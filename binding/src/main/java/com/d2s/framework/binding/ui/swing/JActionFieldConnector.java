@@ -8,7 +8,7 @@ import java.awt.event.FocusEvent;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.d2s.framework.view.swing.components.JActionField;
+import com.d2s.framework.gui.swing.components.JActionField;
 
 /**
  * JActionFieldConnector connector.

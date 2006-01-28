@@ -21,9 +21,9 @@ import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.basic.BasicValueConnector;
+import com.d2s.framework.gui.swing.components.JActionField;
+import com.d2s.framework.gui.swing.components.JDateField;
 import com.d2s.framework.view.IView;
-import com.d2s.framework.view.swing.components.JActionField;
-import com.d2s.framework.view.swing.components.JDateField;
 
 /**
  * This class is an adapter around a SwingView to be able to use it as a cell

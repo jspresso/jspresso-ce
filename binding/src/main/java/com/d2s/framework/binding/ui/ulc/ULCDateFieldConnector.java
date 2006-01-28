@@ -5,7 +5,7 @@ package com.d2s.framework.binding.ui.ulc;
 
 import java.util.Date;
 
-import com.d2s.framework.view.ulc.components.server.ULCDateField;
+import com.d2s.framework.gui.ulc.components.server.ULCDateField;
 import com.ulcjava.base.application.event.ValueChangedEvent;
 import com.ulcjava.base.application.event.serializable.IValueChangedListener;
 

@@ -43,6 +43,17 @@ import com.d2s.framework.binding.ui.ulc.ULCDateFieldConnector;
 import com.d2s.framework.binding.ui.ulc.ULCTextAreaConnector;
 import com.d2s.framework.binding.ui.ulc.ULCTextFieldConnector;
 import com.d2s.framework.binding.ui.ulc.ULCToggleButtonConnector;
+import com.d2s.framework.gui.ulc.components.server.BooleanTableCellRenderer;
+import com.d2s.framework.gui.ulc.components.server.EvenOddListCellRenderer;
+import com.d2s.framework.gui.ulc.components.server.EvenOddTableCellRenderer;
+import com.d2s.framework.gui.ulc.components.server.FormattedTableCellRenderer;
+import com.d2s.framework.gui.ulc.components.server.ITreePathPopupFactory;
+import com.d2s.framework.gui.ulc.components.server.ULCActionField;
+import com.d2s.framework.gui.ulc.components.server.ULCDateField;
+import com.d2s.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
+import com.d2s.framework.gui.ulc.components.server.ULCTable;
+import com.d2s.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
+import com.d2s.framework.gui.ulc.components.server.ULCTree;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -96,17 +107,6 @@ import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import com.d2s.framework.view.descriptor.projection.basic.ProjectionCardViewDescriptor;
-import com.d2s.framework.view.ulc.components.server.BooleanTableCellRenderer;
-import com.d2s.framework.view.ulc.components.server.EvenOddListCellRenderer;
-import com.d2s.framework.view.ulc.components.server.EvenOddTableCellRenderer;
-import com.d2s.framework.view.ulc.components.server.FormattedTableCellRenderer;
-import com.d2s.framework.view.ulc.components.server.ITreePathPopupFactory;
-import com.d2s.framework.view.ulc.components.server.ULCActionField;
-import com.d2s.framework.view.ulc.components.server.ULCDateField;
-import com.d2s.framework.view.ulc.components.server.ULCOnFocusSelectTextField;
-import com.d2s.framework.view.ulc.components.server.ULCTable;
-import com.d2s.framework.view.ulc.components.server.ULCTranslationDataTypeFactory;
-import com.d2s.framework.view.ulc.components.server.ULCTree;
 import com.ulcjava.base.application.BorderFactory;
 import com.ulcjava.base.application.DefaultComboBoxCellRenderer;
 import com.ulcjava.base.application.GridBagConstraints;
@@ -2169,7 +2169,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    * @return the created table.
    */
   protected ULCTable createULCTable() {
-    return new com.d2s.framework.view.ulc.components.server.ULCTable();
+    return new com.d2s.framework.gui.ulc.components.server.ULCTable();
   }
 
   /**

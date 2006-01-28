@@ -96,6 +96,12 @@ import com.d2s.framework.binding.ui.swing.JFormattedFieldConnector;
 import com.d2s.framework.binding.ui.swing.JTextAreaConnector;
 import com.d2s.framework.binding.ui.swing.JTextFieldConnector;
 import com.d2s.framework.binding.ui.swing.JToggleButtonConnector;
+import com.d2s.framework.gui.swing.components.BooleanTableCellRenderer;
+import com.d2s.framework.gui.swing.components.EvenOddListCellRenderer;
+import com.d2s.framework.gui.swing.components.EvenOddTableCellRenderer;
+import com.d2s.framework.gui.swing.components.FormattedTableCellRenderer;
+import com.d2s.framework.gui.swing.components.JActionField;
+import com.d2s.framework.gui.swing.components.JDateField;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -150,12 +156,6 @@ import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import com.d2s.framework.view.descriptor.projection.basic.ProjectionCardViewDescriptor;
-import com.d2s.framework.view.swing.components.BooleanTableCellRenderer;
-import com.d2s.framework.view.swing.components.EvenOddListCellRenderer;
-import com.d2s.framework.view.swing.components.EvenOddTableCellRenderer;
-import com.d2s.framework.view.swing.components.FormattedTableCellRenderer;
-import com.d2s.framework.view.swing.components.JActionField;
-import com.d2s.framework.view.swing.components.JDateField;
 
 /**
  * Factory for swing views.

@@ -8,7 +8,7 @@ import java.beans.PropertyChangeListener;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.d2s.framework.view.ulc.components.server.ULCActionField;
+import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 
 /**
  * ULCActionFieldConnector connector.

@@ -10,7 +10,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import com.d2s.framework.binding.ConnectorBindingException;
-import com.d2s.framework.view.swing.components.JDateField;
+import com.d2s.framework.gui.swing.components.JDateField;
 
 /**
  * JDateField connector.
