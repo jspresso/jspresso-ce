@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.gui.ulc.components.server;
+package com.d2s.framework.view.ulc;
 
 import com.ulcjava.base.application.IRendererComponent;
 import com.ulcjava.base.application.ULCTable;

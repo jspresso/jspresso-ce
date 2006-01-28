@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.gui.swing.components;
+package com.d2s.framework.view.swing;
 
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.format.IFormatter;

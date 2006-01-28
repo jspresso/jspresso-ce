@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.gui.ulc.components.server;
+package com.d2s.framework.view.ulc;
 
 import com.d2s.framework.util.ulc.UlcUtil;
-import com.ulcjava.base.application.DefaultListCellRenderer;
 import com.ulcjava.base.application.IRendererComponent;
 import com.ulcjava.base.application.ULCComponent;
-import com.ulcjava.base.application.ULCList;
+import com.ulcjava.base.application.ULCTable;
+import com.ulcjava.base.application.table.DefaultTableCellRenderer;
 
 /**
- * A default list cell renderer rendering even and odd rows background slightly
+ * A default table cell renderer rendering even and odd rows background slightly
  * differently.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
@@ -19,19 +19,19 @@ import com.ulcjava.base.application.ULCList;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class EvenOddListCellRenderer extends DefaultListCellRenderer {
+public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
 
-  private static final long serialVersionUID = 3450896483325205907L;
+  private static final long serialVersionUID = -932556734324432049L;
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public IRendererComponent getListCellRendererComponent(ULCList list,
+  public IRendererComponent getTableCellRendererComponent(ULCTable table,
       Object value, boolean isSelected, boolean hasFocus, int row) {
-    IRendererComponent renderer = super.getListCellRendererComponent(list,
+    IRendererComponent renderer = super.getTableCellRendererComponent(table,
         value, isSelected, hasFocus, row);
-    UlcUtil.alternateEvenOddBackground((ULCComponent) renderer, list,
+    UlcUtil.alternateEvenOddBackground((ULCComponent) renderer, table,
         isSelected, row);
     return renderer;
   }

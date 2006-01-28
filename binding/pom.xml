@@ -16,5 +16,10 @@
 			<artifactId>d2s-model</artifactId>
 			<version>${pom.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-gui</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
 	</dependencies>
 </project>
