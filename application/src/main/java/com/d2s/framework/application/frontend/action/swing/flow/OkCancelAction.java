@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.application.frontend.action.swing.flow;
+
+import java.util.Map;
+
+import javax.swing.JOptionPane;
+
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.util.swing.SwingUtil;
+import com.d2s.framework.view.IIconFactory;
+
+/**
+ * Action to ask a user validation.
+ * <p>
+ * Copyright 2005 Design2See. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class OkCancelAction extends AbstractMessageAction {
+
+  private IAction okAction;
+  private IAction cancelAction;
+
+  /**
+   * Displays the message using a <code>JOptionPane.OK_CANCEL_OPTION</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public Map<String, Object> execute(IActionHandler actionHandler) {
+    int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
+        .getWindowOrInternalFrame(getSourceComponent()), getMessage(),
+        getName(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+        getIconFactory().getIcon(getIconImageURL(),
+            IIconFactory.LARGE_ICON_SIZE));
+    if (selectedOption == JOptionPane.OK_OPTION) {
+      setNextAction(okAction);
+    } else {
+      setNextAction(cancelAction);
+    }
+    return super.execute(actionHandler);
+  }
+
+  /**
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *          the cancelAction to set.
+   */
+  public void setCancelAction(IAction cancelAction) {
+    this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Sets the okAction.
+   * 
+   * @param okAction
+   *          the okAction to set.
+   */
+  public void setOkAction(IAction okAction) {
+    this.okAction = okAction;
+  }
+
+}

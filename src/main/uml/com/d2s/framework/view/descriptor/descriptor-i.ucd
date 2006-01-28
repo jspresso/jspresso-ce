@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="descriptor-i" size="1313,1255" id="com.d2s.corelayer.view.descriptor" metadata="uml2-1.0" initialized="true" scrolledX="50" tag="1000" key="32303035303731382064657369676E327365652D636F72656C617965722F76696E63656E74">
+  <children xsi:type="editmodel:ClassEditModel" name="ViewConstraint" location="50,826" size="162,409" id="com.d2s.corelayer.view.descriptor/ViewConstraint" packageIndication="2" runTimeClassModel="width,column,getRow(),getColumn(),ViewConstraint(),isWidthResizable(),setColumn(I),row,height,setHeight(I),setHeightResizable(Z),heightResizable,setRow(I),setWidth(I),setWidthResizable(Z),isHeightResizable(),ViewConstraint(IIIIZZ),getWidth(),getHeight(),widthResizable">
+    <children xsi:type="editmodel:CompartmentEditModel" size="139,108">
+      <children xsi:type="editmodel:AttributeEditModel" name="column" id="com.d2s.corelayer.view.descriptor/ViewConstraint#column"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="height" id="com.d2s.corelayer.view.descriptor/ViewConstraint#height"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="heightResizable" id="com.d2s.corelayer.view.descriptor/ViewConstraint#heightResizable"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="row" id="com.d2s.corelayer.view.descriptor/ViewConstraint#row"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="width" id="com.d2s.corelayer.view.descriptor/ViewConstraint#width"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="widthResizable" id="com.d2s.corelayer.view.descriptor/ViewConstraint#widthResizable"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="122,252">
+      <children xsi:type="editmodel:MethodEditModel" name="ViewConstraint" id="com.d2s.corelayer.view.descriptor/ViewConstraint#ViewConstraint()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="ViewConstraint" id="com.d2s.corelayer.view.descriptor/ViewConstraint#ViewConstraint(IIIIZZ)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getColumn" id="com.d2s.corelayer.view.descriptor/ViewConstraint#getColumn()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getHeight" id="com.d2s.corelayer.view.descriptor/ViewConstraint#getHeight()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getRow" id="com.d2s.corelayer.view.descriptor/ViewConstraint#getRow()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getWidth" id="com.d2s.corelayer.view.descriptor/ViewConstraint#getWidth()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isHeightResizable" id="com.d2s.corelayer.view.descriptor/ViewConstraint#isHeightResizable()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isWidthResizable" id="com.d2s.corelayer.view.descriptor/ViewConstraint#isWidthResizable()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setColumn" id="com.d2s.corelayer.view.descriptor/ViewConstraint#setColumn(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setHeight" id="com.d2s.corelayer.view.descriptor/ViewConstraint#setHeight(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setHeightResizable" id="com.d2s.corelayer.view.descriptor/ViewConstraint#setHeightResizable(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setRow" id="com.d2s.corelayer.view.descriptor/ViewConstraint#setRow(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setWidth" id="com.d2s.corelayer.view.descriptor/ViewConstraint#setWidth(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setWidthResizable" id="com.d2s.corelayer.view.descriptor/ViewConstraint#setWidthResizable(Z)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="IComponentViewDescriptor" location="50,217" size="215,171" stereotype="interface" id="com.d2s.corelayer.view.descriptor/IComponentViewDescriptor" packageIndication="2" runTimeClassModel="getWidth(Ljava.lang.String;),getColumnCount(),getLabelsPosition(),getRenderedPropertyNames(),aSIDE,aBOVE">
+    <children xsi:type="editmodel:CompartmentEditModel" size="73,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="aBOVE" id="com.d2s.corelayer.view.descriptor/IComponentViewDescriptor#aBOVE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="aSIDE" id="com.d2s.corelayer.view.descriptor/IComponentViewDescriptor#aSIDE"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="166,72">
+      <children xsi:type="editmodel:MethodEditModel" name="getColumnCount" id="com.d2s.corelayer.view.descriptor/IComponentViewDescriptor#getColumnCount()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getLabelsPosition" id="com.d2s.corelayer.view.descriptor/IComponentViewDescriptor#getLabelsPosition()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getRenderedPropertyNames" id="com.d2s.corelayer.view.descriptor/IComponentViewDescriptor#getRenderedPropertyNames()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getWidth" id="com.d2s.corelayer.view.descriptor/IComponentViewDescriptor#getWidth(Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.8/@sourceConnections.0 //@children.12/@sourceConnections.0" autoLocated="true" id="com.d2s.corelayer.view.descriptor/IViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/IComponentViewDescriptor" source="//@children.1" target="//@children.10" targetEnd="//@children.1/@sourceConnections.0/@children.1" sourceEnd="//@children.1/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="107,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="71,117" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.7/@sourceConnections.0" name="IGridViewDescriptor" location="50,438" size="169,81" stereotype="interface" id="com.d2s.corelayer.view.descriptor/IGridViewDescriptor" packageIndication="2" runTimeClassModel="getViewDescriptors()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="127,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getViewDescriptors" id="com.d2s.corelayer.view.descriptor/IGridViewDescriptor#getViewDescriptors()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/IGridViewDescriptor" source="//@children.2" target="//@children.4/@sourceConnections.0" targetEnd="//@children.2/@sourceConnections.0/@children.1" sourceEnd="//@children.2/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="84,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="ITableViewDescriptor" location="891,438" size="189,81" stereotype="interface" id="com.d2s.corelayer.view.descriptor/ITableViewDescriptor" packageIndication="2" runTimeClassModel="getRenderedPropertyNames()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="166,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getRenderedPropertyNames" id="com.d2s.corelayer.view.descriptor/ITableViewDescriptor#getRenderedPropertyNames()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.d2s.corelayer.view.descriptor/ICollectionViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/ITableViewDescriptor" source="//@children.3" target="//@children.5/@sourceConnections.0" targetEnd="//@children.3/@sourceConnections.0/@children.1" sourceEnd="//@children.3/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="94,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,40"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="IBorderViewDescriptor" location="676,438" size="185,153" stereotype="interface" id="com.d2s.corelayer.view.descriptor/IBorderViewDescriptor" packageIndication="2" runTimeClassModel="getCenterViewDescriptor(),getWestViewDescriptor(),getSouthViewDescriptor(),getEastViewDescriptor(),getNorthViewDescriptor()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="153,90">
+      <children xsi:type="editmodel:MethodEditModel" name="getCenterViewDescriptor" id="com.d2s.corelayer.view.descriptor/IBorderViewDescriptor#getCenterViewDescriptor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getEastViewDescriptor" id="com.d2s.corelayer.view.descriptor/IBorderViewDescriptor#getEastViewDescriptor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getNorthViewDescriptor" id="com.d2s.corelayer.view.descriptor/IBorderViewDescriptor#getNorthViewDescriptor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSouthViewDescriptor" id="com.d2s.corelayer.view.descriptor/IBorderViewDescriptor#getSouthViewDescriptor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getWestViewDescriptor" id="com.d2s.corelayer.view.descriptor/IBorderViewDescriptor#getWestViewDescriptor()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.9/@sourceConnections.0 //@children.6/@sourceConnections.0 //@children.2/@sourceConnections.0" autoLocated="true" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/IBorderViewDescriptor" source="//@children.4" target="//@children.8" targetEnd="//@children.4/@sourceConnections.0/@children.1" sourceEnd="//@children.4/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="92,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="104,135" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="IListViewDescriptor" location="1110,438" size="183,81" stereotype="interface" id="com.d2s.corelayer.view.descriptor/IListViewDescriptor" packageIndication="2" runTimeClassModel="getRenderedPropertyName()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="160,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getRenderedPropertyName" id="com.d2s.corelayer.view.descriptor/IListViewDescriptor#getRenderedPropertyName()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.3/@sourceConnections.0" autoLocated="true" id="com.d2s.corelayer.view.descriptor/ICollectionViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/IListViewDescriptor" source="//@children.5" target="//@children.12" targetEnd="//@children.5/@sourceConnections.0/@children.1" sourceEnd="//@children.5/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="91,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="103,81" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="ITabViewDescriptor" location="249,438" size="166,81" stereotype="interface" id="com.d2s.corelayer.view.descriptor/ITabViewDescriptor" packageIndication="2" runTimeClassModel="getViewDescriptors()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="127,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getViewDescriptors" id="com.d2s.corelayer.view.descriptor/ITabViewDescriptor#getViewDescriptors()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/ITabViewDescriptor" source="//@children.6" target="//@children.4/@sourceConnections.0" targetEnd="//@children.6/@sourceConnections.0/@children.1" sourceEnd="//@children.6/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="83,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="IEvenGridViewDescriptor" location="325,641" size="200,135" stereotype="interface" id="com.d2s.corelayer.view.descriptor/IEvenGridViewDescriptor" packageIndication="2" runTimeClassModel="cOLUMN,getDrivingDimension(),rOW,getDrivingDimensionCellCount()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="79,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="cOLUMN" id="com.d2s.corelayer.view.descriptor/IEvenGridViewDescriptor#cOLUMN"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="rOW" id="com.d2s.corelayer.view.descriptor/IEvenGridViewDescriptor#rOW"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="172,36">
+      <children xsi:type="editmodel:MethodEditModel" name="getDrivingDimension" id="com.d2s.corelayer.view.descriptor/IEvenGridViewDescriptor#getDrivingDimension()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDrivingDimensionCellCount" id="com.d2s.corelayer.view.descriptor/IEvenGridViewDescriptor#getDrivingDimensionCellCount()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" targetConnections="//@children.11/@sourceConnections.0" autoLocated="true" id="com.d2s.corelayer.view.descriptor/IGridViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/IEvenGridViewDescriptor" source="//@children.7" target="//@children.2" targetEnd="//@children.7/@sourceConnections.0/@children.1" sourceEnd="//@children.7/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="100,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="84,81" anchorKind="FixedAtEdge"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.4/@sourceConnections.0" name="ICompositeViewDescriptor" location="340,217" size="209,135" stereotype="interface" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor" packageIndication="2" runTimeClassModel="getCompositeBorderType(),nONE,tITLED,sIMPLE">
+    <children xsi:type="editmodel:CompartmentEditModel" size="71,54">
+      <children xsi:type="editmodel:AttributeEditModel" name="nONE" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor#nONE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="sIMPLE" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor#sIMPLE"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="tITLED" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor#tITLED"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="152,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getCompositeBorderType" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor#getCompositeBorderType()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.d2s.corelayer.view.descriptor/IViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor" source="//@children.8" target="//@children.1/@sourceConnections.0" targetEnd="//@children.8/@sourceConnections.0/@children.1" sourceEnd="//@children.8/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="104,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="ISplitViewDescriptor" location="445,438" size="201,153" stereotype="interface" id="com.d2s.corelayer.view.descriptor/ISplitViewDescriptor" packageIndication="2" runTimeClassModel="getOrientation(),vERTICAL,hORIZONTAL,getLeftTopViewDescriptor(),getRightBottomViewDescriptor()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="102,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="hORIZONTAL" id="com.d2s.corelayer.view.descriptor/ISplitViewDescriptor#hORIZONTAL"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="vERTICAL" id="com.d2s.corelayer.view.descriptor/ISplitViewDescriptor#vERTICAL"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="178,54">
+      <children xsi:type="editmodel:MethodEditModel" name="getLeftTopViewDescriptor" id="com.d2s.corelayer.view.descriptor/ISplitViewDescriptor#getLeftTopViewDescriptor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getOrientation" id="com.d2s.corelayer.view.descriptor/ISplitViewDescriptor#getOrientation()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getRightBottomViewDescriptor" id="com.d2s.corelayer.view.descriptor/ISplitViewDescriptor#getRightBottomViewDescriptor()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.d2s.corelayer.view.descriptor/ICompositeViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/ISplitViewDescriptor" source="//@children.9" target="//@children.4/@sourceConnections.0" targetEnd="//@children.9/@sourceConnections.0/@children.1" sourceEnd="//@children.9/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="100,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.1/@sourceConnections.0" name="IViewDescriptor" location="494,50" size="142,117" stereotype="interface" id="com.d2s.corelayer.view.descriptor/IViewDescriptor" packageIndication="2" runTimeClassModel="getBackground(),getForeground(),getFont()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="103,54">
+      <children xsi:type="editmodel:MethodEditModel" name="getBackground" id="com.d2s.corelayer.view.descriptor/IViewDescriptor#getBackground()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getFont" id="com.d2s.corelayer.view.descriptor/IViewDescriptor#getFont()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getForeground" id="com.d2s.corelayer.view.descriptor/IViewDescriptor#getForeground()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" name="IConstrainedGridViewDescriptor" location="50,641" size="245,81" stereotype="interface" id="com.d2s.corelayer.view.descriptor/IConstrainedGridViewDescriptor" packageIndication="2" runTimeClassModel="getViewConstraint(Lcom.d2s.corelayer.view.descriptor.IViewDescriptor;)">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="120,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getViewConstraint" id="com.d2s.corelayer.view.descriptor/IConstrainedGridViewDescriptor#getViewConstraint(Lcom.d2s.corelayer.view.descriptor.IViewDescriptor;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.d2s.corelayer.view.descriptor/IGridViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/IConstrainedGridViewDescriptor" source="//@children.11" target="//@children.7/@sourceConnections.0" targetEnd="//@children.11/@sourceConnections.0/@children.1" sourceEnd="//@children.11/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="122,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.5/@sourceConnections.0" name="ICollectionViewDescriptor" location="990,217" size="206,81" stereotype="interface" id="com.d2s.corelayer.view.descriptor/ICollectionViewDescriptor" packageIndication="2" runTimeClassModel="getVisibleCollectionSize()">
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="144,18">
+      <children xsi:type="editmodel:MethodEditModel" name="getVisibleCollectionSize" id="com.d2s.corelayer.view.descriptor/ICollectionViewDescriptor#getVisibleCollectionSize()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel"/>
+    <sourceConnections xsi:type="editmodel:GeneralizationEditModel" autoLocated="true" id="com.d2s.corelayer.view.descriptor/IViewDescriptor&lt;-com.d2s.corelayer.view.descriptor/ICollectionViewDescriptor" source="//@children.12" target="//@children.1/@sourceConnections.0" targetEnd="//@children.12/@sourceConnections.0/@children.1" sourceEnd="//@children.12/@sourceConnections.0/@children.0" connectionRouterKind="GeneralizationManhattan">
+      <children xsi:type="editmodel:AssociationEndEditModel" location="103,0" anchorKind="FixedAtEdge" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showAttributeProperty="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" level="-1" showScope="InPackage" properties="wireOptions=1"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="10,10" gridOrigin="0,0" rulerUnit="pixel">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" innerClassSorter="Natural" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPackageMethods="true" showStaticMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showPackageInnerClasses="true" showStaticInnerClasses="true" packageIndication="2" showInterfaceStereotype="true" showAttributeProperty="true"/>
+</editmodel:ClassDiagramEditModel>

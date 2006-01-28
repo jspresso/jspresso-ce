@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="com.d2s.framework.test"
+		class="org.springframework.context.support.ClassPathXmlApplicationContext">
+		<constructor-arg>
+			<list>
+				<value>com/d2s/framework/application-context.xml</value>
+			</list>
+		</constructor-arg>
+	</bean>
+	<bean id="com.d2s.framework.test.model.domain"
+		class="org.springframework.context.support.ClassPathXmlApplicationContext"
+		lazy-init="true">
+		<constructor-arg>
+			<list>
+				<value>com/d2s/framework/test/model/domain/model.xml</value>
+			</list>
+		</constructor-arg>
+		<constructor-arg>
+			<ref local="com.d2s.framework.test" />
+		</constructor-arg>
+	</bean>
+	<bean id="com.d2s.framework.test.view"
+		class="org.springframework.context.support.ClassPathXmlApplicationContext"
+		lazy-init="true">
+		<constructor-arg>
+			<list>
+				<value>com/d2s/framework/test/view/view.xml</value>
+			</list>
+		</constructor-arg>
+		<constructor-arg>
+			<ref local="com.d2s.framework.test.model.domain" />
+		</constructor-arg>
+	</bean>
+</beans>
+

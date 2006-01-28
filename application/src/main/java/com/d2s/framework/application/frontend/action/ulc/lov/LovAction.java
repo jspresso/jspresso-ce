@@ -1,0 +1,146 @@
+/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.application.frontend.action.ulc.lov;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.action.IDisplayableAction;
+import com.d2s.framework.application.frontend.action.AbstractChainedAction;
+import com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.view.ILovViewFactory;
+import com.d2s.framework.view.IView;
+import com.ulcjava.base.application.ULCComponent;
+
+/**
+ * A standard List of value action for reference property views. This action
+ * should be used in view factories.
+ * <p>
+ * Copyright 2005 Design2See. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class LovAction extends ModalDialogAction {
+
+  private ILovViewFactory<ULCComponent> lovViewFactory;
+  private IAction                       createQueryEntityAction;
+  private AbstractChainedAction         okAction;
+  private AbstractChainedAction         cancelAction;
+  private IDisplayableAction            findAction;
+
+  /**
+   * Constructs a new <code>LovAction</code> instance.
+   */
+  public LovAction() {
+    setName("LOV_NAME");
+    setDescription("LOV_DESCRIPTION");
+    setIconImageURL("classpath:images/find-48x48.png");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Map<String, Object> execute(IActionHandler actionHandler) {
+    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+    Map<String, Object> okInitialContext = new HashMap<String, Object>();
+    getViewConnector()
+        .setConnectorValue(getViewConnector().getConnectorValue());
+    okInitialContext.put(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
+        getViewConnector());
+    okAction.setContext(okInitialContext);
+    actions.add(findAction);
+    actions.add(okAction);
+    actions.add(cancelAction);
+    setActions(actions);
+    IReferencePropertyDescriptor modelDescriptor = (IReferencePropertyDescriptor) getContext()
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    IView<ULCComponent> lovView = lovViewFactory.createLovView(
+        (IEntityDescriptor) modelDescriptor.getReferencedDescriptor(),
+        actionHandler, getLocale());
+    setMainView(lovView);
+    createQueryEntityAction.setContext(getContext());
+    Map<String, Object> queryEntityCreationResult = actionHandler
+        .execute(createQueryEntityAction);
+    IValueConnector queryEntityConnector = (IValueConnector) queryEntityCreationResult
+        .get(ActionContextConstants.MODEL_CONNECTOR);
+    getMvcBinder().bind(lovView.getConnector(), queryEntityConnector);
+    Object queryPropertyValue = getContext().get(
+        ActionContextConstants.ACTION_PARAM);
+    if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {
+      findAction.setContext(queryEntityCreationResult);
+      actionHandler.execute(findAction);
+      IQueryEntity queryEntity = (IQueryEntity) queryEntityConnector
+          .getConnectorValue();
+      if (queryEntity.getQueriedEntities() != null
+          && queryEntity.getQueriedEntities().size() == 1) {
+        getViewConnector().setConnectorValue(
+            queryEntity.getQueriedEntities().get(0));
+        return null;
+      }
+    }
+    return super.execute(actionHandler);
+  }
+
+  /**
+   * Sets the lovViewFactory.
+   * 
+   * @param lovViewFactory
+   *          the lovViewFactory to set.
+   */
+  public void setLovViewFactory(ILovViewFactory<ULCComponent> lovViewFactory) {
+    this.lovViewFactory = lovViewFactory;
+  }
+
+  /**
+   * Sets the createQueryEntityAction.
+   * 
+   * @param createQueryEntityAction
+   *          the createQueryEntityAction to set.
+   */
+  public void setCreateQueryEntityAction(IAction createQueryEntityAction) {
+    this.createQueryEntityAction = createQueryEntityAction;
+  }
+
+  /**
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *          the cancelAction to set.
+   */
+  public void setCancelAction(AbstractChainedAction cancelAction) {
+    this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Sets the findAction.
+   * 
+   * @param findAction
+   *          the findAction to set.
+   */
+  public void setFindAction(IDisplayableAction findAction) {
+    this.findAction = findAction;
+  }
+
+  /**
+   * Sets the okAction.
+   * 
+   * @param okAction
+   *          the okAction to set.
+   */
+  public void setOkAction(AbstractChainedAction okAction) {
+    this.okAction = okAction;
+  }
+}

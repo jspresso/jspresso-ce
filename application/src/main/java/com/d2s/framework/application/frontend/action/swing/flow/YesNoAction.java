@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.application.frontend.action.swing.flow;
+
+import java.util.Map;
+
+import javax.swing.JOptionPane;
+
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.util.swing.SwingUtil;
+import com.d2s.framework.view.IIconFactory;
+
+/**
+ * Action to ask a binary question to the user.
+ * <p>
+ * Copyright 2005 Design2See. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class YesNoAction extends AbstractMessageAction {
+
+  private IAction yesAction;
+  private IAction noAction;
+
+  /**
+   * Displays the message using a <code>JOptionPane.YES_NO_OPTION</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public Map<String, Object> execute(IActionHandler actionHandler) {
+    int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
+        .getWindowOrInternalFrame(getSourceComponent()), getMessage(),
+        getName(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
+        getIconFactory().getIcon(getIconImageURL(),
+            IIconFactory.LARGE_ICON_SIZE));
+    if (selectedOption == JOptionPane.YES_OPTION) {
+      setNextAction(yesAction);
+    } else {
+      setNextAction(noAction);
+    }
+    return super.execute(actionHandler);
+  }
+
+  /**
+   * Sets the noAction.
+   * 
+   * @param noAction
+   *          the noAction to set.
+   */
+  public void setNoAction(IAction noAction) {
+    this.noAction = noAction;
+  }
+
+  /**
+   * Sets the yesAction.
+   * 
+   * @param yesAction
+   *          the yesAction to set.
+   */
+  public void setYesAction(IAction yesAction) {
+    this.yesAction = yesAction;
+  }
+
+}
