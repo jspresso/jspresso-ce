@@ -11,4 +11,21 @@
 	<artifactId>d2s-ulc-components-server</artifactId>
 	<packaging>jar</packaging>
 	<name>Design2See Application Framework - ULC - Components - Server</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-ulc-components-shared</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ulc</groupId>
+			<artifactId>ulc-base-development</artifactId>
+			<version>6.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.0</version>
+		</dependency>
+	</dependencies>
 </project>
