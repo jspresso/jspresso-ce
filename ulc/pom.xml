@@ -12,8 +12,7 @@
 	<packaging>pom</packaging>
 	<name>Design2See Application Framework - ULC</name>
 	<modules>
-		<module>client</module>
-		<module>server</module>
-		<module>shared</module>
+		<module>application</module>
+		<module>components</module>
 	</modules>
 </project>

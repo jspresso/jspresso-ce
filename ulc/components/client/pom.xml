@@ -8,7 +8,7 @@
 		<artifactId>design2see-framework</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>d2s-ulc-client</artifactId>
+	<artifactId>d2s-ulc-components-client</artifactId>
 	<packaging>jar</packaging>
-	<name>Design2See Application Framework - ULC - Client</name>
+	<name>Design2See Application Framework - ULC - Components - Client</name>
 </project>
