@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.binding.ui.swing;
+package com.d2s.framework.binding.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

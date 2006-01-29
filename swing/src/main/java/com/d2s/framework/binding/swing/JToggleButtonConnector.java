@@ -1,15 +1,15 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.binding.ui.swing;
+package com.d2s.framework.binding.swing;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JComboBox;
+import javax.swing.JToggleButton;
 
 /**
- * JComboBox connector.
+ * JToggleButton connector.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -17,38 +17,42 @@ import javax.swing.JComboBox;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class JComboBoxConnector extends JComponentConnector<JComboBox> {
+public class JToggleButtonConnector extends JComponentConnector<JToggleButton> {
 
   /**
-   * Constructs a new <code>JComboBoxConnector</code> instance.
+   * Constructs a new <code>JToggleButtonConnector</code> instance.
    * 
    * @param id
    *          the id of the connector.
-   * @param comboBox
-   *          the connected JComboBox.
+   * @param toggleButton
+   *          the connected JToggleButton.
    */
-  public JComboBoxConnector(String id, JComboBox comboBox) {
-    super(id, comboBox);
+  public JToggleButtonConnector(String id, JToggleButton toggleButton) {
+    super(id, toggleButton);
   }
 
   /**
-   * Returns the selected object in the combobox.
+   * Returns a <code>Boolean</code> object mapping the state of the button.
    * <p>
    * {@inheritDoc}
    */
   @Override
   protected Object getConnecteeValue() {
-    return getConnectedJComponent().getSelectedItem();
+    return new Boolean(getConnectedJComponent().isSelected());
   }
 
   /**
-   * Sets the selected item in the combobox to be the connector value to set.
+   * Set the state of the button depending on the connector value to set.
    * <p>
    * {@inheritDoc}
    */
   @Override
   protected void protectedSetConnecteeValue(Object aValue) {
-    getConnectedJComponent().setSelectedItem(aValue);
+    if (aValue == null) {
+      getConnectedJComponent().setSelected(false);
+    } else {
+      getConnectedJComponent().setSelected(((Boolean) aValue).booleanValue());
+    }
   }
 
   /**
@@ -76,4 +80,5 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox> {
     super.protectedUpdateState();
     getConnectedJComponent().setEnabled(isWritable());
   }
+
 }
