@@ -15,27 +15,22 @@
 		<dependency>
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-ulc-components-server</artifactId>
-			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-binding</artifactId>
-			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-view</artifactId>
-			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-application</artifactId>
-			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ulc</groupId>
 			<artifactId>ulc-base-development</artifactId>
-			<version>6.0.3</version>
 		</dependency>
 	</dependencies>
 </project>

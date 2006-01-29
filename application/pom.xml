@@ -14,7 +14,6 @@
 		<dependency>
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-view</artifactId>
-			<version>${pom.version}</version>
 		</dependency>
   </dependencies>
 </project>
