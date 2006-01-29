@@ -5,10 +5,10 @@ package com.d2s.framework.view;
 
 import java.util.Locale;
 
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.action.IDisplayableAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.view.action.IDisplayableAction;
 
 /**
  * A factory for actions.

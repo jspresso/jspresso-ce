@@ -5,9 +5,9 @@ package com.d2s.framework.application.frontend.action.ulc.flow;
 
 import java.util.Map;
 
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.view.IIconFactory;
+import com.d2s.framework.view.action.IAction;
+import com.d2s.framework.view.action.IActionHandler;
 import com.ulcjava.base.application.ULCAlert;
 import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.event.WindowEvent;

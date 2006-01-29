@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor;

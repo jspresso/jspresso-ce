@@ -14,12 +14,12 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.d2s.framework.application.backend.IBackendController;
-import com.d2s.framework.application.backend.projection.BeanProjection;
-import com.d2s.framework.application.backend.projection.Projection;
 import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.test.model.AbstractModelTest;
 import com.d2s.framework.util.swing.splash.SplashWindow;
 import com.d2s.framework.util.url.UrlHelper;
+import com.d2s.framework.view.projection.BeanProjection;
+import com.d2s.framework.view.projection.Projection;
 
 /**
  * Swing view testing.

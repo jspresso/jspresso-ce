@@ -21,12 +21,12 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.action.IDisplayableAction;
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
 import com.d2s.framework.application.frontend.action.swing.IDialogAwareAction;
 import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.view.action.IDisplayableAction;
 
 /**
  * Base class dialog swing actions.

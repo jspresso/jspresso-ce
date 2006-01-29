@@ -3,14 +3,14 @@
  */
 package com.d2s.framework.application.backend.action;
 
-import com.d2s.framework.action.AbstractAction;
-import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.bean.IBeanConnectorFactory;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.util.bean.IAccessorFactory;
+import com.d2s.framework.view.action.AbstractAction;
+import com.d2s.framework.view.action.ActionContextConstants;
 
 /**
  * This class should serve as base class for implementing a action which

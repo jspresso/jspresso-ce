@@ -8,10 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.action.IDisplayableAction;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
@@ -20,6 +16,10 @@ import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.view.ILovViewFactory;
 import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.ActionContextConstants;
+import com.d2s.framework.view.action.IAction;
+import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.view.action.IDisplayableAction;
 import com.ulcjava.base.application.ULCComponent;
 
 /**

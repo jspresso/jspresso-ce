@@ -9,14 +9,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
-import com.d2s.framework.application.backend.projection.ChildProjection;
-import com.d2s.framework.application.backend.projection.Projection;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.view.action.ActionContextConstants;
+import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.view.projection.ChildProjection;
+import com.d2s.framework.view.projection.Projection;
 
 /**
  * This action removes the selected projections from their parent.

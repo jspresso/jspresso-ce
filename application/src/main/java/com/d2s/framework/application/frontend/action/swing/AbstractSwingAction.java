@@ -6,10 +6,10 @@ package com.d2s.framework.application.frontend.action.swing;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
-import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionContextConstants;
 
 /**
  * This class serves as base class for swing actions. It provides accessors on

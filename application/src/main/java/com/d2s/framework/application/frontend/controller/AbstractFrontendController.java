@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.backend.session.MergeMode;
@@ -29,6 +27,8 @@ import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IMapView;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionContextConstants;
+import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
 import com.d2s.framework.view.descriptor.projection.IProjectionViewDescriptor;

@@ -8,14 +8,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.ActionException;
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.ICollectionAccessor;
+import com.d2s.framework.view.action.ActionContextConstants;
+import com.d2s.framework.view.action.ActionException;
+import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * An action used in master/detail views to create and add a new detail to a

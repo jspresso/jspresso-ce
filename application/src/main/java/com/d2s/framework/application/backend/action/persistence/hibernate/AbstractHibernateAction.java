@@ -10,10 +10,10 @@ import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.backend.action.AbstractBackendAction;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.view.action.ActionContextConstants;
 
 /**
  * This the root abstract class of all hibernate related persistence actions.

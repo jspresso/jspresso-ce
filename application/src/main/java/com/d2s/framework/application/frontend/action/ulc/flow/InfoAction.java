@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.flow;
 
-import com.d2s.framework.action.IAction;
+import com.d2s.framework.view.action.IAction;
 
 /**
  * Action to present a message to the user.

@@ -6,7 +6,6 @@ package com.d2s.framework.view.descriptor.projection.basic;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.d2s.framework.application.backend.projection.ChildProjection;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
@@ -14,6 +13,7 @@ import com.d2s.framework.view.descriptor.projection.IChildProjectionViewDescript
 import com.d2s.framework.view.descriptor.projection.ICompositeChildProjectionViewDescriptor;
 import com.d2s.framework.view.descriptor.projection.IProjectionViewDescriptor;
 import com.d2s.framework.view.descriptor.projection.ISimpleChildProjectionViewDescriptor;
+import com.d2s.framework.view.projection.ChildProjection;
 
 /**
  * This is a card view descriptor which stacks the projected view descriptors of

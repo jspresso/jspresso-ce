@@ -3,10 +3,10 @@
  */
 package com.d2s.framework.application.frontend.action.ulc;
 
-import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionContextConstants;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.util.ULCIcon;
 

@@ -5,8 +5,8 @@ package com.d2s.framework.view;
 
 import java.util.Locale;
 
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * Factory for list-of-value views.

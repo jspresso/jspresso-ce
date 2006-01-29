@@ -37,7 +37,6 @@
 		</developer>
 	</developers>
 	<modules>
-		<module>action</module>
 		<module>aop</module>
 		<module>application</module>
 		<module>binding</module>

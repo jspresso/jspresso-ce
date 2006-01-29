@@ -8,9 +8,9 @@ import java.awt.Font;
 import java.util.List;
 import java.util.Map;
 
-import com.d2s.framework.action.IDisplayableAction;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
+import com.d2s.framework.view.action.IDisplayableAction;
 
 /**
  * This public interface is the super-interface of all view descriptors.

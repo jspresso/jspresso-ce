@@ -12,10 +12,10 @@ import org.hibernate.criterion.MatchMode;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * An action to hibernate query entities by example.

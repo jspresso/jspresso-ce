@@ -5,8 +5,8 @@ package com.d2s.framework.application.frontend.action;
 
 import java.util.Map;
 
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.view.action.IAction;
+import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * A simple frontend action to wrap a backend action.

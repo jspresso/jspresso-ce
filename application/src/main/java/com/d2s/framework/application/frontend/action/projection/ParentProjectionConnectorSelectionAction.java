@@ -6,12 +6,12 @@ package com.d2s.framework.application.frontend.action.projection;
 import java.util.Collections;
 import java.util.Map;
 
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * A simple action which selects indices on a parent projection view connector.

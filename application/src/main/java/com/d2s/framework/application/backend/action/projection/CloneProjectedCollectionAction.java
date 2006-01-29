@@ -8,15 +8,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
-import com.d2s.framework.application.backend.projection.BeanProjection;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
+import com.d2s.framework.view.action.ActionContextConstants;
+import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.view.projection.BeanProjection;
 
 /**
  * This action clones the selected objects in the projected collection.

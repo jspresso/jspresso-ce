@@ -8,10 +8,10 @@ import java.awt.Font;
 import java.util.List;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionMap;
-import com.d2s.framework.action.IDisplayableAction;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
+import com.d2s.framework.view.action.ActionMap;
+import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**

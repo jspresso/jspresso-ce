@@ -8,16 +8,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
-import com.d2s.framework.application.backend.projection.BeanProjection;
-import com.d2s.framework.application.backend.projection.ChildProjection;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
+import com.d2s.framework.view.action.ActionContextConstants;
+import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.descriptor.projection.IChildProjectionViewDescriptor;
 import com.d2s.framework.view.descriptor.projection.ISimpleChildProjectionViewDescriptor;
+import com.d2s.framework.view.projection.BeanProjection;
+import com.d2s.framework.view.projection.ChildProjection;
 
 /**
  * This action adds the selected objects as child projections.

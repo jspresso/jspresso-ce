@@ -13,10 +13,6 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.action.IDisplayableAction;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
@@ -25,6 +21,10 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.ActionContextConstants;
+import com.d2s.framework.view.action.IAction;
+import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.view.action.IDisplayableAction;
 
 /**
  * A swing action factory.

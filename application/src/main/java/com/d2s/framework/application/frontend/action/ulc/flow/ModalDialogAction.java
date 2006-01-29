@@ -6,12 +6,12 @@ package com.d2s.framework.application.frontend.action.ulc.flow;
 import java.util.List;
 import java.util.Map;
 
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.action.IDisplayableAction;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 import com.d2s.framework.application.frontend.action.ulc.IDialogAwareAction;
 import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.view.action.IDisplayableAction;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCBorderLayoutPane;
 import com.ulcjava.base.application.ULCButton;

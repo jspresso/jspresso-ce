@@ -67,9 +67,6 @@ import javax.swing.tree.TreeSelectionModel;
 import net.sf.nachocalendar.components.DefaultDayRenderer;
 import net.sf.nachocalendar.components.DefaultHeaderRenderer;
 
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.action.IDisplayableAction;
-import com.d2s.framework.application.backend.projection.BeanProjection;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
@@ -130,6 +127,8 @@ import com.d2s.framework.view.IMapView;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.ViewException;
+import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IBorderViewDescriptor;
 import com.d2s.framework.view.descriptor.ICardViewDescriptor;
 import com.d2s.framework.view.descriptor.ICollectionViewDescriptor;
@@ -152,6 +151,7 @@ import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import com.d2s.framework.view.descriptor.projection.basic.ProjectionCardViewDescriptor;
+import com.d2s.framework.view.projection.BeanProjection;
 
 /**
  * Factory for swing views.
