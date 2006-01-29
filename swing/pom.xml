@@ -8,7 +8,7 @@
 		<artifactId>design2see-framework</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>d2s-ulc</artifactId>
+	<artifactId>d2s-swing</artifactId>
 	<packaging>pom</packaging>
 	<name>Design2See Application Framework - Swing</name>
 	<modules>
