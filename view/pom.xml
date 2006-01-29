@@ -18,16 +18,9 @@
 			<version>${pom.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>jgoodies</groupId>
-			<artifactId>looks</artifactId>
-			<version>1.3.2</version>
-			<type>jar</type>
-		</dependency>
-		<dependency>
-			<groupId>jgoodies</groupId>
-			<artifactId>uif_lite</artifactId>
-			<version>1.3.2</version>
-			<type>jar</type>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-model</artifactId>
+			<version>${pom.version}</version>
 		</dependency>
 	</dependencies>
 </project>

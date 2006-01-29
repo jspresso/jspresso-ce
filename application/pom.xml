@@ -16,5 +16,5 @@
 			<artifactId>d2s-view</artifactId>
 			<version>${pom.version}</version>
 		</dependency>
-	</dependencies>
+  </dependencies>
 </project>

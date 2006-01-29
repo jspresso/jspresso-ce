@@ -11,4 +11,26 @@
 	<artifactId>d2s-swing-application</artifactId>
 	<packaging>jar</packaging>
 	<name>Design2See Application Framework - Swing - Application</name>
+	<dependencies>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-swing-components</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-binding</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-view</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-application</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+	</dependencies>
 </project>
