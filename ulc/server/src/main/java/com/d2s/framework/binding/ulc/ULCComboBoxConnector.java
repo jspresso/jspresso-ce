@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.binding.ui.ulc;
+package com.d2s.framework.binding.ulc;
 
-import com.ulcjava.base.application.ULCToggleButton;
+import com.ulcjava.base.application.ULCComboBox;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
 
 /**
- * ULCToggleButton connector.
+ * JComboBox connector.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -16,43 +16,38 @@ import com.ulcjava.base.application.event.serializable.IActionListener;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ULCToggleButtonConnector extends
-    ULCComponentConnector<ULCToggleButton> {
+public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
 
   /**
-   * Constructs a new <code>ULCToggleButtonConnector</code> instance.
+   * Constructs a new <code>ULCComboBoxConnector</code> instance.
    * 
    * @param id
    *          the id of the connector.
-   * @param toggleButton
-   *          the connected ULCToggleButton.
+   * @param comboBox
+   *          the connected ULCComboBox.
    */
-  public ULCToggleButtonConnector(String id, ULCToggleButton toggleButton) {
-    super(id, toggleButton);
+  public ULCComboBoxConnector(String id, ULCComboBox comboBox) {
+    super(id, comboBox);
   }
 
   /**
-   * Returns a <code>Boolean</code> object mapping the state of the button.
+   * Returns the selected object in the combobox.
    * <p>
    * {@inheritDoc}
    */
   @Override
   protected Object getConnecteeValue() {
-    return new Boolean(getConnectedULCComponent().isSelected());
+    return getConnectedULCComponent().getSelectedItem();
   }
 
   /**
-   * Set the state of the button depending on the connector value to set.
+   * Sets the selected item in the combobox to be the connector value to set.
    * <p>
    * {@inheritDoc}
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
-    if (aValue == null) {
-      getConnectedULCComponent().setSelected(false);
-    } else {
-      getConnectedULCComponent().setSelected(((Boolean) aValue).booleanValue());
-    }
+    getConnectedULCComponent().setSelectedItem(aValue);
   }
 
   /**
@@ -62,7 +57,7 @@ public class ULCToggleButtonConnector extends
   protected void bindULCComponent() {
     getConnectedULCComponent().addActionListener(new IActionListener() {
 
-      private static final long serialVersionUID = 2803794068362725099L;
+      private static final long serialVersionUID = -4418440147926893407L;
 
       /**
        * {@inheritDoc}
@@ -82,5 +77,4 @@ public class ULCToggleButtonConnector extends
     super.updateState();
     getConnectedULCComponent().setEnabled(isWritable());
   }
-
 }

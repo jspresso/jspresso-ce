@@ -5,7 +5,7 @@ package com.d2s.framework.view.ulc;
 
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
-import com.d2s.framework.binding.ui.ulc.ULCActionFieldConnector;
+import com.d2s.framework.binding.ulc.ULCActionFieldConnector;
 import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 import com.d2s.framework.view.IView;
 import com.ulcjava.base.application.DefaultCellEditor;
