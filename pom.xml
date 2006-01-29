@@ -40,7 +40,6 @@
 		<module>aop</module>
 		<module>application</module>
 		<module>binding</module>
-		<module>gui</module>
 		<module>model</module>
 		<module>tools</module>
 		<module>util</module>
