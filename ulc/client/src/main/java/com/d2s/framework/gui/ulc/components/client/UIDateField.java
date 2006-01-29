@@ -27,10 +27,10 @@ import javax.swing.tree.TreeCellEditor;
 import net.sf.nachocalendar.components.DefaultDayRenderer;
 import net.sf.nachocalendar.components.DefaultHeaderRenderer;
 
-import com.d2s.framework.gui.GuiException;
 import com.d2s.framework.gui.swing.components.JDateField;
 import com.d2s.framework.gui.ulc.components.shared.ActionFieldConstants;
 import com.d2s.framework.gui.ulc.components.shared.DateFieldConstants;
+import com.d2s.framework.util.gui.GuiException;
 import com.ulcjava.base.client.IEditorComponent;
 import com.ulcjava.base.client.UIComponent;
 import com.ulcjava.base.client.tabletree.TableTreeCellEditor;

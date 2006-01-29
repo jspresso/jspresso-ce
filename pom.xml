@@ -45,6 +45,9 @@
 		<module>tools</module>
 		<module>util</module>
 		<module>view</module>
+		<module>hibernate</module>
+		<module>swing</module>
+		<module>ulc</module>
 	</modules>
 	<!--
 		<dependencies>
