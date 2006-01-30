@@ -51,7 +51,7 @@ public final class SwingLauncher {
     try {
       CommandLine cmd = parser.parse(options, args);
       IStartup startup = instanciateStartup(cmd
-          .getOptionValue("startupClassName"));
+          .getOptionValue("applicationClass"));
       if (cmd.hasOption("splash")) {
         SplashWindow.splash(UrlHelper.createURL(cmd.getOptionValue("splash"),
             ClassLoader.getSystemClassLoader()));

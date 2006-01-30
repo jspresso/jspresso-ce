@@ -15,7 +15,7 @@
 		<isset property="project.build.directory" />
 	</condition>
 	<condition property="xdoclet.hibernate.output.dir"
-	           value="${basedir}/target/test-classes">
+	           value="${basedir}/app-sample/target/classes">
 		<not>
 			<isset property="xdoclet.hibernate.output.dir" />
 		</not>
@@ -36,7 +36,7 @@
 	           value="${project.build.testSourceDirectory}">
 		<isset property="project.build.testSourceDirectory" />
 	</condition>
-	<condition property="test.src.dir" value="${basedir}/src/test/java">
+	<condition property="test.src.dir" value="${basedir}/app-sample/src/main/java">
 		<not>
 			<isset property="test.src.dir" />
 		</not>
@@ -74,9 +74,9 @@
 				<include name="com/d2s/framework/model/entity/IEntity.java" />
 			</fileset>
 			<fileset dir="${test.src.dir}">
-				<include name="com/d2s/framework/test/model/domain/*.java" />
-				<exclude name="com/d2s/framework/test/model/domain/*Extension.java" />
-				<exclude name="com/d2s/framework/test/model/domain/*Service.java" />
+				<include name="com/d2s/framework/sample/backend/domain/*.java" />
+				<exclude name="com/d2s/framework/sample/backend/domain/*Extension.java" />
+				<exclude name="com/d2s/framework/sample/backend/domain/*Service.java" />
 			</fileset>
 
 			<!-- Generates the hibernate mapping files -->
