@@ -134,7 +134,7 @@
     <property name="descriptionTranslator" ref="mockTranslator" />
   </bean>
 
-  <bean abstract="true" id="abstractModelBackController"
+  <bean abstract="true" id="abstractBackController"
     class="com.d2s.framework.application.backend.DefaultBackendController">
     <property name="beanConnectorFactory" ref="beanConnectorFactory" />
     <property name="applicationSession" ref="applicationSession" />

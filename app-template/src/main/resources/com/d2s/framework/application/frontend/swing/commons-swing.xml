@@ -23,8 +23,7 @@
 	<!--
 		Root action beans.
 	-->
-  <bean id="abstractFrontAction" abstract="true"
-    class="com.d2s.framework.application.frontend.action.AbstractFrontendAction">
+  <bean id="abstractFrontAction" abstract="true">
     <property name="viewFactory" ref="viewFactory" />
     <property name="iconFactory" ref="iconFactory" />
     <property name="mvcBinder" ref="mvcBinder" />
@@ -42,6 +41,13 @@
 	<bean id="cancelDialogFrontAction" parent="abstractFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.std.DialogCancelAction">
 	</bean>
+  
+  <!-- 
+    Action beans
+  -->
+  <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction">
+  </bean>
 
 	<!--
 		The implementation used as view factory.
