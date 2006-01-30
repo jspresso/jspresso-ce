@@ -8,7 +8,7 @@
 		<artifactId>design2see-framework</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
-	<artifactId>d2s-app-template-model</artifactId>
+	<artifactId>d2s-app-sample-shared</artifactId>
 	<packaging>jar</packaging>
-	<name>Design2See Application Framework - App-template - model</name>
+	<name>Design2See Application Framework - App-sample - shared</name>
 </project>
