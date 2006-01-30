@@ -19,7 +19,7 @@
   <!--
     Root action beans.
   -->
-  <bean id="lovFindFrontAction" parent="abstractFrontAction"
+  <bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
     class="com.d2s.framework.application.frontend.action.std.FindAction"/>
 
   <bean id="lovOkFrontAction" parent="abstractFrontAction"
