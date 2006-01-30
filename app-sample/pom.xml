@@ -9,11 +9,6 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>d2s-app-sample</artifactId>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 	<name>Design2See Application Framework - App-sample</name>
-	<modules>
-		<module>shared</module>
-		<module>swing</module>
-    <module>ulc</module>
-	</modules>
 </project>
