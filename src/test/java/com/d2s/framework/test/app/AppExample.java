@@ -57,7 +57,7 @@ public class AppExample extends AbstractModelTest {
    */
   @Override
   protected String getApplicationContextKey() {
-    return "com.d2s.framework.sample.view";
+    return "com.d2s.framework.sample.frontend";
   }
 
   /**

@@ -11,7 +11,7 @@ package com.d2s.framework.test.model.domain;
  * 
  * @hibernate.mapping default-access =
  *                    "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
- *                    package = "com.d2s.framework.sample.model.domain"
+ *                    package = "com.d2s.framework.sample.backend.domain"
  * @hibernate.class table = "CITY" dynamic-insert = "true" dynamic-update =
  *                  "true" persister =
  *                  "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxySingleTableEntityPersister"

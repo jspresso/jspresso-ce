@@ -54,7 +54,7 @@ public class UlcAppExample extends AbstractModelTest implements IApplication {
    */
   @Override
   protected String getApplicationContextKey() {
-    return "com.d2s.framework.sample.view";
+    return "com.d2s.framework.sample.frontend";
   }
 
   /**
