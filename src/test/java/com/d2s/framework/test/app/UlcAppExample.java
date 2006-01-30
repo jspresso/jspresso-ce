@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.IFrontendController;
+import com.d2s.framework.sample.data.AppDataProducer;
 import com.d2s.framework.test.model.AbstractModelTest;
 import com.d2s.framework.view.projection.BeanProjection;
 import com.d2s.framework.view.projection.Projection;

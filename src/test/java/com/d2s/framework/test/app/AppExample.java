@@ -15,6 +15,7 @@ import org.apache.commons.cli.ParseException;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.IFrontendController;
+import com.d2s.framework.sample.data.AppDataProducer;
 import com.d2s.framework.test.model.AbstractModelTest;
 import com.d2s.framework.util.swing.splash.SplashWindow;
 import com.d2s.framework.util.url.UrlHelper;
