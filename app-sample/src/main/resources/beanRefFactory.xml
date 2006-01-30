@@ -10,7 +10,7 @@
         <value>com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
         <value>com/d2s/framework/application/frontend/commons-frontend.xml</value>
         <value>com/d2s/framework/application/frontend/swing/commons-swing.xml</value>
-        <value>com/d2s/framework/sample/backend/domain/sample-domain.xml</value>
+        <value>com/d2s/framework/sample/backend/domain/sample-backend.xml</value>
         <value>com/d2s/framework/sample/frontend/sample-frontend.xml</value>
 			</list>
 		</constructor-arg>
@@ -23,7 +23,7 @@
         <value>com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
         <value>com/d2s/framework/application/frontend/commons-frontend.xml</value>
         <value>com/d2s/framework/application/frontend/ulc/commons-ulc.xml</value>
-        <value>com/d2s/framework/sample/backend/domain/sample-domain.xml</value>
+        <value>com/d2s/framework/sample/backend/domain/sample-backend.xml</value>
         <value>com/d2s/framework/sample/frontend/sample-frontend.xml</value>
 			</list>
 		</constructor-arg>
