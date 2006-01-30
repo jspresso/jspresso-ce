@@ -19,75 +19,41 @@
   <!--
     Root action beans.
   -->
-  <bean id="abstractFrontAction" abstract="true">
-    <property name="viewFactory" ref="viewFactory" />
-    <property name="iconFactory" ref="iconFactory" />
-    <property name="mvcBinder" ref="mvcBinder" />
-  </bean>
-
   <bean id="lovFindFrontAction" parent="abstractFrontAction"
-    class="com.d2s.framework.application.frontend.action.std.FindAction">
-    <property name="wrappedAction" ref="queryEntitiesBackAction" />
-  </bean>
+    class="com.d2s.framework.application.frontend.action.std.FindAction" />
 
   <bean id="lovOkFrontAction" parent="abstractFrontAction"
-    class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction">
-  </bean>
+    class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction" />
 
   <bean id="cancelDialogFrontAction" parent="abstractFrontAction"
-    class="com.d2s.framework.application.frontend.action.ulc.std.DialogCancelAction">
-  </bean>
+    class="com.d2s.framework.application.frontend.action.ulc.std.DialogCancelAction" />
 
   <!-- 
     Action beans
   -->
   <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
-    class="com.d2s.framework.application.frontend.action.ulc.flow.YesNoAction">
-  </bean>
+    class="com.d2s.framework.application.frontend.action.ulc.flow.YesNoAction" />
 
   <!--
     The implementation used as view factory.
   -->
   <bean id="iconFactory" class="com.d2s.framework.view.ulc.UlcIconFactory" />
 
-  <bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.ulc.UlcActionFactory">
-    <property name="iconFactory" ref="iconFactory" />
-  </bean>
+  <bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.ulc.UlcActionFactory" />
 
   <bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
-    class="com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction">
-    <property name="actionFactory" ref="actionFactory" />
-  </bean>
+    class="com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction" />
 
-  <bean id="lovAction" parent="abstractModalDialogAction"
-    class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction">
-    <property name="lovViewFactory" ref="lovViewFactory" />
-    <property name="createQueryEntityAction" ref="createQueryEntityAction" />
-    <property name="okAction" ref="lovOkFrontAction" />
-    <property name="cancelAction" ref="cancelDialogFrontAction" />
-    <property name="findAction" ref="lovFindFrontAction" />
-  </bean>
+  <bean id="lovAction" parent="abstractLovAction"
+    class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" />
 
-  <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory">
-    <property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
-    <property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
-    <property name="iconFactory" ref="iconFactory" />
-    <property name="actionFactory" ref="actionFactory" />
-    <property name="lovAction" ref="lovAction" />
-  </bean>
-
-  <bean id="lovViewFactory" class="com.d2s.framework.view.BasicLovViewFactory">
-    <property name="viewFactory" ref="viewFactory" />
-  </bean>
+  <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory" />
 
   <!--
     The controllers.
   -->
   <bean id="frontController" abstract="true" parent="abstractFrontController"
-    class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController">
-    <property name="viewFactory" ref="viewFactory" />
-    <property name="iconFactory" ref="iconFactory" />
-  </bean>
+    class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController" />
 
 </beans>
 

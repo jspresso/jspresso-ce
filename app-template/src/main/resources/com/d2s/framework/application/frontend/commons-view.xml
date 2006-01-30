@@ -5,10 +5,38 @@
   Test view description context.
 -->
 <beans>
+  <!--
+    View factories
+  -->
+  <bean id="lovViewFactory" class="com.d2s.framework.view.BasicLovViewFactory">
+    <property name="viewFactory" ref="viewFactory" />
+  </bean>
+
+  <!--
+    Root action beans.
+  -->
+  <bean id="abstractFrontAction" abstract="true">
+    <property name="viewFactory" ref="viewFactory" />
+    <property name="iconFactory" ref="iconFactory" />
+    <property name="actionFactory" ref="actionFactory" />
+    <property name="mvcBinder" ref="mvcBinder" />
+  </bean>
 
   <!--
     Action beans.
   -->
+  <bean id="abstractLovAction" abstract="true" parent="abstractFrontAction">
+    <property name="lovViewFactory" ref="lovViewFactory" />
+    <property name="createQueryEntityAction" ref="createQueryEntityAction" />
+    <property name="okAction" ref="lovOkFrontAction" />
+    <property name="cancelAction" ref="cancelDialogFrontAction" />
+    <property name="findAction" ref="lovFindFrontAction" />
+  </bean>
+
+  <bean id="abstractLovFindFrontAction" abstract="true" parent="abstractFrontAction">
+    <property name="wrappedAction" ref="queryEntitiesBackAction" />
+  </bean>
+
   <bean id="connectorSelectionFrontAction"
     class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction">
   </bean>
