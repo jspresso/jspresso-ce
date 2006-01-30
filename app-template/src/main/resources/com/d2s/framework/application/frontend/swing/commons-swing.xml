@@ -2,295 +2,72 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <!--
-	Root application context for the D2S framework.
+	Swing root application context for the D2S framework.
 -->
 <beans default-lazy-init="true">
-	<!--
-		The message source for this context, loaded from localized "messages_xx" files.
-		"getMessage" calls to this context will use this source.
-		Child contexts can have their own message sources, inheriting all messages from this
-		source, being able to define new messages and override ones defined in this source.
-	-->
-	<bean id="messageSource"
-		class="org.springframework.context.support.ResourceBundleMessageSource">
-		<property name="basename" value="messages" />
-	</bean>
-	<!--
-		The implementation used as MvcBinder.
-	-->
-	<bean id="mvcBinder" class="com.d2s.framework.binding.DefaultMvcBinder"></bean>
+
 	<!--
 		The implementation used as ListSelectionModelBinder.
 	-->
-	<bean id="swingListSelectionModelBinder"
+	<bean id="listSelectionModelBinder"
 		class="com.d2s.framework.binding.swing.DefaultListSelectionModelBinder">
-	</bean>
-	<bean id="ulcListSelectionModelBinder"
-		class="com.d2s.framework.binding.ulc.DefaultListSelectionModelBinder">
-	</bean>
-	<!--
-		The implementation used as TreeSelectionModelBinder.
-	-->
-	<bean id="swingTreeSelectionModelBinder"
-		class="com.d2s.framework.binding.swing.DefaultTreeSelectionModelBinder">
-	</bean>
-	<bean id="ulcTreeSelectionModelBinder"
-		class="com.d2s.framework.binding.ulc.DefaultTreeSelectionModelBinder">
-	</bean>
-	<!--
-		The implementation used as AccessorFactory.
-	-->
-	<bean id="accessorFactory" class="com.d2s.framework.util.bean.DefaultAccessorFactory"></bean>
-	<!--
-		The implementation used as ConnectorFactory.
-	-->
-	<bean id="connectorFactory" class="com.d2s.framework.binding.basic.BasicConnectorFactory"></bean>
-	<!--
-		The implementation used as EntityCollectionFactory.
-	-->
-	<bean id="entityCollectionFactory"
-		class="com.d2s.framework.model.entity.DefaultEntityCollectionFactory">
-	</bean>
-	<!--
-		The implementation used as EntityExtensionFactory.
-	-->
-	<bean id="entityExtensionFactory"
-		class="com.d2s.framework.model.entity.DefaultEntityExtensionFactory">
-	</bean>
-	<!--
-		The implementation used as BeanConnectorFactory.
-	-->
-	<bean id="beanConnectorFactory"
-		class="com.d2s.framework.binding.bean.DefaultBeanConnectorFactory">
-		<property name="accessorFactory" ref="accessorFactory" />
-	</bean>
-	<!--
-		The implementation used as MvcBinder.
-	-->
-	<bean id="masterDetailBinder"
-		class="com.d2s.framework.binding.masterdetail.DefaultMasterDetailBinder">
-		<property name="mvcBinder" ref="mvcBinder" />
-	</bean>
-	<!--
-		The GUID generator used to implement entities "synthetic key". The idea was
-		taken from 'maulinshah' post on the hibernate wiki. The implementation of
-		the GUID generator has been written by Marc A. Mnich who published
-		it on http://www.javaexchange.com/aboutRandomGUID.html
-	-->
-	<bean id="entityGUIDGenerator" class="com.d2s.framework.util.uid.RandomGUIDGenerator" />
-	<bean id="mockTranslator" class="com.d2s.framework.util.i18n.mock.MockTranslationProvider" />
-	<!--
-		The implementation used as Application Session.
-	-->
-	<bean id="applicationSession"
-		class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession">
-		<property name="collectionFactory" ref="entityCollectionFactory" />
-		<property name="entityRegistry">
-			<bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" />
-		</property>
-		<property name="unitOfWork">
-			<bean class="com.d2s.framework.application.backend.session.basic.BasicEntityUnitOfWork" />
-		</property>
-		<property name="hibernateTemplate" ref="hibernateTemplate" />
-	</bean>
-	<!--
-		The implementation used as EntityFactory.
-	-->
-	<bean id="entityFactory"
-		class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory">
-		<property name="accessorFactory" ref="accessorFactory" />
-		<property name="entityCollectionFactory" ref="entityCollectionFactory" />
-		<property name="entityExtensionFactory" ref="entityExtensionFactory" />
-		<property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
-		<property name="applicationSession" ref="applicationSession" />
 	</bean>
 
 	<!--
-		Persistence related stuff.
+		The implementation used as TreeSelectionModelBinder.
 	-->
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetClass"
-			value="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxySingleTableEntityPersister" />
-		<property name="targetMethod">
-			<value>setEntityFactory</value>
-		</property>
-		<property name="arguments">
-			<list>
-				<ref local="entityFactory" />
-			</list>
-		</property>
-	</bean>
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetClass"
-			value="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister" />
-		<property name="targetMethod">
-			<value>setEntityFactory</value>
-		</property>
-		<property name="arguments">
-			<list>
-				<ref local="entityFactory" />
-			</list>
-		</property>
-	</bean>
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetClass"
-			value="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyUnionSubclassEntityPersister" />
-		<property name="targetMethod">
-			<value>setEntityFactory</value>
-		</property>
-		<property name="arguments">
-			<list>
-				<ref local="entityFactory" />
-			</list>
-		</property>
-	</bean>
-	<bean id="proxyEntityInterceptor"
-		class="com.d2s.framework.application.backend.persistence.hibernate.ApplicationSessionAwareEntityProxyInterceptor">
-		<property name="entityFactory" ref="entityFactory" />
-		<property name="applicationSession" ref="applicationSession" />
-	</bean>
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
-		<property name="url" value="jdbc:hsqldb:." />
-		<property name="username" value="sa" />
-		<property name="password" value="" />
-	</bean>
-	<bean id="hibernateSessionFactory"
-		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="mappingDirectoryLocations">
-			<list>
-				<value>classpath:com/d2s/framework/test/model/domain</value>
-			</list>
-		</property>
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.query.substitutions">true 1, false 0, yes 'Y', no 'N'</prop>
-				<prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
-				<prop key="hibernate.order_updates">true</prop>
-				<prop key="hibernate.max_fetch_depth">1</prop>
-				<prop key="hibernate.default_batch_fetch_size">8</prop>
-				<prop key="hibernate.jdbc.batch_versioned_data">true</prop>
-				<prop key="hibernate.jdbc.use_streams_for_binary">true</prop>
-				<prop key="hibernate.cache.region_prefix">hibernate.test</prop>
-				<prop key="hibernate.cache.provider_class">
-					org.hibernate.cache.HashtableCacheProvider
-				</prop>
-				<prop key="hibernate.jdbc.use_streams_for_binary">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">create</prop>
-			</props>
-		</property>
-		<property name="entityInterceptor" ref="proxyEntityInterceptor" />
-	</bean>
-	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
-		<property name="sessionFactory" ref="hibernateSessionFactory" />
-	</bean>
-	<bean id="transactionManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="hibernateSessionFactory" />
-	</bean>
-	<bean id="transactionTemplate"
-		class="org.springframework.transaction.support.TransactionTemplate">
-		<property name="transactionManager" ref="transactionManager" />
+	<bean id="treeSelectionModelBinder"
+		class="com.d2s.framework.binding.swing.DefaultTreeSelectionModelBinder">
 	</bean>
 
 	<!--
 		Root action beans.
 	-->
-	<bean abstract="true" id="abstractBackAction"
-		class="com.d2s.framework.application.backend.action.AbstractBackendAction">
-		<property name="accessorFactory" ref="accessorFactory" />
-		<property name="entityFactory" ref="entityFactory" />
-		<property name="beanConnectorFactory" ref="beanConnectorFactory" />
-	</bean>
-	<bean abstract="true" id="abstractHibernateBackAction" parent="abstractBackAction"
-		class="com.d2s.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction">
-		<property name="hibernateTemplate" ref="hibernateTemplate" />
-		<property name="transactionTemplate" ref="transactionTemplate" />
-	</bean>
-  <bean abstract="true" id="abstractSwingFrontAction"
+  <bean id="abstractFrontAction" abstract="true"
     class="com.d2s.framework.application.frontend.action.AbstractFrontendAction">
-    <property name="viewFactory" ref="swingViewFactory" />
-    <property name="iconFactory" ref="swingIconFactory" />
-    <property name="mvcBinder" ref="mvcBinder" />
-  </bean>
-  <bean abstract="true" id="abstractUlcFrontAction"
-    class="com.d2s.framework.application.frontend.action.AbstractFrontendAction">
-    <property name="viewFactory" ref="ulcViewFactory" />
-    <property name="iconFactory" ref="ulcIconFactory" />
+    <property name="viewFactory" ref="viewFactory" />
+    <property name="iconFactory" ref="iconFactory" />
     <property name="mvcBinder" ref="mvcBinder" />
   </bean>
 
-	<bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"
-		class="com.d2s.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction">
-	</bean>
-
-	<bean id="swingLovFindFrontAction" parent="abstractSwingFrontAction"
+	<bean id="lovFindFrontAction" parent="abstractFrontAction"
 		class="com.d2s.framework.application.frontend.action.std.FindAction">
 		<property name="wrappedAction" ref="queryEntitiesBackAction" />
 	</bean>
-  <bean id="ulcLovFindFrontAction" parent="abstractUlcFrontAction"
-    class="com.d2s.framework.application.frontend.action.std.FindAction">
-    <property name="wrappedAction" ref="queryEntitiesBackAction" />
-  </bean>
 
-	<bean id="swingLovOkFrontAction" parent="abstractSwingFrontAction"
+	<bean id="lovOkFrontAction" parent="abstractFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction">
 	</bean>
-	<bean id="swingCancelDialogFrontAction" parent="abstractSwingFrontAction"
-		class="com.d2s.framework.application.frontend.action.swing.std.DialogCancelAction">
-	</bean>
 
-	<bean id="ulcLovOkFrontAction" parent="abstractUlcFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction">
-	</bean>
-	<bean id="ulcCancelDialogFrontAction" parent="abstractUlcFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.std.DialogCancelAction">
+	<bean id="cancelDialogFrontAction" parent="abstractFrontAction"
+		class="com.d2s.framework.application.frontend.action.swing.std.DialogCancelAction">
 	</bean>
 
 	<!--
 		The implementation used as view factory.
 	-->
-	<bean id="abstractViewFactory" abstract="true">
-		<property name="connectorFactory" ref="connectorFactory" />
-		<property name="mvcBinder" ref="mvcBinder" />
-		<property name="labelTranslator" ref="mockTranslator" />
-		<property name="descriptionTranslator" ref="mockTranslator" />
-		<property name="enumerationTranslator" ref="mockTranslator" />
-		<property name="masterDetailBinder" ref="masterDetailBinder" />
-	</bean>
+	<bean id="iconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" />
 
-	<bean id="abstractActionFactory" abstract="true">
-		<property name="labelTranslator" ref="mockTranslator" />
-		<property name="descriptionTranslator" ref="mockTranslator" />
-	</bean>
-
-	<bean id="swingIconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" />
-
-	<bean id="swingActionFactory" parent="abstractActionFactory"
+	<bean id="actionFactory" parent="abstractActionFactory"
 		class="com.d2s.framework.view.swing.SwingActionFactory">
-		<property name="iconFactory" ref="swingIconFactory" />
+		<property name="iconFactory" ref="iconFactory" />
 	</bean>
 
-	<bean id="swingAbstractModalDialogAction" abstract="true" parent="abstractSwingFrontAction"
+	<bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction">
-		<property name="actionFactory" ref="swingActionFactory" />
+		<property name="actionFactory" ref="actionFactory" />
 	</bean>
 
-	<bean id="createQueryEntityAction" parent="abstractBackAction"
-		class="com.d2s.framework.application.backend.action.CreateQueryEntityAction">
-	</bean>
-
-	<bean id="swingLovAction" parent="swingAbstractModalDialogAction"
+	<bean id="lovAction" parent="abstractModalDialogAction"
 		class="com.d2s.framework.application.frontend.action.swing.lov.LovAction">
-		<property name="lovViewFactory" ref="swingLovViewFactory" />
+		<property name="lovViewFactory" ref="lovViewFactory" />
 		<property name="createQueryEntityAction" ref="createQueryEntityAction" />
-		<property name="okAction" ref="swingLovOkFrontAction" />
-		<property name="cancelAction" ref="swingCancelDialogFrontAction" />
-		<property name="findAction" ref="swingLovFindFrontAction" />
+		<property name="okAction" ref="lovOkFrontAction" />
+		<property name="cancelAction" ref="cancelDialogFrontAction" />
+		<property name="findAction" ref="lovFindFrontAction" />
 	</bean>
 
-	<bean id="swingViewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory"
+	<bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory"
 		parent="abstractViewFactory">
 		<!--
 			<constructor-arg index="0" value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
@@ -303,193 +80,29 @@
 			<constructor-arg index="0"
 			value="com.jgoodies.looks.plastic.PlasticXPLookAndFeel" />
 		-->
-		<property name="listSelectionModelBinder" ref="swingListSelectionModelBinder" />
-		<property name="treeSelectionModelBinder" ref="swingTreeSelectionModelBinder" />
-		<property name="iconFactory" ref="swingIconFactory" />
-		<property name="actionFactory" ref="swingActionFactory" />
-		<property name="lovAction" ref="swingLovAction" />
+		<property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
+		<property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
+		<property name="iconFactory" ref="iconFactory" />
+		<property name="actionFactory" ref="actionFactory" />
+		<property name="lovAction" ref="lovAction" />
 	</bean>
 
-	<bean id="swingLovViewFactory" class="com.d2s.framework.view.BasicLovViewFactory">
-		<property name="viewFactory" ref="swingViewFactory" />
+	<bean id="lovViewFactory" class="com.d2s.framework.view.BasicLovViewFactory">
+		<property name="viewFactory" ref="viewFactory" />
 	</bean>
 
-	<bean id="jgoodiesSwingViewFactory"
+	<bean id="jgoodiesViewFactory"
 		class="com.d2s.framework.view.swing.jgoodies.JGoodiesSwingViewFactory"
-		parent="swingViewFactory">
+		parent="viewFactory">
 	</bean>
 
-	<bean id="ulcIconFactory" class="com.d2s.framework.view.ulc.UlcIconFactory" />
-
-	<bean id="ulcActionFactory" parent="abstractActionFactory"
-		class="com.d2s.framework.view.ulc.UlcActionFactory">
-		<property name="iconFactory" ref="ulcIconFactory" />
-	</bean>
-
-	<bean id="ulcAbstractModalDialogAction" abstract="true" parent="abstractUlcFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction">
-		<property name="actionFactory" ref="ulcActionFactory" />
-	</bean>
-
-	<bean id="ulcLovAction" parent="ulcAbstractModalDialogAction"
-		class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction">
-		<property name="lovViewFactory" ref="ulcLovViewFactory" />
-		<property name="createQueryEntityAction" ref="createQueryEntityAction" />
-		<property name="okAction" ref="ulcLovOkFrontAction" />
-		<property name="cancelAction" ref="ulcCancelDialogFrontAction" />
-		<property name="findAction" ref="ulcLovFindFrontAction" />
-	</bean>
-	
-	<bean id="ulcViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory"
-		parent="abstractViewFactory">
-		<property name="listSelectionModelBinder" ref="ulcListSelectionModelBinder" />
-		<property name="treeSelectionModelBinder" ref="ulcTreeSelectionModelBinder" />
-		<property name="iconFactory" ref="ulcIconFactory" />
-		<property name="actionFactory" ref="ulcActionFactory" />
-		<property name="lovAction" ref="ulcLovAction" />
-	</bean>
-
-	<bean id="ulcLovViewFactory" class="com.d2s.framework.view.BasicLovViewFactory">
-		<property name="viewFactory" ref="ulcViewFactory" />
-	</bean>
-
-	<!--
-		The scriptHandler.
-	-->
-	<bean id="scriptHandler" class="com.d2s.framework.util.scripting.DefaultScriptHandler"></bean>
 	<!--
 		The controllers.
 	-->
-	<bean abstract="true" id="abstractFrontController">
-		<property name="mvcBinder" ref="mvcBinder" />
-		<property name="labelTranslator" ref="mockTranslator" />
-		<property name="descriptionTranslator" ref="mockTranslator" />
-	</bean>
-	<bean abstract="true" id="abstractSwingFrontController" parent="abstractFrontController"
+	<bean id="abstractController" abstract="true" parent="abstractFrontController"
 		class="com.d2s.framework.application.frontend.controller.swing.DefaultSwingController">
-		<property name="viewFactory" ref="jgoodiesSwingViewFactory" />
-		<property name="iconFactory" ref="swingIconFactory" />
-	</bean>
-	<bean abstract="true" id="abstractUlcFrontController" parent="abstractFrontController"
-		class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController">
-		<property name="viewFactory" ref="ulcViewFactory" />
-		<property name="iconFactory" ref="ulcIconFactory" />
-	</bean>
-
-	<bean abstract="true" id="abstractModelBackController"
-		class="com.d2s.framework.application.backend.DefaultBackendController">
-		<property name="beanConnectorFactory" ref="beanConnectorFactory" />
-		<property name="applicationSession" ref="applicationSession" />
-	</bean>
-	<!--
-		The Root descriptor of all entities.
-	-->
-	<bean id="com.d2s.framework.model.entity.IEntity"
-		class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
-		<property name="name" value="com.d2s.framework.model.entity.IEntity" />
-		<property name="propertyDescriptors">
-			<list>
-				<bean
-					class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
-					<property name="name" value="id" />
-					<property name="mandatory" value="true" />
-				</bean>
-				<bean
-					class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
-					<property name="name" value="version" />
-					<property name="mandatory" value="true" />
-				</bean>
-			</list>
-		</property>
-	</bean>
-	<!--
-		Utility beans for model.
-	-->
-	<bean id="DATE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TYPE</value>
-		</property>
-	</bean>
-	<bean id="TIME" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.TIME_TYPE</value>
-		</property>
-	</bean>
-	<bean id="DATE_TIME"
-		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TIME_TYPE</value>
-		</property>
-	</bean>
-	<!--
-		Utility beans for views.
-	-->
-	<bean id="ASIDE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.view.descriptor.IComponentViewDescriptor.ASIDE</value>
-		</property>
-	</bean>
-	<bean id="ABOVE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.view.descriptor.IComponentViewDescriptor.ABOVE</value>
-		</property>
-	</bean>
-	<bean id="ROW" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.view.descriptor.IEvenGridViewDescriptor.ROW</value>
-		</property>
-	</bean>
-	<bean id="COLUMN" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.view.descriptor.IEvenGridViewDescriptor.COLUMN</value>
-		</property>
-	</bean>
-	<bean id="HORIZONTAL"
-		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.view.descriptor.ISplitViewDescriptor.HORIZONTAL</value>
-		</property>
-	</bean>
-	<bean id="VERTICAL"
-		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.view.descriptor.ISplitViewDescriptor.VERTICAL</value>
-		</property>
-	</bean>
-	<bean id="SIMPLE_BORDER"
-		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.view.descriptor.IViewDescriptor.SIMPLE</value>
-		</property>
-	</bean>
-	<bean id="TITLED_BORDER"
-		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-		<property name="staticField">
-			<value>com.d2s.framework.view.descriptor.IViewDescriptor.TITLED</value>
-		</property>
-	</bean>
-	<bean id="decoratedView" abstract="true">
-		<property name="borderType" ref="TITLED_BORDER" />
-	</bean>
-	<!--
-		Projection utility beans.
-	-->
-	<bean id="projectionDescriptor"
-		class="com.d2s.framework.model.descriptor.projection.ProjectionDescriptor" />
-	<bean id="childrenProjectionPropertyDescriptor"
-		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetObject" ref="projectionDescriptor" />
-		<property name="targetMethod" value="getPropertyDescriptor" />
-		<property name="arguments">
-			<list>
-				<value>children</value>
-			</list>
-		</property>
-	</bean>
-	<bean abstract="true" id="abstractChildrenProjectionNodeGroupDescriptor"
-		class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor">
-		<property name="renderedProperty" value="name" />
-		<property name="modelDescriptor" ref="childrenProjectionPropertyDescriptor" />
+		<property name="viewFactory" ref="jgoodiesViewFactory" />
+		<property name="iconFactory" ref="iconFactory" />
 	</bean>
 </beans>
 
