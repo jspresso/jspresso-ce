@@ -496,7 +496,7 @@ script.setExecutionResult(result)
   <!--
     The controllers.
   -->
-  <bean id="testFrontController" parent="frontController">
+  <bean id="applicationFrontController" parent="frontController">
     <property name="name" value="Test Application" />
     <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
     <property name="rootProjectionViewDescriptors">
@@ -505,7 +505,7 @@ script.setExecutionResult(result)
       </map>
     </property>
   </bean>
-  <bean id="testBackController" parent="abstractBackController">
+  <bean id="applicationBackController" parent="abstractBackController">
     <property name="rootProjections">
       <map>
         <entry key="company" value-ref="company.projection" />
