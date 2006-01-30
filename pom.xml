@@ -48,6 +48,7 @@
 		<module>swing</module>
 		<module>ulc</module>
     <module>app-template</module>
+    <module>app-sample</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
