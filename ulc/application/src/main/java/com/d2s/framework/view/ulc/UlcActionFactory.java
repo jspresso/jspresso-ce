@@ -61,14 +61,14 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
   private final class ActionAdapter extends
       com.ulcjava.base.application.AbstractAction {
 
-    private static final long                serialVersionUID = 5819377672533326496L;
+    private static final long                     serialVersionUID = 5819377672533326496L;
 
     private com.d2s.framework.view.action.IAction action;
-    private IActionHandler                   actionHandler;
-    private ULCComponent                     sourceComponent;
-    private IModelDescriptor                 modelDescriptor;
-    private IValueConnector                  viewConnector;
-    private Locale                           locale;
+    private IActionHandler                        actionHandler;
+    private ULCComponent                          sourceComponent;
+    private IModelDescriptor                      modelDescriptor;
+    private IValueConnector                       viewConnector;
+    private Locale                                locale;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.

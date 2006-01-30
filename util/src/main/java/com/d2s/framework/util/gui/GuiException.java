@@ -6,7 +6,8 @@ package com.d2s.framework.util.gui;
 import com.d2s.framework.util.exception.NestedRuntimeException;
 
 /**
- * This exception is thrown whenever an unexpected exception occurs on a gui component.
+ * This exception is thrown whenever an unexpected exception occurs on a gui
+ * component.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

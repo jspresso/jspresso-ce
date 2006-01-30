@@ -23,19 +23,19 @@
 		The implementation used as ListSelectionModelBinder.
 	-->
 	<bean id="swingListSelectionModelBinder"
-		class="com.d2s.framework.binding.ui.swing.DefaultListSelectionModelBinder">
+		class="com.d2s.framework.binding.swing.DefaultListSelectionModelBinder">
 	</bean>
 	<bean id="ulcListSelectionModelBinder"
-		class="com.d2s.framework.binding.ui.ulc.DefaultListSelectionModelBinder">
+		class="com.d2s.framework.binding.ulc.DefaultListSelectionModelBinder">
 	</bean>
 	<!--
 		The implementation used as TreeSelectionModelBinder.
 	-->
 	<bean id="swingTreeSelectionModelBinder"
-		class="com.d2s.framework.binding.ui.swing.DefaultTreeSelectionModelBinder">
+		class="com.d2s.framework.binding.swing.DefaultTreeSelectionModelBinder">
 	</bean>
 	<bean id="ulcTreeSelectionModelBinder"
-		class="com.d2s.framework.binding.ui.ulc.DefaultTreeSelectionModelBinder">
+		class="com.d2s.framework.binding.ulc.DefaultTreeSelectionModelBinder">
 	</bean>
 	<!--
 		The implementation used as AccessorFactory.

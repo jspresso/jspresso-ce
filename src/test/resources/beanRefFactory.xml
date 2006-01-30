@@ -6,7 +6,7 @@
 		class="org.springframework.context.support.ClassPathXmlApplicationContext">
 		<constructor-arg>
 			<list>
-				<value>com/d2s/framework/application-context.xml</value>
+				<value>com/d2s/framework/commons.xml</value>
 			</list>
 		</constructor-arg>
 	</bean>

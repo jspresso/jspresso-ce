@@ -67,8 +67,7 @@ public class ChildProjection extends Projection {
    * @param viewDescriptor
    *          the viewDescriptor to set.
    */
-  public void setViewDescriptor(
-      IChildProjectionViewDescriptor viewDescriptor) {
+  public void setViewDescriptor(IChildProjectionViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
   }
 }

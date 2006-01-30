@@ -245,8 +245,8 @@ public class DefaultSwingController extends
    */
   private JInternalFrame createJInternalFrame(IView<JComponent> view) {
     JInternalFrame internalFrame = new JInternalFrame(getLabelTranslator()
-        .getTranslation(view.getDescriptor().getName(),
-            getLocale()), true, false, true, true);
+        .getTranslation(view.getDescriptor().getName(), getLocale()), true,
+        false, true, true);
     internalFrame.setFrameIcon(getIconFactory().getIcon(
         view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     internalFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);

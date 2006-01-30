@@ -35,8 +35,8 @@
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
-  <bean id="removeCollectionFromMasterFrontAction" parent="abstractUlcFrontAction"
-    class="com.d2s.framework.application.frontend.action.ulc.flow.YesNoAction">
+  <bean id="removeCollectionFromMasterFrontAction" parent="abstractSwingFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction">
     <property name="iconImageURL" value="classpath:images/edit_remove-48x48.png" />
     <property name="name" value="remove" />
     <property name="description" value="Removes selected details" />
@@ -133,7 +133,7 @@
   <!--
     Action maps.
   -->
-  <bean id="masterDetailActionMap" class="com.d2s.framework.action.ActionMap">
+  <bean id="masterDetailActionMap" class="com.d2s.framework.view.action.ActionMap">
     <property name="actionMap">
       <map>
         <entry key="EDIT">
@@ -146,7 +146,7 @@
       </map>
     </property>
   </bean>
-  <bean id="projectedCollectionActionMap" class="com.d2s.framework.action.ActionMap">
+  <bean id="projectedCollectionActionMap" class="com.d2s.framework.view.action.ActionMap">
     <property name="actionMap">
       <map>
         <entry key="FILE">
@@ -170,7 +170,7 @@
       </map>
     </property>
   </bean>
-  <bean id="projectionActionMap" class="com.d2s.framework.action.ActionMap">
+  <bean id="projectionActionMap" class="com.d2s.framework.view.action.ActionMap">
     <property name="actionMap">
       <map>
         <entry key="EDIT">
@@ -181,7 +181,7 @@
       </map>
     </property>
   </bean>
-  <bean id="projectedActionMap" class="com.d2s.framework.action.ActionMap">
+  <bean id="projectedActionMap" class="com.d2s.framework.view.action.ActionMap">
     <property name="actionMap">
       <map>
         <entry key="FILE">
@@ -223,7 +223,7 @@ script.setExecutionResult(result)
     <property name="wrappedAction" ref="nameToUppercaseCollectionBackAction" />
   </bean>
 
-  <bean id="personMasterDetailActionMap" class="com.d2s.framework.action.ActionMap">
+  <bean id="personMasterDetailActionMap" class="com.d2s.framework.view.action.ActionMap">
     <property name="parentActionMaps">
       <list>
         <ref local="masterDetailActionMap" />
@@ -612,13 +612,13 @@ script.setExecutionResult(result)
     <property name="elementDescriptor" ref="com.d2s.framework.test.model.domain.Department" />
   </bean>
 
-  <bean id="departments.projection" class="com.d2s.framework.application.backend.projection.BeanProjection">
+  <bean id="departments.projection" class="com.d2s.framework.view.projection.BeanProjection">
     <property name="name" value="departments.projection" />
     <property name="description" value="Departments" />
     <property name="viewDescriptor" ref="company.departments.projection.view" />
   </bean>
 
-  <bean id="company.projection" class="com.d2s.framework.application.backend.projection.Projection">
+  <bean id="company.projection" class="com.d2s.framework.view.projection.Projection">
     <property name="name" value="company.projection" />
     <property name="description" value="Company" />
     <property name="children">
@@ -684,7 +684,7 @@ script.setExecutionResult(result)
   <!--
     The controllers.
   -->
-  <bean id="testFrontController" parent="abstractUlcFrontController">
+  <bean id="testFrontController" parent="abstractSwingFrontController">
     <property name="name" value="Test Application" />
     <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
     <property name="rootProjectionViewDescriptors">
