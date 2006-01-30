@@ -72,7 +72,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
    */
   @Override
   public String typeString() {
-    return "com.d2s.framework.view.ulc.components.client.UIDateField";
+    return "com.d2s.framework.gui.ulc.components.client.UIDateField";
   }
 
   /**

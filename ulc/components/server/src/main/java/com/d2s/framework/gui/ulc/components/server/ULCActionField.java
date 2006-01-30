@@ -72,7 +72,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    */
   @Override
   public String typeString() {
-    return "com.d2s.framework.view.ulc.components.client.UIActionField";
+    return "com.d2s.framework.gui.ulc.components.client.UIActionField";
   }
 
   /**

@@ -72,7 +72,7 @@ public class ULCTranslationDataType extends ULCProxy implements IDataType {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.view.ulc.components.client.UITranslationDataType";
+    return "com.d2s.framework.gui.ulc.components.client.UITranslationDataType";
   }
 
   /**

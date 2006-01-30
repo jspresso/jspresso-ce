@@ -22,7 +22,7 @@ public class ULCTable extends com.ulcjava.base.application.ULCTable {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.view.ulc.components.client.UITable";
+    return "com.d2s.framework.gui.ulc.components.client.UITable";
   }
 
 }

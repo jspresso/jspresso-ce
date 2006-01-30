@@ -90,7 +90,7 @@ public class ULCTree extends com.ulcjava.base.application.ULCTree {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.view.ulc.components.client.UITree";
+    return "com.d2s.framework.gui.ulc.components.client.UITree";
   }
 
   /**

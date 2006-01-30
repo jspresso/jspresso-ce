@@ -62,6 +62,6 @@ public class ULCOnFocusSelectTextField extends ULCTextField {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.view.ulc.components.client.UIOnFocusSelectTextField";
+    return "com.d2s.framework.gui.ulc.components.client.UIOnFocusSelectTextField";
   }
 }
