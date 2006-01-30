@@ -6,11 +6,32 @@
 -->
 <beans>
 
+  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+    <property name="url" value="jdbc:hsqldb:." />
+    <property name="username" value="sa" />
+    <property name="password" value="" />
+  </bean>
+
   <bean id="hibernateSessionFactory" parent="abstractHibernateSessionFactory">
+    <property name="hibernateProperties">
+      <props>
+        <prop key="hibernate.query.substitutions">true 1, false 0, yes 'Y', no 'N'</prop>
+        <prop key="hibernate.dialect">org.hibernate.dialect.HSQLDialect</prop>
+        <prop key="hibernate.order_updates">true</prop>
+        <prop key="hibernate.max_fetch_depth">1</prop>
+        <prop key="hibernate.default_batch_fetch_size">8</prop>
+        <prop key="hibernate.jdbc.batch_versioned_data">true</prop>
+        <prop key="hibernate.jdbc.use_streams_for_binary">true</prop>
+        <prop key="hibernate.cache.region_prefix">hibernate.test</prop>
+        <prop key="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</prop>
+        <prop key="hibernate.hbm2ddl.auto">create</prop>
+      </props>
+    </property>
     <property name="mappingDirectoryLocations">
-    <list>
-    <value>classpath:com/d2s/framework/sample/backend/domain</value>
-    </list>
+      <list>
+        <value>classpath:com/d2s/framework/sample/backend/domain</value>
+      </list>
     </property>
   </bean>
 
