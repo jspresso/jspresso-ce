@@ -1,13 +1,14 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.test.model.domain;
+package com.d2s.framework.sample.backend.domain;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
 
 import com.d2s.framework.model.entity.AbstractEntityExtension;
+import com.d2s.framework.test.model.domain.Person;
 
 /**
  * Helper class computing extended properties for Person entities.

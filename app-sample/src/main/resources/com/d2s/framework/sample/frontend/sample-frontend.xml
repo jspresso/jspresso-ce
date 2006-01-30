@@ -58,7 +58,7 @@ script.setExecutionResult(result)
     <property name="description" value="departmentView" />
     <property name="labelsPosition" ref="ABOVE" />
     <property name="columnCount" value="3" />
-    <property name="modelDescriptor" ref="com.d2s.framework.test.model.domain.Department" />
+    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
     <property name="renderedProperties">
       <list>
         <value>id</value>
@@ -95,7 +95,7 @@ script.setExecutionResult(result)
     <property name="description" value="employeeView" />
     <property name="labelsPosition" ref="ABOVE" />
     <property name="columnCount" value="3" />
-    <property name="modelDescriptor" ref="com.d2s.framework.test.model.domain.Employee" />
+    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Employee" />
     <property name="renderedProperties">
       <list>
         <value>id</value>
@@ -114,7 +114,7 @@ script.setExecutionResult(result)
     <property name="description" value="projectView" />
     <property name="labelsPosition" ref="ABOVE" />
     <property name="columnCount" value="3" />
-    <property name="modelDescriptor" ref="com.d2s.framework.test.model.domain.Project" />
+    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Project" />
     <property name="renderedProperties">
       <list>
         <value>id</value>
@@ -265,8 +265,8 @@ script.setExecutionResult(result)
     </property>
     <property name="classNameToCardMapping">
       <map>
-        <entry key="com.d2s.framework.test.model.domain.Employee" value="E" />
-        <entry key="com.d2s.framework.test.model.domain.Project" value="P" />
+        <entry key="com.d2s.framework.sample.backend.domain.Employee" value="E" />
+        <entry key="com.d2s.framework.sample.backend.domain.Project" value="P" />
       </map>
     </property>
   </bean>
@@ -366,19 +366,19 @@ script.setExecutionResult(result)
 
   <bean id="department.tree" class="com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor">
     <property name="name" value="department.tree" />
-    <property name="modelDescriptor" ref="com.d2s.framework.test.model.domain.Department" />
+    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
     <property name="rootSubtreeDescriptor" ref="company.companyDepartments.subtree" />
   </bean>
 
   <bean id="employee.tree" class="com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor">
     <property name="name" value="employee.tree" />
-    <property name="modelDescriptor" ref="com.d2s.framework.test.model.domain.Employee" />
+    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Employee" />
     <property name="rootSubtreeDescriptor" ref="department.departmentEmployees.subtree" />
   </bean>
 
   <bean id="project.tree" class="com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor">
     <property name="name" value="project.tree" />
-    <property name="modelDescriptor" ref="com.d2s.framework.test.model.domain.Project" />
+    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Project" />
     <property name="rootSubtreeDescriptor" ref="department.departmentProjects.subtree" />
   </bean>
 
@@ -394,9 +394,9 @@ script.setExecutionResult(result)
     </property>
     <property name="classNameToCardMapping">
       <map>
-        <entry key="com.d2s.framework.test.model.domain.Department" value="EP" />
-        <entry key="com.d2s.framework.test.model.domain.Employee" value="E" />
-        <entry key="com.d2s.framework.test.model.domain.Project" value="P" />
+        <entry key="com.d2s.framework.sample.backend.domain.Department" value="EP" />
+        <entry key="com.d2s.framework.sample.backend.domain.Employee" value="E" />
+        <entry key="com.d2s.framework.sample.backend.domain.Project" value="P" />
       </map>
     </property>
   </bean>
@@ -409,7 +409,7 @@ script.setExecutionResult(result)
     <property name="leftTopViewDescriptor" ref="department.tree" />
     <property name="rightBottomViewDescriptor" ref="department.multi.pane" />
     <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
-    <property name="modelDescriptor" ref="com.d2s.framework.test.model.domain.Department" />
+    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
     <property name="actionMap" ref="projectedActionMap" />
   </bean>
 
@@ -421,7 +421,7 @@ script.setExecutionResult(result)
   <bean id="departments.projected" class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor">
     <property name="name" value="projectedObjects" />
     <property name="collectionInterface" value="java.util.List" />
-    <property name="elementDescriptor" ref="com.d2s.framework.test.model.domain.Department" />
+    <property name="elementDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
   </bean>
 
   <bean id="departments.projection" class="com.d2s.framework.view.projection.BeanProjection">
