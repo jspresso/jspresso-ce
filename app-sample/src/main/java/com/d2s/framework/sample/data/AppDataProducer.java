@@ -12,10 +12,10 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
-import com.d2s.framework.test.model.domain.City;
-import com.d2s.framework.test.model.domain.Department;
-import com.d2s.framework.test.model.domain.Employee;
-import com.d2s.framework.test.model.domain.Project;
+import com.d2s.framework.sample.backend.domain.City;
+import com.d2s.framework.sample.backend.domain.Department;
+import com.d2s.framework.sample.backend.domain.Employee;
+import com.d2s.framework.sample.backend.domain.Project;
 
 /**
  * Simple utility class to produce test data.

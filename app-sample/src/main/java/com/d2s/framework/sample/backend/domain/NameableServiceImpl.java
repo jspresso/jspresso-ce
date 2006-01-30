@@ -4,7 +4,6 @@
 package com.d2s.framework.sample.backend.domain;
 
 import com.d2s.framework.model.service.IComponentService;
-import com.d2s.framework.test.model.domain.Nameable;
 
 /**
  * A very usefull ;) service to transform a <code>Nameable</code> name to

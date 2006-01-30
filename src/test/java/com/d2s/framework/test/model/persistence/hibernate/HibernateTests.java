@@ -20,9 +20,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.sample.backend.domain.Department;
+import com.d2s.framework.sample.backend.domain.Employee;
 import com.d2s.framework.test.model.AbstractModelTest;
-import com.d2s.framework.test.model.domain.Department;
-import com.d2s.framework.test.model.domain.Employee;
 
 /**
  * Tests for hibernate persistence layer used in conjunction with proxy

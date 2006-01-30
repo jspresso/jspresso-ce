@@ -17,10 +17,10 @@ import com.d2s.framework.binding.basic.BasicCompositeConnector;
 import com.d2s.framework.binding.basic.BasicValueConnector;
 import com.d2s.framework.binding.bean.BeanConnector;
 import com.d2s.framework.binding.bean.IBeanConnectorFactory;
+import com.d2s.framework.sample.backend.domain.City;
+import com.d2s.framework.sample.backend.domain.Department;
+import com.d2s.framework.sample.backend.domain.Employee;
 import com.d2s.framework.test.model.AbstractModelTest;
-import com.d2s.framework.test.model.domain.City;
-import com.d2s.framework.test.model.domain.Department;
-import com.d2s.framework.test.model.domain.Employee;
 
 /**
  * Test case for DefaultMvcBinder.

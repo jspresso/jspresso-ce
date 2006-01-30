@@ -15,11 +15,11 @@ import java.util.Set;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import com.d2s.framework.test.model.domain.City;
-import com.d2s.framework.test.model.domain.Department;
-import com.d2s.framework.test.model.domain.Employee;
-import com.d2s.framework.test.model.domain.Person;
-import com.d2s.framework.test.model.domain.Project;
+import com.d2s.framework.sample.backend.domain.City;
+import com.d2s.framework.sample.backend.domain.Department;
+import com.d2s.framework.sample.backend.domain.Employee;
+import com.d2s.framework.sample.backend.domain.Person;
+import com.d2s.framework.sample.backend.domain.Project;
 
 /**
  * Test case for entities.

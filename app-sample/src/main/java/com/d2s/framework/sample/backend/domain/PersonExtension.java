@@ -8,7 +8,6 @@ import java.beans.PropertyChangeListener;
 import java.util.Date;
 
 import com.d2s.framework.model.entity.AbstractEntityExtension;
-import com.d2s.framework.test.model.domain.Person;
 
 /**
  * Helper class computing extended properties for Person entities.
