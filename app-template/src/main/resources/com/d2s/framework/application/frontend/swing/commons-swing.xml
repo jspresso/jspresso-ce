@@ -99,7 +99,7 @@
 	<!--
 		The controllers.
 	-->
-	<bean id="abstractController" abstract="true" parent="abstractFrontController"
+	<bean id="frontController" abstract="true" parent="abstractFrontController"
 		class="com.d2s.framework.application.frontend.controller.swing.DefaultSwingController">
 		<property name="viewFactory" ref="jgoodiesViewFactory" />
 		<property name="iconFactory" ref="iconFactory" />

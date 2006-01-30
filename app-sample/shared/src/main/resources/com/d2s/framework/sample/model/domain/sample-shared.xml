@@ -5,7 +5,7 @@
   Test model description context.
 -->
 <beans>
-  <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+  <bean id="appContextSetter" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
     <property name="targetObject" ref="entityFactory" />
     <property name="targetMethod">
       <value>setEntityApplicationContext</value>

@@ -77,7 +77,7 @@
   <!--
     The controllers.
   -->
-  <bean id="abstractController" abstract="true" parent="abstractFrontController"
+  <bean id="frontController" abstract="true" parent="abstractFrontController"
     class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController">
     <property name="viewFactory" ref="viewFactory" />
     <property name="iconFactory" ref="iconFactory" />

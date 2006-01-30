@@ -35,7 +35,7 @@
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
-  <bean id="removeCollectionFromMasterFrontAction" parent="abstractSwingFrontAction"
+  <bean id="removeCollectionFromMasterFrontAction" parent="abstractFrontAction"
     class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction">
     <property name="iconImageURL" value="classpath:images/edit_remove-48x48.png" />
     <property name="name" value="remove" />
@@ -684,7 +684,7 @@ script.setExecutionResult(result)
   <!--
     The controllers.
   -->
-  <bean id="testFrontController" parent="abstractSwingFrontController">
+  <bean id="testFrontController" parent="frontController">
     <property name="name" value="Test Application" />
     <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
     <property name="rootProjectionViewDescriptors">
