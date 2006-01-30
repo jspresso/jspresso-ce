@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>com.design2see</groupId>
-		<artifactId>design2see-framework</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
-	<artifactId>d2s-app-sample</artifactId>
-	<packaging>jar</packaging>
-	<name>Design2See Application Framework - App-sample</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.design2see</groupId>
+    <artifactId>design2see-framework</artifactId>
+    <version>0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>d2s-app-sample</artifactId>
+  <packaging>jar</packaging>
+  <name>Design2See Application Framework - App-sample</name>
+  <dependencies>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-app-template</artifactId>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>compile</phase>
+            <configuration>
+              <tasks>
+                <property name="project.build.sourceDirectory" value="${project.build.sourceDirectory}" />
+                <property name="project.build.outputDirectory" value="${project.build.outputDirectory}" />
+                <property name="project.build.testSourceDirectory" value="${project.build.testSourceDirectory}" />
+                <property name="project.build.testOutputDirectory" value="${project.build.testOutputDirectory}" />
+                <ant target="xdoclet-hibernate" />
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

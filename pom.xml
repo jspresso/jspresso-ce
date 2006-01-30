@@ -137,6 +137,16 @@
 				<artifactId>d2s-ulc-components-client</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-app-template</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-app-sample</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
 			<dependency>
 				<groupId>commons-logging</groupId>
 				<artifactId>commons-logging</artifactId>
@@ -282,6 +292,7 @@
 			</testResource>
 		</testResources>
 		<plugins>
+    <!-- DISABLE UNIT TESTS AS OF NOW
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -292,7 +303,8 @@
 					</includes>
 				</configuration>
 			</plugin>
-			<plugin>
+		-->
+      <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -312,30 +324,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--
-				<plugin>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-				<execution>
-				<phase>generate-test-sources</phase>
-				<configuration>
-				<tasks>
-				<property name="project.build.testOutputDirectory"
-				value="${project.build.testOutputDirectory}" />
-				<property name="project.build.sourceDirectory"
-				value="${project.build.sourceDirectory}" />
-				<property name="project.build.testSourceDirectory"
-				value="${project.build.testSourceDirectory}" />
-				<ant target="xdoclet-hibernate" />
-				</tasks>
-				</configuration>
-				<goals>
-				<goal>run</goal>
-				</goals>
-				</execution>
-				</executions>
-				</plugin>
-			-->
 		</plugins>
 	</build>
 	<reporting>
