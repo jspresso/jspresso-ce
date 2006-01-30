@@ -47,6 +47,7 @@
 		<module>hibernate</module>
 		<module>swing</module>
 		<module>ulc</module>
+    <module>app-template</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
