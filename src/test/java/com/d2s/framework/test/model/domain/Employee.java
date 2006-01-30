@@ -11,7 +11,7 @@ package com.d2s.framework.test.model.domain;
  * 
  * @hibernate.mapping default-access =
  *                    "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
- *                    package = "com.d2s.framework.test.model.domain"
+ *                    package = "com.d2s.framework.sample.model.domain"
  * @hibernate.class table = "EMPLOYEE" dynamic-insert = "true" dynamic-update =
  *                  "true" persister =
  *                  "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxySingleTableEntityPersister"
@@ -78,7 +78,7 @@ public interface Employee extends com.d2s.framework.test.model.domain.Person {
    *                inverse = "true" order-by="NAME"
    * @hibernate.key column = "MANAGER_ID"
    * @hibernate.one-to-many class =
-   *                        "com.d2s.framework.test.model.domain.Employee"
+   *                        "com.d2s.framework.sample.model.domain.Employee"
    * @return the managedEmployees.
    */
   java.util.Set<com.d2s.framework.test.model.domain.Employee> getManagedEmployees();
@@ -134,7 +134,7 @@ public interface Employee extends com.d2s.framework.test.model.domain.Person {
    *                "true"
    * @hibernate.key column = "EMPLOYEE_ID"
    * @hibernate.many-to-many class =
-   *                         "com.d2s.framework.test.model.domain.Project"
+   *                         "com.d2s.framework.sample.model.domain.Project"
    *                         column = "PROJECT_ID"
    * @return the employeeProjects.
    */

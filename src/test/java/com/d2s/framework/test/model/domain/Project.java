@@ -11,7 +11,7 @@ package com.d2s.framework.test.model.domain;
  * 
  * @hibernate.mapping default-access =
  *                    "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
- *                    package = "com.d2s.framework.test.model.domain"
+ *                    package = "com.d2s.framework.sample.model.domain"
  * @hibernate.class table = "PROJECT" dynamic-insert = "true" dynamic-update =
  *                  "true" persister =
  *                  "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxySingleTableEntityPersister"
@@ -46,7 +46,7 @@ public interface Project extends com.d2s.framework.test.model.domain.Nameable,
    *                table = "PROJECT_PROJECT_MEMBERS"
    * @hibernate.key column = "PROJECT_ID"
    * @hibernate.many-to-many class =
-   *                         "com.d2s.framework.test.model.domain.Employee"
+   *                         "com.d2s.framework.sample.model.domain.Employee"
    *                         column = "EMPLOYEE_ID"
    * @return the projectMembers.
    */

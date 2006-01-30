@@ -46,7 +46,7 @@ public abstract class AbstractModelTest extends D2STestCase {
    */
   @Override
   protected String getApplicationContextKey() {
-    return "com.d2s.framework.test.model.domain";
+    return "com.d2s.framework.sample.model.domain";
   }
 
   /**

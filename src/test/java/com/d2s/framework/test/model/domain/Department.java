@@ -11,7 +11,7 @@ package com.d2s.framework.test.model.domain;
  * 
  * @hibernate.mapping default-access =
  *                    "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
- *                    package = "com.d2s.framework.test.model.domain"
+ *                    package = "com.d2s.framework.sample.model.domain"
  * @hibernate.class table = "DEPARTMENT" dynamic-insert = "true" dynamic-update =
  *                  "true" persister =
  *                  "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxySingleTableEntityPersister"
@@ -48,7 +48,7 @@ public interface Department extends
    *                inverse = "true" order-by="NAME"
    * @hibernate.key column = "DEPARTMENT_ID"
    * @hibernate.one-to-many class =
-   *                        "com.d2s.framework.test.model.domain.Employee"
+   *                        "com.d2s.framework.sample.model.domain.Employee"
    * @return the departmentEmployees.
    */
   java.util.Set<com.d2s.framework.test.model.domain.Employee> getDepartmentEmployees();
@@ -88,7 +88,7 @@ public interface Department extends
    *                inverse = "true" order-by="NAME"
    * @hibernate.key column = "DEPARTMENT_ID"
    * @hibernate.one-to-many class =
-   *                        "com.d2s.framework.test.model.domain.Project"
+   *                        "com.d2s.framework.sample.model.domain.Project"
    * @return the departmentProjects.
    */
   java.util.Set<com.d2s.framework.test.model.domain.Project> getDepartmentProjects();

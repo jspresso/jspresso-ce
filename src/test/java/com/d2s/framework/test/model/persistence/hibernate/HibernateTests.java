@@ -136,16 +136,16 @@ public class HibernateTests extends AbstractModelTest {
 
       public Object doInHibernate(Session session) {
         session.createQuery(
-            "delete from com.d2s.framework.test.model.domain.Employee")
+            "delete from com.d2s.framework.sample.model.domain.Employee")
             .executeUpdate();
         session.createQuery(
-            "delete from com.d2s.framework.test.model.domain.Department")
+            "delete from com.d2s.framework.sample.model.domain.Department")
             .executeUpdate();
         session.createQuery(
-            "delete from com.d2s.framework.test.model.domain.Person")
+            "delete from com.d2s.framework.sample.model.domain.Person")
             .executeUpdate();
         session.createQuery(
-            "delete from com.d2s.framework.test.model.domain.City")
+            "delete from com.d2s.framework.sample.model.domain.City")
             .executeUpdate();
         return null;
       }
