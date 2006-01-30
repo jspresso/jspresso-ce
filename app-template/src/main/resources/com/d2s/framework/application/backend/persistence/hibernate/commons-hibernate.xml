@@ -66,8 +66,7 @@
     <property name="password" value="" />
   </bean>
 
-  <bean id="hibernateSessionFactory" abstract="true"
-    class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+  <bean id="hibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
     <property name="hibernateProperties">
       <props>

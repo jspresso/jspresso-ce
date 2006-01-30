@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import com.d2s.framework.application.frontend.startup.AbstractStartup;
 
-
 /**
  * Default swing startup class.
  * <p>

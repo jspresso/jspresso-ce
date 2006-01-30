@@ -15,11 +15,10 @@ import com.ulcjava.base.development.DevelopmentRunner;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public final class UlcLauncher extends
-    DevelopmentRunner {
-  
+public final class UlcLauncher extends DevelopmentRunner {
+
   private UlcLauncher() {
-    //Helper class constructor.
+    // Helper class constructor.
   }
 
   /**

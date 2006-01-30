@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.application.frontend.startup;
 
-
 /**
  * Application startup interface.
  * <p>
@@ -17,7 +16,6 @@ public interface IStartup {
 
   /**
    * Starts up the application.
-   * 
    */
   void start();
 }

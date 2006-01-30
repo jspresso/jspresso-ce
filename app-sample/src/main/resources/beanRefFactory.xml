@@ -3,28 +3,29 @@
 
 <beans>
 	<bean id="swing-context"
-		class="org.springframework.context.support.ClassPathXmlApplicationContext">
+		class="org.springframework.context.support.ClassPathXmlApplicationContext" lazy-init="true">
 		<constructor-arg>
 			<list>
 				<value>com/d2s/framework/application/commons.xml</value>
         <value>com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
-        <value>com/d2s/framework/application/frontend/commons-view.xml</value>
-        <value>com/d2s/framework/application/frontend/commons-swing.xml</value>
-        <value>com/d2s/framework/sample/backend/domain/sample-model.xml</value>
-        <value>com/d2s/framework/sample/view/sample-view.xml</value>
+        <value>com/d2s/framework/application/frontend/commons-frontend.xml</value>
+        <value>com/d2s/framework/application/frontend/swing/commons-swing.xml</value>
+        <value>com/d2s/framework/sample/backend/domain/sample-domain.xml</value>
+        <value>com/d2s/framework/sample/frontend/sample-frontend.xml</value>
 			</list>
 		</constructor-arg>
 	</bean>
 	<bean id="ulc-context"
-		class="org.springframework.context.support.ClassPathXmlApplicationContext"
-		lazy-init="true">
+		class="org.springframework.context.support.ClassPathXmlApplicationContext" lazy-init="true">
 		<constructor-arg>
 			<list>
-				<value>com/d2s/framework/test/model/domain/model.xml</value>
+				<value>com/d2s/framework/application/commons.xml</value>
+        <value>com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</value>
+        <value>com/d2s/framework/application/frontend/commons-frontend.xml</value>
+        <value>com/d2s/framework/application/frontend/ulc/commons-ulc.xml</value>
+        <value>com/d2s/framework/sample/backend/domain/sample-domain.xml</value>
+        <value>com/d2s/framework/sample/frontend/sample-frontend.xml</value>
 			</list>
-		</constructor-arg>
-		<constructor-arg>
-			<ref local="com.d2s.framework.test" />
 		</constructor-arg>
 	</bean>
 </beans>

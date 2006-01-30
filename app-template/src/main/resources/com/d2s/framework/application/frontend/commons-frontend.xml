@@ -18,7 +18,6 @@
   <bean id="abstractFrontAction" abstract="true">
     <property name="viewFactory" ref="viewFactory" />
     <property name="iconFactory" ref="iconFactory" />
-    <property name="actionFactory" ref="actionFactory" />
     <property name="mvcBinder" ref="mvcBinder" />
   </bean>
 
@@ -27,6 +26,7 @@
   -->
   <bean id="abstractLovAction" abstract="true" parent="abstractFrontAction">
     <property name="lovViewFactory" ref="lovViewFactory" />
+    <property name="actionFactory" ref="actionFactory" />
     <property name="createQueryEntityAction" ref="createQueryEntityAction" />
     <property name="okAction" ref="lovOkFrontAction" />
     <property name="cancelAction" ref="cancelDialogFrontAction" />
