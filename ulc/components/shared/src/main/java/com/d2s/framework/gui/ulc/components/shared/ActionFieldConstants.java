@@ -74,4 +74,34 @@ public final class ActionFieldConstants {
    * <code>EDITABLE_KEY</code>.
    */
   public static final String EDITABLE_KEY             = "editable";
+
+  /**
+   * <code>ACCELERATOR_KEY</code>.
+   */
+  public static final String ACCELERATOR_KEY          = "A_K";
+
+  /**
+   * <code>ACTION_COMMAND_KEY</code>.
+   */
+  public static final String ACTION_COMMAND_KEY       = "A_C_K";
+
+  /**
+   * <code>LONG_DESCRIPTION</code>.
+   */
+  public static final String LONG_DESCRIPTION         = "L_D";
+
+  /**
+   * <code>MNEMONIC_KEY</code>.
+   */
+  public static final String MNEMONIC_KEY             = "M_K";
+
+  /**
+   * <code>SHORT_DESCRIPTION</code>.
+   */
+  public static final String SHORT_DESCRIPTION        = "S_D";
+
+  /**
+   * <code>NAME</code>.
+   */
+  public static final String NAME                     = "N";
 }

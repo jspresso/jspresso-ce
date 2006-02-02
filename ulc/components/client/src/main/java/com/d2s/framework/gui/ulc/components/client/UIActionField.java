@@ -27,7 +27,6 @@ import javax.swing.tree.TreeCellEditor;
 import com.d2s.framework.gui.swing.components.JActionField;
 import com.d2s.framework.gui.ulc.components.shared.ActionFieldConstants;
 import com.d2s.framework.gui.ulc.components.shared.DateFieldConstants;
-import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.client.IEditorComponent;
 import com.ulcjava.base.client.UIComponent;
 import com.ulcjava.base.client.UIIcon;
@@ -176,21 +175,21 @@ public class UIActionField extends UIComponent implements IEditorComponent {
         sendActionText();
       }
     };
-    if (actionAnything.get(IAction.ACCELERATOR_KEY, -1) != -1) {
+    if (actionAnything.get(ActionFieldConstants.ACCELERATOR_KEY, -1) != -1) {
       action.putValue(Action.ACCELERATOR_KEY, new Integer(actionAnything.get(
-          IAction.ACCELERATOR_KEY, -1)));
+          ActionFieldConstants.ACCELERATOR_KEY, -1)));
     }
     action.putValue(Action.ACTION_COMMAND_KEY, actionAnything.get(
-        IAction.ACTION_COMMAND_KEY, null));
+        ActionFieldConstants.ACTION_COMMAND_KEY, null));
     action.putValue(Action.LONG_DESCRIPTION, actionAnything.get(
-        IAction.LONG_DESCRIPTION, null));
-    if (actionAnything.get(IAction.MNEMONIC_KEY, -1) != -1) {
+        ActionFieldConstants.LONG_DESCRIPTION, null));
+    if (actionAnything.get(ActionFieldConstants.MNEMONIC_KEY, -1) != -1) {
       action.putValue(Action.MNEMONIC_KEY, new Integer(actionAnything.get(
-          IAction.MNEMONIC_KEY, -1)));
+          ActionFieldConstants.MNEMONIC_KEY, -1)));
     }
-    action.putValue(Action.NAME, actionAnything.get(IAction.NAME, null));
+    action.putValue(Action.NAME, actionAnything.get(ActionFieldConstants.NAME, null));
     action.putValue(Action.SHORT_DESCRIPTION, actionAnything.get(
-        IAction.SHORT_DESCRIPTION, null));
+        ActionFieldConstants.SHORT_DESCRIPTION, null));
     if (actionIcon != null) {
       action.putValue(Action.SMALL_ICON, new ImageIcon(actionIcon.getImage()));
     }

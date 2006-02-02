@@ -198,25 +198,25 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
       return null;
     }
     Anything actionAnything = new Anything();
-    if (action.getValue(IAction.ACCELERATOR_KEY) != null) {
-      actionAnything.put(IAction.ACCELERATOR_KEY, ((Integer) action
-          .getValue(IAction.ACCELERATOR_KEY)).intValue());
+    if (action.getValue(ActionFieldConstants.ACCELERATOR_KEY) != null) {
+      actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, ((Integer) action
+          .getValue(ActionFieldConstants.ACCELERATOR_KEY)).intValue());
     } else {
-      actionAnything.put(IAction.ACCELERATOR_KEY, -1);
+      actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
-    actionAnything.put(IAction.ACTION_COMMAND_KEY, (String) action
-        .getValue(IAction.ACTION_COMMAND_KEY));
-    actionAnything.put(IAction.LONG_DESCRIPTION, (String) action
-        .getValue(IAction.LONG_DESCRIPTION));
-    if (action.getValue(IAction.MNEMONIC_KEY) != null) {
-      actionAnything.put(IAction.MNEMONIC_KEY, ((Integer) action
-          .getValue(IAction.MNEMONIC_KEY)).intValue());
+    actionAnything.put(ActionFieldConstants.ACTION_COMMAND_KEY, (String) action
+        .getValue(ActionFieldConstants.ACTION_COMMAND_KEY));
+    actionAnything.put(ActionFieldConstants.LONG_DESCRIPTION, (String) action
+        .getValue(ActionFieldConstants.LONG_DESCRIPTION));
+    if (action.getValue(ActionFieldConstants.MNEMONIC_KEY) != null) {
+      actionAnything.put(ActionFieldConstants.MNEMONIC_KEY, ((Integer) action
+          .getValue(ActionFieldConstants.MNEMONIC_KEY)).intValue());
     } else {
-      actionAnything.put(IAction.ACCELERATOR_KEY, -1);
+      actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
-    actionAnything.put(IAction.NAME, (String) action.getValue(IAction.NAME));
-    actionAnything.put(IAction.SHORT_DESCRIPTION, (String) action
-        .getValue(IAction.SHORT_DESCRIPTION));
+    actionAnything.put(ActionFieldConstants.NAME, (String) action.getValue(ActionFieldConstants.NAME));
+    actionAnything.put(ActionFieldConstants.SHORT_DESCRIPTION, (String) action
+        .getValue(ActionFieldConstants.SHORT_DESCRIPTION));
     return actionAnything;
   }
 
