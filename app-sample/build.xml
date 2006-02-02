@@ -22,16 +22,6 @@
 		</not>
 	</condition>
 
-	<!-- Compute the model project src dir -->
-	<condition property="model.src.dir" value="${project.build.sourceDirectory}/../../../../model/src/main/java">
-		<isset property="project.build.sourceDirectory" />
-	</condition>
-	<condition property="model.src.dir" value="${basedir}/../model/src/main/java">
-		<not>
-			<isset property="model.src.dir" />
-		</not>
-	</condition>
-
 	<!-- Compute the project test src dir -->
 	<condition property="src.dir"
 	           value="${project.build.sourceDirectory}">
@@ -44,7 +34,7 @@
 	</condition>
 
 	<echo>xdoclet.hibernate.output.dir : ${xdoclet.hibernate.output.dir}</echo>
-	<echo>model.src.dir : ${model.src.dir}</echo>
+	<echo>root.model.src.dir : ${root.model.src.dir}</echo>
 	<echo>src.dir : ${src.dir}</echo>
 
 	<target name="clean-hibernate">
@@ -71,7 +61,7 @@
 
 		<xdoclet>
 			<!-- Defines the file handled by xdoclet2 -->
-			<fileset dir="${model.src.dir}">
+			<fileset dir="${root.model.src.dir}">
 				<include name="com/d2s/framework/model/entity/IEntity.java" />
 			</fileset>
 			<fileset dir="${src.dir}">

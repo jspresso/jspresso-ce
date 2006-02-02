@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.design2see</groupId>
-		<artifactId>design2see-framework</artifactId>
+		<artifactId>d2s-framework</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>d2s-util</artifactId>
@@ -21,7 +21,7 @@
 			<artifactId>commons-beanutils-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>springframework</groupId>
+			<groupId>org.springframework</groupId>
 			<artifactId>spring</artifactId>
 		</dependency>
 		<dependency>

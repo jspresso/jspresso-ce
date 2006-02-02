@@ -3,7 +3,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.design2see</groupId>
-  <artifactId>design2see-framework</artifactId>
+  <artifactId>d2s-framework</artifactId>
   <packaging>pom</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>Design2See Application Framework</name>
@@ -164,7 +164,7 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate</artifactId>
-        <version>3.1</version>
+        <version>3.1.2</version>
       </dependency>
       <dependency>
         <groupId>commons-beanutils</groupId>
@@ -172,9 +172,9 @@
         <version>1.7.0</version>
       </dependency>
       <dependency>
-        <groupId>springframework</groupId>
+        <groupId>org.springframework</groupId>
         <artifactId>spring</artifactId>
-        <version>1.2.5</version>
+        <version>1.2.6</version>
       </dependency>
       <dependency>
         <groupId>aspectwerkz</groupId>
@@ -244,6 +244,16 @@
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-development</artifactId>
+        <version>6.0.3</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-base-client</artifactId>
+        <version>6.0.3</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-base-server</artifactId>
         <version>6.0.3</version>
       </dependency>
       <!-- 		<dependency>
