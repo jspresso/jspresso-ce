@@ -8,8 +8,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -18,10 +21,12 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
+import org.springframework.context.ApplicationContext;
+
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
@@ -30,7 +35,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 /**
- * Generates D2S powered entity java code based on its descriptor.
+ * Generates D2S powered component java code based on its descriptor.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -45,25 +50,27 @@ public class EntityGenerator {
   private static final String TEMPLATE_NAME           = "templateName";
   private static final String OUTPUT_DIR              = "outputDir";
   private static final String COMPONENT_NAMES         = "componentNames";
+  private static final String INCLUDE_PACKAGES        = "includePackages";
 
-  /**
-   * Generates D2S powered entity java code based on its descriptor.
-   * 
-   * @param applicationContextKey
-   *          the applicationContextKey as registered in the spring
-   *          BeanFactoryLocator.
-   * @param templateResourcePath
-   *          the resource path of the directory containg the templates.
-   * @param templateName
-   *          the used entity code template.
-   * @param outputDir
-   *          the root directory where generated sources are generated.
-   * @param entityNames
-   *          the entity descriptor names in the application context.
-   */
-  public void generateEntity(String applicationContextKey,
+  private void generateComponents(String applicationContextKey,
       String templateResourcePath, String templateName, String outputDir,
-      String[] entityNames) {
+      String[] includePackages, String[] componentNames) {
+    ApplicationContext appContext = getApplicationContext(applicationContextKey);
+    if (componentNames == null) {
+      String[] allComponentNames = appContext
+          .getBeanNamesForType(IComponentDescriptor.class);
+      Set<String> filteredComponentNames = new LinkedHashSet<String>();
+      if (includePackages != null) {
+        for (String componentName : allComponentNames) {
+          for (String pkg : includePackages) {
+            if (componentName.startsWith(pkg)) {
+              filteredComponentNames.add(componentName);
+            }
+          }
+        }
+      }
+      componentNames = new ArrayList<String>(filteredComponentNames).toArray(new String[0]);
+    }
     Configuration cfg = new Configuration();
     cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
     BeansWrapper wrapper = new DefaultObjectWrapper();
@@ -80,12 +87,12 @@ public class EntityGenerator {
     rootContext.put("generateSQLName", new GenerateSqlName());
     rootContext.put("instanceof", new InstanceOf(wrapper));
     rootContext.put("compareStrings", new CompareStrings(wrapper));
-    for (String entityName : entityNames) {
+    for (String componentName : componentNames) {
       OutputStream out;
       if (outputDir != null) {
         try {
           File outFile = new File(outputDir + "/"
-              + entityName.replace('.', '/') + ".java");
+              + componentName.replace('.', '/') + ".java");
           if (!outFile.exists()) {
             if (!outFile.getParentFile().exists()) {
               outFile.getParentFile().mkdirs();
@@ -100,8 +107,7 @@ public class EntityGenerator {
       } else {
         out = System.out;
       }
-      rootContext.put("componentDescriptor", getApplicationContext(
-          applicationContextKey).getBean(entityName));
+      rootContext.put("componentDescriptor", appContext.getBean(componentName));
       try {
         template.process(rootContext, new OutputStreamWriter(out));
         out.flush();
@@ -118,14 +124,14 @@ public class EntityGenerator {
     }
   }
 
-  private BeanFactory getApplicationContext(String applicationContextKey) {
+  private ApplicationContext getApplicationContext(String applicationContextKey) {
     BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
-    return bf.getFactory();
+    return (ApplicationContext) bf.getFactory();
   }
 
   /**
-   * Starts Code generation for an entity.
+   * Starts Code generation for an component.
    * 
    * @param args
    *          the command line arguments.
@@ -146,19 +152,26 @@ public class EntityGenerator {
             "sets the resource path of the directory containg the templates.")
         .create(TEMPLATE_RESOURCE_PATH));
     options.addOption(OptionBuilder.withArgName(TEMPLATE_NAME).isRequired()
-        .hasArg().withDescription("sets the used entity code template.")
+        .hasArg().withDescription("sets the used component code template.")
         .create(TEMPLATE_NAME));
     options.addOption(OptionBuilder.withArgName(OUTPUT_DIR).hasArg()
         .withDescription("sets the output directory for generated source.")
         .create(OUTPUT_DIR));
     options
         .addOption(OptionBuilder
-            .withArgName(COMPONENT_NAMES)
-            .isRequired()
+            .withArgName(INCLUDE_PACKAGES)
             .hasArgs()
             .withValueSeparator(',')
             .withDescription(
-                "generate code for the given entity descriptor name in the application context.")
+                "generate code for the component descriptors declared in the listed packages.")
+            .create(INCLUDE_PACKAGES));
+    options
+        .addOption(OptionBuilder
+            .withArgName(COMPONENT_NAMES)
+            .hasArgs()
+            .withValueSeparator(',')
+            .withDescription(
+                "generate code for the given component descriptor names in the application context.")
             .create(COMPONENT_NAMES));
     CommandLineParser parser = new BasicParser();
     CommandLine cmd = null;
@@ -172,9 +185,10 @@ public class EntityGenerator {
     }
 
     EntityGenerator generator = new EntityGenerator();
-    generator.generateEntity(cmd.getOptionValue(APPLICATION_CONTEXT_KEY), cmd
-        .getOptionValue(TEMPLATE_RESOURCE_PATH), cmd
-        .getOptionValue(TEMPLATE_NAME), cmd.getOptionValue(OUTPUT_DIR), cmd
-        .getOptionValues(COMPONENT_NAMES));
+    generator.generateComponents(cmd.getOptionValue(APPLICATION_CONTEXT_KEY),
+        cmd.getOptionValue(TEMPLATE_RESOURCE_PATH), cmd
+            .getOptionValue(TEMPLATE_NAME), cmd.getOptionValue(OUTPUT_DIR), cmd
+            .getOptionValues(INCLUDE_PACKAGES), cmd
+            .getOptionValues(COMPONENT_NAMES));
   }
 }

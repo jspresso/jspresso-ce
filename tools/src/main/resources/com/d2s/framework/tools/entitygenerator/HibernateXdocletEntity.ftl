@@ -87,7 +87,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *                   name = "${generateSQLName(propertyName)}"
      <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IStringPropertyDescriptor")
        &&(propertyDescriptor.maxLength?exists)>
-   *                   length = "${propertyDescriptor.maxLength}"
+   *                   length = "${propertyDescriptor.maxLength?c}"
      </#if>
      <#if propertyDescriptor.mandatory>
    *                   not-null = "true"
@@ -105,13 +105,13 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
          <#else>
            <#local length=supLength>
          </#if>
-   *                   scale = "${length}"
+   *                   scale = "${length?c}"
        <#else>
    *                   scale = "10"
        </#if>
        <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor")>
          <#if propertyDescriptor.maxFractionDigit?exists>
-   *                   precision = "${propertyDescriptor.maxFractionDigit}"
+   *                   precision = "${propertyDescriptor.maxFractionDigit?c}"
          <#else>
    *                   precision = "2"
          </#if>
