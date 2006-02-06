@@ -2253,7 +2253,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    */
   protected ULCCardPane createCardPane() {
     ULCCardPane pane = new ULCCardPane();
-    pane.setMinimumSize(MINIMUM_AREA_SIZE);
+    //pane.setMinimumSize(MINIMUM_AREA_SIZE);
     return pane;
   }
 
