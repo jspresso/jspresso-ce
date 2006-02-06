@@ -35,18 +35,6 @@
     </property>
   </bean>
 
-  <bean id="appContextSetter" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property name="targetObject" ref="entityFactory" />
-    <property name="targetMethod">
-      <value>setEntityApplicationContext</value>
-    </property>
-    <property name="arguments">
-      <list>
-        <bean class="com.d2s.framework.util.spring.ThisApplicationContextFactoryBean" />
-      </list>
-    </property>
-  </bean>
-
   <!--
     Domain description.
   -->

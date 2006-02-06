@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.lang.reflect.Proxy;
 
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
@@ -29,7 +30,8 @@ import com.d2s.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicProxyEntityFactory implements IEntityFactory {
+public class BasicProxyEntityFactory implements IEntityFactory,
+    ApplicationContextAware {
 
   private IAccessorFactory         accessorFactory;
   private IEntityCollectionFactory entityCollectionFactory;
@@ -192,5 +194,12 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    */
   IEntityExtensionFactory getEntityExtensionFactory() {
     return entityExtensionFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setApplicationContext(ApplicationContext applicationContext) {
+    setEntityApplicationContext(applicationContext);
   }
 }
