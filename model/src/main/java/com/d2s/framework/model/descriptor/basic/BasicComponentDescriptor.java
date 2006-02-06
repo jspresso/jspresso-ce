@@ -54,7 +54,10 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    */
   public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
     processPropertiesBufferIfNecessary();
-    return propertyDescriptors.values();
+    if (propertyDescriptors != null) {
+      return propertyDescriptors.values();
+    }
+    return null;
   }
 
   /**

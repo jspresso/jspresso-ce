@@ -37,4 +37,13 @@ public class UlcSampleStartup extends UlcStartup {
         getApplicationContext()).createTestData());
   }
 
+  /**
+   * Returns the "sample-ulc-context" value.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getApplicationContextKey() {
+    return "sample-ulc-context";
+  }
 }

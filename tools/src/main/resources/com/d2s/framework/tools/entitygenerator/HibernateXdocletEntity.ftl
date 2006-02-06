@@ -162,7 +162,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local collectionType=propertyDescriptor.propertyClass.name>
   <#local elementDescriptor=propertyDescriptor.referencedDescriptor.elementDescriptor>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name>
-  <#local reversePropertyName=propertyDescriptor.reverseRelationEnd.name>
+  <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
+  <#local elementName=elementType[elementType?last_index_of(".")+1..]/>
   <#if collectionType="java.util.List">
     <#local hibernateCollectionType="list"/>
   <#elseif collectionType="java.util.Set">
@@ -170,9 +171,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#local bidirectional=true>
+    <#local reversePropertyName=propertyDescriptor.reverseRelationEnd.name>
     <#local manyToMany=instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor")>
-    <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
-    <#local elementName=elementType[elementType?last_index_of(".")+1..]/>
     <#if manyToMany>
       <#local inverse=(compareStrings(elementName, componentName) > 0)/>
     <#else>
@@ -180,7 +180,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     </#if>
   <#else>
     <#local bidirectional=false>
-    <#local manyToMany=false>
+    <#local manyToMany=true>
     <#local inverse=false>
   </#if>
   /**
@@ -228,7 +228,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateEntityRefSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name>
-  <#local propertyType=propertyDescriptor.propertyClass.name>
+  <#local propertyType=propertyDescriptor.referencedDescriptor.name>
   /**
    * Sets the ${propertyName}.
    * 
@@ -240,7 +240,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateEntityRefGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name>
-  <#local propertyType=propertyDescriptor.propertyClass.name>
+  <#local propertyType=propertyDescriptor.referencedDescriptor.name>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#assign bidirectional=true>
     <#assign oneToOne=instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.IReferencePropertyDescriptor")>
@@ -315,7 +315,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
 </#macro>
 <@generateClassHeader componentDescriptor=componentDescriptor/>
-<#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-  <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-</#list>
+<#if componentDescriptor.declaredPropertyDescriptors?exists>
+  <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
+    <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  </#list>
+<#else>
+  // THIS IS JUST A MARKER INTERFACE.
+</#if>
 }

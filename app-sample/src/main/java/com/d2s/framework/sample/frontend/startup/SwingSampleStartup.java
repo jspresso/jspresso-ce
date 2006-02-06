@@ -37,4 +37,13 @@ public class SwingSampleStartup extends SwingStartup {
         getApplicationContext()).createTestData());
   }
 
+  /**
+   * Returns the "sample-swing-context" value.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getApplicationContextKey() {
+    return "sample-swing-context";
+  }
 }

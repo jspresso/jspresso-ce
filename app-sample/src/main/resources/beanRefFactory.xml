@@ -2,7 +2,7 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
-	<bean id="swing-context"
+	<bean id="sample-swing-context"
 		class="org.springframework.context.support.ClassPathXmlApplicationContext" lazy-init="true">
 		<constructor-arg>
 			<list>
@@ -12,10 +12,11 @@
         <value>com/d2s/framework/application/frontend/swing/commons-swing.xml</value>
         <value>com/d2s/framework/sample/backend/sample-backend.xml</value>
         <value>com/d2s/framework/sample/frontend/sample-frontend.xml</value>
+        <value>config.xml</value>
 			</list>
 		</constructor-arg>
 	</bean>
-	<bean id="ulc-context"
+	<bean id="sample-ulc-context"
 		class="org.springframework.context.support.ClassPathXmlApplicationContext" lazy-init="true">
 		<constructor-arg>
 			<list>
@@ -25,6 +26,7 @@
         <value>com/d2s/framework/application/frontend/ulc/commons-ulc.xml</value>
         <value>com/d2s/framework/sample/backend/sample-backend.xml</value>
         <value>com/d2s/framework/sample/frontend/sample-frontend.xml</value>
+        <value>config.xml</value>
 			</list>
 		</constructor-arg>
 	</bean>
