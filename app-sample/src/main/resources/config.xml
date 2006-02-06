@@ -29,7 +29,7 @@
     </property>
     <property name="mappingDirectoryLocations">
       <list>
-        <value>classpath:com/bluevox/cms/model</value>
+        <value>classpath:com/d2s/framework/sample/backend/domain</value>
       </list>
     </property>
   </bean>
