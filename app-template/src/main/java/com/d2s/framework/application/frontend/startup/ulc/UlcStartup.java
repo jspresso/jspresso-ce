@@ -69,4 +69,13 @@ public class UlcStartup extends AbstractStartup implements IApplication {
     // NO-OP
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void start() {
+    super.start();
+    ClientContext.sendMessage("appStarted");
+  }
+
 }

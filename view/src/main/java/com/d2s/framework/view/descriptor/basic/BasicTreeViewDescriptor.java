@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.view.descriptor.basic;
 
+import com.d2s.framework.util.IIconImageURLProvider;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 
@@ -18,8 +19,9 @@ import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
     ITreeViewDescriptor {
 
-  private ITreeLevelDescriptor rootSubtreeDescriptor;
-  private int                  maxDepth = 10;
+  private ITreeLevelDescriptor  rootSubtreeDescriptor;
+  private int                   maxDepth = 10;
+  private IIconImageURLProvider iconImageURLProvider;
 
   /**
    * {@inheritDoc}
@@ -67,5 +69,25 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    */
   public void setMaxDepth(int maxDepth) {
     this.maxDepth = maxDepth;
+  }
+
+  /**
+   * Sets the iconImageURLProvider.
+   * 
+   * @param iconImageURLProvider
+   *          the iconImageURLProvider to set.
+   */
+  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
+    this.iconImageURLProvider = iconImageURLProvider;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getIconImageURLForUserObject(Object userObject) {
+    if (iconImageURLProvider != null) {
+      return iconImageURLProvider.getIconImageURLForObject(userObject);
+    }
+    return null;
   }
 }

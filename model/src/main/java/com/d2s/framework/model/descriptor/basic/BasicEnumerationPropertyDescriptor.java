@@ -4,6 +4,7 @@
 package com.d2s.framework.model.descriptor.basic;
 
 import java.util.List;
+import java.util.Map;
 
 import com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor;
 
@@ -19,9 +20,10 @@ import com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor;
 public class BasicEnumerationPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IEnumerationPropertyDescriptor {
 
-  private String       enumerationName;
-  private List<String> enumerationValues;
-  private Integer      maxLength;
+  private String              enumerationName;
+  private List<String>        enumerationValues;
+  private Integer             maxLength;
+  private Map<String, String> valuesIconImageUrls;
 
   /**
    * {@inheritDoc}
@@ -81,5 +83,25 @@ public class BasicEnumerationPropertyDescriptor extends
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
+  }
+
+  /**
+   * Sets the valuesIconImageUrls.
+   * 
+   * @param valuesIconImageUrls
+   *          the valuesIconImageUrls to set.
+   */
+  public void setValuesIconImageUrls(Map<String, String> valuesIconImageUrls) {
+    this.valuesIconImageUrls = valuesIconImageUrls;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getIconImageURL(String value) {
+    if (valuesIconImageUrls != null) {
+      return valuesIconImageUrls.get(value);
+    }
+    return null;
   }
 }

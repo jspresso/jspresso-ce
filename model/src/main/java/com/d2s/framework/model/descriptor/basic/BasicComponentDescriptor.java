@@ -110,7 +110,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public Class getComponentContract() {
+  public Class<?> getComponentContract() {
     if (componentContract == null) {
       try {
         componentContract = Class.forName(getName());

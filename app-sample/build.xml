@@ -1,79 +1,43 @@
-<project name="design2see" default="xdoclet-hibernate">
+<project default="xdoclet-hibernate">
 
 	<!-- Sets the Xdoclet2 location paths -->
 	<property file="build.properties" />
 	<property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" />
 	<property name="xdoclet.plugins.dir" value="${xdoclet.home}/plugins" />
-
-	<echo>project.build.sourceDirectory : ${project.build.sourceDirectory}</echo>
-	<echo>project.build.outputDirectory : ${project.build.outputDirectory}</echo>
-	<echo>project.build.testSourceDirectory : ${project.build.testSourceDirectory}</echo>
-	<echo>project.build.testOutputDirectory : ${project.build.testOutputDirectory}</echo>
-
-	<!-- Compute the xdoclet output dir -->
-	<condition property="xdoclet.hibernate.output.dir"
-	           value="${project.build.outputDirectory}">
-		<isset property="project.build.outputDirectory" />
-	</condition>
-	<condition property="xdoclet.hibernate.output.dir"
-	           value="${basedir}/target/classes">
-		<not>
-			<isset property="xdoclet.hibernate.output.dir" />
-		</not>
-	</condition>
-
-	<!-- Compute the project test src dir -->
-	<condition property="src.dir"
-	           value="${project.build.sourceDirectory}">
-		<isset property="project.build.sourceDirectory" />
-	</condition>
-	<condition property="src.dir" value="${basedir}/src/main/java">
-		<not>
-			<isset property="src.dir" />
-		</not>
-	</condition>
-
-	<echo>xdoclet.hibernate.output.dir : ${xdoclet.hibernate.output.dir}</echo>
-	<echo>root.model.src.dir : ${root.model.src.dir}</echo>
-	<echo>src.dir : ${src.dir}</echo>
+	<property name="xdoclet.hibernate.input.dir" value="${basedir}/src/main/java" />
+	<property name="xdoclet.hibernate.output.dir" value="${basedir}/target/classes" />
 
 	<target name="clean-hibernate">
-	  <delete>
-	    <fileset dir="${xdoclet.hibernate.output.dir}" includes="**/*.hbm.xml"/>
-	  </delete>
+		<delete>
+			<fileset dir="${xdoclet.hibernate.output.dir}" includes="**/*.hbm.xml" />
+		</delete>
 	</target>
-	
+
 	<target name="xdoclet-hibernate" depends="clean-hibernate">
 		<mkdir dir="${xdoclet.hibernate.output.dir}" />
 		<path id="xdoclet.task.classpath">
 			<!-- Add the xdoclet2 plugins jar here -->
 			<pathelement location="${xdoclet.plugins.dir}/xdoclet-plugin-hibernate-1.0.2.jar" />
-
 			<!-- Xdoclet2 runtime dependencies -->
 			<fileset dir="${xdoclet.lib.dir}">
 				<include name="**/*.jar" />
 			</fileset>
 		</path>
-
-		<taskdef name="xdoclet"
-		         classname="org.xdoclet.ant.XDocletTask"
-		         classpathref="xdoclet.task.classpath" />
+		<taskdef name="xdoclet" classname="org.xdoclet.ant.XDocletTask" classpathref="xdoclet.task.classpath" />
 
 		<xdoclet>
 			<!-- Defines the file handled by xdoclet2 -->
 			<fileset dir="${root.model.src.dir}">
 				<include name="com/d2s/framework/model/entity/IEntity.java" />
 			</fileset>
-			<fileset dir="${src.dir}">
+			<fileset dir="${xdoclet.hibernate.input.dir}">
 				<include name="com/d2s/framework/sample/backend/domain/*.java" />
 				<exclude name="com/d2s/framework/sample/backend/domain/*Extension.java" />
 				<exclude name="com/d2s/framework/sample/backend/domain/*Service.java" />
 			</fileset>
 
 			<!-- Generates the hibernate mapping files -->
-			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
-			           destdir="${xdoclet.hibernate.output.dir}"
-			           version="3.0" />
+			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${xdoclet.hibernate.output.dir}" version="3.0"/>
 		</xdoclet>
 	</target>
 

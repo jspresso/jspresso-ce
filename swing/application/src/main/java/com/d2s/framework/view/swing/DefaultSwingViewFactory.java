@@ -845,24 +845,29 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
         IValueConnector rootConnector = (IValueConnector) tree.getModel()
             .getRoot();
         Icon nodeIcon = null;
-        if (value == rootConnector) {
-          nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-              IIconFactory.SMALL_ICON_SIZE);
-        } else {
-          TreePath path = ConnectorTreeHelper.getTreePathForConnector(
-              rootConnector, (IValueConnector) value);
-          if (path != null) {
-            nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
-                .getSubtreeDescriptorFromPath(
-                    viewDescriptor.getRootSubtreeDescriptor(),
-                    getDescriptorPathFromConnectorTreePath(path))
-                .getNodeGroupDescriptor().getIconImageURL(),
+        nodeIcon = iconFactory.getIcon(viewDescriptor
+            .getIconImageURLForUserObject(((IValueConnector) value)
+                .getConnectorValue()), IIconFactory.SMALL_ICON_SIZE);
+        if (nodeIcon == null) {
+          if (value == rootConnector) {
+            nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
                 IIconFactory.SMALL_ICON_SIZE);
+          } else {
+            TreePath path = ConnectorTreeHelper.getTreePathForConnector(
+                rootConnector, (IValueConnector) value);
+            if (path != null) {
+              nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
+                  .getSubtreeDescriptorFromPath(
+                      viewDescriptor.getRootSubtreeDescriptor(),
+                      getDescriptorPathFromConnectorTreePath(path))
+                  .getNodeGroupDescriptor().getIconImageURL(),
+                  IIconFactory.SMALL_ICON_SIZE);
+            }
           }
         }
-        if (nodeIcon != null) {
-          setIcon(nodeIcon);
-        }
+        setIcon(nodeIcon);
+        String labelText = null;
+        String toolTipText = null;
         if (value instanceof ICollectionConnector) {
           IListViewDescriptor nodeGroupDescriptor = TreeDescriptorHelper
               .getSubtreeDescriptorFromPath(
@@ -871,21 +876,24 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
                       .getTreePathForConnector((IValueConnector) tree
                           .getModel().getRoot(), (IValueConnector) value)))
               .getNodeGroupDescriptor();
-          String labelText = labelTranslator.getTranslation(nodeGroupDescriptor
+          labelText = labelTranslator.getTranslation(nodeGroupDescriptor
               .getName(), locale);
           if (nodeGroupDescriptor.getDescription() != null) {
             ToolTipManager.sharedInstance().registerComponent(tree);
-            setToolTipText(labelTranslator.getTranslation(nodeGroupDescriptor
-                .getDescription(), locale));
+            toolTipText = labelTranslator.getTranslation(nodeGroupDescriptor
+                .getDescription(), locale);
           }
           setText(labelText);
         } else {
           if (((IValueConnector) value).getConnectorValue() != null) {
-            setText(((IValueConnector) value).getConnectorValue().toString());
+            labelText = ((IValueConnector) value).getConnectorValue()
+                .toString();
           } else {
-            setText("");
+            labelText = "";
           }
         }
+        setText(labelText);
+        setToolTipText(toolTipText);
       }
       return renderer;
     }
@@ -970,8 +978,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     JLabel iconLabel = createJLabel();
-    iconLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
+    iconLabel.setIcon(iconFactory.getIcon(modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor().getIconImageURL(),
+        IIconFactory.TINY_ICON_SIZE));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
     scrollPane
@@ -1125,8 +1134,8 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
 
   private TableCellRenderer createEnumerationTableCellRenderer(
       IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor
-        .getEnumerationName(), locale);
+    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
+        locale);
   }
 
   private TableCellRenderer createNumberTableCellRenderer(
@@ -1204,25 +1213,38 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   private final class TranslatedEnumerationTableCellRenderer extends
       EvenOddTableCellRenderer {
 
-    private static final long serialVersionUID = -4500472602998482756L;
-    private String            keyPrefix;
-    private Locale            locale;
+    private static final long              serialVersionUID = -4500472602998482756L;
+    private IEnumerationPropertyDescriptor propertyDescriptor;
+    private Locale                         locale;
 
     /**
      * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
      * instance.
      * 
-     * @param keyPrefix
-     *          the prefix used to lookup translation keys in the form
-     *          keyPrefix.value.
+     * @param propertyDescriptor
+     *          the property descriptor from which the enumeration name is
+     *          taken. The prefix used to lookup translation keys in the form
+     *          keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
      *          the locale to lookup the translation.
      */
-    public TranslatedEnumerationTableCellRenderer(String keyPrefix,
-        Locale locale) {
+    public TranslatedEnumerationTableCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
       super();
-      this.keyPrefix = keyPrefix;
+      this.propertyDescriptor = propertyDescriptor;
       this.locale = locale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
+          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row, column);
     }
 
     /**
@@ -1234,14 +1256,16 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null) {
           super.setValue(enumerationTranslator.getTranslation(
-              computeEnumerationKey(keyPrefix, connectorValue), locale));
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  connectorValue), locale));
         } else {
           super.setValue(connectorValue);
         }
       } else {
         if (value != null) {
           super.setValue(enumerationTranslator.getTranslation(
-              computeEnumerationKey(keyPrefix, value), locale));
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  value), locale));
         } else {
           super.setValue(value);
         }
@@ -1567,7 +1591,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       viewComponent.addItem(enumElement);
     }
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
-        propertyDescriptor.getEnumerationName(), locale));
+        propertyDescriptor, locale));
 
     JComboBoxConnector connector = new JComboBoxConnector(propertyDescriptor
         .getName(), viewComponent);
@@ -1577,22 +1601,24 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   private final class TranslatedEnumerationListCellRenderer extends
       DefaultListCellRenderer {
 
-    private static final long serialVersionUID = -5694559709701757582L;
-    private String            keyPrefix;
-    private Locale            locale;
+    private static final long              serialVersionUID = -5694559709701757582L;
+    private IEnumerationPropertyDescriptor propertyDescriptor;
+    private Locale                         locale;
 
     /**
      * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
      * instance.
      * 
-     * @param keyPrefix
-     *          the prefix used to lookup translation keys in the form
-     *          keyPrefix.value.
+     * @param propertyDescriptor
+     *          the property descriptor from which the enumeration name is
+     *          taken. The prefix used to lookup translation keys in the form
+     *          keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
      *          the locale to lookup the translation.
      */
-    public TranslatedEnumerationListCellRenderer(String keyPrefix, Locale locale) {
-      this.keyPrefix = keyPrefix;
+    public TranslatedEnumerationListCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      this.propertyDescriptor = propertyDescriptor;
       this.locale = locale;
     }
 
@@ -1604,9 +1630,13 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
         int index, boolean isSelected, boolean cellHasFocus) {
       JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
           index, isSelected, cellHasFocus);
+      label
+          .setIcon(iconFactory.getIcon(propertyDescriptor
+              .getIconImageURL(String.valueOf(value)),
+              IIconFactory.TINY_ICON_SIZE));
       if (value != null) {
         setText(enumerationTranslator.getTranslation(computeEnumerationKey(
-            keyPrefix, value), locale));
+            propertyDescriptor.getEnumerationName(), value), locale));
       }
       return label;
     }

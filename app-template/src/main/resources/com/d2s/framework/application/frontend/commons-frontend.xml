@@ -120,7 +120,7 @@
   </bean>
 
   <bean id="addAsChildProjectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
-    <property name="iconImageURL" value="classpath:images/kviewshell-48x48.png" />
+    <property name="iconImageURL" value="classpath:images/view-48x48.png" />
     <property name="name" value="installInTree" />
     <property name="description" value="Installs selected elements in tree" />
     <property name="wrappedAction">

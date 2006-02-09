@@ -47,7 +47,7 @@ public interface IComponentDescriptor extends IModelDescriptor, IIconDescriptor 
    * 
    * @return the interface class defining the component contract.
    */
-  Class getComponentContract();
+  Class<?> getComponentContract();
 
   /**
    * Retrieves the service delegate implemented by this component.

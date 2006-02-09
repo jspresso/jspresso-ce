@@ -66,6 +66,9 @@ public class DefaultUlcController extends
       IView<ULCComponent> projectionView = createProjectionView(
           rootProjectionId, projectionViewDescriptor);
       projectionInternalFrame = createULCInternalFrame(projectionView);
+      projectionInternalFrame.setFrameIcon(getIconFactory().getIcon(
+          projectionViewDescriptor.getIconImageURL(),
+          IIconFactory.SMALL_ICON_SIZE));
       projectionInternalFrames.put(rootProjectionId, projectionInternalFrame);
       controllerFrame.getContentPane().add(projectionInternalFrame);
       getMvcBinder().bind(projectionView.getConnector(),
@@ -190,8 +193,6 @@ public class DefaultUlcController extends
     ULCInternalFrame internalFrame = new ULCInternalFrame(getLabelTranslator()
         .getTranslation(view.getDescriptor().getName(), getLocale()), true,
         false, true, true);
-    internalFrame.setFrameIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     internalFrame.getContentPane().add(view.getPeer());
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;

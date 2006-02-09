@@ -16,6 +16,41 @@
       <artifactId>d2s-app-template</artifactId>
     </dependency>
   </dependencies>
+  <!--
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>xdoclet</groupId>
+        <artifactId>maven2-xdoclet2-plugin</artifactId>
+        <configuration>
+          <configs>
+            <config>
+              <plugin>org.xdoclet.plugin.hibernate.HibernateMappingPlugin</plugin>
+              <params>
+                <version>3.0</version>
+                <destdir>${project.build.outputDir}</destdir>
+              </params>
+            </config>
+          </configs>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>xdoclet-plugins</groupId>
+            <artifactId>xdoclet-plugin-hibernate</artifactId> 
+            <version>1.0.3</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <goals>
+              <goal>xdoclet</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  -->
   <build>
     <plugins>
       <plugin>
@@ -25,10 +60,6 @@
             <phase>compile</phase>
             <configuration>
               <tasks>
-                <property name="project.build.sourceDirectory" value="${project.build.sourceDirectory}" />
-                <property name="project.build.outputDirectory" value="${project.build.outputDirectory}" />
-                <property name="project.build.testSourceDirectory" value="${project.build.testSourceDirectory}" />
-                <property name="project.build.testOutputDirectory" value="${project.build.testOutputDirectory}" />
                 <ant target="xdoclet-hibernate" />
               </tasks>
             </configuration>

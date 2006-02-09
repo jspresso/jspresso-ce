@@ -801,25 +801,31 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
           value, sel, expanded, leaf, nodeHasFocus);
       if (value instanceof IValueConnector) {
         ULCIcon nodeIcon = null;
-        String labelText = null;
-        String toolTipText = null;
         IValueConnector rootConnector = (IValueConnector) tree.getModel()
             .getRoot();
-        if (value == rootConnector) {
-          nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-              IIconFactory.SMALL_ICON_SIZE);
-        } else {
-          TreePath path = ConnectorTreeHelper.getTreePathForConnector(
-              rootConnector, (IValueConnector) value);
-          if (path != null) {
-            nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
-                .getSubtreeDescriptorFromPath(
-                    viewDescriptor.getRootSubtreeDescriptor(),
-                    getDescriptorPathFromConnectorTreePath(path))
-                .getNodeGroupDescriptor().getIconImageURL(),
+        nodeIcon = iconFactory.getIcon(viewDescriptor
+            .getIconImageURLForUserObject(((IValueConnector) value)
+                .getConnectorValue()), IIconFactory.SMALL_ICON_SIZE);
+        if (nodeIcon == null) {
+          if (value == rootConnector) {
+            nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
                 IIconFactory.SMALL_ICON_SIZE);
+          } else {
+            TreePath path = ConnectorTreeHelper.getTreePathForConnector(
+                rootConnector, (IValueConnector) value);
+            if (path != null) {
+              nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
+                  .getSubtreeDescriptorFromPath(
+                      viewDescriptor.getRootSubtreeDescriptor(),
+                      getDescriptorPathFromConnectorTreePath(path))
+                  .getNodeGroupDescriptor().getIconImageURL(),
+                  IIconFactory.SMALL_ICON_SIZE);
+            }
           }
         }
+        ((ULCLabel) renderer).setIcon(nodeIcon);
+        String labelText = null;
+        String toolTipText = null;
         if (value instanceof ICollectionConnector) {
           setDataType(translationDataTypeFactory.getTranslationDataType("", "",
               locale));
@@ -847,7 +853,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
         }
         ((ULCLabel) renderer).setText(labelText);
         ((ULCLabel) renderer).setToolTipText(toolTipText);
-        ((ULCLabel) renderer).setIcon(nodeIcon);
       }
       return renderer;
     }
@@ -932,8 +937,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
     ULCLabel iconLabel = createULCLabel();
-    iconLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
+    iconLabel.setIcon(iconFactory.getIcon(modelDescriptor
+        .getCollectionDescriptor().getElementDescriptor().getIconImageURL(),
+        IIconFactory.TINY_ICON_SIZE));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ULCScrollPane.UPPER_RIGHT_CORNER, iconLabel);
     scrollPane
@@ -1082,8 +1088,8 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
 
   private ITableCellRenderer createEnumerationTableCellRenderer(
       IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor
-        .getEnumerationName(), locale);
+    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
+        locale);
   }
 
   private ITableCellRenderer createNumberTableCellRenderer(
@@ -1164,24 +1170,25 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   private final class TranslatedEnumerationTableCellRenderer extends
       EvenOddTableCellRenderer {
 
-    private static final long serialVersionUID = -4500472602998482756L;
-    private String            keyPrefix;
-    private Locale            locale;
+    private static final long              serialVersionUID = -4500472602998482756L;
+    private IEnumerationPropertyDescriptor propertyDescriptor;
+    private Locale                         locale;
 
     /**
      * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
      * instance.
      * 
-     * @param keyPrefix
-     *          the prefix used to lookup translation keys in the form
-     *          keyPrefix.value.
+     * @param propertyDescriptor
+     *          the property descriptor from which the enumeration name is
+     *          taken. The prefix used to lookup translation keys in the form
+     *          keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
      *          the locale to lookup the translation.
      */
-    public TranslatedEnumerationTableCellRenderer(String keyPrefix,
-        Locale locale) {
+    public TranslatedEnumerationTableCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
       super();
-      this.keyPrefix = keyPrefix;
+      this.propertyDescriptor = propertyDescriptor;
       this.locale = locale;
     }
 
@@ -1193,7 +1200,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
         com.ulcjava.base.application.ULCTable table, Object value,
         boolean isSelected, boolean hasFocus, int row) {
       setDataType(translationDataTypeFactory.getTranslationDataType("",
-          keyPrefix, locale));
+          propertyDescriptor.getEnumerationName(), locale));
+      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
+          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row);
@@ -1582,7 +1591,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       viewComponent.addItem(enumElement);
     }
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
-        propertyDescriptor.getEnumerationName(), locale));
+        propertyDescriptor, locale));
 
     ULCComboBoxConnector connector = new ULCComboBoxConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -1592,22 +1601,24 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   private final class TranslatedEnumerationListCellRenderer extends
       DefaultComboBoxCellRenderer {
 
-    private static final long serialVersionUID = -5694559709701757582L;
-    private String            keyPrefix;
-    private Locale            locale;
+    private static final long              serialVersionUID = -5694559709701757582L;
+    private IEnumerationPropertyDescriptor propertyDescriptor;
+    private Locale                         locale;
 
     /**
      * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
      * instance.
      * 
-     * @param keyPrefix
-     *          the prefix used to lookup translation keys in the form
-     *          keyPrefix.value.
+     * @param propertyDescriptor
+     *          the property descriptor from which the enumeration name is
+     *          taken. The prefix used to lookup translation keys in the form
+     *          keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
      *          the locale to lookup the translation.
      */
-    public TranslatedEnumerationListCellRenderer(String keyPrefix, Locale locale) {
-      this.keyPrefix = keyPrefix;
+    public TranslatedEnumerationListCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      this.propertyDescriptor = propertyDescriptor;
       this.locale = locale;
     }
 
@@ -1618,7 +1629,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     public IRendererComponent getComboBoxCellRendererComponent(
         ULCComboBox comboBox, Object value, boolean isSelected, int index) {
       setDataType(translationDataTypeFactory.getTranslationDataType("",
-          keyPrefix, locale));
+          propertyDescriptor.getEnumerationName(), locale));
+      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
+          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       return super.getComboBoxCellRendererComponent(comboBox, value,
           isSelected, index);
     }
@@ -2253,7 +2266,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    */
   protected ULCCardPane createCardPane() {
     ULCCardPane pane = new ULCCardPane();
-    //pane.setMinimumSize(MINIMUM_AREA_SIZE);
+    // pane.setMinimumSize(MINIMUM_AREA_SIZE);
     return pane;
   }
 

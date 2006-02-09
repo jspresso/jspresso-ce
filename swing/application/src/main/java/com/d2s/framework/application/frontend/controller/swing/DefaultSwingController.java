@@ -92,6 +92,9 @@ public class DefaultSwingController extends
       IView<JComponent> projectionView = createProjectionView(rootProjectionId,
           projectionViewDescriptor);
       projectionInternalFrame = createJInternalFrame(projectionView);
+      projectionInternalFrame.setFrameIcon(getIconFactory().getIcon(
+          projectionViewDescriptor.getIconImageURL(),
+          IIconFactory.SMALL_ICON_SIZE));
       projectionInternalFrame
           .addInternalFrameListener(new ProjectionInternalFrameListener(
               rootProjectionId));
@@ -247,8 +250,6 @@ public class DefaultSwingController extends
     JInternalFrame internalFrame = new JInternalFrame(getLabelTranslator()
         .getTranslation(view.getDescriptor().getName(), getLocale()), true,
         false, true, true);
-    internalFrame.setFrameIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     internalFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);
     internalFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     internalFrame.setGlassPane(createHermeticGlassPane());
