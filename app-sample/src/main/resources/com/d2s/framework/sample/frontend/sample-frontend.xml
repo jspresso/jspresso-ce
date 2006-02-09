@@ -212,7 +212,7 @@ script.setExecutionResult(result)
     <property name="drivingDimension" ref="ROW" />
     <property name="drivingDimensionCellCount" value="1" />
     <property name="masterDetail" value="true" />
-    <property name="viewDescriptors">
+    <property name="childViewDescriptors">
       <list>
         <ref local="employee.pane" />
         <ref local="employee.managedEmployees.table" />
@@ -246,7 +246,7 @@ script.setExecutionResult(result)
     <property name="drivingDimension" ref="ROW" />
     <property name="drivingDimensionCellCount" value="1" />
     <property name="masterDetail" value="true" />
-    <property name="viewDescriptors">
+    <property name="childViewDescriptors">
       <list>
         <ref local="project.pane" />
         <ref local="project.projectMembers.table" />
@@ -270,7 +270,7 @@ script.setExecutionResult(result)
     <property name="drivingDimension" ref="ROW" />
     <property name="drivingDimensionCellCount" value="1" />
     <property name="masterDetail" value="true" />
-    <property name="viewDescriptors">
+    <property name="childViewDescriptors">
       <list>
         <ref local="department.pane" />
         <ref local="department.departmentEmployees.table" />
@@ -286,7 +286,7 @@ script.setExecutionResult(result)
     <property name="drivingDimension" ref="ROW" />
     <property name="drivingDimensionCellCount" value="1" />
     <property name="masterDetail" value="true" />
-    <property name="viewDescriptors">
+    <property name="childViewDescriptors">
       <list>
         <ref local="department.departmentProjects.table" />
         <ref local="project.projectMembers.table" />
@@ -363,7 +363,6 @@ script.setExecutionResult(result)
     <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
     <property name="rootSubtreeDescriptor" ref="company.companyDepartments.subtree" />
     <property name="iconImageURLProvider" ref="domainImageUrlProvider" />
-    <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
   </bean>
 
   <bean id="employee.tree" class="com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor">
@@ -371,7 +370,6 @@ script.setExecutionResult(result)
     <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Employee" />
     <property name="rootSubtreeDescriptor" ref="department.departmentEmployees.subtree" />
     <property name="iconImageURLProvider" ref="domainImageUrlProvider" />
-    <property name="iconImageURL" value="classpath:images/icon3-48x48.png" />
   </bean>
 
   <bean id="project.tree" class="com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor">
@@ -379,7 +377,6 @@ script.setExecutionResult(result)
     <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Project" />
     <property name="rootSubtreeDescriptor" ref="department.departmentProjects.subtree" />
     <property name="iconImageURLProvider" ref="domainImageUrlProvider" />
-    <property name="iconImageURL" value="classpath:images/icon4-48x48.png" />
   </bean>
 
   <bean id="department.multi.pane" class="com.d2s.framework.view.descriptor.basic.EntityCardViewDescriptor">
@@ -396,12 +393,11 @@ script.setExecutionResult(result)
   <bean id="department.view" class="com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor"
     parent="decoratedView">
     <property name="name" value="departmentRootView" />
+    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
     <property name="masterDetail" value="true" />
     <property name="orientation" ref="HORIZONTAL" />
     <property name="leftTopViewDescriptor" ref="department.tree" />
     <property name="rightBottomViewDescriptor" ref="department.multi.pane" />
-    <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
-    <property name="modelDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
     <property name="actionMap" ref="projectedActionMap" />
   </bean>
 

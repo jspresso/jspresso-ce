@@ -15,22 +15,20 @@ package com.d2s.framework.view.descriptor;
 public class ViewConstraints {
 
   private int     row;
-
   private int     column;
-
   private int     width;
-
   private int     height;
-
   private boolean widthResizable;
-
   private boolean heightResizable;
 
   /**
    * Constructs a new <code>ViewConstraints</code> instance.
    */
   public ViewConstraints() {
-    super();
+    width = 1;
+    height = 1;
+    widthResizable = true;
+    heightResizable = true;
   }
 
   /**

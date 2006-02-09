@@ -70,13 +70,19 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
         allDescriptors.addAll(ancestorDescriptor.getPropertyDescriptors());
       }
     }
-    allDescriptors.addAll(getDeclaredPropertyDescriptors());
+    Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
+    if (declaredPropertyDescriptors != null) {
+      allDescriptors.addAll(declaredPropertyDescriptors);
+    }
     return allDescriptors;
   }
 
   private IPropertyDescriptor getDeclaredPropertyDescriptor(String propertyName) {
     processPropertiesBufferIfNecessary();
-    return propertyDescriptors.get(propertyName);
+    if (propertyDescriptors != null) {
+      return propertyDescriptors.get(propertyName);
+    }
+    return null;
   }
 
   /**

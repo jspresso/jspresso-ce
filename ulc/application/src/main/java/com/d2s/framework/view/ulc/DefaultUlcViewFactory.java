@@ -649,7 +649,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     ICompositeValueConnector connector = null;
     if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
       IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
-          .createConfigurableCollectionConnectorListProvider("Root",
+          .createConfigurableCollectionConnectorListProvider(viewDescriptor.getName(),
               ((ICompositeTreeLevelDescriptor) rootDescriptor)
                   .getNodeGroupDescriptor().getRenderedProperty());
       List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
@@ -667,7 +667,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       connector = compositeConnector;
     } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
       IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
-          .createConfigurableCollectionConnectorProvider("Root",
+          .createConfigurableCollectionConnectorProvider(viewDescriptor.getName(),
               ((ISimpleTreeLevelDescriptor) rootDescriptor)
                   .getNodeGroupDescriptor().getRenderedProperty());
       if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {

@@ -3,7 +3,10 @@
  */
 package com.d2s.framework.view.descriptor.basic;
 
+import java.util.List;
+
 import com.d2s.framework.view.descriptor.IEvenGridViewDescriptor;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
  * Default implementation of an even grid view descriptor.
@@ -14,11 +17,29 @@ import com.d2s.framework.view.descriptor.IEvenGridViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicEvenGridViewDescriptor extends BasicGridViewDescriptor
+public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
     implements IEvenGridViewDescriptor {
 
   private int drivingDimensionCellCount;
   private int drivingDimension = ROW;
+  private List<IViewDescriptor> childViewDescriptors;
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IViewDescriptor> getChildViewDescriptors() {
+    return childViewDescriptors;
+  }
+
+  /**
+   * Sets the viewDescriptors.
+   * 
+   * @param viewDescriptors
+   *          the viewDescriptors to set.
+   */
+  public void setChildViewDescriptors(List<IViewDescriptor> viewDescriptors) {
+    this.childViewDescriptors = viewDescriptors;
+  }
 
   /**
    * {@inheritDoc}
