@@ -1540,6 +1540,11 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
         propertyDescriptor.getName(), viewComponent);
     Action fieldAction = actionFactory.createAction(lovAction, actionHandler,
         viewComponent, propertyDescriptor, connector, locale);
+    if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
+      fieldAction.putValue(Action.SMALL_ICON, iconFactory.getIcon(
+          propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+          IIconFactory.TINY_ICON_SIZE));
+    }
     viewComponent.setAction(fieldAction);
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);

@@ -103,16 +103,10 @@
 		<property name="enumerationName" value="GENDER" />
 		<property name="maxLength" value="1" />
 		<property name="mandatory" value="true" />
-		<property name="enumerationValues">
-			<list>
-				<value>M</value>
-				<value>F</value>
-			</list>
-		</property>
-		<property name="valuesIconImageUrls">
+		<property name="valuesAndIconImageUrls">
 			<map>
-				<entry key="M" value="classpath:images/male-48x48.png" />
-				<entry key="F" value="classpath:images/female-48x48.png" />
+				<entry key="M" value="classpath:images/male-48x48.png"/>
+				<entry key="F" value="classpath:images/female-48x48.png"/>
 			</map>
 		</property>
 	</bean>
@@ -309,6 +303,43 @@
 				<ref local="com.d2s.framework.sample.backend.domain.Employee" />
 				<ref local="com.d2s.framework.sample.backend.domain.Person" />
 			</list>
+		</property>
+	</bean>
+
+	<!--
+		The projections.
+	-->
+
+	<bean id="departments.projected" class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor">
+		<property name="name" value="projectedObjects" />
+		<property name="collectionInterface" value="java.util.List" />
+		<property name="elementDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
+	</bean>
+
+	<bean id="company.departments.projection.back" class="com.d2s.framework.view.projection.BeanProjection">
+		<property name="name" value="departments.projection" />
+		<property name="description" value="Departments" />
+		<property name="viewDescriptor" ref="company.departments.projection.front" />
+	</bean>
+
+	<bean id="company.projection.back" class="com.d2s.framework.view.projection.Projection">
+		<property name="name" value="company.projection" />
+		<property name="description" value="Company" />
+		<property name="children">
+			<list>
+				<ref local="company.departments.projection.back" />
+			</list>
+		</property>
+	</bean>
+
+	<!--
+		The controller.
+	-->
+	<bean id="applicationBackController" parent="abstractBackController">
+		<property name="rootProjections">
+			<map>
+				<entry key="company" value-ref="company.projection.back" />
+			</map>
 		</property>
 	</bean>
 </beans>

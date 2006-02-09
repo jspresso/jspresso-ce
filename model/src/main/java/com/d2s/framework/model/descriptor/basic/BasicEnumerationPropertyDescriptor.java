@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,25 +22,25 @@ public class BasicEnumerationPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IEnumerationPropertyDescriptor {
 
   private String              enumerationName;
-  private List<String>        enumerationValues;
   private Integer             maxLength;
-  private Map<String, String> valuesIconImageUrls;
+  private Map<String, String> valuesAndIconImageUrls;
 
   /**
    * {@inheritDoc}
    */
   public List<String> getEnumerationValues() {
-    return enumerationValues;
+    return new ArrayList<String>(valuesAndIconImageUrls.keySet());
   }
 
   /**
-   * Sets the enumerationValues property.
+   * Sets the valuesAndIconImageUrls property.
    * 
-   * @param enumerationValues
-   *          the enumerationValues to set.
+   * @param valuesAndIconImageUrls
+   *          the valuesAndIconImageUrls to set.
    */
-  public void setEnumerationValues(List<String> enumerationValues) {
-    this.enumerationValues = enumerationValues;
+  public void setValuesAndIconImageUrls(
+      Map<String, String> valuesAndIconImageUrls) {
+    this.valuesAndIconImageUrls = valuesAndIconImageUrls;
   }
 
   /**
@@ -86,21 +87,11 @@ public class BasicEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the valuesIconImageUrls.
-   * 
-   * @param valuesIconImageUrls
-   *          the valuesIconImageUrls to set.
-   */
-  public void setValuesIconImageUrls(Map<String, String> valuesIconImageUrls) {
-    this.valuesIconImageUrls = valuesIconImageUrls;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public String getIconImageURL(String value) {
-    if (valuesIconImageUrls != null) {
-      return valuesIconImageUrls.get(value);
+    if (valuesAndIconImageUrls != null) {
+      return valuesAndIconImageUrls.get(value);
     }
     return null;
   }

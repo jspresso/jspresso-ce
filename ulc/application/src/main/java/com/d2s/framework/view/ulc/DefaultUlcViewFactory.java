@@ -1489,6 +1489,11 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
         propertyDescriptor.getName(), viewComponent);
     IAction fieldAction = actionFactory.createAction(lovAction, actionHandler,
         viewComponent, propertyDescriptor, connector, locale);
+    if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
+      fieldAction.putValue(IAction.SMALL_ICON, iconFactory.getIcon(
+          propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
+          IIconFactory.TINY_ICON_SIZE));
+    }
     viewComponent.setAction(fieldAction);
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
