@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.view.action.ActionMap;
@@ -140,5 +141,17 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
    */
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
     this.modelDescriptor = modelDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getIconImageURL() {
+    if (super.getIconImageURL() == null
+        && getModelDescriptor() instanceof IComponentDescriptor) {
+      return ((IComponentDescriptor) getModelDescriptor()).getIconImageURL();
+    }
+    return super.getIconImageURL();
   }
 }

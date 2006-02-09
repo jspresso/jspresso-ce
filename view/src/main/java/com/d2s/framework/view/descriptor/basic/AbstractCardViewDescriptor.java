@@ -18,18 +18,18 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractCardViewDescriptor extends
-    BasicCompositeViewDescriptor implements ICardViewDescriptor {
+    BasicViewDescriptor implements ICardViewDescriptor {
 
-  private Map<String, IViewDescriptor> viewDescriptors;
+  private Map<String, IViewDescriptor> cardViewDescriptors;
 
   /**
    * Sets the childViewDescriptors.
    * 
-   * @param viewDescriptors
-   *          the viewDescriptors to set.
+   * @param cardViewDescriptors
+   *          the cardViewDescriptors to set.
    */
-  public void setViewDescriptors(Map<String, IViewDescriptor> viewDescriptors) {
-    this.viewDescriptors = viewDescriptors;
+  protected void setCardViewDescriptors(Map<String, IViewDescriptor> cardViewDescriptors) {
+    this.cardViewDescriptors = cardViewDescriptors;
   }
 
   /**
@@ -37,7 +37,7 @@ public abstract class AbstractCardViewDescriptor extends
    * 
    * @return the childViewDescriptors.
    */
-  public Map<String, IViewDescriptor> getChildViewDescriptors() {
-    return viewDescriptors;
+  public Map<String, IViewDescriptor> getCardViewDescriptors() {
+    return cardViewDescriptors;
   }
 }

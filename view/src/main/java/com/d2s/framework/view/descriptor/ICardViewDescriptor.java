@@ -16,7 +16,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICardViewDescriptor extends ICompositeViewDescriptor {
+public interface ICardViewDescriptor extends IViewDescriptor {
 
   /**
    * <code>DEFAULT_CARD</code>.
@@ -29,7 +29,7 @@ public interface ICardViewDescriptor extends ICompositeViewDescriptor {
    * 
    * @return the children view descriptors.
    */
-  Map<String, IViewDescriptor> getChildViewDescriptors();
+  Map<String, IViewDescriptor> getCardViewDescriptors();
 
   /**
    * Gets the card name to use to present the model.

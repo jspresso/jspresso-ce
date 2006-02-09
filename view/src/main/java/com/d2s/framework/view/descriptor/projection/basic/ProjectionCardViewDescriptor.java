@@ -39,7 +39,7 @@ public class ProjectionCardViewDescriptor extends AbstractCardViewDescriptor {
         .getRootSubtreeDescriptor();
     Map<String, IViewDescriptor> projectionCards = new HashMap<String, IViewDescriptor>();
     prepareProjectionCards(projectionCards, childProjectionViewDescriptor);
-    setViewDescriptors(projectionCards);
+    setCardViewDescriptors(projectionCards);
   }
 
   private void prepareProjectionCards(

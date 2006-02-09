@@ -239,6 +239,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
       view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
           actionHandler, locale);
+    } else if (viewDescriptor instanceof ICardViewDescriptor) {
+      view = createCardView((ICardViewDescriptor) viewDescriptor,
+          actionHandler, locale);
     } else if (viewDescriptor instanceof ITreeViewDescriptor) {
       view = createTreeView((ITreeViewDescriptor) viewDescriptor,
           actionHandler, locale);
@@ -336,60 +339,55 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       ICompositeViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICompositeView<JComponent> view = null;
-    if (viewDescriptor instanceof ICardViewDescriptor) {
-      view = createCardView((ICardViewDescriptor) viewDescriptor,
+    if (viewDescriptor instanceof IBorderViewDescriptor) {
+      view = createBorderView((IBorderViewDescriptor) viewDescriptor,
           actionHandler, locale);
-    } else {
-      if (viewDescriptor instanceof IBorderViewDescriptor) {
-        view = createBorderView((IBorderViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof IGridViewDescriptor) {
-        view = createGridView((IGridViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof ISplitViewDescriptor) {
-        view = createSplitView((ISplitViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      } else if (viewDescriptor instanceof ITabViewDescriptor) {
-        view = createTabView((ITabViewDescriptor) viewDescriptor,
-            actionHandler, locale);
-      }
-      if (viewDescriptor.isMasterDetail()) {
-        IView<JComponent> masterView = view.getChildren().get(0);
-        view.setConnector(masterView.getConnector());
-        for (int i = 1; i < view.getChildren().size(); i++) {
-          IView<JComponent> detailView = view.getChildren().get(i);
-          detailView.getPeer().setMinimumSize(MINIMUM_AREA_SIZE);
-          detailView.setParent(view);
+    } else if (viewDescriptor instanceof IGridViewDescriptor) {
+      view = createGridView((IGridViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ISplitViewDescriptor) {
+      view = createSplitView((ISplitViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ITabViewDescriptor) {
+      view = createTabView((ITabViewDescriptor) viewDescriptor, actionHandler,
+          locale);
+    }
+    if (viewDescriptor.isMasterDetail()) {
+      IView<JComponent> masterView = view.getChildren().get(0);
+      view.setConnector(masterView.getConnector());
+      for (int i = 1; i < view.getChildren().size(); i++) {
+        IView<JComponent> detailView = view.getChildren().get(i);
+        detailView.getPeer().setMinimumSize(MINIMUM_AREA_SIZE);
+        detailView.setParent(view);
 
-          IValueConnector detailConnector = null;
-          if (detailView.getConnector() instanceof ICollectionConnector) {
-            IConfigurableCollectionConnectorProvider wrapper = connectorFactory
-                .createConfigurableCollectionConnectorProvider(
-                    BeanRefPropertyConnector.THIS_PROPERTY, null);
-            wrapper.addChildConnector(detailView.getConnector());
-            wrapper
-                .setCollectionConnectorProvider((ICollectionConnector) detailView
-                    .getConnector());
-            detailConnector = wrapper;
-          } else {
-            detailConnector = detailView.getConnector();
-          }
-          masterDetailBinder.bind(masterView.getConnector(), detailConnector);
-          masterView = detailView;
+        IValueConnector detailConnector = null;
+        if (detailView.getConnector() instanceof ICollectionConnector) {
+          IConfigurableCollectionConnectorProvider wrapper = connectorFactory
+              .createConfigurableCollectionConnectorProvider(
+                  BeanRefPropertyConnector.THIS_PROPERTY, null);
+          wrapper.addChildConnector(detailView.getConnector());
+          wrapper
+              .setCollectionConnectorProvider((ICollectionConnector) detailView
+                  .getConnector());
+          detailConnector = wrapper;
+        } else {
+          detailConnector = detailView.getConnector();
         }
-      } else {
-        ICompositeValueConnector connector = connectorFactory
-            .createCompositeValueConnector(viewDescriptor.getName(), null);
-        view.setConnector(connector);
-        for (IView<JComponent> childView : view.getChildren()) {
-          childView.setParent(view);
-          childView.getPeer().setMinimumSize(MINIMUM_AREA_SIZE);
-          if (!(childView.getConnector() instanceof ICollectionConnector)) {
-            childView.getConnector().setId(
-                BeanRefPropertyConnector.THIS_PROPERTY);
-          }
-          connector.addChildConnector(childView.getConnector());
+        masterDetailBinder.bind(masterView.getConnector(), detailConnector);
+        masterView = detailView;
+      }
+    } else {
+      ICompositeValueConnector connector = connectorFactory
+          .createCompositeValueConnector(viewDescriptor.getName(), null);
+      view.setConnector(connector);
+      for (IView<JComponent> childView : view.getChildren()) {
+        childView.setParent(view);
+        childView.getPeer().setMinimumSize(MINIMUM_AREA_SIZE);
+        if (!(childView.getConnector() instanceof ICollectionConnector)) {
+          childView.getConnector()
+              .setId(BeanRefPropertyConnector.THIS_PROPERTY);
         }
+        connector.addChildConnector(childView.getConnector());
       }
     }
     return view;
@@ -452,7 +450,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     viewComponent.add(createJPanel(), ICardViewDescriptor.DEFAULT_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
-        .getChildViewDescriptors().entrySet()) {
+        .getCardViewDescriptors().entrySet()) {
       IView<JComponent> childView = createView(childViewDescriptor.getValue(),
           actionHandler, locale);
       viewComponent.add(childView.getPeer(), childViewDescriptor.getKey());
