@@ -18,8 +18,8 @@ public interface Describeable {
    * 
    * @hibernate.property
    * @hibernate.column
-   *                   name = "DESCRIPTION"
-   *                   length = "256"
+   *           name = "DESCRIPTION"
+   *           length = "256"
    * @return the description.
    */
   java.lang.String getDescription();

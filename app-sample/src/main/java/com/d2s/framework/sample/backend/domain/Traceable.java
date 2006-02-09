@@ -17,9 +17,9 @@ public interface Traceable {
    * Gets the createTimestamp.
    * 
    * @hibernate.property
-   *                     type = "timestamp"
+   *           type = "timestamp"
    * @hibernate.column
-   *                   name = "CREATE_TIMESTAMP"
+   *           name = "CREATE_TIMESTAMP"
    * @return the createTimestamp.
    */
   java.util.Date getCreateTimestamp();
@@ -36,9 +36,9 @@ public interface Traceable {
    * Gets the lastUpdateTimestamp.
    * 
    * @hibernate.property
-   *                     type = "timestamp"
+   *           type = "timestamp"
    * @hibernate.column
-   *                   name = "LAST_UPDATE_TIMESTAMP"
+   *           name = "LAST_UPDATE_TIMESTAMP"
    * @return the lastUpdateTimestamp.
    */
   java.util.Date getLastUpdateTimestamp();

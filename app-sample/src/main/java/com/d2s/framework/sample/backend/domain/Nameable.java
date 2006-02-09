@@ -19,9 +19,9 @@ public interface Nameable extends
    * 
    * @hibernate.property
    * @hibernate.column
-   *                   name = "NAME"
-   *                   length = "15"
-   *                   not-null = "true"
+   *           name = "NAME"
+   *           length = "15"
+   *           not-null = "true"
    * @return the name.
    */
   java.lang.String getName();
