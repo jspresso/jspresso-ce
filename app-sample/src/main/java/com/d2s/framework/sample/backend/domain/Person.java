@@ -25,6 +25,21 @@ public interface Person extends
   com.d2s.framework.sample.backend.domain.Traceable {
 
   /**
+   * @hibernate.id generator-class = "assigned" column = "ID" type = "string"
+   *               length = "36"
+   * <p>
+   * {@inheritDoc}
+   */
+  java.io.Serializable getId();
+
+  /**
+   * @hibernate.version column = "VERSION" unsaved-value = "null"
+   * <p>
+   * {@inheritDoc}
+   */
+  Integer getVersion();
+  
+  /**
    * Gets the birthDate.
    * 
    * @hibernate.property

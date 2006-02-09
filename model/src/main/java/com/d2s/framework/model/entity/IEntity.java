@@ -39,8 +39,6 @@ public interface IEntity extends IPropertyChangeCapable, Cloneable {
    * or not. It also establishes the minimal contract of a versionable entity
    * which is providing version accessors to handle access concurrency.
    * 
-   * @hibernate.id generator-class = "assigned" column = "ID" type = "string"
-   *               length = "36"
    * @return The id of the entity.
    */
   Serializable getId();
@@ -48,7 +46,6 @@ public interface IEntity extends IPropertyChangeCapable, Cloneable {
   /**
    * Gets the version of this entity.
    * 
-   * @hibernate.version column = "VERSION" unsaved-value = "null"
    * @return the entity version.
    */
   Integer getVersion();

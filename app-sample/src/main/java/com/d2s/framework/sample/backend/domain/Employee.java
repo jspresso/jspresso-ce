@@ -23,7 +23,7 @@ package com.d2s.framework.sample.backend.domain;
  */
 public interface Employee extends
   com.d2s.framework.sample.backend.domain.Person {
-
+  
   /**
    * Gets the hireDate.
    * 

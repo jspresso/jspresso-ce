@@ -27,32 +27,6 @@
       <unsubscribe>users-unsubscribe@design2see.com</unsubscribe>
     </mailingList>
   </mailingLists>
-  <!--
-  <pluginRepositories>
-    <pluginRepository>
-      <id>codehaus</id>
-      <url>http://dist.codehaus.org/</url>
-      <layout>default</layout>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-    <pluginRepository>
-      <id>codehaus-legacy</id>
-      <url>http://dist.codehaus.org/</url>
-      <layout>legacy</layout>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-    </pluginRepository>
-  </pluginRepositories>
-  -->
   <developers>
     <developer>
       <name>Vincent Vandenschrick</name>

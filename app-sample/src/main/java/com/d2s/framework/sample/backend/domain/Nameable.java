@@ -13,7 +13,7 @@ package com.d2s.framework.sample.backend.domain;
  */
 public interface Nameable extends
   com.d2s.framework.sample.backend.domain.NameableService {
-
+  
   /**
    * Gets the name.
    * 

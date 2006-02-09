@@ -27,14 +27,7 @@
 
 		<xdoclet>
 			<!-- Defines the file handled by xdoclet2 -->
-			<fileset dir="${root.model.src.dir}">
-				<include name="com/d2s/framework/model/entity/IEntity.java" />
-			</fileset>
-			<fileset dir="${xdoclet.hibernate.input.dir}">
-				<include name="com/d2s/framework/sample/backend/domain/*.java" />
-				<exclude name="com/d2s/framework/sample/backend/domain/*Extension.java" />
-				<exclude name="com/d2s/framework/sample/backend/domain/*Service.java" />
-			</fileset>
+			<fileset dir="${xdoclet.hibernate.input.dir}"/>
 
 			<!-- Generates the hibernate mapping files -->
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${xdoclet.hibernate.output.dir}" version="3.0"/>
