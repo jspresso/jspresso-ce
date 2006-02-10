@@ -19,8 +19,8 @@ import com.d2s.framework.view.descriptor.projection.ISubModuleDescriptor;
  */
 public class SubModule extends Module {
 
-  private Module                     parent;
-  private ISubModuleDescriptor viewDescriptor;
+  private Module               parent;
+  private ISubModuleDescriptor descriptor;
 
   /**
    * Gets the projection's parent projection.
@@ -53,21 +53,21 @@ public class SubModule extends Module {
   }
 
   /**
-   * Gets the viewDescriptor.
+   * Gets the descriptor.
    * 
-   * @return the viewDescriptor.
+   * @return the descriptor.
    */
-  public ISubModuleDescriptor getViewDescriptor() {
-    return viewDescriptor;
+  public ISubModuleDescriptor getDescriptor() {
+    return descriptor;
   }
 
   /**
-   * Sets the viewDescriptor.
+   * Sets the descriptor.
    * 
-   * @param viewDescriptor
-   *          the viewDescriptor to set.
+   * @param descriptor
+   *          the descriptor to set.
    */
-  public void setViewDescriptor(ISubModuleDescriptor viewDescriptor) {
-    this.viewDescriptor = viewDescriptor;
+  public void setDescriptor(ISubModuleDescriptor descriptor) {
+    this.descriptor = descriptor;
   }
 }

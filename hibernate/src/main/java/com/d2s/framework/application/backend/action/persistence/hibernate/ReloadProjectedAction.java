@@ -37,7 +37,7 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
-        ICompositeValueConnector projectionConnector = getProjectionConnector();
+        ICompositeValueConnector projectionConnector = getModuleConnector();
         BeanModule projection = (BeanModule) projectionConnector
             .getConnectorValue();
         if (projection.getModuleObjects() != null) {

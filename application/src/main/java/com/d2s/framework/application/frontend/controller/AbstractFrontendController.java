@@ -51,7 +51,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   private DefaultIconDescriptor                 controllerDescriptor;
 
   private String                                selectedModuleId;
-  private Map<String, ICompositeValueConnector> selectedProjectionViewConnectors;
+  private Map<String, ICompositeValueConnector> selectedModuleConnectors;
 
   private IBackendController                    backendController;
   private Map<String, IModuleDescriptor>        moduleDescriptors;
@@ -67,7 +67,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    */
   public AbstractFrontendController() {
     controllerDescriptor = new DefaultIconDescriptor();
-    selectedProjectionViewConnectors = new HashMap<String, ICompositeValueConnector>();
+    selectedModuleConnectors = new HashMap<String, ICompositeValueConnector>();
   }
 
   /**
@@ -209,24 +209,24 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
-    ICompositeValueConnector selectedProjectionViewConnector = selectedProjectionViewConnectors
+    ICompositeValueConnector selectedProjectionViewConnector = selectedModuleConnectors
         .get(getSelectedModuleId());
-    initialActionContext.put(ActionContextConstants.PROJECTION_VIEW_CONNECTOR,
+    initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
         selectedProjectionViewConnector);
     if (selectedProjectionViewConnector != null) {
       if (selectedProjectionViewConnector.getParentConnector() != null) {
         initialActionContext.put(
-            ActionContextConstants.PARENT_PROJECTION_SELECTED_INDICES,
+            ActionContextConstants.PARENT_MODULE_SELECTED_INDICES,
             ((ICollectionConnectorProvider) selectedProjectionViewConnector
                 .getParentConnector()).getCollectionConnector()
                 .getSelectedIndices());
         initialActionContext.put(
-            ActionContextConstants.PARENT_PROJECTION_VIEW_CONNECTOR,
+            ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR,
             selectedProjectionViewConnector.getParentConnector()
                 .getParentConnector());
       }
       initialActionContext.put(
-          ActionContextConstants.PROJECTION_MODEL_CONNECTOR,
+          ActionContextConstants.MODULE_MODEL_CONNECTOR,
           selectedProjectionViewConnector.getModelConnector());
     }
     return initialActionContext;
@@ -271,7 +271,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    *          the identifier of the module.
    * @return the view descriptor of the selected module.
    */
-  protected IModuleDescriptor getModuleViewDescriptor(String moduleId) {
+  protected IModuleDescriptor getModuleDescriptor(String moduleId) {
     return moduleDescriptors.get(moduleId);
   }
 
@@ -353,12 +353,12 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   }
 
   /**
-   * Gets the selectedProjectionViewConnectors.
+   * Gets the selectedModuleConnectors.
    * 
-   * @return the selectedProjectionViewConnectors.
+   * @return the selectedModuleConnectors.
    */
-  protected Map<String, ICompositeValueConnector> getSelectedProjectionViewConnectors() {
-    return selectedProjectionViewConnectors;
+  protected Map<String, ICompositeValueConnector> getSelectedModuleConnectors() {
+    return selectedModuleConnectors;
   }
 
   /**
@@ -434,7 +434,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
         .addConnectorSelectionListener(new IConnectorSelectionListener() {
 
           public void selectedConnectorChange(ConnectorSelectionEvent event) {
-            selectedProjectionViewConnectors.put(moduleId,
+            selectedModuleConnectors.put(moduleId,
                 (ICompositeValueConnector) event.getSelectedConnector());
           }
         });

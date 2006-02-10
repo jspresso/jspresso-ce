@@ -38,24 +38,24 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     ISubModuleDescriptor childProjectionViewDescriptor = (ISubModuleDescriptor) moduleViewDescriptor
         .getRootSubtreeDescriptor();
     Map<String, IViewDescriptor> projectionCards = new HashMap<String, IViewDescriptor>();
-    prepareProjectionCards(projectionCards, childProjectionViewDescriptor);
+    prepareModuleCards(projectionCards, childProjectionViewDescriptor);
     setCardViewDescriptors(projectionCards);
   }
 
-  private void prepareProjectionCards(
+  private void prepareModuleCards(
       Map<String, IViewDescriptor> projectionCards,
       ISubModuleDescriptor projectionViewDescriptor) {
     if (projectionViewDescriptor.getViewDescriptor() != null) {
       IViewDescriptor projectedObjectViewDescriptor = projectionViewDescriptor
           .getViewDescriptor();
       projectionCards.put(
-          computeKeyForProjectionViewDescriptor(projectionViewDescriptor),
+          computeKeyForModuleDescriptor(projectionViewDescriptor),
           projectedObjectViewDescriptor);
     }
     if (projectionViewDescriptor instanceof ISimpleSubModuleDescriptor) {
       if (((ISimpleSubModuleDescriptor) projectionViewDescriptor)
           .getChildDescriptor() != null) {
-        prepareProjectionCards(
+        prepareModuleCards(
             projectionCards,
             (ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) projectionViewDescriptor)
                 .getChildDescriptor());
@@ -65,7 +65,7 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
           .getChildrenDescriptors() != null) {
         for (ITreeLevelDescriptor childProjectionDescriptor : ((ICompositeSubModuleDescriptor) projectionViewDescriptor)
             .getChildrenDescriptors()) {
-          prepareProjectionCards(projectionCards,
+          prepareModuleCards(projectionCards,
               (ISubModuleDescriptor) childProjectionDescriptor);
         }
       }
@@ -77,13 +77,13 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
    */
   public String getCardNameForModel(Object model) {
     if (model instanceof SubModule) {
-      return computeKeyForProjectionViewDescriptor(((SubModule) model)
-          .getViewDescriptor());
+      return computeKeyForModuleDescriptor(((SubModule) model)
+          .getDescriptor());
     }
     return null;
   }
 
-  private String computeKeyForProjectionViewDescriptor(
+  private String computeKeyForModuleDescriptor(
       ISubModuleDescriptor descriptor) {
     if (descriptor.getViewDescriptor().getName() != null) {
       return descriptor.getViewDescriptor().getName();

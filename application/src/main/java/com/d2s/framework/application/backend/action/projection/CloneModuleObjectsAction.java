@@ -44,7 +44,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
       return null;
     }
 
-    ICompositeValueConnector projectionConnector = getProjectionConnector();
+    ICompositeValueConnector projectionConnector = getModuleConnector();
     BeanModule projection = (BeanModule) projectionConnector
         .getConnectorValue();
 

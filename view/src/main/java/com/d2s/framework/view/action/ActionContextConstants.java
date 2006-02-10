@@ -53,22 +53,22 @@ public final class ActionContextConstants {
   /**
    * The module view connector the action was triggered on.
    */
-  public static final String PROJECTION_VIEW_CONNECTOR          = "PROJECTION_VIEW_CONNECTOR";
+  public static final String MODULE_VIEW_CONNECTOR          = "MODULE_VIEW_CONNECTOR";
 
   /**
    * The projection model connector the action was triggered on.
    */
-  public static final String PROJECTION_MODEL_CONNECTOR         = "PROJECTION_MODEL_CONNECTOR";
+  public static final String MODULE_MODEL_CONNECTOR         = "MODULE_MODEL_CONNECTOR";
 
   /**
    * The selected indices in the parent projection.
    */
-  public static final String PARENT_PROJECTION_SELECTED_INDICES = "PARENT_PROJECTION_SELECTED_INDICES";
+  public static final String PARENT_MODULE_SELECTED_INDICES = "PARENT_MODULE_SELECTED_INDICES";
 
   /**
    * The parent projection view connector the action was triggered on.
    */
-  public static final String PARENT_PROJECTION_VIEW_CONNECTOR   = "PARENT_PROJECTION_VIEW_CONNECTOR";
+  public static final String PARENT_MODULE_VIEW_CONNECTOR   = "PARENT_MODULE_VIEW_CONNECTOR";
 
   /**
    * The current application session.

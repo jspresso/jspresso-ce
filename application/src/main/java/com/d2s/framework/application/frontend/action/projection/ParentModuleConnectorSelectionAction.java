@@ -33,7 +33,7 @@ public class ParentModuleConnectorSelectionAction extends
    */
   @Override
   public Map<String, Object> execute(IActionHandler actionHandler) {
-    ICompositeValueConnector parentProjectionConnector = getParentProjectionConnector();
+    ICompositeValueConnector parentProjectionConnector = getParentModuleConnector();
     ICompositeValueConnector grandParentProjectionConnector = (ICompositeValueConnector) parentProjectionConnector
         .getParentConnector();
     if (grandParentProjectionConnector instanceof ICollectionConnectorProvider) {

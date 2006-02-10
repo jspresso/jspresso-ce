@@ -43,7 +43,7 @@ public class AddBeanAsSubModuleAction extends
     if (selectedIndices == null || selectedIndices.length == 0) {
       return null;
     }
-    ICompositeValueConnector projectionConnector = getProjectionConnector();
+    ICompositeValueConnector projectionConnector = getModuleConnector();
     ICollectionConnector collectionConnector = getModelConnector();
     SubModule parentProjection = (SubModule) projectionConnector
         .getConnectorValue();
@@ -59,8 +59,8 @@ public class AddBeanAsSubModuleAction extends
           .getChildConnector(selectedIndices[i]).getConnectorValue();
       BeanModule nextChildProjection = new BeanModule();
       nextChildProjection
-          .setViewDescriptor((ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) parentProjection
-              .getViewDescriptor()).getChildDescriptor());
+          .setDescriptor((ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) parentProjection
+              .getDescriptor()).getChildDescriptor());
       nextChildProjection.setModuleObject(nextselectedProjectedObject);
       nextChildProjection.setName(String.valueOf(nextselectedProjectedObject));
       int nextChildProjectionIndex = children.indexOf(nextChildProjection);

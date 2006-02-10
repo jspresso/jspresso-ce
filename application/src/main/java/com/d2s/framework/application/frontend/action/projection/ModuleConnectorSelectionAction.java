@@ -31,7 +31,7 @@ public class ModuleConnectorSelectionAction extends AbstractChainedAction {
    */
   @Override
   public Map<String, Object> execute(IActionHandler actionHandler) {
-    ICompositeValueConnector projectionConnector = getProjectionConnector();
+    ICompositeValueConnector projectionConnector = getModuleConnector();
     ICollectionConnector parentProjectionCollectionConnector = ((ICollectionConnectorProvider) projectionConnector
         .getParentConnector().getParentConnector()).getCollectionConnector();
     parentProjectionCollectionConnector.setSelectedIndices(new int[0]);

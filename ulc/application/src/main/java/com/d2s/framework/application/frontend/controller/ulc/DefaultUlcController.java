@@ -62,7 +62,7 @@ public class DefaultUlcController extends
     ULCInternalFrame moduleInternalFrame = moduleInternalFrames
         .get(moduleId);
     if (moduleInternalFrame == null) {
-      IModuleDescriptor moduleViewDescriptor = getModuleViewDescriptor(moduleId);
+      IModuleDescriptor moduleViewDescriptor = getModuleDescriptor(moduleId);
       IView<ULCComponent> moduleView = createModuleView(
           moduleId, moduleViewDescriptor);
       moduleInternalFrame = createULCInternalFrame(moduleView);
@@ -137,7 +137,7 @@ public class DefaultUlcController extends
     ULCMenu modulesMenu = new ULCMenu(getLabelTranslator().getTranslation(
         "Modules", getLocale()));
     for (String moduleId : getModuleIds()) {
-      IModuleDescriptor projectionViewDescriptor = getModuleViewDescriptor(moduleId);
+      IModuleDescriptor projectionViewDescriptor = getModuleDescriptor(moduleId);
       ULCMenuItem projectionMenuItem = new ULCMenuItem(
           new ModuleSelectionAction(moduleId,
               projectionViewDescriptor));

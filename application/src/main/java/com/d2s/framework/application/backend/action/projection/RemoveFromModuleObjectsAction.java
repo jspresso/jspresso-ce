@@ -43,7 +43,7 @@ public class RemoveFromModuleObjectsAction extends
       return null;
     }
 
-    ICompositeValueConnector projectionConnector = getProjectionConnector();
+    ICompositeValueConnector projectionConnector = getModuleConnector();
     BeanModule projection = (BeanModule) projectionConnector
         .getConnectorValue();
 
@@ -58,7 +58,7 @@ public class RemoveFromModuleObjectsAction extends
       Object removedObject = collectionConnector.getChildConnector(
           selectedIndices[i]).getConnectorValue();
       projectedCollection.remove(removedObject);
-      removeAsChildProjection(projection, removedObject);
+      removeFromSubModules(projection, removedObject);
     }
     projection.setModuleObjects(projectedCollection);
 
@@ -67,7 +67,7 @@ public class RemoveFromModuleObjectsAction extends
     return null;
   }
 
-  private static void removeAsChildProjection(Module parentProjection,
+  private static void removeFromSubModules(Module parentProjection,
       Object removedObject) {
     if (parentProjection.getSubModules() != null) {
       for (SubModule childProjection : new ArrayList<SubModule>(

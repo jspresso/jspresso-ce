@@ -132,7 +132,7 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
    * connector this action has been executed on from its context. It uses
    * well-known context keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.PROJECTION_VIEW_CONNECTOR</code> to get
+   * <li> <code>ActionContextConstants.MODULE_VIEW_CONNECTOR</code> to get
    * the the projection view connector the action executes on.
    * </ul>
    * <p>
@@ -141,9 +141,9 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
    * 
    * @return the value connector this model action was triggered on.
    */
-  public ICompositeValueConnector getProjectionConnector() {
+  public ICompositeValueConnector getModuleConnector() {
     return (ICompositeValueConnector) getContext().get(
-        ActionContextConstants.PROJECTION_VIEW_CONNECTOR);
+        ActionContextConstants.MODULE_VIEW_CONNECTOR);
   }
 
   /**
@@ -151,7 +151,7 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
    * view connector this action has been executed on from its context. It uses
    * well-known context keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.PARENT_PROJECTION_VIEW_CONNECTOR</code>
+   * <li> <code>ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR</code>
    * to get the the parent projection view connector the action executes on.
    * </ul>
    * <p>
@@ -160,9 +160,9 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
    * 
    * @return the parent value connector this model action was triggered on.
    */
-  public ICompositeValueConnector getParentProjectionConnector() {
+  public ICompositeValueConnector getParentModuleConnector() {
     return (ICompositeValueConnector) getContext().get(
-        ActionContextConstants.PARENT_PROJECTION_VIEW_CONNECTOR);
+        ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR);
   }
 
   /**

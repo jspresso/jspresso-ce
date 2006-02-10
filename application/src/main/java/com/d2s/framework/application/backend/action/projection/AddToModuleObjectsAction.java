@@ -38,7 +38,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    */
   public Map<String, Object> execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
-    ICompositeValueConnector projectionConnector = getProjectionConnector();
+    ICompositeValueConnector projectionConnector = getModuleConnector();
     BeanModule projection = (BeanModule) projectionConnector
         .getConnectorValue();
     IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor())

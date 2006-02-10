@@ -88,7 +88,7 @@ public class DefaultSwingController extends
     JInternalFrame moduleInternalFrame = moduleInternalFrames
         .get(moduleId);
     if (moduleInternalFrame == null) {
-      IModuleDescriptor moduleViewDescriptor = getModuleViewDescriptor(moduleId);
+      IModuleDescriptor moduleViewDescriptor = getModuleDescriptor(moduleId);
       IView<JComponent> moduleView = createModuleView(moduleId,
           moduleViewDescriptor);
       moduleInternalFrame = createJInternalFrame(moduleView);
@@ -187,18 +187,18 @@ public class DefaultSwingController extends
 
   private JMenuBar getApplicationMenuBar() {
     JMenuBar applicationMenuBar = new JMenuBar();
-    applicationMenuBar.add(getProjectionMenu());
+    applicationMenuBar.add(getModulesMenu());
     return applicationMenuBar;
   }
 
-  private JMenu getProjectionMenu() {
+  private JMenu getModulesMenu() {
     JMenu projectionMenu = new JMenu(getLabelTranslator().getTranslation(
-        "Projections", getLocale()));
-    for (String rootProjectionId : getModuleIds()) {
-      IModuleDescriptor projectionViewDescriptor = getModuleViewDescriptor(rootProjectionId);
+        "Modules", getLocale()));
+    for (String moduleId : getModuleIds()) {
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       JMenuItem projectionMenuItem = new JMenuItem(
-          new ModuleSelectionAction(rootProjectionId,
-              projectionViewDescriptor));
+          new ModuleSelectionAction(moduleId,
+              moduleDescriptor));
       projectionMenu.add(projectionMenuItem);
     }
     return projectionMenu;
