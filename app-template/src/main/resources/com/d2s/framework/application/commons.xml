@@ -237,7 +237,7 @@
   <!--
     Projection utility beans.
   -->
-  <bean id="moduleDescriptor" class="com.d2s.framework.model.descriptor.projection.ModuleDescriptor" />
+  <bean id="moduleDescriptor" class="com.d2s.framework.model.descriptor.module.ModuleDescriptor" />
   <bean id="subModulesPropertyDescriptor"
     class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
     <property name="targetObject" ref="moduleDescriptor" />

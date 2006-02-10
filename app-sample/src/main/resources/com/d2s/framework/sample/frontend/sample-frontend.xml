@@ -416,44 +416,44 @@ script.setExecutionResult(result)
     The projection views.
   -->
 
-  <bean id="company.department.projection.front"
-    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleSubModuleDescriptor">
-    <property name="name" value="company.department.projection.front" />
-    <property name="description" value="company.department.projection.front" />
+  <bean id="company.department.module.front"
+    class="com.d2s.framework.view.descriptor.module.basic.BasicSimpleSubModuleDescriptor">
+    <property name="name" value="company.department.module.front" />
+    <property name="description" value="company.department.module.front" />
     <property name="viewDescriptor" ref="department.view" />
     <property name="nodeGroupDescriptor">
       <bean parent="abstractSubModulesNodeGroupDescriptor">
-        <property name="name" value="department.projection.front" />
-        <property name="description" value="department.projection.front" />
+        <property name="name" value="department.module.front" />
+        <property name="description" value="department.module.front" />
         <property name="actionMap" ref="projectionActionMap" />
       </bean>
     </property>
   </bean>
 
-  <bean id="company.departments.projection.front"
-    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleSubModuleDescriptor">
-    <property name="name" value="company.departments.projection.front" />
-    <property name="description" value="company.departments.projection.front" />
+  <bean id="company.departments.module.front"
+    class="com.d2s.framework.view.descriptor.module.basic.BasicSimpleSubModuleDescriptor">
+    <property name="name" value="company.departments.module.front" />
+    <property name="description" value="company.departments.module.front" />
     <property name="iconImageURL" value="classpath:images/icon5-48x48.png" />
     <property name="viewDescriptor" ref="departments.projected.table" />
-    <property name="childDescriptor" ref="company.department.projection.front" />
+    <property name="childDescriptor" ref="company.department.module.front" />
   </bean>
 
-  <bean id="company.projection.front"
-    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleSubModuleDescriptor">
-    <property name="name" value="company.projection.front" />
-    <property name="description" value="company.projection.front" />
+  <bean id="company.module.front"
+    class="com.d2s.framework.view.descriptor.module.basic.BasicSimpleSubModuleDescriptor">
+    <property name="name" value="company.module.front" />
+    <property name="description" value="company.module.front" />
     <property name="iconImageURL" value="classpath:images/icon7-48x48.png" />
-    <property name="childDescriptor" ref="company.departments.projection.front" />
+    <property name="childDescriptor" ref="company.departments.module.front" />
   </bean>
 
   <bean id="company.design.projection"
-    class="com.d2s.framework.view.descriptor.projection.basic.BasicModuleDescriptor">
+    class="com.d2s.framework.view.descriptor.module.basic.BasicModuleDescriptor">
     <property name="name" value="company.design.projection" />
     <property name="description" value="company.design.projection" />
-    <property name="rootSubtreeDescriptor" ref="company.projection.front" />
+    <property name="rootSubtreeDescriptor" ref="company.module.front" />
     <property name="iconImageURLProvider">
-      <bean class="com.d2s.framework.view.projection.ModuleIconImageURLProvider">
+      <bean class="com.d2s.framework.view.module.ModuleIconImageURLProvider">
         <property name="delegateProvider" ref="domainImageUrlProvider" />
       </bean>
     </property>

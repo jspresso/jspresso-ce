@@ -316,18 +316,18 @@
 		<property name="elementDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
 	</bean>
 
-	<bean id="company.departments.projection.back" class="com.d2s.framework.view.projection.BeanModule">
+	<bean id="company.departments.module.back" class="com.d2s.framework.view.module.BeanModule">
 		<property name="name" value="departments.projection" />
 		<property name="description" value="Departments" />
-		<property name="descriptor" ref="company.departments.projection.front" />
+		<property name="descriptor" ref="company.departments.module.front" />
 	</bean>
 
-	<bean id="company.projection.back" class="com.d2s.framework.view.projection.Module">
+	<bean id="company.module.back" class="com.d2s.framework.view.module.Module">
 		<property name="name" value="company.projection" />
 		<property name="description" value="Company" />
 		<property name="subModules">
 			<list>
-				<ref local="company.departments.projection.back" />
+				<ref local="company.departments.module.back" />
 			</list>
 		</property>
 	</bean>
@@ -338,7 +338,7 @@
 	<bean id="applicationBackController" parent="abstractBackController">
 		<property name="modules">
 			<map>
-				<entry key="company" value-ref="company.projection.back" />
+				<entry key="company" value-ref="company.module.back" />
 			</map>
 		</property>
 	</bean>
