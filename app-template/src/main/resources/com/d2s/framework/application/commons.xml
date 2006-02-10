@@ -237,20 +237,20 @@
   <!--
     Projection utility beans.
   -->
-  <bean id="projectionDescriptor" class="com.d2s.framework.model.descriptor.projection.ProjectionDescriptor" />
-  <bean id="childrenProjectionPropertyDescriptor"
+  <bean id="moduleDescriptor" class="com.d2s.framework.model.descriptor.projection.ModuleDescriptor" />
+  <bean id="subModulesPropertyDescriptor"
     class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property name="targetObject" ref="projectionDescriptor" />
+    <property name="targetObject" ref="moduleDescriptor" />
     <property name="targetMethod" value="getPropertyDescriptor" />
     <property name="arguments">
       <list>
-        <value>children</value>
+        <value>subModules</value>
       </list>
     </property>
   </bean>
-  <bean abstract="true" id="abstractChildrenProjectionNodeGroupDescriptor"
+  <bean abstract="true" id="abstractSubModulesNodeGroupDescriptor"
     class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor">
     <property name="renderedProperty" value="name" />
-    <property name="modelDescriptor" ref="childrenProjectionPropertyDescriptor" />
+    <property name="modelDescriptor" ref="subModulesPropertyDescriptor" />
   </bean>
 </beans>

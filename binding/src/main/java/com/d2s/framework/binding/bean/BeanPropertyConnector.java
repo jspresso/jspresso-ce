@@ -11,6 +11,7 @@ import org.apache.commons.lang.ObjectUtils;
 
 import com.d2s.framework.binding.AbstractValueConnector;
 import com.d2s.framework.binding.ConnectorBindingException;
+import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.bean.BeanChangeEvent;
 import com.d2s.framework.util.bean.IAccessor;
@@ -140,11 +141,13 @@ public abstract class BeanPropertyConnector extends AbstractValueConnector
    * {@inheritDoc}
    */
   public void beanChange(BeanChangeEvent evt) {
-    if (evt.getOldValue() != null) {
-      evt.getOldValue().removePropertyChangeListener(getId(), this);
-    }
-    if (evt.getNewValue() != null) {
-      evt.getNewValue().addPropertyChangeListener(getId(), this);
+    if (!(getParentConnector() instanceof ICollectionConnector)) {
+      if (evt.getOldValue() != null) {
+        evt.getOldValue().removePropertyChangeListener(getId(), this);
+      }
+      if (evt.getNewValue() != null) {
+        evt.getNewValue().addPropertyChangeListener(getId(), this);
+      }
     }
 
     boolean oldWritability;

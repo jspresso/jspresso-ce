@@ -51,7 +51,7 @@ public final class ActionContextConstants {
   public static final String VIEW_CONNECTOR                     = "VIEW_CONNECTOR";
 
   /**
-   * The projection view connector the action was triggered on.
+   * The module view connector the action was triggered on.
    */
   public static final String PROJECTION_VIEW_CONNECTOR          = "PROJECTION_VIEW_CONNECTOR";
 

@@ -5,7 +5,7 @@ package com.d2s.framework.view.projection;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.d2s.framework.view.descriptor.projection.IChildProjectionViewDescriptor;
+import com.d2s.framework.view.descriptor.projection.ISubModuleDescriptor;
 
 /**
  * A child projection is a non-root projection (it has a parent). A child
@@ -17,17 +17,17 @@ import com.d2s.framework.view.descriptor.projection.IChildProjectionViewDescript
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ChildProjection extends Projection {
+public class SubModule extends Module {
 
-  private Projection                     parent;
-  private IChildProjectionViewDescriptor viewDescriptor;
+  private Module                     parent;
+  private ISubModuleDescriptor viewDescriptor;
 
   /**
    * Gets the projection's parent projection.
    * 
    * @return the parent projection or null if none.
    */
-  public Projection getParent() {
+  public Module getParent() {
     return parent;
   }
 
@@ -37,17 +37,17 @@ public class ChildProjection extends Projection {
    * @param parent
    *          the parent projection to set or null if none.
    */
-  public void setParent(Projection parent) {
+  public void setParent(Module parent) {
     if (ObjectUtils.equals(this.parent, parent)) {
       return;
     }
-    Projection oldParent = getParent();
+    Module oldParent = getParent();
     if (getParent() != null) {
-      getParent().removeChild(this);
+      getParent().removeSubModule(this);
     }
     this.parent = parent;
-    if (getParent() != null && !getParent().getChildren().contains(this)) {
-      getParent().addChild(this);
+    if (getParent() != null && !getParent().getSubModules().contains(this)) {
+      getParent().addSubModule(this);
     }
     firePropertyChange("parent", oldParent, getParent());
   }
@@ -57,7 +57,7 @@ public class ChildProjection extends Projection {
    * 
    * @return the viewDescriptor.
    */
-  public IChildProjectionViewDescriptor getViewDescriptor() {
+  public ISubModuleDescriptor getViewDescriptor() {
     return viewDescriptor;
   }
 
@@ -67,7 +67,7 @@ public class ChildProjection extends Projection {
    * @param viewDescriptor
    *          the viewDescriptor to set.
    */
-  public void setViewDescriptor(IChildProjectionViewDescriptor viewDescriptor) {
+  public void setViewDescriptor(ISubModuleDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
   }
 }

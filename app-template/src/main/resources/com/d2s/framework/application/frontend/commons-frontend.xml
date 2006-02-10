@@ -2,235 +2,236 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <!--
-  Test view description context.
+	Test view description context.
 -->
 <beans>
-  <!--
-    View factories
-  -->
-  <bean id="lovViewFactory" class="com.d2s.framework.view.BasicLovViewFactory">
-    <property name="viewFactory" ref="viewFactory" />
-  </bean>
+	<!--
+		View factories
+	-->
+	<bean id="lovViewFactory" class="com.d2s.framework.view.BasicLovViewFactory">
+		<property name="viewFactory" ref="viewFactory" />
+	</bean>
 
-  <!--
-    Root action beans.
-  -->
-  <bean id="abstractFrontAction" abstract="true">
-    <property name="viewFactory" ref="viewFactory" />
-    <property name="iconFactory" ref="iconFactory" />
-    <property name="mvcBinder" ref="mvcBinder" />
-  </bean>
+	<!--
+		Root action beans.
+	-->
+	<bean id="abstractFrontAction" abstract="true">
+		<property name="viewFactory" ref="viewFactory" />
+		<property name="iconFactory" ref="iconFactory" />
+		<property name="mvcBinder" ref="mvcBinder" />
+	</bean>
 
-  <!--
-    Action beans.
-  -->
-  <bean id="abstractLovAction" abstract="true" parent="abstractFrontAction">
-    <property name="lovViewFactory" ref="lovViewFactory" />
-    <property name="actionFactory" ref="actionFactory" />
-    <property name="createQueryEntityAction" ref="createQueryEntityAction" />
-    <property name="okAction" ref="lovOkFrontAction" />
-    <property name="cancelAction" ref="cancelDialogFrontAction" />
-    <property name="findAction" ref="lovFindFrontAction" />
-  </bean>
+	<!--
+		Action beans.
+	-->
+	<bean id="abstractLovAction" abstract="true" parent="abstractFrontAction">
+		<property name="lovViewFactory" ref="lovViewFactory" />
+		<property name="actionFactory" ref="actionFactory" />
+		<property name="createQueryEntityAction" ref="createQueryEntityAction" />
+		<property name="okAction" ref="lovOkFrontAction" />
+		<property name="cancelAction" ref="cancelDialogFrontAction" />
+		<property name="findAction" ref="lovFindFrontAction" />
+	</bean>
 
-  <bean id="abstractLovFindFrontAction" abstract="true" parent="abstractFrontAction">
-    <property name="wrappedAction" ref="queryEntitiesBackAction" />
-  </bean>
+	<bean id="abstractLovFindFrontAction" abstract="true" parent="abstractFrontAction">
+		<property name="wrappedAction" ref="queryEntitiesBackAction" />
+	</bean>
 
-  <bean id="connectorSelectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction">
-  </bean>
+	<bean id="connectorSelectionFrontAction"
+		class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction">
+	</bean>
 
-  <bean id="projectionConnectorSelectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.projection.ProjectionConnectorSelectionAction">
-  </bean>
+	<bean id="projectionConnectorSelectionFrontAction"
+		class="com.d2s.framework.application.frontend.action.projection.ModuleConnectorSelectionAction">
+	</bean>
 
-  <bean id="parentProjectionConnectorSelectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.projection.ParentProjectionConnectorSelectionAction">
-  </bean>
+	<bean id="parentProjectionConnectorSelectionFrontAction"
+		class="com.d2s.framework.application.frontend.action.projection.ParentModuleConnectorSelectionAction">
+	</bean>
 
-  <bean id="scriptedBackAction" parent="abstractBackAction"
-    class="com.d2s.framework.application.backend.action.ScriptedBackendAction">
-    <property name="scriptHandler" ref="scriptHandler" />
-  </bean>
+	<bean id="scriptedBackAction" parent="abstractBackAction"
+		class="com.d2s.framework.application.backend.action.ScriptedBackendAction">
+		<property name="scriptHandler" ref="scriptHandler" />
+	</bean>
 
-  <bean id="addToMasterFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
-    <property name="iconImageURL" value="classpath:images/edit_add-48x48.png" />
-    <property name="name" value="add" />
-    <property name="description" value="Adds a new detail" />
-    <!--
-      <property name="mnemonicAsString" value="alt pressed A" />
-    -->
-    <property name="acceleratorAsString" value="alt A" />
-    <property name="wrappedAction">
-      <bean parent="abstractBackAction" class="com.d2s.framework.application.backend.action.AddToMasterAction"></bean>
-    </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
-  </bean>
+	<bean id="addToMasterFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+		<property name="iconImageURL" value="classpath:images/edit_add-48x48.png" />
+		<property name="name" value="add" />
+		<property name="description" value="Adds a new detail" />
+		<!--
+			<property name="mnemonicAsString" value="alt pressed A" />
+		-->
+		<property name="acceleratorAsString" value="alt A" />
+		<property name="wrappedAction">
+			<bean parent="abstractBackAction" class="com.d2s.framework.application.backend.action.AddToMasterAction"></bean>
+		</property>
+		<property name="nextAction" ref="connectorSelectionFrontAction" />
+	</bean>
 
-  <bean id="cloneCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
-    <property name="iconImageURL" value="classpath:images/edit_clone-48x48.png" />
-    <property name="name" value="clone" />
-    <property name="description" value="Clone selected details" />
-    <property name="acceleratorAsString" value="alt C" />
-    <property name="wrappedAction">
-      <bean parent="abstractBackAction" class="com.d2s.framework.application.backend.action.CloneCollectionAction">
-      </bean>
-    </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
-  </bean>
+	<bean id="cloneCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+		<property name="iconImageURL" value="classpath:images/edit_clone-48x48.png" />
+		<property name="name" value="clone" />
+		<property name="description" value="Clone selected details" />
+		<property name="acceleratorAsString" value="alt C" />
+		<property name="wrappedAction">
+			<bean parent="abstractBackAction"
+				class="com.d2s.framework.application.backend.action.CloneCollectionAction">
+			</bean>
+		</property>
+		<property name="nextAction" ref="connectorSelectionFrontAction" />
+	</bean>
 
-  <bean id="addToProjectedFrontAction" parent="addToMasterFrontAction">
-    <property name="wrappedAction">
-      <bean parent="abstractBackAction"
-        class="com.d2s.framework.application.backend.action.projection.AddToProjectedCollectionAction">
-      </bean>
-    </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
-  </bean>
+	<bean id="addToProjectedFrontAction" parent="addToMasterFrontAction">
+		<property name="wrappedAction">
+			<bean parent="abstractBackAction"
+				class="com.d2s.framework.application.backend.action.projection.AddToModuleObjectsAction">
+			</bean>
+		</property>
+		<property name="nextAction" ref="connectorSelectionFrontAction" />
+	</bean>
 
-  <bean id="abstractRemoveCollectionFromMasterFrontAction" abstract="true" parent="abstractFrontAction">
-    <property name="iconImageURL" value="classpath:images/edit_remove-48x48.png" />
-    <property name="name" value="remove" />
-    <property name="description" value="Removes selected details" />
-    <property name="acceleratorAsString" value="alt D" />
-    <property name="message" value="Are you sure you want to remove selected details ?" />
-    <property name="yesAction">
-      <bean parent="abstractHibernateBackAction"
-        class="com.d2s.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction">
-      </bean>
-    </property>
-  </bean>
+	<bean id="abstractRemoveCollectionFromMasterFrontAction" abstract="true" parent="abstractFrontAction">
+		<property name="iconImageURL" value="classpath:images/edit_remove-48x48.png" />
+		<property name="name" value="remove" />
+		<property name="description" value="Removes selected details" />
+		<property name="acceleratorAsString" value="alt D" />
+		<property name="message" value="Are you sure you want to remove selected details ?" />
+		<property name="yesAction">
+			<bean parent="abstractHibernateBackAction"
+				class="com.d2s.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction">
+			</bean>
+		</property>
+	</bean>
 
-  <bean id="removeFromProjectedFrontAction" parent="removeCollectionFromMasterFrontAction">
-    <property name="yesAction">
-      <bean parent="abstractBackAction"
-        class="com.d2s.framework.application.backend.action.projection.RemoveFromProjectedCollectionAction">
-      </bean>
-    </property>
-  </bean>
+	<bean id="removeFromProjectedFrontAction" parent="removeCollectionFromMasterFrontAction">
+		<property name="yesAction">
+			<bean parent="abstractBackAction"
+				class="com.d2s.framework.application.backend.action.projection.RemoveFromModuleObjectsAction">
+			</bean>
+		</property>
+	</bean>
 
-  <bean id="cloneProjectedFrontAction" parent="cloneCollectionFrontAction">
-    <property name="wrappedAction">
-      <bean parent="abstractBackAction"
-        class="com.d2s.framework.application.backend.action.projection.CloneProjectedCollectionAction">
-      </bean>
-    </property>
-    <property name="nextAction" ref="connectorSelectionFrontAction" />
-  </bean>
+	<bean id="cloneProjectedFrontAction" parent="cloneCollectionFrontAction">
+		<property name="wrappedAction">
+			<bean parent="abstractBackAction"
+				class="com.d2s.framework.application.backend.action.projection.CloneModuleObjectsAction">
+			</bean>
+		</property>
+		<property name="nextAction" ref="connectorSelectionFrontAction" />
+	</bean>
 
-  <bean id="addAsChildProjectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
-    <property name="iconImageURL" value="classpath:images/view-48x48.png" />
-    <property name="name" value="installInTree" />
-    <property name="description" value="Installs selected elements in tree" />
-    <property name="wrappedAction">
-      <bean parent="abstractBackAction"
-        class="com.d2s.framework.application.backend.action.projection.AddProjectedAsChildProjectionAction">
-      </bean>
-    </property>
-    <property name="nextAction" ref="projectionConnectorSelectionFrontAction" />
-  </bean>
+	<bean id="addAsChildProjectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+		<property name="iconImageURL" value="classpath:images/view-48x48.png" />
+		<property name="name" value="installInTree" />
+		<property name="description" value="Installs selected elements in tree" />
+		<property name="wrappedAction">
+			<bean parent="abstractBackAction"
+				class="com.d2s.framework.application.backend.action.projection.AddBeanAsSubModuleAction">
+			</bean>
+		</property>
+		<property name="nextAction" ref="projectionConnectorSelectionFrontAction" />
+	</bean>
 
-  <bean id="removeProjectionFromParentFrontAction" parent="removeCollectionFromMasterFrontAction">
-    <property name="yesAction">
-      <bean class="com.d2s.framework.application.frontend.action.ActionWrapper">
-        <property name="wrappedAction">
-          <bean parent="abstractBackAction"
-            class="com.d2s.framework.application.backend.action.projection.RemoveProjectionFromParentAction">
-          </bean>
-        </property>
-        <property name="nextAction" ref="parentProjectionConnectorSelectionFrontAction" />
-      </bean>
-    </property>
-  </bean>
+	<bean id="removeProjectionFromParentFrontAction" parent="removeCollectionFromMasterFrontAction">
+		<property name="yesAction">
+			<bean class="com.d2s.framework.application.frontend.action.ActionWrapper">
+				<property name="wrappedAction">
+					<bean parent="abstractBackAction"
+						class="com.d2s.framework.application.backend.action.projection.RemoveSubModuleFromParentAction">
+					</bean>
+				</property>
+				<property name="nextAction" ref="parentProjectionConnectorSelectionFrontAction" />
+			</bean>
+		</property>
+	</bean>
 
-  <!--
-    Hibernate action beans.
-  -->
-  <bean id="saveProjectedFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
-    <property name="iconImageURL" value="classpath:images/save-48x48.png" />
-    <property name="name" value="save" />
-    <property name="description" value="Save objects" />
-    <property name="wrappedAction">
-      <bean parent="abstractHibernateBackAction"
-        class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveProjectedAction" />
-    </property>
-  </bean>
+	<!--
+		Hibernate action beans.
+	-->
+	<bean id="saveProjectedFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+		<property name="iconImageURL" value="classpath:images/save-48x48.png" />
+		<property name="name" value="save" />
+		<property name="description" value="Save objects" />
+		<property name="wrappedAction">
+			<bean parent="abstractHibernateBackAction"
+				class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveProjectedAction" />
+		</property>
+	</bean>
 
-  <bean id="reloadProjectedFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
-    <property name="iconImageURL" value="classpath:images/reload-48x48.png" />
-    <property name="name" value="reload" />
-    <property name="description" value="Reload objects" />
-    <property name="wrappedAction">
-      <bean parent="abstractHibernateBackAction"
-        class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadProjectedAction" />
-    </property>
-  </bean>
+	<bean id="reloadProjectedFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+		<property name="iconImageURL" value="classpath:images/reload-48x48.png" />
+		<property name="name" value="reload" />
+		<property name="description" value="Reload objects" />
+		<property name="wrappedAction">
+			<bean parent="abstractHibernateBackAction"
+				class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadProjectedAction" />
+		</property>
+	</bean>
 
-  <!--
-    Action maps.
-  -->
-  <bean id="masterDetailActionMap" class="com.d2s.framework.view.action.ActionMap">
-    <property name="actionMap">
-      <map>
-        <entry key="EDIT">
-          <list>
-            <ref local="addToMasterFrontAction" />
-            <ref bean="removeCollectionFromMasterFrontAction" />
-            <ref local="cloneCollectionFrontAction" />
-          </list>
-        </entry>
-      </map>
-    </property>
-  </bean>
+	<!--
+		Action maps.
+	-->
+	<bean id="masterDetailActionMap" class="com.d2s.framework.view.action.ActionMap">
+		<property name="actionMap">
+			<map>
+				<entry key="EDIT">
+					<list>
+						<ref local="addToMasterFrontAction" />
+						<ref bean="removeCollectionFromMasterFrontAction" />
+						<ref local="cloneCollectionFrontAction" />
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
 
-  <bean id="projectedCollectionActionMap" class="com.d2s.framework.view.action.ActionMap">
-    <property name="actionMap">
-      <map>
-        <entry key="FILE">
-          <list>
-            <ref local="saveProjectedFrontAction" />
-            <ref local="reloadProjectedFrontAction" />
-          </list>
-        </entry>
-        <entry key="EDIT">
-          <list>
-            <ref local="addToProjectedFrontAction" />
-            <ref local="removeFromProjectedFrontAction" />
-            <ref local="cloneProjectedFrontAction" />
-          </list>
-        </entry>
-        <entry key="SERVICE">
-          <list>
-            <ref local="addAsChildProjectionFrontAction" />
-          </list>
-        </entry>
-      </map>
-    </property>
-  </bean>
+	<bean id="projectedCollectionActionMap" class="com.d2s.framework.view.action.ActionMap">
+		<property name="actionMap">
+			<map>
+				<entry key="FILE">
+					<list>
+						<ref local="saveProjectedFrontAction" />
+						<ref local="reloadProjectedFrontAction" />
+					</list>
+				</entry>
+				<entry key="EDIT">
+					<list>
+						<ref local="addToProjectedFrontAction" />
+						<ref local="removeFromProjectedFrontAction" />
+						<ref local="cloneProjectedFrontAction" />
+					</list>
+				</entry>
+				<entry key="SERVICE">
+					<list>
+						<ref local="addAsChildProjectionFrontAction" />
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
 
-  <bean id="projectionActionMap" class="com.d2s.framework.view.action.ActionMap">
-    <property name="actionMap">
-      <map>
-        <entry key="EDIT">
-          <list>
-            <ref local="removeProjectionFromParentFrontAction" />
-          </list>
-        </entry>
-      </map>
-    </property>
-  </bean>
+	<bean id="projectionActionMap" class="com.d2s.framework.view.action.ActionMap">
+		<property name="actionMap">
+			<map>
+				<entry key="EDIT">
+					<list>
+						<ref local="removeProjectionFromParentFrontAction" />
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
 
-  <bean id="projectedActionMap" class="com.d2s.framework.view.action.ActionMap">
-    <property name="actionMap">
-      <map>
-        <entry key="FILE">
-          <list>
-            <ref local="saveProjectedFrontAction" />
-            <ref local="reloadProjectedFrontAction" />
-          </list>
-        </entry>
-      </map>
-    </property>
-  </bean>
+	<bean id="projectedActionMap" class="com.d2s.framework.view.action.ActionMap">
+		<property name="actionMap">
+			<map>
+				<entry key="FILE">
+					<list>
+						<ref local="saveProjectedFrontAction" />
+						<ref local="reloadProjectedFrontAction" />
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
 </beans>

@@ -22,7 +22,7 @@ import com.d2s.framework.view.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ParentProjectionConnectorSelectionAction extends
+public class ParentModuleConnectorSelectionAction extends
     AbstractChainedAction {
 
   /**

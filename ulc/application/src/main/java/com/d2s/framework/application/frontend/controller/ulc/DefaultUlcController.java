@@ -11,7 +11,7 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
-import com.d2s.framework.view.descriptor.projection.IProjectionViewDescriptor;
+import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
 import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
@@ -38,7 +38,7 @@ public class DefaultUlcController extends
     AbstractFrontendController<ULCComponent> {
 
   private ULCFrame                      controllerFrame;
-  private Map<String, ULCInternalFrame> projectionInternalFrames;
+  private Map<String, ULCInternalFrame> moduleInternalFrames;
 
   /**
    * Creates the initial view from the root view descriptor, then a JFrame
@@ -55,44 +55,44 @@ public class DefaultUlcController extends
     controllerFrame.setVisible(true);
   }
 
-  private void displayProjection(String rootProjectionId) {
-    if (projectionInternalFrames == null) {
-      projectionInternalFrames = new HashMap<String, ULCInternalFrame>();
+  private void displayModule(String moduleId) {
+    if (moduleInternalFrames == null) {
+      moduleInternalFrames = new HashMap<String, ULCInternalFrame>();
     }
-    ULCInternalFrame projectionInternalFrame = projectionInternalFrames
-        .get(rootProjectionId);
-    if (projectionInternalFrame == null) {
-      IProjectionViewDescriptor projectionViewDescriptor = getRootProjectionViewDescriptor(rootProjectionId);
-      IView<ULCComponent> projectionView = createProjectionView(
-          rootProjectionId, projectionViewDescriptor);
-      projectionInternalFrame = createULCInternalFrame(projectionView);
-      projectionInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          projectionViewDescriptor.getIconImageURL(),
+    ULCInternalFrame moduleInternalFrame = moduleInternalFrames
+        .get(moduleId);
+    if (moduleInternalFrame == null) {
+      IModuleDescriptor moduleViewDescriptor = getModuleViewDescriptor(moduleId);
+      IView<ULCComponent> moduleView = createModuleView(
+          moduleId, moduleViewDescriptor);
+      moduleInternalFrame = createULCInternalFrame(moduleView);
+      moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
+          moduleViewDescriptor.getIconImageURL(),
           IIconFactory.SMALL_ICON_SIZE));
-      projectionInternalFrames.put(rootProjectionId, projectionInternalFrame);
-      controllerFrame.getContentPane().add(projectionInternalFrame);
-      getMvcBinder().bind(projectionView.getConnector(),
-          getBackendController().getRootProjectionConnector(rootProjectionId));
-      projectionInternalFrame.pack();
+      moduleInternalFrames.put(moduleId, moduleInternalFrame);
+      controllerFrame.getContentPane().add(moduleInternalFrame);
+      getMvcBinder().bind(moduleView.getConnector(),
+          getBackendController().getModuleConnector(moduleId));
+      moduleInternalFrame.pack();
     }
-    projectionInternalFrame.setVisible(true);
-    if (projectionInternalFrame.isIcon()) {
-      projectionInternalFrame.setIcon(false);
+    moduleInternalFrame.setVisible(true);
+    if (moduleInternalFrame.isIcon()) {
+      moduleInternalFrame.setIcon(false);
     }
-    projectionInternalFrame.setMaximum(true);
-    projectionInternalFrame.moveToFront();
+    moduleInternalFrame.setMaximum(true);
+    moduleInternalFrame.moveToFront();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected String getSelectedRootProjectionId() {
-    for (Map.Entry<String, ULCInternalFrame> projectionIdAndFrame : projectionInternalFrames
+  protected String getSelectedModuleId() {
+    for (Map.Entry<String, ULCInternalFrame> moduleIdAndFrame : moduleInternalFrames
         .entrySet()) {
-      if (projectionIdAndFrame.getValue() != null
-          && projectionIdAndFrame.getValue().isSelected()) {
-        return projectionIdAndFrame.getKey();
+      if (moduleIdAndFrame.getValue() != null
+          && moduleIdAndFrame.getValue().isSelected()) {
+        return moduleIdAndFrame.getKey();
       }
     }
     return null;
@@ -102,8 +102,8 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  protected void setSelectedRootProjectionId(@SuppressWarnings("unused")
-  String selectedRootProjectionId) {
+  protected void setSelectedModuleId(@SuppressWarnings("unused")
+  String selectedModuleId) {
     throw new UnsupportedOperationException();
   }
 
@@ -129,37 +129,37 @@ public class DefaultUlcController extends
 
   private ULCMenuBar getApplicationMenuBar() {
     ULCMenuBar applicationMenuBar = new ULCMenuBar();
-    applicationMenuBar.add(getProjectionMenu());
+    applicationMenuBar.add(getModulesMenu());
     return applicationMenuBar;
   }
 
-  private ULCMenu getProjectionMenu() {
-    ULCMenu projectionMenu = new ULCMenu(getLabelTranslator().getTranslation(
-        "Projections", getLocale()));
-    for (String rootProjectionId : getRootProjectionIds()) {
-      IProjectionViewDescriptor projectionViewDescriptor = getRootProjectionViewDescriptor(rootProjectionId);
+  private ULCMenu getModulesMenu() {
+    ULCMenu modulesMenu = new ULCMenu(getLabelTranslator().getTranslation(
+        "Modules", getLocale()));
+    for (String moduleId : getModuleIds()) {
+      IModuleDescriptor projectionViewDescriptor = getModuleViewDescriptor(moduleId);
       ULCMenuItem projectionMenuItem = new ULCMenuItem(
-          new ProjectionSelectionAction(rootProjectionId,
+          new ModuleSelectionAction(moduleId,
               projectionViewDescriptor));
-      projectionMenu.add(projectionMenuItem);
+      modulesMenu.add(projectionMenuItem);
     }
-    return projectionMenu;
+    return modulesMenu;
   }
 
-  private final class ProjectionSelectionAction extends AbstractAction {
+  private final class ModuleSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
-    private String            rootProjectionId;
+    private String            moduleId;
 
     /**
-     * Constructs a new <code>ProjectionSelectionAction</code> instance.
+     * Constructs a new <code>ModuleSelectionAction</code> instance.
      * 
-     * @param rootProjectionId
+     * @param moduleId
      * @param projectionViewDescriptor
      */
-    public ProjectionSelectionAction(String rootProjectionId,
-        IProjectionViewDescriptor projectionViewDescriptor) {
-      this.rootProjectionId = rootProjectionId;
+    public ModuleSelectionAction(String moduleId,
+        IModuleDescriptor projectionViewDescriptor) {
+      this.moduleId = moduleId;
       putValue(com.ulcjava.base.application.IAction.NAME, getLabelTranslator()
           .getTranslation(projectionViewDescriptor.getName(), getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
@@ -178,7 +178,7 @@ public class DefaultUlcController extends
     @Override
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
-      displayProjection(rootProjectionId);
+      displayModule(moduleId);
     }
   }
 

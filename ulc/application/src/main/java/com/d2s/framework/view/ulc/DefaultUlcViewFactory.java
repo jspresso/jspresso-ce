@@ -101,8 +101,8 @@ import com.d2s.framework.view.descriptor.TreeDescriptorHelper;
 import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.basic.ProjectionCardViewDescriptor;
-import com.d2s.framework.view.projection.BeanProjection;
+import com.d2s.framework.view.descriptor.projection.basic.ModuleCardViewDescriptor;
+import com.d2s.framework.view.projection.BeanModule;
 import com.ulcjava.base.application.BorderFactory;
 import com.ulcjava.base.application.DefaultComboBoxCellRenderer;
 import com.ulcjava.base.application.GridBagConstraints;
@@ -444,19 +444,19 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
               cardPanel.setSelectedName(cardName);
               IView<ULCComponent> childCardView = cardView.getChild(cardName);
               IValueConnector childCardConnector = childCardView.getConnector();
-              if (cardView.getDescriptor() instanceof ProjectionCardViewDescriptor) {
+              if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
                 if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                  if (cardModel != null && cardModel instanceof BeanProjection) {
+                  if (cardModel != null && cardModel instanceof BeanModule) {
                     childCardConnector.getModelConnector().setConnectorValue(
-                        ((BeanProjection) cardModel).getProjectedObjects());
+                        ((BeanModule) cardModel).getModuleObjects());
                   } else {
                     childCardConnector.getModelConnector().setConnectorValue(
                         cardModel);
                   }
                 } else {
-                  if (cardModel != null && cardModel instanceof BeanProjection) {
+                  if (cardModel != null && cardModel instanceof BeanModule) {
                     childCardConnector.getModelConnector().setConnectorValue(
-                        ((BeanProjection) cardModel).getProjectedObject());
+                        ((BeanModule) cardModel).getModuleObject());
                   } else {
                     childCardConnector.getModelConnector().setConnectorValue(
                         cardModel);
@@ -571,8 +571,8 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   private GridBagConstraints createGridBagConstraints(
       ViewConstraints viewConstraints) {
     GridBagConstraints constraints = new GridBagConstraints();
-    constraints.setGridX(viewConstraints.getRow());
-    constraints.setGridY(viewConstraints.getColumn());
+    constraints.setGridX(viewConstraints.getColumn());
+    constraints.setGridY(viewConstraints.getRow());
     constraints.setGridWidth(viewConstraints.getWidth());
     constraints.setGridHeight(viewConstraints.getHeight());
     if (viewConstraints.isWidthResizable()) {

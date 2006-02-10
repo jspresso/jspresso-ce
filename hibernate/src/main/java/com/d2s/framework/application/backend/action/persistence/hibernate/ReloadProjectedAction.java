@@ -13,7 +13,7 @@ import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.projection.BeanProjection;
+import com.d2s.framework.view.projection.BeanModule;
 
 /**
  * Reloads the projected object(s) in a transaction.
@@ -38,15 +38,15 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
         ICompositeValueConnector projectionConnector = getProjectionConnector();
-        BeanProjection projection = (BeanProjection) projectionConnector
+        BeanModule projection = (BeanModule) projectionConnector
             .getConnectorValue();
-        if (projection.getProjectedObjects() != null) {
-          Collection projectedCollection = projection.getProjectedObjects();
+        if (projection.getModuleObjects() != null) {
+          Collection projectedCollection = projection.getModuleObjects();
           for (Object entity : projectedCollection) {
             reloadEntity((IEntity) entity);
           }
-        } else if (projection.getProjectedObject() != null) {
-          reloadEntity((IEntity) projection.getProjectedObject());
+        } else if (projection.getModuleObject() != null) {
+          reloadEntity((IEntity) projection.getModuleObject());
         }
         return null;
       }

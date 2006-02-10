@@ -14,7 +14,7 @@ import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ISimpleChildProjectionViewDescriptor extends
-    IChildProjectionViewDescriptor, ISimpleTreeLevelDescriptor {
+public interface ISimpleSubModuleDescriptor extends
+    ISubModuleDescriptor, ISimpleTreeLevelDescriptor {
   // No extra operation.
 }

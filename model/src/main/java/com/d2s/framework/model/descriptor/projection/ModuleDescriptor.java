@@ -23,12 +23,12 @@ import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ProjectionDescriptor extends BasicComponentDescriptor {
+public class ModuleDescriptor extends BasicComponentDescriptor {
 
   /**
-   * Constructs a new <code>ProjectionDescriptor</code> instance.
+   * Constructs a new <code>ModuleDescriptor</code> instance.
    */
-  public ProjectionDescriptor() {
+  public ModuleDescriptor() {
     BasicReferencePropertyDescriptor parentDescriptor = new BasicReferencePropertyDescriptor();
     parentDescriptor.setName("parent");
     parentDescriptor.setReferencedDescriptor(this);
@@ -37,9 +37,9 @@ public class ProjectionDescriptor extends BasicComponentDescriptor {
     projectionListDescriptor.setCollectionInterface(List.class);
     projectionListDescriptor.setElementDescriptor(this);
 
-    BasicCollectionPropertyDescriptor childrenDescriptor = new BasicCollectionPropertyDescriptor();
-    childrenDescriptor.setReferencedDescriptor(projectionListDescriptor);
-    childrenDescriptor.setName("children");
+    BasicCollectionPropertyDescriptor subModulesDescriptor = new BasicCollectionPropertyDescriptor();
+    subModulesDescriptor.setReferencedDescriptor(projectionListDescriptor);
+    subModulesDescriptor.setName("subModules");
 
     BasicObjectPropertyDescriptor projectedObjectDescriptor = new BasicObjectPropertyDescriptor();
     projectedObjectDescriptor.setName("projectedObject");
@@ -53,8 +53,8 @@ public class ProjectionDescriptor extends BasicComponentDescriptor {
     BasicStringPropertyDescriptor descriptionDescriptor = new BasicStringPropertyDescriptor();
     descriptionDescriptor.setName("description");
 
-    parentDescriptor.setReverseRelationEnd(childrenDescriptor);
-    childrenDescriptor.setReverseRelationEnd(parentDescriptor);
+    parentDescriptor.setReverseRelationEnd(subModulesDescriptor);
+    subModulesDescriptor.setReverseRelationEnd(parentDescriptor);
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     propertyDescriptors.add(projectedObjectDescriptor);
@@ -62,7 +62,7 @@ public class ProjectionDescriptor extends BasicComponentDescriptor {
     propertyDescriptors.add(nameDescriptor);
     propertyDescriptors.add(descriptionDescriptor);
     propertyDescriptors.add(parentDescriptor);
-    propertyDescriptors.add(childrenDescriptor);
+    propertyDescriptors.add(subModulesDescriptor);
     setPropertyDescriptors(propertyDescriptors);
   }
 }

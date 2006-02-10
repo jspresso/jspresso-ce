@@ -15,7 +15,7 @@ import com.d2s.framework.util.IIconImageURLProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ProjectionIconImageURLProvider implements IIconImageURLProvider {
+public class ModuleIconImageURLProvider implements IIconImageURLProvider {
 
   private IIconImageURLProvider delegateProvider;
 
@@ -23,10 +23,10 @@ public class ProjectionIconImageURLProvider implements IIconImageURLProvider {
    * {@inheritDoc}
    */
   public String getIconImageURLForObject(Object userObject) {
-    if (delegateProvider != null && userObject instanceof BeanProjection) {
+    if (delegateProvider != null && userObject instanceof BeanModule) {
       return delegateProvider
-          .getIconImageURLForObject(((BeanProjection) userObject)
-              .getProjectedObject());
+          .getIconImageURLForObject(((BeanModule) userObject)
+              .getModuleObject());
     }
     return null;
   }

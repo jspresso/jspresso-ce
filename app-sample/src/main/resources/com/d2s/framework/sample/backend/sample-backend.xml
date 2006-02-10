@@ -316,16 +316,16 @@
 		<property name="elementDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
 	</bean>
 
-	<bean id="company.departments.projection.back" class="com.d2s.framework.view.projection.BeanProjection">
+	<bean id="company.departments.projection.back" class="com.d2s.framework.view.projection.BeanModule">
 		<property name="name" value="departments.projection" />
 		<property name="description" value="Departments" />
 		<property name="viewDescriptor" ref="company.departments.projection.front" />
 	</bean>
 
-	<bean id="company.projection.back" class="com.d2s.framework.view.projection.Projection">
+	<bean id="company.projection.back" class="com.d2s.framework.view.projection.Module">
 		<property name="name" value="company.projection" />
 		<property name="description" value="Company" />
-		<property name="children">
+		<property name="subModules">
 			<list>
 				<ref local="company.departments.projection.back" />
 			</list>
@@ -336,7 +336,7 @@
 		The controller.
 	-->
 	<bean id="applicationBackController" parent="abstractBackController">
-		<property name="rootProjections">
+		<property name="modules">
 			<map>
 				<entry key="company" value-ref="company.projection.back" />
 			</map>

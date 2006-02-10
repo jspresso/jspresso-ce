@@ -150,8 +150,8 @@ import com.d2s.framework.view.descriptor.TreeDescriptorHelper;
 import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.basic.ProjectionCardViewDescriptor;
-import com.d2s.framework.view.projection.BeanProjection;
+import com.d2s.framework.view.descriptor.projection.basic.ModuleCardViewDescriptor;
+import com.d2s.framework.view.projection.BeanModule;
 
 /**
  * Factory for swing views.
@@ -290,7 +290,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
           toolBar.addSeparator();
         }
       }
-
       JPanel viewPanel = createJPanel();
       viewPanel.setLayout(new BorderLayout());
       viewPanel.add(toolBar, BorderLayout.NORTH);
@@ -477,19 +476,19 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
               ((CardLayout) cardPanel.getLayout()).show(cardPanel, cardName);
               IView<JComponent> childCardView = cardView.getChild(cardName);
               IValueConnector childCardConnector = childCardView.getConnector();
-              if (cardView.getDescriptor() instanceof ProjectionCardViewDescriptor) {
+              if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
                 if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                  if (cardModel != null && cardModel instanceof BeanProjection) {
+                  if (cardModel != null && cardModel instanceof BeanModule) {
                     childCardConnector.getModelConnector().setConnectorValue(
-                        ((BeanProjection) cardModel).getProjectedObjects());
+                        ((BeanModule) cardModel).getModuleObjects());
                   } else {
                     childCardConnector.getModelConnector().setConnectorValue(
                         cardModel);
                   }
                 } else {
-                  if (cardModel != null && cardModel instanceof BeanProjection) {
+                  if (cardModel != null && cardModel instanceof BeanModule) {
                     childCardConnector.getModelConnector().setConnectorValue(
-                        ((BeanProjection) cardModel).getProjectedObject());
+                        ((BeanModule) cardModel).getModuleObject());
                   } else {
                     childCardConnector.getModelConnector().setConnectorValue(
                         cardModel);
@@ -610,8 +609,8 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   private GridBagConstraints createGridBagConstraints(
       ViewConstraints viewConstraints) {
     GridBagConstraints constraints = new GridBagConstraints();
-    constraints.gridx = viewConstraints.getRow();
-    constraints.gridy = viewConstraints.getColumn();
+    constraints.gridx = viewConstraints.getColumn();
+    constraints.gridy = viewConstraints.getRow();
     constraints.gridwidth = viewConstraints.getWidth();
     constraints.gridheight = viewConstraints.getHeight();
     if (viewConstraints.isWidthResizable()) {

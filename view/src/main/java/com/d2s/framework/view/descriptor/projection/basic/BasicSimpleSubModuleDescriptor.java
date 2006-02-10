@@ -9,7 +9,7 @@ import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
-import com.d2s.framework.view.descriptor.projection.ISimpleChildProjectionViewDescriptor;
+import com.d2s.framework.view.descriptor.projection.ISimpleSubModuleDescriptor;
 
 /**
  * This is the default implementation of a simple projection view descriptor.
@@ -20,38 +20,38 @@ import com.d2s.framework.view.descriptor.projection.ISimpleChildProjectionViewDe
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicSimpleChildProjectionViewDescriptor extends
+public class BasicSimpleSubModuleDescriptor extends
     BasicSimpleTreeLevelDescriptor implements
-    ISimpleChildProjectionViewDescriptor, IIconDescriptor {
+    ISimpleSubModuleDescriptor, IIconDescriptor {
 
-  private IViewDescriptor       projectedViewDescriptor;
+  private IViewDescriptor       viewDescriptor;
   private DefaultIconDescriptor descriptor;
 
   /**
-   * Constructs a new <code>BasicSimpleChildProjectionViewDescriptor</code>
+   * Constructs a new <code>BasicSimpleSubModuleDescriptor</code>
    * instance.
    */
-  public BasicSimpleChildProjectionViewDescriptor() {
+  public BasicSimpleSubModuleDescriptor() {
     descriptor = new DefaultIconDescriptor();
   }
 
   /**
-   * Gets the projectedViewDescriptor.
+   * Gets the viewDescriptor.
    * 
-   * @return the projectedViewDescriptor.
+   * @return the viewDescriptor.
    */
-  public IViewDescriptor getProjectedViewDescriptor() {
-    return projectedViewDescriptor;
+  public IViewDescriptor getViewDescriptor() {
+    return viewDescriptor;
   }
 
   /**
-   * Sets the projectedViewDescriptor.
+   * Sets the viewDescriptor.
    * 
-   * @param projectedViewDescriptor
-   *          the projectedViewDescriptor to set.
+   * @param viewDescriptor
+   *          the viewDescriptor to set.
    */
-  public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
-    this.projectedViewDescriptor = projectedViewDescriptor;
+  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
+    this.viewDescriptor = viewDescriptor;
   }
 
   /**
@@ -64,8 +64,8 @@ public class BasicSimpleChildProjectionViewDescriptor extends
       projectionNodeGroupDescriptor.setName(getName());
       projectionNodeGroupDescriptor.setDescription(getDescription());
       projectionNodeGroupDescriptor.setIconImageURL(getIconImageURL());
-      projectionNodeGroupDescriptor.setModelDescriptor(PROJECTION_DESCRIPTOR
-          .getPropertyDescriptor("children"));
+      projectionNodeGroupDescriptor.setModelDescriptor(MODULE_DESCRIPTOR
+          .getPropertyDescriptor("subModules"));
       projectionNodeGroupDescriptor.setRenderedProperty("name");
       setNodeGroupDescriptor(projectionNodeGroupDescriptor);
     }

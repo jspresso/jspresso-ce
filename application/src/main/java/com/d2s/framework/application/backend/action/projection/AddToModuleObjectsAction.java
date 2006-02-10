@@ -18,7 +18,7 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.projection.BeanProjection;
+import com.d2s.framework.view.projection.BeanModule;
 
 /**
  * This action adds a new object in the projected collection.
@@ -29,7 +29,7 @@ import com.d2s.framework.view.projection.BeanProjection;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class AddToProjectedCollectionAction extends AbstractCollectionAction {
+public class AddToModuleObjectsAction extends AbstractCollectionAction {
 
   /**
    * Adds a new object in the projected collection.
@@ -39,23 +39,25 @@ public class AddToProjectedCollectionAction extends AbstractCollectionAction {
   public Map<String, Object> execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     ICompositeValueConnector projectionConnector = getProjectionConnector();
-    BeanProjection projection = (BeanProjection) projectionConnector
+    BeanModule projection = (BeanModule) projectionConnector
         .getConnectorValue();
     IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor())
         .getElementDescriptor();
 
     Collection<IPropertyChangeCapable> projectedCollection;
-    if (projection.getProjectedObjects() == null) {
+    if (projection.getModuleObjects() == null) {
       projectedCollection = new ArrayList<IPropertyChangeCapable>();
     } else {
       projectedCollection = new ArrayList<IPropertyChangeCapable>(projection
-          .getProjectedObjects());
+          .getModuleObjects());
     }
     IEntity newEntity = getEntityFactory().createEntityInstance(
         projectedComponentDescriptor.getComponentContract());
     projectedCollection.add(newEntity);
-    projection.setProjectedObjects(projectedCollection);
-
+    projection.setModuleObjects(projectedCollection);
+    
+    getModelConnector().setConnectorValue(projectedCollection);
+    
     Map<String, Object> executionResult = new HashMap<String, Object>();
     executionResult.put(ActionContextConstants.SELECTED_INDICES,
         ConnectorHelper.getIndicesOf(getModelConnector(), Collections

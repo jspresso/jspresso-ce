@@ -19,7 +19,7 @@ import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
-import com.d2s.framework.view.projection.Projection;
+import com.d2s.framework.view.projection.Module;
 
 /**
  * Base class for backend application controllers. It provides the implementor
@@ -36,7 +36,7 @@ public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
   private IBeanConnectorFactory                 beanConnectorFactory;
-  private Map<String, ICompositeValueConnector> rootProjectionConnectors;
+  private Map<String, ICompositeValueConnector> moduleConnectors;
   private IApplicationSession                   applicationSession;
 
   /**
@@ -89,28 +89,28 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public ICompositeValueConnector getRootProjectionConnector(
-      String rootProjectionId) {
-    return rootProjectionConnectors.get(rootProjectionId);
+  public ICompositeValueConnector getModuleConnector(
+      String moduleId) {
+    return moduleConnectors.get(moduleId);
   }
 
   /**
-   * Sets the root model controller projections. These projections are not kept
+   * Sets the model controller modules. These modules are not kept
    * as-is. Their connectors are.
    * 
-   * @param rootProjections
-   *          A map containing the root model projections indexed by a
-   *          well-known key used to bind them with their projection views.
+   * @param modules
+   *          A map containing the modules indexed by a
+   *          well-known key used to bind them with their views.
    */
-  public void setRootProjections(Map<String, Projection> rootProjections) {
-    rootProjectionConnectors = new HashMap<String, ICompositeValueConnector>();
-    for (Map.Entry<String, Projection> projectionEntry : rootProjections
+  public void setModules(Map<String, Module> modules) {
+    moduleConnectors = new HashMap<String, ICompositeValueConnector>();
+    for (Map.Entry<String, Module> moduleEntry : modules
         .entrySet()) {
-      BeanConnector nextProjectionConnector = beanConnectorFactory
-          .createBeanConnector(projectionEntry.getKey(), Projection.class);
-      nextProjectionConnector.setConnectorValue(projectionEntry.getValue());
-      rootProjectionConnectors.put(projectionEntry.getKey(),
-          nextProjectionConnector);
+      BeanConnector nextModuleConnector = beanConnectorFactory
+          .createBeanConnector(moduleEntry.getKey(), Module.class);
+      nextModuleConnector.setConnectorValue(moduleEntry.getValue());
+      moduleConnectors.put(moduleEntry.getKey(),
+          nextModuleConnector);
     }
   }
 

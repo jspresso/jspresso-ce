@@ -39,7 +39,7 @@ import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
-import com.d2s.framework.view.descriptor.projection.IProjectionViewDescriptor;
+import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
 
 import foxtrot.Job;
 
@@ -57,7 +57,7 @@ public class DefaultSwingController extends
     AbstractFrontendController<JComponent> {
 
   private JFrame                      controllerFrame;
-  private Map<String, JInternalFrame> projectionInternalFrames;
+  private Map<String, JInternalFrame> moduleInternalFrames;
 
   private WaitCursorTimer             waitTimer;
 
@@ -81,59 +81,59 @@ public class DefaultSwingController extends
     controllerFrame.setVisible(true);
   }
 
-  private void displayProjection(String rootProjectionId) {
-    if (projectionInternalFrames == null) {
-      projectionInternalFrames = new HashMap<String, JInternalFrame>();
+  private void displayModule(String moduleId) {
+    if (moduleInternalFrames == null) {
+      moduleInternalFrames = new HashMap<String, JInternalFrame>();
     }
-    JInternalFrame projectionInternalFrame = projectionInternalFrames
-        .get(rootProjectionId);
-    if (projectionInternalFrame == null) {
-      IProjectionViewDescriptor projectionViewDescriptor = getRootProjectionViewDescriptor(rootProjectionId);
-      IView<JComponent> projectionView = createProjectionView(rootProjectionId,
-          projectionViewDescriptor);
-      projectionInternalFrame = createJInternalFrame(projectionView);
-      projectionInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          projectionViewDescriptor.getIconImageURL(),
+    JInternalFrame moduleInternalFrame = moduleInternalFrames
+        .get(moduleId);
+    if (moduleInternalFrame == null) {
+      IModuleDescriptor moduleViewDescriptor = getModuleViewDescriptor(moduleId);
+      IView<JComponent> moduleView = createModuleView(moduleId,
+          moduleViewDescriptor);
+      moduleInternalFrame = createJInternalFrame(moduleView);
+      moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
+          moduleViewDescriptor.getIconImageURL(),
           IIconFactory.SMALL_ICON_SIZE));
-      projectionInternalFrame
-          .addInternalFrameListener(new ProjectionInternalFrameListener(
-              rootProjectionId));
-      projectionInternalFrames.put(rootProjectionId, projectionInternalFrame);
-      controllerFrame.getContentPane().add(projectionInternalFrame);
-      getMvcBinder().bind(projectionView.getConnector(),
-          getBackendController().getRootProjectionConnector(rootProjectionId));
-      projectionInternalFrame.pack();
+      moduleInternalFrame
+          .addInternalFrameListener(new ModuleInternalFrameListener(
+              moduleId));
+      moduleInternalFrames.put(moduleId, moduleInternalFrame);
+      controllerFrame.getContentPane().add(moduleInternalFrame);
+      getMvcBinder().bind(moduleView.getConnector(),
+          getBackendController().getModuleConnector(moduleId));
+      moduleInternalFrame.pack();
     }
-    projectionInternalFrame.setVisible(true);
-    if (projectionInternalFrame.isIcon()) {
+    moduleInternalFrame.setVisible(true);
+    if (moduleInternalFrame.isIcon()) {
       try {
-        projectionInternalFrame.setIcon(false);
+        moduleInternalFrame.setIcon(false);
       } catch (PropertyVetoException ex) {
         throw new ControllerException(ex);
       }
     }
     try {
-      projectionInternalFrame.setMaximum(true);
+      moduleInternalFrame.setMaximum(true);
     } catch (PropertyVetoException ex) {
       throw new ControllerException(ex);
     }
-    projectionInternalFrame.toFront();
+    moduleInternalFrame.toFront();
   }
 
-  private final class ProjectionInternalFrameListener extends
+  private final class ModuleInternalFrameListener extends
       InternalFrameAdapter {
 
-    private String rootProjectionId;
+    private String moduleId;
 
     /**
-     * Constructs a new <code>ProjectionInternalFrameFocusListener</code>
+     * Constructs a new <code>ModuleInternalFrameListener</code>
      * instance.
      * 
-     * @param rootProjectionId
-     *          the root projection identifier this listener is attached to.
+     * @param moduleId
+     *          the root module identifier this listener is attached to.
      */
-    public ProjectionInternalFrameListener(String rootProjectionId) {
-      this.rootProjectionId = rootProjectionId;
+    public ModuleInternalFrameListener(String moduleId) {
+      this.moduleId = moduleId;
     }
 
     /**
@@ -142,7 +142,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameActivated(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedRootProjectionId(rootProjectionId);
+      setSelectedModuleId(moduleId);
     }
 
     /**
@@ -151,7 +151,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameDeiconified(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedRootProjectionId(rootProjectionId);
+      setSelectedModuleId(moduleId);
     }
 
     /**
@@ -160,7 +160,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameOpened(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedRootProjectionId(rootProjectionId);
+      setSelectedModuleId(moduleId);
     }
   }
 
@@ -194,30 +194,30 @@ public class DefaultSwingController extends
   private JMenu getProjectionMenu() {
     JMenu projectionMenu = new JMenu(getLabelTranslator().getTranslation(
         "Projections", getLocale()));
-    for (String rootProjectionId : getRootProjectionIds()) {
-      IProjectionViewDescriptor projectionViewDescriptor = getRootProjectionViewDescriptor(rootProjectionId);
+    for (String rootProjectionId : getModuleIds()) {
+      IModuleDescriptor projectionViewDescriptor = getModuleViewDescriptor(rootProjectionId);
       JMenuItem projectionMenuItem = new JMenuItem(
-          new ProjectionSelectionAction(rootProjectionId,
+          new ModuleSelectionAction(rootProjectionId,
               projectionViewDescriptor));
       projectionMenu.add(projectionMenuItem);
     }
     return projectionMenu;
   }
 
-  private final class ProjectionSelectionAction extends AbstractAction {
+  private final class ModuleSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
-    private String            rootProjectionId;
+    private String            moduleId;
 
     /**
-     * Constructs a new <code>ProjectionSelectionAction</code> instance.
+     * Constructs a new <code>ModuleSelectionAction</code> instance.
      * 
-     * @param rootProjectionId
+     * @param moduleId
      * @param projectionViewDescriptor
      */
-    public ProjectionSelectionAction(String rootProjectionId,
-        IProjectionViewDescriptor projectionViewDescriptor) {
-      this.rootProjectionId = rootProjectionId;
+    public ModuleSelectionAction(String moduleId,
+        IModuleDescriptor projectionViewDescriptor) {
+      this.moduleId = moduleId;
       putValue(Action.NAME, getLabelTranslator().getTranslation(
           projectionViewDescriptor.getName(), getLocale()));
       putValue(Action.SHORT_DESCRIPTION, getDescriptionTranslator()
@@ -235,7 +235,7 @@ public class DefaultSwingController extends
      */
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
-      displayProjection(rootProjectionId);
+      displayModule(moduleId);
     }
   }
 

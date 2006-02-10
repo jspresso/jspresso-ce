@@ -31,8 +31,8 @@ import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.IProjectionViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.basic.ProjectionCardViewDescriptor;
+import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
+import com.d2s.framework.view.descriptor.projection.basic.ModuleCardViewDescriptor;
 
 /**
  * This class serves as base class for frontend (view) controllers.
@@ -43,24 +43,24 @@ import com.d2s.framework.view.descriptor.projection.basic.ProjectionCardViewDesc
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui componet type used by this controller.
+ *          the actual gui component type used by this controller.
  */
 public abstract class AbstractFrontendController<E> extends AbstractController
     implements IFrontendController {
 
-  private DefaultIconDescriptor                  controllerDescriptor;
+  private DefaultIconDescriptor                 controllerDescriptor;
 
-  private String                                 selectedRootProjectionId;
-  private Map<String, ICompositeValueConnector>  selectedProjectionViewConnectors;
+  private String                                selectedModuleId;
+  private Map<String, ICompositeValueConnector> selectedProjectionViewConnectors;
 
-  private IBackendController                     backendController;
-  private Map<String, IProjectionViewDescriptor> rootProjectionViewDescriptors;
-  private IViewFactory<E>                        viewFactory;
-  private IIconFactory                           iconFactory;
-  private ITranslationProvider                   labelTranslator;
-  private ITranslationProvider                   descriptionTranslator;
-  private IMvcBinder                             mvcBinder;
-  private Locale                                 locale;
+  private IBackendController                    backendController;
+  private Map<String, IModuleDescriptor>        moduleDescriptors;
+  private IViewFactory<E>                       viewFactory;
+  private IIconFactory                          iconFactory;
+  private ITranslationProvider                  labelTranslator;
+  private ITranslationProvider                  descriptionTranslator;
+  private IMvcBinder                            mvcBinder;
+  private Locale                                locale;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -210,7 +210,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
     ICompositeValueConnector selectedProjectionViewConnector = selectedProjectionViewConnectors
-        .get(getSelectedRootProjectionId());
+        .get(getSelectedModuleId());
     initialActionContext.put(ActionContextConstants.PROJECTION_VIEW_CONNECTOR,
         selectedProjectionViewConnector);
     if (selectedProjectionViewConnector != null) {
@@ -233,16 +233,15 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   }
 
   /**
-   * Sets the rootProjectionViewDescriptors. Root projections view descriptors
-   * are used by the frontend controller to give a user access on the domain
-   * window.
+   * Sets the moduleDescriptors. Module view descriptors are used by the
+   * frontend controller to give a user access on the domain window.
    * 
-   * @param rootProjectionViewDescriptors
-   *          the rootProjectionViewDescriptors to set.
+   * @param moduleDescriptors
+   *          the moduleDescriptors to set.
    */
-  public void setRootProjectionViewDescriptors(
-      Map<String, IProjectionViewDescriptor> rootProjectionViewDescriptors) {
-    this.rootProjectionViewDescriptors = rootProjectionViewDescriptors;
+  public void setModuleDescriptors(
+      Map<String, IModuleDescriptor> moduleDescriptors) {
+    this.moduleDescriptors = moduleDescriptors;
   }
 
   /**
@@ -265,26 +264,25 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   }
 
   /**
-   * Given a well-kown sprojection identifier, this method returns the
-   * associated projection view descriptor.
+   * Given a well-kown module identifier, this method returns the associated
+   * module view descriptor.
    * 
-   * @param rootProjectionId
-   *          the identifier of the root projection.
-   * @return the view descriptor of the selected projection.
+   * @param moduleId
+   *          the identifier of the module.
+   * @return the view descriptor of the selected module.
    */
-  protected IProjectionViewDescriptor getRootProjectionViewDescriptor(
-      String rootProjectionId) {
-    return rootProjectionViewDescriptors.get(rootProjectionId);
+  protected IModuleDescriptor getModuleViewDescriptor(String moduleId) {
+    return moduleDescriptors.get(moduleId);
   }
 
   /**
-   * Returns the list of root projection identifiers. This list defines the set
-   * of projections the user have access to.
+   * Returns the list of module identifiers. This list defines the set of
+   * modules the user have access to.
    * 
    * @return the list of projection identifiers.
    */
-  protected List<String> getRootProjectionIds() {
-    return new ArrayList<String>(rootProjectionViewDescriptors.keySet());
+  protected List<String> getModuleIds() {
+    return new ArrayList<String>(moduleDescriptors.keySet());
   }
 
   /**
@@ -364,22 +362,22 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   }
 
   /**
-   * Gets the selectedRootProjectionId.
+   * Gets the selectedModuleId.
    * 
-   * @return the selectedRootProjectionId.
+   * @return the selectedModuleId.
    */
-  protected String getSelectedRootProjectionId() {
-    return selectedRootProjectionId;
+  protected String getSelectedModuleId() {
+    return selectedModuleId;
   }
 
   /**
-   * Sets the selectedRootProjectionId.
+   * Sets the selectedModuleId.
    * 
-   * @param selectedRootProjectionId
-   *          the selectedRootProjectionId to set.
+   * @param selectedModuleId
+   *          the selectedModuleId to set.
    */
-  protected void setSelectedRootProjectionId(String selectedRootProjectionId) {
-    this.selectedRootProjectionId = selectedRootProjectionId;
+  protected void setSelectedModuleId(String selectedModuleId) {
+    this.selectedModuleId = selectedModuleId;
   }
 
   /**
@@ -409,25 +407,25 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   }
 
   /**
-   * Creates a root projection view.
+   * Creates a root module view.
    * 
-   * @param rootProjectionId
-   *          the identifier of the root projection to create the view for.
-   * @param rootProjectionViewDescriptor
-   *          the view descriptor of the root projection to render.
-   * @return a view rendering the root projection.
+   * @param moduleId
+   *          the identifier of the module to create the view for.
+   * @param moduleViewDescriptor
+   *          the view descriptor of the module to render.
+   * @return a view rendering the module.
    */
-  protected IView<E> createProjectionView(final String rootProjectionId,
-      IProjectionViewDescriptor rootProjectionViewDescriptor) {
+  protected IView<E> createModuleView(final String moduleId,
+      IModuleDescriptor moduleViewDescriptor) {
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
-    splitViewDescriptor.setName(rootProjectionViewDescriptor.getName());
+    splitViewDescriptor.setName(moduleViewDescriptor.getName());
     splitViewDescriptor.setMasterDetail(true);
 
-    ProjectionCardViewDescriptor projectionPaneDescriptor = new ProjectionCardViewDescriptor(
-        rootProjectionViewDescriptor);
+    ModuleCardViewDescriptor projectionPaneDescriptor = new ModuleCardViewDescriptor(
+        moduleViewDescriptor);
 
-    splitViewDescriptor.setLeftTopViewDescriptor(rootProjectionViewDescriptor);
+    splitViewDescriptor.setLeftTopViewDescriptor(moduleViewDescriptor);
     splitViewDescriptor.setRightBottomViewDescriptor(projectionPaneDescriptor);
 
     ICompositeView<E> projectionView = (ICompositeView<E>) viewFactory
@@ -436,7 +434,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
         .addConnectorSelectionListener(new IConnectorSelectionListener() {
 
           public void selectedConnectorChange(ConnectorSelectionEvent event) {
-            selectedProjectionViewConnectors.put(rootProjectionId,
+            selectedProjectionViewConnectors.put(moduleId,
                 (ICompositeValueConnector) event.getSelectedConnector());
           }
         });

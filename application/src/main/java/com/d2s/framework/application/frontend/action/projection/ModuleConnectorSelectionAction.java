@@ -21,7 +21,7 @@ import com.d2s.framework.view.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ProjectionConnectorSelectionAction extends AbstractChainedAction {
+public class ModuleConnectorSelectionAction extends AbstractChainedAction {
 
   /**
    * Selects indices on the projection view collection connector based on the

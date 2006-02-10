@@ -3,13 +3,10 @@
  */
 package com.d2s.framework.view.swing.jgoodies;
 
-import java.awt.Component;
 import java.util.Locale;
 
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
 
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
@@ -60,17 +57,17 @@ public class JGoodiesSwingViewFactory extends DefaultSwingViewFactory {
             .getIcon(view.getDescriptor().getIconImageURL(),
                 IIconFactory.TINY_ICON_SIZE));
       }
-      if (view.getPeer() instanceof JPanel) {
-        JToolBar toolBar = null;
-        for (Component child : view.getPeer().getComponents()) {
-          if (child instanceof JToolBar) {
-            toolBar = (JToolBar) child;
-          }
-        }
-        if (toolBar != null) {
-          sif.setToolBar(toolBar);
-        }
-      }
+      // if (view.getPeer() instanceof JPanel) {
+      // JToolBar toolBar = null;
+      // for (Component child : view.getPeer().getComponents()) {
+      // if (child instanceof JToolBar) {
+      // toolBar = (JToolBar) child;
+      // }
+      // }
+      // if (toolBar != null) {
+      // sif.setToolBar(toolBar);
+      //        }
+      //      }
       sif.add(view.getPeer());
       view.setPeer(sif);
     } else {

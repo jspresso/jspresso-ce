@@ -13,7 +13,7 @@ import org.springframework.transaction.support.TransactionCallback;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.projection.BeanProjection;
+import com.d2s.framework.view.projection.BeanModule;
 
 /**
  * Saves the projected object(s) in a transaction.
@@ -38,14 +38,14 @@ public class SaveProjectedAction extends AbstractHibernateAction {
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
         ICompositeValueConnector projectionConnector = getProjectionConnector();
-        BeanProjection projection = (BeanProjection) projectionConnector
+        BeanModule projection = (BeanModule) projectionConnector
             .getConnectorValue();
-        if (projection.getProjectedObjects() != null) {
-          for (Object entity : projection.getProjectedObjects()) {
+        if (projection.getModuleObjects() != null) {
+          for (Object entity : projection.getModuleObjects()) {
             saveEntity((IEntity) entity);
           }
-        } else if (projection.getProjectedObject() != null) {
-          saveEntity((IEntity) projection.getProjectedObject());
+        } else if (projection.getModuleObject() != null) {
+          saveEntity((IEntity) projection.getModuleObject());
         }
         return null;
       }

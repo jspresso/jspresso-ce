@@ -14,10 +14,10 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.descriptor.projection.IChildProjectionViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.ISimpleChildProjectionViewDescriptor;
-import com.d2s.framework.view.projection.BeanProjection;
-import com.d2s.framework.view.projection.ChildProjection;
+import com.d2s.framework.view.descriptor.projection.ISubModuleDescriptor;
+import com.d2s.framework.view.descriptor.projection.ISimpleSubModuleDescriptor;
+import com.d2s.framework.view.projection.BeanModule;
+import com.d2s.framework.view.projection.SubModule;
 
 /**
  * This action adds the selected objects as child projections.
@@ -28,7 +28,7 @@ import com.d2s.framework.view.projection.ChildProjection;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class AddProjectedAsChildProjectionAction extends
+public class AddBeanAsSubModuleAction extends
     AbstractCollectionAction {
 
   /**
@@ -45,23 +45,23 @@ public class AddProjectedAsChildProjectionAction extends
     }
     ICompositeValueConnector projectionConnector = getProjectionConnector();
     ICollectionConnector collectionConnector = getModelConnector();
-    ChildProjection parentProjection = (ChildProjection) projectionConnector
+    SubModule parentProjection = (SubModule) projectionConnector
         .getConnectorValue();
-    List<ChildProjection> children;
-    if (parentProjection.getChildren() == null) {
-      children = new ArrayList<ChildProjection>(selectedIndices.length);
+    List<SubModule> children;
+    if (parentProjection.getSubModules() == null) {
+      children = new ArrayList<SubModule>(selectedIndices.length);
     } else {
-      children = new ArrayList<ChildProjection>(parentProjection.getChildren());
+      children = new ArrayList<SubModule>(parentProjection.getSubModules());
     }
     int[] childSelectedIndices = new int[selectedIndices.length];
     for (int i = 0; i < selectedIndices.length; i++) {
       IPropertyChangeCapable nextselectedProjectedObject = (IPropertyChangeCapable) collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue();
-      BeanProjection nextChildProjection = new BeanProjection();
+      BeanModule nextChildProjection = new BeanModule();
       nextChildProjection
-          .setViewDescriptor((IChildProjectionViewDescriptor) ((ISimpleChildProjectionViewDescriptor) parentProjection
+          .setViewDescriptor((ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) parentProjection
               .getViewDescriptor()).getChildDescriptor());
-      nextChildProjection.setProjectedObject(nextselectedProjectedObject);
+      nextChildProjection.setModuleObject(nextselectedProjectedObject);
       nextChildProjection.setName(String.valueOf(nextselectedProjectedObject));
       int nextChildProjectionIndex = children.indexOf(nextChildProjection);
       if (nextChildProjectionIndex < 0) {
@@ -71,7 +71,7 @@ public class AddProjectedAsChildProjectionAction extends
         childSelectedIndices[i] = nextChildProjectionIndex;
       }
     }
-    parentProjection.setChildren(children);
+    parentProjection.setSubModules(children);
     Map<String, Object> executionResult = new HashMap<String, Object>();
     executionResult.put(ActionContextConstants.SELECTED_INDICES,
         childSelectedIndices);

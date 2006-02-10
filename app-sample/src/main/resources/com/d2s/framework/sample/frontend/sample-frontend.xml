@@ -417,10 +417,12 @@ script.setExecutionResult(result)
   -->
 
   <bean id="company.department.projection.front"
-    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleChildProjectionViewDescriptor">
-    <property name="projectedViewDescriptor" ref="department.view" />
+    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleSubModuleDescriptor">
+    <property name="name" value="company.department.projection.front" />
+    <property name="description" value="company.department.projection.front" />
+    <property name="viewDescriptor" ref="department.view" />
     <property name="nodeGroupDescriptor">
-      <bean parent="abstractChildrenProjectionNodeGroupDescriptor">
+      <bean parent="abstractSubModulesNodeGroupDescriptor">
         <property name="name" value="department.projection.front" />
         <property name="description" value="department.projection.front" />
         <property name="actionMap" ref="projectionActionMap" />
@@ -429,16 +431,16 @@ script.setExecutionResult(result)
   </bean>
 
   <bean id="company.departments.projection.front"
-    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleChildProjectionViewDescriptor">
+    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleSubModuleDescriptor">
     <property name="name" value="company.departments.projection.front" />
     <property name="description" value="company.departments.projection.front" />
     <property name="iconImageURL" value="classpath:images/icon5-48x48.png" />
-    <property name="projectedViewDescriptor" ref="departments.projected.table" />
+    <property name="viewDescriptor" ref="departments.projected.table" />
     <property name="childDescriptor" ref="company.department.projection.front" />
   </bean>
 
   <bean id="company.projection.front"
-    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleChildProjectionViewDescriptor">
+    class="com.d2s.framework.view.descriptor.projection.basic.BasicSimpleSubModuleDescriptor">
     <property name="name" value="company.projection.front" />
     <property name="description" value="company.projection.front" />
     <property name="iconImageURL" value="classpath:images/icon7-48x48.png" />
@@ -446,12 +448,12 @@ script.setExecutionResult(result)
   </bean>
 
   <bean id="company.design.projection"
-    class="com.d2s.framework.view.descriptor.projection.basic.BasicProjectionViewDescriptor">
-    <property name="name" value="company.projection" />
-    <property name="description" value="company.projection" />
+    class="com.d2s.framework.view.descriptor.projection.basic.BasicModuleDescriptor">
+    <property name="name" value="company.design.projection" />
+    <property name="description" value="company.design.projection" />
     <property name="rootSubtreeDescriptor" ref="company.projection.front" />
     <property name="iconImageURLProvider">
-      <bean class="com.d2s.framework.view.projection.ProjectionIconImageURLProvider">
+      <bean class="com.d2s.framework.view.projection.ModuleIconImageURLProvider">
         <property name="delegateProvider" ref="domainImageUrlProvider" />
       </bean>
     </property>
@@ -463,7 +465,7 @@ script.setExecutionResult(result)
   <bean id="applicationFrontController" parent="frontController">
     <property name="name" value="Test Application" />
     <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
-    <property name="rootProjectionViewDescriptors">
+    <property name="moduleDescriptors">
       <map>
         <entry key="company" value-ref="company.design.projection" />
       </map>

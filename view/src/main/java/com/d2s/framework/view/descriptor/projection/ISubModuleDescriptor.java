@@ -4,7 +4,7 @@
 package com.d2s.framework.view.descriptor.projection;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.projection.ProjectionDescriptor;
+import com.d2s.framework.model.descriptor.projection.ModuleDescriptor;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
@@ -17,18 +17,18 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IChildProjectionViewDescriptor extends ITreeLevelDescriptor {
+public interface ISubModuleDescriptor extends ITreeLevelDescriptor {
 
   /**
-   * <code>PROJECTION_DESCRIPTOR</code> is a unique reference to the model
+   * <code>MODULE_DESCRIPTOR</code> is a unique reference to the model
    * descriptor of projections.
    */
-  IComponentDescriptor PROJECTION_DESCRIPTOR = new ProjectionDescriptor();
+  IComponentDescriptor MODULE_DESCRIPTOR = new ModuleDescriptor();
 
   /**
    * Gets the projected view descriptor of this projection.
    * 
    * @return the projected view descriptor of this projection.
    */
-  IViewDescriptor getProjectedViewDescriptor();
+  IViewDescriptor getViewDescriptor();
 }

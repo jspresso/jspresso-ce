@@ -5,21 +5,19 @@ package com.d2s.framework.application.backend.action.projection;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
-import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
-import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.projection.BeanProjection;
+import com.d2s.framework.view.projection.BeanModule;
+import com.d2s.framework.view.projection.SubModule;
+import com.d2s.framework.view.projection.Module;
 
 /**
- * This action clones the selected objects in the projected collection.
+ * This action removes the selected objects from the projected collection.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -27,10 +25,11 @@ import com.d2s.framework.view.projection.BeanProjection;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CloneProjectedCollectionAction extends AbstractCollectionAction {
+public class RemoveFromModuleObjectsAction extends
+    AbstractCollectionAction {
 
   /**
-   * Clones the selected objects in the projected collection.
+   * Removes the selected objects from the projected collection.
    * <p>
    * {@inheritDoc}
    */
@@ -45,27 +44,40 @@ public class CloneProjectedCollectionAction extends AbstractCollectionAction {
     }
 
     ICompositeValueConnector projectionConnector = getProjectionConnector();
-    BeanProjection projection = (BeanProjection) projectionConnector
+    BeanModule projection = (BeanModule) projectionConnector
         .getConnectorValue();
 
     Collection<IPropertyChangeCapable> projectedCollection;
-    if (projection.getProjectedObjects() == null) {
+    if (projection.getModuleObjects() == null) {
       projectedCollection = new ArrayList<IPropertyChangeCapable>();
     } else {
       projectedCollection = new ArrayList<IPropertyChangeCapable>(projection
-          .getProjectedObjects());
+          .getModuleObjects());
     }
-    Collection<IEntity> entityClones = new ArrayList<IEntity>();
     for (int i = 0; i < selectedIndices.length; i++) {
-      entityClones.add(((IEntity) collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue()).clone(false));
+      Object removedObject = collectionConnector.getChildConnector(
+          selectedIndices[i]).getConnectorValue();
+      projectedCollection.remove(removedObject);
+      removeAsChildProjection(projection, removedObject);
     }
-    projectedCollection.addAll(entityClones);
-    projection.setProjectedObjects(projectedCollection);
+    projection.setModuleObjects(projectedCollection);
 
-    Map<String, Object> executionResult = new HashMap<String, Object>();
-    executionResult.put(ActionContextConstants.SELECTED_INDICES,
-        ConnectorHelper.getIndicesOf(collectionConnector, entityClones));
-    return executionResult;
+    getModelConnector().setConnectorValue(projectedCollection);
+
+    return null;
+  }
+
+  private static void removeAsChildProjection(Module parentProjection,
+      Object removedObject) {
+    if (parentProjection.getSubModules() != null) {
+      for (SubModule childProjection : new ArrayList<SubModule>(
+          parentProjection.getSubModules())) {
+        if (childProjection instanceof BeanModule
+            && removedObject.equals(((BeanModule) childProjection)
+                .getModuleObject())) {
+          parentProjection.removeSubModule(childProjection);
+        }
+      }
+    }
   }
 }

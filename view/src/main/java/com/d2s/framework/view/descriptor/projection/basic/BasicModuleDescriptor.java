@@ -4,10 +4,10 @@
 package com.d2s.framework.view.descriptor.projection.basic;
 
 import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.IProjectionViewDescriptor;
+import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
 
 /**
- * This is a default implementation of a simple projection view descriptor.
+ * This is a default implementation of a simple module view descriptor.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -15,7 +15,7 @@ import com.d2s.framework.view.descriptor.projection.IProjectionViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicProjectionViewDescriptor extends BasicTreeViewDescriptor
-    implements IProjectionViewDescriptor {
+public class BasicModuleDescriptor extends BasicTreeViewDescriptor
+    implements IModuleDescriptor {
   // Just a marker as of now.
 }

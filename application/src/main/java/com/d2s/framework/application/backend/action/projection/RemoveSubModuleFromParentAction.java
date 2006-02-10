@@ -15,8 +15,8 @@ import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.projection.ChildProjection;
-import com.d2s.framework.view.projection.Projection;
+import com.d2s.framework.view.projection.SubModule;
+import com.d2s.framework.view.projection.Module;
 
 /**
  * This action removes the selected projections from their parent.
@@ -27,7 +27,7 @@ import com.d2s.framework.view.projection.Projection;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoveProjectionFromParentAction extends AbstractCollectionAction {
+public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
 
   /**
    * Removes the selected projections from their parent.
@@ -44,14 +44,14 @@ public class RemoveProjectionFromParentAction extends AbstractCollectionAction {
     if (selectedIndices == null || selectedIndices.length == 0) {
       return null;
     }
-    Projection parentProjection = (Projection) parentProjectionConnector
+    Module parentProjection = (Module) parentProjectionConnector
         .getConnectorValue();
-    Collection<ChildProjection> childrenToRemove = new ArrayList<ChildProjection>();
+    Collection<SubModule> childrenToRemove = new ArrayList<SubModule>();
 
     for (int i = 0; i < selectedIndices.length; i++) {
-      childrenToRemove.add(parentProjection.getChildren().get(i));
+      childrenToRemove.add(parentProjection.getSubModules().get(i));
     }
-    parentProjection.removeChildren(childrenToRemove);
+    parentProjection.removeSubModules(childrenToRemove);
     Map<String, Object> executionResult = new HashMap<String, Object>();
     executionResult.put(ActionContextConstants.SELECTED_INDICES,
         ConnectorHelper.getIndicesOf(

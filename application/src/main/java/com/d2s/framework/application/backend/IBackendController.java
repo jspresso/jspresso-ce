@@ -30,14 +30,14 @@ public interface IBackendController extends IController {
   void start();
 
   /**
-   * Given a projection identifier, this method returns the composite connector
-   * used as model connector for the associated projection.
+   * Given a module identifier, this method returns the composite connector
+   * used as model connector for the associated module.
    * 
-   * @param rootProjectionId
-   *          the root projection identifier.
-   * @return the associated projection connector.
+   * @param moduleId
+   *          the modulen identifier.
+   * @return the associated module connector.
    */
-  ICompositeValueConnector getRootProjectionConnector(String rootProjectionId);
+  ICompositeValueConnector getModuleConnector(String moduleId);
 
   /**
    * Creates a model connector out of a model descriptor. It should be either a

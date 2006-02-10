@@ -16,13 +16,13 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
- * A projection is a central element in the application architecture. It serves
- * as an entry point on the domain model. Projections are organized as a tree
- * structure since they can (optionally) provide children projections and a
- * parent projection. A projection can be seen as a window on the business
- * grouping processes forming a business activity (like master data management,
- * customer contract handling, ...). Each projection can (optionally) provide a
- * projected object serving as model root for trigerring grouped processes.
+ * A module is a central element in the application architecture. It serves as
+ * an entry point on the domain model. Modules are organized as a tree structure
+ * since they can (optionally) provide projections. A projection can be seen as
+ * a window on the business grouping processes forming a business activity (like
+ * master data management, customer contract handling, ...). Each projection can
+ * (optionally) provide a projected object serving as model root for trigerring
+ * grouped processes.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -30,17 +30,17 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Projection implements IPropertyChangeCapable {
+public class Module implements IPropertyChangeCapable {
 
   private PropertyChangeSupport propertyChangeSupport;
   private String                name;
   private String                description;
-  private List<ChildProjection> children;
+  private List<SubModule>       subModules;
 
   /**
-   * Constructs a new <code>Projection</code> instance.
+   * Constructs a new <code>Module</code> instance.
    */
-  public Projection() {
+  public Module() {
     propertyChangeSupport = new PropertyChangeSupport(this);
   }
 
@@ -75,87 +75,84 @@ public class Projection implements IPropertyChangeCapable {
   }
 
   /**
-   * Gets the children projections.
+   * Gets the subModules projections.
    * 
-   * @return the list of children projections.
+   * @return the list of subModules projections.
    */
-  public List<ChildProjection> getChildren() {
-    return children;
+  public List<SubModule> getSubModules() {
+    return subModules;
   }
 
   /**
-   * Sets the children projections. It will fire a "children" property change
-   * event.
+   * Sets the subModules projections. It will fire a "subModules" property
+   * change event.
    * 
-   * @param children
-   *          the children projections to set.
+   * @param subModules
+   *          the subModules projections to set.
    */
-  public void setChildren(List<ChildProjection> children) {
-    List<ChildProjection> oldValue = null;
-    if (getChildren() != null) {
-      oldValue = new ArrayList<ChildProjection>(getChildren());
+  public void setSubModules(List<SubModule> subModules) {
+    List<SubModule> oldValue = null;
+    if (getSubModules() != null) {
+      oldValue = new ArrayList<SubModule>(getSubModules());
     }
-    this.children = children;
-    updateParentsAndFireChildrenChanged(oldValue, getChildren());
+    this.subModules = subModules;
+    updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
   }
 
   /**
    * Adds a child projection.
    * 
    * @param child
-   *          the child projection to add. It will fire a "children" property
+   *          the child projection to add. It will fire a "subModules" property
    *          change event.
    * @return <code>true</code> if the projection was succesfully added.
    */
-  public boolean addChild(ChildProjection child) {
-    if (children == null) {
-      children = new ArrayList<ChildProjection>();
+  public boolean addSubModule(SubModule child) {
+    if (subModules == null) {
+      subModules = new ArrayList<SubModule>();
     }
-    List<ChildProjection> oldValue = new ArrayList<ChildProjection>(
-        getChildren());
-    if (children.add(child)) {
-      updateParentsAndFireChildrenChanged(oldValue, getChildren());
+    List<SubModule> oldValue = new ArrayList<SubModule>(getSubModules());
+    if (subModules.add(child)) {
+      updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
       return true;
     }
     return false;
   }
 
   /**
-   * Adds a children projection collection. It will fire a "children" property
-   * change event.
+   * Adds a subModules projection collection. It will fire a "subModules"
+   * property change event.
    * 
-   * @param childrenToAdd
-   *          the children projections to add.
-   * @return <code>true</code> if the children projection collection was
+   * @param subModulesToAdd
+   *          the subModules projections to add.
+   * @return <code>true</code> if the subModules projection collection was
    *         succesfully added.
    */
-  public boolean addChildren(Collection<? extends ChildProjection> childrenToAdd) {
-    if (children == null) {
-      children = new ArrayList<ChildProjection>();
+  public boolean addSubModules(Collection<? extends SubModule> subModulesToAdd) {
+    if (subModules == null) {
+      subModules = new ArrayList<SubModule>();
     }
-    List<ChildProjection> oldValue = new ArrayList<ChildProjection>(
-        getChildren());
-    if (children.addAll(childrenToAdd)) {
-      updateParentsAndFireChildrenChanged(oldValue, getChildren());
+    List<SubModule> oldValue = new ArrayList<SubModule>(getSubModules());
+    if (subModules.addAll(subModulesToAdd)) {
+      updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
       return true;
     }
     return false;
   }
 
   /**
-   * Removes a child projection. It will fire a "children" property change
+   * Removes a child projection. It will fire a "subModules" property change
    * event.
    * 
-   * @param child
+   * @param subModule
    *          the child projection to remove.
    * @return <code>true</code> if the projection was succesfully removed.
    */
-  public boolean removeChild(ChildProjection child) {
-    if (children != null) {
-      List<ChildProjection> oldValue = new ArrayList<ChildProjection>(
-          getChildren());
-      if (children.remove(child)) {
-        updateParentsAndFireChildrenChanged(oldValue, getChildren());
+  public boolean removeSubModule(SubModule subModule) {
+    if (subModules != null) {
+      List<SubModule> oldValue = new ArrayList<SubModule>(getSubModules());
+      if (subModules.remove(subModule)) {
+        updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
         return true;
       }
       return false;
@@ -164,20 +161,19 @@ public class Projection implements IPropertyChangeCapable {
   }
 
   /**
-   * Removes a children projection collection. It will fire a "children"
+   * Removes a subModules projection collection. It will fire a "subModules"
    * property change event.
    * 
    * @param childrenToRemove
-   *          the children projections to remove.
-   * @return <code>true</code> if the children projection collection was
+   *          the subModules projections to remove.
+   * @return <code>true</code> if the subModules projection collection was
    *         succesfully removed.
    */
-  public boolean removeChildren(Collection<ChildProjection> childrenToRemove) {
-    if (children != null) {
-      List<ChildProjection> oldValue = new ArrayList<ChildProjection>(
-          getChildren());
-      if (children.removeAll(childrenToRemove)) {
-        updateParentsAndFireChildrenChanged(oldValue, getChildren());
+  public boolean removeSubModules(Collection<SubModule> childrenToRemove) {
+    if (subModules != null) {
+      List<SubModule> oldValue = new ArrayList<SubModule>(getSubModules());
+      if (subModules.removeAll(childrenToRemove)) {
+        updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
         return true;
       }
       return false;
@@ -201,32 +197,32 @@ public class Projection implements IPropertyChangeCapable {
   }
 
   /**
-   * This method will set the parent projection to the new children projections
-   * and remove the parent of the old removed children projections. It will fire
-   * the "children" property change event.
+   * This method will set the parent projection to the new subModules
+   * projections and remove the parent of the old removed subModules
+   * projections. It will fire the "subModules" property change event.
    * 
    * @param oldChildren
-   *          the old children collection property.
+   *          the old subModules collection property.
    * @param newChildren
-   *          the new children collection property.
+   *          the new subModules collection property.
    */
-  protected void updateParentsAndFireChildrenChanged(
-      List<ChildProjection> oldChildren, List<ChildProjection> newChildren) {
+  protected void updateParentsAndFireSubModulesChanged(
+      List<SubModule> oldChildren, List<SubModule> newChildren) {
     if (oldChildren != null) {
-      for (ChildProjection oldChild : oldChildren) {
+      for (SubModule oldChild : oldChildren) {
         if (newChildren == null || !newChildren.contains(oldChild)) {
           oldChild.setParent(null);
         }
       }
     }
     if (newChildren != null) {
-      for (ChildProjection newChild : newChildren) {
+      for (SubModule newChild : newChildren) {
         if (oldChildren == null || !oldChildren.contains(newChild)) {
           newChild.setParent(this);
         }
       }
     }
-    firePropertyChange("children", oldChildren, newChildren);
+    firePropertyChange("subModules", oldChildren, newChildren);
   }
 
   /**
@@ -284,13 +280,13 @@ public class Projection implements IPropertyChangeCapable {
    */
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Projection)) {
+    if (!(obj instanceof Module)) {
       return false;
     }
     if (this == obj) {
       return true;
     }
-    Projection rhs = (Projection) obj;
+    Module rhs = (Module) obj;
     return new EqualsBuilder().append(getName(), rhs.getName()).isEquals();
   }
 

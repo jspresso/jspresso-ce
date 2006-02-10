@@ -15,7 +15,7 @@ import com.d2s.framework.view.descriptor.ICompositeTreeLevelDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICompositeChildProjectionViewDescriptor extends
-    IChildProjectionViewDescriptor, ICompositeTreeLevelDescriptor {
+public interface ICompositeSubModuleDescriptor extends
+    ISubModuleDescriptor, ICompositeTreeLevelDescriptor {
   // No extra operation.
 }
