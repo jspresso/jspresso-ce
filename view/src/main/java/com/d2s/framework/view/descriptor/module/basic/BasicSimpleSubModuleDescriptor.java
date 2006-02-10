@@ -12,7 +12,7 @@ import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.module.ISimpleSubModuleDescriptor;
 
 /**
- * This is the default implementation of a simple projection view descriptor.
+ * This is the default implementation of a simple module view descriptor.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -60,14 +60,14 @@ public class BasicSimpleSubModuleDescriptor extends
   @Override
   public IListViewDescriptor getNodeGroupDescriptor() {
     if (super.getNodeGroupDescriptor() == null) {
-      BasicListViewDescriptor projectionNodeGroupDescriptor = new BasicListViewDescriptor();
-      projectionNodeGroupDescriptor.setName(getName());
-      projectionNodeGroupDescriptor.setDescription(getDescription());
-      projectionNodeGroupDescriptor.setIconImageURL(getIconImageURL());
-      projectionNodeGroupDescriptor.setModelDescriptor(MODULE_DESCRIPTOR
+      BasicListViewDescriptor moduleNodeGroupDescriptor = new BasicListViewDescriptor();
+      moduleNodeGroupDescriptor.setName(getName());
+      moduleNodeGroupDescriptor.setDescription(getDescription());
+      moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
+      moduleNodeGroupDescriptor.setModelDescriptor(MODULE_DESCRIPTOR
           .getPropertyDescriptor("subModules"));
-      projectionNodeGroupDescriptor.setRenderedProperty("name");
-      setNodeGroupDescriptor(projectionNodeGroupDescriptor);
+      moduleNodeGroupDescriptor.setRenderedProperty("name");
+      setNodeGroupDescriptor(moduleNodeGroupDescriptor);
     }
     return super.getNodeGroupDescriptor();
   }

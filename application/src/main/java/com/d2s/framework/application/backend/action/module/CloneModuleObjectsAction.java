@@ -44,15 +44,15 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
       return null;
     }
 
-    ICompositeValueConnector projectionConnector = getModuleConnector();
-    BeanModule projection = (BeanModule) projectionConnector
+    ICompositeValueConnector moduleConnector = getModuleConnector();
+    BeanModule module = (BeanModule) moduleConnector
         .getConnectorValue();
 
     Collection<IPropertyChangeCapable> projectedCollection;
-    if (projection.getModuleObjects() == null) {
+    if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<IPropertyChangeCapable>();
     } else {
-      projectedCollection = new ArrayList<IPropertyChangeCapable>(projection
+      projectedCollection = new ArrayList<IPropertyChangeCapable>(module
           .getModuleObjects());
     }
     Collection<IEntity> entityClones = new ArrayList<IEntity>();
@@ -61,7 +61,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
           selectedIndices[i]).getConnectorValue()).clone(false));
     }
     projectedCollection.addAll(entityClones);
-    projection.setModuleObjects(projectedCollection);
+    module.setModuleObjects(projectedCollection);
 
     getModelConnector().setConnectorValue(projectedCollection);
 

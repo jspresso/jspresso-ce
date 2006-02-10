@@ -8,8 +8,8 @@ import org.apache.commons.lang.ObjectUtils;
 import com.d2s.framework.view.descriptor.module.ISubModuleDescriptor;
 
 /**
- * A child projection is a non-root projection (it has a parent). A child
- * projection uses a view to render its projected artifact.
+ * A child module is a non-root module (it has a parent). A child
+ * module uses a view to render its projected artifact.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -23,19 +23,19 @@ public class SubModule extends Module {
   private ISubModuleDescriptor descriptor;
 
   /**
-   * Gets the projection's parent projection.
+   * Gets the module's parent module.
    * 
-   * @return the parent projection or null if none.
+   * @return the parent module or null if none.
    */
   public Module getParent() {
     return parent;
   }
 
   /**
-   * Sets the parent projection. It will fire a "parent" property change event.
+   * Sets the parent module. It will fire a "parent" property change event.
    * 
    * @param parent
-   *          the parent projection to set or null if none.
+   *          the parent module to set or null if none.
    */
   public void setParent(Module parent) {
     if (ObjectUtils.equals(this.parent, parent)) {

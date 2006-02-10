@@ -72,14 +72,14 @@ public abstract class AbstractBackendAction extends AbstractAction {
   }
 
   /**
-   * This is a utility method which is able to retrieve the projection model
+   * This is a utility method which is able to retrieve the module model
    * connector this action has been executed on from its context. It uses
    * well-known context keys of the action context which is :
    * <ul>
    * <li> <code>ActionContextConstants.MODULE_MODEL_CONNECTOR</code>.
    * </ul>
    * 
-   * @return the projection model connector this action executes on.
+   * @return the module model connector this action executes on.
    */
   public ICompositeValueConnector getModuleConnector() {
     return (ICompositeValueConnector) getContext().get(

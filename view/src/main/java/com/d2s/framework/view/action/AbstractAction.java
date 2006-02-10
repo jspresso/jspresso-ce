@@ -72,7 +72,7 @@ public abstract class AbstractAction implements IAction {
   }
 
   /**
-   * Gets the parent projection selected indices from the context. it uses the
+   * Gets the parent module selected indices from the context. it uses the
    * <code>ActionContextConstants.PARENT_MODULE_SELECTED_INDICES</code>
    * key.
    * 

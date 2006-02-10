@@ -413,7 +413,7 @@ script.setExecutionResult(result)
   </bean>
 
   <!--
-    The projection views.
+    The module views.
   -->
 
   <bean id="company.department.module.front"
@@ -425,7 +425,7 @@ script.setExecutionResult(result)
       <bean parent="abstractSubModulesNodeGroupDescriptor">
         <property name="name" value="department.module.front" />
         <property name="description" value="department.module.front" />
-        <property name="actionMap" ref="projectionActionMap" />
+        <property name="actionMap" ref="moduleActionMap" />
       </bean>
     </property>
   </bean>
@@ -447,10 +447,10 @@ script.setExecutionResult(result)
     <property name="childDescriptor" ref="company.departments.module.front" />
   </bean>
 
-  <bean id="company.design.projection"
+  <bean id="company.design.module"
     class="com.d2s.framework.view.descriptor.module.basic.BasicModuleDescriptor">
-    <property name="name" value="company.design.projection" />
-    <property name="description" value="company.design.projection" />
+    <property name="name" value="company.design.module" />
+    <property name="description" value="company.design.module" />
     <property name="rootSubtreeDescriptor" ref="company.module.front" />
     <property name="iconImageURLProvider">
       <bean class="com.d2s.framework.view.module.ModuleIconImageURLProvider">
@@ -467,7 +467,7 @@ script.setExecutionResult(result)
     <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
     <property name="moduleDescriptors">
       <map>
-        <entry key="company" value-ref="company.design.projection" />
+        <entry key="company" value-ref="company.design.module" />
       </map>
     </property>
   </bean>

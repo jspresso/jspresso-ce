@@ -88,12 +88,12 @@ public class DefaultSwingController extends
     JInternalFrame moduleInternalFrame = moduleInternalFrames
         .get(moduleId);
     if (moduleInternalFrame == null) {
-      IModuleDescriptor moduleViewDescriptor = getModuleDescriptor(moduleId);
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       IView<JComponent> moduleView = createModuleView(moduleId,
-          moduleViewDescriptor);
+          moduleDescriptor);
       moduleInternalFrame = createJInternalFrame(moduleView);
       moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          moduleViewDescriptor.getIconImageURL(),
+          moduleDescriptor.getIconImageURL(),
           IIconFactory.SMALL_ICON_SIZE));
       moduleInternalFrame
           .addInternalFrameListener(new ModuleInternalFrameListener(
@@ -192,16 +192,16 @@ public class DefaultSwingController extends
   }
 
   private JMenu getModulesMenu() {
-    JMenu projectionMenu = new JMenu(getLabelTranslator().getTranslation(
+    JMenu modulesMenu = new JMenu(getLabelTranslator().getTranslation(
         "Modules", getLocale()));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      JMenuItem projectionMenuItem = new JMenuItem(
+      JMenuItem moduleMenuItem = new JMenuItem(
           new ModuleSelectionAction(moduleId,
               moduleDescriptor));
-      projectionMenu.add(projectionMenuItem);
+      modulesMenu.add(moduleMenuItem);
     }
-    return projectionMenu;
+    return modulesMenu;
   }
 
   private final class ModuleSelectionAction extends AbstractAction {
@@ -213,23 +213,23 @@ public class DefaultSwingController extends
      * Constructs a new <code>ModuleSelectionAction</code> instance.
      * 
      * @param moduleId
-     * @param projectionViewDescriptor
+     * @param moduleDescriptor
      */
     public ModuleSelectionAction(String moduleId,
-        IModuleDescriptor projectionViewDescriptor) {
+        IModuleDescriptor moduleDescriptor) {
       this.moduleId = moduleId;
       putValue(Action.NAME, getLabelTranslator().getTranslation(
-          projectionViewDescriptor.getName(), getLocale()));
+          moduleDescriptor.getName(), getLocale()));
       putValue(Action.SHORT_DESCRIPTION, getDescriptionTranslator()
-          .getTranslation(projectionViewDescriptor.getDescription(),
+          .getTranslation(moduleDescriptor.getDescription(),
               getLocale()));
       putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          projectionViewDescriptor.getIconImageURL(),
+          moduleDescriptor.getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
 
     /**
-     * displays the selected projection.
+     * displays the selected module.
      * <p>
      * {@inheritDoc}
      */

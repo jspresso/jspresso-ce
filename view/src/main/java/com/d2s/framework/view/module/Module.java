@@ -18,9 +18,9 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
 /**
  * A module is a central element in the application architecture. It serves as
  * an entry point on the domain model. Modules are organized as a tree structure
- * since they can (optionally) provide projections. A projection can be seen as
+ * since they can (optionally) provide modules. A module can be seen as
  * a window on the business grouping processes forming a business activity (like
- * master data management, customer contract handling, ...). Each projection can
+ * master data management, customer contract handling, ...). Each module can
  * (optionally) provide a projected object serving as model root for trigerring
  * grouped processes.
  * <p>
@@ -75,20 +75,20 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Gets the subModules projections.
+   * Gets the subModules modules.
    * 
-   * @return the list of subModules projections.
+   * @return the list of subModules modules.
    */
   public List<SubModule> getSubModules() {
     return subModules;
   }
 
   /**
-   * Sets the subModules projections. It will fire a "subModules" property
+   * Sets the subModules modules. It will fire a "subModules" property
    * change event.
    * 
    * @param subModules
-   *          the subModules projections to set.
+   *          the subModules modules to set.
    */
   public void setSubModules(List<SubModule> subModules) {
     List<SubModule> oldValue = null;
@@ -100,12 +100,12 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Adds a child projection.
+   * Adds a child module.
    * 
    * @param child
-   *          the child projection to add. It will fire a "subModules" property
+   *          the child module to add. It will fire a "subModules" property
    *          change event.
-   * @return <code>true</code> if the projection was succesfully added.
+   * @return <code>true</code> if the module was succesfully added.
    */
   public boolean addSubModule(SubModule child) {
     if (subModules == null) {
@@ -120,12 +120,12 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Adds a subModules projection collection. It will fire a "subModules"
+   * Adds a subModules module collection. It will fire a "subModules"
    * property change event.
    * 
    * @param subModulesToAdd
-   *          the subModules projections to add.
-   * @return <code>true</code> if the subModules projection collection was
+   *          the subModules modules to add.
+   * @return <code>true</code> if the subModules module collection was
    *         succesfully added.
    */
   public boolean addSubModules(Collection<? extends SubModule> subModulesToAdd) {
@@ -141,12 +141,12 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Removes a child projection. It will fire a "subModules" property change
+   * Removes a child module. It will fire a "subModules" property change
    * event.
    * 
    * @param subModule
-   *          the child projection to remove.
-   * @return <code>true</code> if the projection was succesfully removed.
+   *          the child module to remove.
+   * @return <code>true</code> if the module was succesfully removed.
    */
   public boolean removeSubModule(SubModule subModule) {
     if (subModules != null) {
@@ -161,12 +161,12 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Removes a subModules projection collection. It will fire a "subModules"
+   * Removes a subModules module collection. It will fire a "subModules"
    * property change event.
    * 
    * @param childrenToRemove
-   *          the subModules projections to remove.
-   * @return <code>true</code> if the subModules projection collection was
+   *          the subModules modules to remove.
+   * @return <code>true</code> if the subModules module collection was
    *         succesfully removed.
    */
   public boolean removeSubModules(Collection<SubModule> childrenToRemove) {
@@ -197,9 +197,9 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * This method will set the parent projection to the new subModules
-   * projections and remove the parent of the old removed subModules
-   * projections. It will fire the "subModules" property change event.
+   * This method will set the parent module to the new subModules
+   * modules and remove the parent of the old removed subModules
+   * modules. It will fire the "subModules" property change event.
    * 
    * @param oldChildren
    *          the old subModules collection property.
@@ -226,19 +226,19 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Gets the projection's name. It may serve for the projection's view.
+   * Gets the module's name. It may serve for the module's view.
    * 
-   * @return the projection's name.
+   * @return the module's name.
    */
   public String getName() {
     return name;
   }
 
   /**
-   * Sets the projection's name. It may serve for the projection's view.
+   * Sets the module's name. It may serve for the module's view.
    * 
    * @param name
-   *          the projection's name.
+   *          the module's name.
    */
   public void setName(String name) {
     if (ObjectUtils.equals(this.name, name)) {
@@ -250,19 +250,19 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Gets the projection's description. It may serve for the projection's view.
+   * Gets the module's description. It may serve for the module's view.
    * 
-   * @return the projection's description.
+   * @return the module's description.
    */
   public String getDescription() {
     return description;
   }
 
   /**
-   * Sets the projection's description. It may serve for the projection's view.
+   * Sets the module's description. It may serve for the module's view.
    * 
    * @param description
-   *          the projection's description.
+   *          the module's description.
    */
   public void setDescription(String description) {
     if (ObjectUtils.equals(this.description, description)) {

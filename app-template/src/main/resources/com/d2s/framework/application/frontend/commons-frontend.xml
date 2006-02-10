@@ -41,11 +41,11 @@
 		class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction">
 	</bean>
 
-	<bean id="projectionConnectorSelectionFrontAction"
+	<bean id="moduleConnectorSelectionFrontAction"
 		class="com.d2s.framework.application.frontend.action.module.ModuleConnectorSelectionAction">
 	</bean>
 
-	<bean id="parentProjectionConnectorSelectionFrontAction"
+	<bean id="parentModuleConnectorSelectionFrontAction"
 		class="com.d2s.framework.application.frontend.action.module.ParentModuleConnectorSelectionAction">
 	</bean>
 
@@ -120,7 +120,7 @@
 		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
 
-	<bean id="addAsChildProjectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+	<bean id="addAsChildModuleFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
 		<property name="iconImageURL" value="classpath:images/view-48x48.png" />
 		<property name="name" value="installInTree" />
 		<property name="description" value="Installs selected elements in tree" />
@@ -129,10 +129,10 @@
 				class="com.d2s.framework.application.backend.action.module.AddBeanAsSubModuleAction">
 			</bean>
 		</property>
-		<property name="nextAction" ref="projectionConnectorSelectionFrontAction" />
+		<property name="nextAction" ref="moduleConnectorSelectionFrontAction" />
 	</bean>
 
-	<bean id="removeProjectionFromParentFrontAction" parent="removeCollectionFromMasterFrontAction">
+	<bean id="removeModuleFromParentFrontAction" parent="removeCollectionFromMasterFrontAction">
 		<property name="yesAction">
 			<bean class="com.d2s.framework.application.frontend.action.ActionWrapper">
 				<property name="wrappedAction">
@@ -140,7 +140,7 @@
 						class="com.d2s.framework.application.backend.action.module.RemoveSubModuleFromParentAction">
 					</bean>
 				</property>
-				<property name="nextAction" ref="parentProjectionConnectorSelectionFrontAction" />
+				<property name="nextAction" ref="parentModuleConnectorSelectionFrontAction" />
 			</bean>
 		</property>
 	</bean>
@@ -203,19 +203,19 @@
 				</entry>
 				<entry key="SERVICE">
 					<list>
-						<ref local="addAsChildProjectionFrontAction" />
+						<ref local="addAsChildModuleFrontAction" />
 					</list>
 				</entry>
 			</map>
 		</property>
 	</bean>
 
-	<bean id="projectionActionMap" class="com.d2s.framework.view.action.ActionMap">
+	<bean id="moduleActionMap" class="com.d2s.framework.view.action.ActionMap">
 		<property name="actionMap">
 			<map>
 				<entry key="EDIT">
 					<list>
-						<ref local="removeProjectionFromParentFrontAction" />
+						<ref local="removeModuleFromParentFrontAction" />
 					</list>
 				</entry>
 			</map>

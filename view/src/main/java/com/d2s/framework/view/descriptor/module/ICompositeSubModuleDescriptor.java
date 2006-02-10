@@ -6,7 +6,7 @@ package com.d2s.framework.view.descriptor.module;
 import com.d2s.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 
 /**
- * This interface is implemented by projection views on mutable elements
+ * This interface is implemented by module views on mutable elements
  * (generally a business object).
  * <p>
  * Copyright 2005 Design2See. All rights reserved.

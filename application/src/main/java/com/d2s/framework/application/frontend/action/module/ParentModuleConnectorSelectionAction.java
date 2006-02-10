@@ -14,7 +14,7 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.view.action.IActionHandler;
 
 /**
- * A simple action which selects indices on a parent projection view connector.
+ * A simple action which selects indices on a parent module view connector.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -26,7 +26,7 @@ public class ParentModuleConnectorSelectionAction extends
     AbstractChainedAction {
 
   /**
-   * Selects indices on the parent projection view collection connector based on
+   * Selects indices on the parent module view collection connector based on
    * the <code>ActionContextConstants.SELECTED_INDICES</code> context value.
    * <p>
    * {@inheritDoc}

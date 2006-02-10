@@ -12,7 +12,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
- * A bean projection is the base class of bean related projections.
+ * A bean module is the base class of bean related modules.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -26,7 +26,7 @@ public class BeanModule extends SubModule {
   private Collection<? extends IPropertyChangeCapable> moduleObjects;
 
   /**
-   * Gets the projection's projected object.
+   * Gets the module's projected object.
    * 
    * @return the projected object.
    */
@@ -35,7 +35,7 @@ public class BeanModule extends SubModule {
   }
 
   /**
-   * Sets the projection's projected object.
+   * Sets the module's projected object.
    * 
    * @param moduleObject
    *          the projected object.
@@ -50,7 +50,7 @@ public class BeanModule extends SubModule {
   }
 
   /**
-   * Gets the projection's projected objects.
+   * Gets the module's projected objects.
    * 
    * @return the projected objects.
    */
@@ -59,7 +59,7 @@ public class BeanModule extends SubModule {
   }
 
   /**
-   * Sets the projection's projected object collection.
+   * Sets the module's projected object collection.
    * 
    * @param moduleObjects
    *          the projected object collection.

@@ -8,7 +8,7 @@ import com.d2s.framework.view.descriptor.basic.BasicCompositeTreeLevelDescriptor
 import com.d2s.framework.view.descriptor.module.ICompositeSubModuleDescriptor;
 
 /**
- * This is the default implementation of a mutable projection view descriptor.
+ * This is the default implementation of a mutable module view descriptor.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

@@ -17,7 +17,7 @@ import com.d2s.framework.view.module.SubModule;
 
 /**
  * This is a card view descriptor which stacks the projected view descriptors of
- * the module projection structure.
+ * the module module structure.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -30,43 +30,43 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
   /**
    * Constructs a new <code>ModuleCardViewDescriptor</code> instance.
    * 
-   * @param moduleViewDescriptor
+   * @param moduleDescriptor
    *          the module view descriptor.
    */
   public ModuleCardViewDescriptor(
-      IModuleDescriptor moduleViewDescriptor) {
-    ISubModuleDescriptor childProjectionViewDescriptor = (ISubModuleDescriptor) moduleViewDescriptor
+      IModuleDescriptor moduleDescriptor) {
+    ISubModuleDescriptor subModuleDescriptor = (ISubModuleDescriptor) moduleDescriptor
         .getRootSubtreeDescriptor();
-    Map<String, IViewDescriptor> projectionCards = new HashMap<String, IViewDescriptor>();
-    prepareModuleCards(projectionCards, childProjectionViewDescriptor);
-    setCardViewDescriptors(projectionCards);
+    Map<String, IViewDescriptor> moduleCards = new HashMap<String, IViewDescriptor>();
+    prepareModuleCards(moduleCards, subModuleDescriptor);
+    setCardViewDescriptors(moduleCards);
   }
 
   private void prepareModuleCards(
-      Map<String, IViewDescriptor> projectionCards,
-      ISubModuleDescriptor projectionViewDescriptor) {
-    if (projectionViewDescriptor.getViewDescriptor() != null) {
-      IViewDescriptor projectedObjectViewDescriptor = projectionViewDescriptor
+      Map<String, IViewDescriptor> moduleCards,
+      ISubModuleDescriptor moduleDescriptor) {
+    if (moduleDescriptor.getViewDescriptor() != null) {
+      IViewDescriptor projectedObjectViewDescriptor = moduleDescriptor
           .getViewDescriptor();
-      projectionCards.put(
-          computeKeyForModuleDescriptor(projectionViewDescriptor),
+      moduleCards.put(
+          computeKeyForModuleDescriptor(moduleDescriptor),
           projectedObjectViewDescriptor);
     }
-    if (projectionViewDescriptor instanceof ISimpleSubModuleDescriptor) {
-      if (((ISimpleSubModuleDescriptor) projectionViewDescriptor)
+    if (moduleDescriptor instanceof ISimpleSubModuleDescriptor) {
+      if (((ISimpleSubModuleDescriptor) moduleDescriptor)
           .getChildDescriptor() != null) {
         prepareModuleCards(
-            projectionCards,
-            (ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) projectionViewDescriptor)
+            moduleCards,
+            (ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) moduleDescriptor)
                 .getChildDescriptor());
       }
-    } else if (projectionViewDescriptor instanceof ICompositeSubModuleDescriptor) {
-      if (((ICompositeSubModuleDescriptor) projectionViewDescriptor)
+    } else if (moduleDescriptor instanceof ICompositeSubModuleDescriptor) {
+      if (((ICompositeSubModuleDescriptor) moduleDescriptor)
           .getChildrenDescriptors() != null) {
-        for (ITreeLevelDescriptor childProjectionDescriptor : ((ICompositeSubModuleDescriptor) projectionViewDescriptor)
+        for (ITreeLevelDescriptor subModuleDescriptor : ((ICompositeSubModuleDescriptor) moduleDescriptor)
             .getChildrenDescriptors()) {
-          prepareModuleCards(projectionCards,
-              (ISubModuleDescriptor) childProjectionDescriptor);
+          prepareModuleCards(moduleCards,
+              (ISubModuleDescriptor) subModuleDescriptor);
         }
       }
     }

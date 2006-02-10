@@ -37,15 +37,15 @@ public class SaveProjectedAction extends AbstractHibernateAction {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
-        ICompositeValueConnector projectionConnector = getModuleConnector();
-        BeanModule projection = (BeanModule) projectionConnector
+        ICompositeValueConnector moduleConnector = getModuleConnector();
+        BeanModule module = (BeanModule) moduleConnector
             .getConnectorValue();
-        if (projection.getModuleObjects() != null) {
-          for (Object entity : projection.getModuleObjects()) {
+        if (module.getModuleObjects() != null) {
+          for (Object entity : module.getModuleObjects()) {
             saveEntity((IEntity) entity);
           }
-        } else if (projection.getModuleObject() != null) {
-          saveEntity((IEntity) projection.getModuleObject());
+        } else if (module.getModuleObject() != null) {
+          saveEntity((IEntity) module.getModuleObject());
         }
         return null;
       }

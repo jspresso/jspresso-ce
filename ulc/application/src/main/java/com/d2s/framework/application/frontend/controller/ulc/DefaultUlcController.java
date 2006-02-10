@@ -62,12 +62,12 @@ public class DefaultUlcController extends
     ULCInternalFrame moduleInternalFrame = moduleInternalFrames
         .get(moduleId);
     if (moduleInternalFrame == null) {
-      IModuleDescriptor moduleViewDescriptor = getModuleDescriptor(moduleId);
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       IView<ULCComponent> moduleView = createModuleView(
-          moduleId, moduleViewDescriptor);
+          moduleId, moduleDescriptor);
       moduleInternalFrame = createULCInternalFrame(moduleView);
       moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          moduleViewDescriptor.getIconImageURL(),
+          moduleDescriptor.getIconImageURL(),
           IIconFactory.SMALL_ICON_SIZE));
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
@@ -137,11 +137,11 @@ public class DefaultUlcController extends
     ULCMenu modulesMenu = new ULCMenu(getLabelTranslator().getTranslation(
         "Modules", getLocale()));
     for (String moduleId : getModuleIds()) {
-      IModuleDescriptor projectionViewDescriptor = getModuleDescriptor(moduleId);
-      ULCMenuItem projectionMenuItem = new ULCMenuItem(
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      ULCMenuItem moduleMenuItem = new ULCMenuItem(
           new ModuleSelectionAction(moduleId,
-              projectionViewDescriptor));
-      modulesMenu.add(projectionMenuItem);
+              moduleDescriptor));
+      modulesMenu.add(moduleMenuItem);
     }
     return modulesMenu;
   }
@@ -155,23 +155,23 @@ public class DefaultUlcController extends
      * Constructs a new <code>ModuleSelectionAction</code> instance.
      * 
      * @param moduleId
-     * @param projectionViewDescriptor
+     * @param moduleDescriptor
      */
     public ModuleSelectionAction(String moduleId,
-        IModuleDescriptor projectionViewDescriptor) {
+        IModuleDescriptor moduleDescriptor) {
       this.moduleId = moduleId;
       putValue(com.ulcjava.base.application.IAction.NAME, getLabelTranslator()
-          .getTranslation(projectionViewDescriptor.getName(), getLocale()));
+          .getTranslation(moduleDescriptor.getName(), getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
           getDescriptionTranslator().getTranslation(
-              projectionViewDescriptor.getDescription(), getLocale()));
+              moduleDescriptor.getDescription(), getLocale()));
       putValue(com.ulcjava.base.application.IAction.SMALL_ICON,
-          getIconFactory().getIcon(projectionViewDescriptor.getIconImageURL(),
+          getIconFactory().getIcon(moduleDescriptor.getIconImageURL(),
               IIconFactory.TINY_ICON_SIZE));
     }
 
     /**
-     * displays the selected projection.
+     * displays the selected module.
      * <p>
      * {@inheritDoc}
      */

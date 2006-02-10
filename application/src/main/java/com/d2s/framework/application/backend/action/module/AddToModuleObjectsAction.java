@@ -38,23 +38,23 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    */
   public Map<String, Object> execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
-    ICompositeValueConnector projectionConnector = getModuleConnector();
-    BeanModule projection = (BeanModule) projectionConnector
+    ICompositeValueConnector moduleConnector = getModuleConnector();
+    BeanModule module = (BeanModule) moduleConnector
         .getConnectorValue();
     IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor())
         .getElementDescriptor();
 
     Collection<IPropertyChangeCapable> projectedCollection;
-    if (projection.getModuleObjects() == null) {
+    if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<IPropertyChangeCapable>();
     } else {
-      projectedCollection = new ArrayList<IPropertyChangeCapable>(projection
+      projectedCollection = new ArrayList<IPropertyChangeCapable>(module
           .getModuleObjects());
     }
     IEntity newEntity = getEntityFactory().createEntityInstance(
         projectedComponentDescriptor.getComponentContract());
     projectedCollection.add(newEntity);
-    projection.setModuleObjects(projectedCollection);
+    module.setModuleObjects(projectedCollection);
     
     getModelConnector().setConnectorValue(projectedCollection);
     

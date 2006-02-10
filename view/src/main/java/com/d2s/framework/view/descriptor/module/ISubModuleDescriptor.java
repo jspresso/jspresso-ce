@@ -9,7 +9,7 @@ import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
- * This interface describes a child projection view.
+ * This interface describes a child module view.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -21,14 +21,14 @@ public interface ISubModuleDescriptor extends ITreeLevelDescriptor {
 
   /**
    * <code>MODULE_DESCRIPTOR</code> is a unique reference to the model
-   * descriptor of projections.
+   * descriptor of modules.
    */
   IComponentDescriptor MODULE_DESCRIPTOR = new ModuleDescriptor();
 
   /**
-   * Gets the projected view descriptor of this projection.
+   * Gets the projected view descriptor of this module.
    * 
-   * @return the projected view descriptor of this projection.
+   * @return the projected view descriptor of this module.
    */
   IViewDescriptor getViewDescriptor();
 }

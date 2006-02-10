@@ -19,7 +19,7 @@ import com.d2s.framework.view.module.Module;
 import com.d2s.framework.view.module.SubModule;
 
 /**
- * This action removes the selected projections from their parent.
+ * This action removes the selected modules from their parent.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -30,7 +30,7 @@ import com.d2s.framework.view.module.SubModule;
 public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
 
   /**
-   * Removes the selected projections from their parent.
+   * Removes the selected modules from their parent.
    * <p>
    * {@inheritDoc}
    */

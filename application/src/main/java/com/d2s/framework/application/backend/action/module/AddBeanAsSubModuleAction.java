@@ -20,7 +20,7 @@ import com.d2s.framework.view.module.BeanModule;
 import com.d2s.framework.view.module.SubModule;
 
 /**
- * This action adds the selected objects as child projections.
+ * This action adds the selected objects as child modules.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -32,7 +32,7 @@ public class AddBeanAsSubModuleAction extends
     AbstractCollectionAction {
 
   /**
-   * Adds the selected objects as child projections.
+   * Adds the selected objects as child modules.
    * <p>
    * {@inheritDoc}
    */
@@ -43,9 +43,9 @@ public class AddBeanAsSubModuleAction extends
     if (selectedIndices == null || selectedIndices.length == 0) {
       return null;
     }
-    ICompositeValueConnector projectionConnector = getModuleConnector();
+    ICompositeValueConnector moduleConnector = getModuleConnector();
     ICollectionConnector collectionConnector = getModelConnector();
-    SubModule parentProjection = (SubModule) projectionConnector
+    SubModule parentProjection = (SubModule) moduleConnector
         .getConnectorValue();
     List<SubModule> children;
     if (parentProjection.getSubModules() == null) {
@@ -57,18 +57,18 @@ public class AddBeanAsSubModuleAction extends
     for (int i = 0; i < selectedIndices.length; i++) {
       IPropertyChangeCapable nextselectedProjectedObject = (IPropertyChangeCapable) collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue();
-      BeanModule nextChildProjection = new BeanModule();
-      nextChildProjection
+      BeanModule nextSubModule = new BeanModule();
+      nextSubModule
           .setDescriptor((ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) parentProjection
               .getDescriptor()).getChildDescriptor());
-      nextChildProjection.setModuleObject(nextselectedProjectedObject);
-      nextChildProjection.setName(String.valueOf(nextselectedProjectedObject));
-      int nextChildProjectionIndex = children.indexOf(nextChildProjection);
-      if (nextChildProjectionIndex < 0) {
+      nextSubModule.setModuleObject(nextselectedProjectedObject);
+      nextSubModule.setName(String.valueOf(nextselectedProjectedObject));
+      int nextSubModuleIndex = children.indexOf(nextSubModule);
+      if (nextSubModuleIndex < 0) {
         childSelectedIndices[i] = children.size();
-        children.add(nextChildProjection);
+        children.add(nextSubModule);
       } else {
-        childSelectedIndices[i] = nextChildProjectionIndex;
+        childSelectedIndices[i] = nextSubModuleIndex;
       }
     }
     parentProjection.setSubModules(children);

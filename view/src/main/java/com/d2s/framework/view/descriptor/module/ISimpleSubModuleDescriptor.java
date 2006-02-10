@@ -6,7 +6,7 @@ package com.d2s.framework.view.descriptor.module;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 
 /**
- * This interface describes a simple child projection view.
+ * This interface describes a simple child module view.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

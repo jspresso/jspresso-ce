@@ -307,7 +307,7 @@
 	</bean>
 
 	<!--
-		The projections.
+		The modules.
 	-->
 
 	<bean id="departments.projected" class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor">
@@ -317,13 +317,13 @@
 	</bean>
 
 	<bean id="company.departments.module.back" class="com.d2s.framework.view.module.BeanModule">
-		<property name="name" value="departments.projection" />
+		<property name="name" value="departments.module" />
 		<property name="description" value="Departments" />
 		<property name="descriptor" ref="company.departments.module.front" />
 	</bean>
 
 	<bean id="company.module.back" class="com.d2s.framework.view.module.Module">
-		<property name="name" value="company.projection" />
+		<property name="name" value="company.module" />
 		<property name="description" value="Company" />
 		<property name="subModules">
 			<list>

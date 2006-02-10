@@ -15,7 +15,7 @@ import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor
 import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 
 /**
- * The model descriptor of projection objects.
+ * The model descriptor of module objects.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -33,12 +33,12 @@ public class ModuleDescriptor extends BasicComponentDescriptor {
     parentDescriptor.setName("parent");
     parentDescriptor.setReferencedDescriptor(this);
 
-    BasicCollectionDescriptor projectionListDescriptor = new BasicCollectionDescriptor();
-    projectionListDescriptor.setCollectionInterface(List.class);
-    projectionListDescriptor.setElementDescriptor(this);
+    BasicCollectionDescriptor moduleListDescriptor = new BasicCollectionDescriptor();
+    moduleListDescriptor.setCollectionInterface(List.class);
+    moduleListDescriptor.setElementDescriptor(this);
 
     BasicCollectionPropertyDescriptor subModulesDescriptor = new BasicCollectionPropertyDescriptor();
-    subModulesDescriptor.setReferencedDescriptor(projectionListDescriptor);
+    subModulesDescriptor.setReferencedDescriptor(moduleListDescriptor);
     subModulesDescriptor.setName("subModules");
 
     BasicObjectPropertyDescriptor projectedObjectDescriptor = new BasicObjectPropertyDescriptor();

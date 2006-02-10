@@ -279,7 +279,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * Returns the list of module identifiers. This list defines the set of
    * modules the user have access to.
    * 
-   * @return the list of projection identifiers.
+   * @return the list of module identifiers.
    */
   protected List<String> getModuleIds() {
     return new ArrayList<String>(moduleDescriptors.keySet());
@@ -411,26 +411,26 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * 
    * @param moduleId
    *          the identifier of the module to create the view for.
-   * @param moduleViewDescriptor
+   * @param moduleDescriptor
    *          the view descriptor of the module to render.
    * @return a view rendering the module.
    */
   protected IView<E> createModuleView(final String moduleId,
-      IModuleDescriptor moduleViewDescriptor) {
+      IModuleDescriptor moduleDescriptor) {
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
-    splitViewDescriptor.setName(moduleViewDescriptor.getName());
+    splitViewDescriptor.setName(moduleDescriptor.getName());
     splitViewDescriptor.setMasterDetail(true);
 
-    ModuleCardViewDescriptor projectionPaneDescriptor = new ModuleCardViewDescriptor(
-        moduleViewDescriptor);
+    ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(
+        moduleDescriptor);
 
-    splitViewDescriptor.setLeftTopViewDescriptor(moduleViewDescriptor);
-    splitViewDescriptor.setRightBottomViewDescriptor(projectionPaneDescriptor);
+    splitViewDescriptor.setLeftTopViewDescriptor(moduleDescriptor);
+    splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
 
-    ICompositeView<E> projectionView = (ICompositeView<E>) viewFactory
+    ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory
         .createView(splitViewDescriptor, this, getLocale());
-    ((IConnectorSelector) projectionView.getConnector())
+    ((IConnectorSelector) moduleView.getConnector())
         .addConnectorSelectionListener(new IConnectorSelectionListener() {
 
           public void selectedConnectorChange(ConnectorSelectionEvent event) {
@@ -438,7 +438,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
                 (ICompositeValueConnector) event.getSelectedConnector());
           }
         });
-    for (IView<E> childView : projectionView.getChildren()) {
+    for (IView<E> childView : moduleView.getChildren()) {
       if (childView instanceof IMapView) {
         for (IView<E> grandChildView : ((IMapView<E>) childView).getChildren()) {
           mvcBinder.bind(grandChildView.getConnector(), getBackendController()
@@ -447,6 +447,6 @@ public abstract class AbstractFrontendController<E> extends AbstractController
         }
       }
     }
-    return projectionView;
+    return moduleView;
   }
 }

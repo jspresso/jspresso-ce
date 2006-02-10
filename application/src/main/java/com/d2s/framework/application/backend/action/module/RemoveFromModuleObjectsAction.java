@@ -43,24 +43,24 @@ public class RemoveFromModuleObjectsAction extends
       return null;
     }
 
-    ICompositeValueConnector projectionConnector = getModuleConnector();
-    BeanModule projection = (BeanModule) projectionConnector
+    ICompositeValueConnector moduleConnector = getModuleConnector();
+    BeanModule module = (BeanModule) moduleConnector
         .getConnectorValue();
 
     Collection<IPropertyChangeCapable> projectedCollection;
-    if (projection.getModuleObjects() == null) {
+    if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<IPropertyChangeCapable>();
     } else {
-      projectedCollection = new ArrayList<IPropertyChangeCapable>(projection
+      projectedCollection = new ArrayList<IPropertyChangeCapable>(module
           .getModuleObjects());
     }
     for (int i = 0; i < selectedIndices.length; i++) {
       Object removedObject = collectionConnector.getChildConnector(
           selectedIndices[i]).getConnectorValue();
       projectedCollection.remove(removedObject);
-      removeFromSubModules(projection, removedObject);
+      removeFromSubModules(module, removedObject);
     }
-    projection.setModuleObjects(projectedCollection);
+    module.setModuleObjects(projectedCollection);
 
     getModelConnector().setConnectorValue(projectedCollection);
 
@@ -70,12 +70,12 @@ public class RemoveFromModuleObjectsAction extends
   private static void removeFromSubModules(Module parentProjection,
       Object removedObject) {
     if (parentProjection.getSubModules() != null) {
-      for (SubModule childProjection : new ArrayList<SubModule>(
+      for (SubModule subModule : new ArrayList<SubModule>(
           parentProjection.getSubModules())) {
-        if (childProjection instanceof BeanModule
-            && removedObject.equals(((BeanModule) childProjection)
+        if (subModule instanceof BeanModule
+            && removedObject.equals(((BeanModule) subModule)
                 .getModuleObject())) {
-          parentProjection.removeSubModule(childProjection);
+          parentProjection.removeSubModule(subModule);
         }
       }
     }

@@ -13,7 +13,7 @@ import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
 
 /**
- * A simple action which selects indices on a projection view connector.
+ * A simple action which selects indices on a module view connector.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -24,21 +24,21 @@ import com.d2s.framework.view.action.IActionHandler;
 public class ModuleConnectorSelectionAction extends AbstractChainedAction {
 
   /**
-   * Selects indices on the projection view collection connector based on the
+   * Selects indices on the module view collection connector based on the
    * <code>ActionContextConstants.SELECTED_INDICES</code> context value.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public Map<String, Object> execute(IActionHandler actionHandler) {
-    ICompositeValueConnector projectionConnector = getModuleConnector();
-    ICollectionConnector parentProjectionCollectionConnector = ((ICollectionConnectorProvider) projectionConnector
+    ICompositeValueConnector moduleConnector = getModuleConnector();
+    ICollectionConnector parentProjectionCollectionConnector = ((ICollectionConnectorProvider) moduleConnector
         .getParentConnector().getParentConnector()).getCollectionConnector();
     parentProjectionCollectionConnector.setSelectedIndices(new int[0]);
     int[] connectorSelection = (int[]) getContext().get(
         ActionContextConstants.SELECTED_INDICES);
-    if (projectionConnector instanceof ICollectionConnectorProvider) {
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) projectionConnector)
+    if (moduleConnector instanceof ICollectionConnectorProvider) {
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) moduleConnector)
           .getCollectionConnector();
       collectionConnector.setSelectedIndices(connectorSelection);
     }
