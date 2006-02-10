@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.view.descriptor.projection.basic;
+package com.d2s.framework.view.descriptor.module.basic;
 
 import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
 
 /**
  * This is a default implementation of a simple module view descriptor.

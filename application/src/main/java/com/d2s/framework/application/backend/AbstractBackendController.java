@@ -19,7 +19,7 @@ import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
-import com.d2s.framework.view.projection.Module;
+import com.d2s.framework.view.module.Module;
 
 /**
  * Base class for backend application controllers. It provides the implementor

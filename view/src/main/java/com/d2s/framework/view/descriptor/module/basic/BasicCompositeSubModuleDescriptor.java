@@ -1,11 +1,11 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.view.descriptor.projection.basic;
+package com.d2s.framework.view.descriptor.module.basic;
 
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicCompositeTreeLevelDescriptor;
-import com.d2s.framework.view.descriptor.projection.ICompositeSubModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.ICompositeSubModuleDescriptor;
 
 /**
  * This is the default implementation of a mutable projection view descriptor.

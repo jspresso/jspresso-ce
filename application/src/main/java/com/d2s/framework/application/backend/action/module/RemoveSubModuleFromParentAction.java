@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.backend.action.projection;
+package com.d2s.framework.application.backend.action.module;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,8 +15,8 @@ import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.projection.SubModule;
-import com.d2s.framework.view.projection.Module;
+import com.d2s.framework.view.module.Module;
+import com.d2s.framework.view.module.SubModule;
 
 /**
  * This action removes the selected projections from their parent.

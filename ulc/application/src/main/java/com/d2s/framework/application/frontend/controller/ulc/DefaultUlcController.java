@@ -11,7 +11,7 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
-import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
 import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;

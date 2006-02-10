@@ -31,8 +31,8 @@ import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
-import com.d2s.framework.view.descriptor.projection.basic.ModuleCardViewDescriptor;
+import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.basic.ModuleCardViewDescriptor;
 
 /**
  * This class serves as base class for frontend (view) controllers.

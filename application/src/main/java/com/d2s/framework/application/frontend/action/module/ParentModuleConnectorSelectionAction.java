@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.frontend.action.projection;
+package com.d2s.framework.application.frontend.action.module;
 
 import java.util.Collections;
 import java.util.Map;

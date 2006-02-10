@@ -150,8 +150,8 @@ import com.d2s.framework.view.descriptor.TreeDescriptorHelper;
 import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.basic.ModuleCardViewDescriptor;
-import com.d2s.framework.view.projection.BeanModule;
+import com.d2s.framework.view.descriptor.module.basic.ModuleCardViewDescriptor;
+import com.d2s.framework.view.module.BeanModule;
 
 /**
  * Factory for swing views.

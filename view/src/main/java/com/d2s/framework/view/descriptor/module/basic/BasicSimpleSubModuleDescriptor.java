@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.view.descriptor.projection.basic;
+package com.d2s.framework.view.descriptor.module.basic;
 
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
@@ -9,7 +9,7 @@ import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
-import com.d2s.framework.view.descriptor.projection.ISimpleSubModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.ISimpleSubModuleDescriptor;
 
 /**
  * This is the default implementation of a simple projection view descriptor.

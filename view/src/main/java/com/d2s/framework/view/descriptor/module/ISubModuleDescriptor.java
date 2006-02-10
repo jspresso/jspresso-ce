@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.view.descriptor.projection;
+package com.d2s.framework.view.descriptor.module;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.projection.ModuleDescriptor;
+import com.d2s.framework.model.descriptor.module.ModuleDescriptor;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 

@@ -39,7 +39,7 @@ import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
-import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
 
 import foxtrot.Job;
 

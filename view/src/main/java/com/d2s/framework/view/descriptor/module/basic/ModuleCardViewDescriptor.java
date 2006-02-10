@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.view.descriptor.projection.basic;
+package com.d2s.framework.view.descriptor.module.basic;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,11 +9,11 @@ import java.util.Map;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
-import com.d2s.framework.view.descriptor.projection.ISubModuleDescriptor;
-import com.d2s.framework.view.descriptor.projection.ICompositeSubModuleDescriptor;
-import com.d2s.framework.view.descriptor.projection.IModuleDescriptor;
-import com.d2s.framework.view.descriptor.projection.ISimpleSubModuleDescriptor;
-import com.d2s.framework.view.projection.SubModule;
+import com.d2s.framework.view.descriptor.module.ICompositeSubModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.ISimpleSubModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.ISubModuleDescriptor;
+import com.d2s.framework.view.module.SubModule;
 
 /**
  * This is a card view descriptor which stacks the projected view descriptors of

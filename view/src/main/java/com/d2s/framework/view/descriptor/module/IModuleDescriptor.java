@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.view.descriptor.projection;
+package com.d2s.framework.view.descriptor.module;
 
 import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 

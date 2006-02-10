@@ -6,8 +6,8 @@ package com.d2s.framework.sample.frontend.startup;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.startup.swing.SwingStartup;
 import com.d2s.framework.sample.data.AppDataProducer;
-import com.d2s.framework.view.projection.BeanModule;
-import com.d2s.framework.view.projection.Module;
+import com.d2s.framework.view.module.BeanModule;
+import com.d2s.framework.view.module.Module;
 
 /**
  * Swing sample startup class.

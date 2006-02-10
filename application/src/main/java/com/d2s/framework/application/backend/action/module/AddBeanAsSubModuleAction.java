@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.backend.action.projection;
+package com.d2s.framework.application.backend.action.module;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +14,10 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.descriptor.projection.ISubModuleDescriptor;
-import com.d2s.framework.view.descriptor.projection.ISimpleSubModuleDescriptor;
-import com.d2s.framework.view.projection.BeanModule;
-import com.d2s.framework.view.projection.SubModule;
+import com.d2s.framework.view.descriptor.module.ISimpleSubModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.ISubModuleDescriptor;
+import com.d2s.framework.view.module.BeanModule;
+import com.d2s.framework.view.module.SubModule;
 
 /**
  * This action adds the selected objects as child projections.

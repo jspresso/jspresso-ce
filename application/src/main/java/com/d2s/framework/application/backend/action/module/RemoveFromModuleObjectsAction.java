@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.backend.action.projection;
+package com.d2s.framework.application.backend.action.module;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +12,9 @@ import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.projection.BeanModule;
-import com.d2s.framework.view.projection.SubModule;
-import com.d2s.framework.view.projection.Module;
+import com.d2s.framework.view.module.BeanModule;
+import com.d2s.framework.view.module.Module;
+import com.d2s.framework.view.module.SubModule;
 
 /**
  * This action removes the selected objects from the projected collection.

@@ -1,11 +1,11 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.view.projection;
+package com.d2s.framework.view.module;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.d2s.framework.view.descriptor.projection.ISubModuleDescriptor;
+import com.d2s.framework.view.descriptor.module.ISubModuleDescriptor;
 
 /**
  * A child projection is a non-root projection (it has a parent). A child
