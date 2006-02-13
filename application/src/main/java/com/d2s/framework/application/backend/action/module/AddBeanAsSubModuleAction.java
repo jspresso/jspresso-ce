@@ -45,13 +45,13 @@ public class AddBeanAsSubModuleAction extends
     }
     ICompositeValueConnector moduleConnector = getModuleConnector();
     ICollectionConnector collectionConnector = getModelConnector();
-    SubModule parentProjection = (SubModule) moduleConnector
+    SubModule parentModule = (SubModule) moduleConnector
         .getConnectorValue();
     List<SubModule> children;
-    if (parentProjection.getSubModules() == null) {
+    if (parentModule.getSubModules() == null) {
       children = new ArrayList<SubModule>(selectedIndices.length);
     } else {
-      children = new ArrayList<SubModule>(parentProjection.getSubModules());
+      children = new ArrayList<SubModule>(parentModule.getSubModules());
     }
     int[] childSelectedIndices = new int[selectedIndices.length];
     for (int i = 0; i < selectedIndices.length; i++) {
@@ -59,7 +59,7 @@ public class AddBeanAsSubModuleAction extends
           .getChildConnector(selectedIndices[i]).getConnectorValue();
       BeanModule nextSubModule = new BeanModule();
       nextSubModule
-          .setDescriptor((ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) parentProjection
+          .setDescriptor((ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) parentModule
               .getDescriptor()).getChildDescriptor());
       nextSubModule.setModuleObject(nextselectedProjectedObject);
       nextSubModule.setName(String.valueOf(nextselectedProjectedObject));
@@ -71,7 +71,7 @@ public class AddBeanAsSubModuleAction extends
         childSelectedIndices[i] = nextSubModuleIndex;
       }
     }
-    parentProjection.setSubModules(children);
+    parentModule.setSubModules(children);
     Map<String, Object> executionResult = new HashMap<String, Object>();
     executionResult.put(ActionContextConstants.SELECTED_INDICES,
         childSelectedIndices);

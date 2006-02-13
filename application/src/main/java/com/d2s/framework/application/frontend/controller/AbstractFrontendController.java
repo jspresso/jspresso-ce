@@ -210,24 +210,24 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
-    ICompositeValueConnector selectedProjectionViewConnector = selectedModuleConnectors
+    ICompositeValueConnector selectedModuleViewConnector = selectedModuleConnectors
         .get(getSelectedModuleId());
     initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
-        selectedProjectionViewConnector);
-    if (selectedProjectionViewConnector != null) {
-      if (selectedProjectionViewConnector.getParentConnector() != null) {
+        selectedModuleViewConnector);
+    if (selectedModuleViewConnector != null) {
+      if (selectedModuleViewConnector.getParentConnector() != null) {
         initialActionContext.put(
             ActionContextConstants.PARENT_MODULE_SELECTED_INDICES,
-            ((ICollectionConnectorProvider) selectedProjectionViewConnector
+            ((ICollectionConnectorProvider) selectedModuleViewConnector
                 .getParentConnector()).getCollectionConnector()
                 .getSelectedIndices());
         initialActionContext.put(
             ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR,
-            selectedProjectionViewConnector.getParentConnector()
+            selectedModuleViewConnector.getParentConnector()
                 .getParentConnector());
       }
       initialActionContext.put(ActionContextConstants.MODULE_MODEL_CONNECTOR,
-          selectedProjectionViewConnector.getModelConnector());
+          selectedModuleViewConnector.getModelConnector());
     }
     return initialActionContext;
   }

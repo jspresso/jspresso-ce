@@ -33,14 +33,14 @@ public class ParentModuleConnectorSelectionAction extends
    */
   @Override
   public Map<String, Object> execute(IActionHandler actionHandler) {
-    ICompositeValueConnector parentProjectionConnector = getParentModuleConnector();
-    ICompositeValueConnector grandParentProjectionConnector = (ICompositeValueConnector) parentProjectionConnector
+    ICompositeValueConnector parentModuleConnector = getParentModuleConnector();
+    ICompositeValueConnector grandParentModuleConnector = (ICompositeValueConnector) parentModuleConnector
         .getParentConnector();
-    if (grandParentProjectionConnector instanceof ICollectionConnectorProvider) {
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) grandParentProjectionConnector)
+    if (grandParentModuleConnector instanceof ICollectionConnectorProvider) {
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) grandParentModuleConnector)
           .getCollectionConnector();
       collectionConnector.setSelectedIndices(ConnectorHelper.getIndicesOf(
-          collectionConnector, Collections.singleton(parentProjectionConnector
+          collectionConnector, Collections.singleton(parentModuleConnector
               .getConnectorValue())));
     }
     return super.execute(actionHandler);

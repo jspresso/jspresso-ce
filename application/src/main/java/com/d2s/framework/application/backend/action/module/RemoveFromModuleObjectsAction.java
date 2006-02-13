@@ -67,15 +67,15 @@ public class RemoveFromModuleObjectsAction extends
     return null;
   }
 
-  private static void removeFromSubModules(Module parentProjection,
+  private static void removeFromSubModules(Module parentModule,
       Object removedObject) {
-    if (parentProjection.getSubModules() != null) {
+    if (parentModule.getSubModules() != null) {
       for (SubModule subModule : new ArrayList<SubModule>(
-          parentProjection.getSubModules())) {
+          parentModule.getSubModules())) {
         if (subModule instanceof BeanModule
             && removedObject.equals(((BeanModule) subModule)
                 .getModuleObject())) {
-          parentProjection.removeSubModule(subModule);
+          parentModule.removeSubModule(subModule);
         }
       }
     }

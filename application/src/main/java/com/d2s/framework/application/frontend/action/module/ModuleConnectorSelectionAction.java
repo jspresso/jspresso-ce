@@ -32,9 +32,9 @@ public class ModuleConnectorSelectionAction extends AbstractChainedAction {
   @Override
   public Map<String, Object> execute(IActionHandler actionHandler) {
     ICompositeValueConnector moduleConnector = getModuleConnector();
-    ICollectionConnector parentProjectionCollectionConnector = ((ICollectionConnectorProvider) moduleConnector
+    ICollectionConnector parentModuleCollectionConnector = ((ICollectionConnectorProvider) moduleConnector
         .getParentConnector().getParentConnector()).getCollectionConnector();
-    parentProjectionCollectionConnector.setSelectedIndices(new int[0]);
+    parentModuleCollectionConnector.setSelectedIndices(new int[0]);
     int[] connectorSelection = (int[]) getContext().get(
         ActionContextConstants.SELECTED_INDICES);
     if (moduleConnector instanceof ICollectionConnectorProvider) {

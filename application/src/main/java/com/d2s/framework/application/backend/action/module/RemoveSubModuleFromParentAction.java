@@ -36,7 +36,7 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
    */
   public Map<String, Object> execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
-    ICompositeValueConnector parentProjectionConnector = (ICompositeValueConnector) getModuleConnector()
+    ICompositeValueConnector parentModuleConnector = (ICompositeValueConnector) getModuleConnector()
         .getParentConnector().getParentConnector();
 
     int[] selectedIndices = getParentModuleSelectedIndices();
@@ -44,20 +44,20 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
     if (selectedIndices == null || selectedIndices.length == 0) {
       return null;
     }
-    Module parentProjection = (Module) parentProjectionConnector
+    Module parentModule = (Module) parentModuleConnector
         .getConnectorValue();
     Collection<SubModule> childrenToRemove = new ArrayList<SubModule>();
 
     for (int i = 0; i < selectedIndices.length; i++) {
-      childrenToRemove.add(parentProjection.getSubModules().get(i));
+      childrenToRemove.add(parentModule.getSubModules().get(i));
     }
-    parentProjection.removeSubModules(childrenToRemove);
+    parentModule.removeSubModules(childrenToRemove);
     Map<String, Object> executionResult = new HashMap<String, Object>();
     executionResult.put(ActionContextConstants.SELECTED_INDICES,
         ConnectorHelper.getIndicesOf(
-            ((ICollectionConnectorProvider) parentProjectionConnector
+            ((ICollectionConnectorProvider) parentModuleConnector
                 .getParentConnector()).getCollectionConnector(), Collections
-                .singleton(parentProjectionConnector.getConnectorValue())));
+                .singleton(parentModuleConnector.getConnectorValue())));
     return executionResult;
   }
 }

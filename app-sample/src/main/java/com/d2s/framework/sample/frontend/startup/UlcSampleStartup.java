@@ -30,10 +30,10 @@ public class UlcSampleStartup extends UlcStartup {
     super.start();
     IBackendController backController = (IBackendController) getApplicationContext()
         .getBean("applicationBackController");
-    BeanModule companyProjection = (BeanModule) ((Module) backController
+    BeanModule companyModule = (BeanModule) ((Module) backController
         .getModuleConnector("company").getConnectorValue())
         .getSubModules().get(0);
-    companyProjection.setModuleObjects(new AppDataProducer(
+    companyModule.setModuleObjects(new AppDataProducer(
         getApplicationContext()).createTestData());
   }
 
