@@ -57,11 +57,19 @@ public class DefaultMasterDetailBinder implements IMasterDetailBinder {
      * {@inheritDoc}
      */
     public void selectedConnectorChange(ConnectorSelectionEvent event) {
-      if (event.getSelectedConnector() != null) {
-        mvcBinder.bind(detailConnector, event.getSelectedConnector()
-            .getModelConnector());
+      IValueConnector masterConnector = event.getSelectedConnector(); 
+      if (masterConnector != null) {
+        if (detailConnector.getModelConnector() == null
+            && masterConnector.getModelConnector() != null) {
+          mvcBinder.bind(detailConnector, masterConnector
+              .getModelConnector().clone());
+        }
+        detailConnector.getModelConnector().setConnectorValue(
+            masterConnector.getConnectorValue());
       } else {
-        mvcBinder.bind(detailConnector, null);
+        if (detailConnector.getModelConnector() != null) {
+          detailConnector.getModelConnector().setConnectorValue(null);
+        }
       }
     }
   }
