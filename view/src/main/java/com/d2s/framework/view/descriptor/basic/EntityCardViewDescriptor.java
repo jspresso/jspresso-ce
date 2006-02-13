@@ -12,7 +12,8 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
- * TODO Comment needed.
+ * This class is a card view descriptor that displays entities. Choice of the
+ * card to display is based on the model entity contract.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -40,8 +41,7 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    * @param viewDescriptors
    *          the viewDescriptors to set.
    */
-  public void setViewDescriptors(
-      List<IViewDescriptor> viewDescriptors) {
+  public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     Map<String, IViewDescriptor> classCardMapping = new LinkedHashMap<String, IViewDescriptor>();
     for (IViewDescriptor entityViewDescriptor : viewDescriptors) {
       classCardMapping.put(((IComponentDescriptor) entityViewDescriptor

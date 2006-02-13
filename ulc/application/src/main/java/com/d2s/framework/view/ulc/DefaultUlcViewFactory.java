@@ -78,6 +78,7 @@ import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IMapView;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.ViewException;
 import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IBorderViewDescriptor;
@@ -326,7 +327,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       view.setConnector(masterView.getConnector());
       for (int i = 1; i < view.getChildren().size(); i++) {
         IView<ULCComponent> detailView = view.getChildren().get(i);
-        detailView.getPeer().setMinimumSize(MINIMUM_AREA_SIZE);
         detailView.setParent(view);
         IValueConnector detailConnector = null;
         if (detailView.getConnector() instanceof ICollectionConnector) {
@@ -350,7 +350,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       view.setConnector(connector);
       for (IView<ULCComponent> childView : view.getChildren()) {
         childView.setParent(view);
-        childView.getPeer().setMinimumSize(MINIMUM_AREA_SIZE);
         if (!(childView.getConnector() instanceof ICollectionConnector)) {
           childView.getConnector()
               .setId(BeanRefPropertyConnector.THIS_PROPERTY);
@@ -551,6 +550,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
+    viewComponent.setMinimumSize(MINIMUM_AREA_SIZE);
     BasicCompositeView<ULCComponent> view = constructCompositeView(
         viewComponent, viewDescriptor);
     List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
@@ -649,9 +649,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     ICompositeValueConnector connector = null;
     if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
       IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
-          .createConfigurableCollectionConnectorListProvider(viewDescriptor.getName(),
-              ((ICompositeTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
+          .createConfigurableCollectionConnectorListProvider(viewDescriptor
+              .getName(), ((ICompositeTreeLevelDescriptor) rootDescriptor)
+              .getNodeGroupDescriptor().getRenderedProperty());
       List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
       if (((ICompositeTreeLevelDescriptor) rootDescriptor)
           .getChildrenDescriptors() != null) {
@@ -667,9 +667,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       connector = compositeConnector;
     } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
       IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
-          .createConfigurableCollectionConnectorProvider(viewDescriptor.getName(),
-              ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
+          .createConfigurableCollectionConnectorProvider(viewDescriptor
+              .getName(), ((ISimpleTreeLevelDescriptor) rootDescriptor)
+              .getNodeGroupDescriptor().getRenderedProperty());
       if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
         ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
             viewDescriptor, ((ISimpleTreeLevelDescriptor) rootDescriptor)
@@ -1211,6 +1211,10 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       IComponentDescriptor descriptor) {
     IPropertyDescriptor propertyDescriptor = descriptor
         .getPropertyDescriptor(columnId);
+    if (propertyDescriptor == null) {
+      throw new ViewException("No property " + columnId + " defined for "
+          + descriptor.getComponentContract());
+    }
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return connectorFactory.createCompositeValueConnector(columnId,
           ((IReferencePropertyDescriptor) propertyDescriptor)
@@ -2247,7 +2251,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    */
   protected ULCBorderLayoutPane createBorderLayoutPane() {
     ULCBorderLayoutPane pane = new ULCBorderLayoutPane();
-    pane.setMinimumSize(MINIMUM_AREA_SIZE);
     return pane;
   }
 
@@ -2258,7 +2261,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    */
   protected ULCGridLayoutPane createGridLayoutPane() {
     ULCGridLayoutPane pane = new ULCGridLayoutPane();
-    pane.setMinimumSize(MINIMUM_AREA_SIZE);
     return pane;
   }
 
@@ -2269,7 +2271,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    */
   protected ULCCardPane createCardPane() {
     ULCCardPane pane = new ULCCardPane();
-    // pane.setMinimumSize(MINIMUM_AREA_SIZE);
     return pane;
   }
 
@@ -2280,7 +2281,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    */
   protected ULCGridBagLayoutPane createGridBagLayoutPane() {
     ULCGridBagLayoutPane pane = new ULCGridBagLayoutPane();
-    pane.setMinimumSize(MINIMUM_AREA_SIZE);
     return pane;
   }
 

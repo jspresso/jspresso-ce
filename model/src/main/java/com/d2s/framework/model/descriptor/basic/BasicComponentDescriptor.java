@@ -243,6 +243,9 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
         }
       }
     }
+    if (properties.isEmpty()) {
+      return null;
+    }
     return properties;
   }
 

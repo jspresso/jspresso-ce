@@ -34,6 +34,10 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * {@inheritDoc}
    */
   public List<String> getRenderedProperties() {
+    if (renderedProperties == null) {
+      return ((IComponentDescriptor) getModelDescriptor())
+          .getRenderedProperties();
+    }
     return renderedProperties;
   }
 

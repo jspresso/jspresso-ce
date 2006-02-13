@@ -226,14 +226,30 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           inverse = "true"
      </#if>
      <#if (elementDescriptor.orderingProperties?exists && !manyToMany)>
-               order-by="<#list elementDescriptor.orderingProperties as orderingProperty>${generateSQLName(orderingProperty)}<#if orderingProperty_has_next>,</#if></#list>"
+   *           order-by="<#list elementDescriptor.orderingProperties as orderingProperty>${generateSQLName(orderingProperty)}<#if orderingProperty_has_next>,</#if></#list>"
      </#if>
      <#if manyToMany>
    * @hibernate.key
+       <#if componentName=elementName>
+         <#if inverse>
+   *           column = "${generateSQLName(componentName)}_ID2"
+         <#else>
+   *           column = "${generateSQLName(componentName)}_ID1"
+         </#if>
+       <#else>
    *           column = "${generateSQLName(componentName)}_ID"
+       </#if>
    * @hibernate.many-to-many
    *           class = "${elementType}"
+       <#if componentName=elementName>
+         <#if inverse>
+   *           column = "${generateSQLName(elementName)}_ID1"
+         <#else>
+   *           column = "${generateSQLName(elementName)}_ID2"
+         </#if>
+       <#else>
    *           column = "${generateSQLName(elementName)}_ID"
+       </#if>
      <#elseif bidirectional>
    * @hibernate.key
    *           column = "${generateSQLName(reversePropertyName)}_ID"
@@ -288,6 +304,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           name = "${generateSQLName(propertyName)}_ID"
      <#if oneToOne>
    *           unique = "true"
+     </#if>
+     <#if propertyDescriptor.mandatory>
+   *           not-null = "true"
      </#if>
      <#if propertyDescriptor.unicityScope?exists>
    *           unique-key = "${generateSQLName(propertyDescriptor.unicityScope)}_UNQ"

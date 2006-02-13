@@ -356,7 +356,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       view.setConnector(masterView.getConnector());
       for (int i = 1; i < view.getChildren().size(); i++) {
         IView<JComponent> detailView = view.getChildren().get(i);
-        detailView.getPeer().setMinimumSize(MINIMUM_AREA_SIZE);
         detailView.setParent(view);
 
         IValueConnector detailConnector = null;
@@ -381,7 +380,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       view.setConnector(connector);
       for (IView<JComponent> childView : view.getChildren()) {
         childView.setParent(view);
-        childView.getPeer().setMinimumSize(MINIMUM_AREA_SIZE);
         if (!(childView.getConnector() instanceof ICollectionConnector)) {
           childView.getConnector()
               .setId(BeanRefPropertyConnector.THIS_PROPERTY);
@@ -690,9 +688,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     ICompositeValueConnector connector = null;
     if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
       IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
-          .createConfigurableCollectionConnectorListProvider(viewDescriptor.getName(),
-              ((ICompositeTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
+          .createConfigurableCollectionConnectorListProvider(viewDescriptor
+              .getName(), ((ICompositeTreeLevelDescriptor) rootDescriptor)
+              .getNodeGroupDescriptor().getRenderedProperty());
       List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
       if (((ICompositeTreeLevelDescriptor) rootDescriptor)
           .getChildrenDescriptors() != null) {
@@ -708,9 +706,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       connector = compositeConnector;
     } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
       IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
-          .createConfigurableCollectionConnectorProvider(viewDescriptor.getName(),
-              ((ISimpleTreeLevelDescriptor) rootDescriptor)
-                  .getNodeGroupDescriptor().getRenderedProperty());
+          .createConfigurableCollectionConnectorProvider(viewDescriptor
+              .getName(), ((ISimpleTreeLevelDescriptor) rootDescriptor)
+              .getNodeGroupDescriptor().getRenderedProperty());
       if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
         ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
             viewDescriptor, ((ISimpleTreeLevelDescriptor) rootDescriptor)
@@ -1274,6 +1272,10 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       IComponentDescriptor descriptor) {
     IPropertyDescriptor propertyDescriptor = descriptor
         .getPropertyDescriptor(columnId);
+    if (propertyDescriptor == null) {
+      throw new ViewException("No property " + columnId + " defined for "
+          + descriptor.getComponentContract());
+    }
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return connectorFactory.createCompositeValueConnector(columnId,
           ((IReferencePropertyDescriptor) propertyDescriptor)
@@ -2287,7 +2289,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
    */
   protected JPanel createJPanel() {
     JPanel panel = new JPanel();
-    panel.setMinimumSize(MINIMUM_AREA_SIZE);
     return panel;
   }
 
