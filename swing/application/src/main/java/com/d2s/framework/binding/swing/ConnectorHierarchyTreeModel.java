@@ -191,8 +191,9 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
                 for (int i = newCollectionSize; i < oldCollectionSize; i++) {
                   childIndices[i - newCollectionSize] = i;
                 }
-                fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
-                    getTreePathForConnector(connector).getPath(), childIndices,
+                TreePath treePath = getTreePathForConnector(connector);
+                fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this, treePath
+                    .getPath(), childIndices,
                     ((CollectionConnectorValueChangeEvent) evt)
                         .getRemovedChildrenConnectors().toArray());
               }
