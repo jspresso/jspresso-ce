@@ -13,6 +13,7 @@ import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicObjectPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
+import com.d2s.framework.view.module.Module;
 
 /**
  * The model descriptor of module objects.
@@ -29,6 +30,9 @@ public class ModuleDescriptor extends BasicComponentDescriptor {
    * Constructs a new <code>ModuleDescriptor</code> instance.
    */
   public ModuleDescriptor() {
+    
+    super(Module.class.getName());
+    
     BasicReferencePropertyDescriptor parentDescriptor = new BasicReferencePropertyDescriptor();
     parentDescriptor.setName("parent");
     parentDescriptor.setReferencedDescriptor(this);

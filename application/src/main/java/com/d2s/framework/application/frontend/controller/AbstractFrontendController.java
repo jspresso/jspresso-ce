@@ -55,6 +55,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
 
   private IBackendController                    backendController;
   private Map<String, IModuleDescriptor>        moduleDescriptors;
+  private String                                modulesMenuIconImageUrl;
   private IViewFactory<E>                       viewFactory;
   private IIconFactory                          iconFactory;
   private ITranslationProvider                  labelTranslator;
@@ -225,8 +226,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
             selectedProjectionViewConnector.getParentConnector()
                 .getParentConnector());
       }
-      initialActionContext.put(
-          ActionContextConstants.MODULE_MODEL_CONNECTOR,
+      initialActionContext.put(ActionContextConstants.MODULE_MODEL_CONNECTOR,
           selectedProjectionViewConnector.getModelConnector());
     }
     return initialActionContext;
@@ -428,8 +428,8 @@ public abstract class AbstractFrontendController<E> extends AbstractController
     splitViewDescriptor.setLeftTopViewDescriptor(moduleDescriptor);
     splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
 
-    ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory
-        .createView(splitViewDescriptor, this, getLocale());
+    ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory.createView(
+        splitViewDescriptor, this, getLocale());
     ((IConnectorSelector) moduleView.getConnector())
         .addConnectorSelectionListener(new IConnectorSelectionListener() {
 
@@ -448,5 +448,25 @@ public abstract class AbstractFrontendController<E> extends AbstractController
       }
     }
     return moduleView;
+  }
+
+  
+  /**
+   * Gets the modulesMenuIconImageUrl.
+   * 
+   * @return the modulesMenuIconImageUrl.
+   */
+  protected String getModulesMenuIconImageUrl() {
+    return modulesMenuIconImageUrl;
+  }
+
+  
+  /**
+   * Sets the modulesMenuIconImageUrl.
+   * 
+   * @param modulesMenuIconImageUrl the modulesMenuIconImageUrl to set.
+   */
+  public void setModulesMenuIconImageUrl(String modulesMenuIconImageUrl) {
+    this.modulesMenuIconImageUrl = modulesMenuIconImageUrl;
   }
 }

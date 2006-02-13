@@ -50,6 +50,17 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   private List<IPropertyDescriptor>        tempPropertyBuffer;
 
   /**
+   * Constructs a new <code>BasicComponentDescriptor</code> instance.
+   * 
+   * @param name
+   *          the name of the descriptor which has to be the fully-qualified
+   *          class name of its contract.
+   */
+  public BasicComponentDescriptor(String name) {
+    setName(name);
+  }
+
+  /**
    * {@inheritDoc}
    */
   public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {

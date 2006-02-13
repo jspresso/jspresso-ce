@@ -140,6 +140,7 @@
     <property name="descriptionTranslator" ref="mockTranslator" />
     <property name="viewFactory" ref="viewFactory" />
     <property name="iconFactory" ref="iconFactory" />
+    <property name="modulesMenuIconImageUrl" value="classpath:images/modules-48x48.png" />
   </bean>
 
   <bean abstract="true" id="abstractBackController"
@@ -153,7 +154,7 @@
   -->
   <bean id="com.d2s.framework.model.entity.IEntity"
     class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
-    <property name="name" value="com.d2s.framework.model.entity.IEntity" />
+    <constructor-arg index="0" value="com.d2s.framework.model.entity.IEntity" />
     <property name="propertyDescriptors">
       <list>
         <bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">

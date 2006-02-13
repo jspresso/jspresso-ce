@@ -10,7 +10,7 @@
 	-->
 	<bean id="com.d2s.framework.sample.backend.domain.Traceable"
 		class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
-		<property name="name" value="com.d2s.framework.sample.backend.domain.Traceable" />
+		<constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Traceable" />
 		<property name="propertyDescriptors">
 			<list>
 				<bean class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor">
@@ -32,7 +32,7 @@
 	</bean>
 	<bean id="com.d2s.framework.sample.backend.domain.Nameable"
 		class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
-		<property name="name" value="com.d2s.framework.sample.backend.domain.Nameable" />
+		<constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Nameable" />
 		<property name="propertyDescriptors">
 			<list>
 				<bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
@@ -57,7 +57,7 @@
 	</bean>
 	<bean id="com.d2s.framework.sample.backend.domain.Describeable"
 		class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
-		<property name="name" value="com.d2s.framework.sample.backend.domain.Describeable" />
+		<constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Describeable" />
 		<property name="propertyDescriptors">
 			<list>
 				<bean class="com.d2s.framework.model.descriptor.basic.BasicTextPropertyDescriptor">
@@ -70,7 +70,7 @@
 
 	<bean id="com.d2s.framework.sample.backend.domain.City"
 		class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
-		<property name="name" value="com.d2s.framework.sample.backend.domain.City" />
+		<constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.City" />
 		<property name="ancestorDescriptors">
 			<list>
 				<ref local="com.d2s.framework.sample.backend.domain.Nameable" />
@@ -113,7 +113,7 @@
 
 	<bean id="com.d2s.framework.sample.backend.domain.Person"
 		class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
-		<property name="name" value="com.d2s.framework.sample.backend.domain.Person" />
+		<constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Person" />
 		<property name="ancestorDescriptors">
 			<list>
 				<ref local="com.d2s.framework.sample.backend.domain.Nameable" />
@@ -187,7 +187,7 @@
 
 	<bean id="com.d2s.framework.sample.backend.domain.Employee"
 		class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
-		<property name="name" value="com.d2s.framework.sample.backend.domain.Employee" />
+		<constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Employee" />
 		<property name="iconImageURL" value="classpath:images/icon3-48x48.png" />
 		<property name="ancestorDescriptors">
 			<list>
@@ -233,7 +233,7 @@
 
 	<bean id="com.d2s.framework.sample.backend.domain.Department"
 		class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
-		<property name="name" value="com.d2s.framework.sample.backend.domain.Department" />
+		<constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Department" />
 		<property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
 		<property name="ancestorDescriptors">
 			<list>
@@ -277,7 +277,7 @@
 
 	<bean id="com.d2s.framework.sample.backend.domain.Project"
 		class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
-		<property name="name" value="com.d2s.framework.sample.backend.domain.Project" />
+		<constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Project" />
 		<property name="iconImageURL" value="classpath:images/icon4-48x48.png" />
 		<property name="ancestorDescriptors">
 			<list>

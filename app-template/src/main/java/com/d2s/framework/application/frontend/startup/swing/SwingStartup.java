@@ -16,17 +16,7 @@ import com.d2s.framework.application.frontend.startup.AbstractStartup;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SwingStartup extends AbstractStartup {
-
-  /**
-   * Returns the default "swing-context" value.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getApplicationContextKey() {
-    return "swing-context";
-  }
+public abstract class SwingStartup extends AbstractStartup {
 
   /**
    * Returns the client context default locale.

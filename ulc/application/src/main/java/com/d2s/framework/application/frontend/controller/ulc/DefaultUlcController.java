@@ -59,16 +59,14 @@ public class DefaultUlcController extends
     if (moduleInternalFrames == null) {
       moduleInternalFrames = new HashMap<String, ULCInternalFrame>();
     }
-    ULCInternalFrame moduleInternalFrame = moduleInternalFrames
-        .get(moduleId);
+    ULCInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
     if (moduleInternalFrame == null) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      IView<ULCComponent> moduleView = createModuleView(
-          moduleId, moduleDescriptor);
+      IView<ULCComponent> moduleView = createModuleView(moduleId,
+          moduleDescriptor);
       moduleInternalFrame = createULCInternalFrame(moduleView);
       moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(),
-          IIconFactory.SMALL_ICON_SIZE));
+          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(),
@@ -136,11 +134,12 @@ public class DefaultUlcController extends
   private ULCMenu getModulesMenu() {
     ULCMenu modulesMenu = new ULCMenu(getLabelTranslator().getTranslation(
         "Modules", getLocale()));
+    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+        IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      ULCMenuItem moduleMenuItem = new ULCMenuItem(
-          new ModuleSelectionAction(moduleId,
-              moduleDescriptor));
+      ULCMenuItem moduleMenuItem = new ULCMenuItem(new ModuleSelectionAction(
+          moduleId, moduleDescriptor));
       modulesMenu.add(moduleMenuItem);
     }
     return modulesMenu;

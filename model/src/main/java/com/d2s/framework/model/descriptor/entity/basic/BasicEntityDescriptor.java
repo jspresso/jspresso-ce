@@ -18,5 +18,14 @@ import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 public class BasicEntityDescriptor extends BasicComponentDescriptor implements
     IEntityDescriptor {
 
-  // Empty impl as of now.
+  /**
+   * Constructs a new <code>BasicEntityDescriptor</code> instance.
+   * 
+   * @param name
+   *          the name of the descriptor which has to be the fully-qualified
+   *          class name of its contract.
+   */
+  public BasicEntityDescriptor(String name) {
+    super(name);
+  }
 }

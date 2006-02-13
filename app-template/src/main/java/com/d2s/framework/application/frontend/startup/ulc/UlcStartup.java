@@ -18,17 +18,7 @@ import com.ulcjava.base.application.IApplication;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class UlcStartup extends AbstractStartup implements IApplication {
-
-  /**
-   * Returns the default "ulc-context" value.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getApplicationContextKey() {
-    return "ulc-context";
-  }
+public abstract class UlcStartup extends AbstractStartup implements IApplication {
 
   /**
    * Returns the client context default locale.

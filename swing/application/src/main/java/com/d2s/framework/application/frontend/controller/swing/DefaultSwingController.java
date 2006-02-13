@@ -194,6 +194,8 @@ public class DefaultSwingController extends
   private JMenu getModulesMenu() {
     JMenu modulesMenu = new JMenu(getLabelTranslator().getTranslation(
         "Modules", getLocale()));
+    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+        IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       JMenuItem moduleMenuItem = new JMenuItem(
