@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.d2s.framework.binding.ChildConnectorSupport;
-import com.d2s.framework.binding.CollectionConnectorSupport;
+import com.d2s.framework.binding.CollectionConnectorHelper;
 import com.d2s.framework.binding.ConnectorBindingException;
 import com.d2s.framework.binding.ConnectorMap;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -40,7 +40,6 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
   private IConnectorMap              childConnectors;
   private Class                      elementClass;
   private IBeanConnectorFactory      beanConnectorFactory;
-  private CollectionConnectorSupport collectionConnectorSupport;
   private SelectionChangeSupport     connectorSelectionSupport;
   private ChildConnectorSupport      childConnectorSupport;
 
@@ -61,7 +60,6 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     this.beanConnectorFactory = beanConnectorFactory;
     childConnectors = new ConnectorMap(this);
     childConnectorSupport = new ChildConnectorSupport(this);
-    collectionConnectorSupport = new CollectionConnectorSupport();
     connectorSelectionSupport = new SelectionChangeSupport(this);
   }
 
@@ -80,7 +78,6 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    */
   public void addChildConnector(IValueConnector connector) {
     childConnectors.addConnector(connector.getId(), connector);
-    uncacheConnector(connector);
   }
 
   /**
@@ -92,7 +89,6 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
   protected void removeChildConnector(IValueConnector connector) {
     childConnectors.removeConnector(connector.getId());
     connector.setParentConnector(null);
-    cacheConnector(connector);
   }
 
   /**
@@ -150,20 +146,8 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
         writeChangeListener);
   }
 
-  private void cacheConnector(IValueConnector connector) {
-    collectionConnectorSupport.cacheConnector(connector);
-  }
-
-  private void uncacheConnector(IValueConnector connector) {
-    collectionConnectorSupport.uncacheConnector(connector);
-  }
-
-  private IValueConnector getCachedConnector(String connectorId) {
-    return collectionConnectorSupport.getCachedConnector(connectorId);
-  }
-
   private String computeConnectorId(int i) {
-    return collectionConnectorSupport.computeConnectorId(getId(), i);
+    return CollectionConnectorHelper.computeConnectorId(getId(), i);
   }
 
   /**
@@ -186,10 +170,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
         childConnectorsToRemove.remove(nextConnectorId);
         IValueConnector childConnector = getChildConnector(nextConnectorId);
         if (childConnector == null) {
-          childConnector = getCachedConnector(nextConnectorId);
-          if (childConnector == null) {
-            childConnector = createChildConnector(nextConnectorId);
-          }
+          childConnector = createChildConnector(nextConnectorId);
           addChildConnector(childConnector);
         }
         childConnector.setConnectorValue(nextCollectionElement);
@@ -240,7 +221,6 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     BeanCollectionPropertyConnector clonedConnector = (BeanCollectionPropertyConnector) super
         .clone(newConnectorId);
     clonedConnector.childConnectors = new ConnectorMap(clonedConnector);
-    clonedConnector.collectionConnectorSupport = new CollectionConnectorSupport();
     clonedConnector.childConnectorSupport = new ChildConnectorSupport(
         clonedConnector);
     clonedConnector.connectorSelectionSupport = new SelectionChangeSupport(

@@ -160,8 +160,12 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
                 new TreePath(rootConnector));
             return;
           }
-          if (connector instanceof ICollectionConnector) {
-            if (getTreePathForConnector(connector) != null) {
+          if (connector instanceof ICollectionConnector 
+              && connector.getConnectorValue() != null) {
+            // don't know why but this fixes a tree repaint bug
+            // when the root connector is assigned a null value.
+            TreePath connectorPath = getTreePathForConnector(connector);
+            if (connectorPath != null) {
               Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
               Collection<?> newCollection = (Collection<?>) evt.getNewValue();
               int oldCollectionSize = 0;
@@ -183,7 +187,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
                   childIndices[i - oldCollectionSize] = i;
                 }
                 fireTreeNodesInserted(ConnectorHierarchyTreeModel.this,
-                    getTreePathForConnector(connector).getPath(), childIndices,
+                    connectorPath.getPath(), childIndices,
                     insertedChildren);
               } else if (newCollectionSize < oldCollectionSize) {
                 int[] childIndices = new int[oldCollectionSize
@@ -191,12 +195,9 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
                 for (int i = newCollectionSize; i < oldCollectionSize; i++) {
                   childIndices[i - newCollectionSize] = i;
                 }
-                TreePath treePath = getTreePathForConnector(connector);
-                if (connector.getConnectorValue() != null) {
-                  // don't know why but this fixes a tree repaint bug
-                  // when the root connector is assigned a null value.
+                if (connectorPath != null) {
                   fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
-                      treePath.getPath(), childIndices,
+                      connectorPath.getPath(), childIndices,
                       ((CollectionConnectorValueChangeEvent) evt)
                           .getRemovedChildrenConnectors().toArray());
                 }
@@ -215,7 +216,10 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
                   && !(parentConnector instanceof ICollectionConnectorProvider)) {
                 parentConnector = parentConnector.getParentConnector();
               }
-              if (parentConnector != null) {
+              if (parentConnector != null
+                  && parentConnector.getConnectorValue() != null) {
+                // don't know why but this fixes a tree repaint bug
+                // when the root connector is assigned a null value.
                 TreePath connectorPath = getTreePathForConnector(parentConnector);
                 if (connectorPath != null) {
                   fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,

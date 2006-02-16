@@ -51,7 +51,7 @@ public class ConnectorValueChangeSupport {
       IConnectorValueChangeListener listener) {
     if (listener != null) {
       if (listeners == null) {
-        listeners = new LinkedHashSet<IConnectorValueChangeListener>();
+        listeners = new LinkedHashSet<IConnectorValueChangeListener>(8);
       }
       if (!listeners.contains(listener)) {
         listeners.add(listener);
@@ -122,7 +122,7 @@ public class ConnectorValueChangeSupport {
    */
   public void addInhibitedListener(IConnectorValueChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<IConnectorValueChangeListener>();
+      inhibitedListeners = new HashSet<IConnectorValueChangeListener>(4);
     }
     inhibitedListeners.add(listener);
   }

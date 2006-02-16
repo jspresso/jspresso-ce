@@ -71,7 +71,7 @@ public class ConnectorMap implements IConnectorMap {
    */
   private Map<String, IValueConnector> getStorageMap() {
     if (storageMap == null) {
-      storageMap = new LinkedHashMap<String, IValueConnector>();
+      storageMap = new LinkedHashMap<String, IValueConnector>(8);
     }
     return storageMap;
   }

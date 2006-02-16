@@ -29,7 +29,6 @@ public abstract class AbstractCollectionConnector extends
     AbstractCompositeValueConnector implements ICollectionConnector,
     IConnectorSelector {
 
-  private CollectionConnectorSupport collectionConnectorSupport;
   private IMvcBinder                 mvcBinder;
   private ICompositeValueConnector   childConnectorPrototype;
   private SelectionChangeSupport     connectorSelectionSupport;
@@ -55,7 +54,6 @@ public abstract class AbstractCollectionConnector extends
     super(id);
     this.mvcBinder = binder;
     this.childConnectorPrototype = childConnectorPrototype;
-    collectionConnectorSupport = new CollectionConnectorSupport();
     connectorSelectionSupport = new SelectionChangeSupport(this);
     this.elementClass = elementClass;
   }
@@ -97,31 +95,6 @@ public abstract class AbstractCollectionConnector extends
   @Override
   public void addChildConnector(IValueConnector connector) {
     super.addChildConnector(connector);
-    uncacheConnector(connector);
-  }
-
-  /**
-   * After having called the super implementation, adds the child connector to
-   * the cache for later use.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void removeChildConnector(IValueConnector connector) {
-    super.removeChildConnector(connector);
-    cacheConnector(connector);
-  }
-
-  private void uncacheConnector(IValueConnector connector) {
-    collectionConnectorSupport.uncacheConnector(connector);
-  }
-
-  private void cacheConnector(IValueConnector connector) {
-    collectionConnectorSupport.cacheConnector(connector);
-  }
-
-  private IValueConnector getCachedConnector(String connectorId) {
-    return collectionConnectorSupport.getCachedConnector(connectorId);
   }
 
   /**
@@ -142,25 +115,23 @@ public abstract class AbstractCollectionConnector extends
             .getChildConnector(nextModelConnectorId);
         IValueConnector childConnector = getChildConnector(nextModelConnectorId);
         if (childConnector == null) {
-          childConnector = getCachedConnector(nextModelConnectorId);
-          if (childConnector == null) {
-            childConnector = createChildConnector(computeConnectorId(i));
-            mvcBinder.bind(childConnector, childModelConnector);
-          }
+          childConnector = createChildConnector(computeConnectorId(i));
+          mvcBinder.bind(childConnector, childModelConnector);
           addChildConnector(childConnector);
         }
         i++;
       }
     }
     for (String nextModelConnectorId : childConnectorsToRemove) {
-      IValueConnector removedConnector = getChildConnector(nextModelConnectorId);
-      removedChildrenConnectors.add(removedConnector);
-      removeChildConnector(removedConnector);
+      IValueConnector connectorToRemove = getChildConnector(nextModelConnectorId);
+      mvcBinder.bind(connectorToRemove, null);
+      removedChildrenConnectors.add(connectorToRemove);
+      removeChildConnector(connectorToRemove);
     }
   }
 
   private String computeConnectorId(int i) {
-    return collectionConnectorSupport.computeConnectorId(getId(), i);
+    return CollectionConnectorHelper.computeConnectorId(getId(), i);
   }
 
   /**
@@ -179,7 +150,6 @@ public abstract class AbstractCollectionConnector extends
   public AbstractCollectionConnector clone(String newConnectorId) {
     AbstractCollectionConnector clonedConnector = (AbstractCollectionConnector) super
         .clone(newConnectorId);
-    clonedConnector.collectionConnectorSupport = new CollectionConnectorSupport();
     clonedConnector.connectorSelectionSupport = new SelectionChangeSupport(
         clonedConnector);
     clonedConnector.removedChildrenConnectors = null;
@@ -296,30 +266,6 @@ public abstract class AbstractCollectionConnector extends
    */
   public List<IValueConnector> getRemovedChildrenConnectors() {
     return removedChildrenConnectors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void connectorModelChange(IValueConnector oldModelConnector,
-      IValueConnector newModelConnector) {
-    if (oldModelConnector != newModelConnector) {
-      // don't bind to model connector selections.
-      // if (getModelConnector() != null) {
-      // removeSelectionChangeListener((ICollectionConnector)
-      // getModelConnector());
-      // ((ICollectionConnector) getModelConnector())
-      // .removeSelectionChangeListener(this);
-      // }
-      collectionConnectorSupport.clearConnectorCache(mvcBinder);
-      // don't bind to model connector selections.
-      // if (getModelConnector() != null) {
-      // addSelectionChangeListener((ICollectionConnector) getModelConnector());
-      // ((ICollectionConnector) getModelConnector())
-      // .addSelectionChangeListener(this);
-      // }
-    }
   }
 
   /**

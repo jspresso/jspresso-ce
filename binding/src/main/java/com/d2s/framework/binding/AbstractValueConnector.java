@@ -297,7 +297,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public void addReadabilityGate(IGate gate) {
     if (readabilityGates == null) {
-      readabilityGates = new HashSet<IGate>();
+      readabilityGates = new HashSet<IGate>(4);
     }
     readabilityGates.add(gate);
     updateState();
@@ -308,7 +308,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    */
   public void addWritabilityGate(IGate gate) {
     if (writabilityGates == null) {
-      writabilityGates = new HashSet<IGate>();
+      writabilityGates = new HashSet<IGate>(4);
     }
     writabilityGates.add(gate);
     updateState();
