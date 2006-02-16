@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.backend.session.hibernate;
 
+import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * Basic implementation of an application session aware of hibernate when
@@ -68,8 +70,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   protected Collection<IEntity> wrapUnitOfWorkEntityCollection(IEntity entity,
       Collection<IEntity> transientCollection,
       Collection<IEntity> snapshotCollection, String role) {
-    if (transientCollection instanceof Set) {
-      if (entity.isPersistent()) {
+    if (entity.isPersistent()) {
+      if (transientCollection instanceof Set) {
         PersistentSet persistentSet = new PersistentSet(null,
             (Set<?>) transientCollection);
         persistentSet.setOwner(entity);
@@ -81,28 +83,27 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         for (Object snapshotCollectionElement : snapshotCollection) {
           snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
         }
-        persistentSet.setSnapshot(entity.getId(), entity.getContract()
-            .getName()
-            + "." + role, snapshot);
+        persistentSet.setSnapshot(entity.getId(), getHibernateRoleName(entity
+            .getContract(), role), snapshot);
         return persistentSet;
+      } else if (transientCollection instanceof List) {
+        PersistentList persistentList = new PersistentList(null,
+            (List<?>) transientCollection);
+        persistentList.setOwner(entity);
+        ArrayList<Object> snapshot = new ArrayList<Object>();
+        if (snapshotCollection == null) {
+          persistentList.clearDirty();
+          snapshotCollection = transientCollection;
+        }
+        for (Object snapshotCollectionElement : snapshotCollection) {
+          snapshot.add(snapshotCollectionElement);
+        }
+        persistentList.setSnapshot(entity.getId(), getHibernateRoleName(entity
+            .getContract(), role), snapshot);
+        return persistentList;
       }
-    } else if (transientCollection instanceof List) {
-      PersistentList persistentList = new PersistentList(null,
-          (List<?>) transientCollection);
-      persistentList.setOwner(entity);
-      ArrayList<Object> snapshot = new ArrayList<Object>();
-      if (snapshotCollection == null) {
-        persistentList.clearDirty();
-        snapshotCollection = transientCollection;
-      }
-      for (Object snapshotCollectionElement : snapshotCollection) {
-        snapshot.add(snapshotCollectionElement);
-      }
-      persistentList.setSnapshot(entity.getId(), entity.getContract().getName()
-          + "." + role, snapshot);
-      return persistentList;
     }
-    return transientCollection;
+    return super.wrapUnitOfWorkEntityCollection(entity, transientCollection, snapshotCollection, role);
   }
 
   /**
@@ -113,6 +114,14 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    */
   public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
     this.hibernateTemplate = hibernateTemplate;
+  }
+
+  private static String getHibernateRoleName(Class<?> entityContract,
+      String role) {
+    PropertyDescriptor roleDescriptor = PropertyHelper.getPropertyDescriptor(
+        entityContract, role);
+    return roleDescriptor.getReadMethod().getDeclaringClass().getName() + "."
+        + role;
   }
 
 }
