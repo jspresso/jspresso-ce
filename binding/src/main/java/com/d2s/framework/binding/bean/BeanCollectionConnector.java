@@ -32,7 +32,8 @@ public class BeanCollectionConnector extends BeanCollectionPropertyConnector {
    */
   public BeanCollectionConnector(String id, Class elementClass,
       IBeanConnectorFactory beanConnectorFactory) {
-    super(id, elementClass, beanConnectorFactory);
+    super(id, beanConnectorFactory);
+    setElementClass(elementClass);
   }
 
   /**

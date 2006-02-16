@@ -36,8 +36,8 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
    *          connectors.
    */
   public BasicCollectionConnector(String id, IMvcBinder binder,
-      ICompositeValueConnector childConnectorPrototype) {
-    super(id, binder, childConnectorPrototype);
+      ICompositeValueConnector childConnectorPrototype, Class elementClass) {
+    super(id, binder, childConnectorPrototype, elementClass);
   }
 
   /**

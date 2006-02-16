@@ -82,4 +82,14 @@ public class ConnectorMap implements IConnectorMap {
   public boolean hasConnectors() {
     return storageMap != null && !storageMap.isEmpty();
   }
+
+  
+  /**
+   * Gets the parentConnector.
+   * 
+   * @return the parentConnector.
+   */
+  protected ICompositeValueConnector getParentConnector() {
+    return parentConnector;
+  }
 }

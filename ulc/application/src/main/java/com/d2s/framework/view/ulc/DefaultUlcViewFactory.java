@@ -741,7 +741,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
         .setCollectionConnectorProviders(subtreeConnectors);
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
+            mvcBinder, nodeGroupPrototypeConnector, nodeGroupModelDescriptor
+                .getCollectionDescriptor().getElementDescriptor()
+                .getComponentContract());
     return nodeGroupCollectionConnector;
   }
 
@@ -765,7 +767,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     }
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector);
+            mvcBinder, nodeGroupPrototypeConnector, nodeGroupModelDescriptor
+                .getCollectionDescriptor().getElementDescriptor()
+                .getComponentContract());
     return nodeGroupCollectionConnector;
   }
 
@@ -899,7 +903,8 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
             viewDescriptor.getRenderedProperty());
     ICollectionConnector connector = connectorFactory
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
-            rowConnectorPrototype);
+            rowConnectorPrototype, modelDescriptor.getCollectionDescriptor()
+                .getElementDescriptor().getComponentContract());
     ULCList viewComponent = createULCList();
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
@@ -930,7 +935,8 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
                 .getToStringProperty());
     ICollectionConnector connector = connectorFactory
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
-            rowConnectorPrototype);
+            rowConnectorPrototype, modelDescriptor.getCollectionDescriptor()
+                .getElementDescriptor().getComponentContract());
     ULCTable viewComponent = createULCTable();
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);

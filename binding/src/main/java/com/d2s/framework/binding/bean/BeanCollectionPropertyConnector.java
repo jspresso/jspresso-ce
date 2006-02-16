@@ -12,6 +12,7 @@ import java.util.List;
 
 import com.d2s.framework.binding.ChildConnectorSupport;
 import com.d2s.framework.binding.CollectionConnectorSupport;
+import com.d2s.framework.binding.ConnectorBindingException;
 import com.d2s.framework.binding.ConnectorMap;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.IConnectorMap;
@@ -45,20 +46,18 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
 
   /**
    * Constructs a new bean property connector on a bean collection property.
+   * This constructor does not specify the element class of this collection
+   * connector. It must be setted afterwards using the apropriate setter.
    * 
    * @param property
    *          the property mapped by this connector. This property is also the
    *          connector id.
-   * @param elementClass
-   *          the class of the elements (or superclass or interface) contained
-   *          in this collection.
    * @param beanConnectorFactory
    *          the factory used to create the collection bean connectors.
    */
-  public BeanCollectionPropertyConnector(String property, Class elementClass,
+  public BeanCollectionPropertyConnector(String property,
       IBeanConnectorFactory beanConnectorFactory) {
     super(property, beanConnectorFactory.getAccessorFactory());
-    this.elementClass = elementClass;
     this.beanConnectorFactory = beanConnectorFactory;
     childConnectors = new ConnectorMap(this);
     childConnectorSupport = new ChildConnectorSupport(this);
@@ -141,6 +140,11 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
       IConnectorValueChangeListener modelConnectorListener,
       PropertyChangeListener readChangeListener,
       PropertyChangeListener writeChangeListener) {
+    if (elementClass == null
+        && modelConnectorListener instanceof ICollectionConnector) {
+      setElementClass(((ICollectionConnector) modelConnectorListener)
+          .getElementClass());
+    }
     updateChildConnectors((Collection) getConnecteeValue());
     super.boundAsModel(modelConnectorListener, readChangeListener,
         writeChangeListener);
@@ -175,7 +179,8 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
       int i = 0;
       for (Object nextCollectionElement : beanCollection) {
         if (elementClass == null) {
-          elementClass = nextCollectionElement.getClass();
+          throw new ConnectorBindingException(
+              "elementClass must be set on BeanCollectionPropertyConnector before it can be used.");
         }
         String nextConnectorId = computeConnectorId(i);
         childConnectorsToRemove.remove(nextConnectorId);
@@ -320,5 +325,26 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    */
   public List<ICollectionConnector> getCollectionConnectors() {
     return Collections.singletonList((ICollectionConnector) this);
+  }
+
+  /**
+   * Sets the elementClass.
+   * 
+   * @param elementClass
+   *          the class of the elements (or superclass or interface) contained
+   *          in this collection.
+   */
+  public void setElementClass(Class elementClass) {
+    this.elementClass = elementClass;
+  }
+
+  
+  /**
+   * Gets the elementClass.
+   * 
+   * @return the elementClass.
+   */
+  public Class getElementClass() {
+    return elementClass;
   }
 }

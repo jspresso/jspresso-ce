@@ -65,10 +65,7 @@ public class DefaultBeanConnectorFactory implements IBeanConnectorFactory {
       return new BeanRefPropertyConnector(property, propertyType, this);
     }
     if (Collection.class.isAssignableFrom(propertyType)) {
-      // FIXME elementClass should be determined.
-      Class elementClass = null;
-      // propertyType.get
-      return new BeanCollectionPropertyConnector(property, elementClass, this);
+      return new BeanCollectionPropertyConnector(property, this);
     }
     return new BeanSimplePropertyConnector(property, accessorFactory);
   }

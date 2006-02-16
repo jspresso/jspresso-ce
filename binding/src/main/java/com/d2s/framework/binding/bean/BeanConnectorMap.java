@@ -4,7 +4,6 @@
 package com.d2s.framework.binding.bean;
 
 import com.d2s.framework.binding.ConnectorMap;
-import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 
 /**
@@ -19,23 +18,19 @@ import com.d2s.framework.binding.IValueConnector;
  */
 public class BeanConnectorMap extends ConnectorMap {
 
-  private Class                 beanClass;
   private IBeanConnectorFactory beanConnectorFactory;
 
   /**
    * Constructs a new instance based on the bean class passed as parameter.
    * 
    * @param parentConnector
-   *          the composite connector holding the connector map.
-   * @param beanClass
-   *          the class of the connected bean.
+   *          the bean connector holding the connector map.
    * @param beanConnectorFactory
    *          the factory used to create the bean connectors.
    */
-  BeanConnectorMap(ICompositeValueConnector parentConnector, Class beanClass,
+  BeanConnectorMap(BeanRefPropertyConnector parentConnector,
       IBeanConnectorFactory beanConnectorFactory) {
     super(parentConnector);
-    this.beanClass = beanClass;
     this.beanConnectorFactory = beanConnectorFactory;
   }
 
@@ -68,9 +63,17 @@ public class BeanConnectorMap extends ConnectorMap {
         .getConnector(connectorId);
     if (connector == null) {
       connector = beanConnectorFactory.createBeanPropertyConnector(connectorId,
-          beanClass);
+          getParentConnector().getBeanClass());
       super.addConnector(connector.getId(), connector);
     }
     return connector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected BeanRefPropertyConnector getParentConnector() {
+    return (BeanRefPropertyConnector) super.getParentConnector();
   }
 }

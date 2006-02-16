@@ -40,7 +40,7 @@ public interface IConfigurableConnectorFactory {
    * @return the created connector.
    */
   ICollectionConnector createCollectionConnector(String id, IMvcBinder binder,
-      ICompositeValueConnector childConnectorPrototype);
+      ICompositeValueConnector childConnectorPrototype, Class elementClass);
 
   /**
    * Creates a <code>IConfigurableCollectionConnectorProvider</code>.

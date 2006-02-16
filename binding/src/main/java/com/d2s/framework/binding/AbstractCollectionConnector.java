@@ -34,6 +34,7 @@ public abstract class AbstractCollectionConnector extends
   private ICompositeValueConnector   childConnectorPrototype;
   private SelectionChangeSupport     connectorSelectionSupport;
   private List<IValueConnector>      removedChildrenConnectors;
+  private Class                      elementClass;
 
   /**
    * Creates a new <code>AbstractCollectionConnector</code>.
@@ -46,14 +47,17 @@ public abstract class AbstractCollectionConnector extends
    * @param childConnectorPrototype
    *          the connector prototype used to create new instances of child
    *          connectors.
+   * @param elementClass
+   *          the class of the elements held in this collection connector.
    */
   public AbstractCollectionConnector(String id, IMvcBinder binder,
-      ICompositeValueConnector childConnectorPrototype) {
+      ICompositeValueConnector childConnectorPrototype, Class elementClass) {
     super(id);
     this.mvcBinder = binder;
     this.childConnectorPrototype = childConnectorPrototype;
     collectionConnectorSupport = new CollectionConnectorSupport();
     connectorSelectionSupport = new SelectionChangeSupport(this);
+    this.elementClass = elementClass;
   }
 
   /**
@@ -355,4 +359,13 @@ public abstract class AbstractCollectionConnector extends
     implSetTracksChildrenSelection(tracksChildrenSelection);
   }
 
+  
+  /**
+   * Gets the elementClass.
+   * 
+   * @return the elementClass.
+   */
+  public Class getElementClass() {
+    return elementClass;
+  }
 }

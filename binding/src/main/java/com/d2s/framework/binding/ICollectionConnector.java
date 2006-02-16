@@ -52,4 +52,6 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    * @return the connector's clone.
    */
   ICollectionConnector clone();
+  
+  Class getElementClass();
 }
