@@ -185,9 +185,13 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
             for (int i = newCollectionSize; i < oldCollectionSize; i++) {
               childIndices[i - newCollectionSize] = i;
             }
-            nodesWereRemoved(getTreePathForConnector(connector), childIndices,
-                ((CollectionConnectorValueChangeEvent) evt)
-                    .getRemovedChildrenConnectors().toArray());
+            if (connector.getConnectorValue() != null) {
+              // don't know why but this fixes a tree repaint bug
+              // when the root connector is assigned a null value.
+              nodesWereRemoved(getTreePathForConnector(connector),
+                  childIndices, ((CollectionConnectorValueChangeEvent) evt)
+                      .getRemovedChildrenConnectors().toArray());
+            }
           }
         }
       } else {

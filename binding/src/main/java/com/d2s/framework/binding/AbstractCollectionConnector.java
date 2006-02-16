@@ -178,6 +178,7 @@ public abstract class AbstractCollectionConnector extends
     clonedConnector.collectionConnectorSupport = new CollectionConnectorSupport();
     clonedConnector.connectorSelectionSupport = new SelectionChangeSupport(
         clonedConnector);
+    clonedConnector.removedChildrenConnectors = null;
     return clonedConnector;
   }
 

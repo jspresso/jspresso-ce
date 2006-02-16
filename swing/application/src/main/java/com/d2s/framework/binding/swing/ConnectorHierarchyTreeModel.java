@@ -192,10 +192,14 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
                   childIndices[i - newCollectionSize] = i;
                 }
                 TreePath treePath = getTreePathForConnector(connector);
-                fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this, treePath
-                    .getPath(), childIndices,
-                    ((CollectionConnectorValueChangeEvent) evt)
-                        .getRemovedChildrenConnectors().toArray());
+                if (connector.getConnectorValue() != null) {
+                  // don't know why but this fixes a tree repaint bug
+                  // when the root connector is assigned a null value.
+                  fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
+                      treePath.getPath(), childIndices,
+                      ((CollectionConnectorValueChangeEvent) evt)
+                          .getRemovedChildrenConnectors().toArray());
+                }
               }
             }
           } else {
