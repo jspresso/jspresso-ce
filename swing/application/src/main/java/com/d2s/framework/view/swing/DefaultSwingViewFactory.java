@@ -376,7 +376,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       }
     } else {
       ICompositeValueConnector connector = connectorFactory
-          .createCompositeValueConnector(viewDescriptor.getName(), null);
+          .createCompositeValueConnector(BeanRefPropertyConnector.THIS_PROPERTY, null);
       view.setConnector(connector);
       for (IView<JComponent> childView : view.getChildren()) {
         childView.setParent(view);
@@ -1335,7 +1335,14 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       switch (viewDescriptor.getLabelsPosition()) {
         case IComponentViewDescriptor.ASIDE:
           constraints.insets = new Insets(5, 5, 5, 5);
-          constraints.anchor = GridBagConstraints.EAST;
+          if (propertyView.getPeer() instanceof JTextArea
+              || propertyView.getPeer() instanceof JList
+              || propertyView.getPeer() instanceof JScrollPane
+              || propertyView.getPeer() instanceof JTable) {
+            constraints.anchor = GridBagConstraints.NORTHEAST;
+          } else {
+            constraints.anchor = GridBagConstraints.EAST;
+          }
           constraints.gridx = currentX * 2;
           constraints.gridy = currentY;
           break;

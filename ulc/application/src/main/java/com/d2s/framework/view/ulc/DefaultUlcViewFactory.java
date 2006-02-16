@@ -346,7 +346,8 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       }
     } else {
       ICompositeValueConnector connector = connectorFactory
-          .createCompositeValueConnector(viewDescriptor.getName(), null);
+          .createCompositeValueConnector(
+              BeanRefPropertyConnector.THIS_PROPERTY, null);
       view.setConnector(connector);
       for (IView<ULCComponent> childView : view.getChildren()) {
         childView.setParent(view);
@@ -1271,7 +1272,14 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       switch (viewDescriptor.getLabelsPosition()) {
         case IComponentViewDescriptor.ASIDE:
           constraints.setInsets(new Insets(5, 5, 5, 5));
-          constraints.setAnchor(GridBagConstraints.EAST);
+          if (propertyView.getPeer() instanceof ULCTextArea
+              || propertyView.getPeer() instanceof ULCList
+              || propertyView.getPeer() instanceof ULCScrollPane
+              || propertyView.getPeer() instanceof ULCTable) {
+            constraints.setAnchor(GridBagConstraints.NORTHEAST);
+          } else {
+            constraints.setAnchor(GridBagConstraints.EAST);
+          }
           constraints.setGridX(currentX * 2);
           constraints.setGridY(currentY);
           break;
