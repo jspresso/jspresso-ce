@@ -66,7 +66,6 @@ public interface Department extends
    * @hibernate.set
    *           cascade = "persist,merge,save-update,lock,refresh,evict,replicate"
    *           inverse = "true"
-   *           order-by="NAME"
    * @hibernate.key
    *           column = "DEPARTMENT_ID"
    * @hibernate.one-to-many
@@ -105,7 +104,6 @@ public interface Department extends
    * @hibernate.set
    *           cascade = "persist,merge,save-update,lock,refresh,evict,replicate"
    *           inverse = "true"
-   *           order-by="NAME"
    * @hibernate.key
    *           column = "DEPARTMENT_ID"
    * @hibernate.one-to-many

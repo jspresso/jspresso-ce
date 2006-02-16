@@ -52,6 +52,12 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    * @return the connector's clone.
    */
   ICollectionConnector clone();
-  
+
+  /**
+   * Gets the type (or the super-type) of the elements contained in the
+   * collection.
+   * 
+   * @return the collection element type.
+   */
   Class getElementClass();
 }

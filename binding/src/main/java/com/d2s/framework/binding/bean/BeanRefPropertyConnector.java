@@ -61,8 +61,7 @@ public class BeanRefPropertyConnector extends BeanPropertyConnector implements
     this.beanClass = beanClass;
     this.beanConnectorFactory = beanConnectorFactory;
     beanChangeSupport = new BeanChangeSupport(this);
-    childConnectors = new BeanConnectorMap(this,
-        beanConnectorFactory);
+    childConnectors = new BeanConnectorMap(this, beanConnectorFactory);
     childConnectorSupport = new ChildConnectorSupport(this);
   }
 
@@ -142,6 +141,9 @@ public class BeanRefPropertyConnector extends BeanPropertyConnector implements
    */
   @Override
   public void beanChange(BeanChangeEvent evt) {
+    if (evt.getNewValue() != null) {
+      beanClass = evt.getNewValue().getClass();
+    }
     // preserve the old value before it gets changed.
     Object oldValue = getOldConnectorValue();
     // handle the change normally
@@ -189,7 +191,8 @@ public class BeanRefPropertyConnector extends BeanPropertyConnector implements
     BeanRefPropertyConnector clonedConnector = (BeanRefPropertyConnector) super
         .clone(newConnectorId);
     clonedConnector.beanChangeSupport = new BeanChangeSupport(clonedConnector);
-    clonedConnector.childConnectors = new BeanConnectorMap(clonedConnector, beanConnectorFactory);
+    clonedConnector.childConnectors = new BeanConnectorMap(clonedConnector,
+        beanConnectorFactory);
     clonedConnector.childConnectorSupport = new ChildConnectorSupport(
         clonedConnector);
     return clonedConnector;
@@ -217,4 +220,5 @@ public class BeanRefPropertyConnector extends BeanPropertyConnector implements
   public int getChildConnectorCount() {
     return getChildConnectorKeys().size();
   }
+
 }

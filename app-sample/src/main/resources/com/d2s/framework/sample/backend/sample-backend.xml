@@ -42,12 +42,14 @@
 				</bean>
 			</list>
 		</property>
+    <!--
 		<property name="orderingProperties">
 			<list>
 				<value>name</value>
 			</list>
 		</property>
-		<property name="serviceDelegates">
+    -->
+ 		<property name="serviceDelegates">
 			<map>
 				<entry key="com.d2s.framework.sample.backend.domain.NameableService">
 					<bean class="com.d2s.framework.sample.backend.domain.NameableServiceImpl" />
