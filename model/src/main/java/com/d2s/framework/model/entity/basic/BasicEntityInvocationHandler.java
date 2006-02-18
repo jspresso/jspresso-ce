@@ -14,6 +14,7 @@ import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -372,9 +373,9 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           }
         } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
           // It's a 'many' relation end
-          Collection<Object> oldPropertyElementsToRemove = new HashSet<Object>();
-          Collection<Object> newPropertyElementsToAdd = new HashSet<Object>();
-          Collection<Object> propertyElementsToKeep = new HashSet<Object>();
+          Collection<Object> oldPropertyElementsToRemove = new LinkedHashSet<Object>();
+          Collection<Object> newPropertyElementsToAdd = new LinkedHashSet<Object>();
+          Collection<Object> propertyElementsToKeep = new LinkedHashSet<Object>();
           if (oldProperty != null) {
             oldPropertyElementsToRemove.addAll((Collection<?>) oldProperty);
             propertyElementsToKeep.addAll((Collection<?>) oldProperty);
@@ -396,6 +397,10 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           }
           for (Object element : newPropertyElementsToAdd) {
             propertyAccessor.addToValue(proxy, element);
+          }
+          // if collection is a list, order matters !
+          if(newProperty instanceof List) {
+            
           }
         }
       } catch (IllegalAccessException ex) {
