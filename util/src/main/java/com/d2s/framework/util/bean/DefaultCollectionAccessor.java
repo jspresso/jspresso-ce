@@ -66,8 +66,24 @@ public class DefaultCollectionAccessor extends DefaultPropertyAccessor
     removerMethod.invoke(target, new Object[] {value});
   }
 
-  private String capitalizeFirst(String input) {
+  /**
+   * Capitalizes the first caracter of a string.
+   * 
+   * @param input
+   *          the string to capitalize the first caracter.
+   * @return the transformed string.
+   */
+  protected String capitalizeFirst(String input) {
     return Character.toUpperCase(input.charAt(0)) + input.substring(1);
+  }
+
+  /**
+   * Gets the elementClass.
+   * 
+   * @return the elementClass.
+   */
+  protected Class getElementClass() {
+    return elementClass;
   }
 
 }

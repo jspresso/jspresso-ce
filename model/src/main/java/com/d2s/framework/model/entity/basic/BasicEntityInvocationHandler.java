@@ -182,9 +182,15 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
                   setProperty(proxy, propertyDescriptor, args[0]);
                   return null;
                 case AccessorInfo.ADDER:
-                  addToProperty(proxy,
-                      (ICollectionPropertyDescriptor) propertyDescriptor,
-                      args[0]);
+                  if (args.length == 2) {
+                    addToProperty(proxy,
+                        (ICollectionPropertyDescriptor) propertyDescriptor,
+                        ((Integer) args[0]).intValue(), args[1]);
+                  } else {
+                    addToProperty(proxy,
+                        (ICollectionPropertyDescriptor) propertyDescriptor,
+                        args[0]);
+                  }
                   return null;
                 case AccessorInfo.REMOVER:
                   removeFromProperty(proxy,
@@ -310,6 +316,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     return property;
   }
 
+  @SuppressWarnings("unchecked")
   private void setProperty(Object proxy,
       IPropertyDescriptor propertyDescriptor, Object newProperty)
       throws IntegrityException {
@@ -376,6 +383,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           Collection<Object> oldPropertyElementsToRemove = new LinkedHashSet<Object>();
           Collection<Object> newPropertyElementsToAdd = new LinkedHashSet<Object>();
           Collection<Object> propertyElementsToKeep = new LinkedHashSet<Object>();
+
           if (oldProperty != null) {
             oldPropertyElementsToRemove.addAll((Collection<?>) oldProperty);
             propertyElementsToKeep.addAll((Collection<?>) oldProperty);
@@ -398,10 +406,6 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           for (Object element : newPropertyElementsToAdd) {
             propertyAccessor.addToValue(proxy, element);
           }
-          // if collection is a list, order matters !
-          if(newProperty instanceof List) {
-            
-          }
         }
       } catch (IllegalAccessException ex) {
         throw new EntityException(ex);
@@ -420,6 +424,13 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   @SuppressWarnings("unchecked")
   private void addToProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor, Object value)
+      throws IntegrityException {
+    addToProperty(proxy, propertyDescriptor, -1, value);
+  }
+
+  @SuppressWarnings("unchecked")
+  private void addToProperty(Object proxy,
+      ICollectionPropertyDescriptor propertyDescriptor, int index, Object value)
       throws IntegrityException {
     String propertyName = propertyDescriptor.getName();
     try {
@@ -446,7 +457,15 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       }
       Collection oldCollectionSnapshot = CollectionHelper
           .cloneCollection((Collection<?>) collectionProperty);
-      if (collectionProperty.add(value)) {
+      boolean inserted = false;
+      if (collectionProperty instanceof List && index > 0
+          && index < collectionProperty.size()) {
+        ((List) collectionProperty).add(index, value);
+        inserted = true;
+      } else {
+        inserted = collectionProperty.add(value);
+      }
+      if (inserted) {
         firePropertyChange(propertyName, oldCollectionSnapshot,
             collectionProperty);
         postprocessAdder(proxy, propertyName, collectionProperty, value);

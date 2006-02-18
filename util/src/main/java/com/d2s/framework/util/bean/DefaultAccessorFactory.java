@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.util.bean;
 
+import java.util.List;
+
 /**
  * This is the default implementation of the accessor factory.
  * <p>
@@ -31,6 +33,10 @@ public class DefaultAccessorFactory implements IAccessorFactory {
    */
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
       Class beanClass, Class elementClass) {
+    if (List.class.isAssignableFrom(PropertyHelper.getPropertyType(beanClass,
+        property))) {
+      return new DefaultListAccessor(property, beanClass, elementClass);
+    }
     return new DefaultCollectionAccessor(property, beanClass, elementClass);
   }
 }
