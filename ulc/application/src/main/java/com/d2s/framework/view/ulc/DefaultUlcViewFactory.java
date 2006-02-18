@@ -494,8 +494,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       default:
         break;
     }
-    viewComponent.setContinuousLayout(true);
-    viewComponent.setOneTouchExpandable(true);
 
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
       IView<ULCComponent> leftTopView = createView(viewDescriptor
@@ -1791,7 +1789,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
           .getNodeGroupDescriptor();
       modelDescriptor = viewDescriptor.getModelDescriptor();
       actionMap = viewDescriptor.getActions();
-      if (!(viewConnector instanceof ICollectionConnectorProvider)) {
+      if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }
     }
@@ -2113,7 +2111,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    * @return the created text field.
    */
   protected ULCTextArea createULCTextArea() {
-    return new ULCTextArea();
+    ULCTextArea textArea = new ULCTextArea();
+    textArea.setDragEnabled(true);
+    return textArea;
   }
 
   /**
@@ -2181,7 +2181,10 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    * @return the created split pane.
    */
   protected ULCSplitPane createULCSplitPane() {
-    return new ULCSplitPane();
+    ULCSplitPane splitPane = new ULCSplitPane();
+    splitPane.setContinuousLayout(true);
+    splitPane.setOneTouchExpandable(true);
+    return splitPane;
   }
 
   /**
@@ -2190,7 +2193,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    * @return the created tree.
    */
   protected ULCTree createULCTree() {
-    return new ULCTree();
+    ULCTree tree = new ULCTree();
+    tree.setDragEnabled(true);
+    return tree;
   }
 
   /**
@@ -2199,7 +2204,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    * @return the created table.
    */
   protected ULCTable createULCTable() {
-    return new com.d2s.framework.gui.ulc.components.server.ULCTable();
+    ULCTable table = new com.d2s.framework.gui.ulc.components.server.ULCTable();
+    table.setDragEnabled(true);
+    return table;
   }
 
   /**
@@ -2208,7 +2215,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    * @return the created list.
    */
   protected ULCList createULCList() {
-    return new ULCList();
+    ULCList list = new ULCList();
+    list.setDragEnabled(true);
+    return list;
   }
 
   /**

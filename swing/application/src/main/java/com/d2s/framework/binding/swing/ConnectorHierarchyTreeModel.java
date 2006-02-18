@@ -160,7 +160,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
                 new TreePath(rootConnector));
             return;
           }
-          if (connector instanceof ICollectionConnector 
+          if (connector instanceof ICollectionConnector
               && connector.getConnectorValue() != null) {
             // don't know why but this fixes a tree repaint bug
             // when the root connector is assigned a null value.
@@ -187,8 +187,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
                   childIndices[i - oldCollectionSize] = i;
                 }
                 fireTreeNodesInserted(ConnectorHierarchyTreeModel.this,
-                    connectorPath.getPath(), childIndices,
-                    insertedChildren);
+                    connectorPath.getPath(), childIndices, insertedChildren);
               } else if (newCollectionSize < oldCollectionSize) {
                 int[] childIndices = new int[oldCollectionSize
                     - newCollectionSize];
@@ -210,7 +209,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
             if (connector == rootConnector) {
               fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
                   getTreePathForConnector(connector).getPath(), null, null);
-            } else {
+            } else if (connector.getConnectorValue() != null) {
               IValueConnector parentConnector = connector.getParentConnector();
               while (parentConnector != null
                   && !(parentConnector instanceof ICollectionConnectorProvider)) {

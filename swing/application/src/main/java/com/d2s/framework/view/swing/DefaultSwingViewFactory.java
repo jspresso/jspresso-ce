@@ -376,7 +376,8 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       }
     } else {
       ICompositeValueConnector connector = connectorFactory
-          .createCompositeValueConnector(BeanRefPropertyConnector.THIS_PROPERTY, null);
+          .createCompositeValueConnector(
+              BeanRefPropertyConnector.THIS_PROPERTY, null);
       view.setConnector(connector);
       for (IView<JComponent> childView : view.getChildren()) {
         childView.setParent(view);
@@ -525,8 +526,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       default:
         break;
     }
-    viewComponent.setContinuousLayout(true);
-    viewComponent.setOneTouchExpandable(true);
 
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
       IView<JComponent> leftTopView = createView(viewDescriptor
@@ -1809,7 +1808,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
           .getNodeGroupDescriptor();
       modelDescriptor = viewDescriptor.getModelDescriptor();
       actionMap = viewDescriptor.getActions();
-      if (!(viewConnector instanceof ICollectionConnectorProvider)) {
+      if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }
     }
@@ -2107,7 +2106,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
    * @return the created text area.
    */
   protected JTextArea createJTextArea() {
-    return new JTextArea();
+    JTextArea textArea = new JTextArea();
+    textArea.setDragEnabled(true);
+    return textArea;
   }
 
   /**
@@ -2128,7 +2129,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     JDateField dateField = new JDateField();
     dateField.setRenderer(new DefaultDayRenderer());
     dateField.setHeaderRenderer(new DefaultHeaderRenderer());
-
     return dateField;
   }
 
@@ -2174,7 +2174,10 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
    * @return the created split pane.
    */
   protected JSplitPane createJSplitPane() {
-    return new JSplitPane();
+    JSplitPane splitPane = new JSplitPane();
+    splitPane.setContinuousLayout(true);
+    splitPane.setOneTouchExpandable(true);
+    return splitPane;
   }
 
   /**
@@ -2183,7 +2186,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
    * @return the created tree.
    */
   protected JTree createJTree() {
-    return new JTree();
+    JTree tree = new JTree();
+    tree.setDragEnabled(true);
+    return tree;
   }
 
   /**
@@ -2236,6 +2241,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       }
     };
     table.setSurrendersFocusOnKeystroke(true);
+    table.setDragEnabled(true);
     return table;
   }
 
@@ -2245,7 +2251,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
    * @return the created list.
    */
   protected JList createJList() {
-    return new JList();
+    JList list = new JList();
+    list.setDragEnabled(true);
+    return list;
   }
 
   /**

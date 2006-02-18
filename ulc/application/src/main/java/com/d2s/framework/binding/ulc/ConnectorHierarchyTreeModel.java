@@ -202,7 +202,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
         }
         if (connector == rootConnector) {
           nodeChanged(getTreePathForConnector(connector));
-        } else {
+        } else if (connector.getConnectorValue() != null) {
           IValueConnector parentConnector = connector.getParentConnector();
           while (parentConnector != null
               && !(parentConnector instanceof ICollectionConnectorProvider)) {
