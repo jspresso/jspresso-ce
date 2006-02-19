@@ -4,6 +4,7 @@
 package com.d2s.framework.util.bean;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 /**
  * This interface is implemented by any bean value accessor on a list property.
@@ -36,4 +37,12 @@ public interface IListAccessor extends ICollectionAccessor {
   void addToValue(Object target, int index, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException;
+
+  /**
+   * Return type refined.
+   * <p>
+   * {@inheritDoc}
+   */
+  List getValue(Object target) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException;
 }

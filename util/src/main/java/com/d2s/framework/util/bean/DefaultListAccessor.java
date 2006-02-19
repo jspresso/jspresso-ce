@@ -5,6 +5,7 @@ package com.d2s.framework.util.bean;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.commons.beanutils.MethodUtils;
 
@@ -48,5 +49,13 @@ public class DefaultListAccessor extends DefaultCollectionAccessor implements
           new Class[] {Integer.TYPE, getElementClass()});
     }
     adderAtMethod.invoke(target, new Object[] {new Integer(index), value});
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List getValue(Object target) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    return (List) super.getValue(target);
   }
 }

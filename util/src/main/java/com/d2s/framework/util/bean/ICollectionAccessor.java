@@ -4,6 +4,7 @@
 package com.d2s.framework.util.bean;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 
 /**
  * This interface is implemented by any bean value accessor on a collection
@@ -54,4 +55,11 @@ public interface ICollectionAccessor extends IAccessor {
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException;
 
+  /**
+   * Return type refined.
+   * <p>
+   * {@inheritDoc}
+   */
+  Collection getValue(Object target) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException;
 }

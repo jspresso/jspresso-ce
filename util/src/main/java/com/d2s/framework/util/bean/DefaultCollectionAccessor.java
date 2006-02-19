@@ -5,6 +5,7 @@ package com.d2s.framework.util.bean;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 
 import org.apache.commons.beanutils.MethodUtils;
 
@@ -84,6 +85,14 @@ public class DefaultCollectionAccessor extends DefaultPropertyAccessor
    */
   protected Class getElementClass() {
     return elementClass;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Collection getValue(Object target) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    return (Collection) super.getValue(target);
   }
 
 }

@@ -14,7 +14,6 @@ import java.lang.reflect.Proxy;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -380,9 +379,9 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           }
         } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
           // It's a 'many' relation end
-          Collection<Object> oldPropertyElementsToRemove = new LinkedHashSet<Object>();
-          Collection<Object> newPropertyElementsToAdd = new LinkedHashSet<Object>();
-          Collection<Object> propertyElementsToKeep = new LinkedHashSet<Object>();
+          Collection<Object> oldPropertyElementsToRemove = new HashSet<Object>();
+          Collection<Object> newPropertyElementsToAdd = new HashSet<Object>();
+          Collection<Object> propertyElementsToKeep = new HashSet<Object>();
 
           if (oldProperty != null) {
             oldPropertyElementsToRemove.addAll((Collection<?>) oldProperty);
@@ -405,6 +404,19 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           }
           for (Object element : newPropertyElementsToAdd) {
             propertyAccessor.addToValue(proxy, element);
+          }
+          // if the property is a list we may restore the element order and be
+          // careful not to miss one...
+          if (newProperty instanceof List) {
+            Collection currentProperty = propertyAccessor.getValue(proxy);
+            if (currentProperty instanceof List) {
+              // Just check the only order differs
+              Set<Object> temp = new HashSet<Object>(currentProperty);
+              temp.removeAll((List<?>) newProperty);
+              currentProperty.clear();
+              currentProperty.addAll((List<?>) newProperty);
+              currentProperty.addAll(temp);
+            }
           }
         }
       } catch (IllegalAccessException ex) {
