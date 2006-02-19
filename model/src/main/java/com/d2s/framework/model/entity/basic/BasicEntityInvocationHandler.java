@@ -458,7 +458,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       Collection oldCollectionSnapshot = CollectionHelper
           .cloneCollection((Collection<?>) collectionProperty);
       boolean inserted = false;
-      if (collectionProperty instanceof List && index > 0
+      if (collectionProperty instanceof List && index >= 0
           && index < collectionProperty.size()) {
         ((List) collectionProperty).add(index, value);
         inserted = true;

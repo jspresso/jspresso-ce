@@ -7,7 +7,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 
 import com.d2s.framework.binding.ChildConnectorSupport;
@@ -37,11 +36,11 @@ import com.d2s.framework.util.event.SelectionChangeSupport;
 public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     implements ICollectionConnector, IConnectorMapProvider {
 
-  private IConnectorMap              childConnectors;
-  private Class                      elementClass;
-  private IBeanConnectorFactory      beanConnectorFactory;
-  private SelectionChangeSupport     connectorSelectionSupport;
-  private ChildConnectorSupport      childConnectorSupport;
+  private IConnectorMap          childConnectors;
+  private Class                  elementClass;
+  private IBeanConnectorFactory  beanConnectorFactory;
+  private SelectionChangeSupport selectionChangeSupport;
+  private ChildConnectorSupport  childConnectorSupport;
 
   /**
    * Constructs a new bean property connector on a bean collection property.
@@ -60,7 +59,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     this.beanConnectorFactory = beanConnectorFactory;
     childConnectors = new ConnectorMap(this);
     childConnectorSupport = new ChildConnectorSupport(this);
-    connectorSelectionSupport = new SelectionChangeSupport(this);
+    selectionChangeSupport = new SelectionChangeSupport(this);
   }
 
   /**
@@ -157,28 +156,26 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    *          the bean collection to align the child connectors on.
    */
   private void updateChildConnectors(Collection beanCollection) {
-    Collection<String> childConnectorsToRemove = new HashSet<String>();
-    childConnectorsToRemove.addAll(getChildConnectorKeys());
+    int beanCollectionSize = 0;
     if (beanCollection != null) {
+      beanCollectionSize = beanCollection.size();
       int i = 0;
       for (Object nextCollectionElement : beanCollection) {
         if (elementClass == null) {
           throw new ConnectorBindingException(
               "elementClass must be set on BeanCollectionPropertyConnector before it can be used.");
         }
-        String nextConnectorId = computeConnectorId(i);
-        childConnectorsToRemove.remove(nextConnectorId);
-        IValueConnector childConnector = getChildConnector(nextConnectorId);
+        IValueConnector childConnector = getChildConnector(i);
         if (childConnector == null) {
-          childConnector = createChildConnector(nextConnectorId);
+          childConnector = createChildConnector(computeConnectorId(i));
           addChildConnector(childConnector);
         }
         childConnector.setConnectorValue(nextCollectionElement);
         i++;
       }
     }
-    for (String nextConnectorId : childConnectorsToRemove) {
-      removeChildConnector(getChildConnector(nextConnectorId));
+    while (getChildConnectorCount() != beanCollectionSize) {
+      removeChildConnector(getChildConnector(computeConnectorId(getChildConnectorCount() - 1)));
     }
   }
 
@@ -223,7 +220,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     clonedConnector.childConnectors = new ConnectorMap(clonedConnector);
     clonedConnector.childConnectorSupport = new ChildConnectorSupport(
         clonedConnector);
-    clonedConnector.connectorSelectionSupport = new SelectionChangeSupport(
+    clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
     return clonedConnector;
   }
@@ -240,28 +237,28 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    * {@inheritDoc}
    */
   public void addSelectionChangeListener(ISelectionChangeListener listener) {
-    connectorSelectionSupport.addSelectionChangeListener(listener);
+    selectionChangeSupport.addSelectionChangeListener(listener);
   }
 
   /**
    * {@inheritDoc}
    */
   public void removeSelectionChangeListener(ISelectionChangeListener listener) {
-    connectorSelectionSupport.removeSelectionChangeListener(listener);
+    selectionChangeSupport.removeSelectionChangeListener(listener);
   }
 
   /**
    * {@inheritDoc}
    */
   public void setSelectedIndices(int[] newSelectedIndices) {
-    connectorSelectionSupport.setSelectedIndices(newSelectedIndices);
+    selectionChangeSupport.setSelectedIndices(newSelectedIndices);
   }
 
   /**
    * {@inheritDoc}
    */
   public int[] getSelectedIndices() {
-    return connectorSelectionSupport.getSelectedIndices();
+    return selectionChangeSupport.getSelectedIndices();
   }
 
   /**
@@ -269,14 +266,14 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    */
   public void selectionChange(SelectionChangeEvent evt) {
     if (evt.getSource() instanceof ISelectionChangeListener) {
-      connectorSelectionSupport
+      selectionChangeSupport
           .addInhibitedListener((ISelectionChangeListener) evt.getSource());
     }
     try {
       setSelectedIndices(evt.getNewSelection());
     } finally {
       if (evt.getSource() instanceof ISelectionChangeListener) {
-        connectorSelectionSupport
+        selectionChangeSupport
             .removeInhibitedListener((ISelectionChangeListener) evt.getSource());
       }
     }
@@ -318,7 +315,6 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     this.elementClass = elementClass;
   }
 
-  
   /**
    * Gets the elementClass.
    * 

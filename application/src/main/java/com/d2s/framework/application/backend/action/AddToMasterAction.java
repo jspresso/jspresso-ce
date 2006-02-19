@@ -13,6 +13,7 @@ import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.ICollectionAccessor;
+import com.d2s.framework.util.bean.IListAccessor;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.ActionException;
 import com.d2s.framework.view.action.IActionHandler;
@@ -56,7 +57,18 @@ public class AddToMasterAction extends AbstractCollectionAction {
         collectionDescriptor.getReferencedDescriptor().getElementDescriptor()
             .getComponentContract());
     try {
-      collectionAccessor.addToValue(master, newEntity);
+      int index = -1;
+      if (collectionAccessor instanceof IListAccessor) {
+        if (getSelectedIndices() != null && getSelectedIndices().length > 0) {
+          index = getSelectedIndices()[getSelectedIndices().length - 1];
+        }
+      }
+      if (index >= 0) {
+        ((IListAccessor) collectionAccessor).addToValue(master, index,
+            newEntity);
+      } else {
+        collectionAccessor.addToValue(master, newEntity);
+      }
     } catch (IllegalAccessException ex) {
       throw new ActionException(ex);
     } catch (InvocationTargetException ex) {

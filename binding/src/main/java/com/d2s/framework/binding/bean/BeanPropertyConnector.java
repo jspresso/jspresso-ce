@@ -62,21 +62,35 @@ public abstract class BeanPropertyConnector extends AbstractValueConnector
    *          the old bean provider or null if none.
    */
   protected void beanProviderChanged(IBeanProvider oldBeanProvider) {
+    IPropertyChangeCapable oldBean = null;
+    IPropertyChangeCapable newBean = null;
+
     if (isValueAccessedAsProperty() && getBeanProvider() != null
         && accessor == null && accessorFactory != null) {
       accessor = accessorFactory.createPropertyAccessor(getId(),
           getBeanProvider().getBeanClass());
     }
     if (oldBeanProvider != null) {
+      oldBean = oldBeanProvider.getBean();
       oldBeanProvider.removeBeanChangeListener(this);
     }
     if (getBeanProvider() != null) {
       getBeanProvider().addBeanChangeListener(this);
-      IPropertyChangeCapable bean = getBeanProvider().getBean();
-      if (bean != null) {
-        bean.addPropertyChangeListener(getId(), this);
-      }
+      newBean = getBeanProvider().getBean();
     }
+    if (oldBean != null) {
+      oldBean.removePropertyChangeListener(getId(), this);
+    }
+    if (newBean != null) {
+      newBean.addPropertyChangeListener(getId(), this);
+    }
+    
+    // line below is mainly used to initialize oldConnectorValue (the bean
+    // property connector is not used as model yet since it is just being linked
+    // to its parent). We would like to use the commented beanChange line but it
+    // fails if the current connector is a collection connector.
+    setConnectorValue(getConnecteeValue());
+    // beanChange(new BeanChangeEvent(getBeanProvider(), oldBean, newBean));
   }
 
   /**

@@ -165,6 +165,19 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} element to add.
    */
   void addTo${propertyName?cap_first}(${elementType} ${propertyName}Element);
+  <#if propertyDescriptor.propertyClass.name = "java.util.List">
+
+  /**
+   * Adds an element to the ${propertyName} at the specified index. If the index is out
+   * of the list bounds, the element is simply added at the end of the list.
+   * 
+   * @param index
+   *          the index to add the ${propertyName} element at.
+   * @param ${propertyName}Element
+   *          the ${propertyName} element to add.
+   */
+  void addTo${propertyName?cap_first}(int index, ${elementType} ${propertyName}Element);
+  </#if>
 </#macro>
 
 <#macro generateCollectionRemer componentDescriptor propertyDescriptor>
