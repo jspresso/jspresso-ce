@@ -166,7 +166,7 @@ public class BindingTests extends AbstractModelTest {
         "mvcBinder");
 
     BasicCollectionConnector departmentEmployeesViewConnector = new BasicCollectionConnector(
-        "departmentEmployees", mvcBinder, employeeViewConnectorPrototype, Employee.class);
+        "departmentEmployees", mvcBinder, employeeViewConnectorPrototype);
     departmentViewConnector.addChildConnector(departmentEmployeesViewConnector);
 
     mvcBinder.bind(departmentViewConnector, departmentModelConnector);

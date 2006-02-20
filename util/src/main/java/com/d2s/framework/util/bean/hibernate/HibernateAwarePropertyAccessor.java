@@ -4,14 +4,10 @@
 package com.d2s.framework.util.bean.hibernate;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import java.util.Map;
 
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
-import org.hibernate.collection.PersistentCollection;
-import org.hibernate.engine.SessionImplementor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
@@ -108,11 +104,10 @@ public class HibernateAwarePropertyAccessor implements IAccessor {
 
   /**
    * TODO Comment needed.
-   * <p>
-   * {@inheritDoc}
+   * @return sqdqsd
    */
   public String getProperty() {
-    return delegate.getProperty();
+    return null;
   }
 
   /**

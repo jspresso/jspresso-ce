@@ -36,9 +36,8 @@ public class DefaultBeanConnectorFactory implements IBeanConnectorFactory {
    * <p>
    * {@inheritDoc}
    */
-  public BeanCollectionConnector createBeanCollectionConnector(String id,
-      Class beanClass) {
-    return new BeanCollectionConnector(id, beanClass, this);
+  public BeanCollectionConnector createBeanCollectionConnector(String id) {
+    return new BeanCollectionConnector(id, this);
   }
 
   /**
@@ -55,6 +54,7 @@ public class DefaultBeanConnectorFactory implements IBeanConnectorFactory {
    */
   public BeanPropertyConnector createBeanPropertyConnector(String property,
       Class beanClass) {
+    
     Class propertyType = getPropertyType(beanClass, property);
 
     if (IPropertyChangeCapable.class.isAssignableFrom(propertyType)) {

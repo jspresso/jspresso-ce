@@ -32,11 +32,11 @@ public class DefaultAccessorFactory implements IAccessorFactory {
    * {@inheritDoc}
    */
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
-      Class beanClass, Class elementClass) {
+      Class beanClass) {
     if (List.class.isAssignableFrom(PropertyHelper.getPropertyType(beanClass,
         property))) {
-      return new DefaultListAccessor(property, beanClass, elementClass);
+      return new DefaultListAccessor(property, beanClass);
     }
-    return new DefaultCollectionAccessor(property, beanClass, elementClass);
+    return new DefaultCollectionAccessor(property, beanClass);
   }
 }

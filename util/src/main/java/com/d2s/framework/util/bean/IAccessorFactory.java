@@ -32,10 +32,8 @@ public interface IAccessorFactory {
    *          the property to be accessed.
    * @param beanClass
    *          the java bean class.
-   * @param elementClass
-   *          the type of the elements contained in the collection.
    * @return the collection property accessor.
    */
   ICollectionAccessor createCollectionPropertyAccessor(String property,
-      Class beanClass, Class elementClass);
+      Class beanClass);
 }

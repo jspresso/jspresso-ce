@@ -77,15 +77,6 @@
 	</bean>
 
 	<!--
-		Hibernate aware accessor factory.
-	-->
-	<bean id="accessorFactory" class="com.d2s.framework.util.bean.hibernate.HibernateAwareAccessorFactory">
-		<property name="delegate" ref="defaultAccessorFactory" />
-		<property name="hibernateTemplate" ref="hibernateTemplate" />
-		<property name="applicationSession" ref="applicationSession"/>
-	</bean>
-
-	<!--
 		Hibernate root action beans.
 	-->
 	<bean abstract="true" id="abstractHibernateBackAction" parent="abstractBackAction"

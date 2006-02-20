@@ -18,6 +18,7 @@ import com.d2s.framework.binding.IConnectorMap;
 import com.d2s.framework.binding.IConnectorMapProvider;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.util.bean.AccessorInfo;
 import com.d2s.framework.util.bean.BeanChangeEvent;
 import com.d2s.framework.util.collection.CollectionHelper;
 import com.d2s.framework.util.event.ISelectionChangeListener;
@@ -37,10 +38,10 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     implements ICollectionConnector, IConnectorMapProvider {
 
   private IConnectorMap          childConnectors;
-  private Class                  elementClass;
   private IBeanConnectorFactory  beanConnectorFactory;
   private SelectionChangeSupport selectionChangeSupport;
   private ChildConnectorSupport  childConnectorSupport;
+  private Class                  elementClass;
 
   /**
    * Constructs a new bean property connector on a bean collection property.
@@ -96,7 +97,8 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    * {@inheritDoc}
    */
   public IValueConnector createChildConnector(String connectorId) {
-    return beanConnectorFactory.createBeanConnector(connectorId, elementClass);
+    return beanConnectorFactory.createBeanConnector(connectorId,
+        getElementClass());
   }
 
   /**
@@ -135,11 +137,6 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
       IConnectorValueChangeListener modelConnectorListener,
       PropertyChangeListener readChangeListener,
       PropertyChangeListener writeChangeListener) {
-    if (elementClass == null
-        && modelConnectorListener instanceof ICollectionConnector) {
-      setElementClass(((ICollectionConnector) modelConnectorListener)
-          .getElementClass());
-    }
     updateChildConnectors((Collection) getConnecteeValue());
     super.boundAsModel(modelConnectorListener, readChangeListener,
         writeChangeListener);
@@ -156,19 +153,15 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    *          the bean collection to align the child connectors on.
    */
   private void updateChildConnectors(Collection beanCollection) {
-    if (elementClass == null) {
-      return;
+    if (getElementClass() == null) {
+      throw new ConnectorBindingException(
+          "elementClass must be set on BeanCollectionPropertyConnector before it can be used.");
     }
     int beanCollectionSize = 0;
     if (beanCollection != null) {
       beanCollectionSize = beanCollection.size();
       int i = 0;
       for (Object nextCollectionElement : beanCollection) {
-        // if (elementClass == null) {
-        // throw new ConnectorBindingException(
-        // "elementClass must be set on BeanCollectionPropertyConnector before
-        // it can be used.");
-        //        }
         IValueConnector childConnector = getChildConnector(i);
         if (childConnector == null) {
           childConnector = createChildConnector(computeConnectorId(i));
@@ -308,23 +301,11 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     return Collections.singletonList((ICollectionConnector) this);
   }
 
-  /**
-   * Sets the elementClass.
-   * 
-   * @param elementClass
-   *          the class of the elements (or superclass or interface) contained
-   *          in this collection.
-   */
-  public void setElementClass(Class elementClass) {
-    this.elementClass = elementClass;
-  }
-
-  /**
-   * Gets the elementClass.
-   * 
-   * @return the elementClass.
-   */
-  public Class getElementClass() {
-    return elementClass;
+  private Class getElementClass() {
+    if (elementClass == null) {
+      elementClass = AccessorInfo.getCollectionElementClass(getBeanProvider()
+          .getBeanClass(), getId());
+    }
+    return null;
   }
 }

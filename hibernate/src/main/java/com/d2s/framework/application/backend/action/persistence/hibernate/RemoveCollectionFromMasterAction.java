@@ -65,9 +65,7 @@ public class RemoveCollectionFromMasterAction extends
             ICollectionAccessor collectionAccessor = getAccessorFactory()
                 .createCollectionPropertyAccessor(
                     property,
-                    mergedMaster.getClass(),
-                    collectionDescriptor.getReferencedDescriptor()
-                        .getElementDescriptor().getComponentContract());
+                    mergedMaster.getClass());
             if (getSelectedIndices() != null) {
               for (int selectedIndex : getSelectedIndices()) {
                 IEntity nextDetailToRemove = (IEntity) collectionConnector

@@ -89,8 +89,8 @@ public abstract class BeanPropertyConnector extends AbstractValueConnector
     // property connector is not used as model yet since it is just being linked
     // to its parent). We would like to use the commented beanChange line but it
     // fails if the current connector is a collection connector.
-    setConnectorValue(getConnecteeValue());
-    // beanChange(new BeanChangeEvent(getBeanProvider(), oldBean, newBean));
+    // setConnectorValue(getConnecteeValue());
+    beanChange(new BeanChangeEvent(getBeanProvider(), oldBean, newBean));
   }
 
   /**

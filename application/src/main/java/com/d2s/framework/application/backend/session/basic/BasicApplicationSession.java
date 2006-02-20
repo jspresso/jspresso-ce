@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.collection.PersistentCollection;
-import org.hibernate.collection.PersistentSet;
 
 import com.d2s.framework.application.backend.session.ApplicationSessionException;
 import com.d2s.framework.application.backend.session.IApplicationSession;
@@ -159,11 +158,28 @@ public class BasicApplicationSession implements IApplicationSession {
     }
   }
 
-  protected boolean isInitialized(IEntity entity) {
+  /**
+   * Gets wether the entity is fully initialized.
+   * 
+   * @param entity
+   *          the entity to test.
+   * @return true if the entity does not need some extra initialization step.
+   */
+  protected boolean isInitialized(@SuppressWarnings("unused")
+  IEntity entity) {
     return true;
   }
 
-  protected boolean isInitialized(Collection collection) {
+  /**
+   * Gets wether the collection is fully initialized.
+   * 
+   * @param collection
+   *          the collection to test.
+   * @return true if the collection does not need some extra initialization
+   *         step.
+   */
+  protected boolean isInitialized(@SuppressWarnings("unused")
+  Collection collection) {
     return true;
   }
 

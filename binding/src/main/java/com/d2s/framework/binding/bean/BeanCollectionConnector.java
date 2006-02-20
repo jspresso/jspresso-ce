@@ -24,16 +24,12 @@ public class BeanCollectionConnector extends BeanCollectionPropertyConnector {
    * 
    * @param id
    *          the connector identifier.
-   * @param elementClass
-   *          the class of the elements (or superclass or interface) contained
-   *          in this collection.
    * @param beanConnectorFactory
    *          the factory used to create the collection bean connectors.
    */
-  public BeanCollectionConnector(String id, Class elementClass,
+  public BeanCollectionConnector(String id,
       IBeanConnectorFactory beanConnectorFactory) {
     super(id, beanConnectorFactory);
-    setElementClass(elementClass);
   }
 
   /**

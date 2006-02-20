@@ -284,8 +284,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       }
       ICollectionAccessor collectionAccessor = accessorFactory
           .createCollectionPropertyAccessor(collectionDescriptor.getName(),
-              masterContract, collectionDescriptor.getReferencedDescriptor()
-                  .getElementDescriptor().getComponentContract());
+              masterContract);
       try {
         collectionAccessor.addToValue(collectionEntry.getKey(), clonedEntity);
       } catch (IllegalAccessException ex) {
@@ -362,13 +361,10 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
               // It's a one-to-many relationship
               ICollectionAccessor reversePropertyAccessor = accessorFactory
-                  .createCollectionPropertyAccessor(
-                      reversePropertyDescriptor.getName(),
+                  .createCollectionPropertyAccessor(reversePropertyDescriptor
+                      .getName(),
                       ((IReferencePropertyDescriptor) propertyDescriptor)
-                          .getReferencedDescriptor().getComponentContract(),
-                      ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
-                          .getReferencedDescriptor().getElementDescriptor()
-                          .getComponentContract());
+                          .getReferencedDescriptor().getComponentContract());
               if (oldProperty != null) {
                 reversePropertyAccessor.removeFromValue(oldProperty, proxy);
               }
@@ -395,10 +391,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           newPropertyElementsToAdd.removeAll(propertyElementsToKeep);
           ICollectionAccessor propertyAccessor = accessorFactory
               .createCollectionPropertyAccessor(propertyDescriptor.getName(),
-                  entityDescriptor.getComponentContract(),
-                  ((ICollectionPropertyDescriptor) propertyDescriptor)
-                      .getReferencedDescriptor().getElementDescriptor()
-                      .getComponentContract());
+                  entityDescriptor.getComponentContract());
           for (Object element : oldPropertyElementsToRemove) {
             propertyAccessor.removeFromValue(proxy, element);
           }
@@ -463,8 +456,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           accessorFactory.createCollectionPropertyAccessor(
               reversePropertyDescriptor.getName(),
               propertyDescriptor.getReferencedDescriptor()
-                  .getElementDescriptor().getComponentContract(),
-              entityDescriptor.getComponentContract()).addToValue(value, proxy);
+                  .getElementDescriptor().getComponentContract()).addToValue(
+              value, proxy);
         }
       }
       Collection oldCollectionSnapshot = CollectionHelper
@@ -517,8 +510,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             accessorFactory.createCollectionPropertyAccessor(
                 reversePropertyDescriptor.getName(),
                 propertyDescriptor.getReferencedDescriptor()
-                    .getElementDescriptor().getComponentContract(),
-                entityDescriptor.getComponentContract()).removeFromValue(value,
+                    .getElementDescriptor().getComponentContract()).removeFromValue(value,
                 proxy);
           }
         }

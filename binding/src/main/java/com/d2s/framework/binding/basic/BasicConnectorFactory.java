@@ -37,8 +37,8 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
    * {@inheritDoc}
    */
   public ICollectionConnector createCollectionConnector(String id,
-      IMvcBinder binder, ICompositeValueConnector childConnectorPrototype, Class elementClass) {
-    return new BasicCollectionConnector(id, binder, childConnectorPrototype, elementClass);
+      IMvcBinder binder, ICompositeValueConnector childConnectorPrototype) {
+    return new BasicCollectionConnector(id, binder, childConnectorPrototype);
   }
 
   /**

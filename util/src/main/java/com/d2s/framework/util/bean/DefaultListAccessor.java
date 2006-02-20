@@ -30,12 +30,9 @@ public class DefaultListAccessor extends DefaultCollectionAccessor implements
    *          the property to be accessed.
    * @param beanClass
    *          the java bean class.
-   * @param elementClass
-   *          the type of the collection elements.
    */
-  public DefaultListAccessor(String property, Class beanClass,
-      Class elementClass) {
-    super(property, beanClass, elementClass);
+  public DefaultListAccessor(String property, Class beanClass) {
+    super(property, beanClass);
   }
 
   /**
@@ -46,7 +43,10 @@ public class DefaultListAccessor extends DefaultCollectionAccessor implements
     if (adderAtMethod == null) {
       adderAtMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {Integer.TYPE, getElementClass()});
+          new Class[] {
+              Integer.TYPE,
+              AccessorInfo.getCollectionElementClass(getBeanClass(),
+                  getProperty())});
     }
     adderAtMethod.invoke(target, new Object[] {new Integer(index), value});
   }
@@ -55,7 +55,8 @@ public class DefaultListAccessor extends DefaultCollectionAccessor implements
    * {@inheritDoc}
    */
   @Override
-  public List getValue(Object target) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+  public List getValue(Object target) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
     return (List) super.getValue(target);
   }
 }

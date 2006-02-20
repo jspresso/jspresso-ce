@@ -34,12 +34,10 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
    * @param childConnectorPrototype
    *          the connector prototype used to create new instances of child
    *          connectors.
-   * @param elementClass
-   *          the type of the element to be held by the collection.
    */
   public BasicCollectionConnector(String id, IMvcBinder binder,
-      ICompositeValueConnector childConnectorPrototype, Class elementClass) {
-    super(id, binder, childConnectorPrototype, elementClass);
+      ICompositeValueConnector childConnectorPrototype) {
+    super(id, binder, childConnectorPrototype);
   }
 
   /**

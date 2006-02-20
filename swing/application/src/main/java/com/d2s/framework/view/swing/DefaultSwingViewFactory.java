@@ -779,9 +779,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
         .setCollectionConnectorProviders(subtreeConnectors);
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector, nodeGroupModelDescriptor
-                .getCollectionDescriptor().getElementDescriptor()
-                .getComponentContract());
+            mvcBinder, nodeGroupPrototypeConnector);
     return nodeGroupCollectionConnector;
   }
 
@@ -805,9 +803,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     }
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
-            mvcBinder, nodeGroupPrototypeConnector, nodeGroupModelDescriptor
-                .getCollectionDescriptor().getElementDescriptor()
-                .getComponentContract());
+            mvcBinder, nodeGroupPrototypeConnector);
     return nodeGroupCollectionConnector;
   }
 
@@ -940,8 +936,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
             viewDescriptor.getRenderedProperty());
     ICollectionConnector connector = connectorFactory
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
-            rowConnectorPrototype, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor().getComponentContract());
+            rowConnectorPrototype);
     JList viewComponent = createJList();
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
@@ -972,8 +967,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
                 .getToStringProperty());
     ICollectionConnector connector = connectorFactory
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
-            rowConnectorPrototype, modelDescriptor.getCollectionDescriptor()
-                .getElementDescriptor().getComponentContract());
+            rowConnectorPrototype);
     JTable viewComponent = createJTable();
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);

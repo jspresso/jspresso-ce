@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.util.bean;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 /**
@@ -137,5 +138,28 @@ public class AccessorInfo {
       default:
     }
     return false;
+  }
+
+  /**
+   * Retrieves the collection element class based on the ElementClass
+   * annotation.
+   * 
+   * @param beanClass
+   *          the bean class.
+   * @param property
+   *          the collection property.
+   * @return the collection element class.
+   */
+  public static Class<?> getCollectionElementClass(Class beanClass,
+      String property) {
+    PropertyDescriptor propertyDescriptor = PropertyHelper
+        .getPropertyDescriptor(beanClass, property);
+    ElementClass ecAnn = propertyDescriptor.getReadMethod().getAnnotation(
+        ElementClass.class);
+    if (ecAnn != null) {
+      return ecAnn.value();
+    }
+    return null;
+
   }
 }

@@ -120,8 +120,7 @@ public abstract class AbstractBackendController extends AbstractController
   public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
     if (modelDescriptor instanceof ICollectionDescriptor) {
       return beanConnectorFactory.createBeanCollectionConnector(modelDescriptor
-          .getName(), ((ICollectionDescriptor) modelDescriptor)
-          .getElementDescriptor().getComponentContract());
+          .getName());
     } else if (modelDescriptor instanceof IComponentDescriptor) {
       return beanConnectorFactory.createBeanConnector(
           modelDescriptor.getName(), ((IComponentDescriptor) modelDescriptor)

@@ -72,6 +72,7 @@ public interface Department extends
    *           class = "com.d2s.framework.sample.backend.domain.Employee"
    * @return the departmentEmployees.
    */
+  @com.d2s.framework.util.bean.ElementClass(com.d2s.framework.sample.backend.domain.Employee.class)
   java.util.Set<com.d2s.framework.sample.backend.domain.Employee> getDepartmentEmployees();
 
   /**
@@ -110,6 +111,7 @@ public interface Department extends
    *           class = "com.d2s.framework.sample.backend.domain.Project"
    * @return the departmentProjects.
    */
+  @com.d2s.framework.util.bean.ElementClass(com.d2s.framework.sample.backend.domain.Project.class)
   java.util.Set<com.d2s.framework.sample.backend.domain.Project> getDepartmentProjects();
 
   /**

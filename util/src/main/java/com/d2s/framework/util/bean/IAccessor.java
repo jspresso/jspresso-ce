@@ -57,6 +57,4 @@ public interface IAccessor {
    * @return true if this accessor has a mutator.
    */
   boolean isWritable();
-  
-  String getProperty();
 }

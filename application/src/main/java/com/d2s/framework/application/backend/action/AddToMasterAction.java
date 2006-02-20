@@ -50,9 +50,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
     ICollectionAccessor collectionAccessor = getAccessorFactory()
         .createCollectionPropertyAccessor(
             property,
-            master.getClass(),
-            collectionDescriptor.getReferencedDescriptor()
-                .getElementDescriptor().getComponentContract());
+            master.getClass());
     IEntity newEntity = getEntityFactory().createEntityInstance(
         collectionDescriptor.getReferencedDescriptor().getElementDescriptor()
             .getComponentContract());

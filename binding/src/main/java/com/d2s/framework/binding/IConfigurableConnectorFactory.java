@@ -37,12 +37,10 @@ public interface IConfigurableConnectorFactory {
    * @param childConnectorPrototype
    *          the element prototype connector used by the created collection
    *          connector.
-   * @param elementClass
-   *          the type of the element to be held by the collection.
    * @return the created connector.
    */
   ICollectionConnector createCollectionConnector(String id, IMvcBinder binder,
-      ICompositeValueConnector childConnectorPrototype, Class elementClass);
+      ICompositeValueConnector childConnectorPrototype);
 
   /**
    * Creates a <code>IConfigurableCollectionConnectorProvider</code>.

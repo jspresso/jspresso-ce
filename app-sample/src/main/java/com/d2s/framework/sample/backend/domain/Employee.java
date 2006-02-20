@@ -94,6 +94,7 @@ public interface Employee extends
    *           class = "com.d2s.framework.sample.backend.domain.Employee"
    * @return the managedEmployees.
    */
+  @com.d2s.framework.util.bean.ElementClass(com.d2s.framework.sample.backend.domain.Employee.class)
   java.util.Set<com.d2s.framework.sample.backend.domain.Employee> getManagedEmployees();
 
   /**
@@ -153,6 +154,7 @@ public interface Employee extends
    *           column = "PROJECT_ID"
    * @return the employeeProjects.
    */
+  @com.d2s.framework.util.bean.ElementClass(com.d2s.framework.sample.backend.domain.Project.class)
   java.util.Set<com.d2s.framework.sample.backend.domain.Project> getEmployeeProjects();
 
   /**

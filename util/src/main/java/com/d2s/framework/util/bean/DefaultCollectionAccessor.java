@@ -21,7 +21,6 @@ import org.apache.commons.beanutils.MethodUtils;
 public class DefaultCollectionAccessor extends DefaultPropertyAccessor
     implements ICollectionAccessor {
 
-  private Class  elementClass;
   private Method adderMethod;
   private Method removerMethod;
 
@@ -32,13 +31,9 @@ public class DefaultCollectionAccessor extends DefaultPropertyAccessor
    *          the property to be accessed.
    * @param beanClass
    *          the java bean class.
-   * @param elementClass
-   *          the type of the collection elements.
    */
-  public DefaultCollectionAccessor(String property, Class beanClass,
-      Class elementClass) {
+  public DefaultCollectionAccessor(String property, Class beanClass) {
     super(property, beanClass);
-    this.elementClass = elementClass;
   }
 
   /**
@@ -49,7 +44,8 @@ public class DefaultCollectionAccessor extends DefaultPropertyAccessor
     if (adderMethod == null) {
       adderMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {elementClass});
+          new Class[] {AccessorInfo.getCollectionElementClass(getBeanClass(),
+              getProperty())});
     }
     adderMethod.invoke(target, new Object[] {value});
   }
@@ -62,7 +58,8 @@ public class DefaultCollectionAccessor extends DefaultPropertyAccessor
     if (removerMethod == null) {
       removerMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.REMOVER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {elementClass});
+          new Class[] {AccessorInfo.getCollectionElementClass(getBeanClass(),
+              getProperty())});
     }
     removerMethod.invoke(target, new Object[] {value});
   }
@@ -79,19 +76,11 @@ public class DefaultCollectionAccessor extends DefaultPropertyAccessor
   }
 
   /**
-   * Gets the elementClass.
-   * 
-   * @return the elementClass.
-   */
-  protected Class getElementClass() {
-    return elementClass;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
-  public Collection getValue(Object target) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+  public Collection getValue(Object target) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
     return (Collection) super.getValue(target);
   }
 

@@ -72,6 +72,7 @@ public interface Project extends
    *           column = "EMPLOYEE_ID"
    * @return the projectMembers.
    */
+  @com.d2s.framework.util.bean.ElementClass(com.d2s.framework.sample.backend.domain.Employee.class)
   java.util.Set<com.d2s.framework.sample.backend.domain.Employee> getProjectMembers();
 
   /**
