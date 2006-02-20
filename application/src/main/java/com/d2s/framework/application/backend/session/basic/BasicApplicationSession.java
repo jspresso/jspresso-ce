@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.collection.PersistentCollection;
+import org.hibernate.collection.PersistentSet;
+
 import com.d2s.framework.application.backend.session.ApplicationSessionException;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.IEntityUnitOfWork;
@@ -98,6 +101,7 @@ public class BasicApplicationSession implements IApplicationSession {
       boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
           .isEmpty()));
       if (mergeMode == MergeMode.MERGE_CLEAN_EAGER
+          || mergeMode == MergeMode.MERGE_CLEAN_INITIALIZED
           || (dirtyInSession || (!registeredEntity.getVersion().equals(
               entity.getVersion())))) {
         cleanDirtyProperties(registeredEntity);
@@ -107,27 +111,42 @@ public class BasicApplicationSession implements IApplicationSession {
         Map<String, Object> mergedProperties = new HashMap<String, Object>();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (property.getValue() instanceof IEntity) {
-            mergedProperties.put(property.getKey(), merge((IEntity) property
-                .getValue(), mergeMode, alreadyMerged));
-          } else if (property.getValue() instanceof Collection) {
-            Collection<IEntity> registeredCollection = (Collection<IEntity>) registeredEntityProperties
-                .get(property.getKey());
-            if (registeredCollection == null) {
-              if (property.getValue() instanceof Set) {
-                registeredCollection = collectionFactory
-                    .createEntityCollection(Set.class);
-              } else if (property.getValue() instanceof List) {
-                registeredCollection = collectionFactory
-                    .createEntityCollection(List.class);
+            if (mergeMode == MergeMode.MERGE_CLEAN_INITIALIZED
+                && !isInitialized((IEntity) property.getValue())) {
+              if (registeredEntityProperties.get(property.getKey()) == null) {
+                mergedProperties.put(property.getKey(), property.getValue());
               }
+            } else {
+              mergedProperties.put(property.getKey(), merge((IEntity) property
+                  .getValue(), mergeMode, alreadyMerged));
             }
-            registeredCollection.clear();
-            for (IEntity entityCollectionElement : (Collection<IEntity>) property
-                .getValue()) {
-              registeredCollection.add(merge(entityCollectionElement,
-                  mergeMode, alreadyMerged));
+          } else if (property.getValue() instanceof Collection) {
+            if (mergeMode == MergeMode.MERGE_CLEAN_INITIALIZED
+                && !isInitialized((Collection) property.getValue())) {
+              if (registeredEntityProperties.get(property.getKey()) == null) {
+                mergedProperties.put(property.getKey(), property.getValue());
+              }
+            } else {
+              Collection<IEntity> registeredCollection = (Collection<IEntity>) registeredEntityProperties
+                  .get(property.getKey());
+              if (registeredCollection == null
+                  || (registeredCollection instanceof PersistentCollection)) {
+                if (property.getValue() instanceof Set) {
+                  registeredCollection = collectionFactory
+                      .createEntityCollection(Set.class);
+                } else if (property.getValue() instanceof List) {
+                  registeredCollection = collectionFactory
+                      .createEntityCollection(List.class);
+                }
+              }
+              registeredCollection.clear();
+              for (IEntity entityCollectionElement : (Collection<IEntity>) property
+                  .getValue()) {
+                registeredCollection.add(merge(entityCollectionElement,
+                    mergeMode, alreadyMerged));
+              }
+              mergedProperties.put(property.getKey(), registeredCollection);
             }
-            mergedProperties.put(property.getKey(), registeredCollection);
           } else {
             mergedProperties.put(property.getKey(), property.getValue());
           }
@@ -138,6 +157,14 @@ public class BasicApplicationSession implements IApplicationSession {
     } finally {
       dirtRecorder.setEnabled(dirtRecorderWasEnabled);
     }
+  }
+
+  protected boolean isInitialized(IEntity entity) {
+    return true;
+  }
+
+  protected boolean isInitialized(Collection collection) {
+    return true;
   }
 
   /**

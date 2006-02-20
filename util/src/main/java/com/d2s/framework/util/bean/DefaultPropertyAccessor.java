@@ -70,7 +70,7 @@ public class DefaultPropertyAccessor implements IAccessor {
    * 
    * @return the property.
    */
-  protected String getProperty() {
+  public String getProperty() {
     return property;
   }
 

@@ -25,7 +25,7 @@
   <!--
     The implementation used as AccessorFactory.
   -->
-  <bean id="accessorFactory" class="com.d2s.framework.util.bean.DefaultAccessorFactory"></bean>
+  <bean id="defaultAccessorFactory" class="com.d2s.framework.util.bean.DefaultAccessorFactory"></bean>
 
   <!--
     The implementation used as ConnectorFactory.
@@ -80,12 +80,16 @@
   <!--
     The implementation used as EntityFactory.
   -->
-  <bean id="entityFactory"
-    class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory">
+  <bean id="basicEntityFactory"
+    class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
     <property name="accessorFactory" ref="accessorFactory" />
     <property name="entityCollectionFactory" ref="entityCollectionFactory" />
     <property name="entityExtensionFactory" ref="entityExtensionFactory" />
     <property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
+  </bean>
+
+  <bean id="entityFactory" parent="basicEntityFactory"
+    class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory">
     <property name="applicationSession" ref="applicationSession" />
   </bean>
 

@@ -34,6 +34,7 @@ public enum MergeMode {
    * generally used for "reload" behaviour whenever an entity deep in the graph
    * might have been updated in memory.
    */
-  MERGE_CLEAN_EAGER
+  MERGE_CLEAN_EAGER,
 
+  MERGE_CLEAN_INITIALIZED
 }

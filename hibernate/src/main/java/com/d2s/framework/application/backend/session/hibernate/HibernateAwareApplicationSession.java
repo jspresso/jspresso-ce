@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
+import org.hibernate.collection.PersistentCollection;
 import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -70,40 +72,43 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   protected Collection<IEntity> wrapUnitOfWorkEntityCollection(IEntity entity,
       Collection<IEntity> transientCollection,
       Collection<IEntity> snapshotCollection, String role) {
-    if (entity.isPersistent()) {
-      if (transientCollection instanceof Set) {
-        PersistentSet persistentSet = new PersistentSet(null,
-            (Set<?>) transientCollection);
-        persistentSet.setOwner(entity);
-        HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
-        if (snapshotCollection == null) {
-          persistentSet.clearDirty();
-          snapshotCollection = transientCollection;
+    if (!(transientCollection instanceof PersistentCollection)) {
+      if (entity.isPersistent()) {
+        if (transientCollection instanceof Set) {
+          PersistentSet persistentSet = new PersistentSet(null,
+              (Set<?>) transientCollection);
+          persistentSet.setOwner(entity);
+          HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
+          if (snapshotCollection == null) {
+            persistentSet.clearDirty();
+            snapshotCollection = transientCollection;
+          }
+          for (Object snapshotCollectionElement : snapshotCollection) {
+            snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
+          }
+          persistentSet.setSnapshot(entity.getId(), getHibernateRoleName(entity
+              .getContract(), role), snapshot);
+          return persistentSet;
+        } else if (transientCollection instanceof List) {
+          PersistentList persistentList = new PersistentList(null,
+              (List<?>) transientCollection);
+          persistentList.setOwner(entity);
+          ArrayList<Object> snapshot = new ArrayList<Object>();
+          if (snapshotCollection == null) {
+            persistentList.clearDirty();
+            snapshotCollection = transientCollection;
+          }
+          for (Object snapshotCollectionElement : snapshotCollection) {
+            snapshot.add(snapshotCollectionElement);
+          }
+          persistentList.setSnapshot(entity.getId(), getHibernateRoleName(
+              entity.getContract(), role), snapshot);
+          return persistentList;
         }
-        for (Object snapshotCollectionElement : snapshotCollection) {
-          snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
-        }
-        persistentSet.setSnapshot(entity.getId(), getHibernateRoleName(entity
-            .getContract(), role), snapshot);
-        return persistentSet;
-      } else if (transientCollection instanceof List) {
-        PersistentList persistentList = new PersistentList(null,
-            (List<?>) transientCollection);
-        persistentList.setOwner(entity);
-        ArrayList<Object> snapshot = new ArrayList<Object>();
-        if (snapshotCollection == null) {
-          persistentList.clearDirty();
-          snapshotCollection = transientCollection;
-        }
-        for (Object snapshotCollectionElement : snapshotCollection) {
-          snapshot.add(snapshotCollectionElement);
-        }
-        persistentList.setSnapshot(entity.getId(), getHibernateRoleName(entity
-            .getContract(), role), snapshot);
-        return persistentList;
       }
     }
-    return super.wrapUnitOfWorkEntityCollection(entity, transientCollection, snapshotCollection, role);
+    return super.wrapUnitOfWorkEntityCollection(entity, transientCollection,
+        snapshotCollection, role);
   }
 
   /**
@@ -122,6 +127,26 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         entityContract, role);
     return roleDescriptor.getReadMethod().getDeclaringClass().getName() + "."
         + role;
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isInitialized(Collection collection) {
+    return Hibernate.isInitialized(collection);
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean isInitialized(IEntity entity) {
+    return Hibernate.isInitialized(entity);
   }
 
 }

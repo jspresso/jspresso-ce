@@ -156,15 +156,19 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    *          the bean collection to align the child connectors on.
    */
   private void updateChildConnectors(Collection beanCollection) {
+    if (elementClass == null) {
+      return;
+    }
     int beanCollectionSize = 0;
     if (beanCollection != null) {
       beanCollectionSize = beanCollection.size();
       int i = 0;
       for (Object nextCollectionElement : beanCollection) {
-        if (elementClass == null) {
-          throw new ConnectorBindingException(
-              "elementClass must be set on BeanCollectionPropertyConnector before it can be used.");
-        }
+        // if (elementClass == null) {
+        // throw new ConnectorBindingException(
+        // "elementClass must be set on BeanCollectionPropertyConnector before
+        // it can be used.");
+        //        }
         IValueConnector childConnector = getChildConnector(i);
         if (childConnector == null) {
           childConnector = createChildConnector(computeConnectorId(i));

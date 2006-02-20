@@ -5,7 +5,6 @@ package com.d2s.framework.binding.bean;
 
 import java.util.Collection;
 
-import com.d2s.framework.util.bean.DefaultAccessorFactory;
 import com.d2s.framework.util.bean.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.util.bean.PropertyHelper;
@@ -56,9 +55,6 @@ public class DefaultBeanConnectorFactory implements IBeanConnectorFactory {
    */
   public BeanPropertyConnector createBeanPropertyConnector(String property,
       Class beanClass) {
-    if (accessorFactory == null) {
-      accessorFactory = new DefaultAccessorFactory();
-    }
     Class propertyType = getPropertyType(beanClass, property);
 
     if (IPropertyChangeCapable.class.isAssignableFrom(propertyType)) {

@@ -84,7 +84,7 @@ public abstract class BeanPropertyConnector extends AbstractValueConnector
     if (newBean != null) {
       newBean.addPropertyChangeListener(getId(), this);
     }
-    
+
     // line below is mainly used to initialize oldConnectorValue (the bean
     // property connector is not used as model yet since it is just being linked
     // to its parent). We would like to use the commented beanChange line but it
