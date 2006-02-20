@@ -13,6 +13,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.d2s.framework.util.bean.ElementClass;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
@@ -79,6 +80,7 @@ public class Module implements IPropertyChangeCapable {
    * 
    * @return the list of subModules modules.
    */
+  @ElementClass(SubModule.class)
   public List<SubModule> getSubModules() {
     return subModules;
   }

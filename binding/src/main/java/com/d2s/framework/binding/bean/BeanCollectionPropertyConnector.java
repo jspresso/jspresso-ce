@@ -153,12 +153,12 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    *          the bean collection to align the child connectors on.
    */
   private void updateChildConnectors(Collection beanCollection) {
-    if (getElementClass() == null) {
-      throw new ConnectorBindingException(
-          "elementClass must be set on BeanCollectionPropertyConnector before it can be used.");
-    }
     int beanCollectionSize = 0;
-    if (beanCollection != null) {
+    if (beanCollection != null && beanCollection.size() > 0) {
+      if (getElementClass() == null) {
+        throw new ConnectorBindingException(
+            "elementClass must be set on BeanCollectionPropertyConnector before it can be used.");
+      }
       beanCollectionSize = beanCollection.size();
       int i = 0;
       for (Object nextCollectionElement : beanCollection) {
@@ -306,6 +306,16 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
       elementClass = AccessorInfo.getCollectionElementClass(getBeanProvider()
           .getBeanClass(), getId());
     }
-    return null;
+    return elementClass;
+  }
+
+  
+  /**
+   * Sets the elementClass.
+   * 
+   * @param elementClass the elementClass to set.
+   */
+  protected void setElementClass(Class elementClass) {
+    this.elementClass = elementClass;
   }
 }

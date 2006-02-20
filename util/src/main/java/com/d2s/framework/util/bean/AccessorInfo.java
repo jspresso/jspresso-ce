@@ -5,6 +5,7 @@ package com.d2s.framework.util.bean;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * This class wraps a method object and helps analyzing it as an accessor.
@@ -152,8 +153,19 @@ public class AccessorInfo {
    */
   public static Class<?> getCollectionElementClass(Class beanClass,
       String property) {
-    PropertyDescriptor propertyDescriptor = PropertyHelper
-        .getPropertyDescriptor(beanClass, property);
+    PropertyDescriptor propertyDescriptor = null;
+    if (Proxy.isProxyClass(beanClass)) {
+      for (Class implementedInterface : beanClass.getInterfaces()) {
+        propertyDescriptor = PropertyHelper.getPropertyDescriptor(
+            implementedInterface, property);
+        if (propertyDescriptor != null) {
+          break;
+        }
+      }
+    } else {
+      propertyDescriptor = PropertyHelper.getPropertyDescriptor(beanClass,
+          property);
+    }
     ElementClass ecAnn = propertyDescriptor.getReadMethod().getAnnotation(
         ElementClass.class);
     if (ecAnn != null) {

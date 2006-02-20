@@ -51,6 +51,14 @@ public class BeanConnector extends BeanRefPropertyConnector {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Class getBeanClass() {
+    return getBeanProvider().getBeanClass();
+  }
+
+  /**
    * Returns the bean itself (the java bean instance).
    * <p>
    * {@inheritDoc}
@@ -149,8 +157,11 @@ public class BeanConnector extends BeanRefPropertyConnector {
      *          the new bean instance.
      */
     protected void setBean(IPropertyChangeCapable newBean) {
-      IPropertyChangeCapable oldBean = this.bean;
-      this.bean = newBean;
+      IPropertyChangeCapable oldBean = bean;
+      bean = newBean;
+      if (bean != null) {
+        beanClass = bean.getClass();
+      }
       if (beanChangeSupport != null) {
         beanChangeSupport.fireBeanChange(oldBean, newBean);
       }

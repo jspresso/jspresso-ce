@@ -141,9 +141,11 @@ public class BeanRefPropertyConnector extends BeanPropertyConnector implements
    */
   @Override
   public void beanChange(BeanChangeEvent evt) {
-    if (evt.getNewValue() != null) {
-      beanClass = evt.getNewValue().getClass();
-    }
+    //FIXME BOGUS CODE
+    // if (evt.getNewValue() != null) {
+    // beanClass = evt.getNewValue().getClass();
+    // }
+    
     // preserve the old value before it gets changed.
     Object oldValue = getOldConnectorValue();
     // handle the change normally

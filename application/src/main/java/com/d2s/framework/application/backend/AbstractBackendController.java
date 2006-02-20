@@ -89,28 +89,25 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public ICompositeValueConnector getModuleConnector(
-      String moduleId) {
+  public ICompositeValueConnector getModuleConnector(String moduleId) {
     return moduleConnectors.get(moduleId);
   }
 
   /**
-   * Sets the model controller modules. These modules are not kept
-   * as-is. Their connectors are.
+   * Sets the model controller modules. These modules are not kept as-is. Their
+   * connectors are.
    * 
    * @param modules
-   *          A map containing the modules indexed by a
-   *          well-known key used to bind them with their views.
+   *          A map containing the modules indexed by a well-known key used to
+   *          bind them with their views.
    */
   public void setModules(Map<String, Module> modules) {
     moduleConnectors = new HashMap<String, ICompositeValueConnector>();
-    for (Map.Entry<String, Module> moduleEntry : modules
-        .entrySet()) {
+    for (Map.Entry<String, Module> moduleEntry : modules.entrySet()) {
       BeanConnector nextModuleConnector = beanConnectorFactory
           .createBeanConnector(moduleEntry.getKey(), Module.class);
       nextModuleConnector.setConnectorValue(moduleEntry.getValue());
-      moduleConnectors.put(moduleEntry.getKey(),
-          nextModuleConnector);
+      moduleConnectors.put(moduleEntry.getKey(), nextModuleConnector);
     }
   }
 
@@ -120,7 +117,8 @@ public abstract class AbstractBackendController extends AbstractController
   public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
     if (modelDescriptor instanceof ICollectionDescriptor) {
       return beanConnectorFactory.createBeanCollectionConnector(modelDescriptor
-          .getName());
+          .getName(), ((ICollectionDescriptor) modelDescriptor)
+          .getElementDescriptor().getComponentContract());
     } else if (modelDescriptor instanceof IComponentDescriptor) {
       return beanConnectorFactory.createBeanConnector(
           modelDescriptor.getName(), ((IComponentDescriptor) modelDescriptor)

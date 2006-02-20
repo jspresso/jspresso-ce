@@ -32,9 +32,12 @@ public interface IBeanConnectorFactory {
    * 
    * @param id
    *          the connector id.
+   * @param elementClass
+   *          the collection element class.
    * @return the created BeanCollectionConnector.
    */
-  BeanCollectionConnector createBeanCollectionConnector(String id);
+  BeanCollectionConnector createBeanCollectionConnector(String id,
+      Class elementClass);
 
   /**
    * Creates a new <code>BeanPropertyConnector</code>. Depending on the type

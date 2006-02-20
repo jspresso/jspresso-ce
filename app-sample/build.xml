@@ -17,7 +17,7 @@
 		<mkdir dir="${xdoclet.hibernate.output.dir}" />
 		<path id="xdoclet.task.classpath">
 			<!-- Add the xdoclet2 plugins jar here -->
-			<pathelement location="${xdoclet.plugins.dir}/xdoclet-plugin-hibernate-1.0.3.jar" />
+			<pathelement location="${xdoclet.plugins.dir}/xdoclet-plugin-hibernate-1.0.2.jar" />
 			<!-- Xdoclet2 runtime dependencies -->
 			<fileset dir="${xdoclet.lib.dir}">
 				<include name="**/*.jar" />
