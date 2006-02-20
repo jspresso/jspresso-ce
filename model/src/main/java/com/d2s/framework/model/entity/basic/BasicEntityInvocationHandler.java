@@ -28,7 +28,6 @@ import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
-import com.d2s.framework.model.entity.DefaultEntityCollectionFactory;
 import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
@@ -298,18 +297,35 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     return clonedEntity;
   }
 
-  private Object getProperty(IPropertyDescriptor propertyDescriptor) {
+  /**
+   * Gets a property value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor to get the value for.
+   * @return the property value.
+   */
+  protected Object getProperty(IPropertyDescriptor propertyDescriptor) {
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      return getCollectionPropertyDescriptor((ICollectionPropertyDescriptor) propertyDescriptor);
+    }
+    return properties.get(propertyDescriptor.getName());
+  }
+
+  /**
+   * Gets a collection property value.
+   * 
+   * @param propertyDescriptor
+   *          the property descriptor to get the value for.
+   * @return the property value.
+   */
+  protected Object getCollectionPropertyDescriptor(
+      ICollectionPropertyDescriptor propertyDescriptor) {
     Object property = properties.get(propertyDescriptor.getName());
     if (property == null) {
-      if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        if (collectionFactory == null) {
-          collectionFactory = new DefaultEntityCollectionFactory();
-        }
-        property = collectionFactory
-            .createEntityCollection(((ICollectionPropertyDescriptor) propertyDescriptor)
-                .getReferencedDescriptor().getCollectionInterface());
-        properties.put(propertyDescriptor.getName(), property);
-      }
+      property = collectionFactory
+          .createEntityCollection(propertyDescriptor
+              .getReferencedDescriptor().getCollectionInterface());
+      properties.put(propertyDescriptor.getName(), property);
     }
     return property;
   }
@@ -510,8 +526,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             accessorFactory.createCollectionPropertyAccessor(
                 reversePropertyDescriptor.getName(),
                 propertyDescriptor.getReferencedDescriptor()
-                    .getElementDescriptor().getComponentContract()).removeFromValue(value,
-                proxy);
+                    .getElementDescriptor().getComponentContract())
+                .removeFromValue(value, proxy);
           }
         }
         Collection oldCollectionSnapshot = CollectionHelper
