@@ -131,8 +131,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   @Override
@@ -141,8 +139,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   @Override

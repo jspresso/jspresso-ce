@@ -94,17 +94,18 @@ public class BasicProxyEntityFactory implements IEntityFactory,
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
   }
-  
+
   /**
-   * TODO Comment needed.
+   * Creates the entity proxy invocation handler.
    * 
    * @param entityDescriptor
-   * @return
+   *          the entity descriptor.
+   * @return the entity proxy invocation handler.
    */
-  protected InvocationHandler createEntityInvocationHandler(IEntityDescriptor entityDescriptor) {
-    return new BasicEntityInvocationHandler(
-        entityDescriptor, entityCollectionFactory, accessorFactory,
-        entityExtensionFactory);
+  protected InvocationHandler createEntityInvocationHandler(
+      IEntityDescriptor entityDescriptor) {
+    return new BasicEntityInvocationHandler(entityDescriptor,
+        entityCollectionFactory, accessorFactory, entityExtensionFactory);
   }
 
   /**

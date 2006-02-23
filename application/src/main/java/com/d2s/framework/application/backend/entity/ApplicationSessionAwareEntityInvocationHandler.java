@@ -14,7 +14,9 @@ import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
 import com.d2s.framework.util.bean.IAccessorFactory;
 
 /**
- * TODO Comment needed.
+ * This entity invocation handler handles initialization of lazy loaded
+ * properties like collections an entity references, delegating the
+ * initialization job to the application session.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -25,18 +27,26 @@ import com.d2s.framework.util.bean.IAccessorFactory;
 public class ApplicationSessionAwareEntityInvocationHandler extends
     BasicEntityInvocationHandler {
 
-  private static final long serialVersionUID = 3663517052427878204L;
+  private static final long   serialVersionUID = 3663517052427878204L;
 
   private IApplicationSession applicationSession;
 
   /**
-   * Constructs a new <code>ApplicationSessionAwareEntityInvocationHandler</code>
-   * instance.
+   * Constructs a new
+   * <code>ApplicationSessionAwareEntityInvocationHandler</code> instance.
    * 
    * @param entityDescriptor
+   *          The descriptor of the proxy entity.
    * @param collectionFactory
+   *          The factory used to create empty entity collections from
+   *          collection getters.
    * @param accessorFactory
+   *          The factory used to access proxy properties.
    * @param extensionFactory
+   *          The factory used to create entity extensions based on their
+   *          classes.
+   * @param applicationSession
+   *          the current application session.
    */
   protected ApplicationSessionAwareEntityInvocationHandler(
       IEntityDescriptor entityDescriptor,
@@ -55,11 +65,9 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor propertyDescriptor) {
-    Object lazyProperty = straightGetProperty(propertyDescriptor
-        .getName());
-    Object initializedProperty = applicationSession
-        .initializePropertyIfNeeded((IEntity) proxy, propertyDescriptor
-            .getName());
+    Object lazyProperty = straightGetProperty(propertyDescriptor.getName());
+    Object initializedProperty = applicationSession.initializePropertyIfNeeded(
+        (IEntity) proxy, propertyDescriptor.getName());
     if (initializedProperty != lazyProperty) {
       storeProperty(propertyDescriptor.getName(), initializedProperty);
     }
@@ -72,11 +80,9 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    Object lazyProperty = straightGetProperty(propertyDescriptor
-        .getName());
-    Object initializedProperty = applicationSession
-        .initializePropertyIfNeeded((IEntity) proxy, propertyDescriptor
-            .getName());
+    Object lazyProperty = straightGetProperty(propertyDescriptor.getName());
+    Object initializedProperty = applicationSession.initializePropertyIfNeeded(
+        (IEntity) proxy, propertyDescriptor.getName());
     if (initializedProperty != lazyProperty) {
       storeProperty(propertyDescriptor.getName(), initializedProperty);
     }

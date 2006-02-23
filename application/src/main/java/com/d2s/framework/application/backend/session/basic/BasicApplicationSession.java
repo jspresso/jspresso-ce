@@ -356,15 +356,19 @@ public class BasicApplicationSession implements IApplicationSession {
         }
       }
     }
-    unitOfWork.register(uowEntity, new HashMap<String, Object>(dirtyProperties));
+    unitOfWork
+        .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
     return uowEntity;
   }
 
   /**
-   * TODO Comment needed.
+   * Creates a transient collection instance, in respect to the type of
+   * collection passed as parameter.
    * 
    * @param collection
-   * @return
+   *          the collection to take the type from (List, Set, ...)
+   * @return a transient collection instance with the same interface type as the
+   *         parameter.
    */
   protected Collection<IEntity> createTransientEntityCollection(
       Collection collection) {

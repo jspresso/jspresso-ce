@@ -94,6 +94,16 @@ public interface IApplicationSession extends IEntityDirtAware {
    *         unit of work.
    */
   List<IEntity> cloneInUnitOfWork(List<IEntity> entities);
-  
+
+  /**
+   * Whenever a property might not be fully initialized, this method performs
+   * all necessary complementary initializations..
+   * 
+   * @param entity
+   *          the entity holding the property.
+   * @param propertyName
+   *          the property name.
+   * @return the fully initialized property.
+   */
   Object initializePropertyIfNeeded(IEntity entity, String propertyName);
 }
