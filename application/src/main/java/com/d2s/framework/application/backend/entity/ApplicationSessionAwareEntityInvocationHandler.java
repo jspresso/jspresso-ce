@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.backend.entity;
 
-import java.util.Collection;
-
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -26,6 +24,8 @@ import com.d2s.framework.util.bean.IAccessorFactory;
  */
 public class ApplicationSessionAwareEntityInvocationHandler extends
     BasicEntityInvocationHandler {
+
+  private static final long serialVersionUID = 3663517052427878204L;
 
   private IApplicationSession applicationSession;
 
