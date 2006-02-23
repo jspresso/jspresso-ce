@@ -84,7 +84,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    *          The factory used to create entity extensions based on their
    *          classes.
    */
-  BasicEntityInvocationHandler(IEntityDescriptor entityDescriptor,
+  protected BasicEntityInvocationHandler(IEntityDescriptor entityDescriptor,
       IEntityCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory, IEntityExtensionFactory extensionFactory) {
     this.properties = createPropertyMap();
@@ -175,7 +175,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             try {
               switch (accessorType) {
                 case AccessorInfo.GETTER:
-                  return getProperty(propertyDescriptor);
+                  return getProperty(proxy, propertyDescriptor);
                 case AccessorInfo.SETTER:
                   setProperty(proxy, propertyDescriptor, args[0]);
                   return null;
@@ -300,13 +300,17 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   /**
    * Gets a property value.
    * 
+   * @param proxy
+   *          the proxy to get the property of.
    * @param propertyDescriptor
    *          the property descriptor to get the value for.
    * @return the property value.
    */
-  protected Object getProperty(IPropertyDescriptor propertyDescriptor) {
+  protected Object getProperty(Object proxy,
+      IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      return getCollectionPropertyDescriptor((ICollectionPropertyDescriptor) propertyDescriptor);
+      return getCollectionProperty(proxy,
+          (ICollectionPropertyDescriptor) propertyDescriptor);
     }
     return properties.get(propertyDescriptor.getName());
   }
@@ -314,18 +318,19 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   /**
    * Gets a collection property value.
    * 
+   * @param proxy
+   *          the proxy to get the property of.
    * @param propertyDescriptor
    *          the property descriptor to get the value for.
    * @return the property value.
    */
-  protected Object getCollectionPropertyDescriptor(
-      ICollectionPropertyDescriptor propertyDescriptor) {
+  protected Object getCollectionProperty(@SuppressWarnings("unused")
+  Object proxy, ICollectionPropertyDescriptor propertyDescriptor) {
     Object property = properties.get(propertyDescriptor.getName());
     if (property == null) {
-      property = collectionFactory
-          .createEntityCollection(propertyDescriptor
-              .getReferencedDescriptor().getCollectionInterface());
-      properties.put(propertyDescriptor.getName(), property);
+      property = collectionFactory.createEntityCollection(propertyDescriptor
+          .getReferencedDescriptor().getCollectionInterface());
+      storeProperty(propertyDescriptor.getName(), property);
     }
     return property;
   }
@@ -358,7 +363,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       try {
         if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
           // It's a 'one' relation end
-          properties.put(propertyName, newProperty);
+          storeProperty(propertyName, newProperty);
           if (reversePropertyDescriptor != null) {
             // It is bidirectionnal, so we are going to update the other end.
             if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
@@ -436,7 +441,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
         throw new EntityException(ex);
       }
     } else {
-      properties.put(propertyName, newProperty);
+      storeProperty(propertyName, newProperty);
     }
     firePropertyChange(propertyName, oldProperty, newProperty);
     postprocessSetter(proxy, propertyName, newProperty, oldProperty);
@@ -782,7 +787,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   private void straightSetProperty(String propertyName,
       Object backendPropertyValue) {
     Object currentPropertyValue = properties.get(propertyName);
-    properties.put(propertyName, backendPropertyValue);
+    storeProperty(propertyName, backendPropertyValue);
     if (entityDescriptor.getPropertyDescriptor(propertyName) instanceof ICollectionPropertyDescriptor) {
       currentPropertyValue = Proxy.newProxyInstance(
           getClass().getClassLoader(),
@@ -794,7 +799,15 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     firePropertyChange(propertyName, currentPropertyValue, backendPropertyValue);
   }
 
-  private Object straightGetProperty(String propertyName) {
+  /**
+   * Directly get a property value out of the property store without any other
+   * operation.
+   * 
+   * @param propertyName
+   *          the name of the property.
+   * @return the property value or null.
+   */
+  protected Object straightGetProperty(String propertyName) {
     return properties.get(propertyName);
   }
 
@@ -848,6 +861,19 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   private Map<String, Object> createPropertyMap() {
     return new HashMap<String, Object>();
+  }
+
+  /**
+   * Direct write access to the properties map without any other operation. Use
+   * with caution only in subclasses.
+   * 
+   * @param propertyName
+   *          the property name.
+   * @param propertyValue
+   *          the property value.
+   */
+  protected void storeProperty(String propertyName, Object propertyValue) {
+    properties.put(propertyName, propertyValue);
   }
 
   private static final class NeverEqualsInvocationHandler implements

@@ -94,4 +94,6 @@ public interface IApplicationSession extends IEntityDirtAware {
    *         unit of work.
    */
   List<IEntity> cloneInUnitOfWork(List<IEntity> entities);
+  
+  Object initializePropertyIfNeeded(IEntity entity, String propertyName);
 }

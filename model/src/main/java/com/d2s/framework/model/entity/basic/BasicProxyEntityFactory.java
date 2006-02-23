@@ -4,6 +4,7 @@
 package com.d2s.framework.model.entity.basic;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 import org.springframework.context.ApplicationContext;
@@ -76,9 +77,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   private IEntity createEntityInstance(Class entityContract, Serializable id,
       Class[] extraInterfaces) {
     IEntityDescriptor entityDescriptor = getEntityDescriptor(entityContract);
-    BasicEntityInvocationHandler entityHandler = new BasicEntityInvocationHandler(
-        entityDescriptor, entityCollectionFactory, accessorFactory,
-        entityExtensionFactory);
+    InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
     Class[] implementedClasses;
     if (extraInterfaces != null) {
       implementedClasses = new Class[extraInterfaces.length + 1];
@@ -94,6 +93,18 @@ public class BasicProxyEntityFactory implements IEntityFactory,
         .getClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
+  }
+  
+  /**
+   * TODO Comment needed.
+   * 
+   * @param entityDescriptor
+   * @return
+   */
+  protected InvocationHandler createEntityInvocationHandler(IEntityDescriptor entityDescriptor) {
+    return new BasicEntityInvocationHandler(
+        entityDescriptor, entityCollectionFactory, accessorFactory,
+        entityExtensionFactory);
   }
 
   /**
@@ -174,7 +185,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
    * 
    * @return the accessorFactory.
    */
-  IAccessorFactory getAccessorFactory() {
+  protected IAccessorFactory getAccessorFactory() {
     return accessorFactory;
   }
 
@@ -183,7 +194,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
    * 
    * @return the entityCollectionFactory.
    */
-  IEntityCollectionFactory getEntityCollectionFactory() {
+  protected IEntityCollectionFactory getEntityCollectionFactory() {
     return entityCollectionFactory;
   }
 
@@ -192,7 +203,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
    * 
    * @return the entityExtensionFactory.
    */
-  IEntityExtensionFactory getEntityExtensionFactory() {
+  protected IEntityExtensionFactory getEntityExtensionFactory() {
     return entityExtensionFactory;
   }
 

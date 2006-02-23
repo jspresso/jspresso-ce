@@ -184,6 +184,13 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public Object initializePropertyIfNeeded(IEntity entity, String propertyName) {
+    return (Collection<?>) entity.straightGetProperty(propertyName);
+  }
+  
+  /**
    * Gets a previously registered entity in this application session.
    * 
    * @param entityContractName
@@ -330,7 +337,7 @@ public class BasicApplicationSession implements IApplicationSession {
         uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
             (IEntity) property.getValue(), alreadyMerged));
       } else if (property.getValue() instanceof Collection) {
-        Collection<IEntity> uowEntityCollection = createUnitOfWorkEntityCollection((Collection) property
+        Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
             .getValue());
         for (IEntity entityCollectionElement : (Collection<IEntity>) property
             .getValue()) {
@@ -348,7 +355,7 @@ public class BasicApplicationSession implements IApplicationSession {
     return uowEntity;
   }
 
-  private Collection<IEntity> createUnitOfWorkEntityCollection(
+  protected Collection<IEntity> createTransientEntityCollection(
       Collection collection) {
     Collection<IEntity> uowEntityCollection = null;
     if (collection instanceof Set) {

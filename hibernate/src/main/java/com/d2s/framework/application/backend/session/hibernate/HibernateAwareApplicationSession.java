@@ -19,6 +19,7 @@ import org.hibernate.collection.PersistentSet;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
+import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.PropertyHelper;
@@ -147,6 +148,41 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   @Override
   protected boolean isInitialized(IEntity entity) {
     return Hibernate.isInitialized(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Object initializePropertyIfNeeded(IEntity entity, String propertyName) {
+    final Object currentPropertyValue = (Collection<?>) entity
+        .straightGetProperty(propertyName);
+    if (Hibernate.isInitialized(currentPropertyValue)) {
+      return currentPropertyValue;
+    }
+    final IEntity uowEntity = cloneInUnitOfWork(entity);
+    Object initializedUowProperty = hibernateTemplate
+        .execute(new HibernateCallback() {
+
+          /**
+           * {@inheritDoc}
+           */
+          public Object doInHibernate(Session session) {
+            session.lock(uowEntity, LockMode.NONE);
+            Hibernate.initialize(currentPropertyValue);
+            if (currentPropertyValue instanceof Collection) {
+              Collection<IEntity> returnedCollection = createTransientEntityCollection((Collection) currentPropertyValue);
+              for (Object nextUowEntityCollectionElement : (Collection) currentPropertyValue) {
+                returnedCollection.add(merge(
+                    (IEntity) nextUowEntityCollectionElement,
+                    MergeMode.MERGE_KEEP));
+              }
+              return returnedCollection;
+            }
+            return currentPropertyValue;
+          }
+        });
+    return initializedUowProperty;
   }
 
 }
