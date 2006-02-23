@@ -303,16 +303,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       if (propertyEntry.getValue() != null) {
         IPropertyDescriptor propertyDescriptor = entityDescriptor
             .getPropertyDescriptor(propertyEntry.getKey());
-        if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-          IRelationshipEndPropertyDescriptor reverseDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-              .getReverseRelationEnd();
-          if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-            if (!(reverseDescriptor instanceof IReferencePropertyDescriptor)) {
-              clonedEntity.straightSetProperty(propertyEntry.getKey(),
-                  propertyEntry.getValue());
-            }
-          }
-        } else {
+        if (!(propertyDescriptor instanceof IRelationshipEndPropertyDescriptor)) {
           clonedEntity.straightSetProperty(propertyEntry.getKey(),
               propertyEntry.getValue());
         }

@@ -152,7 +152,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   @Override
   public Object initializePropertyIfNeeded(final IEntity entity,
       final String propertyName) {
-    Object currentPropertyValue = entity.straightGetProperty(propertyName);
+    final Object currentPropertyValue = entity.straightGetProperty(propertyName);
     if (Hibernate.isInitialized(currentPropertyValue)) {
       return currentPropertyValue;
     }
@@ -164,8 +164,11 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
            * {@inheritDoc}
            */
           public Object doInHibernate(Session session) {
-            IEntity loadedEntity = (IEntity) session.load(entity.getContract(),
-                entity.getId());
+            IEntity loadedEntity = entity.clone(true);
+            loadedEntity.straightSetProperty(propertyName, currentPropertyValue);
+            session.lock(loadedEntity, LockMode.NONE);
+            session.setReadOnly(loadedEntity, true);
+            
             Object loadedProperty = loadedEntity
                 .straightGetProperty(propertyName);
             Hibernate.initialize(loadedProperty);
