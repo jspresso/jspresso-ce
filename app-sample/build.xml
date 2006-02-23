@@ -1,11 +1,45 @@
-<project default="xdoclet-hibernate">
+<project default="generate-entities-ann">
 
-	<!-- Sets the Xdoclet2 location paths -->
 	<property file="build.properties" />
 	<property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" />
 	<property name="xdoclet.plugins.dir" value="${xdoclet.home}/plugins" />
-	<property name="xdoclet.hibernate.input.dir" value="${basedir}/src/main/java" />
-	<property name="xdoclet.hibernate.output.dir" value="${basedir}/target/classes" />
+
+	<property name="entities.output.dir" value="${basedir}/src/main/java" />
+	<path id="entity.generator.classpath">
+		<dirset dir="${project.home}">
+			<include name="**/target/classes" />
+		</dirset>
+		<fileset dir="${m2.repo}">
+			<include name="**/commons-cli-1.0.jar" />
+			<include name="**/freemarker-2.3.3.jar" />
+			<include name="**/spring-1.2.6.jar" />
+			<include name="**/commons-logging-1.0.4.jar" />
+			<include name="**/xml-apis-2.0.2.jar" />
+			<include name="**/xerces-2.0.2.jar" />
+			<include name="**/bsf-2.3.0.jar" />
+		</fileset>
+	</path>
+
+	<property name="xdoclet.hibernate.input.dir" value="${entities.output.dir}" />
+	<property name="xdoclet.hibernate.output.dir"
+	          value="${basedir}/src/main/resources" />
+
+
+	<target name="generate-entities-noann">
+		<java classname="com.d2s.framework.tools.entitygenerator.EntityGenerator"
+		      classpathref="entity.generator.classpath">
+			<arg value="-applicationContextKey" />
+			<arg value="sample-model-context" />
+			<arg value="-templateResourcePath" />
+			<arg value="/com/d2s/framework/tools/entitygenerator" />
+			<arg value="-templateName" />
+			<arg value="HibernateXdocletEntity.ftl" />
+			<arg value="-outputDir" />
+			<arg value="${entities.output.dir}" />
+			<arg value="-includePackages" />
+			<arg value="com.d2s.framework.sample.backend.domain" />
+		</java>
+	</target>
 
 	<target name="clean-hibernate">
 		<delete>
@@ -13,7 +47,8 @@
 		</delete>
 	</target>
 
-	<target name="xdoclet-hibernate" depends="clean-hibernate">
+	<target name="xdoclet-hibernate"
+	        depends="clean-hibernate, generate-entities-noann">
 		<mkdir dir="${xdoclet.hibernate.output.dir}" />
 		<path id="xdoclet.task.classpath">
 			<!-- Add the xdoclet2 plugins jar here -->
@@ -23,15 +58,36 @@
 				<include name="**/*.jar" />
 			</fileset>
 		</path>
-		<taskdef name="xdoclet" classname="org.xdoclet.ant.XDocletTask" classpathref="xdoclet.task.classpath" />
+		<taskdef name="xdoclet"
+		         classname="org.xdoclet.ant.XDocletTask"
+		         classpathref="xdoclet.task.classpath" />
 
 		<xdoclet>
 			<!-- Defines the file handled by xdoclet2 -->
-			<fileset dir="${xdoclet.hibernate.input.dir}"/>
+			<fileset dir="${xdoclet.hibernate.input.dir}" />
 
 			<!-- Generates the hibernate mapping files -->
-			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${xdoclet.hibernate.output.dir}" version="3.0"/>
+			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
+			           destdir="${xdoclet.hibernate.output.dir}"
+			           version="3.0" />
 		</xdoclet>
+	</target>
+
+	<target name="generate-entities-ann" depends="xdoclet-hibernate">
+		<java classname="com.d2s.framework.tools.entitygenerator.EntityGenerator"
+		      classpathref="entity.generator.classpath">
+			<arg value="-applicationContextKey" />
+			<arg value="sample-model-context" />
+			<arg value="-templateResourcePath" />
+			<arg value="/com/d2s/framework/tools/entitygenerator" />
+			<arg value="-templateName" />
+			<arg value="HibernateXdocletEntity.ftl" />
+			<arg value="-outputDir" />
+			<arg value="${entities.output.dir}" />
+			<arg value="-generateAnnotations" />
+			<arg value="-includePackages" />
+			<arg value="com.d2s.framework.sample.backend.domain" />
+		</java>
 	</target>
 
 </project>

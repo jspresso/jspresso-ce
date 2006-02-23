@@ -2,6 +2,15 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <beans>
+  <bean id="sample-model-context"
+    class="org.springframework.context.support.ClassPathXmlApplicationContext" lazy-init="true">
+    <constructor-arg>
+      <list>
+        <value>com/d2s/framework/application/commons.xml</value>
+        <value>com/d2s/framework/sample/model/sample-model.xml</value>
+      </list>
+    </constructor-arg>
+  </bean>
 	<bean id="sample-swing-context"
 		class="org.springframework.context.support.ClassPathXmlApplicationContext" lazy-init="true">
 		<constructor-arg>

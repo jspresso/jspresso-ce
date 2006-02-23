@@ -276,7 +276,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    </#if>
    * @return the ${propertyName}.
    */
+  <#if generateAnnotations>
   @com.d2s.framework.util.bean.ElementClass(${elementType}.class)
+  </#if>
   ${collectionType}<${elementType}> get${propertyName?cap_first}();
 </#macro>
 

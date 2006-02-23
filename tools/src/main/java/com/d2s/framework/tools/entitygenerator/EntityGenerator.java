@@ -51,10 +51,11 @@ public class EntityGenerator {
   private static final String OUTPUT_DIR              = "outputDir";
   private static final String COMPONENT_NAMES         = "componentNames";
   private static final String INCLUDE_PACKAGES        = "includePackages";
+  private static final String GENERATE_ANNOTATIONS    = "generateAnnotations";
 
   private void generateComponents(String applicationContextKey,
       String templateResourcePath, String templateName, String outputDir,
-      String[] includePackages, String[] componentNames) {
+      String[] includePackages, boolean generateAnnotations, String[] componentNames) {
     ApplicationContext appContext = getApplicationContext(applicationContextKey);
     if (componentNames == null) {
       String[] allComponentNames = appContext
@@ -69,7 +70,8 @@ public class EntityGenerator {
           }
         }
       }
-      componentNames = new ArrayList<String>(filteredComponentNames).toArray(new String[0]);
+      componentNames = new ArrayList<String>(filteredComponentNames)
+          .toArray(new String[0]);
     }
     Configuration cfg = new Configuration();
     cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
@@ -87,6 +89,7 @@ public class EntityGenerator {
     rootContext.put("generateSQLName", new GenerateSqlName());
     rootContext.put("instanceof", new InstanceOf(wrapper));
     rootContext.put("compareStrings", new CompareStrings(wrapper));
+    rootContext.put("generateAnnotations", new Boolean(generateAnnotations));
     for (String componentName : componentNames) {
       OutputStream out;
       if (outputDir != null) {
@@ -167,6 +170,12 @@ public class EntityGenerator {
             .create(INCLUDE_PACKAGES));
     options
         .addOption(OptionBuilder
+            .withArgName(GENERATE_ANNOTATIONS)
+            .withDescription(
+                "generate java5 annotations (incompatible with XDoclet as of now).")
+            .create(GENERATE_ANNOTATIONS));
+    options
+        .addOption(OptionBuilder
             .withArgName(COMPONENT_NAMES)
             .hasArgs()
             .withValueSeparator(',')
@@ -189,6 +198,7 @@ public class EntityGenerator {
         cmd.getOptionValue(TEMPLATE_RESOURCE_PATH), cmd
             .getOptionValue(TEMPLATE_NAME), cmd.getOptionValue(OUTPUT_DIR), cmd
             .getOptionValues(INCLUDE_PACKAGES), cmd
+            .hasOption(GENERATE_ANNOTATIONS), cmd
             .getOptionValues(COMPONENT_NAMES));
   }
 }

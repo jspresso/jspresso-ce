@@ -4,7 +4,7 @@
 <!--
   BlueVox Backend configuration.
 -->
-<beans>
+<beans default-lazy-init="true">
   <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
     <property name="driverClassName" value="org.hsqldb.jdbcDriver" />
     <property name="url" value="jdbc:hsqldb:." />

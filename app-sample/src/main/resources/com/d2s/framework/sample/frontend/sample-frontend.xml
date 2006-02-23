@@ -4,7 +4,7 @@
 <!--
 	Sample application frontend context.
 -->
-<beans>
+<beans default-lazy-init="true">
 	<!-- 
 		Actions
 	-->
