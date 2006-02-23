@@ -70,7 +70,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected Collection<IEntity> wrapUnitOfWorkEntityCollection(IEntity entity,
+  protected Collection<IEntity> wrapDetachedEntityCollection(IEntity entity,
       Collection<IEntity> transientCollection,
       Collection<IEntity> snapshotCollection, String role) {
     if (!(transientCollection instanceof PersistentCollection)) {
@@ -108,7 +108,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         }
       }
     }
-    return super.wrapUnitOfWorkEntityCollection(entity, transientCollection,
+    return super.wrapDetachedEntityCollection(entity, transientCollection,
         snapshotCollection, role);
   }
 
@@ -151,42 +151,39 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    */
   @Override
   public Object initializePropertyIfNeeded(final IEntity entity,
-      String propertyName) {
-    final Object currentPropertyValue = entity
-        .straightGetProperty(propertyName);
+      final String propertyName) {
+    Object currentPropertyValue = entity.straightGetProperty(propertyName);
     if (Hibernate.isInitialized(currentPropertyValue)) {
       return currentPropertyValue;
     }
-    try {
-      beginUnitOfWork();
-      final IEntity uowEntity = cloneInUnitOfWork(entity);
-      Object initializedUowProperty = hibernateTemplate
-          .execute(new HibernateCallback() {
 
-            /**
-             * {@inheritDoc}
-             */
-            public Object doInHibernate(Session session) {
-              session.lock(uowEntity, LockMode.NONE);
-              Hibernate.initialize(currentPropertyValue);
-              if (currentPropertyValue instanceof Collection) {
-                Collection<IEntity> returnedCollection = createTransientEntityCollection((Collection) currentPropertyValue);
-                for (Object nextUowEntityCollectionElement : (Collection) currentPropertyValue) {
-                  returnedCollection.add(merge(
-                      (IEntity) nextUowEntityCollectionElement,
-                      MergeMode.MERGE_KEEP));
-                }
-                return returnedCollection;
-              } else if (currentPropertyValue instanceof IEntity) {
-                return merge((IEntity) currentPropertyValue, MergeMode.MERGE_KEEP);
+    Object initializedProperty = hibernateTemplate
+        .execute(new HibernateCallback() {
+
+          /**
+           * {@inheritDoc}
+           */
+          public Object doInHibernate(Session session) {
+            IEntity loadedEntity = (IEntity) session.load(entity.getContract(),
+                entity.getId());
+            Object loadedProperty = loadedEntity
+                .straightGetProperty(propertyName);
+            Hibernate.initialize(loadedProperty);
+            if (loadedProperty instanceof Collection) {
+              Collection<IEntity> returnedCollection = createTransientEntityCollection((Collection) loadedProperty);
+              for (Object nextEntityCollectionElement : (Collection) loadedProperty) {
+                returnedCollection
+                    .add(merge((IEntity) nextEntityCollectionElement,
+                        MergeMode.MERGE_KEEP));
+                Hibernate.initialize(nextEntityCollectionElement);
               }
-              return currentPropertyValue;
+              return returnedCollection;
+            } else if (loadedProperty instanceof IEntity) {
+              return merge((IEntity) loadedProperty, MergeMode.MERGE_KEEP);
             }
-          });
-      return initializedUowProperty;
-    } finally {
-      rollbackUnitOfWork();
-    }
+            return loadedProperty;
+          }
+        });
+    return initializedProperty;
   }
-
 }

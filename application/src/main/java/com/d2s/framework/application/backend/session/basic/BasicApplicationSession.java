@@ -347,7 +347,7 @@ public class BasicApplicationSession implements IApplicationSession {
             uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
                 alreadyMerged));
           }
-          uowEntityCollection = wrapUnitOfWorkEntityCollection(entity,
+          uowEntityCollection = wrapDetachedEntityCollection(entity,
               uowEntityCollection, (Collection) dirtyProperties.get(property
                   .getKey()), property.getKey());
           uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
@@ -399,7 +399,7 @@ public class BasicApplicationSession implements IApplicationSession {
    *         in this implementation).
    */
   @SuppressWarnings("unused")
-  protected Collection<IEntity> wrapUnitOfWorkEntityCollection(IEntity entity,
+  protected Collection<IEntity> wrapDetachedEntityCollection(IEntity entity,
       Collection<IEntity> transientCollection,
       Collection<IEntity> snapshotCollection, String role) {
     return transientCollection;
