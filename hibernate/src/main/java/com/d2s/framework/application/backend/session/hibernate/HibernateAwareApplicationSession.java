@@ -155,7 +155,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    */
   @Override
   public Object initializePropertyIfNeeded(IEntity entity, String propertyName) {
-    final Object currentPropertyValue = (Collection<?>) entity
+    final Object currentPropertyValue = entity
         .straightGetProperty(propertyName);
     if (Hibernate.isInitialized(currentPropertyValue)) {
       return currentPropertyValue;

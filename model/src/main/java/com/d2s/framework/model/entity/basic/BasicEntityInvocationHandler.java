@@ -218,22 +218,24 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   private IEntity cloneProxy(boolean includeIdAndVersion) {
-    IEntity clonedEntity;
     if (includeIdAndVersion) {
-      clonedEntity = proxyEntityFactory.createEntityInstance(
-          getEntityContract(), (Serializable) properties.get(IEntity.ID));
-    } else {
-      clonedEntity = proxyEntityFactory
-          .createEntityInstance(getEntityContract());
+      // This is a "technical copy". No functional decisions must be made.
+      return carbonCopy();
     }
+    // This is a "create like" copy.
+    return softCopy();
+  }
+
+  private IEntity softCopy() {
+    IEntity clonedEntity = proxyEntityFactory
+        .createEntityInstance(getEntityContract());
 
     Map<Object, ICollectionPropertyDescriptor> collRelToUpdate = new HashMap<Object, ICollectionPropertyDescriptor>();
     for (Map.Entry<String, Object> propertyEntry : properties.entrySet()) {
       if (propertyEntry.getValue() != null
-          && (includeIdAndVersion || !(IEntity.ID
-              .equals(propertyEntry.getKey())
+          && !(IEntity.ID.equals(propertyEntry.getKey())
               || IEntity.VERSION.equals(propertyEntry.getKey()) || entityDescriptor
-              .getUnclonedProperties().contains(propertyEntry.getKey())))) {
+              .getUnclonedProperties().contains(propertyEntry.getKey()))) {
         IPropertyDescriptor propertyDescriptor = entityDescriptor
             .getPropertyDescriptor(propertyEntry.getKey());
         if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
@@ -244,20 +246,16 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
               clonedEntity.straightSetProperty(propertyEntry.getKey(),
                   propertyEntry.getValue());
               if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-                if (!includeIdAndVersion) {
-                  collRelToUpdate.put(propertyEntry.getValue(),
-                      (ICollectionPropertyDescriptor) reverseDescriptor);
-                }
+                collRelToUpdate.put(propertyEntry.getValue(),
+                    (ICollectionPropertyDescriptor) reverseDescriptor);
               }
             }
           } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
             if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-              if (!includeIdAndVersion) {
-                for (Object reverseCollectionElement : (Collection) propertyEntry
-                    .getValue()) {
-                  collRelToUpdate.put(reverseCollectionElement,
-                      (ICollectionPropertyDescriptor) reverseDescriptor);
-                }
+              for (Object reverseCollectionElement : (Collection) propertyEntry
+                  .getValue()) {
+                collRelToUpdate.put(reverseCollectionElement,
+                    (ICollectionPropertyDescriptor) reverseDescriptor);
               }
             }
           }
@@ -297,6 +295,32 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     return clonedEntity;
   }
 
+  private IEntity carbonCopy() {
+    IEntity clonedEntity = proxyEntityFactory.createEntityInstance(
+          getEntityContract(), (Serializable) properties.get(IEntity.ID));
+
+    for (Map.Entry<String, Object> propertyEntry : properties.entrySet()) {
+      if (propertyEntry.getValue() != null) {
+        IPropertyDescriptor propertyDescriptor = entityDescriptor
+            .getPropertyDescriptor(propertyEntry.getKey());
+        if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
+          IRelationshipEndPropertyDescriptor reverseDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+              .getReverseRelationEnd();
+          if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+            if (!(reverseDescriptor instanceof IReferencePropertyDescriptor)) {
+              clonedEntity.straightSetProperty(propertyEntry.getKey(),
+                  propertyEntry.getValue());
+            }
+          }
+        } else {
+          clonedEntity.straightSetProperty(propertyEntry.getKey(),
+              propertyEntry.getValue());
+        }
+      }
+    }
+    return clonedEntity;
+  }
+
   /**
    * Gets a property value.
    * 
@@ -311,6 +335,9 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       return getCollectionProperty(proxy,
           (ICollectionPropertyDescriptor) propertyDescriptor);
+    } else if(propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      return getReferenceProperty(proxy,
+          (IReferencePropertyDescriptor) propertyDescriptor);
     }
     return properties.get(propertyDescriptor.getName());
   }
@@ -333,6 +360,20 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       storeProperty(propertyDescriptor.getName(), property);
     }
     return property;
+  }
+
+  /**
+   * Gets a reference property value.
+   * 
+   * @param proxy
+   *          the proxy to get the property of.
+   * @param propertyDescriptor
+   *          the property descriptor to get the value for.
+   * @return the property value.
+   */
+  protected Object getReferenceProperty(@SuppressWarnings("unused")
+  Object proxy, IReferencePropertyDescriptor propertyDescriptor) {
+    return properties.get(propertyDescriptor.getName());
   }
 
   @SuppressWarnings("unchecked")

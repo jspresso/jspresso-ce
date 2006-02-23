@@ -90,27 +90,29 @@ public class BasicApplicationSession implements IApplicationSession {
         registeredEntity = entity.clone(true);
         entityRegistry.register(registeredEntity);
         dirtRecorder.register(registeredEntity, null);
-      }
-      alreadyMerged.put(entity, registeredEntity);
-      if (mergeMode == MergeMode.MERGE_KEEP) {
+      } else if (mergeMode == MergeMode.MERGE_KEEP) {
+        alreadyMerged.put(entity, registeredEntity);
         return registeredEntity;
       }
+      alreadyMerged.put(entity, registeredEntity);
       Map sessionDirtyProperties = dirtRecorder
           .getChangedProperties(registeredEntity);
       boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
           .isEmpty()));
-      if (mergeMode == MergeMode.MERGE_CLEAN_EAGER
-          || mergeMode == MergeMode.MERGE_CLEAN_INITIALIZED
+      if (mergeMode != MergeMode.MERGE_CLEAN_LAZY
           || (dirtyInSession || (!registeredEntity.getVersion().equals(
               entity.getVersion())))) {
-        cleanDirtyProperties(registeredEntity);
+        if (mergeMode == MergeMode.MERGE_CLEAN_EAGER
+            || mergeMode == MergeMode.MERGE_CLEAN_LAZY) {
+          cleanDirtyProperties(registeredEntity);
+        }
         Map<String, Object> entityProperties = entity.straightGetProperties();
         Map<String, Object> registeredEntityProperties = registeredEntity
             .straightGetProperties();
         Map<String, Object> mergedProperties = new HashMap<String, Object>();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (property.getValue() instanceof IEntity) {
-            if (mergeMode == MergeMode.MERGE_CLEAN_INITIALIZED
+            if (mergeMode == MergeMode.MERGE_KEEP
                 && !isInitialized((IEntity) property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
@@ -120,7 +122,7 @@ public class BasicApplicationSession implements IApplicationSession {
                   .getValue(), mergeMode, alreadyMerged));
             }
           } else if (property.getValue() instanceof Collection) {
-            if (mergeMode == MergeMode.MERGE_CLEAN_INITIALIZED
+            if (mergeMode == MergeMode.MERGE_KEEP
                 && !isInitialized((Collection) property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
@@ -189,7 +191,7 @@ public class BasicApplicationSession implements IApplicationSession {
   public Object initializePropertyIfNeeded(IEntity entity, String propertyName) {
     return (Collection<?>) entity.straightGetProperty(propertyName);
   }
-  
+
   /**
    * Gets a previously registered entity in this application session.
    * 
@@ -354,8 +356,7 @@ public class BasicApplicationSession implements IApplicationSession {
         }
       }
     }
-    unitOfWork.register(uowEntity, new HashMap<String, Object>(dirtRecorder
-        .getChangedProperties(entity)));
+    unitOfWork.register(uowEntity, new HashMap<String, Object>(dirtyProperties));
     return uowEntity;
   }
 

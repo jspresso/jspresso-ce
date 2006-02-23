@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
@@ -49,20 +50,35 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getReferenceProperty(Object proxy,
+      IReferencePropertyDescriptor propertyDescriptor) {
+    Object lazyProperty = straightGetProperty(propertyDescriptor
+        .getName());
+    Object initializedProperty = applicationSession
+        .initializePropertyIfNeeded((IEntity) proxy, propertyDescriptor
+            .getName());
+    if (initializedProperty != lazyProperty) {
+      storeProperty(propertyDescriptor.getName(), initializedProperty);
+    }
+    return super.getReferenceProperty(proxy, propertyDescriptor);
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    Object currentCollection = (Collection<?>) straightGetProperty(propertyDescriptor
+    Object lazyProperty = straightGetProperty(propertyDescriptor
         .getName());
-    Object initializedCollection = applicationSession
+    Object initializedProperty = applicationSession
         .initializePropertyIfNeeded((IEntity) proxy, propertyDescriptor
             .getName());
-    if (initializedCollection != currentCollection) {
-      storeProperty(propertyDescriptor.getName(), initializedCollection);
+    if (initializedProperty != lazyProperty) {
+      storeProperty(propertyDescriptor.getName(), initializedProperty);
     }
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
