@@ -6,7 +6,7 @@
 
 	<property name="entities.output.dir" value="${basedir}/src/main/java" />
 	<path id="entity.generator.classpath">
-		<dirset dir="${project.home}">
+		<dirset dir="${d2s.project.home}">
 			<include name="**/target/classes" />
 		</dirset>
 		<fileset dir="${m2.repo}">
@@ -17,6 +17,8 @@
 			<include name="**/xml-apis-2.0.2.jar" />
 			<include name="**/xerces-2.0.2.jar" />
 			<include name="**/bsf-2.3.0.jar" />
+			<include name="**/bsf-2.3.0.jar" />
+			<include name="**/log4j-1.2.8.jar" />
 		</fileset>
 	</path>
 
