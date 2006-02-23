@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.model.persistence.hibernate.entity;
+package com.d2s.framework.application.backend.entity;
 
 import java.util.Collection;
 
@@ -23,13 +23,13 @@ import com.d2s.framework.util.bean.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class HibernateSessionAwareEntityInvocationHandler extends
+public class ApplicationSessionAwareEntityInvocationHandler extends
     BasicEntityInvocationHandler {
 
   private IApplicationSession applicationSession;
 
   /**
-   * Constructs a new <code>HibernateSessionAwareEntityInvocationHandler</code>
+   * Constructs a new <code>ApplicationSessionAwareEntityInvocationHandler</code>
    * instance.
    * 
    * @param entityDescriptor
@@ -37,7 +37,7 @@ public class HibernateSessionAwareEntityInvocationHandler extends
    * @param accessorFactory
    * @param extensionFactory
    */
-  protected HibernateSessionAwareEntityInvocationHandler(
+  protected ApplicationSessionAwareEntityInvocationHandler(
       IEntityDescriptor entityDescriptor,
       IEntityCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory,

@@ -160,29 +160,34 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     if (Hibernate.isInitialized(currentPropertyValue)) {
       return currentPropertyValue;
     }
-    final IEntity uowEntity = cloneInUnitOfWork(entity);
-    Object initializedUowProperty = hibernateTemplate
-        .execute(new HibernateCallback() {
-
-          /**
-           * {@inheritDoc}
-           */
-          public Object doInHibernate(Session session) {
-            session.lock(uowEntity, LockMode.NONE);
-            Hibernate.initialize(currentPropertyValue);
-            if (currentPropertyValue instanceof Collection) {
-              Collection<IEntity> returnedCollection = createTransientEntityCollection((Collection) currentPropertyValue);
-              for (Object nextUowEntityCollectionElement : (Collection) currentPropertyValue) {
-                returnedCollection.add(merge(
-                    (IEntity) nextUowEntityCollectionElement,
-                    MergeMode.MERGE_KEEP));
+    try {
+      beginUnitOfWork();
+      final IEntity uowEntity = cloneInUnitOfWork(entity);
+      Object initializedUowProperty = hibernateTemplate
+          .execute(new HibernateCallback() {
+  
+            /**
+             * {@inheritDoc}
+             */
+            public Object doInHibernate(Session session) {
+              session.lock(uowEntity, LockMode.NONE);
+              Hibernate.initialize(currentPropertyValue);
+              if (currentPropertyValue instanceof Collection) {
+                Collection<IEntity> returnedCollection = createTransientEntityCollection((Collection) currentPropertyValue);
+                for (Object nextUowEntityCollectionElement : (Collection) currentPropertyValue) {
+                  returnedCollection.add(merge(
+                      (IEntity) nextUowEntityCollectionElement,
+                      MergeMode.MERGE_KEEP));
+                }
+                return returnedCollection;
               }
-              return returnedCollection;
+              return currentPropertyValue;
             }
-            return currentPropertyValue;
-          }
-        });
-    return initializedUowProperty;
+          });
+      return initializedUowProperty;
+    } finally {
+      rollbackUnitOfWork();
+    }
   }
 
 }

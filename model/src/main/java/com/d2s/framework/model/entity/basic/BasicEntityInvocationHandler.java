@@ -856,7 +856,9 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    *          the proxyEntityFactory to set.
    */
   static void setProxyEntityFactory(BasicProxyEntityFactory proxyEntityFactory) {
-    BasicEntityInvocationHandler.proxyEntityFactory = proxyEntityFactory;
+    if (BasicEntityInvocationHandler.proxyEntityFactory == null) {
+      BasicEntityInvocationHandler.proxyEntityFactory = proxyEntityFactory;
+    }
   }
 
   private Map<String, Object> createPropertyMap() {

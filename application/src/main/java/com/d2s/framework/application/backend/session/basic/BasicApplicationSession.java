@@ -337,17 +337,21 @@ public class BasicApplicationSession implements IApplicationSession {
         uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
             (IEntity) property.getValue(), alreadyMerged));
       } else if (property.getValue() instanceof Collection) {
-        Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
-            .getValue());
-        for (IEntity entityCollectionElement : (Collection<IEntity>) property
-            .getValue()) {
-          uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
-              alreadyMerged));
+        if (isInitialized((Collection) property.getValue())) {
+          Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
+              .getValue());
+          for (IEntity entityCollectionElement : (Collection<IEntity>) property
+              .getValue()) {
+            uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
+                alreadyMerged));
+          }
+          uowEntityCollection = wrapUnitOfWorkEntityCollection(entity,
+              uowEntityCollection, (Collection) dirtyProperties.get(property
+                  .getKey()), property.getKey());
+          uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
+        } else {
+          uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
-        uowEntityCollection = wrapUnitOfWorkEntityCollection(entity,
-            uowEntityCollection, (Collection) dirtyProperties.get(property
-                .getKey()), property.getKey());
-        uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
       }
     }
     unitOfWork.register(uowEntity, new HashMap<String, Object>(dirtRecorder
@@ -355,6 +359,12 @@ public class BasicApplicationSession implements IApplicationSession {
     return uowEntity;
   }
 
+  /**
+   * TODO Comment needed.
+   * 
+   * @param collection
+   * @return
+   */
   protected Collection<IEntity> createTransientEntityCollection(
       Collection collection) {
     Collection<IEntity> uowEntityCollection = null;
