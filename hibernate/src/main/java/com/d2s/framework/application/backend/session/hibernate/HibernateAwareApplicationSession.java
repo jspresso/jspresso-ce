@@ -150,7 +150,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * {@inheritDoc}
    */
   @Override
-  public Object initializePropertyIfNeeded(IEntity entity, String propertyName) {
+  public Object initializePropertyIfNeeded(final IEntity entity,
+      String propertyName) {
     final Object currentPropertyValue = entity
         .straightGetProperty(propertyName);
     if (Hibernate.isInitialized(currentPropertyValue)) {
@@ -161,7 +162,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
       final IEntity uowEntity = cloneInUnitOfWork(entity);
       Object initializedUowProperty = hibernateTemplate
           .execute(new HibernateCallback() {
-  
+
             /**
              * {@inheritDoc}
              */
@@ -176,6 +177,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
                       MergeMode.MERGE_KEEP));
                 }
                 return returnedCollection;
+              } else if (currentPropertyValue instanceof IEntity) {
+                return merge((IEntity) currentPropertyValue, MergeMode.MERGE_KEEP);
               }
               return currentPropertyValue;
             }

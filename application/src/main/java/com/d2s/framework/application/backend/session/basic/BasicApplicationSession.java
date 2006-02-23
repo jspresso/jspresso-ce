@@ -189,7 +189,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public Object initializePropertyIfNeeded(IEntity entity, String propertyName) {
-    return (Collection<?>) entity.straightGetProperty(propertyName);
+    return entity.straightGetProperty(propertyName);
   }
 
   /**
