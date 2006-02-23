@@ -297,7 +297,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   private IEntity carbonCopy() {
     IEntity clonedEntity = proxyEntityFactory.createEntityInstance(
-          getEntityContract(), (Serializable) properties.get(IEntity.ID));
+        getEntityContract(), (Serializable) properties.get(IEntity.ID));
 
     for (Map.Entry<String, Object> propertyEntry : properties.entrySet()) {
       if (propertyEntry.getValue() != null) {
@@ -335,7 +335,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       return getCollectionProperty(proxy,
           (ICollectionPropertyDescriptor) propertyDescriptor);
-    } else if(propertyDescriptor instanceof IReferencePropertyDescriptor) {
+    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return getReferenceProperty(proxy,
           (IReferencePropertyDescriptor) propertyDescriptor);
     }
