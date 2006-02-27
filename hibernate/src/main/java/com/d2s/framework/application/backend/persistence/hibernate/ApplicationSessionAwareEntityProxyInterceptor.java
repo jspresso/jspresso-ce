@@ -140,7 +140,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
       if (entity instanceof IEntity
           && applicationSession.getRegisteredEntity(((IEntity) entity)
               .getContract(), id) == null) {
-        applicationSession.registerEntity((IEntity) entity);
+        applicationSession.registerEntity((IEntity) entity, false);
       }
     }
     return super.onLoad(entity, id, state, propertyNames, types);

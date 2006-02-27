@@ -50,11 +50,11 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public void registerEntity(IEntity entity) {
+  public void registerEntity(IEntity entity, boolean isEntityTransient) {
     if (!unitOfWork.isActive()) {
       entityRegistry.register(entity);
       Map<String, Object> initialDirtyProperties = new HashMap<String, Object>();
-      if (!entity.isPersistent()) {
+      if (isEntityTransient) {
         for (Map.Entry<String, Object> property : entity
             .straightGetProperties().entrySet()) {
           if (property.getValue() != null
@@ -84,9 +84,10 @@ public class BasicApplicationSession implements IApplicationSession {
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
       dirtRecorder.setEnabled(false);
-      IEntity registeredEntity = getRegisteredEntity(entity.getContract(), entity.getId());
+      IEntity registeredEntity = getRegisteredEntity(entity.getContract(),
+          entity.getId());
       if (registeredEntity == null) {
-        registeredEntity = entity.clone(true);
+        registeredEntity = entity;
         entityRegistry.register(registeredEntity);
         dirtRecorder.register(registeredEntity, null);
       } else if (mergeMode == MergeMode.MERGE_KEEP) {
@@ -94,6 +95,9 @@ public class BasicApplicationSession implements IApplicationSession {
         return registeredEntity;
       }
       alreadyMerged.put(entity, registeredEntity);
+      if (entity == registeredEntity) {
+        return registeredEntity;
+      }
       Map sessionDirtyProperties = dirtRecorder
           .getChangedProperties(registeredEntity);
       boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties

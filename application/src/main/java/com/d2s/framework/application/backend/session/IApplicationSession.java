@@ -25,8 +25,11 @@ public interface IApplicationSession extends IEntityDirtAware {
    * 
    * @param entity
    *          the entity to register.
+   * @param isEntityTransient
+   *          wether this entity has to be considered as a transient one. It is
+   *          not safe to rely on entity.isPersistent() to determine it.
    */
-  void registerEntity(IEntity entity);
+  void registerEntity(IEntity entity, boolean isEntityTransient);
 
   /**
    * Merges an entity in this application session. If the application session

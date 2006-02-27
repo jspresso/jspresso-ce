@@ -821,12 +821,14 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     Object currentPropertyValue = properties.get(propertyName);
     storeProperty(propertyName, backendPropertyValue);
     if (entityDescriptor.getPropertyDescriptor(propertyName) instanceof ICollectionPropertyDescriptor) {
-      currentPropertyValue = Proxy.newProxyInstance(
-          getClass().getClassLoader(),
-          new Class[] {((ICollectionPropertyDescriptor) entityDescriptor
-              .getPropertyDescriptor(propertyName)).getReferencedDescriptor()
-              .getCollectionInterface()}, new NeverEqualsInvocationHandler(
-              currentPropertyValue));
+      if (currentPropertyValue != null) {
+        currentPropertyValue = Proxy.newProxyInstance(getClass()
+            .getClassLoader(),
+            new Class[] {((ICollectionPropertyDescriptor) entityDescriptor
+                .getPropertyDescriptor(propertyName)).getReferencedDescriptor()
+                .getCollectionInterface()}, new NeverEqualsInvocationHandler(
+                currentPropertyValue));
+      }
     }
     firePropertyChange(propertyName, currentPropertyValue, backendPropertyValue);
   }
