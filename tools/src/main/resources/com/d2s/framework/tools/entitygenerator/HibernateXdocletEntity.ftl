@@ -316,7 +316,6 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      <#else>
    *           cascade = "lock"
      </#if>
-   *           lazy = "false"
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}_ID"
      <#if oneToOne>
