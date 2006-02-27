@@ -60,7 +60,7 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
   protected void setConnecteeValue(Object connecteeValue) {
     this.connecteeValue = connecteeValue;
     if (getConnecteeValue() == null) {
-      updateChildConnectors(null);
+      updateChildConnectors();
     }
   }
 

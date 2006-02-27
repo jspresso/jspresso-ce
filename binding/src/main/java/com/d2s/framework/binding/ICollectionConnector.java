@@ -52,4 +52,15 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    * @return the connector's clone.
    */
   ICollectionConnector clone();
+
+  /**
+   * Allows this collection connector to behave lazilly. Once turned on, the
+   * connector will not refresh its children nor fire change events but it will
+   * buffer them. When turned off, the collection connector will fire all
+   * necessary events.
+   * 
+   * @param b
+   *          true if lazy behaviour has to be turned on. false otherwise.
+   */
+  void setAllowLazyChildrenLoading(boolean b);
 }

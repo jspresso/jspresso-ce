@@ -295,13 +295,24 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    */
   public void treeCollapsed(@SuppressWarnings("unused")
   TreeExpansionEvent event) {
-    // NO-OP as of now.
+    ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
+        .getPath().getLastPathComponent();
+    for (ICollectionConnector childCollectionConnector : expandedConnector
+        .getCollectionConnectors()) {
+      childCollectionConnector.setAllowLazyChildrenLoading(true);
+    }
   }
 
   /**
    * {@inheritDoc}
    */
   public void treeExpanded(TreeExpansionEvent event) {
+    ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
+        .getPath().getLastPathComponent();
+    for (ICollectionConnector childCollectionConnector : expandedConnector
+        .getCollectionConnectors()) {
+      childCollectionConnector.setAllowLazyChildrenLoading(false);
+    }
     checkListenerRegistrationForConnector((IValueConnector) event.getPath()
         .getLastPathComponent());
   }

@@ -779,6 +779,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
             mvcBinder, nodeGroupPrototypeConnector);
+    nodeGroupCollectionConnector.setAllowLazyChildrenLoading(true);
     return nodeGroupCollectionConnector;
   }
 
@@ -803,6 +804,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
             mvcBinder, nodeGroupPrototypeConnector);
+    nodeGroupCollectionConnector.setAllowLazyChildrenLoading(true);
     return nodeGroupCollectionConnector;
   }
 

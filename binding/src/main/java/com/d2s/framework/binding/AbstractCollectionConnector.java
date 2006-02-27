@@ -34,7 +34,9 @@ public abstract class AbstractCollectionConnector extends
   private SelectionChangeSupport   selectionChangeSupport;
   private List<IValueConnector>    removedChildrenConnectors;
 
+  private boolean                  allowLazyChildrenLoading;
   private boolean                  needsChildrenUpdate;
+  private boolean                  needsFireConnectorValueChange;
 
   /**
    * Creates a new <code>AbstractCollectionConnector</code>.
@@ -54,7 +56,9 @@ public abstract class AbstractCollectionConnector extends
     this.mvcBinder = binder;
     this.childConnectorPrototype = childConnectorPrototype;
     selectionChangeSupport = new SelectionChangeSupport(this);
+    allowLazyChildrenLoading = false;
     needsChildrenUpdate = false;
+    needsFireConnectorValueChange = false;
   }
 
   /**
@@ -66,7 +70,7 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public void connectorValueChange(ConnectorValueChangeEvent evt) {
-    needsChildrenUpdate = true;
+    updateChildConnectors();
     super.connectorValueChange(evt);
   }
 
@@ -98,35 +102,36 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Updates child connectors depending on the state of the model connector.
-   * 
-   * @param modelConnector
-   *          the model connector to synchronize with or null.
    */
-  protected void updateChildConnectors(ICompositeValueConnector modelConnector) {
-    needsChildrenUpdate = false;
-    Collection<String> childConnectorsToRemove = new HashSet<String>();
-    removedChildrenConnectors = new ArrayList<IValueConnector>();
-    childConnectorsToRemove.addAll(getChildConnectorKeys());
-    if (modelConnector != null) {
-      int i = 0;
-      for (String nextModelConnectorId : modelConnector.getChildConnectorKeys()) {
-        childConnectorsToRemove.remove(nextModelConnectorId);
-        IValueConnector childModelConnector = modelConnector
-            .getChildConnector(nextModelConnectorId);
-        IValueConnector childConnector = getChildConnector(nextModelConnectorId);
-        if (childConnector == null) {
-          childConnector = createChildConnector(computeConnectorId(i));
-          mvcBinder.bind(childConnector, childModelConnector);
-          addChildConnector(childConnector);
+  protected void updateChildConnectors() {
+    needsChildrenUpdate = true;
+    if (!allowLazyChildrenLoading) {
+      needsChildrenUpdate = false;
+      Collection<String> childConnectorsToRemove = new HashSet<String>();
+      removedChildrenConnectors = new ArrayList<IValueConnector>();
+      childConnectorsToRemove.addAll(getChildConnectorKeys());
+      if (getModelConnector() != null) {
+        int i = 0;
+        for (String nextModelConnectorId : ((ICollectionConnector) getModelConnector())
+            .getChildConnectorKeys()) {
+          childConnectorsToRemove.remove(nextModelConnectorId);
+          IValueConnector childModelConnector = ((ICollectionConnector) getModelConnector())
+              .getChildConnector(nextModelConnectorId);
+          IValueConnector childConnector = getChildConnector(nextModelConnectorId);
+          if (childConnector == null) {
+            childConnector = createChildConnector(computeConnectorId(i));
+            mvcBinder.bind(childConnector, childModelConnector);
+            addChildConnector(childConnector);
+          }
+          i++;
         }
-        i++;
       }
-    }
-    for (String nextModelConnectorId : childConnectorsToRemove) {
-      IValueConnector connectorToRemove = getChildConnector(nextModelConnectorId);
-      mvcBinder.bind(connectorToRemove, null);
-      removedChildrenConnectors.add(connectorToRemove);
-      removeChildConnector(connectorToRemove);
+      for (String nextModelConnectorId : childConnectorsToRemove) {
+        IValueConnector connectorToRemove = getChildConnector(nextModelConnectorId);
+        mvcBinder.bind(connectorToRemove, null);
+        removedChildrenConnectors.add(connectorToRemove);
+        removeChildConnector(connectorToRemove);
+      }
     }
   }
 
@@ -153,6 +158,7 @@ public abstract class AbstractCollectionConnector extends
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
     clonedConnector.removedChildrenConnectors = null;
+    clonedConnector.allowLazyChildrenLoading = allowLazyChildrenLoading;
     return clonedConnector;
   }
 
@@ -300,10 +306,41 @@ public abstract class AbstractCollectionConnector extends
    * {@inheritDoc}
    */
   @Override
-  public IConnectorMap getConnectorMap() {
-    if (needsChildrenUpdate) {
-      updateChildConnectors((ICompositeValueConnector) getModelConnector());
+  public Collection<String> getChildConnectorKeys() {
+    if (allowLazyChildrenLoading) {
+      return Collections.<String> emptyList();
     }
-    return super.getConnectorMap();
+    return super.getChildConnectorKeys();
   }
+
+  /**
+   * Sets the allowLazyChildrenLoading.
+   * 
+   * @param allowLazyChildrenLoading
+   *          the allowLazyChildrenLoading to set.
+   */
+  public void setAllowLazyChildrenLoading(boolean allowLazyChildrenLoading) {
+    this.allowLazyChildrenLoading = allowLazyChildrenLoading;
+    if (needsChildrenUpdate) {
+      updateChildConnectors();
+    }
+    if (needsFireConnectorValueChange) {
+      fireConnectorValueChange();
+    }
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void fireConnectorValueChange() {
+    needsFireConnectorValueChange = true;
+    if (!allowLazyChildrenLoading) {
+      needsFireConnectorValueChange = false;
+      super.fireConnectorValueChange();
+    }
+  }
+
 }

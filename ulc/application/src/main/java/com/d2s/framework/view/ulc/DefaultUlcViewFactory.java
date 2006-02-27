@@ -740,6 +740,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
             mvcBinder, nodeGroupPrototypeConnector);
+    nodeGroupCollectionConnector.setAllowLazyChildrenLoading(true);
     return nodeGroupCollectionConnector;
   }
 
@@ -764,6 +765,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     ICollectionConnector nodeGroupCollectionConnector = connectorFactory
         .createCollectionConnector(nodeGroupModelDescriptor.getName(),
             mvcBinder, nodeGroupPrototypeConnector);
+    nodeGroupCollectionConnector.setAllowLazyChildrenLoading(true);
     return nodeGroupCollectionConnector;
   }
 

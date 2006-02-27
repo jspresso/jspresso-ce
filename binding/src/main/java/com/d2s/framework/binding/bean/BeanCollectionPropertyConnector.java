@@ -71,7 +71,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    */
   public IConnectorMap getConnectorMap() {
     if (needsChildrenUpdate) {
-      updateChildConnectors((Collection) getConnecteeValue());
+      updateChildConnectors();
     }
     return childConnectors;
   }
@@ -154,11 +154,9 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
 
   /**
    * Updates the child connectors based on a new bean collection.
-   * 
-   * @param beanCollection
-   *          the bean collection to align the child connectors on.
    */
-  private void updateChildConnectors(Collection beanCollection) {
+  private void updateChildConnectors() {
+    Collection beanCollection = (Collection) getConnecteeValue();
     needsChildrenUpdate = false;
     int beanCollectionSize = 0;
     if (beanCollection != null && beanCollection.size() > 0) {
@@ -325,5 +323,13 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    */
   protected void setElementClass(Class elementClass) {
     this.elementClass = elementClass;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setAllowLazyChildrenLoading(@SuppressWarnings("unused")
+  boolean b) {
+    // lazy behaviour can't be turned off.
   }
 }
