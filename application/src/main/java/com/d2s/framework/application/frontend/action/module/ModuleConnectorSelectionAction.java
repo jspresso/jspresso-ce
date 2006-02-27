@@ -40,6 +40,7 @@ public class ModuleConnectorSelectionAction extends AbstractChainedAction {
     if (moduleConnector instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) moduleConnector)
           .getCollectionConnector();
+      collectionConnector.setAllowLazyChildrenLoading(false);
       collectionConnector.setSelectedIndices(connectorSelection);
     }
     return super.execute(actionHandler);
