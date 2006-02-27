@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.backend.session.basic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,8 +54,9 @@ public class BasicApplicationSession implements IApplicationSession {
   public void registerEntity(IEntity entity, boolean isEntityTransient) {
     if (!unitOfWork.isActive()) {
       entityRegistry.register(entity);
-      Map<String, Object> initialDirtyProperties = new HashMap<String, Object>();
+      Map<String, Object> initialDirtyProperties = null;
       if (isEntityTransient) {
+        initialDirtyProperties = new HashMap<String, Object>();
         for (Map.Entry<String, Object> property : entity
             .straightGetProperties().entrySet()) {
           if (property.getValue() != null
@@ -86,25 +88,24 @@ public class BasicApplicationSession implements IApplicationSession {
       dirtRecorder.setEnabled(false);
       IEntity registeredEntity = getRegisteredEntity(entity.getContract(),
           entity.getId());
+      boolean newlyRegistered = false;
       if (registeredEntity == null) {
         registeredEntity = entity;
         entityRegistry.register(registeredEntity);
         dirtRecorder.register(registeredEntity, null);
+        newlyRegistered = true;
       } else if (mergeMode == MergeMode.MERGE_KEEP) {
         alreadyMerged.put(entity, registeredEntity);
         return registeredEntity;
       }
       alreadyMerged.put(entity, registeredEntity);
-      if (entity == registeredEntity) {
-        return registeredEntity;
-      }
       Map sessionDirtyProperties = dirtRecorder
           .getChangedProperties(registeredEntity);
       boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
           .isEmpty()));
       if (mergeMode != MergeMode.MERGE_CLEAN_LAZY
           || (dirtyInSession || (!registeredEntity.getVersion().equals(
-              entity.getVersion())))) {
+              entity.getVersion()))) || newlyRegistered) {
         if (mergeMode == MergeMode.MERGE_CLEAN_EAGER
             || mergeMode == MergeMode.MERGE_CLEAN_LAZY) {
           cleanDirtyProperties(registeredEntity);
@@ -115,7 +116,7 @@ public class BasicApplicationSession implements IApplicationSession {
         Map<String, Object> mergedProperties = new HashMap<String, Object>();
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (property.getValue() instanceof IEntity) {
-            if (mergeMode == MergeMode.MERGE_KEEP
+            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
                 && !isInitialized((IEntity) property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
@@ -125,7 +126,7 @@ public class BasicApplicationSession implements IApplicationSession {
                   .getValue(), mergeMode, alreadyMerged));
             }
           } else if (property.getValue() instanceof Collection) {
-            if (mergeMode == MergeMode.MERGE_KEEP
+            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
                 && !isInitialized((Collection) property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
@@ -323,26 +324,35 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
     List<IEntity> uowEntities = new ArrayList<IEntity>();
-    Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
+    Map<Class, Map<Serializable, IEntity>> alreadyCloned = new HashMap<Class, Map<Serializable, IEntity>>();
     for (IEntity entity : entities) {
-      uowEntities.add(cloneInUnitOfWork(entity, alreadyMerged));
+      uowEntities.add(cloneInUnitOfWork(entity, alreadyCloned));
     }
     return uowEntities;
   }
 
   @SuppressWarnings("unchecked")
   private IEntity cloneInUnitOfWork(IEntity entity,
-      Map<IEntity, IEntity> alreadyCloned) {
-    if (alreadyCloned.containsKey(entity)) {
-      return alreadyCloned.get(entity);
+      Map<Class, Map<Serializable, IEntity>> alreadyCloned) {
+    Map<Serializable, IEntity> contractBuffer = alreadyCloned.get(entity
+        .getContract());
+    IEntity uowEntity = null;
+    if (contractBuffer == null) {
+      contractBuffer = new HashMap<Serializable, IEntity>();
+      alreadyCloned.put(entity.getContract(), contractBuffer);
+    } else {
+      uowEntity = contractBuffer.get(entity.getId());
+      if (uowEntity != null) {
+        return uowEntity;
+      }
     }
+    uowEntity = entity.clone(true);
     Map<String, Object> dirtyProperties = dirtRecorder
         .getChangedProperties(entity);
     if (dirtyProperties == null) {
       dirtyProperties = new HashMap<String, Object>();
     }
-    IEntity uowEntity = entity.clone(true);
-    alreadyCloned.put(entity, uowEntity);
+    contractBuffer.put(entity.getId(), uowEntity);
     Map<String, Object> entityProperties = entity.straightGetProperties();
     for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
       if (property.getValue() instanceof IEntity) {

@@ -6,6 +6,7 @@ package com.d2s.framework.application.backend.action.persistence.hibernate;
 import java.util.Collections;
 import java.util.List;
 
+import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -98,7 +99,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         entities);
     for (IEntity mergedEntity : mergedEntities) {
       if (mergedEntity.isPersistent()) {
-        hibernateSession.saveOrUpdate(mergedEntity);
+        hibernateSession.lock(mergedEntity, LockMode.NONE);
       }
     }
     return mergedEntities;
