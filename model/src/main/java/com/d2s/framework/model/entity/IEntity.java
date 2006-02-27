@@ -124,4 +124,22 @@ public interface IEntity extends IPropertyChangeCapable, Cloneable {
    * @return true if the entity is not transient.
    */
   boolean isPersistent();
+
+  /**
+   * It is important to declare here so that ORM (hibernate for instance)
+   * detects it has to delegate to the underlying instance when proxiing.
+   * 
+   * @return the hashcode.
+   */
+  int hashCode();
+
+  /**
+   * It is important to declare here so that ORM (hibernate for instance)
+   * detects it has to delegate to the underlying instance when proxiing.
+   * 
+   * @param o
+   *          the instance to compare to.
+   * @return true if both instances are equal.
+   */
+  boolean equals(Object o);
 }
