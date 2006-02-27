@@ -103,7 +103,26 @@ public interface IApplicationSession extends IEntityDirtAware {
    *          the entity holding the property.
    * @param propertyName
    *          the property name.
-   * @return the fully initialized property.
    */
-  Object initializePropertyIfNeeded(IEntity entity, String propertyName);
+  void initializePropertyIfNeeded(IEntity entity, String propertyName);
+
+  /**
+   * Gets wether a transactional unit of work has been started in the
+   * application session.
+   * 
+   * @return true if a transactional unit of work has been started in the
+   *         application session.
+   */
+  boolean isUnitOfWorkActive();
+
+  /**
+   * Gets a previously registered entity in this application session.
+   * 
+   * @param entityContract
+   *          the entity contract.
+   * @param entityId
+   *          the identifier of the looked-up entity.
+   * @return the registered entity or null.
+   */
+  IEntity getRegisteredEntity(Class entityContract, Object entityId);
 }

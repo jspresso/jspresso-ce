@@ -9,8 +9,6 @@ import java.util.List;
 
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
-import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
 import com.ulcjava.base.application.tree.TreePath;
 
@@ -57,31 +55,4 @@ public final class ConnectorTreeHelper {
     }
     return null;
   }
-
-  /**
-   * This method will check that a <code>IConnectorValueChangeListener</code>
-   * is attached to a connector and all its descendants in the parent / child
-   * relationship.
-   * 
-   * @param connector
-   *          the connector to start from.
-   * @param connectorsListener
-   *          the listener to attach.
-   */
-  public static void checkListenerRegistrationForConnector(
-      IValueConnector connector,
-      IConnectorValueChangeListener connectorsListener) {
-    // we can add the listener many times since the backing store listener
-    // collection is a Set.
-    connector.addConnectorValueChangeListener(connectorsListener);
-    if (connector instanceof ICompositeValueConnector) {
-      for (String childConnectorId : ((ICompositeValueConnector) connector)
-          .getChildConnectorKeys()) {
-        checkListenerRegistrationForConnector(
-            ((ICompositeValueConnector) connector)
-                .getChildConnector(childConnectorId), connectorsListener);
-      }
-    }
-  }
-
 }

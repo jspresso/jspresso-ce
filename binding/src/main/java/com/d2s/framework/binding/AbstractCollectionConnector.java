@@ -29,10 +29,12 @@ public abstract class AbstractCollectionConnector extends
     AbstractCompositeValueConnector implements ICollectionConnector,
     IConnectorSelector {
 
-  private IMvcBinder                 mvcBinder;
-  private ICompositeValueConnector   childConnectorPrototype;
-  private SelectionChangeSupport     selectionChangeSupport;
-  private List<IValueConnector>      removedChildrenConnectors;
+  private IMvcBinder               mvcBinder;
+  private ICompositeValueConnector childConnectorPrototype;
+  private SelectionChangeSupport   selectionChangeSupport;
+  private List<IValueConnector>    removedChildrenConnectors;
+
+  private boolean                  needsChildrenUpdate;
 
   /**
    * Creates a new <code>AbstractCollectionConnector</code>.
@@ -52,6 +54,7 @@ public abstract class AbstractCollectionConnector extends
     this.mvcBinder = binder;
     this.childConnectorPrototype = childConnectorPrototype;
     selectionChangeSupport = new SelectionChangeSupport(this);
+    needsChildrenUpdate = false;
   }
 
   /**
@@ -63,7 +66,7 @@ public abstract class AbstractCollectionConnector extends
    */
   @Override
   public void connectorValueChange(ConnectorValueChangeEvent evt) {
-    updateChildConnectors((ICompositeValueConnector) evt.getSource());
+    needsChildrenUpdate = true;
     super.connectorValueChange(evt);
   }
 
@@ -100,6 +103,7 @@ public abstract class AbstractCollectionConnector extends
    *          the model connector to synchronize with or null.
    */
   protected void updateChildConnectors(ICompositeValueConnector modelConnector) {
+    needsChildrenUpdate = false;
     Collection<String> childConnectorsToRemove = new HashSet<String>();
     removedChildrenConnectors = new ArrayList<IValueConnector>();
     childConnectorsToRemove.addAll(getChildConnectorKeys());
@@ -256,15 +260,6 @@ public abstract class AbstractCollectionConnector extends
   }
 
   /**
-   * Gets the removedChildrenConnectors.
-   * 
-   * @return the removedChildrenConnectors.
-   */
-  public List<IValueConnector> getRemovedChildrenConnectors() {
-    return removedChildrenConnectors;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -299,5 +294,16 @@ public abstract class AbstractCollectionConnector extends
    */
   public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
     implSetTracksChildrenSelection(tracksChildrenSelection);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IConnectorMap getConnectorMap() {
+    if (needsChildrenUpdate) {
+      updateChildConnectors((ICompositeValueConnector) getModelConnector());
+    }
+    return super.getConnectorMap();
   }
 }

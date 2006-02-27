@@ -30,11 +30,11 @@ public interface IEntityRegistry {
   /**
    * Get an entity from the registry.
    * 
-   * @param entityContractName
-   *          the entity contract name.
+   * @param entityContract
+   *          the entity contract.
    * @param id
    *          the entity identifier.
    * @return the registered entity or <tt>null</tt>
    */
-  IEntity get(String entityContractName, Object id);
+  IEntity get(Class entityContract, Object id);
 }

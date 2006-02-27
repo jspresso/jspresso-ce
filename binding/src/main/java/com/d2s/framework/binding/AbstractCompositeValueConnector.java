@@ -70,7 +70,7 @@ public abstract class AbstractCompositeValueConnector extends
    *          the connector to be added as composite.
    */
   protected void addChildConnector(String storageKey, IValueConnector connector) {
-    childConnectors.addConnector(storageKey, connector);
+    getConnectorMap().addConnector(storageKey, connector);
   }
 
   /**
@@ -80,7 +80,7 @@ public abstract class AbstractCompositeValueConnector extends
    *          the connector to be removed.
    */
   protected void removeChildConnector(IValueConnector connector) {
-    childConnectors.removeConnector(connector.getId());
+    getConnectorMap().removeConnector(connector.getId());
     connector.setParentConnector(null);
   }
 

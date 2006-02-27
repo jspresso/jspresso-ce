@@ -25,13 +25,13 @@ import com.d2s.framework.model.entity.IEntityRegistry;
  */
 public class BasicEntityRegistry implements IEntityRegistry {
 
-  private Map<String, Map<Object, IEntity>> backingStore;
+  private Map<Class, Map<Object, IEntity>> backingStore;
 
   /**
    * Constructs a new <code>BasicEntityRegistry</code> instance.
    */
   public BasicEntityRegistry() {
-    backingStore = new HashMap<String, Map<Object, IEntity>>();
+    backingStore = new HashMap<Class, Map<Object, IEntity>>();
   }
 
   /**
@@ -39,8 +39,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
    */
   @SuppressWarnings("unchecked")
   public void register(IEntity entity) {
-    IEntity existingRegisteredEntity = get(entity.getContract().getName(),
-        entity.getId());
+    IEntity existingRegisteredEntity = get(entity.getContract(), entity.getId());
     if (existingRegisteredEntity != null) {
       if (entity != existingRegisteredEntity) {
         throw new EntityRegistryException(
@@ -50,11 +49,11 @@ public class BasicEntityRegistry implements IEntityRegistry {
       // do nothing since the entity is already registered.
     } else {
       Map<Object, IEntity> contractStore = backingStore.get(entity
-          .getContract().getName());
+          .getContract());
       if (contractStore == null) {
         contractStore = new ReferenceMap(AbstractReferenceMap.HARD,
             AbstractReferenceMap.WEAK, true);
-        backingStore.put(entity.getContract().getName(), contractStore);
+        backingStore.put(entity.getContract(), contractStore);
       }
       contractStore.put(entity.getId(), entity);
     }
@@ -63,15 +62,33 @@ public class BasicEntityRegistry implements IEntityRegistry {
   /**
    * {@inheritDoc}
    */
-  public IEntity get(String entityContractName, Object id) {
-    Map<Object, IEntity> contractStore = backingStore.get(entityContractName);
+  @SuppressWarnings("unchecked")
+  public IEntity get(Class entityContract, Object id) {
+    IEntity registeredEntity = null;
+    Map<Object, IEntity> contractStore = backingStore.get(entityContract);
     if (contractStore != null) {
-      IEntity registeredEntity = contractStore.get(id);
+      registeredEntity = contractStore.get(id);
       if (registeredEntity == null) {
         contractStore.remove(id);
       }
-      return registeredEntity;
     }
-    return null;
+    if (registeredEntity == null) {
+      // we may try subclasses
+      for (Map.Entry<Class, Map<Object, IEntity>> subclassContractStore : backingStore
+          .entrySet()) {
+        if (entityContract.isAssignableFrom(subclassContractStore.getKey())) {
+          contractStore = subclassContractStore.getValue();
+          if (contractStore != null) {
+            registeredEntity = contractStore.get(id);
+          }
+          if (registeredEntity == null) {
+            contractStore.remove(id);
+          } else {
+            break;
+          }
+        }
+      }
+    }
+    return registeredEntity;
   }
 }

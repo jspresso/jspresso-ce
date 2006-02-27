@@ -683,16 +683,15 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       ((IConnectorSelector) connector).setTracksChildrenSelection(true);
     }
 
-    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
-        connector);
     ULCTree viewComponent = createULCTree();
+    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
+        connector, viewComponent);
     viewComponent.getSelectionModel().setSelectionMode(
         ULCTreeSelectionModel.SINGLE_TREE_SELECTION);
     viewComponent.setModel(treeModel);
     viewComponent.setCellRenderer(new ConnectorTreeCellRenderer(viewDescriptor,
         locale));
-    treeSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel());
+    treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
     IView<ULCComponent> view = constructView(scrollPane, viewDescriptor,

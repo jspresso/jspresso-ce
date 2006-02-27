@@ -7,17 +7,19 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.swing.JTree;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.d2s.framework.binding.ConnectorSelectionEvent;
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.ICollectionConnectorListProvider;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.IConnectorSelector;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.event.ISelectionChangeListener;
 import com.d2s.framework.util.event.SelectionChangeEvent;
@@ -47,10 +49,12 @@ public class DefaultTreeSelectionModelBinder implements
   /**
    * {@inheritDoc}
    */
-  public void bindSelectionModel(IValueConnector rootConnector,
-      TreeSelectionModel selectionModel) {
-    selectionModel.addTreeSelectionListener(genericSelectionModelListener);
-    new TreeConnectorsListener(rootConnector, selectionModel);
+  public void bindSelectionModel(IValueConnector rootConnector, JTree tree) {
+    tree.getSelectionModel().addTreeSelectionListener(
+        genericSelectionModelListener);
+    TreeConnectorsListener connectorsListener = new TreeConnectorsListener(
+        rootConnector, tree.getSelectionModel());
+    tree.getModel().addTreeModelListener(connectorsListener);
   }
 
   private static final class SelectionModelListener implements
@@ -192,7 +196,7 @@ public class DefaultTreeSelectionModelBinder implements
     }
   }
 
-  private class TreeConnectorsListener implements IConnectorValueChangeListener {
+  private class TreeConnectorsListener implements TreeModelListener {
 
     private CollectionConnectorsSelectionListener connectorsSelectionListener;
 
@@ -208,24 +212,49 @@ public class DefaultTreeSelectionModelBinder implements
         TreeSelectionModel selectionModel) {
       connectorsSelectionListener = new CollectionConnectorsSelectionListener(
           rootConnector, selectionModel);
-      checkListenerRegistrationForConnector(rootConnector);
+      checkListenerRegistrationForConnector((ICollectionConnectorListProvider) rootConnector);
+    }
+
+    private void checkListenerRegistrationForConnector(
+        ICollectionConnectorListProvider nodeConnector) {
+      for (ICollectionConnector childNodeConnector : nodeConnector
+          .getCollectionConnectors()) {
+        childNodeConnector
+            .addSelectionChangeListener(connectorsSelectionListener);
+      }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(ConnectorValueChangeEvent evt) {
-      IValueConnector connector = evt.getSource();
-      checkListenerRegistrationForConnector(connector);
-      if (connector instanceof ICollectionConnector) {
-        ((ICollectionConnector) connector)
-            .addSelectionChangeListener(connectorsSelectionListener);
-      }
+    public void treeNodesChanged(@SuppressWarnings("unused")
+    TreeModelEvent e) {
+      // NO-OP as of now.
     }
 
-    private void checkListenerRegistrationForConnector(IValueConnector connector) {
-      ConnectorTreeHelper
-          .checkListenerRegistrationForConnector(connector, this);
+    /**
+     * {@inheritDoc}
+     */
+    public void treeNodesInserted(TreeModelEvent e) {
+      checkListenerRegistrationForConnector((ICollectionConnectorListProvider) e
+          .getTreePath().getLastPathComponent());
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void treeNodesRemoved(@SuppressWarnings("unused")
+    TreeModelEvent e) {
+      // NO-OP as of now.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void treeStructureChanged(TreeModelEvent e) {
+      checkListenerRegistrationForConnector((ICollectionConnectorListProvider) e
+          .getTreePath().getLastPathComponent());
+    }
+
   }
 }

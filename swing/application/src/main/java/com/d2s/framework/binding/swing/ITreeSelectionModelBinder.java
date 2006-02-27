@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.binding.swing;
 
-import javax.swing.tree.TreeSelectionModel;
+import javax.swing.JTree;
 
 import com.d2s.framework.binding.IValueConnector;
 
@@ -24,9 +24,8 @@ public interface ITreeSelectionModelBinder {
    * 
    * @param rootConnector
    *          the root connector of the connector hierarchy.
-   * @param selectionModel
-   *          the selection model to bind.
+   * @param tree
+   *          the the tree to bind the selection model of.
    */
-  void bindSelectionModel(IValueConnector rootConnector,
-      TreeSelectionModel selectionModel);
+  void bindSelectionModel(IValueConnector rootConnector, JTree tree);
 }

@@ -4,6 +4,7 @@
 package com.d2s.framework.binding.ulc;
 
 import java.util.Collection;
+import java.util.List;
 
 import com.d2s.framework.binding.CollectionConnectorValueChangeEvent;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
@@ -13,6 +14,9 @@ import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
+import com.ulcjava.base.application.ULCTree;
+import com.ulcjava.base.application.event.TreeModelEvent;
+import com.ulcjava.base.application.event.serializable.ITreeModelListener;
 import com.ulcjava.base.application.tree.AbstractTreeModel;
 import com.ulcjava.base.application.tree.TreePath;
 
@@ -25,7 +29,8 @@ import com.ulcjava.base.application.tree.TreePath;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
+public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
+    ITreeModelListener {
 
   private static final long        serialVersionUID = -1578891934062045656L;
   private ICompositeValueConnector rootConnector;
@@ -36,11 +41,18 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
    * 
    * @param rootConnector
    *          the connector being the root node of the tree.
+   * @param tree
+   *          the tree to which this model wiil be attached to. It will be used
+   *          for the model to bea notified of expansions so that it can
+   *          lazy-load the tree hierarchy.
    */
-  public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector) {
+  public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector,
+      @SuppressWarnings("unused")
+      ULCTree tree) {
     this.rootConnector = rootConnector;
     connectorsListener = new TreeConnectorsListener();
     checkListenerRegistrationForConnector(rootConnector);
+    addTreeModelListener(this);
   }
 
   /**
@@ -141,8 +153,29 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
   }
 
   private void checkListenerRegistrationForConnector(IValueConnector connector) {
-    ConnectorTreeHelper.checkListenerRegistrationForConnector(connector,
-        connectorsListener);
+    if (connector instanceof ICollectionConnectorProvider) {
+      checkListenerRegistrationForConnector(connector, 3);
+    } else {
+      checkListenerRegistrationForConnector(connector, 1);
+    }
+  }
+
+  private void checkListenerRegistrationForConnector(IValueConnector connector,
+      int depth) {
+    if (depth >= 0) {
+      depth--;
+      // we can add the listener many times since the backing store listener
+      // collection is a Set.
+      connector.addConnectorValueChangeListener(connectorsListener);
+      if (connector instanceof ICompositeValueConnector) {
+        for (String childConnectorId : ((ICompositeValueConnector) connector)
+            .getChildConnectorKeys()) {
+          checkListenerRegistrationForConnector(
+              ((ICompositeValueConnector) connector)
+                  .getChildConnector(childConnectorId), depth);
+        }
+      }
+    }
   }
 
   private TreePath getTreePathForConnector(IValueConnector connector) {
@@ -157,7 +190,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
      */
     public void connectorValueChange(ConnectorValueChangeEvent evt) {
       IValueConnector connector = evt.getSource();
-      checkListenerRegistrationForConnector(connector);
       if (connector == rootConnector) {
         nodeStructureChanged(new TreePath(rootConnector));
         return;
@@ -190,9 +222,10 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
               childIndices[i - newCollectionSize] = i;
             }
             if (connectorPath != null) {
+              List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
+                  .getRemovedChildrenConnectors();
               nodesWereRemoved(connectorPath, childIndices,
-                  ((CollectionConnectorValueChangeEvent) evt)
-                      .getRemovedChildrenConnectors().toArray());
+                  removedChildrenConnectors.toArray());
             }
           }
         }
@@ -221,5 +254,37 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel {
         }
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void treeNodesChanged(@SuppressWarnings("unused")
+  TreeModelEvent event) {
+    // NO-OP as of now.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void treeNodesInserted(TreeModelEvent event) {
+    checkListenerRegistrationForConnector((IValueConnector) event.getTreePath()
+        .getLastPathComponent());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void treeNodesRemoved(@SuppressWarnings("unused")
+  TreeModelEvent event) {
+    // NO-OP as of now.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void treeStructureChanged(TreeModelEvent event) {
+    checkListenerRegistrationForConnector((IValueConnector) event.getTreePath()
+        .getLastPathComponent());
   }
 }

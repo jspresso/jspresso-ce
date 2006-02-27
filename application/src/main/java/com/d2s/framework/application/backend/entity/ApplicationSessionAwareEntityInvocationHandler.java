@@ -65,12 +65,8 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor propertyDescriptor) {
-    Object lazyProperty = straightGetProperty(propertyDescriptor.getName());
-    Object initializedProperty = applicationSession.initializePropertyIfNeeded(
+    applicationSession.initializePropertyIfNeeded(
         (IEntity) proxy, propertyDescriptor.getName());
-    if (initializedProperty != lazyProperty) {
-      storeProperty(propertyDescriptor.getName(), initializedProperty);
-    }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 
@@ -80,12 +76,8 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    Object lazyProperty = straightGetProperty(propertyDescriptor.getName());
-    Object initializedProperty = applicationSession.initializePropertyIfNeeded(
+    applicationSession.initializePropertyIfNeeded(
         (IEntity) proxy, propertyDescriptor.getName());
-    if (initializedProperty != lazyProperty) {
-      storeProperty(propertyDescriptor.getName(), initializedProperty);
-    }
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
 

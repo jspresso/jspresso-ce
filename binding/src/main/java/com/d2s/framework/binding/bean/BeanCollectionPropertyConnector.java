@@ -43,6 +43,8 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
   private ChildConnectorSupport  childConnectorSupport;
   private Class                  elementClass;
 
+  private boolean                needsChildrenUpdate;
+
   /**
    * Constructs a new bean property connector on a bean collection property.
    * This constructor does not specify the element class of this collection
@@ -61,12 +63,16 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     childConnectors = new ConnectorMap(this);
     childConnectorSupport = new ChildConnectorSupport(this);
     selectionChangeSupport = new SelectionChangeSupport(this);
+    needsChildrenUpdate = false;
   }
 
   /**
    * {@inheritDoc}
    */
   public IConnectorMap getConnectorMap() {
+    if (needsChildrenUpdate) {
+      updateChildConnectors((Collection) getConnecteeValue());
+    }
     return childConnectors;
   }
 
@@ -77,7 +83,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    *          the connector to be added as composite.
    */
   public void addChildConnector(IValueConnector connector) {
-    childConnectors.addConnector(connector.getId(), connector);
+    getConnectorMap().addConnector(connector.getId(), connector);
   }
 
   /**
@@ -87,7 +93,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    *          the connector to be removed.
    */
   protected void removeChildConnector(IValueConnector connector) {
-    childConnectors.removeConnector(connector.getId());
+    getConnectorMap().removeConnector(connector.getId());
     connector.setParentConnector(null);
   }
 
@@ -110,7 +116,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    */
   @Override
   public void propertyChange(PropertyChangeEvent evt) {
-    updateChildConnectors((Collection) evt.getNewValue());
+    needsChildrenUpdate = true;
     super.propertyChange(evt);
   }
 
@@ -123,7 +129,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    */
   @Override
   public void beanChange(BeanChangeEvent evt) {
-    updateChildConnectors((Collection) getConnecteeValue());
+    needsChildrenUpdate = true;
     super.beanChange(evt);
   }
 
@@ -137,7 +143,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
       IConnectorValueChangeListener modelConnectorListener,
       PropertyChangeListener readChangeListener,
       PropertyChangeListener writeChangeListener) {
-    updateChildConnectors((Collection) getConnecteeValue());
+    needsChildrenUpdate = true;
     super.boundAsModel(modelConnectorListener, readChangeListener,
         writeChangeListener);
   }
@@ -153,6 +159,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    *          the bean collection to align the child connectors on.
    */
   private void updateChildConnectors(Collection beanCollection) {
+    needsChildrenUpdate = false;
     int beanCollectionSize = 0;
     if (beanCollection != null && beanCollection.size() > 0) {
       if (getElementClass() == null) {
@@ -219,6 +226,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
         clonedConnector);
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
+    clonedConnector.needsChildrenUpdate = false;
     return clonedConnector;
   }
 
@@ -309,11 +317,11 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
     return elementClass;
   }
 
-  
   /**
    * Sets the elementClass.
    * 
-   * @param elementClass the elementClass to set.
+   * @param elementClass
+   *          the elementClass to set.
    */
   protected void setElementClass(Class elementClass) {
     this.elementClass = elementClass;

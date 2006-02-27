@@ -113,4 +113,19 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     }
     super.postFlush(entities);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Object getEntity(String entityName, Serializable id) {
+    if (!applicationSession.isUnitOfWorkActive()) {
+      try {
+        return applicationSession.getRegisteredEntity(Class.forName(entityName), id);
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      }
+    }
+    return super.getEntity(entityName, id);
+  }
 }

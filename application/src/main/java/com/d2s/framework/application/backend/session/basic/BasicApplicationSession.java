@@ -84,12 +84,13 @@ public class BasicApplicationSession implements IApplicationSession {
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
       dirtRecorder.setEnabled(false);
-      IEntity registeredEntity = getRegisteredEntity(entity.getContract()
-          .getName(), entity.getId());
+      IEntity registeredEntity = getRegisteredEntity(entity.getContract(), entity.getId());
+      boolean newlyRegistered = false;
       if (registeredEntity == null) {
-        registeredEntity = entity.clone(true);
+        registeredEntity = entity;
         entityRegistry.register(registeredEntity);
         dirtRecorder.register(registeredEntity, null);
+        newlyRegistered = true;
       } else if (mergeMode == MergeMode.MERGE_KEEP) {
         alreadyMerged.put(entity, registeredEntity);
         return registeredEntity;
@@ -146,7 +147,20 @@ public class BasicApplicationSession implements IApplicationSession {
                 registeredCollection.add(merge(entityCollectionElement,
                     mergeMode, alreadyMerged));
               }
-              mergedProperties.put(property.getKey(), registeredCollection);
+              if (registeredEntity.isPersistent()) {
+                Collection<IEntity> snapshotCollection = null;
+                Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
+                if (dirtyProperties != null) {
+                  snapshotCollection = (Collection<IEntity>) dirtyProperties
+                      .get(property.getKey());
+                }
+                mergedProperties.put(property.getKey(),
+                    wrapDetachedEntityCollection(registeredEntity,
+                        registeredCollection, snapshotCollection, property
+                            .getKey()));
+              } else {
+                mergedProperties.put(property.getKey(), registeredCollection);
+              }
             }
           } else {
             mergedProperties.put(property.getKey(), property.getValue());
@@ -188,21 +202,15 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public Object initializePropertyIfNeeded(IEntity entity, String propertyName) {
-    return entity.straightGetProperty(propertyName);
+  public void initializePropertyIfNeeded(IEntity entity, String propertyName) {
+    entity.straightGetProperty(propertyName);
   }
 
   /**
-   * Gets a previously registered entity in this application session.
-   * 
-   * @param entityContractName
-   *          the entity contract name.
-   * @param entityId
-   *          the identifier of the looked-up entity.
-   * @return the registered entity or null.
+   * {@inheritDoc}
    */
-  private IEntity getRegisteredEntity(String entityContractName, Object entityId) {
-    return entityRegistry.get(entityContractName, entityId);
+  public IEntity getRegisteredEntity(Class entityContract, Object entityId) {
+    return entityRegistry.get(entityContract, entityId);
   }
 
   /**
@@ -432,6 +440,13 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   protected Set<IEntity> getEntitiesToMergeBack() {
     return entitiesToMergeBack;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isUnitOfWorkActive() {
+    return unitOfWork.isActive();
   }
 
 }

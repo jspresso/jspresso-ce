@@ -722,16 +722,15 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       ((IConnectorSelector) connector).setTracksChildrenSelection(true);
     }
 
-    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
-        connector);
     JTree viewComponent = createJTree();
+    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
+        connector, viewComponent);
     viewComponent.getSelectionModel().setSelectionMode(
         TreeSelectionModel.SINGLE_TREE_SELECTION);
     viewComponent.setModel(treeModel);
     viewComponent.setCellRenderer(new ConnectorTreeCellRenderer(viewDescriptor,
         locale));
-    treeSelectionModelBinder.bindSelectionModel(connector, viewComponent
-        .getSelectionModel());
+    treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,

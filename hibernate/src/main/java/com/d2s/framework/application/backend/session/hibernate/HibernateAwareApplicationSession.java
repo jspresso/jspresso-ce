@@ -150,43 +150,35 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * {@inheritDoc}
    */
   @Override
-  public Object initializePropertyIfNeeded(final IEntity entity,
+  public void initializePropertyIfNeeded(final IEntity entity,
       final String propertyName) {
-    final Object currentPropertyValue = entity.straightGetProperty(propertyName);
+    final Object currentPropertyValue = entity
+        .straightGetProperty(propertyName);
     if (Hibernate.isInitialized(currentPropertyValue)) {
-      return currentPropertyValue;
+      return;
     }
 
-    Object initializedProperty = hibernateTemplate
-        .execute(new HibernateCallback() {
+    hibernateTemplate.execute(new HibernateCallback() {
 
-          /**
-           * {@inheritDoc}
-           */
-          public Object doInHibernate(Session session) {
-            IEntity loadedEntity = entity.clone(true);
-            loadedEntity.straightSetProperty(propertyName, currentPropertyValue);
-            session.lock(loadedEntity, LockMode.NONE);
-            session.setReadOnly(loadedEntity, true);
-            
-            Object loadedProperty = loadedEntity
-                .straightGetProperty(propertyName);
-            Hibernate.initialize(loadedProperty);
-            if (loadedProperty instanceof Collection) {
-              Collection<IEntity> returnedCollection = createTransientEntityCollection((Collection) loadedProperty);
-              for (Object nextEntityCollectionElement : (Collection) loadedProperty) {
-                returnedCollection
-                    .add(merge((IEntity) nextEntityCollectionElement,
-                        MergeMode.MERGE_KEEP));
-                Hibernate.initialize(nextEntityCollectionElement);
-              }
-              return returnedCollection;
-            } else if (loadedProperty instanceof IEntity) {
-              return merge((IEntity) loadedProperty, MergeMode.MERGE_KEEP);
-            }
-            return loadedProperty;
+      /**
+       * {@inheritDoc}
+       */
+      public Object doInHibernate(Session session) {
+
+        session.lock(entity, LockMode.NONE);
+
+        session.setReadOnly(entity, true);
+        Hibernate.initialize(currentPropertyValue);
+
+        if (currentPropertyValue instanceof Collection) {
+          for (Object nextEntityCollectionElement : (Collection) currentPropertyValue) {
+            merge((IEntity) nextEntityCollectionElement, MergeMode.MERGE_KEEP);
           }
-        });
-    return initializedProperty;
+        } else if (currentPropertyValue instanceof IEntity) {
+          merge((IEntity) currentPropertyValue, MergeMode.MERGE_KEEP);
+        }
+        return null;
+      }
+    });
   }
 }
