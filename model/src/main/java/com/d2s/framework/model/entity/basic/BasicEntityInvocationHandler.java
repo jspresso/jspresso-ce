@@ -664,7 +664,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   private int hashCode(IEntity proxy) {
     if (proxy.getId() == null) {
-      return super.hashCode();
+      throw new NullPointerException(
+          "Id must be assigned on the entity before its hashcode can be used.");
     }
     return new HashCodeBuilder(3, 17).append(proxy.getId()).toHashCode();
   }

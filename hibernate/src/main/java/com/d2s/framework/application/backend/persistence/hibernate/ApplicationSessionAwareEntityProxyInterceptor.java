@@ -50,7 +50,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   @Override
   public int[] findDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
-    if (previousState == null && entity instanceof IEntity) {
+    if (/*previousState == null && */ entity instanceof IEntity) {
       Map<String, Object> dirtyProperties = applicationSession
           .getDirtyProperties((IEntity) entity);
       if (dirtyProperties == null) {

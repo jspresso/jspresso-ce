@@ -461,4 +461,13 @@ public class BasicApplicationSession implements IApplicationSession {
     return unitOfWork.isActive();
   }
 
+  /**
+   * Gets the entity dirt recorder. To be used by subclasses.
+   * 
+   * @return the entity dirt recorder.
+   */
+  protected BeanPropertyChangeRecorder getDirtRecorder() {
+    return dirtRecorder;
+  }
+
 }

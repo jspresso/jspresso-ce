@@ -156,21 +156,26 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     if (Hibernate.isInitialized(currentPropertyValue)) {
       return;
     }
+    boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
+    try {
+      getDirtRecorder().setEnabled(false);
+      hibernateTemplate.execute(new HibernateCallback() {
 
-    hibernateTemplate.execute(new HibernateCallback() {
+        /**
+         * {@inheritDoc}
+         */
+        public Object doInHibernate(Session session) {
 
-      /**
-       * {@inheritDoc}
-       */
-      public Object doInHibernate(Session session) {
+          session.lock(entity, LockMode.NONE);
 
-        session.lock(entity, LockMode.NONE);
+          session.setReadOnly(entity, true);
+          Hibernate.initialize(currentPropertyValue);
 
-        session.setReadOnly(entity, true);
-        Hibernate.initialize(currentPropertyValue);
-
-        return null;
-      }
-    });
+          return null;
+        }
+      });
+    } finally {
+      getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
+    }
   }
 }
