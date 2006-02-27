@@ -77,9 +77,9 @@ public class BasicApplicationSession implements IApplicationSession {
 
   @SuppressWarnings("unchecked")
   private IEntity merge(IEntity entity, MergeMode mergeMode,
-      Map<IEntity, IEntity> alreadyCloned) {
-    if (alreadyCloned.containsKey(entity)) {
-      return alreadyCloned.get(entity);
+      Map<IEntity, IEntity> alreadyMerged) {
+    if (alreadyMerged.containsKey(entity)) {
+      return alreadyMerged.get(entity);
     }
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
@@ -90,10 +90,10 @@ public class BasicApplicationSession implements IApplicationSession {
         entityRegistry.register(registeredEntity);
         dirtRecorder.register(registeredEntity, null);
       } else if (mergeMode == MergeMode.MERGE_KEEP) {
-        alreadyCloned.put(entity, registeredEntity);
+        alreadyMerged.put(entity, registeredEntity);
         return registeredEntity;
       }
-      alreadyCloned.put(entity, registeredEntity);
+      alreadyMerged.put(entity, registeredEntity);
       Map sessionDirtyProperties = dirtRecorder
           .getChangedProperties(registeredEntity);
       boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
@@ -118,7 +118,7 @@ public class BasicApplicationSession implements IApplicationSession {
               }
             } else {
               mergedProperties.put(property.getKey(), merge((IEntity) property
-                  .getValue(), mergeMode, alreadyCloned));
+                  .getValue(), mergeMode, alreadyMerged));
             }
           } else if (property.getValue() instanceof Collection) {
             if (mergeMode == MergeMode.MERGE_KEEP
@@ -143,7 +143,7 @@ public class BasicApplicationSession implements IApplicationSession {
               for (IEntity entityCollectionElement : (Collection<IEntity>) property
                   .getValue()) {
                 registeredCollection.add(merge(entityCollectionElement,
-                    mergeMode, alreadyCloned));
+                    mergeMode, alreadyMerged));
               }
               if (registeredEntity.isPersistent()) {
                 Collection<IEntity> snapshotCollection = null;
@@ -328,9 +328,9 @@ public class BasicApplicationSession implements IApplicationSession {
 
   @SuppressWarnings("unchecked")
   private IEntity cloneInUnitOfWork(IEntity entity,
-      Map<IEntity, IEntity> alreadyMerged) {
-    if (alreadyMerged.containsKey(entity)) {
-      return alreadyMerged.get(entity);
+      Map<IEntity, IEntity> alreadyCloned) {
+    if (alreadyCloned.containsKey(entity)) {
+      return alreadyCloned.get(entity);
     }
     Map<String, Object> dirtyProperties = dirtRecorder
         .getChangedProperties(entity);
@@ -338,12 +338,12 @@ public class BasicApplicationSession implements IApplicationSession {
       dirtyProperties = new HashMap<String, Object>();
     }
     IEntity uowEntity = entity.clone(true);
-    alreadyMerged.put(entity, uowEntity);
+    alreadyCloned.put(entity, uowEntity);
     Map<String, Object> entityProperties = entity.straightGetProperties();
     for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
       if (property.getValue() instanceof IEntity) {
         uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
-            (IEntity) property.getValue(), alreadyMerged));
+            (IEntity) property.getValue(), alreadyCloned));
       } else if (property.getValue() instanceof Collection) {
         if (isInitialized((Collection) property.getValue())) {
           Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
@@ -351,7 +351,7 @@ public class BasicApplicationSession implements IApplicationSession {
           for (IEntity entityCollectionElement : (Collection<IEntity>) property
               .getValue()) {
             uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
-                alreadyMerged));
+                alreadyCloned));
           }
           uowEntityCollection = wrapDetachedEntityCollection(entity,
               uowEntityCollection, (Collection) dirtyProperties.get(property
