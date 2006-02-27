@@ -93,6 +93,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
           .getCollectionConnector();
       if (collectionConnector != null) {
+        collectionConnector.setAllowLazyChildrenLoading(false);
         return collectionConnector.getChildConnectorCount();
       }
     } else if (parent instanceof ICollectionConnectorListProvider) {
