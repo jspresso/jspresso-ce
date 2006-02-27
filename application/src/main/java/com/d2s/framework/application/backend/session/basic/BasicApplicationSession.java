@@ -77,25 +77,23 @@ public class BasicApplicationSession implements IApplicationSession {
 
   @SuppressWarnings("unchecked")
   private IEntity merge(IEntity entity, MergeMode mergeMode,
-      Map<IEntity, IEntity> alreadyMerged) {
-    if (alreadyMerged.containsKey(entity)) {
-      return alreadyMerged.get(entity);
+      Map<IEntity, IEntity> alreadyCloned) {
+    if (alreadyCloned.containsKey(entity)) {
+      return alreadyCloned.get(entity);
     }
     boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
     try {
       dirtRecorder.setEnabled(false);
       IEntity registeredEntity = getRegisteredEntity(entity.getContract(), entity.getId());
-      boolean newlyRegistered = false;
       if (registeredEntity == null) {
-        registeredEntity = entity;
+        registeredEntity = entity.clone(true);
         entityRegistry.register(registeredEntity);
         dirtRecorder.register(registeredEntity, null);
-        newlyRegistered = true;
       } else if (mergeMode == MergeMode.MERGE_KEEP) {
-        alreadyMerged.put(entity, registeredEntity);
+        alreadyCloned.put(entity, registeredEntity);
         return registeredEntity;
       }
-      alreadyMerged.put(entity, registeredEntity);
+      alreadyCloned.put(entity, registeredEntity);
       Map sessionDirtyProperties = dirtRecorder
           .getChangedProperties(registeredEntity);
       boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
@@ -120,7 +118,7 @@ public class BasicApplicationSession implements IApplicationSession {
               }
             } else {
               mergedProperties.put(property.getKey(), merge((IEntity) property
-                  .getValue(), mergeMode, alreadyMerged));
+                  .getValue(), mergeMode, alreadyCloned));
             }
           } else if (property.getValue() instanceof Collection) {
             if (mergeMode == MergeMode.MERGE_KEEP
@@ -145,7 +143,7 @@ public class BasicApplicationSession implements IApplicationSession {
               for (IEntity entityCollectionElement : (Collection<IEntity>) property
                   .getValue()) {
                 registeredCollection.add(merge(entityCollectionElement,
-                    mergeMode, alreadyMerged));
+                    mergeMode, alreadyCloned));
               }
               if (registeredEntity.isPersistent()) {
                 Collection<IEntity> snapshotCollection = null;

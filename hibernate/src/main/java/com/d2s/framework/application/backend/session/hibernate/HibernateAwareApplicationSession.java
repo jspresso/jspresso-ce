@@ -19,7 +19,6 @@ import org.hibernate.collection.PersistentSet;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
-import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.PropertyHelper;
@@ -170,13 +169,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         session.setReadOnly(entity, true);
         Hibernate.initialize(currentPropertyValue);
 
-        if (currentPropertyValue instanceof Collection) {
-          for (Object nextEntityCollectionElement : (Collection) currentPropertyValue) {
-            merge((IEntity) nextEntityCollectionElement, MergeMode.MERGE_KEEP);
-          }
-        } else if (currentPropertyValue instanceof IEntity) {
-          merge((IEntity) currentPropertyValue, MergeMode.MERGE_KEEP);
-        }
         return null;
       }
     });

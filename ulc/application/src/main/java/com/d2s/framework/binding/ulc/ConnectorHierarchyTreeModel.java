@@ -15,7 +15,9 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
 import com.ulcjava.base.application.ULCTree;
+import com.ulcjava.base.application.event.TreeExpansionEvent;
 import com.ulcjava.base.application.event.TreeModelEvent;
+import com.ulcjava.base.application.event.serializable.ITreeExpansionListener;
 import com.ulcjava.base.application.event.serializable.ITreeModelListener;
 import com.ulcjava.base.application.tree.AbstractTreeModel;
 import com.ulcjava.base.application.tree.TreePath;
@@ -30,7 +32,7 @@ import com.ulcjava.base.application.tree.TreePath;
  * @author Vincent Vandenschrick
  */
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
-    ITreeModelListener {
+    ITreeModelListener, ITreeExpansionListener {
 
   private static final long        serialVersionUID = -1578891934062045656L;
   private ICompositeValueConnector rootConnector;
@@ -47,12 +49,12 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    *          lazy-load the tree hierarchy.
    */
   public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector,
-      @SuppressWarnings("unused")
       ULCTree tree) {
     this.rootConnector = rootConnector;
     connectorsListener = new TreeConnectorsListener();
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
+    tree.addTreeExpansionListener(this);
   }
 
   /**
@@ -285,6 +287,22 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    */
   public void treeStructureChanged(TreeModelEvent event) {
     checkListenerRegistrationForConnector((IValueConnector) event.getTreePath()
+        .getLastPathComponent());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void treeCollapsed(@SuppressWarnings("unused")
+  TreeExpansionEvent event) {
+    // NO-OP as of now.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void treeExpanded(TreeExpansionEvent event) {
+    checkListenerRegistrationForConnector((IValueConnector) event.getPath()
         .getLastPathComponent());
   }
 }

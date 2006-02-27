@@ -121,11 +121,29 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   public Object getEntity(String entityName, Serializable id) {
     if (!applicationSession.isUnitOfWorkActive()) {
       try {
-        return applicationSession.getRegisteredEntity(Class.forName(entityName), id);
+        return applicationSession.getRegisteredEntity(
+            Class.forName(entityName), id);
       } catch (ClassNotFoundException ex) {
         ex.printStackTrace();
       }
     }
     return super.getEntity(entityName, id);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean onLoad(Object entity, Serializable id, Object[] state,
+      String[] propertyNames, Type[] types) {
+    if (!applicationSession.isUnitOfWorkActive()) {
+      if (entity instanceof IEntity
+          && applicationSession.getRegisteredEntity(((IEntity) entity)
+              .getContract(), id) == null) {
+        applicationSession.registerEntity((IEntity) entity);
+      }
+    }
+    return super.onLoad(entity, id, state, propertyNames, types);
+  }
+
 }

@@ -8,10 +8,9 @@ import java.util.List;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeWillExpandListener;
-import javax.swing.tree.ExpandVetoException;
 import javax.swing.tree.TreePath;
 
 import com.d2s.framework.binding.CollectionConnectorValueChangeEvent;
@@ -34,7 +33,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * @author Vincent Vandenschrick
  */
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
-    TreeWillExpandListener, TreeModelListener {
+    TreeExpansionListener, TreeModelListener {
 
   private ICompositeValueConnector rootConnector;
   private TreeConnectorsListener   connectorsListener;
@@ -55,7 +54,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     connectorsListener = new TreeConnectorsListener();
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
-    tree.addTreeWillExpandListener(this);
+    tree.addTreeExpansionListener(this);
   }
 
   /**
@@ -273,24 +272,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
-  public void treeWillExpand(TreeExpansionEvent event)
-      throws ExpandVetoException {
-    // TODO notify connector to fetch its children if necessary.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unused")
-  public void treeWillCollapse(TreeExpansionEvent event)
-      throws ExpandVetoException {
-    // NO-OP as of now.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void treeNodesChanged(@SuppressWarnings("unused")
   TreeModelEvent e) {
     // NO-OP as of now.
@@ -318,5 +299,21 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   public void treeStructureChanged(TreeModelEvent e) {
     checkListenerRegistrationForConnector((IValueConnector) e.getTreePath()
         .getLastPathComponent());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void treeExpanded(TreeExpansionEvent event) {
+    checkListenerRegistrationForConnector((IValueConnector) event.getPath()
+        .getLastPathComponent());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void treeCollapsed(@SuppressWarnings("unused")
+  TreeExpansionEvent event) {
+    // NO-OP as of now.
   }
 }
