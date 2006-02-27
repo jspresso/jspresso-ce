@@ -110,13 +110,17 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    */
   @Override
   public boolean isLeaf(Object node) {
+    if (node == rootConnector) {
+      return false;
+    }
     if (node instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) node)
           .getCollectionConnector();
       if (collectionConnector == null) {
         return true;
       }
-      return false;
+      return collectionConnector.getConnectorValue() == null
+          || ((Collection) collectionConnector.getConnectorValue()).isEmpty();
     } else if (node instanceof ICollectionConnectorListProvider) {
       return ((ICollectionConnectorListProvider) node)
           .getCollectionConnectors().isEmpty();
@@ -294,8 +298,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  public void treeCollapsed(@SuppressWarnings("unused")
-  TreeExpansionEvent event) {
+  public void treeCollapsed(TreeExpansionEvent event) {
     ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
         .getPath().getLastPathComponent();
     for (ICollectionConnector childCollectionConnector : expandedConnector

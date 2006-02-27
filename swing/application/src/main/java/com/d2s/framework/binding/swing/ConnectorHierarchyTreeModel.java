@@ -53,10 +53,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     this.rootConnector = rootConnector;
     connectorsListener = new TreeConnectorsListener();
     checkListenerRegistrationForConnector(rootConnector);
-    for (ICollectionConnector childCollectionConnector : ((ICollectionConnectorListProvider) rootConnector)
-        .getCollectionConnectors()) {
-      childCollectionConnector.setAllowLazyChildrenLoading(false);
-    }
     addTreeModelListener(this);
     tree.addTreeExpansionListener(this);
   }
@@ -110,13 +106,17 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   public boolean isLeaf(Object node) {
+    if (node == rootConnector) {
+      return false;
+    }
     if (node instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) node)
           .getCollectionConnector();
       if (collectionConnector == null) {
         return true;
       }
-      return false;
+      return collectionConnector.getConnectorValue() == null
+          || ((Collection) collectionConnector.getConnectorValue()).isEmpty();
     } else if (node instanceof ICollectionConnectorListProvider) {
       return ((ICollectionConnectorListProvider) node)
           .getCollectionConnectors().isEmpty();
@@ -309,6 +309,18 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
+  public void treeCollapsed(TreeExpansionEvent event) {
+    ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
+        .getPath().getLastPathComponent();
+    for (ICollectionConnector childCollectionConnector : expandedConnector
+        .getCollectionConnectors()) {
+      childCollectionConnector.setAllowLazyChildrenLoading(true);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void treeExpanded(TreeExpansionEvent event) {
     ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
         .getPath().getLastPathComponent();
@@ -318,18 +330,5 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     }
     checkListenerRegistrationForConnector((IValueConnector) event.getPath()
         .getLastPathComponent());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void treeCollapsed(@SuppressWarnings("unused")
-  TreeExpansionEvent event) {
-    ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
-        .getPath().getLastPathComponent();
-    for (ICollectionConnector childCollectionConnector : expandedConnector
-        .getCollectionConnectors()) {
-      childCollectionConnector.setAllowLazyChildrenLoading(true);
-    }
   }
 }
