@@ -286,7 +286,12 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
    * {@inheritDoc}
    */
   public int getChildConnectorCount() {
-    return getChildConnectorKeys().size();
+    Collection beanCollection = (Collection) getConnecteeValue();
+    if (beanCollection == null) {
+      return 0;
+    }
+    return beanCollection.size();
+    // return getChildConnectorKeys().size();
   }
 
   /**

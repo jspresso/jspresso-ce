@@ -123,9 +123,9 @@ public abstract class AbstractCollectionConnector extends
           IValueConnector childConnector = getChildConnector(nextModelConnectorId);
           if (childConnector == null) {
             childConnector = createChildConnector(computeConnectorId(i));
-            mvcBinder.bind(childConnector, childModelConnector);
             addChildConnector(childConnector);
           }
+          mvcBinder.bind(childConnector, childModelConnector);
           i++;
         }
       }
