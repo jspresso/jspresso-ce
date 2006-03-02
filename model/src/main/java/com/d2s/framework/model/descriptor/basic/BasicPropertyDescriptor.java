@@ -8,6 +8,7 @@ import java.util.List;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
 import com.d2s.framework.util.descriptor.DefaultDescriptor;
+import com.d2s.framework.util.exception.NestedRuntimeException;
 
 /**
  * Default implementation of a property descriptor.
@@ -23,6 +24,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   private boolean                           mandatory;
   private List<IPropertyIntegrityProcessor> integrityProcessors;
+  private String                            delegateClassName;
   private Class                             delegateClass;
   private String                            unicityScope;
 
@@ -65,17 +67,37 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   public Class getDelegateClass() {
+    if (delegateClass == null) {
+      if (delegateClassName != null) {
+        try {
+          delegateClass = Class.forName(delegateClassName);
+        } catch (ClassNotFoundException ex) {
+          throw new NestedRuntimeException(ex);
+        }
+      }
+    }
     return delegateClass;
   }
 
   /**
-   * Sets the extensionDelegate.
+   * Sets the delegate class name.
    * 
-   * @param delegateClass
-   *          The class of the extension delegate used to compute this property.
+   * @param delegateClassName
+   *          The class name of the extension delegate used to compute this
+   *          property.
    */
-  public void setDelegateClass(Class delegateClass) {
-    this.delegateClass = delegateClass;
+  public void setDelegateClassName(String delegateClassName) {
+    this.delegateClassName = delegateClassName;
+  }
+
+  /**
+   * Sets the delegate class name.
+   * 
+   * @return The class name of the extension delegate used to compute this
+   *          property.
+   */
+  public String getDelegateClassName() {
+    return delegateClassName;
   }
 
   /**

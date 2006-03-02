@@ -17,8 +17,17 @@ public interface IRelationshipEndPropertyDescriptor extends IPropertyDescriptor 
   /**
    * Gets the reverse relationship descriptor of the underlying relation.
    * 
-   * @return value
+   * @return the reverse relation end.
    */
   IRelationshipEndPropertyDescriptor getReverseRelationEnd();
 
+  /**
+   * Sets the reverse relationship descriptor of the underlying relation.
+   * Implementing classes are supposed to reflexively set both relation ends.
+   * 
+   * @param reverseRelationEnd
+   *          the reverse relation end.
+   */
+  void setReverseRelationEnd(
+      IRelationshipEndPropertyDescriptor reverseRelationEnd);
 }

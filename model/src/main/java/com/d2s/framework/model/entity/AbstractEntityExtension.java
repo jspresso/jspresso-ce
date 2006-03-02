@@ -38,4 +38,12 @@ public abstract class AbstractEntityExtension<T extends IEntity> implements
     return extendedEntity;
   }
 
+  /**
+   * Computes the entity type.
+   * 
+   * @return The entity type.
+   */
+  public String getType() {
+    return getEntity().getContract().getName();
+  }
 }

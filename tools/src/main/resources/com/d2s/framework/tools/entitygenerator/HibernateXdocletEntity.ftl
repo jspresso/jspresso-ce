@@ -91,7 +91,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    * 
-   <#if !propertyDescriptor.delegateClass?exists>
+   <#if !propertyDescriptor.delegateClassName?exists>
    * @hibernate.property
      <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDatePropertyDescriptor")>
        <#if propertyDescriptor.type = "DATE">
@@ -221,7 +221,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    * 
-   <#if !propertyDescriptor.delegateClass?exists>
+   <#if !propertyDescriptor.delegateClassName?exists>
    * @hibernate.${hibernateCollectionType}
      <#if manyToMany && inverse>
    *           cascade = "none"
@@ -307,7 +307,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    * 
-   <#if !propertyDescriptor.delegateClass?exists>
+   <#if !propertyDescriptor.delegateClassName?exists>
    * @hibernate.many-to-one 
      <#if oneToOne>
    *           cascade = "persist,merge,save-update,lock,refresh,evict,replicate"
@@ -336,7 +336,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor>
     <@generateCollectionGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.delegateClass?exists>
+	<#if !propertyDescriptor.delegateClassName?exists>
       <@generateCollectionSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
       <@generateCollectionAdder componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
@@ -349,7 +349,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor>
     <@generateEntityRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.delegateClass?exists>
+	<#if !propertyDescriptor.delegateClassName?exists>
       <@generateEntityRefSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
     </#if>
@@ -358,7 +358,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateScalarPropertyAccessors componentDescriptor propertyDescriptor>
     <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.delegateClass?exists>
+	<#if !propertyDescriptor.delegateClassName?exists>
       <@generateScalarSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
     </#if>

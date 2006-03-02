@@ -34,6 +34,14 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    */
   public void setReverseRelationEnd(
       IRelationshipEndPropertyDescriptor reverseRelationEnd) {
-    this.reverseRelationEnd = reverseRelationEnd;
+    if (this.reverseRelationEnd != reverseRelationEnd) {
+      if (this.reverseRelationEnd != null) {
+        this.reverseRelationEnd.setReverseRelationEnd(null);
+      }
+      this.reverseRelationEnd = reverseRelationEnd;
+      if (reverseRelationEnd != null) {
+        reverseRelationEnd.setReverseRelationEnd(this);
+      }
+    }
   }
 }

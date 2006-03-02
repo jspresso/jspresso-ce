@@ -132,7 +132,7 @@
 					<property name="name" value="age" />
 					<property name="minValue" value="0" />
 					<property name="maxValue" value="150" />
-					<property name="delegateClass" value="com.d2s.framework.sample.backend.domain.PersonExtension" />
+					<property name="delegateClassName" value="com.d2s.framework.sample.backend.domain.PersonExtension" />
 				</bean>
 				<bean class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
 					<property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.City" />
@@ -157,7 +157,6 @@
 		class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
 		<property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.Employee" />
 		<property name="name" value="manager" />
-		<property name="reverseRelationEnd" ref="Employee-managedEmployees-descriptor" />
 	</bean>
 
 	<bean id="Employees-set-descriptor" class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor">
@@ -177,7 +176,6 @@
 		class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
 		<property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
 		<property name="name" value="department" />
-		<property name="reverseRelationEnd" ref="Department-departmentEmployees-descriptor" />
 	</bean>
 
 	<bean id="Department-departmentEmployees-descriptor"
@@ -222,7 +220,6 @@
 	<bean id="Department-projects-descriptor"
 		class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
 		<property name="name" value="departmentProjects" />
-		<property name="reverseRelationEnd" ref="Project-department-descriptor" />
 		<property name="referencedDescriptor" ref="Projects-set-descriptor" />
 	</bean>
 
@@ -260,7 +257,6 @@
 	<bean id="Project-projectMembers-descriptor"
 		class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
 		<property name="name" value="projectMembers" />
-		<property name="reverseRelationEnd" ref="Employee-projects-descriptor" />
 		<property name="referencedDescriptor" ref="Employees-set-descriptor" />
 	</bean>
 

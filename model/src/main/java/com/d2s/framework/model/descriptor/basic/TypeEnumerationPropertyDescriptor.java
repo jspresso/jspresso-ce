@@ -30,8 +30,7 @@ public class TypeEnumerationPropertyDescriptor extends BasicEnumerationPropertyD
       List<IComponentDescriptor> componentDescriptorList) {
     Map<String, String> componentDescriptorImages = new LinkedHashMap<String, String>();
     for (IComponentDescriptor componentDescriptor : componentDescriptorList) {
-      componentDescriptorImages.put(componentDescriptor.getComponentContract()
-          .getName(), componentDescriptor.getIconImageURL());
+      componentDescriptorImages.put(componentDescriptor.getName(), componentDescriptor.getIconImageURL());
     }
     setValuesAndIconImageUrls(componentDescriptorImages);
   }
