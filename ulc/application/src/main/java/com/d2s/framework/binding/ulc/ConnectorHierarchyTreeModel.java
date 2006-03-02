@@ -71,8 +71,10 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   @Override
   public Object getChild(Object parent, int index) {
     if (parent instanceof ICollectionConnectorProvider) {
-      return ((ICollectionConnectorProvider) parent).getCollectionConnector()
-          .getChildConnector(index);
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
+          .getCollectionConnector();
+      collectionConnector.setAllowLazyChildrenLoading(false);
+      return collectionConnector.getChildConnector(index);
     } else if (parent instanceof ICollectionConnectorListProvider) {
       return ((ICollectionConnectorListProvider) parent)
           .getCollectionConnectors().get(index);
@@ -92,15 +94,14 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
           .getCollectionConnector();
-      if (collectionConnector != null) {
-        collectionConnector.setAllowLazyChildrenLoading(false);
-        return collectionConnector.getChildConnectorCount();
+      if (collectionConnector == null
+          || collectionConnector.getConnectorValue() == null) {
+        return 0;
       }
+      return ((Collection) collectionConnector.getConnectorValue()).size();
     } else if (parent instanceof ICollectionConnectorListProvider) {
-      if (((ICollectionConnectorListProvider) parent).getCollectionConnectors() != null) {
-        return ((ICollectionConnectorListProvider) parent)
-            .getCollectionConnectors().size();
-      }
+      return ((ICollectionConnectorListProvider) parent)
+          .getCollectionConnectors().size();
     }
     return 0;
   }
@@ -113,19 +114,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     if (node == rootConnector) {
       return false;
     }
-    if (node instanceof ICollectionConnectorProvider) {
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) node)
-          .getCollectionConnector();
-      if (collectionConnector == null) {
-        return true;
-      }
-      return collectionConnector.getConnectorValue() == null
-          || ((Collection) collectionConnector.getConnectorValue()).isEmpty();
-    } else if (node instanceof ICollectionConnectorListProvider) {
-      return ((ICollectionConnectorListProvider) node)
-          .getCollectionConnectors().isEmpty();
-    }
-    return true;
+    return getChildCount(node) == 0;
   }
 
   /**
@@ -222,7 +211,11 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             for (int i = oldCollectionSize; i < newCollectionSize; i++) {
               childIndices[i - oldCollectionSize] = i;
             }
-            nodesWereInserted(connectorPath, childIndices);
+            if (((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
+              nodesChanged(connectorPath, childIndices);
+            } else {
+              nodesWereInserted(connectorPath, childIndices);
+            }
           } else if (newCollectionSize < oldCollectionSize) {
             int[] childIndices = new int[oldCollectionSize - newCollectionSize];
             for (int i = newCollectionSize; i < oldCollectionSize; i++) {

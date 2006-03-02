@@ -55,6 +55,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
     tree.addTreeExpansionListener(this);
+    treeExpanded(new TreeExpansionEvent(tree, new TreePath(rootConnector)));
   }
 
   /**
@@ -68,14 +69,17 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   public Object getChild(Object parent, int index) {
+    Object child = null;
     if (parent instanceof ICollectionConnectorProvider) {
-      return ((ICollectionConnectorProvider) parent).getCollectionConnector()
-          .getChildConnector(index);
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
+          .getCollectionConnector();
+      collectionConnector.setAllowLazyChildrenLoading(false);
+      child = collectionConnector.getChildConnector(index);
     } else if (parent instanceof ICollectionConnectorListProvider) {
-      return ((ICollectionConnectorListProvider) parent)
+      child = ((ICollectionConnectorListProvider) parent)
           .getCollectionConnectors().get(index);
     }
-    return null;
+    return child;
   }
 
   /**
@@ -89,15 +93,14 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
           .getCollectionConnector();
-      if (collectionConnector != null) {
-        collectionConnector.setAllowLazyChildrenLoading(false);
-        return collectionConnector.getChildConnectorCount();
+      if (collectionConnector == null
+          || collectionConnector.getConnectorValue() == null) {
+        return 0;
       }
+      return ((Collection) collectionConnector.getConnectorValue()).size();
     } else if (parent instanceof ICollectionConnectorListProvider) {
-      if (((ICollectionConnectorListProvider) parent).getCollectionConnectors() != null) {
-        return ((ICollectionConnectorListProvider) parent)
-            .getCollectionConnectors().size();
-      }
+      return ((ICollectionConnectorListProvider) parent)
+          .getCollectionConnectors().size();
     }
     return 0;
   }
@@ -109,19 +112,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     if (node == rootConnector) {
       return false;
     }
-    if (node instanceof ICollectionConnectorProvider) {
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) node)
-          .getCollectionConnector();
-      if (collectionConnector == null) {
-        return true;
-      }
-      return collectionConnector.getConnectorValue() == null
-          || ((Collection) collectionConnector.getConnectorValue()).isEmpty();
-    } else if (node instanceof ICollectionConnectorListProvider) {
-      return ((ICollectionConnectorListProvider) node)
-          .getCollectionConnectors().isEmpty();
-    }
-    return true;
+    return getChildCount(node) == 0;
   }
 
   /**
@@ -225,8 +216,14 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                       .getChildConnector(i);
                   childIndices[i - oldCollectionSize] = i;
                 }
-                fireTreeNodesInserted(ConnectorHierarchyTreeModel.this,
-                    connectorPath.getPath(), childIndices, insertedChildren);
+                if (((CollectionConnectorValueChangeEvent) evt)
+                    .isDelayedEvent()) {
+                  fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
+                      connectorPath.getPath(), childIndices, insertedChildren);
+                } else {
+                  fireTreeNodesInserted(ConnectorHierarchyTreeModel.this,
+                      connectorPath.getPath(), childIndices, insertedChildren);
+                }
               } else if (newCollectionSize < oldCollectionSize) {
                 int[] childIndices = new int[oldCollectionSize
                     - newCollectionSize];

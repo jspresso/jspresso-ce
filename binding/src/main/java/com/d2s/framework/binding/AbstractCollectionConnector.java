@@ -37,6 +37,7 @@ public abstract class AbstractCollectionConnector extends
   private boolean                  allowLazyChildrenLoading;
   private boolean                  needsChildrenUpdate;
   private boolean                  needsFireConnectorValueChange;
+  private boolean                  isDelayedEvent;
 
   /**
    * Creates a new <code>AbstractCollectionConnector</code>.
@@ -59,6 +60,7 @@ public abstract class AbstractCollectionConnector extends
     allowLazyChildrenLoading = false;
     needsChildrenUpdate = false;
     needsFireConnectorValueChange = false;
+    isDelayedEvent = false;
   }
 
   /**
@@ -83,8 +85,9 @@ public abstract class AbstractCollectionConnector extends
   @Override
   protected ConnectorValueChangeEvent createChangeEvent(
       Object oldConnectorValue, Object newConnectorValue) {
-    ConnectorValueChangeEvent changeEvent = new CollectionConnectorValueChangeEvent(
+    CollectionConnectorValueChangeEvent changeEvent = new CollectionConnectorValueChangeEvent(
         this, oldConnectorValue, newConnectorValue, removedChildrenConnectors);
+    changeEvent.setDelayedEvent(isDelayedEvent);
     removedChildrenConnectors = null;
     return changeEvent;
   }
@@ -325,13 +328,16 @@ public abstract class AbstractCollectionConnector extends
       updateChildConnectors();
     }
     if (needsFireConnectorValueChange) {
-      fireConnectorValueChange();
+      try {
+        isDelayedEvent = true;
+        fireConnectorValueChange();
+      } finally {
+        isDelayedEvent = false;
+      }
     }
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   @Override

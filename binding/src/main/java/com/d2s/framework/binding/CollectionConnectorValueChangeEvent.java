@@ -21,6 +21,7 @@ public class CollectionConnectorValueChangeEvent extends
 
   private static final long     serialVersionUID = 6547764843701088585L;
   private List<IValueConnector> removedChildrenConnectors;
+  private boolean               delayedEvent;
 
   /**
    * Constructs a new <code>CollectionConnectorValueChangeEvent</code>
@@ -40,6 +41,7 @@ public class CollectionConnectorValueChangeEvent extends
       List<IValueConnector> removedChildrenConnectors) {
     super(source, oldValue, newValue);
     this.removedChildrenConnectors = removedChildrenConnectors;
+    this.delayedEvent = false;
   }
 
   /**
@@ -49,5 +51,25 @@ public class CollectionConnectorValueChangeEvent extends
    */
   public List<IValueConnector> getRemovedChildrenConnectors() {
     return removedChildrenConnectors;
+  }
+
+  
+  /**
+   * Gets the delayedEvent.
+   * 
+   * @return the delayedEvent.
+   */
+  public boolean isDelayedEvent() {
+    return delayedEvent;
+  }
+
+  
+  /**
+   * Sets the delayedEvent.
+   * 
+   * @param delayedEvent the delayedEvent to set.
+   */
+  public void setDelayedEvent(boolean delayedEvent) {
+    this.delayedEvent = delayedEvent;
   }
 }
