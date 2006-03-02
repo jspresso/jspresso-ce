@@ -54,8 +54,11 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
    * {@inheritDoc}
    */
   public List<ICollectionConnector> getCollectionConnectors() {
-    return Collections.singletonList(collectionConnectorProvider
-        .getCollectionConnector());
+    if (collectionConnectorProvider != null) {
+      return Collections.singletonList(collectionConnectorProvider
+          .getCollectionConnector());
+    }
+    return Collections.emptyList();
   }
 
   /**
