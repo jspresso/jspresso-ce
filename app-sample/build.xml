@@ -4,7 +4,9 @@
 	<property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" />
 	<property name="xdoclet.plugins.dir" value="${xdoclet.home}/plugins" />
 
-	<property name="entities.output.dir" value="${basedir}/src/main/java" />
+	<property name="java.src.dir" value="${basedir}${file.separator}src${file.separator}main${file.separator}java" />
+	<property name="resources.src.dir" value="${basedir}${file.separator}src${file.separator}main${file.separator}resources" />
+
 	<path id="entity.generator.classpath">
 		<dirset dir="${d2s.project.home}">
 			<include name="**/target/classes" />
@@ -22,11 +24,6 @@
 		</fileset>
 	</path>
 
-	<property name="xdoclet.hibernate.input.dir" value="${entities.output.dir}" />
-	<property name="xdoclet.hibernate.output.dir"
-	          value="${basedir}/src/main/resources" />
-
-
 	<target name="generate-entities-noann">
 		<java classname="com.d2s.framework.tools.entitygenerator.EntityGenerator"
 		      classpathref="entity.generator.classpath">
@@ -37,7 +34,7 @@
 			<arg value="-templateName" />
 			<arg value="HibernateXdocletEntity.ftl" />
 			<arg value="-outputDir" />
-			<arg value="${entities.output.dir}" />
+			<arg value="${java.src.dir}" />
 			<arg value="-includePackages" />
 			<arg value="com.d2s.framework.sample.backend.domain" />
 		</java>
@@ -45,17 +42,15 @@
 
 	<target name="clean-hibernate">
 		<delete>
-			<fileset dir="${xdoclet.hibernate.output.dir}" includes="**/*.hbm.xml" />
+			<fileset dir="${resources.src.dir}" includes="**/*.hbm.xml" />
 		</delete>
 	</target>
 
 	<target name="xdoclet-hibernate"
 	        depends="clean-hibernate, generate-entities-noann">
-		<mkdir dir="${xdoclet.hibernate.output.dir}" />
+		<mkdir dir="${resources.src.dir}" />
 		<path id="xdoclet.task.classpath">
-			<!-- Add the xdoclet2 plugins jar here -->
 			<pathelement location="${xdoclet.plugins.dir}/xdoclet-plugin-hibernate-1.0.2.jar" />
-			<!-- Xdoclet2 runtime dependencies -->
 			<fileset dir="${xdoclet.lib.dir}">
 				<include name="**/*.jar" />
 			</fileset>
@@ -65,12 +60,9 @@
 		         classpathref="xdoclet.task.classpath" />
 
 		<xdoclet>
-			<!-- Defines the file handled by xdoclet2 -->
-			<fileset dir="${xdoclet.hibernate.input.dir}" />
-
-			<!-- Generates the hibernate mapping files -->
+			<fileset dir="${java.src.dir}" />
 			<component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
-			           destdir="${xdoclet.hibernate.output.dir}"
+			           destdir="${resources.src.dir}"
 			           version="3.0" />
 		</xdoclet>
 	</target>
@@ -85,7 +77,7 @@
 			<arg value="-templateName" />
 			<arg value="HibernateXdocletEntity.ftl" />
 			<arg value="-outputDir" />
-			<arg value="${entities.output.dir}" />
+			<arg value="${java.src.dir}" />
 			<arg value="-generateAnnotations" />
 			<arg value="-includePackages" />
 			<arg value="com.d2s.framework.sample.backend.domain" />
