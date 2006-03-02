@@ -8,9 +8,9 @@ import java.util.List;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeExpansionEvent;
-import javax.swing.event.TreeExpansionListener;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
+import javax.swing.event.TreeWillExpandListener;
 import javax.swing.tree.TreePath;
 
 import com.d2s.framework.binding.CollectionConnectorValueChangeEvent;
@@ -33,7 +33,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * @author Vincent Vandenschrick
  */
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
-    TreeExpansionListener, TreeModelListener {
+    TreeWillExpandListener, TreeModelListener {
 
   private ICompositeValueConnector rootConnector;
   private TreeConnectorsListener   connectorsListener;
@@ -54,8 +54,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     connectorsListener = new TreeConnectorsListener();
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
-    tree.addTreeExpansionListener(this);
-    treeExpanded(new TreeExpansionEvent(tree, new TreePath(rootConnector)));
+    tree.addTreeWillExpandListener(this);
+    treeWillExpand(new TreeExpansionEvent(tree, new TreePath(rootConnector)));
   }
 
   /**
@@ -216,14 +216,14 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                       .getChildConnector(i);
                   childIndices[i - oldCollectionSize] = i;
                 }
-                if (((CollectionConnectorValueChangeEvent) evt)
-                    .isDelayedEvent()) {
-                  fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
-                      connectorPath.getPath(), childIndices, insertedChildren);
-                } else {
+//                if (((CollectionConnectorValueChangeEvent) evt)
+//                    .isDelayedEvent()) {
+//                  fireTreeStructureChanged(ConnectorHierarchyTreeModel.this,
+//                      connectorPath);
+//                } else {
                   fireTreeNodesInserted(ConnectorHierarchyTreeModel.this,
                       connectorPath.getPath(), childIndices, insertedChildren);
-                }
+//                }
               } else if (newCollectionSize < oldCollectionSize) {
                 int[] childIndices = new int[oldCollectionSize
                     - newCollectionSize];
@@ -233,9 +233,15 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                 if (connectorPath != null) {
                   List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
                       .getRemovedChildrenConnectors();
-                  fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
-                      connectorPath.getPath(), childIndices,
-                      removedChildrenConnectors.toArray());
+//                  if (((CollectionConnectorValueChangeEvent) evt)
+//                      .isDelayedEvent()) {
+//                    fireTreeStructureChanged(ConnectorHierarchyTreeModel.this,
+//                        connectorPath);
+//                  } else {
+                    fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
+                        connectorPath.getPath(), childIndices,
+                        removedChildrenConnectors.toArray());
+//                  }
                 }
               }
             }
@@ -306,7 +312,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  public void treeCollapsed(TreeExpansionEvent event) {
+  public void treeWillCollapse(TreeExpansionEvent event) {
     ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
         .getPath().getLastPathComponent();
     for (ICollectionConnector childCollectionConnector : expandedConnector
@@ -318,7 +324,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  public void treeExpanded(TreeExpansionEvent event) {
+  public void treeWillExpand(TreeExpansionEvent event) {
     ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
         .getPath().getLastPathComponent();
     for (ICollectionConnector childCollectionConnector : expandedConnector
