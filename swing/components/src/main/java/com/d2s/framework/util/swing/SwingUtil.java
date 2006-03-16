@@ -42,7 +42,7 @@ public final class SwingUtil {
   private static final String TEXTFIELD_INACTIVE_BACKGROUND_KEY           = "TextField.inactiveBackground";
   private static final String FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY = "FormattedTextField.inactiveBackground";
   
-  private static final boolean DISABLE_THREADING = true;
+  private static final boolean DISABLE_THREADING = false;
 
   private SwingUtil() {
     // Helper class private constructor.

@@ -128,10 +128,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
         if (registeredEntity instanceof HibernateProxy) {
           HibernateProxy proxy = (HibernateProxy) registeredEntity;
           LazyInitializer li = proxy.getHibernateLazyInitializer();
-          if (!li.isUninitialized()) {
-            return li.getImplementation();
-          }
-          return super.getEntity(entityName, id);
+          return li.getImplementation();
         }
         return registeredEntity;
       } catch (ClassNotFoundException ex) {
