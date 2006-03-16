@@ -139,6 +139,7 @@ import com.d2s.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IEvenGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;
+import com.d2s.framework.view.descriptor.INestingViewDescriptor;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.ITabViewDescriptor;
@@ -232,6 +233,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     IView<JComponent> view = null;
     if (viewDescriptor instanceof IComponentViewDescriptor) {
       view = createComponentView((IComponentViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof INestingViewDescriptor) {
+      view = createNestingView((INestingViewDescriptor) viewDescriptor,
           actionHandler, locale);
     } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
       view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
@@ -640,12 +644,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     BorderLayout layout = new BorderLayout();
     viewComponent.setLayout(layout);
 
-    if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<JComponent> centerView = createView(viewDescriptor
-          .getCenterViewDescriptor(), actionHandler, locale);
-      viewComponent.add(centerView.getPeer(), BorderLayout.CENTER);
-      childrenViews.add(centerView);
-    }
     if (viewDescriptor.getEastViewDescriptor() != null) {
       IView<JComponent> eastView = createView(viewDescriptor
           .getEastViewDescriptor(), actionHandler, locale);
@@ -657,6 +655,12 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
           .getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.add(northView.getPeer(), BorderLayout.NORTH);
       childrenViews.add(northView);
+    }
+    if (viewDescriptor.getCenterViewDescriptor() != null) {
+      IView<JComponent> centerView = createView(viewDescriptor
+          .getCenterViewDescriptor(), actionHandler, locale);
+      viewComponent.add(centerView.getPeer(), BorderLayout.CENTER);
+      childrenViews.add(centerView);
     }
     if (viewDescriptor.getWestViewDescriptor() != null) {
       IView<JComponent> westView = createView(viewDescriptor
@@ -1282,6 +1286,35 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
               .getReferencedDescriptor().getToStringProperty());
     }
     return connectorFactory.createValueConnector(propertyDescriptor.getName());
+  }
+
+  // /////////////// //
+  // Nesting Section //
+  // /////////////// //
+
+  private IView<JComponent> createNestingView(
+      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+
+    ICompositeValueConnector connector = connectorFactory
+    .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
+        .getName(), null);
+
+    JPanel viewComponent = createJPanel();
+    BorderLayout layout = new BorderLayout();
+    viewComponent.setLayout(layout);
+
+    IView<JComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    
+    IView<JComponent> nestedView = createView(viewDescriptor
+        .getNestedViewDescriptor(), actionHandler, locale);
+
+    connector.addChildConnector(nestedView.getConnector());
+    
+    viewComponent.add(nestedView.getPeer(), BorderLayout.CENTER);
+
+    return view;
   }
 
   // ///////////////// //

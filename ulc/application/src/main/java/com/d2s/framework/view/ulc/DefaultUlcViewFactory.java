@@ -91,6 +91,7 @@ import com.d2s.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IEvenGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;
+import com.d2s.framework.view.descriptor.INestingViewDescriptor;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.ITabViewDescriptor;
@@ -195,6 +196,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     IView<ULCComponent> view = null;
     if (viewDescriptor instanceof IComponentViewDescriptor) {
       view = createComponentView((IComponentViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof INestingViewDescriptor) {
+      view = createNestingView((INestingViewDescriptor) viewDescriptor,
           actionHandler, locale);
     } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
       view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
@@ -601,12 +605,6 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
         viewComponent, viewDescriptor);
     List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
 
-    if (viewDescriptor.getCenterViewDescriptor() != null) {
-      IView<ULCComponent> centerView = createView(viewDescriptor
-          .getCenterViewDescriptor(), actionHandler, locale);
-      viewComponent.add(centerView.getPeer(), ULCBorderLayoutPane.CENTER);
-      childrenViews.add(centerView);
-    }
     if (viewDescriptor.getEastViewDescriptor() != null) {
       IView<ULCComponent> eastView = createView(viewDescriptor
           .getEastViewDescriptor(), actionHandler, locale);
@@ -618,6 +616,12 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
           .getNorthViewDescriptor(), actionHandler, locale);
       viewComponent.add(northView.getPeer(), ULCBorderLayoutPane.NORTH);
       childrenViews.add(northView);
+    }
+    if (viewDescriptor.getCenterViewDescriptor() != null) {
+      IView<ULCComponent> centerView = createView(viewDescriptor
+          .getCenterViewDescriptor(), actionHandler, locale);
+      viewComponent.add(centerView.getPeer(), ULCBorderLayoutPane.CENTER);
+      childrenViews.add(centerView);
     }
     if (viewDescriptor.getWestViewDescriptor() != null) {
       IView<ULCComponent> westView = createView(viewDescriptor
@@ -1221,6 +1225,33 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
               .getReferencedDescriptor().getToStringProperty());
     }
     return connectorFactory.createValueConnector(propertyDescriptor.getName());
+  }
+
+  // /////////////// //
+  // Nesting Section //
+  // /////////////// //
+
+  private IView<ULCComponent> createNestingView(
+      INestingViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+
+    ICompositeValueConnector connector = connectorFactory
+        .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
+            .getName(), null);
+
+    ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
+
+    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+
+    IView<ULCComponent> nestedView = createView(viewDescriptor
+        .getNestedViewDescriptor(), actionHandler, locale);
+
+    connector.addChildConnector(nestedView.getConnector());
+
+    viewComponent.add(nestedView.getPeer(), ULCBorderLayoutPane.CENTER);
+
+    return view;
   }
 
   // ///////////////// //
