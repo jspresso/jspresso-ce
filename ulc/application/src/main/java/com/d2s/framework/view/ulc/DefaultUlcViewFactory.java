@@ -1243,6 +1243,11 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     for (String propertyName : viewDescriptor.getRenderedProperties()) {
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptor) viewDescriptor
           .getModelDescriptor()).getPropertyDescriptor(propertyName);
+      if (propertyDescriptor == null) {
+        throw new ViewException("Property descriptor [" + propertyName
+            + "] does not exist for model descriptor "
+            + viewDescriptor.getModelDescriptor().getName() + ".");
+      }
       IView<ULCComponent> propertyView = createPropertyView(propertyDescriptor,
           viewDescriptor.getRenderedChildProperties(propertyName),
           actionHandler, locale);

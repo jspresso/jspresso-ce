@@ -1307,6 +1307,11 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     for (String propertyName : viewDescriptor.getRenderedProperties()) {
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptor) viewDescriptor
           .getModelDescriptor()).getPropertyDescriptor(propertyName);
+      if (propertyDescriptor == null) {
+        throw new ViewException("Property descriptor [" + propertyName
+            + "] does not exist for model descriptor "
+            + viewDescriptor.getModelDescriptor().getName() + ".");
+      }
       IView<JComponent> propertyView = createPropertyView(propertyDescriptor,
           viewDescriptor.getRenderedChildProperties(propertyName),
           actionHandler, locale);
