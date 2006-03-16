@@ -211,7 +211,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if manyToMany>
       <#local inverse=(compareStrings(elementName, componentName) > 0)/>
     <#else>
-      <#local inverse=true/>
+      <#if hibernateCollectionType="list">
+        <#local inverse=false/>
+      <#else>
+        <#local inverse=true/>
+      </#if>
     </#if>
   <#else>
     <#local bidirectional=false>
@@ -299,7 +303,16 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local propertyType=propertyDescriptor.referencedDescriptor.name>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#assign bidirectional=true>
-    <#assign oneToOne=instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.IReferencePropertyDescriptor")>
+    <#if instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.IReferencePropertyDescriptor")>
+      <#assign oneToOne=true>
+    <#else>
+      <#assign oneToOne=false>
+      <#if propertyDescriptor.reverseRelationEnd.propertyClass.name="java.util.List">
+        <#local managesPersistence=false>
+      <#else>
+        <#local managesPersistence=true>
+      </#if>
+    </#if>
   <#else>
     <#assign bidirectional=false>
     <#assign oneToOne=false>
@@ -307,61 +320,65 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    * 
-   <#if !propertyDescriptor.delegateClassName?exists>
+  <#if !propertyDescriptor.delegateClassName?exists>
    * @hibernate.many-to-one 
-     <#if oneToOne>
+    <#if oneToOne>
    *           cascade = "persist,merge,save-update,lock,refresh,evict,replicate"
-     <#elseif bidirectional>
+    <#elseif bidirectional>
    *           cascade = "save-update,lock"
-     <#else>
+      <#if !managesPersistence>
+   *           insert = "false"
+   *           update = "false"
+      </#if>
+    <#else>
    *           cascade = "lock"
-     </#if>
+    </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}_ID"
-     <#if oneToOne>
+    <#if oneToOne>
    *           unique = "true"
-     </#if>
-     <#if propertyDescriptor.mandatory>
+    </#if>
+    <#if propertyDescriptor.mandatory>
    *           not-null = "true"
-     </#if>
-     <#if propertyDescriptor.unicityScope?exists>
+    </#if>
+    <#if propertyDescriptor.unicityScope?exists>
    *           unique-key = "${generateSQLName(propertyDescriptor.unicityScope)}_UNQ"
-     </#if>
-   </#if>
+    </#if>
+  </#if>
    * @return the ${propertyName}.
    */
   ${propertyType} get${propertyName?cap_first}();
 </#macro>
 
 <#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor>
-    <@generateCollectionGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  <@generateCollectionGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.readOnly>
-      <@generateCollectionSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  <#if !propertyDescriptor.readOnly>
+    <@generateCollectionSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-      <@generateCollectionAdder componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+    <@generateCollectionAdder componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-      <@generateCollectionRemer componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+    <@generateCollectionRemer componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-    </#if>
+  </#if>
 </#macro>
 
 <#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor>
-    <@generateEntityRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  <@generateEntityRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.readOnly>
-      <@generateEntityRefSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  <#if !propertyDescriptor.readOnly>
+    <@generateEntityRefSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-    </#if>
+  </#if>
 </#macro>
 
 <#macro generateScalarPropertyAccessors componentDescriptor propertyDescriptor>
-    <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.readOnly>
-      <@generateScalarSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  <#if !propertyDescriptor.readOnly>
+    <@generateScalarSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-    </#if>
+  </#if>
 </#macro>
 
 <#macro generatePropertyAccessors componentDescriptor propertyDescriptor>

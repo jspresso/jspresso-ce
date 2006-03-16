@@ -41,6 +41,8 @@ public final class SwingUtil {
   private static final String FORMATTED_TEXTFIELD_FONT_KEY                = "FormattedTextField.font";
   private static final String TEXTFIELD_INACTIVE_BACKGROUND_KEY           = "TextField.inactiveBackground";
   private static final String FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY = "FormattedTextField.inactiveBackground";
+  
+  private static final boolean DISABLE_THREADING = true;
 
   private SwingUtil() {
     // Helper class private constructor.
@@ -54,18 +56,21 @@ public final class SwingUtil {
    *          the runnable operation which updates the GUI.
    */
   public static void updateSwingGui(Runnable runnable) {
-    // runnable.run();
-    if (SwingUtilities.isEventDispatchThread()) {
+    if (DISABLE_THREADING) {
       runnable.run();
     } else {
-      try {
-        SwingUtilities.invokeAndWait(runnable);
-      } catch (InterruptedException ex) {
-        throw new NestedRuntimeException(ex);
-      } catch (InvocationTargetException ex) {
-        throw new NestedRuntimeException(ex);
+      if (SwingUtilities.isEventDispatchThread()) {
+        runnable.run();
+      } else {
+        try {
+          SwingUtilities.invokeAndWait(runnable);
+        } catch (InterruptedException ex) {
+          throw new NestedRuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+          throw new NestedRuntimeException(ex);
+        }
+        // SwingUtilities.invokeLater(runnable);
       }
-      // SwingUtilities.invokeLater(runnable);
     }
   }
 
@@ -94,8 +99,10 @@ public final class SwingUtil {
    * @return the job execution result.
    */
   public static Object performLongOperation(Job foxtrotJob) {
+    if (DISABLE_THREADING) {
+      return foxtrotJob.run();
+    }
     return Worker.post(foxtrotJob);
-    // return foxtrotJob.run();
   }
 
   /**

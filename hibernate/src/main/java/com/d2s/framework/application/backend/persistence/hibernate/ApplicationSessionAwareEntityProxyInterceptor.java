@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.hibernate.Transaction;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
@@ -50,7 +52,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   @Override
   public int[] findDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
-    if (/*previousState == null && */ entity instanceof IEntity) {
+    if (/* previousState == null && */entity instanceof IEntity) {
       Map<String, Object> dirtyProperties = applicationSession
           .getDirtyProperties((IEntity) entity);
       if (dirtyProperties == null) {
@@ -121,8 +123,17 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   public Object getEntity(String entityName, Serializable id) {
     if (!applicationSession.isUnitOfWorkActive()) {
       try {
-        return applicationSession.getRegisteredEntity(
-            Class.forName(entityName), id);
+        Object registeredEntity = applicationSession.getRegisteredEntity(Class
+            .forName(entityName), id);
+        if (registeredEntity instanceof HibernateProxy) {
+          HibernateProxy proxy = (HibernateProxy) registeredEntity;
+          LazyInitializer li = proxy.getHibernateLazyInitializer();
+          if (!li.isUninitialized()) {
+            return li.getImplementation();
+          }
+          return super.getEntity(entityName, id);
+        }
+        return registeredEntity;
       } catch (ClassNotFoundException ex) {
         ex.printStackTrace();
       }
