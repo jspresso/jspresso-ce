@@ -116,4 +116,12 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   public void setUnicityScope(String unicityScope) {
     this.unicityScope = unicityScope;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isReadOnly() {
+    return getDelegateClassName() != null;
+  }
+
 }

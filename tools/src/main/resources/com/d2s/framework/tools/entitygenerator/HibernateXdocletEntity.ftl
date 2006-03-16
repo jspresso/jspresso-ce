@@ -336,7 +336,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor>
     <@generateCollectionGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.delegateClassName?exists>
+	<#if !propertyDescriptor.readOnly>
       <@generateCollectionSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
       <@generateCollectionAdder componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
@@ -349,7 +349,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor>
     <@generateEntityRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.delegateClassName?exists>
+	<#if !propertyDescriptor.readOnly>
       <@generateEntityRefSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
     </#if>
@@ -358,7 +358,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateScalarPropertyAccessors componentDescriptor propertyDescriptor>
     <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-	<#if !propertyDescriptor.delegateClassName?exists>
+	<#if !propertyDescriptor.readOnly>
       <@generateScalarSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
     </#if>
