@@ -50,7 +50,7 @@ public class JGoodiesSwingViewFactory extends DefaultSwingViewFactory {
   protected void decorateWithBorder(IView<JComponent> view, Locale locale) {
     if (view.getDescriptor().getBorderType() == IViewDescriptor.TITLED) {
       SimpleInternalFrame sif = new SimpleInternalFrame(getLabelTranslator()
-          .getTranslation(view.getDescriptor().getModelDescriptor().getName(),
+          .getTranslation(getTitleKey(view.getDescriptor()),
               locale));
       if (view.getDescriptor().getIconImageURL() != null) {
         sif.setFrameIcon(getIconFactory()

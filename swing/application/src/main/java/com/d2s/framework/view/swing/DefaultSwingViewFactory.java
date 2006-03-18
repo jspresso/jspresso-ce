@@ -323,15 +323,29 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
         view.getPeer().setBorder(BorderFactory.createEtchedBorder());
         break;
       case IViewDescriptor.TITLED:
-        view.getPeer().setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), labelTranslator
-                    .getTranslation(view.getDescriptor().getModelDescriptor()
-                        .getName(), locale)));
+        view.getPeer()
+            .setBorder(
+                BorderFactory.createTitledBorder(BorderFactory
+                    .createEtchedBorder(), labelTranslator.getTranslation(
+                    getTitleKey(view.getDescriptor()), locale)));
         break;
       default:
         break;
     }
+  }
+
+  /**
+   * Compute the title of a view.
+   * 
+   * @param viewDescriptor the descriptor of the view.
+   * @return the key of the view title.
+   */
+  protected String getTitleKey(IViewDescriptor viewDescriptor) {
+    String viewName = viewDescriptor.getName();
+    if (viewName == null) {
+      return viewDescriptor.getModelDescriptor().getName();
+    }
+    return viewName;
   }
 
   // ///////////////// //
@@ -1297,8 +1311,8 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       Locale locale) {
 
     ICompositeValueConnector connector = connectorFactory
-    .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
-        .getName(), null);
+        .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
+            .getName(), null);
 
     JPanel viewComponent = createJPanel();
     BorderLayout layout = new BorderLayout();
@@ -1306,12 +1320,12 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
 
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-    
+
     IView<JComponent> nestedView = createView(viewDescriptor
         .getNestedViewDescriptor(), actionHandler, locale);
 
     connector.addChildConnector(nestedView.getConnector());
-    
+
     viewComponent.add(nestedView.getPeer(), BorderLayout.CENTER);
 
     return view;

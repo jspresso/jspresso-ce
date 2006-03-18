@@ -46,6 +46,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   private List<String>                     renderedProperties;
   private List<String>                     queryableProperties;
   private String                           toStringProperty;
+  private boolean                          computed;
 
   private List<IPropertyDescriptor>        tempPropertyBuffer;
 
@@ -58,6 +59,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    */
   public BasicComponentDescriptor(String name) {
     setName(name);
+    this.computed = false;
   }
 
   /**
@@ -360,6 +362,23 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    */
   public void setToStringProperty(String toStringProperty) {
     this.toStringProperty = toStringProperty;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isComputed() {
+    return computed;
+  }
+
+  
+  /**
+   * Sets the computed.
+   * 
+   * @param computed the computed to set.
+   */
+  public void setComputed(boolean computed) {
+    this.computed = computed;
   }
 
 }

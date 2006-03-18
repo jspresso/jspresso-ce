@@ -297,12 +297,25 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
         view.getPeer().setBorder(
             BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), labelTranslator
-                    .getTranslation(view.getDescriptor().getModelDescriptor()
-                        .getName(), locale)));
+                    .getTranslation(getTitleKey(view.getDescriptor()), locale)));
         break;
       default:
         break;
     }
+  }
+
+  /**
+   * Compute the title of a view.
+   * 
+   * @param viewDescriptor the descriptor of the view.
+   * @return the key of the view title.
+   */
+  protected String getTitleKey(IViewDescriptor viewDescriptor) {
+    String viewName = viewDescriptor.getName();
+    if (viewName == null) {
+      return viewDescriptor.getModelDescriptor().getName();
+    }
+    return viewName;
   }
 
   // ///////////////// //

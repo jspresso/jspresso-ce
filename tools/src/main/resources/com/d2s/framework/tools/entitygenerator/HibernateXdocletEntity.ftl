@@ -91,7 +91,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    * 
-   <#if !propertyDescriptor.delegateClassName?exists>
+   <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
    * @hibernate.property
      <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDatePropertyDescriptor")>
        <#if propertyDescriptor.type = "DATE">
@@ -225,7 +225,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    * 
-   <#if !propertyDescriptor.delegateClassName?exists>
+   <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
    * @hibernate.${hibernateCollectionType}
      <#if manyToMany && inverse>
    *           cascade = "none"
@@ -320,7 +320,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    * 
-  <#if !propertyDescriptor.delegateClassName?exists>
+  <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
    * @hibernate.many-to-one 
     <#if oneToOne>
    *           cascade = "persist,merge,save-update,lock,refresh,evict,replicate"

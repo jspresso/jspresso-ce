@@ -28,4 +28,16 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor implements
   public BasicEntityDescriptor(String name) {
     super(name);
   }
+
+  /**
+   * Throws an exception since an entity is always a persistent definition.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setComputed(@SuppressWarnings("unused")
+  boolean computed) {
+    throw new UnsupportedOperationException(
+        "An entity descriptor cannot be a computed interface.");
+  }
 }

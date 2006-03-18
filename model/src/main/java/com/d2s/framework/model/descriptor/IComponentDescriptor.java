@@ -124,4 +124,13 @@ public interface IComponentDescriptor extends IModelDescriptor, IIconDescriptor 
    *         component.
    */
   String getToStringProperty();
+
+  /**
+   * Gets wether this component descriptor is itself persistent or if it is only
+   * an interface for other entities.
+   * 
+   * @return false if the interface defines a representation in the persistent
+   *         storage.
+   */
+  boolean isComputed();
 }
