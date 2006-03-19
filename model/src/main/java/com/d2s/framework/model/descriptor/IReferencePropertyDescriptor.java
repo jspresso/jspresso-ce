@@ -13,7 +13,7 @@ package com.d2s.framework.model.descriptor;
  * @author Vincent Vandenschrick
  */
 public interface IReferencePropertyDescriptor extends
-    IRelationshipEndPropertyDescriptor {
+    IRelationshipEndPropertyDescriptor, IComponentDescriptorProvider {
 
   /**
    * Gets the descriptor of the component referenced by this property.

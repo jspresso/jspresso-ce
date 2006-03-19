@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
@@ -25,7 +25,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentViewDescriptor {
 
   private List<String>              renderedProperties;
-  private int                       labelsPosition = ABOVE;
+  private int                       labelsPosition = ASIDE;
   private int                       columnCount    = 1;
   private Map<String, Integer>      propertyWidths;
   private Map<String, List<String>> renderedChildProperties;
@@ -35,8 +35,8 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    */
   public List<String> getRenderedProperties() {
     if (renderedProperties == null) {
-      return ((IComponentDescriptor) getModelDescriptor())
-          .getRenderedProperties();
+      return ((IComponentDescriptorProvider) getModelDescriptor())
+          .getComponentDescriptor().getRenderedProperties();
     }
     return renderedProperties;
   }
@@ -117,8 +117,8 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       childProperties = renderedChildProperties.get(propertyName);
     }
     if (childProperties == null) {
-      IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptor) getModelDescriptor())
-          .getPropertyDescriptor(propertyName);
+      IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
+          .getComponentDescriptor().getPropertyDescriptor(propertyName);
       if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor) {
         return ((ICollectionPropertyDescriptor) childPropertyDescriptor)
             .getCollectionDescriptor().getElementDescriptor()
@@ -149,8 +149,8 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public String getIconImageURL() {
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null) {
-      iconImageURL = ((IComponentDescriptor) getModelDescriptor())
-          .getIconImageURL();
+      iconImageURL = ((IComponentDescriptorProvider) getModelDescriptor())
+          .getComponentDescriptor().getIconImageURL();
     }
     return iconImageURL;
   }

@@ -381,4 +381,11 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
     this.computed = computed;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor getComponentDescriptor() {
+    return this;
+  }
+
 }

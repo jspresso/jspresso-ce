@@ -403,7 +403,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
               IAccessor reversePropertyAccessor = accessorFactory
                   .createPropertyAccessor(
                       reversePropertyDescriptor.getName(),
-                      ((IReferencePropertyDescriptor) reversePropertyDescriptor)
+                      ((IReferencePropertyDescriptor) propertyDescriptor)
                           .getReferencedDescriptor().getComponentContract());
               if (oldProperty != null) {
                 reversePropertyAccessor.setValue(oldProperty, null);

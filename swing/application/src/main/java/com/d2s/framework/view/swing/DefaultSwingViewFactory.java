@@ -99,6 +99,7 @@ import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IDatePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IDurationPropertyDescriptor;
@@ -337,7 +338,8 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   /**
    * Compute the title of a view.
    * 
-   * @param viewDescriptor the descriptor of the view.
+   * @param viewDescriptor
+   *          the descriptor of the view.
    * @return the key of the view title.
    */
   protected String getTitleKey(IViewDescriptor viewDescriptor) {
@@ -399,10 +401,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       view.setConnector(connector);
       for (IView<JComponent> childView : view.getChildren()) {
         childView.setParent(view);
-        if (!(childView.getConnector() instanceof ICollectionConnector)) {
-          childView.getConnector()
-              .setId(BeanRefPropertyConnector.THIS_PROPERTY);
-        }
         connector.addChildConnector(childView.getConnector());
       }
     }
@@ -705,9 +703,10 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     ICompositeValueConnector connector = null;
     if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
       IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
-          .createConfigurableCollectionConnectorListProvider(viewDescriptor
-              .getName(), ((ICompositeTreeLevelDescriptor) rootDescriptor)
-              .getNodeGroupDescriptor().getRenderedProperty());
+          .createConfigurableCollectionConnectorListProvider(
+              BeanRefPropertyConnector.THIS_PROPERTY,
+              ((ICompositeTreeLevelDescriptor) rootDescriptor)
+                  .getNodeGroupDescriptor().getRenderedProperty());
       List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
       if (((ICompositeTreeLevelDescriptor) rootDescriptor)
           .getChildrenDescriptors() != null) {
@@ -723,9 +722,10 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       connector = compositeConnector;
     } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
       IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
-          .createConfigurableCollectionConnectorProvider(viewDescriptor
-              .getName(), ((ISimpleTreeLevelDescriptor) rootDescriptor)
-              .getNodeGroupDescriptor().getRenderedProperty());
+          .createConfigurableCollectionConnectorProvider(
+              BeanRefPropertyConnector.THIS_PROPERTY,
+              ((ISimpleTreeLevelDescriptor) rootDescriptor)
+                  .getNodeGroupDescriptor().getRenderedProperty());
       if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
         ICollectionConnectorProvider subtreeConnector = createNodeGroupConnector(
             viewDescriptor, ((ISimpleTreeLevelDescriptor) rootDescriptor)
@@ -1335,12 +1335,20 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   // Component Section //
   // ///////////////// //
 
+  private String getConnectorIdForComponentView(
+      IComponentViewDescriptor viewDescriptor) {
+    if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
+      return BeanRefPropertyConnector.THIS_PROPERTY;
+    }
+    return viewDescriptor.getModelDescriptor().getName();
+  }
+
   private IView<JComponent> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     ICompositeValueConnector connector = connectorFactory
-        .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
-            .getName(), null);
+        .createCompositeValueConnector(
+            getConnectorIdForComponentView(viewDescriptor), null);
     JPanel viewComponent = createJPanel();
     IView<JComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -1352,8 +1360,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     int currentY = 0;
 
     for (String propertyName : viewDescriptor.getRenderedProperties()) {
-      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptor) viewDescriptor
-          .getModelDescriptor()).getPropertyDescriptor(propertyName);
+      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
+          .getModelDescriptor()).getComponentDescriptor()
+          .getPropertyDescriptor(propertyName);
       if (propertyDescriptor == null) {
         throw new ViewException("Property descriptor [" + propertyName
             + "] does not exist for model descriptor "

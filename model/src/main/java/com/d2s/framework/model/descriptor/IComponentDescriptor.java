@@ -21,7 +21,8 @@ import com.d2s.framework.util.descriptor.IIconDescriptor;
  * @see com.d2s.framework.model.descriptor.IPropertyDescriptor
  * @author Vincent Vandenschrick
  */
-public interface IComponentDescriptor extends IModelDescriptor, IIconDescriptor {
+public interface IComponentDescriptor extends IModelDescriptor,
+    IIconDescriptor, IComponentDescriptorProvider {
 
   /**
    * Gets the collection of the properties descriptors of this component

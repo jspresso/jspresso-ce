@@ -44,4 +44,11 @@ public class BasicReferencePropertyDescriptor extends
   public Class getPropertyClass() {
     return getReferencedDescriptor().getComponentContract();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor getComponentDescriptor() {
+    return getReferencedDescriptor();
+  }
 }

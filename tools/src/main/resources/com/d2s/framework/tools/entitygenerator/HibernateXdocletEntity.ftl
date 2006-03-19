@@ -273,10 +273,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.one-to-many
    *           class = "${elementType}"
      </#if>
-   </#if>
-   <#if hibernateCollectionType="list">
+     <#if hibernateCollectionType="list">
    * @hibernate.list-index
    *           column = "${generateSQLName(propertyName)}_SEQ"
+     </#if>
    </#if>
    * @return the ${propertyName}.
    */
@@ -302,11 +302,15 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local propertyName=propertyDescriptor.name>
   <#local propertyType=propertyDescriptor.referencedDescriptor.name>
   <#if propertyDescriptor.reverseRelationEnd?exists>
-    <#assign bidirectional=true>
+    <#local bidirectional=true>
     <#if instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.IReferencePropertyDescriptor")>
-      <#assign oneToOne=true>
+      <#local oneToOne=true>
+      <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
+      <#local elementName=propertyType[propertyType?last_index_of(".")+1..]/>
+      <#local reverseOneToOne=(compareStrings(elementName, componentName) < 0)/>
     <#else>
-      <#assign oneToOne=false>
+      <#local oneToOne=false>
+      <#local reverseOneToOne=false>
       <#if propertyDescriptor.reverseRelationEnd.propertyClass.name="java.util.List">
         <#local managesPersistence=false>
       <#else>
@@ -314,35 +318,42 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       </#if>
     </#if>
   <#else>
-    <#assign bidirectional=false>
-    <#assign oneToOne=false>
+    <#local bidirectional=false>
+    <#local oneToOne=false>
+    <#local reverseOneToOne=false>
   </#if>
   /**
    * Gets the ${propertyName}.
    * 
   <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
-   * @hibernate.many-to-one 
-    <#if oneToOne>
+    <#if reverseOneToOne>
+   * @hibernate.one-to-one 
    *           cascade = "persist,merge,save-update,lock,refresh,evict,replicate"
-    <#elseif bidirectional>
+   *           property-ref = "${propertyDescriptor.reverseRelationEnd.name}"
+    <#else>
+   * @hibernate.many-to-one 
+      <#if oneToOne>
+   *           cascade = "persist,merge,save-update,lock,refresh,evict,replicate"
+      <#elseif bidirectional>
    *           cascade = "save-update,lock"
-      <#if !managesPersistence>
+        <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"
-      </#if>
-    <#else>
+        </#if>
+      <#else>
    *           cascade = "lock"
-    </#if>
+      </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}_ID"
-    <#if oneToOne>
+      <#if oneToOne>
    *           unique = "true"
-    </#if>
-    <#if propertyDescriptor.mandatory>
+      </#if>
+      <#if propertyDescriptor.mandatory>
    *           not-null = "true"
-    </#if>
-    <#if propertyDescriptor.unicityScope?exists>
+      </#if>
+      <#if propertyDescriptor.unicityScope?exists>
    *           unique-key = "${generateSQLName(propertyDescriptor.unicityScope)}_UNQ"
+      </#if>
     </#if>
   </#if>
    * @return the ${propertyName}.
