@@ -94,7 +94,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * Sets the delegate class name.
    * 
    * @return The class name of the extension delegate used to compute this
-   *          property.
+   *         property.
    */
   public String getDelegateClassName() {
     return delegateClassName;
@@ -122,6 +122,25 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public boolean isReadOnly() {
     return getDelegateClassName() != null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof IPropertyDescriptor) {
+      return getName().equals(((IPropertyDescriptor) obj).getName());
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return getName().hashCode();
   }
 
 }

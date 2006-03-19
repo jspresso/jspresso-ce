@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -77,7 +78,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * {@inheritDoc}
    */
   public Collection<IPropertyDescriptor> getPropertyDescriptors() {
-    List<IPropertyDescriptor> allDescriptors = new ArrayList<IPropertyDescriptor>();
+    Set<IPropertyDescriptor> allDescriptors = new LinkedHashSet<IPropertyDescriptor>();
     if (ancestorDescriptors != null) {
       for (IComponentDescriptor ancestorDescriptor : ancestorDescriptors) {
         allDescriptors.addAll(ancestorDescriptor.getPropertyDescriptors());

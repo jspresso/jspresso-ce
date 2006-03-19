@@ -1566,8 +1566,11 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     JTextArea viewComponent = createJTextArea();
+    viewComponent.setLineWrap(true);
     JScrollPane scrollPane = createJScrollPane();
     scrollPane.setViewportView(viewComponent);
+    scrollPane
+        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     JTextAreaConnector connector = new JTextAreaConnector(propertyDescriptor
         .getName(), viewComponent);
     return constructView(scrollPane, null, connector);
@@ -2164,6 +2167,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   protected JTextArea createJTextArea() {
     JTextArea textArea = new JTextArea();
     textArea.setDragEnabled(true);
+    textArea.setWrapStyleWord(true);
     return textArea;
   }
 

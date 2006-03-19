@@ -1516,8 +1516,11 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     ULCTextArea viewComponent = createULCTextArea();
+    viewComponent.setLineWrap(true);
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
+    scrollPane
+        .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     ULCTextAreaConnector connector = new ULCTextAreaConnector(
         propertyDescriptor.getName(), viewComponent);
     return constructView(scrollPane, null, connector);
@@ -2167,6 +2170,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   protected ULCTextArea createULCTextArea() {
     ULCTextArea textArea = new ULCTextArea();
     textArea.setDragEnabled(true);
+    textArea.setWrapStyleWord(true);
     return textArea;
   }
 

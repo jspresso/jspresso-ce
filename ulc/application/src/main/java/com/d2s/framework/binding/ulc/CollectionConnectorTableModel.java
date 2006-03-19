@@ -220,6 +220,10 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
       } else if (newCollectionSize < oldCollectionSize) {
         fireTableRowsDeleted(newCollectionSize, oldCollectionSize - 1);
       }
+      if (evt.getNewValue() != null
+          && !((Collection<?>) evt.getNewValue()).isEmpty()) {
+        collectionConnector.setSelectedIndices(new int[] {0});
+      }
     }
   }
 
