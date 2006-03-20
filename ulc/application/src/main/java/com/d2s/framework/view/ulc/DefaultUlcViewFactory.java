@@ -1293,6 +1293,8 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     int currentX = 0;
     int currentY = 0;
 
+    boolean isSpaceFilled = false;
+
     for (String propertyName : viewDescriptor.getRenderedProperties()) {
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
@@ -1374,12 +1376,34 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
           || propertyView.getPeer() instanceof ULCTable) {
         constraints.setWeightY(1.0);
         constraints.setFill(GridBagConstraints.BOTH);
+        isSpaceFilled = true;
       } else {
         constraints.setFill(GridBagConstraints.NONE);
       }
       viewComponent.add(propertyView.getPeer(), constraints);
 
       currentX += propertyWidth;
+    }
+    if (!isSpaceFilled) {
+      ULCBorderLayoutPane filler = createBorderLayoutPane();
+      GridBagConstraints constraints = new GridBagConstraints();
+      constraints.setGridX(0);
+      constraints.setWeightX(1.0);
+      constraints.setWeightY(1.0);
+      constraints.setFill(GridBagConstraints.BOTH);
+      switch (viewDescriptor.getLabelsPosition()) {
+        case IComponentViewDescriptor.ASIDE:
+          constraints.setGridY(currentY + 1);
+          constraints.setGridWidth(viewDescriptor.getColumnCount() * 2);
+          break;
+        case IComponentViewDescriptor.ABOVE:
+          constraints.setGridY((currentY + 1) * 2);
+          constraints.setGridWidth(viewDescriptor.getColumnCount());
+          break;
+        default:
+          break;
+      }
+      viewComponent.add(filler, constraints);
     }
     return view;
   }

@@ -78,6 +78,9 @@ public class BasicApplicationSession implements IApplicationSession {
   @SuppressWarnings("unchecked")
   private IEntity merge(IEntity entity, MergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
+    if (entity == null) {
+      return null;
+    }
     if (alreadyMerged.containsKey(entity)) {
       return alreadyMerged.get(entity);
     }

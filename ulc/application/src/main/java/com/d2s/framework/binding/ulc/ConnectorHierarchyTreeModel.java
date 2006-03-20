@@ -252,8 +252,13 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             // when the root connector is assigned a null value.
             TreePath connectorPath = getTreePathForConnector(parentConnector);
             if (connectorPath != null) {
-              nodesChanged(getTreePathForConnector(parentConnector),
-                  new int[] {getIndexOfChild(parentConnector, connector)});
+              try {
+                nodesChanged(getTreePathForConnector(parentConnector),
+                    new int[] {getIndexOfChild(parentConnector, connector)});
+              } catch (Throwable ignored) {
+                // an exception can be thrown whenever a node connector is
+                // repainted before being added.
+              }
             }
           }
         }

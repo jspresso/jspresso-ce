@@ -56,7 +56,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
     tree.addTreeWillExpandListener(this);
-    //treeWillExpand(new TreeExpansionEvent(tree, new TreePath(rootConnector)));
+    // treeWillExpand(new TreeExpansionEvent(tree, new
+    // TreePath(rootConnector)));
   }
 
   /**
@@ -253,10 +254,16 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                 // when the root connector is assigned a null value.
                 TreePath connectorPath = getTreePathForConnector(parentConnector);
                 if (connectorPath != null) {
-                  fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
-                      getTreePathForConnector(parentConnector).getPath(),
-                      new int[] {getIndexOfChild(parentConnector, connector)},
-                      new Object[] {connector});
+                  try {
+                    fireTreeNodesChanged(
+                        ConnectorHierarchyTreeModel.this,
+                        getTreePathForConnector(parentConnector).getPath(),
+                        new int[] {getIndexOfChild(parentConnector, connector)},
+                        new Object[] {connector});
+                  } catch (Throwable ignored) {
+                    // an exception can be thrown whenever a node connector is
+                    // repainted before being added.
+                  }
                 }
               }
             }

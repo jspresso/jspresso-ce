@@ -130,7 +130,19 @@ public interface IApplicationSession extends IEntityDirtAware {
    */
   IEntity getRegisteredEntity(Class entityContract, Object entityId);
 
+  /**
+   * Wether the entity is fully initialized.
+   * 
+   * @param entity the entity to test.
+   * @return true if the entity is fully initialized.
+   */
   boolean isInitialized(IEntity entity);
 
+  /**
+   * Wether the collection is fully initialized.
+   * 
+   * @param collection the collection to test.
+   * @return true if the collection is fully initialized.
+   */
   boolean isInitialized(Collection collection);
 }

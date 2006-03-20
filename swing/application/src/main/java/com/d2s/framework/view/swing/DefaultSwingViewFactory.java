@@ -1359,6 +1359,8 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     int currentX = 0;
     int currentY = 0;
 
+    boolean isSpaceFilled = false;
+
     for (String propertyName : viewDescriptor.getRenderedProperties()) {
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
@@ -1438,12 +1440,34 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
           || propertyView.getPeer() instanceof JTable) {
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
+        isSpaceFilled = true;
       } else {
         constraints.fill = GridBagConstraints.NONE;
       }
       viewComponent.add(propertyView.getPeer(), constraints);
 
       currentX += propertyWidth;
+    }
+    if (!isSpaceFilled) {
+      JPanel filler = createJPanel();
+      GridBagConstraints constraints = new GridBagConstraints();
+      constraints.gridx = 0;
+      constraints.weightx = 1.0;
+      constraints.weighty = 1.0;
+      constraints.fill = GridBagConstraints.BOTH;
+      switch (viewDescriptor.getLabelsPosition()) {
+        case IComponentViewDescriptor.ASIDE:
+          constraints.gridy = currentY + 1;
+          constraints.gridwidth = viewDescriptor.getColumnCount() * 2;
+          break;
+        case IComponentViewDescriptor.ABOVE:
+          constraints.gridy = (currentY + 1) * 2;
+          constraints.gridwidth = viewDescriptor.getColumnCount();
+          break;
+        default:
+          break;
+      }
+      viewComponent.add(filler, constraints);
     }
     return view;
   }
