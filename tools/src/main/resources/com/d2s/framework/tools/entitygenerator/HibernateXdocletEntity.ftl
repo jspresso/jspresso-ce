@@ -230,7 +230,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      <#if manyToMany && inverse>
    *           cascade = "none"
        <#else>
+         <#if propertyDescriptor.composition>
+   *           cascade = "persist,merge,save-update,refresh,evict,replicate,delete"
+         <#else>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+         </#if>
        </#if>
      <#if manyToMany>
        <#if inverse>
@@ -335,11 +339,13 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#if oneToOne>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
       <#elseif bidirectional>
-   *           cascade = "save-update"
+   *           cascade = "none"
         <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"
         </#if>
+      <#else>
+   *           cascade = "none"
       </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}_ID"

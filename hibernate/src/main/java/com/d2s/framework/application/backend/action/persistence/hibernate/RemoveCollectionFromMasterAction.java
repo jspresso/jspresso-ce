@@ -76,6 +76,7 @@ public class RemoveCollectionFromMasterAction extends
                       LockMode.NONE);
                   collectionAccessor
                       .removeFromValue(mergedMaster, mergedDetail);
+                  session.delete(mergedDetail);
                   removedObjects.add(nextDetailToRemove);
                 } catch (IllegalAccessException ex) {
                   throw new ActionException(ex);
