@@ -184,7 +184,7 @@ public class BasicApplicationSession implements IApplicationSession {
    *          the entity to test.
    * @return true if the entity does not need some extra initialization step.
    */
-  protected boolean isInitialized(@SuppressWarnings("unused")
+  public boolean isInitialized(@SuppressWarnings("unused")
   IEntity entity) {
     return true;
   }
@@ -197,7 +197,7 @@ public class BasicApplicationSession implements IApplicationSession {
    * @return true if the collection does not need some extra initialization
    *         step.
    */
-  protected boolean isInitialized(@SuppressWarnings("unused")
+  public boolean isInitialized(@SuppressWarnings("unused")
   Collection collection) {
     return true;
   }
@@ -356,8 +356,12 @@ public class BasicApplicationSession implements IApplicationSession {
     Map<String, Object> entityProperties = entity.straightGetProperties();
     for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
       if (property.getValue() instanceof IEntity) {
-        uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
-            (IEntity) property.getValue(), alreadyCloned));
+        if (isInitialized((IEntity) property.getValue())) {
+          uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
+              (IEntity) property.getValue(), alreadyCloned));
+        } else {
+          uowEntity.straightSetProperty(property.getKey(), property.getValue());
+        }
       } else if (property.getValue() instanceof Collection) {
         if (isInitialized((Collection) property.getValue())) {
           Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property

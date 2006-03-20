@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.backend.session;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.d2s.framework.model.entity.IEntity;
@@ -128,4 +129,8 @@ public interface IApplicationSession extends IEntityDirtAware {
    * @return the registered entity or null.
    */
   IEntity getRegisteredEntity(Class entityContract, Object entityId);
+
+  boolean isInitialized(IEntity entity);
+
+  boolean isInitialized(Collection collection);
 }

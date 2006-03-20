@@ -246,16 +246,20 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
               clonedEntity.straightSetProperty(propertyEntry.getKey(),
                   propertyEntry.getValue());
               if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-                collRelToUpdate.put(propertyEntry.getValue(),
-                    (ICollectionPropertyDescriptor) reverseDescriptor);
+                if (isInitialized((IEntity) propertyEntry.getValue())) {
+                  collRelToUpdate.put(propertyEntry.getValue(),
+                      (ICollectionPropertyDescriptor) reverseDescriptor);
+                }
               }
             }
           } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
             if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
               for (Object reverseCollectionElement : (Collection) propertyEntry
                   .getValue()) {
-                collRelToUpdate.put(reverseCollectionElement,
-                    (ICollectionPropertyDescriptor) reverseDescriptor);
+                if (isInitialized((IEntity) reverseCollectionElement)) {
+                  collRelToUpdate.put(reverseCollectionElement,
+                      (ICollectionPropertyDescriptor) reverseDescriptor);
+                }
               }
             }
           }
@@ -293,6 +297,31 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       }
     }
     return clonedEntity;
+  }
+
+  /**
+   * Gets wether the entity is fully initialized.
+   * 
+   * @param entity
+   *          the entity to test.
+   * @return true if the entity does not need some extra initialization step.
+   */
+  protected boolean isInitialized(@SuppressWarnings("unused")
+  IEntity entity) {
+    return true;
+  }
+
+  /**
+   * Gets wether the collection is fully initialized.
+   * 
+   * @param collection
+   *          the collection to test.
+   * @return true if the collection does not need some extra initialization
+   *         step.
+   */
+  protected boolean isInitialized(@SuppressWarnings("unused")
+  Collection collection) {
+    return true;
   }
 
   private IEntity carbonCopy() {
@@ -401,8 +430,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
               // It's a one-to-one relationship
               IAccessor reversePropertyAccessor = accessorFactory
-                  .createPropertyAccessor(
-                      reversePropertyDescriptor.getName(),
+                  .createPropertyAccessor(reversePropertyDescriptor.getName(),
                       ((IReferencePropertyDescriptor) propertyDescriptor)
                           .getReferencedDescriptor().getComponentContract());
               if (oldProperty != null) {

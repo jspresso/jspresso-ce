@@ -133,7 +133,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * {@inheritDoc}
    */
   @Override
-  protected boolean isInitialized(Collection collection) {
+  public boolean isInitialized(Collection collection) {
     return Hibernate.isInitialized(collection);
   }
 
@@ -141,7 +141,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * {@inheritDoc}
    */
   @Override
-  protected boolean isInitialized(IEntity entity) {
+  public boolean isInitialized(IEntity entity) {
     return Hibernate.isInitialized(entity);
   }
 
