@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContextAware;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
@@ -77,6 +78,10 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   private IEntity createEntityInstance(Class entityContract, Serializable id,
       Class[] extraInterfaces) {
     IEntityDescriptor entityDescriptor = getEntityDescriptor(entityContract);
+    if (entityDescriptor.isPurelyAbstract()) {
+      throw new EntityException(entityDescriptor.getName()
+          + " is purely abstract. It cannot be instanciated.");
+    }
     InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
     Class[] implementedClasses;
     if (extraInterfaces != null) {

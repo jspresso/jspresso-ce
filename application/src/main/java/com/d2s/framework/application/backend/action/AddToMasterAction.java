@@ -59,11 +59,6 @@ public class AddToMasterAction extends AbstractCollectionAction {
           .getElementDescriptor();
     }
 
-    if (elementDescriptor.isPurelyAbstract()) {
-      throw new ActionException(elementDescriptor.getName()
-          + "is purely abstract. It cannot be instanciated.");
-    }
-
     IEntity newEntity = getEntityFactory().createEntityInstance(
         elementDescriptor.getComponentContract());
     try {
