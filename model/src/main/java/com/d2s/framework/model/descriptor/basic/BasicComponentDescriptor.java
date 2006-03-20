@@ -22,6 +22,7 @@ import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.service.IComponentService;
+import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.exception.NestedRuntimeException;
 
@@ -48,8 +49,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   private List<String>                     queryableProperties;
   private String                           toStringProperty;
   private boolean                          computed;
-
-  private List<IPropertyDescriptor>        tempPropertyBuffer;
+  private List<ILifecycleInterceptor>      lifecycleInterceptors;
 
   /**
    * Constructs a new <code>BasicComponentDescriptor</code> instance.
@@ -67,7 +67,6 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * {@inheritDoc}
    */
   public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
-    processPropertiesBufferIfNecessary();
     if (propertyDescriptors != null) {
       return propertyDescriptors.values();
     }
@@ -92,7 +91,6 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   }
 
   private IPropertyDescriptor getDeclaredPropertyDescriptor(String propertyName) {
-    processPropertiesBufferIfNecessary();
     if (propertyDescriptors != null) {
       return propertyDescriptors.get(propertyName);
     }
@@ -121,10 +119,10 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    *          the propertyDescriptors to set.
    */
   public void setPropertyDescriptors(Collection<IPropertyDescriptor> descriptors) {
-    if (tempPropertyBuffer == null) {
-      tempPropertyBuffer = new ArrayList<IPropertyDescriptor>();
+    propertyDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
+    for (IPropertyDescriptor descriptor : descriptors) {
+      propertyDescriptors.put(descriptor.getName(), descriptor);
     }
-    tempPropertyBuffer.addAll(descriptors);
   }
 
   /**
@@ -139,16 +137,6 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
       }
     }
     return componentContract;
-  }
-
-  private synchronized void processPropertiesBufferIfNecessary() {
-    if (tempPropertyBuffer != null) {
-      propertyDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
-      for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
-        propertyDescriptors.put(descriptor.getName(), descriptor);
-      }
-      tempPropertyBuffer = null;
-    }
   }
 
   /**
@@ -186,9 +174,15 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the descriptor ancestors collection. It directly translates the
+   * components inheritance hierarchy since the component property descriptors
+   * are the union of the declared property descriptors of the component and of
+   * its ancestors one. A component may have multiple ancestors which means that
+   * complex multi-inheritance hierarchy can be mapped.
+   * 
+   * @return ancestorDescriptors The list of ancestor entity descriptors.
    */
-  public List<IComponentDescriptor> getAncestorDescriptors() {
+  protected List<IComponentDescriptor> getAncestorDescriptors() {
     return ancestorDescriptors;
   }
 
@@ -372,11 +366,11 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
     return computed;
   }
 
-  
   /**
    * Sets the computed.
    * 
-   * @param computed the computed to set.
+   * @param computed
+   *          the computed to set.
    */
   public void setComputed(boolean computed) {
     this.computed = computed;
@@ -396,4 +390,32 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
     return true;
   }
 
+  /**
+   * Gets the lifecycleInterceptors.
+   * 
+   * @return the lifecycleInterceptors.
+   */
+  public List<ILifecycleInterceptor> getLifecycleInterceptors() {
+    List<ILifecycleInterceptor> allInterceptors = new ArrayList<ILifecycleInterceptor>();
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor ancestorDescriptor : getAncestorDescriptors()) {
+        allInterceptors.addAll(ancestorDescriptor.getLifecycleInterceptors());
+      }
+    }
+    if (lifecycleInterceptors != null) {
+      allInterceptors.addAll(lifecycleInterceptors);
+    }
+    return allInterceptors;
+  }
+
+  /**
+   * Sets the lifecycleInterceptors.
+   * 
+   * @param lifecycleInterceptors
+   *          the lifecycleInterceptors to set.
+   */
+  public void setLifecycleInterceptors(
+      List<ILifecycleInterceptor> lifecycleInterceptors) {
+    this.lifecycleInterceptors = lifecycleInterceptors;
+  }
 }

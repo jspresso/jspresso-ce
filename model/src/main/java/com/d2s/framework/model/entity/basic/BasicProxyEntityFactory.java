@@ -65,6 +65,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
                         .getPropertyClass()));
       }
     }
+    createdEntity.onCreate();
     return createdEntity;
   }
 

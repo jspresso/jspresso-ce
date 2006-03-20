@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
+import org.hibernate.type.Type;
 
 import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
@@ -69,5 +70,17 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onDelete(Object entity, Serializable id, Object[] state,
+      String[] propertyNames, Type[] types) {
+    if (entity instanceof IEntity) {
+      ((IEntity) entity).onDelete();
+    }
+    super.onDelete(entity, id, state, propertyNames, types);
   }
 }

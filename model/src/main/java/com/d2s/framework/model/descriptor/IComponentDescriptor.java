@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.d2s.framework.model.service.IComponentService;
+import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
 
 /**
@@ -76,17 +77,6 @@ public interface IComponentDescriptor extends IModelDescriptor,
   Collection<String> getUnclonedProperties();
 
   /**
-   * Gets the descriptor ancestors collection. It directly translates the
-   * components inheritance hierarchy since the component property descriptors
-   * are the union of the declared property descriptors of the component and of
-   * its ancestors one. A component may have multiple ancestors which means that
-   * complex multi-inheritance hierarchy can be mapped.
-   * 
-   * @return ancestorDescriptors The list of ancestor entity descriptors.
-   */
-  List<IComponentDescriptor> getAncestorDescriptors();
-
-  /**
    * Gets the collection of the properties descriptors this entity descriptor
    * declares (excluding the ones of its ancestors).
    * 
@@ -142,4 +132,11 @@ public interface IComponentDescriptor extends IModelDescriptor,
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();
+
+  /**
+   * Gets the entity lifecycle interceptors.
+   * 
+   * @return the list of entity lifecycle interceptors.
+   */
+  List<ILifecycleInterceptor> getLifecycleInterceptors();
 }

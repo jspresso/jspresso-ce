@@ -52,7 +52,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   @Override
   public int[] findDirty(Object entity, Serializable id, Object[] currentState,
       Object[] previousState, String[] propertyNames, Type[] types) {
-    if (/* previousState == null && */entity instanceof IEntity) {
+    if (entity instanceof IEntity) {
       Map<String, Object> dirtyProperties = applicationSession
           .getDirtyProperties((IEntity) entity);
       if (dirtyProperties == null) {
@@ -154,4 +154,24 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     return super.onLoad(entity, id, state, propertyNames, types);
   }
 
+  // /**
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public void preFlush(Iterator entities) {
+  // while (entities.hasNext()) {
+  // Object nextObject = entities.next();
+  // if (nextObject instanceof IEntity) {
+  // IEntity entity = (IEntity) nextObject;
+  // if (applicationSession.isDirty(entity)) {
+  // if (entity.isPersistent()) {
+  // entity.onUpdate();
+  // } else {
+  // entity.onPersist();
+  // }
+  // }
+  // }
+  // }
+  // super.preFlush(entities);
+  // }
 }

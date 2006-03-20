@@ -33,10 +33,12 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtension;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
+import com.d2s.framework.model.entity.IEntityLifecycle;
 import com.d2s.framework.model.integrity.ICollectionIntegrityProcessor;
 import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
 import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.model.service.IComponentService;
+import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.bean.AccessorInfo;
 import com.d2s.framework.util.bean.IAccessor;
 import com.d2s.framework.util.bean.IAccessorFactory;
@@ -148,6 +150,17 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     } else if ("clone".equals(methodName)) {
       return cloneProxy(((Boolean) args[0]).booleanValue());
     } else {
+      boolean isLifecycleMethod = false;
+      try {
+        isLifecycleMethod = IEntityLifecycle.class.getMethod(methodName,
+            (Class[]) method.getParameterTypes()) != null;
+      } catch (NoSuchMethodException ignored) {
+        // this is certainly normal.
+      }
+      if (isLifecycleMethod) {
+        invokeLifecycleInterceptors(proxy, method, args);
+        return null;
+      }
       AccessorInfo accessorInfo = new AccessorInfo(method);
       int accessorType = accessorInfo.getAccessorType();
       if (accessorType != AccessorInfo.NONE) {
@@ -930,6 +943,34 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    */
   protected void storeProperty(String propertyName, Object propertyValue) {
     properties.put(propertyName, propertyValue);
+  }
+
+  private void invokeLifecycleInterceptors(Object proxy,
+      Method lifecycleMethod, Object[] args) {
+    for (ILifecycleInterceptor lifecycleInterceptor : entityDescriptor
+        .getLifecycleInterceptors()) {
+      int signatureSize = lifecycleMethod.getParameterTypes().length + 1;
+      Class[] parameterTypes = new Class[signatureSize];
+      Object[] parameters = new Object[signatureSize];
+
+      parameterTypes[0] = entityDescriptor.getComponentContract();
+      parameters[0] = proxy;
+
+      for (int i = 1; i < signatureSize; i++) {
+        parameterTypes[i] = lifecycleMethod.getParameterTypes()[i - 1];
+        parameters[i] = args[i - 1];
+      }
+      try {
+        MethodUtils.invokeMethod(lifecycleInterceptor, lifecycleMethod
+            .getName(), parameters, parameterTypes);
+      } catch (IllegalAccessException ex) {
+        throw new EntityException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new EntityException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new EntityException(ex);
+      }
+    }
   }
 
   private static final class NeverEqualsInvocationHandler implements
