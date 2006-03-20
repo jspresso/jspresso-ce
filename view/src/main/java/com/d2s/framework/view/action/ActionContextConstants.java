@@ -21,34 +21,40 @@ public final class ActionContextConstants {
   /**
    * The source widget.
    */
-  public static final String SOURCE_COMPONENT                   = "SOURCE_COMPONENT";
+  public static final String SOURCE_COMPONENT               = "SOURCE_COMPONENT";
 
   /**
    * The selected indices of the view connector in case of a collection
    * connector. It may serve as storage key for a return value whenever an
    * action must be chained with selection update on the view.
    */
-  public static final String SELECTED_INDICES                   = "SELECTED_INDICES";
+  public static final String SELECTED_INDICES               = "SELECTED_INDICES";
 
   /**
    * The the descriptor of the model domain object the action was triggered on.
    */
-  public static final String MODEL_DESCRIPTOR                   = "MODEL_DESCRIPTOR";
+  public static final String MODEL_DESCRIPTOR               = "MODEL_DESCRIPTOR";
+
+  /**
+   * The the descriptor of the model collection element domain object the action
+   * was triggered on.
+   */
+  public static final String ELEMENT_DESCRIPTOR             = "ELEMENT_DESCRIPTOR";
 
   /**
    * The root connector of the application controller.
    */
-  public static final String MODEL_CONNECTOR                    = "MODEL_CONNECTOR";
+  public static final String MODEL_CONNECTOR                = "MODEL_CONNECTOR";
 
   /**
    * The locale the action has to use to execute.
    */
-  public static final String LOCALE                             = "LOCALE";
+  public static final String LOCALE                         = "LOCALE";
 
   /**
    * The view connector the action was triggered on.
    */
-  public static final String VIEW_CONNECTOR                     = "VIEW_CONNECTOR";
+  public static final String VIEW_CONNECTOR                 = "VIEW_CONNECTOR";
 
   /**
    * The module view connector the action was triggered on.
@@ -73,20 +79,20 @@ public final class ActionContextConstants {
   /**
    * The current application session.
    */
-  public static final String APPLICATION_SESSION                = "APPLICATION_SESSION";
+  public static final String APPLICATION_SESSION            = "APPLICATION_SESSION";
 
   /**
    * An arbitrary action result.
    */
-  public static final String ACTION_RESULT                      = "ACTION_RESULT";
+  public static final String ACTION_RESULT                  = "ACTION_RESULT";
 
   /**
    * An arbitrary action param.
    */
-  public static final String ACTION_PARAM                       = "ACTION_PARAM";
+  public static final String ACTION_PARAM                   = "ACTION_PARAM";
 
   /**
    * The view connector at the origin of the action chain.
    */
-  public static final String SOURCE_VIEW_CONNECTOR              = "SOURCE_VIEW_CONNECTOR";
+  public static final String SOURCE_VIEW_CONNECTOR          = "SOURCE_VIEW_CONNECTOR";
 }

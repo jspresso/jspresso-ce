@@ -389,4 +389,11 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
     return this;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isPurelyAbstract() {
+    return true;
+  }
+
 }

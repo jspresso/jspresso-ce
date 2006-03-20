@@ -133,16 +133,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * {@inheritDoc}
    */
   @Override
-  public boolean isInitialized(Collection collection) {
-    return Hibernate.isInitialized(collection);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isInitialized(IEntity entity) {
-    return Hibernate.isInitialized(entity);
+  public boolean isInitialized(Object objectOrProxy) {
+    return Hibernate.isInitialized(objectOrProxy);
   }
 
   /**
@@ -151,26 +143,32 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   @Override
   public void initializePropertyIfNeeded(final IEntity entity,
       final String propertyName) {
-    final Object currentPropertyValue = entity
-        .straightGetProperty(propertyName);
-    if (Hibernate.isInitialized(currentPropertyValue)) {
+    if (Hibernate.isInitialized(entity.straightGetProperty(propertyName))) {
       return;
     }
     boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
     try {
       getDirtRecorder().setEnabled(false);
-      Hibernate.initialize(currentPropertyValue);
+
       hibernateTemplate.execute(new HibernateCallback() {
 
         /**
          * {@inheritDoc}
          */
         public Object doInHibernate(Session session) {
-          if (session.get(entity.getContract(), entity.getId()) == null) {
+          IEntity lockedEntity = (IEntity) session.get(entity.getContract(),
+              entity.getId());
+          if (lockedEntity == null) {
             session.lock(entity, LockMode.NONE);
             session.setReadOnly(entity, true);
+            lockedEntity = entity;
           }
-          Hibernate.initialize(currentPropertyValue);
+          Object initializedProperty = lockedEntity
+              .straightGetProperty(propertyName);
+          Hibernate.initialize(initializedProperty);
+          if (lockedEntity != entity) {
+            entity.straightSetProperty(propertyName, initializedProperty);
+          }
           return null;
         }
       });

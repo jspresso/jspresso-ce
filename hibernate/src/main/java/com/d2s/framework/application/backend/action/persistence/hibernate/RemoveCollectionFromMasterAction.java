@@ -63,8 +63,7 @@ public class RemoveCollectionFromMasterAction extends
             IEntity mergedMaster = mergeInHibernate((IEntity) master, session);
             String property = collectionDescriptor.getName();
             ICollectionAccessor collectionAccessor = getAccessorFactory()
-                .createCollectionPropertyAccessor(
-                    property,
+                .createCollectionPropertyAccessor(property,
                     mergedMaster.getClass());
             if (getSelectedIndices() != null) {
               for (int selectedIndex : getSelectedIndices()) {
@@ -74,9 +73,11 @@ public class RemoveCollectionFromMasterAction extends
                   Object mergedDetail = session.get(nextDetailToRemove
                       .getContract().getName(), nextDetailToRemove.getId(),
                       LockMode.NONE);
-                  collectionAccessor
-                      .removeFromValue(mergedMaster, mergedDetail);
-                  session.delete(mergedDetail);
+                  if (mergedDetail != null) {
+                    collectionAccessor.removeFromValue(mergedMaster,
+                        mergedDetail);
+                    session.delete(mergedDetail);
+                  }
                   removedObjects.add(nextDetailToRemove);
                 } catch (IllegalAccessException ex) {
                   throw new ActionException(ex);

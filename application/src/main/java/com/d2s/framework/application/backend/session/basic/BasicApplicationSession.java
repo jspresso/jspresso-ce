@@ -118,21 +118,21 @@ public class BasicApplicationSession implements IApplicationSession {
         for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
           if (property.getValue() instanceof IEntity) {
             if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
-                && !isInitialized((IEntity) property.getValue())) {
+                && !isInitialized(property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
               }
             } else {
               Object registeredProperty = registeredEntityProperties
                   .get(property.getKey());
-              if (isInitialized((IEntity) registeredProperty)) {
+              if (isInitialized(registeredProperty)) {
                 mergedProperties.put(property.getKey(), merge(
                     (IEntity) property.getValue(), mergeMode, alreadyMerged));
               }
             }
           } else if (property.getValue() instanceof Collection) {
             if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
-                && !isInitialized((Collection) property.getValue())) {
+                && !isInitialized(property.getValue())) {
               if (registeredEntityProperties.get(property.getKey()) == null) {
                 mergedProperties.put(property.getKey(), property.getValue());
               }
@@ -181,27 +181,10 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
-   * Gets wether the entity is fully initialized.
-   * 
-   * @param entity
-   *          the entity to test.
-   * @return true if the entity does not need some extra initialization step.
+   * {@inheritDoc}
    */
   public boolean isInitialized(@SuppressWarnings("unused")
-  IEntity entity) {
-    return true;
-  }
-
-  /**
-   * Gets wether the collection is fully initialized.
-   * 
-   * @param collection
-   *          the collection to test.
-   * @return true if the collection does not need some extra initialization
-   *         step.
-   */
-  public boolean isInitialized(@SuppressWarnings("unused")
-  Collection collection) {
+  Object objectOrProxy) {
     return true;
   }
 
@@ -286,12 +269,15 @@ public class BasicApplicationSession implements IApplicationSession {
       throw new ApplicationSessionException(
           "Cannot commit a unit of work that has not begun.");
     }
-    Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
-    for (IEntity entityToMergeBack : entitiesToMergeBack) {
-      merge(entityToMergeBack, MergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
+    try {
+      Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
+      for (IEntity entityToMergeBack : entitiesToMergeBack) {
+        merge(entityToMergeBack, MergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
+      }
+    } finally {
+      unitOfWork.commit();
+      entitiesToMergeBack = null;
     }
-    unitOfWork.commit();
-    entitiesToMergeBack = null;
   }
 
   /**
@@ -359,14 +345,14 @@ public class BasicApplicationSession implements IApplicationSession {
     Map<String, Object> entityProperties = entity.straightGetProperties();
     for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
       if (property.getValue() instanceof IEntity) {
-        if (isInitialized((IEntity) property.getValue())) {
+        if (isInitialized(property.getValue())) {
           uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
               (IEntity) property.getValue(), alreadyCloned));
         } else {
           uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
       } else if (property.getValue() instanceof Collection) {
-        if (isInitialized((Collection) property.getValue())) {
+        if (isInitialized(property.getValue())) {
           Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
               .getValue());
           for (IEntity entityCollectionElement : (Collection<IEntity>) property

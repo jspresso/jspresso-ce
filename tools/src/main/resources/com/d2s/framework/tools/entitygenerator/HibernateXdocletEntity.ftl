@@ -41,6 +41,9 @@ package ${package};
  *           dynamic-insert = "true"
  *           dynamic-update = "true"
  *           persister = "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
+    <#if componentDescriptor.purelyAbstract>
+ *           abstract = "true"
+    </#if>
     <#if superEntity?exists>
  * @hibernate.joined-subclass-key
  *           column = "ID"

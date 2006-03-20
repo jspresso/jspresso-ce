@@ -11,6 +11,7 @@ import java.util.Map;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.ICollectionAccessor;
 import com.d2s.framework.util.bean.IListAccessor;
@@ -48,12 +49,23 @@ public class AddToMasterAction extends AbstractCollectionAction {
         .getConnectorValue();
     String property = collectionDescriptor.getName();
     ICollectionAccessor collectionAccessor = getAccessorFactory()
-        .createCollectionPropertyAccessor(
-            property,
-            master.getClass());
+        .createCollectionPropertyAccessor(property, master.getClass());
+
+    IComponentDescriptor elementDescriptor = (IComponentDescriptor) getContext()
+        .get(ActionContextConstants.ELEMENT_DESCRIPTOR);
+
+    if (elementDescriptor == null) {
+      elementDescriptor = collectionDescriptor.getReferencedDescriptor()
+          .getElementDescriptor();
+    }
+
+    if (elementDescriptor.isPurelyAbstract()) {
+      throw new ActionException(elementDescriptor.getName()
+          + "is purely abstract. It cannot be instanciated.");
+    }
+
     IEntity newEntity = getEntityFactory().createEntityInstance(
-        collectionDescriptor.getReferencedDescriptor().getElementDescriptor()
-            .getComponentContract());
+        elementDescriptor.getComponentContract());
     try {
       int index = -1;
       if (collectionAccessor instanceof IListAccessor) {

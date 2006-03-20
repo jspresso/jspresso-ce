@@ -246,7 +246,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
               clonedEntity.straightSetProperty(propertyEntry.getKey(),
                   propertyEntry.getValue());
               if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-                if (isInitialized((IEntity) propertyEntry.getValue())) {
+                if (isInitialized(propertyEntry.getValue())) {
                   collRelToUpdate.put(propertyEntry.getValue(),
                       (ICollectionPropertyDescriptor) reverseDescriptor);
                 }
@@ -256,7 +256,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
               for (Object reverseCollectionElement : (Collection) propertyEntry
                   .getValue()) {
-                if (isInitialized((IEntity) reverseCollectionElement)) {
+                if (isInitialized(reverseCollectionElement)) {
                   collRelToUpdate.put(reverseCollectionElement,
                       (ICollectionPropertyDescriptor) reverseDescriptor);
                 }
@@ -300,27 +300,14 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   /**
-   * Gets wether the entity is fully initialized.
+   * Wether the object is fully initialized.
    * 
-   * @param entity
-   *          the entity to test.
-   * @return true if the entity does not need some extra initialization step.
+   * @param objectOrProxy
+   *          the object to test.
+   * @return true if the object is fully initialized.
    */
   protected boolean isInitialized(@SuppressWarnings("unused")
-  IEntity entity) {
-    return true;
-  }
-
-  /**
-   * Gets wether the collection is fully initialized.
-   * 
-   * @param collection
-   *          the collection to test.
-   * @return true if the collection does not need some extra initialization
-   *         step.
-   */
-  protected boolean isInitialized(@SuppressWarnings("unused")
-  Collection collection) {
+  Object objectOrProxy) {
     return true;
   }
 
@@ -756,7 +743,11 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     if (changeSupport == null || (oldValue == null && newValue == null)) {
       return;
     }
-    changeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    if (!isInitialized(oldValue)) {
+      changeSupport.firePropertyChange(propertyName, null, newValue);
+    } else {
+      changeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    }
   }
 
   /**

@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.application.backend.session;
 
-import java.util.Collection;
 import java.util.List;
 
 import com.d2s.framework.model.entity.IEntity;
@@ -131,18 +130,10 @@ public interface IApplicationSession extends IEntityDirtAware {
   IEntity getRegisteredEntity(Class entityContract, Object entityId);
 
   /**
-   * Wether the entity is fully initialized.
+   * Wether the object is fully initialized.
    * 
-   * @param entity the entity to test.
-   * @return true if the entity is fully initialized.
+   * @param objectOrProxy the object to test.
+   * @return true if the object is fully initialized.
    */
-  boolean isInitialized(IEntity entity);
-
-  /**
-   * Wether the collection is fully initialized.
-   * 
-   * @param collection the collection to test.
-   * @return true if the collection is fully initialized.
-   */
-  boolean isInitialized(Collection collection);
+  boolean isInitialized(Object objectOrProxy);
 }

@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.backend.entity;
 
-import java.util.Collection;
-
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -87,15 +85,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected boolean isInitialized(Collection collection) {
-    return applicationSession.isInitialized(collection);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean isInitialized(IEntity entity) {
-    return applicationSession.isInitialized(entity);
+  protected boolean isInitialized(Object objectOrProxy) {
+    return applicationSession.isInitialized(objectOrProxy);
   }
 }

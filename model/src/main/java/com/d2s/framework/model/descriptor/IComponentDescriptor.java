@@ -134,4 +134,12 @@ public interface IComponentDescriptor extends IModelDescriptor,
    *         storage.
    */
   boolean isComputed();
+
+  /**
+   * Gets wether this entity descriptor is a pure abstract definition. Only
+   * descendents of this descriptor can be instanciated.
+   * 
+   * @return true if this is a pure abstract entity descriptor.
+   */
+  boolean isPurelyAbstract();
 }

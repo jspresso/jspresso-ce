@@ -38,16 +38,13 @@
 	</bean>
 
 	<bean id="connectorSelectionFrontAction"
-		class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction">
-	</bean>
+		class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction" />
 
 	<bean id="moduleConnectorSelectionFrontAction"
-		class="com.d2s.framework.application.frontend.action.module.ModuleConnectorSelectionAction">
-	</bean>
+		class="com.d2s.framework.application.frontend.action.module.ModuleConnectorSelectionAction" />
 
 	<bean id="parentModuleConnectorSelectionFrontAction"
-		class="com.d2s.framework.application.frontend.action.module.ParentModuleConnectorSelectionAction">
-	</bean>
+		class="com.d2s.framework.application.frontend.action.module.ParentModuleConnectorSelectionAction" />
 
 	<bean id="scriptedBackAction" parent="abstractBackAction"
 		class="com.d2s.framework.application.backend.action.ScriptedBackendAction">
@@ -63,7 +60,7 @@
 		-->
 		<property name="acceleratorAsString" value="alt A" />
 		<property name="wrappedAction">
-			<bean parent="abstractBackAction" class="com.d2s.framework.application.backend.action.AddToMasterAction"></bean>
+			<bean parent="abstractBackAction" class="com.d2s.framework.application.backend.action.AddToMasterAction" />
 		</property>
 		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
@@ -75,8 +72,7 @@
 		<property name="acceleratorAsString" value="alt C" />
 		<property name="wrappedAction">
 			<bean parent="abstractBackAction"
-				class="com.d2s.framework.application.backend.action.CloneCollectionAction">
-			</bean>
+				class="com.d2s.framework.application.backend.action.CloneCollectionAction" />
 		</property>
 		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
@@ -84,8 +80,7 @@
 	<bean id="addToProjectedFrontAction" parent="addToMasterFrontAction">
 		<property name="wrappedAction">
 			<bean parent="abstractBackAction"
-				class="com.d2s.framework.application.backend.action.module.AddToModuleObjectsAction">
-			</bean>
+				class="com.d2s.framework.application.backend.action.module.AddToModuleObjectsAction" />
 		</property>
 		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
@@ -106,16 +101,14 @@
 	<bean id="removeFromProjectedFrontAction" parent="removeCollectionFromMasterFrontAction">
 		<property name="yesAction">
 			<bean parent="abstractBackAction"
-				class="com.d2s.framework.application.backend.action.module.RemoveFromModuleObjectsAction">
-			</bean>
+				class="com.d2s.framework.application.backend.action.module.RemoveFromModuleObjectsAction" />
 		</property>
 	</bean>
 
 	<bean id="cloneProjectedFrontAction" parent="cloneCollectionFrontAction">
 		<property name="wrappedAction">
 			<bean parent="abstractBackAction"
-				class="com.d2s.framework.application.backend.action.module.CloneModuleObjectsAction">
-			</bean>
+				class="com.d2s.framework.application.backend.action.module.CloneModuleObjectsAction" />
 		</property>
 		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
@@ -126,8 +119,7 @@
 		<property name="description" value="Installs selected elements in tree" />
 		<property name="wrappedAction">
 			<bean parent="abstractBackAction"
-				class="com.d2s.framework.application.backend.action.module.AddBeanAsSubModuleAction">
-			</bean>
+				class="com.d2s.framework.application.backend.action.module.AddBeanAsSubModuleAction" />
 		</property>
 		<property name="nextAction" ref="moduleConnectorSelectionFrontAction" />
 	</bean>
@@ -137,8 +129,7 @@
 			<bean class="com.d2s.framework.application.frontend.action.ActionWrapper">
 				<property name="wrappedAction">
 					<bean parent="abstractBackAction"
-						class="com.d2s.framework.application.backend.action.module.RemoveSubModuleFromParentAction">
-					</bean>
+						class="com.d2s.framework.application.backend.action.module.RemoveSubModuleFromParentAction" />
 				</property>
 				<property name="nextAction" ref="parentModuleConnectorSelectionFrontAction" />
 			</bean>
