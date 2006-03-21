@@ -8,8 +8,8 @@ import org.apache.commons.lang.ObjectUtils;
 import com.d2s.framework.view.descriptor.module.ISubModuleDescriptor;
 
 /**
- * A child module is a non-root module (it has a parent). A child
- * module uses a view to render its projected artifact.
+ * A child module is a non-root module (it has a parent). A child module uses a
+ * view to render its projected artifact.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

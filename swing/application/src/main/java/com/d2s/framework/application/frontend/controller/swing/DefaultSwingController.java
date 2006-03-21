@@ -85,19 +85,16 @@ public class DefaultSwingController extends
     if (moduleInternalFrames == null) {
       moduleInternalFrames = new HashMap<String, JInternalFrame>();
     }
-    JInternalFrame moduleInternalFrame = moduleInternalFrames
-        .get(moduleId);
+    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
     if (moduleInternalFrame == null) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       IView<JComponent> moduleView = createModuleView(moduleId,
           moduleDescriptor);
       moduleInternalFrame = createJInternalFrame(moduleView);
       moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(),
-          IIconFactory.SMALL_ICON_SIZE));
+          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
       moduleInternalFrame
-          .addInternalFrameListener(new ModuleInternalFrameListener(
-              moduleId));
+          .addInternalFrameListener(new ModuleInternalFrameListener(moduleId));
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(),
@@ -120,14 +117,12 @@ public class DefaultSwingController extends
     moduleInternalFrame.toFront();
   }
 
-  private final class ModuleInternalFrameListener extends
-      InternalFrameAdapter {
+  private final class ModuleInternalFrameListener extends InternalFrameAdapter {
 
     private String moduleId;
 
     /**
-     * Constructs a new <code>ModuleInternalFrameListener</code>
-     * instance.
+     * Constructs a new <code>ModuleInternalFrameListener</code> instance.
      * 
      * @param moduleId
      *          the root module identifier this listener is attached to.
@@ -198,9 +193,8 @@ public class DefaultSwingController extends
         IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      JMenuItem moduleMenuItem = new JMenuItem(
-          new ModuleSelectionAction(moduleId,
-              moduleDescriptor));
+      JMenuItem moduleMenuItem = new JMenuItem(new ModuleSelectionAction(
+          moduleId, moduleDescriptor));
       modulesMenu.add(moduleMenuItem);
     }
     return modulesMenu;
@@ -223,11 +217,9 @@ public class DefaultSwingController extends
       putValue(Action.NAME, getLabelTranslator().getTranslation(
           moduleDescriptor.getName(), getLocale()));
       putValue(Action.SHORT_DESCRIPTION, getDescriptionTranslator()
-          .getTranslation(moduleDescriptor.getDescription(),
-              getLocale()));
+          .getTranslation(moduleDescriptor.getDescription(), getLocale()));
       putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(),
-          IIconFactory.TINY_ICON_SIZE));
+          moduleDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     }
 
     /**

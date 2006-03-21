@@ -30,9 +30,9 @@ public class ModuleDescriptor extends BasicComponentDescriptor {
    * Constructs a new <code>ModuleDescriptor</code> instance.
    */
   public ModuleDescriptor() {
-    
+
     super(Module.class.getName());
-    
+
     BasicReferencePropertyDescriptor parentDescriptor = new BasicReferencePropertyDescriptor();
     parentDescriptor.setName("parent");
     parentDescriptor.setReferencedDescriptor(this);

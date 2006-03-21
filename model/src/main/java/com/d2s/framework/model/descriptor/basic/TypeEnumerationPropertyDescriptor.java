@@ -18,7 +18,8 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class TypeEnumerationPropertyDescriptor extends BasicEnumerationPropertyDescriptor {
+public class TypeEnumerationPropertyDescriptor extends
+    BasicEnumerationPropertyDescriptor {
 
   /**
    * Sets the componentDescriptorList property.
@@ -30,7 +31,8 @@ public class TypeEnumerationPropertyDescriptor extends BasicEnumerationPropertyD
       List<IComponentDescriptor> componentDescriptorList) {
     Map<String, String> componentDescriptorImages = new LinkedHashMap<String, String>();
     for (IComponentDescriptor componentDescriptor : componentDescriptorList) {
-      componentDescriptorImages.put(componentDescriptor.getName(), componentDescriptor.getIconImageURL());
+      componentDescriptorImages.put(componentDescriptor.getName(),
+          componentDescriptor.getIconImageURL());
     }
     setValuesAndIconImageUrls(componentDescriptorImages);
   }

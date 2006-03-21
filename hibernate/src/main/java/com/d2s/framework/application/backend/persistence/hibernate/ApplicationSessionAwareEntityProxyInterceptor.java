@@ -55,10 +55,19 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     if (entity instanceof IEntity) {
       Map<String, Object> dirtyProperties = applicationSession
           .getDirtyProperties((IEntity) entity);
+      if (dirtyProperties != null) {
+        dirtyProperties.remove(IEntity.VERSION);
+      }
       if (dirtyProperties == null) {
         return null;
       } else if (dirtyProperties.isEmpty()) {
         return new int[0];
+      }
+      // the entity is dirty and is going to be flushed.
+      // To workaround a bug, the update lifecycle hook is handeled here.
+      if (((IEntity) entity).isPersistent() && ((IEntity) entity).onUpdate()) {
+        dirtyProperties = applicationSession
+            .getDirtyProperties((IEntity) entity);
       }
       int[] indices = new int[dirtyProperties.size()];
       int n = 0;
@@ -108,12 +117,25 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   public void postFlush(Iterator entities) {
     while (entities.hasNext()) {
       Object entity = entities.next();
-      if (entity instanceof IEntity
-          && applicationSession.isDirty((IEntity) entity)) {
+      if (entity instanceof IEntity) {
         applicationSession.recordAsSynchronized((IEntity) entity);
       }
     }
     super.postFlush(entities);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean onSave(Object entity, Serializable id, Object[] state,
+      String[] propertyNames, Type[] types) {
+    boolean stateUpdated = super
+        .onSave(entity, id, state, propertyNames, types);
+    if (entity instanceof IEntity) {
+      applicationSession.recordAsSynchronized((IEntity) entity);
+    }
+    return stateUpdated;
   }
 
   /**
@@ -153,25 +175,4 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     }
     return super.onLoad(entity, id, state, propertyNames, types);
   }
-
-  // /**
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public void preFlush(Iterator entities) {
-  // while (entities.hasNext()) {
-  // Object nextObject = entities.next();
-  // if (nextObject instanceof IEntity) {
-  // IEntity entity = (IEntity) nextObject;
-  // if (applicationSession.isDirty(entity)) {
-  // if (entity.isPersistent()) {
-  // entity.onUpdate();
-  // } else {
-  // entity.onPersist();
-  // }
-  // }
-  // }
-  // }
-  // super.preFlush(entities);
-  // }
 }

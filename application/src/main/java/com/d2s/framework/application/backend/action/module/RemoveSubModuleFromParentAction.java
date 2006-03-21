@@ -44,8 +44,7 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
     if (selectedIndices == null || selectedIndices.length == 0) {
       return null;
     }
-    Module parentModule = (Module) parentModuleConnector
-        .getConnectorValue();
+    Module parentModule = (Module) parentModuleConnector.getConnectorValue();
     Collection<SubModule> childrenToRemove = new ArrayList<SubModule>();
 
     for (int i = 0; i < selectedIndices.length; i++) {

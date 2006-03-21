@@ -39,8 +39,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
   public Map<String, Object> execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     ICompositeValueConnector moduleConnector = getModuleConnector();
-    BeanModule module = (BeanModule) moduleConnector
-        .getConnectorValue();
+    BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
     IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor())
         .getElementDescriptor();
 
@@ -55,9 +54,9 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
         projectedComponentDescriptor.getComponentContract());
     projectedCollection.add(newEntity);
     module.setModuleObjects(projectedCollection);
-    
+
     getModelConnector().setConnectorValue(projectedCollection);
-    
+
     Map<String, Object> executionResult = new HashMap<String, Object>();
     executionResult.put(ActionContextConstants.SELECTED_INDICES,
         ConnectorHelper.getIndicesOf(getModelConnector(), Collections

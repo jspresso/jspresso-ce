@@ -53,7 +53,6 @@ public class CollectionConnectorValueChangeEvent extends
     return removedChildrenConnectors;
   }
 
-  
   /**
    * Gets the delayedEvent.
    * 
@@ -63,11 +62,11 @@ public class CollectionConnectorValueChangeEvent extends
     return delayedEvent;
   }
 
-  
   /**
    * Sets the delayedEvent.
    * 
-   * @param delayedEvent the delayedEvent to set.
+   * @param delayedEvent
+   *          the delayedEvent to set.
    */
   public void setDelayedEvent(boolean delayedEvent) {
     this.delayedEvent = delayedEvent;

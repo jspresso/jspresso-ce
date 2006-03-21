@@ -189,7 +189,7 @@ public class DefaultTreeSelectionModelBinder implements
 
   private class TreeConnectorsListener implements ITreeModelListener {
 
-    private static final long serialVersionUID = -3248157949292741288L;
+    private static final long                     serialVersionUID = -3248157949292741288L;
 
     private CollectionConnectorsSelectionListener connectorsSelectionListener;
 

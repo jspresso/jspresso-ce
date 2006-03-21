@@ -4,6 +4,7 @@
 package com.d2s.framework.model.persistence.hibernate;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
@@ -82,5 +83,52 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       ((IEntity) entity).onDelete();
     }
     super.onDelete(entity, id, state, propertyNames, types);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean onSave(Object entity, Serializable id, Object[] state,
+      String[] propertyNames, Type[] types) {
+    boolean stateUpdated = false;
+    if (entity instanceof IEntity) {
+      if (((IEntity) entity).onPersist()) {
+        extractState((IEntity) entity, propertyNames, state);
+        stateUpdated = true;
+      }
+    }
+    return stateUpdated
+        || super.onSave(entity, id, state, propertyNames, types);
+  }
+
+//  /**
+//   * {@inheritDoc}
+//   */
+//  @Override
+//  public boolean onFlushDirty(Object entity, Serializable id,
+//      Object[] currentState, Object[] previousState, String[] propertyNames,
+//      Type[] types) {
+//    boolean stateUpdated = false;
+//    if (entity instanceof IEntity) {
+//      if (((IEntity) entity).onUpdate()) {
+//        extractState((IEntity) entity, propertyNames, currentState);
+//        stateUpdated = true;
+//      }
+//    }
+//    return stateUpdated
+//        || super.onFlushDirty(entity, id, currentState, previousState,
+//        propertyNames, types);
+//  }
+
+  private void extractState(IEntity entity, String[] propertyNames,
+      Object[] state) {
+    for (int i = 0; i < propertyNames.length; i++) {
+      String propertyName = propertyNames[i];
+      Object property = entity.straightGetProperty(propertyName);
+      if (!(property instanceof Collection<?>)) {
+        state[i] = property;
+      }
+    }
   }
 }

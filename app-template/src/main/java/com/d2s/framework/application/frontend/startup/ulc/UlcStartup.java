@@ -18,7 +18,8 @@ import com.ulcjava.base.application.IApplication;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class UlcStartup extends AbstractStartup implements IApplication {
+public abstract class UlcStartup extends AbstractStartup implements
+    IApplication {
 
   /**
    * Returns the client context default locale.

@@ -20,8 +20,8 @@ import com.d2s.framework.view.descriptor.ViewConstraints;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicConstrainedGridViewDescriptor extends BasicCompositeViewDescriptor
-    implements IConstrainedGridViewDescriptor {
+public class BasicConstrainedGridViewDescriptor extends
+    BasicCompositeViewDescriptor implements IConstrainedGridViewDescriptor {
 
   private Map<IViewDescriptor, ViewConstraints> constrainedViews;
 

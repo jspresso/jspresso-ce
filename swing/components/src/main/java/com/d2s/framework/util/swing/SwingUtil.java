@@ -35,14 +35,14 @@ import foxtrot.Worker;
  */
 public final class SwingUtil {
 
-  private static final double DARKER_COLOR_FACTOR                         = 0.93;
+  private static final double  DARKER_COLOR_FACTOR                         = 0.93;
 
-  private static final String TEXTFIELD_FONT_KEY                          = "TextField.font";
-  private static final String FORMATTED_TEXTFIELD_FONT_KEY                = "FormattedTextField.font";
-  private static final String TEXTFIELD_INACTIVE_BACKGROUND_KEY           = "TextField.inactiveBackground";
-  private static final String FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY = "FormattedTextField.inactiveBackground";
-  
-  private static final boolean DISABLE_THREADING = false;
+  private static final String  TEXTFIELD_FONT_KEY                          = "TextField.font";
+  private static final String  FORMATTED_TEXTFIELD_FONT_KEY                = "FormattedTextField.font";
+  private static final String  TEXTFIELD_INACTIVE_BACKGROUND_KEY           = "TextField.inactiveBackground";
+  private static final String  FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY = "FormattedTextField.inactiveBackground";
+
+  private static final boolean DISABLE_THREADING                           = false;
 
   private SwingUtil() {
     // Helper class private constructor.

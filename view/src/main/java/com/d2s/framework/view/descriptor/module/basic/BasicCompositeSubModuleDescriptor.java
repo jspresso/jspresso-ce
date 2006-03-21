@@ -17,8 +17,7 @@ import com.d2s.framework.view.descriptor.module.ICompositeSubModuleDescriptor;
  * @author Vincent Vandenschrick
  */
 public class BasicCompositeSubModuleDescriptor extends
-    BasicCompositeTreeLevelDescriptor implements
-    ICompositeSubModuleDescriptor {
+    BasicCompositeTreeLevelDescriptor implements ICompositeSubModuleDescriptor {
 
   private IViewDescriptor viewDescriptor;
 

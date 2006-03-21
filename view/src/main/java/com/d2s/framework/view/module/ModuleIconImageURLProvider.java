@@ -25,8 +25,7 @@ public class ModuleIconImageURLProvider implements IIconImageURLProvider {
   public String getIconImageURLForObject(Object userObject) {
     if (delegateProvider != null && userObject instanceof BeanModule) {
       return delegateProvider
-          .getIconImageURLForObject(((BeanModule) userObject)
-              .getModuleObject());
+          .getIconImageURLForObject(((BeanModule) userObject).getModuleObject());
     }
     return null;
   }

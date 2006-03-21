@@ -33,11 +33,12 @@ public interface IEnumerationPropertyDescriptor extends
    * @return the list of values contained in the underlying enumeration.
    */
   List<String> getEnumerationValues();
-  
+
   /**
    * Gets the icon image url to use to render a enumeration value.
    * 
-   * @param value the value to render.
+   * @param value
+   *          the value to render.
    * @return the image url to use.
    */
   String getIconImageURL(String value);

@@ -100,7 +100,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
     for (IEntity mergedEntity : mergedEntities) {
       if (mergedEntity.isPersistent()) {
         hibernateSession.lock(mergedEntity, LockMode.NONE);
-        //hibernateSession.saveOrUpdate(mergedEntity);
+        // hibernateSession.saveOrUpdate(mergedEntity);
       }
     }
     return mergedEntities;

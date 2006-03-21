@@ -18,10 +18,11 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
     BasicPropertyDescriptor implements IRelationshipEndPropertyDescriptor {
 
   private IRelationshipEndPropertyDescriptor reverseRelationEnd;
-  private boolean composition;
-  
+  private boolean                            composition;
+
   /**
-   * Constructs a new <code>BasicRelationshipEndPropertyDescriptor</code> instance.
+   * Constructs a new <code>BasicRelationshipEndPropertyDescriptor</code>
+   * instance.
    */
   public BasicRelationshipEndPropertyDescriptor() {
     this.composition = true;
@@ -60,11 +61,11 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
     return composition;
   }
 
-  
   /**
    * Sets the composition.
    * 
-   * @param composition the composition to set.
+   * @param composition
+   *          the composition to set.
    */
   public void setComposition(boolean composition) {
     this.composition = composition;

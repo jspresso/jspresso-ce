@@ -31,10 +31,10 @@ public class SwingSampleStartup extends SwingStartup {
     IBackendController backController = (IBackendController) getApplicationContext()
         .getBean("applicationBackController");
     BeanModule companyModule = (BeanModule) ((Module) backController
-        .getModuleConnector("company").getConnectorValue())
-        .getSubModules().get(0);
-    companyModule.setModuleObjects(new AppDataProducer(
-        getApplicationContext()).createTestData());
+        .getModuleConnector("company").getConnectorValue()).getSubModules()
+        .get(0);
+    companyModule.setModuleObjects(new AppDataProducer(getApplicationContext())
+        .createTestData());
   }
 
   /**

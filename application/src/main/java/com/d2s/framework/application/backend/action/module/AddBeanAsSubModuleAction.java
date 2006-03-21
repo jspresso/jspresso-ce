@@ -28,8 +28,7 @@ import com.d2s.framework.view.module.SubModule;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class AddBeanAsSubModuleAction extends
-    AbstractCollectionAction {
+public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
 
   /**
    * Adds the selected objects as child modules.
@@ -45,8 +44,7 @@ public class AddBeanAsSubModuleAction extends
     }
     ICompositeValueConnector moduleConnector = getModuleConnector();
     ICollectionConnector collectionConnector = getModelConnector();
-    SubModule parentModule = (SubModule) moduleConnector
-        .getConnectorValue();
+    SubModule parentModule = (SubModule) moduleConnector.getConnectorValue();
     List<SubModule> children;
     if (parentModule.getSubModules() == null) {
       children = new ArrayList<SubModule>(selectedIndices.length);

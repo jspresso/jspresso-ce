@@ -15,8 +15,8 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicNestingViewDescriptor extends BasicViewDescriptor
-    implements INestingViewDescriptor {
+public class BasicNestingViewDescriptor extends BasicViewDescriptor implements
+    INestingViewDescriptor {
 
   private IViewDescriptor nestedViewDescriptor;
 

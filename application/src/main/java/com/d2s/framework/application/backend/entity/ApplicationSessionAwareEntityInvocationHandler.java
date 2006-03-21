@@ -65,8 +65,8 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor propertyDescriptor) {
-    applicationSession.initializePropertyIfNeeded(
-        (IEntity) proxy, propertyDescriptor.getName());
+    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+        propertyDescriptor.getName());
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 
@@ -76,8 +76,8 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    applicationSession.initializePropertyIfNeeded(
-        (IEntity) proxy, propertyDescriptor.getName());
+    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+        propertyDescriptor.getName());
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
 

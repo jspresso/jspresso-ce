@@ -24,7 +24,8 @@ public class BeanCollectionConnector extends BeanCollectionPropertyConnector {
    * 
    * @param id
    *          the connector identifier.
-   * @param elementClass the collection element class.
+   * @param elementClass
+   *          the collection element class.
    * @param beanConnectorFactory
    *          the factory used to create the collection bean connectors.
    */

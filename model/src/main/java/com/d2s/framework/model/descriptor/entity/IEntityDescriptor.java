@@ -15,5 +15,5 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
  * @author Vincent Vandenschrick
  */
 public interface IEntityDescriptor extends IComponentDescriptor {
-  //EMPTY AS OF NOW
+  // EMPTY AS OF NOW
 }

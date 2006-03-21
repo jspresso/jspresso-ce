@@ -26,6 +26,5 @@ public interface ITreeSelectionModelBinder {
    * @param tree
    *          the the tree to bind the selection model of.
    */
-  void bindSelectionModel(IValueConnector rootConnector,
-      ULCTree tree);
+  void bindSelectionModel(IValueConnector rootConnector, ULCTree tree);
 }

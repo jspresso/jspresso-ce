@@ -25,8 +25,7 @@ import com.d2s.framework.view.module.SubModule;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class RemoveFromModuleObjectsAction extends
-    AbstractCollectionAction {
+public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
 
   /**
    * Removes the selected objects from the projected collection.
@@ -44,8 +43,7 @@ public class RemoveFromModuleObjectsAction extends
     }
 
     ICompositeValueConnector moduleConnector = getModuleConnector();
-    BeanModule module = (BeanModule) moduleConnector
-        .getConnectorValue();
+    BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
 
     Collection<IPropertyChangeCapable> projectedCollection;
     if (module.getModuleObjects() == null) {
@@ -70,11 +68,10 @@ public class RemoveFromModuleObjectsAction extends
   private static void removeFromSubModules(Module parentModule,
       Object removedObject) {
     if (parentModule.getSubModules() != null) {
-      for (SubModule subModule : new ArrayList<SubModule>(
-          parentModule.getSubModules())) {
+      for (SubModule subModule : new ArrayList<SubModule>(parentModule
+          .getSubModules())) {
         if (subModule instanceof BeanModule
-            && removedObject.equals(((BeanModule) subModule)
-                .getModuleObject())) {
+            && removedObject.equals(((BeanModule) subModule).getModuleObject())) {
           parentModule.removeSubModule(subModule);
         }
       }

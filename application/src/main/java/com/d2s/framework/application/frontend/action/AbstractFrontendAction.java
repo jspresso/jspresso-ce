@@ -132,8 +132,8 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
    * connector this action has been executed on from its context. It uses
    * well-known context keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.MODULE_VIEW_CONNECTOR</code> to get
-   * the the module view connector the action executes on.
+   * <li> <code>ActionContextConstants.MODULE_VIEW_CONNECTOR</code> to get the
+   * the module view connector the action executes on.
    * </ul>
    * <p>
    * The returned connector mainly serves for acting on the view component the
@@ -147,12 +147,12 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
   }
 
   /**
-   * This is a utility method which is able to retrieve the parent module
-   * view connector this action has been executed on from its context. It uses
+   * This is a utility method which is able to retrieve the parent module view
+   * connector this action has been executed on from its context. It uses
    * well-known context keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR</code>
-   * to get the the parent module view connector the action executes on.
+   * <li> <code>ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR</code> to
+   * get the the parent module view connector the action executes on.
    * </ul>
    * <p>
    * The returned connector mainly serves for acting on the view component the

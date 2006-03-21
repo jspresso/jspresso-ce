@@ -88,4 +88,11 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   private void cleanup() {
     dirtRecorder = null;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void clearDirtyState(IEntity flushedEntity) {
+    dirtRecorder.resetChangedProperties(flushedEntity, null);
+  }
 }

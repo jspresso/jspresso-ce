@@ -15,7 +15,7 @@ import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicModuleDescriptor extends BasicTreeViewDescriptor
-    implements IModuleDescriptor {
+public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
+    IModuleDescriptor {
   // Just a marker as of now.
 }

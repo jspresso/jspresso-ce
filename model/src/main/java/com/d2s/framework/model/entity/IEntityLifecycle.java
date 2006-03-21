@@ -16,21 +16,29 @@ public interface IEntityLifecycle {
 
   /**
    * Called when an entity is created (still transient).
+   * 
+   * @return true if the state of the entity has been updated.
    */
-  void onCreate();
+  boolean onCreate();
 
   /**
    * Called just before an entity is persisted (insert).
+   * 
+   * @return true if the state of the entity has been updated.
    */
-  void onPersist();
+  boolean onPersist();
 
   /**
    * Called just before an entity is updated (update).
+   * 
+   * @return true if the state of the entity has been updated.
    */
-  void onUpdate();
+  boolean onUpdate();
 
   /**
    * Called just before an entity is deleted (delete).
+   * 
+   * @return true if the state of the entity has been updated.
    */
-  void onDelete();
+  boolean onDelete();
 }

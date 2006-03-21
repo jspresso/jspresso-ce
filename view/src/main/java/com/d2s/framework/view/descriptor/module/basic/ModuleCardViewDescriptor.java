@@ -33,8 +33,7 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
    * @param moduleDescriptor
    *          the module view descriptor.
    */
-  public ModuleCardViewDescriptor(
-      IModuleDescriptor moduleDescriptor) {
+  public ModuleCardViewDescriptor(IModuleDescriptor moduleDescriptor) {
     ISubModuleDescriptor subModuleDescriptor = (ISubModuleDescriptor) moduleDescriptor
         .getRootSubtreeDescriptor();
     Map<String, IViewDescriptor> moduleCards = new HashMap<String, IViewDescriptor>();
@@ -42,19 +41,16 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     setCardViewDescriptors(moduleCards);
   }
 
-  private void prepareModuleCards(
-      Map<String, IViewDescriptor> moduleCards,
+  private void prepareModuleCards(Map<String, IViewDescriptor> moduleCards,
       ISubModuleDescriptor moduleDescriptor) {
     if (moduleDescriptor.getViewDescriptor() != null) {
       IViewDescriptor projectedObjectViewDescriptor = moduleDescriptor
           .getViewDescriptor();
-      moduleCards.put(
-          computeKeyForModuleDescriptor(moduleDescriptor),
+      moduleCards.put(computeKeyForModuleDescriptor(moduleDescriptor),
           projectedObjectViewDescriptor);
     }
     if (moduleDescriptor instanceof ISimpleSubModuleDescriptor) {
-      if (((ISimpleSubModuleDescriptor) moduleDescriptor)
-          .getChildDescriptor() != null) {
+      if (((ISimpleSubModuleDescriptor) moduleDescriptor).getChildDescriptor() != null) {
         prepareModuleCards(
             moduleCards,
             (ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) moduleDescriptor)
@@ -77,14 +73,12 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
    */
   public String getCardNameForModel(Object model) {
     if (model instanceof SubModule) {
-      return computeKeyForModuleDescriptor(((SubModule) model)
-          .getDescriptor());
+      return computeKeyForModuleDescriptor(((SubModule) model).getDescriptor());
     }
     return null;
   }
 
-  private String computeKeyForModuleDescriptor(
-      ISubModuleDescriptor descriptor) {
+  private String computeKeyForModuleDescriptor(ISubModuleDescriptor descriptor) {
     if (descriptor.getViewDescriptor().getName() != null) {
       return descriptor.getViewDescriptor().getName();
     }

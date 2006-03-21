@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.model.descriptor.entity.basic;
 
-
 import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 
@@ -19,7 +18,7 @@ import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 public class BasicEntityDescriptor extends BasicComponentDescriptor implements
     IEntityDescriptor {
 
-  private boolean                           purelyAbstract;
+  private boolean purelyAbstract;
 
   /**
    * Constructs a new <code>BasicEntityDescriptor</code> instance.

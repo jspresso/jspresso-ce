@@ -22,12 +22,11 @@ import com.d2s.framework.view.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ParentModuleConnectorSelectionAction extends
-    AbstractChainedAction {
+public class ParentModuleConnectorSelectionAction extends AbstractChainedAction {
 
   /**
-   * Selects indices on the parent module view collection connector based on
-   * the <code>ActionContextConstants.SELECTED_INDICES</code> context value.
+   * Selects indices on the parent module view collection connector based on the
+   * <code>ActionContextConstants.SELECTED_INDICES</code> context value.
    * <p>
    * {@inheritDoc}
    */

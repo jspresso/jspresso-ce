@@ -83,7 +83,6 @@ public class ConnectorMap implements IConnectorMap {
     return storageMap != null && !storageMap.isEmpty();
   }
 
-  
   /**
    * Gets the parentConnector.
    * 

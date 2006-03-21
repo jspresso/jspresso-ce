@@ -297,6 +297,7 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   public void recordAsSynchronized(IEntity flushedEntity) {
     if (unitOfWork.isActive()) {
+      unitOfWork.clearDirtyState(flushedEntity);
       entitiesToMergeBack.add(flushedEntity);
     }
   }

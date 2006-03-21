@@ -19,9 +19,9 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
 /**
  * A module is a central element in the application architecture. It serves as
  * an entry point on the domain model. Modules are organized as a tree structure
- * since they can (optionally) provide modules. A module can be seen as
- * a window on the business grouping processes forming a business activity (like
- * master data management, customer contract handling, ...). Each module can
+ * since they can (optionally) provide modules. A module can be seen as a window
+ * on the business grouping processes forming a business activity (like master
+ * data management, customer contract handling, ...). Each module can
  * (optionally) provide a projected object serving as model root for trigerring
  * grouped processes.
  * <p>
@@ -86,8 +86,8 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Sets the subModules modules. It will fire a "subModules" property
-   * change event.
+   * Sets the subModules modules. It will fire a "subModules" property change
+   * event.
    * 
    * @param subModules
    *          the subModules modules to set.
@@ -122,8 +122,8 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Adds a subModules module collection. It will fire a "subModules"
-   * property change event.
+   * Adds a subModules module collection. It will fire a "subModules" property
+   * change event.
    * 
    * @param subModulesToAdd
    *          the subModules modules to add.
@@ -143,8 +143,7 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * Removes a child module. It will fire a "subModules" property change
-   * event.
+   * Removes a child module. It will fire a "subModules" property change event.
    * 
    * @param subModule
    *          the child module to remove.
@@ -199,9 +198,9 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
-   * This method will set the parent module to the new subModules
-   * modules and remove the parent of the old removed subModules
-   * modules. It will fire the "subModules" property change event.
+   * This method will set the parent module to the new subModules modules and
+   * remove the parent of the old removed subModules modules. It will fire the
+   * "subModules" property change event.
    * 
    * @param oldChildren
    *          the old subModules collection property.

@@ -58,4 +58,12 @@ public interface IEntityUnitOfWork extends IEntityDirtAware {
    *          unit of work along with their original values.
    */
   void register(IEntity entity, Map<String, Object> initialChangedProperties);
+
+  /**
+   * Clears the dirty state of the entity in this unit of work.
+   * 
+   * @param flushedEntity
+   *          the entity that was flushed and cleaned.
+   */
+  void clearDirtyState(IEntity flushedEntity);
 }

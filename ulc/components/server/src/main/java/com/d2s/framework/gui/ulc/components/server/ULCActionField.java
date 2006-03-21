@@ -199,8 +199,9 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     }
     Anything actionAnything = new Anything();
     if (action.getValue(ActionFieldConstants.ACCELERATOR_KEY) != null) {
-      actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, ((Integer) action
-          .getValue(ActionFieldConstants.ACCELERATOR_KEY)).intValue());
+      actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY,
+          ((Integer) action.getValue(ActionFieldConstants.ACCELERATOR_KEY))
+              .intValue());
     } else {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
@@ -214,7 +215,8 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     } else {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
-    actionAnything.put(ActionFieldConstants.NAME, (String) action.getValue(ActionFieldConstants.NAME));
+    actionAnything.put(ActionFieldConstants.NAME, (String) action
+        .getValue(ActionFieldConstants.NAME));
     actionAnything.put(ActionFieldConstants.SHORT_DESCRIPTION, (String) action
         .getValue(ActionFieldConstants.SHORT_DESCRIPTION));
     return actionAnything;

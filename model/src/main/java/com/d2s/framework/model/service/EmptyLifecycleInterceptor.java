@@ -21,33 +21,33 @@ public abstract class EmptyLifecycleInterceptor<E> implements
   /**
    * {@inheritDoc}
    */
-  public void onCreate(@SuppressWarnings("unused")
+  public boolean onCreate(@SuppressWarnings("unused")
   E entity) {
-    // NO-OP
+    return false;
   }
 
   /**
    * {@inheritDoc}
    */
-  public void onPersist(@SuppressWarnings("unused")
+  public boolean onPersist(@SuppressWarnings("unused")
   E entity) {
-    // NO-OP
+    return false;
   }
 
   /**
    * {@inheritDoc}
    */
-  public void onUpdate(@SuppressWarnings("unused")
+  public boolean onUpdate(@SuppressWarnings("unused")
   E entity) {
-    // NO-OP
+    return false;
   }
 
   /**
    * {@inheritDoc}
    */
-  public void onDelete(@SuppressWarnings("unused")
+  public boolean onDelete(@SuppressWarnings("unused")
   E entity) {
-    // NO-OP
+    return false;
   }
 
 }

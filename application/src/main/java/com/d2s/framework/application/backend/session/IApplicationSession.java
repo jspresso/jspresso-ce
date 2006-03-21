@@ -132,7 +132,8 @@ public interface IApplicationSession extends IEntityDirtAware {
   /**
    * Wether the object is fully initialized.
    * 
-   * @param objectOrProxy the object to test.
+   * @param objectOrProxy
+   *          the object to test.
    * @return true if the object is fully initialized.
    */
   boolean isInitialized(Object objectOrProxy);

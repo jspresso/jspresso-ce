@@ -13,16 +13,13 @@ package com.d2s.framework.sample.backend.domain;
  * @version $LastChangedRevision$
  */
 public interface Nameable extends
-  com.d2s.framework.sample.backend.domain.NameableService {
-  
+    com.d2s.framework.sample.backend.domain.NameableService {
+
   /**
    * Gets the name.
    * 
    * @hibernate.property
-   * @hibernate.column
-   *           name = "NAME"
-   *           length = "15"
-   *           not-null = "true"
+   * @hibernate.column name = "NAME" length = "15" not-null = "true"
    * @return the name.
    */
   java.lang.String getName();

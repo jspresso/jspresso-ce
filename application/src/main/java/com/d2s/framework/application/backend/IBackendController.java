@@ -30,8 +30,8 @@ public interface IBackendController extends IController {
   void start();
 
   /**
-   * Given a module identifier, this method returns the composite connector
-   * used as model connector for the associated module.
+   * Given a module identifier, this method returns the composite connector used
+   * as model connector for the associated module.
    * 
    * @param moduleId
    *          the modulen identifier.

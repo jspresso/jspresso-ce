@@ -50,8 +50,7 @@ public class JGoodiesSwingViewFactory extends DefaultSwingViewFactory {
   protected void decorateWithBorder(IView<JComponent> view, Locale locale) {
     if (view.getDescriptor().getBorderType() == IViewDescriptor.TITLED) {
       SimpleInternalFrame sif = new SimpleInternalFrame(getLabelTranslator()
-          .getTranslation(getTitleKey(view.getDescriptor()),
-              locale));
+          .getTranslation(getTitleKey(view.getDescriptor()), locale));
       if (view.getDescriptor().getIconImageURL() != null) {
         sif.setFrameIcon(getIconFactory()
             .getIcon(view.getDescriptor().getIconImageURL(),
@@ -66,8 +65,8 @@ public class JGoodiesSwingViewFactory extends DefaultSwingViewFactory {
       // }
       // if (toolBar != null) {
       // sif.setToolBar(toolBar);
-      //        }
-      //      }
+      // }
+      // }
       sif.add(view.getPeer());
       view.setPeer(sif);
     } else {

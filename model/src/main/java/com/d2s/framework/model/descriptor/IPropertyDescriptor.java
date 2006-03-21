@@ -56,7 +56,7 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * @return the unicity scope.
    */
   String getUnicityScope();
-  
+
   /**
    * Wether the underlying property is read-only.
    * 

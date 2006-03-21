@@ -158,8 +158,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
         // this is certainly normal.
       }
       if (isLifecycleMethod) {
-        invokeLifecycleInterceptors(proxy, method, args);
-        return null;
+        return new Boolean(invokeLifecycleInterceptors(proxy, method, args));
       }
       AccessorInfo accessorInfo = new AccessorInfo(method);
       int accessorType = accessorInfo.getAccessorType();
@@ -945,8 +944,9 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     properties.put(propertyName, propertyValue);
   }
 
-  private void invokeLifecycleInterceptors(Object proxy,
+  private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object[] args) {
+    boolean interceptorResults = false;
     for (ILifecycleInterceptor lifecycleInterceptor : entityDescriptor
         .getLifecycleInterceptors()) {
       int signatureSize = lifecycleMethod.getParameterTypes().length + 1;
@@ -961,8 +961,10 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
         parameters[i] = args[i - 1];
       }
       try {
-        MethodUtils.invokeMethod(lifecycleInterceptor, lifecycleMethod
-            .getName(), parameters, parameterTypes);
+        interceptorResults = interceptorResults
+            || ((Boolean) MethodUtils.invokeMethod(lifecycleInterceptor,
+                lifecycleMethod.getName(), parameters, parameterTypes))
+                .booleanValue();
       } catch (IllegalAccessException ex) {
         throw new EntityException(ex);
       } catch (InvocationTargetException ex) {
@@ -971,6 +973,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
         throw new EntityException(ex);
       }
     }
+    return interceptorResults;
   }
 
   private static final class NeverEqualsInvocationHandler implements

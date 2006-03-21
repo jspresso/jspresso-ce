@@ -19,7 +19,8 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntity extends IEntityLifecycle, IPropertyChangeCapable, Cloneable {
+public interface IEntity extends IEntityLifecycle, IPropertyChangeCapable,
+    Cloneable {
 
   /**
    * constant for identifier property <code>ID</code>.

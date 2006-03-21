@@ -88,9 +88,8 @@ public class BeanModule extends SubModule {
       return true;
     }
     BeanModule rhs = (BeanModule) obj;
-    return new EqualsBuilder().append(getModuleObject(),
-        rhs.getModuleObject()).append(getModuleObjects(),
-        rhs.getModuleObjects()).isEquals();
+    return new EqualsBuilder().append(getModuleObject(), rhs.getModuleObject())
+        .append(getModuleObjects(), rhs.getModuleObjects()).isEquals();
   }
 
   /**

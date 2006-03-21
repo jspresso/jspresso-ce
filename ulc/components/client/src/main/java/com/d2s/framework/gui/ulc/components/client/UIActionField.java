@@ -187,7 +187,8 @@ public class UIActionField extends UIComponent implements IEditorComponent {
       action.putValue(Action.MNEMONIC_KEY, new Integer(actionAnything.get(
           ActionFieldConstants.MNEMONIC_KEY, -1)));
     }
-    action.putValue(Action.NAME, actionAnything.get(ActionFieldConstants.NAME, null));
+    action.putValue(Action.NAME, actionAnything.get(ActionFieldConstants.NAME,
+        null));
     action.putValue(Action.SHORT_DESCRIPTION, actionAnything.get(
         ActionFieldConstants.SHORT_DESCRIPTION, null));
     if (actionIcon != null) {

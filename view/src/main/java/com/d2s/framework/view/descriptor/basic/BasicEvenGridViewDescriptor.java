@@ -20,8 +20,8 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
     implements IEvenGridViewDescriptor {
 
-  private int drivingDimensionCellCount;
-  private int drivingDimension = ROW;
+  private int                   drivingDimensionCellCount;
+  private int                   drivingDimension = ROW;
   private List<IViewDescriptor> childViewDescriptors;
 
   /**

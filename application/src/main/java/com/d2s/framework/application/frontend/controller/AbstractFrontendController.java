@@ -450,7 +450,6 @@ public abstract class AbstractFrontendController<E> extends AbstractController
     return moduleView;
   }
 
-  
   /**
    * Gets the modulesMenuIconImageUrl.
    * 
@@ -460,11 +459,11 @@ public abstract class AbstractFrontendController<E> extends AbstractController
     return modulesMenuIconImageUrl;
   }
 
-  
   /**
    * Sets the modulesMenuIconImageUrl.
    * 
-   * @param modulesMenuIconImageUrl the modulesMenuIconImageUrl to set.
+   * @param modulesMenuIconImageUrl
+   *          the modulesMenuIconImageUrl to set.
    */
   public void setModulesMenuIconImageUrl(String modulesMenuIconImageUrl) {
     this.modulesMenuIconImageUrl = modulesMenuIconImageUrl;

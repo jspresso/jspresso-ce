@@ -55,7 +55,8 @@ public class EntityGenerator {
 
   private void generateComponents(String applicationContextKey,
       String templateResourcePath, String templateName, String outputDir,
-      String[] includePackages, boolean generateAnnotations, String[] componentNames) {
+      String[] includePackages, boolean generateAnnotations,
+      String[] componentNames) {
     ApplicationContext appContext = getApplicationContext(applicationContextKey);
     if (componentNames == null) {
       String[] allComponentNames = appContext
