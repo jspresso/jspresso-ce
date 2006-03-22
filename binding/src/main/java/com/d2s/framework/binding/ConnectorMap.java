@@ -47,8 +47,12 @@ public class ConnectorMap implements IConnectorMap {
    * {@inheritDoc}
    */
   public void removeConnector(String storageKey) {
+    IValueConnector connectorToRemove = null;
     if (storageKey != null) {
-      getStorageMap().remove(storageKey);
+      connectorToRemove = getStorageMap().remove(storageKey);
+    }
+    if (connectorToRemove != null) {
+      connectorToRemove.setParentConnector(null);
     }
   }
 

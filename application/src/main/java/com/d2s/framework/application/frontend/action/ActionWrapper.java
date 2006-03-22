@@ -30,6 +30,13 @@ public class ActionWrapper extends AbstractChainedAction {
       wrappedAction.setContext(getContext());
     }
     Map<String, Object> backendResult = actionHandler.execute(wrappedAction);
+    if (backendResult != null) {
+      if (getContext() == null) {
+        setContext(backendResult);
+      } else {
+        getContext().putAll(backendResult);
+      }
+    }
     if (getNextAction() != null) {
       return super.execute(actionHandler);
     }

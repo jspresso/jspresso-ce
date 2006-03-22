@@ -166,6 +166,7 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
       }
       beanCollectionSize = beanCollection.size();
       int i = 0;
+
       for (Object nextCollectionElement : beanCollection) {
         IValueConnector childConnector = getChildConnector(i);
         if (childConnector == null) {
@@ -177,7 +178,8 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
       }
     }
     while (getChildConnectorCount() != beanCollectionSize) {
-      removeChildConnector(getChildConnector(computeConnectorId(getChildConnectorCount() - 1)));
+      IValueConnector childConnector = getChildConnector(computeConnectorId(getChildConnectorCount() - 1));
+      removeChildConnector(childConnector);
     }
   }
 

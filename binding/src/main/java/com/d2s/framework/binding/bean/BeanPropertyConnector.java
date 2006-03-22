@@ -121,7 +121,10 @@ public abstract class BeanPropertyConnector extends AbstractValueConnector
     } catch (InvocationTargetException ex) {
       throw new ConnectorBindingException(ex);
     } catch (NoSuchMethodException ex) {
-      throw new ConnectorBindingException(ex);
+      // this may be a normal behaviour in case of polymorphism.
+      // don't throw any exception.
+      // throw new ConnectorBindingException(ex);
+      return null;
     }
   }
 

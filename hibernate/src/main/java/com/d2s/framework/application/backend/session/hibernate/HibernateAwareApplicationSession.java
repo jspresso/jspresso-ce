@@ -160,9 +160,10 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
               entity.getId());
           if (lockedEntity == null) {
             session.lock(entity, LockMode.NONE);
-            session.setReadOnly(entity, true);
             lockedEntity = entity;
           }
+          session.setReadOnly(lockedEntity, true);
+
           Object initializedProperty = lockedEntity
               .straightGetProperty(propertyName);
           Hibernate.initialize(initializedProperty);

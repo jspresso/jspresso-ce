@@ -182,7 +182,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * 
    * @return ancestorDescriptors The list of ancestor entity descriptors.
    */
-  protected List<IComponentDescriptor> getAncestorDescriptors() {
+  public List<IComponentDescriptor> getAncestorDescriptors() {
     return ancestorDescriptors;
   }
 

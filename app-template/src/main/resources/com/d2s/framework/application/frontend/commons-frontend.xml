@@ -51,7 +51,15 @@
 		<property name="scriptHandler" ref="scriptHandler" />
 	</bean>
 
-	<bean id="addToMasterFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+	<bean id="abstractAddToMasterFrontAction" abstract="true"
+		class="com.d2s.framework.application.frontend.action.std.AddToMasterAction">
+		<property name="wrappedAction">
+			<bean parent="abstractBackAction" class="com.d2s.framework.application.backend.action.AddToMasterAction" />
+		</property>
+		<property name="nextAction" ref="connectorSelectionFrontAction" />
+	</bean>
+
+	<bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction">
 		<property name="iconImageURL" value="classpath:images/edit_add-48x48.png" />
 		<property name="name" value="add" />
 		<property name="description" value="Adds a new detail" />
@@ -59,10 +67,6 @@
 			<property name="mnemonicAsString" value="alt pressed A" />
 		-->
 		<property name="acceleratorAsString" value="alt A" />
-		<property name="wrappedAction">
-			<bean parent="abstractBackAction" class="com.d2s.framework.application.backend.action.AddToMasterAction" />
-		</property>
-		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
 
 	<bean id="cloneCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
@@ -134,6 +138,30 @@
 				<property name="nextAction" ref="parentModuleConnectorSelectionFrontAction" />
 			</bean>
 		</property>
+	</bean>
+
+	<bean id="moveUpFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+		<property name="iconImageURL" value="classpath:images/up-48x48.png" />
+		<property name="name" value="moveUp" />
+		<property name="wrappedAction">
+			<bean parent="abstractBackAction"
+				class="com.d2s.framework.application.backend.action.CollectionElementMoveAction">
+				<property name="offset" value="-1" />
+			</bean>
+		</property>
+		<property name="nextAction" ref="connectorSelectionFrontAction" />
+	</bean>
+
+	<bean id="moveDownFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+		<property name="iconImageURL" value="classpath:images/down-48x48.png" />
+		<property name="name" value="moveDown" />
+		<property name="wrappedAction">
+			<bean parent="abstractBackAction"
+				class="com.d2s.framework.application.backend.action.CollectionElementMoveAction">
+				<property name="offset" value="1" />
+			</bean>
+		</property>
+		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
 
 	<!--

@@ -152,20 +152,20 @@ public class BasicApplicationSession implements IApplicationSession {
                   registeredCollection.add(merge(entityCollectionElement,
                       mergeMode, alreadyMerged));
                 }
-                if (registeredEntity.isPersistent()) {
-                  Collection<IEntity> snapshotCollection = null;
-                  Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
-                  if (dirtyProperties != null) {
-                    snapshotCollection = (Collection<IEntity>) dirtyProperties
-                        .get(property.getKey());
-                  }
-                  mergedProperties.put(property.getKey(),
-                      wrapDetachedEntityCollection(registeredEntity,
-                          registeredCollection, snapshotCollection, property
-                              .getKey()));
-                } else {
+//                if (registeredEntity.isPersistent()) {
+//                  Collection<IEntity> snapshotCollection = null;
+//                  Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
+//                  if (dirtyProperties != null) {
+//                    snapshotCollection = (Collection<IEntity>) dirtyProperties
+//                        .get(property.getKey());
+//                  }
+//                  mergedProperties.put(property.getKey(),
+//                      wrapDetachedEntityCollection(registeredEntity,
+//                          registeredCollection, snapshotCollection, property
+//                              .getKey()));
+//                } else {
                   mergedProperties.put(property.getKey(), registeredCollection);
-                }
+//                }
               }
             }
           } else {
