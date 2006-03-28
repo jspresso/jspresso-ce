@@ -152,20 +152,20 @@ public class BasicApplicationSession implements IApplicationSession {
                   registeredCollection.add(merge(entityCollectionElement,
                       mergeMode, alreadyMerged));
                 }
-//                if (registeredEntity.isPersistent()) {
-//                  Collection<IEntity> snapshotCollection = null;
-//                  Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
-//                  if (dirtyProperties != null) {
-//                    snapshotCollection = (Collection<IEntity>) dirtyProperties
-//                        .get(property.getKey());
-//                  }
-//                  mergedProperties.put(property.getKey(),
-//                      wrapDetachedEntityCollection(registeredEntity,
-//                          registeredCollection, snapshotCollection, property
-//                              .getKey()));
-//                } else {
+                if (registeredEntity.isPersistent()) {
+                  Collection<IEntity> snapshotCollection = null;
+                  Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
+                  if (dirtyProperties != null) {
+                    snapshotCollection = (Collection<IEntity>) dirtyProperties
+                        .get(property.getKey());
+                  }
+                  mergedProperties.put(property.getKey(),
+                      wrapDetachedEntityCollection(registeredEntity,
+                          registeredCollection, snapshotCollection, property
+                              .getKey()));
+                } else {
                   mergedProperties.put(property.getKey(), registeredCollection);
-//                }
+                }
               }
             }
           } else {
@@ -361,9 +361,18 @@ public class BasicApplicationSession implements IApplicationSession {
             uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
                 alreadyCloned));
           }
+          Collection snapshotCollection = (Collection) dirtyProperties
+              .get(property.getKey());
+          if (snapshotCollection != null) {
+            Collection clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
+            for (Object snapshotCollectionElement : snapshotCollection) {
+              clonedSnapshotCollection.add(cloneInUnitOfWork(
+                  (IEntity) snapshotCollectionElement, alreadyCloned));
+            }
+            snapshotCollection = clonedSnapshotCollection;
+          }
           uowEntityCollection = wrapDetachedEntityCollection(entity,
-              uowEntityCollection, (Collection) dirtyProperties.get(property
-                  .getKey()), property.getKey());
+              uowEntityCollection, snapshotCollection, property.getKey());
           uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
         } else {
           uowEntity.straightSetProperty(property.getKey(), property.getValue());

@@ -69,7 +69,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
         }
       }
       if (index >= 0) {
-        ((IListAccessor) collectionAccessor).addToValue(master, index,
+        ((IListAccessor) collectionAccessor).addToValue(master, index + 1,
             newEntity);
       } else {
         collectionAccessor.addToValue(master, newEntity);

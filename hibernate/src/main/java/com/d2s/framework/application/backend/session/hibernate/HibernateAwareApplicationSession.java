@@ -106,6 +106,12 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           return persistentList;
         }
       }
+    } else {
+      if (snapshotCollection == null) {
+        ((PersistentCollection) transientCollection).clearDirty();
+      } else {
+        ((PersistentCollection) transientCollection).dirty();
+      }
     }
     return super.wrapDetachedEntityCollection(entity, transientCollection,
         snapshotCollection, role);
@@ -156,6 +162,17 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
          * {@inheritDoc}
          */
         public Object doInHibernate(Session session) {
+          // IEntity sessionEntity = (IEntity)
+          // session.load(entity.getContract(),
+          // entity.getId());
+          // session.lock(sessionEntity, LockMode.NONE);
+          // session.setReadOnly(sessionEntity, true);
+          // Object initializedProperty = sessionEntity
+          // .straightGetProperty(propertyName);
+          // Hibernate.initialize(initializedProperty);
+          // entity.straightSetProperty(propertyName, initializedProperty);
+          // return null;
+
           IEntity lockedEntity = (IEntity) session.get(entity.getContract(),
               entity.getId());
           if (lockedEntity == null) {

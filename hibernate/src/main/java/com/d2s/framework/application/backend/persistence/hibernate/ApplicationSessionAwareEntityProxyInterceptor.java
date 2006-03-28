@@ -7,7 +7,9 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Transaction;
+import org.hibernate.collection.PersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
@@ -128,29 +130,29 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public boolean onSave(Object entity, Serializable id, Object[] state,
-      String[] propertyNames, Type[] types) {
-    boolean stateUpdated = super
-        .onSave(entity, id, state, propertyNames, types);
-    if (entity instanceof IEntity) {
-      applicationSession.recordAsSynchronized((IEntity) entity);
-    }
-    return stateUpdated;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public Object getEntity(String entityName, Serializable id) {
     if (!applicationSession.isUnitOfWorkActive()) {
       try {
-        Object registeredEntity = applicationSession.getRegisteredEntity(Class
+        IEntity registeredEntity = applicationSession.getRegisteredEntity(Class
             .forName(entityName), id);
         if (registeredEntity instanceof HibernateProxy) {
           HibernateProxy proxy = (HibernateProxy) registeredEntity;
           LazyInitializer li = proxy.getHibernateLazyInitializer();
-          return li.getImplementation();
+          registeredEntity = (IEntity) li.getImplementation();
+        }
+
+        if (registeredEntity != null) {
+          // Whenever the entity has dirty persistent collection, make them
+          // clean to workaround a "bug" with hibernate since hibernate cannot
+          // re-attach a "dirty" detached collection.
+          for (Map.Entry<String, Object> registeredPropertyEntry : registeredEntity
+              .straightGetProperties().entrySet()) {
+            if (registeredPropertyEntry.getValue() instanceof PersistentCollection
+                && Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
+              ((PersistentCollection) registeredPropertyEntry.getValue())
+                  .clearDirty();
+            }
+          }
         }
         return registeredEntity;
       } catch (ClassNotFoundException ex) {

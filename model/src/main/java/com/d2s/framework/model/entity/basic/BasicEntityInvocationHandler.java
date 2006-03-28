@@ -415,7 +415,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     if (ObjectUtils.equals(oldProperty, newProperty)) {
       return;
     }
-    preprocessSetter(proxy, propertyName, newProperty, oldProperty);
+    preprocessSetter(proxy, propertyName, oldProperty, newProperty);
     if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       // It's a relation end
       IRelationshipEndPropertyDescriptor reversePropertyDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
@@ -503,7 +503,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       storeProperty(propertyName, newProperty);
     }
     firePropertyChange(propertyName, oldProperty, newProperty);
-    postprocessSetter(proxy, propertyName, newProperty, oldProperty);
+    postprocessSetter(proxy, propertyName, oldProperty, newProperty);
   }
 
   @SuppressWarnings("unchecked")
@@ -784,7 +784,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     if (integrityProcessors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor processor : integrityProcessors) {
+    for (IPropertyIntegrityProcessor<Object, Object> processor : integrityProcessors) {
       processor.preprocessSetterIntegrity(proxy, oldValue, newValue);
     }
   }
@@ -795,7 +795,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     if (integrityProcessors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor processor : integrityProcessors) {
+    for (IPropertyIntegrityProcessor<Object, Object> processor : integrityProcessors) {
       processor.postprocessSetterIntegrity(proxy, oldValue, newValue);
     }
   }

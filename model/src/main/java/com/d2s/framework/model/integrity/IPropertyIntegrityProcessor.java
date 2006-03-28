@@ -12,8 +12,12 @@ package com.d2s.framework.model.integrity;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          The type of the target.
+ * @param <F>
+ *          The type of the property.
  */
-public interface IPropertyIntegrityProcessor {
+public interface IPropertyIntegrityProcessor<E, F> {
 
   /**
    * This method gets called whenever a property is about to be set on an
@@ -29,8 +33,8 @@ public interface IPropertyIntegrityProcessor {
    * @throws IntegrityException
    *           thrown whenever this processor does not succeed.
    */
-  void preprocessSetterIntegrity(Object target, Object oldPropertyValue,
-      Object newPropertyValue) throws IntegrityException;
+  void preprocessSetterIntegrity(E target, F oldPropertyValue,
+      F newPropertyValue) throws IntegrityException;
 
   /**
    * This method gets called whenever a property has been set on an component to
@@ -46,6 +50,6 @@ public interface IPropertyIntegrityProcessor {
    * @throws IntegrityException
    *           thrown whenever this processor does not succeed.
    */
-  void postprocessSetterIntegrity(Object target, Object oldPropertyValue,
-      Object newPropertyValue) throws IntegrityException;
+  void postprocessSetterIntegrity(E target, F oldPropertyValue,
+      F newPropertyValue) throws IntegrityException;
 }
