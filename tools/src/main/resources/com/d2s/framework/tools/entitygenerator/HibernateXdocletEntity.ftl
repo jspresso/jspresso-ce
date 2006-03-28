@@ -78,7 +78,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateScalarSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name>
-  <#local propertyType=propertyDescriptor.propertyClass.name>
+  <#if propertyDescriptor.propertyClass.array>
+    <#local propertyType=propertyDescriptor.propertyClass.componentType.name+"[]">
+  <#else>
+    <#local propertyType=propertyDescriptor.propertyClass.name>
+  </#if>
   /**
    * Sets the ${propertyName}.
    * 
@@ -90,7 +94,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateScalarGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name>
-  <#local propertyType=propertyDescriptor.propertyClass.name>
+  <#if propertyDescriptor.propertyClass.array>
+    <#local propertyType=propertyDescriptor.propertyClass.componentType.name+"[]">
+  <#else>
+    <#local propertyType=propertyDescriptor.propertyClass.name>
+  </#if>
   /**
    * Gets the ${propertyName}.
    * 
@@ -104,11 +112,17 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
        <#else>
    *           type = "timestamp"
        </#if>
+<#-- <#elseif    instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
+              && !(propertyDescriptor.maxLength?exists)>
+   *           type = "blob"
+-->
      </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}"
-     <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IStringPropertyDescriptor")
-       &&(propertyDescriptor.maxLength?exists)>
+     <#if (   instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IStringPropertyDescriptor")
+           || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
+          )
+       && (propertyDescriptor.maxLength?exists)>
    *           length = "${propertyDescriptor.maxLength?c}"
      </#if>
      <#if propertyDescriptor.mandatory>
