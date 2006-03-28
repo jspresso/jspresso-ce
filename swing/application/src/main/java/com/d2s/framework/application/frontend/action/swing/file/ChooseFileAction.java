@@ -35,36 +35,20 @@ public class ChooseFileAction extends AbstractSwingAction {
   private ITranslationProvider      labelTranslator;
   private Map<String, List<String>> fileFilter;
   private IFileOpenCallback         fileOpenCallback;
+  private JFileChooser              fileChooser;
 
   /**
    * {@inheritDoc}
    */
   @Override
   public Map<String, Object> execute(IActionHandler actionHandler) {
-    JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle(labelTranslator.getTranslation(getName(),
-        getLocale()));
-    if (fileFilter != null) {
-      for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
-          .entrySet()) {
-        StringBuffer extensionsDescription = new StringBuffer("( ");
-        for (String fileExtension : fileTypeEntry.getValue()) {
-          extensionsDescription.append("*").append(fileExtension).append(" ");
-        }
-        extensionsDescription.append(" )");
-        fileChooser.addChoosableFileFilter(new FileFilterAdapter(fileTypeEntry
-            .getValue(), labelTranslator.getTranslation(fileTypeEntry.getKey(),
-            getLocale())
-            + extensionsDescription.toString()));
-      }
-    }
 
-    fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    JFileChooser currentFileChooser = getFileChooser();
 
-    int returnVal = fileChooser.showOpenDialog(SwingUtilities
+    int returnVal = currentFileChooser.showOpenDialog(SwingUtilities
         .getWindowAncestor(getSourceComponent()));
     if (returnVal == JFileChooser.APPROVE_OPTION) {
-      File file = fileChooser.getSelectedFile();
+      File file = currentFileChooser.getSelectedFile();
       if (file != null) {
         try {
           fileOpenCallback.fileOpened(new FileInputStream(file), file
@@ -81,6 +65,30 @@ public class ChooseFileAction extends AbstractSwingAction {
     return super.execute(actionHandler);
   }
 
+  private JFileChooser getFileChooser() {
+    if (fileChooser == null) {
+      fileChooser = new JFileChooser();
+      fileChooser.setDialogTitle(labelTranslator.getTranslation(getName(),
+          getLocale()));
+      if (fileFilter != null) {
+        for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
+            .entrySet()) {
+          StringBuffer extensionsDescription = new StringBuffer("( ");
+          for (String fileExtension : fileTypeEntry.getValue()) {
+            extensionsDescription.append("*").append(fileExtension).append(" ");
+          }
+          extensionsDescription.append(" )");
+          fileChooser.addChoosableFileFilter(new FileFilterAdapter(
+              fileTypeEntry.getValue(), labelTranslator.getTranslation(
+                  fileTypeEntry.getKey(), getLocale())
+                  + extensionsDescription.toString()));
+        }
+      }
+      fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+    }
+    return fileChooser;
+  }
+
   /**
    * Sets the fileFilter. Filter file types are a map of descriptions keying
    * file extension arays.
@@ -89,7 +97,11 @@ public class ChooseFileAction extends AbstractSwingAction {
    *          the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
+    Map<String, List<String>> oldFileFilter = this.fileFilter;
     this.fileFilter = fileFilter;
+    if (oldFileFilter != this.fileFilter) {
+      fileChooser = null;
+    }
   }
 
   /**

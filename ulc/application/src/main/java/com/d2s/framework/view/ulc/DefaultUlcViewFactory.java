@@ -37,6 +37,7 @@ import com.d2s.framework.binding.ulc.ITreeSelectionModelBinder;
 import com.d2s.framework.binding.ulc.ULCActionFieldConnector;
 import com.d2s.framework.binding.ulc.ULCComboBoxConnector;
 import com.d2s.framework.binding.ulc.ULCDateFieldConnector;
+import com.d2s.framework.binding.ulc.ULCImageConnector;
 import com.d2s.framework.binding.ulc.ULCTextAreaConnector;
 import com.d2s.framework.binding.ulc.ULCTextFieldConnector;
 import com.d2s.framework.binding.ulc.ULCToggleButtonConnector;
@@ -92,6 +93,7 @@ import com.d2s.framework.view.descriptor.ICompositeViewDescriptor;
 import com.d2s.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IEvenGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IGridViewDescriptor;
+import com.d2s.framework.view.descriptor.IImageViewDescriptor;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.INestingViewDescriptor;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
@@ -202,6 +204,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
           actionHandler, locale);
     } else if (viewDescriptor instanceof INestingViewDescriptor) {
       view = createNestingView((INestingViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IImageViewDescriptor) {
+      view = createImageView((IImageViewDescriptor) viewDescriptor,
           actionHandler, locale);
     } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
       view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
@@ -1244,6 +1249,27 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     return connectorFactory.createValueConnector(propertyDescriptor.getName());
   }
 
+  // ///////////// //
+  // Image Section //
+  // ///////////// //
+
+  private IView<ULCComponent> createImageView(
+      IImageViewDescriptor viewDescriptor, @SuppressWarnings("unused")
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
+    ULCLabel imageLabel = createULCLabel();
+    imageLabel.setHorizontalAlignment(IDefaults.CENTER);
+    ULCImageConnector connector = new ULCImageConnector(viewDescriptor
+        .getModelDescriptor().getName(), imageLabel);
+    ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
+    IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    ULCScrollPane scrollPane = createULCScrollPane();
+    scrollPane.setViewPortView(imageLabel);
+    viewComponent.add(scrollPane, ULCBorderLayoutPane.CENTER);
+    return view;
+  }
+
   // /////////////// //
   // Nesting Section //
   // /////////////// //
@@ -1255,19 +1281,13 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     ICompositeValueConnector connector = connectorFactory
         .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
             .getName(), null);
-
     ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
-
     IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-
     IView<ULCComponent> nestedView = createView(viewDescriptor
         .getNestedViewDescriptor(), actionHandler, locale);
-
     connector.addChildConnector(nestedView.getConnector());
-
     viewComponent.add(nestedView.getPeer(), ULCBorderLayoutPane.CENTER);
-
     return view;
   }
 

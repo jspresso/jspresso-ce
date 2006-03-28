@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.binding.swing;
+
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+
+/**
+ * A connector on a label whose role is to render an image based on its binary
+ * representation taken out of the connector value.
+ * <p>
+ * Copyright 2005 Design2See. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class JImageConnector extends JComponentConnector<JLabel> {
+
+  /**
+   * Constructs a new <code>JImageConnector</code> instance.
+   * 
+   * @param id
+   *          the id of the connector.
+   * @param connectedULCComponent
+   *          the connected JLabel.
+   */
+  public JImageConnector(String id, JLabel connectedULCComponent) {
+    super(id, connectedULCComponent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void bindJComponent() {
+    // NO-OP. this is a "read-only" connector.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getConnecteeValue() {
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void protectedSetConnecteeValue(Object connecteeValue) {
+    if (connecteeValue != null) {
+      getConnectedJComponent().setIcon(new ImageIcon((byte[]) connecteeValue));
+    } else {
+      getConnectedJComponent().setIcon(null);
+    }
+  }
+}

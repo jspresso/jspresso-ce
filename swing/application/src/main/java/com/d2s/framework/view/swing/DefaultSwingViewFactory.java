@@ -90,6 +90,7 @@ import com.d2s.framework.binding.swing.JActionFieldConnector;
 import com.d2s.framework.binding.swing.JComboBoxConnector;
 import com.d2s.framework.binding.swing.JDateFieldConnector;
 import com.d2s.framework.binding.swing.JFormattedFieldConnector;
+import com.d2s.framework.binding.swing.JImageConnector;
 import com.d2s.framework.binding.swing.JTextAreaConnector;
 import com.d2s.framework.binding.swing.JTextFieldConnector;
 import com.d2s.framework.binding.swing.JToggleButtonConnector;
@@ -140,6 +141,7 @@ import com.d2s.framework.view.descriptor.ICompositeViewDescriptor;
 import com.d2s.framework.view.descriptor.IConstrainedGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IEvenGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IGridViewDescriptor;
+import com.d2s.framework.view.descriptor.IImageViewDescriptor;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.INestingViewDescriptor;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
@@ -239,6 +241,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
           actionHandler, locale);
     } else if (viewDescriptor instanceof INestingViewDescriptor) {
       view = createNestingView((INestingViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IImageViewDescriptor) {
+      view = createImageView((IImageViewDescriptor) viewDescriptor,
           actionHandler, locale);
     } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
       view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
@@ -1303,6 +1308,29 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
               .getReferencedDescriptor().getToStringProperty());
     }
     return connectorFactory.createValueConnector(propertyDescriptor.getName());
+  }
+
+  // ///////////// //
+  // Image Section //
+  // ///////////// //
+
+  private IView<JComponent> createImageView(
+      IImageViewDescriptor viewDescriptor, @SuppressWarnings("unused")
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
+    JLabel imageLabel = createJLabel();
+    imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    JImageConnector connector = new JImageConnector(viewDescriptor
+        .getModelDescriptor().getName(), imageLabel);
+    JPanel viewComponent = createJPanel();
+    BorderLayout layout = new BorderLayout();
+    viewComponent.setLayout(layout);
+    IView<JComponent> view = constructView(viewComponent, viewDescriptor,
+        connector);
+    JScrollPane scrollPane = createJScrollPane();
+    scrollPane.setViewportView(imageLabel);
+    viewComponent.add(scrollPane, BorderLayout.CENTER);
+    return view;
   }
 
   // /////////////// //

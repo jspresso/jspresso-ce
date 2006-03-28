@@ -7,7 +7,7 @@ import com.d2s.framework.view.descriptor.INestingViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
- * Default implementation of a border view descriptor.
+ * Default implementation of a nesting view descriptor.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

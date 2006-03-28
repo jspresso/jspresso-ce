@@ -30,29 +30,13 @@ public class ChooseFileAction extends AbstractUlcAction {
   private ITranslationProvider      labelTranslator;
   private Map<String, List<String>> fileFilter;
   private IFileOpenCallback         fileOpenCallback;
+  private FileChooserConfig         fileChooser;
 
   /**
    * {@inheritDoc}
    */
   @Override
   public Map<String, Object> execute(IActionHandler actionHandler) {
-    FileChooserConfig fcConfig = new FileChooserConfig();
-    fcConfig.setDialogTitle(labelTranslator.getTranslation(getName(),
-        getLocale()));
-    if (fileFilter != null) {
-      for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
-          .entrySet()) {
-        StringBuffer extensionsDescription = new StringBuffer("( ");
-        for (String fileExtension : fileTypeEntry.getValue()) {
-          extensionsDescription.append("*").append(fileExtension).append(" ");
-        }
-        extensionsDescription.append(" )");
-        fcConfig.addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
-            fileTypeEntry.getValue().toArray(new String[0]), labelTranslator
-                .getTranslation(fileTypeEntry.getKey(), getLocale())
-                + extensionsDescription.toString()));
-      }
-    }
     ClientContext.loadFile(new IFileLoadHandler() {
 
       private static final long serialVersionUID = -1025629868916915262L;
@@ -60,6 +44,7 @@ public class ChooseFileAction extends AbstractUlcAction {
       @SuppressWarnings("unused")
       public void onSuccess(InputStream in, String filePath) {
         if (fileOpenCallback != null) {
+          getFileChooser().setCurrentDirectory(filePath);
           fileOpenCallback.fileOpened(in, filePath);
         }
       }
@@ -70,8 +55,31 @@ public class ChooseFileAction extends AbstractUlcAction {
           fileOpenCallback.cancel();
         }
       }
-    }, fcConfig);
+    }, getFileChooser());
     return super.execute(actionHandler);
+  }
+
+  private FileChooserConfig getFileChooser() {
+    if (fileChooser == null) {
+      fileChooser = new FileChooserConfig();
+      fileChooser.setDialogTitle(labelTranslator.getTranslation(getName(),
+          getLocale()));
+      if (fileFilter != null) {
+        for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
+            .entrySet()) {
+          StringBuffer extensionsDescription = new StringBuffer("( ");
+          for (String fileExtension : fileTypeEntry.getValue()) {
+            extensionsDescription.append("*").append(fileExtension).append(" ");
+          }
+          extensionsDescription.append(" )");
+          fileChooser.addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
+              fileTypeEntry.getValue().toArray(new String[0]), labelTranslator
+                  .getTranslation(fileTypeEntry.getKey(), getLocale())
+                  + extensionsDescription.toString()));
+        }
+      }
+    }
+    return fileChooser;
   }
 
   /**
@@ -82,7 +90,11 @@ public class ChooseFileAction extends AbstractUlcAction {
    *          the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
+    Map<String, List<String>> oldFileFilter = this.fileFilter;
     this.fileFilter = fileFilter;
+    if (oldFileFilter != this.fileFilter) {
+      fileChooser = null;
+    }
   }
 
   /**
