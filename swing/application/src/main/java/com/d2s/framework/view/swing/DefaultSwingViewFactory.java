@@ -95,6 +95,7 @@ import com.d2s.framework.binding.swing.JTextFieldConnector;
 import com.d2s.framework.binding.swing.JToggleButtonConnector;
 import com.d2s.framework.gui.swing.components.JActionField;
 import com.d2s.framework.gui.swing.components.JDateField;
+import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -194,6 +195,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   private IIconFactory<Icon>                 iconFactory;
   private IActionFactory<Action, JComponent> actionFactory;
   private IDisplayableAction                 lovAction;
+  private IDisplayableAction                 chooseFileAsBinaryPropertyAction;
 
   /**
    * Constructs a new <code>DefaultSwingViewFactory</code> instance.
@@ -1516,6 +1518,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       view = createStringPropertyView(
           (IStringPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+      view = createBinaryPropertyView(
+          (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
@@ -1639,6 +1644,20 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
+    viewComponent.setAction(fieldAction);
+    adjustSizes(viewComponent, null, null);
+    return constructView(viewComponent, null, connector);
+  }
+
+  private IView<JComponent> createBinaryPropertyView(
+      IBinaryPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    JActionField viewComponent = createJActionField();
+    JActionFieldConnector connector = new JActionFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    Action fieldAction = actionFactory.createAction(
+        chooseFileAsBinaryPropertyAction, actionHandler, viewComponent,
+        propertyDescriptor, connector, locale);
     viewComponent.setAction(fieldAction);
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
@@ -2541,5 +2560,16 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
+  }
+  
+  /**
+   * Sets the chooseFileAsBinaryPropertyAction.
+   * 
+   * @param chooseFileAsBinaryPropertyAction
+   *          the chooseFileAsBinaryPropertyAction to set.
+   */
+  public void setChooseFileAsBinaryPropertyAction(
+      IDisplayableAction chooseFileAsBinaryPropertyAction) {
+    this.chooseFileAsBinaryPropertyAction = chooseFileAsBinaryPropertyAction;
   }
 }

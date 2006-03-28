@@ -3,6 +3,9 @@
  */
 package com.d2s.framework.model.descriptor;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * This interface is implemented by descriptors of binary properties.
  * <p>
@@ -20,4 +23,13 @@ public interface IBinaryPropertyDescriptor extends IScalarPropertyDescriptor {
    * @return the string property maximum length.
    */
   Integer getMaxLength();
+
+  /**
+   * Gets the map of allowed file types (descriptions) and their associated
+   * extensions.
+   * 
+   * @return the map of allowed file types (descriptions) and their associated
+   *         extensions.
+   */
+  Map<String, List<String>> getFileFilter();
 }

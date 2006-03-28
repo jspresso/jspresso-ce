@@ -47,6 +47,9 @@
   <bean id="lovAction" parent="abstractLovAction"
     class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" />
 
+  <bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
+    class="com.d2s.framework.application.frontend.action.swing.file.ChooseFileAsBinaryPropertyAction" />
+
   <bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory">
     <!--
       <constructor-arg index="0" value="com.jgoodies.looks.windows.WindowsLookAndFeel" />

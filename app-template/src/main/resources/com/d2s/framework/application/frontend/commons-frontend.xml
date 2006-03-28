@@ -37,6 +37,13 @@
 		<property name="wrappedAction" ref="queryEntitiesBackAction" />
 	</bean>
 
+	<bean id="abstractChooseFileAction" abstract="true" parent="abstractFrontAction">
+		<property name="iconImageURL" value="classpath:images/open_file-48x48.png" />
+		<property name="name" value="OPEN_FILE" />
+		<property name="description" value="OPEN_FILE" />
+		<property name="labelTranslator" ref="mockTranslator" />
+	</bean>
+
 	<bean id="connectorSelectionFrontAction"
 		class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction" />
 

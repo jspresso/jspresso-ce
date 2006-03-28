@@ -47,6 +47,9 @@
   <bean id="lovAction" parent="abstractLovAction"
     class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" />
 
+  <bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
+    class="com.d2s.framework.application.frontend.action.ulc.file.ChooseFileAsBinaryPropertyAction" />
+
   <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory" />
 
   <!--

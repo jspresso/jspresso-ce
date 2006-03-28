@@ -87,6 +87,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     IValueConnector cellConnector = getConnectorAt(rowIndex, columnIndex);
     if (cellConnector instanceof ICompositeValueConnector) {
       return cellConnector.toString();
+    } else if (cellConnector.getConnectorValue() instanceof byte[]) {
+      return null;
     }
     return cellConnector.getConnectorValue();
   }
@@ -118,7 +120,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
       }
     } else {
-      getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
+      if ("".equals(cellValue)) {
+        getConnectorAt(rowIndex, columnIndex).setConnectorValue(null);
+      } else {
+        getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
+      }
     }
   }
 

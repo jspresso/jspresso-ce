@@ -83,7 +83,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * {@inheritDoc}
    */
   public Object getValueAt(int rowIndex, int columnIndex) {
-    return getConnectorAt(rowIndex, columnIndex).getConnectorValue();
+    IValueConnector cellConnector = getConnectorAt(rowIndex, columnIndex);
+    if (cellConnector.getConnectorValue() instanceof byte[]) {
+      return null;
+    }
+    return cellConnector.getConnectorValue();
   }
 
   /**

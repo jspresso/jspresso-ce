@@ -47,6 +47,7 @@ import com.d2s.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
 import com.d2s.framework.gui.ulc.components.server.ULCTable;
 import com.d2s.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
 import com.d2s.framework.gui.ulc.components.server.ULCTree;
+import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -188,6 +189,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   private ULCTranslationDataTypeFactory         translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
   private IActionFactory<IAction, ULCComponent> actionFactory;
   private IDisplayableAction                    lovAction;
+  private IDisplayableAction                    chooseFileAsBinaryPropertyAction;
 
   /**
    * {@inheritDoc}
@@ -1453,6 +1455,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       view = createStringPropertyView(
           (IStringPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+      view = createBinaryPropertyView(
+          (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
@@ -1589,6 +1594,20 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
+    viewComponent.setAction(fieldAction);
+    adjustSizes(viewComponent, null, null);
+    return constructView(viewComponent, null, connector);
+  }
+
+  private IView<ULCComponent> createBinaryPropertyView(
+      IBinaryPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    ULCActionField viewComponent = createULCActionField();
+    ULCActionFieldConnector connector = new ULCActionFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    IAction fieldAction = actionFactory.createAction(
+        chooseFileAsBinaryPropertyAction, actionHandler, viewComponent,
+        propertyDescriptor, connector, locale);
     viewComponent.setAction(fieldAction);
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
@@ -2525,5 +2544,16 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
+  }
+
+  /**
+   * Sets the chooseFileAsBinaryPropertyAction.
+   * 
+   * @param chooseFileAsBinaryPropertyAction
+   *          the chooseFileAsBinaryPropertyAction to set.
+   */
+  public void setChooseFileAsBinaryPropertyAction(
+      IDisplayableAction chooseFileAsBinaryPropertyAction) {
+    this.chooseFileAsBinaryPropertyAction = chooseFileAsBinaryPropertyAction;
   }
 }
