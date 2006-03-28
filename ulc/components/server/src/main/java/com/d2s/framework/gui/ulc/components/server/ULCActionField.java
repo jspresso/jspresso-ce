@@ -40,6 +40,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   private Object                value;
   private String                actionText;
   private boolean               editable;
+  private boolean               showTextField;
   private IAction               action;
   private ULCIcon               actionIcon;
   private int                   editingRow;
@@ -49,10 +50,22 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
 
   /**
    * Constructs a new <code>ULCActionField</code> instance.
+   * 
    */
   public ULCActionField() {
+    this(true);
+  }
+  
+  /**
+   * Constructs a new <code>ULCActionField</code> instance.
+   * 
+   * @param showTextField
+   *          is the text field visible to the user.
+   */
+  public ULCActionField(boolean showTextField) {
     propertyChangeSupport = new PropertyChangeSupport(this);
     editable = true;
+    this.showTextField = showTextField;
   }
 
   /**
@@ -61,6 +74,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   @Override
   protected void saveState(Anything a) {
     super.saveState(a);
+    a.put(ActionFieldConstants.SHOW_TEXTFIELD_KEY, showTextField);
     a.put(ActionFieldConstants.ACTION_TEXT_KEY, actionText);
     saveState(a, ActionFieldConstants.ICON_KEY, actionIcon, null);
     a.put(ActionFieldConstants.ACTION_KEY, actionToAnything());
@@ -240,6 +254,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   public void copyAttributes(ICellComponent source) {
     sourceActionField = (ULCActionField) source;
     setAction(sourceActionField.action);
+    showTextField = sourceActionField.showTextField;
   }
 
   /**

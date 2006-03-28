@@ -1030,7 +1030,8 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       } else {
         column.setCellRenderer(new EvenOddTableCellRenderer());
       }
-      if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
+      if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+          || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
         column.setPreferredWidth(computePixelWidth(viewComponent, 3));
         if (editorView.getPeer() instanceof ULCAbstractButton) {
           ((ULCAbstractButton) editorView.getPeer())
@@ -1584,7 +1585,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   private IView<ULCComponent> createReferencePropertyView(
       IReferencePropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    ULCActionField viewComponent = createULCActionField();
+    ULCActionField viewComponent = createULCActionField(true);
     ULCActionFieldConnector connector = new ULCActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     IAction fieldAction = actionFactory.createAction(lovAction, actionHandler,
@@ -1602,7 +1603,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   private IView<ULCComponent> createBinaryPropertyView(
       IBinaryPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    ULCActionField viewComponent = createULCActionField();
+    ULCActionField viewComponent = createULCActionField(false);
     ULCActionFieldConnector connector = new ULCActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     IAction fieldAction = actionFactory.createAction(
@@ -2220,10 +2221,12 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   /**
    * Creates an action field.
    * 
+   * @param showTextField
+   *          is the text field visible to the user.
    * @return the created action field.
    */
-  protected ULCActionField createULCActionField() {
-    return new ULCActionField();
+  protected ULCActionField createULCActionField(boolean showTextField) {
+    return new ULCActionField(showTextField);
   }
 
   /**

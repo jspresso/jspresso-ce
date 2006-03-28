@@ -41,26 +41,33 @@ public class JActionField extends JPanel {
 
   private JTextField        textField;
   private Object            value;
+  private boolean           showTextField;
 
   /**
    * Constructs a new <code>JActionField</code> instance.
+   * 
+   * @param showTextField
+   *          is the text field visible to the user.
    */
-  public JActionField() {
+  public JActionField(boolean showTextField) {
     textField = new JTextField();
     setLayout(new BorderLayout());
-    add(textField, BorderLayout.CENTER);
-    Border border = textField.getBorder();
-    textField.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
-    setBorder(border);
-    super.addFocusListener(new FocusAdapter() {
+    if (showTextField) {
+      add(textField, BorderLayout.CENTER);
+      Border border = textField.getBorder();
+      textField.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
+      setBorder(border);
+      super.addFocusListener(new FocusAdapter() {
 
-      @Override
-      public void focusGained(@SuppressWarnings("unused")
-      FocusEvent e) {
-        textField.requestFocus();
-      }
-    });
-    SwingUtil.enableSelectionOnFocusGained(textField);
+        @Override
+        public void focusGained(@SuppressWarnings("unused")
+        FocusEvent e) {
+          textField.requestFocus();
+        }
+      });
+      SwingUtil.enableSelectionOnFocusGained(textField);
+    }
+    this.showTextField = showTextField;
   }
 
   /**
@@ -76,10 +83,14 @@ public class JActionField extends JPanel {
     actionButton.setAction(action);
     actionButton.setActionCommand("%");
     actionButton.setText("");
-    actionButton.setPreferredSize(new Dimension(
-        textField.getPreferredSize().height,
-        textField.getPreferredSize().height));
-    add(actionButton, BorderLayout.EAST);
+    if (showTextField) {
+      actionButton.setPreferredSize(new Dimension(
+          textField.getPreferredSize().height,
+          textField.getPreferredSize().height));
+      add(actionButton, BorderLayout.EAST);
+    } else {
+      add(actionButton, BorderLayout.CENTER);
+    }
   }
 
   /**

@@ -104,4 +104,9 @@ public final class ActionFieldConstants {
    * <code>NAME</code>.
    */
   public static final String NAME                     = "N";
+
+  /**
+   * <code>SHOW_TEXTFIELD_KEY</code>.
+   */
+  public static final String SHOW_TEXTFIELD_KEY       = "S_TF";
 }

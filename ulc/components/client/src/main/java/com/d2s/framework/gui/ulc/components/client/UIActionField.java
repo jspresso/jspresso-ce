@@ -52,9 +52,10 @@ public class UIActionField extends UIComponent implements IEditorComponent {
    * {@inheritDoc}
    */
   @Override
-  protected Object createBasicObject(@SuppressWarnings("unused")
-  Anything args) {
-    JActionField actionField = new JActionField() {
+  protected Object createBasicObject(Anything args) {
+    boolean showTextField = args.get(ActionFieldConstants.SHOW_TEXTFIELD_KEY, true);
+    
+    JActionField actionField = new JActionField(showTextField) {
 
       private static final long serialVersionUID = 7747321535435615536L;
 
@@ -151,7 +152,7 @@ public class UIActionField extends UIComponent implements IEditorComponent {
 
   private void handleSetEditable(Anything args) {
     getBasicObject().setEditable(
-        args.get(DateFieldConstants.EDITABLE_KEY, true));
+        args.get(ActionFieldConstants.EDITABLE_KEY, true));
   }
 
   private void handleSetAction(Anything args) {

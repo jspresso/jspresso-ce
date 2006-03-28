@@ -1054,7 +1054,8 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       } else {
         column.setCellRenderer(new EvenOddTableCellRenderer());
       }
-      if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
+      if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+          || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
         column.setPreferredWidth(computePixelWidth(viewComponent, 3));
       } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
         column.setPreferredWidth(computePixelWidth(viewComponent,
@@ -1634,7 +1635,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   private IView<JComponent> createReferencePropertyView(
       IReferencePropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    JActionField viewComponent = createJActionField();
+    JActionField viewComponent = createJActionField(true);
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     Action fieldAction = actionFactory.createAction(lovAction, actionHandler,
@@ -1652,7 +1653,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   private IView<JComponent> createBinaryPropertyView(
       IBinaryPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    JActionField viewComponent = createJActionField();
+    JActionField viewComponent = createJActionField(false);
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     Action fieldAction = actionFactory.createAction(
@@ -2217,10 +2218,12 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   /**
    * Creates an action field.
    * 
+   * @param showTextField
+   *          is the text field visible to the user.
    * @return the created action field.
    */
-  protected JActionField createJActionField() {
-    return new JActionField();
+  protected JActionField createJActionField(boolean showTextField) {
+    return new JActionField(showTextField);
   }
 
   /**
@@ -2561,7 +2564,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
   }
-  
+
   /**
    * Sets the chooseFileAsBinaryPropertyAction.
    * 
