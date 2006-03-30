@@ -1,9 +1,17 @@
 package com.d2s.framework.security.swing;
 
 import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -12,15 +20,23 @@ import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
-import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
+import com.d2s.framework.util.swing.SwingUtil;
+import com.d2s.framework.view.IIconFactory;
 
 /**
  * <p>
- * Uses a Swing dialog window to query the user for answers to authentication
+ * Uses a Swing dialog to query the user for answers to authentication
  * questions. This can be used by a JAAS application to instantiate a
  * CallbackHandler
  * 
@@ -28,32 +44,37 @@ import javax.swing.JTextField;
  */
 public class DialogCallbackHandler implements CallbackHandler {
 
-  private Component        parentComponent;
-  private static final int JPasswordFieldLen = 8;
+  private Component           parentComponent;
+  private IIconFactory<Icon>  iconFactory;
+  private static final int    DEFAULT_FIELD_LENGTH = 32;
+  private static final Insets DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
 
-  /**
-   * Creates a callback dialog with the default parent window.
-   */
-  public DialogCallbackHandler() {
-  }
+  private Locale              locale;
 
-  /**
-   * Creates a callback dialog and specify the parent window.
-   * 
-   * @param parentComponent
-   *          the parent window -- specify <code>null</code> for the default
-   *          parent
-   */
-  public DialogCallbackHandler(Component parentComponent) {
-    this.parentComponent = parentComponent;
-  }
+  private String              okYesIconImageURL;
+  private String              noIconImageURL;
+  private String              cancelIconImageURL;
 
-  /*
-   * An interface for recording actions to carry out if the user clicks OK for
-   * the dialog.
-   */
-  private static interface Action {
-    void perform();
+  private String              infoIconImageURL;
+  private String              warningIconImageURL;
+  private String              errorIconImageURL;
+
+  private Icon getIcon(TextOutputCallback callback)
+      throws UnsupportedCallbackException {
+    switch (callback.getMessageType()) {
+      case TextOutputCallback.INFORMATION:
+        return iconFactory.getIcon(infoIconImageURL,
+            IIconFactory.SMALL_ICON_SIZE);
+      case TextOutputCallback.WARNING:
+        return iconFactory.getIcon(warningIconImageURL,
+            IIconFactory.SMALL_ICON_SIZE);
+      case TextOutputCallback.ERROR:
+        return iconFactory.getIcon(errorIconImageURL,
+            IIconFactory.SMALL_ICON_SIZE);
+      default:
+        throw new UnsupportedCallbackException(callback,
+            "Unrecognized message type");
+    }
   }
 
   /**
@@ -67,205 +88,381 @@ public class DialogCallbackHandler implements CallbackHandler {
    */
 
   public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
-    /* Collect messages to display in the dialog */
-    final List messages = new ArrayList(3);
 
-    /* Collection actions to perform if the user clicks OK */
-    final List okActions = new ArrayList(2);
+    String dialogTitle = null;
 
-    ConfirmationInfo confirmation = new ConfirmationInfo();
+    final JDialog callbackDialog;
+    if (parentComponent != null) {
+      Window parentWindow = SwingUtilities.windowForComponent(parentComponent);
+      if (parentWindow instanceof Dialog) {
+        callbackDialog = new JDialog((Dialog) parentWindow, true);
+      } else {
+        callbackDialog = new JDialog((Frame) parentWindow, true);
+      }
+    } else {
+      callbackDialog = new JDialog((Frame) null, true);
+    }
 
-    for (int i = 0; i < callbacks.length; i++) {
-      if (callbacks[i] instanceof TextOutputCallback) {
-        TextOutputCallback tc = (TextOutputCallback) callbacks[i];
+    List<ActionListener> proceedActions = new ArrayList<ActionListener>(2);
 
-        switch (tc.getMessageType()) {
-          case TextOutputCallback.INFORMATION:
-            confirmation.messageType = JOptionPane.INFORMATION_MESSAGE;
-            break;
-          case TextOutputCallback.WARNING:
-            confirmation.messageType = JOptionPane.WARNING_MESSAGE;
-            break;
-          case TextOutputCallback.ERROR:
-            confirmation.messageType = JOptionPane.ERROR_MESSAGE;
-            break;
-          default:
-            throw new UnsupportedCallbackException(callbacks[i],
-                "Unrecognized message type");
+    JPanel messagePanel = null;
+    JPanel inputPanel = null;
+    JPanel optionPanel = null;
+
+    for (Callback callback : callbacks) {
+      if (callback instanceof TextOutputCallback) {
+        if (messagePanel == null) {
+          messagePanel = new JPanel();
+          messagePanel.setLayout(new GridBagLayout());
         }
-
-        messages.add(tc.getMessage());
-
-      } else if (callbacks[i] instanceof NameCallback) {
-        final NameCallback nc = (NameCallback) callbacks[i];
-
-        JLabel prompt = new JLabel(nc.getPrompt());
-
-        final JTextField name = new JTextField();
-        String defaultName = nc.getDefaultName();
-        if (defaultName != null) {
-          name.setText(defaultName);
+        processTextOutputCallback(messagePanel, (TextOutputCallback) callback);
+        if (dialogTitle == null) {
+          dialogTitle = ((TextOutputCallback) callback).getMessage();
         }
-
-        /*
-         * Put the prompt and name in a horizontal box, and add that to the set
-         * of messages.
-         */
-        Box namePanel = Box.createHorizontalBox();
-        namePanel.add(prompt);
-        namePanel.add(name);
-        messages.add(namePanel);
-
-        /* Store the name back into the callback if OK */
-        okActions.add(new Action() {
-
-          public void perform() {
-            nc.setName(name.getText());
-          }
-        });
-
-      } else if (callbacks[i] instanceof PasswordCallback) {
-        final PasswordCallback pc = (PasswordCallback) callbacks[i];
-
-        JLabel prompt = new JLabel(pc.getPrompt());
-
-        final JPasswordField password = new JPasswordField(JPasswordFieldLen);
-        if (!pc.isEchoOn()) {
-          password.setEchoChar('*');
+      } else if (callback instanceof NameCallback) {
+        if (inputPanel == null) {
+          inputPanel = new JPanel();
+          inputPanel.setLayout(new GridBagLayout());
         }
+        processNameCallback(proceedActions, inputPanel, (NameCallback) callback);
 
-        Box passwordPanel = Box.createHorizontalBox();
-        passwordPanel.add(prompt);
-        passwordPanel.add(password);
-        messages.add(passwordPanel);
-
-        okActions.add(new Action() {
-
-          public void perform() {
-            pc.setPassword(password.getPassword());
-          }
-        });
-
-      } else if (callbacks[i] instanceof ConfirmationCallback) {
-        ConfirmationCallback cc = (ConfirmationCallback) callbacks[i];
-
-        confirmation.setCallback(cc);
-        if (cc.getPrompt() != null) {
-          messages.add(cc.getPrompt());
+      } else if (callback instanceof PasswordCallback) {
+        if (inputPanel == null) {
+          inputPanel = new JPanel();
+          inputPanel.setLayout(new GridBagLayout());
         }
+        processPasswordCallback(proceedActions, inputPanel,
+            (PasswordCallback) callback);
+
+      } else if (callback instanceof ConfirmationCallback) {
+        if (optionPanel == null) {
+          optionPanel = new JPanel();
+          optionPanel.setLayout(new GridBagLayout());
+        }
+        processConfirmationCallback(callbackDialog, proceedActions,
+            optionPanel, (ConfirmationCallback) callback);
 
       } else {
-        throw new UnsupportedCallbackException(callbacks[i],
+        throw new UnsupportedCallbackException(callback,
             "Unrecognized Callback");
       }
     }
 
-    /* Display the dialog */
-    int result = JOptionPane.showOptionDialog(parentComponent, messages
-        .toArray(), "Confirmation", /* title */
-    confirmation.optionType, confirmation.messageType, null, /* icon */
-    confirmation.options, /* options */
-    confirmation.initialValue); /* initialValue */
+    JPanel dialogPanel = new JPanel();
+    dialogPanel.setLayout(new GridBagLayout());
 
-    /* Perform the OK actions */
-    if (result == JOptionPane.OK_OPTION || result == JOptionPane.YES_OPTION) {
-      Iterator iterator = okActions.iterator();
-      while (iterator.hasNext()) {
-        ((Action) iterator.next()).perform();
-      }
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.insets = DEFAULT_INSETS;
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.gridy = GridBagConstraints.RELATIVE;
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    constraints.weightx = 1.0d;
+    constraints.weighty = 0.0d;
+    constraints.fill = GridBagConstraints.BOTH;
+
+    if (messagePanel != null) {
+      dialogPanel.add(messagePanel, constraints);
     }
-    confirmation.handleResult(result);
+    if (inputPanel != null) {
+      dialogPanel.add(inputPanel, constraints);
+    }
+    if (optionPanel == null) {
+      optionPanel = new JPanel();
+      optionPanel.setLayout(new GridBagLayout());
+      ConfirmationCallback cc = new ConfirmationCallback(
+          ConfirmationCallback.INFORMATION,
+          ConfirmationCallback.OK_CANCEL_OPTION, ConfirmationCallback.OK);
+      processConfirmationCallback(callbackDialog, proceedActions, optionPanel,
+          cc);
+    }
+    dialogPanel.add(optionPanel, constraints);
+
+    if (dialogTitle != null) {
+      callbackDialog.setTitle(dialogTitle);
+    }
+    callbackDialog.getContentPane().add(dialogPanel);
+    callbackDialog.pack();
+    SwingUtil.centerOnScreen(callbackDialog);
+    callbackDialog.setVisible(true);
   }
 
-  /*
-   * Provides assistance with translating between JAAS and Swing confirmation
-   * dialogs.
-   */
-  private static class ConfirmationInfo {
+  private void processConfirmationCallback(final JDialog callbackDialog,
+      List<ActionListener> proceedActions, JPanel optionPanel,
+      final ConfirmationCallback cc) throws UnsupportedCallbackException {
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.insets = DEFAULT_INSETS;
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.gridy = GridBagConstraints.RELATIVE;
+    constraints.gridwidth = 1;
+    constraints.weightx = 0.0d;
+    constraints.fill = GridBagConstraints.NONE;
 
-    private int[]                translations;
+    int confirmationOptionType = cc.getOptionType();
+    if (confirmationOptionType == ConfirmationCallback.UNSPECIFIED_OPTION) {
+      for (int i = 0; i < cc.getOptions().length; i++) {
+        final int optionIndex = i;
 
-    int                          optionType   = JOptionPane.OK_CANCEL_OPTION;
-    Object[]                     options      = null;
-    Object                       initialValue = null;
+        JButton optionButton = new JButton(cc.getOptions()[i]);
+        optionButton.addActionListener(new ActionListener() {
 
-    int                          messageType  = JOptionPane.QUESTION_MESSAGE;
-
-    private ConfirmationCallback callback;
-
-    /* Set the confirmation callback handler */
-    void setCallback(ConfirmationCallback callback)
-        throws UnsupportedCallbackException {
-      this.callback = callback;
-
-      int confirmationOptionType = callback.getOptionType();
+          public void actionPerformed(@SuppressWarnings("unused")
+          ActionEvent e) {
+            cc.setSelectedIndex(optionIndex);
+            callbackDialog.dispose();
+          }
+        });
+        optionPanel.add(optionButton, constraints);
+      }
+    } else {
+      if (locale == null) {
+        locale = Locale.getDefault();
+      }
       switch (confirmationOptionType) {
         case ConfirmationCallback.YES_NO_OPTION:
-          optionType = JOptionPane.YES_NO_OPTION;
-          translations = new int[] {JOptionPane.YES_OPTION,
-              ConfirmationCallback.YES, JOptionPane.NO_OPTION,
-              ConfirmationCallback.NO, JOptionPane.CLOSED_OPTION,
-              ConfirmationCallback.NO};
+          optionPanel.add(createOptionButton(callbackDialog, cc,
+              ConfirmationCallback.YES, UIManager.getString(
+                  "OptionPane.yesButtonText", locale), proceedActions),
+              constraints);
+          optionPanel.add(createOptionButton(callbackDialog, cc,
+              ConfirmationCallback.NO, UIManager.getString(
+                  "OptionPane.noButtonText", locale), proceedActions),
+              constraints);
           break;
         case ConfirmationCallback.YES_NO_CANCEL_OPTION:
-          optionType = JOptionPane.YES_NO_CANCEL_OPTION;
-          translations = new int[] {JOptionPane.YES_OPTION,
-              ConfirmationCallback.YES, JOptionPane.NO_OPTION,
-              ConfirmationCallback.NO, JOptionPane.CANCEL_OPTION,
-              ConfirmationCallback.CANCEL, JOptionPane.CLOSED_OPTION,
-              ConfirmationCallback.CANCEL};
+          optionPanel.add(createOptionButton(callbackDialog, cc,
+              ConfirmationCallback.YES, UIManager.getString(
+                  "OptionPane.yesButtonText", locale), proceedActions),
+              constraints);
+          optionPanel.add(createOptionButton(callbackDialog, cc,
+              ConfirmationCallback.NO, UIManager.getString(
+                  "OptionPane.noButtonText", locale), proceedActions),
+              constraints);
+          optionPanel.add(createOptionButton(callbackDialog, cc,
+              ConfirmationCallback.CANCEL, UIManager.getString(
+                  "OptionPane.cancelButtonText", locale), proceedActions),
+              constraints);
           break;
         case ConfirmationCallback.OK_CANCEL_OPTION:
-          optionType = JOptionPane.OK_CANCEL_OPTION;
-          translations = new int[] {JOptionPane.OK_OPTION,
-              ConfirmationCallback.OK, JOptionPane.CANCEL_OPTION,
-              ConfirmationCallback.CANCEL, JOptionPane.CLOSED_OPTION,
-              ConfirmationCallback.CANCEL};
-          break;
-        case ConfirmationCallback.UNSPECIFIED_OPTION:
-          options = callback.getOptions();
-          /*
-           * There's no way to know if the default option means to cancel the
-           * login, but there isn't a better way to guess this.
-           */
-          translations = new int[] {JOptionPane.CLOSED_OPTION,
-              callback.getDefaultOption()};
+          optionPanel.add(createOptionButton(callbackDialog, cc,
+              ConfirmationCallback.OK, UIManager.getString(
+                  "OptionPane.okButtonText", locale), proceedActions),
+              constraints);
+          optionPanel.add(createOptionButton(callbackDialog, cc,
+              ConfirmationCallback.CANCEL, UIManager.getString(
+                  "OptionPane.cancelButtonText", locale), proceedActions),
+              constraints);
           break;
         default:
-          throw new UnsupportedCallbackException(callback,
+          throw new UnsupportedCallbackException(cc,
               "Unrecognized option type: " + confirmationOptionType);
       }
+    }
+  }
 
-      int confirmationMessageType = callback.getMessageType();
-      switch (confirmationMessageType) {
-        case ConfirmationCallback.WARNING:
-          messageType = JOptionPane.WARNING_MESSAGE;
-          break;
-        case ConfirmationCallback.ERROR:
-          messageType = JOptionPane.ERROR_MESSAGE;
-          break;
-        case ConfirmationCallback.INFORMATION:
-          messageType = JOptionPane.INFORMATION_MESSAGE;
-          break;
-        default:
-          throw new UnsupportedCallbackException(callback,
-              "Unrecognized message type: " + confirmationMessageType);
-      }
+  private void processPasswordCallback(
+      final List<ActionListener> proceedActions, JPanel inputPanel,
+      final PasswordCallback pc) {
+    JLabel promptLabel = new JLabel(pc.getPrompt());
+
+    final JPasswordField passwordField = new JPasswordField(
+        DEFAULT_FIELD_LENGTH);
+    if (!pc.isEchoOn()) {
+      passwordField.setEchoChar('*');
     }
 
-    /* Process the result returned by the Swing dialog */
-    void handleResult(int result) {
-      if (callback == null) {
-        return;
-      }
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.insets = DEFAULT_INSETS;
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.gridy = GridBagConstraints.RELATIVE;
+    constraints.gridwidth = 1;
+    constraints.weightx = 1.0d;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    inputPanel.add(promptLabel, constraints);
 
-      for (int i = 0; i < translations.length; i += 2) {
-        if (translations[i] == result) {
-          result = translations[i + 1];
-          break;
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    inputPanel.add(passwordField, constraints);
+
+    proceedActions.add(new ActionListener() {
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        pc.setPassword(passwordField.getPassword());
+      }
+    });
+  }
+
+  private void processNameCallback(final List<ActionListener> proceedActions,
+      JPanel inputPanel, final NameCallback nc) {
+    JLabel promptLabel = new JLabel(nc.getPrompt());
+    final JTextField nameTextField = new JTextField(DEFAULT_FIELD_LENGTH);
+
+    String defaultName = nc.getDefaultName();
+    if (defaultName != null) {
+      nameTextField.setText(defaultName);
+    }
+
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.insets = DEFAULT_INSETS;
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.gridy = GridBagConstraints.RELATIVE;
+    constraints.gridwidth = 1;
+    constraints.weightx = 1.0d;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    inputPanel.add(promptLabel, constraints);
+
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    inputPanel.add(nameTextField, constraints);
+
+    proceedActions.add(new ActionListener() {
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        nc.setName(nameTextField.getText());
+      }
+    });
+  }
+
+  private void processTextOutputCallback(JPanel messagePanel,
+      TextOutputCallback toc) throws UnsupportedCallbackException {
+    JLabel messageLabel = new JLabel(toc.getMessage(), getIcon(toc),
+        SwingConstants.LEADING);
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.insets = DEFAULT_INSETS;
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.gridy = GridBagConstraints.RELATIVE;
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    constraints.weightx = 1.0d;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    messagePanel.add(messageLabel, constraints);
+  }
+
+  private JButton createOptionButton(final JDialog callbackDialog,
+      final ConfirmationCallback cc, final int option, String text,
+      final List<ActionListener> proceedActions) {
+    JButton optionButton = new JButton(text);
+    if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
+      optionButton.setIcon(iconFactory.getIcon(okYesIconImageURL,
+          IIconFactory.SMALL_ICON_SIZE));
+      optionButton.addActionListener(new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+          for (ActionListener proceedAction : proceedActions) {
+            proceedAction.actionPerformed(e);
+          }
+          cc.setSelectedIndex(option);
+          callbackDialog.dispose();
         }
+      });
+    } else {
+      if (option == ConfirmationCallback.NO) {
+        optionButton.setIcon(iconFactory.getIcon(noIconImageURL,
+            IIconFactory.SMALL_ICON_SIZE));
+      } else if (option == ConfirmationCallback.CANCEL) {
+        optionButton.setIcon(iconFactory.getIcon(cancelIconImageURL,
+            IIconFactory.SMALL_ICON_SIZE));
       }
-      callback.setSelectedIndex(result);
+      optionButton.addActionListener(new ActionListener() {
+
+        public void actionPerformed(@SuppressWarnings("unused")
+        ActionEvent e) {
+          cc.setSelectedIndex(option);
+          callbackDialog.dispose();
+        }
+      });
     }
+    if (cc.getDefaultOption() == option) {
+      callbackDialog.getRootPane().setDefaultButton(optionButton);
+    }
+    return optionButton;
+  }
+
+  /**
+   * Sets the errorIconImageURL.
+   * 
+   * @param errorIconImageURL
+   *          the errorIconImageURL to set.
+   */
+  public void setErrorIconImageURL(String errorIconImageURL) {
+    this.errorIconImageURL = errorIconImageURL;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *          the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<Icon> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the infoIconImageURL.
+   * 
+   * @param infoIconImageURL
+   *          the infoIconImageURL to set.
+   */
+  public void setInfoIconImageURL(String infoIconImageURL) {
+    this.infoIconImageURL = infoIconImageURL;
+  }
+
+  /**
+   * Sets the locale.
+   * 
+   * @param locale
+   *          the locale to set.
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
+  }
+
+  /**
+   * Sets the warningIconImageURL.
+   * 
+   * @param warningIconImageURL
+   *          the warningIconImageURL to set.
+   */
+  public void setWarningIconImageURL(String warningIconImageURL) {
+    this.warningIconImageURL = warningIconImageURL;
+  }
+
+  /**
+   * Sets the parentComponent.
+   * 
+   * @param parentComponent
+   *          the parentComponent to set.
+   */
+  public void setParentComponent(Component parentComponent) {
+    this.parentComponent = parentComponent;
+  }
+
+  /**
+   * Sets the cancelIconImageURL.
+   * 
+   * @param cancelIconImageURL
+   *          the cancelIconImageURL to set.
+   */
+  public void setCancelIconImageURL(String cancelIconImageURL) {
+    this.cancelIconImageURL = cancelIconImageURL;
+  }
+
+  /**
+   * Sets the noIconImageURL.
+   * 
+   * @param noIconImageURL
+   *          the noIconImageURL to set.
+   */
+  public void setNoIconImageURL(String noIconImageURL) {
+    this.noIconImageURL = noIconImageURL;
+  }
+
+  /**
+   * Sets the okYesIconImageURL.
+   * 
+   * @param okYesIconImageURL
+   *          the okYesIconImageURL to set.
+   */
+  public void setOkYesIconImageURL(String okYesIconImageURL) {
+    this.okYesIconImageURL = okYesIconImageURL;
   }
 }

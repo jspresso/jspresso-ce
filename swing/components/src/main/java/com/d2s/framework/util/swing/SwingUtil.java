@@ -6,6 +6,8 @@ package com.d2s.framework.util.swing;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -39,6 +41,7 @@ public final class SwingUtil {
 
   private static final String  TEXTFIELD_FONT_KEY                          = "TextField.font";
   private static final String  FORMATTED_TEXTFIELD_FONT_KEY                = "FormattedTextField.font";
+  private static final String  PASSWORDFIELD_FONT_KEY                      = "PasswordField.font";
   private static final String  TEXTFIELD_INACTIVE_BACKGROUND_KEY           = "TextField.inactiveBackground";
   private static final String  FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY = "FormattedTextField.inactiveBackground";
 
@@ -204,6 +207,7 @@ public final class SwingUtil {
         .get(TEXTFIELD_FONT_KEY));
     UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY, UIManager
         .get(TEXTFIELD_INACTIVE_BACKGROUND_KEY));
+    UIManager.put(PASSWORDFIELD_FONT_KEY, UIManager.get(TEXTFIELD_FONT_KEY));
   }
 
   /**
@@ -308,5 +312,17 @@ public final class SwingUtil {
         }
       }
     }
+  }
+
+  /**
+   * Center a window on screen.
+   * 
+   * @param w
+   *          the window to center on screen.
+   */
+  public static void centerOnScreen(Window w) {
+    Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
+    w.setLocation((screenDim.width - w.getWidth()) / 2, (screenDim.height - w
+        .getHeight()) / 2);
   }
 }

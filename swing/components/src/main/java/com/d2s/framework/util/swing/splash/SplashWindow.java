@@ -11,7 +11,6 @@
 package com.d2s.framework.util.swing.splash;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -22,6 +21,8 @@ import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.net.URL;
+
+import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * A Splash window.
@@ -99,9 +100,7 @@ public final class SplashWindow extends Window {
     int imgWidth = image.getWidth(this);
     int imgHeight = image.getHeight(this);
     setSize(imgWidth, imgHeight);
-    Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-    setLocation((screenDim.width - imgWidth) / 2,
-        (screenDim.height - imgHeight) / 2);
+    SwingUtil.centerOnScreen(this);
 
     // Users shall be able to close the splash window by
     // clicking on its display area. This mouse listener

@@ -2,80 +2,88 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <!--
-	Swing root application context for the D2S framework.
+  Swing root application context for the D2S framework.
 -->
 <beans default-lazy-init="true">
 
-	<!--
-		The implementation used as ListSelectionModelBinder.
-	-->
-	<bean id="listSelectionModelBinder" class="com.d2s.framework.binding.swing.DefaultListSelectionModelBinder"></bean>
+  <!--
+    The implementation used as ListSelectionModelBinder.
+  -->
+  <bean id="listSelectionModelBinder" class="com.d2s.framework.binding.swing.DefaultListSelectionModelBinder"></bean>
 
-	<!--
-		The implementation used as TreeSelectionModelBinder.
-	-->
-	<bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.swing.DefaultTreeSelectionModelBinder"></bean>
+  <!--
+    The implementation used as TreeSelectionModelBinder.
+  -->
+  <bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.swing.DefaultTreeSelectionModelBinder"></bean>
 
-	<!--
-		Root action beans.
-	-->
-	<bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
-		class="com.d2s.framework.application.frontend.action.std.FindAction" />
+  <!--
+    Root action beans.
+  -->
+  <bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
+    class="com.d2s.framework.application.frontend.action.std.FindAction" />
 
-	<bean id="lovOkFrontAction" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction" />
+  <bean id="lovOkFrontAction" parent="abstractFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction" />
 
-	<bean id="cancelDialogFrontAction" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.swing.std.DialogCancelAction" />
+  <bean id="cancelDialogFrontAction" parent="abstractFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.std.DialogCancelAction" />
 
-	<!-- 
-		Action beans
-	-->
-	<bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
-		class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction" />
+  <!-- 
+    Action beans
+  -->
+  <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction" />
 
-	<!--
-		The implementation used as view factory.
-	-->
-	<bean id="iconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" />
+  <!--
+    The implementation used as view factory.
+  -->
+  <bean id="iconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" />
 
-	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.swing.SwingActionFactory" />
+  <bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.swing.SwingActionFactory" />
 
-	<bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction" />
+  <bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction" />
 
-	<bean id="lovAction" parent="abstractLovAction"
-		class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" />
+  <bean id="lovAction" parent="abstractLovAction"
+    class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" />
 
-	<bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
-		class="com.d2s.framework.application.frontend.action.swing.file.ChooseFileAsBinaryPropertyAction" />
+  <bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
+    class="com.d2s.framework.application.frontend.action.swing.file.ChooseFileAsBinaryPropertyAction" />
 
-	<bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory">
-		<!--
-			<constructor-arg index="0" value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
-			<constructor-arg index="0"
-			value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
-			<constructor-arg index="0"
-			value="com.jgoodies.looks.plastic.PlasticLookAndFeel" />
-			<constructor-arg index="0"
-			value="com.jgoodies.looks.plastic.Plastic3DLookAndFeel" />
-			<constructor-arg index="0"
-			value="com.jgoodies.looks.plastic.PlasticXPLookAndFeel" />
-		-->
-	</bean>
+  <bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory">
+    <!--
+      <constructor-arg index="0" value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
+      <constructor-arg index="0"
+      value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
+      <constructor-arg index="0"
+      value="com.jgoodies.looks.plastic.PlasticLookAndFeel" />
+      <constructor-arg index="0"
+      value="com.jgoodies.looks.plastic.Plastic3DLookAndFeel" />
+      <constructor-arg index="0"
+      value="com.jgoodies.looks.plastic.PlasticXPLookAndFeel" />
+    -->
+  </bean>
 
-	<bean id="jgoodiesViewFactory" class="com.d2s.framework.view.swing.jgoodies.JGoodiesSwingViewFactory"
-		parent="viewFactory" />
+  <bean id="jgoodiesViewFactory" class="com.d2s.framework.view.swing.jgoodies.JGoodiesSwingViewFactory"
+    parent="viewFactory" />
 
-	<!--
-		The controllers.
-	-->
-	<bean id="frontController" abstract="true" parent="abstractFrontController"
-		class="com.d2s.framework.application.frontend.controller.swing.DefaultSwingController">
-		<property name="viewFactory" ref="jgoodiesViewFactory" />
-		<property name="loginCallbackHandler">
-			<bean class="com.sun.security.auth.callback.DialogCallbackHandler" />
-		</property>
-	</bean>
+  <!--
+    The controllers.
+  -->
+  <bean id="frontController" abstract="true" parent="abstractFrontController"
+    class="com.d2s.framework.application.frontend.controller.swing.DefaultSwingController">
+    <property name="viewFactory" ref="jgoodiesViewFactory" />
+    <property name="loginCallbackHandler">
+      <bean class="com.d2s.framework.security.swing.DialogCallbackHandler">
+        <property name="iconFactory" ref="iconFactory" />
+        <property name="okYesIconImageURL" value="classpath:images/ok-48x48.png" />
+        <property name="noIconImageURL" value="classpath:images/no-48x48.png" />
+        <property name="cancelIconImageURL" value="classpath:images/cancel-48x48.png" />
+        <property name="infoIconImageURL" value="classpath:images/info-48x48.png" />
+        <property name="warningIconImageURL" value="classpath:images/warning-48x48.png" />
+        <property name="errorIconImageURL" value="classpath:images/error-48x48.png" />
+      </bean>
+    </property>
+  </bean>
 </beans>
 

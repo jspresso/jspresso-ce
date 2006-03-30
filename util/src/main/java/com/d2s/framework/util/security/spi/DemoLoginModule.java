@@ -10,6 +10,7 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
@@ -99,9 +100,10 @@ public class DemoLoginModule implements LoginModule {
           + "to garner authentication information from the user");
     }
 
-    Callback[] callbacks = new Callback[2];
-    callbacks[0] = new NameCallback("user name : ");
-    callbacks[1] = new PasswordCallback("password  : ", false);
+    Callback[] callbacks = new Callback[3];
+    callbacks[0] = new NameCallback("User");
+    callbacks[1] = new PasswordCallback("Password", false);
+    callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION, "Enter login information :");
 
     try {
       callbackHandler.handle(callbacks);
@@ -136,7 +138,7 @@ public class DemoLoginModule implements LoginModule {
 
     // verify the username/password
     boolean usernameCorrect = false;
-    if (username.equals("demo")) {
+    if ("demo".equals(username)) {
       usernameCorrect = true;
     }
     if (usernameCorrect && password.length == 4 && password[0] == 'd'
