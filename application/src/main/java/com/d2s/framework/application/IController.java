@@ -42,4 +42,11 @@ public interface IController extends IActionHandler {
    * @return the merged entity.
    */
   IEntity merge(IEntity entity, MergeMode mergeMode);
+
+  /**
+   * Stops the controller. This method performs any necessary cleanup.
+   * 
+   * @return true if the stop was successful.
+   */
+  boolean stop();
 }

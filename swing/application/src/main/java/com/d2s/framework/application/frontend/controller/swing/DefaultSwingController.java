@@ -8,11 +8,14 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.security.auth.callback.CallbackHandler;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -33,6 +36,7 @@ import javax.swing.event.InternalFrameEvent;
 import com.d2s.framework.application.ControllerException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
+import com.d2s.framework.security.swing.DialogCallbackHandler;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.WaitCursorTimer;
 import com.d2s.framework.view.IIconFactory;
@@ -78,10 +82,28 @@ public class DefaultSwingController extends
       controllerFrame = createControllerFrame();
       controllerFrame.pack();
       controllerFrame.setSize(1100, 800);
+      SwingUtil.centerOnScreen(controllerFrame);
       controllerFrame.setVisible(true);
-      return true;
+      CallbackHandler callbackHandler = getLoginCallbackHandler();
+      if (callbackHandler instanceof DialogCallbackHandler) {
+        ((DialogCallbackHandler) callbackHandler)
+            .setParentComponent(controllerFrame);
+      }
+      if (performLogin()) {
+        return true;
+      }
+      stop();
     }
     return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    controllerFrame.dispose();
+    return true;
   }
 
   private void displayModule(String moduleId) {
@@ -177,9 +199,20 @@ public class DefaultSwingController extends
     frame.setContentPane(new JDesktopPane());
     frame.setIconImage(((ImageIcon) getIconFactory().getIcon(getIconImageURL(),
         IIconFactory.SMALL_ICON_SIZE)).getImage());
-    frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
     frame.setJMenuBar(getApplicationMenuBar());
     frame.setGlassPane(createHermeticGlassPane());
+    frame.addWindowListener(new WindowAdapter() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void windowClosing(@SuppressWarnings("unused")
+      WindowEvent e) {
+        stop();
+      }
+    });
     return frame;
   }
 

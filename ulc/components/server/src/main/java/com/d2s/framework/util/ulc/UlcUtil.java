@@ -3,8 +3,10 @@
  */
 package com.d2s.framework.util.ulc;
 
+import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCContainer;
+import com.ulcjava.base.application.ULCWindow;
 import com.ulcjava.base.application.util.Color;
 
 /**
@@ -113,5 +115,16 @@ public final class UlcUtil {
         renderer.setBackground(collectionComponent.getBackground());
       }
     }
+  }
+
+  /**
+   * Center a window on screen.
+   * 
+   * @param w
+   *          the window to center on screen.
+   */
+  public static void centerOnScreen(ULCWindow w) {
+    w.setLocation((ClientContext.getScreenWidth() - w.getWidth()) / 2,
+        (ClientContext.getScreenHeight() - w.getHeight()) / 2);
   }
 }

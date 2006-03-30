@@ -56,7 +56,19 @@
     The controllers.
   -->
   <bean id="frontController" abstract="true" parent="abstractFrontController"
-    class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController" />
+    class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController">
+    <property name="loginCallbackHandler">
+      <bean class="com.d2s.framework.security.ulc.DialogCallbackHandler">
+        <property name="iconFactory" ref="iconFactory" />
+        <property name="okYesIconImageURL" value="classpath:images/ok-48x48.png" />
+        <property name="noIconImageURL" value="classpath:images/no-48x48.png" />
+        <property name="cancelIconImageURL" value="classpath:images/cancel-48x48.png" />
+        <property name="infoIconImageURL" value="classpath:images/info-48x48.png" />
+        <property name="warningIconImageURL" value="classpath:images/warning-48x48.png" />
+        <property name="errorIconImageURL" value="classpath:images/error-48x48.png" />
+      </bean>
+    </property>
+  </bean>
 
 </beans>
 

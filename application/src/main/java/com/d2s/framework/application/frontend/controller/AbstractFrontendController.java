@@ -206,12 +206,8 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    */
   public boolean start(IBackendController peerController, Locale startingLocale) {
     setBackendController(peerController);
-    if (performLogin()) {
-      this.locale = startingLocale;
-      peerController.start();
-      return true;
-    }
-    return false;
+    this.locale = startingLocale;
+    return peerController.start();
   }
 
   /**
@@ -500,7 +496,12 @@ public abstract class AbstractFrontendController<E> extends AbstractController
     this.loginCallbackHandler = loginCallbackHandler;
   }
 
-  private boolean performLogin() {
+  /**
+   * Performs login using JAAS configuration.
+   * 
+   * @return true if login is successful.
+   */
+  protected boolean performLogin() {
     // Obtain a LoginContext, needed for authentication.
     // Tell it to use the LoginModule implementation
     // specified by the entry named "Sample" in the
@@ -525,14 +526,14 @@ public abstract class AbstractFrontendController<E> extends AbstractController
         lc.login();
         // if we return with no exception,
         // authentication succeeded
-        getBackendController().getApplicationSession().setOwner(
-            lc.getSubject());
+        getBackendController().getApplicationSession()
+            .setOwner(lc.getSubject());
         break;
       } catch (LoginException le) {
         System.err.println("Authentication failed:");
         System.err.println("  " + le.getMessage());
         try {
-          Thread.sleep(2000);
+          Thread.sleep(1000);
         } catch (Exception e) {
           // ignore
         }
@@ -544,5 +545,22 @@ public abstract class AbstractFrontendController<E> extends AbstractController
       return false;
     }
     return true;
+  }
+
+  
+  /**
+   * Gets the loginCallbackHandler.
+   * 
+   * @return the loginCallbackHandler.
+   */
+  protected CallbackHandler getLoginCallbackHandler() {
+    return loginCallbackHandler;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean stop() {
+    return getBackendController().stop();
   }
 }

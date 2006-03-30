@@ -9,10 +9,12 @@ import java.util.Map;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
+import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
 import com.ulcjava.base.application.AbstractAction;
+import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
 import com.ulcjava.base.application.ULCFrame;
@@ -21,6 +23,8 @@ import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
 import com.ulcjava.base.application.event.ActionEvent;
+import com.ulcjava.base.application.event.WindowEvent;
+import com.ulcjava.base.application.event.serializable.IWindowListener;
 import com.ulcjava.base.application.util.ULCIcon;
 import com.ulcjava.base.shared.IWindowConstants;
 
@@ -51,11 +55,22 @@ public class DefaultUlcController extends
     if (super.start(backendController, locale)) {
       controllerFrame = createControllerFrame();
       controllerFrame.pack();
-      controllerFrame.setSize(1024, 768);
+      controllerFrame.setSize(1100, 800);
+      UlcUtil.centerOnScreen(controllerFrame);
       controllerFrame.setVisible(true);
       return true;
     }
     return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    controllerFrame.setVisible(false);
+    ApplicationContext.terminate();
+    return true;
   }
 
   private void displayModule(String moduleId) {
@@ -123,8 +138,17 @@ public class DefaultUlcController extends
     frame.setContentPane(new ULCDesktopPane());
     frame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
         IIconFactory.SMALL_ICON_SIZE));
-    frame.setDefaultCloseOperation(ULCFrame.TERMINATE_ON_CLOSE);
+    frame.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
     frame.setMenuBar(getApplicationMenuBar());
+    frame.addWindowListener(new IWindowListener() {
+
+      private static final long serialVersionUID = -7845554617417316256L;
+
+      public void windowClosing(@SuppressWarnings("unused")
+      WindowEvent event) {
+        stop();
+      }
+    });
     return frame;
   }
 

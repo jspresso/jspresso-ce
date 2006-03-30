@@ -60,8 +60,15 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public void start() {
-    // Empty as of now
+  public boolean start() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean stop() {
+    return true;
   }
 
   /**
