@@ -94,7 +94,12 @@ public class DialogCallbackHandler implements CallbackHandler {
 
     final JDialog callbackDialog;
     if (parentComponent != null) {
-      Window parentWindow = SwingUtilities.windowForComponent(parentComponent);
+      Window parentWindow;
+      if (parentComponent instanceof Window) {
+        parentWindow = (Window) parentComponent;
+      } else {
+        parentWindow = SwingUtilities.windowForComponent(parentComponent);
+      }
       if (parentWindow instanceof Dialog) {
         callbackDialog = new JDialog((Dialog) parentWindow, true);
       } else {
@@ -103,7 +108,8 @@ public class DialogCallbackHandler implements CallbackHandler {
     } else {
       callbackDialog = new JDialog((Frame) null, true);
     }
-    callbackDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    callbackDialog
+        .setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
     List<ActionListener> proceedActions = new ArrayList<ActionListener>(2);
 

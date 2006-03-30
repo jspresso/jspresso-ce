@@ -5,6 +5,7 @@ package com.d2s.framework.application.frontend.controller.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.MouseAdapter;
@@ -16,6 +17,8 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -81,6 +84,8 @@ public class DefaultSwingController extends
       waitTimer.start();
       controllerFrame = createControllerFrame();
       controllerFrame.pack();
+      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+      controllerFrame.setSize(12 * screenRes, 8 * screenRes);
       controllerFrame.setSize(1100, 800);
       SwingUtil.centerOnScreen(controllerFrame);
       controllerFrame.setVisible(true);
@@ -95,6 +100,52 @@ public class DefaultSwingController extends
       stop();
     }
     return false;
+  }
+
+  /**
+   * Performs login using JAAS configuration.
+   * 
+   * @return true if login is successful.
+   */
+  private boolean performLogin() {
+    // Obtain a LoginContext, needed for authentication.
+    // Tell it to use the LoginModule implementation
+    // specified by the entry named "Sample" in the
+    // JAAS login configuration file and to also use the
+    // specified CallbackHandler.
+    LoginContext lc = null;
+    try {
+      lc = new LoginContext(getLoginContextName(), getLoginCallbackHandler());
+    } catch (LoginException le) {
+      System.err.println("Cannot create LoginContext. " + le.getMessage());
+      return false;
+    } catch (SecurityException se) {
+      System.err.println("Cannot create LoginContext. " + se.getMessage());
+      return false;
+    }
+
+    // the user has 3 attempts to authenticate successfully
+    int i;
+    for (i = 0; i < 3; i++) {
+      try {
+        // attempt authentication
+        lc.login();
+        // if we return with no exception,
+        // authentication succeeded
+        getBackendController().getApplicationSession()
+            .setOwner(lc.getSubject());
+        break;
+      } catch (LoginException le) {
+        System.err.println("Authentication failed:");
+        System.err.println("  " + le.getMessage());
+      }
+    }
+
+    // did they fail three times?
+    if (i == 3) {
+      return false;
+    }
+    return true;
   }
 
   /**
@@ -233,6 +284,8 @@ public class DefaultSwingController extends
           moduleId, moduleDescriptor));
       modulesMenu.add(moduleMenuItem);
     }
+    modulesMenu.addSeparator();
+    modulesMenu.add(new JMenuItem(new QuitAction()));
     return modulesMenu;
   }
 
@@ -266,6 +319,31 @@ public class DefaultSwingController extends
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       displayModule(moduleId);
+    }
+  }
+
+  private final class QuitAction extends AbstractAction {
+
+    private static final long serialVersionUID = -5797994634301619085L;
+
+    /**
+     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     */
+    public QuitAction() {
+      putValue(Action.NAME, getLabelTranslator().getTranslation("QUIT",
+          getLocale()));
+      putValue(Action.SHORT_DESCRIPTION, getDescriptionTranslator()
+          .getTranslation("QUIT", getLocale()));
+    }
+
+    /**
+     * displays the selected module.
+     * <p>
+     * {@inheritDoc}
+     */
+    public void actionPerformed(@SuppressWarnings("unused")
+    ActionEvent e) {
+      stop();
     }
   }
 

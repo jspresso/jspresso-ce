@@ -3,18 +3,31 @@
  */
 package com.d2s.framework.application.frontend.controller.ulc;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.TextOutputCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
+
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
+import com.d2s.framework.security.ulc.DialogCallbackHandler;
+import com.d2s.framework.security.ulc.ILoginListener;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
 import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
+import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
 import com.ulcjava.base.application.ULCFrame;
@@ -39,10 +52,13 @@ import com.ulcjava.base.shared.IWindowConstants;
  * @author Vincent Vandenschrick
  */
 public class DefaultUlcController extends
-    AbstractFrontendController<ULCComponent> {
+    AbstractFrontendController<ULCComponent> implements ILoginListener {
 
   private ULCFrame                      controllerFrame;
   private Map<String, ULCInternalFrame> moduleInternalFrames;
+  private NameCallback                  nameLoginCallback;
+  private PasswordCallback              passwordLoginCallback;
+  private int                           loginRetries;
 
   /**
    * Creates the initial view from the root view descriptor, then a JFrame
@@ -53,14 +69,89 @@ public class DefaultUlcController extends
   @Override
   public boolean start(IBackendController backendController, Locale locale) {
     if (super.start(backendController, locale)) {
+      loginRetries = 0;
       controllerFrame = createControllerFrame();
       controllerFrame.pack();
-      controllerFrame.setSize(1100, 800);
+      int screenRes = ClientContext.getScreenResolution();
+      controllerFrame.setSize(12 * screenRes, 8 * screenRes);
       UlcUtil.centerOnScreen(controllerFrame);
       controllerFrame.setVisible(true);
+      CallbackHandler callbackHandler = getLoginCallbackHandler();
+      if (callbackHandler instanceof DialogCallbackHandler) {
+        ((DialogCallbackHandler) callbackHandler)
+            .setParentComponent(controllerFrame);
+        ((DialogCallbackHandler) callbackHandler).setLoginListener(this);
+      }
+      initiateLogin();
       return true;
     }
     return false;
+  }
+
+  private void initiateLogin() {
+    Callback[] callbacks = new Callback[3];
+    nameLoginCallback = new NameCallback("User");
+    passwordLoginCallback = new PasswordCallback("Password", false);
+    callbacks[0] = nameLoginCallback;
+    callbacks[1] = passwordLoginCallback;
+    callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION,
+        "Enter login information :");
+    try {
+      getLoginCallbackHandler().handle(callbacks);
+    } catch (IOException ex) {
+      // NO-OP
+    } catch (UnsupportedCallbackException ex) {
+      // NO-OP
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void loginComplete() {
+    LoginContext lc = null;
+    try {
+      lc = new LoginContext(getLoginContextName(),
+          new AutomaticCallbackHandler());
+    } catch (LoginException le) {
+      System.err.println("Cannot create LoginContext. " + le.getMessage());
+    } catch (SecurityException se) {
+      System.err.println("Cannot create LoginContext. " + se.getMessage());
+    }
+    try {
+      // attempt authentication
+      lc.login();
+      // if we return with no exception,
+      // authentication succeeded
+      getBackendController().getApplicationSession().setOwner(lc.getSubject());
+      return;
+    } catch (LoginException le) {
+      loginRetries++;
+      System.err.println("Authentication failed:");
+      System.err.println("  " + le.getMessage());
+    }
+    if (loginRetries < 3) {
+      initiateLogin();
+    } else {
+      stop();
+    }
+  }
+
+  private class AutomaticCallbackHandler implements CallbackHandler {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void handle(Callback[] callbacks) {
+      for (Callback callback : callbacks) {
+        if (callback instanceof NameCallback) {
+          ((NameCallback) callback).setName(nameLoginCallback.getName());
+        } else if (callback instanceof PasswordCallback) {
+          ((PasswordCallback) callback).setPassword(passwordLoginCallback
+              .getPassword());
+        }
+      }
+    }
   }
 
   /**
@@ -169,6 +260,8 @@ public class DefaultUlcController extends
           moduleId, moduleDescriptor));
       modulesMenu.add(moduleMenuItem);
     }
+    modulesMenu.addSeparator();
+    modulesMenu.add(new ULCMenuItem(new QuitAction()));
     return modulesMenu;
   }
 
@@ -205,6 +298,32 @@ public class DefaultUlcController extends
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       displayModule(moduleId);
+    }
+  }
+
+  private final class QuitAction extends AbstractAction {
+
+    private static final long serialVersionUID = -1476651758085260422L;
+
+    /**
+     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     */
+    public QuitAction() {
+      putValue(com.ulcjava.base.application.IAction.NAME, getLabelTranslator()
+          .getTranslation("QUIT", getLocale()));
+      putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
+          getDescriptionTranslator().getTranslation("QUIT", getLocale()));
+    }
+
+    /**
+     * displays the selected module.
+     * <p>
+     * {@inheritDoc}
+     */
+    @Override
+    public void actionPerformed(@SuppressWarnings("unused")
+    ActionEvent e) {
+      stop();
     }
   }
 

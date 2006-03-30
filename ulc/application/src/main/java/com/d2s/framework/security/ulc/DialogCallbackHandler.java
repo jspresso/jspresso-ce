@@ -15,6 +15,7 @@ import javax.swing.UIManager;
 
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
+import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.GridBagConstraints;
 import com.ulcjava.base.application.ULCButton;
 import com.ulcjava.base.application.ULCComponent;
@@ -27,6 +28,7 @@ import com.ulcjava.base.application.ULCWindow;
 import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
+import com.ulcjava.base.application.util.Dimension;
 import com.ulcjava.base.application.util.Insets;
 import com.ulcjava.base.application.util.ULCIcon;
 import com.ulcjava.base.shared.IDefaults;
@@ -42,6 +44,8 @@ import com.ulcjava.base.shared.IWindowConstants;
 public class DialogCallbackHandler implements CallbackHandler {
 
   private ULCComponent          parentComponent;
+  private ILoginListener        loginListener;
+
   private IIconFactory<ULCIcon> iconFactory;
   private static final int      DEFAULT_FIELD_LENGTH = 32;
   private static final Insets   DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
@@ -90,13 +94,20 @@ public class DialogCallbackHandler implements CallbackHandler {
 
     final ULCDialog callbackDialog;
     if (parentComponent != null) {
-      ULCWindow parentWindow = UlcUtilities.windowForComponent(parentComponent);
+      ULCWindow parentWindow;
+      if (parentComponent instanceof ULCWindow) {
+        parentWindow = (ULCWindow) parentComponent;
+      } else {
+        parentWindow = UlcUtilities.windowForComponent(parentComponent);
+      }
       callbackDialog = new ULCDialog(parentWindow, true);
     } else {
       callbackDialog = new ULCDialog((ULCWindow) null, true);
     }
     callbackDialog
         .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    int screenRes = ClientContext.getScreenResolution();
+    callbackDialog.setSize(new Dimension(4 * screenRes, 2 * screenRes));
 
     List<IActionListener> proceedActions = new ArrayList<IActionListener>(2);
 
@@ -200,7 +211,7 @@ public class DialogCallbackHandler implements CallbackHandler {
           public void actionPerformed(@SuppressWarnings("unused")
           ActionEvent e) {
             cc.setSelectedIndex(optionIndex);
-            callbackDialog.setVisible(false);
+            endClientSideLoginProcess(callbackDialog);
           }
         });
         optionPanel.add(optionButton, constraints);
@@ -352,7 +363,7 @@ public class DialogCallbackHandler implements CallbackHandler {
             proceedAction.actionPerformed(e);
           }
           cc.setSelectedIndex(option);
-          callbackDialog.setVisible(false);
+          endClientSideLoginProcess(callbackDialog);
         }
       });
     } else {
@@ -370,7 +381,7 @@ public class DialogCallbackHandler implements CallbackHandler {
         public void actionPerformed(@SuppressWarnings("unused")
         ActionEvent e) {
           cc.setSelectedIndex(option);
-          callbackDialog.setVisible(false);
+          endClientSideLoginProcess(callbackDialog);
         }
       });
     }
@@ -378,6 +389,13 @@ public class DialogCallbackHandler implements CallbackHandler {
       callbackDialog.getRootPane().setDefaultButton(optionButton);
     }
     return optionButton;
+  }
+
+  private void endClientSideLoginProcess(ULCDialog callbackDialog) {
+    if (loginListener != null) {
+      loginListener.loginComplete();
+    }
+    callbackDialog.setVisible(false);
   }
 
   /**
@@ -468,5 +486,15 @@ public class DialogCallbackHandler implements CallbackHandler {
    */
   public void setOkYesIconImageURL(String okYesIconImageURL) {
     this.okYesIconImageURL = okYesIconImageURL;
+  }
+
+  /**
+   * Sets the loginListener.
+   * 
+   * @param loginListener
+   *          the loginListener to set.
+   */
+  public void setLoginListener(ILoginListener loginListener) {
+    this.loginListener = loginListener;
   }
 }
