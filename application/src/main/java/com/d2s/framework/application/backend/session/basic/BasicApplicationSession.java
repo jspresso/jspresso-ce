@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.security.auth.Subject;
+
 import com.d2s.framework.application.backend.session.ApplicationSessionException;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.IEntityUnitOfWork;
@@ -38,6 +40,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private IEntityUnitOfWork          unitOfWork;
   private IEntityCollectionFactory   collectionFactory;
   private Set<IEntity>               entitiesToMergeBack;
+  private Subject                    owner;
 
   /**
    * Constructs a new <code>BasicApplicationSession</code> instance.
@@ -471,6 +474,26 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   protected BeanPropertyChangeRecorder getDirtRecorder() {
     return dirtRecorder;
+  }
+
+  
+  /**
+   * Gets the owner.
+   * 
+   * @return the owner.
+   */
+  public Subject getOwner() {
+    return owner;
+  }
+
+  
+  /**
+   * Sets the owner.
+   * 
+   * @param owner the owner to set.
+   */
+  public void setOwner(Subject owner) {
+    this.owner = owner;
   }
 
 }

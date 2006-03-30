@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
@@ -70,7 +69,6 @@ public abstract class AbstractFrontendController<E> extends AbstractController
 
   private String                                loginContextName;
   private CallbackHandler                       loginCallbackHandler;
-  private Subject                               loginSubject;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -495,7 +493,8 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   /**
    * Sets the loginCallbackHandler.
    * 
-   * @param loginCallbackHandler the loginCallbackHandler to set.
+   * @param loginCallbackHandler
+   *          the loginCallbackHandler to set.
    */
   public void setLoginCallbackHandler(CallbackHandler loginCallbackHandler) {
     this.loginCallbackHandler = loginCallbackHandler;
@@ -526,13 +525,14 @@ public abstract class AbstractFrontendController<E> extends AbstractController
         lc.login();
         // if we return with no exception,
         // authentication succeeded
-        loginSubject = lc.getSubject();
+        getBackendController().getApplicationSession().setOwner(
+            lc.getSubject());
         break;
       } catch (LoginException le) {
         System.err.println("Authentication failed:");
         System.err.println("  " + le.getMessage());
         try {
-          Thread.sleep(3000);
+          Thread.sleep(2000);
         } catch (Exception e) {
           // ignore
         }
@@ -545,15 +545,4 @@ public abstract class AbstractFrontendController<E> extends AbstractController
     }
     return true;
   }
-
-  
-  /**
-   * Gets the loginSubject.
-   * 
-   * @return the loginSubject.
-   */
-  public Subject getLoginSubject() {
-    return loginSubject;
-  }
-
 }

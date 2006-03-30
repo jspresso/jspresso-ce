@@ -5,6 +5,8 @@ package com.d2s.framework.application.backend.session;
 
 import java.util.List;
 
+import javax.security.auth.Subject;
+
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityDirtAware;
 
@@ -137,4 +139,19 @@ public interface IApplicationSession extends IEntityDirtAware {
    * @return true if the object is fully initialized.
    */
   boolean isInitialized(Object objectOrProxy);
+
+  /**
+   * Gets the session owner as a JAAS subject.
+   * 
+   * @return the session owner.
+   */
+  Subject getOwner();
+
+  /**
+   * Sets the session owner as a JAAS subject.
+   * 
+   * @param sessionOwner
+   *          the session owner.
+   */
+  void setOwner(Subject sessionOwner);
 }
