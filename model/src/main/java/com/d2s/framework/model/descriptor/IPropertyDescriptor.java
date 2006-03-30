@@ -63,4 +63,11 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * @return true if read-only
    */
   boolean isReadOnly();
+
+  /**
+   * Gets wether this kind of property descriptor is queryable.
+   * 
+   * @return true if this kind of property descriptor is queryable.
+   */
+  boolean isQueryable();
 }

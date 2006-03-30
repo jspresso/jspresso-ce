@@ -171,6 +171,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
   private ITranslationProvider                  descriptionTranslator;
   private ITranslationProvider                  enumerationTranslator;
   private int                                   maxCharacterLength          = 30;
+  private int                                   maxColumnCharacterLength    = 15;
   private static final char                     TEMPLATE_CHAR               = 'O';
   private static final Date                     TEMPLATE_DATE               = new Date(
                                                                                 3661 * 1000);
@@ -544,12 +545,12 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
 
     switch (viewDescriptor.getDrivingDimension()) {
       case IEvenGridViewDescriptor.ROW:
-        viewComponent.setCols(viewDescriptor.getDrivingDimensionCellCount());
+        viewComponent.setColumns(viewDescriptor.getDrivingDimensionCellCount());
         viewComponent.setRows(0);
         break;
       case IEvenGridViewDescriptor.COLUMN:
         viewComponent.setRows(viewDescriptor.getDrivingDimensionCellCount());
-        viewComponent.setCols(0);
+        viewComponent.setColumns(0);
         break;
       default:
         break;
@@ -1007,6 +1008,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), sorterDecorator);
 
+    int maxColumnSize = computePixelWidth(viewComponent,
+        maxColumnCharacterLength);
+
     for (int i = 0; i < viewDescriptor.getRenderedProperties().size(); i++) {
       ULCTableColumn column = viewComponent.getColumnModel().getColumn(i);
       column.setHeaderRenderer(new DefaultTableHeaderCellRenderer());
@@ -1037,7 +1041,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
       }
       if (propertyDescriptor instanceof IBooleanPropertyDescriptor
           || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-        column.setPreferredWidth(computePixelWidth(viewComponent, 3));
+        column.setPreferredWidth(computePixelWidth(viewComponent, 2));
         if (editorView.getPeer() instanceof ULCAbstractButton) {
           ((ULCAbstractButton) editorView.getPeer())
               .setHorizontalAlignment(IDefaults.CENTER);
@@ -1050,9 +1054,9 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
             getMaxTranslationLength(
                 (IEnumerationPropertyDescriptor) propertyDescriptor, locale)));
       } else {
-        column.setPreferredWidth(computePixelWidth(viewComponent,
+        column.setPreferredWidth(Math.min(computePixelWidth(viewComponent,
             getFormatLength(createFormatter(propertyDescriptor, locale),
-                getTemplateValue(propertyDescriptor))));
+                getTemplateValue(propertyDescriptor))), maxColumnSize));
       }
     }
     viewComponent.setComponentPopupMenu(createPopupMenu(viewComponent, view,
@@ -2214,7 +2218,7 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     if (characterLength > 0 && characterLength < maxCharacterLength) {
       charLength = characterLength + 1;
     }
-    return component.getFont().getSize() * charLength;
+    return (int) ((component.getFont().getSize() * charLength) / 1.5);
   }
 
   /**

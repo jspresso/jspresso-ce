@@ -68,17 +68,20 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void start(IBackendController backendController, Locale locale) {
-    super.start(backendController, locale);
-    // Toolkit.getDefaultToolkit().getSystemEventQueue().push(new
-    // WaitCursorEventQueue(500));
-    waitTimer = new WaitCursorTimer(500);
-    waitTimer.setDaemon(true);
-    waitTimer.start();
-    controllerFrame = createControllerFrame();
-    controllerFrame.pack();
-    controllerFrame.setSize(1100, 800);
-    controllerFrame.setVisible(true);
+  public boolean start(IBackendController backendController, Locale locale) {
+    if (super.start(backendController, locale)) {
+      // Toolkit.getDefaultToolkit().getSystemEventQueue().push(new
+      // WaitCursorEventQueue(500));
+      waitTimer = new WaitCursorTimer(500);
+      waitTimer.setDaemon(true);
+      waitTimer.start();
+      controllerFrame = createControllerFrame();
+      controllerFrame.pack();
+      controllerFrame.setSize(1100, 800);
+      controllerFrame.setVisible(true);
+      return true;
+    }
+    return false;
   }
 
   private void displayModule(String moduleId) {

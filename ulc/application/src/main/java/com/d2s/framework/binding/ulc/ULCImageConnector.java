@@ -18,6 +18,8 @@ import com.ulcjava.base.application.util.ULCIcon;
  */
 public class ULCImageConnector extends ULCComponentConnector<ULCLabel> {
 
+  private byte[] binaryValue;
+
   /**
    * Constructs a new <code>ULCImageConnector</code> instance.
    * 
@@ -43,7 +45,7 @@ public class ULCImageConnector extends ULCComponentConnector<ULCLabel> {
    */
   @Override
   protected Object getConnecteeValue() {
-    return null;
+    return binaryValue;
   }
 
   /**
@@ -51,8 +53,9 @@ public class ULCImageConnector extends ULCComponentConnector<ULCLabel> {
    */
   @Override
   protected void setConnecteeValue(Object connecteeValue) {
-    if (connecteeValue != null) {
-      getConnectedULCComponent().setIcon(new ULCIcon((byte[]) connecteeValue));
+    this.binaryValue = (byte[]) connecteeValue;
+    if (binaryValue != null) {
+      getConnectedULCComponent().setIcon(new ULCIcon(binaryValue));
     } else {
       getConnectedULCComponent().setIcon(null);
     }

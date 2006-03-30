@@ -16,5 +16,13 @@ import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
  */
 public abstract class BasicScalarPropertyDescriptor extends
     BasicPropertyDescriptor implements IScalarPropertyDescriptor {
-  // Empty implementation as of now.
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isQueryable() {
+    return true;
+  }
+
 }

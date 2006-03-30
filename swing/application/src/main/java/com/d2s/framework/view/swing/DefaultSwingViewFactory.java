@@ -178,6 +178,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
   private ITranslationProvider               descriptionTranslator;
   private ITranslationProvider               enumerationTranslator;
   private int                                maxCharacterLength          = 30;
+  private int                                maxColumnCharacterLength    = 15;
   private static final char                  TEMPLATE_CHAR               = 'O';
   private static final Date                  TEMPLATE_DATE               = new Date(
                                                                              3661 * 1000);
@@ -1036,6 +1037,8 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     viewComponent.setModel(sorterDecorator);
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), sorterDecorator);
+    int maxColumnSize = computePixelWidth(viewComponent,
+        maxColumnCharacterLength);
     for (int i = 0; i < viewDescriptor.getRenderedProperties().size(); i++) {
       TableColumn column = viewComponent.getColumnModel().getColumn(i);
       String propertyName = viewDescriptor.getRenderedProperties().get(i);
@@ -1061,15 +1064,15 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
       }
       if (propertyDescriptor instanceof IBooleanPropertyDescriptor
           || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-        column.setPreferredWidth(computePixelWidth(viewComponent, 3));
+        column.setPreferredWidth(computePixelWidth(viewComponent, 2));
       } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
         column.setPreferredWidth(computePixelWidth(viewComponent,
             getMaxTranslationLength(
                 (IEnumerationPropertyDescriptor) propertyDescriptor, locale)));
       } else {
-        column.setPreferredWidth(computePixelWidth(viewComponent,
+        column.setPreferredWidth(Math.min(computePixelWidth(viewComponent,
             getFormatLength(createFormatter(propertyDescriptor, locale),
-                getTemplateValue(propertyDescriptor))));
+                getTemplateValue(propertyDescriptor))), maxColumnSize));
       }
     }
     viewComponent.addMouseListener(new PopupListener(viewComponent, view,
@@ -2215,9 +2218,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
     if (characterLength > 0 && characterLength < maxCharacterLength) {
       charLength = characterLength + 1;
     }
-    return component.getFontMetrics(component.getFont()).charWidth(
-        TEMPLATE_CHAR)
-        * charLength;
+    return (int) ((component.getFont().getSize() * charLength) / 1.5);
   }
 
   /**

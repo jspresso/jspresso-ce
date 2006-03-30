@@ -64,4 +64,12 @@ public class BasicBinaryPropertyDescriptor extends
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isQueryable() {
+    return false;
+  }
 }

@@ -260,4 +260,17 @@
 			</map>
 		</property>
 	</bean>
+
+	<bean id="binaryPropertyActionMap" class="com.d2s.framework.view.action.ActionMap">
+		<property name="actionMap">
+			<map>
+				<entry key="FILE">
+					<list>
+						<ref bean="chooseFileAsBinaryPropertyAction" />
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
 </beans>

@@ -25,4 +25,12 @@ public class BasicObjectPropertyDescriptor extends
   public Class getPropertyClass() {
     return Object.class;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isQueryable() {
+    return false;
+  }
 }

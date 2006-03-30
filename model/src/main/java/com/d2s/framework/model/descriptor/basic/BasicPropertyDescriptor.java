@@ -143,4 +143,11 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     return getName().hashCode();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isQueryable() {
+    return false;
+  }
+
 }

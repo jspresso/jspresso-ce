@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Locale;
 
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
@@ -72,8 +70,7 @@ public class BasicLovViewFactory<E> implements ILovViewFactory<E> {
     for (String queryProperty : entityDescriptor.getQueryableProperties()) {
       IPropertyDescriptor propertyDescriptor = entityDescriptor
           .getPropertyDescriptor(queryProperty);
-      if (propertyDescriptor instanceof IScalarPropertyDescriptor
-          || propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      if (propertyDescriptor.isQueryable()) {
         queryProperties.add(queryProperty);
       }
     }

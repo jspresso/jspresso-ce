@@ -47,12 +47,15 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  public void start(IBackendController backendController, Locale locale) {
-    super.start(backendController, locale);
-    controllerFrame = createControllerFrame();
-    controllerFrame.pack();
-    controllerFrame.setSize(1024, 768);
-    controllerFrame.setVisible(true);
+  public boolean start(IBackendController backendController, Locale locale) {
+    if (super.start(backendController, locale)) {
+      controllerFrame = createControllerFrame();
+      controllerFrame.pack();
+      controllerFrame.setSize(1024, 768);
+      controllerFrame.setVisible(true);
+      return true;
+    }
+    return false;
   }
 
   private void displayModule(String moduleId) {

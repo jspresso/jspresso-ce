@@ -51,4 +51,12 @@ public class BasicReferencePropertyDescriptor extends
   public IComponentDescriptor getComponentDescriptor() {
     return getReferencedDescriptor();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isQueryable() {
+    return true;
+  }
 }

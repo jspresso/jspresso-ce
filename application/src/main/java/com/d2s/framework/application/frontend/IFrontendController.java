@@ -31,6 +31,7 @@ public interface IFrontendController extends IController, IIconDescriptor {
    * @param locale
    *          the local this controller should use to create the views and
    *          execute actions.
+   * @return true if the controller succesfully started.
    */
-  void start(IBackendController backendController, Locale locale);
+  boolean start(IBackendController backendController, Locale locale);
 }

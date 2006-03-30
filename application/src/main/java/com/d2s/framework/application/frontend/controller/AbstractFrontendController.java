@@ -9,6 +9,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.security.auth.Subject;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
+
 import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.backend.session.MergeMode;
@@ -62,6 +67,10 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   private ITranslationProvider                  descriptionTranslator;
   private IMvcBinder                            mvcBinder;
   private Locale                                locale;
+
+  private String                                loginContextName;
+  private CallbackHandler                       loginCallbackHandler;
+  private Subject                               loginSubject;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -197,10 +206,14 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * <p>
    * {@inheritDoc}
    */
-  public void start(IBackendController peerController, Locale startingLocale) {
-    this.locale = startingLocale;
-    setBackendController(peerController);
-    peerController.start();
+  public boolean start(IBackendController peerController, Locale startingLocale) {
+    if (performLogin()) {
+      this.locale = startingLocale;
+      setBackendController(peerController);
+      peerController.start();
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -468,4 +481,79 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   public void setModulesMenuIconImageUrl(String modulesMenuIconImageUrl) {
     this.modulesMenuIconImageUrl = modulesMenuIconImageUrl;
   }
+
+  /**
+   * Sets the loginContextName.
+   * 
+   * @param loginContextName
+   *          the loginContextName to set.
+   */
+  public void setLoginContextName(String loginContextName) {
+    this.loginContextName = loginContextName;
+  }
+
+  /**
+   * Sets the loginCallbackHandler.
+   * 
+   * @param loginCallbackHandler the loginCallbackHandler to set.
+   */
+  public void setLoginCallbackHandler(CallbackHandler loginCallbackHandler) {
+    this.loginCallbackHandler = loginCallbackHandler;
+  }
+
+  private boolean performLogin() {
+    // Obtain a LoginContext, needed for authentication.
+    // Tell it to use the LoginModule implementation
+    // specified by the entry named "Sample" in the
+    // JAAS login configuration file and to also use the
+    // specified CallbackHandler.
+    LoginContext lc = null;
+    try {
+      lc = new LoginContext(loginContextName, loginCallbackHandler);
+    } catch (LoginException le) {
+      System.err.println("Cannot create LoginContext. " + le.getMessage());
+      return false;
+    } catch (SecurityException se) {
+      System.err.println("Cannot create LoginContext. " + se.getMessage());
+      return false;
+    }
+
+    // the user has 3 attempts to authenticate successfully
+    int i;
+    for (i = 0; i < 3; i++) {
+      try {
+        // attempt authentication
+        lc.login();
+        // if we return with no exception,
+        // authentication succeeded
+        loginSubject = lc.getSubject();
+        break;
+      } catch (LoginException le) {
+        System.err.println("Authentication failed:");
+        System.err.println("  " + le.getMessage());
+        try {
+          Thread.sleep(3000);
+        } catch (Exception e) {
+          // ignore
+        }
+      }
+    }
+
+    // did they fail three times?
+    if (i == 3) {
+      return false;
+    }
+    return true;
+  }
+
+  
+  /**
+   * Gets the loginSubject.
+   * 
+   * @return the loginSubject.
+   */
+  public Subject getLoginSubject() {
+    return loginSubject;
+  }
+
 }

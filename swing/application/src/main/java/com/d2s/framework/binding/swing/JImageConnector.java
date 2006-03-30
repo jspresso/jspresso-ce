@@ -18,6 +18,8 @@ import javax.swing.JLabel;
  */
 public class JImageConnector extends JComponentConnector<JLabel> {
 
+  private byte[] binaryValue;
+
   /**
    * Constructs a new <code>JImageConnector</code> instance.
    * 
@@ -43,7 +45,7 @@ public class JImageConnector extends JComponentConnector<JLabel> {
    */
   @Override
   protected Object getConnecteeValue() {
-    return null;
+    return binaryValue;
   }
 
   /**
@@ -51,8 +53,9 @@ public class JImageConnector extends JComponentConnector<JLabel> {
    */
   @Override
   protected void protectedSetConnecteeValue(Object connecteeValue) {
-    if (connecteeValue != null) {
-      getConnectedJComponent().setIcon(new ImageIcon((byte[]) connecteeValue));
+    this.binaryValue = (byte[]) connecteeValue;
+    if (binaryValue != null) {
+      getConnectedJComponent().setIcon(new ImageIcon(binaryValue));
     } else {
       getConnectedJComponent().setIcon(null);
     }

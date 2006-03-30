@@ -244,17 +244,17 @@
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-development</artifactId>
-        <version>6.0.3</version>
+        <version>6.0.4</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-client</artifactId>
-        <version>6.0.3</version>
+        <version>6.0.4</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-server</artifactId>
-        <version>6.0.3</version>
+        <version>6.0.4</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

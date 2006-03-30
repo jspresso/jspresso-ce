@@ -53,8 +53,9 @@ public class UIActionField extends UIComponent implements IEditorComponent {
    */
   @Override
   protected Object createBasicObject(Anything args) {
-    boolean showTextField = args.get(ActionFieldConstants.SHOW_TEXTFIELD_KEY, true);
-    
+    boolean showTextField = args.get(ActionFieldConstants.SHOW_TEXTFIELD_KEY,
+        true);
+
     JActionField actionField = new JActionField(showTextField) {
 
       private static final long serialVersionUID = 7747321535435615536L;
@@ -93,9 +94,12 @@ public class UIActionField extends UIComponent implements IEditorComponent {
   }
 
   private void sendActionText() {
+    sendActionText(getBasicObject().getActionText());
+  }
+
+  private void sendActionText(String actionText) {
     Anything actionTextAnything = new Anything();
-    actionTextAnything.put(ActionFieldConstants.ACTION_TEXT_KEY,
-        getBasicObject().getActionText());
+    actionTextAnything.put(ActionFieldConstants.ACTION_TEXT_KEY, actionText);
     sendULC(ActionFieldConstants.SET_ACTION_TEXT_REQUEST, actionTextAnything);
   }
 
@@ -170,10 +174,10 @@ public class UIActionField extends UIComponent implements IEditorComponent {
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent evt) {
         if (evt.getSource() instanceof JButton) {
-          getBasicObject().setActionText(
-              ((JButton) evt.getSource()).getActionCommand());
+          sendActionText(((JButton) evt.getSource()).getActionCommand());
+        } else {
+          sendActionText();
         }
-        sendActionText();
       }
     };
     if (actionAnything.get(ActionFieldConstants.ACCELERATOR_KEY, -1) != -1) {
@@ -292,7 +296,10 @@ public class UIActionField extends UIComponent implements IEditorComponent {
     public boolean isCellEditable(EventObject evt) {
       if (evt instanceof MouseEvent) {
         MouseEvent me = (MouseEvent) evt;
-        return (me.getClickCount() > 1);
+        if (getBasicObject().isShowingTextField()) {
+          return (me.getClickCount() >= 2);
+        }
+        return (me.getClickCount() >= 1);
       }
       return super.isCellEditable(evt);
     }
