@@ -205,9 +205,9 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * {@inheritDoc}
    */
   public boolean start(IBackendController peerController, Locale startingLocale) {
+    setBackendController(peerController);
     if (performLogin()) {
       this.locale = startingLocale;
-      setBackendController(peerController);
       peerController.start();
       return true;
     }

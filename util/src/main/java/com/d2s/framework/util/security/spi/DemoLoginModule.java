@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.util.security.spi;
 
+import java.io.IOException;
 import java.util.Map;
 
 import javax.security.auth.Subject;
@@ -227,6 +228,15 @@ public class DemoLoginModule implements LoginModule {
    */
   public boolean abort() {
     if (!succeeded) {
+      Callback[] callbacks = new Callback[1];
+      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, "Login failed.");
+      try {
+        callbackHandler.handle(callbacks);
+      } catch (IOException ex) {
+        //NO-OP.
+      } catch (UnsupportedCallbackException ex) {
+        //NO-OP.
+      }
       return false;
     } else if (succeeded && !commitSucceeded) {
       // login succeeded but overall authentication failed

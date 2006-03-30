@@ -140,7 +140,7 @@ public class DialogCallbackHandler implements CallbackHandler {
           optionPanel.setLayout(new GridBagLayout());
         }
         processConfirmationCallback(callbackDialog, proceedActions,
-            optionPanel, (ConfirmationCallback) callback);
+            optionPanel, (ConfirmationCallback) callback, inputPanel != null);
 
       } else {
         throw new UnsupportedCallbackException(callback,
@@ -173,7 +173,7 @@ public class DialogCallbackHandler implements CallbackHandler {
           ConfirmationCallback.INFORMATION,
           ConfirmationCallback.OK_CANCEL_OPTION, ConfirmationCallback.OK);
       processConfirmationCallback(callbackDialog, proceedActions, optionPanel,
-          cc);
+          cc, inputPanel != null);
     }
     dialogPanel.add(optionPanel, constraints);
 
@@ -188,7 +188,8 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   private void processConfirmationCallback(final JDialog callbackDialog,
       List<ActionListener> proceedActions, JPanel optionPanel,
-      final ConfirmationCallback cc) throws UnsupportedCallbackException {
+      final ConfirmationCallback cc, boolean hasInput)
+      throws UnsupportedCallbackException {
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.insets = DEFAULT_INSETS;
     constraints.gridx = GridBagConstraints.RELATIVE;
@@ -247,10 +248,12 @@ public class DialogCallbackHandler implements CallbackHandler {
               ConfirmationCallback.OK, UIManager.getString(
                   "OptionPane.okButtonText", locale), proceedActions),
               constraints);
-          optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.CANCEL, UIManager.getString(
-                  "OptionPane.cancelButtonText", locale), proceedActions),
-              constraints);
+          if (hasInput) {
+            optionPanel.add(createOptionButton(callbackDialog, cc,
+                ConfirmationCallback.CANCEL, UIManager.getString(
+                    "OptionPane.cancelButtonText", locale), proceedActions),
+                constraints);
+          }
           break;
         default:
           throw new UnsupportedCallbackException(cc,
