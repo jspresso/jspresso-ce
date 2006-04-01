@@ -107,7 +107,8 @@ public class DialogCallbackHandler implements CallbackHandler {
     callbackDialog
         .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
     int screenRes = ClientContext.getScreenResolution();
-    callbackDialog.setSize(new Dimension(4 * screenRes, 2 * screenRes));
+    callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
+        * (callbacks.length + 1) / 2));
 
     List<IActionListener> proceedActions = new ArrayList<IActionListener>(2);
 
@@ -494,7 +495,8 @@ public class DialogCallbackHandler implements CallbackHandler {
    * @param callbackHandlerListener
    *          the callbackHandlerListener to set.
    */
-  public void setCallbackHandlerListener(ICallbackHandlerListener callbackHandlerListener) {
+  public void setCallbackHandlerListener(
+      ICallbackHandlerListener callbackHandlerListener) {
     this.callbackHandlerListener = callbackHandlerListener;
   }
 }

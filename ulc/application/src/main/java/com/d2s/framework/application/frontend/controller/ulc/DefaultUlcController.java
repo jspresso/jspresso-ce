@@ -10,9 +10,6 @@ import java.util.Map;
 
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
-import javax.security.auth.callback.NameCallback;
-import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
@@ -35,8 +32,10 @@ import com.ulcjava.base.application.ULCInternalFrame;
 import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
+import com.ulcjava.base.application.ULCPollingTimer;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
+import com.ulcjava.base.application.event.serializable.IActionListener;
 import com.ulcjava.base.application.event.serializable.IWindowListener;
 import com.ulcjava.base.application.util.ULCIcon;
 import com.ulcjava.base.shared.IWindowConstants;
@@ -52,13 +51,16 @@ import com.ulcjava.base.shared.IWindowConstants;
  * @author Vincent Vandenschrick
  */
 public class DefaultUlcController extends
-    AbstractFrontendController<ULCComponent> implements ICallbackHandlerListener {
+    AbstractFrontendController<ULCComponent> implements
+    ICallbackHandlerListener {
 
   private ULCFrame                      controllerFrame;
   private Map<String, ULCInternalFrame> moduleInternalFrames;
-  private NameCallback                  nameLoginCallback;
-  private PasswordCallback              passwordLoginCallback;
+  private Callback[]                    loginCallbacks;
+  private ULCPollingTimer               loginTimer;
   private int                           loginRetries;
+  private boolean                       loginSuccessful;
+  private boolean                       loginComplete;
 
   /**
    * Creates the initial view from the root view descriptor, then a JFrame
@@ -70,6 +72,8 @@ public class DefaultUlcController extends
   public boolean start(IBackendController backendController, Locale locale) {
     if (super.start(backendController, locale)) {
       loginRetries = 0;
+      loginSuccessful = false;
+      loginComplete = false;
       controllerFrame = createControllerFrame();
       controllerFrame.pack();
       int screenRes = ClientContext.getScreenResolution();
@@ -80,7 +84,8 @@ public class DefaultUlcController extends
       if (callbackHandler instanceof DialogCallbackHandler) {
         ((DialogCallbackHandler) callbackHandler)
             .setParentComponent(controllerFrame);
-        ((DialogCallbackHandler) callbackHandler).setCallbackHandlerListener(this);
+        ((DialogCallbackHandler) callbackHandler)
+            .setCallbackHandlerListener(this);
       }
       performLogin();
       return true;
@@ -89,68 +94,100 @@ public class DefaultUlcController extends
   }
 
   private void performLogin() {
-    Callback[] callbacks = new Callback[3];
-    nameLoginCallback = new NameCallback("User");
-    passwordLoginCallback = new PasswordCallback("Password", false);
-    callbacks[0] = nameLoginCallback;
-    callbacks[1] = passwordLoginCallback;
-    callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION,
-        "Enter login information :");
-    try {
-      getLoginCallbackHandler().handle(callbacks);
-    } catch (IOException ex) {
-      // NO-OP
-    } catch (UnsupportedCallbackException ex) {
-      // NO-OP
-    }
+    new LoginThread().start();
+    loginTimer = new ULCPollingTimer(2000, new IActionListener() {
+
+      private static final long serialVersionUID = 5630061795918376362L;
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent event) {
+        if (loginCallbacks != null) {
+          Callback[] loginCallbacksCopy = loginCallbacks;
+          loginCallbacks = null;
+          try {
+            getLoginCallbackHandler().handle(loginCallbacksCopy);
+          } catch (IOException ex) {
+            // NO-OP
+          } catch (UnsupportedCallbackException ex) {
+            // NO-OP
+          }
+        }
+        if (loginComplete) {
+          loginTimer.stop();
+          loginTimer = null;
+          if (!loginSuccessful) {
+            stop();
+          }
+        }
+      }
+    });
+    loginTimer.setInitialDelay(100);
+    loginTimer.start();
   }
 
   /**
    * {@inheritDoc}
    */
   public void callbackHandlingComplete() {
-    LoginContext lc = null;
+    notifyWaiters();
+  }
+
+  private synchronized void waitForNotification() {
     try {
-      lc = new LoginContext(getLoginContextName(),
-          new AutomaticCallbackHandler());
-    } catch (LoginException le) {
-      System.err.println("Cannot create LoginContext. " + le.getMessage());
-    } catch (SecurityException se) {
-      System.err.println("Cannot create LoginContext. " + se.getMessage());
-    }
-    try {
-      // attempt authentication
-      lc.login();
-      // if we return with no exception,
-      // authentication succeeded
-      getBackendController().getApplicationSession().setOwner(lc.getSubject());
-      return;
-    } catch (LoginException le) {
-      loginRetries++;
-      System.err.println("Authentication failed:");
-      System.err.println("  " + le.getMessage());
-    }
-    if (loginRetries < MAX_LOGIN_RETRIES) {
-      performLogin();
-    } else {
-      stop();
+      wait();
+    } catch (InterruptedException ex) {
+      // NO-OP.
     }
   }
 
-  private class AutomaticCallbackHandler implements CallbackHandler {
+  private synchronized void notifyWaiters() {
+    notifyAll();
+  }
+
+  private class ThreadBlockingCallbackHandler implements CallbackHandler {
 
     /**
      * {@inheritDoc}
      */
     public void handle(Callback[] callbacks) {
-      for (Callback callback : callbacks) {
-        if (callback instanceof NameCallback) {
-          ((NameCallback) callback).setName(nameLoginCallback.getName());
-        } else if (callback instanceof PasswordCallback) {
-          ((PasswordCallback) callback).setPassword(passwordLoginCallback
-              .getPassword());
+      loginCallbacks = callbacks;
+      waitForNotification();
+    }
+  }
+
+  private class LoginThread extends Thread {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void run() {
+      while (!loginSuccessful && loginRetries < MAX_LOGIN_RETRIES) {
+        LoginContext lc = null;
+        try {
+          lc = new LoginContext(getLoginContextName(),
+              new ThreadBlockingCallbackHandler());
+        } catch (LoginException le) {
+          System.err.println("Cannot create LoginContext. " + le.getMessage());
+        } catch (SecurityException se) {
+          System.err.println("Cannot create LoginContext. " + se.getMessage());
+        }
+        try {
+          // attempt authentication
+          lc.login();
+          // if we return with no exception,
+          // authentication succeeded
+          getBackendController().getApplicationSession().setOwner(
+              lc.getSubject());
+          loginSuccessful = true;
+          return;
+        } catch (LoginException le) {
+          loginRetries++;
+          System.err.println("Authentication failed:");
+          System.err.println("  " + le.getMessage());
         }
       }
+      loginComplete = true;
     }
   }
 
