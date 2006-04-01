@@ -12,12 +12,12 @@ package com.d2s.framework.security.ulc;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ILoginListener {
+public interface ICallbackHandlerListener {
 
   /**
    * Notified whenever the login process is complete from the user point of
    * view.
    */
-  void loginComplete();
+  void callbackHandlingComplete();
 
 }

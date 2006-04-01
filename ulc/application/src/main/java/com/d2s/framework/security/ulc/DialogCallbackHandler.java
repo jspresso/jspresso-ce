@@ -43,22 +43,22 @@ import com.ulcjava.base.shared.IWindowConstants;
  */
 public class DialogCallbackHandler implements CallbackHandler {
 
-  private ULCComponent          parentComponent;
-  private ILoginListener        loginListener;
+  private ULCComponent             parentComponent;
+  private ICallbackHandlerListener callbackHandlerListener;
 
-  private IIconFactory<ULCIcon> iconFactory;
-  private static final int      DEFAULT_FIELD_LENGTH = 32;
-  private static final Insets   DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
+  private IIconFactory<ULCIcon>    iconFactory;
+  private static final int         DEFAULT_FIELD_LENGTH = 32;
+  private static final Insets      DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
 
-  private Locale                locale;
+  private Locale                   locale;
 
-  private String                okYesIconImageURL;
-  private String                noIconImageURL;
-  private String                cancelIconImageURL;
+  private String                   okYesIconImageURL;
+  private String                   noIconImageURL;
+  private String                   cancelIconImageURL;
 
-  private String                infoIconImageURL;
-  private String                warningIconImageURL;
-  private String                errorIconImageURL;
+  private String                   infoIconImageURL;
+  private String                   warningIconImageURL;
+  private String                   errorIconImageURL;
 
   private ULCIcon getIcon(TextOutputCallback callback)
       throws UnsupportedCallbackException {
@@ -392,8 +392,8 @@ public class DialogCallbackHandler implements CallbackHandler {
   }
 
   private void endClientSideLoginProcess(ULCDialog callbackDialog) {
-    if (loginListener != null) {
-      loginListener.loginComplete();
+    if (callbackHandlerListener != null) {
+      callbackHandlerListener.callbackHandlingComplete();
     }
     callbackDialog.setVisible(false);
   }
@@ -489,12 +489,12 @@ public class DialogCallbackHandler implements CallbackHandler {
   }
 
   /**
-   * Sets the loginListener.
+   * Sets the callbackHandlerListener.
    * 
-   * @param loginListener
-   *          the loginListener to set.
+   * @param callbackHandlerListener
+   *          the callbackHandlerListener to set.
    */
-  public void setLoginListener(ILoginListener loginListener) {
-    this.loginListener = loginListener;
+  public void setCallbackHandlerListener(ICallbackHandlerListener callbackHandlerListener) {
+    this.callbackHandlerListener = callbackHandlerListener;
   }
 }

@@ -67,6 +67,10 @@ public abstract class AbstractFrontendController<E> extends AbstractController
 
   private String                                loginContextName;
   private CallbackHandler                       loginCallbackHandler;
+  /**
+   * <code>MAX_LOGIN_RETRIES</code>.
+   */
+  protected static final int                    MAX_LOGIN_RETRIES = 3;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -510,7 +514,6 @@ public abstract class AbstractFrontendController<E> extends AbstractController
     return getBackendController().stop();
   }
 
-  
   /**
    * Gets the loginContextName.
    * 

@@ -20,7 +20,7 @@ import javax.security.auth.login.LoginException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.security.ulc.DialogCallbackHandler;
-import com.d2s.framework.security.ulc.ILoginListener;
+import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
@@ -52,7 +52,7 @@ import com.ulcjava.base.shared.IWindowConstants;
  * @author Vincent Vandenschrick
  */
 public class DefaultUlcController extends
-    AbstractFrontendController<ULCComponent> implements ILoginListener {
+    AbstractFrontendController<ULCComponent> implements ICallbackHandlerListener {
 
   private ULCFrame                      controllerFrame;
   private Map<String, ULCInternalFrame> moduleInternalFrames;
@@ -80,15 +80,15 @@ public class DefaultUlcController extends
       if (callbackHandler instanceof DialogCallbackHandler) {
         ((DialogCallbackHandler) callbackHandler)
             .setParentComponent(controllerFrame);
-        ((DialogCallbackHandler) callbackHandler).setLoginListener(this);
+        ((DialogCallbackHandler) callbackHandler).setCallbackHandlerListener(this);
       }
-      initiateLogin();
+      performLogin();
       return true;
     }
     return false;
   }
 
-  private void initiateLogin() {
+  private void performLogin() {
     Callback[] callbacks = new Callback[3];
     nameLoginCallback = new NameCallback("User");
     passwordLoginCallback = new PasswordCallback("Password", false);
@@ -108,7 +108,7 @@ public class DefaultUlcController extends
   /**
    * {@inheritDoc}
    */
-  public void loginComplete() {
+  public void callbackHandlingComplete() {
     LoginContext lc = null;
     try {
       lc = new LoginContext(getLoginContextName(),
@@ -130,8 +130,8 @@ public class DefaultUlcController extends
       System.err.println("Authentication failed:");
       System.err.println("  " + le.getMessage());
     }
-    if (loginRetries < 3) {
-      initiateLogin();
+    if (loginRetries < MAX_LOGIN_RETRIES) {
+      performLogin();
     } else {
       stop();
     }

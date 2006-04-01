@@ -126,7 +126,7 @@ public class DefaultSwingController extends
 
     // the user has 3 attempts to authenticate successfully
     int i;
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < MAX_LOGIN_RETRIES; i++) {
       try {
         // attempt authentication
         lc.login();
