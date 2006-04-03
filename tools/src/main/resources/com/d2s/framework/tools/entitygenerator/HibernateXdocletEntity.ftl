@@ -221,10 +221,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#elseif collectionType="java.util.Set">
     <#local hibernateCollectionType="set"/>
   </#if>
+  <#local manyToMany=propertyDescriptor.manyToMany>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#local bidirectional=true>
     <#local reversePropertyName=propertyDescriptor.reverseRelationEnd.name>
-    <#local manyToMany=instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor")>
     <#if manyToMany>
       <#local inverse=(compareStrings(elementName, componentName) > 0)/>
     <#else>
@@ -236,8 +236,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     </#if>
   <#else>
     <#local bidirectional=false>
-    <#local manyToMany=true>
     <#local inverse=false>
+    <#if !manyToMany>
+      <#local reversePropertyName=propertyDescriptor.name+"Parent">
+    </#if>
   </#if>
   /**
    * Gets the ${propertyName}.
@@ -288,7 +290,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
        <#else>
    *           column = "${generateSQLName(elementName)}_ID"
        </#if>
-     <#elseif bidirectional>
+     <#else>
    * @hibernate.key
    *           column = "${generateSQLName(reversePropertyName)}_ID"
    * @hibernate.one-to-many

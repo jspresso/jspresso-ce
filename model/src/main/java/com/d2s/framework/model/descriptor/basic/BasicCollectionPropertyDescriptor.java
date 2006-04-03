@@ -20,6 +20,14 @@ public class BasicCollectionPropertyDescriptor extends
     ICollectionPropertyDescriptor {
 
   private ICollectionDescriptor referencedDescriptor;
+  private boolean               manyToMany;
+
+  /**
+   * Constructs a new <code>BasicCollectionPropertyDescriptor</code> instance.
+   */
+  public BasicCollectionPropertyDescriptor() {
+    this.manyToMany = false;
+  }
 
   /**
    * Gets the referencedDescriptor.
@@ -52,5 +60,28 @@ public class BasicCollectionPropertyDescriptor extends
    */
   public ICollectionDescriptor getCollectionDescriptor() {
     return getReferencedDescriptor();
+  }
+
+  /**
+   * Gets the manyToMany.
+   * 
+   * @return the manyToMany.
+   */
+  public boolean isManyToMany() {
+    if (getReverseRelationEnd() != null) {
+      // priory ty is given to the reverse relation end.
+      return getReverseRelationEnd() instanceof ICollectionPropertyDescriptor;
+    }
+    return manyToMany;
+  }
+
+  /**
+   * Sets the manyToMany.
+   * 
+   * @param manyToMany
+   *          the manyToMany to set.
+   */
+  public void setManyToMany(boolean manyToMany) {
+    this.manyToMany = manyToMany;
   }
 }

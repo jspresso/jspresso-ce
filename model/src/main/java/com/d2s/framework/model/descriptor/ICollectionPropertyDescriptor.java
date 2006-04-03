@@ -21,4 +21,11 @@ public interface ICollectionPropertyDescriptor extends
    * @return the referenced collection descriptor.
    */
   ICollectionDescriptor getReferencedDescriptor();
+
+  /**
+   * Gets whether this collection property descriptor is a many-to-many end.
+   * 
+   * @return true if this collection property descriptor is a many-to-many end.
+   */
+  boolean isManyToMany();
 }
