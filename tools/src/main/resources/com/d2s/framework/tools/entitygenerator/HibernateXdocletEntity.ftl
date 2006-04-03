@@ -356,7 +356,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#if oneToOne>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
       <#elseif bidirectional>
-   *           cascade = "none"
+   *           cascade = "persist,merge,save-update"
         <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"

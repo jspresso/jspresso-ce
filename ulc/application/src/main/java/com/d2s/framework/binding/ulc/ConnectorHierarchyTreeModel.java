@@ -213,7 +213,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
               childIndices[i - oldCollectionSize] = i;
             }
             if (((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
-              nodeStructureChanged(connectorPath);
+              nodesChanged(connectorPath, childIndices);
             } else {
               nodesWereInserted(connectorPath, childIndices);
             }
@@ -225,12 +225,13 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             if (connectorPath != null) {
               List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
                   .getRemovedChildrenConnectors();
-              if (((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
-                nodeStructureChanged(connectorPath);
-              } else {
-                nodesWereRemoved(connectorPath, childIndices,
-                    removedChildrenConnectors.toArray());
-              }
+              // if (((CollectionConnectorValueChangeEvent)
+              // evt).isDelayedEvent()) {
+              // nodeStructureChanged(connectorPath);
+              // } else {
+              nodesWereRemoved(connectorPath, childIndices,
+                  removedChildrenConnectors.toArray());
+              // }
             }
           }
         }

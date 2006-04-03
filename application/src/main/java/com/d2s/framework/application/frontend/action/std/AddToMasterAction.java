@@ -52,9 +52,9 @@ public class AddToMasterAction extends ActionWrapper {
       IEntityDescriptor elementEntityDescriptor) {
     this.elementEntityDescriptor = elementEntityDescriptor;
     if (elementEntityDescriptor != null) {
-      setName("Add " + elementEntityDescriptor.getName());
+      setName("ADD " + elementEntityDescriptor.getName());
       setIconImageURL(elementEntityDescriptor.getIconImageURL());
-      setDescription("adds a new " + elementEntityDescriptor.getName());
+      setDescription("ADD " + elementEntityDescriptor.getName());
     }
   }
 }
