@@ -44,46 +44,58 @@ public class AddToMasterAction extends AbstractCollectionAction {
       return null;
     }
     Map<String, Object> executionResult = new HashMap<String, Object>();
-    ICollectionPropertyDescriptor collectionDescriptor = (ICollectionPropertyDescriptor) getModelDescriptor();
     Object master = collectionConnector.getParentConnector()
         .getConnectorValue();
-    String property = collectionDescriptor.getName();
+    String property = getModelDescriptor().getName();
     ICollectionAccessor collectionAccessor = getAccessorFactory()
         .createCollectionPropertyAccessor(property, master.getClass());
 
+    IEntity newEntity = getNewEntity();
+
+    if (newEntity != null) {
+      try {
+        int index = -1;
+        if (collectionAccessor instanceof IListAccessor) {
+          if (getSelectedIndices() != null && getSelectedIndices().length > 0) {
+            index = getSelectedIndices()[getSelectedIndices().length - 1];
+          }
+        }
+        if (index >= 0) {
+          ((IListAccessor) collectionAccessor).addToValue(master, index + 1,
+              newEntity);
+        } else {
+          collectionAccessor.addToValue(master, newEntity);
+        }
+      } catch (IllegalAccessException ex) {
+        throw new ActionException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new ActionException(ex);
+      } catch (NoSuchMethodException ex) {
+        throw new ActionException(ex);
+      }
+      executionResult.put(ActionContextConstants.SELECTED_INDICES,
+          ConnectorHelper.getIndicesOf(collectionConnector, Collections
+              .singleton(newEntity)));
+    }
+    return executionResult;
+  }
+
+  /**
+   * Gets the new entity to add. It is createdusing the informations contained
+   * in the context.
+   * 
+   * @return the entity to add to the collection.
+   */
+  protected IEntity getNewEntity() {
     IComponentDescriptor elementDescriptor = (IComponentDescriptor) getContext()
         .get(ActionContextConstants.ELEMENT_DESCRIPTOR);
-
     if (elementDescriptor == null) {
-      elementDescriptor = collectionDescriptor.getReferencedDescriptor()
-          .getElementDescriptor();
+      elementDescriptor = ((ICollectionPropertyDescriptor) getModelDescriptor())
+          .getReferencedDescriptor().getElementDescriptor();
     }
 
     IEntity newEntity = getEntityFactory().createEntityInstance(
         elementDescriptor.getComponentContract());
-    try {
-      int index = -1;
-      if (collectionAccessor instanceof IListAccessor) {
-        if (getSelectedIndices() != null && getSelectedIndices().length > 0) {
-          index = getSelectedIndices()[getSelectedIndices().length - 1];
-        }
-      }
-      if (index >= 0) {
-        ((IListAccessor) collectionAccessor).addToValue(master, index + 1,
-            newEntity);
-      } else {
-        collectionAccessor.addToValue(master, newEntity);
-      }
-    } catch (IllegalAccessException ex) {
-      throw new ActionException(ex);
-    } catch (InvocationTargetException ex) {
-      throw new ActionException(ex);
-    } catch (NoSuchMethodException ex) {
-      throw new ActionException(ex);
-    }
-    executionResult.put(ActionContextConstants.SELECTED_INDICES,
-        ConnectorHelper.getIndicesOf(collectionConnector, Collections
-            .singleton(newEntity)));
-    return executionResult;
+    return newEntity;
   }
 }

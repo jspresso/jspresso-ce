@@ -80,6 +80,7 @@ public class ModalDialogAction extends AbstractSwingAction {
     }
     JPanel actionPanel = new JPanel();
     actionPanel.setLayout(new GridLayout(1, 0, 5, 10));
+    JButton defaultButton = null;
     for (IDisplayableAction action : actions) {
       JButton actionButton = new JButton();
       actionButton.setAction(actionFactory.createAction(action, actionHandler,
@@ -95,6 +96,9 @@ public class ModalDialogAction extends AbstractSwingAction {
         });
       }
       actionPanel.add(actionButton);
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
     }
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BorderLayout());
@@ -102,15 +106,14 @@ public class ModalDialogAction extends AbstractSwingAction {
     mainPanel.add(actionPanel, BorderLayout.SOUTH);
     dialog.getContentPane().add(mainPanel);
     dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    if (defaultButton != null) {
+      dialog.getRootPane().setDefaultButton(defaultButton);
+    }
     dialog.pack();
     if (window != null) {
-      // // dialog.setSize(Math.min(window.getWidth(), dialog.getWidth()),
-      // // Math.min(
-      // // window.getHeight(), dialog.getHeight()));
       dialog.setLocation(window.getX()
           + (window.getWidth() - dialog.getWidth()) / 2, window.getY()
           + (window.getHeight() - dialog.getHeight()) / 2);
-      // dialog.setLocation(window.getX(), window.getY());
     }
     dialog.setVisible(true);
     return super.execute(actionHandler);

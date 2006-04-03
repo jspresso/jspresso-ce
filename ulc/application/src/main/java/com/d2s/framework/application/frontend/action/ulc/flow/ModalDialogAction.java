@@ -70,6 +70,7 @@ public class ModalDialogAction extends AbstractUlcAction {
     ULCWindow window = UlcUtilities.getWindowAncestor(getSourceComponent());
     dialog = new ULCDialog(window, getName(), true);
     ULCGridLayoutPane actionPanel = new ULCGridLayoutPane(1, 0, 5, 10);
+    ULCButton defaultButton = null;
     for (IDisplayableAction action : actions) {
       ULCButton actionButton = new ULCButton();
       actionButton.setAction(actionFactory.createAction(action, actionHandler,
@@ -87,22 +88,19 @@ public class ModalDialogAction extends AbstractUlcAction {
         });
       }
       actionPanel.add(actionButton);
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
     }
     ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
     mainPanel.add(mainView.getPeer(), ULCBorderLayoutPane.CENTER);
     mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
     dialog.getContentPane().add(mainPanel);
     dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    if (defaultButton != null) {
+      dialog.getRootPane().setDefaultButton(defaultButton);
+    }
     dialog.pack();
-    // if (window != null) {
-    // // dialog.setSize(Math.min(window.getWidth(), dialog.getWidth()),
-    // // Math.min(
-    // // window.getHeight(), dialog.getHeight()));
-    // // dialog.setLocation(window.getX()
-    // // + (window.getWidth() - dialog.getWidth()) / 2, window.getY()
-    // // + (window.getHeight() - dialog.getHeight()) / 2);
-    // dialog.setLocation(window.getX(), window.getY());
-    // }
     dialog.setVisible(true);
     return super.execute(actionHandler);
   }

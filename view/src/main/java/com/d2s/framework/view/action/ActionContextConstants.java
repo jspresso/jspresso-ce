@@ -95,4 +95,9 @@ public final class ActionContextConstants {
    * The view connector at the origin of the action chain.
    */
   public static final String SOURCE_VIEW_CONNECTOR          = "SOURCE_VIEW_CONNECTOR";
+
+  /**
+   * The view descriptor at the origin of the action chain.
+   */
+  public static final String SOURCE_MODEL_DESCRIPTOR          = "SOURCE_MODEL_DESCRIPTOR";
 }
