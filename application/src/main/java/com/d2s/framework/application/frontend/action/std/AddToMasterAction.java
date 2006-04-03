@@ -9,6 +9,7 @@ import java.util.Map;
 import com.d2s.framework.application.frontend.action.ActionWrapper;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.view.action.ActionContextConstants;
+import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * Creates and adds an entity to the selected master detail collection.
@@ -30,15 +31,13 @@ public class AddToMasterAction extends ActionWrapper {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> getContext() {
-    Map<String, Object> context = super.getContext();
+  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     if (context == null) {
       context = new HashMap<String, Object>();
-      setContext(context);
     }
     context.put(ActionContextConstants.ELEMENT_DESCRIPTOR,
         elementEntityDescriptor);
-    return context;
+    super.execute(actionHandler, context);
   }
 
   /**

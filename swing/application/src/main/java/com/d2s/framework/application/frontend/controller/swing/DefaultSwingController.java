@@ -384,7 +384,8 @@ public class DefaultSwingController extends
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected final void executeBackend(final IAction action) {
+  protected final void executeBackend(final IAction action,
+      final Map<String, Object> context) {
     if (action.isLongOperation()) {
       SwingUtil.performLongOperation(new Job() {
 
@@ -395,17 +396,18 @@ public class DefaultSwingController extends
          */
         @Override
         public Object run() {
-          protectedExecuteBackend(action);
+          protectedExecuteBackend(action, context);
           return null;
         }
       });
     } else {
-      protectedExecuteBackend(action);
+      protectedExecuteBackend(action, context);
     }
   }
 
-  private void protectedExecuteBackend(IAction action) {
-    super.executeBackend(action);
+  private void protectedExecuteBackend(IAction action,
+      Map<String, Object> context) {
+    super.executeBackend(action, context);
   }
 
   /**
@@ -413,7 +415,8 @@ public class DefaultSwingController extends
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected final void executeFrontend(final IAction action) {
+  protected final void executeFrontend(final IAction action,
+      final Map<String, Object> context) {
     // return (Map<String, Object>) SwingUtil.performLongOperation(new Job() {
     //
     // /**
@@ -426,23 +429,24 @@ public class DefaultSwingController extends
     // return protectedExecuteFrontend(action);
     // }
     // });
-    protectedExecuteFrontend(action);
+    protectedExecuteFrontend(action, context);
   }
 
-  private void protectedExecuteFrontend(IAction action) {
-    super.executeFrontend(action);
+  private void protectedExecuteFrontend(IAction action,
+      Map<String, Object> context) {
+    super.executeFrontend(action, context);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public void execute(IAction action) {
+  public void execute(IAction action, Map<String, Object> context) {
     if (action == null) {
       return;
     }
-    JComponent sourceComponent = (JComponent) action.getContext().get(
-        ActionContextConstants.SOURCE_COMPONENT);
+    JComponent sourceComponent = (JComponent) context
+        .get(ActionContextConstants.SOURCE_COMPONENT);
     Component windowOrInternalFrame = null;
     if (sourceComponent != null) {
       windowOrInternalFrame = SwingUtil
@@ -457,7 +461,7 @@ public class DefaultSwingController extends
     }
     waitTimer.startTimer(sourceComponent);
     try {
-      super.execute(action);
+      super.execute(action, context);
     } finally {
       if (windowOrInternalFrame instanceof JFrame) {
         ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(false);

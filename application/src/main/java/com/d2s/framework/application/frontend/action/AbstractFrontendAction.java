@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.frontend.action;
 
+import java.util.Map;
+
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
@@ -120,11 +122,12 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
    * 
+   * @param context
+   *          the action context.
    * @return the value connector this model action was triggered on.
    */
-  public IValueConnector getViewConnector() {
-    return (IValueConnector) getContext().get(
-        ActionContextConstants.VIEW_CONNECTOR);
+  public IValueConnector getViewConnector(Map<String, Object> context) {
+    return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
   }
 
   /**
@@ -139,11 +142,13 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
    * 
+   * @param context
+   *          the action context.
    * @return the value connector this model action was triggered on.
    */
-  public ICompositeValueConnector getModuleConnector() {
-    return (ICompositeValueConnector) getContext().get(
-        ActionContextConstants.MODULE_VIEW_CONNECTOR);
+  public ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
+    return (ICompositeValueConnector) context
+        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR);
   }
 
   /**
@@ -158,11 +163,14 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
    * 
+   * @param context
+   *          the action context.
    * @return the parent value connector this model action was triggered on.
    */
-  public ICompositeValueConnector getParentModuleConnector() {
-    return (ICompositeValueConnector) getContext().get(
-        ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR);
+  public ICompositeValueConnector getParentModuleConnector(
+      Map<String, Object> context) {
+    return (ICompositeValueConnector) context
+        .get(ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR);
   }
 
   /**

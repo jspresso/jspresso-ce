@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.frontend.action.swing.flow;
 
+import java.util.Map;
+
 import javax.swing.JOptionPane;
 
 import com.d2s.framework.util.swing.SwingUtil;
@@ -30,9 +32,9 @@ public class OkCancelAction extends AbstractMessageAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(getSourceComponent()), getMessage(),
+        .getWindowOrInternalFrame(getSourceComponent(context)), getMessage(),
         getName(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
         getIconFactory().getIcon(getIconImageURL(),
             IIconFactory.LARGE_ICON_SIZE));
@@ -41,7 +43,7 @@ public class OkCancelAction extends AbstractMessageAction {
     } else {
       setNextAction(cancelAction);
     }
-    super.execute(actionHandler);
+    super.execute(actionHandler, context);
   }
 
   /**

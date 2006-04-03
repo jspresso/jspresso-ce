@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.flow;
 
+import java.util.Map;
+
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.action.IActionHandler;
@@ -66,11 +68,12 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(final IActionHandler actionHandler) {
+  public void execute(final IActionHandler actionHandler,
+      final Map<String, Object> context) {
     final ULCAlert alert = new ULCAlert(UlcUtilities
-        .getRoot(getSourceComponent()), getName(), getMessage(), firstOption,
-        secondOption, thirdOption, getIconFactory().getIcon(getIconImageURL(),
-            IIconFactory.LARGE_ICON_SIZE));
+        .getRoot(getSourceComponent(context)), getName(), getMessage(),
+        firstOption, secondOption, thirdOption, getIconFactory().getIcon(
+            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
     alert.addWindowListener(new IWindowListener() {
 
       private static final long serialVersionUID = -6049928144066455758L;
@@ -78,7 +81,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
       public void windowClosing(@SuppressWarnings("unused")
       WindowEvent event) {
         setNextAction(getNextAction(alert.getValue()));
-        executeNextAction(actionHandler);
+        executeNextAction(actionHandler, context);
       }
     });
     alert.show();
@@ -98,8 +101,11 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * 
    * @param actionHandler
    *          the action handler responsible for the action execution.
+   * @param context
+   *          the action context.
    */
-  protected void executeNextAction(IActionHandler actionHandler) {
-    super.execute(actionHandler);
+  protected void executeNextAction(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    super.execute(actionHandler, context);
   }
 }

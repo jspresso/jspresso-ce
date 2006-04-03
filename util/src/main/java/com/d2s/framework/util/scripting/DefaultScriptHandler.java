@@ -30,14 +30,12 @@ public class DefaultScriptHandler implements IScriptHandler {
   /**
    * {@inheritDoc}
    */
-  public Object evaluate(IScript scriptable) {
+  public Object evaluate(IScript scriptable, Map<String, Object> context) {
     BSFManager enginesManager = new BSFManager();
-    if (scriptable.getContext() != null) {
-      for (Map.Entry<String, Object> contextEntry : scriptable.getContext()
-          .entrySet()) {
-        enginesManager.registerBean(contextEntry.getKey(), contextEntry
-            .getValue());
-      }
+    if (context != null) {
+      enginesManager.registerBean(IScript.CONTEXT, context);
+      enginesManager.registerBean(IScript.SCRIPTED_OBJECT, scriptable
+          .getScriptedObject());
     }
     try {
       return enginesManager.eval(scriptable.getLanguage(), null, 0, 0,
@@ -50,14 +48,12 @@ public class DefaultScriptHandler implements IScriptHandler {
   /**
    * {@inheritDoc}
    */
-  public void execute(IScript scriptable) {
+  public void execute(IScript scriptable, Map<String, Object> context) {
     BSFManager enginesManager = new BSFManager();
-    if (scriptable.getContext() != null) {
-      for (Map.Entry<String, Object> contextEntry : scriptable.getContext()
-          .entrySet()) {
-        enginesManager.registerBean(contextEntry.getKey(), contextEntry
-            .getValue());
-      }
+    if (context != null) {
+      enginesManager.registerBean(IScript.CONTEXT, scriptable);
+      enginesManager.registerBean(IScript.SCRIPTED_OBJECT, scriptable
+          .getScriptedObject());
     }
     try {
       enginesManager.exec(scriptable.getLanguage(), null, 0, 0, scriptable

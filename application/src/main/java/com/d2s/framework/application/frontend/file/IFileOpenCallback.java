@@ -4,6 +4,7 @@
 package com.d2s.framework.application.frontend.file;
 
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * This interface is used react to file openings.
@@ -23,11 +24,16 @@ public interface IFileOpenCallback {
    *          the input stream to read the file bytes.
    * @param filePath
    *          the file path.
+   * @param context
+   *          the action context.
    */
-  void fileOpened(InputStream in, String filePath);
+  void fileOpened(InputStream in, String filePath, Map<String, Object> context);
 
   /**
    * Called whenever the file opening is cancelled.
+   * 
+   * @param context
+   *          the action context.
    */
-  void cancel();
+  void cancel(Map<String, Object> context);
 }

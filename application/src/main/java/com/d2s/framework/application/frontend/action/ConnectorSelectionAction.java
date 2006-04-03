@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.frontend.action;
 
+import java.util.Map;
+
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
@@ -25,11 +27,11 @@ public class ConnectorSelectionAction extends AbstractChainedAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler) {
-    ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector();
-    int[] connectorSelection = (int[]) getContext().get(
+  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+    ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
+    int[] connectorSelection = (int[]) context.get(
         ActionContextConstants.SELECTED_INDICES);
     collectionConnector.setSelectedIndices(connectorSelection);
-    super.execute(actionHandler);
+    super.execute(actionHandler, context);
   }
 }

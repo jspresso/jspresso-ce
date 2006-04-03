@@ -102,24 +102,24 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
         || super.onSave(entity, id, state, propertyNames, types);
   }
 
-//  /**
-//   * {@inheritDoc}
-//   */
-//  @Override
-//  public boolean onFlushDirty(Object entity, Serializable id,
-//      Object[] currentState, Object[] previousState, String[] propertyNames,
-//      Type[] types) {
-//    boolean stateUpdated = false;
-//    if (entity instanceof IEntity) {
-//      if (((IEntity) entity).onUpdate()) {
-//        extractState((IEntity) entity, propertyNames, currentState);
-//        stateUpdated = true;
-//      }
-//    }
-//    return stateUpdated
-//        || super.onFlushDirty(entity, id, currentState, previousState,
-//        propertyNames, types);
-//  }
+  // /**
+  // * {@inheritDoc}
+  // */
+  // @Override
+  // public boolean onFlushDirty(Object entity, Serializable id,
+  // Object[] currentState, Object[] previousState, String[] propertyNames,
+  // Type[] types) {
+  // boolean stateUpdated = false;
+  // if (entity instanceof IEntity) {
+  // if (((IEntity) entity).onUpdate()) {
+  // extractState((IEntity) entity, propertyNames, currentState);
+  // stateUpdated = true;
+  // }
+  // }
+  // return stateUpdated
+  // || super.onFlushDirty(entity, id, currentState, previousState,
+  // propertyNames, types);
+  // }
 
   private void extractState(IEntity entity, String[] propertyNames,
       Object[] state) {

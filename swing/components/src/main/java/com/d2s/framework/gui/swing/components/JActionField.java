@@ -229,7 +229,6 @@ public class JActionField extends JPanel {
     textField.selectAll();
   }
 
-  
   /**
    * Gets the showTextField.
    * 

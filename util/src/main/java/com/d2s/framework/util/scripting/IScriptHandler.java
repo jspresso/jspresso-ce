@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.util.scripting;
 
+import java.util.Map;
+
 /**
  * The interface implemented by script executors.
  * <p>
@@ -19,15 +21,19 @@ public interface IScriptHandler {
    * 
    * @param script
    *          the script to execute.
+   * @param context
+   *          the action context.
    */
-  void execute(IScript script);
+  void execute(IScript script, Map<String, Object> context);
 
   /**
    * Evaluates a scripted expression.
    * 
    * @param script
    *          the script to evaluate.
+   * @param context
+   *          the action context.
    * @return the evaluation result.
    */
-  Object evaluate(IScript script);
+  Object evaluate(IScript script, Map<String, Object> context);
 }

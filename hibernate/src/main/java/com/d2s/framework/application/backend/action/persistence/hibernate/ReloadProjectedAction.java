@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -31,29 +32,29 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
+  IActionHandler actionHandler, final Map<String, Object> context) {
     getTransactionTemplate().execute(new TransactionCallback() {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
-        ICompositeValueConnector moduleConnector = getModuleConnector();
+        ICompositeValueConnector moduleConnector = getModuleConnector(context);
         BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
         if (module.getModuleObjects() != null) {
           Collection projectedCollection = module.getModuleObjects();
           for (Object entity : projectedCollection) {
-            reloadEntity((IEntity) entity);
+            reloadEntity((IEntity) entity, context);
           }
         } else if (module.getModuleObject() != null) {
-          reloadEntity((IEntity) module.getModuleObject());
+          reloadEntity((IEntity) module.getModuleObject(), context);
         }
         return null;
       }
     });
   }
 
-  private void reloadEntity(IEntity entity) {
+  private void reloadEntity(IEntity entity, Map<String, Object> context) {
     if (entity.isPersistent()) {
-      getApplicationSession().merge(
+      getApplicationSession(context).merge(
           (IEntity) getHibernateTemplate().load(entity.getContract().getName(),
               entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
     }

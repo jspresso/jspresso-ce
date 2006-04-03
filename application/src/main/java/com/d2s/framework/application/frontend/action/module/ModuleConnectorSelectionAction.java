@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.frontend.action.module;
 
+import java.util.Map;
+
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
@@ -28,19 +30,19 @@ public class ModuleConnectorSelectionAction extends AbstractChainedAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler) {
-    ICompositeValueConnector moduleConnector = getModuleConnector();
+  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+    ICompositeValueConnector moduleConnector = getModuleConnector(context);
     ICollectionConnector parentModuleCollectionConnector = ((ICollectionConnectorProvider) moduleConnector
         .getParentConnector().getParentConnector()).getCollectionConnector();
     parentModuleCollectionConnector.setSelectedIndices(new int[0]);
-    int[] connectorSelection = (int[]) getContext().get(
-        ActionContextConstants.SELECTED_INDICES);
+    int[] connectorSelection = (int[]) context
+        .get(ActionContextConstants.SELECTED_INDICES);
     if (moduleConnector instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) moduleConnector)
           .getCollectionConnector();
       collectionConnector.setAllowLazyChildrenLoading(false);
       collectionConnector.setSelectedIndices(connectorSelection);
     }
-    super.execute(actionHandler);
+    super.execute(actionHandler, context);
   }
 }

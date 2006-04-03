@@ -3,10 +3,6 @@
  */
 package com.d2s.framework.util.scripting;
 
-import java.util.Map;
-
-import com.d2s.framework.util.context.IContextAware;
-
 /**
  * Interface implemented by ny scriptable object.
  * <p>
@@ -16,7 +12,7 @@ import com.d2s.framework.util.context.IContextAware;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IScript extends IContextAware {
+public interface IScript {
 
   /**
    * <code>SCRIPTED_OBJECT</code> is the script context key of the scripted
@@ -25,10 +21,9 @@ public interface IScript extends IContextAware {
   String SCRIPTED_OBJECT = "SCRIPTED_OBJECT";
 
   /**
-   * <code>SCRIPT</code> is the script context key of the script object
-   * itself. It is generally used to set the script execution result.
+   * <code>CONTEXT</code> is the script execution context map.
    */
-  String SCRIPT          = "SCRIPT";
+  String CONTEXT         = "CONTEXT";
 
   /**
    * Gets the script code.
@@ -38,24 +33,16 @@ public interface IScript extends IContextAware {
   String getScript();
 
   /**
+   * Gets the scripted object.
+   * 
+   * @return the scripted object.
+   */
+  Object getScriptedObject();
+
+  /**
    * Gets the scripting language used.
    * 
    * @return the scripting language used.
    */
   String getLanguage();
-
-  /**
-   * Gets the script execution result.
-   * 
-   * @return the script execution result.
-   */
-  Map<String, Object> getExecutionResult();
-
-  /**
-   * Sets the script execution result.
-   * 
-   * @param executionResult
-   *          the script execution result.
-   */
-  void setExecutionResult(Map<String, Object> executionResult);
 }

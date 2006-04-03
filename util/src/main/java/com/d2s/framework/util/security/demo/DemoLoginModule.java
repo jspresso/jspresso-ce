@@ -17,7 +17,6 @@ import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
-
 /**
  * login : demo. password : demo.
  * <p>
@@ -104,7 +103,8 @@ public class DemoLoginModule implements LoginModule {
     Callback[] callbacks = new Callback[3];
     callbacks[0] = new NameCallback("User");
     callbacks[1] = new PasswordCallback("Password", false);
-    callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION, "Enter login information :");
+    callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION,
+        "Enter login information :");
 
     try {
       callbackHandler.handle(callbacks);
@@ -229,13 +229,14 @@ public class DemoLoginModule implements LoginModule {
   public boolean abort() {
     if (!succeeded) {
       Callback[] callbacks = new Callback[1];
-      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, "Login failed.");
+      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR,
+          "Login failed.");
       try {
         callbackHandler.handle(callbacks);
       } catch (IOException ex) {
-        //NO-OP.
+        // NO-OP.
       } catch (UnsupportedCallbackException ex) {
-        //NO-OP.
+        // NO-OP.
       }
       return false;
     } else if (succeeded && !commitSucceeded) {

@@ -35,11 +35,11 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
-    ICompositeValueConnector parentModuleConnector = (ICompositeValueConnector) getModuleConnector()
-        .getParentConnector().getParentConnector();
+  IActionHandler actionHandler, Map<String, Object> context) {
+    ICompositeValueConnector parentModuleConnector = (ICompositeValueConnector) getModuleConnector(
+        context).getParentConnector().getParentConnector();
 
-    int[] selectedIndices = getParentModuleSelectedIndices();
+    int[] selectedIndices = getParentModuleSelectedIndices(context);
 
     if (selectedIndices == null || selectedIndices.length == 0) {
       return;

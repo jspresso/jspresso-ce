@@ -5,6 +5,7 @@ package com.d2s.framework.application.backend.action.module;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.binding.ConnectorHelper;
@@ -33,16 +34,16 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
-    int[] selectedIndices = getSelectedIndices();
-    ICollectionConnector collectionConnector = getModelConnector();
+  IActionHandler actionHandler, Map<String, Object> context) {
+    int[] selectedIndices = getSelectedIndices(context);
+    ICollectionConnector collectionConnector = getModelConnector(context);
 
     if (selectedIndices == null || selectedIndices.length == 0
         || collectionConnector == null) {
       return;
     }
 
-    ICompositeValueConnector moduleConnector = getModuleConnector();
+    ICompositeValueConnector moduleConnector = getModuleConnector(context);
     BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
 
     Collection<IPropertyChangeCapable> projectedCollection;
@@ -60,9 +61,9 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
     projectedCollection.addAll(entityClones);
     module.setModuleObjects(projectedCollection);
 
-    getModelConnector().setConnectorValue(projectedCollection);
+    getModelConnector(context).setConnectorValue(projectedCollection);
 
-    getContext().put(ActionContextConstants.SELECTED_INDICES,
+    context.put(ActionContextConstants.SELECTED_INDICES,
         ConnectorHelper.getIndicesOf(collectionConnector, entityClones));
   }
 }

@@ -26,6 +26,7 @@ public interface IBackendController extends IController {
    * Asks this backend controller to perform any necessary action upon startup.
    * One of this action should be to construct the root connector based on the
    * root model descriptor.
+   * 
    * @return true if the controller successfully started.
    */
   boolean start();

@@ -41,35 +41,35 @@ public class ChooseFileAction extends AbstractSwingAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
 
-    JFileChooser currentFileChooser = getFileChooser();
+    JFileChooser currentFileChooser = getFileChooser(context);
 
     int returnVal = currentFileChooser.showOpenDialog(SwingUtilities
-        .getWindowAncestor(getSourceComponent()));
+        .getWindowAncestor(getSourceComponent(context)));
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
         try {
           fileOpenCallback.fileOpened(new FileInputStream(file), file
-              .getAbsolutePath());
+              .getAbsolutePath(), context);
         } catch (FileNotFoundException ex) {
-          fileOpenCallback.cancel();
+          fileOpenCallback.cancel(context);
         }
       } else {
-        fileOpenCallback.cancel();
+        fileOpenCallback.cancel(context);
       }
     } else {
-      fileOpenCallback.cancel();
+      fileOpenCallback.cancel(context);
     }
-    super.execute(actionHandler);
+    super.execute(actionHandler, context);
   }
 
-  private JFileChooser getFileChooser() {
+  private JFileChooser getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new JFileChooser();
       fileChooser.setDialogTitle(labelTranslator.getTranslation(getName(),
-          getLocale()));
+          getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
             .entrySet()) {
@@ -80,7 +80,7 @@ public class ChooseFileAction extends AbstractSwingAction {
           extensionsDescription.append(" )");
           fileChooser.addChoosableFileFilter(new FileFilterAdapter(
               fileTypeEntry.getValue(), labelTranslator.getTranslation(
-                  fileTypeEntry.getKey(), getLocale())
+                  fileTypeEntry.getKey(), getLocale(context))
                   + extensionsDescription.toString()));
         }
       }

@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.frontend.action.swing;
 
+import java.util.Map;
+
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
@@ -29,11 +31,12 @@ public abstract class AbstractSwingAction extends AbstractChainedAction {
    * action context key which is :
    * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
    * 
+   * @param context
+   *          the action context.
    * @return the source widget this action was triggered from.
    */
-  public JComponent getSourceComponent() {
-    return (JComponent) getContext().get(
-        ActionContextConstants.SOURCE_COMPONENT);
+  public JComponent getSourceComponent(Map<String, Object> context) {
+    return (JComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
   }
 
   /**

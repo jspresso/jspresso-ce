@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.frontend.action.ulc;
 
+import java.util.Map;
+
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IViewFactory;
@@ -28,11 +30,12 @@ public abstract class AbstractUlcAction extends AbstractChainedAction {
    * action context key which is :
    * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
    * 
+   * @param context
+   *          the action context.
    * @return the source widget this action was triggered from.
    */
-  public ULCComponent getSourceComponent() {
-    return (ULCComponent) getContext().get(
-        ActionContextConstants.SOURCE_COMPONENT);
+  public ULCComponent getSourceComponent(Map<String, Object> context) {
+    return (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
   }
 
   /**

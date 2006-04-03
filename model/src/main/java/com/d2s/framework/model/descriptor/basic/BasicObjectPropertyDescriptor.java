@@ -25,7 +25,7 @@ public class BasicObjectPropertyDescriptor extends
   public Class getPropertyClass() {
     return Object.class;
   }
-  
+
   /**
    * {@inheritDoc}
    */

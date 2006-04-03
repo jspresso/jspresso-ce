@@ -476,7 +476,6 @@ public class BasicApplicationSession implements IApplicationSession {
     return dirtRecorder;
   }
 
-  
   /**
    * Gets the owner.
    * 
@@ -486,11 +485,11 @@ public class BasicApplicationSession implements IApplicationSession {
     return owner;
   }
 
-  
   /**
    * Sets the owner.
    * 
-   * @param owner the owner to set.
+   * @param owner
+   *          the owner to set.
    */
   public void setOwner(Subject owner) {
     this.owner = owner;

@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
+import java.util.Map;
+
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
@@ -30,19 +32,19 @@ public class SaveProjectedAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
+  IActionHandler actionHandler, final Map<String, Object> context) {
     getTransactionTemplate().execute(new TransactionCallback() {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
-        ICompositeValueConnector moduleConnector = getModuleConnector();
+        ICompositeValueConnector moduleConnector = getModuleConnector(context);
         BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
         if (module.getModuleObjects() != null) {
           for (Object entity : module.getModuleObjects()) {
-            saveEntity((IEntity) entity);
+            saveEntity((IEntity) entity, context);
           }
         } else if (module.getModuleObject() != null) {
-          saveEntity((IEntity) module.getModuleObject());
+          saveEntity((IEntity) module.getModuleObject(), context);
         }
         return null;
       }
@@ -55,11 +57,11 @@ public class SaveProjectedAction extends AbstractHibernateAction {
    * @param entity
    *          the entity to save.
    */
-  private void saveEntity(final IEntity entity) {
+  private void saveEntity(final IEntity entity, final Map<String, Object> context) {
     getHibernateTemplate().execute(new HibernateCallback() {
 
       public Object doInHibernate(Session session) {
-        IEntity mergedEntity = mergeInHibernate(entity, session);
+        IEntity mergedEntity = mergeInHibernate(entity, session, context);
         session.saveOrUpdate(mergedEntity);
         return null;
       }

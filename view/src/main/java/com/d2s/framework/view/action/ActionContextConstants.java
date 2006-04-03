@@ -99,5 +99,10 @@ public final class ActionContextConstants {
   /**
    * The view descriptor at the origin of the action chain.
    */
-  public static final String SOURCE_MODEL_DESCRIPTOR          = "SOURCE_MODEL_DESCRIPTOR";
+  public static final String SOURCE_MODEL_DESCRIPTOR        = "SOURCE_MODEL_DESCRIPTOR";
+
+  /**
+   * the connector of the query model.
+   */
+  public static final String QUERY_MODEL_CONNECTOR          = "QUERY_MODEL_CONNECTOR";
 }

@@ -36,9 +36,8 @@ public abstract class EmptyPropertyIntegrityProcessor<E, F> implements
    * {@inheritDoc}
    */
   @SuppressWarnings("unused")
-  public void postprocessSetterIntegrity(E target,
-      F oldPropertyValue, F newPropertyValue)
-      throws IntegrityException {
+  public void postprocessSetterIntegrity(E target, F oldPropertyValue,
+      F newPropertyValue) throws IntegrityException {
     // NO-OP
   }
 

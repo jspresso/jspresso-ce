@@ -20,7 +20,7 @@ import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 public class BasicBinaryPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IBinaryPropertyDescriptor {
 
-  private Integer maxLength;
+  private Integer                   maxLength;
   private Map<String, List<String>> fileFilter;
 
   /**
@@ -47,7 +47,6 @@ public class BasicBinaryPropertyDescriptor extends
     return byte[].class;
   }
 
-  
   /**
    * {@inheritDoc}
    */
@@ -55,11 +54,11 @@ public class BasicBinaryPropertyDescriptor extends
     return fileFilter;
   }
 
-  
   /**
    * Sets the fileFilter.
    * 
-   * @param fileFilter the fileFilter to set.
+   * @param fileFilter
+   *          the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;

@@ -5,6 +5,7 @@ package com.d2s.framework.application.backend.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -31,9 +32,9 @@ public class CloneCollectionAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
-    int[] selectedIndices = getSelectedIndices();
-    ICollectionConnector collectionConnector = getModelConnector();
+  IActionHandler actionHandler, Map<String, Object> context) {
+    int[] selectedIndices = getSelectedIndices(context);
+    ICollectionConnector collectionConnector = getModelConnector(context);
     if (selectedIndices == null || selectedIndices.length == 0
         || collectionConnector == null) {
       return;
@@ -43,8 +44,8 @@ public class CloneCollectionAction extends AbstractCollectionAction {
       entityClones.add(((IEntity) collectionConnector.getChildConnector(
           selectedIndices[i]).getConnectorValue()).clone(false));
     }
-    getContext().put(ActionContextConstants.SELECTED_INDICES,
-        ConnectorHelper.getIndicesOf(collectionConnector, entityClones));
+    context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
+        .getIndicesOf(collectionConnector, entityClones));
   }
 
 }

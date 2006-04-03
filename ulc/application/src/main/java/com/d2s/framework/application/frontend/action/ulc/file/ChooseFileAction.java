@@ -36,7 +36,8 @@ public class ChooseFileAction extends AbstractUlcAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler,
+      final Map<String, Object> context) {
     ClientContext.loadFile(new IFileLoadHandler() {
 
       private static final long serialVersionUID = -1025629868916915262L;
@@ -44,26 +45,26 @@ public class ChooseFileAction extends AbstractUlcAction {
       @SuppressWarnings("unused")
       public void onSuccess(InputStream in, String filePath) {
         if (fileOpenCallback != null) {
-          getFileChooser().setCurrentDirectory(filePath);
-          fileOpenCallback.fileOpened(in, filePath);
+          getFileChooser(context).setCurrentDirectory(filePath);
+          fileOpenCallback.fileOpened(in, filePath, context);
         }
       }
 
       @SuppressWarnings("unused")
       public void onFailure(int reason, String description) {
         if (fileOpenCallback != null) {
-          fileOpenCallback.cancel();
+          fileOpenCallback.cancel(context);
         }
       }
-    }, getFileChooser());
-    super.execute(actionHandler);
+    }, getFileChooser(context));
+    super.execute(actionHandler, context);
   }
 
-  private FileChooserConfig getFileChooser() {
+  private FileChooserConfig getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new FileChooserConfig();
       fileChooser.setDialogTitle(labelTranslator.getTranslation(getName(),
-          getLocale()));
+          getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
             .entrySet()) {
@@ -72,10 +73,12 @@ public class ChooseFileAction extends AbstractUlcAction {
             extensionsDescription.append("*").append(fileExtension).append(" ");
           }
           extensionsDescription.append(" )");
-          fileChooser.addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
-              fileTypeEntry.getValue().toArray(new String[0]), labelTranslator
-                  .getTranslation(fileTypeEntry.getKey(), getLocale())
-                  + extensionsDescription.toString()));
+          fileChooser
+              .addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
+                  fileTypeEntry.getValue().toArray(new String[0]),
+                  labelTranslator.getTranslation(fileTypeEntry.getKey(),
+                      getLocale(context))
+                      + extensionsDescription.toString()));
         }
       }
     }

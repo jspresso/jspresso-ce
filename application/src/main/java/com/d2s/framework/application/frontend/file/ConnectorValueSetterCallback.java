@@ -7,8 +7,9 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
-import com.d2s.framework.application.frontend.action.AbstractFrontendAction;
+import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.ActionException;
 
@@ -24,23 +25,11 @@ import com.d2s.framework.view.action.ActionException;
  */
 public class ConnectorValueSetterCallback implements IFileOpenCallback {
 
-  private AbstractFrontendAction chooseFileAction;
-
-  /**
-   * Constructs a new <code>ConnectorValueSetterCallback</code> instance.
-   * 
-   * @param chooseFileAction
-   *          the action this callback is tied to.
-   */
-  public ConnectorValueSetterCallback(AbstractFrontendAction chooseFileAction) {
-    this.chooseFileAction = chooseFileAction;
-  }
-
   /**
    * {@inheritDoc}
    */
   public void fileOpened(InputStream in, @SuppressWarnings("unused")
-  String filePath) {
+  String filePath, Map<String, Object> context) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       InputStream is = new BufferedInputStream(in);
@@ -51,9 +40,8 @@ public class ConnectorValueSetterCallback implements IFileOpenCallback {
       }
       baos.flush();
       byte[] fileContent = baos.toByteArray();
-      chooseFileAction.getContext().put(ActionContextConstants.ACTION_RESULT,
-          fileContent);
-      chooseFileAction.getViewConnector().setConnectorValue(fileContent);
+      context.put(ActionContextConstants.ACTION_RESULT, fileContent);
+      ((IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR)).setConnectorValue(fileContent);
     } catch (IOException ex) {
       throw new ActionException(ex);
     } finally {
@@ -70,7 +58,8 @@ public class ConnectorValueSetterCallback implements IFileOpenCallback {
   /**
    * {@inheritDoc}
    */
-  public void cancel() {
+  public void cancel(@SuppressWarnings("unused")
+  Map<String, Object> context) {
     // NO-OP
   }
 

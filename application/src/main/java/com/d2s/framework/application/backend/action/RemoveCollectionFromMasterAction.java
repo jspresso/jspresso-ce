@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend.action;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -30,20 +31,20 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
-    ICollectionConnector collectionConnector = getModelConnector();
+  IActionHandler actionHandler, Map<String, Object> context) {
+    ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
       return;
     }
-    ICollectionPropertyDescriptor collectionDescriptor = (ICollectionPropertyDescriptor) getModelDescriptor();
+    ICollectionPropertyDescriptor collectionDescriptor = (ICollectionPropertyDescriptor) getModelDescriptor(context);
     Object master = collectionConnector.getParentConnector()
         .getConnectorValue();
     String property = collectionDescriptor.getName();
     ICollectionAccessor collectionAccessor = getAccessorFactory()
         .createCollectionPropertyAccessor(property, master.getClass());
     int deletionCount = 0;
-    if (getSelectedIndices() != null) {
-      for (int selectedIndex : getSelectedIndices()) {
+    if (getSelectedIndices(context) != null) {
+      for (int selectedIndex : getSelectedIndices(context)) {
         Object nextDetailToRemove = collectionConnector.getChildConnector(
             selectedIndex - deletionCount).getConnectorValue();
         try {

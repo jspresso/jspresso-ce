@@ -17,7 +17,7 @@ import java.security.Principal;
 public class DemoPrincipal implements Principal, java.io.Serializable {
 
   private static final long serialVersionUID = -7412558834725479377L;
-  private String name;
+  private String            name;
 
   /**
    * Create a DemoPrincipal with a Sample username.

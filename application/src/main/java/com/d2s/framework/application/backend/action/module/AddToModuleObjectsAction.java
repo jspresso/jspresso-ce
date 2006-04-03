@@ -6,6 +6,7 @@ package com.d2s.framework.application.backend.action.module;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.binding.ConnectorHelper;
@@ -35,10 +36,10 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
-    ICompositeValueConnector moduleConnector = getModuleConnector();
+  IActionHandler actionHandler, Map<String, Object> context) {
+    ICompositeValueConnector moduleConnector = getModuleConnector(context);
     BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
-    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor())
+    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor(context))
         .getElementDescriptor();
 
     Collection<IPropertyChangeCapable> projectedCollection;
@@ -53,10 +54,10 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     projectedCollection.add(newEntity);
     module.setModuleObjects(projectedCollection);
 
-    getModelConnector().setConnectorValue(projectedCollection);
+    getModelConnector(context).setConnectorValue(projectedCollection);
 
-    getContext().put(ActionContextConstants.SELECTED_INDICES,
-        ConnectorHelper.getIndicesOf(getModelConnector(), Collections
+    context.put(ActionContextConstants.SELECTED_INDICES,
+        ConnectorHelper.getIndicesOf(getModelConnector(context), Collections
             .singleton(newEntity)));
   }
 }

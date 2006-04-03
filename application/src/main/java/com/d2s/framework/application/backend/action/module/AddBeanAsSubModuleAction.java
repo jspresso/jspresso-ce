@@ -5,6 +5,7 @@ package com.d2s.framework.application.backend.action.module;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -34,14 +35,14 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
-    int[] selectedIndices = getSelectedIndices();
+  IActionHandler actionHandler, Map<String, Object> context) {
+    int[] selectedIndices = getSelectedIndices(context);
 
     if (selectedIndices == null || selectedIndices.length == 0) {
       return;
     }
-    ICompositeValueConnector moduleConnector = getModuleConnector();
-    ICollectionConnector collectionConnector = getModelConnector();
+    ICompositeValueConnector moduleConnector = getModuleConnector(context);
+    ICollectionConnector collectionConnector = getModelConnector(context);
     SubModule parentModule = (SubModule) moduleConnector.getConnectorValue();
     List<SubModule> children;
     if (parentModule.getSubModules() == null) {
@@ -68,7 +69,7 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
       }
     }
     parentModule.setSubModules(children);
-    getContext().put(ActionContextConstants.SELECTED_INDICES,
+    context.put(ActionContextConstants.SELECTED_INDICES,
         childSelectedIndices);
   }
 }

@@ -4,7 +4,6 @@
 package com.d2s.framework.application.frontend.action.ulc.lov;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,44 +54,39 @@ public class LovAction extends ModalDialogAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
-    Map<String, Object> okInitialContext = new HashMap<String, Object>();
-    getViewConnector()
-        .setConnectorValue(getViewConnector().getConnectorValue());
-    okInitialContext.put(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
-        getViewConnector());
-    okAction.setContext(okInitialContext);
+    getViewConnector(context).setConnectorValue(
+        getViewConnector(context).getConnectorValue());
+    context.put(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
+        getViewConnector(context));
     actions.add(findAction);
     actions.add(okAction);
     actions.add(cancelAction);
     setActions(actions);
     IView<ULCComponent> lovView = lovViewFactory.createLovView(
-        getQueryEntityDescriptor(), actionHandler, getLocale());
+        getQueryEntityDescriptor(context), actionHandler, getLocale(context));
     setMainView(lovView);
-    createQueryEntityAction.setContext(getContext());
     createQueryEntityAction
-        .setQueryEntityDescriptor(getQueryEntityDescriptor());
-    actionHandler
-        .execute(createQueryEntityAction);
-    IValueConnector queryEntityConnector = (IValueConnector) getContext()
-        .get(ActionContextConstants.MODEL_CONNECTOR);
+        .setQueryEntityDescriptor(getQueryEntityDescriptor(context));
+    actionHandler.execute(createQueryEntityAction, context);
+    IValueConnector queryEntityConnector = (IValueConnector) context
+        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
     getMvcBinder().bind(lovView.getConnector(), queryEntityConnector);
-    Object queryPropertyValue = getContext().get(
-        ActionContextConstants.ACTION_PARAM);
+    Object queryPropertyValue = context
+        .get(ActionContextConstants.ACTION_PARAM);
     if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {
-      findAction.setContext(getContext());
-      actionHandler.execute(findAction);
+      actionHandler.execute(findAction, context);
       IQueryEntity queryEntity = (IQueryEntity) queryEntityConnector
           .getConnectorValue();
       if (queryEntity.getQueriedEntities() != null
           && queryEntity.getQueriedEntities().size() == 1) {
-        getViewConnector().setConnectorValue(
+        getViewConnector(context).setConnectorValue(
             queryEntity.getQueriedEntities().get(0));
         return;
       }
     }
-    super.execute(actionHandler);
+    super.execute(actionHandler, context);
   }
 
   /**
@@ -149,14 +143,17 @@ public class LovAction extends ModalDialogAction {
   /**
    * Gets the queryEntityDescriptor.
    * 
+   * @param context
+   *          the action context.
    * @return the queryEntityDescriptor.
    */
-  protected IEntityDescriptor getQueryEntityDescriptor() {
+  protected IEntityDescriptor getQueryEntityDescriptor(
+      Map<String, Object> context) {
     if (queryEntityDescriptor != null) {
       return queryEntityDescriptor;
     }
-    IModelDescriptor modelDescriptor = (IModelDescriptor) getContext().get(
-        ActionContextConstants.MODEL_DESCRIPTOR);
+    IModelDescriptor modelDescriptor = (IModelDescriptor) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
     if (modelDescriptor instanceof IReferencePropertyDescriptor) {
       return (IEntityDescriptor) ((IReferencePropertyDescriptor) modelDescriptor)
           .getReferencedDescriptor();

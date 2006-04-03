@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.util.scripting;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Utility class helping to bring scripting capability in an object.
@@ -19,8 +17,6 @@ public class ScriptMixin implements IScript {
 
   private String              script;
   private String              language;
-  private Map<String, Object> scriptContext;
-  private Map<String, Object> executionResult;
   private Object              scriptedObject;
 
   /**
@@ -31,30 +27,6 @@ public class ScriptMixin implements IScript {
    */
   public ScriptMixin(Object scriptedObject) {
     this.scriptedObject = scriptedObject;
-  }
-
-  /**
-   * Returns a context containing :
-   * <li> any value from the context set through the setContext method.
-   * <li> SCRIPT : the mixin itself.
-   * <li> SCRIPTED_OBJECT : the object the mixin is introduced in.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Map<String, Object> getContext() {
-    if (scriptContext == null) {
-      scriptContext = new HashMap<String, Object>();
-    }
-    scriptContext.put(IScript.SCRIPT, this);
-    scriptContext.put(IScript.SCRIPTED_OBJECT, scriptedObject);
-    return scriptContext;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setContext(Map<String, Object> context) {
-    this.scriptContext = context;
   }
 
   /**
@@ -95,22 +67,13 @@ public class ScriptMixin implements IScript {
     this.script = script;
   }
 
+  
   /**
-   * Gets the executionResult.
+   * Gets the scriptedObject.
    * 
-   * @return the executionResult.
+   * @return the scriptedObject.
    */
-  public Map<String, Object> getExecutionResult() {
-    return executionResult;
-  }
-
-  /**
-   * Sets the executionResult.
-   * 
-   * @param executionResult
-   *          the executionResult to set.
-   */
-  public void setExecutionResult(Map<String, Object> executionResult) {
-    this.executionResult = executionResult;
+  public Object getScriptedObject() {
+    return scriptedObject;
   }
 }

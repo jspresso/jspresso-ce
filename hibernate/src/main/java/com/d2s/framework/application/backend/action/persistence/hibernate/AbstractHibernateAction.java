@@ -5,6 +5,7 @@ package com.d2s.framework.application.backend.action.persistence.hibernate;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.LockMode;
 import org.hibernate.Session;
@@ -33,11 +34,14 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
   /**
    * Gets the current application session.
    * 
+   * @param context
+   *          the action context.
    * @return the current application session.
    */
-  protected IApplicationSession getApplicationSession() {
-    return (IApplicationSession) getContext().get(
-        ActionContextConstants.APPLICATION_SESSION);
+  protected IApplicationSession getApplicationSession(
+      Map<String, Object> context) {
+    return (IApplicationSession) context
+        .get(ActionContextConstants.APPLICATION_SESSION);
   }
 
   /**
@@ -76,11 +80,14 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    *          the entity to merge.
    * @param hibernateSession
    *          the hibernate session
+   * @param context
+   *          the action context.
    * @return the merged entity.
    */
-  protected IEntity mergeInHibernate(IEntity entity, Session hibernateSession) {
-    return mergeInHibernate(Collections.singletonList(entity), hibernateSession)
-        .get(0);
+  protected IEntity mergeInHibernate(IEntity entity, Session hibernateSession,
+      Map<String, Object> context) {
+    return mergeInHibernate(Collections.singletonList(entity),
+        hibernateSession, context).get(0);
   }
 
   /**
@@ -91,12 +98,14 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    *          the entities to merge.
    * @param hibernateSession
    *          the hibernate session
+   * @param context
+   *          the action context.
    * @return the merged entity.
    */
   protected List<IEntity> mergeInHibernate(List<IEntity> entities,
-      Session hibernateSession) {
-    List<IEntity> mergedEntities = getApplicationSession().cloneInUnitOfWork(
-        entities);
+      Session hibernateSession, Map<String, Object> context) {
+    List<IEntity> mergedEntities = getApplicationSession(context)
+        .cloneInUnitOfWork(entities);
     for (IEntity mergedEntity : mergedEntities) {
       if (mergedEntity.isPersistent()) {
         hibernateSession.lock(mergedEntity, LockMode.NONE);

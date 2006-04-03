@@ -50,12 +50,11 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
 
   /**
    * Constructs a new <code>ULCActionField</code> instance.
-   * 
    */
   public ULCActionField() {
     this(true);
   }
-  
+
   /**
    * Constructs a new <code>ULCActionField</code> instance.
    * 

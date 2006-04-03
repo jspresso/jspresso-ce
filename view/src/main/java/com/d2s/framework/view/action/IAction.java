@@ -3,9 +3,7 @@
  */
 package com.d2s.framework.view.action;
 
-import java.util.Collection;
-
-import com.d2s.framework.util.context.IContextAware;
+import java.util.Map;
 
 /**
  * This interface establishes the contract of any action in the application.
@@ -16,7 +14,7 @@ import com.d2s.framework.util.context.IContextAware;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IAction extends IContextAware {
+public interface IAction {
 
   /**
    * Executes the action. During execution, the action should access its
@@ -27,8 +25,11 @@ public interface IAction extends IContextAware {
    *          the action handler this action has been told to execute by. It may
    *          be used to post another actio execution upon completion of this
    *          one.
+   * @param context
+   *          the execution context. The action should update it depending on
+   *          its result.
    */
-  void execute(IActionHandler actionHandler);
+  void execute(IActionHandler actionHandler, Map<String, Object> context);
 
   /**
    * Tells the framework wether this action executes on the application model or
@@ -39,15 +40,6 @@ public interface IAction extends IContextAware {
    *         (domain model objects).
    */
   boolean isBackend();
-
-  /**
-   * Gets the inputContextKeys. These keys index the context values used by the
-   * action to execute. The values are accessed using
-   * <code>getContext().get(key)</code>.
-   * 
-   * @return the inputContextKeys.
-   */
-  Collection<String> getInputContextKeys();
 
   /**
    * Wether the action take a long time.

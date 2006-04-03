@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.frontend.action.swing.lov;
 
+import java.util.Map;
+
 import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.swing.std.DialogOkAction;
@@ -30,8 +32,8 @@ public class OkLovAction extends DialogOkAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler) {
-    ICollectionConnector resultConnector = ((ICollectionConnectorProvider) ((ICompositeValueConnector) getViewConnector())
+  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+    ICollectionConnector resultConnector = ((ICollectionConnectorProvider) ((ICompositeValueConnector) getViewConnector(context))
         .getChildConnector(BeanRefPropertyConnector.THIS_PROPERTY))
         .getCollectionConnector();
     int[] resultSelectedIndices = resultConnector.getSelectedIndices();
@@ -42,8 +44,8 @@ public class OkLovAction extends DialogOkAction {
         selectedEntity = ((IController) actionHandler).merge(selectedEntity,
             MergeMode.MERGE_KEEP);
       }
-      getContext().put(ActionContextConstants.ACTION_RESULT, selectedEntity);
+      context.put(ActionContextConstants.ACTION_RESULT, selectedEntity);
     }
-    super.execute(actionHandler);
+    super.execute(actionHandler, context);
   }
 }

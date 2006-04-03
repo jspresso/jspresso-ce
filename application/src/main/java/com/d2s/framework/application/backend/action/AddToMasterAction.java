@@ -5,6 +5,7 @@ package com.d2s.framework.application.backend.action;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
+import java.util.Map;
 
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -36,24 +37,26 @@ public class AddToMasterAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
-    ICollectionConnector collectionConnector = getModelConnector();
+  IActionHandler actionHandler, Map<String, Object> context) {
+    ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
       return;
     }
     Object master = collectionConnector.getParentConnector()
         .getConnectorValue();
     ICollectionAccessor collectionAccessor = getAccessorFactory()
-        .createCollectionPropertyAccessor(collectionConnector.getId(), master.getClass());
+        .createCollectionPropertyAccessor(collectionConnector.getId(),
+            master.getClass());
 
-    IEntity newEntity = getNewEntity();
+    IEntity newEntity = getNewEntity(context);
 
     if (newEntity != null) {
       try {
         int index = -1;
         if (collectionAccessor instanceof IListAccessor) {
-          if (getSelectedIndices() != null && getSelectedIndices().length > 0) {
-            index = getSelectedIndices()[getSelectedIndices().length - 1];
+          if (getSelectedIndices(context) != null
+              && getSelectedIndices(context).length > 0) {
+            index = getSelectedIndices(context)[getSelectedIndices(context).length - 1];
           }
         }
         if (index >= 0) {
@@ -69,9 +72,8 @@ public class AddToMasterAction extends AbstractCollectionAction {
       } catch (NoSuchMethodException ex) {
         throw new ActionException(ex);
       }
-      getContext().put(ActionContextConstants.SELECTED_INDICES,
-          ConnectorHelper.getIndicesOf(collectionConnector, Collections
-              .singleton(newEntity)));
+      context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
+          .getIndicesOf(collectionConnector, Collections.singleton(newEntity)));
     }
   }
 
@@ -79,13 +81,15 @@ public class AddToMasterAction extends AbstractCollectionAction {
    * Gets the new entity to add. It is createdusing the informations contained
    * in the context.
    * 
+   * @param context
+   *          the action context.
    * @return the entity to add to the collection.
    */
-  protected IEntity getNewEntity() {
-    IComponentDescriptor elementDescriptor = (IComponentDescriptor) getContext()
+  protected IEntity getNewEntity(Map<String, Object> context) {
+    IComponentDescriptor elementDescriptor = (IComponentDescriptor) context
         .get(ActionContextConstants.ELEMENT_DESCRIPTOR);
     if (elementDescriptor == null) {
-      elementDescriptor = ((ICollectionPropertyDescriptor) getModelDescriptor())
+      elementDescriptor = ((ICollectionPropertyDescriptor) getModelDescriptor(context))
           .getReferencedDescriptor().getElementDescriptor();
     }
 

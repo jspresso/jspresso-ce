@@ -4,6 +4,7 @@
 package com.d2s.framework.application.frontend.action.ulc.flow;
 
 import java.util.List;
+import java.util.Map;
 
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 import com.d2s.framework.application.frontend.action.ulc.IDialogAwareAction;
@@ -64,16 +65,16 @@ public class ModalDialogAction extends AbstractUlcAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     final ULCDialog dialog;
-    ULCWindow window = UlcUtilities.getWindowAncestor(getSourceComponent());
+    ULCWindow window = UlcUtilities.getWindowAncestor(getSourceComponent(context));
     dialog = new ULCDialog(window, getName(), true);
     ULCGridLayoutPane actionPanel = new ULCGridLayoutPane(1, 0, 5, 10);
     ULCButton defaultButton = null;
     for (IDisplayableAction action : actions) {
       ULCButton actionButton = new ULCButton();
       actionButton.setAction(actionFactory.createAction(action, actionHandler,
-          mainView, getLocale()));
+          mainView, getLocale(context)));
       if (action instanceof IDialogAwareAction) {
         final IDialogAwareAction finalAction = (IDialogAwareAction) action;
         actionButton.addActionListener(new IActionListener() {
@@ -101,7 +102,7 @@ public class ModalDialogAction extends AbstractUlcAction {
     }
     dialog.pack();
     dialog.setVisible(true);
-    super.execute(actionHandler);
+    super.execute(actionHandler, context);
   }
 
   /**

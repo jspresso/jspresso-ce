@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.backend.action;
 
+import java.util.Map;
+
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.bean.IBeanConnectorFactory;
@@ -49,11 +51,13 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * The returned connector mainly serves for retrieving the domain object the
    * action has to be triggered on.
    * 
+   * @param context
+   *          the action context.
    * @return the value connector this model action was triggered on.
    */
-  public IValueConnector getModelConnector() {
-    return (IValueConnector) getContext().get(
-        ActionContextConstants.MODEL_CONNECTOR);
+  public IValueConnector getModelConnector(Map<String, Object> context) {
+    return (IValueConnector) context
+        .get(ActionContextConstants.MODEL_CONNECTOR);
   }
 
   /**
@@ -64,11 +68,13 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * <li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code>.
    * </ul>
    * 
+   * @param context
+   *          the action context.
    * @return the model descriptor this action executes on.
    */
-  public IModelDescriptor getModelDescriptor() {
-    return (IModelDescriptor) getContext().get(
-        ActionContextConstants.MODEL_DESCRIPTOR);
+  public IModelDescriptor getModelDescriptor(Map<String, Object> context) {
+    return (IModelDescriptor) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
   }
 
   /**
@@ -79,11 +85,13 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * <li> <code>ActionContextConstants.MODULE_MODEL_CONNECTOR</code>.
    * </ul>
    * 
+   * @param context
+   *          the action context.
    * @return the module model connector this action executes on.
    */
-  public ICompositeValueConnector getModuleConnector() {
-    return (ICompositeValueConnector) getContext().get(
-        ActionContextConstants.MODULE_MODEL_CONNECTOR);
+  public ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
+    return (ICompositeValueConnector) context
+        .get(ActionContextConstants.MODULE_MODEL_CONNECTOR);
   }
 
   /**

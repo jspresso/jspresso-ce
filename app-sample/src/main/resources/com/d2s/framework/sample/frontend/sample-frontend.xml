@@ -14,15 +14,11 @@
 		<property name="script">
 			<value>
 				<![CDATA[
-from java.util import HashMap
-
-result = HashMap()
-script = bsf.lookupBean("SCRIPT")
+context = bsf.lookupBean("CONTEXT")
 scriptedAction = bsf.lookupBean("SCRIPTED_OBJECT")
-collectionConnector = scriptedAction.getModelConnector()
-for selectedIndex in scriptedAction.getContext().get("SELECTED_INDICES"):
+collectionConnector = scriptedAction.getModelConnector(context)
+for selectedIndex in context.get("SELECTED_INDICES"):
   collectionConnector.getChildConnector(selectedIndex).getConnectorValue().transformNameToUppercase()
-script.setExecutionResult(result)
 				]]>
 			</value>
 		</property>

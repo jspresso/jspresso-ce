@@ -6,6 +6,7 @@ package com.d2s.framework.application.backend.action.persistence.hibernate;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
 import org.hibernate.LockMode;
 import org.hibernate.Session;
@@ -42,8 +43,8 @@ public class RemoveCollectionFromMasterAction extends
    * {@inheritDoc}
    */
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler) {
-    final ICollectionConnector collectionConnector = getModelConnector();
+  IActionHandler actionHandler, final Map<String, Object> context) {
+    final ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
       return;
     }
@@ -55,16 +56,16 @@ public class RemoveCollectionFromMasterAction extends
         getHibernateTemplate().execute(new HibernateCallback() {
 
           public Object doInHibernate(Session session) {
-            ICollectionPropertyDescriptor collectionDescriptor = (ICollectionPropertyDescriptor) getModelDescriptor();
+            ICollectionPropertyDescriptor collectionDescriptor = (ICollectionPropertyDescriptor) getModelDescriptor(context);
             Object master = collectionConnector.getParentConnector()
                 .getConnectorValue();
-            IEntity mergedMaster = mergeInHibernate((IEntity) master, session);
+            IEntity mergedMaster = mergeInHibernate((IEntity) master, session, context);
             String property = collectionDescriptor.getName();
             ICollectionAccessor collectionAccessor = getAccessorFactory()
                 .createCollectionPropertyAccessor(property,
                     mergedMaster.getClass());
-            if (getSelectedIndices() != null) {
-              for (int selectedIndex : getSelectedIndices()) {
+            if (getSelectedIndices(context) != null) {
+              for (int selectedIndex : getSelectedIndices(context)) {
                 IEntity nextDetailToRemove = (IEntity) collectionConnector
                     .getChildConnector(selectedIndex).getConnectorValue();
                 try {
@@ -93,7 +94,7 @@ public class RemoveCollectionFromMasterAction extends
       }
     });
     if (removedObjects.size() != 0) {
-      getContext().put(ActionContextConstants.ACTION_RESULT, removedObjects);
+      context.put(ActionContextConstants.ACTION_RESULT, removedObjects);
     }
   }
 

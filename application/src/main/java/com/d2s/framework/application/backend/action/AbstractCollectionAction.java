@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.backend.action;
 
+import java.util.Map;
+
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.view.action.ActionContextConstants;
@@ -24,18 +26,19 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public ICollectionConnector getModelConnector() {
-    return (ICollectionConnector) super.getModelConnector();
+  public ICollectionConnector getModelConnector(Map<String, Object> context) {
+    return (ICollectionConnector) super.getModelConnector(context);
   }
 
   /**
    * Gets the selected indices from the context. it uses the
    * <code>ActionContextConstants.SELECTED_INDICES</code> key.
+   * @param context the action context.
    * 
    * @return the selected indices if any.
    */
-  public int[] getSelectedIndices() {
-    return (int[]) getContext().get(ActionContextConstants.SELECTED_INDICES);
+  public int[] getSelectedIndices(Map<String, Object> context) {
+    return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
   }
 
   /**
@@ -44,7 +47,7 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public ICollectionDescriptorProvider getModelDescriptor() {
-    return (ICollectionDescriptorProvider) super.getModelDescriptor();
+  public ICollectionDescriptorProvider getModelDescriptor(Map<String, Object> context) {
+    return (ICollectionDescriptorProvider) super.getModelDescriptor(context);
   }
 }
