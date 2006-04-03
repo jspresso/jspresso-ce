@@ -46,9 +46,8 @@ public class AddToMasterAction extends AbstractCollectionAction {
     Map<String, Object> executionResult = new HashMap<String, Object>();
     Object master = collectionConnector.getParentConnector()
         .getConnectorValue();
-    String property = getModelDescriptor().getName();
     ICollectionAccessor collectionAccessor = getAccessorFactory()
-        .createCollectionPropertyAccessor(property, master.getClass());
+        .createCollectionPropertyAccessor(collectionConnector.getId(), master.getClass());
 
     IEntity newEntity = getNewEntity();
 

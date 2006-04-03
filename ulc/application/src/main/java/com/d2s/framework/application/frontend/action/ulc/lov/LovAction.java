@@ -62,8 +62,6 @@ public class LovAction extends ModalDialogAction {
         .setConnectorValue(getViewConnector().getConnectorValue());
     okInitialContext.put(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
         getViewConnector());
-    okInitialContext.put(ActionContextConstants.SOURCE_MODEL_DESCRIPTOR,
-        getContext().get(ActionContextConstants.MODEL_DESCRIPTOR));
     okAction.setContext(okInitialContext);
     actions.add(findAction);
     actions.add(okAction);
