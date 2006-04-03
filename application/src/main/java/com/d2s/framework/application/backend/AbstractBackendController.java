@@ -45,16 +45,16 @@ public abstract class AbstractBackendController extends AbstractController
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(IAction action) {
+  public void execute(IAction action) {
     if (action == null) {
-      return null;
+      return;
     }
     Map<String, Object> actionContext = getInitialActionContext();
     if (action.getContext() != null) {
       actionContext.putAll(action.getContext());
     }
     action.setContext(actionContext);
-    return action.execute(this);
+    action.execute(this);
   }
 
   /**

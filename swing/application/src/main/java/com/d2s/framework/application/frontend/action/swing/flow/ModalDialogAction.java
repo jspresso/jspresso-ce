@@ -11,7 +11,6 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -70,7 +69,7 @@ public class ModalDialogAction extends AbstractSwingAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     final JDialog dialog;
     Window window = SwingUtilities.getWindowAncestor(getSourceComponent());
     if (window instanceof Dialog) {
@@ -116,7 +115,7 @@ public class ModalDialogAction extends AbstractSwingAction {
           + (window.getHeight() - dialog.getHeight()) / 2);
     }
     dialog.setVisible(true);
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 
   /**

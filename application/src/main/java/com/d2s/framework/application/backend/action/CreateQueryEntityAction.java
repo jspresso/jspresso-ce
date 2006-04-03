@@ -3,9 +3,6 @@
  */
 package com.d2s.framework.application.backend.action;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.d2s.framework.binding.bean.BeanConnector;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IQueryEntity;
@@ -32,7 +29,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     IQueryEntity queryEntity = getEntityFactory().createQueryEntityInstance(
         queryEntityDescriptor.getComponentContract());
@@ -46,9 +43,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
           queryEntityDescriptor.getToStringProperty()).setConnectorValue(
           queryPropertyValue);
     }
-    Map<String, Object> result = new HashMap<String, Object>();
-    result.put(ActionContextConstants.MODEL_CONNECTOR, modelConnector);
-    return result;
+    getContext().put(ActionContextConstants.MODEL_CONNECTOR, modelConnector);
   }
 
   /**

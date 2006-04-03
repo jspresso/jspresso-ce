@@ -4,7 +4,6 @@
 package com.d2s.framework.view.action;
 
 import java.util.Collection;
-import java.util.Map;
 
 import com.d2s.framework.util.context.IContextAware;
 
@@ -28,10 +27,8 @@ public interface IAction extends IContextAware {
    *          the action handler this action has been told to execute by. It may
    *          be used to post another actio execution upon completion of this
    *          one.
-   * @return the map containing the result(s), message(s) or application
-   *         exception(s) produced by the execution of the action.
    */
-  Map<String, Object> execute(IActionHandler actionHandler);
+  void execute(IActionHandler actionHandler);
 
   /**
    * Tells the framework wether this action executes on the application model or

@@ -4,7 +4,6 @@
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
@@ -32,7 +31,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     IValueConnector modelConnector = getModelConnector();
     final IQueryEntity queryEntity = (IQueryEntity) modelConnector
@@ -52,7 +51,6 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         return null;
       }
     });
-    return null;
   }
 
 }

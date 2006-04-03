@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.backend.action;
 
-import java.util.Map;
-
 import com.d2s.framework.util.scripting.IScriptHandler;
 import com.d2s.framework.util.scripting.ScriptMixin;
 import com.d2s.framework.view.action.IActionHandler;
@@ -36,10 +34,9 @@ public class ScriptedBackendAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     scriptHandler.execute(scriptMixin);
-    return scriptMixin.getExecutionResult();
   }
 
   /**

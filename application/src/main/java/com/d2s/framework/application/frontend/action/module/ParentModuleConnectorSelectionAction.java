@@ -4,7 +4,6 @@
 package com.d2s.framework.application.frontend.action.module;
 
 import java.util.Collections;
-import java.util.Map;
 
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.binding.ConnectorHelper;
@@ -31,7 +30,7 @@ public class ParentModuleConnectorSelectionAction extends AbstractChainedAction 
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     ICompositeValueConnector parentModuleConnector = getParentModuleConnector();
     ICompositeValueConnector grandParentModuleConnector = (ICompositeValueConnector) parentModuleConnector
         .getParentConnector();
@@ -42,6 +41,6 @@ public class ParentModuleConnectorSelectionAction extends AbstractChainedAction 
           collectionConnector, Collections.singleton(parentModuleConnector
               .getConnectorValue())));
     }
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 }

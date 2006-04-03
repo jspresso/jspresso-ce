@@ -4,9 +4,7 @@
 package com.d2s.framework.application.backend.action.module;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -35,12 +33,12 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     int[] selectedIndices = getSelectedIndices();
 
     if (selectedIndices == null || selectedIndices.length == 0) {
-      return null;
+      return;
     }
     ICompositeValueConnector moduleConnector = getModuleConnector();
     ICollectionConnector collectionConnector = getModelConnector();
@@ -70,9 +68,7 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
       }
     }
     parentModule.setSubModules(children);
-    Map<String, Object> executionResult = new HashMap<String, Object>();
-    executionResult.put(ActionContextConstants.SELECTED_INDICES,
+    getContext().put(ActionContextConstants.SELECTED_INDICES,
         childSelectedIndices);
-    return executionResult;
   }
 }

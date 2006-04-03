@@ -4,7 +4,6 @@
 package com.d2s.framework.application.frontend.action.ulc.flow;
 
 import java.util.List;
-import java.util.Map;
 
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 import com.d2s.framework.application.frontend.action.ulc.IDialogAwareAction;
@@ -65,7 +64,7 @@ public class ModalDialogAction extends AbstractUlcAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     final ULCDialog dialog;
     ULCWindow window = UlcUtilities.getWindowAncestor(getSourceComponent());
     dialog = new ULCDialog(window, getName(), true);
@@ -102,7 +101,7 @@ public class ModalDialogAction extends AbstractUlcAction {
     }
     dialog.pack();
     dialog.setVisible(true);
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 
   /**

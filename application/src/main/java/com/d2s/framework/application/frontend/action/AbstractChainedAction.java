@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.frontend.action;
 
-import java.util.Map;
-
 import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.action.IActionHandler;
 
@@ -47,16 +45,15 @@ public abstract class AbstractChainedAction extends AbstractFrontendAction {
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     if (nextAction != null) {
       if (nextAction.getContext() == null) {
         nextAction.setContext(getContext());
       } else {
         nextAction.getContext().putAll(getContext());
       }
-      return actionHandler.execute(nextAction);
+      actionHandler.execute(nextAction);
     }
-    return null;
   }
 
 }

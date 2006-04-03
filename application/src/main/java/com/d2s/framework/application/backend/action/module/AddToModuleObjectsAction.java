@@ -6,8 +6,6 @@ package com.d2s.framework.application.backend.action.module;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.binding.ConnectorHelper;
@@ -36,7 +34,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     ICompositeValueConnector moduleConnector = getModuleConnector();
     BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
@@ -57,10 +55,8 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
 
     getModelConnector().setConnectorValue(projectedCollection);
 
-    Map<String, Object> executionResult = new HashMap<String, Object>();
-    executionResult.put(ActionContextConstants.SELECTED_INDICES,
+    getContext().put(ActionContextConstants.SELECTED_INDICES,
         ConnectorHelper.getIndicesOf(getModelConnector(), Collections
             .singleton(newEntity)));
-    return executionResult;
   }
 }

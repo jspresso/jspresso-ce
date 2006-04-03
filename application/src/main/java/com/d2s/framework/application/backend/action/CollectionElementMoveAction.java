@@ -4,9 +4,7 @@
 package com.d2s.framework.application.backend.action;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -34,20 +32,18 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     int[] indicesToMove = getSelectedIndices();
     ICollectionConnector collectionConnector = getModelConnector();
     if (indicesToMove == null || indicesToMove.length == 0
         || collectionConnector == null) {
-      return null;
+      return;
     }
     if (!List.class.isAssignableFrom(getModelDescriptor()
         .getCollectionDescriptor().getCollectionInterface())) {
-      return null;
+      return;
     }
-
-    Map<String, Object> executionResult = new HashMap<String, Object>();
 
     List elementList = new ArrayList<Object>((List) collectionConnector
         .getConnectorValue());
@@ -70,10 +66,9 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       }
       ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
           .straightSetProperty(collectionConnector.getId(), elementList);
-      executionResult.put(ActionContextConstants.SELECTED_INDICES,
+      getContext().put(ActionContextConstants.SELECTED_INDICES,
           ConnectorHelper.getIndicesOf(collectionConnector, elementsToMove));
     }
-    return executionResult;
   }
 
   /**

@@ -59,7 +59,7 @@ public class LovAction extends ModalDialogAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
     Map<String, Object> okInitialContext = new HashMap<String, Object>();
     getViewConnector()
@@ -77,15 +77,14 @@ public class LovAction extends ModalDialogAction {
     createQueryEntityAction.setContext(getContext());
     createQueryEntityAction
         .setQueryEntityDescriptor(getQueryEntityDescriptor());
-    Map<String, Object> queryEntityCreationResult = actionHandler
-        .execute(createQueryEntityAction);
-    IValueConnector queryEntityConnector = (IValueConnector) queryEntityCreationResult
-        .get(ActionContextConstants.MODEL_CONNECTOR);
+    actionHandler.execute(createQueryEntityAction);
+    IValueConnector queryEntityConnector = (IValueConnector) getContext().get(
+        ActionContextConstants.MODEL_CONNECTOR);
     getMvcBinder().bind(lovView.getConnector(), queryEntityConnector);
     Object queryPropertyValue = getContext().get(
         ActionContextConstants.ACTION_PARAM);
     if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {
-      findAction.setContext(queryEntityCreationResult);
+      findAction.setContext(getContext());
       actionHandler.execute(findAction);
       IQueryEntity queryEntity = (IQueryEntity) queryEntityConnector
           .getConnectorValue();
@@ -94,10 +93,10 @@ public class LovAction extends ModalDialogAction {
         IEntity selectedEntity = ((IController) actionHandler).merge(
             queryEntity.getQueriedEntities().get(0), MergeMode.MERGE_KEEP);
         getViewConnector().setConnectorValue(selectedEntity);
-        return null;
+        return;
       }
     }
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 
   /**

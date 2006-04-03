@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.flow;
 
-import java.util.Map;
-
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.action.IActionHandler;
@@ -68,7 +66,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(final IActionHandler actionHandler) {
+  public void execute(final IActionHandler actionHandler) {
     final ULCAlert alert = new ULCAlert(UlcUtilities
         .getRoot(getSourceComponent()), getName(), getMessage(), firstOption,
         secondOption, thirdOption, getIconFactory().getIcon(getIconImageURL(),
@@ -84,7 +82,6 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
       }
     });
     alert.show();
-    return null;
   }
 
   /**
@@ -101,9 +98,8 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * 
    * @param actionHandler
    *          the action handler responsible for the action execution.
-   * @return the next action execution result.
    */
-  protected Map<String, Object> executeNextAction(IActionHandler actionHandler) {
-    return super.execute(actionHandler);
+  protected void executeNextAction(IActionHandler actionHandler) {
+    super.execute(actionHandler);
   }
 }

@@ -5,9 +5,7 @@ package com.d2s.framework.application.backend.action.persistence.hibernate;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 
 import org.hibernate.LockMode;
 import org.hibernate.Session;
@@ -43,11 +41,11 @@ public class RemoveCollectionFromMasterAction extends
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     final ICollectionConnector collectionConnector = getModelConnector();
     if (collectionConnector == null) {
-      return null;
+      return;
     }
     final Collection<Object> removedObjects = new HashSet<Object>();
     getTransactionTemplate().execute(new TransactionCallback() {
@@ -95,11 +93,8 @@ public class RemoveCollectionFromMasterAction extends
       }
     });
     if (removedObjects.size() != 0) {
-      Map<String, Object> actionResult = new HashMap<String, Object>();
-      actionResult.put(ActionContextConstants.ACTION_RESULT, removedObjects);
-      return actionResult;
+      getContext().put(ActionContextConstants.ACTION_RESULT, removedObjects);
     }
-    return null;
   }
 
 }

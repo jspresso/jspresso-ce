@@ -105,9 +105,9 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(IAction action) {
+  public void execute(IAction action) {
     if (action == null) {
-      return null;
+      return;
     }
     Map<String, Object> actionContext = getInitialActionContext();
     if (action.getContext() != null) {
@@ -116,16 +116,11 @@ public abstract class AbstractFrontendController<E> extends AbstractController
     } else {
       action.setContext(actionContext);
     }
-    Map<String, Object> actionResult = null;
     if (action.isBackend()) {
-      actionResult = executeBackend(action);
+      executeBackend(action);
     } else {
-      actionResult = executeFrontend(action);
+      executeFrontend(action);
     }
-    if (actionResult != null) {
-      actionContext.putAll(actionResult);
-    }
-    return actionContext;
   }
 
   /**
@@ -133,10 +128,9 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * 
    * @param action
    *          the backend action to execute.
-   * @return the action execution result.
    */
-  protected Map<String, Object> executeBackend(IAction action) {
-    return getBackendController().execute(action);
+  protected void executeBackend(IAction action) {
+    getBackendController().execute(action);
   }
 
   /**
@@ -144,10 +138,9 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * 
    * @param action
    *          the frontend action to execute.
-   * @return the action execution result.
    */
-  protected Map<String, Object> executeFrontend(IAction action) {
-    return action.execute(this);
+  protected void executeFrontend(IAction action) {
+    action.execute(this);
   }
 
   /**

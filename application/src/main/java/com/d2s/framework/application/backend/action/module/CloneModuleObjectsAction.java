@@ -5,8 +5,6 @@ package com.d2s.framework.application.backend.action.module;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.binding.ConnectorHelper;
@@ -34,14 +32,14 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     int[] selectedIndices = getSelectedIndices();
     ICollectionConnector collectionConnector = getModelConnector();
 
     if (selectedIndices == null || selectedIndices.length == 0
         || collectionConnector == null) {
-      return null;
+      return;
     }
 
     ICompositeValueConnector moduleConnector = getModuleConnector();
@@ -64,9 +62,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
 
     getModelConnector().setConnectorValue(projectedCollection);
 
-    Map<String, Object> executionResult = new HashMap<String, Object>();
-    executionResult.put(ActionContextConstants.SELECTED_INDICES,
+    getContext().put(ActionContextConstants.SELECTED_INDICES,
         ConnectorHelper.getIndicesOf(collectionConnector, entityClones));
-    return executionResult;
   }
 }

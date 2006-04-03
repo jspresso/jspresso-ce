@@ -41,7 +41,7 @@ public class ChooseFileAction extends AbstractSwingAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
 
     JFileChooser currentFileChooser = getFileChooser();
 
@@ -62,7 +62,7 @@ public class ChooseFileAction extends AbstractSwingAction {
     } else {
       fileOpenCallback.cancel();
     }
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 
   private JFileChooser getFileChooser() {

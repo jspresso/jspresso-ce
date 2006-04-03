@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.view.action;
 
-import java.util.Map;
 
 /**
  * This interface establishes the general contract of an object able to axacute
@@ -25,11 +24,8 @@ public interface IActionHandler {
    * 
    * @param action
    *          the action to be executed.
-   * @return the map containing the result of the action execution (return
-   *         values, exceptions, messages, ...), generally the result map return
-   *         by the action itself.
    * @see IAction#execute(IActionHandler)
    */
-  Map<String, Object> execute(IAction action);
+  void execute(IAction action);
 
 }

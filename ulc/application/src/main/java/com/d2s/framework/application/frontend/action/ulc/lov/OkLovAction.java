@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.lov;
 
-import java.util.Map;
-
 import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.ulc.std.DialogOkAction;
@@ -32,7 +30,7 @@ public class OkLovAction extends DialogOkAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     ICollectionConnector resultConnector = ((ICollectionConnectorProvider) ((ICompositeValueConnector) getViewConnector())
         .getChildConnector(BeanRefPropertyConnector.THIS_PROPERTY))
         .getCollectionConnector();
@@ -46,6 +44,6 @@ public class OkLovAction extends DialogOkAction {
       }
       getContext().put(ActionContextConstants.ACTION_RESULT, selectedEntity);
     }
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 }

@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
-import java.util.Map;
-
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
@@ -31,7 +29,7 @@ public class SaveProjectedAction extends AbstractHibernateAction {
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     getTransactionTemplate().execute(new TransactionCallback() {
 
@@ -49,7 +47,6 @@ public class SaveProjectedAction extends AbstractHibernateAction {
         return null;
       }
     });
-    return null;
   }
 
   /**

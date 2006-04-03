@@ -5,8 +5,6 @@ package com.d2s.framework.application.backend.action;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -37,13 +35,12 @@ public class AddToMasterAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     ICollectionConnector collectionConnector = getModelConnector();
     if (collectionConnector == null) {
-      return null;
+      return;
     }
-    Map<String, Object> executionResult = new HashMap<String, Object>();
     Object master = collectionConnector.getParentConnector()
         .getConnectorValue();
     ICollectionAccessor collectionAccessor = getAccessorFactory()
@@ -72,11 +69,10 @@ public class AddToMasterAction extends AbstractCollectionAction {
       } catch (NoSuchMethodException ex) {
         throw new ActionException(ex);
       }
-      executionResult.put(ActionContextConstants.SELECTED_INDICES,
+      getContext().put(ActionContextConstants.SELECTED_INDICES,
           ConnectorHelper.getIndicesOf(collectionConnector, Collections
               .singleton(newEntity)));
     }
-    return executionResult;
   }
 
   /**

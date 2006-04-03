@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.file;
 
-import java.util.Map;
-
 import com.d2s.framework.application.frontend.file.ConnectorValueSetterCallback;
 import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.view.action.ActionContextConstants;
@@ -34,10 +32,10 @@ public class ChooseFileAsBinaryPropertyAction extends ChooseFileAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     IBinaryPropertyDescriptor modelDescriptor = (IBinaryPropertyDescriptor) getContext()
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
     setFileFilter(modelDescriptor.getFileFilter());
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 }

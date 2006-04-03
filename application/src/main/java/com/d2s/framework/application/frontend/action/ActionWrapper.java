@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.frontend.action;
 
-import java.util.Map;
-
 import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.action.IActionHandler;
 
@@ -25,22 +23,14 @@ public class ActionWrapper extends AbstractChainedAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     if (wrappedAction != null) {
       wrappedAction.setContext(getContext());
     }
-    Map<String, Object> backendResult = actionHandler.execute(wrappedAction);
-    if (backendResult != null) {
-      if (getContext() == null) {
-        setContext(backendResult);
-      } else {
-        getContext().putAll(backendResult);
-      }
-    }
+    actionHandler.execute(wrappedAction);
     if (getNextAction() != null) {
-      return super.execute(actionHandler);
+      super.execute(actionHandler);
     }
-    return backendResult;
   }
 
   /**

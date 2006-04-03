@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.frontend.action.std;
 
-import java.util.Map;
-
 import com.d2s.framework.application.frontend.action.AbstractFrontendAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.view.action.ActionContextConstants;
@@ -28,7 +26,7 @@ public class SetConnectorValueAction extends AbstractFrontendAction {
   /**
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     Object previousActionResult = getContext().get(
         ActionContextConstants.ACTION_RESULT);
@@ -37,7 +35,6 @@ public class SetConnectorValueAction extends AbstractFrontendAction {
     // the following will force a connector value change event.
     connector.setConnectorValue(null);
     connector.setConnectorValue(previousActionResult);
-    return null;
   }
 
   /**

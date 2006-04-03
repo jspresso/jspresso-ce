@@ -36,7 +36,7 @@ public class ChooseFileAction extends AbstractUlcAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     ClientContext.loadFile(new IFileLoadHandler() {
 
       private static final long serialVersionUID = -1025629868916915262L;
@@ -56,7 +56,7 @@ public class ChooseFileAction extends AbstractUlcAction {
         }
       }
     }, getFileChooser());
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 
   private FileChooserConfig getFileChooser() {

@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.frontend.action.swing.flow;
 
-import java.util.Map;
-
 import javax.swing.JOptionPane;
 
 import com.d2s.framework.util.swing.SwingUtil;
@@ -33,7 +31,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
    * {@inheritDoc}
    */
   @Override
-  public Map<String, Object> execute(IActionHandler actionHandler) {
+  public void execute(IActionHandler actionHandler) {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent()), getMessage(),
         getName(), JOptionPane.YES_NO_CANCEL_OPTION,
@@ -46,7 +44,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
     } else {
       setNextAction(noAction);
     }
-    return super.execute(actionHandler);
+    super.execute(actionHandler);
   }
 
   /**

@@ -4,7 +4,6 @@
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
 import java.util.Collection;
-import java.util.Map;
 
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -31,7 +30,7 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
    * <p>
    * {@inheritDoc}
    */
-  public Map<String, Object> execute(@SuppressWarnings("unused")
+  public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler) {
     getTransactionTemplate().execute(new TransactionCallback() {
 
@@ -50,7 +49,6 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
         return null;
       }
     });
-    return null;
   }
 
   private void reloadEntity(IEntity entity) {
