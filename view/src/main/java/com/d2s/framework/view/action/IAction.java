@@ -47,4 +47,21 @@ public interface IAction {
    * @return true if the action may take a long time.
    */
   boolean isLongOperation();
+
+  /**
+   * Puts some value in the initial action context.
+   * 
+   * @param key
+   *          the key the value is associated to.
+   * @param value
+   *          the context value to put.
+   */
+  void putInitialContext(String key, Object value);
+
+  /**
+   * Gets the initial action context.
+   * 
+   * @return the initial action context.
+   */
+  Map<String, Object> getInitialContext();
 }

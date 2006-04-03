@@ -62,7 +62,7 @@ public class LovAction extends ModalDialogAction {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
     getViewConnector(context).setConnectorValue(
         getViewConnector(context).getConnectorValue());
-    context.put(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
+    okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
         getViewConnector(context));
     actions.add(findAction);
     actions.add(okAction);
@@ -77,6 +77,8 @@ public class LovAction extends ModalDialogAction {
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
     getMvcBinder().bind(lovView.getConnector(), queryEntityConnector);
+    findAction.putInitialContext(ActionContextConstants.QUERY_MODEL_CONNECTOR,
+        queryEntityConnector);
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_PARAM);
     if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {

@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.view.action;
 
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -18,7 +19,8 @@ import java.util.Map;
  */
 public abstract class AbstractAction implements IAction {
 
-  private boolean longOperation;
+  private boolean             longOperation;
+  private Map<String, Object> initialContext;
 
   /**
    * Retrieves the locale the action has to use to execute from its context
@@ -60,5 +62,24 @@ public abstract class AbstractAction implements IAction {
    */
   public void setLongOperation(boolean longOperation) {
     this.longOperation = longOperation;
+  }
+
+  /**
+   * Gets the initialContext.
+   * 
+   * @return the initialContext.
+   */
+  public Map<String, Object> getInitialContext() {
+    return initialContext;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void putInitialContext(String key, Object value) {
+    if (initialContext == null) {
+      initialContext = new HashMap<String, Object>();
+    }
+    initialContext.put(key, value);
   }
 }

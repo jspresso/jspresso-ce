@@ -142,6 +142,9 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
         initialActionContext.put(ActionContextConstants.LOCALE, locale);
         initialActionContext.put(ActionContextConstants.ACTION_PARAM, e
             .getActionCommand());
+        if (action.getInitialContext() != null) {
+          initialActionContext.putAll(action.getInitialContext());
+        }
         actionHandler.execute(action, initialActionContext);
       }
     }
