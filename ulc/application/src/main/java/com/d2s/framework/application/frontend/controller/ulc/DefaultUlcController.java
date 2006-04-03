@@ -173,10 +173,7 @@ public class DefaultUlcController extends
           System.err.println("Cannot create LoginContext. " + se.getMessage());
         }
         try {
-          // attempt authentication
           lc.login();
-          // if we return with no exception,
-          // authentication succeeded
           getBackendController().getApplicationSession().setOwner(
               lc.getSubject());
           loginSuccessful = true;

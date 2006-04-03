@@ -108,11 +108,6 @@ public class DefaultSwingController extends
    * @return true if login is successful.
    */
   private boolean performLogin() {
-    // Obtain a LoginContext, needed for authentication.
-    // Tell it to use the LoginModule implementation
-    // specified by the entry named "Sample" in the
-    // JAAS login configuration file and to also use the
-    // specified CallbackHandler.
     LoginContext lc = null;
     try {
       lc = new LoginContext(getLoginContextName(), getLoginCallbackHandler());
@@ -123,15 +118,10 @@ public class DefaultSwingController extends
       System.err.println("Cannot create LoginContext. " + se.getMessage());
       return false;
     }
-
-    // the user has 3 attempts to authenticate successfully
     int i;
     for (i = 0; i < MAX_LOGIN_RETRIES; i++) {
       try {
-        // attempt authentication
         lc.login();
-        // if we return with no exception,
-        // authentication succeeded
         getBackendController().getApplicationSession()
             .setOwner(lc.getSubject());
         break;
@@ -140,8 +130,6 @@ public class DefaultSwingController extends
         System.err.println("  " + le.getMessage());
       }
     }
-
-    // did they fail three times?
     if (i == 3) {
       return false;
     }
