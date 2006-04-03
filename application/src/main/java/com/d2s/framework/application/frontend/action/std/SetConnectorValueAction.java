@@ -35,7 +35,7 @@ public class SetConnectorValueAction extends AbstractFrontendAction {
     IValueConnector connector = (IValueConnector) context
         .get(connectorActionContextKey);
     // the following will force a connector value change event.
-    connector.setConnectorValue(null);
+    // connector.setConnectorValue(null);
     connector.setConnectorValue(previousActionResult);
   }
 

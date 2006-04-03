@@ -7,13 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.action.CreateQueryEntityAction;
+import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.view.ILovViewFactory;
 import com.d2s.framework.view.IView;
@@ -83,8 +86,9 @@ public class LovAction extends ModalDialogAction {
           .getConnectorValue();
       if (queryEntity.getQueriedEntities() != null
           && queryEntity.getQueriedEntities().size() == 1) {
-        getViewConnector(context).setConnectorValue(
-            queryEntity.getQueriedEntities().get(0));
+        IEntity selectedEntity = ((IController) actionHandler).merge(
+            queryEntity.getQueriedEntities().get(0), MergeMode.MERGE_KEEP);
+        getViewConnector(context).setConnectorValue(selectedEntity);
         return;
       }
     }
