@@ -52,7 +52,7 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
     if (enabled) {
       Map<String, Object> changedProperties = changedPropertiesMap.get(evt
           .getSource());
-      if (!changedPropertiesMap.containsKey(evt.getPropertyName())) {
+      if (!changedProperties.containsKey(evt.getPropertyName())) {
         changedProperties.put(evt.getPropertyName(), evt.getOldValue());
       }
       if (interceptor != null) {
