@@ -131,8 +131,12 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
       String role) {
     PropertyDescriptor roleDescriptor = PropertyHelper.getPropertyDescriptor(
         entityContract, role);
-    return roleDescriptor.getReadMethod().getDeclaringClass().getName() + "."
-        + role;
+    Class<?> entityDeclaringClass = roleDescriptor.getReadMethod()
+        .getDeclaringClass();
+    if (!IEntity.class.isAssignableFrom(entityDeclaringClass)) {
+      entityDeclaringClass = entityContract;
+    }
+    return entityDeclaringClass.getName() + "." + role;
   }
 
   /**
