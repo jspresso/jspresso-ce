@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 
-import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
@@ -48,7 +47,6 @@ public class RemoveCollectionFromMasterAction extends
     if (collectionConnector == null) {
       return;
     }
-    final Collection<Object> removedObjects = new HashSet<Object>();
     getTransactionTemplate().execute(new TransactionCallback() {
 
       public Object doInTransaction(@SuppressWarnings("unused")
@@ -59,25 +57,22 @@ public class RemoveCollectionFromMasterAction extends
             ICollectionPropertyDescriptor collectionDescriptor = (ICollectionPropertyDescriptor) getModelDescriptor(context);
             Object master = collectionConnector.getParentConnector()
                 .getConnectorValue();
-            IEntity mergedMaster = mergeInHibernate((IEntity) master, session, context);
+            IEntity mergedMaster = mergeInHibernate((IEntity) master, session,
+                context);
             String property = collectionDescriptor.getName();
             ICollectionAccessor collectionAccessor = getAccessorFactory()
                 .createCollectionPropertyAccessor(property,
                     mergedMaster.getClass());
             if (getSelectedIndices(context) != null) {
+              Collection<IEntity> detailsToRemove = new HashSet<IEntity>();
               for (int selectedIndex : getSelectedIndices(context)) {
-                IEntity nextDetailToRemove = (IEntity) collectionConnector
-                    .getChildConnector(selectedIndex).getConnectorValue();
+                detailsToRemove.add((IEntity) collectionConnector
+                    .getChildConnector(selectedIndex).getConnectorValue());
+              }
+              for (IEntity nextDetailToRemove : detailsToRemove) {
                 try {
-                  Object mergedDetail = session.get(nextDetailToRemove
-                      .getContract().getName(), nextDetailToRemove.getId(),
-                      LockMode.NONE);
-                  if (mergedDetail != null) {
-                    collectionAccessor.removeFromValue(mergedMaster,
-                        mergedDetail);
-                    session.delete(mergedDetail);
-                  }
-                  removedObjects.add(nextDetailToRemove);
+                  collectionAccessor.removeFromValue(mergedMaster,
+                      nextDetailToRemove);
                 } catch (IllegalAccessException ex) {
                   throw new ActionException(ex);
                 } catch (InvocationTargetException ex) {
@@ -85,6 +80,19 @@ public class RemoveCollectionFromMasterAction extends
                 } catch (NoSuchMethodException ex) {
                   throw new ActionException(ex);
                 }
+                if (nextDetailToRemove.isPersistent()) {
+                  IEntity sessionEntity = (IEntity) session.get(
+                      nextDetailToRemove.getContract(), nextDetailToRemove
+                          .getId());
+                  if (sessionEntity == null) {
+                    sessionEntity = nextDetailToRemove;
+                  }
+                  session.delete(sessionEntity);
+                }
+              }
+              if (detailsToRemove.size() != 0) {
+                context.put(ActionContextConstants.ACTION_RESULT,
+                    detailsToRemove);
               }
             }
             return null;
@@ -93,9 +101,6 @@ public class RemoveCollectionFromMasterAction extends
         return null;
       }
     });
-    if (removedObjects.size() != 0) {
-      context.put(ActionContextConstants.ACTION_RESULT, removedObjects);
-    }
   }
 
 }
