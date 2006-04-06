@@ -4,7 +4,7 @@
 package com.d2s.framework.security.ulc;
 
 /**
- * TODO Comment needed.
+ * This interface is implemented by listeners on auth callback handlers.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

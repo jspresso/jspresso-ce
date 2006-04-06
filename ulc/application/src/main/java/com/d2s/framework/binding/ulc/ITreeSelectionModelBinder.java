@@ -4,6 +4,7 @@
 package com.d2s.framework.binding.ulc;
 
 import com.d2s.framework.binding.IValueConnector;
+import com.ulcjava.base.application.ULCTableTree;
 import com.ulcjava.base.application.ULCTree;
 
 /**
@@ -27,4 +28,14 @@ public interface ITreeSelectionModelBinder {
    *          the the tree to bind the selection model of.
    */
   void bindSelectionModel(IValueConnector rootConnector, ULCTree tree);
+
+  /**
+   * Binds a collection connector to keep track of a selection model selections.
+   * 
+   * @param rootConnector
+   *          the root connector of the connector hierarchy.
+   * @param tree
+   *          the the tree to bind the selection model of.
+   */
+  void bindSelectionModel(IValueConnector rootConnector, ULCTableTree tree);
 }

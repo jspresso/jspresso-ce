@@ -131,6 +131,7 @@ import com.ulcjava.base.application.ULCPopupMenu;
 import com.ulcjava.base.application.ULCScrollPane;
 import com.ulcjava.base.application.ULCSplitPane;
 import com.ulcjava.base.application.ULCTabbedPane;
+import com.ulcjava.base.application.ULCTableTree;
 import com.ulcjava.base.application.ULCTextArea;
 import com.ulcjava.base.application.ULCTextField;
 import com.ulcjava.base.application.ULCToolBar;
@@ -712,6 +713,20 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     ULCTree viewComponent = createULCTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
         connector, viewComponent);
+
+    // TODO tabletree mgt
+    // ULCTableTree viewComponent = createULCTableTree();
+    // ConnectorHierarchyTableTreeModel treeModel = new
+    // ConnectorHierarchyTableTreeModel(
+    // connector, viewComponent);
+    // List<String> columnIds = new ArrayList<String>();
+    // columnIds.add("text");
+    // columnIds.add("text");
+    // treeModel.setColumnConnectorKeys(columnIds);
+    // Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
+    // columnClassesByIds.put("text", String.class);
+    // treeModel.setColumnClassesByIds(columnClassesByIds);
+
     viewComponent.getSelectionModel().setSelectionMode(
         ULCTreeSelectionModel.SINGLE_TREE_SELECTION);
     viewComponent.setModel(treeModel);
@@ -2324,6 +2339,17 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
     ULCTree tree = new ULCTree();
     tree.setDragEnabled(true);
     return tree;
+  }
+
+  /**
+   * Creates a table tree.
+   * 
+   * @return the created table tree.
+   */
+  protected ULCTableTree createULCTableTree() {
+    ULCTableTree tableTree = new ULCTableTree();
+    tableTree.setDragEnabled(true);
+    return tableTree;
   }
 
   /**

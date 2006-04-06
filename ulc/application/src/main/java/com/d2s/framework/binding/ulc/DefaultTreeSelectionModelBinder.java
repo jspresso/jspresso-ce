@@ -15,9 +15,12 @@ import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.event.ISelectionChangeListener;
 import com.d2s.framework.util.event.SelectionChangeEvent;
+import com.ulcjava.base.application.ULCTableTree;
 import com.ulcjava.base.application.ULCTree;
+import com.ulcjava.base.application.event.TableTreeModelEvent;
 import com.ulcjava.base.application.event.TreeModelEvent;
 import com.ulcjava.base.application.event.TreeSelectionEvent;
+import com.ulcjava.base.application.event.serializable.ITableTreeModelListener;
 import com.ulcjava.base.application.event.serializable.ITreeModelListener;
 import com.ulcjava.base.application.event.serializable.ITreeSelectionListener;
 import com.ulcjava.base.application.tree.TreePath;
@@ -53,6 +56,18 @@ public class DefaultTreeSelectionModelBinder implements
     TreeConnectorsListener connectorsListener = new TreeConnectorsListener(
         rootConnector, tree.getSelectionModel());
     tree.getModel().addTreeModelListener(connectorsListener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void bindSelectionModel(IValueConnector rootConnector,
+      ULCTableTree tree) {
+    tree.getSelectionModel().addTreeSelectionListener(
+        genericSelectionModelListener);
+    TableTreeConnectorsListener connectorsListener = new TableTreeConnectorsListener(
+        rootConnector, tree.getSelectionModel());
+    tree.getModel().addTableTreeModelListener(connectorsListener);
   }
 
   private static final class SelectionModelListener implements
@@ -247,6 +262,76 @@ public class DefaultTreeSelectionModelBinder implements
     public void treeStructureChanged(TreeModelEvent event) {
       checkListenerRegistrationForConnector((ICollectionConnectorListProvider) event
           .getTreePath().getLastPathComponent());
+    }
+  }
+
+  private class TableTreeConnectorsListener implements ITableTreeModelListener {
+
+    private static final long                     serialVersionUID = 4849798444201068503L;
+    private CollectionConnectorsSelectionListener connectorsSelectionListener;
+
+    /**
+     * Constructs a new <code>TreeConnectorsListener</code> instance.
+     * 
+     * @param rootConnector
+     *          the root connector of the connector hierarchy.
+     * @param selectionModel
+     *          the selection model of the related tree.
+     */
+    public TableTreeConnectorsListener(IValueConnector rootConnector,
+        ULCTreeSelectionModel selectionModel) {
+      connectorsSelectionListener = new CollectionConnectorsSelectionListener(
+          rootConnector, selectionModel);
+      checkListenerRegistrationForConnector((ICollectionConnectorListProvider) rootConnector);
+    }
+
+    private void checkListenerRegistrationForConnector(
+        ICollectionConnectorListProvider nodeConnector) {
+      for (ICollectionConnector childNodeConnector : nodeConnector
+          .getCollectionConnectors()) {
+        childNodeConnector
+            .addSelectionChangeListener(connectorsSelectionListener);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void tableTreeNodesChanged(@SuppressWarnings("unused")
+    TableTreeModelEvent event) {
+      // NO-OP as of now.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void tableTreeNodesInserted(TableTreeModelEvent event) {
+      checkListenerRegistrationForConnector((ICollectionConnectorListProvider) event
+          .getTreePath().getLastPathComponent());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void tableTreeNodesRemoved(@SuppressWarnings("unused")
+    TableTreeModelEvent event) {
+      // NO-OP as of now.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void tableTreeStructureChanged(TableTreeModelEvent event) {
+      checkListenerRegistrationForConnector((ICollectionConnectorListProvider) event
+          .getTreePath().getLastPathComponent());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void tableTreeNodeStructureChanged(@SuppressWarnings("unused")
+    TableTreeModelEvent event) {
+      // NO-OP as of now.
     }
   }
 }

@@ -6,7 +6,7 @@ package com.d2s.framework.util.security.demo;
 import java.security.Principal;
 
 /**
- * TODO Comment needed.
+ * Principal implementation for demo authentification.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

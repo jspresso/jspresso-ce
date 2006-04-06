@@ -117,13 +117,13 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
       if (!(cellValue instanceof String)) {
         // this cellValue is the real one, not the string representation comming
         // back from the client side.
-        getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
+        cellConnector.setConnectorValue(cellValue);
       }
     } else {
       if ("".equals(cellValue)) {
-        getConnectorAt(rowIndex, columnIndex).setConnectorValue(null);
+        cellConnector.setConnectorValue(null);
       } else {
-        getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
+        cellConnector.setConnectorValue(cellValue);
       }
     }
   }

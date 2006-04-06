@@ -55,7 +55,11 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     connectorsListener = new TreeConnectorsListener();
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
-    tree.addTreeExpansionListener(this);
+    if (tree != null) {
+      // tree mignt be null if this tree model is used as delegate for a
+      // treetable.
+      tree.addTreeExpansionListener(this);
+    }
   }
 
   /**
