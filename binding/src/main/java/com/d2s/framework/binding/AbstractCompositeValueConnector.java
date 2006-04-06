@@ -23,7 +23,7 @@ public abstract class AbstractCompositeValueConnector extends
   private IConnectorMap             childConnectors;
   private ChildConnectorSupport     childConnectorSupport;
   private ConnectorSelectionSupport connectorSelectionSupport;
-  private boolean                   tracksChildrenSelection;
+  private boolean                   trackingChildrenSelection;
   private String                    renderingChildConnectorId;
 
   /**
@@ -36,7 +36,7 @@ public abstract class AbstractCompositeValueConnector extends
     super(id);
     childConnectorSupport = new ChildConnectorSupport(this);
     connectorSelectionSupport = new ConnectorSelectionSupport();
-    tracksChildrenSelection = false;
+    trackingChildrenSelection = false;
     childConnectors = new ConnectorMap(this);
   }
 
@@ -95,7 +95,7 @@ public abstract class AbstractCompositeValueConnector extends
     clonedConnector.childConnectorSupport = new ChildConnectorSupport(
         clonedConnector);
     clonedConnector.connectorSelectionSupport = new ConnectorSelectionSupport();
-    clonedConnector.tracksChildrenSelection = tracksChildrenSelection;
+    clonedConnector.trackingChildrenSelection = trackingChildrenSelection;
     for (String connectorKey : getChildConnectorKeys()) {
       clonedConnector
           .addChildConnector(getChildConnector(connectorKey).clone());
@@ -219,7 +219,7 @@ public abstract class AbstractCompositeValueConnector extends
    *          the connector selection event to propagate.
    */
   protected void implFireSelectedConnectorChange(ConnectorSelectionEvent evt) {
-    if (evt.getSource() == this || tracksChildrenSelection) {
+    if (evt.getSource() == this || trackingChildrenSelection) {
       connectorSelectionSupport.fireSelectedConnectorChange(evt);
     }
     IValueConnector parentConnector = getParentConnector();
@@ -237,18 +237,25 @@ public abstract class AbstractCompositeValueConnector extends
    * used by subclasses which implement <code>IConnectorSelector</code>.
    * 
    * @param tracksChildren
-   *          the tracksChildrenSelection to set.
+   *          the trackingChildrenSelection to set.
    */
   protected void implSetTracksChildrenSelection(boolean tracksChildren) {
-    this.tracksChildrenSelection = tracksChildren;
+    this.trackingChildrenSelection = tracksChildren;
   }
 
   /**
-   * Gets the tracksChildrenSelection.
+   * Gets the trackingChildrenSelection.
    * 
-   * @return the tracksChildrenSelection.
+   * @return the trackingChildrenSelection.
    */
-  protected boolean isTracksChildrenSelection() {
-    return tracksChildrenSelection;
+  protected boolean isTrackingChildrenSelection() {
+    return trackingChildrenSelection;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean areChildrenWritable() {
+    return true;
   }
 }

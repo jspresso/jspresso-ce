@@ -334,4 +334,11 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
   boolean b) {
     // lazy behaviour can't be turned off.
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean areChildrenWritable() {
+    return true;
+  }
 }

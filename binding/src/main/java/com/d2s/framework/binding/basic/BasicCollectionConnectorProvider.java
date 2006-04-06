@@ -126,7 +126,7 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   @Override
   public void boundAsView() {
     super.boundAsView();
-    if (isTracksChildrenSelection()) {
+    if (isTrackingChildrenSelection()) {
       implFireSelectedConnectorChange(this);
     }
   }

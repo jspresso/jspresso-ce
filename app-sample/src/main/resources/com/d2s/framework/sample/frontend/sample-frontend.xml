@@ -399,7 +399,7 @@ for selectedIndex in context.get("SELECTED_INDICES"):
 		<property name="name" value="company.departments" />
 		<property name="iconImageURL" value="classpath:images/icon5-48x48.png" />
 		<property name="modelDescriptor" ref="departments.projected" />
-		<property name="actionMap" ref="projectedCollectionActionMap" />
+		<property name="actionMap" ref="projectedEditableCollectionActionMap" />
 	</bean>
 
 	<!--

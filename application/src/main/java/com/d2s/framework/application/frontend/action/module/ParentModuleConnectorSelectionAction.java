@@ -33,7 +33,7 @@ public class ParentModuleConnectorSelectionAction extends AbstractChainedAction 
   @Override
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector parentModuleConnector = getParentModuleConnector(context);
-    ICompositeValueConnector grandParentModuleConnector = (ICompositeValueConnector) parentModuleConnector
+    ICompositeValueConnector grandParentModuleConnector = parentModuleConnector
         .getParentConnector();
     if (grandParentModuleConnector instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) grandParentModuleConnector)

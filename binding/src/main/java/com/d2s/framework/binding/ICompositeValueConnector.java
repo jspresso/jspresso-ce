@@ -65,4 +65,12 @@ public interface ICompositeValueConnector extends IValueConnector {
    * @return the connector's clone.
    */
   ICompositeValueConnector clone();
+  
+  /**
+   * Are the children connectors writable ?
+   * 
+   * @return true if writable.
+   */
+  boolean areChildrenWritable();
+
 }

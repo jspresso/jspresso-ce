@@ -33,7 +33,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   private Object                      oldConnectorValue;
   private ConnectorValueChangeSupport valueChangeSupport;
-  private IValueConnector             parentConnector;
+  private ICompositeValueConnector    parentConnector;
 
   private IValueConnector             modelConnector;
 
@@ -243,7 +243,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @return the writable.
    */
   public boolean isWritable() {
-    if (getParentConnector() != null && !getParentConnector().isWritable()) {
+    if (getParentConnector() != null && !getParentConnector().areChildrenWritable()) {
       return false;
     }
     return locallyWritable && areGatesOpen(writabilityGates);
@@ -278,7 +278,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * 
    * @return the parentConnector.
    */
-  public IValueConnector getParentConnector() {
+  public ICompositeValueConnector getParentConnector() {
     return parentConnector;
   }
 
@@ -288,7 +288,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @param parentConnector
    *          the parentConnector to set.
    */
-  public void setParentConnector(IValueConnector parentConnector) {
+  public void setParentConnector(ICompositeValueConnector parentConnector) {
     this.parentConnector = parentConnector;
   }
 

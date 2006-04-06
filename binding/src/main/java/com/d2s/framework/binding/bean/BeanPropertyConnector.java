@@ -12,7 +12,7 @@ import org.apache.commons.lang.ObjectUtils;
 import com.d2s.framework.binding.AbstractValueConnector;
 import com.d2s.framework.binding.ConnectorBindingException;
 import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.bean.BeanChangeEvent;
 import com.d2s.framework.util.bean.IAccessor;
 import com.d2s.framework.util.bean.IAccessorFactory;
@@ -101,7 +101,7 @@ public abstract class BeanPropertyConnector extends AbstractValueConnector
    * {@inheritDoc}
    */
   @Override
-  public void setParentConnector(IValueConnector parentConnector) {
+  public void setParentConnector(ICompositeValueConnector parentConnector) {
     IBeanProvider oldBeanProvider = getBeanProvider();
     super.setParentConnector(parentConnector);
     beanProviderChanged(oldBeanProvider);

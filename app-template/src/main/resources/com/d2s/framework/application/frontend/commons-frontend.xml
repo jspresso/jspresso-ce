@@ -216,7 +216,25 @@
 		</property>
 	</bean>
 
-	<bean id="projectedCollectionActionMap" class="com.d2s.framework.view.action.ActionMap">
+  <bean id="projectedReadonlyCollectionActionMap" class="com.d2s.framework.view.action.ActionMap">
+    <property name="actionMap">
+      <map>
+        <entry key="FILE">
+          <list>
+            <ref local="saveProjectedFrontAction" />
+            <ref local="reloadProjectedFrontAction" />
+          </list>
+        </entry>
+        <entry key="SERVICE">
+          <list>
+            <ref local="addAsChildModuleFrontAction" />
+          </list>
+        </entry>
+      </map>
+    </property>
+  </bean>
+
+	<bean id="projectedEditableCollectionActionMap" class="com.d2s.framework.view.action.ActionMap">
 		<property name="actionMap">
 			<map>
 				<entry key="FILE">

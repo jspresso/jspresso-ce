@@ -122,7 +122,7 @@ public class BasicCollectionConnectorListProvider extends
   @Override
   public void boundAsView() {
     super.boundAsView();
-    if (isTracksChildrenSelection()) {
+    if (isTrackingChildrenSelection()) {
       implFireSelectedConnectorChange(this);
     }
   }

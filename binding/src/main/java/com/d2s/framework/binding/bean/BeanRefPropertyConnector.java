@@ -218,4 +218,11 @@ public class BeanRefPropertyConnector extends BeanPropertyConnector implements
     return getChildConnectorKeys().size();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public boolean areChildrenWritable() {
+    return true;
+  }
+
 }

@@ -466,32 +466,37 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
                 .getCardNameForModel(cardModel);
             ULCCardPane cardPanel = (ULCCardPane) cardView.getPeer();
             if (cardName != null) {
-              cardPanel.setSelectedName(cardName);
               IView<ULCComponent> childCardView = cardView.getChild(cardName);
-              IValueConnector childCardConnector = childCardView.getConnector();
-              if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
-                if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                  if (cardModel != null && cardModel instanceof BeanModule) {
-                    childCardConnector.getModelConnector().setConnectorValue(
-                        ((BeanModule) cardModel).getModuleObjects());
+              if (childCardView != null) {
+                cardPanel.setSelectedName(cardName);
+                IValueConnector childCardConnector = childCardView
+                    .getConnector();
+                if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
+                  if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
+                    if (cardModel != null && cardModel instanceof BeanModule) {
+                      childCardConnector.getModelConnector().setConnectorValue(
+                          ((BeanModule) cardModel).getModuleObjects());
+                    } else {
+                      childCardConnector.getModelConnector().setConnectorValue(
+                          cardModel);
+                    }
                   } else {
-                    childCardConnector.getModelConnector().setConnectorValue(
-                        cardModel);
+                    if (cardModel != null && cardModel instanceof BeanModule) {
+                      childCardConnector.getModelConnector().setConnectorValue(
+                          ((BeanModule) cardModel).getModuleObject());
+                    } else {
+                      childCardConnector.getModelConnector().setConnectorValue(
+                          cardModel);
+                    }
                   }
                 } else {
-                  if (cardModel != null && cardModel instanceof BeanModule) {
-                    childCardConnector.getModelConnector().setConnectorValue(
-                        ((BeanModule) cardModel).getModuleObject());
-                  } else {
-                    childCardConnector.getModelConnector().setConnectorValue(
-                        cardModel);
+                  if (childCardConnector != null) {
+                    mvcBinder.bind(childCardConnector, cardView.getConnector()
+                        .getModelConnector());
                   }
                 }
               } else {
-                if (childCardConnector != null) {
-                  mvcBinder.bind(childCardConnector, cardView.getConnector()
-                      .getModelConnector());
-                }
+                cardPanel.setSelectedName(ICardViewDescriptor.DEFAULT_CARD);
               }
             } else {
               cardPanel.setSelectedName(ICardViewDescriptor.DEFAULT_CARD);
@@ -875,8 +880,11 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
                       .getTreePathForConnector((IValueConnector) tree
                           .getModel().getRoot(), (IValueConnector) value)))
               .getNodeGroupDescriptor();
-          labelText = labelTranslator.getTranslation(nodeGroupDescriptor
-              .getName(), locale);
+          String labelKey = nodeGroupDescriptor.getName();
+          if (labelKey == null) {
+            labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
+          }
+          labelText = labelTranslator.getTranslation(labelKey, locale);
           if (nodeGroupDescriptor.getDescription() != null) {
             toolTipText = labelTranslator.getTranslation(nodeGroupDescriptor
                 .getDescription(), locale);

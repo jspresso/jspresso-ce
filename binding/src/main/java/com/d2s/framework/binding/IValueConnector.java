@@ -89,7 +89,7 @@ public interface IValueConnector extends IConnector,
    * 
    * @return the parent connector.
    */
-  IValueConnector getParentConnector();
+  ICompositeValueConnector getParentConnector();
 
   /**
    * Sets the connector this connector is attached to in parent / child
@@ -98,7 +98,7 @@ public interface IValueConnector extends IConnector,
    * @param parent
    *          the parent connector.
    */
-  void setParentConnector(IValueConnector parent);
+  void setParentConnector(ICompositeValueConnector parent);
 
   /**
    * Forces the different events to be fired towards the listeners passed as

@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.service.IComponentService;
@@ -344,7 +345,15 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    */
   public String getToStringProperty() {
     if (toStringProperty == null) {
-      return getRenderedProperties().get(0);
+      for (String renderedProperty : getRenderedProperties()) {
+        if (getPropertyDescriptor(renderedProperty) instanceof IStringPropertyDescriptor) {
+          toStringProperty = renderedProperty;
+          break;
+        }
+      }
+      if (toStringProperty == null) {
+        toStringProperty = getRenderedProperties().get(0);
+      }
     }
     return toStringProperty;
   }
