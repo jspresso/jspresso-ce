@@ -340,6 +340,13 @@ public abstract class AbstractCollectionConnector extends
   /**
    * {@inheritDoc}
    */
+  public boolean isAllowLazyChildrenLoading() {
+    return allowLazyChildrenLoading;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   protected void fireConnectorValueChange() {
     needsFireConnectorValueChange = true;

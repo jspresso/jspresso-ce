@@ -338,6 +338,13 @@ public class BeanCollectionPropertyConnector extends BeanPropertyConnector
   /**
    * {@inheritDoc}
    */
+  public boolean isAllowLazyChildrenLoading() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean areChildrenWritable() {
     return true;
   }

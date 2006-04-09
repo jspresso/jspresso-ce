@@ -330,7 +330,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
         .getPath().getLastPathComponent();
     CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
         expandedConnector, false, false);
-    checkListenerRegistrationForConnector((IValueConnector) event.getPath()
-        .getLastPathComponent());
+    checkListenerRegistrationForConnector(expandedConnector);
   }
 }

@@ -140,4 +140,13 @@ public class ConnectorValueChangeSupport {
     }
     inhibitedListeners.remove(listener);
   }
+
+  /**
+   * Gets wether the listener collection is empty.
+   * 
+   * @return true if the listener collection is empty.
+   */
+  public boolean isEmpty() {
+    return listeners == null || listeners.isEmpty();
+  }
 }

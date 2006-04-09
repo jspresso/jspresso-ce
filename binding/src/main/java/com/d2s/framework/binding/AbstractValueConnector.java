@@ -135,11 +135,13 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Notifies its listeners about a change in the connector's value.
    */
   protected void fireConnectorValueChange() {
-    valueChangeSupport.fireConnectorValueChange(createChangeEvent(
-        oldConnectorValue, getConnecteeValue()));
-    // the change propagated correctly. Save the value propagated as the old
-    // value of the connector.
-    oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
+    if (!valueChangeSupport.isEmpty()) {
+      valueChangeSupport.fireConnectorValueChange(createChangeEvent(
+          oldConnectorValue, getConnecteeValue()));
+      // the change propagated correctly. Save the value propagated as the old
+      // value of the connector.
+      oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
+    }
   }
 
   /**
@@ -243,7 +245,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @return the writable.
    */
   public boolean isWritable() {
-    if (getParentConnector() != null && !getParentConnector().areChildrenWritable()) {
+    if (getParentConnector() != null
+        && !getParentConnector().areChildrenWritable()) {
       return false;
     }
     return locallyWritable && areGatesOpen(writabilityGates);

@@ -324,6 +324,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateEntityRefGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name>
   <#local propertyType=propertyDescriptor.referencedDescriptor.name>
+  <#local isEntity=instanceof(propertyDescriptor.referencedDescriptor, "com.d2s.framework.model.descriptor.entity.IEntityDescriptor")/>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#local bidirectional=true>
     <#if instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.IReferencePropertyDescriptor")>
@@ -349,24 +350,42 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * Gets the ${propertyName}.
    * 
   <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
-    <#if reverseOneToOne>
+    <#if isEntity>
+      <#if reverseOneToOne>
    * @hibernate.one-to-one 
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
    *           property-ref = "${propertyDescriptor.reverseRelationEnd.name}"
-    <#else>
+      <#else>
    * @hibernate.many-to-one 
-      <#if oneToOne>
+        <#if oneToOne>
    *           cascade = "persist,merge,save-update,refresh,evict,replicate"
-      <#elseif bidirectional>
+        <#elseif bidirectional>
    *           cascade = "persist,merge,save-update"
-        <#if !managesPersistence>
+          <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"
-        </#if>
-      <#else>
+          </#if>
+        <#else>
    *           cascade = "none"
-      </#if>
+        </#if>
    * @hibernate.column
+   *           name = "${generateSQLName(propertyName)}_ID"
+        <#if oneToOne>
+   *           unique = "true"
+        </#if>
+        <#if propertyDescriptor.mandatory>
+   *           not-null = "true"
+        </#if>
+        <#if propertyDescriptor.unicityScope?exists>
+   *           unique-key = "${generateSQLName(propertyDescriptor.unicityScope)}_UNQ"
+        </#if>
+      </#if>
+    <#else>
+   * @hibernate.any
+   *           id-type = "string"
+   * @hibernate.any-column
+   *           name = "${generateSQLName(propertyName)}_NAME"
+   * @hibernate.any-column
    *           name = "${generateSQLName(propertyName)}_ID"
       <#if oneToOne>
    *           unique = "true"

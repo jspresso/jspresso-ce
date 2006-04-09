@@ -63,4 +63,11 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    *          true if lazy behaviour has to be turned on. false otherwise.
    */
   void setAllowLazyChildrenLoading(boolean b);
+
+  /**
+   * Gets wether this connector is configured to load its children lazilly.
+   * 
+   * @return true if this connector is configured to load its children lazilly.
+   */
+  boolean isAllowLazyChildrenLoading();
 }

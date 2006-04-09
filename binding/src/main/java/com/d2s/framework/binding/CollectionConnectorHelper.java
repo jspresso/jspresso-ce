@@ -50,21 +50,23 @@ public final class CollectionConnectorHelper {
   public static void setAllowLazyChildrenLoadingForConnector(
       ICollectionConnectorListProvider connector, boolean state,
       boolean recursive) {
-    for (ICollectionConnector childCollectionConnector : connector
-        .getCollectionConnectors()) {
-      if (recursive) {
-        for (String grandChildConnectorKey : childCollectionConnector
-            .getChildConnectorKeys()) {
-          IValueConnector grandChildConnector = childCollectionConnector
-              .getChildConnector(grandChildConnectorKey);
-          if (grandChildConnector instanceof ICollectionConnectorListProvider) {
-            setAllowLazyChildrenLoadingForConnector(
-                (ICollectionConnectorListProvider) grandChildConnector, state,
-                recursive);
+    if (connector instanceof ICollectionConnectorProvider) {
+      for (ICollectionConnector childCollectionConnector : connector
+          .getCollectionConnectors()) {
+        if (recursive) {
+          for (String grandChildConnectorKey : childCollectionConnector
+              .getChildConnectorKeys()) {
+            IValueConnector grandChildConnector = childCollectionConnector
+                .getChildConnector(grandChildConnectorKey);
+            if (grandChildConnector instanceof ICollectionConnectorListProvider) {
+              setAllowLazyChildrenLoadingForConnector(
+                  (ICollectionConnectorListProvider) grandChildConnector,
+                  state, recursive);
+            }
           }
         }
+        childCollectionConnector.setAllowLazyChildrenLoading(state);
       }
-      childCollectionConnector.setAllowLazyChildrenLoading(state);
     }
   }
 }
