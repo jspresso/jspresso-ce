@@ -27,6 +27,9 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 import org.springframework.context.ApplicationContext;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import commons.CompareStrings;
+import commons.GenerateSqlName;
+import commons.InstanceOf;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
@@ -53,11 +56,19 @@ public class EntityGenerator {
   private static final String INCLUDE_PACKAGES        = "includePackages";
   private static final String GENERATE_ANNOTATIONS    = "generateAnnotations";
 
-  private void generateComponents(String applicationContextKey,
-      String templateResourcePath, String templateName, String outputDir,
-      String[] includePackages, boolean generateAnnotations,
-      String[] componentNames) {
-    ApplicationContext appContext = getApplicationContext(applicationContextKey);
+  private String              applicationContextKey;
+  private String              templateResourcePath;
+  private String              templateName;
+  private String              outputDir;
+  private String[]            includePackages;
+  private boolean             generateAnnotations;
+  private String[]            componentNames;
+
+  /**
+   * Generates the component java source files.
+   */
+  public void generateComponents() {
+    ApplicationContext appContext = getApplicationContext();
     if (componentNames == null) {
       String[] allComponentNames = appContext
           .getBeanNamesForType(IComponentDescriptor.class);
@@ -128,7 +139,7 @@ public class EntityGenerator {
     }
   }
 
-  private ApplicationContext getApplicationContext(String applicationContextKey) {
+  private ApplicationContext getApplicationContext() {
     BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     return (ApplicationContext) bf.getFactory();
@@ -195,11 +206,84 @@ public class EntityGenerator {
     }
 
     EntityGenerator generator = new EntityGenerator();
-    generator.generateComponents(cmd.getOptionValue(APPLICATION_CONTEXT_KEY),
-        cmd.getOptionValue(TEMPLATE_RESOURCE_PATH), cmd
-            .getOptionValue(TEMPLATE_NAME), cmd.getOptionValue(OUTPUT_DIR), cmd
-            .getOptionValues(INCLUDE_PACKAGES), cmd
-            .hasOption(GENERATE_ANNOTATIONS), cmd
-            .getOptionValues(COMPONENT_NAMES));
+    generator.setApplicationContextKey(cmd
+        .getOptionValue(APPLICATION_CONTEXT_KEY));
+    generator.setTemplateResourcePath(cmd
+        .getOptionValue(TEMPLATE_RESOURCE_PATH));
+    generator.setTemplateName(cmd.getOptionValue(TEMPLATE_NAME));
+    generator.setOutputDir(cmd.getOptionValue(OUTPUT_DIR));
+    generator.setIncludePackages(cmd.getOptionValues(INCLUDE_PACKAGES));
+    generator.setGenerateAnnotations(cmd.hasOption(GENERATE_ANNOTATIONS));
+    generator.setComponentNames(cmd.getOptionValues(COMPONENT_NAMES));
+  }
+
+  /**
+   * Sets the applicationContextKey.
+   * 
+   * @param applicationContextKey
+   *          the applicationContextKey to set.
+   */
+  public void setApplicationContextKey(String applicationContextKey) {
+    this.applicationContextKey = applicationContextKey;
+  }
+
+  /**
+   * Sets the componentNames.
+   * 
+   * @param componentNames
+   *          the componentNames to set.
+   */
+  public void setComponentNames(String[] componentNames) {
+    this.componentNames = componentNames;
+  }
+
+  /**
+   * Sets the generateAnnotations.
+   * 
+   * @param generateAnnotations
+   *          the generateAnnotations to set.
+   */
+  public void setGenerateAnnotations(boolean generateAnnotations) {
+    this.generateAnnotations = generateAnnotations;
+  }
+
+  /**
+   * Sets the includePackages.
+   * 
+   * @param includePackages
+   *          the includePackages to set.
+   */
+  public void setIncludePackages(String[] includePackages) {
+    this.includePackages = includePackages;
+  }
+
+  /**
+   * Sets the outputDir.
+   * 
+   * @param outputDir
+   *          the outputDir to set.
+   */
+  public void setOutputDir(String outputDir) {
+    this.outputDir = outputDir;
+  }
+
+  /**
+   * Sets the templateName.
+   * 
+   * @param templateName
+   *          the templateName to set.
+   */
+  public void setTemplateName(String templateName) {
+    this.templateName = templateName;
+  }
+
+  /**
+   * Sets the templateResourcePath.
+   * 
+   * @param templateResourcePath
+   *          the templateResourcePath to set.
+   */
+  public void setTemplateResourcePath(String templateResourcePath) {
+    this.templateResourcePath = templateResourcePath;
   }
 }
