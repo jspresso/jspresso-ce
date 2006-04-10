@@ -16,7 +16,7 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.application.view.descriptor.module.IModuleDescriptor;
-import com.d2s.framework.application.view.descriptor.module.ModuleCardViewDescriptor;
+import com.d2s.framework.application.view.descriptor.module.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;

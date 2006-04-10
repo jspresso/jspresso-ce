@@ -39,6 +39,7 @@ import javax.swing.event.InternalFrameEvent;
 import com.d2s.framework.application.ControllerException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
+import com.d2s.framework.application.view.descriptor.module.IModuleDescriptor;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.WaitCursorTimer;
@@ -46,7 +47,6 @@ import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
-import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
 
 import foxtrot.Job;
 

@@ -16,6 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.application.model.module.BeanModule;
+import com.d2s.framework.application.view.descriptor.module.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
@@ -108,7 +109,6 @@ import com.d2s.framework.view.descriptor.TreeDescriptorHelper;
 import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
-import com.d2s.framework.view.descriptor.module.basic.ModuleCardViewDescriptor;
 import com.ulcjava.base.application.BorderFactory;
 import com.ulcjava.base.application.DefaultComboBoxCellRenderer;
 import com.ulcjava.base.application.GridBagConstraints;
