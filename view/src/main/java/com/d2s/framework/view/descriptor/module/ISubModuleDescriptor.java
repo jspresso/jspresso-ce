@@ -3,8 +3,8 @@
  */
 package com.d2s.framework.view.descriptor.module;
 
+import com.d2s.framework.application.descriptor.module.ModuleDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.module.ModuleDescriptor;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 

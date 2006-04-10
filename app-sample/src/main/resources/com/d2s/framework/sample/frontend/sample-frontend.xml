@@ -442,7 +442,7 @@ for selectedIndex in context.get("SELECTED_INDICES"):
 		<property name="description" value="company.design.module" />
 		<property name="rootSubtreeDescriptor" ref="company.module.front" />
 		<property name="iconImageURLProvider">
-			<bean class="com.d2s.framework.view.module.ModuleIconImageURLProvider">
+			<bean class="com.d2s.framework.model.descriptor.module.ModuleIconImageURLProvider">
 				<property name="delegateProvider" ref="domainImageUrlProvider" />
 			</bean>
 		</property>

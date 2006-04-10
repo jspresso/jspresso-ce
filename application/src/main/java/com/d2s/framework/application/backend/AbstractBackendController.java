@@ -9,6 +9,7 @@ import java.util.Map;
 import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.application.module.Module;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.bean.BeanConnector;
@@ -17,7 +18,6 @@ import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.module.Module;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
 

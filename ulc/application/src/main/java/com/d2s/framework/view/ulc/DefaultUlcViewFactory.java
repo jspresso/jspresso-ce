@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.d2s.framework.application.module.BeanModule;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
@@ -67,7 +68,6 @@ import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
-import com.d2s.framework.model.module.BeanModule;
 import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;

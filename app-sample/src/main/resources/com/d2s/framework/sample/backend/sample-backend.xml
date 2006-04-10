@@ -16,13 +16,13 @@
 		<property name="elementDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
 	</bean>
 
-	<bean id="company.departments.module.back" class="com.d2s.framework.view.module.BeanModule">
+	<bean id="company.departments.module.back" class="com.d2s.framework.model.module.BeanModule">
 		<property name="name" value="departments.module" />
 		<property name="description" value="Departments" />
 		<property name="descriptor" ref="company.departments.module.front" />
 	</bean>
 
-	<bean id="company.module.back" class="com.d2s.framework.view.module.Module">
+	<bean id="company.module.back" class="com.d2s.framework.model.module.Module">
 		<property name="name" value="company.module" />
 		<property name="description" value="Company" />
 		<property name="subModules">
