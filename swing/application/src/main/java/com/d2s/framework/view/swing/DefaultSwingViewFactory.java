@@ -115,6 +115,7 @@ import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
+import com.d2s.framework.model.module.BeanModule;
 import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
@@ -156,7 +157,6 @@ import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import com.d2s.framework.view.descriptor.module.basic.ModuleCardViewDescriptor;
-import com.d2s.framework.view.module.BeanModule;
 
 /**
  * Factory for swing views.

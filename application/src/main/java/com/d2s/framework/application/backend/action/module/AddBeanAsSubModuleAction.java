@@ -10,13 +10,13 @@ import java.util.Map;
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.model.module.BeanModule;
+import com.d2s.framework.model.module.SubModule;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.descriptor.module.ISimpleSubModuleDescriptor;
 import com.d2s.framework.view.descriptor.module.ISubModuleDescriptor;
-import com.d2s.framework.view.module.BeanModule;
-import com.d2s.framework.view.module.SubModule;
 
 /**
  * This action adds the selected objects as child modules.

@@ -14,10 +14,10 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.module.BeanModule;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
-import com.d2s.framework.view.module.BeanModule;
 
 /**
  * This action adds a new object in the projected collection.

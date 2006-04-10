@@ -13,7 +13,7 @@ import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicObjectPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
-import com.d2s.framework.view.module.Module;
+import com.d2s.framework.model.module.Module;
 
 /**
  * The model descriptor of module objects.
