@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor;
 
+import java.util.List;
+
 /**
  * This interface is implemented by descriptors of collection properties.
  * <p>
@@ -28,4 +30,11 @@ public interface ICollectionPropertyDescriptor extends
    * @return true if this collection property descriptor is a many-to-many end.
    */
   boolean isManyToMany();
+
+  /**
+   * Get the list of properties ordering this collection.
+   * 
+   * @return the list of properties ordering this collection.
+   */
+  List<String> getOrderingProperties();
 }

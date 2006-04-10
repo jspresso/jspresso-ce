@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.List;
+
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 
@@ -21,6 +23,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   private ICollectionDescriptor referencedDescriptor;
   private boolean               manyToMany;
+  private List<String>          orderingProperties;
 
   /**
    * Constructs a new <code>BasicCollectionPropertyDescriptor</code> instance.
@@ -83,5 +86,28 @@ public class BasicCollectionPropertyDescriptor extends
    */
   public void setManyToMany(boolean manyToMany) {
     this.manyToMany = manyToMany;
+  }
+
+  /**
+   * Gets the orderingProperties.
+   * 
+   * @return the orderingProperties.
+   */
+  public List<String> getOrderingProperties() {
+    if (orderingProperties == null) {
+      return getReferencedDescriptor().getElementDescriptor()
+          .getOrderingProperties();
+    }
+    return orderingProperties;
+  }
+
+  /**
+   * Sets the orderingProperties.
+   * 
+   * @param orderingProperties
+   *          the orderingProperties to set.
+   */
+  public void setOrderingProperties(List<String> orderingProperties) {
+    this.orderingProperties = orderingProperties;
   }
 }
