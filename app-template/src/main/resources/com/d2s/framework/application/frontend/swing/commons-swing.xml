@@ -36,6 +36,9 @@
 	<bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction" />
 
+  <bean id="infoFrontAction" abstract="true" parent="abstractFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction" />
+
 	<!--
 		The implementation used as view factory.
 	-->
