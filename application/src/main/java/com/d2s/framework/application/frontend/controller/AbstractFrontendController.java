@@ -15,6 +15,8 @@ import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.IFrontendController;
+import com.d2s.framework.application.view.descriptor.module.IModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.module.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
@@ -33,8 +35,6 @@ import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
-import com.d2s.framework.view.descriptor.module.IModuleDescriptor;
-import com.d2s.framework.view.descriptor.module.basic.ModuleCardViewDescriptor;
 
 /**
  * This class serves as base class for frontend (view) controllers.
