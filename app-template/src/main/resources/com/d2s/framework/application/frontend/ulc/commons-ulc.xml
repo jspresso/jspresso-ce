@@ -2,78 +2,80 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <!--
-	ULC root application context for the D2S framework.
+  ULC root application context for the D2S framework.
 -->
 <beans default-lazy-init="true">
 
-	<!--
-		The implementation used as ListSelectionModelBinder.
-	-->
-	<bean id="listSelectionModelBinder" class="com.d2s.framework.binding.ulc.DefaultListSelectionModelBinder"></bean>
+  <!--
+    The implementation used as ListSelectionModelBinder.
+  -->
+  <bean id="listSelectionModelBinder" class="com.d2s.framework.binding.ulc.DefaultListSelectionModelBinder"></bean>
 
-	<!--
-		The implementation used as TreeSelectionModelBinder.
-	-->
-	<bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.ulc.DefaultTreeSelectionModelBinder"></bean>
+  <!--
+    The implementation used as TreeSelectionModelBinder.
+  -->
+  <bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.ulc.DefaultTreeSelectionModelBinder"></bean>
 
-	<!--
-		Root action beans.
-	-->
-	<bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
-		class="com.d2s.framework.application.frontend.action.std.FindAction" />
+  <!--
+    Root action beans.
+  -->
+  <bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
+    class="com.d2s.framework.application.frontend.action.std.FindAction" />
 
-	<bean id="lovOkFrontAction" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction">
-		<property name="nextAction" ref="sourceViewConnectorSetAction" />
-	</bean>
+  <bean id="lovOkFrontAction" parent="abstractFrontAction"
+    class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction">
+    <property name="nextAction" ref="sourceViewConnectorSetAction" />
+  </bean>
 
-	<bean id="cancelDialogFrontAction" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.std.DialogCancelAction" />
+  <bean id="cancelDialogFrontAction" parent="abstractFrontAction"
+    class="com.d2s.framework.application.frontend.action.ulc.std.DialogCancelAction" />
 
-	<!-- 
-		Action beans
-	-->
-	<bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.flow.YesNoAction" />
+  <!-- 
+    Action beans
+  -->
+  <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
+    class="com.d2s.framework.application.frontend.action.ulc.flow.YesNoAction" />
 
   <bean id="infoFrontAction" abstract="true" parent="abstractFrontAction"
-    class="com.d2s.framework.application.frontend.action.ulc.flow.InfoAction" />
+    class="com.d2s.framework.application.frontend.action.ulc.flow.InfoAction">
+    <property name="iconImageURL" value="classpath:images/info-48x48.png"/>
+  </bean>
 
-	<!--
-		The implementation used as view factory.
-	-->
-	<bean id="iconFactory" class="com.d2s.framework.view.ulc.UlcIconFactory" />
+  <!--
+    The implementation used as view factory.
+  -->
+  <bean id="iconFactory" class="com.d2s.framework.view.ulc.UlcIconFactory" />
 
-	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.ulc.UlcActionFactory" />
+  <bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.ulc.UlcActionFactory" />
 
-	<bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction" />
+  <bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
+    class="com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction" />
 
-	<bean id="lovAction" parent="abstractLovAction"
-		class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" />
+  <bean id="lovAction" parent="abstractLovAction"
+    class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" />
 
-	<bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
-		class="com.d2s.framework.application.frontend.action.ulc.file.ChooseFileAsBinaryPropertyAction" />
+  <bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
+    class="com.d2s.framework.application.frontend.action.ulc.file.ChooseFileAsBinaryPropertyAction" />
 
-	<bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory" />
+  <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory" />
 
-	<!--
-		The controllers.
-	-->
-	<bean id="frontController" abstract="true" parent="abstractFrontController"
-		class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController">
-		<property name="loginCallbackHandler">
-			<bean class="com.d2s.framework.security.ulc.DialogCallbackHandler">
-				<property name="iconFactory" ref="iconFactory" />
-				<property name="okYesIconImageURL" value="classpath:images/ok-48x48.png" />
-				<property name="noIconImageURL" value="classpath:images/no-48x48.png" />
-				<property name="cancelIconImageURL" value="classpath:images/cancel-48x48.png" />
-				<property name="infoIconImageURL" value="classpath:images/info-48x48.png" />
-				<property name="warningIconImageURL" value="classpath:images/warning-48x48.png" />
-				<property name="errorIconImageURL" value="classpath:images/error-48x48.png" />
-			</bean>
-		</property>
-	</bean>
+  <!--
+    The controllers.
+  -->
+  <bean id="frontController" abstract="true" parent="abstractFrontController"
+    class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController">
+    <property name="loginCallbackHandler">
+      <bean class="com.d2s.framework.security.ulc.DialogCallbackHandler">
+        <property name="iconFactory" ref="iconFactory" />
+        <property name="okYesIconImageURL" value="classpath:images/ok-48x48.png" />
+        <property name="noIconImageURL" value="classpath:images/no-48x48.png" />
+        <property name="cancelIconImageURL" value="classpath:images/cancel-48x48.png" />
+        <property name="infoIconImageURL" value="classpath:images/info-48x48.png" />
+        <property name="warningIconImageURL" value="classpath:images/warning-48x48.png" />
+        <property name="errorIconImageURL" value="classpath:images/error-48x48.png" />
+      </bean>
+    </property>
+  </bean>
 
 </beans>
 
