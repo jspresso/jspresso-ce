@@ -5,8 +5,8 @@ package com.d2s.framework.sample.frontend.startup;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.startup.ulc.UlcStartup;
-import com.d2s.framework.application.module.BeanModule;
-import com.d2s.framework.application.module.Module;
+import com.d2s.framework.application.model.module.BeanModule;
+import com.d2s.framework.application.model.module.Module;
 import com.d2s.framework.sample.data.AppDataProducer;
 
 /**

@@ -6,7 +6,7 @@ package com.d2s.framework.view.descriptor.module.basic;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.d2s.framework.application.module.SubModule;
+import com.d2s.framework.application.model.module.SubModule;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;

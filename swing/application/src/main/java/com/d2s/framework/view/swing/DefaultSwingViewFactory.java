@@ -67,7 +67,7 @@ import javax.swing.tree.TreeSelectionModel;
 import net.sf.nachocalendar.components.DefaultDayRenderer;
 import net.sf.nachocalendar.components.DefaultHeaderRenderer;
 
-import com.d2s.framework.application.module.BeanModule;
+import com.d2s.framework.application.model.module.BeanModule;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;

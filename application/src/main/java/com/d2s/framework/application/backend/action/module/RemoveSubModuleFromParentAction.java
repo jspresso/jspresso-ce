@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
-import com.d2s.framework.application.module.Module;
-import com.d2s.framework.application.module.SubModule;
+import com.d2s.framework.application.model.module.Module;
+import com.d2s.framework.application.model.module.SubModule;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
