@@ -215,6 +215,7 @@ public class EntityGenerator {
     generator.setIncludePackages(cmd.getOptionValues(INCLUDE_PACKAGES));
     generator.setGenerateAnnotations(cmd.hasOption(GENERATE_ANNOTATIONS));
     generator.setComponentNames(cmd.getOptionValues(COMPONENT_NAMES));
+    generator.generateComponents();
   }
 
   /**
