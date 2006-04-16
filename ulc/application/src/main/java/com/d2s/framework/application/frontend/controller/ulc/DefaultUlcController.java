@@ -51,7 +51,7 @@ import com.ulcjava.base.shared.IWindowConstants;
  * @author Vincent Vandenschrick
  */
 public class DefaultUlcController extends
-    AbstractFrontendController<ULCComponent> implements
+    AbstractFrontendController<ULCComponent, ULCIcon> implements
     ICallbackHandlerListener {
 
   private ULCFrame                      controllerFrame;
@@ -246,15 +246,6 @@ public class DefaultUlcController extends
   protected void setSelectedModuleId(@SuppressWarnings("unused")
   String selectedModuleId) {
     throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected IIconFactory<ULCIcon> getIconFactory() {
-    return (IIconFactory<ULCIcon>) super.getIconFactory();
   }
 
   private ULCFrame createControllerFrame() {

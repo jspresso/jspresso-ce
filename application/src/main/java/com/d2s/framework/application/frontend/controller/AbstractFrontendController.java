@@ -45,10 +45,12 @@ import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used by this controller.
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public abstract class AbstractFrontendController<E> extends AbstractController
-    implements IFrontendController {
+public abstract class AbstractFrontendController<E, F> extends
+    AbstractController implements IFrontendController {
 
   private DefaultIconDescriptor                 controllerDescriptor;
 
@@ -58,8 +60,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
   private IBackendController                    backendController;
   private Map<String, IModuleDescriptor>        moduleDescriptors;
   private String                                modulesMenuIconImageUrl;
-  private IViewFactory<E>                       viewFactory;
-  private IIconFactory                          iconFactory;
+  private IViewFactory<E, F>                    viewFactory;
   private ITranslationProvider                  labelTranslator;
   private ITranslationProvider                  descriptionTranslator;
   private IMvcBinder                            mvcBinder;
@@ -251,7 +252,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * @param viewFactory
    *          the viewFactory to set.
    */
-  public void setViewFactory(IViewFactory<E> viewFactory) {
+  public void setViewFactory(IViewFactory<E, F> viewFactory) {
     this.viewFactory = viewFactory;
   }
 
@@ -260,7 +261,7 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * 
    * @return the viewFactory.
    */
-  protected IViewFactory<E> getViewFactory() {
+  protected IViewFactory<E, F> getViewFactory() {
     return viewFactory;
   }
 
@@ -386,18 +387,8 @@ public abstract class AbstractFrontendController<E> extends AbstractController
    * 
    * @return the iconFactory.
    */
-  protected IIconFactory getIconFactory() {
-    return iconFactory;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory iconFactory) {
-    this.iconFactory = iconFactory;
+  protected IIconFactory<F> getIconFactory() {
+    return viewFactory.getIconFactory();
   }
 
   /**

@@ -161,7 +161,7 @@ import com.ulcjava.base.shared.IDefaults;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
+public class DefaultUlcViewFactory implements IViewFactory<ULCComponent, ULCIcon> {
 
   private IConfigurableConnectorFactory         connectorFactory;
   private IMvcBinder                            mvcBinder;
@@ -2584,6 +2584,13 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent> {
    */
   public void setIconFactory(IIconFactory<ULCIcon> iconFactory) {
     this.iconFactory = iconFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IIconFactory<ULCIcon> getIconFactory() {
+    return iconFactory;
   }
 
   /**

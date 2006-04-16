@@ -27,10 +27,11 @@ import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
+ *          the actual gui component type used.
  */
 public class BasicLovViewFactory<E> implements ILovViewFactory<E> {
 
-  private IViewFactory<E> viewFactory;
+  private IViewFactory<E, ?> viewFactory;
 
   /**
    * Creates a split view with a component view as the top view (the query
@@ -104,7 +105,7 @@ public class BasicLovViewFactory<E> implements ILovViewFactory<E> {
    * @param viewFactory
    *          the viewFactory to set.
    */
-  public void setViewFactory(IViewFactory<E> viewFactory) {
+  public void setViewFactory(IViewFactory<E, ?> viewFactory) {
     this.viewFactory = viewFactory;
   }
 

@@ -61,7 +61,7 @@ import foxtrot.Job;
  * @author Vincent Vandenschrick
  */
 public class DefaultSwingController extends
-    AbstractFrontendController<JComponent> {
+    AbstractFrontendController<JComponent, Icon> {
 
   private JFrame                      controllerFrame;
   private Map<String, JInternalFrame> moduleInternalFrames;
@@ -221,15 +221,6 @@ public class DefaultSwingController extends
     InternalFrameEvent e) {
       setSelectedModuleId(moduleId);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected IIconFactory<Icon> getIconFactory() {
-    return (IIconFactory<Icon>) super.getIconFactory();
   }
 
   private JFrame createControllerFrame() {

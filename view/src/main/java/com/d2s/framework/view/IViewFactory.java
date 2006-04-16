@@ -17,8 +17,11 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public interface IViewFactory<E> {
+public interface IViewFactory<E, F> {
 
   /**
    * Creates a new view from a view descriptor.
@@ -35,4 +38,11 @@ public interface IViewFactory<E> {
    */
   IView<E> createView(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale);
+  
+  /**
+   * Gets the icon factory.
+   * 
+   * @return the icon factory.
+   */
+  IIconFactory<F> getIconFactory();
 }

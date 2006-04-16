@@ -167,7 +167,7 @@ import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
+public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon> {
 
   private IConfigurableConnectorFactory      connectorFactory;
   private IMvcBinder                         mvcBinder;
@@ -2579,7 +2579,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent> {
    * 
    * @return the iconFactory.
    */
-  protected IIconFactory<Icon> getIconFactory() {
+  public IIconFactory<Icon> getIconFactory() {
     return iconFactory;
   }
 
