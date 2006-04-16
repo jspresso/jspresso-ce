@@ -14,8 +14,12 @@ import com.d2s.framework.application.frontend.action.AbstractChainedAction;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public class OkAction extends AbstractChainedAction {
+public class OkAction<E, F> extends AbstractChainedAction<E, F> {
 
   /**
    * Constructs a new <code>OkAction</code> instance.

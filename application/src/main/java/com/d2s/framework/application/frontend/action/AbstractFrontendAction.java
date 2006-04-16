@@ -5,6 +5,7 @@ package com.d2s.framework.application.frontend.action;
 
 import java.util.Map;
 
+import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
@@ -23,16 +24,17 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public abstract class AbstractFrontendAction extends AbstractAction implements
-    IDisplayableAction {
+public abstract class AbstractFrontendAction<E, F> extends AbstractAction
+    implements IDisplayableAction {
 
   private String                mnemonicAsString;
   private String                acceleratorAsString;
   private DefaultIconDescriptor actionDescriptor;
-  private IMvcBinder            mvcBinder;
-  private IViewFactory          viewFactory;
-  private IIconFactory          iconFactory;
 
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
@@ -200,59 +202,47 @@ public abstract class AbstractFrontendAction extends AbstractAction implements
   }
 
   /**
-   * Gets the mvcBinder.
+   * Gets the frontend controller out of the action context.
    * 
-   * @return the mvcBinder.
+   * @param context
+   *          the action context.
+   * @return the frontend controller.
    */
-  protected IMvcBinder getMvcBinder() {
-    return mvcBinder;
+  @SuppressWarnings("unchecked")
+  protected IFrontendController<E, F> getController(Map<String, Object> context) {
+    return (IFrontendController<E, F>) context.get(ActionContextConstants.CONTROLLER);
   }
 
   /**
-   * Sets the mvcBinder.
+   * Gets the mvcBinder.
    * 
-   * @param mvcBinder
-   *          the mvcBinder to set.
+   * @param context
+   *          the action context.
+   * @return the mvcBinder.
    */
-  public void setMvcBinder(IMvcBinder mvcBinder) {
-    this.mvcBinder = mvcBinder;
+  protected IMvcBinder getMvcBinder(Map<String, Object> context) {
+    return getController(context).getMvcBinder();
   }
 
   /**
    * Gets the viewFactory.
    * 
+   * @param context
+   *          the action context.
    * @return the viewFactory.
    */
-  protected IViewFactory getViewFactory() {
-    return viewFactory;
-  }
-
-  /**
-   * Sets the viewFactory.
-   * 
-   * @param viewFactory
-   *          the viewFactory to set.
-   */
-  public void setViewFactory(IViewFactory viewFactory) {
-    this.viewFactory = viewFactory;
+  protected IViewFactory<E, F> getViewFactory(Map<String, Object> context) {
+    return getController(context).getViewFactory();
   }
 
   /**
    * Gets the iconFactory.
    * 
+   * @param context
+   *          the action context.
    * @return the iconFactory.
    */
-  protected IIconFactory getIconFactory() {
-    return iconFactory;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory iconFactory) {
-    this.iconFactory = iconFactory;
+  protected IIconFactory<F> getIconFactory(Map<String, Object> context) {
+    return getViewFactory(context).getIconFactory();
   }
 }

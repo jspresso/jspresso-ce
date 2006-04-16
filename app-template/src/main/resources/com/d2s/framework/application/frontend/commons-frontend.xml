@@ -15,11 +15,7 @@
   <!--
     Root action beans.
   -->
-  <bean id="abstractFrontAction" abstract="true">
-    <property name="viewFactory" ref="viewFactory" />
-    <property name="iconFactory" ref="iconFactory" />
-    <property name="mvcBinder" ref="mvcBinder" />
-  </bean>
+  <bean id="abstractFrontAction" abstract="true" />
 
   <!--
     Action beans.

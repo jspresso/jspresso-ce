@@ -19,8 +19,12 @@ import com.d2s.framework.view.action.IActionHandler;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public class AddToMasterAction extends ActionWrapper {
+public class AddToMasterAction<E, F> extends ActionWrapper<E, F> {
 
   private IEntityDescriptor elementEntityDescriptor;
 

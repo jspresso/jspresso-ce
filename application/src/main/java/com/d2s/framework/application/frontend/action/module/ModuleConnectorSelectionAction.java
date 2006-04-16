@@ -20,8 +20,13 @@ import com.d2s.framework.view.action.IActionHandler;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public class ModuleConnectorSelectionAction extends AbstractChainedAction {
+public class ModuleConnectorSelectionAction<E, F> extends
+    AbstractChainedAction<E, F> {
 
   /**
    * Selects indices on the module view collection connector based on the

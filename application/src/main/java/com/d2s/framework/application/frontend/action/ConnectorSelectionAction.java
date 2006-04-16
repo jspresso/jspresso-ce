@@ -17,8 +17,12 @@ import com.d2s.framework.view.action.IActionHandler;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public class ConnectorSelectionAction extends AbstractChainedAction {
+public class ConnectorSelectionAction<E, F> extends AbstractChainedAction<E, F> {
 
   /**
    * Selects indices on the view collection connector based on the
@@ -29,8 +33,8 @@ public class ConnectorSelectionAction extends AbstractChainedAction {
   @Override
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
-    int[] connectorSelection = (int[]) context.get(
-        ActionContextConstants.SELECTED_INDICES);
+    int[] connectorSelection = (int[]) context
+        .get(ActionContextConstants.SELECTED_INDICES);
     collectionConnector.setSelectedIndices(connectorSelection);
     super.execute(actionHandler, context);
   }

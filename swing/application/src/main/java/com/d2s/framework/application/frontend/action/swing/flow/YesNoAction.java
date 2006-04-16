@@ -36,7 +36,7 @@ public class YesNoAction extends AbstractMessageAction {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)), getMessage(),
         getName(), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-        getIconFactory().getIcon(getIconImageURL(),
+        getIconFactory(context).getIcon(getIconImageURL(),
             IIconFactory.LARGE_ICON_SIZE));
     if (selectedOption == JOptionPane.YES_OPTION) {
       setNextAction(yesAction);

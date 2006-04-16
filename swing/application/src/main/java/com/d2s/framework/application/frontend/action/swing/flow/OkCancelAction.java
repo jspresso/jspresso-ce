@@ -36,7 +36,7 @@ public class OkCancelAction extends AbstractMessageAction {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)), getMessage(),
         getName(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
-        getIconFactory().getIcon(getIconImageURL(),
+        getIconFactory(context).getIcon(getIconImageURL(),
             IIconFactory.LARGE_ICON_SIZE));
     if (selectedOption == JOptionPane.OK_OPTION) {
       setNextAction(okAction);

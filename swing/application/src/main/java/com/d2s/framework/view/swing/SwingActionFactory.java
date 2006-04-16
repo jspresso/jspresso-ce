@@ -124,6 +124,8 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
         HashMap<String, Object> initialActionContext = new HashMap<String, Object>();
+        initialActionContext.put(ActionContextConstants.CONTROLLER,
+            actionHandler);
         initialActionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
             modelDescriptor);
         initialActionContext.put(ActionContextConstants.SOURCE_COMPONENT,

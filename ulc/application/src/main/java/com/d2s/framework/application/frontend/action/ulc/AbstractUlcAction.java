@@ -6,8 +6,6 @@ package com.d2s.framework.application.frontend.action.ulc;
 import java.util.Map;
 
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
-import com.d2s.framework.view.IIconFactory;
-import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.util.ULCIcon;
@@ -22,7 +20,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractUlcAction extends AbstractChainedAction {
+public abstract class AbstractUlcAction extends AbstractChainedAction<ULCComponent, ULCIcon> {
 
   /**
    * Retrieves the widget this action was triggered from. It may serve to
@@ -36,27 +34,5 @@ public abstract class AbstractUlcAction extends AbstractChainedAction {
    */
   public ULCComponent getSourceComponent(Map<String, Object> context) {
     return (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
-  }
-
-  /**
-   * Refines return type.
-   * <p>
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected IIconFactory<ULCIcon> getIconFactory() {
-    return (IIconFactory<ULCIcon>) super.getIconFactory();
-  }
-
-  /**
-   * Refines return type.
-   * <p>
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected IViewFactory<ULCComponent> getViewFactory() {
-    return (IViewFactory<ULCComponent>) super.getViewFactory();
   }
 }

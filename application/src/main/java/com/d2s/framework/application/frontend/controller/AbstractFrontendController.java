@@ -261,7 +261,7 @@ public abstract class AbstractFrontendController<E, F> extends
    * 
    * @return the viewFactory.
    */
-  protected IViewFactory<E, F> getViewFactory() {
+  public IViewFactory<E, F> getViewFactory() {
     return viewFactory;
   }
 
@@ -311,7 +311,7 @@ public abstract class AbstractFrontendController<E, F> extends
    * 
    * @return the mvcBinder.
    */
-  protected IMvcBinder getMvcBinder() {
+  public IMvcBinder getMvcBinder() {
     return mvcBinder;
   }
 

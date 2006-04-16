@@ -17,8 +17,13 @@ import com.d2s.framework.view.action.IActionHandler;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public abstract class AbstractChainedAction extends AbstractFrontendAction {
+public abstract class AbstractChainedAction<E, F> extends
+    AbstractFrontendAction<E, F> {
 
   private IAction nextAction;
 

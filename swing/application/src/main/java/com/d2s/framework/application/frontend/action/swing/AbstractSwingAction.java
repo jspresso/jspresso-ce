@@ -9,8 +9,6 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
-import com.d2s.framework.view.IIconFactory;
-import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.action.ActionContextConstants;
 
 /**
@@ -23,7 +21,7 @@ import com.d2s.framework.view.action.ActionContextConstants;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractSwingAction extends AbstractChainedAction {
+public abstract class AbstractSwingAction extends AbstractChainedAction<JComponent, Icon> {
 
   /**
    * Retrieves the widget this action was triggered from. It may serve to
@@ -38,27 +36,4 @@ public abstract class AbstractSwingAction extends AbstractChainedAction {
   public JComponent getSourceComponent(Map<String, Object> context) {
     return (JComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
   }
-
-  /**
-   * Refines return type.
-   * <p>
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected IIconFactory<Icon> getIconFactory() {
-    return (IIconFactory<Icon>) super.getIconFactory();
-  }
-
-  /**
-   * Refines return type.
-   * <p>
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected IViewFactory<JComponent> getViewFactory() {
-    return (IViewFactory<JComponent>) super.getViewFactory();
-  }
-
 }

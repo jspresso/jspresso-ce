@@ -16,8 +16,12 @@ import com.d2s.framework.view.action.IActionHandler;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the actual gui component type used.
+ * @param <F>
+ *          the actual icon type used.
  */
-public class ActionWrapper extends AbstractChainedAction {
+public class ActionWrapper<E, F> extends AbstractChainedAction<E, F> {
 
   private IAction wrappedAction;
 

@@ -76,7 +76,7 @@ public class LovAction extends ModalDialogAction {
     actionHandler.execute(createQueryEntityAction, context);
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
-    getMvcBinder().bind(lovView.getConnector(), queryEntityConnector);
+    getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
     findAction.putInitialContext(ActionContextConstants.QUERY_MODEL_CONNECTOR,
         queryEntityConnector);
     Object queryPropertyValue = context

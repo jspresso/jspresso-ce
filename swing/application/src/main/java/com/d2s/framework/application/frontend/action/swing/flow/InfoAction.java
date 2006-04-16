@@ -31,7 +31,7 @@ public class InfoAction extends AbstractMessageAction {
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     JOptionPane.showInternalMessageDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)), getMessage(),
-        getName(), JOptionPane.INFORMATION_MESSAGE, getIconFactory().getIcon(
+        getName(), JOptionPane.INFORMATION_MESSAGE, getIconFactory(context).getIcon(
             getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
     super.execute(actionHandler, context);
   }

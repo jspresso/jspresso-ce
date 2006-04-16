@@ -37,7 +37,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)), getMessage(),
         getName(), JOptionPane.YES_NO_CANCEL_OPTION,
-        JOptionPane.QUESTION_MESSAGE, getIconFactory().getIcon(
+        JOptionPane.QUESTION_MESSAGE, getIconFactory(context).getIcon(
             getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
     if (selectedOption == JOptionPane.CANCEL_OPTION) {
       setNextAction(cancelAction);

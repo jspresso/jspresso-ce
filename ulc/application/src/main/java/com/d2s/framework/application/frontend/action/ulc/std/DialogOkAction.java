@@ -5,7 +5,9 @@ package com.d2s.framework.application.frontend.action.ulc.std;
 
 import com.d2s.framework.application.frontend.action.std.OkAction;
 import com.d2s.framework.application.frontend.action.ulc.IDialogAwareAction;
+import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDialog;
+import com.ulcjava.base.application.util.ULCIcon;
 
 /**
  * A standard ok action. Since it is a chained action, it can be chained with
@@ -17,7 +19,7 @@ import com.ulcjava.base.application.ULCDialog;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DialogOkAction extends OkAction implements IDialogAwareAction {
+public class DialogOkAction extends OkAction<ULCComponent, ULCIcon> implements IDialogAwareAction {
 
   /**
    * {@inheritDoc}

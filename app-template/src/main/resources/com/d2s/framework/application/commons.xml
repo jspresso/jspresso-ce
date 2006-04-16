@@ -144,7 +144,6 @@
     <property name="labelTranslator" ref="mockTranslator" />
     <property name="descriptionTranslator" ref="mockTranslator" />
     <property name="viewFactory" ref="viewFactory" />
-    <property name="iconFactory" ref="iconFactory" />
     <property name="modulesMenuIconImageUrl" value="classpath:images/modules-48x48.png" />
   </bean>
 
