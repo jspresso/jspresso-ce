@@ -39,7 +39,7 @@ import javax.swing.event.InternalFrameEvent;
 import com.d2s.framework.application.ControllerException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
-import com.d2s.framework.application.view.descriptor.module.IModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.WaitCursorTimer;

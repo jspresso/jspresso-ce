@@ -1,16 +1,16 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.view.descriptor.module.basic;
+package com.d2s.framework.application.view.descriptor.basic;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.d2s.framework.application.model.module.SubModule;
-import com.d2s.framework.application.view.descriptor.module.ICompositeSubModuleDescriptor;
-import com.d2s.framework.application.view.descriptor.module.IModuleDescriptor;
-import com.d2s.framework.application.view.descriptor.module.ISimpleSubModuleDescriptor;
-import com.d2s.framework.application.view.descriptor.module.ISubModuleDescriptor;
+import com.d2s.framework.application.model.SubModule;
+import com.d2s.framework.application.view.descriptor.ICompositeSubModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.ISimpleSubModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;

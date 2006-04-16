@@ -1,9 +1,9 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.view.descriptor.module.basic;
+package com.d2s.framework.application.view.descriptor.basic;
 
-import com.d2s.framework.application.view.descriptor.module.ISimpleSubModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.ISimpleSubModuleDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;

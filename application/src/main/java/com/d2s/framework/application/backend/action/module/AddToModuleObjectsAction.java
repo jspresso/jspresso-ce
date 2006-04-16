@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
-import com.d2s.framework.application.model.module.BeanModule;
+import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;

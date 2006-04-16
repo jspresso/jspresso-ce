@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.model.descriptor.module;
+package com.d2s.framework.application.model.descriptor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.d2s.framework.application.model.module.Module;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;

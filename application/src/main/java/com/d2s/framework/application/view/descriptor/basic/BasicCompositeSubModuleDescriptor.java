@@ -1,9 +1,9 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.view.descriptor.module.basic;
+package com.d2s.framework.application.view.descriptor.basic;
 
-import com.d2s.framework.application.view.descriptor.module.ICompositeSubModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.ICompositeSubModuleDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicCompositeTreeLevelDescriptor;
 

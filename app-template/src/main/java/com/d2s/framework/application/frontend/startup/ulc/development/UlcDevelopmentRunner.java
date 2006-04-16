@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.frontend.startup.ulc;
+package com.d2s.framework.application.frontend.startup.ulc.development;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import com.ulcjava.base.client.IMessageService;
 import com.ulcjava.base.development.DevelopmentRunner;
 
 /**
- * Custom development runner to cope with formatted textfield font bug.
+ * Custom jnlp runner to cope with formatted textfield font bug.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -22,9 +22,9 @@ import com.ulcjava.base.development.DevelopmentRunner;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public final class UlcDevelopmentLauncher extends DevelopmentRunner {
+public final class UlcDevelopmentRunner {
 
-  private UlcDevelopmentLauncher() {
+  private UlcDevelopmentRunner() {
     // Helper class constructor.
   }
 

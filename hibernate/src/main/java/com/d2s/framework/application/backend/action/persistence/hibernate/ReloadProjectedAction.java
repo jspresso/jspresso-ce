@@ -10,7 +10,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
 import com.d2s.framework.application.backend.session.MergeMode;
-import com.d2s.framework.application.model.module.BeanModule;
+import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.view.action.IActionHandler;

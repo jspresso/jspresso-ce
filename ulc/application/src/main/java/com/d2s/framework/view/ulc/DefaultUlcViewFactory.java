@@ -15,8 +15,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import com.d2s.framework.application.model.module.BeanModule;
-import com.d2s.framework.application.view.descriptor.module.basic.ModuleCardViewDescriptor;
+import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;

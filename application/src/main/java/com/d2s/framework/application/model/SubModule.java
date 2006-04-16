@@ -1,11 +1,11 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.model.module;
+package com.d2s.framework.application.model;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.d2s.framework.application.view.descriptor.module.ISubModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
 
 /**
  * A child module is a non-root module (it has a parent). A child module uses a

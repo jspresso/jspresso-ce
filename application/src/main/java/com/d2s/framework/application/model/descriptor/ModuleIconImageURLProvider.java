@@ -1,9 +1,9 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.model.descriptor.module;
+package com.d2s.framework.application.model.descriptor;
 
-import com.d2s.framework.application.model.module.BeanModule;
+import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.util.IIconImageURLProvider;
 
 /**

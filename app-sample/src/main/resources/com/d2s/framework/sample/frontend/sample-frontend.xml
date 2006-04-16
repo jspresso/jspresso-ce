@@ -407,7 +407,7 @@ for selectedIndex in context.get("SELECTED_INDICES"):
 	-->
 
 	<bean id="company.department.module.front"
-		class="com.d2s.framework.application.view.descriptor.module.basic.BasicSimpleSubModuleDescriptor">
+		class="com.d2s.framework.application.view.descriptor.basic.BasicSimpleSubModuleDescriptor">
 		<property name="name" value="company.department.module.front" />
 		<property name="description" value="company.department.module.front" />
 		<property name="viewDescriptor" ref="department.view" />
@@ -421,7 +421,7 @@ for selectedIndex in context.get("SELECTED_INDICES"):
 	</bean>
 
 	<bean id="company.departments.module.front"
-		class="com.d2s.framework.application.view.descriptor.module.basic.BasicSimpleSubModuleDescriptor">
+		class="com.d2s.framework.application.view.descriptor.basic.BasicSimpleSubModuleDescriptor">
 		<property name="name" value="company.departments.module.front" />
 		<property name="description" value="company.departments.module.front" />
 		<property name="iconImageURL" value="classpath:images/icon5-48x48.png" />
@@ -430,19 +430,19 @@ for selectedIndex in context.get("SELECTED_INDICES"):
 	</bean>
 
 	<bean id="company.module.front"
-		class="com.d2s.framework.application.view.descriptor.module.basic.BasicSimpleSubModuleDescriptor">
+		class="com.d2s.framework.application.view.descriptor.basic.BasicSimpleSubModuleDescriptor">
 		<property name="name" value="company.module.front" />
 		<property name="description" value="company.module.front" />
 		<property name="iconImageURL" value="classpath:images/icon7-48x48.png" />
 		<property name="childDescriptor" ref="company.departments.module.front" />
 	</bean>
 
-	<bean id="company.design.module" class="com.d2s.framework.application.view.descriptor.module.basic.BasicModuleDescriptor">
+	<bean id="company.design.module" class="com.d2s.framework.application.view.descriptor.basic.BasicModuleDescriptor">
 		<property name="name" value="company.design.module" />
 		<property name="description" value="company.design.module" />
 		<property name="rootSubtreeDescriptor" ref="company.module.front" />
 		<property name="iconImageURLProvider">
-			<bean class="com.d2s.framework.application.model.descriptor.module.ModuleIconImageURLProvider">
+			<bean class="com.d2s.framework.application.model.descriptor.ModuleIconImageURLProvider">
 				<property name="delegateProvider" ref="domainImageUrlProvider" />
 			</bean>
 		</property>

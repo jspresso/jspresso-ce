@@ -16,7 +16,7 @@ import javax.security.auth.login.LoginException;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
-import com.d2s.framework.application.view.descriptor.module.IModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.security.ulc.DialogCallbackHandler;
 import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.ulc.UlcUtil;

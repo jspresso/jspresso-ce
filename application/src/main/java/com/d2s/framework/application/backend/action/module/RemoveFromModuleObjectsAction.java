@@ -8,9 +8,9 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
-import com.d2s.framework.application.model.module.BeanModule;
-import com.d2s.framework.application.model.module.Module;
-import com.d2s.framework.application.model.module.SubModule;
+import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
