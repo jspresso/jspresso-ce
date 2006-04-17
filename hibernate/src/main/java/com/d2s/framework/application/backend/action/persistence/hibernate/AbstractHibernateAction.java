@@ -13,9 +13,9 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.d2s.framework.application.backend.action.AbstractBackendAction;
+import com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.view.action.ActionContextConstants;
 
 /**
  * This the root abstract class of all hibernate related persistence actions.
@@ -28,9 +28,6 @@ import com.d2s.framework.view.action.ActionContextConstants;
  */
 public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
-  private HibernateTemplate   hibernateTemplate;
-  private TransactionTemplate transactionTemplate;
-
   /**
    * Gets the current application session.
    * 
@@ -40,36 +37,39 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    */
   protected IApplicationSession getApplicationSession(
       Map<String, Object> context) {
-    return (IApplicationSession) context
-        .get(ActionContextConstants.APPLICATION_SESSION);
+    return getController(context).getApplicationSession();
   }
+  
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected HibernateBackendController getController(Map<String, Object> context) {
+    return (HibernateBackendController) super.getController(context);
+  }
+
 
   /**
    * Gets the hibernateTemplate.
    * 
+   * @param context
+   *          the action context.
    * @return the hibernateTemplate.
    */
-  protected HibernateTemplate getHibernateTemplate() {
-    return hibernateTemplate;
-  }
-
-  /**
-   * Sets the hibernateTemplate.
-   * 
-   * @param hibernateTemplate
-   *          the hibernateTemplate to set.
-   */
-  public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
-    this.hibernateTemplate = hibernateTemplate;
+  protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
+    return getController(context).getHibernateTemplate();
   }
 
   /**
    * Gets the transactionTemplate.
    * 
+   * @param context
+   *          the action context.
    * @return the transactionTemplate.
    */
-  protected TransactionTemplate getTransactionTemplate() {
-    return transactionTemplate;
+  protected TransactionTemplate getTransactionTemplate(Map<String, Object> context) {
+    return getController(context).getTransactionTemplate();
   }
 
   /**
@@ -112,15 +112,5 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
       }
     }
     return mergedEntities;
-  }
-
-  /**
-   * Sets the transactionTemplate.
-   * 
-   * @param transactionTemplate
-   *          the transactionTemplate to set.
-   */
-  public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
-    this.transactionTemplate = transactionTemplate;
   }
 }

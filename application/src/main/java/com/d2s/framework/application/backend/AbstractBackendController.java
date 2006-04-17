@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.d2s.framework.application.AbstractController;
+import com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.model.Module;
@@ -91,8 +92,8 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
-    initialActionContext.put(ActionContextConstants.APPLICATION_SESSION,
-        getApplicationSession());
+    initialActionContext.put(ActionContextConstants.CONTROLLER,
+        this);
     return initialActionContext;
   }
 
@@ -152,6 +153,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
     this.applicationSession = applicationSession;
+    linkSessionArtifacts();
   }
 
   /**
@@ -169,23 +171,27 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public IEntityFactory getEntityFactory() {
-    return entityFactory;
-  }
-
-  /**
    * Sets the entityFactory.
    * 
    * @param entityFactory
    *          the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
+    if (!(entityFactory instanceof ApplicationSessionAwareProxyEntityFactory)) {
+      throw new IllegalArgumentException(
+          "entityFactory must be an ApplicationSessionAwareProxyEntityFactory.");
+    }
     this.entityFactory = entityFactory;
+    linkSessionArtifacts();
   }
 
-  
+  /**
+   * {@inheritDoc}
+   */
+  public ApplicationSessionAwareProxyEntityFactory getEntityFactory() {
+    return (ApplicationSessionAwareProxyEntityFactory) entityFactory;
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -193,13 +199,19 @@ public abstract class AbstractBackendController extends AbstractController
     return accessorFactory;
   }
 
-  
   /**
    * Sets the accessorFactory.
    * 
-   * @param accessorFactory the accessorFactory to set.
+   * @param accessorFactory
+   *          the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
+  }
+  
+  private void linkSessionArtifacts() {
+    if (getApplicationSession() != null && getEntityFactory() != null) {
+      getEntityFactory().setApplicationSession(getApplicationSession());
+    }
   }
 }

@@ -77,11 +77,6 @@ public final class ActionContextConstants {
   public static final String PARENT_MODULE_VIEW_CONNECTOR   = "PARENT_MODULE_VIEW_CONNECTOR";
 
   /**
-   * The current application session.
-   */
-  public static final String APPLICATION_SESSION            = "APPLICATION_SESSION";
-
-  /**
    * An arbitrary action result.
    */
   public static final String ACTION_RESULT                  = "ACTION_RESULT";

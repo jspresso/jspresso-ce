@@ -34,12 +34,12 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   @SuppressWarnings("unchecked")
   public void execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  IActionHandler actionHandler, final Map<String, Object> context) {
     final IQueryEntity queryEntity = (IQueryEntity) ((IValueConnector) context
     .get(ActionContextConstants.QUERY_MODEL_CONNECTOR))
         .getConnectorValue();
 
-    getTransactionTemplate().execute(new TransactionCallback() {
+    getTransactionTemplate(context).execute(new TransactionCallback() {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
@@ -47,7 +47,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             .getContract().getName());
         criteria.add(Example.create(queryEntity).ignoreCase().enableLike(
             MatchMode.START));
-        List<IEntity> queriedEntities = getHibernateTemplate().findByCriteria(
+        List<IEntity> queriedEntities = getHibernateTemplate(context).findByCriteria(
             criteria);
         queryEntity.setQueriedEntities(queriedEntities);
         return null;

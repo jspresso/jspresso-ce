@@ -17,28 +17,40 @@ public interface IEntityLifecycle {
   /**
    * Called when an entity is created (still transient).
    * 
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
    * @return true if the state of the entity has been updated.
    */
-  boolean onCreate();
+  boolean onCreate(IEntityFactory entityFactory);
 
   /**
    * Called just before an entity is persisted (insert).
    * 
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
    * @return true if the state of the entity has been updated.
    */
-  boolean onPersist();
+  boolean onPersist(IEntityFactory entityFactory);
 
   /**
    * Called just before an entity is updated (update).
    * 
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
    * @return true if the state of the entity has been updated.
    */
-  boolean onUpdate();
+  boolean onUpdate(IEntityFactory entityFactory);
 
   /**
    * Called just before an entity is deleted (delete).
    * 
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
    * @return true if the state of the entity has been updated.
    */
-  boolean onDelete();
+  boolean onDelete(IEntityFactory entityFactory);
 }

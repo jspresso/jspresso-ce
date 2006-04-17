@@ -67,7 +67,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
       }
       // the entity is dirty and is going to be flushed.
       // To workaround a bug, the update lifecycle hook is handeled here.
-      if (((IEntity) entity).isPersistent() && ((IEntity) entity).onUpdate()) {
+      if (((IEntity) entity).isPersistent() && ((IEntity) entity).onUpdate(getEntityFactory())) {
         dirtyProperties = applicationSession
             .getDirtyProperties((IEntity) entity);
       }

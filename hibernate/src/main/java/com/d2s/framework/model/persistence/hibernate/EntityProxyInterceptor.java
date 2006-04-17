@@ -64,23 +64,13 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   }
 
   /**
-   * Sets the entityFactory.
-   * 
-   * @param entityFactory
-   *          the entityFactory to set.
-   */
-  public void setEntityFactory(IEntityFactory entityFactory) {
-    this.entityFactory = entityFactory;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
   public void onDelete(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
-      ((IEntity) entity).onDelete();
+      ((IEntity) entity).onDelete(getEntityFactory());
     }
     super.onDelete(entity, id, state, propertyNames, types);
   }
@@ -93,7 +83,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       String[] propertyNames, Type[] types) {
     boolean stateUpdated = false;
     if (entity instanceof IEntity) {
-      if (((IEntity) entity).onPersist()) {
+      if (((IEntity) entity).onPersist(getEntityFactory())) {
         extractState((IEntity) entity, propertyNames, state);
         stateUpdated = true;
       }
@@ -130,5 +120,25 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
         state[i] = property;
       }
     }
+  }
+
+  
+  /**
+   * Sets the entityFactory.
+   * 
+   * @param entityFactory
+   *          the entityFactory to set.
+   */
+  public void setEntityFactory(IEntityFactory entityFactory) {
+    this.entityFactory = entityFactory;
+  }
+
+  /**
+   * Gets the entityFactory.
+   * 
+   * @return the entityFactory.
+   */
+  protected IEntityFactory getEntityFactory() {
+    return entityFactory;
   }
 }

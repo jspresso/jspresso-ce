@@ -33,7 +33,7 @@ public class SaveProjectedAction extends AbstractHibernateAction {
    */
   public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
-    getTransactionTemplate().execute(new TransactionCallback() {
+    getTransactionTemplate(context).execute(new TransactionCallback() {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
@@ -58,7 +58,7 @@ public class SaveProjectedAction extends AbstractHibernateAction {
    *          the entity to save.
    */
   private void saveEntity(final IEntity entity, final Map<String, Object> context) {
-    getHibernateTemplate().execute(new HibernateCallback() {
+    getHibernateTemplate(context).execute(new HibernateCallback() {
 
       public Object doInHibernate(Session session) {
         IEntity mergedEntity = mergeInHibernate(entity, session, context);

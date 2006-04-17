@@ -33,7 +33,7 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
    */
   public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
-    getTransactionTemplate().execute(new TransactionCallback() {
+    getTransactionTemplate(context).execute(new TransactionCallback() {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
@@ -55,7 +55,7 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
   private void reloadEntity(IEntity entity, Map<String, Object> context) {
     if (entity.isPersistent()) {
       getApplicationSession(context).merge(
-          (IEntity) getHibernateTemplate().load(entity.getContract().getName(),
+          (IEntity) getHibernateTemplate(context).load(entity.getContract().getName(),
               entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
     }
   }

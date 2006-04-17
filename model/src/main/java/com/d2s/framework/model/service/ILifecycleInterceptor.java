@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.service;
 
+import com.d2s.framework.model.entity.IEntityFactory;
+
 /**
  * Defines all the entity lifecycle hooks.
  * <p>
@@ -21,34 +23,46 @@ public interface ILifecycleInterceptor<E> {
    * 
    * @param entity
    *          the created entity.
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
    * @return true if the state of the entity has been updated.
    */
-  boolean onCreate(E entity);
+  boolean onCreate(E entity, IEntityFactory entityFactory);
 
   /**
    * Called whenever an entity is made persistent for the first time.
    * 
    * @param entity
    *          the persisted entity.
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
    * @return true if the state of the entity has been updated.
    */
-  boolean onPersist(E entity);
+  boolean onPersist(E entity, IEntityFactory entityFactory);
 
   /**
    * Called whenever an persistent entity is updated.
    * 
    * @param entity
    *          the updated entity.
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
    * @return true if the state of the entity has been updated.
    */
-  boolean onUpdate(E entity);
+  boolean onUpdate(E entity, IEntityFactory entityFactory);
 
   /**
    * Called whenever an persistent entity is deleted.
    * 
    * @param entity
    *          the deleted entity.
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
    * @return true if the state of the entity has been updated.
    */
-  boolean onDelete(E entity);
+  boolean onDelete(E entity, IEntityFactory entityFactory);
 }

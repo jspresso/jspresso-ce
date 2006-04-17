@@ -47,11 +47,11 @@ public class RemoveCollectionFromMasterAction extends
     if (collectionConnector == null) {
       return;
     }
-    getTransactionTemplate().execute(new TransactionCallback() {
+    getTransactionTemplate(context).execute(new TransactionCallback() {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
-        getHibernateTemplate().execute(new HibernateCallback() {
+        getHibernateTemplate(context).execute(new HibernateCallback() {
 
           public Object doInHibernate(Session session) {
             ICollectionPropertyDescriptor collectionDescriptor = (ICollectionPropertyDescriptor) getModelDescriptor(context);

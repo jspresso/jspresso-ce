@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.service;
 
+import com.d2s.framework.model.entity.IEntityFactory;
+
 /**
  * Empty interceptor for entity lifecycle. It is designed to be subclassed and
  * used as an component service.
@@ -21,32 +23,32 @@ public abstract class EmptyLifecycleInterceptor<E> implements
   /**
    * {@inheritDoc}
    */
-  public boolean onCreate(@SuppressWarnings("unused")
-  E entity) {
+  @SuppressWarnings("unused")
+  public boolean onCreate(E entity, IEntityFactory entityFactory) {
     return false;
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean onPersist(@SuppressWarnings("unused")
-  E entity) {
+  @SuppressWarnings("unused")
+  public boolean onPersist(E entity, IEntityFactory entityFactory) {
     return false;
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean onUpdate(@SuppressWarnings("unused")
-  E entity) {
+  @SuppressWarnings("unused")
+  public boolean onUpdate(E entity, IEntityFactory entityFactory) {
     return false;
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean onDelete(@SuppressWarnings("unused")
-  E entity) {
+  @SuppressWarnings("unused")
+  public boolean onDelete(E entity, IEntityFactory entityFactory) {
     return false;
   }
 
