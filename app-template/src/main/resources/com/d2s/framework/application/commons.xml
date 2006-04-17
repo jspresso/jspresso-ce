@@ -144,10 +144,12 @@
 
 	<bean abstract="true" id="abstractBackController"
 		class="com.d2s.framework.application.backend.DefaultBackendController" singleton="false">
-		<property name="applicationSession">
-			<bean parent="abstractApplicationSession"
-				class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession" />
+		<property name="entityFactory">
+			<bean parent="basicEntityFactory"
+				class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory" />
 		</property>
+		<property name="accessorFactory" ref="accessorFactory" />
+		<property name="beanConnectorFactory" ref="beanConnectorFactory" />
 	</bean>
 
 	<!--

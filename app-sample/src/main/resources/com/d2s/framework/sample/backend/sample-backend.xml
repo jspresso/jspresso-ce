@@ -16,29 +16,27 @@
 		<property name="elementDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
 	</bean>
 
-	<bean id="company.departments.module.back" class="com.d2s.framework.application.model.BeanModule">
-		<property name="name" value="departments.module" />
-		<property name="description" value="Departments" />
-		<property name="descriptor" ref="company.departments.module.front" />
-	</bean>
-
-	<bean id="company.module.back" class="com.d2s.framework.application.model.Module">
-		<property name="name" value="company.module" />
-		<property name="description" value="Company" />
-		<property name="subModules">
-			<list>
-				<ref local="company.departments.module.back" />
-			</list>
-		</property>
-	</bean>
-
 	<!--
 		The controller.
 	-->
 	<bean id="applicationBackController" parent="abstractHibernateBackController">
 		<property name="modules">
 			<map>
-				<entry key="company" value-ref="company.module.back" />
+				<entry key="company">
+					<bean class="com.d2s.framework.application.model.Module">
+						<property name="name" value="company.module" />
+						<property name="description" value="Company" />
+						<property name="subModules">
+							<list>
+								<bean class="com.d2s.framework.application.model.BeanModule">
+									<property name="name" value="departments.module" />
+									<property name="description" value="Departments" />
+									<property name="descriptor" ref="company.departments.module.front" />
+								</bean>
+							</list>
+						</property>
+					</bean>
+				</entry>
 			</map>
 		</property>
 	</bean>
