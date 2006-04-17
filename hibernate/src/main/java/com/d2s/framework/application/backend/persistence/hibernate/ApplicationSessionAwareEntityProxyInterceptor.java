@@ -86,7 +86,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   }
 
   /**
-   * Begins the application session current unit of work. {@inheritDoc}
+   * Begins the application session current unit of work.
    * <p>
    * {@inheritDoc}
    */

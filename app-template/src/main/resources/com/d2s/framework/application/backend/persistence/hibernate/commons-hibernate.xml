@@ -6,49 +6,6 @@
 -->
 <beans default-lazy-init="true">
 
-	<!--
-		Hibernate persisters configuration. They are configured with basicEntityFactory since this factory is 
-		a singleton.
-	-->
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetClass"
-			value="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxySingleTableEntityPersister" />
-		<property name="targetMethod">
-			<value>setEntityFactory</value>
-		</property>
-		<property name="arguments">
-			<list>
-				<ref bean="basicEntityFactory" />
-			</list>
-		</property>
-	</bean>
-
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetClass"
-			value="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister" />
-		<property name="targetMethod">
-			<value>setEntityFactory</value>
-		</property>
-		<property name="arguments">
-			<list>
-				<ref bean="basicEntityFactory" />
-			</list>
-		</property>
-	</bean>
-
-	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-		<property name="targetClass"
-			value="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyUnionSubclassEntityPersister" />
-		<property name="targetMethod">
-			<value>setEntityFactory</value>
-		</property>
-		<property name="arguments">
-			<list>
-				<ref bean="basicEntityFactory" />
-			</list>
-		</property>
-	</bean>
-
 	<bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
@@ -57,7 +14,7 @@
 		<property name="sessionFactory" ref="hibernateSessionFactory" />
 	</bean>
 
-	<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+	<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate" singleton="false">
 		<property name="transactionManager" ref="transactionManager" />
 	</bean>
 
@@ -81,6 +38,7 @@
 				class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession" />
 		</property>
 		<property name="hibernateTemplate" ref="hibernateTemplate" />
+		<property name="transactionTemplate" ref="transactionTemplate" />
 	</bean>
 </beans>
 

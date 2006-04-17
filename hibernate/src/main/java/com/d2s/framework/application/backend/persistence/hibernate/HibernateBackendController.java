@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend.persistence.hibernate;
 
 import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.d2s.framework.application.backend.DefaultBackendController;
@@ -84,15 +85,18 @@ public class HibernateBackendController extends DefaultBackendController {
    */
   public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
     this.transactionTemplate = transactionTemplate;
+    linkHibernateArtifacts();
   }
 
   private void linkHibernateArtifacts() {
     if (getApplicationSession() != null && getHibernateTemplate() != null
-        && getEntityFactory() != null) {
+        && getTransactionTemplate() != null && getEntityFactory() != null) {
       ApplicationSessionAwareEntityProxyInterceptor entityInterceptor = new ApplicationSessionAwareEntityProxyInterceptor();
       entityInterceptor.setApplicationSession(getApplicationSession());
       entityInterceptor.setEntityFactory(getEntityFactory());
       getHibernateTemplate().setEntityInterceptor(entityInterceptor);
+      ((HibernateTransactionManager) getTransactionTemplate()
+          .getTransactionManager()).setEntityInterceptor(entityInterceptor);
       ((HibernateAwareApplicationSession) getApplicationSession())
           .setHibernateTemplate(getHibernateTemplate());
     }
