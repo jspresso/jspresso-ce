@@ -167,7 +167,7 @@ import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon> {
+public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, Action> {
 
   private IConfigurableConnectorFactory      connectorFactory;
   private IMvcBinder                         mvcBinder;
@@ -2612,5 +2612,15 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon> {
   public void setChooseFileAsBinaryPropertyAction(
       IDisplayableAction chooseFileAsBinaryPropertyAction) {
     this.chooseFileAsBinaryPropertyAction = chooseFileAsBinaryPropertyAction;
+  }
+
+  
+  /**
+   * Gets the actionFactory.
+   * 
+   * @return the actionFactory.
+   */
+  public IActionFactory<Action, JComponent> getActionFactory() {
+    return actionFactory;
   }
 }

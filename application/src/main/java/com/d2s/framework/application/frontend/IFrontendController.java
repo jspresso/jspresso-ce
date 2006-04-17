@@ -23,8 +23,10 @@ import com.d2s.framework.view.IViewFactory;
  *          the actual gui component type used.
  * @param <F>
  *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public interface IFrontendController<E, F> extends IController, IIconDescriptor {
+public interface IFrontendController<E, F, G> extends IController, IIconDescriptor {
 
   /**
    * Starts the controller. This method performs any necessary initializations
@@ -46,7 +48,7 @@ public interface IFrontendController<E, F> extends IController, IIconDescriptor 
    * 
    * @return the view factory used by this controller.
    */
-  IViewFactory<E, F> getViewFactory();
+  IViewFactory<E, F, G> getViewFactory();
   
   /**
    * Gets the mvc binder used by this controller.

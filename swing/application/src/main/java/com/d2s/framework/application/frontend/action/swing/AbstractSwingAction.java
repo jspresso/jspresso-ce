@@ -5,6 +5,7 @@ package com.d2s.framework.application.frontend.action.swing;
 
 import java.util.Map;
 
+import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
@@ -21,7 +22,7 @@ import com.d2s.framework.view.action.ActionContextConstants;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractSwingAction extends AbstractChainedAction<JComponent, Icon> {
+public abstract class AbstractSwingAction extends AbstractChainedAction<JComponent, Icon, Action> {
 
   /**
    * Retrieves the widget this action was triggered from. It may serve to

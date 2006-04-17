@@ -20,8 +20,10 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  *          the actual gui component type used.
  * @param <F>
  *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public interface IViewFactory<E, F> {
+public interface IViewFactory<E, F, G> {
 
   /**
    * Creates a new view from a view descriptor.
@@ -45,4 +47,12 @@ public interface IViewFactory<E, F> {
    * @return the icon factory.
    */
   IIconFactory<F> getIconFactory();
+  
+  /**
+   * Gets the action factory.
+   * 
+   * @return the action factory.
+   */
+  IActionFactory<G, E> getActionFactory();
+  
 }

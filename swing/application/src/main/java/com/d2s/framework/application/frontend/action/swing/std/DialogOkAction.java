@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.frontend.action.swing.std;
 
+import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -20,7 +21,7 @@ import com.d2s.framework.application.frontend.action.swing.IDialogAwareAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DialogOkAction extends OkAction<JComponent, Icon> implements IDialogAwareAction {
+public class DialogOkAction extends OkAction<JComponent, Icon, Action> implements IDialogAwareAction {
 
   /**
    * {@inheritDoc}

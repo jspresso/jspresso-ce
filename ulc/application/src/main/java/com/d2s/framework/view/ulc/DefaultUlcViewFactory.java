@@ -161,7 +161,7 @@ import com.ulcjava.base.shared.IDefaults;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultUlcViewFactory implements IViewFactory<ULCComponent, ULCIcon> {
+public class DefaultUlcViewFactory implements IViewFactory<ULCComponent, ULCIcon, IAction> {
 
   private IConfigurableConnectorFactory         connectorFactory;
   private IMvcBinder                            mvcBinder;
@@ -2623,5 +2623,15 @@ public class DefaultUlcViewFactory implements IViewFactory<ULCComponent, ULCIcon
   public void setChooseFileAsBinaryPropertyAction(
       IDisplayableAction chooseFileAsBinaryPropertyAction) {
     this.chooseFileAsBinaryPropertyAction = chooseFileAsBinaryPropertyAction;
+  }
+
+  
+  /**
+   * Gets the actionFactory.
+   * 
+   * @return the actionFactory.
+   */
+  public IActionFactory<IAction, ULCComponent> getActionFactory() {
+    return actionFactory;
   }
 }

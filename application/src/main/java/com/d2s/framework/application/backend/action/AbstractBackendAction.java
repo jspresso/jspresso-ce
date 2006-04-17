@@ -5,6 +5,7 @@ package com.d2s.framework.application.backend.action;
 
 import java.util.Map;
 
+import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.bean.IBeanConnectorFactory;
@@ -27,10 +28,6 @@ import com.d2s.framework.view.action.ActionContextConstants;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractBackendAction extends AbstractAction {
-
-  private IAccessorFactory      accessorFactory;
-  private IEntityFactory        entityFactory;
-  private IBeanConnectorFactory beanConnectorFactory;
 
   /**
    * {@inheritDoc}
@@ -95,60 +92,48 @@ public abstract class AbstractBackendAction extends AbstractAction {
   }
 
   /**
-   * Gets the accessorFactory.
+   * Gets the frontend controller out of the action context.
    * 
-   * @return the accessorFactory.
+   * @param context
+   *          the action context.
+   * @return the frontend controller.
    */
-  protected IAccessorFactory getAccessorFactory() {
-    return accessorFactory;
+  @SuppressWarnings("unchecked")
+  protected IBackendController getController(Map<String, Object> context) {
+    return (IBackendController) context.get(ActionContextConstants.CONTROLLER);
   }
 
   /**
-   * Sets the accessorFactory.
+   * Gets the accessorFactory.
    * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
+   * @param context
+   *          the action context.
+   * @return the accessorFactory.
    */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
+  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
+    return getController(context).getAccessorFactory();
   }
 
   /**
    * Gets the entityFactory.
    * 
+   * @param context
+   *          the action context.
    * @return the entityFactory.
    */
-  protected IEntityFactory getEntityFactory() {
-    return entityFactory;
-  }
-
-  /**
-   * Sets the entityFactory.
-   * 
-   * @param entityFactory
-   *          the entityFactory to set.
-   */
-  public void setEntityFactory(IEntityFactory entityFactory) {
-    this.entityFactory = entityFactory;
+  protected IEntityFactory getEntityFactory(Map<String, Object> context) {
+    return getController(context).getEntityFactory();
   }
 
   /**
    * Gets the beanConnectorFactory.
    * 
+   * @param context
+   *          the action context.
    * @return the beanConnectorFactory.
    */
-  protected IBeanConnectorFactory getBeanConnectorFactory() {
-    return beanConnectorFactory;
-  }
-
-  /**
-   * Sets the beanConnectorFactory.
-   * 
-   * @param beanConnectorFactory
-   *          the beanConnectorFactory to set.
-   */
-  public void setBeanConnectorFactory(IBeanConnectorFactory beanConnectorFactory) {
-    this.beanConnectorFactory = beanConnectorFactory;
+  protected IBeanConnectorFactory getBeanConnectorFactory(Map<String, Object> context) {
+    return getController(context).getBeanConnectorFactory();
   }
 
 }

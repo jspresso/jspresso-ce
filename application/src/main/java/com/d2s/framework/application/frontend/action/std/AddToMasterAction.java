@@ -23,8 +23,10 @@ import com.d2s.framework.view.action.IActionHandler;
  *          the actual gui component type used.
  * @param <F>
  *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class AddToMasterAction<E, F> extends ActionWrapper<E, F> {
+public class AddToMasterAction<E, F, G> extends ActionWrapper<E, F, G> {
 
   private IEntityDescriptor elementEntityDescriptor;
 

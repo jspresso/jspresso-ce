@@ -40,7 +40,7 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
     Object master = collectionConnector.getParentConnector()
         .getConnectorValue();
     String property = collectionDescriptor.getName();
-    ICollectionAccessor collectionAccessor = getAccessorFactory()
+    ICollectionAccessor collectionAccessor = getAccessorFactory(context)
         .createCollectionPropertyAccessor(property, master.getClass());
     int deletionCount = 0;
     if (getSelectedIndices(context) != null) {

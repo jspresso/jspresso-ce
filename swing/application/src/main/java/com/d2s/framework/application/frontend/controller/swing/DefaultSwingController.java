@@ -61,7 +61,7 @@ import foxtrot.Job;
  * @author Vincent Vandenschrick
  */
 public class DefaultSwingController extends
-    AbstractFrontendController<JComponent, Icon> {
+    AbstractFrontendController<JComponent, Icon, Action> {
 
   private JFrame                      controllerFrame;
   private Map<String, JInternalFrame> moduleInternalFrames;

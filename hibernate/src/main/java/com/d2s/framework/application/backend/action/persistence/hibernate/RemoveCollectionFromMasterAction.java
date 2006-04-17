@@ -60,7 +60,7 @@ public class RemoveCollectionFromMasterAction extends
             IEntity mergedMaster = mergeInHibernate((IEntity) master, session,
                 context);
             String property = collectionDescriptor.getName();
-            ICollectionAccessor collectionAccessor = getAccessorFactory()
+            ICollectionAccessor collectionAccessor = getAccessorFactory(context)
                 .createCollectionPropertyAccessor(property,
                     mergedMaster.getClass());
             if (getSelectedIndices(context) != null) {

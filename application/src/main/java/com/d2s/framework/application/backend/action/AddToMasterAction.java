@@ -44,7 +44,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
     }
     Object master = collectionConnector.getParentConnector()
         .getConnectorValue();
-    ICollectionAccessor collectionAccessor = getAccessorFactory()
+    ICollectionAccessor collectionAccessor = getAccessorFactory(context)
         .createCollectionPropertyAccessor(collectionConnector.getId(),
             master.getClass());
 
@@ -93,7 +93,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
           .getReferencedDescriptor().getElementDescriptor();
     }
 
-    IEntity newEntity = getEntityFactory().createEntityInstance(
+    IEntity newEntity = getEntityFactory(context).createEntityInstance(
         elementDescriptor.getComponentContract());
     return newEntity;
   }

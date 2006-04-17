@@ -7,7 +7,10 @@ import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.bean.IBeanConnectorFactory;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.util.bean.IAccessorFactory;
 
 /**
  * This interface establishes the contract of the backend controllers. Backend
@@ -58,5 +61,26 @@ public interface IBackendController extends IController {
    * @return the current controller application session.
    */
   IApplicationSession getApplicationSession();
+
+  /**
+   * Gets the entityFactory for this backend controller.
+   * 
+   * @return the entityFactory for this backend controller.
+   */
+  IEntityFactory getEntityFactory();
+
+  /**
+   * Gets the accessorFactory for this backend controller.
+   * 
+   * @return the accessorFactory for this backend controller.
+   */
+  IAccessorFactory getAccessorFactory();
+
+  /**
+   * Gets the beanConnectorFactory for this backend controller.
+   * 
+   * @return the beanConnectorFactory for this backend controller.
+   */
+  IBeanConnectorFactory getBeanConnectorFactory();
 
 }

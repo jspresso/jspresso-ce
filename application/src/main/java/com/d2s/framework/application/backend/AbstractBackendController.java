@@ -18,6 +18,8 @@ import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.util.bean.IAccessorFactory;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IAction;
 
@@ -35,6 +37,8 @@ import com.d2s.framework.view.action.IAction;
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
+  private IAccessorFactory                      accessorFactory;
+  private IEntityFactory                        entityFactory;
   private IBeanConnectorFactory                 beanConnectorFactory;
   private Map<String, ICompositeValueConnector> moduleConnectors;
   private IApplicationSession                   applicationSession;
@@ -155,5 +159,47 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public IEntity merge(IEntity entity, MergeMode mergeMode) {
     return getApplicationSession().merge(entity, mergeMode);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IBeanConnectorFactory getBeanConnectorFactory() {
+    return beanConnectorFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IEntityFactory getEntityFactory() {
+    return entityFactory;
+  }
+
+  /**
+   * Sets the entityFactory.
+   * 
+   * @param entityFactory
+   *          the entityFactory to set.
+   */
+  public void setEntityFactory(IEntityFactory entityFactory) {
+    this.entityFactory = entityFactory;
+  }
+
+  
+  /**
+   * {@inheritDoc}
+   */
+  public IAccessorFactory getAccessorFactory() {
+    return accessorFactory;
+  }
+
+  
+  /**
+   * Sets the accessorFactory.
+   * 
+   * @param accessorFactory the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
   }
 }

@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -23,7 +22,6 @@ import javax.swing.WindowConstants;
 
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
 import com.d2s.framework.application.frontend.action.swing.IDialogAwareAction;
-import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.action.IDisplayableAction;
@@ -39,7 +37,6 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class ModalDialogAction extends AbstractSwingAction {
 
-  private IActionFactory<Action, JComponent> actionFactory;
   private IView<JComponent>                  mainView;
   private List<IDisplayableAction>           actions;
 
@@ -84,7 +81,7 @@ public class ModalDialogAction extends AbstractSwingAction {
     JButton defaultButton = null;
     for (IDisplayableAction action : actions) {
       JButton actionButton = new JButton();
-      actionButton.setAction(actionFactory.createAction(action, actionHandler,
+      actionButton.setAction(getActionFactory(context).createAction(action, actionHandler,
           mainView, getLocale(context)));
       if (action instanceof IDialogAwareAction) {
         final IDialogAwareAction finalAction = (IDialogAwareAction) action;
@@ -118,15 +115,5 @@ public class ModalDialogAction extends AbstractSwingAction {
     }
     dialog.setVisible(true);
     super.execute(actionHandler, context);
-  }
-
-  /**
-   * Sets the actionFactory.
-   * 
-   * @param actionFactory
-   *          the actionFactory to set.
-   */
-  public void setActionFactory(IActionFactory<Action, JComponent> actionFactory) {
-    this.actionFactory = actionFactory;
   }
 }

@@ -10,6 +10,7 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
+import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.action.AbstractAction;
@@ -28,8 +29,10 @@ import com.d2s.framework.view.action.IDisplayableAction;
  *          the actual gui component type used.
  * @param <F>
  *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public abstract class AbstractFrontendAction<E, F> extends AbstractAction
+public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
     implements IDisplayableAction {
 
   private String                mnemonicAsString;
@@ -209,8 +212,8 @@ public abstract class AbstractFrontendAction<E, F> extends AbstractAction
    * @return the frontend controller.
    */
   @SuppressWarnings("unchecked")
-  protected IFrontendController<E, F> getController(Map<String, Object> context) {
-    return (IFrontendController<E, F>) context.get(ActionContextConstants.CONTROLLER);
+  protected IFrontendController<E, F, G> getController(Map<String, Object> context) {
+    return (IFrontendController<E, F, G>) context.get(ActionContextConstants.CONTROLLER);
   }
 
   /**
@@ -231,7 +234,7 @@ public abstract class AbstractFrontendAction<E, F> extends AbstractAction
    *          the action context.
    * @return the viewFactory.
    */
-  protected IViewFactory<E, F> getViewFactory(Map<String, Object> context) {
+  protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
   }
 
@@ -244,5 +247,16 @@ public abstract class AbstractFrontendAction<E, F> extends AbstractAction
    */
   protected IIconFactory<F> getIconFactory(Map<String, Object> context) {
     return getViewFactory(context).getIconFactory();
+  }
+
+  /**
+   * Gets the actionFactory.
+   * 
+   * @param context
+   *          the action context.
+   * @return the actionFactory.
+   */
+  protected IActionFactory<G, E> getActionFactory(Map<String, Object> context) {
+    return getViewFactory(context).getActionFactory();
   }
 }

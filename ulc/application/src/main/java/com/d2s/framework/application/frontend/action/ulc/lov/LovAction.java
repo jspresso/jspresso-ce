@@ -18,11 +18,11 @@ import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
-import com.d2s.framework.view.ILovViewFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.action.IDisplayableAction;
+import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
 import com.ulcjava.base.application.ULCComponent;
 
 /**
@@ -37,12 +37,12 @@ import com.ulcjava.base.application.ULCComponent;
  */
 public class LovAction extends ModalDialogAction {
 
-  private ILovViewFactory<ULCComponent> lovViewFactory;
-  private CreateQueryEntityAction       createQueryEntityAction;
-  private IDisplayableAction            okAction;
-  private IDisplayableAction            cancelAction;
-  private IDisplayableAction            findAction;
-  private IEntityDescriptor             queryEntityDescriptor;
+  private ILovViewDescriptorFactory lovViewDescriptorFactory;
+  private CreateQueryEntityAction   createQueryEntityAction;
+  private IDisplayableAction        okAction;
+  private IDisplayableAction        cancelAction;
+  private IDisplayableAction        findAction;
+  private IEntityDescriptor         queryEntityDescriptor;
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -67,9 +67,10 @@ public class LovAction extends ModalDialogAction {
     actions.add(okAction);
     actions.add(cancelAction);
     setActions(actions);
-    IView<ULCComponent> lovView = lovViewFactory.createLovView(
-        getQueryEntityDescriptor(context), actionHandler, getLocale(context));
-    setMainView(lovView);
+    IView<ULCComponent> lovView = getViewFactory(context).createView(
+        lovViewDescriptorFactory
+            .createLovViewDescriptor(getQueryEntityDescriptor(context)),
+        actionHandler, getLocale(context));
     createQueryEntityAction
         .setQueryEntityDescriptor(getQueryEntityDescriptor(context));
     actionHandler.execute(createQueryEntityAction, context);
@@ -96,13 +97,14 @@ public class LovAction extends ModalDialogAction {
   }
 
   /**
-   * Sets the lovViewFactory.
+   * Sets the lovViewDescriptorFactory.
    * 
-   * @param lovViewFactory
-   *          the lovViewFactory to set.
+   * @param lovViewDescriptorFactory
+   *          the lovViewDescriptorFactory to set.
    */
-  public void setLovViewFactory(ILovViewFactory<ULCComponent> lovViewFactory) {
-    this.lovViewFactory = lovViewFactory;
+  public void setLovViewDescriptorFactory(
+      ILovViewDescriptorFactory lovViewDescriptorFactory) {
+    this.lovViewDescriptorFactory = lovViewDescriptorFactory;
   }
 
   /**

@@ -8,9 +8,7 @@
   <!--
     View factories
   -->
-  <bean id="lovViewFactory" class="com.d2s.framework.view.BasicLovViewFactory">
-    <property name="viewFactory" ref="viewFactory" />
-  </bean>
+  <bean id="lovViewDescriptorFactory" class="com.d2s.framework.view.descriptor.basic.BasicLovViewDescriptorFactory"/>
 
   <!--
     Root action beans.
@@ -21,8 +19,7 @@
     Action beans.
   -->
   <bean id="abstractLovAction" abstract="true" parent="abstractFrontAction">
-    <property name="lovViewFactory" ref="lovViewFactory" />
-    <property name="actionFactory" ref="actionFactory" />
+    <property name="lovViewDescriptorFactory" ref="lovViewDescriptorFactory" />
     <property name="createQueryEntityAction" ref="createQueryEntityAction" />
     <property name="okAction" ref="lovOkFrontAction" />
     <property name="cancelAction" ref="cancelDialogFrontAction" />

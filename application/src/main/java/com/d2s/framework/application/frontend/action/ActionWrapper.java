@@ -20,8 +20,10 @@ import com.d2s.framework.view.action.IActionHandler;
  *          the actual gui component type used.
  * @param <F>
  *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public class ActionWrapper<E, F> extends AbstractChainedAction<E, F> {
+public class ActionWrapper<E, F, G> extends AbstractChainedAction<E, F, G> {
 
   private IAction wrappedAction;
 

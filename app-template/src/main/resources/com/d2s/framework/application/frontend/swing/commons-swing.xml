@@ -42,7 +42,7 @@
 	<!--
 		The implementation used as view factory.
 	-->
-	<bean id="iconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" />
+	<bean id="iconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" singleton="false"/>
 
 	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.swing.SwingActionFactory" />
 

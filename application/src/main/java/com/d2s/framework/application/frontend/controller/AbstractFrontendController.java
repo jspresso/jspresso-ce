@@ -48,8 +48,10 @@ import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
  *          the actual gui component type used.
  * @param <F>
  *          the actual icon type used.
+ * @param <G>
+ *          the actual action type used.
  */
-public abstract class AbstractFrontendController<E, F> extends
+public abstract class AbstractFrontendController<E, F, G> extends
     AbstractController implements IFrontendController {
 
   private DefaultIconDescriptor                 controllerDescriptor;
@@ -60,7 +62,7 @@ public abstract class AbstractFrontendController<E, F> extends
   private IBackendController                    backendController;
   private Map<String, IModuleDescriptor>        moduleDescriptors;
   private String                                modulesMenuIconImageUrl;
-  private IViewFactory<E, F>                    viewFactory;
+  private IViewFactory<E, F, G>                 viewFactory;
   private ITranslationProvider                  labelTranslator;
   private ITranslationProvider                  descriptionTranslator;
   private IMvcBinder                            mvcBinder;
@@ -252,7 +254,7 @@ public abstract class AbstractFrontendController<E, F> extends
    * @param viewFactory
    *          the viewFactory to set.
    */
-  public void setViewFactory(IViewFactory<E, F> viewFactory) {
+  public void setViewFactory(IViewFactory<E, F, G> viewFactory) {
     this.viewFactory = viewFactory;
   }
 
@@ -261,7 +263,7 @@ public abstract class AbstractFrontendController<E, F> extends
    * 
    * @return the viewFactory.
    */
-  public IViewFactory<E, F> getViewFactory() {
+  public IViewFactory<E, F, G> getViewFactory() {
     return viewFactory;
   }
 

@@ -49,7 +49,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
       projectedCollection = new ArrayList<IPropertyChangeCapable>(module
           .getModuleObjects());
     }
-    IEntity newEntity = getEntityFactory().createEntityInstance(
+    IEntity newEntity = getEntityFactory(context).createEntityInstance(
         projectedComponentDescriptor.getComponentContract());
     projectedCollection.add(newEntity);
     module.setModuleObjects(projectedCollection);

@@ -33,9 +33,9 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
    */
   public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    IQueryEntity queryEntity = getEntityFactory().createQueryEntityInstance(
+    IQueryEntity queryEntity = getEntityFactory(context).createQueryEntityInstance(
         queryEntityDescriptor.getComponentContract());
-    BeanConnector modelConnector = getBeanConnectorFactory()
+    BeanConnector modelConnector = getBeanConnectorFactory(context)
         .createBeanConnector("lovQueryEntity", queryEntity.getClass());
     modelConnector.setConnectorValue(queryEntity);
     Object queryPropertyValue = context

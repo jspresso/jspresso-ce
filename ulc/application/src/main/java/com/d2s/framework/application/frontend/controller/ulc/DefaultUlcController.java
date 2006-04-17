@@ -25,6 +25,7 @@ import com.d2s.framework.view.IView;
 import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
+import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
 import com.ulcjava.base.application.ULCFrame;
@@ -51,7 +52,7 @@ import com.ulcjava.base.shared.IWindowConstants;
  * @author Vincent Vandenschrick
  */
 public class DefaultUlcController extends
-    AbstractFrontendController<ULCComponent, ULCIcon> implements
+    AbstractFrontendController<ULCComponent, ULCIcon, IAction> implements
     ICallbackHandlerListener {
 
   private ULCFrame                      controllerFrame;
