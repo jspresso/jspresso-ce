@@ -48,14 +48,6 @@ public class HibernateBackendController extends DefaultBackendController {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public HibernateAwareApplicationSession getApplicationSession() {
-    return (HibernateAwareApplicationSession) super.getApplicationSession();
-  }
-
-  /**
    * Gets the hibernateTemplate.
    * 
    * @return the hibernateTemplate.
@@ -101,7 +93,8 @@ public class HibernateBackendController extends DefaultBackendController {
       entityInterceptor.setApplicationSession(getApplicationSession());
       entityInterceptor.setEntityFactory(getEntityFactory());
       getHibernateTemplate().setEntityInterceptor(entityInterceptor);
-      getApplicationSession().setHibernateTemplate(getHibernateTemplate());
+      ((HibernateAwareApplicationSession) getApplicationSession())
+          .setHibernateTemplate(getHibernateTemplate());
     }
   }
 }

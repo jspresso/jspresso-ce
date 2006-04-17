@@ -92,8 +92,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
-    initialActionContext.put(ActionContextConstants.CONTROLLER,
-        this);
+    initialActionContext.put(ActionContextConstants.CONTROLLER, this);
     return initialActionContext;
   }
 
@@ -188,8 +187,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public ApplicationSessionAwareProxyEntityFactory getEntityFactory() {
-    return (ApplicationSessionAwareProxyEntityFactory) entityFactory;
+  public IEntityFactory getEntityFactory() {
+    return entityFactory;
   }
 
   /**
@@ -208,10 +207,11 @@ public abstract class AbstractBackendController extends AbstractController
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
   }
-  
+
   private void linkSessionArtifacts() {
     if (getApplicationSession() != null && getEntityFactory() != null) {
-      getEntityFactory().setApplicationSession(getApplicationSession());
+      ((ApplicationSessionAwareProxyEntityFactory) getEntityFactory())
+          .setApplicationSession(getApplicationSession());
     }
   }
 }

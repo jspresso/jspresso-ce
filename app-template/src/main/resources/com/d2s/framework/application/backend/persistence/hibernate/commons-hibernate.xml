@@ -80,6 +80,7 @@
 			<bean parent="abstractApplicationSession"
 				class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession" />
 		</property>
+		<property name="hibernateTemplate" ref="hibernateTemplate" />
 	</bean>
 </beans>
 
