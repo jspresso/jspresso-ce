@@ -19,7 +19,6 @@
 			<include name="**/xml-apis-2.0.2.jar" />
 			<include name="**/xerces-2.0.2.jar" />
 			<include name="**/bsf-2.3.0.jar" />
-			<include name="**/bsf-2.3.0.jar" />
 			<include name="**/log4j-1.2.8.jar" />
 		</fileset>
 	</path>

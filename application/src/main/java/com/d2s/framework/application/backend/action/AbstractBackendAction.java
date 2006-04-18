@@ -100,7 +100,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    */
   @SuppressWarnings("unchecked")
   protected IBackendController getController(Map<String, Object> context) {
-    return (IBackendController) context.get(ActionContextConstants.CONTROLLER);
+    return (IBackendController) context.get(ActionContextConstants.BACK_CONTROLLER);
   }
 
   /**

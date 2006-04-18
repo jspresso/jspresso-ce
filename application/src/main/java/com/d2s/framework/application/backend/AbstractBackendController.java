@@ -92,7 +92,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
-    initialActionContext.put(ActionContextConstants.CONTROLLER, this);
+    initialActionContext.put(ActionContextConstants.BACK_CONTROLLER, this);
     return initialActionContext;
   }
 

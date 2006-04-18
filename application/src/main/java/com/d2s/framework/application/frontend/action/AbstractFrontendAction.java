@@ -213,7 +213,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   @SuppressWarnings("unchecked")
   protected IFrontendController<E, F, G> getController(Map<String, Object> context) {
-    return (IFrontendController<E, F, G>) context.get(ActionContextConstants.CONTROLLER);
+    return (IFrontendController<E, F, G>) context.get(ActionContextConstants.FRONT_CONTROLLER);
   }
 
   /**

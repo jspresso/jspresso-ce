@@ -214,8 +214,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public Map<String, Object> getInitialActionContext() {
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
-    initialActionContext.put(ActionContextConstants.CONTROLLER,
-        this);
+    initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
     ICompositeValueConnector selectedModuleViewConnector = selectedModuleConnectors
         .get(getSelectedModuleId());
     initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,

@@ -102,7 +102,12 @@ public final class ActionContextConstants {
   public static final String QUERY_MODEL_CONNECTOR          = "QUERY_MODEL_CONNECTOR";
 
   /**
-   * the controller (backend or frontend).
+   * the frontend controller.
    */
-  public static final String CONTROLLER                     = "CONTROLLER";
+  public static final String FRONT_CONTROLLER               = "FRONT_CONTROLLER";
+
+  /**
+   * the backend controller.
+   */
+  public static final String BACK_CONTROLLER               = "BACK_CONTROLLER";
 }
