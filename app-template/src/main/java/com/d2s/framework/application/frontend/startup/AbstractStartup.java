@@ -12,6 +12,7 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.IFrontendController;
+import com.d2s.framework.application.startup.IStartup;
 
 /**
  * Abstract class for application startup.

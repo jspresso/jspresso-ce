@@ -46,6 +46,7 @@
 		<module>hibernate</module>
 		<module>swing</module>
 		<module>ulc</module>
+		<module>app-launch</module>
 		<module>app-template</module>
 		<module>app-sample</module>
 	</modules>
@@ -143,6 +144,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.design2see</groupId>
+				<artifactId>d2s-app-launch</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.design2see</groupId>
 				<artifactId>d2s-app-sample</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
@@ -159,7 +165,7 @@
 			<dependency>
 				<groupId>commons-lang</groupId>
 				<artifactId>commons-lang</artifactId>
-				<version>2.0</version>
+				<version>2.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>

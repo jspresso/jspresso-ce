@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.frontend.startup.ulc.jnlp;
+package com.d2s.framework.application.launch.ulc.jnlp;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;

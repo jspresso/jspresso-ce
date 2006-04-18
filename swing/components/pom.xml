@@ -27,10 +27,12 @@
 		<dependency>
 			<groupId>foxtrot</groupId>
 			<artifactId>foxtrot</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>jgoodies</groupId>
 			<artifactId>uif_lite</artifactId>
+			<optional>true</optional>
 		</dependency>
 	</dependencies>
 </project>

@@ -16,5 +16,9 @@
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-util</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
 	</dependencies>
 </project>

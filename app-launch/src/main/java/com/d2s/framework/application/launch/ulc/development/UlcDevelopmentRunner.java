@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.frontend.startup.ulc.development;
+package com.d2s.framework.application.launch.ulc.development;
 
 import java.util.ArrayList;
 import java.util.List;

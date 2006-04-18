@@ -28,5 +28,14 @@
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-application</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>jgoodies</groupId>
+			<artifactId>uif_lite</artifactId>
+			<optional>true</optional>
+		</dependency>
+  	<dependency>
+			<groupId>foxtrot</groupId>
+			<artifactId>foxtrot</artifactId>
+		</dependency>
 	</dependencies>
 </project>
