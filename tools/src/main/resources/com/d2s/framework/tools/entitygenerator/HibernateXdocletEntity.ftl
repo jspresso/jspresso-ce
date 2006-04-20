@@ -270,6 +270,13 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           order-by="<#list propertyDescriptor.orderingProperties as orderingProperty>${generateSQLName(orderingProperty)}<#if orderingProperty_has_next>,</#if></#list>"
      </#if>
 -->
+<#--
+  The following replaces the previous block wich makes hibernate fail... Ordering is now handled in the entity itself.
+  But hibernate must be provided with an ordering attribute so that a Linked HashSet is used instead of a set.
+-->
+     <#if (propertyDescriptor.orderingProperties?exists && !manyToMany && !(hibernateCollectionType="list"))>
+   *           order-by="ID"
+     </#if>
      <#if manyToMany>
    * @hibernate.key
        <#if componentName=elementName>

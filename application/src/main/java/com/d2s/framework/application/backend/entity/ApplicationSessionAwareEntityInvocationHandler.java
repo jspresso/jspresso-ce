@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.backend.entity;
 
+import java.util.Collection;
+
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -73,11 +75,16 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor.getName());
+    if (applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+        propertyDescriptor.getName())) {
+      Collection<Object> propertyValue = (Collection<Object>) ((IEntity) proxy)
+          .straightGetProperty(propertyDescriptor.getName());
+      sortCollectionProperty(propertyDescriptor, propertyValue);
+    }
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
 

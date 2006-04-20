@@ -194,8 +194,9 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public void initializePropertyIfNeeded(IEntity entity, String propertyName) {
-    entity.straightGetProperty(propertyName);
+  @SuppressWarnings("unused")
+  public boolean initializePropertyIfNeeded(IEntity entity, String propertyName) {
+    return false;
   }
 
   /**

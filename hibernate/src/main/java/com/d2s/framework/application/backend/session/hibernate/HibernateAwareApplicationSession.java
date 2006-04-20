@@ -151,10 +151,10 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * {@inheritDoc}
    */
   @Override
-  public void initializePropertyIfNeeded(final IEntity entity,
+  public boolean initializePropertyIfNeeded(final IEntity entity,
       final String propertyName) {
     if (Hibernate.isInitialized(entity.straightGetProperty(propertyName))) {
-      return;
+      return false;
     }
     boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
     try {
@@ -185,5 +185,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     } finally {
       getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
     }
+    return true;
   }
 }

@@ -11,7 +11,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +42,7 @@ import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.model.service.IComponentService;
 import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.bean.AccessorInfo;
+import com.d2s.framework.util.bean.BeanComparator;
 import com.d2s.framework.util.bean.IAccessor;
 import com.d2s.framework.util.bean.IAccessorFactory;
 import com.d2s.framework.util.bean.ICollectionAccessor;
@@ -851,21 +854,63 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     }
   }
 
-  private void straightSetProperty(String propertyName,
-      Object backendPropertyValue) {
+  @SuppressWarnings("unchecked")
+  private void straightSetProperty(String propertyName, Object newPropertyValue) {
     Object currentPropertyValue = properties.get(propertyName);
-    storeProperty(propertyName, backendPropertyValue);
+    storeProperty(propertyName, newPropertyValue);
     if (entityDescriptor.getPropertyDescriptor(propertyName) instanceof ICollectionPropertyDescriptor) {
+      ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityDescriptor
+          .getPropertyDescriptor(propertyName);
+      if (isInitialized(newPropertyValue)) {
+        sortCollectionProperty(propertyDescriptor,
+            (Collection<Object>) newPropertyValue);
+      }
       if (currentPropertyValue != null) {
         currentPropertyValue = Proxy.newProxyInstance(getClass()
-            .getClassLoader(),
-            new Class[] {((ICollectionPropertyDescriptor) entityDescriptor
-                .getPropertyDescriptor(propertyName)).getReferencedDescriptor()
-                .getCollectionInterface()}, new NeverEqualsInvocationHandler(
-                currentPropertyValue));
+            .getClassLoader(), new Class[] {propertyDescriptor
+            .getReferencedDescriptor().getCollectionInterface()},
+            new NeverEqualsInvocationHandler(currentPropertyValue));
       }
     }
-    firePropertyChange(propertyName, currentPropertyValue, backendPropertyValue);
+    firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
+  }
+
+  /**
+   * Sorts a collection property whenever its descriptor declares it using its
+   * oderingProperties.
+   * 
+   * @param propertyDescriptor
+   *          the collection property descriptor.
+   * @param propertyValue
+   *          the raw collection property value.
+   */
+  protected void sortCollectionProperty(
+      ICollectionPropertyDescriptor propertyDescriptor,
+      Collection<Object> propertyValue) {
+    if (propertyValue != null
+        && !propertyValue.isEmpty()
+        && !List.class.isAssignableFrom(propertyDescriptor
+            .getCollectionDescriptor().getCollectionInterface())) {
+      List<String> orderingProperties = propertyDescriptor
+          .getOrderingProperties();
+      if (orderingProperties != null) {
+        BeanComparator comparator = new BeanComparator();
+        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
+        Class collectionElementContract = propertyDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getComponentContract();
+        for (String orderingProperty : orderingProperties) {
+          orderingAccessors.add(accessorFactory.createPropertyAccessor(
+              orderingProperty, collectionElementContract));
+        }
+        comparator.setOrderingAccessors(orderingAccessors);
+        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
+        Collections.sort(collectionCopy, comparator);
+        Collection<Object> collectionProperty = propertyValue;
+        collectionProperty.clear();
+        collectionProperty.addAll(collectionCopy);
+      }
+    }
   }
 
   /**

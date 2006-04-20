@@ -108,8 +108,9 @@ public interface IApplicationSession extends IEntityDirtAware {
    *          the entity holding the property.
    * @param propertyName
    *          the property name.
+   * @return true if the property has been initialized.
    */
-  void initializePropertyIfNeeded(IEntity entity, String propertyName);
+  boolean initializePropertyIfNeeded(IEntity entity, String propertyName);
 
   /**
    * Gets wether a transactional unit of work has been started in the
