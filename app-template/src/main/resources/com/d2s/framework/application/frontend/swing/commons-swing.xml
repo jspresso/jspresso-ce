@@ -20,10 +20,10 @@
 		Root action beans.
 	-->
 	<bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
-		class="com.d2s.framework.application.frontend.action.std.FindAction" />
+		class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false"/>
 
 	<bean id="lovOkFrontAction" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction">
+		class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction" singleton="false">
 		<property name="nextAction" ref="sourceViewConnectorSetAction" />
 	</bean>
 
@@ -36,26 +36,28 @@
 	<bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction" />
 
-  <bean id="infoFrontAction" abstract="true" parent="abstractFrontAction"
-    class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction" />
+	<bean id="infoFrontAction" abstract="true" parent="abstractFrontAction"
+		class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction" />
 
 	<!--
 		The implementation used as view factory.
 	-->
-	<bean id="iconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" singleton="false"/>
+	<bean id="iconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" singleton="false" />
 
-	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.swing.SwingActionFactory" />
+	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.swing.SwingActionFactory"
+		singleton="false" />
 
 	<bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction" />
 
 	<bean id="lovAction" parent="abstractLovAction"
-		class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" />
+		class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" singleton="false"/>
 
 	<bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
 		class="com.d2s.framework.application.frontend.action.swing.file.ChooseFileAsBinaryPropertyAction" />
 
-	<bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory">
+	<bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory"
+		singleton="false">
 		<!--
 			<constructor-arg index="0" value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
 			<constructor-arg index="0"
@@ -70,7 +72,7 @@
 	</bean>
 
 	<bean id="jgoodiesViewFactory" class="com.d2s.framework.view.swing.jgoodies.JGoodiesSwingViewFactory"
-		parent="viewFactory" />
+		parent="viewFactory" singleton="false" />
 
 	<!--
 		The controllers.

@@ -67,7 +67,7 @@
 	<!--
 		The root abstract implementation used as Application Session.
 	-->
-	<bean id="abstractApplicationSession" abstract="true" singleton="false">
+	<bean id="abstractApplicationSession" abstract="true">
 		<property name="collectionFactory" ref="entityCollectionFactory" />
 		<property name="entityRegistry">
 			<bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" />
@@ -101,7 +101,7 @@
 		The implementation used as view factory.
 		View factory is not defined as singleton since it can implement some cache a the session level.
 	-->
-	<bean id="abstractViewFactory" abstract="true" singleton="false">
+	<bean id="abstractViewFactory" abstract="true">
 		<property name="connectorFactory" ref="connectorFactory" />
 		<property name="mvcBinder" ref="mvcBinder" />
 		<property name="labelTranslator" ref="mockTranslator" />
@@ -116,7 +116,7 @@
 		<property name="chooseFileAsBinaryPropertyAction" ref="chooseFileAsBinaryPropertyAction" />
 	</bean>
 
-	<bean id="abstractActionFactory" abstract="true" singleton="false">
+	<bean id="abstractActionFactory" abstract="true">
 		<property name="labelTranslator" ref="mockTranslator" />
 		<property name="descriptionTranslator" ref="mockTranslator" />
 		<property name="iconFactory" ref="iconFactory" />
@@ -134,7 +134,7 @@
 	<!--
 		The controllers. Controllers are not singleton since they can hold some session state.
 	-->
-	<bean abstract="true" id="abstractFrontController" singleton="false">
+	<bean abstract="true" id="abstractFrontController">
 		<property name="mvcBinder" ref="mvcBinder" />
 		<property name="labelTranslator" ref="mockTranslator" />
 		<property name="descriptionTranslator" ref="mockTranslator" />
@@ -143,7 +143,7 @@
 	</bean>
 
 	<bean abstract="true" id="abstractBackController"
-		class="com.d2s.framework.application.backend.DefaultBackendController" singleton="false">
+		class="com.d2s.framework.application.backend.DefaultBackendController">
 		<property name="entityFactory">
 			<bean parent="basicEntityFactory"
 				class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory" />

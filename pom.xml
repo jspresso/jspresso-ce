@@ -48,7 +48,6 @@
 		<module>ulc</module>
 		<module>app-launch</module>
 		<module>app-template</module>
-		<module>app-sample</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>
@@ -145,11 +144,6 @@
 			<dependency>
 				<groupId>com.design2see</groupId>
 				<artifactId>d2s-app-launch</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-app-sample</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
 			<dependency>

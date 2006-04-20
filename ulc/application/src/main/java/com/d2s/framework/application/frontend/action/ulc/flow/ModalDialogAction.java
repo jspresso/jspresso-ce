@@ -8,11 +8,10 @@ import java.util.Map;
 
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 import com.d2s.framework.application.frontend.action.ulc.IDialogAwareAction;
-import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.action.IDisplayableAction;
-import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCBorderLayoutPane;
 import com.ulcjava.base.application.ULCButton;
 import com.ulcjava.base.application.ULCComponent;
@@ -34,30 +33,6 @@ import com.ulcjava.base.shared.IWindowConstants;
  */
 public class ModalDialogAction extends AbstractUlcAction {
 
-  private IActionFactory<IAction, ULCComponent> actionFactory;
-  private IView<ULCComponent>                   mainView;
-  private List<IDisplayableAction>              actions;
-
-  /**
-   * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(List<IDisplayableAction> actions) {
-    this.actions = actions;
-  }
-
-  /**
-   * Sets the mainView.
-   * 
-   * @param mainView
-   *          the mainView to set.
-   */
-  public void setMainView(IView<ULCComponent> mainView) {
-    this.mainView = mainView;
-  }
-
   /**
    * Shows a modal dialog containig a main view and a button panel with the list
    * of registered actions.
@@ -67,14 +42,16 @@ public class ModalDialogAction extends AbstractUlcAction {
   @Override
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     final ULCDialog dialog;
-    ULCWindow window = UlcUtilities.getWindowAncestor(getSourceComponent(context));
+    IView<ULCComponent> mainView = getMainView(context);
+    ULCWindow window = UlcUtilities
+        .getWindowAncestor(getSourceComponent(context));
     dialog = new ULCDialog(window, getName(), true);
     ULCGridLayoutPane actionPanel = new ULCGridLayoutPane(1, 0, 5, 10);
     ULCButton defaultButton = null;
-    for (IDisplayableAction action : actions) {
+    for (IDisplayableAction action : getActions(context)) {
       ULCButton actionButton = new ULCButton();
-      actionButton.setAction(actionFactory.createAction(action, actionHandler,
-          mainView, getLocale(context)));
+      actionButton.setAction(getActionFactory(context).createAction(action,
+          actionHandler, mainView, getLocale(context)));
       if (action instanceof IDialogAwareAction) {
         final IDialogAwareAction finalAction = (IDialogAwareAction) action;
         actionButton.addActionListener(new IActionListener() {
@@ -106,13 +83,29 @@ public class ModalDialogAction extends AbstractUlcAction {
   }
 
   /**
-   * Sets the actionFactory.
+   * Gets the actions.
    * 
-   * @param actionFactory
-   *          the actionFactory to set.
+   * @param context
+   *          the action context.
+   * @return the actions.
    */
-  public void setActionFactory(
-      IActionFactory<IAction, ULCComponent> actionFactory) {
-    this.actionFactory = actionFactory;
+  @SuppressWarnings("unchecked")
+  public List<IDisplayableAction> getActions(Map<String, Object> context) {
+    return (List<IDisplayableAction>) context
+        .get(ActionContextConstants.DIALOG_ACTIONS);
   }
+
+  /**
+   * Gets the mainView.
+   * 
+   * @param context
+   *          the action context.
+   * @return the mainView.
+   */
+  @SuppressWarnings("unchecked")
+  public IView<ULCComponent> getMainView(Map<String, Object> context) {
+    return (IView<ULCComponent>) context
+        .get(ActionContextConstants.DIALOG_VIEW);
+  }
+
 }

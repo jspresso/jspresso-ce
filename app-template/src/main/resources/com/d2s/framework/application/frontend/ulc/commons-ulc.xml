@@ -20,10 +20,10 @@
 		Root action beans.
 	-->
 	<bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
-		class="com.d2s.framework.application.frontend.action.std.FindAction" />
+		class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false"/>
 
 	<bean id="lovOkFrontAction" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction">
+		class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction" singleton="false">
 		<property name="nextAction" ref="sourceViewConnectorSetAction" />
 	</bean>
 
@@ -44,30 +44,31 @@
 	<!--
 		The implementation used as view factory.
 	-->
-	
+
 	<!-- 
-	  This icon factory is defined as non-singleton since it implements a per ulc session cache.
+		This icon factory is defined as non-singleton since it implements a per ulc session cache.
 	-->
 	<bean id="iconFactory" class="com.d2s.framework.view.ulc.UlcIconFactory" singleton="false" />
 
-	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.ulc.UlcActionFactory" />
+	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.ulc.UlcActionFactory"
+		singleton="false" />
 
 	<bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
 		class="com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction" />
 
 	<bean id="lovAction" parent="abstractLovAction"
-		class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" />
+		class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" singleton="false"/>
 
 	<bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
 		class="com.d2s.framework.application.frontend.action.ulc.file.ChooseFileAsBinaryPropertyAction" />
 
-	<bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory" />
+	<bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory"  singleton="false"/>
 
 	<!--
 		The controllers.
 	-->
 	<bean id="frontController" abstract="true" parent="abstractFrontController"
-		class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController">
+		class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController" singleton="false">
 		<property name="loginCallbackHandler">
 			<bean class="com.d2s.framework.security.ulc.DialogCallbackHandler">
 				<property name="iconFactory" ref="iconFactory" />

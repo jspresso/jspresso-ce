@@ -25,7 +25,9 @@ import com.d2s.framework.application.startup.IStartup;
  */
 public abstract class AbstractStartup implements IStartup {
 
-  private BeanFactory applicationContext;
+  private BeanFactory         applicationContext;
+  private IFrontendController frontendController;
+  private IBackendController  backendController;
 
   /**
    * Gets the applicationContext.
@@ -48,14 +50,7 @@ public abstract class AbstractStartup implements IStartup {
    * {@inheritDoc}
    */
   public void start() {
-    Locale locale = getStartupLocale();
-
-    IFrontendController frontController = (IFrontendController) getApplicationContext()
-        .getBean("applicationFrontController");
-    IBackendController backController = (IBackendController) getApplicationContext()
-        .getBean("applicationBackController");
-
-    frontController.start(backController, locale);
+    getFrontendController().start(getBackendController(), getStartupLocale());
   }
 
   /**
@@ -72,4 +67,31 @@ public abstract class AbstractStartup implements IStartup {
    * @return the startup locale.
    */
   protected abstract Locale getStartupLocale();
+
+  /**
+   * Gets the application frontend controller.
+   * 
+   * @return the application frontend controller.
+   */
+  protected IFrontendController getFrontendController() {
+    if (frontendController == null) {
+      frontendController = (IFrontendController) getApplicationContext()
+          .getBean("applicationFrontController");
+    }
+    return frontendController;
+  }
+
+  /**
+   * Gets the application backend controller.
+   * 
+   * @return the application backend controller.
+   */
+  protected IBackendController getBackendController() {
+    if (backendController == null) {
+      backendController = (IBackendController) getApplicationContext()
+          .getBean("applicationBackController");
+    }
+    return backendController;
+
+  }
 }

@@ -23,6 +23,7 @@ import javax.swing.WindowConstants;
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
 import com.d2s.framework.application.frontend.action.swing.IDialogAwareAction;
 import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.ActionContextConstants;
 import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.action.IDisplayableAction;
 
@@ -37,29 +38,6 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class ModalDialogAction extends AbstractSwingAction {
 
-  private IView<JComponent>                  mainView;
-  private List<IDisplayableAction>           actions;
-
-  /**
-   * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(List<IDisplayableAction> actions) {
-    this.actions = actions;
-  }
-
-  /**
-   * Sets the mainView.
-   * 
-   * @param mainView
-   *          the mainView to set.
-   */
-  public void setMainView(IView<JComponent> mainView) {
-    this.mainView = mainView;
-  }
-
   /**
    * Shows a modal dialog containig a main view and a button panel with the list
    * of registered actions.
@@ -69,6 +47,7 @@ public class ModalDialogAction extends AbstractSwingAction {
   @Override
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     final JDialog dialog;
+    IView<JComponent> mainView = getMainView(context);
     Window window = SwingUtilities
         .getWindowAncestor(getSourceComponent(context));
     if (window instanceof Dialog) {
@@ -79,10 +58,10 @@ public class ModalDialogAction extends AbstractSwingAction {
     JPanel actionPanel = new JPanel();
     actionPanel.setLayout(new GridLayout(1, 0, 5, 10));
     JButton defaultButton = null;
-    for (IDisplayableAction action : actions) {
+    for (IDisplayableAction action : getActions(context)) {
       JButton actionButton = new JButton();
-      actionButton.setAction(getActionFactory(context).createAction(action, actionHandler,
-          mainView, getLocale(context)));
+      actionButton.setAction(getActionFactory(context).createAction(action,
+          actionHandler, mainView, getLocale(context)));
       if (action instanceof IDialogAwareAction) {
         final IDialogAwareAction finalAction = (IDialogAwareAction) action;
         actionButton.addActionListener(new ActionListener() {
@@ -116,4 +95,30 @@ public class ModalDialogAction extends AbstractSwingAction {
     dialog.setVisible(true);
     super.execute(actionHandler, context);
   }
+
+  /**
+   * Gets the actions.
+   * 
+   * @param context
+   *          the action context.
+   * @return the actions.
+   */
+  @SuppressWarnings("unchecked")
+  public List<IDisplayableAction> getActions(Map<String, Object> context) {
+    return (List<IDisplayableAction>) context
+        .get(ActionContextConstants.DIALOG_ACTIONS);
+  }
+
+  /**
+   * Gets the mainView.
+   * 
+   * @param context
+   *          the action context.
+   * @return the mainView.
+   */
+  @SuppressWarnings("unchecked")
+  public IView<JComponent> getMainView(Map<String, Object> context) {
+    return (IView<JComponent>) context.get(ActionContextConstants.DIALOG_VIEW);
+  }
+
 }

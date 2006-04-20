@@ -109,5 +109,15 @@ public final class ActionContextConstants {
   /**
    * the backend controller.
    */
-  public static final String BACK_CONTROLLER               = "BACK_CONTROLLER";
+  public static final String BACK_CONTROLLER                = "BACK_CONTROLLER";
+
+  /**
+   * The dialog actions.
+   */
+  public static final String DIALOG_ACTIONS                 = "DIALOG_ACTIONS";
+
+  /**
+   * The dialog view.
+   */
+  public static final String DIALOG_VIEW                    = "DIALOG_VIEW";
 }

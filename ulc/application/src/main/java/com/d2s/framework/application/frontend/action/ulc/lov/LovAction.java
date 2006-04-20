@@ -66,11 +66,12 @@ public class LovAction extends ModalDialogAction {
     actions.add(findAction);
     actions.add(okAction);
     actions.add(cancelAction);
-    setActions(actions);
+    context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
     IView<ULCComponent> lovView = getViewFactory(context).createView(
         lovViewDescriptorFactory
             .createLovViewDescriptor(getQueryEntityDescriptor(context)),
         actionHandler, getLocale(context));
+    context.put(ActionContextConstants.DIALOG_VIEW, lovView);
     createQueryEntityAction
         .setQueryEntityDescriptor(getQueryEntityDescriptor(context));
     actionHandler.execute(createQueryEntityAction, context);
