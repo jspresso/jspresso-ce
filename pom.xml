@@ -261,6 +261,11 @@
 				<artifactId>ulc-jnlp-client</artifactId>
 				<version>6.0.4</version>
 			</dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-servlet-server</artifactId>
+        <version>6.0.4</version>
+      </dependency>
 			<dependency>
 				<groupId>ulc</groupId>
 				<artifactId>ulc-servlet-client</artifactId>
@@ -276,6 +281,11 @@
 				<artifactId>ulc-deployment-key</artifactId>
 				<version>6.0.4</version>
 			</dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>3.8.1</version>
+      </dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -326,10 +336,14 @@
 					</execution>
 				</executions>
 			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
+					  <inherited>true</inherited>
 						<id>obfuscate</id>
 						<phase>package</phase>
 						<configuration>
@@ -424,7 +438,8 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-		</plugins>
+			</plugins>
+		</pluginManagement>
 	</build>
 	<reporting>
 		<plugins>
