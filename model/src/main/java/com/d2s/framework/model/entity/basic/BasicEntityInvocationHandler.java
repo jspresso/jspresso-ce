@@ -5,15 +5,12 @@ package com.d2s.framework.model.entity.basic;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -42,7 +39,6 @@ import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.model.service.IComponentService;
 import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.bean.AccessorInfo;
-import com.d2s.framework.util.bean.BeanComparator;
 import com.d2s.framework.util.bean.IAccessor;
 import com.d2s.framework.util.bean.IAccessorFactory;
 import com.d2s.framework.util.bean.ICollectionAccessor;
@@ -61,19 +57,19 @@ import com.d2s.framework.util.collection.CollectionHelper;
 public class BasicEntityInvocationHandler implements InvocationHandler,
     Serializable {
 
-  private static final long              serialVersionUID = 6078989823404409653L;
+  private static final long            serialVersionUID = 6078989823404409653L;
 
-  private static BasicProxyEntityFactory proxyEntityFactory;
+  private BasicProxyEntityFactory      proxyEntityFactory;
 
-  private IEntityDescriptor              entityDescriptor;
-  private PropertyChangeSupport          changeSupport;
-  private Map<String, Object>            properties;
-  private Map<Class, IEntityExtension>   entityExtensions;
-  private IEntityCollectionFactory       collectionFactory;
-  private IAccessorFactory               accessorFactory;
-  private IEntityExtensionFactory        extensionFactory;
+  private IEntityDescriptor            entityDescriptor;
+  private PropertyChangeSupport        changeSupport;
+  private Map<String, Object>          properties;
+  private Map<Class, IEntityExtension> entityExtensions;
+  private IEntityCollectionFactory     collectionFactory;
+  private IAccessorFactory             accessorFactory;
+  private IEntityExtensionFactory      extensionFactory;
 
-  private Set<String>                    modifierMonitors;
+  private Set<String>                  modifierMonitors;
 
   /**
    * Constructs a new <code>BasicEntityInvocationHandler</code> instance.
@@ -88,15 +84,20 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    * @param extensionFactory
    *          The factory used to create entity extensions based on their
    *          classes.
+   * @param proxyEntityFactory
+   *          the entity factory used to clone entities in case.
    */
   protected BasicEntityInvocationHandler(IEntityDescriptor entityDescriptor,
       IEntityCollectionFactory collectionFactory,
-      IAccessorFactory accessorFactory, IEntityExtensionFactory extensionFactory) {
+      IAccessorFactory accessorFactory,
+      IEntityExtensionFactory extensionFactory,
+      BasicProxyEntityFactory proxyEntityFactory) {
     this.properties = createPropertyMap();
     this.entityDescriptor = entityDescriptor;
     this.collectionFactory = collectionFactory;
     this.accessorFactory = accessorFactory;
     this.extensionFactory = extensionFactory;
+    this.proxyEntityFactory = proxyEntityFactory;
   }
 
   /**
@@ -861,10 +862,6 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     if (entityDescriptor.getPropertyDescriptor(propertyName) instanceof ICollectionPropertyDescriptor) {
       ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityDescriptor
           .getPropertyDescriptor(propertyName);
-      if (isInitialized(newPropertyValue)) {
-        sortCollectionProperty(propertyDescriptor,
-            (Collection<Object>) newPropertyValue);
-      }
       if (currentPropertyValue != null) {
         currentPropertyValue = Proxy.newProxyInstance(getClass()
             .getClassLoader(), new Class[] {propertyDescriptor
@@ -873,44 +870,6 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       }
     }
     firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
-  }
-
-  /**
-   * Sorts a collection property whenever its descriptor declares it using its
-   * oderingProperties.
-   * 
-   * @param propertyDescriptor
-   *          the collection property descriptor.
-   * @param propertyValue
-   *          the raw collection property value.
-   */
-  protected void sortCollectionProperty(
-      ICollectionPropertyDescriptor propertyDescriptor,
-      Collection<Object> propertyValue) {
-    if (propertyValue != null
-        && !propertyValue.isEmpty()
-        && !List.class.isAssignableFrom(propertyDescriptor
-            .getCollectionDescriptor().getCollectionInterface())) {
-      List<String> orderingProperties = propertyDescriptor
-          .getOrderingProperties();
-      if (orderingProperties != null) {
-        BeanComparator comparator = new BeanComparator();
-        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
-        Class collectionElementContract = propertyDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getComponentContract();
-        for (String orderingProperty : orderingProperties) {
-          orderingAccessors.add(accessorFactory.createPropertyAccessor(
-              orderingProperty, collectionElementContract));
-        }
-        comparator.setOrderingAccessors(orderingAccessors);
-        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
-        Collections.sort(collectionCopy, comparator);
-        Collection<Object> collectionProperty = propertyValue;
-        collectionProperty.clear();
-        collectionProperty.addAll(collectionCopy);
-      }
-    }
   }
 
   /**
@@ -944,36 +903,25 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     return entityDescriptor.getComponentContract();
   }
 
-  private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-    out.writeObject(entityDescriptor.getComponentContract());
-    out.writeObject(properties);
-    out.writeObject(entityExtensions);
-  }
-
-  @SuppressWarnings("unchecked")
-  private void readObject(java.io.ObjectInputStream in) throws IOException,
-      ClassNotFoundException {
-    entityDescriptor = proxyEntityFactory.getEntityDescriptor((Class) in
-        .readObject());
-    properties = (Map<String, Object>) in.readObject();
-    entityExtensions = (Map<Class, IEntityExtension>) in.readObject();
-
-    collectionFactory = proxyEntityFactory.getEntityCollectionFactory();
-    accessorFactory = proxyEntityFactory.getAccessorFactory();
-    extensionFactory = proxyEntityFactory.getEntityExtensionFactory();
-  }
-
-  /**
-   * Sets the proxyEntityFactory.
-   * 
-   * @param proxyEntityFactory
-   *          the proxyEntityFactory to set.
-   */
-  static void setProxyEntityFactory(BasicProxyEntityFactory proxyEntityFactory) {
-    if (BasicEntityInvocationHandler.proxyEntityFactory == null) {
-      BasicEntityInvocationHandler.proxyEntityFactory = proxyEntityFactory;
-    }
-  }
+  // private void writeObject(java.io.ObjectOutputStream out) throws IOException
+  // {
+  // out.writeObject(entityDescriptor.getComponentContract());
+  // out.writeObject(properties);
+  // out.writeObject(entityExtensions);
+  // }
+  //
+  // @SuppressWarnings("unchecked")
+  // private void readObject(java.io.ObjectInputStream in) throws IOException,
+  // ClassNotFoundException {
+  // entityDescriptor = proxyEntityFactory.getEntityDescriptor((Class) in
+  // .readObject());
+  // properties = (Map<String, Object>) in.readObject();
+  // entityExtensions = (Map<Class, IEntityExtension>) in.readObject();
+  //
+  // collectionFactory = proxyEntityFactory.getEntityCollectionFactory();
+  // accessorFactory = proxyEntityFactory.getAccessorFactory();
+  // extensionFactory = proxyEntityFactory.getEntityExtensionFactory();
+  // }
 
   private Map<String, Object> createPropertyMap() {
     return new HashMap<String, Object>();

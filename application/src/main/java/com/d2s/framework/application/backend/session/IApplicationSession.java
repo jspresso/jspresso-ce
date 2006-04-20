@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.security.auth.Subject;
 
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityDirtAware;
 
@@ -106,11 +107,11 @@ public interface IApplicationSession extends IEntityDirtAware {
    * 
    * @param entity
    *          the entity holding the property.
-   * @param propertyName
-   *          the property name.
-   * @return true if the property has been initialized.
+   * @param propertyDescriptor
+   *          the property descriptor.
    */
-  boolean initializePropertyIfNeeded(IEntity entity, String propertyName);
+  void initializePropertyIfNeeded(IEntity entity,
+      IPropertyDescriptor propertyDescriptor);
 
   /**
    * Gets wether a transactional unit of work has been started in the

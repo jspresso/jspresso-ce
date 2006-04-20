@@ -56,6 +56,6 @@ public class ApplicationSessionAwareProxyEntityFactory extends
       IEntityDescriptor entityDescriptor) {
     return new ApplicationSessionAwareEntityInvocationHandler(entityDescriptor,
         getEntityCollectionFactory(), getAccessorFactory(),
-        getEntityExtensionFactory(), applicationSession);
+        getEntityExtensionFactory(), this, applicationSession);
   }
 }

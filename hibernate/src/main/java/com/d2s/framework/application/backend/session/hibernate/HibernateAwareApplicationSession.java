@@ -20,6 +20,8 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.PropertyHelper;
 
@@ -150,17 +152,19 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
-  public boolean initializePropertyIfNeeded(final IEntity entity,
-      final String propertyName) {
+  public void initializePropertyIfNeeded(final IEntity entity,
+      IPropertyDescriptor propertyDescriptor) {
+    final String propertyName = propertyDescriptor.getName();
     if (Hibernate.isInitialized(entity.straightGetProperty(propertyName))) {
-      return false;
+      return;
     }
     boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
     try {
       getDirtRecorder().setEnabled(false);
 
-      hibernateTemplate.execute(new HibernateCallback() {
+      Object propertyValue = hibernateTemplate.execute(new HibernateCallback() {
 
         /**
          * {@inheritDoc}
@@ -179,12 +183,20 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           if (lockedEntity != entity) {
             entity.straightSetProperty(propertyName, initializedProperty);
           }
-          return null;
+          return initializedProperty;
         }
       });
+      if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+        sortCollectionProperty(
+            (ICollectionPropertyDescriptor) propertyDescriptor,
+            (Collection<Object>) propertyValue);
+        if (propertyValue instanceof PersistentCollection) {
+          ((PersistentCollection) propertyValue).clearDirty();
+        }
+      }
     } finally {
       getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
     }
-    return true;
+    return;
   }
 }

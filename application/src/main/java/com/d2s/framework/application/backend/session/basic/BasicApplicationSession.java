@@ -19,10 +19,15 @@ import com.d2s.framework.application.backend.session.ApplicationSessionException
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.IEntityUnitOfWork;
 import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityRegistry;
+import com.d2s.framework.util.bean.BeanComparator;
 import com.d2s.framework.util.bean.BeanPropertyChangeRecorder;
+import com.d2s.framework.util.bean.IAccessor;
+import com.d2s.framework.util.bean.IAccessorFactory;
 
 /**
  * Basic implementation of an application session.
@@ -39,6 +44,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private BeanPropertyChangeRecorder dirtRecorder;
   private IEntityUnitOfWork          unitOfWork;
   private IEntityCollectionFactory   collectionFactory;
+  private IAccessorFactory           accessorFactory;
   private Set<IEntity>               entitiesToMergeBack;
   private Subject                    owner;
 
@@ -195,8 +201,9 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   @SuppressWarnings("unused")
-  public boolean initializePropertyIfNeeded(IEntity entity, String propertyName) {
-    return false;
+  public void initializePropertyIfNeeded(IEntity entity,
+      IPropertyDescriptor propertyName) {
+    // NO-OP;
   }
 
   /**
@@ -496,4 +503,51 @@ public class BasicApplicationSession implements IApplicationSession {
     this.owner = owner;
   }
 
+  /**
+   * Sorts a collection property whenever its descriptor declares it using its
+   * oderingProperties.
+   * 
+   * @param propertyDescriptor
+   *          the collection property descriptor.
+   * @param propertyValue
+   *          the raw collection property value.
+   */
+  protected void sortCollectionProperty(
+      ICollectionPropertyDescriptor propertyDescriptor,
+      Collection<Object> propertyValue) {
+    if (propertyValue != null
+        && !propertyValue.isEmpty()
+        && !List.class.isAssignableFrom(propertyDescriptor
+            .getCollectionDescriptor().getCollectionInterface())) {
+      List<String> orderingProperties = propertyDescriptor
+          .getOrderingProperties();
+      if (orderingProperties != null) {
+        BeanComparator comparator = new BeanComparator();
+        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
+        Class collectionElementContract = propertyDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getComponentContract();
+        for (String orderingProperty : orderingProperties) {
+          orderingAccessors.add(accessorFactory.createPropertyAccessor(
+              orderingProperty, collectionElementContract));
+        }
+        comparator.setOrderingAccessors(orderingAccessors);
+        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
+        Collections.sort(collectionCopy, comparator);
+        Collection<Object> collectionProperty = propertyValue;
+        collectionProperty.clear();
+        collectionProperty.addAll(collectionCopy);
+      }
+    }
+  }
+
+  
+  /**
+   * Sets the accessorFactory.
+   * 
+   * @param accessorFactory the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
+  }
 }

@@ -42,13 +42,6 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   private ApplicationContext       entityApplicationContext;
 
   /**
-   * Constructs a new <code>BasicProxyEntityFactory</code> instance.
-   */
-  public BasicProxyEntityFactory() {
-    BasicEntityInvocationHandler.setProxyEntityFactory(this);
-  }
-
-  /**
    * {@inheritDoc}
    */
   public IEntity createEntityInstance(Class entityContract) {
@@ -111,7 +104,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   protected InvocationHandler createEntityInvocationHandler(
       IEntityDescriptor entityDescriptor) {
     return new BasicEntityInvocationHandler(entityDescriptor,
-        entityCollectionFactory, accessorFactory, entityExtensionFactory);
+        entityCollectionFactory, accessorFactory, entityExtensionFactory, this);
   }
 
   /**

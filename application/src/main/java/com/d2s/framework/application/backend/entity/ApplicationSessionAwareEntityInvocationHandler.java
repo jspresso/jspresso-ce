@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.backend.entity;
 
-import java.util.Collection;
-
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -13,6 +11,7 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
+import com.d2s.framework.model.entity.basic.BasicProxyEntityFactory;
 import com.d2s.framework.util.bean.IAccessorFactory;
 
 /**
@@ -47,6 +46,8 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    * @param extensionFactory
    *          The factory used to create entity extensions based on their
    *          classes.
+   * @param proxyEntityFactory
+   *          the entity factory used to clone entities in case.
    * @param applicationSession
    *          the current application session.
    */
@@ -55,9 +56,10 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
       IEntityCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory,
       IEntityExtensionFactory extensionFactory,
+      BasicProxyEntityFactory proxyEntityFactory,
       IApplicationSession applicationSession) {
     super(entityDescriptor, collectionFactory, accessorFactory,
-        extensionFactory);
+        extensionFactory, proxyEntityFactory);
     this.applicationSession = applicationSession;
   }
 
@@ -68,7 +70,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor propertyDescriptor) {
     applicationSession.initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor.getName());
+        propertyDescriptor);
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 
@@ -79,12 +81,8 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    if (applicationSession.initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor.getName())) {
-      Collection<Object> propertyValue = (Collection<Object>) ((IEntity) proxy)
-          .straightGetProperty(propertyDescriptor.getName());
-      sortCollectionProperty(propertyDescriptor, propertyValue);
-    }
+    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+        propertyDescriptor);
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
 
