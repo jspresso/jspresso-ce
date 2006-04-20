@@ -230,7 +230,8 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * {@inheritDoc}
    */
   public List<String> getOrderingProperties() {
-    List<String> properties = new ArrayList<String>();
+    // use a set to avoid duplicates.
+    Set<String> properties = new LinkedHashSet<String>();
     if (orderingProperties != null) {
       properties.addAll(orderingProperties);
     }
@@ -244,7 +245,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
     if (properties.isEmpty()) {
       return null;
     }
-    return properties;
+    return new ArrayList<String>(properties);
   }
 
   private synchronized void registerService(Class serviceContract,

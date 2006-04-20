@@ -265,9 +265,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      <#if inverse>
    *           inverse = "true"
      </#if>
+<#--
      <#if (propertyDescriptor.orderingProperties?exists && !manyToMany && !(hibernateCollectionType="list"))>
    *           order-by="<#list propertyDescriptor.orderingProperties as orderingProperty>${generateSQLName(orderingProperty)}<#if orderingProperty_has_next>,</#if></#list>"
      </#if>
+-->
      <#if manyToMany>
    * @hibernate.key
        <#if componentName=elementName>
