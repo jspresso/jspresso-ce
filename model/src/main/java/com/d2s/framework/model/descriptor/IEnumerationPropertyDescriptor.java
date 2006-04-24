@@ -42,5 +42,12 @@ public interface IEnumerationPropertyDescriptor extends
    * @return the image url to use.
    */
   String getIconImageURL(String value);
+  
+  /**
+   * Gets the maximum length of the underlying string property.
+   * 
+   * @return the string property maximum length.
+   */
+  Integer getMaxLength();
 
 }

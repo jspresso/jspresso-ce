@@ -42,7 +42,7 @@ public class CloneCollectionAction extends AbstractCollectionAction {
     Collection<IEntity> entityClones = new ArrayList<IEntity>();
     for (int i = 0; i < selectedIndices.length; i++) {
       entityClones.add(((IEntity) collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue()).clone(false));
+          selectedIndices[i]).getConnectorValue()).clone(getEntityFactory(context), false));
     }
     context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
         .getIndicesOf(collectionConnector, entityClones));

@@ -39,6 +39,13 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    * {@inheritDoc}
    */
   public String getType() {
+    if (type != null) {
+      return type;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IDatePropertyDescriptor) getParentDescriptor())
+          .getType();
+    }
     return type;
   }
 

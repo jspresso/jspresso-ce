@@ -113,11 +113,13 @@ public interface IEntity extends IEntityLifecycle, IPropertyChangeCapable,
    * Clones the entity potentially assigning it a new identifier and resetting
    * the version.
    * 
+   * @param entityFactory
+   *          the entity factory used to create the new instance.
    * @param includeIdAndVersion
    *          if true, the identifier and version will be cloned also.
    * @return the cloned entity.
    */
-  IEntity clone(boolean includeIdAndVersion);
+  IEntity clone(IEntityFactory entityFactory, boolean includeIdAndVersion);
 
   /**
    * Gets wether this entity has already been saved in the backing store.
@@ -143,4 +145,13 @@ public interface IEntity extends IEntityLifecycle, IPropertyChangeCapable,
    * @return true if both instances are equal.
    */
   boolean equals(Object o);
+
+  /**
+   * Sorts a collection property whenever its descriptor declares it using its
+   * oderingProperties.
+   * 
+   * @param propertyName
+   *          the collection property name.
+   */
+  void sortCollectionProperty(String propertyName);
 }

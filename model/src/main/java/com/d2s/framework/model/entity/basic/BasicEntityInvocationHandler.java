@@ -10,7 +10,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +34,7 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtension;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
+import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityLifecycle;
 import com.d2s.framework.model.integrity.ICollectionIntegrityProcessor;
 import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
@@ -39,6 +42,7 @@ import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.model.service.IComponentService;
 import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.bean.AccessorInfo;
+import com.d2s.framework.util.bean.BeanComparator;
 import com.d2s.framework.util.bean.IAccessor;
 import com.d2s.framework.util.bean.IAccessorFactory;
 import com.d2s.framework.util.bean.ICollectionAccessor;
@@ -58,8 +62,6 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     Serializable {
 
   private static final long            serialVersionUID = 6078989823404409653L;
-
-  private BasicProxyEntityFactory      proxyEntityFactory;
 
   private IEntityDescriptor            entityDescriptor;
   private PropertyChangeSupport        changeSupport;
@@ -84,20 +86,15 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    * @param extensionFactory
    *          The factory used to create entity extensions based on their
    *          classes.
-   * @param proxyEntityFactory
-   *          the entity factory used to clone entities in case.
    */
   protected BasicEntityInvocationHandler(IEntityDescriptor entityDescriptor,
       IEntityCollectionFactory collectionFactory,
-      IAccessorFactory accessorFactory,
-      IEntityExtensionFactory extensionFactory,
-      BasicProxyEntityFactory proxyEntityFactory) {
+      IAccessorFactory accessorFactory, IEntityExtensionFactory extensionFactory) {
     this.properties = createPropertyMap();
     this.entityDescriptor = entityDescriptor;
     this.collectionFactory = collectionFactory;
     this.accessorFactory = accessorFactory;
     this.extensionFactory = extensionFactory;
-    this.proxyEntityFactory = proxyEntityFactory;
   }
 
   /**
@@ -152,7 +149,11 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     } else if ("isPersistent".equals(methodName)) {
       return new Boolean(((IEntity) proxy).getVersion() != null);
     } else if ("clone".equals(methodName)) {
-      return cloneProxy(((Boolean) args[0]).booleanValue());
+      return cloneProxy((IEntityFactory) args[0], ((Boolean) args[1])
+          .booleanValue());
+    } else if ("sortCollectionProperty".equals(methodName)) {
+      sortCollectionProperty((String) args[0]);
+      return null;
     } else {
       boolean isLifecycleMethod = false;
       try {
@@ -233,17 +234,18 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
         + entityDescriptor.getComponentContract());
   }
 
-  private IEntity cloneProxy(boolean includeIdAndVersion) {
+  private IEntity cloneProxy(IEntityFactory entityFactory,
+      boolean includeIdAndVersion) {
     if (includeIdAndVersion) {
       // This is a "technical copy". No functional decisions must be made.
-      return carbonCopy();
+      return carbonCopy(entityFactory);
     }
     // This is a "create like" copy.
-    return softCopy();
+    return softCopy(entityFactory);
   }
 
-  private IEntity softCopy() {
-    IEntity clonedEntity = proxyEntityFactory
+  private IEntity softCopy(IEntityFactory entityFactory) {
+    IEntity clonedEntity = entityFactory
         .createEntityInstance(getEntityContract());
 
     Map<Object, ICollectionPropertyDescriptor> collRelToUpdate = new HashMap<Object, ICollectionPropertyDescriptor>();
@@ -327,8 +329,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     return true;
   }
 
-  private IEntity carbonCopy() {
-    IEntity clonedEntity = proxyEntityFactory.createEntityInstance(
+  private IEntity carbonCopy(IEntityFactory entityFactory) {
+    IEntity clonedEntity = entityFactory.createEntityInstance(
         getEntityContract(), (Serializable) properties.get(IEntity.ID));
 
     for (Map.Entry<String, Object> propertyEntry : properties.entrySet()) {
@@ -970,6 +972,37 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       }
     }
     return interceptorResults;
+  }
+
+  @SuppressWarnings("unchecked")
+  private void sortCollectionProperty(String propertyName) {
+    Collection<Object> propertyValue = (Collection<Object>) straightGetProperty(propertyName);
+    ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityDescriptor
+        .getPropertyDescriptor(propertyName);
+    if (propertyValue != null
+        && !propertyValue.isEmpty()
+        && !List.class.isAssignableFrom(propertyDescriptor
+            .getCollectionDescriptor().getCollectionInterface())) {
+      List<String> orderingProperties = propertyDescriptor
+          .getOrderingProperties();
+      if (orderingProperties != null) {
+        BeanComparator comparator = new BeanComparator();
+        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
+        Class collectionElementContract = propertyDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getComponentContract();
+        for (String orderingProperty : orderingProperties) {
+          orderingAccessors.add(accessorFactory.createPropertyAccessor(
+              orderingProperty, collectionElementContract));
+        }
+        comparator.setOrderingAccessors(orderingAccessors);
+        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
+        Collections.sort(collectionCopy, comparator);
+        Collection<Object> collectionProperty = propertyValue;
+        collectionProperty.clear();
+        collectionProperty.addAll(collectionCopy);
+      }
+    }
   }
 
   private static final class NeverEqualsInvocationHandler implements

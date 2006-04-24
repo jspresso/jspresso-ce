@@ -170,26 +170,16 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
          * {@inheritDoc}
          */
         public Object doInHibernate(Session session) {
-          IEntity lockedEntity = null;
-          if (lockedEntity == null) {
-            session.lock(entity, LockMode.NONE);
-            lockedEntity = entity;
-          }
-          session.setReadOnly(lockedEntity, true);
+          session.lock(entity, LockMode.NONE);
+          session.setReadOnly(entity, true);
 
-          Object initializedProperty = lockedEntity
-              .straightGetProperty(propertyName);
+          Object initializedProperty = entity.straightGetProperty(propertyName);
           Hibernate.initialize(initializedProperty);
-          if (lockedEntity != entity) {
-            entity.straightSetProperty(propertyName, initializedProperty);
-          }
           return initializedProperty;
         }
       });
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        sortCollectionProperty(
-            (ICollectionPropertyDescriptor) propertyDescriptor,
-            (Collection<Object>) propertyValue);
+        entity.sortCollectionProperty(propertyName);
         if (propertyValue instanceof PersistentCollection) {
           ((PersistentCollection) propertyValue).clearDirty();
         }

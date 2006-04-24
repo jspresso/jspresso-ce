@@ -23,6 +23,13 @@ public class BasicDecimalPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Integer getMaxFractionDigit() {
+    if (maxFractionDigit != null) {
+      return maxFractionDigit;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IDecimalPropertyDescriptor) getParentDescriptor())
+          .getMaxFractionDigit();
+    }
     return maxFractionDigit;
   }
 

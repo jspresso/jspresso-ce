@@ -17,13 +17,20 @@ import com.d2s.framework.model.descriptor.IDurationPropertyDescriptor;
 public class BasicDurationPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IDurationPropertyDescriptor {
 
-  private long maxMillis = 0;
+  private Long maxMillis;
 
   /**
    * {@inheritDoc}
    */
   public long getMaxMillis() {
-    return maxMillis;
+    if (maxMillis != null) {
+      return maxMillis.longValue();
+    }
+    if (getParentDescriptor() != null) {
+      return ((IDurationPropertyDescriptor) getParentDescriptor())
+          .getMaxMillis();
+    }
+    return 0;
   }
 
   /**
@@ -33,7 +40,7 @@ public class BasicDurationPropertyDescriptor extends
    *          the maxMillis to set.
    */
   public void setMaxMillis(long maxMillis) {
-    this.maxMillis = maxMillis;
+    this.maxMillis = new Long(maxMillis);
   }
 
   /**

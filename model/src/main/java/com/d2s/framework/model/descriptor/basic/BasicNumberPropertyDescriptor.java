@@ -24,6 +24,13 @@ public abstract class BasicNumberPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Double getMinValue() {
+    if (minValue != null) {
+      return minValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((INumberPropertyDescriptor) getParentDescriptor())
+          .getMinValue();
+    }
     return minValue;
   }
 
@@ -31,6 +38,13 @@ public abstract class BasicNumberPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Double getMaxValue() {
+    if (maxValue != null) {
+      return maxValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((INumberPropertyDescriptor) getParentDescriptor())
+          .getMaxValue();
+    }
     return maxValue;
   }
 

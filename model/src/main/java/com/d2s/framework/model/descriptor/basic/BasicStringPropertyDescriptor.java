@@ -23,6 +23,13 @@ public class BasicStringPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Integer getMaxLength() {
+    if (maxLength != null) {
+      return maxLength;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IStringPropertyDescriptor) getParentDescriptor())
+          .getMaxLength();
+    }
     return maxLength;
   }
 

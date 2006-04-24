@@ -22,15 +22,8 @@ public class BasicCollectionPropertyDescriptor extends
     ICollectionPropertyDescriptor {
 
   private ICollectionDescriptor referencedDescriptor;
-  private boolean               manyToMany;
+  private Boolean               manyToMany;
   private List<String>          orderingProperties;
-
-  /**
-   * Constructs a new <code>BasicCollectionPropertyDescriptor</code> instance.
-   */
-  public BasicCollectionPropertyDescriptor() {
-    this.manyToMany = false;
-  }
 
   /**
    * Gets the referencedDescriptor.
@@ -38,6 +31,13 @@ public class BasicCollectionPropertyDescriptor extends
    * @return the referencedDescriptor.
    */
   public ICollectionDescriptor getReferencedDescriptor() {
+    if (referencedDescriptor != null) {
+      return referencedDescriptor;
+    }
+    if (getParentDescriptor() != null) {
+      return ((ICollectionPropertyDescriptor) getParentDescriptor())
+          .getReferencedDescriptor();
+    }
     return referencedDescriptor;
   }
 
@@ -75,7 +75,14 @@ public class BasicCollectionPropertyDescriptor extends
       // priory ty is given to the reverse relation end.
       return getReverseRelationEnd() instanceof ICollectionPropertyDescriptor;
     }
-    return manyToMany;
+    if (manyToMany != null) {
+      return manyToMany.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return ((ICollectionPropertyDescriptor) getParentDescriptor())
+          .isManyToMany();
+    }
+    return false;
   }
 
   /**
@@ -85,7 +92,7 @@ public class BasicCollectionPropertyDescriptor extends
    *          the manyToMany to set.
    */
   public void setManyToMany(boolean manyToMany) {
-    this.manyToMany = manyToMany;
+    this.manyToMany = new Boolean(manyToMany);
   }
 
   /**
@@ -94,11 +101,15 @@ public class BasicCollectionPropertyDescriptor extends
    * @return the orderingProperties.
    */
   public List<String> getOrderingProperties() {
-    if (orderingProperties == null) {
-      return getReferencedDescriptor().getElementDescriptor()
+    if (orderingProperties != null) {
+      return orderingProperties;
+    }
+    if (getParentDescriptor() != null) {
+      return ((ICollectionPropertyDescriptor) getParentDescriptor())
           .getOrderingProperties();
     }
-    return orderingProperties;
+    return getReferencedDescriptor().getElementDescriptor()
+        .getOrderingProperties();
   }
 
   /**

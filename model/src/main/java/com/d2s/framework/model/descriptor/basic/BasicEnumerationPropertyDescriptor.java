@@ -47,6 +47,13 @@ public class BasicEnumerationPropertyDescriptor extends
    * {@inheritDoc}
    */
   public String getEnumerationName() {
+    if (enumerationName != null) {
+      return enumerationName;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IEnumerationPropertyDescriptor) getParentDescriptor())
+          .getEnumerationName();
+    }
     return enumerationName;
   }
 
@@ -73,6 +80,13 @@ public class BasicEnumerationPropertyDescriptor extends
    * @return the maxLength.
    */
   public Integer getMaxLength() {
+    if (maxLength != null) {
+      return maxLength;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IEnumerationPropertyDescriptor) getParentDescriptor())
+          .getMaxLength();
+    }
     return maxLength;
   }
 

@@ -11,7 +11,6 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
-import com.d2s.framework.model.entity.basic.BasicProxyEntityFactory;
 import com.d2s.framework.util.bean.IAccessorFactory;
 
 /**
@@ -46,8 +45,6 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    * @param extensionFactory
    *          The factory used to create entity extensions based on their
    *          classes.
-   * @param proxyEntityFactory
-   *          the entity factory used to clone entities in case.
    * @param applicationSession
    *          the current application session.
    */
@@ -56,10 +53,9 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
       IEntityCollectionFactory collectionFactory,
       IAccessorFactory accessorFactory,
       IEntityExtensionFactory extensionFactory,
-      BasicProxyEntityFactory proxyEntityFactory,
       IApplicationSession applicationSession) {
     super(entityDescriptor, collectionFactory, accessorFactory,
-        extensionFactory, proxyEntityFactory);
+        extensionFactory);
     this.applicationSession = applicationSession;
   }
 

@@ -22,7 +22,9 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
 public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     implements IPropertyDescriptor {
 
-  private boolean                           mandatory;
+  private IPropertyDescriptor               parentDescriptor;
+
+  private Boolean                           mandatory;
   private List<IPropertyIntegrityProcessor> integrityProcessors;
   private String                            delegateClassName;
   private Class                             delegateClass;
@@ -32,7 +34,13 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   public boolean isMandatory() {
-    return mandatory;
+    if (mandatory != null) {
+      return mandatory.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().isMandatory();
+    }
+    return false;
   }
 
   /**
@@ -42,13 +50,19 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    *          the mandatory to set.
    */
   public void setMandatory(boolean mandatory) {
-    this.mandatory = mandatory;
+    this.mandatory = new Boolean(mandatory);
   }
 
   /**
    * {@inheritDoc}
    */
   public List<IPropertyIntegrityProcessor> getIntegrityProcessors() {
+    if (integrityProcessors != null) {
+      return integrityProcessors;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getIntegrityProcessors();
+    }
     return integrityProcessors;
   }
 
@@ -68,9 +82,10 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public Class getDelegateClass() {
     if (delegateClass == null) {
-      if (delegateClassName != null) {
+      String className = getDelegateClassName();
+      if (className != null) {
         try {
-          delegateClass = Class.forName(delegateClassName);
+          delegateClass = Class.forName(className);
         } catch (ClassNotFoundException ex) {
           throw new NestedRuntimeException(ex);
         }
@@ -97,6 +112,12 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    *         property.
    */
   public String getDelegateClassName() {
+    if (delegateClassName != null) {
+      return delegateClassName;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getDelegateClassName();
+    }
     return delegateClassName;
   }
 
@@ -104,7 +125,41 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   public String getUnicityScope() {
+    if (unicityScope != null) {
+      return unicityScope;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getUnicityScope();
+    }
     return unicityScope;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getDescription() {
+    if (super.getDescription() != null) {
+      return super.getDescription();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getDescription();
+    }
+    return super.getDescription();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getName() {
+    if (super.getName() != null) {
+      return super.getName();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getName();
+    }
+    return super.getName();
   }
 
   /**
@@ -148,6 +203,32 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public boolean isQueryable() {
     return false;
+  }
+
+  /**
+   * Gets the parentDescriptor.
+   * 
+   * @return the parentDescriptor.
+   */
+  protected IPropertyDescriptor getParentDescriptor() {
+    return parentDescriptor;
+  }
+
+  /**
+   * Sets the parentDescriptor.
+   * 
+   * @param parentDescriptor
+   *          the parentDescriptor to set.
+   */
+  public void setParentDescriptor(IPropertyDescriptor parentDescriptor) {
+    this.parentDescriptor = parentDescriptor;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isDerived() {
+    return parentDescriptor != null;
   }
 
 }

@@ -27,6 +27,13 @@ public class BasicBinaryPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Integer getMaxLength() {
+    if (maxLength != null) {
+      return maxLength;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IBinaryPropertyDescriptor) getParentDescriptor())
+          .getMaxLength();
+    }
     return maxLength;
   }
 
@@ -51,6 +58,13 @@ public class BasicBinaryPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Map<String, List<String>> getFileFilter() {
+    if (fileFilter != null) {
+      return fileFilter;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IBinaryPropertyDescriptor) getParentDescriptor())
+          .getFileFilter();
+    }
     return fileFilter;
   }
 

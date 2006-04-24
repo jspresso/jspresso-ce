@@ -25,6 +25,13 @@ public class BasicReferencePropertyDescriptor extends
    * {@inheritDoc}
    */
   public IComponentDescriptor getReferencedDescriptor() {
+    if (referencedDescriptor != null) {
+      return referencedDescriptor;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IReferencePropertyDescriptor) getParentDescriptor())
+          .getReferencedDescriptor();
+    }
     return referencedDescriptor;
   }
 

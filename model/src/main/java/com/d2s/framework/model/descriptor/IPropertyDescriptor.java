@@ -44,6 +44,15 @@ public interface IPropertyDescriptor extends IModelDescriptor {
   Class getDelegateClass();
 
   /**
+   * Gets the <code>Class</code> name of the delegates used to compute the
+   * values of the property or <code>null</code> if this property is not a
+   * derived one.
+   * 
+   * @return The class of the extension delegates used to compute the property.
+   */
+  String getDelegateClassName();
+
+  /**
    * Gets the class of this property.
    * 
    * @return the property class.
@@ -70,4 +79,11 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * @return true if this kind of property descriptor is queryable.
    */
   boolean isQueryable();
+
+  /**
+   * Gets wether this descriptor is an overload of a parent one.
+   * 
+   * @return true if this descriptor is an overload of a parent one.
+   */
+  boolean isDerived();
 }

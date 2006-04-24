@@ -454,9 +454,16 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 </#macro>
 <@generateClassHeader componentDescriptor=componentDescriptor/>
 <#if componentDescriptor.declaredPropertyDescriptors?exists>
+  <#assign empty=true/>
   <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-    <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+    <#if !propertyDescriptor.derived>
+      <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+      <#assign empty=false/>
+    </#if>
   </#list>
+  <#if empty>
+  // THIS IS JUST A MARKER INTERFACE.
+  </#if>
 <#else>
   // THIS IS JUST A MARKER INTERFACE.
 </#if>

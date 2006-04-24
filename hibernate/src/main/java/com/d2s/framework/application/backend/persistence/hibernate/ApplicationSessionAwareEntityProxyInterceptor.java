@@ -177,4 +177,17 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     }
     return super.onLoad(entity, id, state, propertyNames, types);
   }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void onCollectionRecreate(Object collection, Serializable key) {
+    // TODO Auto-generated method stub
+    super.onCollectionRecreate(collection, key);
+  }
+  
+  
 }

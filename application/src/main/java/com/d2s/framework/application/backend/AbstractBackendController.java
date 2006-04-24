@@ -10,6 +10,7 @@ import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
 import com.d2s.framework.application.model.Module;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
@@ -151,6 +152,10 @@ public abstract class AbstractBackendController extends AbstractController
    *          the applicationSession to set.
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
+    if (!(applicationSession instanceof BasicApplicationSession)) {
+      throw new IllegalArgumentException(
+          "applicationSession must be a BasicApplicationSession.");
+    }
     this.applicationSession = applicationSession;
     linkSessionArtifacts();
   }
@@ -212,6 +217,8 @@ public abstract class AbstractBackendController extends AbstractController
     if (getApplicationSession() != null && getEntityFactory() != null) {
       ((ApplicationSessionAwareProxyEntityFactory) getEntityFactory())
           .setApplicationSession(getApplicationSession());
+      ((BasicApplicationSession) getApplicationSession())
+          .setEntityFactory(getEntityFactory());
     }
   }
 }

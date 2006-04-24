@@ -104,7 +104,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   protected InvocationHandler createEntityInvocationHandler(
       IEntityDescriptor entityDescriptor) {
     return new BasicEntityInvocationHandler(entityDescriptor,
-        entityCollectionFactory, accessorFactory, entityExtensionFactory, this);
+        entityCollectionFactory, accessorFactory, entityExtensionFactory);
   }
 
   /**
