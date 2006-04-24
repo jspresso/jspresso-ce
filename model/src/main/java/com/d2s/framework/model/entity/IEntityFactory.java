@@ -20,29 +20,36 @@ public interface IEntityFactory {
    * Creates a new entity instance based on the entity descriptor. The entity
    * will be initialized with any necessary starting state.
    * 
+   * @param <T>
+   *          the concrete class of the created entity.
    * @param entityContract
    *          the class of the entity to create.
    * @return the entity instance.
    */
-  IEntity createEntityInstance(Class entityContract);
+  <T extends IEntity> T createEntityInstance(Class<T> entityContract);
 
   /**
    * Creates a new entity instance based on the entity descriptor.
    * 
+   * @param <T>
+   *          the concrete class of the created entity.
    * @param entityContract
    *          the class of the entity to create.
    * @param id
    *          the identifier to set on the entity.
    * @return the entity instance.
    */
-  IEntity createEntityInstance(Class entityContract, Serializable id);
+  <T extends IEntity> T createEntityInstance(Class<T> entityContract,
+      Serializable id);
 
   /**
    * Creates a new query entity instance based on the entity descriptor.
    * 
+   * @param <T>
+   *          the concrete class of the created query entity.
    * @param entityContract
    *          the class of the entity to create.
    * @return the query entity instance.
    */
-  IQueryEntity createQueryEntityInstance(Class entityContract);
+  <T extends IQueryEntity> T createQueryEntityInstance(Class<T> entityContract);
 }

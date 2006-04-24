@@ -85,6 +85,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
    *          the action context.
    * @return the entity to add to the collection.
    */
+  @SuppressWarnings("unchecked")
   protected IEntity getNewEntity(Map<String, Object> context) {
     IComponentDescriptor elementDescriptor = (IComponentDescriptor) context
         .get(ActionContextConstants.ELEMENT_DESCRIPTOR);
@@ -94,7 +95,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
     }
 
     IEntity newEntity = getEntityFactory(context).createEntityInstance(
-        elementDescriptor.getComponentContract());
+        (Class<? extends IEntity>) elementDescriptor.getComponentContract());
     return newEntity;
   }
 }

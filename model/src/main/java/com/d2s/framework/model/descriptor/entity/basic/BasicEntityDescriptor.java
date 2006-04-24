@@ -5,6 +5,7 @@ package com.d2s.framework.model.descriptor.entity.basic;
 
 import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.entity.IEntity;
 
 /**
  * Default implementation of entity descriptors.
@@ -62,5 +63,14 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor implements
    */
   public void setPurelyAbstract(boolean purelyAbstract) {
     this.purelyAbstract = purelyAbstract;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public Class<? extends IEntity> getComponentContract() {
+    return (Class<? extends IEntity>) super.getComponentContract();
   }
 }

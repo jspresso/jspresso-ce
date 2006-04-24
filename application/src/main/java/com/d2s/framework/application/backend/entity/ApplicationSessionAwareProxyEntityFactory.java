@@ -32,8 +32,8 @@ public class ApplicationSessionAwareProxyEntityFactory extends
    * {@inheritDoc}
    */
   @Override
-  public IEntity createEntityInstance(Class entityContract) {
-    IEntity newEntity = super.createEntityInstance(entityContract);
+  public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
+    T newEntity = super.createEntityInstance(entityContract);
     applicationSession.registerEntity(newEntity, true);
     return newEntity;
   }

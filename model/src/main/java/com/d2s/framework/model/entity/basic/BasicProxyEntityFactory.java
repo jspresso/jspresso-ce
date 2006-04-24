@@ -44,9 +44,9 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   /**
    * {@inheritDoc}
    */
-  public IEntity createEntityInstance(Class entityContract) {
-    IEntity createdEntity = createEntityInstance(entityContract,
-        entityGUIDGenerator.generateGUID());
+  public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
+    T createdEntity = createEntityInstance(entityContract, entityGUIDGenerator
+        .generateGUID());
     for (IPropertyDescriptor propertyDescriptor : getEntityDescriptor(
         entityContract).getPropertyDescriptors()) {
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
@@ -65,12 +65,14 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   /**
    * {@inheritDoc}
    */
-  public IEntity createEntityInstance(Class entityContract, Serializable id) {
+  public <T extends IEntity> T createEntityInstance(Class<T> entityContract,
+      Serializable id) {
     return createEntityInstance(entityContract, id, null);
   }
 
-  private IEntity createEntityInstance(Class entityContract, Serializable id,
-      Class[] extraInterfaces) {
+  @SuppressWarnings("unchecked")
+  private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
+      Serializable id, Class[] extraInterfaces) {
     IEntityDescriptor entityDescriptor = getEntityDescriptor(entityContract);
     if (entityDescriptor.isPurelyAbstract()) {
       throw new EntityException(entityDescriptor.getName()
@@ -88,8 +90,8 @@ public class BasicProxyEntityFactory implements IEntityFactory,
       implementedClasses = new Class[1];
       implementedClasses[0] = entityDescriptor.getComponentContract();
     }
-    IEntity entity = (IEntity) Proxy.newProxyInstance(IEntity.class
-        .getClassLoader(), implementedClasses, entityHandler);
+    T entity = (T) Proxy.newProxyInstance(IEntity.class.getClassLoader(),
+        implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
   }
@@ -110,12 +112,13 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   /**
    * {@inheritDoc}
    */
-  public IQueryEntity createQueryEntityInstance(Class entityContract) {
+  @SuppressWarnings("unchecked")
+  public <T extends IQueryEntity> T createQueryEntityInstance(Class<T> entityContract) {
     IEntity entityDelegate = createEntityInstance(entityContract, null,
         new Class[] {IQueryEntity.class});
     QueryEntityInvocationHandler entityHandler = new QueryEntityInvocationHandler(
         entityDelegate);
-    return (IQueryEntity) Proxy.newProxyInstance(IQueryEntity.class
+    return (T) Proxy.newProxyInstance(IQueryEntity.class
         .getClassLoader(), entityDelegate.getClass().getInterfaces(),
         entityHandler);
   }

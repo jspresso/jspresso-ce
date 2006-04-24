@@ -901,7 +901,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    * 
    * @return the entity interface contract.
    */
-  public Class getEntityContract() {
+  public Class<? extends IEntity> getEntityContract() {
     return entityDescriptor.getComponentContract();
   }
 

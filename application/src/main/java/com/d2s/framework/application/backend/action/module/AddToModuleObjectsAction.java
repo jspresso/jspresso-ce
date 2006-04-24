@@ -35,6 +35,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
@@ -50,14 +51,15 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
           .getModuleObjects());
     }
     IEntity newEntity = getEntityFactory(context).createEntityInstance(
-        projectedComponentDescriptor.getComponentContract());
+        (Class<? extends IEntity>) projectedComponentDescriptor
+            .getComponentContract());
     projectedCollection.add(newEntity);
     module.setModuleObjects(projectedCollection);
 
     getModelConnector(context).setConnectorValue(projectedCollection);
 
-    context.put(ActionContextConstants.SELECTED_INDICES,
-        ConnectorHelper.getIndicesOf(getModelConnector(context), Collections
+    context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
+        .getIndicesOf(getModelConnector(context), Collections
             .singleton(newEntity)));
   }
 }

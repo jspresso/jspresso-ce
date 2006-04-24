@@ -40,11 +40,12 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unused")
+  @SuppressWarnings({"unused", "unchecked" })
   public Object instantiate(String entityName, EntityMode entityMode,
       Serializable id) {
     try {
-      return entityFactory.createEntityInstance(Class.forName(entityName), id);
+      return entityFactory.createEntityInstance(
+          (Class<? extends IEntity>) Class.forName(entityName), id);
     } catch (ClassNotFoundException ex) {
       throw new EntityException(ex);
     }
@@ -122,7 +123,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
     }
   }
 
-  
   /**
    * Sets the entityFactory.
    * 
