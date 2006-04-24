@@ -216,6 +216,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
   <#local elementName=elementType[elementType?last_index_of(".")+1..]/>
+  <#local isEntity=instanceof(componentDescriptor, "com.d2s.framework.model.descriptor.entity.IEntityDescriptor")/>
   <#if collectionType="java.util.List">
     <#local hibernateCollectionType="list"/>
   <#elseif collectionType="java.util.Set">
@@ -302,6 +303,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
      <#else>
    * @hibernate.key
    *           column = "${generateSQLName(reversePropertyName)}_ID"
+   <#if !isEntity>
+   *           foreign-key = "none"
+   </#if>
    * @hibernate.one-to-many
    *           class = "${elementType}"
      </#if>
