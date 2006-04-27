@@ -261,11 +261,11 @@
 				<artifactId>ulc-jnlp-client</artifactId>
 				<version>6.0.4</version>
 			</dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-servlet-server</artifactId>
-        <version>6.0.4</version>
-      </dependency>
+			<dependency>
+				<groupId>ulc</groupId>
+				<artifactId>ulc-servlet-server</artifactId>
+				<version>6.0.4</version>
+			</dependency>
 			<dependency>
 				<groupId>ulc</groupId>
 				<artifactId>ulc-servlet-client</artifactId>
@@ -281,11 +281,11 @@
 				<artifactId>ulc-deployment-key</artifactId>
 				<version>6.0.4</version>
 			</dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>3.8.1</version>
-      </dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>3.8.1</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -327,9 +327,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <linksource>false</linksource>
-        </configuration>
+				<configuration>
+					<linksource>false</linksource>
+				</configuration>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -339,24 +339,21 @@
 					</execution>
 				</executions>
 			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<executions>
 					<execution>
-					  <inherited>true</inherited>
 						<id>obfuscate</id>
 						<phase>package</phase>
 						<configuration>
 							<tasks>
-								<taskdef name="proguard" classname="proguard.ant.ProGuardTask" />
+								<taskdef resource="proguard/ant/task.properties" />
 								<taskdef resource="net/sf/antcontrib/antlib.xml" />
 								<if>
 									<equals arg1="${project.packaging}" arg2="jar" />
 									<then>
-										<proguard note="false" verbose="false">
+										<proguard note="false" verbose="false" renamesourcefileattribute="SourceFile">
 											<injar file="${project.artifact.file}" />
 											<outjar
 												file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}" />
@@ -369,7 +366,9 @@
 											<keepattribute name="SourceFile" />
 											<keepattribute name="LineNumberTable" />
 											<keepattribute name="Deprecated" />
+											<keepattribute name="Signature" />
 											<keepattribute name="*Annotation*" />
+											<keepattribute name="EnclosingMethod" />
 
 											<!-- Preserve all public classes, and their public and protected fields
 												and methods. -->
@@ -407,7 +406,7 @@
 												compatible, please refer to the manual. -->
 
 											<keepclassmembers implements="java.io.Serializable">
-												<field access="final" type="long" name="serialVersionUID" />
+												<field access="static final" type="long" name="serialVersionUID" />
 												<method access="private" type="void" name="writeObject"
 													parameters="java.io.ObjectOutputStream" />
 												<method access="private" type="void" name="readObject"
@@ -419,6 +418,10 @@
 											<!-- Your application may contain more items that need to be preserved;
 												typically classes that are dynamically created using Class.forName -->
 										</proguard>
+										<move
+											file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}"
+											tofile="${project.artifact.file}" />
+										<signjar jar="${project.artifact.file}" alias="d2s" storepass="design2see" />
 									</then>
 								</if>
 							</tasks>
@@ -432,7 +435,7 @@
 					<dependency>
 						<groupId>net.sf.proguard</groupId>
 						<artifactId>proguard</artifactId>
-						<version>3.4</version>
+						<version>3.5</version>
 					</dependency>
 					<dependency>
 						<groupId>ant-contrib</groupId>
@@ -441,8 +444,7 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			</plugins>
-		</pluginManagement>
+		</plugins>
 	</build>
 	<reporting>
 		<plugins>
