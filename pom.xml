@@ -421,7 +421,6 @@
 										<move
 											file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}"
 											tofile="${project.artifact.file}" />
-										<signjar jar="${project.artifact.file}" alias="d2s" storepass="design2see" />
 									</then>
 								</if>
 							</tasks>
