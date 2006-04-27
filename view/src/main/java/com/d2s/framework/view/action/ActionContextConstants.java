@@ -42,11 +42,6 @@ public final class ActionContextConstants {
   public static final String ELEMENT_DESCRIPTOR             = "ELEMENT_DESCRIPTOR";
 
   /**
-   * The root connector of the application controller.
-   */
-  public static final String MODEL_CONNECTOR                = "MODEL_CONNECTOR";
-
-  /**
    * The locale the action has to use to execute.
    */
   public static final String LOCALE                         = "LOCALE";
@@ -60,21 +55,6 @@ public final class ActionContextConstants {
    * The module view connector the action was triggered on.
    */
   public static final String MODULE_VIEW_CONNECTOR          = "MODULE_VIEW_CONNECTOR";
-
-  /**
-   * The module model connector the action was triggered on.
-   */
-  public static final String MODULE_MODEL_CONNECTOR         = "MODULE_MODEL_CONNECTOR";
-
-  /**
-   * The selected indices in the parent module.
-   */
-  public static final String PARENT_MODULE_SELECTED_INDICES = "PARENT_MODULE_SELECTED_INDICES";
-
-  /**
-   * The parent module view connector the action was triggered on.
-   */
-  public static final String PARENT_MODULE_VIEW_CONNECTOR   = "PARENT_MODULE_VIEW_CONNECTOR";
 
   /**
    * An arbitrary action result.

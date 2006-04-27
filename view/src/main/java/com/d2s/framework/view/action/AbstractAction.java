@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.d2s.framework.binding.ICollectionConnectorProvider;
+import com.d2s.framework.binding.ICompositeValueConnector;
+
 /**
  * Base class for all application actions. Takes care of the context reference
  * as well as the input context keys reference.
@@ -32,19 +35,6 @@ public abstract class AbstractAction implements IAction {
    */
   public Locale getLocale(Map<String, Object> context) {
     return (Locale) context.get(ActionContextConstants.LOCALE);
-  }
-
-  /**
-   * Gets the parent module selected indices from the context. it uses the
-   * <code>ActionContextConstants.PARENT_MODULE_SELECTED_INDICES</code> key.
-   * 
-   * @param context
-   *          the action context.
-   * @return the selected indices if any.
-   */
-  public int[] getParentModuleSelectedIndices(Map<String, Object> context) {
-    return (int[]) context
-        .get(ActionContextConstants.PARENT_MODULE_SELECTED_INDICES);
   }
 
   /**
@@ -81,5 +71,19 @@ public abstract class AbstractAction implements IAction {
       initialContext = new HashMap<String, Object>();
     }
     initialContext.put(key, value);
+  }
+
+  /**
+   * Gets the parent module selected indices from the context. it uses the
+   * <code>ActionContextConstants.PARENT_MODULE_SELECTED_INDICES</code> key.
+   * 
+   * @param context
+   *          the action context.
+   * @return the selected indices if any.
+   */
+  public int[] getParentModuleSelectedIndices(Map<String, Object> context) {
+    return ((ICollectionConnectorProvider) ((ICompositeValueConnector) context
+        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR))
+        .getParentConnector()).getCollectionConnector().getSelectedIndices();
   }
 }

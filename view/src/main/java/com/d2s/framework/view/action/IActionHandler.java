@@ -31,4 +31,20 @@ public interface IActionHandler {
    */
   void execute(IAction action, Map<String, Object> context);
 
+  /**
+   * Retrieves the initial action context from the controller. This context is
+   * passed to the action chain and contains application-wide context key-value
+   * pairs.
+   * 
+   * @return the map representing the initial context provided by this
+   *         controller.
+   */
+  Map<String, Object> getInitialActionContext();
+
+  /**
+   * Creates an empty action context.
+   * 
+   * @return an empty action context.
+   */
+  Map<String, Object> createEmptyContext();
 }

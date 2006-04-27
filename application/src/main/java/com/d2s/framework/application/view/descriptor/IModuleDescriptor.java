@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.view.descriptor;
 
+import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 
 /**
@@ -15,5 +16,11 @@ import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public interface IModuleDescriptor extends ITreeViewDescriptor {
-  // Just a marker as of now.
+  
+  /**
+   * Gets the action which is executed when the module is launched.
+   * 
+   * @return the action which is executed when the module is launched.
+   */
+  IAction getStartupAction();
 }

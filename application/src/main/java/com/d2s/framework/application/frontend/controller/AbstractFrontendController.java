@@ -18,7 +18,6 @@ import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorSelectionListener;
 import com.d2s.framework.binding.IConnectorSelector;
@@ -217,22 +216,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
     ICompositeValueConnector selectedModuleViewConnector = selectedModuleConnectors
         .get(getSelectedModuleId());
-    initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
-        selectedModuleViewConnector);
     if (selectedModuleViewConnector != null) {
-      if (selectedModuleViewConnector.getParentConnector() != null) {
-        initialActionContext.put(
-            ActionContextConstants.PARENT_MODULE_SELECTED_INDICES,
-            ((ICollectionConnectorProvider) selectedModuleViewConnector
-                .getParentConnector()).getCollectionConnector()
-                .getSelectedIndices());
-        initialActionContext.put(
-            ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR,
-            selectedModuleViewConnector.getParentConnector()
-                .getParentConnector());
-      }
-      initialActionContext.put(ActionContextConstants.MODULE_MODEL_CONNECTOR,
-          selectedModuleViewConnector.getModelConnector());
+      initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
+          selectedModuleViewConnector);
     }
     return initialActionContext;
   }

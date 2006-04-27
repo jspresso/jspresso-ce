@@ -163,6 +163,12 @@ public class DefaultSwingController extends
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(),
           getBackendController().getModuleConnector(moduleId));
+      if (moduleDescriptor.getStartupAction() != null) {
+        Map<String, Object> context = createEmptyContext();
+        context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
+            moduleView.getConnector());
+        execute(moduleDescriptor.getStartupAction(), context);
+      }
       moduleInternalFrame.pack();
     }
     moduleInternalFrame.setVisible(true);

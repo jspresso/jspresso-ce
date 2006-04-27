@@ -3,8 +3,8 @@
  */
 package com.d2s.framework.view.ulc;
 
-import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.swing.KeyStroke;
 
@@ -117,13 +117,11 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
     @Override
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
-        HashMap<String, Object> initialActionContext = new HashMap<String, Object>();
+        Map<String, Object> initialActionContext = actionHandler.createEmptyContext();
         initialActionContext.put(ActionContextConstants.SOURCE_COMPONENT,
             sourceComponent);
         initialActionContext.put(ActionContextConstants.VIEW_CONNECTOR,
             viewConnector);
-        initialActionContext.put(ActionContextConstants.MODEL_CONNECTOR,
-            viewConnector.getModelConnector());
         if (viewConnector instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) viewConnector)
                 .getCollectionConnector() != null) {

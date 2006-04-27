@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application;
 
-import java.util.Map;
-
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.view.action.IActionHandler;
@@ -21,16 +19,6 @@ import com.d2s.framework.view.action.IActionHandler;
  * @author Vincent Vandenschrick
  */
 public interface IController extends IActionHandler {
-
-  /**
-   * Retrieves the initial action context from the controller. This context is
-   * passed to the action chain and contains application-wide context key-value
-   * pairs.
-   * 
-   * @return the map representing the initial context provided by this
-   *         controller.
-   */
-  Map<String, Object> getInitialActionContext();
 
   /**
    * Merges an entity in the application session.

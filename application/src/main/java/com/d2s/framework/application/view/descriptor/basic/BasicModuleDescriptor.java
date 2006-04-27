@@ -4,6 +4,7 @@
 package com.d2s.framework.application.view.descriptor.basic;
 
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
 
 /**
@@ -17,5 +18,23 @@ import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
  */
 public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
     IModuleDescriptor {
-  // Just a marker as of now.
+  
+    private IAction startupAction;
+
+    /**
+     * {@inheritDoc}
+     */
+    public IAction getStartupAction() {
+      return startupAction;
+    }
+
+    
+    /**
+     * Sets the startupAction.
+     * 
+     * @param startupAction the startupAction to set.
+     */
+    public void setStartupAction(IAction startupAction) {
+      this.startupAction = startupAction;
+    }
 }

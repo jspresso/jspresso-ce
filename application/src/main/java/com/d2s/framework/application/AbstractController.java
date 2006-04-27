@@ -3,6 +3,9 @@
  */
 package com.d2s.framework.application;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Base class for controllers. It holds a reference to the root connector.
  * <p>
@@ -14,24 +17,11 @@ package com.d2s.framework.application;
  */
 public abstract class AbstractController implements IController {
 
-  // private IValueConnector rootValueConnector;
-  //
-  // /**
-  // * Gets the rootValueConnector.
-  // *
-  // * @return the rootValueConnector.
-  // */
-  // public IValueConnector getRootValueConnector() {
-  // return rootValueConnector;
-  // }
-  //
-  // /**
-  // * Sets the rootValueConnector.
-  // *
-  // * @param rootValueConnector
-  // * the rootValueConnector to set.
-  // */
-  // protected void setRootValueConnector(IValueConnector rootValueConnector) {
-  // this.rootValueConnector = rootValueConnector;
-  // }
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, Object> createEmptyContext() {
+    return new HashMap<String, Object>();
+  }
+
 }

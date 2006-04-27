@@ -22,6 +22,7 @@ import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.ActionContextConstants;
 import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
@@ -215,6 +216,14 @@ public class DefaultUlcController extends
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(),
           getBackendController().getModuleConnector(moduleId));
+      if (moduleDescriptor.getStartupAction() != null) {
+        if (moduleDescriptor.getStartupAction() != null) {
+          Map<String, Object> context = createEmptyContext();
+          context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
+              moduleView.getConnector());
+          execute(moduleDescriptor.getStartupAction(), context);
+        }
+      }
       moduleInternalFrame.pack();
     }
     moduleInternalFrame.setVisible(true);

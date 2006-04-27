@@ -174,8 +174,9 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   public ICompositeValueConnector getParentModuleConnector(
       Map<String, Object> context) {
-    return (ICompositeValueConnector) context
-        .get(ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR);
+    return ((ICompositeValueConnector) context
+        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR))
+        .getParentConnector().getParentConnector();
   }
 
   /**
@@ -212,8 +213,10 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * @return the frontend controller.
    */
   @SuppressWarnings("unchecked")
-  protected IFrontendController<E, F, G> getController(Map<String, Object> context) {
-    return (IFrontendController<E, F, G>) context.get(ActionContextConstants.FRONT_CONTROLLER);
+  protected IFrontendController<E, F, G> getController(
+      Map<String, Object> context) {
+    return (IFrontendController<E, F, G>) context
+        .get(ActionContextConstants.FRONT_CONTROLLER);
   }
 
   /**

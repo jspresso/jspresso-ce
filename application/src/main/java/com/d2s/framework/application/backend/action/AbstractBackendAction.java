@@ -53,8 +53,8 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * @return the value connector this model action was triggered on.
    */
   public IValueConnector getModelConnector(Map<String, Object> context) {
-    return (IValueConnector) context
-        .get(ActionContextConstants.MODEL_CONNECTOR);
+    return ((IValueConnector) context
+        .get(ActionContextConstants.VIEW_CONNECTOR)).getModelConnector();
   }
 
   /**
@@ -87,8 +87,8 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * @return the module model connector this action executes on.
    */
   public ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
-    return (ICompositeValueConnector) context
-        .get(ActionContextConstants.MODULE_MODEL_CONNECTOR);
+    return (ICompositeValueConnector) ((ICompositeValueConnector) context
+        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR)).getModelConnector();
   }
 
   /**
@@ -100,7 +100,8 @@ public abstract class AbstractBackendAction extends AbstractAction {
    */
   @SuppressWarnings("unchecked")
   protected IBackendController getController(Map<String, Object> context) {
-    return (IBackendController) context.get(ActionContextConstants.BACK_CONTROLLER);
+    return (IBackendController) context
+        .get(ActionContextConstants.BACK_CONTROLLER);
   }
 
   /**
@@ -132,7 +133,8 @@ public abstract class AbstractBackendAction extends AbstractAction {
    *          the action context.
    * @return the beanConnectorFactory.
    */
-  protected IBeanConnectorFactory getBeanConnectorFactory(Map<String, Object> context) {
+  protected IBeanConnectorFactory getBeanConnectorFactory(
+      Map<String, Object> context) {
     return getController(context).getBeanConnectorFactory();
   }
 
