@@ -67,7 +67,9 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
       }
       // the entity is dirty and is going to be flushed.
       // To workaround a bug, the update lifecycle hook is handeled here.
-      if (((IEntity) entity).isPersistent() && ((IEntity) entity).onUpdate(getEntityFactory())) {
+      if (((IEntity) entity).isPersistent()
+          && /* ((IEntity) entity).onUpdate(getEntityFactory()) */onFlushDirty(
+              entity, id, currentState, previousState, propertyNames, types)) {
         dirtyProperties = applicationSession
             .getDirtyProperties((IEntity) entity);
       }
@@ -188,6 +190,5 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     // TODO Auto-generated method stub
     super.onCollectionRecreate(collection, key);
   }
-  
-  
+
 }
