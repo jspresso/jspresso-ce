@@ -14,6 +14,10 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.design2see</groupId>
+			<artifactId>d2s-action</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.design2see</groupId>
 			<artifactId>d2s-binding</artifactId>
 		</dependency>
 		<dependency>
