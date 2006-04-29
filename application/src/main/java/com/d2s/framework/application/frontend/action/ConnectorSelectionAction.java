@@ -5,9 +5,9 @@ package com.d2s.framework.application.frontend.action;
 
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * A simple action which selects indices on ath view connector.

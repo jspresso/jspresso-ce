@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.application.view.descriptor;
 
-import com.d2s.framework.view.action.IAction;
+import com.d2s.framework.action.IAction;
 import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 
 /**

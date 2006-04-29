@@ -9,9 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.ActionException;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.ActionException;
 
 /**
  * Default handler implementation to deal with setting binary properties using

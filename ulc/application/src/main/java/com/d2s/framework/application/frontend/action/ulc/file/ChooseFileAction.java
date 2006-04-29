@@ -7,10 +7,10 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 import com.d2s.framework.application.frontend.file.IFileOpenCallback;
 import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.view.action.IActionHandler;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.util.serializable.IFileLoadHandler;
 import com.ulcjava.base.shared.FileChooserConfig;

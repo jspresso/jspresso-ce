@@ -5,8 +5,8 @@ package com.d2s.framework.application.frontend.action;
 
 import java.util.Map;
 
-import com.d2s.framework.view.action.IAction;
-import com.d2s.framework.view.action.IActionHandler;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
 
 /**
  * An simple frontend swing action which holds a reference on a chained next

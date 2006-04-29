@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.action.CreateQueryEntityAction;
 import com.d2s.framework.application.backend.session.MergeMode;
@@ -21,8 +23,6 @@ import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.view.IView;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
 

@@ -5,10 +5,10 @@ package com.d2s.framework.application.frontend.action.std;
 
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractFrontendAction;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * Sets the object registered as ACTION_RESULT in the action context as the

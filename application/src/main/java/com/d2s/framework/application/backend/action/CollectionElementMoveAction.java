@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * An action used in list components to move a detail up and down.

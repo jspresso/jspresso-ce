@@ -5,10 +5,10 @@ package com.d2s.framework.application.frontend.action.ulc.file;
 
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.file.ConnectorValueSetterCallback;
 import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * Lets the user browse the local file system and choose a file to update the

@@ -3,8 +3,8 @@
  */
 package com.d2s.framework.application.view.descriptor.basic;
 
+import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
-import com.d2s.framework.view.action.IAction;
 import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
 
 /**

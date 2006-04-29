@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.view.action;
 
+import com.d2s.framework.action.IAction;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
 
 /**

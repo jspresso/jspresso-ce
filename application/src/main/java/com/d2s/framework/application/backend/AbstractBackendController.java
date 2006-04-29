@@ -6,6 +6,8 @@ package com.d2s.framework.application.backend;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory;
 import com.d2s.framework.application.backend.session.IApplicationSession;
@@ -22,8 +24,6 @@ import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.util.bean.IAccessorFactory;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.IAction;
 
 /**
  * Base class for backend application controllers. It provides the implementor

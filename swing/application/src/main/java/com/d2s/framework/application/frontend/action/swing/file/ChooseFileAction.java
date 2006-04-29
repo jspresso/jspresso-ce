@@ -15,10 +15,10 @@ import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
 import com.d2s.framework.application.frontend.file.IFileOpenCallback;
 import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * Initiates a file choosing action. Then the file content is passed as a byte

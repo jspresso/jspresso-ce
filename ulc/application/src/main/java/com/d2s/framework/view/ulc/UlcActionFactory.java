@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.swing.KeyStroke;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
@@ -15,8 +17,6 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.IActionHandler;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCComponent;
@@ -63,7 +63,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
     private static final long                     serialVersionUID = 5819377672533326496L;
 
-    private com.d2s.framework.view.action.IAction action;
+    private com.d2s.framework.action.IAction action;
     private IActionHandler                        actionHandler;
     private ULCComponent                          sourceComponent;
     private IModelDescriptor                      modelDescriptor;

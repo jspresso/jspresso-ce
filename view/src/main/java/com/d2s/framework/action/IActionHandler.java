@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.view.action;
+package com.d2s.framework.action;
 
 import java.util.Map;
 

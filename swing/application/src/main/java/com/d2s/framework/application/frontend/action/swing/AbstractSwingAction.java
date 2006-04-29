@@ -9,8 +9,8 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
-import com.d2s.framework.view.action.ActionContextConstants;
 
 /**
  * This class serves as base class for swing actions. It provides accessors on

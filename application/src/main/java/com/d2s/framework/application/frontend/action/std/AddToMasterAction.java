@@ -6,10 +6,10 @@ package com.d2s.framework.application.frontend.action.std;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ActionWrapper;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
-import com.d2s.framework.view.action.ActionContextConstants;
-import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * Creates and adds an entity to the selected master detail collection.

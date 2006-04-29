@@ -6,11 +6,11 @@ package com.d2s.framework.application.backend.action;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionException;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.util.bean.ICollectionAccessor;
-import com.d2s.framework.view.action.ActionException;
-import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * An action used in master/detail views to remove selected details from a

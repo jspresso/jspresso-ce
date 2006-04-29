@@ -5,9 +5,9 @@ package com.d2s.framework.application.backend.action;
 
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
-import com.d2s.framework.view.action.ActionContextConstants;
 
 /**
  * Base class for backend actions acting on collections.

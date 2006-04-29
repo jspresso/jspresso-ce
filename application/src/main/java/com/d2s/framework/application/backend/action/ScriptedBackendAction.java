@@ -5,9 +5,9 @@ package com.d2s.framework.application.backend.action;
 
 import java.util.Map;
 
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.util.scripting.IScriptHandler;
 import com.d2s.framework.util.scripting.ScriptMixin;
-import com.d2s.framework.view.action.IActionHandler;
 
 /**
  * A scripted backend action.
