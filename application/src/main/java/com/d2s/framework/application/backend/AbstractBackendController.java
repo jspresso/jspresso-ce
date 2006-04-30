@@ -221,4 +221,12 @@ public abstract class AbstractBackendController extends AbstractController
           .setEntityFactory(getEntityFactory());
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  public void handleException(Throwable ex, Map<String, Object> context) {
+    // NO-OP
+  }
 }

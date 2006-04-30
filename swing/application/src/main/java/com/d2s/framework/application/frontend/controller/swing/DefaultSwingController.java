@@ -12,6 +12,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -31,6 +33,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameAdapter;
@@ -165,8 +168,8 @@ public class DefaultSwingController extends
           getBackendController().getModuleConnector(moduleId));
       if (moduleDescriptor.getStartupAction() != null) {
         Map<String, Object> context = createEmptyContext();
-        context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
-            moduleView.getConnector());
+        context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR, moduleView
+            .getConnector());
         execute(moduleDescriptor.getStartupAction(), context);
       }
       moduleInternalFrame.pack();
@@ -458,5 +461,18 @@ public class DefaultSwingController extends
       }
       waitTimer.stopTimer();
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void handleException(Throwable ex, Map<String, Object> context) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ex.printStackTrace(new PrintStream(baos));
+    JOptionPane.showInternalMessageDialog(SwingUtil
+        .getWindowOrInternalFrame((Component) context
+            .get(ActionContextConstants.SOURCE_COMPONENT)), ex
+        .getLocalizedMessage(), getLabelTranslator().getTranslation("ERROR",
+        getLocale()), JOptionPane.ERROR_MESSAGE);
   }
 }

@@ -3,7 +3,9 @@
  */
 package com.d2s.framework.application.frontend.controller.ulc;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -27,6 +29,7 @@ import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IAction;
+import com.ulcjava.base.application.ULCAlert;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
 import com.ulcjava.base.application.ULCFrame;
@@ -35,6 +38,7 @@ import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
 import com.ulcjava.base.application.ULCPollingTimer;
+import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
@@ -219,8 +223,8 @@ public class DefaultUlcController extends
       if (moduleDescriptor.getStartupAction() != null) {
         if (moduleDescriptor.getStartupAction() != null) {
           Map<String, Object> context = createEmptyContext();
-          context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
-              moduleView.getConnector());
+          context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR, moduleView
+              .getConnector());
           execute(moduleDescriptor.getStartupAction(), context);
         }
       }
@@ -376,5 +380,19 @@ public class DefaultUlcController extends
     internalFrame.getContentPane().add(view.getPeer());
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void handleException(Throwable ex, Map<String, Object> context) {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    ex.printStackTrace(new PrintStream(baos));
+    ULCAlert alert = new ULCAlert(UlcUtilities.getRoot((ULCComponent) context
+        .get(ActionContextConstants.SOURCE_COMPONENT)), getLabelTranslator()
+        .getTranslation("ERROR", getLocale()), ex.getLocalizedMessage(),
+        getLabelTranslator().getTranslation("OK_OPTION", getLocale()));
+    alert.setMessageType(ULCAlert.ERROR_MESSAGE);
+    alert.show();
   }
 }

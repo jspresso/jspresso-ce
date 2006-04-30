@@ -117,27 +117,31 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
     @Override
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
-        Map<String, Object> initialActionContext = actionHandler.createEmptyContext();
-        initialActionContext.put(ActionContextConstants.SOURCE_COMPONENT,
+        Map<String, Object> actionContext = actionHandler.createEmptyContext();
+        actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
             sourceComponent);
-        initialActionContext.put(ActionContextConstants.VIEW_CONNECTOR,
+        actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
             viewConnector);
         if (viewConnector instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) viewConnector)
                 .getCollectionConnector() != null) {
-          initialActionContext.put(ActionContextConstants.SELECTED_INDICES,
+          actionContext.put(ActionContextConstants.SELECTED_INDICES,
               ((ICollectionConnectorProvider) viewConnector)
                   .getCollectionConnector().getSelectedIndices());
         }
-        initialActionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
+        actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
             modelDescriptor);
-        initialActionContext.put(ActionContextConstants.LOCALE, locale);
-        initialActionContext.put(ActionContextConstants.ACTION_PARAM, e
+        actionContext.put(ActionContextConstants.LOCALE, locale);
+        actionContext.put(ActionContextConstants.ACTION_PARAM, e
             .getActionCommand());
         if (action.getInitialContext() != null) {
-          initialActionContext.putAll(action.getInitialContext());
+          actionContext.putAll(action.getInitialContext());
         }
-        actionHandler.execute(action, initialActionContext);
+        try {
+          actionHandler.execute(action, actionContext);
+        } catch (Throwable ex) {
+          actionHandler.handleException(ex, actionContext);
+        }
       }
     }
 

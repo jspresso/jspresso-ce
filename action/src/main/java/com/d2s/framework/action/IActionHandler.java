@@ -16,7 +16,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IActionHandler {
+public interface IActionHandler extends IExceptionHandler {
 
   /**
    * Executes an action. Implementors should delegate the execution to the
@@ -47,4 +47,4 @@ public interface IActionHandler {
    * @return an empty action context.
    */
   Map<String, Object> createEmptyContext();
-}
+  }
