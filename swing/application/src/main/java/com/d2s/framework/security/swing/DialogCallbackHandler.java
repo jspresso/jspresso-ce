@@ -29,9 +29,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
+import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.view.IIconFactory;
 
@@ -45,33 +45,23 @@ import com.d2s.framework.view.IIconFactory;
  */
 public class DialogCallbackHandler implements CallbackHandler {
 
-  private Component           parentComponent;
-  private IIconFactory<Icon>  iconFactory;
-  private static final int    DEFAULT_FIELD_LENGTH = 32;
-  private static final Insets DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
+  private Component            parentComponent;
+  private IIconFactory<Icon>   iconFactory;
+  private static final int     DEFAULT_FIELD_LENGTH = 32;
+  private static final Insets  DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
 
-  private Locale              locale;
-
-  private String              okYesIconImageURL;
-  private String              noIconImageURL;
-  private String              cancelIconImageURL;
-
-  private String              infoIconImageURL;
-  private String              warningIconImageURL;
-  private String              errorIconImageURL;
+  private Locale               locale;
+  private ITranslationProvider labelTranslator;
 
   private Icon getIcon(TextOutputCallback callback)
       throws UnsupportedCallbackException {
     switch (callback.getMessageType()) {
       case TextOutputCallback.INFORMATION:
-        return iconFactory.getIcon(infoIconImageURL,
-            IIconFactory.SMALL_ICON_SIZE);
+        return iconFactory.getInfoIcon(IIconFactory.SMALL_ICON_SIZE);
       case TextOutputCallback.WARNING:
-        return iconFactory.getIcon(warningIconImageURL,
-            IIconFactory.SMALL_ICON_SIZE);
+        return iconFactory.getWarningIcon(IIconFactory.SMALL_ICON_SIZE);
       case TextOutputCallback.ERROR:
-        return iconFactory.getIcon(errorIconImageURL,
-            IIconFactory.SMALL_ICON_SIZE);
+        return iconFactory.getErrorIcon(IIconFactory.SMALL_ICON_SIZE);
       default:
         throw new UnsupportedCallbackException(callback,
             "Unrecognized message type");
@@ -229,38 +219,31 @@ public class DialogCallbackHandler implements CallbackHandler {
       switch (confirmationOptionType) {
         case ConfirmationCallback.YES_NO_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, UIManager.getString(
-                  "OptionPane.yesButtonText", locale), proceedActions),
-              constraints);
+              ConfirmationCallback.YES, labelTranslator.getTranslation("YES",
+                  locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.NO, UIManager.getString(
-                  "OptionPane.noButtonText", locale), proceedActions),
-              constraints);
+              ConfirmationCallback.NO, labelTranslator.getTranslation("NO",
+                  locale), proceedActions), constraints);
           break;
         case ConfirmationCallback.YES_NO_CANCEL_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, UIManager.getString(
-                  "OptionPane.yesButtonText", locale), proceedActions),
-              constraints);
+              ConfirmationCallback.YES, labelTranslator.getTranslation("YES",
+                  locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.NO, UIManager.getString(
-                  "OptionPane.noButtonText", locale), proceedActions),
-              constraints);
+              ConfirmationCallback.NO, labelTranslator.getTranslation("NO",
+                  locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.CANCEL, UIManager.getString(
-                  "OptionPane.cancelButtonText", locale), proceedActions),
-              constraints);
+              ConfirmationCallback.CANCEL, labelTranslator.getTranslation(
+                  "CANCEL", locale), proceedActions), constraints);
           break;
         case ConfirmationCallback.OK_CANCEL_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.OK, UIManager.getString(
-                  "OptionPane.okButtonText", locale), proceedActions),
-              constraints);
+              ConfirmationCallback.OK, labelTranslator.getTranslation("OK",
+                  locale), proceedActions), constraints);
           if (hasInput) {
             optionPanel.add(createOptionButton(callbackDialog, cc,
-                ConfirmationCallback.CANCEL, UIManager.getString(
-                    "OptionPane.cancelButtonText", locale), proceedActions),
-                constraints);
+                ConfirmationCallback.CANCEL, labelTranslator.getTranslation(
+                    "CANCEL", locale), proceedActions), constraints);
           }
           break;
         default:
@@ -352,8 +335,8 @@ public class DialogCallbackHandler implements CallbackHandler {
       final List<ActionListener> proceedActions) {
     JButton optionButton = new JButton(text);
     if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
-      optionButton.setIcon(iconFactory.getIcon(okYesIconImageURL,
-          IIconFactory.SMALL_ICON_SIZE));
+      optionButton.setIcon(iconFactory
+          .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
       optionButton.addActionListener(new ActionListener() {
 
         public void actionPerformed(ActionEvent e) {
@@ -366,11 +349,11 @@ public class DialogCallbackHandler implements CallbackHandler {
       });
     } else {
       if (option == ConfirmationCallback.NO) {
-        optionButton.setIcon(iconFactory.getIcon(noIconImageURL,
-            IIconFactory.SMALL_ICON_SIZE));
+        optionButton.setIcon(iconFactory
+            .getNoIcon(IIconFactory.SMALL_ICON_SIZE));
       } else if (option == ConfirmationCallback.CANCEL) {
-        optionButton.setIcon(iconFactory.getIcon(cancelIconImageURL,
-            IIconFactory.SMALL_ICON_SIZE));
+        optionButton.setIcon(iconFactory
+            .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
       }
       optionButton.addActionListener(new ActionListener() {
 
@@ -388,36 +371,6 @@ public class DialogCallbackHandler implements CallbackHandler {
   }
 
   /**
-   * Sets the errorIconImageURL.
-   * 
-   * @param errorIconImageURL
-   *          the errorIconImageURL to set.
-   */
-  public void setErrorIconImageURL(String errorIconImageURL) {
-    this.errorIconImageURL = errorIconImageURL;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<Icon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the infoIconImageURL.
-   * 
-   * @param infoIconImageURL
-   *          the infoIconImageURL to set.
-   */
-  public void setInfoIconImageURL(String infoIconImageURL) {
-    this.infoIconImageURL = infoIconImageURL;
-  }
-
-  /**
    * Sets the locale.
    * 
    * @param locale
@@ -425,16 +378,6 @@ public class DialogCallbackHandler implements CallbackHandler {
    */
   public void setLocale(Locale locale) {
     this.locale = locale;
-  }
-
-  /**
-   * Sets the warningIconImageURL.
-   * 
-   * @param warningIconImageURL
-   *          the warningIconImageURL to set.
-   */
-  public void setWarningIconImageURL(String warningIconImageURL) {
-    this.warningIconImageURL = warningIconImageURL;
   }
 
   /**
@@ -448,32 +391,22 @@ public class DialogCallbackHandler implements CallbackHandler {
   }
 
   /**
-   * Sets the cancelIconImageURL.
+   * Sets the iconFactory.
    * 
-   * @param cancelIconImageURL
-   *          the cancelIconImageURL to set.
+   * @param iconFactory
+   *          the iconFactory to set.
    */
-  public void setCancelIconImageURL(String cancelIconImageURL) {
-    this.cancelIconImageURL = cancelIconImageURL;
+  public void setIconFactory(IIconFactory<Icon> iconFactory) {
+    this.iconFactory = iconFactory;
   }
 
+  
   /**
-   * Sets the noIconImageURL.
+   * Sets the labelTranslator.
    * 
-   * @param noIconImageURL
-   *          the noIconImageURL to set.
+   * @param labelTranslator the labelTranslator to set.
    */
-  public void setNoIconImageURL(String noIconImageURL) {
-    this.noIconImageURL = noIconImageURL;
-  }
-
-  /**
-   * Sets the okYesIconImageURL.
-   * 
-   * @param okYesIconImageURL
-   *          the okYesIconImageURL to set.
-   */
-  public void setOkYesIconImageURL(String okYesIconImageURL) {
-    this.okYesIconImageURL = okYesIconImageURL;
+  public void setLabelTranslator(ITranslationProvider labelTranslator) {
+    this.labelTranslator = labelTranslator;
   }
 }

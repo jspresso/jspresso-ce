@@ -46,4 +46,65 @@ public interface IIconFactory<E> {
    * @return the constructed icon.
    */
   E getIcon(String urlSpec, Dimension iconSize);
+
+  /**
+   * Gets the standard error icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getErrorIcon(Dimension iconSize);
+
+  /**
+   * Gets the standard warning icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getWarningIcon(Dimension iconSize);
+
+  /**
+   * Gets the standard info icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getInfoIcon(Dimension iconSize);
+
+  /**
+   * Gets the standard cancel icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getCancelIcon(Dimension iconSize);
+
+  /**
+   * Gets the standard ok / yes icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getOkYesIcon(Dimension iconSize);
+
+  /**
+   * Gets the standard no icon.
+   * 
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getNoIcon(Dimension iconSize);
+
 }

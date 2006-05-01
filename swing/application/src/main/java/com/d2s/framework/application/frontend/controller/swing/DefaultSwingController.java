@@ -12,8 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -33,7 +31,6 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameAdapter;
@@ -45,6 +42,7 @@ import com.d2s.framework.application.ControllerException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.gui.swing.components.JErrorDialog;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.WaitCursorTimer;
@@ -467,12 +465,26 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   public void handleException(Throwable ex, Map<String, Object> context) {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ex.printStackTrace(new PrintStream(baos));
-    JOptionPane.showInternalMessageDialog(SwingUtil
-        .getWindowOrInternalFrame((Component) context
-            .get(ActionContextConstants.SOURCE_COMPONENT)), ex
-        .getLocalizedMessage(), getLabelTranslator().getTranslation("ERROR",
-        getLocale()), JOptionPane.ERROR_MESSAGE);
+    JErrorDialog dialog = JErrorDialog.createInstance((Component) context
+        .get(ActionContextConstants.SOURCE_COMPONENT), getLabelTranslator(),
+        getLocale());
+    dialog.setTitle(getLabelTranslator().getTranslation("ERROR", getLocale()));
+    dialog.setMessageIcon(getIconFactory().getErrorIcon(
+        IIconFactory.MEDIUM_ICON_SIZE));
+    dialog.setMessage(ex.getLocalizedMessage());
+    dialog.setDetails(ex);
+    dialog.setVisible(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected CallbackHandler createLoginCallbackHandler() {
+    DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
+    callbackHandler.setLocale(getLocale());
+    callbackHandler.setLabelTranslator(getLabelTranslator());
+    callbackHandler.setIconFactory(getIconFactory());
+    return callbackHandler;
   }
 }

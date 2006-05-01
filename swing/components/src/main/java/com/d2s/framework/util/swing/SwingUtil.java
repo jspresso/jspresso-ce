@@ -20,6 +20,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.d2s.framework.util.exception.NestedRuntimeException;
 
@@ -208,6 +209,17 @@ public final class SwingUtil {
     UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY, UIManager
         .get(TEXTFIELD_INACTIVE_BACKGROUND_KEY));
     UIManager.put(PASSWORDFIELD_FONT_KEY, UIManager.get(TEXTFIELD_FONT_KEY));
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (ClassNotFoundException ex) {
+      //NO-OP
+    } catch (InstantiationException ex) {
+      //NO-OP
+    } catch (IllegalAccessException ex) {
+      //NO-OP
+    } catch (UnsupportedLookAndFeelException ex) {
+      //NO-OP
+    }
   }
 
   /**

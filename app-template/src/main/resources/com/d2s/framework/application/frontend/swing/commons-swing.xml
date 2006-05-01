@@ -20,7 +20,7 @@
 		Root action beans.
 	-->
 	<bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
-		class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false"/>
+		class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false" />
 
 	<bean id="lovOkFrontAction" parent="abstractFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction" singleton="false">
@@ -42,7 +42,8 @@
 	<!--
 		The implementation used as view factory.
 	-->
-	<bean id="iconFactory" class="com.d2s.framework.view.swing.SwingIconFactory" singleton="false" />
+	<bean id="iconFactory" parent="abstractIconFactory" class="com.d2s.framework.view.swing.SwingIconFactory"
+		singleton="false" />
 
 	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.swing.SwingActionFactory"
 		singleton="false" />
@@ -51,7 +52,7 @@
 		class="com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction" />
 
 	<bean id="lovAction" parent="abstractLovAction"
-		class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" singleton="false"/>
+		class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" singleton="false" />
 
 	<bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
 		class="com.d2s.framework.application.frontend.action.swing.file.ChooseFileAsBinaryPropertyAction" />
@@ -80,17 +81,6 @@
 	<bean id="frontController" abstract="true" parent="abstractFrontController"
 		class="com.d2s.framework.application.frontend.controller.swing.DefaultSwingController">
 		<property name="viewFactory" ref="jgoodiesViewFactory" />
-		<property name="loginCallbackHandler">
-			<bean class="com.d2s.framework.security.swing.DialogCallbackHandler">
-				<property name="iconFactory" ref="iconFactory" />
-				<property name="okYesIconImageURL" value="classpath:images/ok-48x48.png" />
-				<property name="noIconImageURL" value="classpath:images/no-48x48.png" />
-				<property name="cancelIconImageURL" value="classpath:images/cancel-48x48.png" />
-				<property name="infoIconImageURL" value="classpath:images/info-48x48.png" />
-				<property name="warningIconImageURL" value="classpath:images/warning-48x48.png" />
-				<property name="errorIconImageURL" value="classpath:images/error-48x48.png" />
-			</bean>
-		</property>
 	</bean>
 </beans>
 

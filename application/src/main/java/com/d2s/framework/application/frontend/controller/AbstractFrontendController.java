@@ -69,6 +69,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private String                                loginContextName;
   private CallbackHandler                       loginCallbackHandler;
+
   /**
    * <code>MAX_LOGIN_RETRIES</code>.
    */
@@ -461,23 +462,23 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the loginCallbackHandler.
-   * 
-   * @param loginCallbackHandler
-   *          the loginCallbackHandler to set.
-   */
-  public void setLoginCallbackHandler(CallbackHandler loginCallbackHandler) {
-    this.loginCallbackHandler = loginCallbackHandler;
-  }
-
-  /**
    * Gets the loginCallbackHandler.
    * 
    * @return the loginCallbackHandler.
    */
   protected CallbackHandler getLoginCallbackHandler() {
+    if (loginCallbackHandler == null) {
+      loginCallbackHandler = createLoginCallbackHandler();
+    }
     return loginCallbackHandler;
   }
+
+  /**
+   * Creates a new login callback handler.
+   * 
+   * @return a new login callback handler
+   */
+  protected abstract CallbackHandler createLoginCallbackHandler();
 
   /**
    * {@inheritDoc}

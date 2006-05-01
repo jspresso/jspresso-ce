@@ -3,9 +3,7 @@
  */
 package com.d2s.framework.application.frontend.controller.ulc;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -20,6 +18,7 @@ import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.gui.ulc.components.server.ULCErrorDialog;
 import com.d2s.framework.security.ulc.DialogCallbackHandler;
 import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.ulc.UlcUtil;
@@ -29,7 +28,6 @@ import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IAction;
-import com.ulcjava.base.application.ULCAlert;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
 import com.ulcjava.base.application.ULCFrame;
@@ -38,7 +36,6 @@ import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
 import com.ulcjava.base.application.ULCPollingTimer;
-import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
@@ -386,13 +383,26 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   public void handleException(Throwable ex, Map<String, Object> context) {
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    ex.printStackTrace(new PrintStream(baos));
-    ULCAlert alert = new ULCAlert(UlcUtilities.getRoot((ULCComponent) context
-        .get(ActionContextConstants.SOURCE_COMPONENT)), getLabelTranslator()
-        .getTranslation("ERROR", getLocale()), ex.getLocalizedMessage(),
-        getLabelTranslator().getTranslation("OK_OPTION", getLocale()));
-    alert.setMessageType(ULCAlert.ERROR_MESSAGE);
-    alert.show();
+    ULCErrorDialog dialog = ULCErrorDialog.createInstance(
+        (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT),
+        getLabelTranslator(), getLocale());
+    dialog.setMessageIcon(getIconFactory().getErrorIcon(
+        IIconFactory.MEDIUM_ICON_SIZE));
+    dialog.setTitle(getLabelTranslator().getTranslation("ERROR", getLocale()));
+    dialog.setMessage(ex.getLocalizedMessage());
+    dialog.setDetails(ex);
+    dialog.setVisible(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected CallbackHandler createLoginCallbackHandler() {
+    DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
+    callbackHandler.setLocale(getLocale());
+    callbackHandler.setLabelTranslator(getLabelTranslator());
+    callbackHandler.setIconFactory(getIconFactory());
+    return callbackHandler;
   }
 }

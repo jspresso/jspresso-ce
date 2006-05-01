@@ -135,12 +135,21 @@
 	<!--
 		The controllers. Controllers are not singleton since they can hold some session state.
 	-->
-	<bean abstract="true" id="abstractFrontController">
+	<bean abstract="true" id="abstractFrontController"
+		class="com.d2s.framework.application.frontend.controller.AbstractFrontendController">
 		<property name="mvcBinder" ref="mvcBinder" />
 		<property name="labelTranslator" ref="mockTranslator" />
 		<property name="descriptionTranslator" ref="mockTranslator" />
 		<property name="viewFactory" ref="viewFactory" />
-		<property name="modulesMenuIconImageUrl" value="classpath:images/modules-48x48.png" />
+	</bean>
+
+	<bean abstract="true" id="abstractIconFactory" class="com.d2s.framework.view.AbstractIconFactory">
+		<property name="okYesIconImageURL" value="classpath:images/ok-48x48.png" />
+		<property name="noIconImageURL" value="classpath:images/no-48x48.png" />
+		<property name="cancelIconImageURL" value="classpath:images/cancel-48x48.png" />
+		<property name="infoIconImageURL" value="classpath:images/info-48x48.png" />
+		<property name="warningIconImageURL" value="classpath:images/warning-48x48.png" />
+		<property name="errorIconImageURL" value="classpath:images/error-48x48.png" />
 	</bean>
 
 	<bean abstract="true" id="abstractBackController"

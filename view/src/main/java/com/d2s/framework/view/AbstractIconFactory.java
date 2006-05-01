@@ -22,6 +22,14 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   private Map<String, Map<Dimension, E>> iconStore;
 
+  private String                                okYesIconImageURL;
+  private String                                noIconImageURL;
+  private String                                cancelIconImageURL;
+
+  private String                                infoIconImageURL;
+  private String                                warningIconImageURL;
+  private String                                errorIconImageURL;
+
   /**
    * Constructs a new <code>AbstractIconFactory</code> instance.
    */
@@ -56,5 +64,107 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
       multiDimStore.put(iconSize, cachedIcon);
     }
     return cachedIcon;
+  }
+
+  /**
+   * Sets the cancelIconImageURL.
+   * 
+   * @param cancelIconImageURL
+   *          the cancelIconImageURL to set.
+   */
+  public void setCancelIconImageURL(String cancelIconImageURL) {
+    this.cancelIconImageURL = cancelIconImageURL;
+  }
+
+  /**
+   * Sets the errorIconImageURL.
+   * 
+   * @param errorIconImageURL
+   *          the errorIconImageURL to set.
+   */
+  public void setErrorIconImageURL(String errorIconImageURL) {
+    this.errorIconImageURL = errorIconImageURL;
+  }
+
+  /**
+   * Sets the infoIconImageURL.
+   * 
+   * @param infoIconImageURL
+   *          the infoIconImageURL to set.
+   */
+  public void setInfoIconImageURL(String infoIconImageURL) {
+    this.infoIconImageURL = infoIconImageURL;
+  }
+
+  /**
+   * Sets the noIconImageURL.
+   * 
+   * @param noIconImageURL
+   *          the noIconImageURL to set.
+   */
+  public void setNoIconImageURL(String noIconImageURL) {
+    this.noIconImageURL = noIconImageURL;
+  }
+
+  /**
+   * Sets the okYesIconImageURL.
+   * 
+   * @param okYesIconImageURL
+   *          the okYesIconImageURL to set.
+   */
+  public void setOkYesIconImageURL(String okYesIconImageURL) {
+    this.okYesIconImageURL = okYesIconImageURL;
+  }
+
+  /**
+   * Sets the warningIconImageURL.
+   * 
+   * @param warningIconImageURL
+   *          the warningIconImageURL to set.
+   */
+  public void setWarningIconImageURL(String warningIconImageURL) {
+    this.warningIconImageURL = warningIconImageURL;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getCancelIcon(Dimension iconSize) {
+    return getIcon(cancelIconImageURL, iconSize);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getErrorIcon(Dimension iconSize) {
+    return getIcon(errorIconImageURL, iconSize);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getInfoIcon(Dimension iconSize) {
+    return getIcon(infoIconImageURL, iconSize);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getNoIcon(Dimension iconSize) {
+    return getIcon(noIconImageURL, iconSize);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getOkYesIcon(Dimension iconSize) {
+    return getIcon(okYesIconImageURL, iconSize);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getWarningIcon(Dimension iconSize) {
+    return getIcon(warningIconImageURL, iconSize);
   }
 }
