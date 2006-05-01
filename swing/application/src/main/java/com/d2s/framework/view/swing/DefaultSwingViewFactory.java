@@ -174,9 +174,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
   private IMasterDetailBinder                masterDetailBinder;
   private IListSelectionModelBinder          listSelectionModelBinder;
   private ITreeSelectionModelBinder          treeSelectionModelBinder;
-  private ITranslationProvider               labelTranslator;
-  private ITranslationProvider               descriptionTranslator;
-  private ITranslationProvider               enumerationTranslator;
+  private ITranslationProvider               translationProvider;
   private int                                maxCharacterLength          = 30;
   private int                                maxColumnCharacterLength    = 15;
   private static final char                  TEMPLATE_CHAR               = 'O';
@@ -312,7 +310,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
     decorateWithBorder(view, locale);
     if (viewDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
-          labelTranslator.getTranslation(viewDescriptor.getDescription(),
+          translationProvider.getTranslation(viewDescriptor.getDescription(),
               locale));
     }
     return view;
@@ -335,7 +333,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
         view.getPeer()
             .setBorder(
                 BorderFactory.createTitledBorder(BorderFactory
-                    .createEtchedBorder(), labelTranslator.getTranslation(
+                    .createEtchedBorder(), translationProvider.getTranslation(
                     getTitleKey(view.getDescriptor()), locale)));
         break;
       default:
@@ -445,12 +443,12 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
       Icon childIcon = iconFactory.getIcon(childViewDescriptor
           .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
       if (childViewDescriptor.getDescription() != null) {
-        viewComponent.addTab(labelTranslator.getTranslation(childViewDescriptor
+        viewComponent.addTab(translationProvider.getTranslation(childViewDescriptor
             .getName(), locale), childIcon, childView.getPeer(),
-            descriptionTranslator.getTranslation(childViewDescriptor
+            translationProvider.getTranslation(childViewDescriptor
                 .getDescription(), locale));
       } else {
-        viewComponent.addTab(labelTranslator.getTranslation(childViewDescriptor
+        viewComponent.addTab(translationProvider.getTranslation(childViewDescriptor
             .getName(), locale), childIcon, childView.getPeer());
       }
       childrenViews.add(childView);
@@ -907,10 +905,10 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
           if (labelKey == null) {
             labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
           }
-          labelText = labelTranslator.getTranslation(labelKey, locale);
+          labelText = translationProvider.getTranslation(labelKey, locale);
           if (nodeGroupDescriptor.getDescription() != null) {
             ToolTipManager.sharedInstance().registerComponent(tree);
-            toolTipText = labelTranslator.getTranslation(nodeGroupDescriptor
+            toolTipText = translationProvider.getTranslation(nodeGroupDescriptor
                 .getDescription(), locale);
           }
           setText(labelText);
@@ -1055,7 +1053,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
       IPropertyDescriptor propertyDescriptor = modelDescriptor
           .getCollectionDescriptor().getElementDescriptor()
           .getPropertyDescriptor(propertyName);
-      StringBuffer columnName = new StringBuffer(labelTranslator
+      StringBuffer columnName = new StringBuffer(translationProvider
           .getTranslation(propertyDescriptor.getName(), locale));
       if (propertyDescriptor.isMandatory()) {
         columnName.append("*");
@@ -1288,7 +1286,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null) {
-          super.setValue(enumerationTranslator.getTranslation(
+          super.setValue(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   connectorValue), locale));
         } else {
@@ -1296,7 +1294,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
         }
       } else {
         if (value != null) {
-          super.setValue(enumerationTranslator.getTranslation(
+          super.setValue(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {
@@ -1518,7 +1516,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
   private JLabel createPropertyLabel(IPropertyDescriptor propertyDescriptor,
       JComponent propertyComponent, Locale locale) {
     JLabel propertyLabel = createJLabel();
-    StringBuffer labelText = new StringBuffer(labelTranslator.getTranslation(
+    StringBuffer labelText = new StringBuffer(translationProvider.getTranslation(
         propertyDescriptor.getName(), locale));
     if (propertyDescriptor.isMandatory()) {
       labelText.append("*");
@@ -1565,7 +1563,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
     }
     if (propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
-          labelTranslator.getTranslation(propertyDescriptor.getDescription(),
+          translationProvider.getTranslation(propertyDescriptor.getDescription(),
               locale));
     }
     return view;
@@ -1794,7 +1792,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
               .getIconImageURL(String.valueOf(value)),
               IIconFactory.TINY_ICON_SIZE));
       if (value != null) {
-        setText(enumerationTranslator.getTranslation(computeEnumerationKey(
+        setText(translationProvider.getTranslation(computeEnumerationKey(
             propertyDescriptor.getEnumerationName(), value), locale));
       }
       return label;
@@ -1997,7 +1995,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
       IValueConnector viewConnector, IActionHandler actionHandler, Locale locale) {
     JPopupMenu popupMenu = createJPopupMenu();
     JLabel titleLabel = createJLabel();
-    titleLabel.setText(labelTranslator.getTranslation(viewDescriptor
+    titleLabel.setText(translationProvider.getTranslation(viewDescriptor
         .getModelDescriptor().getName(), locale));
     titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
         IIconFactory.TINY_ICON_SIZE));
@@ -2196,9 +2194,9 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
   private int getMaxTranslationLength(
       IEnumerationPropertyDescriptor descriptor, Locale locale) {
     int maxTranslationLength = -1;
-    if (enumerationTranslator != null) {
+    if (translationProvider != null) {
       for (Object enumerationValue : descriptor.getEnumerationValues()) {
-        String translation = enumerationTranslator.getTranslation(
+        String translation = translationProvider.getTranslation(
             computeEnumerationKey(descriptor.getEnumerationName(),
                 enumerationValue), locale);
         if (translation.length() > maxTranslationLength) {
@@ -2482,33 +2480,22 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
   }
 
   /**
-   * Sets the labelTranslator.
+   * Sets the translationProvider.
    * 
-   * @param labelTranslator
-   *          the labelTranslator to set.
+   * @param translationProvider
+   *          the translationProvider to set.
    */
-  public void setLabelTranslator(ITranslationProvider labelTranslator) {
-    this.labelTranslator = labelTranslator;
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 
   /**
-   * Gets the labelTranslator.
+   * Gets the translationProvider.
    * 
-   * @return the labelTranslator.
+   * @return the translationProvider.
    */
-  protected ITranslationProvider getLabelTranslator() {
-    return labelTranslator;
-  }
-
-  /**
-   * Sets the labelTranslator.
-   * 
-   * @param descriptionTranslator
-   *          the labelTranslator to set.
-   */
-  public void setDescriptionTranslator(
-      ITranslationProvider descriptionTranslator) {
-    this.descriptionTranslator = descriptionTranslator;
+  protected ITranslationProvider getTranslationProvider() {
+    return translationProvider;
   }
 
   /**
@@ -2531,17 +2518,6 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
   public void setTreeSelectionModelBinder(
       ITreeSelectionModelBinder treeSelectionModelBinder) {
     this.treeSelectionModelBinder = treeSelectionModelBinder;
-  }
-
-  /**
-   * Sets the enumerationTranslator.
-   * 
-   * @param enumerationTranslator
-   *          the enumerationTranslator to set.
-   */
-  public void setEnumerationTranslator(
-      ITranslationProvider enumerationTranslator) {
-    this.enumerationTranslator = enumerationTranslator;
   }
 
   /**

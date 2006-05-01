@@ -62,8 +62,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private Map<String, IModuleDescriptor>        moduleDescriptors;
   private String                                modulesMenuIconImageUrl;
   private IViewFactory<E, F, G>                 viewFactory;
-  private ITranslationProvider                  labelTranslator;
-  private ITranslationProvider                  descriptionTranslator;
+  private ITranslationProvider                  translationProvider;
   private IMvcBinder                            mvcBinder;
   private Locale                                locale;
 
@@ -278,22 +277,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the labelTranslator.
+   * Sets the translationProvider.
    * 
-   * @param labelTranslator
-   *          the labelTranslator to set.
+   * @param translationProvider
+   *          the translationProvider to set.
    */
-  public void setLabelTranslator(ITranslationProvider labelTranslator) {
-    this.labelTranslator = labelTranslator;
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 
   /**
-   * Gets the labelTranslator.
+   * Gets the translationProvider.
    * 
-   * @return the labelTranslator.
+   * @return the translationProvider.
    */
-  protected ITranslationProvider getLabelTranslator() {
-    return labelTranslator;
+  protected ITranslationProvider getTranslationProvider() {
+    return translationProvider;
   }
 
   /**
@@ -313,26 +312,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public void setMvcBinder(IMvcBinder mvcBinder) {
     this.mvcBinder = mvcBinder;
-  }
-
-  /**
-   * Gets the descriptionTranslator.
-   * 
-   * @return the descriptionTranslator.
-   */
-  protected ITranslationProvider getDescriptionTranslator() {
-    return descriptionTranslator;
-  }
-
-  /**
-   * Sets the descriptionTranslator.
-   * 
-   * @param descriptionTranslator
-   *          the descriptionTranslator to set.
-   */
-  public void setDescriptionTranslator(
-      ITranslationProvider descriptionTranslator) {
-    this.descriptionTranslator = descriptionTranslator;
   }
 
   /**

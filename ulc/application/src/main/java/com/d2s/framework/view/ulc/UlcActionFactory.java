@@ -34,8 +34,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  */
 public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
-  private ITranslationProvider  labelTranslator;
-  private ITranslationProvider  descriptionTranslator;
+  private ITranslationProvider  translationProvider;
   private IIconFactory<ULCIcon> iconFactory;
 
   /**
@@ -90,9 +89,9 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       this.modelDescriptor = modelDescriptor;
       this.viewConnector = viewConnector;
       this.locale = locale;
-      putValue(IAction.NAME, labelTranslator.getTranslation(action.getName(),
+      putValue(IAction.NAME, translationProvider.getTranslation(action.getName(),
           locale));
-      putValue(IAction.SHORT_DESCRIPTION, descriptionTranslator.getTranslation(
+      putValue(IAction.SHORT_DESCRIPTION, translationProvider.getTranslation(
           action.getDescription(), locale));
       putValue(IAction.SMALL_ICON, iconFactory.getIcon(
           action.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
@@ -148,17 +147,6 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
   }
 
   /**
-   * Sets the descriptionTranslator.
-   * 
-   * @param descriptionTranslator
-   *          the descriptionTranslator to set.
-   */
-  public void setDescriptionTranslator(
-      ITranslationProvider descriptionTranslator) {
-    this.descriptionTranslator = descriptionTranslator;
-  }
-
-  /**
    * Sets the iconFactory.
    * 
    * @param iconFactory
@@ -169,12 +157,12 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
   }
 
   /**
-   * Sets the labelTranslator.
+   * Sets the translationProvider.
    * 
-   * @param labelTranslator
-   *          the labelTranslator to set.
+   * @param translationProvider
+   *          the translationProvider to set.
    */
-  public void setLabelTranslator(ITranslationProvider labelTranslator) {
-    this.labelTranslator = labelTranslator;
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 }

@@ -105,9 +105,7 @@
 	<bean id="abstractViewFactory" abstract="true">
 		<property name="connectorFactory" ref="connectorFactory" />
 		<property name="mvcBinder" ref="mvcBinder" />
-		<property name="labelTranslator" ref="mockTranslator" />
-		<property name="descriptionTranslator" ref="mockTranslator" />
-		<property name="enumerationTranslator" ref="mockTranslator" />
+		<property name="translationProvider" ref="mockTranslator" />
 		<property name="masterDetailBinder" ref="masterDetailBinder" />
 		<property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
 		<property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
@@ -118,8 +116,7 @@
 	</bean>
 
 	<bean id="abstractActionFactory" abstract="true">
-		<property name="labelTranslator" ref="mockTranslator" />
-		<property name="descriptionTranslator" ref="mockTranslator" />
+		<property name="translationProvider" ref="mockTranslator" />
 		<property name="iconFactory" ref="iconFactory" />
 	</bean>
 
@@ -138,8 +135,7 @@
 	<bean abstract="true" id="abstractFrontController"
 		class="com.d2s.framework.application.frontend.controller.AbstractFrontendController">
 		<property name="mvcBinder" ref="mvcBinder" />
-		<property name="labelTranslator" ref="mockTranslator" />
-		<property name="descriptionTranslator" ref="mockTranslator" />
+		<property name="translationProvider" ref="mockTranslator" />
 		<property name="viewFactory" ref="viewFactory" />
 	</bean>
 

@@ -37,8 +37,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class SwingActionFactory implements IActionFactory<Action, JComponent> {
 
-  private ITranslationProvider labelTranslator;
-  private ITranslationProvider descriptionTranslator;
+  private ITranslationProvider translationProvider;
   private IIconFactory<Icon>   iconFactory;
 
   /**
@@ -97,9 +96,9 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
         this.viewConnector = viewConnector;
       }
       this.locale = locale;
-      putValue(Action.NAME, labelTranslator.getTranslation(action.getName(),
+      putValue(Action.NAME, translationProvider.getTranslation(action.getName(),
           locale));
-      putValue(Action.SHORT_DESCRIPTION, descriptionTranslator.getTranslation(
+      putValue(Action.SHORT_DESCRIPTION, translationProvider.getTranslation(
           action.getDescription(), locale));
       putValue(Action.SMALL_ICON, iconFactory.getIcon(action.getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
@@ -155,17 +154,6 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
   }
 
   /**
-   * Sets the descriptionTranslator.
-   * 
-   * @param descriptionTranslator
-   *          the descriptionTranslator to set.
-   */
-  public void setDescriptionTranslator(
-      ITranslationProvider descriptionTranslator) {
-    this.descriptionTranslator = descriptionTranslator;
-  }
-
-  /**
    * Sets the iconFactory.
    * 
    * @param iconFactory
@@ -176,12 +164,12 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
   }
 
   /**
-   * Sets the labelTranslator.
+   * Sets the translationProvider.
    * 
-   * @param labelTranslator
-   *          the labelTranslator to set.
+   * @param translationProvider
+   *          the translationProvider to set.
    */
-  public void setLabelTranslator(ITranslationProvider labelTranslator) {
-    this.labelTranslator = labelTranslator;
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 }

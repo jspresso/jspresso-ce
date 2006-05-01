@@ -51,7 +51,7 @@ public class DialogCallbackHandler implements CallbackHandler {
   private static final Insets  DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
 
   private Locale               locale;
-  private ITranslationProvider labelTranslator;
+  private ITranslationProvider translationProvider;
 
   private Icon getIcon(TextOutputCallback callback)
       throws UnsupportedCallbackException {
@@ -219,30 +219,30 @@ public class DialogCallbackHandler implements CallbackHandler {
       switch (confirmationOptionType) {
         case ConfirmationCallback.YES_NO_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, labelTranslator.getTranslation("YES",
+              ConfirmationCallback.YES, translationProvider.getTranslation("YES",
                   locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.NO, labelTranslator.getTranslation("NO",
+              ConfirmationCallback.NO, translationProvider.getTranslation("NO",
                   locale), proceedActions), constraints);
           break;
         case ConfirmationCallback.YES_NO_CANCEL_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, labelTranslator.getTranslation("YES",
+              ConfirmationCallback.YES, translationProvider.getTranslation("YES",
                   locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.NO, labelTranslator.getTranslation("NO",
+              ConfirmationCallback.NO, translationProvider.getTranslation("NO",
                   locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.CANCEL, labelTranslator.getTranslation(
+              ConfirmationCallback.CANCEL, translationProvider.getTranslation(
                   "CANCEL", locale), proceedActions), constraints);
           break;
         case ConfirmationCallback.OK_CANCEL_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.OK, labelTranslator.getTranslation("OK",
+              ConfirmationCallback.OK, translationProvider.getTranslation("OK",
                   locale), proceedActions), constraints);
           if (hasInput) {
             optionPanel.add(createOptionButton(callbackDialog, cc,
-                ConfirmationCallback.CANCEL, labelTranslator.getTranslation(
+                ConfirmationCallback.CANCEL, translationProvider.getTranslation(
                     "CANCEL", locale), proceedActions), constraints);
           }
           break;
@@ -402,11 +402,11 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   
   /**
-   * Sets the labelTranslator.
+   * Sets the translationProvider.
    * 
-   * @param labelTranslator the labelTranslator to set.
+   * @param translationProvider the translationProvider to set.
    */
-  public void setLabelTranslator(ITranslationProvider labelTranslator) {
-    this.labelTranslator = labelTranslator;
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 }

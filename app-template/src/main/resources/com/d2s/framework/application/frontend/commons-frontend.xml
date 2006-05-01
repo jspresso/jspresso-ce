@@ -39,7 +39,7 @@
     <property name="iconImageURL" value="classpath:images/open_file-48x48.png" />
     <property name="name" value="OPEN_FILE" />
     <property name="description" value="OPEN_FILE" />
-    <property name="labelTranslator" ref="mockTranslator" />
+    <property name="translationProvider" ref="mockTranslator" />
   </bean>
 
   <bean id="connectorSelectionFrontAction"

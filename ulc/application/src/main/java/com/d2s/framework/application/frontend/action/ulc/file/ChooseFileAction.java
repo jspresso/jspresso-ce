@@ -27,7 +27,7 @@ import com.ulcjava.base.shared.FileChooserConfig;
  */
 public class ChooseFileAction extends AbstractUlcAction {
 
-  private ITranslationProvider      labelTranslator;
+  private ITranslationProvider      translationProvider;
   private Map<String, List<String>> fileFilter;
   private IFileOpenCallback         fileOpenCallback;
   private FileChooserConfig         fileChooser;
@@ -63,7 +63,7 @@ public class ChooseFileAction extends AbstractUlcAction {
   private FileChooserConfig getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new FileChooserConfig();
-      fileChooser.setDialogTitle(labelTranslator.getTranslation(getName(),
+      fileChooser.setDialogTitle(translationProvider.getTranslation(getName(),
           getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
@@ -76,7 +76,7 @@ public class ChooseFileAction extends AbstractUlcAction {
           fileChooser
               .addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
                   fileTypeEntry.getValue().toArray(new String[0]),
-                  labelTranslator.getTranslation(fileTypeEntry.getKey(),
+                  translationProvider.getTranslation(fileTypeEntry.getKey(),
                       getLocale(context))
                       + extensionsDescription.toString()));
         }
@@ -101,13 +101,13 @@ public class ChooseFileAction extends AbstractUlcAction {
   }
 
   /**
-   * Sets the labelTranslator.
+   * Sets the translationProvider.
    * 
-   * @param labelTranslator
-   *          the labelTranslator to set.
+   * @param translationProvider
+   *          the translationProvider to set.
    */
-  public void setLabelTranslator(ITranslationProvider labelTranslator) {
-    this.labelTranslator = labelTranslator;
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 
   /**

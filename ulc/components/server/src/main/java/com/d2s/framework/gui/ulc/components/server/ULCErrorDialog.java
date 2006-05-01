@@ -44,7 +44,7 @@ public final class ULCErrorDialog extends ULCDialog {
   private ULCIcon              messageIcon;
 
   private Locale               locale;
-  private ITranslationProvider labelTranslator;
+  private ITranslationProvider translationProvider;
 
   private int                  collapsedHeight  = 0;
   private int                  expandedHeight   = 0;
@@ -54,18 +54,18 @@ public final class ULCErrorDialog extends ULCDialog {
    * 
    * @param sourceComponent
    *          one of the components insinde the owning window.
-   * @param labelTranslator
-   *          the translator for labels.
+   * @param translationProvider
+   *          the translationProvider for labels.
    * @param locale
    *          the locale used.
    * @return the created error dialog instance.
    */
   public static ULCErrorDialog createInstance(ULCComponent sourceComponent,
-      ITranslationProvider labelTranslator, Locale locale) {
+      ITranslationProvider translationProvider, Locale locale) {
     ULCErrorDialog errorDialog;
     errorDialog = new ULCErrorDialog(UlcUtilities
         .windowForComponent(sourceComponent));
-    errorDialog.labelTranslator = labelTranslator;
+    errorDialog.translationProvider = translationProvider;
     errorDialog.locale = locale;
     errorDialog.initGui();
     return errorDialog;
@@ -122,11 +122,11 @@ public final class ULCErrorDialog extends ULCDialog {
     gbc.setWeightY(0.0);
     gbc.setAnchor(GridBagConstraints.WEST);
     gbc.setInsets(new Insets(12, 0, 11, 5));
-    ULCButton okButton = new ULCButton(labelTranslator.getTranslation("OK",
+    ULCButton okButton = new ULCButton(translationProvider.getTranslation("OK",
         locale));
     pane.add(okButton, gbc);
 
-    detailsButton = new ULCButton(labelTranslator.getTranslation("DETAILS",
+    detailsButton = new ULCButton(translationProvider.getTranslation("DETAILS",
         locale));
     gbc = new GridBagConstraints();
     gbc.setGridX(2);
@@ -150,7 +150,7 @@ public final class ULCErrorDialog extends ULCDialog {
     gbc.setWeightY(1.0);
     pane.add(detailsPanel, gbc);
 
-    ULCButton button = new ULCButton(labelTranslator.getTranslation("COPY",
+    ULCButton button = new ULCButton(translationProvider.getTranslation("COPY",
         locale));
     button.addActionListener(new IActionListener() {
 
@@ -228,13 +228,13 @@ public final class ULCErrorDialog extends ULCDialog {
     String exceptionAsDetails = null;
     if (details != null) {
       StringBuffer html = new StringBuffer("<html>");
-      html.append("<b>" + labelTranslator.getTranslation("DETAILS", locale)
+      html.append("<b>" + translationProvider.getTranslation("DETAILS", locale)
           + " :</b>");
       html.append("<pre>");
       html.append("    " + details.getMessage());
       html.append("</pre>");
       html.append("<div></div>");
-      html.append("<b>" + labelTranslator.getTranslation("STACK_TRACE", locale)
+      html.append("<b>" + translationProvider.getTranslation("STACK_TRACE", locale)
           + " :</b>");
       html.append("<pre>");
       for (StackTraceElement el : details.getStackTrace()) {
@@ -264,7 +264,7 @@ public final class ULCErrorDialog extends ULCDialog {
       }
       setSize(getWidth(), height);
       detailsPanel.setVisible(true);
-      detailsButton.setText(labelTranslator.getTranslation("DETAILS", locale)
+      detailsButton.setText(translationProvider.getTranslation("DETAILS", locale)
           + " >>");
     } else {
       expandedHeight = getHeight();

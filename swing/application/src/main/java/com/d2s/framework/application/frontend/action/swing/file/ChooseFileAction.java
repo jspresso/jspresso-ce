@@ -32,7 +32,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public class ChooseFileAction extends AbstractSwingAction {
 
-  private ITranslationProvider      labelTranslator;
+  private ITranslationProvider      translationProvider;
   private Map<String, List<String>> fileFilter;
   private IFileOpenCallback         fileOpenCallback;
   private JFileChooser              fileChooser;
@@ -68,7 +68,7 @@ public class ChooseFileAction extends AbstractSwingAction {
   private JFileChooser getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle(labelTranslator.getTranslation(getName(),
+      fileChooser.setDialogTitle(translationProvider.getTranslation(getName(),
           getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
@@ -79,7 +79,7 @@ public class ChooseFileAction extends AbstractSwingAction {
           }
           extensionsDescription.append(" )");
           fileChooser.addChoosableFileFilter(new FileFilterAdapter(
-              fileTypeEntry.getValue(), labelTranslator.getTranslation(
+              fileTypeEntry.getValue(), translationProvider.getTranslation(
                   fileTypeEntry.getKey(), getLocale(context))
                   + extensionsDescription.toString()));
         }
@@ -105,13 +105,13 @@ public class ChooseFileAction extends AbstractSwingAction {
   }
 
   /**
-   * Sets the labelTranslator.
+   * Sets the translationProvider.
    * 
-   * @param labelTranslator
-   *          the labelTranslator to set.
+   * @param translationProvider
+   *          the translationProvider to set.
    */
-  public void setLabelTranslator(ITranslationProvider labelTranslator) {
-    this.labelTranslator = labelTranslator;
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 
   /**

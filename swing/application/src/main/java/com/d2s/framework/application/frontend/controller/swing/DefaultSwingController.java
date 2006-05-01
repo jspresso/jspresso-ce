@@ -231,7 +231,7 @@ public class DefaultSwingController extends
   }
 
   private JFrame createControllerFrame() {
-    JFrame frame = new JFrame(getLabelTranslator().getTranslation(getName(),
+    JFrame frame = new JFrame(getTranslationProvider().getTranslation(getName(),
         getLocale()));
     frame.setContentPane(new JDesktopPane());
     frame.setIconImage(((ImageIcon) getIconFactory().getIcon(getIconImageURL(),
@@ -260,7 +260,7 @@ public class DefaultSwingController extends
   }
 
   private JMenu getModulesMenu() {
-    JMenu modulesMenu = new JMenu(getLabelTranslator().getTranslation(
+    JMenu modulesMenu = new JMenu(getTranslationProvider().getTranslation(
         "Modules", getLocale()));
     modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
@@ -289,9 +289,9 @@ public class DefaultSwingController extends
     public ModuleSelectionAction(String moduleId,
         IModuleDescriptor moduleDescriptor) {
       this.moduleId = moduleId;
-      putValue(Action.NAME, getLabelTranslator().getTranslation(
+      putValue(Action.NAME, getTranslationProvider().getTranslation(
           moduleDescriptor.getName(), getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, getDescriptionTranslator()
+      putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
           .getTranslation(moduleDescriptor.getDescription(), getLocale()));
       putValue(Action.SMALL_ICON, getIconFactory().getIcon(
           moduleDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
@@ -316,9 +316,9 @@ public class DefaultSwingController extends
      * Constructs a new <code>ModuleSelectionAction</code> instance.
      */
     public QuitAction() {
-      putValue(Action.NAME, getLabelTranslator().getTranslation("QUIT",
+      putValue(Action.NAME, getTranslationProvider().getTranslation("QUIT",
           getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, getDescriptionTranslator()
+      putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
           .getTranslation("QUIT", getLocale()));
     }
 
@@ -341,7 +341,7 @@ public class DefaultSwingController extends
    * @return the constructed internal frame.
    */
   private JInternalFrame createJInternalFrame(IView<JComponent> view) {
-    JInternalFrame internalFrame = new JInternalFrame(getLabelTranslator()
+    JInternalFrame internalFrame = new JInternalFrame(getTranslationProvider()
         .getTranslation(view.getDescriptor().getName(), getLocale()), true,
         false, true, true);
     internalFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);
@@ -466,9 +466,9 @@ public class DefaultSwingController extends
    */
   public void handleException(Throwable ex, Map<String, Object> context) {
     JErrorDialog dialog = JErrorDialog.createInstance((Component) context
-        .get(ActionContextConstants.SOURCE_COMPONENT), getLabelTranslator(),
+        .get(ActionContextConstants.SOURCE_COMPONENT), getTranslationProvider(),
         getLocale());
-    dialog.setTitle(getLabelTranslator().getTranslation("ERROR", getLocale()));
+    dialog.setTitle(getTranslationProvider().getTranslation("ERROR", getLocale()));
     dialog.setMessageIcon(getIconFactory().getErrorIcon(
         IIconFactory.MEDIUM_ICON_SIZE));
     dialog.setMessage(ex.getLocalizedMessage());
@@ -483,7 +483,7 @@ public class DefaultSwingController extends
   protected CallbackHandler createLoginCallbackHandler() {
     DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
     callbackHandler.setLocale(getLocale());
-    callbackHandler.setLabelTranslator(getLabelTranslator());
+    callbackHandler.setTranslationProvider(getTranslationProvider());
     callbackHandler.setIconFactory(getIconFactory());
     return callbackHandler;
   }

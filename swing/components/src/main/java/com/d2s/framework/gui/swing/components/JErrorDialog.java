@@ -53,7 +53,7 @@ public final class JErrorDialog extends JDialog {
   private Icon                 messageIcon;
 
   private Locale               locale;
-  private ITranslationProvider labelTranslator;
+  private ITranslationProvider translationProvider;
 
   private int                  collapsedHeight  = 0;
   private int                  expandedHeight   = 0;
@@ -63,14 +63,14 @@ public final class JErrorDialog extends JDialog {
    * 
    * @param sourceComponent
    *          one of the components insinde the owning window.
-   * @param labelTranslator
-   *          the translator for labels.
+   * @param translationProvider
+   *          the translationProvider for labels.
    * @param locale
    *          the locale used.
    * @return the created error dialog instance.
    */
   public static JErrorDialog createInstance(Component sourceComponent,
-      ITranslationProvider labelTranslator, Locale locale) {
+      ITranslationProvider translationProvider, Locale locale) {
     JErrorDialog errorDialog;
     Window window = SwingUtilities.windowForComponent(sourceComponent);
     if (window instanceof Dialog) {
@@ -78,7 +78,7 @@ public final class JErrorDialog extends JDialog {
     } else {
       errorDialog = new JErrorDialog((Frame) window);
     }
-    errorDialog.labelTranslator = labelTranslator;
+    errorDialog.translationProvider = translationProvider;
     errorDialog.locale = locale;
     errorDialog.initGui();
     return errorDialog;
@@ -147,10 +147,10 @@ public final class JErrorDialog extends JDialog {
     gbc.weighty = 0.0;
     gbc.anchor = GridBagConstraints.LINE_END;
     gbc.insets = new Insets(12, 0, 11, 5);
-    JButton okButton = new JButton(labelTranslator.getTranslation("OK", locale));
+    JButton okButton = new JButton(translationProvider.getTranslation("OK", locale));
     this.getContentPane().add(okButton, gbc);
 
-    detailsButton = new JButton(labelTranslator.getTranslation("DETAILS", locale));
+    detailsButton = new JButton(translationProvider.getTranslation("DETAILS", locale));
     gbc = new GridBagConstraints();
     gbc.gridx = 2;
     gbc.weightx = 0.0;
@@ -177,7 +177,7 @@ public final class JErrorDialog extends JDialog {
     gbc.weighty = 1.0;
     this.getContentPane().add(detailsPanel, gbc);
 
-    JButton button = new JButton(labelTranslator.getTranslation("COPY", locale));
+    JButton button = new JButton(translationProvider.getTranslation("COPY", locale));
     button.addActionListener(new ActionListener() {
 
       public void actionPerformed(@SuppressWarnings("unused")
@@ -248,12 +248,12 @@ public final class JErrorDialog extends JDialog {
     String exceptionAsDetails = null;
     if (details != null) {
       StringBuffer html = new StringBuffer("<html>");
-      html.append("<b>" + labelTranslator.getTranslation("DETAILS", locale) + " :</b>");
+      html.append("<b>" + translationProvider.getTranslation("DETAILS", locale) + " :</b>");
       html.append("<pre>");
       html.append("    " + details.getMessage());
       html.append("</pre>");
       html.append("<div></div>");
-      html.append("<b>" + labelTranslator.getTranslation("STACK_TRACE", locale) + " :</b>");
+      html.append("<b>" + translationProvider.getTranslation("STACK_TRACE", locale) + " :</b>");
       html.append("<pre>");
       for (StackTraceElement el : details.getStackTrace()) {
         html.append("    " + el.toString() + "\n");
@@ -282,7 +282,7 @@ public final class JErrorDialog extends JDialog {
       }
       setSize(getWidth(), height);
       detailsPanel.setVisible(true);
-      detailsButton.setText(labelTranslator.getTranslation("DETAILS", locale) + " >>");
+      detailsButton.setText(translationProvider.getTranslation("DETAILS", locale) + " >>");
       detailsPanel.applyComponentOrientation(detailsButton
           .getComponentOrientation());
       detailsPane.setCaretPosition(0);
