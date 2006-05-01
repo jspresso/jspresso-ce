@@ -27,4 +27,20 @@ public class MockTranslationProvider implements ITranslationProvider {
     return "[" + locale.getISO3Language() + ":" + key + "]";
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public String getMessage(String key, Object[] args, Locale locale) {
+    StringBuffer message = new StringBuffer(getTranslation(key, locale));
+    if (args != null && args.length > 0) {
+      message.append(" { ");
+      for (Object arg : args) {
+        message.append(String.valueOf(arg));
+        message.append(" ");
+      }
+      message.append("}");
+    }
+    return message.toString();
+  }
+
 }

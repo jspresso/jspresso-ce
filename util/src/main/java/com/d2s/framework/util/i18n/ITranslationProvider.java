@@ -27,4 +27,16 @@ public interface ITranslationProvider {
    */
   String getTranslation(String key, Locale locale);
 
+  /**
+   * Gets a translated message based on a key.
+   * 
+   * @param key
+   *          the i18n key.
+   * @param args
+   *          the message arguments used in message format.
+   * @param locale
+   *          the locale the string must be translated into.
+   * @return the translated string.
+   */
+  String getMessage(String key, Object[] args, Locale locale);
 }
