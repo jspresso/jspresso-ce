@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.backend.action;
 
+import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.action.AbstractAction;
@@ -136,6 +137,14 @@ public abstract class AbstractBackendAction extends AbstractAction {
   protected IBeanConnectorFactory getBeanConnectorFactory(
       Map<String, Object> context) {
     return getController(context).getBeanConnectorFactory();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Locale getLocale(Map<String, Object> context) {
+    return getController(context).getLocale();
   }
 
 }

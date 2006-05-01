@@ -69,7 +69,6 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
     private JComponent        sourceComponent;
     private IModelDescriptor  modelDescriptor;
     private IValueConnector   viewConnector;
-    private Locale            locale;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
@@ -95,7 +94,6 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
       } else {
         this.viewConnector = viewConnector;
       }
-      this.locale = locale;
       putValue(Action.NAME, translationProvider.getTranslation(action.getName(),
           locale));
       putValue(Action.SHORT_DESCRIPTION, translationProvider.getTranslation(
@@ -137,7 +135,6 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
               ((ICollectionConnectorProvider) viewConnector)
                   .getCollectionConnector().getSelectedIndices());
         }
-        actionContext.put(ActionContextConstants.LOCALE, locale);
         actionContext.put(ActionContextConstants.ACTION_PARAM, e
             .getActionCommand());
         if (action.getInitialContext() != null) {

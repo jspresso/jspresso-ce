@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.frontend.action;
 
+import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.action.AbstractAction;
@@ -261,5 +262,13 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   protected IActionFactory<G, E> getActionFactory(Map<String, Object> context) {
     return getViewFactory(context).getActionFactory();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Locale getLocale(Map<String, Object> context) {
+    return getController(context).getLocale();
   }
 }

@@ -303,7 +303,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the locale.
    */
-  protected Locale getLocale() {
+  public Locale getLocale() {
     return getBackendController().getApplicationSession().getLocale();
   }
 

@@ -35,9 +35,7 @@ public abstract class AbstractAction implements IAction {
    *          the action context.
    * @return the locale the action executes in.
    */
-  public Locale getLocale(Map<String, Object> context) {
-    return (Locale) context.get(ActionContextConstants.LOCALE);
-  }
+  public abstract Locale getLocale(Map<String, Object> context);
 
 
   /**

@@ -67,7 +67,6 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
     private ULCComponent                          sourceComponent;
     private IModelDescriptor                      modelDescriptor;
     private IValueConnector                       viewConnector;
-    private Locale                                locale;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
@@ -88,7 +87,6 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       this.sourceComponent = sourceComponent;
       this.modelDescriptor = modelDescriptor;
       this.viewConnector = viewConnector;
-      this.locale = locale;
       putValue(IAction.NAME, translationProvider.getTranslation(action.getName(),
           locale));
       putValue(IAction.SHORT_DESCRIPTION, translationProvider.getTranslation(
@@ -130,7 +128,6 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
         }
         actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
             modelDescriptor);
-        actionContext.put(ActionContextConstants.LOCALE, locale);
         actionContext.put(ActionContextConstants.ACTION_PARAM, e
             .getActionCommand());
         if (action.getInitialContext() != null) {

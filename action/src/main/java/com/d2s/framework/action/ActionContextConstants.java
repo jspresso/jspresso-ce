@@ -42,11 +42,6 @@ public final class ActionContextConstants {
   public static final String ELEMENT_DESCRIPTOR             = "ELEMENT_DESCRIPTOR";
 
   /**
-   * The locale the action has to use to execute.
-   */
-  public static final String LOCALE                         = "LOCALE";
-
-  /**
    * The view connector the action was triggered on.
    */
   public static final String VIEW_CONNECTOR                 = "VIEW_CONNECTOR";

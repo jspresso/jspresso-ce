@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application;
 
+import java.util.Locale;
+
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.model.entity.IEntity;
@@ -37,4 +39,11 @@ public interface IController extends IActionHandler {
    * @return true if the stop was successful.
    */
   boolean stop();
+
+  /**
+   * Gets the current controller locale.
+   * 
+   * @return the current controller locale.
+   */
+  Locale getLocale();
 }
