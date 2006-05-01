@@ -20,13 +20,14 @@ import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorSelectionListener;
 import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.ICompositeView;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IMapView;
@@ -62,9 +63,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private Map<String, IModuleDescriptor>        moduleDescriptors;
   private String                                modulesMenuIconImageUrl;
   private IViewFactory<E, F, G>                 viewFactory;
-  private ITranslationProvider                  translationProvider;
   private IMvcBinder                            mvcBinder;
-  private Locale                                locale;
 
   private String                                loginContextName;
   private CallbackHandler                       loginCallbackHandler;
@@ -202,8 +201,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public boolean start(IBackendController peerController, Locale startingLocale) {
     setBackendController(peerController);
-    this.locale = startingLocale;
-    return peerController.start();
+    return peerController.start(startingLocale);
   }
 
   /**
@@ -219,6 +217,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (selectedModuleViewConnector != null) {
       initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
           selectedModuleViewConnector);
+      if (selectedModuleViewConnector instanceof ICollectionConnectorProvider) {
+        ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) selectedModuleViewConnector)
+            .getCollectionConnector();
+        collectionConnector.setAllowLazyChildrenLoading(false);
+      }
     }
     return initialActionContext;
   }
@@ -277,25 +280,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
-  }
-
-  /**
-   * Gets the translationProvider.
-   * 
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
-  }
-
-  /**
    * Gets the mvcBinder.
    * 
    * @return the mvcBinder.
@@ -320,7 +304,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the locale.
    */
   protected Locale getLocale() {
-    return locale;
+    return getBackendController().getApplicationSession().getLocale();
   }
 
   /**

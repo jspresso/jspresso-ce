@@ -160,6 +160,7 @@
     </property>
     <property name="accessorFactory" ref="accessorFactory" />
     <property name="beanConnectorFactory" ref="beanConnectorFactory" />
+    <property name="translationProvider" ref="mockTranslator" />
   </bean>
 
   <!--

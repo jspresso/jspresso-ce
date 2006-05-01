@@ -47,7 +47,6 @@ public class ModuleConnectorSelectionAction<E, F, G> extends
     if (moduleConnector instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) moduleConnector)
           .getCollectionConnector();
-      collectionConnector.setAllowLazyChildrenLoading(false);
       collectionConnector.setSelectedIndices(connectorSelection);
     }
     super.execute(actionHandler, context);

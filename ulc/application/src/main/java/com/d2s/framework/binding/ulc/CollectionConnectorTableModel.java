@@ -40,8 +40,6 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private List<String>                                    columnConnectorKeys;
   private Map<String, Class>                              columnClassesByIds;
 
-  private Map<String, Map<Object, Object>>                translatedColumnMappings;
-
   /**
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
    * 
@@ -92,15 +90,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     } else if (cellConnector.getConnectorValue() instanceof byte[]) {
       return null;
     }
-    Object value = cellConnector.getConnectorValue();
-    if (translatedColumnMappings != null) {
-      Map<Object, Object> columnMapping = translatedColumnMappings
-          .get(getColumnName(columnIndex));
-      if (columnMapping != null) {
-        return columnMapping.get(value);
-      }
-    }
-    return value;
+    return cellConnector.getConnectorValue();
   }
 
   /**

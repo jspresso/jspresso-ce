@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,6 +45,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private IEntityCollectionFactory   collectionFactory;
   private Set<IEntity>               entitiesToMergeBack;
   private Subject                    owner;
+  private Locale                     locale;
 
   /**
    * Constructs a new <code>BasicApplicationSession</code> instance.
@@ -499,13 +501,34 @@ public class BasicApplicationSession implements IApplicationSession {
   public void setOwner(Subject owner) {
     this.owner = owner;
   }
-  
+
   /**
    * Sets the entityFactory.
    * 
-   * @param entityFactory the entityFactory to set.
+   * @param entityFactory
+   *          the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
+  }
+
+  
+  /**
+   * Gets the locale.
+   * 
+   * @return the locale.
+   */
+  public Locale getLocale() {
+    return locale;
+  }
+
+  
+  /**
+   * Sets the locale.
+   * 
+   * @param locale the locale to set.
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
   }
 }

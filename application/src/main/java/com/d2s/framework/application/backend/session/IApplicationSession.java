@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend.session;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.security.auth.Subject;
 
@@ -156,4 +157,18 @@ public interface IApplicationSession extends IEntityDirtAware {
    *          the session owner.
    */
   void setOwner(Subject sessionOwner);
+  
+  /**
+   * Sets the session locale.
+   * 
+   * @param locale the session locale.
+   */
+  void setLocale(Locale locale);
+
+  /**
+   * Gets the session locale.
+   * 
+   * @return the session locale.
+   */
+  Locale getLocale();
 }

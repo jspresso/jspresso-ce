@@ -18,44 +18,38 @@ import java.util.Map;
  */
 public class ULCTranslationDataTypeFactory {
 
-  private Map<String, Map<String, Map<Locale, ULCTranslationDataType>>> dataTypeStore;
+  private Map<String, Map<Locale, ULCTranslationDataType>> dataTypeStore;
 
   /**
    * Constructs a new <code>ULCTranslationDataTypeFactory</code> instance.
    */
   public ULCTranslationDataTypeFactory() {
-    dataTypeStore = new HashMap<String, Map<String, Map<Locale, ULCTranslationDataType>>>();
+    dataTypeStore = new HashMap<String, Map<Locale, ULCTranslationDataType>>();
   }
 
   /**
    * Gets a (cached) translation data type.
    * 
-   * @param bundle
-   *          the resource bundle name on which the translation data type
-   *          relies.
-   * @param prefix
-   *          the key prefix the translation data type uses.
+   * @param id
+   *          the id the translation data type is (or has been) stored with.
    * @param locale
    *          the locale the translation data type uses.
+   * @param translationMapping
+   *          key / value translation mapping used whenever the translation
+   *          datatype does not exist yet and must be created.
    * @return the corresponding translation data type.
    */
-  public ULCTranslationDataType getTranslationDataType(String bundle,
-      String prefix, Locale locale) {
-    Map<String, Map<Locale, ULCTranslationDataType>> bundleStore = dataTypeStore
-        .get(bundle);
-    if (bundleStore == null) {
-      bundleStore = new HashMap<String, Map<Locale, ULCTranslationDataType>>();
-      dataTypeStore.put(bundle, bundleStore);
+  public ULCTranslationDataType getTranslationDataType(String id,
+      Locale locale, Map<String, String> translationMapping) {
+    Map<Locale, ULCTranslationDataType> idStore = dataTypeStore.get(id);
+    if (idStore == null) {
+      idStore = new HashMap<Locale, ULCTranslationDataType>();
+      dataTypeStore.put(id, idStore);
     }
-    Map<Locale, ULCTranslationDataType> prefixStore = bundleStore.get(prefix);
-    if (prefixStore == null) {
-      prefixStore = new HashMap<Locale, ULCTranslationDataType>();
-      bundleStore.put(prefix, prefixStore);
-    }
-    ULCTranslationDataType dataType = prefixStore.get(locale);
+    ULCTranslationDataType dataType = idStore.get(locale);
     if (dataType == null) {
-      dataType = new ULCTranslationDataType(bundle, prefix, locale);
-      prefixStore.put(locale, dataType);
+      dataType = new ULCTranslationDataType(translationMapping);
+      idStore.put(locale, dataType);
     }
     return dataType;
   }

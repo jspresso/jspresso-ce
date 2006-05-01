@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
@@ -65,8 +66,34 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public boolean start() {
+  public boolean start(Locale locale) {
+    applicationSession.setLocale(locale);
+    for (ICompositeValueConnector moduleConnector : moduleConnectors.values()) {
+      translateModule((Module) moduleConnector.getConnectorValue());
+    }
     return true;
+  }
+
+  private void translateModule(Module module) {
+    module.setName(getTranslationProvider().getTranslation(module.getName(),
+        getLocale()));
+    module.setDescription(getTranslationProvider().getTranslation(
+        module.getDescription(), getLocale()));
+    if (module.getSubModules() != null) {
+      for (Module subModule : module.getSubModules()) {
+        translateModule(subModule);
+      }
+    }
+  }
+
+  /**
+   * Gets the locale used by this controller. The locale is actually held by the
+   * session.
+   * 
+   * @return locale used by this controller.
+   */
+  public Locale getLocale() {
+    return applicationSession.getLocale();
   }
 
   /**

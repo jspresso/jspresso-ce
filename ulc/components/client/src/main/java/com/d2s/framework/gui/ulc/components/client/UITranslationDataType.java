@@ -3,14 +3,14 @@
  */
 package com.d2s.framework.gui.ulc.components.client;
 
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.gui.ulc.components.shared.TranslationDataTypeConstants;
-import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.util.i18n.mock.MockTranslationProvider;
 import com.ulcjava.base.client.datatype.UIDataType;
 import com.ulcjava.base.shared.internal.Anything;
 
@@ -26,28 +26,29 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UITranslationDataType extends UIDataType {
 
-  private String               bundle;
-  private String               prefix;
-  private Locale               locale;
-
-  private ITranslationProvider translationProvider;
+  private Map<String, String> dictionary;
+  private Map<String, String> reverseDictionary;
 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void restoreState(Anything args) {
     super.restoreState(args);
-    if (args.isDefined(TranslationDataTypeConstants.BUNDLE_KEY)) {
-      bundle = args.get(TranslationDataTypeConstants.BUNDLE_KEY, (String) null);
+
+    dictionary = new HashMap<String, String>();
+    reverseDictionary = new HashMap<String, String>();
+
+    Vector<String> flatDictionary = new Vector<String>();
+
+    if (args.isDefined(TranslationDataTypeConstants.DICTIONARY)) {
+      flatDictionary = args.get(TranslationDataTypeConstants.DICTIONARY)
+          .toCollection();
     }
-    if (args.isDefined(TranslationDataTypeConstants.PREFIX_KEY)) {
-      prefix = args.get(TranslationDataTypeConstants.PREFIX_KEY, (String) null);
-    }
-    if (args.isDefined(TranslationDataTypeConstants.LANGUAGE_KEY)) {
-      locale = new Locale(args.get(TranslationDataTypeConstants.LANGUAGE_KEY,
-          (String) null));
-      translationProvider = new MockTranslationProvider();
+    for (int index = 0; index < flatDictionary.size() - 1; index += 2) {
+      dictionary.put(flatDictionary.get(index), flatDictionary.get(index + 1));
+      reverseDictionary.put(flatDictionary.get(index + 1), flatDictionary.get(index));
     }
   }
 
@@ -57,7 +58,13 @@ public class UITranslationDataType extends UIDataType {
   @Override
   public Object convertToObject(String newString, @SuppressWarnings("unused")
   Object previousValue) {
-    return newString;
+    if (newString == null) {
+      return null;
+    }
+    if (reverseDictionary == null) {
+      return newString.toString();
+    }
+    return reverseDictionary.get(newString);
   }
 
   /**
@@ -69,18 +76,10 @@ public class UITranslationDataType extends UIDataType {
     if (object == null) {
       return "";
     }
-    if (translationProvider == null) {
+    if (dictionary == null) {
       return object.toString();
     }
-    if (object.toString().startsWith("[")) {
-      return object.toString();
-    }
-    StringBuffer key = new StringBuffer();
-    if (prefix != null && prefix.length() > 0) {
-      key.append(prefix).append(".");
-    }
-    key.append(object);
-    return translationProvider.getTranslation(key.toString(), locale);
+    return dictionary.get(object);
   }
 
   /**
@@ -103,8 +102,7 @@ public class UITranslationDataType extends UIDataType {
       return true;
     }
     UITranslationDataType rhs = (UITranslationDataType) obj;
-    return new EqualsBuilder().append(bundle, rhs.bundle).append(prefix,
-        rhs.prefix).append(locale, rhs.locale).isEquals();
+    return new EqualsBuilder().append(dictionary, rhs.dictionary).isEquals();
   }
 
   /**
@@ -112,7 +110,6 @@ public class UITranslationDataType extends UIDataType {
    */
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(7, 23).append(bundle).append(prefix).append(
-        locale).toHashCode();
+    return new HashCodeBuilder(7, 23).append(dictionary).toHashCode();
   }
 }

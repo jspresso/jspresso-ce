@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.backend;
 
+import java.util.Locale;
+
 import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.binding.ICompositeValueConnector;
@@ -30,9 +32,11 @@ public interface IBackendController extends IController {
    * One of this action should be to construct the root connector based on the
    * root model descriptor.
    * 
+   * @param locale
+   *          the locale this backend controller should start with.
    * @return true if the controller successfully started.
    */
-  boolean start();
+  boolean start(Locale locale);
 
   /**
    * Given a module identifier, this method returns the composite connector used

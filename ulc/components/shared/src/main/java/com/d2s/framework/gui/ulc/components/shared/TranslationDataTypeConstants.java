@@ -20,17 +20,7 @@ public final class TranslationDataTypeConstants {
 
   // anything key constants
   /**
-   * <code>PREFIX_KEY</code>.
+   * <code>DICTIONARY</code>.
    */
-  public static final String PREFIX_KEY   = "prefix";
-
-  /**
-   * <code>LANGUAGE_KEY</code>.
-   */
-  public static final String LANGUAGE_KEY = "language";
-
-  /**
-   * <code>BUNDLE_KEY</code>.
-   */
-  public static final String BUNDLE_KEY   = "bundle";
+  public static final String DICTIONARY   = "dictionary";
 }

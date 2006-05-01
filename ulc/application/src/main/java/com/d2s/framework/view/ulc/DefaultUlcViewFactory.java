@@ -49,6 +49,7 @@ import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 import com.d2s.framework.gui.ulc.components.server.ULCDateField;
 import com.d2s.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
 import com.d2s.framework.gui.ulc.components.server.ULCTable;
+import com.d2s.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
 import com.d2s.framework.gui.ulc.components.server.ULCTree;
 import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
@@ -191,6 +192,8 @@ public class DefaultUlcViewFactory implements
   private IActionFactory<IAction, ULCComponent> actionFactory;
   private IDisplayableAction                    lovAction;
   private IDisplayableAction                    chooseFileAsBinaryPropertyAction;
+
+  private ULCTranslationDataTypeFactory         translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
 
   /**
    * {@inheritDoc}
@@ -817,6 +820,8 @@ public class DefaultUlcViewFactory implements
 
     private static final long   serialVersionUID = -5153268751092971328L;
     private ITreeViewDescriptor viewDescriptor;
+
+    @SuppressWarnings("unused")
     private Locale              locale;
 
     /**
@@ -866,39 +871,40 @@ public class DefaultUlcViewFactory implements
           }
         }
         ((ULCLabel) renderer).setIcon(nodeIcon);
-        String labelText = null;
-        String toolTipText = null;
-        if (value instanceof ICollectionConnector) {
-          // setDataType(translationDataTypeFactory.getTranslationDataType("",
-          // "",
-          // locale));
-          IListViewDescriptor nodeGroupDescriptor = TreeDescriptorHelper
-              .getSubtreeDescriptorFromPath(
-                  viewDescriptor.getRootSubtreeDescriptor(),
-                  getDescriptorPathFromConnectorTreePath(ConnectorTreeHelper
-                      .getTreePathForConnector((IValueConnector) tree
-                          .getModel().getRoot(), (IValueConnector) value)))
-              .getNodeGroupDescriptor();
-          String labelKey = nodeGroupDescriptor.getName();
-          if (labelKey == null) {
-            labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
-          }
-          labelText = translationProvider.getTranslation(labelKey, locale);
-          if (nodeGroupDescriptor.getDescription() != null) {
-            toolTipText = translationProvider.getTranslation(
-                nodeGroupDescriptor.getDescription(), locale);
-          }
-        } else {
-          setDataType(null);
-          if (((IValueConnector) value).getConnectorValue() != null) {
-            labelText = ((IValueConnector) value).getConnectorValue()
-                .toString();
-          } else {
-            labelText = "";
-          }
-        }
-        ((ULCLabel) renderer).setText(labelText);
-        ((ULCLabel) renderer).setToolTipText(toolTipText);
+
+        // The following is useless in ULC since the renderer value is not
+        // forwarded to the client.
+
+        // String labelText = null;
+        // String toolTipText = null;
+        // if (value instanceof ICollectionConnector) {
+        // IListViewDescriptor nodeGroupDescriptor = TreeDescriptorHelper
+        // .getSubtreeDescriptorFromPath(
+        // viewDescriptor.getRootSubtreeDescriptor(),
+        // getDescriptorPathFromConnectorTreePath(ConnectorTreeHelper
+        // .getTreePathForConnector((IValueConnector) tree
+        // .getModel().getRoot(), (IValueConnector) value)))
+        // .getNodeGroupDescriptor();
+        // String labelKey = nodeGroupDescriptor.getName();
+        // if (labelKey == null) {
+        // labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
+        // }
+        // labelText = translationProvider.getTranslation(labelKey, locale);
+        // if (nodeGroupDescriptor.getDescription() != null) {
+        // toolTipText = translationProvider.getTranslation(
+        // nodeGroupDescriptor.getDescription(), locale);
+        // }
+        // } else {
+        // setDataType(null);
+        // if (((IValueConnector) value).getConnectorValue() != null) {
+        // labelText = ((IValueConnector) value).getConnectorValue()
+        // .toString();
+        // } else {
+        // labelText = "";
+        // }
+        // }
+        // ((ULCLabel) renderer).setText(labelText);
+        // ((ULCLabel) renderer).setToolTipText(toolTipText);
       }
       return renderer;
     }
@@ -961,7 +967,10 @@ public class DefaultUlcViewFactory implements
       rowConnectorPrototype.addChildConnector(cellConnector);
     }
     viewComponent.setCellRenderer(new EvenOddListCellRenderer());
-    viewComponent.setModel(new CollectionConnectorListModel(connector));
+
+    CollectionConnectorListModel listModel = new CollectionConnectorListModel(
+        connector);
+    viewComponent.setModel(listModel);
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), null);
     return view;
@@ -997,6 +1006,7 @@ public class DefaultUlcViewFactory implements
 
     Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
     List<String> columnConnectorKeys = new ArrayList<String>();
+
     for (String columnId : viewDescriptor.getRenderedProperties()) {
       IValueConnector columnConnector = createColumnConnector(columnId,
           modelDescriptor.getCollectionDescriptor().getElementDescriptor());
@@ -1014,9 +1024,7 @@ public class DefaultUlcViewFactory implements
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
     tableModel.setColumnClassesByIds(columnClassesByIds);
-    
-    //FIXME translations mappings
-    
+
     TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent
         .getTableHeader());
     java.awt.Dimension iconSize = new java.awt.Dimension(viewComponent
@@ -1086,6 +1094,17 @@ public class DefaultUlcViewFactory implements
     viewComponent.setComponentPopupMenu(createPopupMenu(viewComponent, view,
         actionHandler, locale));
     return view;
+  }
+
+  private Map<String, String> computeTranslationMapping(
+      IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+    Map<String, String> translationMapping = new HashMap<String, String>();
+    for (String enumerationValue : propertyDescriptor.getEnumerationValues()) {
+      translationMapping.put(enumerationValue, translationProvider
+          .getTranslation(computeEnumerationKey(propertyDescriptor
+              .getEnumerationName(), enumerationValue), locale));
+    }
+    return translationMapping;
   }
 
   private ITableCellRenderer createTableCellRenderer(
@@ -1224,7 +1243,6 @@ public class DefaultUlcViewFactory implements
 
     private static final long              serialVersionUID = -4500472602998482756L;
     private IEnumerationPropertyDescriptor propertyDescriptor;
-    @SuppressWarnings("unused")
     private Locale                         locale;
 
     /**
@@ -1252,8 +1270,9 @@ public class DefaultUlcViewFactory implements
     public IRendererComponent getTableCellRendererComponent(
         com.ulcjava.base.application.ULCTable table, Object value,
         boolean isSelected, boolean hasFocus, int row) {
-      // setDataType(translationDataTypeFactory.getTranslationDataType("",
-      // propertyDescriptor.getEnumerationName(), locale));
+      setDataType(translationDataTypeFactory.getTranslationDataType(
+          propertyDescriptor.getEnumerationName(), locale,
+          computeTranslationMapping(propertyDescriptor, locale)));
       setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
           .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
@@ -1757,15 +1776,13 @@ public class DefaultUlcViewFactory implements
       IActionHandler actionHandler, Locale locale) {
     ULCComboBox viewComponent = createULCComboBox();
     for (String enumElement : propertyDescriptor.getEnumerationValues()) {
-      viewComponent.addItem(translationProvider.getTranslation(enumElement,
-          locale));
+      viewComponent.addItem(enumElement);
     }
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
         propertyDescriptor, locale));
 
     ULCComboBoxConnector connector = new ULCComboBoxConnector(
-        propertyDescriptor.getName(), viewComponent, propertyDescriptor
-            .getEnumerationValues());
+        propertyDescriptor.getName(), viewComponent);
     return constructView(viewComponent, null, connector);
   }
 
@@ -1774,7 +1791,6 @@ public class DefaultUlcViewFactory implements
 
     private static final long              serialVersionUID = -5694559709701757582L;
     private IEnumerationPropertyDescriptor propertyDescriptor;
-    @SuppressWarnings("unused")
     private Locale                         locale;
 
     /**
@@ -1800,8 +1816,9 @@ public class DefaultUlcViewFactory implements
     @Override
     public IRendererComponent getComboBoxCellRendererComponent(
         ULCComboBox comboBox, Object value, boolean isSelected, int index) {
-      // setDataType(translationDataTypeFactory.getTranslationDataType("",
-      // propertyDescriptor.getEnumerationName(), locale));
+      setDataType(translationDataTypeFactory.getTranslationDataType(
+          propertyDescriptor.getEnumerationName(), locale,
+          computeTranslationMapping(propertyDescriptor, locale)));
       setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
           .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       return super.getComboBoxCellRendererComponent(comboBox, value,

@@ -218,12 +218,10 @@ public class DefaultUlcController extends
       getMvcBinder().bind(moduleView.getConnector(),
           getBackendController().getModuleConnector(moduleId));
       if (moduleDescriptor.getStartupAction() != null) {
-        if (moduleDescriptor.getStartupAction() != null) {
-          Map<String, Object> context = createEmptyContext();
-          context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR, moduleView
-              .getConnector());
-          execute(moduleDescriptor.getStartupAction(), context);
-        }
+        Map<String, Object> context = createEmptyContext();
+        context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR, moduleView
+            .getConnector());
+        execute(moduleDescriptor.getStartupAction(), context);
       }
       moduleInternalFrame.pack();
     }
@@ -315,8 +313,9 @@ public class DefaultUlcController extends
     public ModuleSelectionAction(String moduleId,
         IModuleDescriptor moduleDescriptor) {
       this.moduleId = moduleId;
-      putValue(com.ulcjava.base.application.IAction.NAME, getTranslationProvider()
-          .getTranslation(moduleDescriptor.getName(), getLocale()));
+      putValue(com.ulcjava.base.application.IAction.NAME,
+          getTranslationProvider().getTranslation(moduleDescriptor.getName(),
+              getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
           getTranslationProvider().getTranslation(
               moduleDescriptor.getDescription(), getLocale()));
@@ -345,8 +344,8 @@ public class DefaultUlcController extends
      * Constructs a new <code>ModuleSelectionAction</code> instance.
      */
     public QuitAction() {
-      putValue(com.ulcjava.base.application.IAction.NAME, getTranslationProvider()
-          .getTranslation("QUIT", getLocale()));
+      putValue(com.ulcjava.base.application.IAction.NAME,
+          getTranslationProvider().getTranslation("QUIT", getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
           getTranslationProvider().getTranslation("QUIT", getLocale()));
     }
@@ -371,9 +370,9 @@ public class DefaultUlcController extends
    * @return the constructed internal frame.
    */
   private ULCInternalFrame createULCInternalFrame(IView<ULCComponent> view) {
-    ULCInternalFrame internalFrame = new ULCInternalFrame(getTranslationProvider()
-        .getTranslation(view.getDescriptor().getName(), getLocale()), true,
-        false, true, true);
+    ULCInternalFrame internalFrame = new ULCInternalFrame(
+        getTranslationProvider().getTranslation(view.getDescriptor().getName(),
+            getLocale()), true, false, true, true);
     internalFrame.getContentPane().add(view.getPeer());
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;
@@ -388,7 +387,8 @@ public class DefaultUlcController extends
         getTranslationProvider(), getLocale());
     dialog.setMessageIcon(getIconFactory().getErrorIcon(
         IIconFactory.MEDIUM_ICON_SIZE));
-    dialog.setTitle(getTranslationProvider().getTranslation("ERROR", getLocale()));
+    dialog.setTitle(getTranslationProvider().getTranslation("ERROR",
+        getLocale()));
     dialog.setMessage(ex.getLocalizedMessage());
     dialog.setDetails(ex);
     dialog.setVisible(true);

@@ -3,7 +3,8 @@
  */
 package com.d2s.framework.gui.ulc.components.server;
 
-import java.util.Locale;
+import java.util.Map;
+import java.util.Vector;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -25,34 +26,26 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class ULCTranslationDataType extends ULCProxy implements IDataType {
 
-  private static final long serialVersionUID = 5080679351626979457L;
+  private static final long   serialVersionUID = 5080679351626979457L;
 
-  private String            bundle;
-  private String            prefix;
-  private Locale            locale;
+  private Map<String, String> dictionary;
 
   /**
    * Constructs a new <code>ULCTranslationDataType</code> instance. This
    * constructor has default visibility to prevent for direct instanciation.
    * 
-   * @param bundle
-   *          the name of the resource bundle to use for the translation.
-   * @param prefix
-   *          the prefix to use for the translation.
-   * @param locale
-   *          the locale to use for the translation.
+   * @param dictionary
+   *          the dictionary containing the translations.
    */
-  ULCTranslationDataType(String bundle, String prefix, Locale locale) {
-    this.bundle = bundle;
-    this.prefix = prefix;
-    this.locale = locale;
+  ULCTranslationDataType(Map<String, String> dictionary) {
+    this.dictionary = dictionary;
   }
 
   /**
    * Constructs a new <code>ULCTranslationDataType</code> instance.
    */
   public ULCTranslationDataType() {
-    this(null, null, null);
+    this(null);
   }
 
   /**
@@ -61,10 +54,13 @@ public class ULCTranslationDataType extends ULCProxy implements IDataType {
   @Override
   protected void saveState(Anything a) {
     super.saveState(a);
-    saveState(a, TranslationDataTypeConstants.BUNDLE_KEY, bundle, null);
-    saveState(a, TranslationDataTypeConstants.PREFIX_KEY, prefix, null);
-    saveState(a, TranslationDataTypeConstants.LANGUAGE_KEY, locale
-        .getLanguage(), null);
+    Vector<String> flatDictionary = new Vector<String>();
+    for (Map.Entry<String, String> dictEntry : dictionary.entrySet()) {
+      flatDictionary.add(dictEntry.getKey());
+      flatDictionary.add(dictEntry.getValue());
+    }
+
+    saveState(a, TranslationDataTypeConstants.DICTIONARY, flatDictionary, null);
   }
 
   /**
@@ -87,8 +83,7 @@ public class ULCTranslationDataType extends ULCProxy implements IDataType {
       return true;
     }
     ULCTranslationDataType rhs = (ULCTranslationDataType) obj;
-    return new EqualsBuilder().append(bundle, rhs.bundle).append(prefix,
-        rhs.prefix).append(locale, rhs.locale).isEquals();
+    return new EqualsBuilder().append(dictionary, rhs.dictionary).isEquals();
   }
 
   /**
@@ -96,8 +91,7 @@ public class ULCTranslationDataType extends ULCProxy implements IDataType {
    */
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(7, 23).append(bundle).append(prefix).append(
-        locale).toHashCode();
+    return new HashCodeBuilder(7, 23).append(dictionary).toHashCode();
   }
 
 }
