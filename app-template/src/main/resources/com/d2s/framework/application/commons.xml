@@ -2,269 +2,265 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <!--
-  Root application context for the D2S framework.
+	Root application context for the D2S framework.
 -->
 <beans default-lazy-init="true">
-  <!--
-    The message source for this context, loaded from localized "messages_xx" files.
-    "getMessage" calls to this context will use this source.
-    Child contexts can have their own message sources, inheriting all messages from this
-    source, being able to define new messages and override ones defined in this source.
-  -->
-  <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-    <property name="basename" value="messages" />
-  </bean>
 
-  <bean id="mockTranslator" class="com.d2s.framework.util.i18n.mock.MockTranslationProvider" />
+	<bean id="mockMessageSource" class="com.d2s.framework.util.i18n.mock.MockMessageSource" />
 
-  <!--
-    The implementation used as MvcBinder.
-  -->
-  <bean id="mvcBinder" class="com.d2s.framework.binding.DefaultMvcBinder"></bean>
+	<bean id="translationProvider" class="com.d2s.framework.util.i18n.basic.MessageSourceTranslationProvider">
+		<property name="messageSource" ref="applicationMessageSource" />
+	</bean>
 
-  <!--
-    The implementation used as AccessorFactory.
-  -->
-  <bean id="accessorFactory" class="com.d2s.framework.util.bean.DefaultAccessorFactory"></bean>
+	<!--
+		The implementation used as MvcBinder.
+	-->
+	<bean id="mvcBinder" class="com.d2s.framework.binding.DefaultMvcBinder"></bean>
 
-  <!--
-    The implementation used as ConnectorFactory.
-  -->
-  <bean id="connectorFactory" class="com.d2s.framework.binding.basic.BasicConnectorFactory"></bean>
+	<!--
+		The implementation used as AccessorFactory.
+	-->
+	<bean id="accessorFactory" class="com.d2s.framework.util.bean.DefaultAccessorFactory"></bean>
 
-  <!--
-    The implementation used as EntityCollectionFactory.
-  -->
-  <bean id="entityCollectionFactory" class="com.d2s.framework.model.entity.DefaultEntityCollectionFactory"></bean>
+	<!--
+		The implementation used as ConnectorFactory.
+	-->
+	<bean id="connectorFactory" class="com.d2s.framework.binding.basic.BasicConnectorFactory"></bean>
 
-  <!--
-    The implementation used as EntityExtensionFactory.
-  -->
-  <bean id="entityExtensionFactory" class="com.d2s.framework.model.entity.DefaultEntityExtensionFactory"></bean>
+	<!--
+		The implementation used as EntityCollectionFactory.
+	-->
+	<bean id="entityCollectionFactory" class="com.d2s.framework.model.entity.DefaultEntityCollectionFactory"></bean>
 
-  <!--
-    The implementation used as BeanConnectorFactory.
-  -->
-  <bean id="beanConnectorFactory" class="com.d2s.framework.binding.bean.DefaultBeanConnectorFactory">
-    <property name="accessorFactory" ref="accessorFactory" />
-  </bean>
+	<!--
+		The implementation used as EntityExtensionFactory.
+	-->
+	<bean id="entityExtensionFactory" class="com.d2s.framework.model.entity.DefaultEntityExtensionFactory"></bean>
 
-  <!--
-    The implementation used as MvcBinder.
-  -->
-  <bean id="masterDetailBinder" class="com.d2s.framework.binding.masterdetail.DefaultMasterDetailBinder">
-    <property name="mvcBinder" ref="mvcBinder" />
-  </bean>
+	<!--
+		The implementation used as BeanConnectorFactory.
+	-->
+	<bean id="beanConnectorFactory" class="com.d2s.framework.binding.bean.DefaultBeanConnectorFactory">
+		<property name="accessorFactory" ref="accessorFactory" />
+	</bean>
 
-  <!--
-    The GUID generator used to implement entities "synthetic key". The idea was
-    taken from 'maulinshah' post on the hibernate wiki. The implementation of
-    the GUID generator has been written by Marc A. Mnich who published
-    it on http://www.javaexchange.com/aboutRandomGUID.html
-  -->
-  <bean id="entityGUIDGenerator" class="com.d2s.framework.util.uid.RandomGUIDGenerator" />
+	<!--
+		The implementation used as MvcBinder.
+	-->
+	<bean id="masterDetailBinder" class="com.d2s.framework.binding.masterdetail.DefaultMasterDetailBinder">
+		<property name="mvcBinder" ref="mvcBinder" />
+	</bean>
 
-  <!--
-    The root abstract implementation used as Application Session.
-  -->
-  <bean id="abstractApplicationSession" abstract="true"
-    class="com.d2s.framework.application.backend.session.basic.BasicApplicationSession">
-    <property name="collectionFactory" ref="entityCollectionFactory" />
-    <property name="entityRegistry">
-      <bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" />
-    </property>
-    <property name="unitOfWork">
-      <bean class="com.d2s.framework.application.backend.session.basic.BasicEntityUnitOfWork" />
-    </property>
-  </bean>
+	<!--
+		The GUID generator used to implement entities "synthetic key". The idea was
+		taken from 'maulinshah' post on the hibernate wiki. The implementation of
+		the GUID generator has been written by Marc A. Mnich who published
+		it on http://www.javaexchange.com/aboutRandomGUID.html
+	-->
+	<bean id="entityGUIDGenerator" class="com.d2s.framework.util.uid.RandomGUIDGenerator" />
 
-  <!--
-    The implementation used as EntityFactory.
-  -->
-  <bean id="basicEntityFactory" class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
-    <property name="accessorFactory" ref="accessorFactory" />
-    <property name="entityCollectionFactory" ref="entityCollectionFactory" />
-    <property name="entityExtensionFactory" ref="entityExtensionFactory" />
-    <property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
-  </bean>
+	<!--
+		The root abstract implementation used as Application Session.
+	-->
+	<bean id="abstractApplicationSession" abstract="true"
+		class="com.d2s.framework.application.backend.session.basic.BasicApplicationSession">
+		<property name="collectionFactory" ref="entityCollectionFactory" />
+		<property name="entityRegistry">
+			<bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" />
+		</property>
+		<property name="unitOfWork">
+			<bean class="com.d2s.framework.application.backend.session.basic.BasicEntityUnitOfWork" />
+		</property>
+	</bean>
 
-  <!--
-    Root action beans.
-  -->
-  <bean abstract="true" id="abstractAction">
-    <property name="translationProvider" ref="mockTranslator" />
-  </bean>
+	<!--
+		The implementation used as EntityFactory.
+	-->
+	<bean id="basicEntityFactory" class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
+		<property name="accessorFactory" ref="accessorFactory" />
+		<property name="entityCollectionFactory" ref="entityCollectionFactory" />
+		<property name="entityExtensionFactory" ref="entityExtensionFactory" />
+		<property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
+	</bean>
 
-  <bean abstract="true" id="abstractBackAction" parent="abstractAction"
-    class="com.d2s.framework.application.backend.action.AbstractBackendAction" />
+	<!--
+		Root action beans.
+	-->
+	<bean abstract="true" id="abstractAction">
+		<property name="translationProvider" ref="translationProvider" />
+	</bean>
 
-  <bean id="createQueryEntityAction" parent="abstractBackAction"
-    class="com.d2s.framework.application.backend.action.CreateQueryEntityAction">
-  </bean>
+	<bean abstract="true" id="abstractBackAction" parent="abstractAction"
+		class="com.d2s.framework.application.backend.action.AbstractBackendAction" />
 
-  <!--
-    The implementation used as view factory.
-    View factory is not defined as singleton since it can implement some cache a the session level.
-  -->
-  <bean id="abstractViewFactory" abstract="true">
-    <property name="connectorFactory" ref="connectorFactory" />
-    <property name="mvcBinder" ref="mvcBinder" />
-    <property name="translationProvider" ref="mockTranslator" />
-    <property name="masterDetailBinder" ref="masterDetailBinder" />
-    <property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
-    <property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
-    <property name="iconFactory" ref="iconFactory" />
-    <property name="actionFactory" ref="actionFactory" />
-    <property name="lovAction" ref="lovAction" />
-    <property name="chooseFileAsBinaryPropertyAction" ref="chooseFileAsBinaryPropertyAction" />
-  </bean>
+	<bean id="createQueryEntityAction" parent="abstractBackAction"
+		class="com.d2s.framework.application.backend.action.CreateQueryEntityAction">
+	</bean>
 
-  <bean id="abstractActionFactory" abstract="true">
-    <property name="translationProvider" ref="mockTranslator" />
-    <property name="iconFactory" ref="iconFactory" />
-  </bean>
+	<!--
+		The implementation used as view factory.
+		View factory is not defined as singleton since it can implement some cache a the session level.
+	-->
+	<bean id="abstractViewFactory" abstract="true">
+		<property name="connectorFactory" ref="connectorFactory" />
+		<property name="mvcBinder" ref="mvcBinder" />
+		<property name="translationProvider" ref="translationProvider" />
+		<property name="masterDetailBinder" ref="masterDetailBinder" />
+		<property name="listSelectionModelBinder" ref="listSelectionModelBinder" />
+		<property name="treeSelectionModelBinder" ref="treeSelectionModelBinder" />
+		<property name="iconFactory" ref="iconFactory" />
+		<property name="actionFactory" ref="actionFactory" />
+		<property name="lovAction" ref="lovAction" />
+		<property name="chooseFileAsBinaryPropertyAction" ref="chooseFileAsBinaryPropertyAction" />
+	</bean>
 
-  <!--
-    The scriptHandler.
-  -->
-  <bean id="scriptHandler" class="com.d2s.framework.util.scripting.DefaultScriptHandler"></bean>
+	<bean id="abstractActionFactory" abstract="true">
+		<property name="translationProvider" ref="translationProvider" />
+		<property name="iconFactory" ref="iconFactory" />
+	</bean>
 
-  <!--
-    The controllers.
-  -->
+	<!--
+		The scriptHandler.
+	-->
+	<bean id="scriptHandler" class="com.d2s.framework.util.scripting.DefaultScriptHandler"></bean>
 
-  <!--
-    The controllers. Controllers are not singleton since they can hold some session state.
-  -->
-  <bean abstract="true" id="abstractFrontController"
-    class="com.d2s.framework.application.frontend.controller.AbstractFrontendController">
-    <property name="mvcBinder" ref="mvcBinder" />
-    <property name="translationProvider" ref="mockTranslator" />
-    <property name="viewFactory" ref="viewFactory" />
-  </bean>
+	<!--
+		The controllers.
+	-->
 
-  <bean abstract="true" id="abstractIconFactory" class="com.d2s.framework.view.AbstractIconFactory">
-    <property name="okYesIconImageURL" value="classpath:images/ok-48x48.png" />
-    <property name="noIconImageURL" value="classpath:images/no-48x48.png" />
-    <property name="cancelIconImageURL" value="classpath:images/cancel-48x48.png" />
-    <property name="infoIconImageURL" value="classpath:images/info-48x48.png" />
-    <property name="warningIconImageURL" value="classpath:images/warning-48x48.png" />
-    <property name="errorIconImageURL" value="classpath:images/error-48x48.png" />
-  </bean>
+	<!--
+		The controllers. Controllers are not singleton since they can hold some session state.
+	-->
+	<bean abstract="true" id="abstractFrontController"
+		class="com.d2s.framework.application.frontend.controller.AbstractFrontendController">
+		<property name="mvcBinder" ref="mvcBinder" />
+		<property name="translationProvider" ref="translationProvider" />
+		<property name="viewFactory" ref="viewFactory" />
+	</bean>
 
-  <bean abstract="true" id="abstractBackController"
-    class="com.d2s.framework.application.backend.DefaultBackendController">
-    <property name="entityFactory">
-      <bean parent="basicEntityFactory"
-        class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory" />
-    </property>
-    <property name="accessorFactory" ref="accessorFactory" />
-    <property name="beanConnectorFactory" ref="beanConnectorFactory" />
-    <property name="translationProvider" ref="mockTranslator" />
-  </bean>
+	<bean abstract="true" id="abstractIconFactory" class="com.d2s.framework.view.AbstractIconFactory">
+		<property name="okYesIconImageURL" value="classpath:images/ok-48x48.png" />
+		<property name="noIconImageURL" value="classpath:images/no-48x48.png" />
+		<property name="cancelIconImageURL" value="classpath:images/cancel-48x48.png" />
+		<property name="infoIconImageURL" value="classpath:images/info-48x48.png" />
+		<property name="warningIconImageURL" value="classpath:images/warning-48x48.png" />
+		<property name="errorIconImageURL" value="classpath:images/error-48x48.png" />
+	</bean>
 
-  <!--
-    The Root descriptor of all entities.
-  -->
-  <bean id="com.d2s.framework.model.entity.IEntity"
-    class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
-    <constructor-arg index="0" value="com.d2s.framework.model.entity.IEntity" />
-    <property name="propertyDescriptors">
-      <list>
-        <bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
-          <property name="name" value="id" />
-          <property name="mandatory" value="true" />
-        </bean>
-        <bean class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
-          <property name="name" value="version" />
-          <property name="mandatory" value="true" />
-        </bean>
-      </list>
-    </property>
-  </bean>
+	<bean abstract="true" id="abstractBackController"
+		class="com.d2s.framework.application.backend.DefaultBackendController">
+		<property name="entityFactory">
+			<bean parent="basicEntityFactory"
+				class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory" />
+		</property>
+		<property name="accessorFactory" ref="accessorFactory" />
+		<property name="beanConnectorFactory" ref="beanConnectorFactory" />
+		<property name="translationProvider" ref="translationProvider" />
+	</bean>
 
-  <!--
-    Utility beans for model.
-  -->
-  <bean id="DATE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TYPE</value>
-    </property>
-  </bean>
-  <bean id="TIME" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.TIME_TYPE</value>
-    </property>
-  </bean>
-  <bean id="DATE_TIME" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TIME_TYPE</value>
-    </property>
-  </bean>
+	<!--
+		The Root descriptor of all entities.
+	-->
+	<bean id="com.d2s.framework.model.entity.IEntity"
+		class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
+		<constructor-arg index="0" value="com.d2s.framework.model.entity.IEntity" />
+		<property name="propertyDescriptors">
+			<list>
+				<bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+					<property name="name" value="id" />
+					<property name="mandatory" value="true" />
+				</bean>
+				<bean class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
+					<property name="name" value="version" />
+					<property name="mandatory" value="true" />
+				</bean>
+			</list>
+		</property>
+	</bean>
 
-  <!--
-    Utility beans for views.
-  -->
-  <bean id="ASIDE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.IComponentViewDescriptor.ASIDE</value>
-    </property>
-  </bean>
-  <bean id="ABOVE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.IComponentViewDescriptor.ABOVE</value>
-    </property>
-  </bean>
-  <bean id="ROW" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.IEvenGridViewDescriptor.ROW</value>
-    </property>
-  </bean>
-  <bean id="COLUMN" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.IEvenGridViewDescriptor.COLUMN</value>
-    </property>
-  </bean>
-  <bean id="HORIZONTAL" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.ISplitViewDescriptor.HORIZONTAL</value>
-    </property>
-  </bean>
-  <bean id="VERTICAL" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.ISplitViewDescriptor.VERTICAL</value>
-    </property>
-  </bean>
-  <bean id="SIMPLE_BORDER" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.IViewDescriptor.SIMPLE</value>
-    </property>
-  </bean>
-  <bean id="TITLED_BORDER" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.IViewDescriptor.TITLED</value>
-    </property>
-  </bean>
-  <bean id="decoratedView" abstract="true">
-    <property name="borderType" ref="TITLED_BORDER" />
-  </bean>
+	<!--
+		Utility beans for model.
+	-->
+	<bean id="DATE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TYPE</value>
+		</property>
+	</bean>
+	<bean id="TIME" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.TIME_TYPE</value>
+		</property>
+	</bean>
+	<bean id="DATE_TIME" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TIME_TYPE</value>
+		</property>
+	</bean>
 
-  <!--
-    Module utility beans.
-  -->
-  <bean id="moduleDescriptor" class="com.d2s.framework.application.model.descriptor.ModuleDescriptor" />
-  <bean id="subModulesPropertyDescriptor" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property name="targetObject" ref="moduleDescriptor" />
-    <property name="targetMethod" value="getPropertyDescriptor" />
-    <property name="arguments">
-      <list>
-        <value>subModules</value>
-      </list>
-    </property>
-  </bean>
-  <bean abstract="true" id="abstractSubModulesNodeGroupDescriptor"
-    class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor">
-    <property name="renderedProperty" value="name" />
-    <property name="modelDescriptor" ref="subModulesPropertyDescriptor" />
-  </bean>
+	<!--
+		Utility beans for views.
+	-->
+	<bean id="ASIDE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.view.descriptor.IComponentViewDescriptor.ASIDE</value>
+		</property>
+	</bean>
+	<bean id="ABOVE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.view.descriptor.IComponentViewDescriptor.ABOVE</value>
+		</property>
+	</bean>
+	<bean id="ROW" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.view.descriptor.IEvenGridViewDescriptor.ROW</value>
+		</property>
+	</bean>
+	<bean id="COLUMN" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.view.descriptor.IEvenGridViewDescriptor.COLUMN</value>
+		</property>
+	</bean>
+	<bean id="HORIZONTAL" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.view.descriptor.ISplitViewDescriptor.HORIZONTAL</value>
+		</property>
+	</bean>
+	<bean id="VERTICAL" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.view.descriptor.ISplitViewDescriptor.VERTICAL</value>
+		</property>
+	</bean>
+	<bean id="SIMPLE_BORDER" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.view.descriptor.IViewDescriptor.SIMPLE</value>
+		</property>
+	</bean>
+	<bean id="TITLED_BORDER" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.view.descriptor.IViewDescriptor.TITLED</value>
+		</property>
+	</bean>
+	<bean id="decoratedView" abstract="true">
+		<property name="borderType" ref="TITLED_BORDER" />
+	</bean>
+
+	<!--
+		Module utility beans.
+	-->
+	<bean id="moduleDescriptor" class="com.d2s.framework.application.model.descriptor.ModuleDescriptor" />
+	<bean id="subModulesPropertyDescriptor"
+		class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" ref="moduleDescriptor" />
+		<property name="targetMethod" value="getPropertyDescriptor" />
+		<property name="arguments">
+			<list>
+				<value>subModules</value>
+			</list>
+		</property>
+	</bean>
+	<bean abstract="true" id="abstractSubModulesNodeGroupDescriptor"
+		class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor">
+		<property name="renderedProperty" value="name" />
+		<property name="modelDescriptor" ref="subModulesPropertyDescriptor" />
+	</bean>
 </beans>
