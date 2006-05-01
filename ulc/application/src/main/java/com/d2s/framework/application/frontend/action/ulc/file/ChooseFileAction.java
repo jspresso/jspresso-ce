@@ -10,7 +10,6 @@ import java.util.Map;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 import com.d2s.framework.application.frontend.file.IFileOpenCallback;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.util.serializable.IFileLoadHandler;
 import com.ulcjava.base.shared.FileChooserConfig;
@@ -27,7 +26,6 @@ import com.ulcjava.base.shared.FileChooserConfig;
  */
 public class ChooseFileAction extends AbstractUlcAction {
 
-  private ITranslationProvider      translationProvider;
   private Map<String, List<String>> fileFilter;
   private IFileOpenCallback         fileOpenCallback;
   private FileChooserConfig         fileChooser;
@@ -63,7 +61,7 @@ public class ChooseFileAction extends AbstractUlcAction {
   private FileChooserConfig getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new FileChooserConfig();
-      fileChooser.setDialogTitle(translationProvider.getTranslation(getName(),
+      fileChooser.setDialogTitle(getTranslationProvider().getTranslation(getName(),
           getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
@@ -76,7 +74,7 @@ public class ChooseFileAction extends AbstractUlcAction {
           fileChooser
               .addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
                   fileTypeEntry.getValue().toArray(new String[0]),
-                  translationProvider.getTranslation(fileTypeEntry.getKey(),
+                  getTranslationProvider().getTranslation(fileTypeEntry.getKey(),
                       getLocale(context))
                       + extensionsDescription.toString()));
         }
@@ -98,16 +96,6 @@ public class ChooseFileAction extends AbstractUlcAction {
     if (oldFileFilter != this.fileFilter) {
       fileChooser = null;
     }
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 
   /**

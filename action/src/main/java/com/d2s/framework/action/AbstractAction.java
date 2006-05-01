@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Base class for all application actions. Takes care of the context reference
@@ -22,8 +23,9 @@ import com.d2s.framework.binding.ICompositeValueConnector;
  */
 public abstract class AbstractAction implements IAction {
 
-  private boolean             longOperation;
-  private Map<String, Object> initialContext;
+  private boolean              longOperation;
+  private Map<String, Object>  initialContext;
+  private ITranslationProvider translationProvider;
 
   /**
    * Retrieves the locale the action has to use to execute from its context
@@ -36,6 +38,7 @@ public abstract class AbstractAction implements IAction {
   public Locale getLocale(Map<String, Object> context) {
     return (Locale) context.get(ActionContextConstants.LOCALE);
   }
+
 
   /**
    * {@inheritDoc}
@@ -85,5 +88,23 @@ public abstract class AbstractAction implements IAction {
     return ((ICollectionConnectorProvider) ((ICompositeValueConnector) context
         .get(ActionContextConstants.MODULE_VIEW_CONNECTOR))
         .getParentConnector()).getCollectionConnector().getSelectedIndices();
+  }
+
+  /**
+   * Gets the translationProvider.
+   * 
+   * @return the translationProvider.
+   */
+  protected ITranslationProvider getTranslationProvider() {
+    return translationProvider;
+  }
+  
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 }

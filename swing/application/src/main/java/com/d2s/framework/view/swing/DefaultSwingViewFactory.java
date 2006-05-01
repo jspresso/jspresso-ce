@@ -978,7 +978,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
         connector);
 
     if (viewDescriptor.getRenderedProperty() != null) {
-      IValueConnector cellConnector = createCellConnector(viewDescriptor
+      IValueConnector cellConnector = createColumnConnector(viewDescriptor
           .getRenderedProperty(), modelDescriptor.getCollectionDescriptor()
           .getElementDescriptor());
       rowConnectorPrototype.addChildConnector(cellConnector);
@@ -1020,7 +1020,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
     Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
     List<String> columnConnectorKeys = new ArrayList<String>();
     for (String columnId : viewDescriptor.getRenderedProperties()) {
-      IValueConnector columnConnector = createCellConnector(columnId,
+      IValueConnector columnConnector = createColumnConnector(columnId,
           modelDescriptor.getCollectionDescriptor().getElementDescriptor());
       rowConnectorPrototype.addChildConnector(columnConnector);
       columnClassesByIds.put(columnId, modelDescriptor
@@ -1304,7 +1304,7 @@ public class DefaultSwingViewFactory implements IViewFactory<JComponent, Icon, A
     }
   }
 
-  private IValueConnector createCellConnector(String columnId,
+  private IValueConnector createColumnConnector(String columnId,
       IComponentDescriptor descriptor) {
     IPropertyDescriptor propertyDescriptor = descriptor
         .getPropertyDescriptor(columnId);

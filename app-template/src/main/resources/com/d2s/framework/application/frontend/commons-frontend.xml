@@ -8,12 +8,12 @@
   <!--
     View factories
   -->
-  <bean id="lovViewDescriptorFactory" class="com.d2s.framework.view.descriptor.basic.BasicLovViewDescriptorFactory"/>
+  <bean id="lovViewDescriptorFactory" class="com.d2s.framework.view.descriptor.basic.BasicLovViewDescriptorFactory" />
 
   <!--
     Root action beans.
   -->
-  <bean id="abstractFrontAction" abstract="true" />
+  <bean abstract="true" id="abstractFrontAction" parent="abstractAction" />
 
   <!--
     Action beans.
@@ -39,7 +39,6 @@
     <property name="iconImageURL" value="classpath:images/open_file-48x48.png" />
     <property name="name" value="OPEN_FILE" />
     <property name="description" value="OPEN_FILE" />
-    <property name="translationProvider" ref="mockTranslator" />
   </bean>
 
   <bean id="connectorSelectionFrontAction"

@@ -3,6 +3,9 @@
  */
 package com.d2s.framework.binding.ulc;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.ulcjava.base.application.ULCComboBox;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
@@ -18,6 +21,8 @@ import com.ulcjava.base.application.event.serializable.IActionListener;
  */
 public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
 
+  private List<String> genuineValues;
+
   /**
    * Constructs a new <code>ULCComboBoxConnector</code> instance.
    * 
@@ -25,9 +30,15 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
    *          the id of the connector.
    * @param comboBox
    *          the connected ULCComboBox.
+   * @param genuineValues
+   *          the values which are used when getting the connector value. I18N
+   *          in ULC can't be handled in renderers. That is why this workaround
+   *          has to be used.
    */
-  public ULCComboBoxConnector(String id, ULCComboBox comboBox) {
+  public ULCComboBoxConnector(String id, ULCComboBox comboBox,
+      List<String> genuineValues) {
     super(id, comboBox);
+    this.genuineValues = genuineValues;
   }
 
   /**
@@ -37,7 +48,7 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
    */
   @Override
   protected Object getConnecteeValue() {
-    return getConnectedULCComponent().getSelectedItem();
+    return genuineValues.get(getConnectedULCComponent().getSelectedIndex());
   }
 
   /**
@@ -47,7 +58,8 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
-    getConnectedULCComponent().setSelectedItem(aValue);
+    getConnectedULCComponent().setSelectedIndex(
+        Collections.binarySearch(genuineValues, (String) aValue));
   }
 
   /**

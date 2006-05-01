@@ -18,7 +18,6 @@ import javax.swing.filechooser.FileFilter;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
 import com.d2s.framework.application.frontend.file.IFileOpenCallback;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Initiates a file choosing action. Then the file content is passed as a byte
@@ -32,7 +31,6 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public class ChooseFileAction extends AbstractSwingAction {
 
-  private ITranslationProvider      translationProvider;
   private Map<String, List<String>> fileFilter;
   private IFileOpenCallback         fileOpenCallback;
   private JFileChooser              fileChooser;
@@ -68,7 +66,7 @@ public class ChooseFileAction extends AbstractSwingAction {
   private JFileChooser getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle(translationProvider.getTranslation(getName(),
+      fileChooser.setDialogTitle(getTranslationProvider().getTranslation(getName(),
           getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
@@ -79,7 +77,7 @@ public class ChooseFileAction extends AbstractSwingAction {
           }
           extensionsDescription.append(" )");
           fileChooser.addChoosableFileFilter(new FileFilterAdapter(
-              fileTypeEntry.getValue(), translationProvider.getTranslation(
+              fileTypeEntry.getValue(), getTranslationProvider().getTranslation(
                   fileTypeEntry.getKey(), getLocale(context))
                   + extensionsDescription.toString()));
         }
@@ -102,16 +100,6 @@ public class ChooseFileAction extends AbstractSwingAction {
     if (oldFileFilter != this.fileFilter) {
       fileChooser = null;
     }
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 
   /**
