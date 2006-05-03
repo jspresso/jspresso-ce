@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.d2s.framework.application.IController;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.i18n.ITranslationProvider;
@@ -23,9 +24,8 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public abstract class AbstractAction implements IAction {
 
-  private boolean              longOperation;
-  private Map<String, Object>  initialContext;
-  private ITranslationProvider translationProvider;
+  private boolean             longOperation;
+  private Map<String, Object> initialContext;
 
   /**
    * Retrieves the locale the action has to use to execute from its context
@@ -36,7 +36,6 @@ public abstract class AbstractAction implements IAction {
    * @return the locale the action executes in.
    */
   public abstract Locale getLocale(Map<String, Object> context);
-
 
   /**
    * {@inheritDoc}
@@ -89,20 +88,23 @@ public abstract class AbstractAction implements IAction {
   }
 
   /**
-   * Gets the translationProvider.
+   * Gets the controller (frontend or backend) out of the action context.
    * 
-   * @return the translationProvider.
+   * @param context
+   *          the action context.
+   * @return the controller (frontend or backend).
    */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
-  }
-  
+  protected abstract IController getController(Map<String, Object> context);
+
   /**
-   * Sets the translationProvider.
+   * Gets a translation provider out of the action context.
    * 
-   * @param translationProvider the translationProvider to set.
+   * @param context
+   *          the action context.
+   * @return the translation provider.
    */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
+  protected ITranslationProvider getTranslationProvider(
+      Map<String, Object> context) {
+    return getController(context).getTranslationProvider();
   }
 }

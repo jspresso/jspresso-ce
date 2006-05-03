@@ -5,6 +5,8 @@ package com.d2s.framework.util.i18n.mock;
 
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.MessageSourceResolvable;
 
@@ -18,6 +20,8 @@ import org.springframework.context.MessageSourceResolvable;
  * @author Vincent Vandenschrick
  */
 public class MockMessageSource implements MessageSource {
+
+  private static final Log LOG = LogFactory.getLog(MockMessageSource.class);
 
   private String getTranslation(String key, Locale locale) {
     return "[" + locale.getISO3Language() + ":" + key + "]";
@@ -35,6 +39,9 @@ public class MockMessageSource implements MessageSource {
    */
   public String getMessage(String key, Object[] args, String defaultMessage,
       Locale locale) {
+    if (LOG.isWarnEnabled()) {
+      LOG.warn(key + "=/*TO_REPLACE*/");
+    }
     StringBuffer message = new StringBuffer(getTranslation(key, locale));
     if (args != null && args.length > 0) {
       message.append(" { ");

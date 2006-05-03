@@ -21,7 +21,7 @@ public class FindAction extends ActionWrapper {
    * Constructs a new <code>FindAction</code> instance.
    */
   public FindAction() {
-    setName("FIND");
+    setName("find.name");
     setIconImageURL("classpath:images/find-48x48.png");
   }
 }

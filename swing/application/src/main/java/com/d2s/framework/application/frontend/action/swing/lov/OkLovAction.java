@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.swing.std.DialogOkAction;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -40,8 +39,8 @@ public class OkLovAction extends DialogOkAction {
     if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
       IEntity selectedEntity = (IEntity) resultConnector.getChildConnector(
           resultSelectedIndices[0]).getConnectorValue();
-      if (selectedEntity != null && actionHandler instanceof IController) {
-        selectedEntity = ((IController) actionHandler).merge(selectedEntity,
+      if (selectedEntity != null) {
+        selectedEntity = getController(context).merge(selectedEntity,
             MergeMode.MERGE_KEEP);
       }
       context.put(ActionContextConstants.ACTION_RESULT, selectedEntity);

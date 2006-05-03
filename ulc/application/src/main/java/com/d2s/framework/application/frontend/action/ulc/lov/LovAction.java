@@ -48,8 +48,8 @@ public class LovAction extends ModalDialogAction {
    * Constructs a new <code>LovAction</code> instance.
    */
   public LovAction() {
-    setName("LOV_NAME");
-    setDescription("LOV_DESCRIPTION");
+    setName("lov.name");
+    setDescription("lov.description");
     setIconImageURL("classpath:images/find-48x48.png");
   }
 

@@ -3,9 +3,12 @@
  */
 package com.d2s.framework.application.view.descriptor.basic;
 
+import java.util.Locale;
+
 import com.d2s.framework.application.view.descriptor.ISimpleSubModuleDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
@@ -120,5 +123,19 @@ public class BasicSimpleSubModuleDescriptor extends
    */
   public void setName(String name) {
     descriptor.setName(name);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+    return descriptor.getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+    return descriptor.getI18nDescription(translationProvider, locale);
   }
 }

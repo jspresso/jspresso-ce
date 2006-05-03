@@ -3,6 +3,10 @@
  */
 package com.d2s.framework.util.descriptor;
 
+import java.util.Locale;
+
+import com.d2s.framework.util.i18n.ITranslationProvider;
+
 /**
  * This class is a default convennience implementation of
  * <code>IDescriptor</code>.
@@ -16,7 +20,6 @@ package com.d2s.framework.util.descriptor;
 public class DefaultDescriptor implements IDescriptor {
 
   private String name;
-
   private String description;
 
   /**
@@ -55,5 +58,21 @@ public class DefaultDescriptor implements IDescriptor {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
+    return translationProvider.getTranslation(description, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
+    return translationProvider.getTranslation(name, locale);
   }
 }

@@ -50,7 +50,6 @@ public final class JErrorDialog extends JDialog {
   private JButton              detailsButton;
   private JPanel               detailsPanel;
   private JLabel               iconLabel;
-  private Icon                 messageIcon;
 
   private Locale               locale;
   private ITranslationProvider translationProvider;
@@ -99,7 +98,7 @@ public final class JErrorDialog extends JDialog {
    *          the Icon to use. If null, the default error icon will be used
    */
   public void setMessageIcon(Icon messageIcon) {
-    this.messageIcon = messageIcon;
+    iconLabel.setIcon(messageIcon);
   }
 
   /**
@@ -115,7 +114,7 @@ public final class JErrorDialog extends JDialog {
     gbc.fill = GridBagConstraints.NONE;
     gbc.gridheight = 1;
     gbc.insets = new Insets(22, 12, 11, 17);
-    iconLabel = new JLabel(messageIcon);
+    iconLabel = new JLabel();
     this.getContentPane().add(iconLabel, gbc);
 
     messagePane = new JEditorPane();
@@ -128,13 +127,11 @@ public final class JErrorDialog extends JDialog {
     gbc.anchor = GridBagConstraints.LINE_START;
     gbc.fill = GridBagConstraints.BOTH;
     gbc.gridheight = 1;
-    gbc.gridwidth = 3;
+    gbc.gridwidth = 2;
     gbc.gridx = 1;
+    gbc.gridy = 0;
     gbc.weightx = 0.0;
-    gbc.weighty = 0.00001; // ensures that when detailsPane is hidden, it get
-    // all
-    // the extra space, but none when detailsPane is shown
-    // (unless you have a REALLY BIG MONITOR
+    gbc.weighty = 0.00001;
     gbc.insets = new Insets(24, 0, 0, 11);
     this.getContentPane().add(messagePane, gbc);
 
@@ -147,10 +144,12 @@ public final class JErrorDialog extends JDialog {
     gbc.weighty = 0.0;
     gbc.anchor = GridBagConstraints.LINE_END;
     gbc.insets = new Insets(12, 0, 11, 5);
-    JButton okButton = new JButton(translationProvider.getTranslation("OK", locale));
+    JButton okButton = new JButton(translationProvider.getTranslation("ok",
+        locale));
     this.getContentPane().add(okButton, gbc);
 
-    detailsButton = new JButton(translationProvider.getTranslation("DETAILS", locale));
+    detailsButton = new JButton(translationProvider.getTranslation("details",
+        locale));
     gbc = new GridBagConstraints();
     gbc.gridx = 2;
     gbc.weightx = 0.0;
@@ -171,13 +170,15 @@ public final class JErrorDialog extends JDialog {
             11, 11, 11), 0, 0));
     gbc = new GridBagConstraints();
     gbc.fill = GridBagConstraints.BOTH;
-    gbc.gridwidth = 2;
+    gbc.gridwidth = 3;
     gbc.gridx = 0;
     gbc.gridy = 2;
+    gbc.weightx = 1.0;
     gbc.weighty = 1.0;
     this.getContentPane().add(detailsPanel, gbc);
 
-    JButton button = new JButton(translationProvider.getTranslation("COPY", locale));
+    JButton button = new JButton(translationProvider.getTranslation("copy.name",
+        locale));
     button.addActionListener(new ActionListener() {
 
       public void actionPerformed(@SuppressWarnings("unused")
@@ -248,12 +249,15 @@ public final class JErrorDialog extends JDialog {
     String exceptionAsDetails = null;
     if (details != null) {
       StringBuffer html = new StringBuffer("<html>");
-      html.append("<b>" + translationProvider.getTranslation("DETAILS", locale) + " :</b>");
+      html.append("<b>" + translationProvider.getTranslation("details", locale)
+          + " :</b>");
       html.append("<pre>");
       html.append("    " + details.getMessage());
       html.append("</pre>");
       html.append("<div></div>");
-      html.append("<b>" + translationProvider.getTranslation("STACK_TRACE", locale) + " :</b>");
+      html.append("<b>"
+          + translationProvider.getTranslation("stacktrace", locale)
+          + " :</b>");
       html.append("<pre>");
       for (StackTraceElement el : details.getStackTrace()) {
         html.append("    " + el.toString() + "\n");
@@ -282,19 +286,22 @@ public final class JErrorDialog extends JDialog {
       }
       setSize(getWidth(), height);
       detailsPanel.setVisible(true);
-      detailsButton.setText(translationProvider.getTranslation("DETAILS", locale) + " >>");
+      detailsButton.setText(translationProvider.getTranslation("details",
+          locale)
+          + "<<");
       detailsPanel.applyComponentOrientation(detailsButton
           .getComponentOrientation());
       detailsPane.setCaretPosition(0);
     } else {
       expandedHeight = getHeight();
       detailsPanel.setVisible(false);
-      detailsButton.setText("detailsText" + " <<");
+      detailsButton.setText(translationProvider.getTranslation("details",
+          locale)
+          + ">>");
       messagePane.setSize(0, 0);
       messagePane.setSize(messagePane.getPreferredSize());
       setSize(getWidth(), collapsedHeight);
     }
-
     repaint();
   }
 

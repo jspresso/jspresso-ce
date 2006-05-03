@@ -30,7 +30,7 @@ public class MockTranslationProvider implements ITranslationProvider {
   /**
    * {@inheritDoc}
    */
-  public String getMessage(String key, Object[] args, Locale locale) {
+  public String getTranslation(String key, Object[] args, Locale locale) {
     StringBuffer message = new StringBuffer(getTranslation(key, locale));
     if (args != null && args.length > 0) {
       message.append(" { ");

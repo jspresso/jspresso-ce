@@ -13,6 +13,7 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IViewFactory;
@@ -213,6 +214,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    *          the action context.
    * @return the frontend controller.
    */
+  @Override
   @SuppressWarnings("unchecked")
   protected IFrontendController<E, F, G> getController(
       Map<String, Object> context) {
@@ -270,5 +272,21 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   @Override
   public Locale getLocale(Map<String, Object> context) {
     return getController(context).getLocale();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
+    return actionDescriptor.getI18nDescription(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
+    return actionDescriptor.getI18nName(translationProvider, locale);
   }
 }

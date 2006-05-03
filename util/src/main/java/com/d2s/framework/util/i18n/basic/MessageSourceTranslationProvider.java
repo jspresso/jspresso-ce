@@ -28,7 +28,7 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
    */
   public String getTranslation(String key, Locale locale) {
     if (key == null) {
-      return null;
+      return "";
     }
     return messageSource.getMessage(key, null, locale);
   }
@@ -36,7 +36,7 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
   /**
    * {@inheritDoc}
    */
-  public String getMessage(String key, Object[] args, Locale locale) {
+  public String getTranslation(String key, Object[] args, Locale locale) {
     if (key == null) {
       return null;
     }

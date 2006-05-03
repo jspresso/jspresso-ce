@@ -6,11 +6,13 @@ package com.d2s.framework.view.descriptor.basic;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.action.ActionMap;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
@@ -154,4 +156,30 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     }
     return super.getIconImageURL();
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
+    if (getDescription() == null) {
+      return getModelDescriptor().getI18nDescription(translationProvider,
+          locale);
+    }
+    return super.getI18nDescription(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
+    if (getName() == null) {
+      return getModelDescriptor().getI18nName(translationProvider, locale);
+    }
+    return super.getI18nName(translationProvider, locale);
+  }
+
 }

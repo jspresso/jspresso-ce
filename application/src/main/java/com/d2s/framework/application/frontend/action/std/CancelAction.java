@@ -21,7 +21,7 @@ public class CancelAction extends AbstractChainedAction {
    * Constructs a new <code>CancelAction</code> instance.
    */
   public CancelAction() {
-    setName("CANCEL");
+    setName("cancel.name");
     setIconImageURL("classpath:images/cancel-48x48.png");
   }
 }

@@ -60,13 +60,13 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
   private final class ActionAdapter extends
       com.ulcjava.base.application.AbstractAction {
 
-    private static final long                     serialVersionUID = 5819377672533326496L;
+    private static final long                serialVersionUID = 5819377672533326496L;
 
     private com.d2s.framework.action.IAction action;
-    private IActionHandler                        actionHandler;
-    private ULCComponent                          sourceComponent;
-    private IModelDescriptor                      modelDescriptor;
-    private IValueConnector                       viewConnector;
+    private IActionHandler                   actionHandler;
+    private ULCComponent                     sourceComponent;
+    private IModelDescriptor                 modelDescriptor;
+    private IValueConnector                  viewConnector;
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
@@ -87,10 +87,12 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       this.sourceComponent = sourceComponent;
       this.modelDescriptor = modelDescriptor;
       this.viewConnector = viewConnector;
-      putValue(IAction.NAME, translationProvider.getTranslation(action.getName(),
-          locale));
-      putValue(IAction.SHORT_DESCRIPTION, translationProvider.getTranslation(
-          action.getDescription(), locale));
+      putValue(IAction.NAME, action.getI18nName(translationProvider, locale));
+      if (action.getDescription() != null) {
+        putValue(IAction.SHORT_DESCRIPTION, action.getI18nDescription(
+            translationProvider, locale)
+            + TOOLTIP_ELLIPSIS);
+      }
       putValue(IAction.SMALL_ICON, iconFactory.getIcon(
           action.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
       if (action.getMnemonicAsString() != null) {
@@ -117,8 +119,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
         Map<String, Object> actionContext = actionHandler.createEmptyContext();
         actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
             sourceComponent);
-        actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
-            viewConnector);
+        actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
         if (viewConnector instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) viewConnector)
                 .getCollectionConnector() != null) {

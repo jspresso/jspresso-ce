@@ -26,7 +26,7 @@
 	<!--
 		Hibernate root action beans.
 	-->
-	<bean abstract="true" id="abstractHibernateBackAction" parent="abstractBackAction"
+	<bean abstract="true" id="abstractHibernateBackAction"
 		class="com.d2s.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
 
 	<bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"

@@ -27,7 +27,7 @@ public class OkAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Constructs a new <code>OkAction</code> instance.
    */
   public OkAction() {
-    setName("OK");
+    setName("ok");
     setIconImageURL("classpath:images/ok-48x48.png");
   }
 }

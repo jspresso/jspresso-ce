@@ -61,7 +61,7 @@ public class ChooseFileAction extends AbstractUlcAction {
   private FileChooserConfig getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new FileChooserConfig();
-      fileChooser.setDialogTitle(getTranslationProvider().getTranslation(getName(),
+      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
           getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
@@ -74,8 +74,8 @@ public class ChooseFileAction extends AbstractUlcAction {
           fileChooser
               .addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
                   fileTypeEntry.getValue().toArray(new String[0]),
-                  getTranslationProvider().getTranslation(fileTypeEntry.getKey(),
-                      getLocale(context))
+                  getTranslationProvider(context).getTranslation(
+                      fileTypeEntry.getKey(), getLocale(context))
                       + extensionsDescription.toString()));
         }
       }

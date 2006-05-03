@@ -99,6 +99,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    *          the action context.
    * @return the frontend controller.
    */
+  @Override
   @SuppressWarnings("unchecked")
   protected IBackendController getController(Map<String, Object> context) {
     return (IBackendController) context

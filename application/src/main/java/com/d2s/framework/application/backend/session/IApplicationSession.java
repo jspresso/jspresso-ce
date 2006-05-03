@@ -52,6 +52,22 @@ public interface IApplicationSession extends IEntityDirtAware {
   IEntity merge(IEntity entity, MergeMode mergeMode);
 
   /**
+   * Merges a list of entities in this application session. If the application session
+   * already contains an entity with this id, the state of the entity passed as
+   * parameter is merged into the registered entity depending on the merge mode
+   * used. If not, a copy of the entity is registered into the application
+   * session. The entity passed as parameter is considered not dirty so the
+   * application dirty states are updated accordingly.
+   * 
+  * @param entities
+   *          the list of entities to merge.
+   * @param mergeMode
+   *          the merge mmode to be used.
+   * @return the merged entity list.
+   */
+  List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode);
+
+  /**
    * Begins the current unit of work.
    * 
    * @see IEntityUnitOfWork#begin()

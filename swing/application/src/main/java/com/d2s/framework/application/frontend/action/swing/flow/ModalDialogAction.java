@@ -51,9 +51,11 @@ public class ModalDialogAction extends AbstractSwingAction {
     Window window = SwingUtilities
         .getWindowAncestor(getSourceComponent(context));
     if (window instanceof Dialog) {
-      dialog = new JDialog((Dialog) window, getName(), true);
+      dialog = new JDialog((Dialog) window, getI18nName(
+          getTranslationProvider(context), getLocale(context)), true);
     } else {
-      dialog = new JDialog((Frame) window, getName(), true);
+      dialog = new JDialog((Frame) window, getI18nName(
+          getTranslationProvider(context), getLocale(context)), true);
     }
     JPanel actionPanel = new JPanel();
     actionPanel.setLayout(new GridLayout(1, 0, 5, 10));

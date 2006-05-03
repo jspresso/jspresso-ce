@@ -28,6 +28,7 @@ import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.ICompositeView;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IMapView;
@@ -56,7 +57,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private DefaultIconDescriptor                 controllerDescriptor;
 
-  private String                                selectedModuleId;
   private Map<String, ICompositeValueConnector> selectedModuleConnectors;
 
   private IBackendController                    backendController;
@@ -220,7 +220,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       if (selectedModuleViewConnector instanceof ICollectionConnectorProvider) {
         ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) selectedModuleViewConnector)
             .getCollectionConnector();
-        collectionConnector.setAllowLazyChildrenLoading(false);
+        if (collectionConnector != null) {
+          collectionConnector.setAllowLazyChildrenLoading(false);
+        }
       }
     }
     return initialActionContext;
@@ -317,25 +319,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the selectedModuleId.
-   * 
-   * @return the selectedModuleId.
-   */
-  protected String getSelectedModuleId() {
-    return selectedModuleId;
-  }
-
-  /**
-   * Sets the selectedModuleId.
-   * 
-   * @param selectedModuleId
-   *          the selectedModuleId to set.
-   */
-  protected void setSelectedModuleId(String selectedModuleId) {
-    this.selectedModuleId = selectedModuleId;
-  }
-
-  /**
    * Gets the iconFactory.
    * 
    * @return the iconFactory.
@@ -351,6 +334,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
     return getBackendController().merge(entity, mergeMode);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
+    return getBackendController().merge(entities, mergeMode);
+  }
   /**
    * Creates a root module view.
    * 
@@ -457,5 +446,26 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected String getLoginContextName() {
     return loginContextName;
+  }
+
+  /**
+   * Gets the selectedModuleId.
+   * 
+   * @return the selectedModuleId.
+   */
+  protected abstract String getSelectedModuleId();
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+    return controllerDescriptor.getI18nDescription(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+    return controllerDescriptor.getI18nName(translationProvider, locale);
   }
 }

@@ -94,10 +94,12 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
       } else {
         this.viewConnector = viewConnector;
       }
-      putValue(Action.NAME, translationProvider.getTranslation(action.getName(),
-          locale));
-      putValue(Action.SHORT_DESCRIPTION, translationProvider.getTranslation(
-          action.getDescription(), locale));
+      putValue(Action.NAME, action.getI18nName(translationProvider, locale));
+      if (action.getDescription() != null) {
+        putValue(Action.SHORT_DESCRIPTION, action.getI18nDescription(
+            translationProvider, locale)
+            + TOOLTIP_ELLIPSIS);
+      }
       putValue(Action.SMALL_ICON, iconFactory.getIcon(action.getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
       if (action.getMnemonicAsString() != null) {
@@ -120,14 +122,12 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
      */
     public void actionPerformed(ActionEvent e) {
       if (actionHandler != null) {
-        Map<String, Object> actionContext = actionHandler
-            .createEmptyContext();
+        Map<String, Object> actionContext = actionHandler.createEmptyContext();
         actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
             modelDescriptor);
         actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
             sourceComponent);
-        actionContext.put(ActionContextConstants.VIEW_CONNECTOR,
-            viewConnector);
+        actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
         if (viewConnector instanceof ICollectionConnectorProvider
             && ((ICollectionConnectorProvider) viewConnector)
                 .getCollectionConnector() != null) {

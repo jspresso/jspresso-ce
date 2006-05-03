@@ -26,6 +26,11 @@ import com.d2s.framework.view.action.IDisplayableAction;
 public interface IActionFactory<E, F> {
 
   /**
+   * <code>TOOLTIP_ELLIPSIS</code> is "...".
+   */
+  String TOOLTIP_ELLIPSIS = "...";
+
+  /**
    * Creates an action from its descriptor.
    * 
    * @param action

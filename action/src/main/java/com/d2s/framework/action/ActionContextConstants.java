@@ -52,6 +52,11 @@ public final class ActionContextConstants {
   public static final String MODULE_VIEW_CONNECTOR          = "MODULE_VIEW_CONNECTOR";
 
   /**
+   * The module root view connector the action was triggered on.
+   */
+  public static final String MODULE_ROOT_CONNECTOR          = "MODULE_ROOT_CONNECTOR";
+
+  /**
    * An arbitrary action result.
    */
   public static final String ACTION_RESULT                  = "ACTION_RESULT";

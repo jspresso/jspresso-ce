@@ -66,8 +66,7 @@ public class ChooseFileAction extends AbstractSwingAction {
   private JFileChooser getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle(getTranslationProvider().getTranslation(getName(),
-          getLocale(context)));
+      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context), getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
             .entrySet()) {
@@ -77,7 +76,7 @@ public class ChooseFileAction extends AbstractSwingAction {
           }
           extensionsDescription.append(" )");
           fileChooser.addChoosableFileFilter(new FileFilterAdapter(
-              fileTypeEntry.getValue(), getTranslationProvider().getTranslation(
+              fileTypeEntry.getValue(), getTranslationProvider(context).getTranslation(
                   fileTypeEntry.getKey(), getLocale(context))
                   + extensionsDescription.toString()));
         }

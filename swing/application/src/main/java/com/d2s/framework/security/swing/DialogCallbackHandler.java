@@ -219,31 +219,31 @@ public class DialogCallbackHandler implements CallbackHandler {
       switch (confirmationOptionType) {
         case ConfirmationCallback.YES_NO_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, translationProvider.getTranslation("YES",
+              ConfirmationCallback.YES, translationProvider.getTranslation("yes",
                   locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.NO, translationProvider.getTranslation("NO",
+              ConfirmationCallback.NO, translationProvider.getTranslation("no",
                   locale), proceedActions), constraints);
           break;
         case ConfirmationCallback.YES_NO_CANCEL_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, translationProvider.getTranslation("YES",
+              ConfirmationCallback.YES, translationProvider.getTranslation("yes",
                   locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.NO, translationProvider.getTranslation("NO",
+              ConfirmationCallback.NO, translationProvider.getTranslation("no",
                   locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
               ConfirmationCallback.CANCEL, translationProvider.getTranslation(
-                  "CANCEL", locale), proceedActions), constraints);
+                  "cancel.name", locale), proceedActions), constraints);
           break;
         case ConfirmationCallback.OK_CANCEL_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.OK, translationProvider.getTranslation("OK",
+              ConfirmationCallback.OK, translationProvider.getTranslation("ok",
                   locale), proceedActions), constraints);
           if (hasInput) {
             optionPanel.add(createOptionButton(callbackDialog, cc,
                 ConfirmationCallback.CANCEL, translationProvider.getTranslation(
-                    "CANCEL", locale), proceedActions), constraints);
+                    "cancel.name", locale), proceedActions), constraints);
           }
           break;
         default:

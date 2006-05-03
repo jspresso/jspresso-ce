@@ -22,13 +22,12 @@
 	<bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
 		class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false" />
 
-	<bean id="lovOkFrontAction" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction" singleton="false">
+	<bean id="lovOkFrontAction" class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction"
+		singleton="false">
 		<property name="nextAction" ref="sourceViewConnectorSetAction" />
 	</bean>
 
-	<bean id="cancelDialogFrontAction" parent="abstractFrontAction"
-		class="com.d2s.framework.application.frontend.action.ulc.std.DialogCancelAction" />
+	<bean id="cancelDialogFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.DialogCancelAction" />
 
 	<!-- 
 		Action beans
@@ -36,7 +35,7 @@
 	<bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
 		class="com.d2s.framework.application.frontend.action.ulc.flow.YesNoAction" />
 
-	<bean id="infoFrontAction" abstract="true" parent="abstractFrontAction"
+	<bean id="infoFrontAction" abstract="true"
 		class="com.d2s.framework.application.frontend.action.ulc.flow.InfoAction">
 		<property name="iconImageURL" value="classpath:images/info-48x48.png" />
 	</bean>
@@ -54,7 +53,7 @@
 	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.ulc.UlcActionFactory"
 		singleton="false" />
 
-	<bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
+	<bean id="abstractModalDialogAction" abstract="true"
 		class="com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction" />
 
 	<bean id="lovAction" parent="abstractLovAction"

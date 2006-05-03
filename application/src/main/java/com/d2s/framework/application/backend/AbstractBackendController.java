@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -192,6 +193,13 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public IEntity merge(IEntity entity, MergeMode mergeMode) {
     return getApplicationSession().merge(entity, mergeMode);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
+    return getApplicationSession().merge(entities, mergeMode);
   }
 
   /**

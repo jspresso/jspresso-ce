@@ -26,6 +26,11 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public interface IViewFactory<E, F, G> {
 
   /**
+   * <code>TOOLTIP_ELLIPSIS</code> is "...".
+   */
+  String TOOLTIP_ELLIPSIS = "...";
+
+  /**
    * Creates a new view from a view descriptor.
    * 
    * @param viewDescriptor
@@ -40,19 +45,19 @@ public interface IViewFactory<E, F, G> {
    */
   IView<E> createView(IViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale);
-  
+
   /**
    * Gets the icon factory.
    * 
    * @return the icon factory.
    */
   IIconFactory<F> getIconFactory();
-  
+
   /**
    * Gets the action factory.
    * 
    * @return the action factory.
    */
   IActionFactory<G, E> getActionFactory();
-  
+
 }

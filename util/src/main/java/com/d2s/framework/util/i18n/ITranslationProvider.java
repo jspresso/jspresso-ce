@@ -38,5 +38,5 @@ public interface ITranslationProvider {
    *          the locale the string must be translated into.
    * @return the translated string.
    */
-  String getMessage(String key, Object[] args, Locale locale);
+  String getTranslation(String key, Object[] args, Locale locale);
 }

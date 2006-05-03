@@ -219,7 +219,7 @@ public class DefaultUlcController extends
           getBackendController().getModuleConnector(moduleId));
       if (moduleDescriptor.getStartupAction() != null) {
         Map<String, Object> context = createEmptyContext();
-        context.put(ActionContextConstants.MODULE_VIEW_CONNECTOR, moduleView
+        context.put(ActionContextConstants.MODULE_ROOT_CONNECTOR, moduleView
             .getConnector());
         execute(moduleDescriptor.getStartupAction(), context);
       }
@@ -248,18 +248,9 @@ public class DefaultUlcController extends
     return null;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setSelectedModuleId(@SuppressWarnings("unused")
-  String selectedModuleId) {
-    throw new UnsupportedOperationException();
-  }
-
   private ULCFrame createControllerFrame() {
-    ULCFrame frame = new ULCFrame(getTranslationProvider().getTranslation(
-        getName(), getLocale()));
+    ULCFrame frame = new ULCFrame(getI18nName(getTranslationProvider(),
+        getLocale()));
     frame.setContentPane(new ULCDesktopPane());
     frame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
         IIconFactory.SMALL_ICON_SIZE));
@@ -285,7 +276,7 @@ public class DefaultUlcController extends
 
   private ULCMenu getModulesMenu() {
     ULCMenu modulesMenu = new ULCMenu(getTranslationProvider().getTranslation(
-        "Modules", getLocale()));
+        "modules", getLocale()));
     modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
@@ -313,12 +304,11 @@ public class DefaultUlcController extends
     public ModuleSelectionAction(String moduleId,
         IModuleDescriptor moduleDescriptor) {
       this.moduleId = moduleId;
-      putValue(com.ulcjava.base.application.IAction.NAME,
-          getTranslationProvider().getTranslation(moduleDescriptor.getName(),
-              getLocale()));
+      putValue(com.ulcjava.base.application.IAction.NAME, moduleDescriptor
+          .getI18nName(getTranslationProvider(), getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
-          getTranslationProvider().getTranslation(
-              moduleDescriptor.getDescription(), getLocale()));
+          moduleDescriptor
+          .getI18nDescription(getTranslationProvider(), getLocale()));
       putValue(com.ulcjava.base.application.IAction.SMALL_ICON,
           getIconFactory().getIcon(moduleDescriptor.getIconImageURL(),
               IIconFactory.TINY_ICON_SIZE));
@@ -345,9 +335,9 @@ public class DefaultUlcController extends
      */
     public QuitAction() {
       putValue(com.ulcjava.base.application.IAction.NAME,
-          getTranslationProvider().getTranslation("QUIT", getLocale()));
+          getTranslationProvider().getTranslation("quit.name", getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
-          getTranslationProvider().getTranslation("QUIT", getLocale()));
+          getTranslationProvider().getTranslation("quit.description", getLocale()));
     }
 
     /**
@@ -370,9 +360,9 @@ public class DefaultUlcController extends
    * @return the constructed internal frame.
    */
   private ULCInternalFrame createULCInternalFrame(IView<ULCComponent> view) {
-    ULCInternalFrame internalFrame = new ULCInternalFrame(
-        getTranslationProvider().getTranslation(view.getDescriptor().getName(),
-            getLocale()), true, false, true, true);
+    ULCInternalFrame internalFrame = new ULCInternalFrame(view.getDescriptor()
+        .getI18nName(getTranslationProvider(), getLocale()), true, false, true,
+        true);
     internalFrame.getContentPane().add(view.getPeer());
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;
@@ -382,12 +372,13 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   public void handleException(Throwable ex, Map<String, Object> context) {
+    ex.printStackTrace();
     ULCErrorDialog dialog = ULCErrorDialog.createInstance(
         (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT),
         getTranslationProvider(), getLocale());
     dialog.setMessageIcon(getIconFactory().getErrorIcon(
         IIconFactory.MEDIUM_ICON_SIZE));
-    dialog.setTitle(getTranslationProvider().getTranslation("ERROR",
+    dialog.setTitle(getTranslationProvider().getTranslation("error",
         getLocale()));
     dialog.setMessage(ex.getLocalizedMessage());
     dialog.setDetails(ex);

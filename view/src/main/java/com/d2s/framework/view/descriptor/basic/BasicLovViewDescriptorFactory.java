@@ -45,7 +45,6 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     queryComponentViewDescriptor.setModelDescriptor(entityDescriptor);
     queryComponentViewDescriptor.setName("queryEntity");
-    queryComponentViewDescriptor.setDescription("queryEntityView");
     queryComponentViewDescriptor
         .setLabelsPosition(IComponentViewDescriptor.ASIDE);
     queryComponentViewDescriptor.setColumnCount(2);
@@ -77,7 +76,6 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     queriedEntitiesDescriptor.setName("queriedEntities");
 
     resultViewDescriptor.setName("queriedEntities.table");
-    resultViewDescriptor.setDescription("queriedEntitiesView");
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     return resultViewDescriptor;
   }

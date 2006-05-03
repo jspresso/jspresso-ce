@@ -86,16 +86,8 @@
 	<!--
 		Root action beans.
 	-->
-	<bean abstract="true" id="abstractAction">
-		<property name="translationProvider" ref="translationProvider" />
-	</bean>
 
-	<bean abstract="true" id="abstractBackAction" parent="abstractAction"
-		class="com.d2s.framework.application.backend.action.AbstractBackendAction" />
-
-	<bean id="createQueryEntityAction" parent="abstractBackAction"
-		class="com.d2s.framework.application.backend.action.CreateQueryEntityAction">
-	</bean>
+	<bean id="createQueryEntityAction" class="com.d2s.framework.application.backend.action.CreateQueryEntityAction" />
 
 	<!--
 		The implementation used as view factory.

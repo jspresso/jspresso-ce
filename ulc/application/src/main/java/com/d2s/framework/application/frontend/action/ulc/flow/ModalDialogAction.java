@@ -45,7 +45,8 @@ public class ModalDialogAction extends AbstractUlcAction {
     IView<ULCComponent> mainView = getMainView(context);
     ULCWindow window = UlcUtilities
         .getWindowAncestor(getSourceComponent(context));
-    dialog = new ULCDialog(window, getName(), true);
+    dialog = new ULCDialog(window, getI18nName(getTranslationProvider(context),
+        getLocale(context)), true);
     ULCGridLayoutPane actionPanel = new ULCGridLayoutPane(1, 0, 5, 10);
     ULCButton defaultButton = null;
     for (IDisplayableAction action : getActions(context)) {

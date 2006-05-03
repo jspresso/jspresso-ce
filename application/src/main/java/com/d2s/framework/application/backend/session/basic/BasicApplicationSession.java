@@ -83,6 +83,18 @@ public class BasicApplicationSession implements IApplicationSession {
     return merge(entity, mergeMode, new HashMap<IEntity, IEntity>());
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
+    Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
+    List<IEntity> mergedList = new ArrayList<IEntity>();
+    for (IEntity entity : entities) {
+      mergedList.add(merge(entity, mergeMode, alreadyMerged));
+    }
+    return mergedList;
+  }
+
   @SuppressWarnings("unchecked")
   private IEntity merge(IEntity entity, MergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
@@ -512,7 +524,6 @@ public class BasicApplicationSession implements IApplicationSession {
     this.entityFactory = entityFactory;
   }
 
-  
   /**
    * Gets the locale.
    * 
@@ -522,11 +533,11 @@ public class BasicApplicationSession implements IApplicationSession {
     return locale;
   }
 
-  
   /**
    * Sets the locale.
    * 
-   * @param locale the locale to set.
+   * @param locale
+   *          the locale to set.
    */
   public void setLocale(Locale locale) {
     this.locale = locale;

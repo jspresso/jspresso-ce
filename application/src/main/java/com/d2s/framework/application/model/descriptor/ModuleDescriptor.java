@@ -49,7 +49,6 @@ public class ModuleDescriptor extends BasicComponentDescriptor {
     projectedObjectDescriptor.setName("projectedObject");
 
     BasicCollectionPropertyDescriptor projectedObjectsDescriptor = new BasicCollectionPropertyDescriptor();
-    projectedObjectsDescriptor.setName("projectedObjects");
 
     BasicStringPropertyDescriptor nameDescriptor = new BasicStringPropertyDescriptor();
     nameDescriptor.setName("name");

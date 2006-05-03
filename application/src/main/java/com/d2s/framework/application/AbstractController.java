@@ -43,7 +43,7 @@ public abstract class AbstractController implements IController {
    * 
    * @return the translationProvider.
    */
-  protected ITranslationProvider getTranslationProvider() {
+  public ITranslationProvider getTranslationProvider() {
     return translationProvider;
   }
 }

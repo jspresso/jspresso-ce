@@ -22,12 +22,12 @@
 	<bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
 		class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false" />
 
-	<bean id="lovOkFrontAction" parent="abstractFrontAction"
+	<bean id="lovOkFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction" singleton="false">
 		<property name="nextAction" ref="sourceViewConnectorSetAction" />
 	</bean>
 
-	<bean id="cancelDialogFrontAction" parent="abstractFrontAction"
+	<bean id="cancelDialogFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.std.DialogCancelAction" />
 
 	<!-- 
@@ -36,7 +36,7 @@
 	<bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
 		class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction" />
 
-	<bean id="infoFrontAction" abstract="true" parent="abstractFrontAction"
+	<bean id="infoFrontAction" abstract="true"
 		class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction" />
 
 	<!--
@@ -48,7 +48,7 @@
 	<bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.swing.SwingActionFactory"
 		singleton="false" />
 
-	<bean id="abstractModalDialogAction" abstract="true" parent="abstractFrontAction"
+	<bean id="abstractModalDialogAction" abstract="true"
 		class="com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction" />
 
 	<bean id="lovAction" parent="abstractLovAction"
