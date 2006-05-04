@@ -30,8 +30,10 @@ public class InfoAction extends AbstractMessageAction {
   @Override
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     JOptionPane.showInternalMessageDialog(SwingUtil
-        .getWindowOrInternalFrame(getSourceComponent(context)), getMessage(),
-        getName(), JOptionPane.INFORMATION_MESSAGE, getIconFactory(context).getIcon(
+        .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
+        getTranslationProvider(context), getLocale(context)), getI18nName(
+        getTranslationProvider(context), getLocale(context)),
+        JOptionPane.INFORMATION_MESSAGE, getIconFactory(context).getIcon(
             getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
     super.execute(actionHandler, context);
   }

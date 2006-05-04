@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.util.swing.SwingUtil;
@@ -34,14 +35,16 @@ public class OkCancelAction extends AbstractMessageAction {
   @Override
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(getSourceComponent(context)), getMessage(),
-        getName(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
+        .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
+        getTranslationProvider(context), getLocale(context)), getI18nName(
+        getTranslationProvider(context), getLocale(context)),
+        JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
         getIconFactory(context).getIcon(getIconImageURL(),
             IIconFactory.LARGE_ICON_SIZE));
     if (selectedOption == JOptionPane.OK_OPTION) {
-      setNextAction(okAction);
+      context.put(ActionContextConstants.NEXT_ACTION, okAction);
     } else {
-      setNextAction(cancelAction);
+      context.put(ActionContextConstants.NEXT_ACTION, cancelAction);
     }
     super.execute(actionHandler, context);
   }

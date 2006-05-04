@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.util.swing.SwingUtil;
@@ -35,16 +36,18 @@ public class YesNoCancelAction extends AbstractMessageAction {
   @Override
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(getSourceComponent(context)), getMessage(),
-        getName(), JOptionPane.YES_NO_CANCEL_OPTION,
-        JOptionPane.QUESTION_MESSAGE, getIconFactory(context).getIcon(
-            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+        .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
+        getTranslationProvider(context), getLocale(context)), getI18nName(
+        getTranslationProvider(context), getLocale(context)),
+        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
+        getIconFactory(context).getIcon(getIconImageURL(),
+            IIconFactory.LARGE_ICON_SIZE));
     if (selectedOption == JOptionPane.CANCEL_OPTION) {
-      setNextAction(cancelAction);
+      context.put(ActionContextConstants.NEXT_ACTION, cancelAction);
     } else if (selectedOption == JOptionPane.YES_OPTION) {
-      setNextAction(yesAction);
+      context.put(ActionContextConstants.NEXT_ACTION, yesAction);
     } else {
-      setNextAction(noAction);
+      context.put(ActionContextConstants.NEXT_ACTION, noAction);
     }
     super.execute(actionHandler, context);
   }

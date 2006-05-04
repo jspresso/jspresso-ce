@@ -3,10 +3,14 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.flow;
 
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.IIconFactory;
 import com.ulcjava.base.application.ULCAlert;
 import com.ulcjava.base.application.UlcUtilities;
@@ -27,19 +31,19 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
   /**
    * <code>OK_OPTION</code>.
    */
-  protected static final String OK_OPTION     = "OK_OPTION";
+  protected static final String OK_OPTION     = "ok";
   /**
    * <code>CANCEL_OPTION</code>.
    */
-  protected static final String CANCEL_OPTION = "CANCEL_OPTION";
+  protected static final String CANCEL_OPTION = "cancel";
   /**
    * <code>YES_OPTION</code>.
    */
-  protected static final String YES_OPTION    = "YES_OPTION";
+  protected static final String YES_OPTION    = "yes";
   /**
    * <code>NO_OPTION</code>.
    */
-  protected static final String NO_OPTION     = "NO_OPTION";
+  protected static final String NO_OPTION     = "no";
 
   private String                firstOption;
   private String                secondOption;
@@ -70,17 +74,41 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
   @Override
   public void execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
+    ITranslationProvider translationProvider = getTranslationProvider(context);
+    Locale locale = getLocale(context);
+    final Map<String, String> optionReverseDictionary = new HashMap<String, String>();
+    String translatedFirstOption = null;
+    if (firstOption != null) {
+      translatedFirstOption = translationProvider.getTranslation(firstOption,
+          locale);
+      optionReverseDictionary.put(translatedFirstOption, firstOption);
+    }
+    String translatedSecondOption = null;
+    if (secondOption != null) {
+      translatedSecondOption = translationProvider.getTranslation(secondOption,
+          locale);
+      optionReverseDictionary.put(translatedSecondOption, secondOption);
+    }
+    String translatedThirdOption = null;
+    if (thirdOption != null) {
+      translatedThirdOption = translationProvider.getTranslation(thirdOption,
+          locale);
+      optionReverseDictionary.put(translatedThirdOption, thirdOption);
+    }
     final ULCAlert alert = new ULCAlert(UlcUtilities
-        .getRoot(getSourceComponent(context)), getName(), getMessage(),
-        firstOption, secondOption, thirdOption, getIconFactory(context).getIcon(
-            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+        .getRoot(getSourceComponent(context)), getI18nName(translationProvider,
+        locale), getI18nMessage(translationProvider, locale),
+        translatedFirstOption, translatedSecondOption, translatedThirdOption,
+        getIconFactory(context).getIcon(getIconImageURL(),
+            IIconFactory.LARGE_ICON_SIZE));
     alert.addWindowListener(new IWindowListener() {
 
       private static final long serialVersionUID = -6049928144066455758L;
 
       public void windowClosing(@SuppressWarnings("unused")
       WindowEvent event) {
-        setNextAction(getNextAction(alert.getValue()));
+        context.put(ActionContextConstants.NEXT_ACTION,
+            getNextAction(optionReverseDictionary.get(alert.getValue())));
         executeNextAction(actionHandler, context);
       }
     });

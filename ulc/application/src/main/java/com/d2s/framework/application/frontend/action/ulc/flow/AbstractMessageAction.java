@@ -3,7 +3,10 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.flow;
 
+import java.util.Locale;
+
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Base class for all message ULC actions. It just keeps a reference on the
@@ -36,5 +39,19 @@ public abstract class AbstractMessageAction extends AbstractUlcAction {
    */
   protected String getMessage() {
     return message;
+  }
+
+  /**
+   * Gets I18ed message.
+   * 
+   * @param translationProvider
+   *          the translation provider to use.
+   * @param locale
+   *          the locale to use.
+   * @return the I18ed message.
+   */
+  protected String getI18nMessage(ITranslationProvider translationProvider,
+      Locale locale) {
+    return translationProvider.getTranslation(getMessage(), locale);
   }
 }

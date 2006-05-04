@@ -29,7 +29,7 @@ public class InfoAction extends AbstractFlowAction {
   @Override
   protected IAction getNextAction(@SuppressWarnings("unused")
   String selectedOption) {
-    return getNextAction();
+    return null;
   }
 
 }

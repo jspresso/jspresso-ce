@@ -33,7 +33,7 @@ public class ActionWrapper<E, F, G> extends AbstractChainedAction<E, F, G> {
   @Override
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
     actionHandler.execute(wrappedAction, context);
-    if (getNextAction() != null) {
+    if (getNextAction(context) != null) {
       super.execute(actionHandler, context);
     }
   }

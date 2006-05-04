@@ -5,6 +5,7 @@ package com.d2s.framework.application.frontend.action;
 
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
 
@@ -30,13 +31,20 @@ public abstract class AbstractChainedAction<E, F, G> extends
   private IAction nextAction;
 
   /**
-   * Gets the next action reference.
+   * Gets the next action reference. If the next action has been configured
+   * strongly through the setter method, it is directly returned. If not, it is
+   * looked up into the action context.
    * 
+   * @param context
+   *          the action context.
    * @return the next action to execute.
    * @see #setNextAction(IAction)
    */
-  public IAction getNextAction() {
-    return nextAction;
+  public IAction getNextAction(Map<String, Object> context) {
+    if (nextAction != null) {
+      return nextAction;
+    }
+    return (IAction) context.get(ActionContextConstants.NEXT_ACTION);
   }
 
   /**
@@ -55,8 +63,8 @@ public abstract class AbstractChainedAction<E, F, G> extends
    * {@inheritDoc}
    */
   public void execute(IActionHandler actionHandler, Map<String, Object> context) {
-    if (nextAction != null) {
-      actionHandler.execute(nextAction, context);
+    if (getNextAction(context) != null) {
+      actionHandler.execute(getNextAction(context), context);
     }
   }
 
