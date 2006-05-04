@@ -4,6 +4,7 @@
 package com.d2s.framework.model.persistence.hibernate;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.Collection;
 
 import org.hibernate.EmptyInterceptor;
@@ -40,7 +41,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings({"unused", "unchecked" })
+  @SuppressWarnings({ "unused", "unchecked" })
   public Object instantiate(String entityName, EntityMode entityMode,
       Serializable id) {
     try {
@@ -71,7 +72,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   public void onDelete(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
-      ((IEntity) entity).onDelete(getEntityFactory());
+      ((IEntity) entity).onDelete(getEntityFactory(), getPrincipal());
     }
     super.onDelete(entity, id, state, propertyNames, types);
   }
@@ -84,7 +85,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       String[] propertyNames, Type[] types) {
     boolean stateUpdated = false;
     if (entity instanceof IEntity) {
-      if (((IEntity) entity).onPersist(getEntityFactory())) {
+      if (((IEntity) entity).onPersist(getEntityFactory(), getPrincipal())) {
         extractState((IEntity) entity, propertyNames, state);
         stateUpdated = true;
       }
@@ -102,7 +103,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       Type[] types) {
     boolean stateUpdated = false;
     if (entity instanceof IEntity) {
-      if (((IEntity) entity).onUpdate(getEntityFactory())) {
+      if (((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal())) {
         extractState((IEntity) entity, propertyNames, currentState);
         stateUpdated = true;
       }
@@ -140,5 +141,14 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    */
   protected IEntityFactory getEntityFactory() {
     return entityFactory;
+  }
+
+  /**
+   * Gets the principal owning the session.
+   * 
+   * @return the principal owning the session.
+   */
+  protected Principal getPrincipal() {
+    return null;
   }
 }

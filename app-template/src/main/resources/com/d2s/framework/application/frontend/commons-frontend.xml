@@ -54,6 +54,8 @@
 
 	<bean id="abstractAddToMasterFrontAction" abstract="true"
 		class="com.d2s.framework.application.frontend.action.std.AddToMasterAction">
+		<property name="name" value="add.name" />
+		<property name="description" value="add.description" />
 		<property name="wrappedAction">
 			<bean class="com.d2s.framework.application.backend.action.AddToMasterAction" />
 		</property>
@@ -62,8 +64,6 @@
 
 	<bean id="addToMasterFrontAction" parent="abstractAddToMasterFrontAction">
 		<property name="iconImageURL" value="classpath:images/edit_add-48x48.png" />
-		<property name="name" value="add.name" />
-		<property name="description" value="add.description" />
 		<!--
 			<property name="mnemonicAsString" value="alt pressed A" />
 		-->
@@ -137,7 +137,8 @@
 
 	<bean id="moveUpFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
 		<property name="iconImageURL" value="classpath:images/up-48x48.png" />
-		<property name="name" value="moveUp" />
+		<property name="name" value="moveUp.name" />
+		<property name="description" value="moveUp.description" />
 		<property name="wrappedAction">
 			<bean class="com.d2s.framework.application.backend.action.CollectionElementMoveAction">
 				<property name="offset" value="-1" />
@@ -148,7 +149,8 @@
 
 	<bean id="moveDownFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
 		<property name="iconImageURL" value="classpath:images/down-48x48.png" />
-		<property name="name" value="moveDown" />
+		<property name="name" value="moveDown.name" />
+		<property name="description" value="moveDown.description" />
 		<property name="wrappedAction">
 			<bean class="com.d2s.framework.application.backend.action.CollectionElementMoveAction">
 				<property name="offset" value="1" />

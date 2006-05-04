@@ -211,27 +211,27 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
       return null;
     }
     Anything actionAnything = new Anything();
-    if (action.getValue(ActionFieldConstants.ACCELERATOR_KEY) != null) {
+    if (action.getValue(IAction.ACCELERATOR_KEY) != null) {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY,
-          ((Integer) action.getValue(ActionFieldConstants.ACCELERATOR_KEY))
+          ((Integer) action.getValue(IAction.ACCELERATOR_KEY))
               .intValue());
     } else {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
     actionAnything.put(ActionFieldConstants.ACTION_COMMAND_KEY, (String) action
-        .getValue(ActionFieldConstants.ACTION_COMMAND_KEY));
+        .getValue(IAction.ACTION_COMMAND_KEY));
     actionAnything.put(ActionFieldConstants.LONG_DESCRIPTION, (String) action
-        .getValue(ActionFieldConstants.LONG_DESCRIPTION));
-    if (action.getValue(ActionFieldConstants.MNEMONIC_KEY) != null) {
+        .getValue(IAction.LONG_DESCRIPTION));
+    if (action.getValue(IAction.MNEMONIC_KEY) != null) {
       actionAnything.put(ActionFieldConstants.MNEMONIC_KEY, ((Integer) action
-          .getValue(ActionFieldConstants.MNEMONIC_KEY)).intValue());
+          .getValue(IAction.MNEMONIC_KEY)).intValue());
     } else {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
     actionAnything.put(ActionFieldConstants.NAME, (String) action
-        .getValue(ActionFieldConstants.NAME));
+        .getValue(IAction.NAME));
     actionAnything.put(ActionFieldConstants.SHORT_DESCRIPTION, (String) action
-        .getValue(ActionFieldConstants.SHORT_DESCRIPTION));
+        .getValue(IAction.SHORT_DESCRIPTION));
     return actionAnything;
   }
 

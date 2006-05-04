@@ -1666,16 +1666,16 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor.getName(), viewComponent);
     Action fieldAction = actionFactory.createAction(lovAction, actionHandler,
         viewComponent, propertyDescriptor, connector, locale);
-    fieldAction.putValue(Action.NAME, getTranslationProvider()
-        .getTranslation(
-            "lov.element.name",
-            new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale));
+    fieldAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
+        "lov.element.name",
+        new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
+            translationProvider, locale)}, locale));
     fieldAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale));
+                .getI18nName(translationProvider, locale)}, locale)
+        + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       fieldAction.putValue(Action.SMALL_ICON, iconFactory.getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),

@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.Action;
-
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
@@ -1644,16 +1642,16 @@ public class DefaultUlcViewFactory implements
         propertyDescriptor.getName(), viewComponent);
     IAction fieldAction = actionFactory.createAction(lovAction, actionHandler,
         viewComponent, propertyDescriptor, connector, locale);
-    fieldAction.putValue(Action.NAME, getTranslationProvider()
-        .getTranslation(
-            "lov.element.name",
-            new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale));
-    fieldAction.putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
+    fieldAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
+        "lov.element.name",
+        new Object[] {propertyDescriptor.getReferencedDescriptor().getI18nName(
+            translationProvider, locale)}, locale));
+    fieldAction.putValue(IAction.SHORT_DESCRIPTION, getTranslationProvider()
         .getTranslation(
             "lov.element.description",
             new Object[] {propertyDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale));
+                .getI18nName(translationProvider, locale)}, locale)
+        + TOOLTIP_ELLIPSIS);
     if (propertyDescriptor.getReferencedDescriptor().getIconImageURL() != null) {
       fieldAction.putValue(IAction.SMALL_ICON, iconFactory.getIcon(
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),

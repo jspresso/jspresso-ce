@@ -177,7 +177,7 @@ public class DefaultUlcController extends
         }
         try {
           lc.login();
-          getBackendController().getApplicationSession().setOwner(
+          getBackendController().getApplicationSession().setSubject(
               lc.getSubject());
           loginSuccessful = true;
           return;

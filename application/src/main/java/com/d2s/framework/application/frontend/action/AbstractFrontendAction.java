@@ -6,8 +6,8 @@ package com.d2s.framework.application.frontend.action;
 import java.util.Locale;
 import java.util.Map;
 
-import com.d2s.framework.action.AbstractAction;
 import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.application.action.AbstractAction;
 import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IMvcBinder;
@@ -279,7 +279,10 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
-    return actionDescriptor.getI18nDescription(translationProvider, locale);
+    if (getDescription() != null) {
+      return actionDescriptor.getI18nDescription(translationProvider, locale);
+    }
+    return getI18nName(translationProvider, locale);
   }
 
   /**

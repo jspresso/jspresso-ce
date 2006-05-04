@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.backend.session;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
 
@@ -164,7 +165,14 @@ public interface IApplicationSession extends IEntityDirtAware {
    * 
    * @return the session owner.
    */
-  Subject getOwner();
+  Subject getSubject();
+
+  /**
+   * Gets the session principal as a JAAS principal.
+   * 
+   * @return the session owner.
+   */
+  Principal getPrincipal();
 
   /**
    * Sets the session owner as a JAAS subject.
@@ -172,7 +180,7 @@ public interface IApplicationSession extends IEntityDirtAware {
    * @param sessionOwner
    *          the session owner.
    */
-  void setOwner(Subject sessionOwner);
+  void setSubject(Subject sessionOwner);
   
   /**
    * Sets the session locale.

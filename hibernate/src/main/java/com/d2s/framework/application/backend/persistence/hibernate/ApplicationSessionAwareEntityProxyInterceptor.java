@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -179,4 +180,15 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     }
     return super.onLoad(entity, id, state, propertyNames, types);
   }
+
+  /**
+   * Gets the principal of the application session.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Principal getPrincipal() {
+    return applicationSession.getPrincipal();
+  }
+
 }

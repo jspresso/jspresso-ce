@@ -4,7 +4,9 @@
 package com.d2s.framework.util.security.demo;
 
 import java.io.IOException;
+import java.util.ListResourceBundle;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -29,25 +31,36 @@ import javax.security.auth.spi.LoginModule;
 public class DemoLoginModule implements LoginModule {
 
   // initial state
-  private Subject         subject;
-  private CallbackHandler callbackHandler;
+  private Subject             subject;
+  private CallbackHandler     callbackHandler;
   @SuppressWarnings("unused")
-  private Map             sharedState;
-  private Map             options;
+  private Map                 sharedState;
+  private Map                 options;
 
   // configurable option
-  private boolean         debug           = false;
+  private boolean             debug           = false;
 
   // the authentication status
-  private boolean         succeeded       = false;
-  private boolean         commitSucceeded = false;
+  private boolean             succeeded       = false;
+  private boolean             commitSucceeded = false;
 
   // username and password
-  private String          username;
-  private char[]          password;
+  private String              username;
+  private char[]              password;
 
   // testUser's DemoPrincipal
-  private DemoPrincipal   userPrincipal;
+  private DemoPrincipal       userPrincipal;
+
+  private static final String USER            = "user";
+  private static final String PASSWORD        = "password";
+  private static final String CRED_MESSAGE    = "credentialMessage";
+  private static final String USER_FAILED     = "userIncorrect";
+  private static final String PASSWORD_FAILED = "passwordIncorrect";
+  private static final String LOGIN_FAILED    = "loginFailed";
+
+  private ResourceBundle      bundle          = ResourceBundle
+                                                  .getBundle(DlmBundle.class
+                                                      .getName());
 
   /**
    * Initialize this <code>LoginModule</code>.
@@ -101,10 +114,10 @@ public class DemoLoginModule implements LoginModule {
     }
 
     Callback[] callbacks = new Callback[3];
-    callbacks[0] = new NameCallback("User");
-    callbacks[1] = new PasswordCallback("Password", false);
+    callbacks[0] = new NameCallback(bundle.getString(USER));
+    callbacks[1] = new PasswordCallback(bundle.getString(PASSWORD), false);
     callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION,
-        "Enter login information :");
+        bundle.getString(CRED_MESSAGE));
 
     try {
       callbackHandler.handle(callbacks);
@@ -128,9 +141,9 @@ public class DemoLoginModule implements LoginModule {
 
     // print debugging information
     if (debug) {
-      System.out.println("\t\t[SampleLoginModule] "
-          + "user entered user name: " + username);
-      System.out.print("\t\t[SampleLoginModule] " + "user entered password: ");
+      System.out.println("\t\t[DemoLoginModule] " + "user entered user name: "
+          + username);
+      System.out.print("\t\t[DemoLoginModule] " + "user entered password: ");
       for (int i = 0; i < password.length; i++) {
         System.out.print(password[i]);
       }
@@ -146,7 +159,7 @@ public class DemoLoginModule implements LoginModule {
         && password[1] == 'e' && password[2] == 'm' && password[3] == 'o') {
 
       if (debug) {
-        System.out.println("\t\t[SampleLoginModule] "
+        System.out.println("\t\t[DemoLoginModule] "
             + "authentication succeeded");
       }
       succeeded = true;
@@ -154,7 +167,7 @@ public class DemoLoginModule implements LoginModule {
     }
     // authentication failed -- clean out state
     if (debug) {
-      System.out.println("\t\t[SampleLoginModule] " + "authentication failed");
+      System.out.println("\t\t[DemoLoginModule] " + "authentication failed");
     }
     succeeded = false;
     username = null;
@@ -163,9 +176,9 @@ public class DemoLoginModule implements LoginModule {
     }
     password = null;
     if (!usernameCorrect) {
-      throw new FailedLoginException("User Name Incorrect");
+      throw new FailedLoginException(bundle.getString(USER_FAILED));
     }
-    throw new FailedLoginException("Password Incorrect");
+    throw new FailedLoginException(bundle.getString(PASSWORD_FAILED));
   }
 
   /**
@@ -196,7 +209,7 @@ public class DemoLoginModule implements LoginModule {
     }
 
     if (debug) {
-      System.out.println("\t\t[SampleLoginModule] "
+      System.out.println("\t\t[DemoLoginModule] "
           + "added DemoPrincipal to Subject");
     }
 
@@ -229,8 +242,8 @@ public class DemoLoginModule implements LoginModule {
   public boolean abort() {
     if (!succeeded) {
       Callback[] callbacks = new Callback[1];
-      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR,
-          "Login failed.");
+      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, bundle
+          .getString(LOGIN_FAILED));
       try {
         callbackHandler.handle(callbacks);
       } catch (IOException ex) {
@@ -281,5 +294,67 @@ public class DemoLoginModule implements LoginModule {
     }
     userPrincipal = null;
     return true;
+  }
+
+  /**
+   * Default RB.
+   * <p>
+   * Copyright 2005 Design2See. All rights reserved.
+   * <p>
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   */
+  public static class DlmBundle extends ListResourceBundle {
+
+    static final Object[][] CONTENTS = {
+                                         {USER, "User"},
+                                         {PASSWORD, "Password"},
+                                         {CRED_MESSAGE,
+                                             "Enter login information :"},
+                                         {USER_FAILED, "User incorrect"},
+                                         {PASSWORD_FAILED, "Password incorrect"},
+                                         {LOGIN_FAILED, "Login failed"}};
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Object[][] getContents() {
+      return CONTENTS;
+    }
+
+  }
+
+  /**
+   * French RB.
+   * <p>
+   * Copyright 2005 Design2See. All rights reserved.
+   * <p>
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   */
+  public static class DlmBundle_fr extends ListResourceBundle {
+
+    static final Object[][] CONTENTS = {
+                                         {USER, "Utilisateur"},
+                                         {PASSWORD, "Mot de passe"},
+                                         {CRED_MESSAGE,
+                                             "Veuillez saisir vos informations d'identification :"},
+                                         {USER_FAILED, "Utilisateur incorrect"},
+                                         {PASSWORD_FAILED,
+                                             "Mot de passe incorrect"},
+                                         {LOGIN_FAILED,
+                                             "Identification incorrecte"}};
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Object[][] getContents() {
+      return CONTENTS;
+    }
+
   }
 }

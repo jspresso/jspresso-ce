@@ -229,7 +229,7 @@ public class DialogCallbackHandler implements CallbackHandler {
                   locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
               ConfirmationCallback.CANCEL, translationProvider.getTranslation(
-                  "cancel.name", locale), proceedActions), constraints);
+                  "cancel", locale), proceedActions), constraints);
           break;
         case ConfirmationCallback.OK_CANCEL_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
@@ -238,7 +238,7 @@ public class DialogCallbackHandler implements CallbackHandler {
           if (hasInput) {
             optionPanel.add(createOptionButton(callbackDialog, cc,
                 ConfirmationCallback.CANCEL, translationProvider.getTranslation(
-                    "cancel.name", locale), proceedActions), constraints);
+                    "cancel", locale), proceedActions), constraints);
           }
           break;
         default:

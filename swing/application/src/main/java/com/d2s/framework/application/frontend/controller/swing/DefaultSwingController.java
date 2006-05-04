@@ -126,7 +126,7 @@ public class DefaultSwingController extends
       try {
         lc.login();
         getBackendController().getApplicationSession()
-            .setOwner(lc.getSubject());
+            .setSubject(lc.getSubject());
         break;
       } catch (LoginException le) {
         System.err.println("Authentication failed:");

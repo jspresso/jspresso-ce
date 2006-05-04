@@ -12,6 +12,11 @@
 		<property name="messageSource" ref="applicationMessageSource" />
 	</bean>
 
+	<bean id="commonsMessageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+	  <property name="parentMessageSource" ref="mockMessageSource" />
+	  <property name="basename" value="com.d2s.framework.application.i18n.Commons" />
+	</bean>
+
 	<!--
 		The implementation used as MvcBinder.
 	-->

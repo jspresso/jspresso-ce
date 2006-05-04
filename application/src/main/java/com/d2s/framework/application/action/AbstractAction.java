@@ -1,12 +1,14 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.action;
+package com.d2s.framework.application.action;
 
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.IController;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;

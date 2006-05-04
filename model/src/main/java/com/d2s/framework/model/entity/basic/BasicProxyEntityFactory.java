@@ -6,6 +6,7 @@ package com.d2s.framework.model.entity.basic;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.security.Principal;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -58,7 +59,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
                         .getPropertyClass()));
       }
     }
-    createdEntity.onCreate(this);
+    createdEntity.onCreate(this, getPrincipal());
     return createdEntity;
   }
 
@@ -113,14 +114,14 @@ public class BasicProxyEntityFactory implements IEntityFactory,
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public <T extends IQueryEntity> T createQueryEntityInstance(Class<T> entityContract) {
+  public <T extends IQueryEntity> T createQueryEntityInstance(
+      Class<T> entityContract) {
     IEntity entityDelegate = createEntityInstance(entityContract, null,
         new Class[] {IQueryEntity.class});
     QueryEntityInvocationHandler entityHandler = new QueryEntityInvocationHandler(
         entityDelegate);
-    return (T) Proxy.newProxyInstance(IQueryEntity.class
-        .getClassLoader(), entityDelegate.getClass().getInterfaces(),
-        entityHandler);
+    return (T) Proxy.newProxyInstance(IQueryEntity.class.getClassLoader(),
+        entityDelegate.getClass().getInterfaces(), entityHandler);
   }
 
   /**
@@ -215,5 +216,14 @@ public class BasicProxyEntityFactory implements IEntityFactory,
    */
   public void setApplicationContext(ApplicationContext applicationContext) {
     setEntityApplicationContext(applicationContext);
+  }
+
+  /**
+   * Gets the principal using the factory.
+   * 
+   * @return the principal using the factory.
+   */
+  protected Principal getPrincipal() {
+    return null;
   }
 }

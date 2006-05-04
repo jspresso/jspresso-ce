@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend.session.basic;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -44,7 +45,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private IEntityFactory             entityFactory;
   private IEntityCollectionFactory   collectionFactory;
   private Set<IEntity>               entitiesToMergeBack;
-  private Subject                    owner;
+  private Subject                    subject;
   private Locale                     locale;
 
   /**
@@ -500,18 +501,28 @@ public class BasicApplicationSession implements IApplicationSession {
    * 
    * @return the owner.
    */
-  public Subject getOwner() {
-    return owner;
+  public Subject getSubject() {
+    return subject;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Principal getPrincipal() {
+    if (subject != null && !subject.getPrincipals().isEmpty()) {
+      return subject.getPrincipals().iterator().next();
+    }
+    return null;
   }
 
   /**
    * Sets the owner.
    * 
-   * @param owner
+   * @param subject
    *          the owner to set.
    */
-  public void setOwner(Subject owner) {
-    this.owner = owner;
+  public void setSubject(Subject subject) {
+    this.subject = subject;
   }
 
   /**

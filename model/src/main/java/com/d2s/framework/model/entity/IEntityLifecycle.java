@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.entity;
 
+import java.security.Principal;
+
 /**
  * Defines the entity lifecycle hooks.
  * <p>
@@ -20,9 +22,11 @@ public interface IEntityLifecycle {
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onCreate(IEntityFactory entityFactory);
+  boolean onCreate(IEntityFactory entityFactory, Principal principal);
 
   /**
    * Called just before an entity is persisted (insert).
@@ -30,9 +34,11 @@ public interface IEntityLifecycle {
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onPersist(IEntityFactory entityFactory);
+  boolean onPersist(IEntityFactory entityFactory, Principal principal);
 
   /**
    * Called just before an entity is updated (update).
@@ -40,9 +46,11 @@ public interface IEntityLifecycle {
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onUpdate(IEntityFactory entityFactory);
+  boolean onUpdate(IEntityFactory entityFactory, Principal principal);
 
   /**
    * Called just before an entity is deleted (delete).
@@ -50,7 +58,9 @@ public interface IEntityLifecycle {
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onDelete(IEntityFactory entityFactory);
+  boolean onDelete(IEntityFactory entityFactory, Principal principal);
 }

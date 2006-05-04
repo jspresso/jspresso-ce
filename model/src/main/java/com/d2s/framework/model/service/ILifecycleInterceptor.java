@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.service;
 
+import java.security.Principal;
+
 import com.d2s.framework.model.entity.IEntityFactory;
 
 /**
@@ -26,9 +28,11 @@ public interface ILifecycleInterceptor<E> {
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onCreate(E entity, IEntityFactory entityFactory);
+  boolean onCreate(E entity, IEntityFactory entityFactory, Principal principal);
 
   /**
    * Called whenever an entity is made persistent for the first time.
@@ -38,9 +42,11 @@ public interface ILifecycleInterceptor<E> {
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onPersist(E entity, IEntityFactory entityFactory);
+  boolean onPersist(E entity, IEntityFactory entityFactory, Principal principal);
 
   /**
    * Called whenever an persistent entity is updated.
@@ -50,9 +56,11 @@ public interface ILifecycleInterceptor<E> {
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onUpdate(E entity, IEntityFactory entityFactory);
+  boolean onUpdate(E entity, IEntityFactory entityFactory, Principal principal);
 
   /**
    * Called whenever an persistent entity is deleted.
@@ -62,7 +70,9 @@ public interface ILifecycleInterceptor<E> {
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
    *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onDelete(E entity, IEntityFactory entityFactory);
+  boolean onDelete(E entity, IEntityFactory entityFactory, Principal principal);
 }
