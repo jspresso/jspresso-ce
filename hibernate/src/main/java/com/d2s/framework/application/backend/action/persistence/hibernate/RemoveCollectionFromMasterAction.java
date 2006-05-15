@@ -66,8 +66,9 @@ public class RemoveCollectionFromMasterAction extends
             if (getSelectedIndices(context) != null) {
               Collection<IEntity> detailsToRemove = new HashSet<IEntity>();
               for (int selectedIndex : getSelectedIndices(context)) {
-                detailsToRemove.add((IEntity) collectionConnector
-                    .getChildConnector(selectedIndex).getConnectorValue());
+                detailsToRemove.add(mergeInHibernate(
+                    (IEntity) collectionConnector.getChildConnector(
+                        selectedIndex).getConnectorValue(), session, context));
               }
               for (IEntity nextDetailToRemove : detailsToRemove) {
                 try {
@@ -81,13 +82,7 @@ public class RemoveCollectionFromMasterAction extends
                   throw new ActionException(ex);
                 }
                 if (nextDetailToRemove.isPersistent()) {
-                  IEntity sessionEntity = (IEntity) session.get(
-                      nextDetailToRemove.getContract(), nextDetailToRemove
-                          .getId());
-                  if (sessionEntity == null) {
-                    sessionEntity = nextDetailToRemove;
-                  }
-                  session.delete(sessionEntity);
+                  session.delete(nextDetailToRemove);
                 }
               }
               if (detailsToRemove.size() != 0) {

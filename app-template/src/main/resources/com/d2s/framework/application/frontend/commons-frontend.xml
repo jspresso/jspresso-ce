@@ -103,7 +103,9 @@
 
 	<bean id="removeFromProjectedFrontAction" parent="removeCollectionFromMasterFrontAction">
 		<property name="yesAction">
-			<bean class="com.d2s.framework.application.backend.action.module.RemoveFromModuleObjectsAction" />
+			<bean parent="abstractHibernateBackAction"
+				class="com.d2s.framework.application.backend.action.persistence.hibernate.module.RemoveFromModuleObjectsAction">
+			</bean>
 		</property>
 	</bean>
 
