@@ -314,6 +314,9 @@ public class UIActionField extends UIComponent implements IEditorComponent {
         return true;
       }
       sendActionText();
+      if (getBasicObject().getActionText().length() == 0) {
+        return true;
+      }
       return false;
     }
   }
