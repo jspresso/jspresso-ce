@@ -149,7 +149,7 @@ public final class ULCErrorDialog extends ULCDialog {
     gbc.setWeightY(1.0);
     pane.add(detailsPanel, gbc);
 
-    ULCButton button = new ULCButton(translationProvider.getTranslation("copy",
+    ULCButton button = new ULCButton(translationProvider.getTranslation("copy.name",
         locale));
     button.addActionListener(new IActionListener() {
 
@@ -268,11 +268,10 @@ public final class ULCErrorDialog extends ULCDialog {
           locale)
           + " <<");
     } else {
-      expandedHeight = getHeight();
       detailsPanel.setVisible(false);
       detailsButton.setText(translationProvider.getTranslation("details",
           locale)
-          + " <<");
+          + " >>");
       setSize(getWidth(), collapsedHeight);
     }
     repaint();

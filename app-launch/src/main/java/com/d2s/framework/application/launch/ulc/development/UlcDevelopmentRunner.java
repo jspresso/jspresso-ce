@@ -24,6 +24,8 @@ import com.ulcjava.base.development.DevelopmentRunner;
  */
 public final class UlcDevelopmentRunner {
 
+  private static List<IMessageService> messageHandlers;
+
   private UlcDevelopmentRunner() {
     // Helper class constructor.
   }
@@ -35,6 +37,16 @@ public final class UlcDevelopmentRunner {
    *          arguments.
    */
   public static void main(String[] args) {
+    ClientEnvironmentAdapter.setMessageService(new IMessageService() {
+
+      public void handleMessage(String msg) {
+        if (messageHandlers != null) {
+          for (IMessageService messageHandler : messageHandlers) {
+            messageHandler.handleMessage(msg);
+          }
+        }
+      }
+    });
     String splashUrl = null;
     List<String> filteredArgs = new ArrayList<String>();
     for (int i = 0; i < args.length; i++) {
@@ -48,7 +60,7 @@ public final class UlcDevelopmentRunner {
     if (splashUrl != null) {
       SplashWindow.splash(UrlHelper.createURL(splashUrl, ClassLoader
           .getSystemClassLoader()));
-      ClientEnvironmentAdapter.setMessageService(new IMessageService() {
+      registerMessageHandler(new IMessageService() {
 
         public void handleMessage(String msg) {
           if ("appStarted".equals(msg)) {
@@ -59,5 +71,18 @@ public final class UlcDevelopmentRunner {
     }
     SwingUtil.installDefaults();
     DevelopmentRunner.main(filteredArgs.toArray(new String[0]));
+  }
+
+  /**
+   * Registers a new message handler to which client messages will be delivered.
+   * 
+   * @param messageHandler
+   *          the new message handler to be delivered.
+   */
+  public static void registerMessageHandler(IMessageService messageHandler) {
+    if (messageHandlers == null) {
+      messageHandlers = new ArrayList<IMessageService>();
+    }
+    messageHandlers.add(messageHandler);
   }
 }

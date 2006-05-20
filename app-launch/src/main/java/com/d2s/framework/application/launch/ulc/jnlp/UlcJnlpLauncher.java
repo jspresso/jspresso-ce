@@ -15,7 +15,7 @@ import com.ulcjava.base.client.IMessageService;
 import com.ulcjava.environment.jnlp.client.DefaultJnlpLauncher;
 
 /**
- * Custom development runner to cope with formatted textfield font bug.
+ * Custom jnlp runner to cope with formatted textfield font bug.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -24,6 +24,8 @@ import com.ulcjava.environment.jnlp.client.DefaultJnlpLauncher;
  * @author Vincent Vandenschrick
  */
 public final class UlcJnlpLauncher {
+
+  private static List<IMessageService> messageHandlers;
 
   private UlcJnlpLauncher() {
     // Helper class constructor.
@@ -38,6 +40,16 @@ public final class UlcJnlpLauncher {
    *           whenever the startup url is malformed.
    */
   public static void main(String[] args) throws MalformedURLException {
+    ClientEnvironmentAdapter.setMessageService(new IMessageService() {
+
+      public void handleMessage(String msg) {
+        if (messageHandlers != null) {
+          for (IMessageService messageHandler : messageHandlers) {
+            messageHandler.handleMessage(msg);
+          }
+        }
+      }
+    });
     String splashUrl = null;
     List<String> filteredArgs = new ArrayList<String>();
     for (int i = 0; i < args.length; i++) {
@@ -50,7 +62,7 @@ public final class UlcJnlpLauncher {
     }
     if (splashUrl != null) {
       SplashWindow.splash(UrlHelper.createURL(splashUrl, null));
-      ClientEnvironmentAdapter.setMessageService(new IMessageService() {
+      registerMessageHandler(new IMessageService() {
 
         public void handleMessage(String msg) {
           if ("appStarted".equals(msg)) {
@@ -61,5 +73,18 @@ public final class UlcJnlpLauncher {
     }
     SwingUtil.installDefaults();
     DefaultJnlpLauncher.main(filteredArgs.toArray(new String[0]));
+  }
+
+  /**
+   * Registers a new message handler to which client messages will be delivered.
+   * 
+   * @param messageHandler
+   *          the new message handler to be delivered.
+   */
+  public static void registerMessageHandler(IMessageService messageHandler) {
+    if (messageHandlers == null) {
+      messageHandlers = new ArrayList<IMessageService>();
+    }
+    messageHandlers.add(messageHandler);
   }
 }
