@@ -5,7 +5,9 @@ package com.d2s.framework.application.launch.ulc.development;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
+import com.d2s.framework.application.launch.ulc.ClassInvoker;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.splash.SplashWindow;
 import com.d2s.framework.util.url.UrlHelper;
@@ -47,6 +49,7 @@ public final class UlcDevelopmentRunner {
         }
       }
     });
+    registerMessageHandler(new ClassInvoker());
     String splashUrl = null;
     List<String> filteredArgs = new ArrayList<String>();
     for (int i = 0; i < args.length; i++) {
@@ -70,6 +73,9 @@ public final class UlcDevelopmentRunner {
       });
     }
     SwingUtil.installDefaults();
+    Properties props =
+      ClientEnvironmentAdapter.getClientInfo().getSystemProperties();
+              props.setProperty("java.io.tmpdir", System.getProperty("java.io.tmpdir"));
     DevelopmentRunner.main(filteredArgs.toArray(new String[0]));
   }
 
