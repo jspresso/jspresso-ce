@@ -264,11 +264,6 @@
 			</dependency>
 			<dependency>
 				<groupId>ulc</groupId>
-				<artifactId>ulc-standalone-client</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
 				<artifactId>ulc-jnlp-client</artifactId>
 				<version>6.0.4</version>
 			</dependency>

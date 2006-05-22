@@ -14,8 +14,8 @@ import com.d2s.framework.util.swing.splash.SplashWindow;
 import com.d2s.framework.util.url.UrlHelper;
 import com.ulcjava.base.client.ClientEnvironmentAdapter;
 import com.ulcjava.base.client.IMessageService;
+import com.ulcjava.base.trusted.AllPermissionsFileService;
 import com.ulcjava.environment.jnlp.client.DefaultJnlpLauncher;
-import com.ulcjava.environment.standalone.client.StandaloneFileService;
 
 /**
  * Custom jnlp runner to cope with formatted textfield font bug.
@@ -43,16 +43,6 @@ public final class UlcJnlpLauncher {
    *           whenever the startup url is malformed.
    */
   public static void main(String[] args) throws MalformedURLException {
-    ClientEnvironmentAdapter.setMessageService(new IMessageService() {
-
-      public void handleMessage(String msg) {
-        if (messageHandlers != null) {
-          for (IMessageService messageHandler : messageHandlers) {
-            messageHandler.handleMessage(msg);
-          }
-        }
-      }
-    });
     registerMessageHandler(new ClassInvoker());
     String splashUrl = null;
     List<String> filteredArgs = new ArrayList<String>();
@@ -80,8 +70,17 @@ public final class UlcJnlpLauncher {
     props.setProperty("java.io.tmpdir", System.getProperty("java.io.tmpdir"));
     SwingUtil.installDefaults();
     DefaultJnlpLauncher.main(filteredArgs.toArray(new String[0]));
+    ClientEnvironmentAdapter.setMessageService(new IMessageService() {
 
-    ClientEnvironmentAdapter.setFileService(new StandaloneFileService());
+      public void handleMessage(String msg) {
+        if (messageHandlers != null) {
+          for (IMessageService messageHandler : messageHandlers) {
+            messageHandler.handleMessage(msg);
+          }
+        }
+      }
+    });
+    ClientEnvironmentAdapter.setFileService(new AllPermissionsFileService());
   }
 
   /**
