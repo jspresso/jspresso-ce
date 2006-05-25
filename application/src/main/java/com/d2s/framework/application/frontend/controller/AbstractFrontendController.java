@@ -112,10 +112,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
     Map<String, Object> actionContext = getInitialActionContext();
     context.putAll(actionContext);
-    if (action.isBackend()) {
-      executeBackend(action, context);
-    } else {
-      executeFrontend(action, context);
+    try {
+      if (action.isBackend()) {
+        executeBackend(action, context);
+      } else {
+        executeFrontend(action, context);
+      }
+    } catch (Throwable ex) {
+      handleException(ex, actionContext);
     }
   }
 

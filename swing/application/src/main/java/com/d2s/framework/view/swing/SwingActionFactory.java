@@ -140,11 +140,7 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
         if (action.getInitialContext() != null) {
           actionContext.putAll(action.getInitialContext());
         }
-        try {
-          actionHandler.execute(action, actionContext);
-        } catch (Throwable ex) {
-          actionHandler.handleException(ex, actionContext);
-        }
+        actionHandler.execute(action, actionContext);
       }
     }
 
