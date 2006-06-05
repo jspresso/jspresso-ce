@@ -30,7 +30,8 @@ public class SwingIconFactory extends AbstractIconFactory<Icon> {
   @Override
   protected Icon createIcon(String urlSpec, Dimension iconSize) {
     if (urlSpec != null) {
-      URL imageURL = UrlHelper.createURL(urlSpec, getClass().getClassLoader());
+      URL imageURL = UrlHelper.createURL(urlSpec, Thread.currentThread()
+          .getContextClassLoader());
       if (imageURL != null) {
         ImageIcon imageIcon = new ImageIcon(imageURL);
         imageIcon.setImage(imageIcon.getImage().getScaledInstance(
@@ -41,5 +42,4 @@ public class SwingIconFactory extends AbstractIconFactory<Icon> {
     }
     return null;
   }
-
 }

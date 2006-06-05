@@ -91,8 +91,8 @@ public class BasicProxyEntityFactory implements IEntityFactory,
       implementedClasses = new Class[1];
       implementedClasses[0] = entityDescriptor.getComponentContract();
     }
-    T entity = (T) Proxy.newProxyInstance(IEntity.class.getClassLoader(),
-        implementedClasses, entityHandler);
+    T entity = (T) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
   }
@@ -120,8 +120,9 @@ public class BasicProxyEntityFactory implements IEntityFactory,
         new Class[] {IQueryEntity.class});
     QueryEntityInvocationHandler entityHandler = new QueryEntityInvocationHandler(
         entityDelegate);
-    return (T) Proxy.newProxyInstance(IQueryEntity.class.getClassLoader(),
-        entityDelegate.getClass().getInterfaces(), entityHandler);
+    return (T) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), entityDelegate.getClass().getInterfaces(),
+        entityHandler);
   }
 
   /**

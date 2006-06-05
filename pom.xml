@@ -43,6 +43,7 @@
 		<module>model</module>
 		<module>tools</module>
 		<module>util</module>
+		<module>security</module>
 		<module>view</module>
 		<module>hibernate</module>
 		<module>swing</module>
@@ -251,6 +252,11 @@
 				<groupId>ulc</groupId>
 				<artifactId>ulc-base-development</artifactId>
 				<version>6.0.4</version>
+			</dependency>
+			<dependency>
+				<groupId>jboss</groupId>
+				<artifactId>jbosssx</artifactId>
+				<version>4.0.4</version>
 			</dependency>
 			<dependency>
 				<groupId>ulc</groupId>

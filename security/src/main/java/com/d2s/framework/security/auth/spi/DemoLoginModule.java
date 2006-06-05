@@ -1,10 +1,9 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.util.security.demo;
+package com.d2s.framework.security.auth.spi;
 
 import java.io.IOException;
-import java.util.ListResourceBundle;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -18,6 +17,11 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
+
+import com.d2s.framework.security.UserPrincipal;
+import com.d2s.framework.security.auth.spi.LoginUtils;
+import com.d2s.framework.security.auth.spi.LoginUtils.DlmBundle;
+
 
 /**
  * login : demo. password : demo.
@@ -48,15 +52,8 @@ public class DemoLoginModule implements LoginModule {
   private String              username;
   private char[]              password;
 
-  // testUser's DemoPrincipal
-  private DemoPrincipal       userPrincipal;
-
-  private static final String USER            = "user";
-  private static final String PASSWORD        = "password";
-  private static final String CRED_MESSAGE    = "credentialMessage";
-  private static final String USER_FAILED     = "userIncorrect";
-  private static final String PASSWORD_FAILED = "passwordIncorrect";
-  private static final String LOGIN_FAILED    = "loginFailed";
+  // testUser's UserPrincipal
+  private UserPrincipal       userPrincipal;
 
   private ResourceBundle      bundle          = ResourceBundle
                                                   .getBundle(DlmBundle.class
@@ -114,10 +111,10 @@ public class DemoLoginModule implements LoginModule {
     }
 
     Callback[] callbacks = new Callback[3];
-    callbacks[0] = new NameCallback(bundle.getString(USER));
-    callbacks[1] = new PasswordCallback(bundle.getString(PASSWORD), false);
+    callbacks[0] = new NameCallback(bundle.getString(LoginUtils.USER));
+    callbacks[1] = new PasswordCallback(bundle.getString(LoginUtils.PASSWORD), false);
     callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION,
-        bundle.getString(CRED_MESSAGE));
+        bundle.getString(LoginUtils.CRED_MESSAGE));
 
     try {
       callbackHandler.handle(callbacks);
@@ -176,9 +173,9 @@ public class DemoLoginModule implements LoginModule {
     }
     password = null;
     if (!usernameCorrect) {
-      throw new FailedLoginException(bundle.getString(USER_FAILED));
+      throw new FailedLoginException(bundle.getString(LoginUtils.USER_FAILED));
     }
-    throw new FailedLoginException(bundle.getString(PASSWORD_FAILED));
+    throw new FailedLoginException(bundle.getString(LoginUtils.PASSWORD_FAILED));
   }
 
   /**
@@ -203,7 +200,8 @@ public class DemoLoginModule implements LoginModule {
       return false;
     }
     // assume the user we authenticated is the DemoPrincipal
-    userPrincipal = new DemoPrincipal(username);
+    userPrincipal = new UserPrincipal(username);
+    userPrincipal.putCustomProperty("owner", "ou=demo");
     if (!subject.getPrincipals().contains(userPrincipal)) {
       subject.getPrincipals().add(userPrincipal);
     }
@@ -243,7 +241,7 @@ public class DemoLoginModule implements LoginModule {
     if (!succeeded) {
       Callback[] callbacks = new Callback[1];
       callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, bundle
-          .getString(LOGIN_FAILED));
+          .getString(LoginUtils.LOGIN_FAILED));
       try {
         callbackHandler.handle(callbacks);
       } catch (IOException ex) {
@@ -294,67 +292,5 @@ public class DemoLoginModule implements LoginModule {
     }
     userPrincipal = null;
     return true;
-  }
-
-  /**
-   * Default RB.
-   * <p>
-   * Copyright 2005 Design2See. All rights reserved.
-   * <p>
-   * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
-   */
-  public static class DlmBundle extends ListResourceBundle {
-
-    static final Object[][] CONTENTS = {
-                                         {USER, "User"},
-                                         {PASSWORD, "Password"},
-                                         {CRED_MESSAGE,
-                                             "Enter login information :"},
-                                         {USER_FAILED, "User incorrect"},
-                                         {PASSWORD_FAILED, "Password incorrect"},
-                                         {LOGIN_FAILED, "Login failed"}};
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Object[][] getContents() {
-      return CONTENTS;
-    }
-
-  }
-
-  /**
-   * French RB.
-   * <p>
-   * Copyright 2005 Design2See. All rights reserved.
-   * <p>
-   * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
-   */
-  public static class DlmBundle_fr extends ListResourceBundle {
-
-    static final Object[][] CONTENTS = {
-                                         {USER, "Utilisateur"},
-                                         {PASSWORD, "Mot de passe"},
-                                         {CRED_MESSAGE,
-                                             "Veuillez saisir vos informations d'identification :"},
-                                         {USER_FAILED, "Utilisateur incorrect"},
-                                         {PASSWORD_FAILED,
-                                             "Mot de passe incorrect"},
-                                         {LOGIN_FAILED,
-                                             "Identification incorrecte"}};
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Object[][] getContents() {
-      return CONTENTS;
-    }
-
   }
 }

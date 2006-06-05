@@ -865,8 +865,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityDescriptor
           .getPropertyDescriptor(propertyName);
       if (currentPropertyValue != null) {
-        currentPropertyValue = Proxy.newProxyInstance(getClass()
-            .getClassLoader(), new Class[] {propertyDescriptor
+        currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
+            .getContextClassLoader(), new Class[] {propertyDescriptor
             .getReferencedDescriptor().getCollectionInterface()},
             new NeverEqualsInvocationHandler(currentPropertyValue));
       }

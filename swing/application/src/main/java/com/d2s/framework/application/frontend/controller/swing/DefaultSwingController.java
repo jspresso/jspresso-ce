@@ -111,19 +111,19 @@ public class DefaultSwingController extends
    * @return true if login is successful.
    */
   private boolean performLogin() {
-    LoginContext lc = null;
-    try {
-      lc = new LoginContext(getLoginContextName(), getLoginCallbackHandler());
-    } catch (LoginException le) {
-      System.err.println("Cannot create LoginContext. " + le.getMessage());
-      return false;
-    } catch (SecurityException se) {
-      System.err.println("Cannot create LoginContext. " + se.getMessage());
-      return false;
-    }
     int i;
     for (i = 0; i < MAX_LOGIN_RETRIES; i++) {
       try {
+        LoginContext lc = null;
+        try {
+          lc = new LoginContext(getLoginContextName(), getLoginCallbackHandler());
+        } catch (LoginException le) {
+          System.err.println("Cannot create LoginContext. " + le.getMessage());
+          return false;
+        } catch (SecurityException se) {
+          System.err.println("Cannot create LoginContext. " + se.getMessage());
+          return false;
+        }
         lc.login();
         getBackendController().getApplicationSession()
             .setSubject(lc.getSubject());
