@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.security.auth.spi;
+package com.d2s.framework.util.security;
 
 import java.util.ListResourceBundle;
 
 /**
- * TODO Comment needed.
+ * Some i18n utils for login.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

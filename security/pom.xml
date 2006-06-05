@@ -11,9 +11,17 @@
   <packaging>jar</packaging>
   <name>Design2See Application Framework - Security</name>
   <dependencies>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-util</artifactId>
+		</dependency>
     <dependency>
       <groupId>jboss</groupId>
       <artifactId>jbosssx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jboss</groupId>
+      <artifactId>jboss-common</artifactId>
     </dependency>
   </dependencies>
 </project>

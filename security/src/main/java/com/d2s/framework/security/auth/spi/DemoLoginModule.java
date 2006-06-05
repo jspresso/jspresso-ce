@@ -19,8 +19,8 @@ import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
 import com.d2s.framework.security.UserPrincipal;
-import com.d2s.framework.security.auth.spi.LoginUtils;
-import com.d2s.framework.security.auth.spi.LoginUtils.DlmBundle;
+import com.d2s.framework.util.security.LoginUtils;
+import com.d2s.framework.util.security.LoginUtils.DlmBundle;
 
 
 /**
