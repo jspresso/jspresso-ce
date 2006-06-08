@@ -10,6 +10,7 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,6 +80,26 @@ public class DialogCallbackHandler implements CallbackHandler {
    */
 
   public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
+
+    boolean tocFound = false;
+    boolean pcFound = false;
+    for (Callback callback : callbacks) {
+      if (callback instanceof TextOutputCallback) {
+        tocFound = true;
+      } else if (callback instanceof PasswordCallback) {
+        pcFound = true;
+      }
+    }
+
+    if (pcFound && !tocFound) {
+      TextOutputCallback defaultToc = new TextOutputCallback(
+          TextOutputCallback.INFORMATION, translationProvider.getTranslation(
+              "credentialMessage", locale));
+      List<Callback> completedCallBacks = new ArrayList<Callback>(Arrays.asList(callbacks));
+      completedCallBacks.add(defaultToc);
+      callbacks = completedCallBacks
+          .toArray(new Callback[callbacks.length + 1]);
+    }
 
     String dialogTitle = null;
 
@@ -219,16 +240,16 @@ public class DialogCallbackHandler implements CallbackHandler {
       switch (confirmationOptionType) {
         case ConfirmationCallback.YES_NO_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, translationProvider.getTranslation("yes",
-                  locale), proceedActions), constraints);
+              ConfirmationCallback.YES, translationProvider.getTranslation(
+                  "yes", locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
               ConfirmationCallback.NO, translationProvider.getTranslation("no",
                   locale), proceedActions), constraints);
           break;
         case ConfirmationCallback.YES_NO_CANCEL_OPTION:
           optionPanel.add(createOptionButton(callbackDialog, cc,
-              ConfirmationCallback.YES, translationProvider.getTranslation("yes",
-                  locale), proceedActions), constraints);
+              ConfirmationCallback.YES, translationProvider.getTranslation(
+                  "yes", locale), proceedActions), constraints);
           optionPanel.add(createOptionButton(callbackDialog, cc,
               ConfirmationCallback.NO, translationProvider.getTranslation("no",
                   locale), proceedActions), constraints);
@@ -242,8 +263,9 @@ public class DialogCallbackHandler implements CallbackHandler {
                   locale), proceedActions), constraints);
           if (hasInput) {
             optionPanel.add(createOptionButton(callbackDialog, cc,
-                ConfirmationCallback.CANCEL, translationProvider.getTranslation(
-                    "cancel", locale), proceedActions), constraints);
+                ConfirmationCallback.CANCEL, translationProvider
+                    .getTranslation("cancel", locale), proceedActions),
+                constraints);
           }
           break;
         default:
@@ -256,7 +278,10 @@ public class DialogCallbackHandler implements CallbackHandler {
   private void processPasswordCallback(
       final List<ActionListener> proceedActions, JPanel inputPanel,
       final PasswordCallback pc) {
-    JLabel promptLabel = new JLabel(pc.getPrompt());
+    // JLabel promptLabel = new JLabel(pc.getPrompt());
+    JLabel promptLabel = new JLabel(translationProvider.getTranslation(
+        "password", locale)
+        + " :");
 
     final JPasswordField passwordField = new JPasswordField(
         DEFAULT_FIELD_LENGTH);
@@ -287,13 +312,16 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   private void processNameCallback(final List<ActionListener> proceedActions,
       JPanel inputPanel, final NameCallback nc) {
-    JLabel promptLabel = new JLabel(nc.getPrompt());
+    // JLabel promptLabel = new JLabel(nc.getPrompt());
+    JLabel promptLabel = new JLabel(translationProvider.getTranslation("user",
+        locale)
+        + " :");
     final JTextField nameTextField = new JTextField(DEFAULT_FIELD_LENGTH);
 
-    String defaultName = nc.getDefaultName();
-    if (defaultName != null) {
-      nameTextField.setText(defaultName);
-    }
+    // String defaultName = nc.getDefaultName();
+    // if (defaultName != null) {
+    // nameTextField.setText(defaultName);
+    // }
 
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.insets = DEFAULT_INSETS;
@@ -400,11 +428,11 @@ public class DialogCallbackHandler implements CallbackHandler {
     this.iconFactory = iconFactory;
   }
 
-  
   /**
    * Sets the translationProvider.
    * 
-   * @param translationProvider the translationProvider to set.
+   * @param translationProvider
+   *          the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;

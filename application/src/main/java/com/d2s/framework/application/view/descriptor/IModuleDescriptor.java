@@ -4,6 +4,7 @@
 package com.d2s.framework.application.view.descriptor;
 
 import com.d2s.framework.action.IAction;
+import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 
 /**
@@ -15,7 +16,7 @@ import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IModuleDescriptor extends ITreeViewDescriptor {
+public interface IModuleDescriptor extends ITreeViewDescriptor, ISecurable {
   
   /**
    * Gets the action which is executed when the module is launched.

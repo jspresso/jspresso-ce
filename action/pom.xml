@@ -16,5 +16,9 @@
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-binding</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-security</artifactId>
+		</dependency>
 	</dependencies>
 </project>

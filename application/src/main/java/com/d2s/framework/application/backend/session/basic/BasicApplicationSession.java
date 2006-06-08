@@ -4,7 +4,6 @@
 package com.d2s.framework.application.backend.session.basic;
 
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +25,7 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityRegistry;
+import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.bean.BeanPropertyChangeRecorder;
 
 /**
@@ -508,9 +508,9 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public Principal getPrincipal() {
+  public UserPrincipal getPrincipal() {
     if (subject != null && !subject.getPrincipals().isEmpty()) {
-      return subject.getPrincipals().iterator().next();
+      return (UserPrincipal) subject.getPrincipals().iterator().next();
     }
     return null;
   }

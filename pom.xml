@@ -90,6 +90,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.design2see</groupId>
+				<artifactId>d2s-security</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.design2see</groupId>
 				<artifactId>d2s-view</artifactId>
 				<version>${pom.version}</version>
 			</dependency>

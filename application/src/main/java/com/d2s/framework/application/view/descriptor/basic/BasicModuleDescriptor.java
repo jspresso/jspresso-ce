@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.view.descriptor.basic;
 
+import java.util.Collection;
+
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
@@ -18,23 +20,43 @@ import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
  */
 public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
     IModuleDescriptor {
-  
-    private IAction startupAction;
 
-    /**
-     * {@inheritDoc}
-     */
-    public IAction getStartupAction() {
-      return startupAction;
-    }
+  private IAction            startupAction;
+  private Collection<String> grantedRoles;
 
-    
-    /**
-     * Sets the startupAction.
-     * 
-     * @param startupAction the startupAction to set.
-     */
-    public void setStartupAction(IAction startupAction) {
-      this.startupAction = startupAction;
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public IAction getStartupAction() {
+    return startupAction;
+  }
+
+  /**
+   * Sets the startupAction.
+   * 
+   * @param startupAction
+   *          the startupAction to set.
+   */
+  public void setStartupAction(IAction startupAction) {
+    this.startupAction = startupAction;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
+  }
 }

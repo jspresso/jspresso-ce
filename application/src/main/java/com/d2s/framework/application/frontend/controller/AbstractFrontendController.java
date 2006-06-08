@@ -27,6 +27,7 @@ import com.d2s.framework.binding.IConnectorSelectionListener;
 import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.ICompositeView;
@@ -113,13 +114,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
     Map<String, Object> actionContext = getInitialActionContext();
     context.putAll(actionContext);
     try {
+      SecurityHelper.checkAccess(getBackendController().getApplicationSession()
+          .getSubject(), action, getTranslationProvider(), getLocale());
       if (action.isBackend()) {
         executeBackend(action, context);
       } else {
         executeFrontend(action, context);
       }
     } catch (Throwable ex) {
-      handleException(ex, actionContext);
+      handleException(ex, context);
     }
   }
 
@@ -344,6 +347,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
     return getBackendController().merge(entities, mergeMode);
   }
+
   /**
    * Creates a root module view.
    * 
@@ -462,14 +466,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * {@inheritDoc}
    */
-  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
     return controllerDescriptor.getI18nDescription(translationProvider, locale);
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
     return controllerDescriptor.getI18nName(translationProvider, locale);
   }
 }

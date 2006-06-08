@@ -6,6 +6,7 @@ package com.d2s.framework.model.service;
 import java.security.Principal;
 
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Defines all the entity lifecycle hooks.
@@ -32,7 +33,7 @@ public interface ILifecycleInterceptor<E> {
    *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onCreate(E entity, IEntityFactory entityFactory, Principal principal);
+  boolean onCreate(E entity, IEntityFactory entityFactory, UserPrincipal principal);
 
   /**
    * Called whenever an entity is made persistent for the first time.

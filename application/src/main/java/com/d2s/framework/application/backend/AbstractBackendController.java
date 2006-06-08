@@ -25,6 +25,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.util.bean.IAccessorFactory;
 
 /**
@@ -57,6 +58,8 @@ public abstract class AbstractBackendController extends AbstractController
     if (action == null) {
       return;
     }
+    SecurityHelper.checkAccess(getApplicationSession().getSubject(), action,
+        getTranslationProvider(), getLocale());
     Map<String, Object> actionContext = getInitialActionContext();
     if (context != null) {
       context.putAll(actionContext);

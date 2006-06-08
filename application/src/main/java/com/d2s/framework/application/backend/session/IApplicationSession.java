@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.application.backend.session;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,6 +11,7 @@ import javax.security.auth.Subject;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityDirtAware;
+import com.d2s.framework.security.UserPrincipal;
 
 /**
  * This interface establishes the contract of an application session. This
@@ -172,7 +172,7 @@ public interface IApplicationSession extends IEntityDirtAware {
    * 
    * @return the session owner.
    */
-  Principal getPrincipal();
+  UserPrincipal getPrincipal();
 
   /**
    * Sets the session owner as a JAAS subject.

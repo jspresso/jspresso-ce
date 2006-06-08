@@ -31,6 +31,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameAdapter;
@@ -43,6 +44,7 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.gui.swing.components.JErrorDialog;
+import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.WaitCursorTimer;
@@ -116,7 +118,8 @@ public class DefaultSwingController extends
       try {
         LoginContext lc = null;
         try {
-          lc = new LoginContext(getLoginContextName(), getLoginCallbackHandler());
+          lc = new LoginContext(getLoginContextName(),
+              getLoginCallbackHandler());
         } catch (LoginException le) {
           System.err.println("Cannot create LoginContext. " + le.getMessage());
           return false;
@@ -125,8 +128,8 @@ public class DefaultSwingController extends
           return false;
         }
         lc.login();
-        getBackendController().getApplicationSession()
-            .setSubject(lc.getSubject());
+        getBackendController().getApplicationSession().setSubject(
+            lc.getSubject());
         break;
       } catch (LoginException le) {
         System.err.println("Authentication failed:");
@@ -307,7 +310,15 @@ public class DefaultSwingController extends
      */
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
-      displayModule(moduleId);
+      try {
+        SecurityHelper.checkAccess(getBackendController()
+            .getApplicationSession().getSubject(),
+            getModuleDescriptor(moduleId), getTranslationProvider(),
+            getLocale());
+        displayModule(moduleId);
+      } catch (SecurityException ex) {
+        handleException(ex, null);
+      }
     }
   }
 
@@ -319,8 +330,8 @@ public class DefaultSwingController extends
      * Constructs a new <code>ModuleSelectionAction</code> instance.
      */
     public QuitAction() {
-      putValue(Action.NAME, getTranslationProvider().getTranslation("quit.name",
-          getLocale()));
+      putValue(Action.NAME, getTranslationProvider().getTranslation(
+          "quit.name", getLocale()));
       putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
           .getTranslation("quit.description", getLocale()));
     }
@@ -468,17 +479,24 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   public void handleException(Throwable ex, Map<String, Object> context) {
-    ex.printStackTrace();
-    JErrorDialog dialog = JErrorDialog.createInstance((Component) context
-        .get(ActionContextConstants.SOURCE_COMPONENT),
-        getTranslationProvider(), getLocale());
-    dialog.setTitle(getTranslationProvider().getTranslation("error",
-        getLocale()));
-    dialog.setMessageIcon(getIconFactory().getErrorIcon(
-        IIconFactory.MEDIUM_ICON_SIZE));
-    dialog.setMessage(ex.getLocalizedMessage());
-    dialog.setDetails(ex);
-    dialog.setVisible(true);
+    if (ex instanceof SecurityException) {
+      JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
+          ex.getMessage(), getTranslationProvider().getTranslation("error",
+              getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
+              .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+    } else {
+      ex.printStackTrace();
+      JErrorDialog dialog = JErrorDialog.createInstance((Component) context
+          .get(ActionContextConstants.SOURCE_COMPONENT),
+          getTranslationProvider(), getLocale());
+      dialog.setTitle(getTranslationProvider().getTranslation("error",
+          getLocale()));
+      dialog.setMessageIcon(getIconFactory().getErrorIcon(
+          IIconFactory.MEDIUM_ICON_SIZE));
+      dialog.setMessage(ex.getLocalizedMessage());
+      dialog.setDetails(ex);
+      dialog.setVisible(true);
+    }
   }
 
   /**

@@ -19,6 +19,7 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.gui.ulc.components.server.ULCErrorDialog;
+import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.ulc.DialogCallbackHandler;
 import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.ulc.UlcUtil;
@@ -28,6 +29,7 @@ import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IAction;
+import com.ulcjava.base.application.ULCAlert;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
 import com.ulcjava.base.application.ULCFrame;
@@ -307,8 +309,8 @@ public class DefaultUlcController extends
       putValue(com.ulcjava.base.application.IAction.NAME, moduleDescriptor
           .getI18nName(getTranslationProvider(), getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
-          moduleDescriptor
-          .getI18nDescription(getTranslationProvider(), getLocale()));
+          moduleDescriptor.getI18nDescription(getTranslationProvider(),
+              getLocale()));
       putValue(com.ulcjava.base.application.IAction.SMALL_ICON,
           getIconFactory().getIcon(moduleDescriptor.getIconImageURL(),
               IIconFactory.TINY_ICON_SIZE));
@@ -322,7 +324,15 @@ public class DefaultUlcController extends
     @Override
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
-      displayModule(moduleId);
+      try {
+        SecurityHelper.checkAccess(getBackendController()
+            .getApplicationSession().getSubject(),
+            getModuleDescriptor(moduleId), getTranslationProvider(),
+            getLocale());
+        displayModule(moduleId);
+      } catch (SecurityException ex) {
+        handleException(ex, null);
+      }
     }
   }
 
@@ -337,7 +347,8 @@ public class DefaultUlcController extends
       putValue(com.ulcjava.base.application.IAction.NAME,
           getTranslationProvider().getTranslation("quit.name", getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
-          getTranslationProvider().getTranslation("quit.description", getLocale()));
+          getTranslationProvider().getTranslation("quit.description",
+              getLocale()));
     }
 
     /**
@@ -372,17 +383,25 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   public void handleException(Throwable ex, Map<String, Object> context) {
-    ex.printStackTrace();
-    ULCErrorDialog dialog = ULCErrorDialog.createInstance(
-        (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT),
-        getTranslationProvider(), getLocale());
-    dialog.setMessageIcon(getIconFactory().getErrorIcon(
-        IIconFactory.MEDIUM_ICON_SIZE));
-    dialog.setTitle(getTranslationProvider().getTranslation("error",
-        getLocale()));
-    dialog.setMessage(ex.getLocalizedMessage());
-    dialog.setDetails(ex);
-    dialog.setVisible(true);
+    if (ex instanceof SecurityException) {
+      ULCAlert alert = new ULCAlert(controllerFrame, getTranslationProvider()
+          .getTranslation("error", getLocale()), ex.getMessage(),
+          getTranslationProvider().getTranslation("ok", getLocale()), null,
+          null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+      alert.show();
+    } else {
+      ex.printStackTrace();
+      ULCErrorDialog dialog = ULCErrorDialog.createInstance(
+          (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT),
+          getTranslationProvider(), getLocale());
+      dialog.setMessageIcon(getIconFactory().getErrorIcon(
+          IIconFactory.MEDIUM_ICON_SIZE));
+      dialog.setTitle(getTranslationProvider().getTranslation("error",
+          getLocale()));
+      dialog.setMessage(ex.getLocalizedMessage());
+      dialog.setDetails(ex);
+      dialog.setVisible(true);
+    }
   }
 
   /**

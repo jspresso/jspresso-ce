@@ -5,6 +5,8 @@ package com.d2s.framework.action;
 
 import java.util.Map;
 
+import com.d2s.framework.security.ISecurable;
+
 /**
  * This interface establishes the contract of any action in the application.
  * <p>
@@ -14,7 +16,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IAction {
+public interface IAction extends ISecurable {
 
   /**
    * Executes the action. During execution, the action should access its

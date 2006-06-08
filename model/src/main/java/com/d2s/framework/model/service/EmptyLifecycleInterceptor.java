@@ -6,6 +6,7 @@ package com.d2s.framework.model.service;
 import java.security.Principal;
 
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Empty interceptor for entity lifecycle. It is designed to be subclassed and
@@ -27,7 +28,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
    */
   @SuppressWarnings("unused")
   public boolean onCreate(E entity, IEntityFactory entityFactory,
-      Principal principal) {
+      UserPrincipal principal) {
     return false;
   }
 

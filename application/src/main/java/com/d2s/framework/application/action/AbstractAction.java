@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.action;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -28,6 +29,7 @@ public abstract class AbstractAction implements IAction {
 
   private boolean             longOperation;
   private Map<String, Object> initialContext;
+  private Collection<String>  grantedRoles;
 
   /**
    * Retrieves the locale the action has to use to execute from its context
@@ -108,5 +110,23 @@ public abstract class AbstractAction implements IAction {
   protected ITranslationProvider getTranslationProvider(
       Map<String, Object> context) {
     return getController(context).getTranslationProvider();
+  }
+
+  
+  /**
+   * {@inheritDoc}
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 }
