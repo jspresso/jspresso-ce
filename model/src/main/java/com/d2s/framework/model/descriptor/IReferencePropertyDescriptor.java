@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor;
 
+import java.util.Map;
+
 /**
  * This interface is implemented by descriptors of reference properties.
  * <p>
@@ -21,5 +23,15 @@ public interface IReferencePropertyDescriptor extends
    * @return the referenced component descriptor
    */
   IComponentDescriptor getReferencedDescriptor();
+
+  /**
+   * Gets the initialization map between master object attributes and query
+   * entity for LOV. For instance, a mapping holding (attrA,attrB) will indicate
+   * that the lov query entity should be initialized with its 'attrA' value
+   * initialized with the 'attrB' value of its master.
+   * 
+   * @return the initialisation mapping.
+   */
+  Map<String, String> getInitializationMapping();
 
 }

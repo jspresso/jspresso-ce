@@ -1042,6 +1042,9 @@ public class DefaultUlcViewFactory implements
       column.setHeaderValue(columnName.toString());
       IView<ULCComponent> editorView = createPropertyView(propertyDescriptor,
           null, actionHandler, locale);
+      if (editorView.getConnector().getParentConnector() == null) {
+        editorView.getConnector().setParentConnector(connector);
+      }
       if (editorView.getPeer() instanceof IEditorComponent) {
         UlcViewCellEditorAdapter editor = new UlcViewCellEditorAdapter(
             editorView);

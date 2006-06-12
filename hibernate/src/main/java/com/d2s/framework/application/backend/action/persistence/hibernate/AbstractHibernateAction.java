@@ -14,7 +14,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.d2s.framework.application.backend.action.AbstractBackendAction;
 import com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController;
-import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -27,19 +26,6 @@ import com.d2s.framework.model.entity.IEntity;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractHibernateAction extends AbstractBackendAction {
-
-  /**
-   * Gets the current application session.
-   * 
-   * @param context
-   *          the action context.
-   * @return the current application session.
-   */
-  protected IApplicationSession getApplicationSession(
-      Map<String, Object> context) {
-    return getController(context).getApplicationSession();
-  }
-  
 
   /**
    * {@inheritDoc}

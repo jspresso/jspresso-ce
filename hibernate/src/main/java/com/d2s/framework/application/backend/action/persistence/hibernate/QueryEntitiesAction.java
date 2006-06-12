@@ -9,6 +9,7 @@ import java.util.Map;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
@@ -28,7 +29,7 @@ import com.d2s.framework.model.entity.IQueryEntity;
  * @author Vincent Vandenschrick
  */
 public class QueryEntitiesAction extends AbstractHibernateAction {
-  
+
   /**
    * {@inheritDoc}
    */
@@ -36,8 +37,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
     final IQueryEntity queryEntity = (IQueryEntity) ((IValueConnector) context
-    .get(ActionContextConstants.QUERY_MODEL_CONNECTOR))
-        .getConnectorValue();
+        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR)).getConnectorValue();
 
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
@@ -47,8 +47,15 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             .getContract().getName());
         criteria.add(Example.create(queryEntity).ignoreCase().enableLike(
             MatchMode.START));
-        List<IEntity> queriedEntities = getHibernateTemplate(context).findByCriteria(
-            criteria);
+        for (Map.Entry<String, Object> property : queryEntity
+            .straightGetProperties().entrySet()) {
+          if (property.getValue() instanceof IEntity) {
+            criteria.add(Restrictions
+                .eq(property.getKey(), property.getValue()));
+          }
+        }
+        List<IEntity> queriedEntities = getHibernateTemplate(context)
+            .findByCriteria(criteria);
         queryEntity.setQueriedEntities(queriedEntities);
         return null;
       }

@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.Map;
+
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 
@@ -20,6 +22,7 @@ public class BasicReferencePropertyDescriptor extends
     IReferencePropertyDescriptor {
 
   private IComponentDescriptor referencedDescriptor;
+  private Map<String, String>  initializationMapping;
 
   /**
    * {@inheritDoc}
@@ -65,5 +68,25 @@ public class BasicReferencePropertyDescriptor extends
   @Override
   public boolean isQueryable() {
     return true;
+  }
+
+  
+  /**
+   * Gets the initializationMapping.
+   * 
+   * @return the initializationMapping.
+   */
+  public Map<String, String> getInitializationMapping() {
+    return initializationMapping;
+  }
+
+  
+  /**
+   * Sets the initializationMapping.
+   * 
+   * @param initializationMapping the initializationMapping to set.
+   */
+  public void setInitializationMapping(Map<String, String> initializationMapping) {
+    this.initializationMapping = initializationMapping;
   }
 }

@@ -3,13 +3,23 @@
  */
 package com.d2s.framework.application.backend.action;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.IConnector;
+import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.bean.BeanConnector;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.util.bean.IAccessorFactory;
+import com.d2s.framework.util.bean.IBeanProvider;
 
 /**
  * Creates a query entity.
@@ -22,8 +32,6 @@ import com.d2s.framework.model.entity.IQueryEntity;
  */
 public class CreateQueryEntityAction extends AbstractBackendAction {
 
-  private IEntityDescriptor queryEntityDescriptor;
-
   /**
    * Creates a query entity using the model descriptor passed in the context.
    * The action result contains the model connector holding the created query
@@ -34,10 +42,65 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
   @SuppressWarnings("unchecked")
   public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
+    IEntityDescriptor queryEntityDescriptor;
+    IModelDescriptor modelDescriptor = (IModelDescriptor) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    if (modelDescriptor instanceof IReferencePropertyDescriptor) {
+      queryEntityDescriptor = (IEntityDescriptor) ((IReferencePropertyDescriptor) modelDescriptor)
+          .getReferencedDescriptor();
+    } else {
+      queryEntityDescriptor = (IEntityDescriptor) modelDescriptor;
+    }
     IQueryEntity queryEntity = getEntityFactory(context)
         .createQueryEntityInstance(
             (Class<? extends IQueryEntity>) queryEntityDescriptor
                 .getComponentContract());
+
+    if (modelDescriptor instanceof IReferencePropertyDescriptor) {
+      queryEntityDescriptor = (IEntityDescriptor) ((IReferencePropertyDescriptor) modelDescriptor)
+          .getReferencedDescriptor();
+      Map<String, String> initializationMapping = ((IReferencePropertyDescriptor) modelDescriptor)
+          .getInitializationMapping();
+      if (initializationMapping != null) {
+        IEntity masterEntity = null;
+        // The following relies on a workaround used to determine the bean
+        // model whenever the lov component is used inside a jtable.
+        IConnector parentModelConnector = ((IValueConnector) context
+            .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
+            .getModelConnector();
+        if (parentModelConnector instanceof IBeanProvider) {
+          masterEntity = (IEntity) ((IBeanProvider) parentModelConnector)
+              .getBean();
+        } else if (parentModelConnector instanceof ICollectionConnector) {
+          int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
+              .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
+              .getSelectedIndices()[0];
+          masterEntity = (IEntity) ((ICollectionConnector) parentModelConnector)
+              .getChildConnector(collectionIndex).getConnectorValue();
+        }
+        if (masterEntity != null) {
+          IAccessorFactory accessorFactory = getAccessorFactory(context);
+          for (Map.Entry<String, String> initializedAttribute : initializationMapping
+              .entrySet()) {
+            try {
+              accessorFactory.createPropertyAccessor(
+                  initializedAttribute.getKey(), queryEntity.getContract())
+                  .setValue(
+                      queryEntity,
+                      accessorFactory.createPropertyAccessor(
+                          initializedAttribute.getValue(),
+                          masterEntity.getContract()).getValue(masterEntity));
+            } catch (IllegalAccessException ex) {
+              throw new ActionException(ex);
+            } catch (InvocationTargetException ex) {
+              throw new ActionException(ex);
+            } catch (NoSuchMethodException ex) {
+              throw new ActionException(ex);
+            }
+          }
+        }
+      }
+    }
     BeanConnector modelConnector = getBeanConnectorFactory(context)
         .createBeanConnector("lovQueryEntity", queryEntity.getClass());
     modelConnector.setConnectorValue(queryEntity);
@@ -49,15 +112,5 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
           queryPropertyValue);
     }
     context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
-  }
-
-  /**
-   * Sets the queryEntityDescriptor.
-   * 
-   * @param queryEntityDescriptor
-   *          the queryEntityDescriptor to set.
-   */
-  public void setQueryEntityDescriptor(IEntityDescriptor queryEntityDescriptor) {
-    this.queryEntityDescriptor = queryEntityDescriptor;
   }
 }

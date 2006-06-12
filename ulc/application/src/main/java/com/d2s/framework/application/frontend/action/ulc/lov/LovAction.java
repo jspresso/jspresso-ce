@@ -72,8 +72,6 @@ public class LovAction extends ModalDialogAction {
             .createLovViewDescriptor(getQueryEntityDescriptor(context)),
         actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, lovView);
-    createQueryEntityAction
-        .setQueryEntityDescriptor(getQueryEntityDescriptor(context));
     actionHandler.execute(createQueryEntityAction, context);
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);

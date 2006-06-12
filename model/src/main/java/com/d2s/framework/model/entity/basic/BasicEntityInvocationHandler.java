@@ -985,7 +985,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             .getCollectionDescriptor().getCollectionInterface())) {
       List<String> orderingProperties = propertyDescriptor
           .getOrderingProperties();
-      if (orderingProperties != null) {
+      if (orderingProperties != null && !orderingProperties.isEmpty()) {
         BeanComparator comparator = new BeanComparator();
         List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
         Class collectionElementContract = propertyDescriptor

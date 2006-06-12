@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.hibernate.Hibernate;
@@ -56,6 +57,28 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           session.lock(entityToMergeBack, LockMode.NONE);
         }
         performActualUnitOfWorkCommit();
+        return null;
+      }
+    });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void performPendingOperations() {
+    hibernateTemplate.execute(new HibernateCallback() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public Object doInHibernate(Session session) {
+        Set<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
+        if (entitiesToDelete != null) {
+          for (IEntity entityToDelete : entitiesToDelete) {
+            session.delete(entityToDelete);
+          }
+        }
         return null;
       }
     });
@@ -170,10 +193,13 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
          * {@inheritDoc}
          */
         public Object doInHibernate(Session session) {
+          HibernateAwareApplicationSession
+              .cleanPesristentCollectionDirtyState(entity);
           session.lock(entity, LockMode.NONE);
           session.setReadOnly(entity, true);
 
           Object initializedProperty = entity.straightGetProperty(propertyName);
+
           Hibernate.initialize(initializedProperty);
           return initializedProperty;
         }
@@ -188,5 +214,29 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
       getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
     }
     return;
+  }
+
+  /**
+   * Whenever the entity has dirty persistent collection, make them clean to
+   * workaround a "bug" with hibernate since hibernate cannot re-attach a
+   * "dirty" detached collection.
+   * 
+   * @param entity
+   *          the entity to clean the collections dirty state of.
+   */
+  public static void cleanPesristentCollectionDirtyState(IEntity entity) {
+    if (entity != null) {
+      // Whenever the entity has dirty persistent collection, make them
+      // clean to workaround a "bug" with hibernate since hibernate cannot
+      // re-attach a "dirty" detached collection.
+      for (Map.Entry<String, Object> registeredPropertyEntry : entity
+          .straightGetProperties().entrySet()) {
+        if (registeredPropertyEntry.getValue() instanceof PersistentCollection
+            && Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
+          ((PersistentCollection) registeredPropertyEntry.getValue())
+              .clearDirty();
+        }
+      }
+    }
   }
 }

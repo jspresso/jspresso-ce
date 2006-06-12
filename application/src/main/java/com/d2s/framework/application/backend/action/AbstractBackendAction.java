@@ -9,6 +9,7 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.action.AbstractAction;
 import com.d2s.framework.application.backend.IBackendController;
+import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.bean.IBeanConnectorFactory;
@@ -148,4 +149,15 @@ public abstract class AbstractBackendAction extends AbstractAction {
     return getController(context).getLocale();
   }
 
+  /**
+   * Gets the current application session.
+   * 
+   * @param context
+   *          the action context.
+   * @return the current application session.
+   */
+  protected IApplicationSession getApplicationSession(
+      Map<String, Object> context) {
+    return getController(context).getApplicationSession();
+  }
 }

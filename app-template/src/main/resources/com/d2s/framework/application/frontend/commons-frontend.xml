@@ -95,9 +95,12 @@
 		<property name="acceleratorAsString" value="alt D" />
 		<property name="message" value="remove.selected.message" />
 		<property name="yesAction">
-			<bean parent="abstractHibernateBackAction"
+			<!--
+				<bean parent="abstractHibernateBackAction"
 				class="com.d2s.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction">
-			</bean>
+				</bean>
+			-->
+			<bean class="com.d2s.framework.application.backend.action.RemoveCollectionFromMasterAction" />
 		</property>
 	</bean>
 

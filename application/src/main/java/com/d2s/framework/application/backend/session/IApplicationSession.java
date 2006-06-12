@@ -37,6 +37,24 @@ public interface IApplicationSession extends IEntityDirtAware {
   void registerEntity(IEntity entity, boolean isEntityTransient);
 
   /**
+   * Registers an entity for later deletion.
+   * 
+   * @param entity
+   *          the entity to register.
+   */
+  void registerEntityForDeletion(IEntity entity);
+
+  /**
+   * Gives a chance to the session to perform any pending operation.
+   */
+  void performPendingOperations();
+
+  /**
+   * Clears the pending operations.
+   */
+  void clearPendingOperations();
+
+  /**
    * Merges an entity in this application session. If the application session
    * already contains an entity with this id, the state of the entity passed as
    * parameter is merged into the registered entity depending on the merge mode
@@ -53,14 +71,14 @@ public interface IApplicationSession extends IEntityDirtAware {
   IEntity merge(IEntity entity, MergeMode mergeMode);
 
   /**
-   * Merges a list of entities in this application session. If the application session
-   * already contains an entity with this id, the state of the entity passed as
-   * parameter is merged into the registered entity depending on the merge mode
-   * used. If not, a copy of the entity is registered into the application
-   * session. The entity passed as parameter is considered not dirty so the
-   * application dirty states are updated accordingly.
+   * Merges a list of entities in this application session. If the application
+   * session already contains an entity with this id, the state of the entity
+   * passed as parameter is merged into the registered entity depending on the
+   * merge mode used. If not, a copy of the entity is registered into the
+   * application session. The entity passed as parameter is considered not dirty
+   * so the application dirty states are updated accordingly.
    * 
-  * @param entities
+   * @param entities
    *          the list of entities to merge.
    * @param mergeMode
    *          the merge mmode to be used.
@@ -181,11 +199,12 @@ public interface IApplicationSession extends IEntityDirtAware {
    *          the session owner.
    */
   void setSubject(Subject sessionOwner);
-  
+
   /**
    * Sets the session locale.
    * 
-   * @param locale the session locale.
+   * @param locale
+   *          the session locale.
    */
   void setLocale(Locale locale);
 

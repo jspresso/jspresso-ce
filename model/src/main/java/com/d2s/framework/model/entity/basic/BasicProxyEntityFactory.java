@@ -6,7 +6,6 @@ package com.d2s.framework.model.entity.basic;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-import java.security.Principal;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -20,6 +19,7 @@ import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.bean.IAccessorFactory;
 import com.d2s.framework.util.uid.IGUIDGenerator;
 
@@ -224,7 +224,7 @@ public class BasicProxyEntityFactory implements IEntityFactory,
    * 
    * @return the principal using the factory.
    */
-  protected Principal getPrincipal() {
+  protected UserPrincipal getPrincipal() {
     return null;
   }
 }

@@ -10,6 +10,7 @@ import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.bean.ICollectionAccessor;
 
 /**
@@ -49,6 +50,8 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
             selectedIndex - deletionCount).getConnectorValue();
         try {
           collectionAccessor.removeFromValue(master, nextDetailToRemove);
+          getApplicationSession(context)
+              .registerEntityForDeletion((IEntity) nextDetailToRemove);
           deletionCount++;
         } catch (IllegalAccessException ex) {
           throw new ActionException(ex);

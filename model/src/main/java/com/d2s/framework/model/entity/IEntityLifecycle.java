@@ -5,6 +5,8 @@ package com.d2s.framework.model.entity;
 
 import java.security.Principal;
 
+import com.d2s.framework.security.UserPrincipal;
+
 /**
  * Defines the entity lifecycle hooks.
  * <p>
@@ -26,7 +28,7 @@ public interface IEntityLifecycle {
    *          the principal triggering the action.
    * @return true if the state of the entity has been updated.
    */
-  boolean onCreate(IEntityFactory entityFactory, Principal principal);
+  boolean onCreate(IEntityFactory entityFactory, UserPrincipal principal);
 
   /**
    * Called just before an entity is persisted (insert).

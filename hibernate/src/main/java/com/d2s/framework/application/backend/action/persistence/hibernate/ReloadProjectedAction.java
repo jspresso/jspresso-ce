@@ -33,6 +33,7 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
    */
   public void execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
+    getApplicationSession(context).clearPendingOperations();
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
       public Object doInTransaction(@SuppressWarnings("unused")

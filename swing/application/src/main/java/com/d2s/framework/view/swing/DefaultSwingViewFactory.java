@@ -1047,8 +1047,12 @@ public class DefaultSwingViewFactory implements
       }
       column.setHeaderValue(columnName.toString());
 
-      column.setCellEditor(createTableCellEditor(propertyDescriptor,
-          actionHandler, locale));
+      IView<JComponent> editorView = createPropertyView(propertyDescriptor,
+          null, actionHandler, locale);
+      if (editorView.getConnector().getParentConnector() == null) {
+        editorView.getConnector().setParentConnector(connector);
+      }
+      column.setCellEditor(createTableCellEditor(editorView));
       TableCellRenderer cellRenderer = createTableCellRenderer(
           propertyDescriptor, locale);
       if (cellRenderer != null) {
@@ -1074,11 +1078,7 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  private TableCellEditor createTableCellEditor(
-      IPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      Locale locale) {
-    IView<JComponent> editorView = createPropertyView(propertyDescriptor, null,
-        actionHandler, locale);
+  private TableCellEditor createTableCellEditor(IView<JComponent> editorView) {
     SwingViewCellEditorAdapter editor;
     if (editorView.getPeer() instanceof JActionField) {
       editor = new SwingViewCellEditorAdapter(editorView) {

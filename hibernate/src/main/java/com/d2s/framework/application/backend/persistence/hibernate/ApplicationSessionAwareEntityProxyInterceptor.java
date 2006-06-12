@@ -8,14 +8,13 @@ import java.security.Principal;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.hibernate.Hibernate;
 import org.hibernate.Transaction;
-import org.hibernate.collection.PersistentCollection;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
+import com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.persistence.hibernate.EntityProxyInterceptor;
 
@@ -111,6 +110,16 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
     } else {
       applicationSession.rollbackUnitOfWork();
     }
+    super.afterTransactionCompletion(tx);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void preFlush(Iterator entities) {
+    applicationSession.performPendingOperations();
+    super.preFlush(entities);
   }
 
   /**
@@ -144,19 +153,8 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
           registeredEntity = (IEntity) li.getImplementation();
         }
 
-        if (registeredEntity != null) {
-          // Whenever the entity has dirty persistent collection, make them
-          // clean to workaround a "bug" with hibernate since hibernate cannot
-          // re-attach a "dirty" detached collection.
-          for (Map.Entry<String, Object> registeredPropertyEntry : registeredEntity
-              .straightGetProperties().entrySet()) {
-            if (registeredPropertyEntry.getValue() instanceof PersistentCollection
-                && Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
-              ((PersistentCollection) registeredPropertyEntry.getValue())
-                  .clearDirty();
-            }
-          }
-        }
+        HibernateAwareApplicationSession
+            .cleanPesristentCollectionDirtyState(registeredEntity);
         return registeredEntity;
       } catch (ClassNotFoundException ex) {
         ex.printStackTrace();

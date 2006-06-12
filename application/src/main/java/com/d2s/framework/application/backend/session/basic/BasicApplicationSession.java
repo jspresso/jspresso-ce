@@ -45,6 +45,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private IEntityFactory             entityFactory;
   private IEntityCollectionFactory   collectionFactory;
   private Set<IEntity>               entitiesToMergeBack;
+  private Set<IEntity>               entitiesRegisteredForDeletion;
   private Subject                    subject;
   private Locale                     locale;
 
@@ -75,6 +76,39 @@ public class BasicApplicationSession implements IApplicationSession {
       }
       dirtRecorder.register(entity, initialDirtyProperties);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void registerEntityForDeletion(IEntity entity) {
+    if (entitiesRegisteredForDeletion == null) {
+      entitiesRegisteredForDeletion = new LinkedHashSet<IEntity>();
+    }
+    entitiesRegisteredForDeletion.add(entity);
+  }
+
+  /**
+   * Gets the entitiesRegisteredForDeletion.
+   * 
+   * @return the entitiesRegisteredForDeletion.
+   */
+  protected Set<IEntity> getEntitiesRegisteredForDeletion() {
+    return entitiesRegisteredForDeletion;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void performPendingOperations() {
+    entitiesRegisteredForDeletion = null;
+  }
+
+  /**
+   * Clears the pending operations.
+   */
+  public void clearPendingOperations() {
+    entitiesRegisteredForDeletion = null;
   }
 
   /**
@@ -300,6 +334,7 @@ public class BasicApplicationSession implements IApplicationSession {
     } finally {
       unitOfWork.commit();
       entitiesToMergeBack = null;
+      clearPendingOperations();
     }
   }
 
