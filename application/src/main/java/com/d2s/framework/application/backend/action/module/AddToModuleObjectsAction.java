@@ -36,7 +36,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
@@ -61,5 +61,6 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
         .getIndicesOf(getModelConnector(context), Collections
             .singleton(newEntity)));
+    return true;
   }
 }

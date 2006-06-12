@@ -72,7 +72,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(final IActionHandler actionHandler,
+  public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
     ITranslationProvider translationProvider = getTranslationProvider(context);
     Locale locale = getLocale(context);
@@ -113,6 +113,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
       }
     });
     alert.show();
+    return true;
   }
 
   /**

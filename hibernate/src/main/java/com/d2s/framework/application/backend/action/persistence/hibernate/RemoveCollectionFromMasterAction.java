@@ -41,11 +41,11 @@ public class RemoveCollectionFromMasterAction extends
    * <p>
    * {@inheritDoc}
    */
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
     final ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
-      return;
+      return false;
     }
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
@@ -96,6 +96,7 @@ public class RemoveCollectionFromMasterAction extends
         return null;
       }
     });
+    return true;
   }
 
 }

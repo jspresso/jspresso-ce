@@ -34,10 +34,10 @@ public class ChooseFileAsBinaryPropertyAction extends ChooseFileAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     IBinaryPropertyDescriptor modelDescriptor = (IBinaryPropertyDescriptor) context
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
     setFileFilter(modelDescriptor.getFileFilter());
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 }

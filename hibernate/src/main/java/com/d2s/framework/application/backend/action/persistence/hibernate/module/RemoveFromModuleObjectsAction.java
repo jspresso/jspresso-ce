@@ -41,14 +41,14 @@ public class RemoveFromModuleObjectsAction extends
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
 
     if (selectedIndices == null || selectedIndices.length == 0
         || collectionConnector == null) {
-      return;
+      return false;
     }
 
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
@@ -93,6 +93,7 @@ public class RemoveFromModuleObjectsAction extends
     }
     module.setModuleObjects(projectedCollection);
     collectionConnector.setConnectorValue(projectedCollection);
+    return true;
   }
 
   private static void removeFromSubModules(Module parentModule,

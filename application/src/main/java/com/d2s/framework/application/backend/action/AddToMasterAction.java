@@ -36,11 +36,11 @@ public class AddToMasterAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
-      return;
+      return false;
     }
     Object master = collectionConnector.getParentConnector()
         .getConnectorValue();
@@ -75,6 +75,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
       context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
           .getIndicesOf(collectionConnector, Collections.singleton(newEntity)));
     }
+    return true;
   }
 
   /**

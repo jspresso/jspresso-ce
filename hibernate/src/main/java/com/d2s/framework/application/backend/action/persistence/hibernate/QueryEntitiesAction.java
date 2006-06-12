@@ -34,7 +34,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
     final IQueryEntity queryEntity = (IQueryEntity) ((IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR)).getConnectorValue();
@@ -60,6 +60,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         return null;
       }
     });
+    return true;
   }
 
 }

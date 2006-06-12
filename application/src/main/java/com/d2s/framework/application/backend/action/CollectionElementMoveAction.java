@@ -33,17 +33,17 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     int[] indicesToMove = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (indicesToMove == null || indicesToMove.length == 0
         || collectionConnector == null) {
-      return;
+      return false;
     }
     if (!List.class.isAssignableFrom(getModelDescriptor(context)
         .getCollectionDescriptor().getCollectionInterface())) {
-      return;
+      return false;
     }
 
     List elementList = new ArrayList<Object>((List) collectionConnector
@@ -70,6 +70,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       context.put(ActionContextConstants.SELECTED_INDICES,
           ConnectorHelper.getIndicesOf(collectionConnector, elementsToMove));
     }
+    return true;
   }
 
   /**

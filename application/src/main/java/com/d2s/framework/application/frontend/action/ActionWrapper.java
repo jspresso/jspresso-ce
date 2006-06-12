@@ -31,11 +31,15 @@ public class ActionWrapper<E, F, G> extends AbstractChainedAction<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
-    actionHandler.execute(wrappedAction, context);
-    if (getNextAction(context) != null) {
-      super.execute(actionHandler, context);
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    if (actionHandler.execute(wrappedAction, context)) {
+      if (getNextAction(context) != null) {
+        return super.execute(actionHandler, context);
+      }
+      return true;
     }
+    return false;
   }
 
   /**

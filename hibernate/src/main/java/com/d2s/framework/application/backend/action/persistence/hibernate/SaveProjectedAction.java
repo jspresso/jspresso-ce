@@ -31,7 +31,7 @@ public class SaveProjectedAction extends AbstractHibernateAction {
    * <p>
    * {@inheritDoc}
    */
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
@@ -49,6 +49,7 @@ public class SaveProjectedAction extends AbstractHibernateAction {
         return null;
       }
     });
+    return true;
   }
 
   /**

@@ -441,9 +441,9 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  public void execute(IAction action, Map<String, Object> context) {
+  public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
-      return;
+      return false;
     }
     JComponent sourceComponent = (JComponent) context
         .get(ActionContextConstants.SOURCE_COMPONENT);
@@ -461,7 +461,7 @@ public class DefaultSwingController extends
     }
     waitTimer.startTimer(sourceComponent);
     try {
-      super.execute(action, context);
+      return super.execute(action, context);
     } finally {
       if (windowOrInternalFrame instanceof JFrame) {
         ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(false);

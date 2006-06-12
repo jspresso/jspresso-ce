@@ -34,12 +34,12 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
 
     if (selectedIndices == null || selectedIndices.length == 0) {
-      return;
+      return false;
     }
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
@@ -69,7 +69,7 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
       }
     }
     parentModule.setSubModules(children);
-    context.put(ActionContextConstants.SELECTED_INDICES,
-        childSelectedIndices);
+    context.put(ActionContextConstants.SELECTED_INDICES, childSelectedIndices);
+    return true;
   }
 }

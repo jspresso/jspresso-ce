@@ -58,7 +58,7 @@ public class LovAction extends ModalDialogAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
     getViewConnector(context).setConnectorValue(
         getViewConnector(context).getConnectorValue());
@@ -91,10 +91,10 @@ public class LovAction extends ModalDialogAction {
         IEntity selectedEntity = ((IController) actionHandler).merge(
             queryEntity.getQueriedEntities().get(0), MergeMode.MERGE_KEEP);
         getViewConnector(context).setConnectorValue(selectedEntity);
-        return;
+        return true;
       }
     }
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 
   /**

@@ -37,7 +37,7 @@ public class ModuleConnectorSelectionAction<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     ICollectionConnector parentModuleCollectionConnector = ((ICollectionConnectorProvider) moduleConnector
         .getParentConnector().getParentConnector()).getCollectionConnector();
@@ -49,6 +49,6 @@ public class ModuleConnectorSelectionAction<E, F, G> extends
           .getCollectionConnector();
       collectionConnector.setSelectedIndices(connectorSelection);
     }
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 }

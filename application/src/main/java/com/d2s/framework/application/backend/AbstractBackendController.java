@@ -54,9 +54,9 @@ public abstract class AbstractBackendController extends AbstractController
    * <p>
    * {@inheritDoc}
    */
-  public void execute(IAction action, Map<String, Object> context) {
+  public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
-      return;
+      return false;
     }
     SecurityHelper.checkAccess(getApplicationSession().getSubject(), action,
         getTranslationProvider(), getLocale());
@@ -64,7 +64,7 @@ public abstract class AbstractBackendController extends AbstractController
     if (context != null) {
       context.putAll(actionContext);
     }
-    action.execute(this, context);
+    return action.execute(this, context);
   }
 
   /**

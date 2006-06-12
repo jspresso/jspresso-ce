@@ -33,11 +33,11 @@ public class ConnectorSelectionAction<E, F, G> extends AbstractChainedAction<E, 
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
     int[] connectorSelection = (int[]) context
         .get(ActionContextConstants.SELECTED_INDICES);
     collectionConnector.setSelectedIndices(connectorSelection);
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 }

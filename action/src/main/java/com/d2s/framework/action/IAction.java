@@ -30,8 +30,9 @@ public interface IAction extends ISecurable {
    * @param context
    *          the execution context. The action should update it depending on
    *          its result.
+   * @return true whenever this action completes normally.
    */
-  void execute(IActionHandler actionHandler, Map<String, Object> context);
+  boolean execute(IActionHandler actionHandler, Map<String, Object> context);
 
   /**
    * Tells the framework wether this action executes on the application model or

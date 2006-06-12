@@ -38,7 +38,7 @@ public class ParentModuleConnectorSelectionAction<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector parentModuleConnector = getParentModuleConnector(context);
     ICompositeValueConnector grandParentModuleConnector = parentModuleConnector
         .getParentConnector();
@@ -49,6 +49,6 @@ public class ParentModuleConnectorSelectionAction<E, F, G> extends
           collectionConnector, Collections.singleton(parentModuleConnector
               .getConnectorValue())));
     }
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 }

@@ -40,7 +40,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     IEntityDescriptor queryEntityDescriptor;
     IModelDescriptor modelDescriptor = (IModelDescriptor) context
@@ -112,5 +112,6 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
           queryPropertyValue);
     }
     context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
+    return true;
   }
 }

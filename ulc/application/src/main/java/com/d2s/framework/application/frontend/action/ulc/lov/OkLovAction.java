@@ -31,7 +31,7 @@ public class OkLovAction extends DialogOkAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector resultConnector = ((ICollectionConnectorProvider) ((ICompositeValueConnector) getViewConnector(context))
         .getChildConnector(BeanRefPropertyConnector.THIS_PROPERTY))
         .getCollectionConnector();
@@ -45,6 +45,6 @@ public class OkLovAction extends DialogOkAction {
       }
       context.put(ActionContextConstants.ACTION_RESULT, selectedEntity);
     }
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 }

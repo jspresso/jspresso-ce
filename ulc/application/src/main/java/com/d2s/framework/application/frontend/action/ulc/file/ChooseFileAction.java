@@ -34,7 +34,7 @@ public class ChooseFileAction extends AbstractUlcAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler,
+  public boolean execute(IActionHandler actionHandler,
       final Map<String, Object> context) {
     ClientContext.loadFile(new IFileLoadHandler() {
 
@@ -55,7 +55,7 @@ public class ChooseFileAction extends AbstractUlcAction {
         }
       }
     }, getFileChooser(context));
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 
   private FileChooserConfig getFileChooser(Map<String, Object> context) {

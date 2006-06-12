@@ -62,10 +62,11 @@ public abstract class AbstractChainedAction<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     if (getNextAction(context) != null) {
-      actionHandler.execute(getNextAction(context), context);
+      return actionHandler.execute(getNextAction(context), context);
     }
+    return true;
   }
 
 }

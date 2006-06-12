@@ -31,11 +31,11 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
-      return;
+      return false;
     }
     ICollectionPropertyDescriptor collectionDescriptor = (ICollectionPropertyDescriptor) getModelDescriptor(context);
     Object master = collectionConnector.getParentConnector()
@@ -50,8 +50,8 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
             selectedIndex - deletionCount).getConnectorValue();
         try {
           collectionAccessor.removeFromValue(master, nextDetailToRemove);
-          getApplicationSession(context)
-              .registerEntityForDeletion((IEntity) nextDetailToRemove);
+          getApplicationSession(context).registerEntityForDeletion(
+              (IEntity) nextDetailToRemove);
           deletionCount++;
         } catch (IllegalAccessException ex) {
           throw new ActionException(ex);
@@ -62,6 +62,7 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
         }
       }
     }
+    return true;
   }
 
 }

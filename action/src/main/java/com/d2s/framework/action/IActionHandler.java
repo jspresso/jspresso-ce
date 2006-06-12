@@ -27,9 +27,10 @@ public interface IActionHandler extends IExceptionHandler {
    *          the action to be executed.
    * @param context
    *          the action execution context.
+   * @return true whenever this action completes normally.
    * @see IAction#execute(IActionHandler, Map)
    */
-  void execute(IAction action, Map<String, Object> context);
+  boolean execute(IAction action, Map<String, Object> context);
 
   /**
    * Retrieves the initial action context from the controller. This context is
@@ -47,4 +48,4 @@ public interface IActionHandler extends IExceptionHandler {
    * @return an empty action context.
    */
   Map<String, Object> createEmptyContext();
-  }
+}

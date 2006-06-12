@@ -107,9 +107,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * <p>
    * {@inheritDoc}
    */
-  public void execute(IAction action, Map<String, Object> context) {
+  public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
-      return;
+      return false;
     }
     Map<String, Object> actionContext = getInitialActionContext();
     context.putAll(actionContext);
@@ -123,7 +123,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
       }
     } catch (Throwable ex) {
       handleException(ex, context);
+      return false;
     }
+    return true;
   }
 
   /**

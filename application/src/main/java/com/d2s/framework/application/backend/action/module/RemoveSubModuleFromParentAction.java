@@ -34,7 +34,7 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector parentModuleConnector = getModuleConnector(
         context).getParentConnector().getParentConnector();
@@ -42,7 +42,7 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
     int[] selectedIndices = getParentModuleSelectedIndices(context);
 
     if (selectedIndices == null || selectedIndices.length == 0) {
-      return;
+      return false;
     }
     Module parentModule = (Module) parentModuleConnector.getConnectorValue();
     Collection<SubModule> childrenToRemove = new ArrayList<SubModule>();
@@ -57,5 +57,6 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
             ((ICollectionConnectorProvider) parentModuleConnector
                 .getParentConnector()).getCollectionConnector(), Collections
                 .singleton(parentModuleConnector.getConnectorValue())));
+    return true;
   }
 }

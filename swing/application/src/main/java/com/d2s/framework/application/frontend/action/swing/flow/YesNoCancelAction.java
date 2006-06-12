@@ -34,7 +34,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
         getTranslationProvider(context), getLocale(context)), getI18nName(
@@ -49,7 +49,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
     } else {
       context.put(ActionContextConstants.NEXT_ACTION, noAction);
     }
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 
   /**

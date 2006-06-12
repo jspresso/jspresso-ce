@@ -33,14 +33,14 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
 
     if (selectedIndices == null || selectedIndices.length == 0
         || collectionConnector == null) {
-      return;
+      return false;
     }
 
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
@@ -65,5 +65,6 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
 
     context.put(ActionContextConstants.SELECTED_INDICES,
         ConnectorHelper.getIndicesOf(collectionConnector, entityClones));
+    return true;
   }
 }

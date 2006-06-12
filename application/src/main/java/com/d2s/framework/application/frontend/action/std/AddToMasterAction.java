@@ -39,13 +39,13 @@ public class AddToMasterAction<E, F, G> extends ActionWrapper<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public void execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     if (context == null) {
       context = new HashMap<String, Object>();
     }
     context.put(ActionContextConstants.ELEMENT_DESCRIPTOR,
         elementEntityDescriptor);
-    super.execute(actionHandler, context);
+    return super.execute(actionHandler, context);
   }
 
   /**

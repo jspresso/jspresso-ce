@@ -36,9 +36,10 @@ public class ScriptedBackendAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void execute(@SuppressWarnings("unused")
+  public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     scriptHandler.execute(scriptMixin, context);
+    return true;
   }
 
   /**
