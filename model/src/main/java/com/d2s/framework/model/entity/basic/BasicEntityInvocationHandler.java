@@ -467,9 +467,9 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       ICollectionPropertyDescriptor propertyDescriptor, Object value)
       throws IntegrityException {
     String propertyName = propertyDescriptor.getName();
-    // if (!isInitialized(straightGetProperty(propertyName))) {
-    // return;
-    // }
+    if (!isInitialized(straightGetProperty(propertyName))) {
+      return;
+    }
     try {
       Collection collectionProperty = (Collection) accessorFactory
           .createPropertyAccessor(propertyName,

@@ -4,16 +4,23 @@
 package com.d2s.framework.application.backend.action;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityDescriptorRegistry;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.util.bean.IAccessorFactory;
+import com.d2s.framework.util.bean.ICollectionAccessor;
 
 /**
  * An action used in master/detail views to remove selected details from a
@@ -39,34 +46,6 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
     if (collectionConnector == null) {
       return false;
     }
-    // TODO test
-    // ICollectionPropertyDescriptor collectionDescriptor =
-    // (ICollectionPropertyDescriptor) getModelDescriptor(context);
-    // Object master = collectionConnector.getParentConnector()
-    // .getConnectorValue();
-    // String property = collectionDescriptor.getName();
-    // ICollectionAccessor collectionAccessor = getAccessorFactory(context)
-    // .createCollectionPropertyAccessor(property, master.getClass());
-    // int deletionCount = 0;
-    // if (getSelectedIndices(context) != null) {
-    // for (int selectedIndex : getSelectedIndices(context)) {
-    // Object nextDetailToRemove = collectionConnector.getChildConnector(
-    // selectedIndex - deletionCount).getConnectorValue();
-    // try {
-    // collectionAccessor.removeFromValue(master, nextDetailToRemove);
-    // getApplicationSession(context).registerEntityForDeletion(
-    // (IEntity) nextDetailToRemove);
-    // deletionCount++;
-    // } catch (IllegalAccessException ex) {
-    // throw new ActionException(ex);
-    // } catch (InvocationTargetException ex) {
-    // throw new ActionException(ex);
-    // } catch (NoSuchMethodException ex) {
-    // throw new ActionException(ex);
-    // }
-    // }
-    // }
-
     int deletionCount = 0;
     if (getSelectedIndices(context) != null) {
       IEntityFactory entityFactory = getEntityFactory(context);
@@ -75,11 +54,8 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
             .getChildConnector(selectedIndex - deletionCount)
             .getConnectorValue();
         try {
-          cleanRelationships(nextDetailToRemove, entityFactory
-              .getEntityDescriptor(nextDetailToRemove.getContract()),
-              getAccessorFactory(context));
-          getApplicationSession(context).registerEntityForDeletion(
-              nextDetailToRemove);
+          cleanRelationshipsOnDeletion(nextDetailToRemove, entityFactory,
+              getAccessorFactory(context), getApplicationSession(context));
           deletionCount++;
         } catch (IllegalAccessException ex) {
           throw new ActionException(ex);
@@ -93,16 +69,61 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
     return true;
   }
 
-  private void cleanRelationships(IEntity entity,
-      IEntityDescriptor entityDescriptor, IAccessorFactory accessorFactory)
+  /**
+   * Performs necessary cleanings when an entity is deleted.
+   * 
+   * @param entity
+   *          the deleted entity.
+   * @param entityDescriptorRegistry
+   *          the entity descriptor registry.
+   * @param accessorFactory
+   *          the accessor factory.
+   * @param applicationSession
+   *          the application session.
+   * @throws IllegalAccessException
+   *           whenever this kind of exception occurs.
+   * @throws InvocationTargetException
+   *           whenever this kind of exception occurs.
+   * @throws NoSuchMethodException
+   *           whenever this kind of exception occurs.
+   */
+  @SuppressWarnings("unchecked")
+  public static void cleanRelationshipsOnDeletion(IEntity entity,
+      IEntityDescriptorRegistry entityDescriptorRegistry,
+      IAccessorFactory accessorFactory, IApplicationSession applicationSession)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
+    IEntityDescriptor entityDescriptor = entityDescriptorRegistry
+        .getEntityDescriptor(entity.getContract());
     for (Map.Entry<String, Object> property : entity.straightGetProperties()
         .entrySet()) {
-      if (entityDescriptor.getPropertyDescriptor(property.getKey()) instanceof IReferencePropertyDescriptor) {
-        accessorFactory.createPropertyAccessor(property.getKey(),
-            entity.getContract()).setValue(entity, null);
+      if (property.getValue() != null) {
+        IPropertyDescriptor propertyDescriptor = entityDescriptor
+            .getPropertyDescriptor(property.getKey());
+        if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+          accessorFactory.createPropertyAccessor(property.getKey(),
+              entity.getContract()).setValue(entity, null);
+        } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+          if (((ICollectionPropertyDescriptor) propertyDescriptor)
+              .isComposition()) {
+            if (applicationSession.isInitialized(property.getValue())) {
+              for (IEntity composedEntity : new ArrayList<IEntity>(
+                  (Collection<IEntity>) property.getValue())) {
+                cleanRelationshipsOnDeletion(composedEntity,
+                    entityDescriptorRegistry, accessorFactory,
+                    applicationSession);
+              }
+            }
+          } else if (((ICollectionPropertyDescriptor) propertyDescriptor)
+              .getReverseRelationEnd() instanceof ICollectionPropertyDescriptor) {
+            ICollectionAccessor collectionAccessor = accessorFactory
+                .createCollectionPropertyAccessor(property.getKey(), entity
+                    .getContract());
+            collectionAccessor.setValue(entity, null);
+          }
+        }
       }
     }
+    applicationSession.registerEntityForDeletion(entity);
   }
 }

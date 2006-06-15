@@ -7,10 +7,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityDescriptorRegistry;
 
 /**
- * TODO Comment needed.
+ * Default implementation based on spring application context.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -26,7 +27,7 @@ public class BasicEntityDescriptorRegistry implements
   /**
    * {@inheritDoc}
    */
-  public IEntityDescriptor getEntityDescriptor(Class<?> entityContract) {
+  public <T extends IEntity> IEntityDescriptor getEntityDescriptor(Class<T> entityContract) {
     return (IEntityDescriptor) entityApplicationContext.getBean(entityContract
         .getName());
   }

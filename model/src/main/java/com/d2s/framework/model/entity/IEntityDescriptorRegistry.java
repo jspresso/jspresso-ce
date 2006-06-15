@@ -19,9 +19,12 @@ public interface IEntityDescriptorRegistry {
   /**
    * Retrieves an entity descriptor from its contract.
    * 
+   * @param <T>
+   *          the type of the entity.
    * @param entityContract
    *          the entity contract.
    * @return th entity descriptor.
    */
-  IEntityDescriptor getEntityDescriptor(Class<?> entityContract);
+  <T extends IEntity> IEntityDescriptor getEntityDescriptor(
+      Class<T> entityContract);
 }

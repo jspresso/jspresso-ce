@@ -16,7 +16,7 @@ import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntityFactory {
+public interface IEntityFactory extends IEntityDescriptorRegistry {
 
   /**
    * Creates a new entity instance based on the entity descriptor. The entity
