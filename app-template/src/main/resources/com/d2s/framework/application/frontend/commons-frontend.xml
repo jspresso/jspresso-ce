@@ -234,7 +234,6 @@
 					<list>
 						<ref local="addToProjectedFrontAction" />
 						<ref local="removeFromProjectedFrontAction" />
-						<ref local="cloneProjectedFrontAction" />
 					</list>
 				</entry>
 				<entry key="SERVICE">
