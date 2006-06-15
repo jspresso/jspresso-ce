@@ -106,16 +106,14 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
         } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
           if (((ICollectionPropertyDescriptor) propertyDescriptor)
               .isComposition()) {
-            if (applicationSession.isInitialized(property.getValue())) {
-              for (IEntity composedEntity : new ArrayList<IEntity>(
-                  (Collection<IEntity>) property.getValue())) {
-                cleanRelationshipsOnDeletion(composedEntity,
-                    entityDescriptorRegistry, accessorFactory,
-                    applicationSession);
-              }
+            applicationSession.initializePropertyIfNeeded(entity,
+                propertyDescriptor);
+            for (IEntity composedEntity : new ArrayList<IEntity>(
+                (Collection<IEntity>) property.getValue())) {
+              cleanRelationshipsOnDeletion(composedEntity,
+                  entityDescriptorRegistry, accessorFactory, applicationSession);
             }
-          } else if (((ICollectionPropertyDescriptor) propertyDescriptor)
-              .getReverseRelationEnd() instanceof ICollectionPropertyDescriptor) {
+          } else {
             ICollectionAccessor collectionAccessor = accessorFactory
                 .createCollectionPropertyAccessor(property.getKey(), entity
                     .getContract());
