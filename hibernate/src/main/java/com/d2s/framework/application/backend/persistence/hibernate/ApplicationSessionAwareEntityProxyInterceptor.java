@@ -154,7 +154,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
         }
 
         HibernateAwareApplicationSession
-            .cleanPesristentCollectionDirtyState(registeredEntity);
+            .cleanPersistentCollectionDirtyState(registeredEntity);
         return registeredEntity;
       } catch (ClassNotFoundException ex) {
         ex.printStackTrace();

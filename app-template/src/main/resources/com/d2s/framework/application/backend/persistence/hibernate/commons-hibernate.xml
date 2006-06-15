@@ -41,5 +41,10 @@
 		<property name="hibernateTemplate" ref="hibernateTemplate" />
 		<property name="transactionTemplate" ref="transactionTemplate" />
 	</bean>
+
+	<bean id="smartEntityCloneFactory"
+		class="com.d2s.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory">
+		<property name="accessorFactory" ref="accessorFactory" />
+	</bean>
 </beans>
 

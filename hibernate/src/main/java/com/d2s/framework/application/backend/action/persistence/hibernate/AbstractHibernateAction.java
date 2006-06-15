@@ -35,7 +35,6 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
     return (HibernateBackendController) super.getController(context);
   }
 
-
   /**
    * Gets the hibernateTemplate.
    * 
@@ -54,7 +53,8 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    *          the action context.
    * @return the transactionTemplate.
    */
-  protected TransactionTemplate getTransactionTemplate(Map<String, Object> context) {
+  protected TransactionTemplate getTransactionTemplate(
+      Map<String, Object> context) {
     return getController(context).getTransactionTemplate();
   }
 

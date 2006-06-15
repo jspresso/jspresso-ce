@@ -13,8 +13,8 @@
 	</bean>
 
 	<bean id="commonsMessageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
-	  <property name="parentMessageSource" ref="mockMessageSource" />
-	  <property name="basename" value="com.d2s.framework.application.i18n.Commons" />
+		<property name="parentMessageSource" ref="mockMessageSource" />
+		<property name="basename" value="com.d2s.framework.application.i18n.Commons" />
 	</bean>
 
 	<!--
@@ -70,13 +70,22 @@
 	<bean id="abstractApplicationSession" abstract="true"
 		class="com.d2s.framework.application.backend.session.basic.BasicApplicationSession">
 		<property name="collectionFactory" ref="entityCollectionFactory" />
+		<property name="accessorFactory" ref="accessorFactory" />
 		<property name="entityRegistry">
 			<bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" />
 		</property>
 		<property name="unitOfWork">
 			<bean class="com.d2s.framework.application.backend.session.basic.BasicEntityUnitOfWork" />
 		</property>
+		<property name="carbonEntityCloneFactory">
+			<bean class="com.d2s.framework.model.entity.CarbonEntityCloneFactory" />
+		</property>
 	</bean>
+
+	<!--
+		The implementation used as EntityDescriptorRegistry.
+	-->
+	<bean id="entityDescriptorRegistry" class="com.d2s.framework.model.entity.basic.BasicEntityDescriptorRegistry" />
 
 	<!--
 		The implementation used as EntityFactory.
@@ -86,6 +95,7 @@
 		<property name="entityCollectionFactory" ref="entityCollectionFactory" />
 		<property name="entityExtensionFactory" ref="entityExtensionFactory" />
 		<property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
+		<property name="entityDescriptorRegistry" ref="entityDescriptorRegistry" />
 	</bean>
 
 	<!--

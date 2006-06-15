@@ -17,6 +17,7 @@ import org.hibernate.Session;
 import org.hibernate.collection.PersistentCollection;
 import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
+import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
@@ -187,6 +188,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     try {
       getDirtRecorder().setEnabled(false);
 
+      hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
       Object propertyValue = hibernateTemplate.execute(new HibernateCallback() {
 
         /**
@@ -194,9 +196,9 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
          */
         public Object doInHibernate(Session session) {
           HibernateAwareApplicationSession
-              .cleanPesristentCollectionDirtyState(entity);
+              .cleanPersistentCollectionDirtyState(entity);
           session.lock(entity, LockMode.NONE);
-          session.setReadOnly(entity, true);
+          // session.setReadOnly(entity, true);
 
           Object initializedProperty = entity.straightGetProperty(propertyName);
 
@@ -205,7 +207,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         }
       });
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        entity.sortCollectionProperty(propertyName);
+        sortCollectionProperty(entity, propertyName);
         if (propertyValue instanceof PersistentCollection) {
           ((PersistentCollection) propertyValue).clearDirty();
         }
@@ -224,7 +226,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * @param entity
    *          the entity to clean the collections dirty state of.
    */
-  public static void cleanPesristentCollectionDirtyState(IEntity entity) {
+  public static void cleanPersistentCollectionDirtyState(IEntity entity) {
     if (entity != null) {
       // Whenever the entity has dirty persistent collection, make them
       // clean to workaround a "bug" with hibernate since hibernate cannot

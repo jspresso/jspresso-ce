@@ -6,6 +6,7 @@ package com.d2s.framework.application.backend.action.persistence.hibernate;
 import java.util.Collection;
 import java.util.Map;
 
+import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
@@ -48,6 +49,7 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
         } else if (module.getModuleObject() != null) {
           reloadEntity((IEntity) module.getModuleObject(), context);
         }
+        status.setRollbackOnly();
         return null;
       }
     });
@@ -56,8 +58,9 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
 
   private void reloadEntity(IEntity entity, Map<String, Object> context) {
     if (entity.isPersistent()) {
+      HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
       getApplicationSession(context).merge(
-          (IEntity) getHibernateTemplate(context).load(entity.getContract().getName(),
+          (IEntity) hibernateTemplate.load(entity.getContract().getName(),
               entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
     }
   }

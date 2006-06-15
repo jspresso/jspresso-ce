@@ -15,6 +15,7 @@ import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityCloneFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
@@ -27,6 +28,8 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * @author Vincent Vandenschrick
  */
 public class CloneModuleObjectsAction extends AbstractCollectionAction {
+
+  private IEntityCloneFactory entityCloneFactory;
 
   /**
    * Clones the selected objects in the projected collection.
@@ -55,16 +58,27 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
     }
     Collection<IEntity> entityClones = new ArrayList<IEntity>();
     for (int i = 0; i < selectedIndices.length; i++) {
-      entityClones.add(((IEntity) collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue()).clone(getEntityFactory(context), false));
+      entityClones.add(entityCloneFactory.cloneEntity(
+          ((IEntity) collectionConnector.getChildConnector(selectedIndices[i])
+              .getConnectorValue()), getEntityFactory(context)));
     }
     projectedCollection.addAll(entityClones);
     module.setModuleObjects(projectedCollection);
 
     getModelConnector(context).setConnectorValue(projectedCollection);
 
-    context.put(ActionContextConstants.SELECTED_INDICES,
-        ConnectorHelper.getIndicesOf(collectionConnector, entityClones));
+    context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
+        .getIndicesOf(collectionConnector, entityClones));
     return true;
+  }
+
+  /**
+   * Sets the entityCloneFactory.
+   * 
+   * @param entityCloneFactory
+   *          the entityCloneFactory to set.
+   */
+  public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
+    this.entityCloneFactory = entityCloneFactory;
   }
 }

@@ -7,15 +7,13 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
+import com.d2s.framework.model.entity.IEntityDescriptorRegistry;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IQueryEntity;
@@ -33,14 +31,13 @@ import com.d2s.framework.util.uid.IGUIDGenerator;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicProxyEntityFactory implements IEntityFactory,
-    ApplicationContextAware {
+public class BasicProxyEntityFactory implements IEntityFactory {
 
-  private IAccessorFactory         accessorFactory;
-  private IEntityCollectionFactory entityCollectionFactory;
-  private IEntityExtensionFactory  entityExtensionFactory;
-  private IGUIDGenerator           entityGUIDGenerator;
-  private ApplicationContext       entityApplicationContext;
+  private IAccessorFactory          accessorFactory;
+  private IEntityCollectionFactory  entityCollectionFactory;
+  private IEntityExtensionFactory   entityExtensionFactory;
+  private IGUIDGenerator            entityGUIDGenerator;
+  private IEntityDescriptorRegistry entityDescriptorRegistry;
 
   /**
    * {@inheritDoc}
@@ -48,8 +45,8 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
     T createdEntity = createEntityInstance(entityContract, entityGUIDGenerator
         .generateGUID());
-    for (IPropertyDescriptor propertyDescriptor : getEntityDescriptor(
-        entityContract).getPropertyDescriptors()) {
+    for (IPropertyDescriptor propertyDescriptor : entityDescriptorRegistry
+        .getEntityDescriptor(entityContract).getPropertyDescriptors()) {
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
         createdEntity
             .straightSetProperty(
@@ -74,7 +71,8 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id, Class[] extraInterfaces) {
-    IEntityDescriptor entityDescriptor = getEntityDescriptor(entityContract);
+    IEntityDescriptor entityDescriptor = entityDescriptorRegistry
+        .getEntityDescriptor(entityContract);
     if (entityDescriptor.isPurelyAbstract()) {
       throw new EntityException(entityDescriptor.getName()
           + " is purely abstract. It cannot be instanciated.");
@@ -168,24 +166,6 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   }
 
   /**
-   * Sets the application context holding the entity descriptor bean
-   * definitions.
-   * 
-   * @param entityApplicationContext
-   *          the application context holding the entity descriptor bean
-   *          definitions.
-   */
-  public void setEntityApplicationContext(
-      ApplicationContext entityApplicationContext) {
-    this.entityApplicationContext = entityApplicationContext;
-  }
-
-  IEntityDescriptor getEntityDescriptor(Class entityContract) {
-    return (IEntityDescriptor) entityApplicationContext.getBean(entityContract
-        .getName());
-  }
-
-  /**
    * Gets the accessorFactory.
    * 
    * @return the accessorFactory.
@@ -213,18 +193,29 @@ public class BasicProxyEntityFactory implements IEntityFactory,
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public void setApplicationContext(ApplicationContext applicationContext) {
-    setEntityApplicationContext(applicationContext);
-  }
-
-  /**
    * Gets the principal using the factory.
    * 
    * @return the principal using the factory.
    */
   protected UserPrincipal getPrincipal() {
     return null;
+  }
+
+  
+  /**
+   * Sets the entityDescriptorRegistry.
+   * 
+   * @param entityDescriptorRegistry the entityDescriptorRegistry to set.
+   */
+  public void setEntityDescriptorRegistry(
+      IEntityDescriptorRegistry entityDescriptorRegistry) {
+    this.entityDescriptorRegistry = entityDescriptorRegistry;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public <T extends IEntity> IEntityDescriptor getEntityDescriptor(Class<T> entityContract) {
+    return entityDescriptorRegistry.getEntityDescriptor(entityContract);
   }
 }

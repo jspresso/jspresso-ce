@@ -84,12 +84,13 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
               .entrySet()) {
             try {
               accessorFactory.createPropertyAccessor(
-                  initializedAttribute.getKey(), queryEntity.getContract())
-                  .setValue(
-                      queryEntity,
-                      accessorFactory.createPropertyAccessor(
-                          initializedAttribute.getValue(),
-                          masterEntity.getContract()).getValue(masterEntity));
+                  initializedAttribute.getKey(),
+                  queryEntity.getContract()).setValue(
+                  queryEntity,
+                  accessorFactory.createPropertyAccessor(
+                      initializedAttribute.getValue(),
+                      masterEntity.getContract())
+                      .getValue(masterEntity));
             } catch (IllegalAccessException ex) {
               throw new ActionException(ex);
             } catch (InvocationTargetException ex) {

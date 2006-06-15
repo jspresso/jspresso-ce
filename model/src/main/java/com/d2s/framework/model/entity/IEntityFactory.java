@@ -5,6 +5,8 @@ package com.d2s.framework.model.entity;
 
 import java.io.Serializable;
 
+import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+
 /**
  * This interface defines the contract of an entities factory.
  * <p>
@@ -52,4 +54,16 @@ public interface IEntityFactory {
    * @return the query entity instance.
    */
   <T extends IQueryEntity> T createQueryEntityInstance(Class<T> entityContract);
+
+  /**
+   * Gets an entity descriptor from its conract.
+   * 
+   * @param <T>
+   *          the entity type.
+   * @param entityContract
+   *          the entity contract
+   * @return the entity descriptor.
+   */
+  <T extends IEntity> IEntityDescriptor getEntityDescriptor(
+      Class<T> entityContract);
 }

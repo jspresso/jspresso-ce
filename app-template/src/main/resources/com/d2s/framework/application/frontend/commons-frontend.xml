@@ -76,7 +76,9 @@
 		<property name="description" value="clone.description" />
 		<property name="acceleratorAsString" value="alt C" />
 		<property name="wrappedAction">
-			<bean class="com.d2s.framework.application.backend.action.CloneCollectionAction" />
+			<bean class="com.d2s.framework.application.backend.action.CloneCollectionAction">
+				<property name="entityCloneFactory" ref="smartEntityCloneFactory" />
+			</bean>
 		</property>
 		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
@@ -95,11 +97,6 @@
 		<property name="acceleratorAsString" value="alt D" />
 		<property name="message" value="remove.selected.message" />
 		<property name="yesAction">
-			<!--
-				<bean parent="abstractHibernateBackAction"
-				class="com.d2s.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction">
-				</bean>
-			-->
 			<bean class="com.d2s.framework.application.backend.action.RemoveCollectionFromMasterAction" />
 		</property>
 	</bean>
@@ -114,7 +111,9 @@
 
 	<bean id="cloneProjectedFrontAction" parent="cloneCollectionFrontAction">
 		<property name="wrappedAction">
-			<bean class="com.d2s.framework.application.backend.action.module.CloneModuleObjectsAction" />
+			<bean class="com.d2s.framework.application.backend.action.module.CloneModuleObjectsAction">
+				<property name="entityCloneFactory" ref="smartEntityCloneFactory" />
+			</bean>
 		</property>
 		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>

@@ -20,13 +20,18 @@ import com.d2s.framework.application.backend.session.ApplicationSessionException
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.IEntityUnitOfWork;
 import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityCloneFactory;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityRegistry;
 import com.d2s.framework.security.UserPrincipal;
+import com.d2s.framework.util.bean.BeanComparator;
 import com.d2s.framework.util.bean.BeanPropertyChangeRecorder;
+import com.d2s.framework.util.bean.IAccessor;
+import com.d2s.framework.util.bean.IAccessorFactory;
 
 /**
  * Basic implementation of an application session.
@@ -40,9 +45,11 @@ import com.d2s.framework.util.bean.BeanPropertyChangeRecorder;
 public class BasicApplicationSession implements IApplicationSession {
 
   private IEntityRegistry            entityRegistry;
+  private IEntityCloneFactory        carbonEntityCloneFactory;
   private BeanPropertyChangeRecorder dirtRecorder;
   private IEntityUnitOfWork          unitOfWork;
   private IEntityFactory             entityFactory;
+  private IAccessorFactory           accessorFactory;
   private IEntityCollectionFactory   collectionFactory;
   private Set<IEntity>               entitiesToMergeBack;
   private Set<IEntity>               entitiesRegisteredForDeletion;
@@ -394,7 +401,7 @@ public class BasicApplicationSession implements IApplicationSession {
         return uowEntity;
       }
     }
-    uowEntity = entity.clone(entityFactory, true);
+    uowEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
     Map<String, Object> dirtyProperties = dirtRecorder
         .getChangedProperties(entity);
     if (dirtyProperties == null) {
@@ -484,6 +491,47 @@ public class BasicApplicationSession implements IApplicationSession {
       Collection<IEntity> transientCollection,
       Collection<IEntity> snapshotCollection, String role) {
     return transientCollection;
+  }
+
+  /**
+   * Sorts an entity collection property.
+   * 
+   * @param entity
+   *          the entity to sort the collection property of.
+   * @param propertyName
+   *          the name of the collection property to sort.
+   */
+  @SuppressWarnings("unchecked")
+  protected void sortCollectionProperty(IEntity entity, String propertyName) {
+    Collection<Object> propertyValue = (Collection<Object>) entity
+        .straightGetProperty(propertyName);
+    ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityFactory
+        .getEntityDescriptor(entity.getContract()).getPropertyDescriptor(
+            propertyName);
+    if (propertyValue != null
+        && !propertyValue.isEmpty()
+        && !List.class.isAssignableFrom(propertyDescriptor
+            .getCollectionDescriptor().getCollectionInterface())) {
+      List<String> orderingProperties = propertyDescriptor
+          .getOrderingProperties();
+      if (orderingProperties != null && !orderingProperties.isEmpty()) {
+        BeanComparator comparator = new BeanComparator();
+        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
+        Class collectionElementContract = propertyDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getComponentContract();
+        for (String orderingProperty : orderingProperties) {
+          orderingAccessors.add(accessorFactory.createPropertyAccessor(
+              orderingProperty, collectionElementContract));
+        }
+        comparator.setOrderingAccessors(orderingAccessors);
+        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
+        Collections.sort(collectionCopy, comparator);
+        Collection<Object> collectionProperty = propertyValue;
+        collectionProperty.clear();
+        collectionProperty.addAll(collectionCopy);
+      }
+    }
   }
 
   /**
@@ -587,5 +635,26 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   public void setLocale(Locale locale) {
     this.locale = locale;
+  }
+
+  /**
+   * Sets the carbonEntityCloneFactory.
+   * 
+   * @param carbonEntityCloneFactory
+   *          the carbonEntityCloneFactory to set.
+   */
+  public void setCarbonEntityCloneFactory(
+      IEntityCloneFactory carbonEntityCloneFactory) {
+    this.carbonEntityCloneFactory = carbonEntityCloneFactory;
+  }
+
+  
+  /**
+   * Sets the accessorFactory.
+   * 
+   * @param accessorFactory the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
   }
 }

@@ -12,6 +12,7 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityCloneFactory;
 
 /**
  * An action used duplicate a collection of domain objects. Cloning an entity
@@ -24,6 +25,8 @@ import com.d2s.framework.model.entity.IEntity;
  * @author Vincent Vandenschrick
  */
 public class CloneCollectionAction extends AbstractCollectionAction {
+
+  private IEntityCloneFactory entityCloneFactory;
 
   /**
    * Retrieves the managed collection from the model connector then clones the
@@ -41,13 +44,23 @@ public class CloneCollectionAction extends AbstractCollectionAction {
     }
     Collection<IEntity> entityClones = new ArrayList<IEntity>();
     for (int i = 0; i < selectedIndices.length; i++) {
-      entityClones.add(((IEntity) collectionConnector.getChildConnector(
-          selectedIndices[i]).getConnectorValue()).clone(
-          getEntityFactory(context), false));
+      entityClones.add(entityCloneFactory.cloneEntity(
+          ((IEntity) collectionConnector.getChildConnector(selectedIndices[i])
+              .getConnectorValue()), getEntityFactory(context)));
     }
     context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
         .getIndicesOf(collectionConnector, entityClones));
     return true;
+  }
+
+  /**
+   * Sets the entityCloneFactory.
+   * 
+   * @param entityCloneFactory
+   *          the entityCloneFactory to set.
+   */
+  public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
+    this.entityCloneFactory = entityCloneFactory;
   }
 
 }

@@ -10,9 +10,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -34,7 +32,6 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtension;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
-import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityLifecycle;
 import com.d2s.framework.model.integrity.ICollectionIntegrityProcessor;
 import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
@@ -42,7 +39,6 @@ import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.model.service.IComponentService;
 import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.bean.AccessorInfo;
-import com.d2s.framework.util.bean.BeanComparator;
 import com.d2s.framework.util.bean.IAccessor;
 import com.d2s.framework.util.bean.IAccessorFactory;
 import com.d2s.framework.util.bean.ICollectionAccessor;
@@ -148,12 +144,6 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       return straightGetProperties();
     } else if ("isPersistent".equals(methodName)) {
       return new Boolean(((IEntity) proxy).getVersion() != null);
-    } else if ("clone".equals(methodName)) {
-      return cloneProxy((IEntityFactory) args[0], ((Boolean) args[1])
-          .booleanValue());
-    } else if ("sortCollectionProperty".equals(methodName)) {
-      sortCollectionProperty((String) args[0]);
-      return null;
     } else {
       boolean isLifecycleMethod = false;
       try {
@@ -234,89 +224,6 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
         + entityDescriptor.getComponentContract());
   }
 
-  private IEntity cloneProxy(IEntityFactory entityFactory,
-      boolean includeIdAndVersion) {
-    if (includeIdAndVersion) {
-      // This is a "technical copy". No functional decisions must be made.
-      return carbonCopy(entityFactory);
-    }
-    // This is a "create like" copy.
-    return softCopy(entityFactory);
-  }
-
-  private IEntity softCopy(IEntityFactory entityFactory) {
-    IEntity clonedEntity = entityFactory
-        .createEntityInstance(getEntityContract());
-
-    Map<Object, ICollectionPropertyDescriptor> collRelToUpdate = new HashMap<Object, ICollectionPropertyDescriptor>();
-    for (Map.Entry<String, Object> propertyEntry : properties.entrySet()) {
-      if (propertyEntry.getValue() != null
-          && !(IEntity.ID.equals(propertyEntry.getKey())
-              || IEntity.VERSION.equals(propertyEntry.getKey()) || entityDescriptor
-              .getUnclonedProperties().contains(propertyEntry.getKey()))) {
-        IPropertyDescriptor propertyDescriptor = entityDescriptor
-            .getPropertyDescriptor(propertyEntry.getKey());
-        if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-          IRelationshipEndPropertyDescriptor reverseDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-              .getReverseRelationEnd();
-          if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-            if (!(reverseDescriptor instanceof IReferencePropertyDescriptor)) {
-              clonedEntity.straightSetProperty(propertyEntry.getKey(),
-                  propertyEntry.getValue());
-              if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-                if (isInitialized(propertyEntry.getValue())) {
-                  collRelToUpdate.put(propertyEntry.getValue(),
-                      (ICollectionPropertyDescriptor) reverseDescriptor);
-                }
-              }
-            }
-          } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-            if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-              for (Object reverseCollectionElement : (Collection) propertyEntry
-                  .getValue()) {
-                if (isInitialized(reverseCollectionElement)) {
-                  collRelToUpdate.put(reverseCollectionElement,
-                      (ICollectionPropertyDescriptor) reverseDescriptor);
-                }
-              }
-            }
-          }
-        } else {
-          clonedEntity.straightSetProperty(propertyEntry.getKey(),
-              propertyEntry.getValue());
-        }
-      }
-    }
-    for (Map.Entry<Object, ICollectionPropertyDescriptor> collectionEntry : collRelToUpdate
-        .entrySet()) {
-      ICollectionPropertyDescriptor collectionDescriptor = collectionEntry
-          .getValue();
-      Class masterContract = null;
-      if (collectionDescriptor.getReverseRelationEnd() instanceof IReferencePropertyDescriptor) {
-        masterContract = ((IReferencePropertyDescriptor) collectionDescriptor
-            .getReverseRelationEnd()).getReferencedDescriptor()
-            .getComponentContract();
-      } else if (collectionDescriptor.getReverseRelationEnd() instanceof ICollectionPropertyDescriptor) {
-        masterContract = ((ICollectionPropertyDescriptor) collectionDescriptor
-            .getReverseRelationEnd()).getReferencedDescriptor()
-            .getElementDescriptor().getComponentContract();
-      }
-      ICollectionAccessor collectionAccessor = accessorFactory
-          .createCollectionPropertyAccessor(collectionDescriptor.getName(),
-              masterContract);
-      try {
-        collectionAccessor.addToValue(collectionEntry.getKey(), clonedEntity);
-      } catch (IllegalAccessException ex) {
-        throw new EntityException(ex);
-      } catch (InvocationTargetException ex) {
-        throw new EntityException(ex);
-      } catch (NoSuchMethodException ex) {
-        throw new EntityException(ex);
-      }
-    }
-    return clonedEntity;
-  }
-
   /**
    * Wether the object is fully initialized.
    * 
@@ -327,23 +234,6 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   protected boolean isInitialized(@SuppressWarnings("unused")
   Object objectOrProxy) {
     return true;
-  }
-
-  private IEntity carbonCopy(IEntityFactory entityFactory) {
-    IEntity clonedEntity = entityFactory.createEntityInstance(
-        getEntityContract(), (Serializable) properties.get(IEntity.ID));
-
-    for (Map.Entry<String, Object> propertyEntry : properties.entrySet()) {
-      if (propertyEntry.getValue() != null) {
-        IPropertyDescriptor propertyDescriptor = entityDescriptor
-            .getPropertyDescriptor(propertyEntry.getKey());
-        if (!(propertyDescriptor instanceof IRelationshipEndPropertyDescriptor)) {
-          clonedEntity.straightSetProperty(propertyEntry.getKey(),
-              propertyEntry.getValue());
-        }
-      }
-    }
-    return clonedEntity;
   }
 
   /**
@@ -972,37 +862,6 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       }
     }
     return interceptorResults;
-  }
-
-  @SuppressWarnings("unchecked")
-  private void sortCollectionProperty(String propertyName) {
-    Collection<Object> propertyValue = (Collection<Object>) straightGetProperty(propertyName);
-    ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityDescriptor
-        .getPropertyDescriptor(propertyName);
-    if (propertyValue != null
-        && !propertyValue.isEmpty()
-        && !List.class.isAssignableFrom(propertyDescriptor
-            .getCollectionDescriptor().getCollectionInterface())) {
-      List<String> orderingProperties = propertyDescriptor
-          .getOrderingProperties();
-      if (orderingProperties != null && !orderingProperties.isEmpty()) {
-        BeanComparator comparator = new BeanComparator();
-        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
-        Class collectionElementContract = propertyDescriptor
-            .getCollectionDescriptor().getElementDescriptor()
-            .getComponentContract();
-        for (String orderingProperty : orderingProperties) {
-          orderingAccessors.add(accessorFactory.createPropertyAccessor(
-              orderingProperty, collectionElementContract));
-        }
-        comparator.setOrderingAccessors(orderingAccessors);
-        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
-        Collections.sort(collectionCopy, comparator);
-        Collection<Object> collectionProperty = propertyValue;
-        collectionProperty.clear();
-        collectionProperty.addAll(collectionCopy);
-      }
-    }
   }
 
   private static final class NeverEqualsInvocationHandler implements
