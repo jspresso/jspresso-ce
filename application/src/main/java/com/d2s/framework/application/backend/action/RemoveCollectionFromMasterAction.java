@@ -124,6 +124,6 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
         }
       }
     }
-    applicationSession.registerEntityForDeletion(entity);
+    applicationSession.deleteEntity(entity);
   }
 }

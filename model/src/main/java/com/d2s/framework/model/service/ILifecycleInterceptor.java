@@ -3,9 +3,8 @@
  */
 package com.d2s.framework.model.service;
 
-import java.security.Principal;
-
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.security.UserPrincipal;
 
 /**
@@ -31,9 +30,12 @@ public interface ILifecycleInterceptor<E> {
    *          lifecycle step.
    * @param principal
    *          the principal triggering the action.
+   * @param entityLifecycleHandler
+   *          entityLifecycleHandler.
    * @return true if the state of the entity has been updated.
    */
-  boolean onCreate(E entity, IEntityFactory entityFactory, UserPrincipal principal);
+  boolean onCreate(E entity, IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called whenever an entity is made persistent for the first time.
@@ -45,9 +47,12 @@ public interface ILifecycleInterceptor<E> {
    *          lifecycle step.
    * @param principal
    *          the principal triggering the action.
+   * @param entityLifecycleHandler
+   *          entityLifecycleHandler.
    * @return true if the state of the entity has been updated.
    */
-  boolean onPersist(E entity, IEntityFactory entityFactory, Principal principal);
+  boolean onPersist(E entity, IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called whenever an persistent entity is updated.
@@ -59,9 +64,12 @@ public interface ILifecycleInterceptor<E> {
    *          lifecycle step.
    * @param principal
    *          the principal triggering the action.
+   * @param entityLifecycleHandler
+   *          entityLifecycleHandler.
    * @return true if the state of the entity has been updated.
    */
-  boolean onUpdate(E entity, IEntityFactory entityFactory, Principal principal);
+  boolean onUpdate(E entity, IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called whenever an persistent entity is deleted.
@@ -73,7 +81,10 @@ public interface ILifecycleInterceptor<E> {
    *          lifecycle step.
    * @param principal
    *          the principal triggering the action.
+   * @param entityLifecycleHandler
+   *          entityLifecycleHandler.
    * @return true if the state of the entity has been updated.
    */
-  boolean onDelete(E entity, IEntityFactory entityFactory, Principal principal);
+  boolean onDelete(E entity, IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 }

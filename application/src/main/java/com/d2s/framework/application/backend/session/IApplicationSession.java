@@ -10,6 +10,7 @@ import javax.security.auth.Subject;
 
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.entity.IEntityDirtAware;
 import com.d2s.framework.security.UserPrincipal;
 
@@ -23,7 +24,7 @@ import com.d2s.framework.security.UserPrincipal;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IApplicationSession extends IEntityDirtAware {
+public interface IApplicationSession extends IEntityDirtAware, IEntityLifecycleHandler {
 
   /**
    * Registers an entity in this application session.
@@ -35,14 +36,6 @@ public interface IApplicationSession extends IEntityDirtAware {
    *          not safe to rely on entity.isPersistent() to determine it.
    */
   void registerEntity(IEntity entity, boolean isEntityTransient);
-
-  /**
-   * Registers an entity for later deletion.
-   * 
-   * @param entity
-   *          the entity to register.
-   */
-  void registerEntityForDeletion(IEntity entity);
 
   /**
    * Gives a chance to the session to perform any pending operation.

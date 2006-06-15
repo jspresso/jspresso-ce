@@ -1,0 +1,25 @@
+/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.model.entity;
+
+
+/**
+ * TODO Comment needed.
+ * <p>
+ * Copyright 2005 Design2See. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public interface IEntityLifecycleHandler {
+
+  /**
+   * Registers an entity for deletion.
+   * 
+   * @param entity
+   *          the entity to register.
+   */
+  void deleteEntity(IEntity entity);
+}

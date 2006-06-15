@@ -3,9 +3,8 @@
  */
 package com.d2s.framework.model.service;
 
-import java.security.Principal;
-
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.security.UserPrincipal;
 
 /**
@@ -28,7 +27,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
    */
   @SuppressWarnings("unused")
   public boolean onCreate(E entity, IEntityFactory entityFactory,
-      UserPrincipal principal) {
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     return false;
   }
 
@@ -37,7 +36,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
    */
   @SuppressWarnings("unused")
   public boolean onPersist(E entity, IEntityFactory entityFactory,
-      Principal principal) {
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     return false;
   }
 
@@ -46,7 +45,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
    */
   @SuppressWarnings("unused")
   public boolean onUpdate(E entity, IEntityFactory entityFactory,
-      Principal principal) {
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     return false;
   }
 
@@ -55,7 +54,7 @@ public abstract class EmptyLifecycleInterceptor<E> implements
    */
   @SuppressWarnings("unused")
   public boolean onDelete(E entity, IEntityFactory entityFactory,
-      Principal principal) {
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     return false;
   }
 

@@ -4,7 +4,6 @@
 package com.d2s.framework.application.backend.persistence.hibernate;
 
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -16,7 +15,9 @@ import org.hibernate.type.Type;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.persistence.hibernate.EntityProxyInterceptor;
+import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Hibernate session interceptor aware of an application session to deal with
@@ -185,8 +186,16 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  protected Principal getPrincipal() {
+  protected UserPrincipal getPrincipal() {
     return applicationSession.getPrincipal();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return applicationSession;
   }
 
 }

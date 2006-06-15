@@ -4,7 +4,6 @@
 package com.d2s.framework.model.persistence.hibernate;
 
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.Collection;
 
 import org.hibernate.EmptyInterceptor;
@@ -14,6 +13,8 @@ import org.hibernate.type.Type;
 import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
+import com.d2s.framework.security.UserPrincipal;
 
 /**
  * This hibernate interceptor enables hibernate to handle entities which are
@@ -72,7 +73,8 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   public void onDelete(Object entity, Serializable id, Object[] state,
       String[] propertyNames, Type[] types) {
     if (entity instanceof IEntity) {
-      ((IEntity) entity).onDelete(getEntityFactory(), getPrincipal());
+      ((IEntity) entity).onDelete(getEntityFactory(), getPrincipal(),
+          getEntityLifecycleHandler());
     }
     super.onDelete(entity, id, state, propertyNames, types);
   }
@@ -85,7 +87,8 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       String[] propertyNames, Type[] types) {
     boolean stateUpdated = false;
     if (entity instanceof IEntity) {
-      if (((IEntity) entity).onPersist(getEntityFactory(), getPrincipal())) {
+      if (((IEntity) entity).onPersist(getEntityFactory(), getPrincipal(),
+          getEntityLifecycleHandler())) {
         extractState((IEntity) entity, propertyNames, state);
         stateUpdated = true;
       }
@@ -103,7 +106,8 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
       Type[] types) {
     boolean stateUpdated = false;
     if (entity instanceof IEntity) {
-      if (((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal())) {
+      if (((IEntity) entity).onUpdate(getEntityFactory(), getPrincipal(),
+          getEntityLifecycleHandler())) {
         extractState((IEntity) entity, propertyNames, currentState);
         stateUpdated = true;
       }
@@ -148,7 +152,16 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * 
    * @return the principal owning the session.
    */
-  protected Principal getPrincipal() {
+  protected UserPrincipal getPrincipal() {
+    return null;
+  }
+
+  /**
+   * Gets the lifecycle handler.
+   * 
+   * @return the entity lifecycle handler.
+   */
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
     return null;
   }
 }

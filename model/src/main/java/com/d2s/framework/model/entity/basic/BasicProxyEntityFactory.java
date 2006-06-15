@@ -16,6 +16,7 @@ import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityDescriptorRegistry;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.bean.IAccessorFactory;
@@ -56,7 +57,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
                         .getPropertyClass()));
       }
     }
-    createdEntity.onCreate(this, getPrincipal());
+    createdEntity.onCreate(this, getPrincipal(), getEntityLifecycleHandler());
     return createdEntity;
   }
 
@@ -201,11 +202,11 @@ public class BasicProxyEntityFactory implements IEntityFactory {
     return null;
   }
 
-  
   /**
    * Sets the entityDescriptorRegistry.
    * 
-   * @param entityDescriptorRegistry the entityDescriptorRegistry to set.
+   * @param entityDescriptorRegistry
+   *          the entityDescriptorRegistry to set.
    */
   public void setEntityDescriptorRegistry(
       IEntityDescriptorRegistry entityDescriptorRegistry) {
@@ -215,7 +216,17 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   /**
    * {@inheritDoc}
    */
-  public <T extends IEntity> IEntityDescriptor getEntityDescriptor(Class<T> entityContract) {
+  public <T extends IEntity> IEntityDescriptor getEntityDescriptor(
+      Class<T> entityContract) {
     return entityDescriptorRegistry.getEntityDescriptor(entityContract);
+  }
+
+  /**
+   * Gets the entity lifecycle handler.
+   * 
+   * @return the entity lifecycle handler.
+   */
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return null;
   }
 }

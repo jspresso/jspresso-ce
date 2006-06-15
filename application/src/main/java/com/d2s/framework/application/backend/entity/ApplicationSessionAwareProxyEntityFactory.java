@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationHandler;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.entity.basic.BasicProxyEntityFactory;
 
 /**
@@ -57,5 +58,15 @@ public class ApplicationSessionAwareProxyEntityFactory extends
     return new ApplicationSessionAwareEntityInvocationHandler(entityDescriptor,
         getEntityCollectionFactory(), getAccessorFactory(),
         getEntityExtensionFactory(), applicationSession);
+  }
+
+  /**
+   * Returns the application session.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return applicationSession;
   }
 }
