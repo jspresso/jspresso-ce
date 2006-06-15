@@ -489,12 +489,13 @@ public class DefaultSwingController extends
       JErrorDialog dialog = JErrorDialog.createInstance((Component) context
           .get(ActionContextConstants.SOURCE_COMPONENT),
           getTranslationProvider(), getLocale());
-      dialog.setTitle(getTranslationProvider().getTranslation("error",
-          getLocale()));
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
           IIconFactory.MEDIUM_ICON_SIZE));
+      dialog.setTitle(getTranslationProvider().getTranslation("error",
+          getLocale()));
       dialog.setMessage(ex.getLocalizedMessage());
       dialog.setDetails(ex);
+      dialog.pack();
       dialog.setVisible(true);
     }
   }

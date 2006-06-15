@@ -400,6 +400,7 @@ public class DefaultUlcController extends
           getLocale()));
       dialog.setMessage(ex.getLocalizedMessage());
       dialog.setDetails(ex);
+      dialog.pack();
       dialog.setVisible(true);
     }
   }
