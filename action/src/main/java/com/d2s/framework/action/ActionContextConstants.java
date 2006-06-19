@@ -105,4 +105,9 @@ public final class ActionContextConstants {
    * The next action.
    */
   public static final String NEXT_ACTION              = "NEXT_ACTION";
+
+  /**
+   * A parametrized entity descriptor.
+   */
+  public static final String ENTITY_REF_DESCRIPTOR = "ENTITY_REF_DESCRIPTOR";
 }

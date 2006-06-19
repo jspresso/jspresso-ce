@@ -17,7 +17,6 @@ import com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.view.IView;
@@ -37,12 +36,12 @@ import com.ulcjava.base.application.ULCComponent;
  */
 public class LovAction extends ModalDialogAction {
 
-  private ILovViewDescriptorFactory lovViewDescriptorFactory;
-  private CreateQueryEntityAction   createQueryEntityAction;
-  private IDisplayableAction        okAction;
-  private IDisplayableAction        cancelAction;
-  private IDisplayableAction        findAction;
-  private IEntityDescriptor         queryEntityDescriptor;
+  private ILovViewDescriptorFactory    lovViewDescriptorFactory;
+  private CreateQueryEntityAction      createQueryEntityAction;
+  private IDisplayableAction           okAction;
+  private IDisplayableAction           cancelAction;
+  private IDisplayableAction           findAction;
+  private IReferencePropertyDescriptor entityRefQueryDescriptor;
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -57,7 +56,8 @@ public class LovAction extends ModalDialogAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
     getViewConnector(context).setConnectorValue(
         getViewConnector(context).getConnectorValue());
@@ -67,11 +67,13 @@ public class LovAction extends ModalDialogAction {
     actions.add(okAction);
     actions.add(cancelAction);
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
+    IReferencePropertyDescriptor erqDescriptor = getEntityRefQueryDescriptor(context);
     IView<ULCComponent> lovView = getViewFactory(context).createView(
         lovViewDescriptorFactory
-            .createLovViewDescriptor(getQueryEntityDescriptor(context)),
+            .createLovViewDescriptor(erqDescriptor),
         actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, lovView);
+    context.put(ActionContextConstants.ENTITY_REF_DESCRIPTOR, erqDescriptor);
     actionHandler.execute(createQueryEntityAction, context);
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
@@ -148,35 +150,34 @@ public class LovAction extends ModalDialogAction {
   }
 
   /**
-   * Gets the queryEntityDescriptor.
+   * Gets the entityRefQueryDescriptor.
    * 
    * @param context
    *          the action context.
-   * @return the queryEntityDescriptor.
+   * @return the entityRefQueryDescriptor.
    */
-  protected IEntityDescriptor getQueryEntityDescriptor(
+  protected IReferencePropertyDescriptor getEntityRefQueryDescriptor(
       Map<String, Object> context) {
-    if (queryEntityDescriptor != null) {
-      return queryEntityDescriptor;
+    if (entityRefQueryDescriptor != null) {
+      return entityRefQueryDescriptor;
     }
     IModelDescriptor modelDescriptor = (IModelDescriptor) context
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
     if (modelDescriptor instanceof IReferencePropertyDescriptor) {
-      return (IEntityDescriptor) ((IReferencePropertyDescriptor) modelDescriptor)
-          .getReferencedDescriptor();
-    } else if (modelDescriptor instanceof IEntityDescriptor) {
-      return (IEntityDescriptor) modelDescriptor;
+      return (IReferencePropertyDescriptor) modelDescriptor;
     }
     return null;
   }
 
   /**
-   * Sets the queryEntityDescriptor.
+   * Sets the entityRefQueryDescriptor.
    * 
-   * @param queryEntityDescriptor
-   *          the queryEntityDescriptor to set.
+   * @param entityRefQueryDescriptor
+   *          the entityRefQueryDescriptor to set.
    */
-  public void setQueryEntityDescriptor(IEntityDescriptor queryEntityDescriptor) {
-    this.queryEntityDescriptor = queryEntityDescriptor;
+  public void setEntityRefQueryDescriptor(
+      IReferencePropertyDescriptor entityRefQueryDescriptor) {
+    this.entityRefQueryDescriptor = entityRefQueryDescriptor;
   }
+
 }

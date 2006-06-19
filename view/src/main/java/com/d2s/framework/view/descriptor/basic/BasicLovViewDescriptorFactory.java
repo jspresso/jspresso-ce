@@ -6,10 +6,11 @@ package com.d2s.framework.view.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
 import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
@@ -29,19 +30,21 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
    * {@inheritDoc}
    */
   public IViewDescriptor createLovViewDescriptor(
-      IEntityDescriptor entityDescriptor) {
+      IReferencePropertyDescriptor entityRefDescriptor) {
     BasicSplitViewDescriptor lovViewDescriptor = new BasicSplitViewDescriptor();
     lovViewDescriptor.setMasterDetail(true);
     lovViewDescriptor
-        .setLeftTopViewDescriptor(createQueryComponentViewDescriptor(entityDescriptor));
+        .setLeftTopViewDescriptor(createQueryComponentViewDescriptor(entityRefDescriptor
+            .getComponentDescriptor()));
     lovViewDescriptor
-        .setRightBottomViewDescriptor(createResultViewDescriptor(entityDescriptor));
+        .setRightBottomViewDescriptor(createResultViewDescriptor(entityRefDescriptor
+            .getComponentDescriptor()));
     return lovViewDescriptor;
 
   }
 
   private IViewDescriptor createQueryComponentViewDescriptor(
-      IEntityDescriptor entityDescriptor) {
+      IComponentDescriptor entityDescriptor) {
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     queryComponentViewDescriptor.setModelDescriptor(entityDescriptor);
     queryComponentViewDescriptor.setName("queryEntity");
@@ -63,7 +66,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   }
 
   private IViewDescriptor createResultViewDescriptor(
-      IEntityDescriptor entityDescriptor) {
+      IComponentDescriptor entityDescriptor) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
     BasicCollectionDescriptor queriedEntitiesListDescriptor = new BasicCollectionDescriptor();
