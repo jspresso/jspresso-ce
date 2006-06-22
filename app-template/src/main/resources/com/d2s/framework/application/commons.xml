@@ -25,7 +25,7 @@
 	<!--
 		The implementation used as AccessorFactory.
 	-->
-	<bean id="beanAccessorFactory" class="com.d2s.framework.util.bean.BeanAccessorFactory"></bean>
+	<bean id="beanAccessorFactory" class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory"></bean>
 
 	<!--
 		The implementation used as ConnectorFactory.
