@@ -48,6 +48,7 @@
 		<module>hibernate</module>
 		<module>swing</module>
 		<module>ulc</module>
+		<module>jasper</module>
 		<module>app-launch</module>
 		<module>app-template</module>
 	</modules>
@@ -180,7 +181,7 @@
 			</dependency>
 			<dependency>
 				<groupId>commons-beanutils</groupId>
-				<artifactId>commons-beanutils-core</artifactId>
+				<artifactId>commons-beanutils</artifactId>
 				<version>1.7.0</version>
 			</dependency>
 			<dependency>
@@ -312,6 +313,11 @@
 				<groupId>jasperreports</groupId>
 				<artifactId>jasperreports</artifactId>
 				<version>1.2.1</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>2.4</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

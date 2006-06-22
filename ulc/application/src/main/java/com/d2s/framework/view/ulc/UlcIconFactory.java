@@ -33,8 +33,7 @@ public class UlcIconFactory extends AbstractIconFactory<ULCIcon> {
   @Override
   protected ULCIcon createIcon(String urlSpec, Dimension iconSize) {
     if (urlSpec != null) {
-      URL imageURL = UrlHelper.createURL(urlSpec, Thread.currentThread()
-          .getContextClassLoader());
+      URL imageURL = UrlHelper.createURL(urlSpec);
       if (imageURL != null) {
         try {
           Image iconImage = ImageIO.read(imageURL).getScaledInstance(

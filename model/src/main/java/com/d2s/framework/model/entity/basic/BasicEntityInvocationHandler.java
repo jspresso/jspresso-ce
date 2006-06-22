@@ -38,10 +38,10 @@ import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
 import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.model.service.IComponentService;
 import com.d2s.framework.model.service.ILifecycleInterceptor;
+import com.d2s.framework.util.access.IAccessor;
+import com.d2s.framework.util.access.IAccessorFactory;
+import com.d2s.framework.util.access.ICollectionAccessor;
 import com.d2s.framework.util.bean.AccessorInfo;
-import com.d2s.framework.util.bean.IAccessor;
-import com.d2s.framework.util.bean.IAccessorFactory;
-import com.d2s.framework.util.bean.ICollectionAccessor;
 import com.d2s.framework.util.collection.CollectionHelper;
 
 /**

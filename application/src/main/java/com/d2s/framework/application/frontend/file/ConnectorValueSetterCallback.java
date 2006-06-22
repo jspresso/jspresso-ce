@@ -33,10 +33,9 @@ public class ConnectorValueSetterCallback implements IFileOpenCallback {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {
       InputStream is = new BufferedInputStream(in);
-      int b = is.read();
-      while (b != -1) {
+      int b;
+      while ((b = is.read()) != -1) {
         baos.write(b);
-        b = is.read();
       }
       baos.flush();
       byte[] fileContent = baos.toByteArray();

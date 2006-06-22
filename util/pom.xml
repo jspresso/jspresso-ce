@@ -19,7 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils-core</artifactId>
+			<artifactId>commons-beanutils</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.apache.commons.beanutils.MethodUtils;
 
+import com.d2s.framework.util.access.IListAccessor;
+
 /**
  * This class is the default implementation of list property accessors.
  * <p>
@@ -18,7 +20,7 @@ import org.apache.commons.beanutils.MethodUtils;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultListAccessor extends DefaultCollectionAccessor implements
+public class BeanListAccessor extends BeanCollectionAccessor implements
     IListAccessor {
 
   private Method adderAtMethod;
@@ -31,7 +33,7 @@ public class DefaultListAccessor extends DefaultCollectionAccessor implements
    * @param beanClass
    *          the java bean class.
    */
-  public DefaultListAccessor(String property, Class beanClass) {
+  public BeanListAccessor(String property, Class beanClass) {
     super(property, beanClass);
   }
 

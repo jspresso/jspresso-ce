@@ -28,10 +28,10 @@ import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityRegistry;
 import com.d2s.framework.security.UserPrincipal;
+import com.d2s.framework.util.access.IAccessor;
+import com.d2s.framework.util.access.IAccessorFactory;
 import com.d2s.framework.util.bean.BeanComparator;
 import com.d2s.framework.util.bean.BeanPropertyChangeRecorder;
-import com.d2s.framework.util.bean.IAccessor;
-import com.d2s.framework.util.bean.IAccessorFactory;
 
 /**
  * Basic implementation of an application session.

@@ -8,6 +8,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
+import com.d2s.framework.util.access.IAccessor;
+
 /**
  * This class is the default implementation of property accessors. It relies on
  * Jakarta commmons beanutils.
@@ -18,7 +20,7 @@ import org.apache.commons.beanutils.PropertyUtils;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultPropertyAccessor implements IAccessor {
+public class BeanPropertyAccessor implements IAccessor {
 
   private String  property;
   private Class   beanClass;
@@ -32,7 +34,7 @@ public class DefaultPropertyAccessor implements IAccessor {
    * @param beanClass
    *          the class of the beans accessed using this accessor.
    */
-  public DefaultPropertyAccessor(String property, Class beanClass) {
+  public BeanPropertyAccessor(String property, Class beanClass) {
     this.property = property;
     this.beanClass = beanClass;
 

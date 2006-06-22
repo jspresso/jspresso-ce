@@ -12,7 +12,7 @@ import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.bean.IBeanConnectorFactory;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntityFactory;
-import com.d2s.framework.util.bean.IAccessorFactory;
+import com.d2s.framework.util.access.IAccessorFactory;
 
 /**
  * This interface establishes the contract of the backend controllers. Backend

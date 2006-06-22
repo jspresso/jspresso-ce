@@ -29,6 +29,18 @@ public final class UrlHelper {
    * Creates a URL object.
    * 
    * @param urlSpec
+   *          the string representation of the URL. In case of a classpath url
+   *          the thread context classloader will be used.
+   * @return the constructed URL or null.
+   */
+  public static URL createURL(String urlSpec) {
+    return createURL(urlSpec, Thread.currentThread().getContextClassLoader());
+  }
+
+  /**
+   * Creates a URL object.
+   * 
+   * @param urlSpec
    *          the string representation of the URL.
    * @param cl
    *          the class loader used to get the resource URL in case of a

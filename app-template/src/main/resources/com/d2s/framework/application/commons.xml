@@ -25,7 +25,7 @@
 	<!--
 		The implementation used as AccessorFactory.
 	-->
-	<bean id="accessorFactory" class="com.d2s.framework.util.bean.DefaultAccessorFactory"></bean>
+	<bean id="beanAccessorFactory" class="com.d2s.framework.util.bean.BeanAccessorFactory"></bean>
 
 	<!--
 		The implementation used as ConnectorFactory.
@@ -46,7 +46,7 @@
 		The implementation used as BeanConnectorFactory.
 	-->
 	<bean id="beanConnectorFactory" class="com.d2s.framework.binding.bean.DefaultBeanConnectorFactory">
-		<property name="accessorFactory" ref="accessorFactory" />
+		<property name="accessorFactory" ref="beanAccessorFactory" />
 	</bean>
 
 	<!--
@@ -70,7 +70,7 @@
 	<bean id="abstractApplicationSession" abstract="true"
 		class="com.d2s.framework.application.backend.session.basic.BasicApplicationSession">
 		<property name="collectionFactory" ref="entityCollectionFactory" />
-		<property name="accessorFactory" ref="accessorFactory" />
+		<property name="accessorFactory" ref="beanAccessorFactory" />
 		<property name="entityRegistry">
 			<bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" />
 		</property>
@@ -91,7 +91,7 @@
 		The implementation used as EntityFactory.
 	-->
 	<bean id="basicEntityFactory" class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
-		<property name="accessorFactory" ref="accessorFactory" />
+		<property name="accessorFactory" ref="beanAccessorFactory" />
 		<property name="entityCollectionFactory" ref="entityCollectionFactory" />
 		<property name="entityExtensionFactory" ref="entityExtensionFactory" />
 		<property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
@@ -160,7 +160,7 @@
 			<bean parent="basicEntityFactory"
 				class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory" />
 		</property>
-		<property name="accessorFactory" ref="accessorFactory" />
+		<property name="accessorFactory" ref="beanAccessorFactory" />
 		<property name="beanConnectorFactory" ref="beanConnectorFactory" />
 		<property name="translationProvider" ref="translationProvider" />
 	</bean>

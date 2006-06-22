@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.binding.bean;
 
-import com.d2s.framework.util.bean.IAccessorFactory;
+import com.d2s.framework.util.access.IAccessorFactory;
 
 /**
  * Interface for all factories of bean connector maps.

@@ -5,7 +5,7 @@ package com.d2s.framework.binding.bean;
 
 import java.util.Collection;
 
-import com.d2s.framework.util.bean.IAccessorFactory;
+import com.d2s.framework.util.access.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.util.bean.PropertyHelper;
 
@@ -78,7 +78,7 @@ public class DefaultBeanConnectorFactory implements IBeanConnectorFactory {
   }
 
   /**
-   * It return by default a <code>DefaultAccessorFactory</code> unless another
+   * It return by default a <code>BeanAccessorFactory</code> unless another
    * one has been set using <code>setAccessorFactory</code>.
    * <p>
    * {@inheritDoc}

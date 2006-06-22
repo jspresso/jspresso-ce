@@ -3,9 +3,8 @@
  */
 package com.d2s.framework.model.entity;
 
-
 /**
- * TODO Comment needed.
+ * Defaines the contract of any component able to handle entities lifecycle.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

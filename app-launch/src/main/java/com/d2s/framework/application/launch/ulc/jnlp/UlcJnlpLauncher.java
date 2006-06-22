@@ -55,7 +55,7 @@ public final class UlcJnlpLauncher {
       }
     }
     if (splashUrl != null) {
-      SplashWindow.splash(UrlHelper.createURL(splashUrl, null));
+      SplashWindow.splash(UrlHelper.createURL(splashUrl));
       registerMessageHandler(new IMessageService() {
 
         public void handleMessage(String msg) {

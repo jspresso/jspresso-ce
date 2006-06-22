@@ -24,6 +24,14 @@
 			<artifactId>ulc-base-server</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>ulc</groupId>
+			<artifactId>ulc-servlet-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
 		</dependency>

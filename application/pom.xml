@@ -15,9 +15,5 @@
 			<groupId>com.design2see</groupId>
 			<artifactId>d2s-view</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-		</dependency>
 	</dependencies>
 </project>

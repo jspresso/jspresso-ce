@@ -11,7 +11,7 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
-import com.d2s.framework.util.bean.IAccessorFactory;
+import com.d2s.framework.util.access.IAccessorFactory;
 
 /**
  * This entity invocation handler handles initialization of lazy loaded

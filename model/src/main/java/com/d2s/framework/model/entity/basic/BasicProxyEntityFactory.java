@@ -19,7 +19,7 @@ import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.security.UserPrincipal;
-import com.d2s.framework.util.bean.IAccessorFactory;
+import com.d2s.framework.util.access.IAccessorFactory;
 import com.d2s.framework.util.uid.IGUIDGenerator;
 
 /**

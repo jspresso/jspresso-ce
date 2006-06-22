@@ -61,8 +61,7 @@ public final class UlcDevelopmentRunner {
       }
     }
     if (splashUrl != null) {
-      SplashWindow.splash(UrlHelper.createURL(splashUrl, ClassLoader
-          .getSystemClassLoader()));
+      SplashWindow.splash(UrlHelper.createURL(splashUrl));
       registerMessageHandler(new IMessageService() {
 
         public void handleMessage(String msg) {

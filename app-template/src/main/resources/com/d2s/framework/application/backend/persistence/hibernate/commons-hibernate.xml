@@ -44,7 +44,7 @@
 
 	<bean id="smartEntityCloneFactory"
 		class="com.d2s.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory">
-		<property name="accessorFactory" ref="accessorFactory" />
+		<property name="accessorFactory" ref="beanAccessorFactory" />
 	</bean>
 </beans>
 

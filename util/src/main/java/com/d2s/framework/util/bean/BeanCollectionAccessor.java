@@ -9,6 +9,8 @@ import java.util.Collection;
 
 import org.apache.commons.beanutils.MethodUtils;
 
+import com.d2s.framework.util.access.ICollectionAccessor;
+
 /**
  * This class is the default implementation of collection property accessors.
  * <p>
@@ -18,7 +20,7 @@ import org.apache.commons.beanutils.MethodUtils;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultCollectionAccessor extends DefaultPropertyAccessor
+public class BeanCollectionAccessor extends BeanPropertyAccessor
     implements ICollectionAccessor {
 
   private Method adderMethod;
@@ -32,7 +34,7 @@ public class DefaultCollectionAccessor extends DefaultPropertyAccessor
    * @param beanClass
    *          the java bean class.
    */
-  public DefaultCollectionAccessor(String property, Class beanClass) {
+  public BeanCollectionAccessor(String property, Class beanClass) {
     super(property, beanClass);
   }
 

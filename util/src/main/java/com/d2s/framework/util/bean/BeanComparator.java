@@ -7,6 +7,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.List;
 
+import com.d2s.framework.util.access.IAccessor;
+
 /**
  * A bean comparator which compare beans based on a list of properties using
  * their natural order.
