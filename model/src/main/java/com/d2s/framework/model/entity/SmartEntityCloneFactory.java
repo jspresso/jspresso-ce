@@ -13,8 +13,8 @@ import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
-import com.d2s.framework.util.access.IAccessorFactory;
-import com.d2s.framework.util.access.ICollectionAccessor;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.accessor.ICollectionAccessor;
 
 /**
  * Performs a copy of the entity. It may be used in application actions to

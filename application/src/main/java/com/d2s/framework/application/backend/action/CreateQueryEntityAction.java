@@ -17,7 +17,7 @@ import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
-import com.d2s.framework.util.access.IAccessorFactory;
+import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IBeanProvider;
 
 /**

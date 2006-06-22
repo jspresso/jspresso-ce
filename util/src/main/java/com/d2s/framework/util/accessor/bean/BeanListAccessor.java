@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.util.bean;
+package com.d2s.framework.util.accessor.bean;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,7 +9,8 @@ import java.util.List;
 
 import org.apache.commons.beanutils.MethodUtils;
 
-import com.d2s.framework.util.access.IListAccessor;
+import com.d2s.framework.util.accessor.IListAccessor;
+import com.d2s.framework.util.bean.AccessorInfo;
 
 /**
  * This class is the default implementation of list property accessors.

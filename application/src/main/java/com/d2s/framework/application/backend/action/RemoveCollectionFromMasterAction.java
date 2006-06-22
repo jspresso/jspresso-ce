@@ -19,8 +19,8 @@ import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityDescriptorRegistry;
 import com.d2s.framework.model.entity.IEntityFactory;
-import com.d2s.framework.util.access.IAccessorFactory;
-import com.d2s.framework.util.access.ICollectionAccessor;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.accessor.ICollectionAccessor;
 
 /**
  * An action used in master/detail views to remove selected details from a

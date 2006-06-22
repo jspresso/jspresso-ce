@@ -1,15 +1,14 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.util.access;
+package com.d2s.framework.util.accessor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
+import java.util.List;
 
 
 /**
- * This interface is implemented by any bean value accessor on a collection
- * property.
+ * This interface is implemented by any bean value accessor on a list property.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -17,13 +16,15 @@ import java.util.Collection;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ICollectionAccessor extends IAccessor {
+public interface IListAccessor extends ICollectionAccessor {
 
   /**
    * Adds the value to the bean property of this accessor.
    * 
    * @param target
    *          the target on which to add the value.
+   * @param index
+   *          index at which the specified element is to be inserted.
    * @param value
    *          the value to add.
    * @throws IllegalAccessException
@@ -34,25 +35,7 @@ public interface ICollectionAccessor extends IAccessor {
    * @throws NoSuchMethodException
    *           if a matching method is not found.
    */
-  void addToValue(Object target, Object value) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException;
-
-  /**
-   * Removes the value from the bean property of this accessor.
-   * 
-   * @param target
-   *          the target on which to remove the value.
-   * @param value
-   *          the value to remove.
-   * @throws IllegalAccessException
-   *           if the underlying method throws an exception.
-   * @throws InvocationTargetException
-   *           if this <code>Method</code> object enforces Java language
-   *           access control and the underlying method is inaccessible.
-   * @throws NoSuchMethodException
-   *           if a matching method is not found.
-   */
-  void removeFromValue(Object target, Object value)
+  void addToValue(Object target, int index, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException;
 
@@ -61,6 +44,6 @@ public interface ICollectionAccessor extends IAccessor {
    * <p>
    * {@inheritDoc}
    */
-  Collection getValue(Object target) throws IllegalAccessException,
+  List getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;
 }

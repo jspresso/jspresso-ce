@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.binding.bean;
 
-import com.d2s.framework.util.access.IAccessorFactory;
+import com.d2s.framework.util.accessor.IAccessorFactory;
 
 /**
  * This connector is a simple java bean property connector. "Simple" means not a

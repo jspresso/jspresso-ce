@@ -1,14 +1,15 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.util.bean;
+package com.d2s.framework.util.accessor.bean;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.beanutils.PropertyUtils;
 
-import com.d2s.framework.util.access.IAccessor;
+import com.d2s.framework.util.accessor.IAccessor;
+import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * This class is the default implementation of property accessors. It relies on

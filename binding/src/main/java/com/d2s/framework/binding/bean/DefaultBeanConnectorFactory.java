@@ -5,7 +5,7 @@ package com.d2s.framework.binding.bean;
 
 import java.util.Collection;
 
-import com.d2s.framework.util.access.IAccessorFactory;
+import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.util.bean.PropertyHelper;
 

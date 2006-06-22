@@ -15,7 +15,7 @@ import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.util.access.ICollectionAccessor;
+import com.d2s.framework.util.accessor.ICollectionAccessor;
 
 /**
  * An action used in master/detail views to create and add a new detail to a

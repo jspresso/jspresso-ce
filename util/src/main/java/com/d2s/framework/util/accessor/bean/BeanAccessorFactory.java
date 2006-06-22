@@ -1,13 +1,14 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.util.bean;
+package com.d2s.framework.util.accessor.bean;
 
 import java.util.List;
 
-import com.d2s.framework.util.access.IAccessor;
-import com.d2s.framework.util.access.IAccessorFactory;
-import com.d2s.framework.util.access.ICollectionAccessor;
+import com.d2s.framework.util.accessor.IAccessor;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.accessor.ICollectionAccessor;
+import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * This is the default implementation of the accessor factory.
