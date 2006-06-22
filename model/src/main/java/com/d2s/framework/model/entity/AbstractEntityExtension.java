@@ -3,6 +3,11 @@
  */
 package com.d2s.framework.model.entity;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
+
 /**
  * This abstract class is a helper base class for entity extensions. Developpers
  * should inherit from it and use the <code>getEntity()</code> to access the
@@ -45,5 +50,29 @@ public abstract class AbstractEntityExtension<T extends IEntity> implements
    */
   public String getType() {
     return getEntity().getContract().getName();
+  }
+
+  /**
+   * Registers a property change listener to forward property changes.
+   * 
+   * @param sourceBean
+   *          the source bean.
+   * @param sourceProperty
+   *          the name of the source property.
+   * @param forwardedProperty
+   *          the name of the forwarded property.
+   */
+  protected void registerNotificationForwarding(
+      IPropertyChangeCapable sourceBean, String sourceProperty,
+      final String forwardedProperty) {
+    sourceBean.addPropertyChangeListener(sourceProperty,
+        new PropertyChangeListener() {
+
+          public void propertyChange(@SuppressWarnings("unused")
+          PropertyChangeEvent evt) {
+            getEntity().firePropertyChange(forwardedProperty,
+                evt.getOldValue(), evt.getNewValue());
+          }
+        });
   }
 }
