@@ -7,7 +7,6 @@ import java.util.Collection;
 
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
-import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * Default implementation for BeanConnectors factory.
@@ -53,10 +52,7 @@ public class DefaultBeanConnectorFactory implements IBeanConnectorFactory {
    * <p>
    * {@inheritDoc}
    */
-  public BeanPropertyConnector createBeanPropertyConnector(String property,
-      Class beanClass) {
-
-    Class propertyType = getPropertyType(beanClass, property);
+  public BeanPropertyConnector createBeanPropertyConnector(String property, Class propertyType) {
 
     if (IPropertyChangeCapable.class.isAssignableFrom(propertyType)) {
       return new BeanRefPropertyConnector(property, propertyType, this);
@@ -85,13 +81,5 @@ public class DefaultBeanConnectorFactory implements IBeanConnectorFactory {
    */
   public IAccessorFactory getAccessorFactory() {
     return accessorFactory;
-  }
-
-  private Class getPropertyType(Class beanClass, String property) {
-    try {
-      return PropertyHelper.getPropertyType(beanClass, property);
-    } catch (RuntimeException e) {
-      throw e;
-    }
   }
 }

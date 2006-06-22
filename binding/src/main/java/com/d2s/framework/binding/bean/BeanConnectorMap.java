@@ -5,6 +5,7 @@ package com.d2s.framework.binding.bean;
 
 import com.d2s.framework.binding.ConnectorMap;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * Serves as an auto-generating ConnectorMap for beans. It may be used to hold a
@@ -62,8 +63,9 @@ public class BeanConnectorMap extends ConnectorMap {
     BeanPropertyConnector connector = (BeanPropertyConnector) super
         .getConnector(connectorId);
     if (connector == null) {
+      Class propertyType = PropertyHelper.getPropertyType(getParentConnector().getBeanClass(), connectorId);
       connector = beanConnectorFactory.createBeanPropertyConnector(connectorId,
-          getParentConnector().getBeanClass());
+          propertyType);
       super.addConnector(connector.getId(), connector);
     }
     return connector;

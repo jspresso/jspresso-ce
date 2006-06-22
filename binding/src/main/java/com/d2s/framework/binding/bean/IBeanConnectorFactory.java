@@ -47,12 +47,12 @@ public interface IBeanConnectorFactory {
    * 
    * @param property
    *          the java bean property the connector will listen to.
-   * @param beanClass
-   *          the bean class this connector is used for.
+   * @param propertyType
+   *          the type of the property this connector is used for.
    * @return the created java bean connector.
    */
   BeanPropertyConnector createBeanPropertyConnector(String property,
-      Class beanClass);
+      Class propertyType);
 
   /**
    * Gets the <code>IAccessorFactory</code> used.
