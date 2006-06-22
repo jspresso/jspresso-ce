@@ -18,8 +18,8 @@ import com.d2s.framework.application.backend.session.basic.BasicApplicationSessi
 import com.d2s.framework.application.model.Module;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.bean.BeanConnector;
-import com.d2s.framework.binding.bean.IBeanConnectorFactory;
+import com.d2s.framework.binding.model.IModelConnectorFactory;
+import com.d2s.framework.binding.model.ModelConnector;
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
@@ -44,7 +44,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   private IAccessorFactory                      accessorFactory;
   private IEntityFactory                        entityFactory;
-  private IBeanConnectorFactory                 beanConnectorFactory;
+  private IModelConnectorFactory                beanConnectorFactory;
   private Map<String, ICompositeValueConnector> moduleConnectors;
   private IApplicationSession                   applicationSession;
 
@@ -113,7 +113,7 @@ public abstract class AbstractBackendController extends AbstractController
    * @param beanConnectorFactory
    *          the beanConnectorFactory to set.
    */
-  public void setBeanConnectorFactory(IBeanConnectorFactory beanConnectorFactory) {
+  public void setBeanConnectorFactory(IModelConnectorFactory beanConnectorFactory) {
     this.beanConnectorFactory = beanConnectorFactory;
   }
 
@@ -146,8 +146,8 @@ public abstract class AbstractBackendController extends AbstractController
   public void setModules(Map<String, Module> modules) {
     moduleConnectors = new HashMap<String, ICompositeValueConnector>();
     for (Map.Entry<String, Module> moduleEntry : modules.entrySet()) {
-      BeanConnector nextModuleConnector = beanConnectorFactory
-          .createBeanConnector(moduleEntry.getKey(), Module.class);
+      ModelConnector nextModuleConnector = beanConnectorFactory
+          .createModelConnector(moduleEntry.getKey(), Module.class);
       nextModuleConnector.setConnectorValue(moduleEntry.getValue());
       moduleConnectors.put(moduleEntry.getKey(), nextModuleConnector);
     }
@@ -158,11 +158,11 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
     if (modelDescriptor instanceof ICollectionDescriptor) {
-      return beanConnectorFactory.createBeanCollectionConnector(modelDescriptor
+      return beanConnectorFactory.createModelCollectionConnector(modelDescriptor
           .getName(), ((ICollectionDescriptor) modelDescriptor)
           .getElementDescriptor().getComponentContract());
     } else if (modelDescriptor instanceof IComponentDescriptor) {
-      return beanConnectorFactory.createBeanConnector(
+      return beanConnectorFactory.createModelConnector(
           modelDescriptor.getName(), ((IComponentDescriptor) modelDescriptor)
               .getComponentContract());
     }
@@ -208,7 +208,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IBeanConnectorFactory getBeanConnectorFactory() {
+  public IModelConnectorFactory getBeanConnectorFactory() {
     return beanConnectorFactory;
   }
 

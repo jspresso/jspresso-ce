@@ -9,7 +9,7 @@ package com.d2s.framework.binding;
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
  * 
- * @see com.d2s.framework.binding.bean.BeanCollectionPropertyConnector
+ * @see com.d2s.framework.binding.model.ModelCollectionPropertyConnector
  * @see com.d2s.framework.binding.AbstractCollectionConnector
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick

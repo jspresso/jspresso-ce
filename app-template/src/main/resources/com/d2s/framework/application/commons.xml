@@ -45,7 +45,7 @@
 	<!--
 		The implementation used as BeanConnectorFactory.
 	-->
-	<bean id="beanConnectorFactory" class="com.d2s.framework.binding.bean.DefaultBeanConnectorFactory">
+	<bean id="beanConnectorFactory" class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
 		<property name="accessorFactory" ref="beanAccessorFactory" />
 	</bean>
 

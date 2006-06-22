@@ -5,6 +5,7 @@ package com.d2s.framework.binding.model;
 
 import com.d2s.framework.binding.ConnectorMap;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * Serves as an auto-generating ConnectorMap for maps. It may be used to hold a
@@ -63,7 +64,8 @@ public class ModelConnectorMap extends ConnectorMap {
         .getConnector(connectorId);
     if (connector == null) {
       connector = mapConnectorFactory.createModelPropertyConnector(connectorId,
-          getParentConnector().getModelClass());
+          PropertyHelper.getPropertyType(getParentConnector().getModelClass(),
+              connectorId));
       super.addConnector(connector.getId(), connector);
     }
     return connector;

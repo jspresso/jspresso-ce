@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.binding.model;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 
 import com.d2s.framework.binding.ChildConnectorSupport;
@@ -66,8 +67,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * Returns the child connectors of this <code>ModelRefPropertyConnector</code>
    * instance. This is the lazilly created map of
-   * <code>ModelPropertyConnector</code> s connected to the model properties of
-   * the referenced model.
+   * <code>ModelPropertyConnector</code> s connected to the model properties
+   * of the referenced model.
    * <p>
    * {@inheritDoc}
    */
@@ -116,19 +117,18 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     }
   }
 
-  // TODO complete bean connector
-  // /**
-  // * The referenced model of this <code>ModelRefPropertyConnector</code>
-  // * changed. It will notify its <code>IModelChangeListener</code> s (i.e. the
-  // * child property connectors) of the change.
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public void propertyChange(PropertyChangeEvent evt) {
-  // super.propertyChange(evt);
-  // fireModelChange(evt.getOldValue(), evt.getNewValue());
-  // }
+  /**
+   * The referenced model of this <code>ModelRefPropertyConnector</code>
+   * changed. It will notify its <code>IModelChangeListener</code> s (i.e. the
+   * child property connectors) of the change.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    super.propertyChange(evt);
+    fireModelChange(evt.getOldValue(), evt.getNewValue());
+  }
 
   /**
    * After having performed the standard (super implementation) handling of the

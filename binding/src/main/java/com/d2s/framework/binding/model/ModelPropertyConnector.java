@@ -3,15 +3,19 @@
  */
 package com.d2s.framework.binding.model;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
 import org.apache.commons.lang.ObjectUtils;
 
 import com.d2s.framework.binding.AbstractValueConnector;
 import com.d2s.framework.binding.ConnectorBindingException;
+import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.util.model.IModelChangeListener;
 import com.d2s.framework.util.model.IModelProvider;
 import com.d2s.framework.util.model.ModelChangeEvent;
@@ -26,7 +30,7 @@ import com.d2s.framework.util.model.ModelChangeEvent;
  * @author Vincent Vandenschrick
  */
 public abstract class ModelPropertyConnector extends AbstractValueConnector
-    implements IModelChangeListener {
+    implements IModelChangeListener, PropertyChangeListener {
 
   private IAccessor        accessor;
   private IAccessorFactory accessorFactory;
@@ -70,13 +74,14 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
       getModelProvider().addModelChangeListener(this);
       newModel = getModelProvider().getModel();
     }
-    // TODO complete bean connector with line below
-    // if (oldModel != null) {
-    // oldModel.removePropertyChangeListener(getId(), this);
-    // }
-    // if (newModel != null) {
-    // newModel.addPropertyChangeListener(getId(), this);
-    // }
+    if (oldModel != null && oldModel instanceof IPropertyChangeCapable) {
+      ((IPropertyChangeCapable) oldModel).removePropertyChangeListener(getId(),
+          this);
+    }
+    if (newModel != null && newModel instanceof IPropertyChangeCapable) {
+      ((IPropertyChangeCapable) newModel).addPropertyChangeListener(getId(),
+          this);
+    }
 
     // line below is mainly used to initialize oldConnectorValue (the model
     // property connector is not used as model yet since it is just being linked
@@ -152,16 +157,19 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * {@inheritDoc}
    */
   public void modelChange(ModelChangeEvent evt) {
-    
-    //TODO complete bean connector
-    // if (!(getParentConnector() instanceof ICollectionConnector)) {
-    // if (evt.getOldValue() != null) {
-    // evt.getOldValue().removePropertyChangeListener(getId(), this);
-    // }
-    // if (evt.getNewValue() != null) {
-    // evt.getNewValue().addPropertyChangeListener(getId(), this);
-    // }
-    // }
+
+    if (!(getParentConnector() instanceof ICollectionConnector)) {
+      if (evt.getOldValue() != null
+          && evt.getOldValue() instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) evt.getOldValue())
+            .removePropertyChangeListener(getId(), this);
+      }
+      if (evt.getNewValue() != null
+          && evt.getOldValue() instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) evt.getNewValue()).addPropertyChangeListener(
+            getId(), this);
+      }
+    }
 
     boolean oldWritability;
     boolean newWritability;
@@ -186,11 +194,10 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * <p>
    * {@inheritDoc}
    */
-  //TODO complete bean connector
-//  public void propertyChange(@SuppressWarnings("unused")
-//  PropertyChangeEvent evt) {
-//    fireConnectorValueChange();
-//  }
+  public void propertyChange(@SuppressWarnings("unused")
+  PropertyChangeEvent evt) {
+    fireConnectorValueChange();
+  }
 
   /**
    * Gets the modelProvider.

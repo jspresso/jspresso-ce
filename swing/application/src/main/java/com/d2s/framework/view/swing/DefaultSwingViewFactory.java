@@ -81,8 +81,8 @@ import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.bean.BeanRefPropertyConnector;
 import com.d2s.framework.binding.masterdetail.IMasterDetailBinder;
+import com.d2s.framework.binding.model.ModelRefPropertyConnector;
 import com.d2s.framework.binding.swing.CollectionConnectorListModel;
 import com.d2s.framework.binding.swing.CollectionConnectorTableModel;
 import com.d2s.framework.binding.swing.ConnectorHierarchyTreeModel;
@@ -373,7 +373,7 @@ public class DefaultSwingViewFactory implements
         if (detailView.getConnector() instanceof ICollectionConnector) {
           IConfigurableCollectionConnectorProvider wrapper = connectorFactory
               .createConfigurableCollectionConnectorProvider(
-                  BeanRefPropertyConnector.THIS_PROPERTY, null);
+                  ModelRefPropertyConnector.THIS_PROPERTY, null);
           wrapper.addChildConnector(detailView.getConnector());
           wrapper
               .setCollectionConnectorProvider((ICollectionConnector) detailView
@@ -388,7 +388,7 @@ public class DefaultSwingViewFactory implements
     } else {
       ICompositeValueConnector connector = connectorFactory
           .createCompositeValueConnector(
-              BeanRefPropertyConnector.THIS_PROPERTY, null);
+              ModelRefPropertyConnector.THIS_PROPERTY, null);
       view.setConnector(connector);
       for (IView<JComponent> childView : view.getChildren()) {
         childView.setParent(view);
@@ -701,7 +701,7 @@ public class DefaultSwingViewFactory implements
     if (rootDescriptor instanceof ICompositeTreeLevelDescriptor) {
       IConfigurableCollectionConnectorListProvider compositeConnector = connectorFactory
           .createConfigurableCollectionConnectorListProvider(
-              BeanRefPropertyConnector.THIS_PROPERTY,
+              ModelRefPropertyConnector.THIS_PROPERTY,
               ((ICompositeTreeLevelDescriptor) rootDescriptor)
                   .getNodeGroupDescriptor().getRenderedProperty());
       List<ICollectionConnectorProvider> subtreeConnectors = new ArrayList<ICollectionConnectorProvider>();
@@ -720,7 +720,7 @@ public class DefaultSwingViewFactory implements
     } else if (rootDescriptor instanceof ISimpleTreeLevelDescriptor) {
       IConfigurableCollectionConnectorProvider simpleConnector = connectorFactory
           .createConfigurableCollectionConnectorProvider(
-              BeanRefPropertyConnector.THIS_PROPERTY,
+              ModelRefPropertyConnector.THIS_PROPERTY,
               ((ISimpleTreeLevelDescriptor) rootDescriptor)
                   .getNodeGroupDescriptor().getRenderedProperty());
       if (((ISimpleTreeLevelDescriptor) rootDescriptor).getChildDescriptor() != null) {
@@ -1366,7 +1366,7 @@ public class DefaultSwingViewFactory implements
   private String getConnectorIdForComponentView(
       IComponentViewDescriptor viewDescriptor) {
     if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
-      return BeanRefPropertyConnector.THIS_PROPERTY;
+      return ModelRefPropertyConnector.THIS_PROPERTY;
     }
     return viewDescriptor.getModelDescriptor().getName();
   }

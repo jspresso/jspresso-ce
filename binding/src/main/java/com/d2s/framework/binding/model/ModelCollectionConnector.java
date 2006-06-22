@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.binding.model;
 
+import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 
 /**
@@ -52,10 +53,9 @@ public class ModelCollectionConnector extends ModelCollectionPropertyConnector {
   @Override
   protected void setConnecteeValue(@SuppressWarnings("unused")
   Object aValue) {
-    // TODO complete bean connector.
-    // Collection oldValue = connecteeValue;
-    // connecteeValue = (Collection) aValue;
-    // propertyChange(new PropertyChangeEvent(this, "connecteeValue",
-    // computeOldConnectorValue(oldValue), connecteeValue));
+    Collection oldValue = connecteeValue;
+    connecteeValue = (Collection) aValue;
+    propertyChange(new PropertyChangeEvent(this, "connecteeValue",
+        computeOldConnectorValue(oldValue), connecteeValue));
   }
 }

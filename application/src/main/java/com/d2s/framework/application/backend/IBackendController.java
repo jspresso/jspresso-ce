@@ -9,7 +9,7 @@ import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.bean.IBeanConnectorFactory;
+import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.util.accessor.IAccessorFactory;
@@ -85,6 +85,6 @@ public interface IBackendController extends IController {
    * 
    * @return the beanConnectorFactory for this backend controller.
    */
-  IBeanConnectorFactory getBeanConnectorFactory();
+  IModelConnectorFactory getBeanConnectorFactory();
 
 }

@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.binding.model;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
 import java.util.Collections;
@@ -106,19 +107,18 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
         getElementClass());
   }
 
-  // TODO complete bean connector
-  // /**
-  // * Before invoking the super implementation which fires the
-  // * <code>ConnectorValueChangeEvent</code>, this implementation reconstructs
-  // * the child connectors based on the retrieved collection.
-  // * <p>
-  // * {@inheritDoc}
-  // */
-  // @Override
-  // public void propertyChange(PropertyChangeEvent evt) {
-  // needsChildrenUpdate = true;
-  // super.propertyChange(evt);
-  // }
+  /**
+   * Before invoking the super implementation which fires the
+   * <code>ConnectorValueChangeEvent</code>, this implementation reconstructs
+   * the child connectors based on the retrieved collection.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    needsChildrenUpdate = true;
+    super.propertyChange(evt);
+  }
 
   /**
    * Before invoking the super implementation which handles the

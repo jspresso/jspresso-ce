@@ -12,7 +12,7 @@ import com.d2s.framework.application.frontend.action.swing.std.DialogOkAction;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.binding.bean.BeanRefPropertyConnector;
+import com.d2s.framework.binding.model.ModelRefPropertyConnector;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -33,7 +33,7 @@ public class OkLovAction extends DialogOkAction {
   @Override
   public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector resultConnector = ((ICollectionConnectorProvider) ((ICompositeValueConnector) getViewConnector(context))
-        .getChildConnector(BeanRefPropertyConnector.THIS_PROPERTY))
+        .getChildConnector(ModelRefPropertyConnector.THIS_PROPERTY))
         .getCollectionConnector();
     int[] resultSelectedIndices = resultConnector.getSelectedIndices();
     if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
