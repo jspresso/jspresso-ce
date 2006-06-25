@@ -39,8 +39,8 @@ public class ConnectorMap implements IConnectorMap {
   public void addConnector(String storageKey, IValueConnector connector) {
     if (storageKey != null && connector != null) {
       getStorageMap().put(storageKey, connector);
+      connector.setParentConnector(parentConnector);
     }
-    connector.setParentConnector(parentConnector);
   }
 
   /**

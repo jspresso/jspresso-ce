@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.d2s.framework.application.model.Module;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
@@ -24,12 +25,18 @@ import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ModuleDescriptor extends BasicComponentDescriptor {
+public final class ModuleDescriptor extends BasicComponentDescriptor {
+
+  /**
+   * <code>MODULE_DESCRIPTOR</code> is a unique reference to the model
+   * descriptor of modules.
+   */
+  public static final IComponentDescriptor MODULE_DESCRIPTOR = new ModuleDescriptor();
 
   /**
    * Constructs a new <code>ModuleDescriptor</code> instance.
    */
-  public ModuleDescriptor() {
+  private ModuleDescriptor() {
 
     super(Module.class.getName());
 

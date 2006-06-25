@@ -11,6 +11,7 @@ import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
+import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
 import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
@@ -76,7 +77,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     BasicCollectionPropertyDescriptor queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor();
     queriedEntitiesDescriptor
         .setReferencedDescriptor(queriedEntitiesListDescriptor);
-    queriedEntitiesDescriptor.setName("queriedEntities");
+    queriedEntitiesDescriptor.setName(IQueryEntity.QUERIED_ENTITIES);
 
     resultViewDescriptor.setName("queriedEntities.table");
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);

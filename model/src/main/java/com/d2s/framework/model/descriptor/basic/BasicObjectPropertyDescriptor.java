@@ -22,7 +22,7 @@ public class BasicObjectPropertyDescriptor extends
    * <p>
    * {@inheritDoc}
    */
-  public Class getPropertyClass() {
+  public Class getModelType() {
     return Object.class;
   }
 

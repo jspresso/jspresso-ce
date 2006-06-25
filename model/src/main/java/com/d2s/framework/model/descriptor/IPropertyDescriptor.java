@@ -53,13 +53,6 @@ public interface IPropertyDescriptor extends IModelDescriptor {
   String getDelegateClassName();
 
   /**
-   * Gets the class of this property.
-   * 
-   * @return the property class.
-   */
-  Class getPropertyClass();
-
-  /**
    * Gets the scope on which the property is unique.
    * 
    * @return the unicity scope.

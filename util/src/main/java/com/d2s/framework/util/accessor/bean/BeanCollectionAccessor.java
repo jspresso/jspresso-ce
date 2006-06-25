@@ -21,11 +21,12 @@ import com.d2s.framework.util.bean.AccessorInfo;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BeanCollectionAccessor extends BeanPropertyAccessor
-    implements ICollectionAccessor {
+public class BeanCollectionAccessor extends BeanPropertyAccessor implements
+    ICollectionAccessor {
 
   private Method adderMethod;
   private Method removerMethod;
+  private Class  elementClass;
 
   /**
    * Constructs a new default java bean collection property accessor.
@@ -34,9 +35,13 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor
    *          the property to be accessed.
    * @param beanClass
    *          the java bean class.
+   * @param elementClass
+   *          the collection element class.
    */
-  public BeanCollectionAccessor(String property, Class beanClass) {
+  public BeanCollectionAccessor(String property, Class beanClass,
+      Class elementClass) {
     super(property, beanClass);
+    this.elementClass = elementClass;
   }
 
   /**
@@ -47,8 +52,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor
     if (adderMethod == null) {
       adderMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {AccessorInfo.getCollectionElementClass(getBeanClass(),
-              getProperty())});
+          new Class[] {getElementClass()});
     }
     adderMethod.invoke(target, new Object[] {value});
   }
@@ -61,8 +65,7 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor
     if (removerMethod == null) {
       removerMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.REMOVER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {AccessorInfo.getCollectionElementClass(getBeanClass(),
-              getProperty())});
+          new Class[] {getElementClass()});
     }
     removerMethod.invoke(target, new Object[] {value});
   }
@@ -85,6 +88,15 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor
   public Collection getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException {
     return (Collection) super.getValue(target);
+  }
+
+  /**
+   * Gets the elementClass.
+   * 
+   * @return the elementClass.
+   */
+  protected Class getElementClass() {
+    return elementClass;
   }
 
 }

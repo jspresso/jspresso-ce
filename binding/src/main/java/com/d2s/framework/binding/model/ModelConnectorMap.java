@@ -5,7 +5,7 @@ package com.d2s.framework.binding.model;
 
 import com.d2s.framework.binding.ConnectorMap;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.util.bean.PropertyHelper;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 
 /**
  * Serves as an auto-generating ConnectorMap for maps. It may be used to hold a
@@ -19,20 +19,20 @@ import com.d2s.framework.util.bean.PropertyHelper;
  */
 public class ModelConnectorMap extends ConnectorMap {
 
-  private IModelConnectorFactory mapConnectorFactory;
+  private IModelConnectorFactory modelConnectorFactory;
 
   /**
    * Constructs a new instance based on the model class passed as parameter.
    * 
    * @param parentConnector
    *          the model connector holding the connector map.
-   * @param mapConnectorFactory
+   * @param modelConnectorFactory
    *          the factory used to create the model connectors.
    */
   ModelConnectorMap(ModelRefPropertyConnector parentConnector,
-      IModelConnectorFactory mapConnectorFactory) {
+      IModelConnectorFactory modelConnectorFactory) {
     super(parentConnector);
-    this.mapConnectorFactory = mapConnectorFactory;
+    this.modelConnectorFactory = modelConnectorFactory;
   }
 
   /**
@@ -63,10 +63,12 @@ public class ModelConnectorMap extends ConnectorMap {
     ModelPropertyConnector connector = (ModelPropertyConnector) super
         .getConnector(connectorId);
     if (connector == null) {
-      connector = mapConnectorFactory.createModelPropertyConnector(connectorId,
-          PropertyHelper.getPropertyType(getParentConnector().getModelClass(),
-              connectorId));
-      super.addConnector(connector.getId(), connector);
+      IComponentDescriptor componentDescriptor = getParentConnector()
+          .getModelDescriptor().getComponentDescriptor();
+      connector = (ModelPropertyConnector) modelConnectorFactory
+          .createModelConnector(componentDescriptor
+              .getPropertyDescriptor(connectorId));
+      super.addConnector(connectorId, connector);
     }
     return connector;
   }

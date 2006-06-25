@@ -33,9 +33,11 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
    *          the property to be accessed.
    * @param beanClass
    *          the java bean class.
+   * @param elementClass
+   *          the collection element class.
    */
-  public BeanListAccessor(String property, Class beanClass) {
-    super(property, beanClass);
+  public BeanListAccessor(String property, Class beanClass, Class elementClass) {
+    super(property, beanClass, elementClass);
   }
 
   /**
@@ -46,10 +48,7 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
     if (adderAtMethod == null) {
       adderAtMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {
-              Integer.TYPE,
-              AccessorInfo.getCollectionElementClass(getBeanClass(),
-                  getProperty())});
+          new Class[] {getElementClass()});
     }
     adderAtMethod.invoke(target, new Object[] {new Integer(index), value});
   }

@@ -7,7 +7,6 @@ import java.util.Locale;
 
 import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
-import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
@@ -46,7 +45,7 @@ public interface IBackendController extends IController {
    *          the modulen identifier.
    * @return the associated module connector.
    */
-  ICompositeValueConnector getModuleConnector(String moduleId);
+  IValueConnector getModuleConnector(String moduleId);
 
   /**
    * Creates a model connector out of a model descriptor. It should be either a

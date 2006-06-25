@@ -6,9 +6,9 @@ package com.d2s.framework.model.entity;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 
 /**
  * Does a "carbon" copy of the entity including its id and version. This factory
@@ -32,13 +32,13 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
         .getContract(), (Serializable) entityToClone
         .straightGetProperty(IEntity.ID));
 
-    IEntityDescriptor entityDescriptor = entityFactory
-        .getEntityDescriptor(entityToClone.getContract());
+    IComponentDescriptor componentDescriptor = entityFactory
+        .getComponentDescriptor(entityToClone.getContract());
 
     for (Map.Entry<String, Object> propertyEntry : entityToClone
         .straightGetProperties().entrySet()) {
       if (propertyEntry.getValue() != null) {
-        IPropertyDescriptor propertyDescriptor = entityDescriptor
+        IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(propertyEntry.getKey());
         if (!(propertyDescriptor instanceof IRelationshipEndPropertyDescriptor)) {
           clonedEntity.straightSetProperty(propertyEntry.getKey(),

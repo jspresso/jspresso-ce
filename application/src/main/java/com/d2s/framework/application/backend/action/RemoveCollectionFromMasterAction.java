@@ -13,14 +13,13 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityDescriptorRegistry;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.util.accessor.IAccessorFactory;
-import com.d2s.framework.util.accessor.ICollectionAccessor;
 
 /**
  * An action used in master/detail views to remove selected details from a
@@ -74,7 +73,7 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
    * 
    * @param entity
    *          the deleted entity.
-   * @param entityDescriptorRegistry
+   * @param componentDescriptorRegistry
    *          the entity descriptor registry.
    * @param accessorFactory
    *          the accessor factory.
@@ -89,12 +88,12 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
    */
   @SuppressWarnings("unchecked")
   public static void cleanRelationshipsOnDeletion(IEntity entity,
-      IEntityDescriptorRegistry entityDescriptorRegistry,
+      IComponentDescriptorRegistry componentDescriptorRegistry,
       IAccessorFactory accessorFactory, IApplicationSession applicationSession)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    IEntityDescriptor entityDescriptor = entityDescriptorRegistry
-        .getEntityDescriptor(entity.getContract());
+    IComponentDescriptor entityDescriptor = componentDescriptorRegistry
+        .getComponentDescriptor(entity.getContract());
     for (Map.Entry<String, Object> property : entity.straightGetProperties()
         .entrySet()) {
       if (property.getValue() != null) {
@@ -111,13 +110,11 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
             for (IEntity composedEntity : new ArrayList<IEntity>(
                 (Collection<IEntity>) property.getValue())) {
               cleanRelationshipsOnDeletion(composedEntity,
-                  entityDescriptorRegistry, accessorFactory, applicationSession);
+                  componentDescriptorRegistry, accessorFactory, applicationSession);
             }
           } else {
-            ICollectionAccessor collectionAccessor = accessorFactory
-                .createCollectionPropertyAccessor(property.getKey(), entity
-                    .getContract());
-            collectionAccessor.setValue(entity, null);
+            accessorFactory.createPropertyAccessor(property.getKey(),
+                entity.getContract()).setValue(entity, null);
           }
         }
       }

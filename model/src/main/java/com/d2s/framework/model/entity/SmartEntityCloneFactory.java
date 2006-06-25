@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
 
@@ -27,7 +27,7 @@ import com.d2s.framework.util.accessor.ICollectionAccessor;
  * @author Vincent Vandenschrick
  */
 public class SmartEntityCloneFactory implements IEntityCloneFactory {
-  
+
   private IAccessorFactory accessorFactory;
 
   /**
@@ -39,17 +39,17 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
     E clonedEntity = (E) entityFactory.createEntityInstance(entityToClone
         .getContract());
 
-    IEntityDescriptor entityDescriptor = entityFactory
-        .getEntityDescriptor(entityToClone.getContract());
+    IComponentDescriptor componentDescriptor = entityFactory
+        .getComponentDescriptor(entityToClone.getContract());
 
     Map<Object, ICollectionPropertyDescriptor> collRelToUpdate = new HashMap<Object, ICollectionPropertyDescriptor>();
     for (Map.Entry<String, Object> propertyEntry : entityToClone
         .straightGetProperties().entrySet()) {
       if (propertyEntry.getValue() != null
           && !(IEntity.ID.equals(propertyEntry.getKey())
-              || IEntity.VERSION.equals(propertyEntry.getKey()) || entityDescriptor
+              || IEntity.VERSION.equals(propertyEntry.getKey()) || componentDescriptor
               .getUnclonedProperties().contains(propertyEntry.getKey()))) {
-        IPropertyDescriptor propertyDescriptor = entityDescriptor
+        IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(propertyEntry.getKey());
         if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
           IRelationshipEndPropertyDescriptor reverseDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
@@ -98,7 +98,7 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
       }
       ICollectionAccessor collectionAccessor = accessorFactory
           .createCollectionPropertyAccessor(collectionDescriptor.getName(),
-              masterContract);
+              masterContract, clonedEntity.getContract());
       try {
         collectionAccessor.addToValue(collectionEntry.getKey(), clonedEntity);
       } catch (IllegalAccessException ex) {
@@ -111,7 +111,7 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
     }
     return clonedEntity;
   }
-  
+
   /**
    * Wether the object is fully initialized.
    * 
@@ -124,14 +124,14 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
     return true;
   }
 
-  
   /**
    * Sets the accessorFactory.
    * 
-   * @param accessorFactory the accessorFactory to set.
+   * @param accessorFactory
+   *          the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
   }
-  
+
 }

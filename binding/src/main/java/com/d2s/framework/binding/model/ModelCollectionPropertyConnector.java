@@ -11,14 +11,14 @@ import java.util.List;
 
 import com.d2s.framework.binding.ChildConnectorSupport;
 import com.d2s.framework.binding.CollectionConnectorHelper;
-import com.d2s.framework.binding.ConnectorBindingException;
 import com.d2s.framework.binding.ConnectorMap;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.IConnectorMap;
 import com.d2s.framework.binding.IConnectorMapProvider;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.util.bean.AccessorInfo;
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.util.collection.CollectionHelper;
 import com.d2s.framework.util.event.ISelectionChangeListener;
 import com.d2s.framework.util.event.SelectionChangeEvent;
@@ -41,7 +41,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   private IModelConnectorFactory modelConnectorFactory;
   private SelectionChangeSupport selectionChangeSupport;
   private ChildConnectorSupport  childConnectorSupport;
-  private Class                  elementClass;
 
   private boolean                needsChildrenUpdate;
 
@@ -50,15 +49,15 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * This constructor does not specify the element class of this collection
    * connector. It must be setted afterwards using the apropriate setter.
    * 
-   * @param property
-   *          the property mapped by this connector. This property is also the
-   *          connector id.
+   * @param modelDescriptor
+   *          the model descriptor backing this connector.
    * @param modelConnectorFactory
    *          the factory used to create the collection model connectors.
    */
-  public ModelCollectionPropertyConnector(String property,
+  public ModelCollectionPropertyConnector(
+      ICollectionDescriptorProvider modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
-    super(property, modelConnectorFactory.getAccessorFactory());
+    super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
     childConnectors = new ConnectorMap(this);
     childConnectorSupport = new ChildConnectorSupport(this);
@@ -103,8 +102,13 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * {@inheritDoc}
    */
   public IValueConnector createChildConnector(String connectorId) {
-    return modelConnectorFactory.createModelConnector(connectorId,
-        getElementClass());
+    IComponentDescriptor componentDescriptor;
+    componentDescriptor = ((ICollectionDescriptorProvider) getModelDescriptor())
+        .getCollectionDescriptor().getElementDescriptor();
+    IValueConnector elementConnector = modelConnectorFactory
+        .createModelConnector(componentDescriptor);
+    elementConnector.setId(connectorId);
+    return elementConnector;
   }
 
   /**
@@ -160,10 +164,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     needsChildrenUpdate = false;
     int modelCollectionSize = 0;
     if (modelCollection != null && modelCollection.size() > 0) {
-      if (getElementClass() == null) {
-        throw new ConnectorBindingException(
-            "elementClass must be set on ModelCollectionPropertyConnector before it can be used.");
-      }
       modelCollectionSize = modelCollection.size();
       int i = 0;
 
@@ -307,24 +307,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    */
   public List<ICollectionConnector> getCollectionConnectors() {
     return Collections.singletonList((ICollectionConnector) this);
-  }
-
-  private Class getElementClass() {
-    if (elementClass == null) {
-      elementClass = AccessorInfo.getCollectionElementClass(getModelProvider()
-          .getModelClass(), getId());
-    }
-    return elementClass;
-  }
-
-  /**
-   * Sets the elementClass.
-   * 
-   * @param elementClass
-   *          the elementClass to set.
-   */
-  protected void setElementClass(Class elementClass) {
-    this.elementClass = elementClass;
   }
 
   /**

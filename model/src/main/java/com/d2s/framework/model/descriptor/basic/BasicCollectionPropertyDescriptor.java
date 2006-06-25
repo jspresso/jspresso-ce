@@ -54,7 +54,7 @@ public class BasicCollectionPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getPropertyClass() {
+  public Class getModelType() {
     return getReferencedDescriptor().getCollectionInterface();
   }
 

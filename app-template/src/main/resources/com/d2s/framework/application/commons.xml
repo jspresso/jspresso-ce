@@ -43,10 +43,11 @@
 	<bean id="entityExtensionFactory" class="com.d2s.framework.model.entity.DefaultEntityExtensionFactory"></bean>
 
 	<!--
-		The implementation used as BeanConnectorFactory.
+		The implementation used as ModelConnectorFactory.
 	-->
 	<bean id="beanConnectorFactory" class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
 		<property name="accessorFactory" ref="beanAccessorFactory" />
+		<property name="descriptorRegistry" ref="entityDescriptorRegistry" />
 	</bean>
 
 	<!--
@@ -85,7 +86,7 @@
 	<!--
 		The implementation used as EntityDescriptorRegistry.
 	-->
-	<bean id="entityDescriptorRegistry" class="com.d2s.framework.model.entity.basic.BasicEntityDescriptorRegistry" />
+	<bean id="entityDescriptorRegistry" class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
 	<!--
 		The implementation used as EntityFactory.

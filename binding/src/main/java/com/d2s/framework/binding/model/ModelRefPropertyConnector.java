@@ -11,6 +11,9 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorMap;
 import com.d2s.framework.binding.IConnectorMapProvider;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.util.model.IModelChangeListener;
 import com.d2s.framework.util.model.IModelProvider;
 import com.d2s.framework.util.model.ModelChangeEvent;
@@ -31,7 +34,6 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     ICompositeValueConnector, IConnectorMapProvider, IModelProvider {
 
   private IModelConnectorFactory modelConnectorFactory;
-  private Class                  modelClass;
   private ModelChangeSupport     modelChangeSupport;
   private IConnectorMap          childConnectors;
   private ChildConnectorSupport  childConnectorSupport;
@@ -45,19 +47,14 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * Constructs a new model property connector on a model reference property.
    * 
-   * @param property
-   *          the property mapped by this connector. This property is also the
-   *          connector id.
-   * @param modelClass
-   *          the model class on which all the contained model connectors will
-   *          act.
+   * @param modelDescriptor
+   *          the model descriptor backing this connector.
    * @param modelConnectorFactory
    *          the factory used to create the property connectors.
    */
-  ModelRefPropertyConnector(String property, Class modelClass,
+  ModelRefPropertyConnector(IComponentDescriptorProvider modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
-    super(property, modelConnectorFactory.getAccessorFactory());
-    this.modelClass = modelClass;
+    super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
     modelChangeSupport = new ModelChangeSupport(this);
     childConnectors = new ModelConnectorMap(this, modelConnectorFactory);
@@ -86,15 +83,6 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     if (listener != null) {
       modelChangeSupport.addModelChangeListener(listener);
     }
-  }
-
-  /**
-   * Returns the class (or superclass) of the referenced model.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Class getModelClass() {
-    return modelClass;
   }
 
   /**
@@ -221,4 +209,23 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     return true;
   }
 
+  /**
+   * Overriden to deal with polymorphism.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IComponentDescriptorProvider getModelDescriptor() {
+    IComponentDescriptorProvider registeredModelDescriptor = (IComponentDescriptorProvider) super
+        .getModelDescriptor();
+    if (getModel() instanceof IEntity && !(getModel() instanceof IQueryEntity)) {
+      Class entityContract = ((IEntity) getModel()).getContract();
+      if (!entityContract.equals(registeredModelDescriptor.getModelType())) {
+        // we must take care of subclasses (polymorphism)
+        return modelConnectorFactory.getDescriptorRegistry()
+            .getComponentDescriptor(entityContract);
+      }
+    }
+    return registeredModelDescriptor;
+  }
 }

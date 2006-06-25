@@ -16,5 +16,11 @@ import com.d2s.framework.util.descriptor.IDescriptor;
  * @author Vincent Vandenschrick
  */
 public interface IModelDescriptor extends IDescriptor {
-  // Empty as of now
+
+  /**
+   * Gets the type of the model.
+   * 
+   * @return the type of the model.
+   */
+  Class getModelType();
 }

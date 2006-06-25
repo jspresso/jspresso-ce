@@ -16,12 +16,9 @@ import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
-import com.d2s.framework.binding.model.ModelConnector;
-import com.d2s.framework.model.descriptor.ICollectionDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
@@ -42,11 +39,11 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
-  private IAccessorFactory                      accessorFactory;
-  private IEntityFactory                        entityFactory;
-  private IModelConnectorFactory                beanConnectorFactory;
-  private Map<String, ICompositeValueConnector> moduleConnectors;
-  private IApplicationSession                   applicationSession;
+  private IAccessorFactory             accessorFactory;
+  private IEntityFactory               entityFactory;
+  private IModelConnectorFactory       beanConnectorFactory;
+  private Map<String, IValueConnector> moduleConnectors;
+  private IApplicationSession          applicationSession;
 
   /**
    * Directly delegates execution to the action after having completed its
@@ -72,7 +69,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public boolean start(Locale locale) {
     applicationSession.setLocale(locale);
-    for (ICompositeValueConnector moduleConnector : moduleConnectors.values()) {
+    for (IValueConnector moduleConnector : moduleConnectors.values()) {
       translateModule((Module) moduleConnector.getConnectorValue());
     }
     return true;
@@ -113,7 +110,8 @@ public abstract class AbstractBackendController extends AbstractController
    * @param beanConnectorFactory
    *          the beanConnectorFactory to set.
    */
-  public void setBeanConnectorFactory(IModelConnectorFactory beanConnectorFactory) {
+  public void setBeanConnectorFactory(
+      IModelConnectorFactory beanConnectorFactory) {
     this.beanConnectorFactory = beanConnectorFactory;
   }
 
@@ -131,7 +129,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public ICompositeValueConnector getModuleConnector(String moduleId) {
+  public IValueConnector getModuleConnector(String moduleId) {
     return moduleConnectors.get(moduleId);
   }
 
@@ -144,10 +142,10 @@ public abstract class AbstractBackendController extends AbstractController
    *          bind them with their views.
    */
   public void setModules(Map<String, Module> modules) {
-    moduleConnectors = new HashMap<String, ICompositeValueConnector>();
+    moduleConnectors = new HashMap<String, IValueConnector>();
     for (Map.Entry<String, Module> moduleEntry : modules.entrySet()) {
-      ModelConnector nextModuleConnector = beanConnectorFactory
-          .createModelConnector(moduleEntry.getKey(), Module.class);
+      IValueConnector nextModuleConnector = beanConnectorFactory
+          .createModelConnector(ModuleDescriptor.MODULE_DESCRIPTOR);
       nextModuleConnector.setConnectorValue(moduleEntry.getValue());
       moduleConnectors.put(moduleEntry.getKey(), nextModuleConnector);
     }
@@ -157,16 +155,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
-    if (modelDescriptor instanceof ICollectionDescriptor) {
-      return beanConnectorFactory.createModelCollectionConnector(modelDescriptor
-          .getName(), ((ICollectionDescriptor) modelDescriptor)
-          .getElementDescriptor().getComponentContract());
-    } else if (modelDescriptor instanceof IComponentDescriptor) {
-      return beanConnectorFactory.createModelConnector(
-          modelDescriptor.getName(), ((IComponentDescriptor) modelDescriptor)
-              .getComponentContract());
-    }
-    return null;
+    return beanConnectorFactory.createModelConnector(modelDescriptor);
   }
 
   /**

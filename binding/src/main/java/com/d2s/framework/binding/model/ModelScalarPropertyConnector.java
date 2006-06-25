@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.binding.model;
 
+import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
 /**
@@ -16,12 +17,12 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * @author Vincent Vandenschrick
  */
 
-public class ModelSimplePropertyConnector extends ModelPropertyConnector {
+public class ModelScalarPropertyConnector extends ModelPropertyConnector {
 
   /**
    * Constructs a new model property connector on a simple model property.
    */
-  ModelSimplePropertyConnector(String property, IAccessorFactory accessorFactory) {
-    super(property, accessorFactory);
+  ModelScalarPropertyConnector(IScalarPropertyDescriptor modelDescriptor, IAccessorFactory accessorFactory) {
+    super(modelDescriptor, accessorFactory);
   }
 }

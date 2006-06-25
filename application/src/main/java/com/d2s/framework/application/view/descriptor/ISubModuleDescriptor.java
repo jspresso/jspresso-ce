@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.view.descriptor;
 
-import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
@@ -18,12 +16,6 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public interface ISubModuleDescriptor extends ITreeLevelDescriptor {
-
-  /**
-   * <code>MODULE_DESCRIPTOR</code> is a unique reference to the model
-   * descriptor of modules.
-   */
-  IComponentDescriptor MODULE_DESCRIPTOR = new ModuleDescriptor();
 
   /**
    * Gets the projected view descriptor of this module.

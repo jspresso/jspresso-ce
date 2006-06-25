@@ -506,7 +506,7 @@ public class BasicApplicationSession implements IApplicationSession {
     Collection<Object> propertyValue = (Collection<Object>) entity
         .straightGetProperty(propertyName);
     ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityFactory
-        .getEntityDescriptor(entity.getContract()).getPropertyDescriptor(
+        .getComponentDescriptor(entity.getContract()).getPropertyDescriptor(
             propertyName);
     if (propertyValue != null
         && !propertyValue.isEmpty()

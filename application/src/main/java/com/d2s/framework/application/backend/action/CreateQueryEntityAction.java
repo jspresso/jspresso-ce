@@ -15,10 +15,12 @@ import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.ModelConnector;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.descriptor.entity.basic.BasicQueryEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.util.accessor.IAccessorFactory;
-import com.d2s.framework.util.bean.IBeanProvider;
+import com.d2s.framework.util.model.IModelProvider;
 
 /**
  * Creates a query entity.
@@ -64,9 +66,9 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
       IConnector parentModelConnector = ((IValueConnector) context
           .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
           .getModelConnector();
-      if (parentModelConnector instanceof IBeanProvider) {
-        masterEntity = (IEntity) ((IBeanProvider) parentModelConnector)
-            .getBean();
+      if (parentModelConnector instanceof IModelProvider) {
+        masterEntity = (IEntity) ((IModelProvider) parentModelConnector)
+            .getModel();
       } else if (parentModelConnector instanceof ICollectionConnector) {
         int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
             .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
@@ -96,8 +98,10 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
         }
       }
     }
-    ModelConnector modelConnector = getBeanConnectorFactory(context)
-        .createModelConnector("lovQueryEntity", queryEntity.getClass());
+    ModelConnector modelConnector = (ModelConnector) getBeanConnectorFactory(
+        context).createModelConnector(
+        new BasicQueryEntityDescriptor((IEntityDescriptor) erqDescriptor
+            .getReferencedDescriptor(), queryEntity.getClass()));
     modelConnector.setConnectorValue(queryEntity);
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_PARAM);

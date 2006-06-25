@@ -12,7 +12,7 @@ package com.d2s.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IComponentDescriptorProvider {
+public interface IComponentDescriptorProvider extends IModelDescriptor {
 
   /**
    * Gets the referenced component descriptor.

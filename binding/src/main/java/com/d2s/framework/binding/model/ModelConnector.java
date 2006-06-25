@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.binding.model;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.util.model.IModelChangeListener;
 import com.d2s.framework.util.model.IModelProvider;
 import com.d2s.framework.util.model.ModelChangeSupport;
@@ -26,18 +27,15 @@ public class ModelConnector extends ModelRefPropertyConnector {
   /**
    * Constructs a new instance based on the model class passed as parameter.
    * 
-   * @param id
-   *          the id of this model connector.
-   * @param modelClass
-   *          the model class on which all the contained model connectors will
-   *          act.
+   * @param modelDescriptor
+   *          the model descriptor backing this connector.
    * @param modelConnectorFactory
    *          the factory used to create the child property connectors.
    */
-  ModelConnector(String id, Class modelClass,
+  ModelConnector(IComponentDescriptorProvider modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
-    super(id, modelClass, modelConnectorFactory);
-    this.modelProvider = new InnerModelProvider(modelClass);
+    super(modelDescriptor, modelConnectorFactory);
+    this.modelProvider = new InnerModelProvider(modelDescriptor);
     modelProviderChanged(null);
   }
 
@@ -45,16 +43,8 @@ public class ModelConnector extends ModelRefPropertyConnector {
    * {@inheritDoc}
    */
   @Override
-  protected IModelProvider getModelProvider() {
+  public IModelProvider getModelProvider() {
     return modelProvider;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class getModelClass() {
-    return getModelProvider().getModelClass();
   }
 
   /**
@@ -74,8 +64,7 @@ public class ModelConnector extends ModelRefPropertyConnector {
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
-    ((InnerModelProvider) getModelProvider())
-        .setModel(aValue);
+    ((InnerModelProvider) getModelProvider()).setModel(aValue);
   }
 
   /**
@@ -93,20 +82,20 @@ public class ModelConnector extends ModelRefPropertyConnector {
   public ModelConnector clone(String newConnectorId) {
     ModelConnector clonedConnector = (ModelConnector) super
         .clone(newConnectorId);
-    clonedConnector.modelProvider = new InnerModelProvider(modelProvider
-        .getModelClass());
+    clonedConnector.modelProvider = new InnerModelProvider(
+        modelProvider.getModelDescriptor());
     clonedConnector.modelProviderChanged(null);
     return clonedConnector;
   }
 
   private static final class InnerModelProvider implements IModelProvider {
 
-    private Object             model;
-    private ModelChangeSupport modelChangeSupport;
-    private Class              modelClass;
+    private Object                       model;
+    private ModelChangeSupport           modelChangeSupport;
+    private IComponentDescriptorProvider modelDescriptor;
 
-    private InnerModelProvider(Class modelClass) {
-      this.modelClass = modelClass;
+    private InnerModelProvider(IComponentDescriptorProvider modelDescriptor) {
+      this.modelDescriptor = modelDescriptor;
     }
 
     /**
@@ -131,12 +120,12 @@ public class ModelConnector extends ModelRefPropertyConnector {
     }
 
     /**
-     * Gets the model class held internally.
+     * Gets the model descriptor held internally.
      * <p>
      * {@inheritDoc}
      */
-    public Class getModelClass() {
-      return modelClass;
+    public IComponentDescriptorProvider getModelDescriptor() {
+      return modelDescriptor;
     }
 
     /**
@@ -159,9 +148,6 @@ public class ModelConnector extends ModelRefPropertyConnector {
     protected void setModel(Object newModel) {
       Object oldModel = model;
       model = newModel;
-      if (model != null) {
-        modelClass = model.getClass();
-      }
       if (modelChangeSupport != null) {
         modelChangeSupport.fireModelChange(oldModel, newModel);
       }

@@ -50,7 +50,7 @@ public class BasicBinaryPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getPropertyClass() {
+  public Class getModelType() {
     return byte[].class;
   }
 

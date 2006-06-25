@@ -5,7 +5,7 @@ package com.d2s.framework.model.entity;
 
 import java.io.Serializable;
 
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 
 /**
  * This interface defines the contract of an entities factory.
@@ -16,7 +16,7 @@ import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntityFactory extends IEntityDescriptorRegistry {
+public interface IEntityFactory extends IComponentDescriptorRegistry {
 
   /**
    * Creates a new entity instance based on the entity descriptor. The entity
@@ -54,16 +54,4 @@ public interface IEntityFactory extends IEntityDescriptorRegistry {
    * @return the query entity instance.
    */
   <T extends IQueryEntity> T createQueryEntityInstance(Class<T> entityContract);
-
-  /**
-   * Gets an entity descriptor from its conract.
-   * 
-   * @param <T>
-   *          the entity type.
-   * @param entityContract
-   *          the entity contract
-   * @return the entity descriptor.
-   */
-  <T extends IEntity> IEntityDescriptor getEntityDescriptor(
-      Class<T> entityContract);
 }

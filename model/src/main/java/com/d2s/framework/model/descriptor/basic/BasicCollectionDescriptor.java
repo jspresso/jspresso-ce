@@ -62,4 +62,11 @@ public class BasicCollectionDescriptor extends DefaultDescriptor implements
   public ICollectionDescriptor getCollectionDescriptor() {
     return this;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class getModelType() {
+    return getCollectionInterface();
+  }
 }

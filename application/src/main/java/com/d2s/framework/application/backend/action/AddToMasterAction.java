@@ -12,6 +12,7 @@ import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.model.IModelValueConnector;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
@@ -41,15 +42,17 @@ public class AddToMasterAction extends AbstractCollectionAction {
     if (collectionConnector == null) {
       return false;
     }
-    Object master = collectionConnector.getParentConnector()
-        .getConnectorValue();
-    ICollectionAccessor collectionAccessor = getAccessorFactory(context)
-        .createCollectionPropertyAccessor(collectionConnector.getId(),
-            master.getClass());
 
     IEntity newEntity = getNewEntity(context);
-
     if (newEntity != null) {
+      Object master = collectionConnector.getParentConnector()
+          .getConnectorValue();
+      ICollectionAccessor collectionAccessor = getAccessorFactory(context)
+          .createCollectionPropertyAccessor(
+              collectionConnector.getId(),
+              ((IModelValueConnector) collectionConnector).getModelProvider()
+                  .getModelDescriptor().getComponentDescriptor()
+                  .getComponentContract(), newEntity.getContract());
       try {
         // int index = -1;
         // if (collectionAccessor instanceof IListAccessor) {

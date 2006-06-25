@@ -78,10 +78,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateScalarSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.propertyClass.array>
-    <#local propertyType=propertyDescriptor.propertyClass.componentType.name+"[]"/>
+  <#if propertyDescriptor.modelType.array>
+    <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
   <#else>
-    <#local propertyType=propertyDescriptor.propertyClass.name/>
+    <#local propertyType=propertyDescriptor.modelType.name/>
   </#if>
   /**
    * Sets the ${propertyName}.
@@ -94,10 +94,10 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateScalarGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#if propertyDescriptor.propertyClass.array>
-    <#local propertyType=propertyDescriptor.propertyClass.componentType.name+"[]"/>
+  <#if propertyDescriptor.modelType.array>
+    <#local propertyType=propertyDescriptor.modelType.componentType.name+"[]"/>
   <#else>
-    <#local propertyType=propertyDescriptor.propertyClass.name/>
+    <#local propertyType=propertyDescriptor.modelType.name/>
   </#if>
   /**
    * Gets the ${propertyName}.
@@ -161,7 +161,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateCollectionSetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#local collectionType=propertyDescriptor.propertyClass.name/>
+  <#local collectionType=propertyDescriptor.modelType.name/>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
   /**
    * Sets the ${propertyName}.
@@ -182,7 +182,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *          the ${propertyName} element to add.
    */
   void addTo${propertyName?cap_first}(${elementType} ${propertyName}Element);
-  <#if propertyDescriptor.propertyClass.name = "java.util.List">
+  <#if propertyDescriptor.modelType.name = "java.util.List">
 
   /**
    * Adds an element to the ${propertyName} at the specified index. If the index is out
@@ -211,7 +211,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 
 <#macro generateCollectionGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
-  <#local collectionType=propertyDescriptor.propertyClass.name/>
+  <#local collectionType=propertyDescriptor.modelType.name/>
   <#local elementDescriptor=propertyDescriptor.referencedDescriptor.elementDescriptor/>
   <#local elementType=propertyDescriptor.referencedDescriptor.elementDescriptor.name/>
   <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
@@ -348,7 +348,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#else>
       <#local oneToOne=false/>
       <#local reverseOneToOne=false/>
-      <#if propertyDescriptor.reverseRelationEnd.propertyClass.name="java.util.List">
+      <#if propertyDescriptor.reverseRelationEnd.modelType.name="java.util.List">
         <#local managesPersistence=false/>
       <#else>
         <#local managesPersistence=true/>

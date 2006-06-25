@@ -5,6 +5,7 @@ package com.d2s.framework.application.view.descriptor.basic;
 
 import java.util.Locale;
 
+import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.ISimpleSubModuleDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
@@ -66,7 +67,7 @@ public class BasicSimpleSubModuleDescriptor extends
       moduleNodeGroupDescriptor.setName(getName());
       moduleNodeGroupDescriptor.setDescription(getDescription());
       moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
-      moduleNodeGroupDescriptor.setModelDescriptor(MODULE_DESCRIPTOR
+      moduleNodeGroupDescriptor.setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
           .getPropertyDescriptor("subModules"));
       moduleNodeGroupDescriptor.setRenderedProperty("name");
       setNodeGroupDescriptor(moduleNodeGroupDescriptor);

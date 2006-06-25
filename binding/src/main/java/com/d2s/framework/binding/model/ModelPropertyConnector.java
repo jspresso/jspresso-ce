@@ -13,6 +13,7 @@ import com.d2s.framework.binding.AbstractValueConnector;
 import com.d2s.framework.binding.ConnectorBindingException;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
@@ -30,22 +31,26 @@ import com.d2s.framework.util.model.ModelChangeEvent;
  * @author Vincent Vandenschrick
  */
 public abstract class ModelPropertyConnector extends AbstractValueConnector
-    implements IModelChangeListener, PropertyChangeListener {
+    implements IModelValueConnector, IModelChangeListener,
+    PropertyChangeListener {
 
   private IAccessor        accessor;
   private IAccessorFactory accessorFactory;
+  private IModelDescriptor modelDescriptor;
 
   /**
    * Constructs a new model connector on a model property.
    * 
-   * @param property
-   *          The java model property to which the connector is bound at
+   * @param modelDescriptor
+   *          The model descriptor to which the connector is bound at.
    * @param accessorFactory
    *          The factory which is used to build the <code>IAccessor</code>
    *          used to access the java model property bi-directionally
    */
-  ModelPropertyConnector(String property, IAccessorFactory accessorFactory) {
-    super(property);
+  ModelPropertyConnector(IModelDescriptor modelDescriptor,
+      IAccessorFactory accessorFactory) {
+    super(modelDescriptor.getName());
+    this.modelDescriptor = modelDescriptor;
     this.accessorFactory = accessorFactory;
   }
 
@@ -63,8 +68,8 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
     if (isValueAccessedAsProperty() && getModelProvider() != null
         && accessor == null && accessorFactory != null) {
-      accessor = accessorFactory.createPropertyAccessor(getId(),
-          getModelProvider().getModelClass());
+      accessor = accessorFactory.createPropertyAccessor(modelDescriptor
+          .getName(), getModelProvider().getModelDescriptor().getModelType());
     }
     if (oldModelProvider != null) {
       oldModel = oldModelProvider.getModel();
@@ -165,7 +170,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
             .removePropertyChangeListener(getId(), this);
       }
       if (evt.getNewValue() != null
-          && evt.getOldValue() instanceof IPropertyChangeCapable) {
+          && evt.getNewValue() instanceof IPropertyChangeCapable) {
         ((IPropertyChangeCapable) evt.getNewValue()).addPropertyChangeListener(
             getId(), this);
       }
@@ -204,7 +209,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * 
    * @return the modelProvider.
    */
-  protected IModelProvider getModelProvider() {
+  public IModelProvider getModelProvider() {
     if (getParentConnector() instanceof IModelProvider) {
       return (IModelProvider) getParentConnector();
     }
@@ -251,5 +256,14 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    */
   protected boolean isValueAccessedAsProperty() {
     return true;
+  }
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  public IModelDescriptor getModelDescriptor() {
+    return modelDescriptor;
   }
 }

@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.util.model;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
+
 /**
  * This public interface should be implemented by any class being able to
  * provide a model instance. It allows for registration of
@@ -25,11 +27,11 @@ public interface IModelProvider {
   Object getModel();
 
   /**
-   * Gets the model type of this provider.
+   * Gets the bean object of this provider.
    * 
-   * @return The bean class object
+   * @return The bean object
    */
-  Class getModelClass();
+  IComponentDescriptorProvider getModelDescriptor();
 
   /**
    * Adds a new bean listener to this model provider.

@@ -1000,7 +1000,7 @@ public class DefaultUlcViewFactory implements
       if (columnDescriptor instanceof IReferencePropertyDescriptor) {
         columnClassesByIds.put(columnId, String.class);
       } else {
-        columnClassesByIds.put(columnId, columnDescriptor.getPropertyClass());
+        columnClassesByIds.put(columnId, columnDescriptor.getModelType());
       }
       columnConnectorKeys.add(columnId);
     }

@@ -428,4 +428,11 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
       List<ILifecycleInterceptor> lifecycleInterceptors) {
     this.lifecycleInterceptors = lifecycleInterceptors;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class getModelType() {
+    return getComponentContract();
+  }
 }

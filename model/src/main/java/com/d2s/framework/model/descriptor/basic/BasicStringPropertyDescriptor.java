@@ -46,7 +46,7 @@ public class BasicStringPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getPropertyClass() {
+  public Class getModelType() {
     return String.class;
   }
 }

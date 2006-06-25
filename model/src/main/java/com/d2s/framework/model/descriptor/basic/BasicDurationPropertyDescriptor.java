@@ -46,7 +46,7 @@ public class BasicDurationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getPropertyClass() {
+  public Class getModelType() {
     return Long.class;
   }
 }

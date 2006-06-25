@@ -1012,7 +1012,7 @@ public class DefaultSwingViewFactory implements
       rowConnectorPrototype.addChildConnector(columnConnector);
       columnClassesByIds.put(columnId, modelDescriptor
           .getCollectionDescriptor().getElementDescriptor()
-          .getPropertyDescriptor(columnId).getPropertyClass());
+          .getPropertyDescriptor(columnId).getModelType());
       columnConnectorKeys.add(columnId);
     }
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(

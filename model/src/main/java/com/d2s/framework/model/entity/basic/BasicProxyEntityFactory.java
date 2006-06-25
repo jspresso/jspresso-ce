@@ -8,12 +8,13 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityCollectionFactory;
-import com.d2s.framework.model.entity.IEntityDescriptorRegistry;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
@@ -34,11 +35,11 @@ import com.d2s.framework.util.uid.IGUIDGenerator;
  */
 public class BasicProxyEntityFactory implements IEntityFactory {
 
-  private IAccessorFactory          accessorFactory;
-  private IEntityCollectionFactory  entityCollectionFactory;
-  private IEntityExtensionFactory   entityExtensionFactory;
-  private IGUIDGenerator            entityGUIDGenerator;
-  private IEntityDescriptorRegistry entityDescriptorRegistry;
+  private IAccessorFactory             accessorFactory;
+  private IEntityCollectionFactory     entityCollectionFactory;
+  private IEntityExtensionFactory      entityExtensionFactory;
+  private IGUIDGenerator               entityGUIDGenerator;
+  private IComponentDescriptorRegistry entityDescriptorRegistry;
 
   /**
    * {@inheritDoc}
@@ -47,14 +48,14 @@ public class BasicProxyEntityFactory implements IEntityFactory {
     T createdEntity = createEntityInstance(entityContract, entityGUIDGenerator
         .generateGUID());
     for (IPropertyDescriptor propertyDescriptor : entityDescriptorRegistry
-        .getEntityDescriptor(entityContract).getPropertyDescriptors()) {
+        .getComponentDescriptor(entityContract).getPropertyDescriptors()) {
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
         createdEntity
             .straightSetProperty(
                 propertyDescriptor.getName(),
                 entityCollectionFactory
                     .createEntityCollection(((ICollectionPropertyDescriptor) propertyDescriptor)
-                        .getPropertyClass()));
+                        .getModelType()));
       }
     }
     createdEntity.onCreate(this, getPrincipal(), getEntityLifecycleHandler());
@@ -72,8 +73,8 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id, Class[] extraInterfaces) {
-    IEntityDescriptor entityDescriptor = entityDescriptorRegistry
-        .getEntityDescriptor(entityContract);
+    IEntityDescriptor entityDescriptor = (IEntityDescriptor) entityDescriptorRegistry
+        .getComponentDescriptor(entityContract);
     if (entityDescriptor.isPurelyAbstract()) {
       throw new EntityException(entityDescriptor.getName()
           + " is purely abstract. It cannot be instanciated.");
@@ -209,16 +210,15 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    *          the entityDescriptorRegistry to set.
    */
   public void setEntityDescriptorRegistry(
-      IEntityDescriptorRegistry entityDescriptorRegistry) {
+      IComponentDescriptorRegistry entityDescriptorRegistry) {
     this.entityDescriptorRegistry = entityDescriptorRegistry;
   }
 
   /**
    * {@inheritDoc}
    */
-  public <T extends IEntity> IEntityDescriptor getEntityDescriptor(
-      Class<T> entityContract) {
-    return entityDescriptorRegistry.getEntityDescriptor(entityContract);
+  public IComponentDescriptor getComponentDescriptor(Class componentContract) {
+    return entityDescriptorRegistry.getComponentDescriptor(componentContract);
   }
 
   /**

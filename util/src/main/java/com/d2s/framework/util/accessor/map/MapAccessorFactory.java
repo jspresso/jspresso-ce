@@ -37,7 +37,8 @@ public class MapAccessorFactory implements IAccessorFactory {
    */
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
       @SuppressWarnings("unused")
-      Class beanClass) {
+      Class beanClass, @SuppressWarnings("unused")
+      Class elementClass) {
     return new MapCollectionAccessor(property);
   }
 }

@@ -39,16 +39,15 @@ public class DefaultMvcBinder implements IMvcBinder {
     for (String nextConnectorId : viewConnector.getChildConnectorKeys()) {
       IValueConnector nextChildViewConnector = viewConnector
           .getChildConnector(nextConnectorId);
-      IValueConnector nextChildModelConnector = null;
       if (modelConnector != null) {
-        nextChildModelConnector = modelConnector
+        IValueConnector nextChildModelConnector = modelConnector
             .getChildConnector(nextChildViewConnector.getId());
         if (nextChildModelConnector == null) {
           throw new MissingConnectorException("Missing model connector for id "
               + nextConnectorId);
         }
+        bind(nextChildViewConnector, nextChildModelConnector);
       }
-      bind(nextChildViewConnector, nextChildModelConnector);
     }
   }
 }

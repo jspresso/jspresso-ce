@@ -6,6 +6,8 @@ package com.d2s.framework.binding.model;
 import java.beans.PropertyChangeEvent;
 import java.util.Collection;
 
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+
 /**
  * A connector on an independent model collection.
  * <p>
@@ -22,17 +24,15 @@ public class ModelCollectionConnector extends ModelCollectionPropertyConnector {
   /**
    * Constructs a new <code>ModelCollectionConnector</code> instance.
    * 
-   * @param id
-   *          the connector identifier.
-   * @param elementClass
-   *          the collection element class.
+   * @param modelDescriptor
+   *          the model descriptor backing this connector.
    * @param modelConnectorFactory
    *          the factory used to create the collection model connectors.
    */
-  public ModelCollectionConnector(String id, Class elementClass,
+  public ModelCollectionConnector(
+      ICollectionDescriptorProvider modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
-    super(id, modelConnectorFactory);
-    setElementClass(elementClass);
+    super(modelDescriptor, modelConnectorFactory);
   }
 
   /**

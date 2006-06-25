@@ -51,7 +51,7 @@ public class BasicReferencePropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getPropertyClass() {
+  public Class getModelType() {
     return getReferencedDescriptor().getComponentContract();
   }
 

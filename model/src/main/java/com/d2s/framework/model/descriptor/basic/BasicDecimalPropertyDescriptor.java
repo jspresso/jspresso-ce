@@ -46,7 +46,7 @@ public class BasicDecimalPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getPropertyClass() {
+  public Class getModelType() {
     return Double.class;
   }
 }

@@ -39,10 +39,14 @@ public class BeanPropertyAccessor implements IAccessor {
     this.property = property;
     this.beanClass = beanClass;
 
-    PropertyDescriptor propertyDescriptor = PropertyHelper
-        .getPropertyDescriptor(beanClass, property);
-    if (propertyDescriptor != null) {
-      this.writable = propertyDescriptor.getWriteMethod() != null;
+    try {
+      PropertyDescriptor propertyDescriptor = PropertyHelper
+          .getPropertyDescriptor(beanClass, property);
+      if (propertyDescriptor != null) {
+        this.writable = propertyDescriptor.getWriteMethod() != null;
+      }
+    } catch (RuntimeException e) {
+      throw e;
     }
   }
 

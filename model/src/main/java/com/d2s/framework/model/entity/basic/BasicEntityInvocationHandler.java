@@ -337,10 +337,13 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
               // It's a one-to-many relationship
               ICollectionAccessor reversePropertyAccessor = accessorFactory
-                  .createCollectionPropertyAccessor(reversePropertyDescriptor
-                      .getName(),
+                  .createCollectionPropertyAccessor(
+                      reversePropertyDescriptor.getName(),
                       ((IReferencePropertyDescriptor) propertyDescriptor)
-                          .getReferencedDescriptor().getComponentContract());
+                          .getReferencedDescriptor().getComponentContract(),
+                      ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                          .getCollectionDescriptor().getElementDescriptor()
+                          .getComponentContract());
               if (oldProperty != null) {
                 reversePropertyAccessor.removeFromValue(oldProperty, proxy);
               }
@@ -367,7 +370,10 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           newPropertyElementsToAdd.removeAll(propertyElementsToKeep);
           ICollectionAccessor propertyAccessor = accessorFactory
               .createCollectionPropertyAccessor(propertyDescriptor.getName(),
-                  entityDescriptor.getComponentContract());
+                  entityDescriptor.getComponentContract(),
+                  ((ICollectionPropertyDescriptor) propertyDescriptor)
+                      .getCollectionDescriptor().getElementDescriptor()
+                      .getComponentContract());
           for (Object element : oldPropertyElementsToRemove) {
             propertyAccessor.removeFromValue(proxy, element);
           }
@@ -432,8 +438,10 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
           accessorFactory.createCollectionPropertyAccessor(
               reversePropertyDescriptor.getName(),
               propertyDescriptor.getReferencedDescriptor()
-                  .getElementDescriptor().getComponentContract()).addToValue(
-              value, proxy);
+                  .getElementDescriptor().getComponentContract(),
+              ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                  .getCollectionDescriptor().getElementDescriptor()
+                  .getComponentContract()).addToValue(value, proxy);
         }
       }
       Collection oldCollectionSnapshot = CollectionHelper
@@ -489,8 +497,10 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
             accessorFactory.createCollectionPropertyAccessor(
                 reversePropertyDescriptor.getName(),
                 propertyDescriptor.getReferencedDescriptor()
-                    .getElementDescriptor().getComponentContract())
-                .removeFromValue(value, proxy);
+                    .getElementDescriptor().getComponentContract(),
+                ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                    .getCollectionDescriptor().getElementDescriptor()
+                    .getComponentContract()).removeFromValue(value, proxy);
           }
         }
         Collection oldCollectionSnapshot = CollectionHelper

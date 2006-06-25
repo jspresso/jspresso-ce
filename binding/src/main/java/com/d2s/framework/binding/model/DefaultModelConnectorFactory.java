@@ -3,10 +3,16 @@
  */
 package com.d2s.framework.binding.model;
 
-import java.util.Collection;
-
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.descriptor.ICollectionDescriptor;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
-import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * Default implementation for model connectors factory.
@@ -19,50 +25,33 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  */
 public class DefaultModelConnectorFactory implements IModelConnectorFactory {
 
-  private IAccessorFactory accessorFactory;
+  private IAccessorFactory          accessorFactory;
+  private IComponentDescriptorRegistry descriptorRegistry;
 
   /**
-   * Default ModelConnector factory implementation.
+   * TODO Comment needed.
    * <p>
    * {@inheritDoc}
    */
-  public ModelConnector createModelConnector(String id, Class modelClass) {
-    return new ModelConnector(id, modelClass, this);
-  }
-
-  /**
-   * Default ModelCollectionConnector factory implementation.
-   * <p>
-   * {@inheritDoc}
-   */
-  public ModelCollectionConnector createModelCollectionConnector(String id,
-      Class elementClass) {
-    return new ModelCollectionConnector(id, elementClass, this);
-  }
-
-  /**
-   * Creates a subclass of IValueConnector depending on the type of the model
-   * property. As of now the created connectors include :
-   * <ul>
-   * <li><code>ModelRefPropertyConnector</code> in case of a model reference
-   * property.
-   * <li><code>ModelCollectionPropertyConnector</code> in case of a model
-   * collection property.
-   * <li><code>ModelSimplePropertyConnector</code> in all other cases.
-   * </ul>
-   * <p>
-   * {@inheritDoc}
-   */
-  public ModelPropertyConnector createModelPropertyConnector(String property,
-      Class propertyType) {
-
-    if (IPropertyChangeCapable.class.isAssignableFrom(propertyType)) {
-      return new ModelRefPropertyConnector(property, propertyType, this);
+  public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
+    if (modelDescriptor instanceof IComponentDescriptor) {
+      return new ModelConnector((IComponentDescriptor) modelDescriptor, this);
+    } else if (modelDescriptor instanceof ICollectionDescriptor) {
+      return new ModelCollectionConnector(
+          (ICollectionDescriptor) modelDescriptor, this);
+    } else if (modelDescriptor instanceof IPropertyDescriptor) {
+      if (modelDescriptor instanceof IReferencePropertyDescriptor) {
+        return new ModelRefPropertyConnector(
+            (IReferencePropertyDescriptor) modelDescriptor, this);
+      } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
+        return new ModelCollectionPropertyConnector(
+            (ICollectionPropertyDescriptor) modelDescriptor, this);
+      } else if (modelDescriptor instanceof IScalarPropertyDescriptor) {
+        return new ModelScalarPropertyConnector(
+            (IScalarPropertyDescriptor) modelDescriptor, accessorFactory);
+      }
     }
-    if (Collection.class.isAssignableFrom(propertyType)) {
-      return new ModelCollectionPropertyConnector(property, this);
-    }
-    return new ModelSimplePropertyConnector(property, accessorFactory);
+    return null;
   }
 
   /**
@@ -80,5 +69,26 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    */
   public IAccessorFactory getAccessorFactory() {
     return accessorFactory;
+  }
+
+  
+  /**
+   * Gets the descriptorRegistry.
+   * 
+   * @return the descriptorRegistry.
+   */
+  public IComponentDescriptorRegistry getDescriptorRegistry() {
+    return descriptorRegistry;
+  }
+
+  
+  /**
+   * Sets the descriptorRegistry.
+   * 
+   * @param descriptorRegistry the descriptorRegistry to set.
+   */
+  public void setDescriptorRegistry(
+      IComponentDescriptorRegistry descriptorRegistry) {
+    this.descriptorRegistry = descriptorRegistry;
   }
 }

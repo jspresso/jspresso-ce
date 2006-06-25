@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.util.accessor;
 
-
 /**
  * This interface specify the contract of property accessor factories.
  * <p>
@@ -33,8 +32,10 @@ public interface IAccessorFactory {
    *          the property to be accessed.
    * @param beanClass
    *          the java bean class.
+   * @param elementClass
+   *          the collection element class.
    * @return the collection property accessor.
    */
   ICollectionAccessor createCollectionPropertyAccessor(String property,
-      Class beanClass);
+      Class beanClass, Class elementClass);
 }
