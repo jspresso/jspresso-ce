@@ -21,7 +21,6 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
-import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.service.IComponentService;
 import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
@@ -319,8 +318,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
       List<String> allProperties = new ArrayList<String>();
       for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
         if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor)
-            && !(propertyDescriptor instanceof ITextPropertyDescriptor)
-            && !IEntity.ID.equals(propertyDescriptor.getName())) {
+            && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
           allProperties.add(propertyDescriptor.getName());
         }
       }

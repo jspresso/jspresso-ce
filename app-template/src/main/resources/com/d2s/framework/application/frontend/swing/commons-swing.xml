@@ -9,12 +9,12 @@
 	<!--
 		The implementation used as ListSelectionModelBinder.
 	-->
-	<bean id="listSelectionModelBinder" class="com.d2s.framework.binding.swing.DefaultListSelectionModelBinder"></bean>
+	<bean id="listSelectionModelBinder" class="com.d2s.framework.binding.swing.DefaultListSelectionModelBinder" />
 
 	<!--
 		The implementation used as TreeSelectionModelBinder.
 	-->
-	<bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.swing.DefaultTreeSelectionModelBinder"></bean>
+	<bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.swing.DefaultTreeSelectionModelBinder" />
 
 	<!--
 		Root action beans.
@@ -22,13 +22,21 @@
 	<bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
 		class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false" />
 
-	<bean id="lovOkFrontAction"
-		class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction" singleton="false">
+	<bean id="lovOkFrontAction" class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction"
+		singleton="false">
 		<property name="nextAction" ref="sourceViewConnectorSetAction" />
 	</bean>
 
+	<bean id="printOkFrontAction"
+		class="com.d2s.framework.application.frontend.action.swing.lov.OkChooseComponentAction">
+		<property name="nextAction" ref="editReportParametersAction" />
+	</bean>
+
+	<bean id="doPrintAction" parent="abstractDoPrintAction"
+		class="com.d2s.framework.application.frontend.action.swing.std.OkAction" />
+
 	<bean id="cancelDialogFrontAction"
-		class="com.d2s.framework.application.frontend.action.swing.std.DialogCancelAction" />
+		class="com.d2s.framework.application.frontend.action.swing.std.CancelAction" />
 
 	<!-- 
 		Action beans
@@ -56,6 +64,15 @@
 
 	<bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
 		class="com.d2s.framework.application.frontend.action.swing.file.ChooseFileAsBinaryPropertyAction" />
+
+	<bean id="chooseComponentAction" parent="abstractChooseComponentAction"
+		class="com.d2s.framework.application.frontend.action.swing.lov.ChooseComponentAction" />
+
+	<bean id="editReportParametersAction" parent="abstractEditReportParametersAction"
+		class="com.d2s.framework.application.printing.frontend.action.swing.EditReportParametersAction" />
+
+	<bean id="displayReportAction"
+		class="com.d2s.framework.application.printing.frontend.action.swing.DisplayJasperReportAction" />
 
 	<bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory"
 		singleton="false">

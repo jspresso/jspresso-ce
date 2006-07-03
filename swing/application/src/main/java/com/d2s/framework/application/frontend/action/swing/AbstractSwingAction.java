@@ -3,14 +3,17 @@
  */
 package com.d2s.framework.application.frontend.action.swing;
 
+import java.awt.Dialog;
+import java.awt.Window;
 import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
+import javax.swing.SwingUtilities;
 
 import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.application.frontend.action.AbstractChainedAction;
+import com.d2s.framework.application.frontend.action.ActionWrapper;
 
 /**
  * This class serves as base class for swing actions. It provides accessors on
@@ -22,7 +25,8 @@ import com.d2s.framework.application.frontend.action.AbstractChainedAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractSwingAction extends AbstractChainedAction<JComponent, Icon, Action> {
+public abstract class AbstractSwingAction extends
+    ActionWrapper<JComponent, Icon, Action> {
 
   /**
    * Retrieves the widget this action was triggered from. It may serve to
@@ -36,5 +40,30 @@ public abstract class AbstractSwingAction extends AbstractChainedAction<JCompone
    */
   public JComponent getSourceComponent(Map<String, Object> context) {
     return (JComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  }
+
+  /**
+   * Retrieves the widget which triggered the action from the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the widget which triggered the action.
+   */
+  public JComponent getActionWidget(Map<String, Object> context) {
+    return (JComponent) context.get(ActionContextConstants.ACTION_WIDGET);
+  }
+
+  /**
+   * If the ancestor of the action widget is a dialog, dispose it.
+   * 
+   * @param context
+   *          the action context.
+   */
+  protected void closeDialog(Map<String, Object> context) {
+    Window actionWindow = SwingUtilities
+        .windowForComponent(getActionWidget(context));
+    if (actionWindow instanceof Dialog) {
+      actionWindow.dispose();
+    }
   }
 }

@@ -3,10 +3,10 @@
  */
 package com.d2s.framework.binding.model;
 
+import com.d2s.framework.model.IModelChangeListener;
+import com.d2s.framework.model.IModelProvider;
+import com.d2s.framework.model.ModelChangeSupport;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
-import com.d2s.framework.util.model.IModelChangeListener;
-import com.d2s.framework.util.model.IModelProvider;
-import com.d2s.framework.util.model.ModelChangeSupport;
 
 /**
  * This class implements the connector mechanism on an arbitrry model. This type

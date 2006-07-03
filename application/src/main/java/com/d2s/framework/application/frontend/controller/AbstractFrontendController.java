@@ -109,7 +109,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
-      return false;
+      return true;
     }
     Map<String, Object> actionContext = getInitialActionContext();
     context.putAll(actionContext);

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.util.model;
+package com.d2s.framework.model;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 

@@ -8,8 +8,6 @@ import java.awt.Dialog;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +21,6 @@ import javax.swing.WindowConstants;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
-import com.d2s.framework.application.frontend.action.swing.IDialogAwareAction;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;
 
@@ -64,16 +61,6 @@ public class ModalDialogAction extends AbstractSwingAction {
       JButton actionButton = new JButton();
       actionButton.setAction(getActionFactory(context).createAction(action,
           actionHandler, mainView, getLocale(context)));
-      if (action instanceof IDialogAwareAction) {
-        final IDialogAwareAction finalAction = (IDialogAwareAction) action;
-        actionButton.addActionListener(new ActionListener() {
-
-          public void actionPerformed(@SuppressWarnings("unused")
-          ActionEvent e) {
-            finalAction.postActionExecution(dialog);
-          }
-        });
-      }
       actionPanel.add(actionButton);
       if (defaultButton == null) {
         defaultButton = actionButton;

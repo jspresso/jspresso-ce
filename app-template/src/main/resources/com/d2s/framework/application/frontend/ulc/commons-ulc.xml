@@ -9,12 +9,12 @@
 	<!--
 		The implementation used as ListSelectionModelBinder.
 	-->
-	<bean id="listSelectionModelBinder" class="com.d2s.framework.binding.ulc.DefaultListSelectionModelBinder"></bean>
+	<bean id="listSelectionModelBinder" class="com.d2s.framework.binding.ulc.DefaultListSelectionModelBinder" />
 
 	<!--
 		The implementation used as TreeSelectionModelBinder.
 	-->
-	<bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.ulc.DefaultTreeSelectionModelBinder"></bean>
+	<bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.ulc.DefaultTreeSelectionModelBinder" />
 
 	<!--
 		Root action beans.
@@ -27,7 +27,15 @@
 		<property name="nextAction" ref="sourceViewConnectorSetAction" />
 	</bean>
 
-	<bean id="cancelDialogFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.DialogCancelAction" />
+	<bean id="printOkFrontAction"
+		class="com.d2s.framework.application.frontend.action.ulc.lov.OkChooseComponentAction">
+		<property name="nextAction" ref="editReportParametersAction" />
+	</bean>
+
+	<bean id="doPrintAction" parent="abstractDoPrintAction"
+		class="com.d2s.framework.application.frontend.action.ulc.std.OkAction" />
+
+	<bean id="cancelDialogFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.CancelAction" />
 
 	<!-- 
 		Action beans
@@ -61,6 +69,15 @@
 
 	<bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
 		class="com.d2s.framework.application.frontend.action.ulc.file.ChooseFileAsBinaryPropertyAction" />
+
+	<bean id="chooseComponentAction" abstract="true" parent="abstractChooseComponentAction"
+		class="com.d2s.framework.application.frontend.action.ulc.lov.ChooseComponentAction" />
+
+	<bean id="editReportParametersAction" parent="abstractEditReportParametersAction"
+		class="com.d2s.framework.application.printing.frontend.action.ulc.EditReportParametersAction" />
+
+	<bean id="displayReportAction"
+		class="com.d2s.framework.application.printing.frontend.action.ulc.DisplayJasperReportAction" />
 
 	<bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory"
 		singleton="false" />

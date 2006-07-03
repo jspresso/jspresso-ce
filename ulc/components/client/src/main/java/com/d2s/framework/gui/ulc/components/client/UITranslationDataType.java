@@ -7,10 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
-
 import com.d2s.framework.gui.ulc.components.shared.TranslationDataTypeConstants;
+import com.d2s.framework.util.lang.ObjectUtils;
 import com.ulcjava.base.client.datatype.UIDataType;
 import com.ulcjava.base.shared.internal.Anything;
 
@@ -48,7 +46,8 @@ public class UITranslationDataType extends UIDataType {
     }
     for (int index = 0; index < flatDictionary.size() - 1; index += 2) {
       dictionary.put(flatDictionary.get(index), flatDictionary.get(index + 1));
-      reverseDictionary.put(flatDictionary.get(index + 1), flatDictionary.get(index));
+      reverseDictionary.put(flatDictionary.get(index + 1), flatDictionary
+          .get(index));
     }
   }
 
@@ -102,7 +101,7 @@ public class UITranslationDataType extends UIDataType {
       return true;
     }
     UITranslationDataType rhs = (UITranslationDataType) obj;
-    return new EqualsBuilder().append(dictionary, rhs.dictionary).isEquals();
+    return ObjectUtils.equals(dictionary, rhs.dictionary);
   }
 
   /**
@@ -110,6 +109,9 @@ public class UITranslationDataType extends UIDataType {
    */
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(7, 23).append(dictionary).toHashCode();
+    if (dictionary == null) {
+      return 0;
+    }
+    return dictionary.hashCode();
   }
 }

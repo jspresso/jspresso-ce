@@ -20,27 +20,29 @@
 	<!--
 		The implementation used as MvcBinder.
 	-->
-	<bean id="mvcBinder" class="com.d2s.framework.binding.DefaultMvcBinder"></bean>
+	<bean id="mvcBinder" class="com.d2s.framework.binding.DefaultMvcBinder" />
 
 	<!--
 		The implementation used as AccessorFactory.
 	-->
-	<bean id="beanAccessorFactory" class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory"></bean>
+	<bean id="beanAccessorFactory" class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory" />
+
+	<bean id="mapAccessorFactory" class="com.d2s.framework.util.accessor.map.MapAccessorFactory" />
 
 	<!--
 		The implementation used as ConnectorFactory.
 	-->
-	<bean id="connectorFactory" class="com.d2s.framework.binding.basic.BasicConnectorFactory"></bean>
+	<bean id="connectorFactory" class="com.d2s.framework.binding.basic.BasicConnectorFactory" />
 
 	<!--
 		The implementation used as EntityCollectionFactory.
 	-->
-	<bean id="entityCollectionFactory" class="com.d2s.framework.model.entity.DefaultEntityCollectionFactory"></bean>
+	<bean id="entityCollectionFactory" class="com.d2s.framework.model.entity.DefaultEntityCollectionFactory" />
 
 	<!--
 		The implementation used as EntityExtensionFactory.
 	-->
-	<bean id="entityExtensionFactory" class="com.d2s.framework.model.entity.DefaultEntityExtensionFactory"></bean>
+	<bean id="entityExtensionFactory" class="com.d2s.framework.model.entity.DefaultEntityExtensionFactory" />
 
 	<!--
 		The implementation used as ModelConnectorFactory.
@@ -48,6 +50,10 @@
 	<bean id="beanConnectorFactory" class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
 		<property name="accessorFactory" ref="beanAccessorFactory" />
 		<property name="descriptorRegistry" ref="entityDescriptorRegistry" />
+	</bean>
+
+	<bean id="mapConnectorFactory" class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
+		<property name="accessorFactory" ref="mapAccessorFactory" />
 	</bean>
 
 	<!--
@@ -86,7 +92,8 @@
 	<!--
 		The implementation used as EntityDescriptorRegistry.
 	-->
-	<bean id="entityDescriptorRegistry" class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
+	<bean id="entityDescriptorRegistry"
+		class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
 	<!--
 		The implementation used as EntityFactory.
@@ -270,5 +277,12 @@
 		class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor">
 		<property name="renderedProperty" value="name" />
 		<property name="modelDescriptor" ref="subModulesPropertyDescriptor" />
+	</bean>
+	
+	<!-- 
+	  Backend action beans
+	-->
+	<bean id="doPrintBackendAction" class="com.d2s.framework.application.printing.backend.action.GenerateJasperReportAction">
+		<property name="jdbcTemplate" ref="reportingJdbcTemplate" />
 	</bean>
 </beans>

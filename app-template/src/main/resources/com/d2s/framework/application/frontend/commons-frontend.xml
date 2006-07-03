@@ -10,6 +10,14 @@
 	-->
 	<bean id="lovViewDescriptorFactory" class="com.d2s.framework.view.descriptor.basic.BasicLovViewDescriptorFactory" />
 
+	<!-- 
+		Report descriptors
+	-->
+	<bean id="abstractReportDescriptor" abstract="true"
+		class="com.d2s.framework.application.printing.model.descriptor.basic.BasicReportDescriptor">
+		<constructor-arg index="0"
+			value="com.d2s.framework.application.printing.model.descriptor.basic.IReportDescriptor" />
+	</bean>
 	<!--
 		Root action beans.
 	-->
@@ -28,6 +36,10 @@
 		<property name="wrappedAction" ref="queryEntitiesBackAction" />
 	</bean>
 
+	<bean id="abstractChooseComponentAction" abstract="true">
+		<property name="cancelAction" ref="cancelDialogFrontAction" />
+	</bean>
+
 	<bean id="sourceViewConnectorSetAction"
 		class="com.d2s.framework.application.frontend.action.std.SetConnectorValueAction">
 		<property name="connectorActionContextKey" value="SOURCE_VIEW_CONNECTOR" />
@@ -37,6 +49,32 @@
 		<property name="iconImageURL" value="classpath:images/open_file-48x48.png" />
 		<property name="name" value="open.file.name" />
 		<property name="description" value="open.file.description" />
+	</bean>
+
+	<bean id="abstractPrintAction" abstract="true"
+		class="com.d2s.framework.application.printing.frontend.action.PrintReportAction">
+		<property name="iconImageURL" value="classpath:images/print-48x48.png" />
+		<property name="name" value="print.name" />
+		<property name="description" value="print.description" />
+		<property name="beanConnectorFactory" ref="beanConnectorFactory" />
+		<property name="nextAction">
+			<bean parent="chooseComponentAction">
+				<property name="okAction" ref="printOkFrontAction" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="abstractDoPrintAction" abstract="true">
+		<property name="name" value="ok" />
+		<property name="iconImageURL" value="classpath:images/print-48x48.png" />
+		<property name="wrappedAction" ref="doPrintBackendAction" />
+		<property name="nextAction" ref="displayReportAction" />
+	</bean>
+
+	<bean id="abstractEditReportParametersAction" abstract="true">
+		<property name="mapConnectorFactory" ref="mapConnectorFactory" />
+		<property name="okAction" ref="doPrintAction" />
+		<property name="cancelAction" ref="cancelDialogFrontAction" />
 	</bean>
 
 	<bean id="connectorSelectionFrontAction"

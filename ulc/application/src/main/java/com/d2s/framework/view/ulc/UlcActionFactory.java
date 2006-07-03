@@ -129,8 +129,10 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
         }
         actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
             modelDescriptor);
-        actionContext.put(ActionContextConstants.ACTION_PARAM, e
+        actionContext.put(ActionContextConstants.ACTION_COMMAND, e
             .getActionCommand());
+        actionContext.put(ActionContextConstants.ACTION_WIDGET, e
+            .getSource());
         if (action.getInitialContext() != null) {
           actionContext.putAll(action.getInitialContext());
         }

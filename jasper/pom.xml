@@ -13,7 +13,15 @@
   <dependencies>
 		<dependency>
 			<groupId>com.design2see</groupId>
-			<artifactId>d2s-application</artifactId>
+			<artifactId>d2s-action</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-swing-application</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.design2see</groupId>
+			<artifactId>d2s-ulc-application</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>jasperreports</groupId>

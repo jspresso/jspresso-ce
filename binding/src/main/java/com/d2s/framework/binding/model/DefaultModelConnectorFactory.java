@@ -29,8 +29,6 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   private IComponentDescriptorRegistry descriptorRegistry;
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {

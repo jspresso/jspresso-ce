@@ -9,7 +9,6 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
-import com.d2s.framework.application.frontend.action.ulc.IDialogAwareAction;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.ulcjava.base.application.ULCBorderLayoutPane;
@@ -19,7 +18,6 @@ import com.ulcjava.base.application.ULCDialog;
 import com.ulcjava.base.application.ULCGridLayoutPane;
 import com.ulcjava.base.application.ULCWindow;
 import com.ulcjava.base.application.UlcUtilities;
-import com.ulcjava.base.application.event.serializable.IActionListener;
 import com.ulcjava.base.shared.IWindowConstants;
 
 /**
@@ -53,18 +51,6 @@ public class ModalDialogAction extends AbstractUlcAction {
       ULCButton actionButton = new ULCButton();
       actionButton.setAction(getActionFactory(context).createAction(action,
           actionHandler, mainView, getLocale(context)));
-      if (action instanceof IDialogAwareAction) {
-        final IDialogAwareAction finalAction = (IDialogAwareAction) action;
-        actionButton.addActionListener(new IActionListener() {
-
-          private static final long serialVersionUID = -6613837292845274145L;
-
-          public void actionPerformed(@SuppressWarnings("unused")
-          com.ulcjava.base.application.event.ActionEvent e) {
-            finalAction.postActionExecution(dialog);
-          }
-        });
-      }
       actionPanel.add(actionButton);
       if (defaultButton == null) {
         defaultButton = actionButton;

@@ -13,6 +13,7 @@ import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.IConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.ModelConnector;
+import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
@@ -20,7 +21,6 @@ import com.d2s.framework.model.descriptor.entity.basic.BasicQueryEntityDescripto
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.util.accessor.IAccessorFactory;
-import com.d2s.framework.util.model.IModelProvider;
 
 /**
  * Creates a query entity.
@@ -104,7 +104,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
             .getReferencedDescriptor(), queryEntity.getClass()));
     modelConnector.setConnectorValue(queryEntity);
     Object queryPropertyValue = context
-        .get(ActionContextConstants.ACTION_PARAM);
+        .get(ActionContextConstants.ACTION_COMMAND);
     if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {
       modelConnector.getChildConnector(
           erqDescriptor.getComponentDescriptor().getToStringProperty())

@@ -64,7 +64,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
               }
             }
           });
-      context.put(ActionContextConstants.ACTION_RESULT, jasperPrint);
+      context.put(ActionContextConstants.ACTION_PARAM, jasperPrint);
     } catch (JRException ex) {
       throw new ActionException(ex);
     } catch (IOException ex) {

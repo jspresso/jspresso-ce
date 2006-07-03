@@ -11,13 +11,13 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorMap;
 import com.d2s.framework.binding.IConnectorMapProvider;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.IModelChangeListener;
+import com.d2s.framework.model.IModelProvider;
+import com.d2s.framework.model.ModelChangeEvent;
+import com.d2s.framework.model.ModelChangeSupport;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
-import com.d2s.framework.util.model.IModelChangeListener;
-import com.d2s.framework.util.model.IModelProvider;
-import com.d2s.framework.util.model.ModelChangeEvent;
-import com.d2s.framework.util.model.ModelChangeSupport;
 
 /**
  * This class is a model property connector which manages a model reference

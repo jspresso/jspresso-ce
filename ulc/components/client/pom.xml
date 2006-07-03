@@ -24,9 +24,5 @@
 			<groupId>ulc</groupId>
 			<artifactId>ulc-base-client</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
 	</dependencies>
 </project>

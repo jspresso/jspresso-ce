@@ -53,7 +53,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
-      return false;
+      return true;
     }
     SecurityHelper.checkAccess(getApplicationSession().getSubject(), action,
         getTranslationProvider(), getLocale());

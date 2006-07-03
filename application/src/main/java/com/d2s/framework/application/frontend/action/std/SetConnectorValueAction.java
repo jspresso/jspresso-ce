@@ -31,7 +31,7 @@ public class SetConnectorValueAction extends AbstractFrontendAction {
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     Object previousActionResult = context
-        .get(ActionContextConstants.ACTION_RESULT);
+        .get(ActionContextConstants.ACTION_PARAM);
     IValueConnector connector = (IValueConnector) context
         .get(connectorActionContextKey);
     // the following will force a connector value change event.

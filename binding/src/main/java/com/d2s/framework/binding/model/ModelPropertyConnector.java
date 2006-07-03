@@ -13,13 +13,13 @@ import com.d2s.framework.binding.AbstractValueConnector;
 import com.d2s.framework.binding.ConnectorBindingException;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.model.IModelChangeListener;
+import com.d2s.framework.model.IModelProvider;
+import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
-import com.d2s.framework.util.model.IModelChangeListener;
-import com.d2s.framework.util.model.IModelProvider;
-import com.d2s.framework.util.model.ModelChangeEvent;
 
 /**
  * This connector is a model property connector.

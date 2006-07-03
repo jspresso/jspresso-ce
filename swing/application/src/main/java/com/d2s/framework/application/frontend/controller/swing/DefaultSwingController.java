@@ -443,7 +443,7 @@ public class DefaultSwingController extends
   @Override
   public boolean execute(IAction action, Map<String, Object> context) {
     if (action == null) {
-      return false;
+      return true;
     }
     JComponent sourceComponent = (JComponent) context
         .get(ActionContextConstants.SOURCE_COMPONENT);

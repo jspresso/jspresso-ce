@@ -17,13 +17,13 @@ import com.d2s.framework.binding.IConnectorMap;
 import com.d2s.framework.binding.IConnectorMapProvider;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.util.collection.CollectionHelper;
 import com.d2s.framework.util.event.ISelectionChangeListener;
 import com.d2s.framework.util.event.SelectionChangeEvent;
 import com.d2s.framework.util.event.SelectionChangeSupport;
-import com.d2s.framework.util.model.ModelChangeEvent;
 
 /**
  * This class is a model property connector which manages a collection property.

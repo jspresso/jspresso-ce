@@ -19,6 +19,15 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public interface IDescriptor {
 
   /**
+   * <code>NAME</code>="name".
+   */
+  String NAME        = "name";
+  /**
+   * <code>DESCRIPTION</code>="description".
+   */
+  String DESCRIPTION = "description";
+
+  /**
    * Gets the name of this descriptor. Depending on the implementation, this
    * name can be technically meaningful (e.g. a method name, a property name,
    * ...).

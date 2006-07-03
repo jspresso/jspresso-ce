@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor.entity.basic;
 
+import java.util.List;
+
 import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
 import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
@@ -72,5 +74,17 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor implements
   @Override
   public Class<? extends IEntity> getComponentContract() {
     return (Class<? extends IEntity>) super.getComponentContract();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<String> getRenderedProperties() {
+    List<String> superRenderedProperties = super.getRenderedProperties();
+    if (superRenderedProperties != null) {
+      superRenderedProperties.remove(IEntity.ID);
+    }
+    return superRenderedProperties;
   }
 }

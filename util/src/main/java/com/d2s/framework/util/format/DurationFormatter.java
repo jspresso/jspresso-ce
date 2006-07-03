@@ -5,7 +5,6 @@ package com.d2s.framework.util.format;
 
 import java.util.Locale;
 
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.Instant;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormat;
@@ -40,7 +39,7 @@ public class DurationFormatter implements IFormatter {
    * {@inheritDoc}
    */
   public Object parse(String source) {
-    if (StringUtils.isEmpty(source)) {
+    if (source == null || source.length() == 0) {
       return null;
     }
     return new Long(formatter.parsePeriod(source)

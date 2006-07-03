@@ -4,8 +4,8 @@
 package com.d2s.framework.binding.model;
 
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
-import com.d2s.framework.util.model.IModelProvider;
 
 
 /**

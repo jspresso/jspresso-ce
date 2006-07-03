@@ -6,9 +6,12 @@ package com.d2s.framework.application.frontend.action.ulc;
 import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.application.frontend.action.AbstractChainedAction;
+import com.d2s.framework.application.frontend.action.ActionWrapper;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCComponent;
+import com.ulcjava.base.application.ULCDialog;
+import com.ulcjava.base.application.ULCWindow;
+import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.util.ULCIcon;
 
 /**
@@ -21,7 +24,8 @@ import com.ulcjava.base.application.util.ULCIcon;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractUlcAction extends AbstractChainedAction<ULCComponent, ULCIcon, IAction> {
+public abstract class AbstractUlcAction extends
+    ActionWrapper<ULCComponent, ULCIcon, IAction> {
 
   /**
    * Retrieves the widget this action was triggered from. It may serve to
@@ -35,5 +39,30 @@ public abstract class AbstractUlcAction extends AbstractChainedAction<ULCCompone
    */
   public ULCComponent getSourceComponent(Map<String, Object> context) {
     return (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  }
+
+  /**
+   * Retrieves the widget which triggered the action from the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the widget which triggered the action.
+   */
+  public ULCComponent getActionWidget(Map<String, Object> context) {
+    return (ULCComponent) context.get(ActionContextConstants.ACTION_WIDGET);
+  }
+
+  /**
+   * If the ancestor of the action widget is a dialog, dispose it.
+   * 
+   * @param context
+   *          the action context.
+   */
+  protected void closeDialog(Map<String, Object> context) {
+    ULCWindow actionWindow = UlcUtilities
+        .windowForComponent(getActionWidget(context));
+    if (actionWindow instanceof ULCDialog) {
+      actionWindow.setVisible(false);
+    }
   }
 }

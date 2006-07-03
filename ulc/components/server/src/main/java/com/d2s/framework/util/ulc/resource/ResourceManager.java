@@ -32,6 +32,8 @@ import com.ulcjava.container.servlet.application.ServletContainerContext;
 public final class ResourceManager {
 
   private static final String          DOWNLOAD_SERVLET_URL_PATTERN = "/download";
+  private static final String          APPLICATION_PREFIX           = "application/";
+
   private static final ResourceManager INSTANCE                     = new ResourceManager();
 
   private Map<String, IResource>       resources;
@@ -143,8 +145,14 @@ public final class ResourceManager {
     if (inDevelopmentEnvironment()) {
       IResource resourceProvider = ResourceManager.getInstance().getRegistered(
           id);
-      String url = createTemporaryFile(resourceProvider.getContent())
-          .toURL().toString();
+      String fileExtension = ".tmp";
+      if (resourceProvider.getMimeType().startsWith(APPLICATION_PREFIX)) {
+        fileExtension = "."
+            + resourceProvider.getMimeType().substring(
+                APPLICATION_PREFIX.length());
+      }
+      String url = createTemporaryFile(resourceProvider.getContent(),
+          fileExtension).toURL().toString();
       ClientContext.showDocument(url, target);
     } else if (inServletContainerEnvironment()) {
       HttpServletRequest request = ServletContainerContext.getRequest();
@@ -182,8 +190,9 @@ public final class ResourceManager {
     }
   }
 
-  private File createTemporaryFile(InputStream is) throws IOException {
-    File file = File.createTempFile(getClass().getName(), ".tmp");
+  private File createTemporaryFile(InputStream is, String fileExtension)
+      throws IOException {
+    File file = File.createTempFile(getClass().getName(), fileExtension);
     file.deleteOnExit();
 
     BufferedInputStream inputStream = new BufferedInputStream(is);

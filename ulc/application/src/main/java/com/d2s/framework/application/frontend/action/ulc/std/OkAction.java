@@ -1,9 +1,12 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.frontend.action.std;
+package com.d2s.framework.application.frontend.action.ulc.std;
 
-import com.d2s.framework.application.frontend.action.AbstractChainedAction;
+import java.util.Map;
+
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 
 /**
  * A standard ok action. Since it is a chained action, it can be chained with
@@ -14,14 +17,8 @@ import com.d2s.framework.application.frontend.action.AbstractChainedAction;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
- * @param <E>
- *          the actual gui component type used.
- * @param <F>
- *          the actual icon type used.
- * @param <G>
- *          the actual action type used.
  */
-public class OkAction<E, F, G> extends AbstractChainedAction<E, F, G> {
+public class OkAction extends AbstractUlcAction {
 
   /**
    * Constructs a new <code>OkAction</code> instance.
@@ -29,5 +26,15 @@ public class OkAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   public OkAction() {
     setName("ok");
     setIconImageURL("classpath:images/ok-48x48.png");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    closeDialog(context);
+    return super.execute(actionHandler, context);
   }
 }

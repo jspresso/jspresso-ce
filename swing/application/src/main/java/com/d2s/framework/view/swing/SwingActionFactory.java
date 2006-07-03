@@ -135,8 +135,10 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
               ((ICollectionConnectorProvider) viewConnector)
                   .getCollectionConnector().getSelectedIndices());
         }
-        actionContext.put(ActionContextConstants.ACTION_PARAM, e
+        actionContext.put(ActionContextConstants.ACTION_COMMAND, e
             .getActionCommand());
+        actionContext.put(ActionContextConstants.ACTION_WIDGET, e
+            .getSource());
         if (action.getInitialContext() != null) {
           actionContext.putAll(action.getInitialContext());
         }

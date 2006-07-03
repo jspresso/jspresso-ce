@@ -5,6 +5,7 @@ package com.d2s.framework.application.printing.model;
 
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
 import com.d2s.framework.util.context.IContextAware;
+import com.d2s.framework.util.descriptor.IDescriptor;
 
 /**
  * Defines the contract of a report instance.
@@ -15,7 +16,7 @@ import com.d2s.framework.util.context.IContextAware;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IReport extends IContextAware {
+public interface IReport extends IContextAware, IDescriptor {
 
   /**
    * Gets the descriptor of this report.

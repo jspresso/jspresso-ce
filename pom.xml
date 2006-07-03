@@ -156,6 +156,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.design2see</groupId>
+				<artifactId>d2s-jasper</artifactId>
+				<version>${pom.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.design2see</groupId>
 				<artifactId>d2s-app-launch</artifactId>
 				<version>${pom.version}</version>
 			</dependency>
