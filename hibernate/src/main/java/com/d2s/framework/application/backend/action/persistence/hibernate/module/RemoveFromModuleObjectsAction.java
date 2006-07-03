@@ -21,7 +21,6 @@ import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * This action removes the selected objects from the projected collection.
@@ -54,11 +53,11 @@ public class RemoveFromModuleObjectsAction extends
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
 
-    Collection<IPropertyChangeCapable> projectedCollection;
+    Collection<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
-      projectedCollection = new ArrayList<IPropertyChangeCapable>();
+      projectedCollection = new ArrayList<Object>();
     } else {
-      projectedCollection = new ArrayList<IPropertyChangeCapable>(module
+      projectedCollection = new ArrayList<Object>(module
           .getModuleObjects());
     }
 

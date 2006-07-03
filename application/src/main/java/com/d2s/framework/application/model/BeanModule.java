@@ -9,8 +9,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.d2s.framework.util.bean.IPropertyChangeCapable;
-
 /**
  * A bean module is the base class of bean related modules.
  * <p>
@@ -22,15 +20,15 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  */
 public class BeanModule extends SubModule {
 
-  private IPropertyChangeCapable                       moduleObject;
-  private Collection<? extends IPropertyChangeCapable> moduleObjects;
+  private Object        moduleObject;
+  private Collection<?> moduleObjects;
 
   /**
    * Gets the module's projected object.
    * 
    * @return the projected object.
    */
-  public IPropertyChangeCapable getModuleObject() {
+  public Object getModuleObject() {
     return moduleObject;
   }
 
@@ -40,7 +38,7 @@ public class BeanModule extends SubModule {
    * @param moduleObject
    *          the projected object.
    */
-  public void setModuleObject(IPropertyChangeCapable moduleObject) {
+  public void setModuleObject(Object moduleObject) {
     if (ObjectUtils.equals(this.moduleObject, moduleObject)) {
       return;
     }
@@ -54,7 +52,7 @@ public class BeanModule extends SubModule {
    * 
    * @return the projected objects.
    */
-  public Collection<? extends IPropertyChangeCapable> getModuleObjects() {
+  public Collection<?> getModuleObjects() {
     return moduleObjects;
   }
 
@@ -64,8 +62,7 @@ public class BeanModule extends SubModule {
    * @param moduleObjects
    *          the projected object collection.
    */
-  public void setModuleObjects(
-      Collection<? extends IPropertyChangeCapable> moduleObjects) {
+  public void setModuleObjects(Collection<?> moduleObjects) {
     if (ObjectUtils.equals(this.moduleObjects, moduleObjects)) {
       return;
     }

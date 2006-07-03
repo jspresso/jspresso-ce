@@ -8,6 +8,7 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
+import com.d2s.framework.application.printing.model.IReport;
 import com.d2s.framework.application.printing.model.IReportFactory;
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -47,11 +48,18 @@ public class ReportAction<E, F, G> extends AbstractChainedAction<E, F, G> {
         || collectionConnector == null) {
       return false;
     }
-    IReportDescriptor reportDescriptor = (IReportDescriptor) collectionConnector
-        .getChildConnector(selectedIndices[0]).getConnectorValue();
-    context.put(ActionContextConstants.ACTION_PARAM, reportFactory
-        .createReportInstance(reportDescriptor,
-            getTranslationProvider(context), getLocale(context)));
+
+    Object reportDescriptorOrReport = collectionConnector.getChildConnector(
+        selectedIndices[0]).getConnectorValue();
+    IReport report = null;
+    if (reportDescriptorOrReport instanceof IReport) {
+      report = (IReport) reportDescriptorOrReport;
+    } else if (reportDescriptorOrReport instanceof IReportDescriptor) {
+      report = reportFactory.createReportInstance(
+          (IReportDescriptor) reportDescriptorOrReport,
+          getTranslationProvider(context), getLocale(context));
+    }
+    context.put(ActionContextConstants.ACTION_PARAM, report);
     return super.execute(actionHandler, context);
   }
 

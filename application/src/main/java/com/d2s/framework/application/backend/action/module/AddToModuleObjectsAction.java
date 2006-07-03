@@ -17,7 +17,6 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * This action adds a new object in the projected collection.
@@ -43,11 +42,11 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor(context))
         .getElementDescriptor();
 
-    Collection<IPropertyChangeCapable> projectedCollection;
+    Collection<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
-      projectedCollection = new ArrayList<IPropertyChangeCapable>();
+      projectedCollection = new ArrayList<Object>();
     } else {
-      projectedCollection = new ArrayList<IPropertyChangeCapable>(module
+      projectedCollection = new ArrayList<Object>(module
           .getModuleObjects());
     }
     IEntity newEntity = getEntityFactory(context).createEntityInstance(
