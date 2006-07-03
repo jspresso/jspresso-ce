@@ -54,6 +54,9 @@ public class EditReportParametersAction extends ModalDialogAction {
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
 
 
+    if (report.getReportDescriptor().getRenderedProperties().size() == 0) {
+      return actionHandler.execute(okAction, context);
+    }
     BasicComponentViewDescriptor reportContextViewDescriptor = new BasicComponentViewDescriptor();
     reportContextViewDescriptor.setModelDescriptor(report.getReportDescriptor());
 

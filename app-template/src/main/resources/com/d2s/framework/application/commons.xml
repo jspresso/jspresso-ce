@@ -23,11 +23,13 @@
 	<bean id="mvcBinder" class="com.d2s.framework.binding.DefaultMvcBinder" />
 
 	<!--
-		The implementation used as AccessorFactory.
+		The implementation used as factories.
 	-->
 	<bean id="beanAccessorFactory" class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory" />
 
 	<bean id="mapAccessorFactory" class="com.d2s.framework.util.accessor.map.MapAccessorFactory" />
+
+	<bean id="reportFactory" class="com.d2s.framework.application.printing.model.basic.BasicReportFactory" />
 
 	<!--
 		The implementation used as ConnectorFactory.
@@ -211,6 +213,12 @@
 			<value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TIME_TYPE</value>
 		</property>
 	</bean>
+	<bean id="BasicReportDescriptor.INSTANCE"
+		class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
+		<property name="staticField">
+			<value>com.d2s.framework.application.printing.model.descriptor.basic.BasicReportDescriptor.INSTANCE</value>
+		</property>
+	</bean>
 
 	<!--
 		Utility beans for views.
@@ -278,11 +286,12 @@
 		<property name="renderedProperty" value="name" />
 		<property name="modelDescriptor" ref="subModulesPropertyDescriptor" />
 	</bean>
-	
+
 	<!-- 
-	  Backend action beans
+		Backend action beans
 	-->
-	<bean id="doPrintBackendAction" class="com.d2s.framework.application.printing.backend.action.GenerateJasperReportAction">
+	<bean id="doPrintBackendAction"
+		class="com.d2s.framework.application.printing.backend.action.GenerateJasperReportAction">
 		<property name="jdbcTemplate" ref="reportingJdbcTemplate" />
 	</bean>
 </beans>

@@ -4,7 +4,6 @@
 package com.d2s.framework.application.printing.frontend.action;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -13,7 +12,7 @@ import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.application.printing.model.IReport;
-import com.d2s.framework.application.printing.model.basic.BasicReport;
+import com.d2s.framework.application.printing.model.IReportFactory;
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
 import com.d2s.framework.application.printing.model.descriptor.basic.BasicReportDescriptor;
 import com.d2s.framework.binding.IValueConnector;
@@ -36,9 +35,10 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * @param <G>
  *          the actual action type used.
  */
-public class PrintReportAction<E, F, G> extends AbstractChainedAction<E, F, G> {
+public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
   private IModelConnectorFactory  beanConnectorFactory;
+  private IReportFactory          reportFactory;
   private List<IReportDescriptor> reportDescriptors;
 
   /**
@@ -60,12 +60,11 @@ public class PrintReportAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     BasicCollectionDescriptor modelDescriptor = new BasicCollectionDescriptor();
     modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
-    IValueConnector reportDescriptorsConnector = beanConnectorFactory
+    IValueConnector reportsConnector = beanConnectorFactory
         .createModelConnector(modelDescriptor);
-    reportDescriptorsConnector.setConnectorValue(createReportInstances(
+    reportsConnector.setConnectorValue(createReportInstances(
         getTranslationProvider(context), getLocale(context)));
-    context
-        .put(ActionContextConstants.ACTION_PARAM, reportDescriptorsConnector);
+    context.put(ActionContextConstants.ACTION_PARAM, reportsConnector);
     return super.execute(actionHandler, context);
   }
 
@@ -74,13 +73,7 @@ public class PrintReportAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     List<IReport> reports = new ArrayList<IReport>();
     if (reportDescriptors != null) {
       for (IReportDescriptor descriptor : reportDescriptors) {
-        BasicReport report = new BasicReport();
-        report.setName(descriptor.getI18nName(translationProvider, locale));
-        report.setDescription(descriptor.getI18nDescription(translationProvider,
-            locale));
-        report.setReportDescriptor(descriptor);
-        report.setContext(new HashMap<String, Object>());
-        reports.add(report);
+        reports.add(reportFactory.createReportInstance(descriptor, translationProvider, locale));
       }
     }
     return reports;
@@ -95,5 +88,15 @@ public class PrintReportAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   public void setBeanConnectorFactory(
       IModelConnectorFactory beanConnectorFactory) {
     this.beanConnectorFactory = beanConnectorFactory;
+  }
+
+  
+  /**
+   * Sets the reportFactory.
+   * 
+   * @param reportFactory the reportFactory to set.
+   */
+  public void setReportFactory(IReportFactory reportFactory) {
+    this.reportFactory = reportFactory;
   }
 }
