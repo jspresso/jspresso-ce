@@ -47,6 +47,7 @@ import com.d2s.framework.gui.swing.components.JErrorDialog;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
 import com.d2s.framework.util.swing.SwingUtil;
+import com.d2s.framework.util.swing.WaitCursorEventQueue;
 import com.d2s.framework.util.swing.WaitCursorTimer;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
@@ -82,29 +83,33 @@ public class DefaultSwingController extends
   @Override
   public boolean start(IBackendController backendController, Locale locale) {
     if (super.start(backendController, locale)) {
-      // Toolkit.getDefaultToolkit().getSystemEventQueue().push(new
-      // WaitCursorEventQueue(500));
-      waitTimer = new WaitCursorTimer(500);
-      waitTimer.setDaemon(true);
-      waitTimer.start();
-      controllerFrame = createControllerFrame();
-      controllerFrame.pack();
-      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-      controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-      controllerFrame.setSize(1100, 800);
-      SwingUtil.centerOnScreen(controllerFrame);
-      controllerFrame.setVisible(true);
+      Toolkit.getDefaultToolkit().getSystemEventQueue().push(
+          new WaitCursorEventQueue(500));
       CallbackHandler callbackHandler = getLoginCallbackHandler();
       if (callbackHandler instanceof DialogCallbackHandler) {
         ((DialogCallbackHandler) callbackHandler)
             .setParentComponent(controllerFrame);
       }
       if (performLogin()) {
+        displayControllerFrame();
         return true;
       }
       stop();
     }
     return false;
+  }
+
+  private void displayControllerFrame() {
+    waitTimer = new WaitCursorTimer(500);
+    waitTimer.setDaemon(true);
+    waitTimer.start();
+    controllerFrame = createControllerFrame();
+    controllerFrame.pack();
+    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    controllerFrame.setSize(1100, 800);
+    SwingUtil.centerOnScreen(controllerFrame);
+    controllerFrame.setVisible(true);
   }
 
   /**
@@ -128,8 +133,7 @@ public class DefaultSwingController extends
           return false;
         }
         lc.login();
-        getBackendController().getApplicationSession().setSubject(
-            lc.getSubject());
+        loginSuccess(lc.getSubject());
         break;
       } catch (LoginException le) {
         System.err.println("Authentication failed:");
@@ -147,7 +151,9 @@ public class DefaultSwingController extends
    */
   @Override
   public boolean stop() {
-    controllerFrame.dispose();
+    if (controllerFrame != null) {
+      controllerFrame.dispose();
+    }
     return true;
   }
 

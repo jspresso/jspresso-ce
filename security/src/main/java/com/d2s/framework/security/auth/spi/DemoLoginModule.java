@@ -201,7 +201,7 @@ public class DemoLoginModule implements LoginModule {
     }
     // assume the user we authenticated is the DemoPrincipal
     userPrincipal = new UserPrincipal(username);
-    userPrincipal.putCustomProperty("owner", "ou=demo");
+    userPrincipal.putCustomProperty(UserPrincipal.OWNER_PROPERTY, "ou=demo");
     if (!subject.getPrincipals().contains(userPrincipal)) {
       subject.getPrincipals().add(userPrincipal);
     }

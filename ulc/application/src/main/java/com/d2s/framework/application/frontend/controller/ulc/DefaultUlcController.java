@@ -79,12 +79,6 @@ public class DefaultUlcController extends
       loginRetries = 0;
       loginSuccessful = false;
       loginComplete = false;
-      controllerFrame = createControllerFrame();
-      controllerFrame.pack();
-      int screenRes = ClientContext.getScreenResolution();
-      controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-      UlcUtil.centerOnScreen(controllerFrame);
-      controllerFrame.setVisible(true);
       CallbackHandler callbackHandler = getLoginCallbackHandler();
       if (callbackHandler instanceof DialogCallbackHandler) {
         ((DialogCallbackHandler) callbackHandler)
@@ -120,7 +114,9 @@ public class DefaultUlcController extends
         if (loginComplete) {
           loginTimer.stop();
           loginTimer = null;
-          if (!loginSuccessful) {
+          if (loginSuccessful) {
+            displayControllerFrame();
+          } else {
             stop();
           }
         }
@@ -128,6 +124,15 @@ public class DefaultUlcController extends
     });
     loginTimer.setInitialDelay(100);
     loginTimer.start();
+  }
+
+  private void displayControllerFrame() {
+    controllerFrame = createControllerFrame();
+    controllerFrame.pack();
+    int screenRes = ClientContext.getScreenResolution();
+    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    UlcUtil.centerOnScreen(controllerFrame);
+    controllerFrame.setVisible(true);
   }
 
   /**
@@ -179,10 +184,8 @@ public class DefaultUlcController extends
         }
         try {
           lc.login();
-          getBackendController().getApplicationSession().setSubject(
-              lc.getSubject());
+          loginSuccess(lc.getSubject());
           loginSuccessful = true;
-          return;
         } catch (LoginException le) {
           loginRetries++;
           System.err.println("Authentication failed:");
@@ -198,7 +201,9 @@ public class DefaultUlcController extends
    */
   @Override
   public boolean stop() {
-    controllerFrame.setVisible(false);
+    if (controllerFrame != null) {
+      controllerFrame.setVisible(false);
+    }
     ApplicationContext.terminate();
     return true;
   }

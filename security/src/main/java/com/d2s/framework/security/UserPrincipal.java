@@ -24,6 +24,16 @@ public class UserPrincipal implements Principal, Serializable {
 
   private String              name;
   private Map<String, Object> customProperties;
+  
+  /**
+   * <code>OWNER_PROPERTY</code>.
+   */
+  public static final String OWNER_PROPERTY = "owner";
+
+  /**
+   * <code>LANGUAGE_PROPERTY</code>.
+   */
+  public static final String LANGUAGE_PROPERTY = "language";
 
   /**
    * Constructs a new <code>UserPrincipal</code> instance.

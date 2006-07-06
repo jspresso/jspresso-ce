@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
 
 import com.d2s.framework.action.ActionContextConstants;
@@ -28,6 +29,7 @@ import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.security.SecurityHelper;
+import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.ICompositeView;
@@ -479,5 +481,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     return controllerDescriptor.getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * This method installs the security subject into the application session.
+   * 
+   * @param subject
+   *          the authenticated user subject.
+   */
+  protected void loginSuccess(Subject subject) {
+    getBackendController().getApplicationSession().setSubject(subject);
+    String userPreferredLanguageCode = (String) getBackendController()
+        .getApplicationSession().getPrincipal().getCustomProperty(
+            UserPrincipal.LANGUAGE_PROPERTY);
+    if (userPreferredLanguageCode != null) {
+      getBackendController().getApplicationSession().setLocale(
+          new Locale(userPreferredLanguageCode));
+    }
   }
 }
