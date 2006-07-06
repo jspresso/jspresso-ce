@@ -59,14 +59,4 @@ public abstract class UlcStartup extends AbstractStartup implements
   String message) {
     // NO-OP
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void start() {
-    super.start();
-    ClientContext.sendMessage("appStarted");
-  }
-
 }

@@ -114,6 +114,7 @@ public class DefaultUlcController extends
         if (loginComplete) {
           loginTimer.stop();
           loginTimer = null;
+          ClientContext.sendMessage("appStarted");
           if (loginSuccessful) {
             displayControllerFrame();
           } else {
