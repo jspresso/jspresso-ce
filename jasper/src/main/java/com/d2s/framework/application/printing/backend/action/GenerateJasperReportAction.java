@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -52,6 +53,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
       final Map<String, Object> reportContext = new HashMap<String, Object>(
           reportDesign.getContext());
       reportContext.putAll(context);
+      reportContext.put(JRParameter.REPORT_LOCALE, getLocale(context));
       JasperPrint jasperPrint = (JasperPrint) jdbcTemplate
           .execute(new ConnectionCallback() {
 
