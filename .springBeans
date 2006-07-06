@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<configs>
+		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/ulc/commons-ulc.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/swing/commons-swing.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+	</configs>
+	<configSets>
+		<configSet>
+			<name>d2s-template-swing</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>true</incomplete>
+			<configs>
+				<config>app-template/src/main/resources/com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/swing/commons-swing.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>d2s-template-ulc</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>true</incomplete>
+			<configs>
+				<config>app-template/src/main/resources/com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/ulc/commons-ulc.xml</config>
+			</configs>
+		</configSet>
+	</configSets>
+</beansProjectDescription>
