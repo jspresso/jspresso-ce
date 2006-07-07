@@ -5,7 +5,7 @@
 	<groupId>com.design2see</groupId>
 	<artifactId>d2s-framework</artifactId>
 	<packaging>pom</packaging>
-	<version>0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>Design2See Application Framework</name>
 	<organization>
 		<name>Design2See</name>

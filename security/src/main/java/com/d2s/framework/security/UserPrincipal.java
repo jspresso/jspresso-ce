@@ -112,4 +112,14 @@ public class UserPrincipal implements Principal, Serializable {
   public Object getCustomProperty(String propertyName) {
     return customProperties.get(propertyName);
   }
+
+  
+  /**
+   * Gets the customProperties.
+   * 
+   * @return the customProperties.
+   */
+  public Map<String, Object> getCustomProperties() {
+    return customProperties;
+  }
 }

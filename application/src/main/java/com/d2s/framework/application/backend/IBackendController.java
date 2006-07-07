@@ -86,4 +86,8 @@ public interface IBackendController extends IController {
    */
   IModelConnectorFactory getBeanConnectorFactory();
 
+  /**
+   * Translate modules based on the locale set.
+   */
+  void translateModules();
 }

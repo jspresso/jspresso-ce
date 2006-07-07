@@ -69,16 +69,22 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public boolean start(Locale locale) {
     applicationSession.setLocale(locale);
-    for (IValueConnector moduleConnector : moduleConnectors.values()) {
-      translateModule((Module) moduleConnector.getConnectorValue());
-    }
     return true;
   }
 
+  /**
+   * Translate modules based on the locale set.
+   */
+  public void translateModules() {
+    for (IValueConnector moduleConnector : moduleConnectors.values()) {
+      translateModule((Module) moduleConnector.getConnectorValue());
+    }
+  }
+
   private void translateModule(Module module) {
-    module.setName(getTranslationProvider().getTranslation(module.getName(),
-        getLocale()));
-    module.setDescription(getTranslationProvider().getTranslation(
+    module.setI18nName(getTranslationProvider().getTranslation(
+        module.getName(), getLocale()));
+    module.setI18nDescription(getTranslationProvider().getTranslation(
         module.getDescription(), getLocale()));
     if (module.getSubModules() != null) {
       for (Module subModule : module.getSubModules()) {

@@ -22,7 +22,6 @@ import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.security.LoginUtils;
 import com.d2s.framework.util.security.LoginUtils.DlmBundle;
 
-
 /**
  * login : demo. password : demo.
  * <p>
@@ -35,29 +34,29 @@ import com.d2s.framework.util.security.LoginUtils.DlmBundle;
 public class DemoLoginModule implements LoginModule {
 
   // initial state
-  private Subject             subject;
-  private CallbackHandler     callbackHandler;
+  private Subject         subject;
+  private CallbackHandler callbackHandler;
   @SuppressWarnings("unused")
-  private Map                 sharedState;
-  private Map                 options;
+  private Map             sharedState;
+  private Map             options;
 
   // configurable option
-  private boolean             debug           = false;
+  private boolean         debug           = false;
 
   // the authentication status
-  private boolean             succeeded       = false;
-  private boolean             commitSucceeded = false;
+  private boolean         succeeded       = false;
+  private boolean         commitSucceeded = false;
 
   // username and password
-  private String              username;
-  private char[]              password;
+  private String          username;
+  private char[]          password;
 
   // testUser's UserPrincipal
-  private UserPrincipal       userPrincipal;
+  private UserPrincipal   userPrincipal;
 
-  private ResourceBundle      bundle          = ResourceBundle
-                                                  .getBundle(DlmBundle.class
-                                                      .getName());
+  private ResourceBundle  bundle          = ResourceBundle
+                                              .getBundle(DlmBundle.class
+                                                  .getName());
 
   /**
    * Initialize this <code>LoginModule</code>.
@@ -112,7 +111,8 @@ public class DemoLoginModule implements LoginModule {
 
     Callback[] callbacks = new Callback[3];
     callbacks[0] = new NameCallback(bundle.getString(LoginUtils.USER));
-    callbacks[1] = new PasswordCallback(bundle.getString(LoginUtils.PASSWORD), false);
+    callbacks[1] = new PasswordCallback(bundle.getString(LoginUtils.PASSWORD),
+        false);
     callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION,
         bundle.getString(LoginUtils.CRED_MESSAGE));
 
@@ -201,7 +201,8 @@ public class DemoLoginModule implements LoginModule {
     }
     // assume the user we authenticated is the DemoPrincipal
     userPrincipal = new UserPrincipal(username);
-    userPrincipal.putCustomProperty(UserPrincipal.OWNER_PROPERTY, "ou=demo");
+    userPrincipal.putCustomProperty(UserPrincipal.OWNER_PROPERTY,
+        "ou=demo,ou=customers,ou=cms,ou=applications,dc=bluevox,dc=com");
     if (!subject.getPrincipals().contains(userPrincipal)) {
       subject.getPrincipals().add(userPrincipal);
     }

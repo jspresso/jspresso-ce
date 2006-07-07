@@ -283,7 +283,7 @@
 	</bean>
 	<bean abstract="true" id="abstractSubModulesNodeGroupDescriptor"
 		class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor">
-		<property name="renderedProperty" value="name" />
+		<property name="renderedProperty" value="i18nName" />
 		<property name="modelDescriptor" ref="subModulesPropertyDescriptor" />
 	</bean>
 

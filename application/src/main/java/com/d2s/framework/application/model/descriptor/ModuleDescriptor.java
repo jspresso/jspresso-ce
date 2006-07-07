@@ -63,6 +63,12 @@ public final class ModuleDescriptor extends BasicComponentDescriptor {
     BasicStringPropertyDescriptor descriptionDescriptor = new BasicStringPropertyDescriptor();
     descriptionDescriptor.setName("description");
 
+    BasicStringPropertyDescriptor i18nNameDescriptor = new BasicStringPropertyDescriptor();
+    i18nNameDescriptor.setName("i18nName");
+
+    BasicStringPropertyDescriptor i18nDescriptionDescriptor = new BasicStringPropertyDescriptor();
+    i18nDescriptionDescriptor.setName("i18nDescription");
+
     parentDescriptor.setReverseRelationEnd(subModulesDescriptor);
     subModulesDescriptor.setReverseRelationEnd(parentDescriptor);
 
@@ -71,6 +77,8 @@ public final class ModuleDescriptor extends BasicComponentDescriptor {
     propertyDescriptors.add(projectedObjectsDescriptor);
     propertyDescriptors.add(nameDescriptor);
     propertyDescriptors.add(descriptionDescriptor);
+    propertyDescriptors.add(i18nNameDescriptor);
+    propertyDescriptors.add(i18nDescriptionDescriptor);
     propertyDescriptors.add(parentDescriptor);
     propertyDescriptors.add(subModulesDescriptor);
     setPropertyDescriptors(propertyDescriptors);

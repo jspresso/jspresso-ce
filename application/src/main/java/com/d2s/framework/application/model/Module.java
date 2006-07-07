@@ -35,6 +35,8 @@ public class Module implements IPropertyChangeCapable {
   private PropertyChangeSupport propertyChangeSupport;
   private String                name;
   private String                description;
+  private String                i18nName;
+  private String                i18nDescription;
   private List<SubModule>       subModules;
 
   /**
@@ -273,6 +275,60 @@ public class Module implements IPropertyChangeCapable {
   }
 
   /**
+   * Gets the i18nDescription.
+   * 
+   * @return the i18nDescription.
+   */
+  public String getI18nDescription() {
+    if (i18nDescription != null) {
+      return i18nDescription;
+    }
+    return getDescription();
+  }
+
+  /**
+   * Gets the i18nName.
+   * 
+   * @return the i18nName.
+   */
+  public String getI18nName() {
+    if (i18nName != null) {
+      return i18nName;
+    }
+    return getName();
+  }
+
+  /**
+   * Sets the i18nDescription.
+   * 
+   * @param i18nDescription
+   *          the i18nDescription to set.
+   */
+  public void setI18nDescription(String i18nDescription) {
+    if (ObjectUtils.equals(this.i18nDescription, i18nDescription)) {
+      return;
+    }
+    String oldValue = getI18nDescription();
+    this.i18nDescription = i18nDescription;
+    firePropertyChange("i18nDescription", oldValue, getI18nDescription());
+  }
+
+  /**
+   * Sets the i18nName.
+   * 
+   * @param i18nName
+   *          the i18nName to set.
+   */
+  public void setI18nName(String i18nName) {
+    if (ObjectUtils.equals(this.i18nName, i18nName)) {
+      return;
+    }
+    String oldValue = getI18nName();
+    this.i18nName = i18nName;
+    firePropertyChange("i18nName", oldValue, getI18nName());
+  }
+
+  /**
    * Equality based on name.
    * <p>
    * {@inheritDoc}
@@ -306,8 +362,8 @@ public class Module implements IPropertyChangeCapable {
    */
   @Override
   public String toString() {
-    if (name != null) {
-      return name;
+    if (getI18nName() != null) {
+      return getI18nName();
     }
     return "";
   }

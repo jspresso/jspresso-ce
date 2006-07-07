@@ -69,7 +69,7 @@ public class BasicSimpleSubModuleDescriptor extends
       moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
       moduleNodeGroupDescriptor.setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
           .getPropertyDescriptor("subModules"));
-      moduleNodeGroupDescriptor.setRenderedProperty("name");
+      moduleNodeGroupDescriptor.setRenderedProperty("i18nName");
       setNodeGroupDescriptor(moduleNodeGroupDescriptor);
     }
     return super.getNodeGroupDescriptor();

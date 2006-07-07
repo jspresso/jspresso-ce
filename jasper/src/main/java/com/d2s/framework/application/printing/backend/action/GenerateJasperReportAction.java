@@ -23,6 +23,7 @@ import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractBackendAction;
 import com.d2s.framework.application.printing.model.IReport;
+import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.url.UrlHelper;
 
 /**
@@ -53,6 +54,9 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
       final Map<String, Object> reportContext = new HashMap<String, Object>(
           reportDesign.getContext());
       reportContext.putAll(context);
+      UserPrincipal user = getController(context).getApplicationSession()
+          .getPrincipal();
+      reportContext.putAll(user.getCustomProperties());
       reportContext.put(JRParameter.REPORT_LOCALE, getLocale(context));
       JasperPrint jasperPrint = (JasperPrint) jdbcTemplate
           .execute(new ConnectionCallback() {
