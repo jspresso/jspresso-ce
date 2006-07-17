@@ -3,11 +3,17 @@
  */
 package com.d2s.framework.binding.swing;
 
+import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.border.BevelBorder;
+
 import org.apache.commons.lang.StringUtils;
 
+import com.d2s.framework.binding.ConnectorValueChangeEvent;
+import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.gui.swing.components.JActionField;
 
 /**
@@ -89,5 +95,19 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   protected void protectedUpdateState() {
     super.protectedUpdateState();
     getConnectedJComponent().setEditable(isWritable());
+    if (!getConnectedJComponent().isShowingTextField()) {
+      addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+        public void connectorValueChange(ConnectorValueChangeEvent evt) {
+          if (evt.getNewValue() != null) {
+            getConnectedJComponent().setBorder(
+                BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.RED
+                    .brighter(), Color.RED.darker()));
+          } else {
+            getConnectedJComponent().setBorder(null);
+          }
+        }
+      });
+    }
   }
 }

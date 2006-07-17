@@ -467,4 +467,13 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
       sendUI(DateFieldConstants.SET_EDITABLE_REQUEST, editableAnything);
     }
   }
+  
+  /**
+   * Gets the showTextField.
+   * 
+   * @return the showTextField.
+   */
+  public boolean isShowingTextField() {
+    return showTextField;
+  }
 }

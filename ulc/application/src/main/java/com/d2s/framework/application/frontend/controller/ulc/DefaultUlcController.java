@@ -25,6 +25,7 @@ import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
+import com.d2s.framework.view.IViewFactory;
 import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
@@ -316,7 +317,8 @@ public class DefaultUlcController extends
           .getI18nName(getTranslationProvider(), getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
           moduleDescriptor.getI18nDescription(getTranslationProvider(),
-              getLocale()));
+              getLocale())
+              + IViewFactory.TOOLTIP_ELLIPSIS);
       putValue(com.ulcjava.base.application.IAction.SMALL_ICON,
           getIconFactory().getIcon(moduleDescriptor.getIconImageURL(),
               IIconFactory.TINY_ICON_SIZE));
