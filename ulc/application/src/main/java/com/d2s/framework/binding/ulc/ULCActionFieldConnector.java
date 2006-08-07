@@ -11,9 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.gui.ulc.components.server.ULCActionField;
-import com.ulcjava.base.application.BorderFactory;
-import com.ulcjava.base.application.border.ULCBevelBorder;
-import com.ulcjava.base.application.util.Color;
 
 /**
  * ULCActionFieldConnector connector.
@@ -77,7 +74,7 @@ public class ULCActionFieldConnector extends
       if (StringUtils.isEmpty(getConnectedULCComponent().getActionText())) {
         getConnectedULCComponent().setValue(null);
       } else {
-        getConnectedULCComponent().performAction();
+        getConnectedULCComponent().performAction(0);
       }
     }
   }
@@ -109,13 +106,7 @@ public class ULCActionFieldConnector extends
       addConnectorValueChangeListener(new IConnectorValueChangeListener() {
 
         public void connectorValueChange(ConnectorValueChangeEvent evt) {
-          if (evt.getNewValue() != null) {
-            getConnectedULCComponent().setBorder(
-                BorderFactory.createBevelBorder(ULCBevelBorder.RAISED,
-                    Color.red.brighter(), Color.red.darker()));
-          } else {
-            getConnectedULCComponent().setBorder(null);
-          }
+          getConnectedULCComponent().setDecorated(evt.getNewValue() != null);
         }
       });
     }

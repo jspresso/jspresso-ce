@@ -8,6 +8,7 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1660,7 +1661,7 @@ public class DefaultUlcViewFactory implements
           propertyDescriptor.getReferencedDescriptor().getIconImageURL(),
           IIconFactory.TINY_ICON_SIZE));
     }
-    viewComponent.setAction(fieldAction);
+    viewComponent.setActions(Collections.singletonList(fieldAction));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -1674,7 +1675,7 @@ public class DefaultUlcViewFactory implements
     IAction fieldAction = actionFactory.createAction(
         chooseFileAsBinaryPropertyAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
-    viewComponent.setAction(fieldAction);
+    viewComponent.setActions(Collections.singletonList(fieldAction));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }

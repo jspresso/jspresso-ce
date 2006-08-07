@@ -9,7 +9,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.AbstractCellEditor;
@@ -45,7 +47,6 @@ import com.ulcjava.base.shared.internal.Anything;
 public class UIActionField extends UIComponent implements IEditorComponent {
 
   private TableCellEditor tableCellEditor;
-  private UIIcon          actionIcon;
   private FocusListener   actionFocusListener;
 
   /**
@@ -117,9 +118,7 @@ public class UIActionField extends UIComponent implements IEditorComponent {
   public void restoreState(Anything args) {
     super.restoreState(args);
     handleSetActionText(args);
-    actionIcon = (UIIcon) getSession().getManaged(UIIcon.class,
-        args.get(ActionFieldConstants.ICON_KEY));
-    handleSetAction(args.get(ActionFieldConstants.ACTION_KEY));
+    handleSetActions(args);
     getBasicObject().setEditable(
         args.get(DateFieldConstants.EDITABLE_KEY, true));
   }
@@ -139,8 +138,8 @@ public class UIActionField extends UIComponent implements IEditorComponent {
   public void handleRequest(String request, Anything args) {
     if (request.equals(ActionFieldConstants.SET_ACTION_TEXT_REQUEST)) {
       handleSetActionText(args);
-    } else if (request.equals(ActionFieldConstants.SET_ACTION_REQUEST)) {
-      handleSetAction(args);
+    } else if (request.equals(ActionFieldConstants.SET_ACTIONS_REQUEST)) {
+      handleSetActions(args);
     } else if (request.equals(ActionFieldConstants.SET_EDITABLE_REQUEST)) {
       handleSetEditable(args);
     } else {
@@ -159,11 +158,25 @@ public class UIActionField extends UIComponent implements IEditorComponent {
         args.get(ActionFieldConstants.EDITABLE_KEY, true));
   }
 
-  private void handleSetAction(Anything args) {
-    getBasicObject().setAction(anythingToAction(args));
+  private void handleSetActions(Anything args) {
+    List<UIIcon> icons = new ArrayList<UIIcon>();
+    List<Action> actions = new ArrayList<Action>();
+
+    Anything iconsAnything = args.get(ActionFieldConstants.ICONS_KEY);
+    for (int index = 0; index < iconsAnything.size(); index++) {
+      icons.add((UIIcon) getSession().getManaged(UIIcon.class,
+          iconsAnything.get(index)));
+    }
+
+    Anything actionsAnything = args.get(ActionFieldConstants.ACTIONS_KEY);
+    for (int index = 0; index < actionsAnything.size(); index++) {
+      actions.add(anythingToAction(actionsAnything.get(index),
+          icons.get(index)));
+    }
+    getBasicObject().setActions(actions);
   }
 
-  private Action anythingToAction(Anything actionAnything) {
+  private Action anythingToAction(Anything actionAnything, UIIcon actionIcon) {
     if (actionAnything == null) {
       return null;
     }
@@ -173,6 +186,7 @@ public class UIActionField extends UIComponent implements IEditorComponent {
 
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent evt) {
+        // TODO handle for multiple actions
         if (evt.getSource() instanceof JButton) {
           sendActionText(((JButton) evt.getSource()).getActionCommand());
         } else {

@@ -3,20 +3,26 @@
  */
 package com.d2s.framework.gui.swing.components;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 import com.d2s.framework.util.lang.ObjectUtils;
@@ -41,6 +47,7 @@ public class JActionField extends JPanel {
   private JTextField        textField;
   private Object            value;
   private boolean           showTextField;
+  private JPanel            buttonPanel;
 
   /**
    * Constructs a new <code>JActionField</code> instance.
@@ -50,9 +57,11 @@ public class JActionField extends JPanel {
    */
   public JActionField(boolean showTextField) {
     textField = new JTextField();
-    setLayout(new BorderLayout());
+    setLayout(new GridBagLayout());
     if (showTextField) {
-      add(textField, BorderLayout.CENTER);
+      add(textField, new GridBagConstraints(0, 0, 1, 1, 1, 0,
+          GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
+              0, 0, 0, 0), 0, 0));
       Border border = textField.getBorder();
       textField.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
       setBorder(border);
@@ -67,28 +76,47 @@ public class JActionField extends JPanel {
       SwingUtil.enableSelectionOnFocusGained(textField);
     }
     this.showTextField = showTextField;
+    buttonPanel = new JPanel();
+    buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+
+    int buttonPosition;
+    if (showTextField) {
+      buttonPosition = 1;
+    } else {
+      buttonPosition = 0;
+    }
+    add(buttonPanel, new GridBagConstraints(buttonPosition, 0, 1, 1, 0, 1,
+        GridBagConstraints.WEST, GridBagConstraints.VERTICAL, new Insets(0, 0,
+            0, 0), 0, 0));
   }
 
   /**
    * Sets the action field action.
    * 
-   * @param action
-   *          the action field action.
+   * @param actions
+   *          the action field actions.
    */
-  public void setAction(Action action) {
-    textField.setAction(action);
-    JButton actionButton = new JButton();
-    actionButton.setBackground(textField.getBackground());
-    actionButton.setAction(action);
-    actionButton.setActionCommand("%");
-    actionButton.setText("");
-    if (showTextField) {
-      actionButton.setPreferredSize(new Dimension(
-          textField.getPreferredSize().height,
-          textField.getPreferredSize().height));
-      add(actionButton, BorderLayout.EAST);
-    } else {
-      add(actionButton, BorderLayout.CENTER);
+  public void setActions(List<Action> actions) {
+    for (Action action : actions) {
+      JButton actionButton = new JButton();
+      actionButton.setBackground(textField.getBackground());
+      actionButton.setAction(action);
+      actionButton.setActionCommand("%");
+      actionButton.setText("");
+      int buttonSquareSize;
+      if (showTextField) {
+        buttonSquareSize = textField.getPreferredSize().height;
+        if (textField.getAction() == null) {
+          textField.setAction(action);
+        }
+      } else {
+        buttonSquareSize = actionButton.getPreferredSize().height;
+      }
+      actionButton.setPreferredSize(new Dimension(buttonSquareSize,
+          buttonSquareSize));
+      actionButton.setMinimumSize(actionButton.getPreferredSize());
+      actionButton.setMaximumSize(actionButton.getPreferredSize());
+      buttonPanel.add(actionButton);
     }
   }
 
@@ -235,5 +263,20 @@ public class JActionField extends JPanel {
    */
   public boolean isShowingTextField() {
     return showTextField;
+  }
+
+  /**
+   * Decorates the component with a marker.
+   * 
+   * @param decorated
+   *          if the component should be decorated.
+   */
+  public void setDecorated(boolean decorated) {
+    if (decorated) {
+      buttonPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,
+          Color.RED.brighter(), Color.RED.darker()));
+    } else {
+      setBorder(null);
+    }
   }
 }

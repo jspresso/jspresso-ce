@@ -3,12 +3,8 @@
  */
 package com.d2s.framework.binding.swing;
 
-import java.awt.Color;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.border.BevelBorder;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -99,13 +95,7 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
       addConnectorValueChangeListener(new IConnectorValueChangeListener() {
 
         public void connectorValueChange(ConnectorValueChangeEvent evt) {
-          if (evt.getNewValue() != null) {
-            getConnectedJComponent().setBorder(
-                BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.RED
-                    .brighter(), Color.RED.darker()));
-          } else {
-            getConnectedJComponent().setBorder(null);
-          }
+          getConnectedJComponent().setDecorated(evt.getNewValue() != null);
         }
       });
     }

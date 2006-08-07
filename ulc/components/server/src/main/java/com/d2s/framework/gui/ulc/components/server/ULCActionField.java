@@ -5,13 +5,14 @@ package com.d2s.framework.gui.ulc.components.server;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.gui.ulc.components.shared.ActionFieldConstants;
-import com.d2s.framework.gui.ulc.components.shared.DateFieldConstants;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.IEditorComponent;
 import com.ulcjava.base.application.ULCComponent;
@@ -40,9 +41,10 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   private Object                value;
   private String                actionText;
   private boolean               editable;
+  private boolean               decorated;
   private boolean               showTextField;
-  private IAction               action;
-  private ULCIcon               actionIcon;
+  private List<IAction>         actions;
+  private List<ULCIcon>         actionIcons;
   private int                   editingRow;
   private int                   editingColumn;
 
@@ -73,11 +75,35 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   @Override
   protected void saveState(Anything a) {
     super.saveState(a);
+
     a.put(ActionFieldConstants.SHOW_TEXTFIELD_KEY, showTextField);
     a.put(ActionFieldConstants.ACTION_TEXT_KEY, actionText);
-    saveState(a, ActionFieldConstants.ICON_KEY, actionIcon, null);
-    a.put(ActionFieldConstants.ACTION_KEY, actionToAnything());
+    
+    Anything actionIconsAnything = new Anything();
+    fillActionIcons(actionIconsAnything);
+    a.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
+
+    Anything actionsAnything = new Anything();
+    fillActions(actionsAnything);
+    a.put(ActionFieldConstants.ACTIONS_KEY, actionsAnything);
+
     editableToAnything(a);
+  }
+
+  private void fillActionIcons(Anything anything) {
+    if (actionIcons != null) {
+      for (ULCIcon actionIcon : actionIcons) {
+        anything.append(actionIcon.getRef());
+      }
+    }
+  }
+
+  private void fillActions(Anything anything) {
+    if (actions != null) {
+      for (IAction action : actions) {
+        anything.append(actionToAnything(action));
+      }
+    }
   }
 
   /**
@@ -166,33 +192,38 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * 
    * @return the action.
    */
-  public IAction getAction() {
-    return action;
+  public List<IAction> getActions() {
+    return actions;
   }
 
   /**
    * Sets the action.
    * 
-   * @param action
-   *          the action to set.
+   * @param actions
+   *          the actions to set.
    */
-  public void setAction(IAction action) {
-    if (!ObjectUtils.equals(this.action, action)) {
-      this.action = action;
-      if (action != null) {
-        setActionIcon((ULCIcon) action.getValue(IAction.SMALL_ICON));
+  public void setActions(List<IAction> actions) {
+    if (!ObjectUtils.equals(this.actions, actions)) {
+      this.actions = actions;
+      if (actions != null) {
+        List<ULCIcon> newActionIcons = new ArrayList<ULCIcon>();
+        for (IAction action : actions) {
+          newActionIcons.add((ULCIcon) action.getValue(IAction.SMALL_ICON));
+        }
+        actionIcons = newActionIcons;
       }
-      Anything args = new Anything();
-      args.append(actionToAnything());
-      sendUI(ActionFieldConstants.SET_ACTION_REQUEST, args);
-    }
-  }
+      
+      Anything actionsAnything = new Anything();
+      fillActions(actionsAnything);
 
-  private void setActionIcon(ULCIcon actionIcon) {
-    if (!ObjectUtils.equals(this.actionIcon, actionIcon)) {
-      ULCIcon oldActionIcon = this.actionIcon;
-      this.actionIcon = actionIcon;
-      update(ActionFieldConstants.ICON_KEY, oldActionIcon, this.actionIcon);
+      Anything actionIconsAnything = new Anything();
+      fillActionIcons(actionIconsAnything);
+      
+      Anything args = new Anything();
+      args.put(ActionFieldConstants.ACTIONS_KEY, actionsAnything);
+      args.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
+
+      sendUI(ActionFieldConstants.SET_ACTIONS_REQUEST, args);
     }
   }
 
@@ -206,15 +237,14 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     return ObjectUtils.equals(valueToString(), actionText);
   }
 
-  private Anything actionToAnything() {
+  private Anything actionToAnything(IAction action) {
     if (action == null) {
       return null;
     }
     Anything actionAnything = new Anything();
     if (action.getValue(IAction.ACCELERATOR_KEY) != null) {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY,
-          ((Integer) action.getValue(IAction.ACCELERATOR_KEY))
-              .intValue());
+          ((Integer) action.getValue(IAction.ACCELERATOR_KEY)).intValue());
     } else {
       actionAnything.put(ActionFieldConstants.ACCELERATOR_KEY, -1);
     }
@@ -236,7 +266,11 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   }
 
   private void editableToAnything(Anything args) {
-    args.put(DateFieldConstants.EDITABLE_KEY, editable);
+    args.put(ActionFieldConstants.EDITABLE_KEY, editable);
+  }
+
+  private void decoratedToAnything(Anything args) {
+    args.put(ActionFieldConstants.DECORATED_KEY, decorated);
   }
 
   /**
@@ -252,7 +286,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    */
   public void copyAttributes(ICellComponent source) {
     sourceActionField = (ULCActionField) source;
-    setAction(sourceActionField.action);
+    setActions(sourceActionField.actions);
     showTextField = sourceActionField.showTextField;
   }
 
@@ -267,7 +301,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
       return true;
     }
     ULCActionField otherActionField = (ULCActionField) component;
-    return new EqualsBuilder().append(action, otherActionField.action)
+    return new EqualsBuilder().append(actions, otherActionField.actions)
         .isEquals();
   }
 
@@ -275,7 +309,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    * {@inheritDoc}
    */
   public int attributesHashCode() {
-    return new HashCodeBuilder(17, 53).append(action).toHashCode();
+    return new HashCodeBuilder(17, 53).append(actions).toHashCode();
   }
 
   /**
@@ -309,9 +343,12 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
 
   /**
    * performs the registered action programatically.
+   * 
+   * @param index
+   *          the index of the action to be triggerred.
    */
-  public void performAction() {
-    action.actionPerformed(new ActionEvent(this, actionText));
+  public void performAction(int index) {
+    actions.get(index).actionPerformed(new ActionEvent(this, actionText));
   }
 
   /**
@@ -464,10 +501,10 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
       this.editable = editable;
       Anything editableAnything = new Anything();
       editableToAnything(editableAnything);
-      sendUI(DateFieldConstants.SET_EDITABLE_REQUEST, editableAnything);
+      sendUI(ActionFieldConstants.SET_EDITABLE_REQUEST, editableAnything);
     }
   }
-  
+
   /**
    * Gets the showTextField.
    * 
@@ -475,5 +512,20 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    */
   public boolean isShowingTextField() {
     return showTextField;
+  }
+
+  /**
+   * Decorates the component with a marker.
+   * 
+   * @param decorated
+   *          if the component should be decorated.
+   */
+  public void setDecorated(boolean decorated) {
+    if (this.decorated != decorated) {
+      this.decorated = decorated;
+      Anything decoratedAnything = new Anything();
+      decoratedToAnything(decoratedAnything);
+      sendUI(ActionFieldConstants.SET_DECORATED_REQUEST, decoratedAnything);
+    }
   }
 }
