@@ -5,7 +5,6 @@ package com.d2s.framework.gui.ulc.components.server;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -44,7 +43,6 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   private boolean               decorated;
   private boolean               showTextField;
   private List<IAction>         actions;
-  private List<ULCIcon>         actionIcons;
   private int                   editingRow;
   private int                   editingColumn;
 
@@ -78,30 +76,25 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
 
     a.put(ActionFieldConstants.SHOW_TEXTFIELD_KEY, showTextField);
     a.put(ActionFieldConstants.ACTION_TEXT_KEY, actionText);
-    
-    Anything actionIconsAnything = new Anything();
-    fillActionIcons(actionIconsAnything);
-    a.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
 
+    Anything actionIconsAnything = new Anything();
     Anything actionsAnything = new Anything();
-    fillActions(actionsAnything);
+
+    fillActionData(actionsAnything, actionIconsAnything);
+
+    a.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
     a.put(ActionFieldConstants.ACTIONS_KEY, actionsAnything);
 
     editableToAnything(a);
   }
 
-  private void fillActionIcons(Anything anything) {
-    if (actionIcons != null) {
-      for (ULCIcon actionIcon : actionIcons) {
-        anything.append(actionIcon.getRef());
-      }
-    }
-  }
-
-  private void fillActions(Anything anything) {
+  private void fillActionData(Anything actionsAnything, Anything iconsAnything) {
     if (actions != null) {
       for (IAction action : actions) {
-        anything.append(actionToAnything(action));
+        actionsAnything.append(actionToAnything(action));
+        ULCIcon icon = (ULCIcon) action.getValue(IAction.SMALL_ICON);
+        icon.upload();
+        iconsAnything.append(icon.getRef());
       }
     }
   }
@@ -205,20 +198,11 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   public void setActions(List<IAction> actions) {
     if (!ObjectUtils.equals(this.actions, actions)) {
       this.actions = actions;
-      if (actions != null) {
-        List<ULCIcon> newActionIcons = new ArrayList<ULCIcon>();
-        for (IAction action : actions) {
-          newActionIcons.add((ULCIcon) action.getValue(IAction.SMALL_ICON));
-        }
-        actionIcons = newActionIcons;
-      }
-      
-      Anything actionsAnything = new Anything();
-      fillActions(actionsAnything);
 
+      Anything actionsAnything = new Anything();
       Anything actionIconsAnything = new Anything();
-      fillActionIcons(actionIconsAnything);
-      
+      fillActionData(actionsAnything, actionIconsAnything);
+
       Anything args = new Anything();
       args.put(ActionFieldConstants.ACTIONS_KEY, actionsAnything);
       args.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
