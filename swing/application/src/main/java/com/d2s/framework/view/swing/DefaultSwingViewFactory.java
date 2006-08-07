@@ -19,6 +19,7 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -199,6 +200,7 @@ public class DefaultSwingViewFactory implements
   private IActionFactory<Action, JComponent> actionFactory;
   private IDisplayableAction                 lovAction;
   private IDisplayableAction                 chooseFileAsBinaryPropertyAction;
+  private IDisplayableAction                 downloadBinaryPropertyAsFileAction;
 
   /**
    * Constructs a new <code>DefaultSwingViewFactory</code> instance.
@@ -1693,10 +1695,14 @@ public class DefaultSwingViewFactory implements
     JActionField viewComponent = createJActionField(false);
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
-    Action fieldAction = actionFactory.createAction(
+    Action uploadAction = actionFactory.createAction(
         chooseFileAsBinaryPropertyAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
-    viewComponent.setActions(Collections.singletonList(fieldAction));
+    Action downloadAction = actionFactory.createAction(
+        downloadBinaryPropertyAsFileAction, actionHandler, viewComponent,
+        propertyDescriptor, connector, locale);
+    viewComponent.setActions(Arrays.asList(new Action[] {uploadAction,
+        downloadAction}));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2587,6 +2593,17 @@ public class DefaultSwingViewFactory implements
   public void setChooseFileAsBinaryPropertyAction(
       IDisplayableAction chooseFileAsBinaryPropertyAction) {
     this.chooseFileAsBinaryPropertyAction = chooseFileAsBinaryPropertyAction;
+  }
+
+  /**
+   * Sets the downloadBinaryPropertyAsFileAction.
+   * 
+   * @param downloadBinaryPropertyAsFileAction
+   *          the downloadBinaryPropertyAsFileAction to set.
+   */
+  public void setDownloadBinaryPropertyAsFileAction(
+      IDisplayableAction downloadBinaryPropertyAsFileAction) {
+    this.downloadBinaryPropertyAsFileAction = downloadBinaryPropertyAsFileAction;
   }
 
   /**

@@ -129,6 +129,7 @@
 		<property name="actionFactory" ref="actionFactory" />
 		<property name="lovAction" ref="lovAction" />
 		<property name="chooseFileAsBinaryPropertyAction" ref="chooseFileAsBinaryPropertyAction" />
+		<property name="downloadBinaryPropertyAsFileAction" ref="chooseFileAsBinaryPropertyAction" />
 	</bean>
 
 	<bean id="abstractActionFactory" abstract="true">

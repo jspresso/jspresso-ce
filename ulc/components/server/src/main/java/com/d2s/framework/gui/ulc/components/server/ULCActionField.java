@@ -303,6 +303,8 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   public void handleRequest(String request, Anything args) {
     if (request.equals(ActionFieldConstants.SET_ACTION_TEXT_REQUEST)) {
       handleSetActionText(args);
+    } else if (request.equals(ActionFieldConstants.TRIGGER_ACTION_REQUEST)) {
+      handleTriggerAction(args);
     } else if (request.equals(ActionFieldConstants.SET_EDITING_CELL_REQUEST)) {
       handleSetEditingCell(args);
     } else if (request.equals(ActionFieldConstants.SYNC_STATE_REQUEST)) {
@@ -314,6 +316,11 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
 
   private void handleSetActionText(Anything args) {
     updateActionText(args.get(ActionFieldConstants.ACTION_TEXT_KEY, ""), false);
+  }
+
+  private void handleTriggerAction(Anything args) {
+    performAction(args.get(ActionFieldConstants.ACTION_INDEX_KEY, 0), args.get(
+        ActionFieldConstants.ACTION_TEXT_KEY, ""));
   }
 
   private void handleSyncState(Anything args) {
@@ -332,7 +339,11 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    *          the index of the action to be triggerred.
    */
   public void performAction(int index) {
-    actions.get(index).actionPerformed(new ActionEvent(this, actionText));
+    performAction(index, actionText);
+  }
+
+  private void performAction(int index, String command) {
+    actions.get(index).actionPerformed(new ActionEvent(this, command));
   }
 
   /**

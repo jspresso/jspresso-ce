@@ -25,6 +25,11 @@ public final class ActionFieldConstants {
   public static final String SET_ACTION_TEXT_REQUEST  = "setActionText";
 
   /**
+   * <code>TRIGGER_ACTION_REQUEST</code>.
+   */
+  public static final String TRIGGER_ACTION_REQUEST  = "triggerAction";
+
+  /**
    * <code>SET_ACTION_REQUEST</code>.
    */
   public static final String SET_ACTIONS_REQUEST       = "setActions";
@@ -54,6 +59,11 @@ public final class ActionFieldConstants {
    * <code>ACTION_TEXT_KEY</code>.
    */
   public static final String ACTION_TEXT_KEY          = "actionText";
+
+  /**
+   * <code>ACTION_INDEX_KEY</code>.
+   */
+  public static final String ACTION_INDEX_KEY          = "actionIndex";
 
   /**
    * <code>ACTION_KEY</code>.

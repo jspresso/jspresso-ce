@@ -104,6 +104,13 @@ public class UIActionField extends UIComponent implements IEditorComponent {
     sendULC(ActionFieldConstants.SET_ACTION_TEXT_REQUEST, actionTextAnything);
   }
 
+  private void triggerAction(int index, String actionText) {
+    Anything actionTextAnything = new Anything();
+    actionTextAnything.put(ActionFieldConstants.ACTION_INDEX_KEY, index);
+    actionTextAnything.put(ActionFieldConstants.ACTION_TEXT_KEY, actionText);
+    sendULC(ActionFieldConstants.TRIGGER_ACTION_REQUEST, actionTextAnything);
+  }
+
   private void syncState() {
     Anything actionTextAnything = new Anything();
     actionTextAnything.put(ActionFieldConstants.ACTION_TEXT_KEY,
@@ -142,6 +149,8 @@ public class UIActionField extends UIComponent implements IEditorComponent {
       handleSetActions(args);
     } else if (request.equals(ActionFieldConstants.SET_EDITABLE_REQUEST)) {
       handleSetEditable(args);
+    } else if (request.equals(ActionFieldConstants.SET_DECORATED_REQUEST)) {
+      handleSetDecorated(args);
     } else {
       super.handleRequest(request, args);
     }
@@ -158,6 +167,11 @@ public class UIActionField extends UIComponent implements IEditorComponent {
         args.get(ActionFieldConstants.EDITABLE_KEY, true));
   }
 
+  private void handleSetDecorated(Anything args) {
+    getBasicObject().setDecorated(
+        args.get(ActionFieldConstants.DECORATED_KEY, true));
+  }
+
   private void handleSetActions(Anything args) {
     List<UIIcon> icons = new ArrayList<UIIcon>();
     List<Action> actions = new ArrayList<Action>();
@@ -170,13 +184,14 @@ public class UIActionField extends UIComponent implements IEditorComponent {
 
     Anything actionsAnything = args.get(ActionFieldConstants.ACTIONS_KEY);
     for (int index = 0; index < actionsAnything.size(); index++) {
-      actions.add(anythingToAction(actionsAnything.get(index),
-          icons.get(index)));
+      actions.add(anythingToAction(index, actionsAnything.get(index), icons
+          .get(index)));
     }
     getBasicObject().setActions(actions);
   }
 
-  private Action anythingToAction(Anything actionAnything, UIIcon actionIcon) {
+  private Action anythingToAction(final int index, Anything actionAnything,
+      UIIcon actionIcon) {
     if (actionAnything == null) {
       return null;
     }
@@ -186,9 +201,9 @@ public class UIActionField extends UIComponent implements IEditorComponent {
 
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent evt) {
-        // TODO handle for multiple actions
         if (evt.getSource() instanceof JButton) {
-          sendActionText(((JButton) evt.getSource()).getActionCommand());
+          triggerAction(index, ((JButton) evt.getSource()).getActionCommand());
+          //sendActionText(((JButton) evt.getSource()).getActionCommand());
         } else {
           sendActionText();
         }
