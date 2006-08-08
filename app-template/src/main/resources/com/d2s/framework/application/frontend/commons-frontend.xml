@@ -45,10 +45,16 @@
 		<property name="connectorActionContextKey" value="SOURCE_VIEW_CONNECTOR" />
 	</bean>
 
-	<bean id="abstractChooseFileAction" abstract="true">
+	<bean id="abstractOpenFileAction" abstract="true">
 		<property name="iconImageURL" value="classpath:images/open_file-48x48.png" />
 		<property name="name" value="open.file.name" />
 		<property name="description" value="open.file.description" />
+	</bean>
+
+	<bean id="abstractSaveFileAction" abstract="true">
+		<property name="iconImageURL" value="classpath:images/save_file-48x48.png" />
+		<property name="name" value="save.file.name" />
+		<property name="description" value="save.file.description" />
 	</bean>
 
 	<bean id="abstractPrintAction" abstract="true"
@@ -322,7 +328,8 @@
 			<map>
 				<entry key="FILE">
 					<list>
-						<ref bean="chooseFileAsBinaryPropertyAction" />
+						<ref bean="openFileAsBinaryPropertyAction" />
+						<ref bean="saveBinaryPropertyAsFileAction" />
 					</list>
 				</entry>
 			</map>

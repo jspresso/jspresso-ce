@@ -3,20 +3,14 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.file;
 
-import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
-import com.d2s.framework.application.frontend.file.IFileOpenCallback;
-import com.ulcjava.base.application.ClientContext;
-import com.ulcjava.base.application.util.serializable.IFileLoadHandler;
 import com.ulcjava.base.shared.FileChooserConfig;
 
 /**
- * Initiates a file choosing action. Then the file content is passed as a byte
- * array to the next action through its context entry ACTION_RESULT.
+ * Initiates a file choosing action.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -24,41 +18,19 @@ import com.ulcjava.base.shared.FileChooserConfig;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ChooseFileAction extends AbstractUlcAction {
+public abstract class ChooseFileAction extends AbstractUlcAction {
 
   private Map<String, List<String>> fileFilter;
-  private IFileOpenCallback         fileOpenCallback;
   private FileChooserConfig         fileChooser;
 
   /**
-   * {@inheritDoc}
+   * Gets the file chooser configuration used to build this file chooser.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file chooser configuration.
    */
-  @Override
-  public boolean execute(IActionHandler actionHandler,
-      final Map<String, Object> context) {
-    ClientContext.loadFile(new IFileLoadHandler() {
-
-      private static final long serialVersionUID = -1025629868916915262L;
-
-      @SuppressWarnings("unused")
-      public void onSuccess(InputStream in, String filePath) {
-        if (fileOpenCallback != null) {
-          getFileChooser(context).setCurrentDirectory(filePath);
-          fileOpenCallback.fileOpened(in, filePath, context);
-        }
-      }
-
-      @SuppressWarnings("unused")
-      public void onFailure(int reason, String description) {
-        if (fileOpenCallback != null) {
-          fileOpenCallback.cancel(context);
-        }
-      }
-    }, getFileChooser(context));
-    return super.execute(actionHandler, context);
-  }
-
-  private FileChooserConfig getFileChooser(Map<String, Object> context) {
+  protected FileChooserConfig getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new FileChooserConfig();
       fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
@@ -96,15 +68,5 @@ public class ChooseFileAction extends AbstractUlcAction {
     if (oldFileFilter != this.fileFilter) {
       fileChooser = null;
     }
-  }
-
-  /**
-   * Sets the fileOpenCallback.
-   * 
-   * @param fileOpenCallback
-   *          the fileOpenCallback to set.
-   */
-  public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
-    this.fileOpenCallback = fileOpenCallback;
   }
 }

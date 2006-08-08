@@ -3,11 +3,11 @@
  */
 package com.d2s.framework.application.frontend.file;
 
-import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Map;
 
 /**
- * This interface is used react to file open.
+ * This interface is used react to file save.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -15,19 +15,27 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IFileOpenCallback {
+public interface IFileSaveCallback {
 
   /**
-   * Called whenever a file is opened.
+   * Called whenever a file is chosen as save destination.
    * 
-   * @param in
-   *          the input stream to read the file bytes.
+   * @param out
+   *          the output stream to write to the file.
+   * @param context
+   *          the action context.
+   */
+  void fileChosen(OutputStream out, Map<String, Object> context);
+
+  /**
+   * Called whenever a file is finished writing.
+   * 
    * @param filePath
    *          the file path.
    * @param context
    *          the action context.
    */
-  void fileChosen(InputStream in, String filePath, Map<String, Object> context);
+  void fileWritten(String filePath, Map<String, Object> context);
 
   /**
    * Called whenever the file opening is cancelled.

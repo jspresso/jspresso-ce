@@ -128,8 +128,8 @@
 		<property name="iconFactory" ref="iconFactory" />
 		<property name="actionFactory" ref="actionFactory" />
 		<property name="lovAction" ref="lovAction" />
-		<property name="chooseFileAsBinaryPropertyAction" ref="chooseFileAsBinaryPropertyAction" />
-		<property name="downloadBinaryPropertyAsFileAction" ref="chooseFileAsBinaryPropertyAction" />
+		<property name="openFileAsBinaryPropertyAction" ref="openFileAsBinaryPropertyAction" />
+		<property name="saveBinaryPropertyAsFileAction" ref="saveBinaryPropertyAsFileAction" />
 	</bean>
 
 	<bean id="abstractActionFactory" abstract="true">

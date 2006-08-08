@@ -199,8 +199,8 @@ public class DefaultSwingViewFactory implements
   private IIconFactory<Icon>                 iconFactory;
   private IActionFactory<Action, JComponent> actionFactory;
   private IDisplayableAction                 lovAction;
-  private IDisplayableAction                 chooseFileAsBinaryPropertyAction;
-  private IDisplayableAction                 downloadBinaryPropertyAsFileAction;
+  private IDisplayableAction                 openFileAsBinaryPropertyAction;
+  private IDisplayableAction                 saveBinaryPropertyAsFileAction;
 
   /**
    * Constructs a new <code>DefaultSwingViewFactory</code> instance.
@@ -1695,14 +1695,14 @@ public class DefaultSwingViewFactory implements
     JActionField viewComponent = createJActionField(false);
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
-    Action uploadAction = actionFactory.createAction(
-        chooseFileAsBinaryPropertyAction, actionHandler, viewComponent,
+    Action openAction = actionFactory.createAction(
+        openFileAsBinaryPropertyAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
-    Action downloadAction = actionFactory.createAction(
-        downloadBinaryPropertyAsFileAction, actionHandler, viewComponent,
+    Action saveAction = actionFactory.createAction(
+        saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
-    viewComponent.setActions(Arrays.asList(new Action[] {uploadAction,
-        downloadAction}));
+    viewComponent.setActions(Arrays.asList(new Action[] {openAction,
+        saveAction}));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2585,25 +2585,25 @@ public class DefaultSwingViewFactory implements
   }
 
   /**
-   * Sets the chooseFileAsBinaryPropertyAction.
+   * Sets the openFileAsBinaryPropertyAction.
    * 
-   * @param chooseFileAsBinaryPropertyAction
-   *          the chooseFileAsBinaryPropertyAction to set.
+   * @param openFileAsBinaryPropertyAction
+   *          the openFileAsBinaryPropertyAction to set.
    */
-  public void setChooseFileAsBinaryPropertyAction(
-      IDisplayableAction chooseFileAsBinaryPropertyAction) {
-    this.chooseFileAsBinaryPropertyAction = chooseFileAsBinaryPropertyAction;
+  public void setOpenFileAsBinaryPropertyAction(
+      IDisplayableAction openFileAsBinaryPropertyAction) {
+    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
   }
 
   /**
-   * Sets the downloadBinaryPropertyAsFileAction.
+   * Sets the saveBinaryPropertyAsFileAction.
    * 
-   * @param downloadBinaryPropertyAsFileAction
-   *          the downloadBinaryPropertyAsFileAction to set.
+   * @param saveBinaryPropertyAsFileAction
+   *          the saveBinaryPropertyAsFileAction to set.
    */
-  public void setDownloadBinaryPropertyAsFileAction(
-      IDisplayableAction downloadBinaryPropertyAsFileAction) {
-    this.downloadBinaryPropertyAsFileAction = downloadBinaryPropertyAsFileAction;
+  public void setSaveBinaryPropertyAsFileAction(
+      IDisplayableAction saveBinaryPropertyAsFileAction) {
+    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
   }
 
   /**

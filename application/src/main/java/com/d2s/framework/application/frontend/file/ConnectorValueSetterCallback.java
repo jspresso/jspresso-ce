@@ -28,7 +28,7 @@ public class ConnectorValueSetterCallback implements IFileOpenCallback {
   /**
    * {@inheritDoc}
    */
-  public void fileOpened(InputStream in, @SuppressWarnings("unused")
+  public void fileChosen(InputStream in, @SuppressWarnings("unused")
   String filePath, Map<String, Object> context) {
     ByteArrayOutputStream baos = new ByteArrayOutputStream();
     try {

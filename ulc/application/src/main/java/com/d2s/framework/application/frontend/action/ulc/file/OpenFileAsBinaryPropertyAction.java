@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.frontend.action.swing.file;
+package com.d2s.framework.application.frontend.action.ulc.file;
 
 import java.util.Map;
 
@@ -21,12 +21,12 @@ import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ChooseFileAsBinaryPropertyAction extends ChooseFileAction {
+public class OpenFileAsBinaryPropertyAction extends OpenFileAction {
 
   /**
-   * Constructs a new <code>ChooseFileAsBinaryPropertyAction</code> instance.
+   * Constructs a new <code>OpenFileAsBinaryPropertyAction</code> instance.
    */
-  public ChooseFileAsBinaryPropertyAction() {
+  public OpenFileAsBinaryPropertyAction() {
     setFileOpenCallback(new ConnectorValueSetterCallback());
   }
 

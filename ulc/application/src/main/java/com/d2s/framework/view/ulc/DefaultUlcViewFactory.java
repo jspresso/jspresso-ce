@@ -193,8 +193,8 @@ public class DefaultUlcViewFactory implements
   private IIconFactory<ULCIcon>                 iconFactory;
   private IActionFactory<IAction, ULCComponent> actionFactory;
   private IDisplayableAction                    lovAction;
-  private IDisplayableAction                    chooseFileAsBinaryPropertyAction;
-  private IDisplayableAction                    downloadBinaryPropertyAsFileAction;
+  private IDisplayableAction                    openFileAsBinaryPropertyAction;
+  private IDisplayableAction                    saveBinaryPropertyAsFileAction;
 
   private ULCTranslationDataTypeFactory         translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
 
@@ -1674,14 +1674,14 @@ public class DefaultUlcViewFactory implements
     ULCActionField viewComponent = createULCActionField(false);
     ULCActionFieldConnector connector = new ULCActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
-    IAction uploadAction = actionFactory.createAction(
-        chooseFileAsBinaryPropertyAction, actionHandler, viewComponent,
+    IAction openAction = actionFactory.createAction(
+        openFileAsBinaryPropertyAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
-    IAction downloadAction = actionFactory.createAction(
-        downloadBinaryPropertyAsFileAction, actionHandler, viewComponent,
+    IAction saveAction = actionFactory.createAction(
+        saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
-    viewComponent.setActions(Arrays.asList(new IAction[] {uploadAction,
-        downloadAction}));
+    viewComponent.setActions(Arrays.asList(new IAction[] {openAction,
+        saveAction}));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2619,25 +2619,25 @@ public class DefaultUlcViewFactory implements
   }
 
   /**
-   * Sets the chooseFileAsBinaryPropertyAction.
+   * Sets the openFileAsBinaryPropertyAction.
    * 
-   * @param chooseFileAsBinaryPropertyAction
-   *          the chooseFileAsBinaryPropertyAction to set.
+   * @param openFileAsBinaryPropertyAction
+   *          the openFileAsBinaryPropertyAction to set.
    */
-  public void setChooseFileAsBinaryPropertyAction(
-      IDisplayableAction chooseFileAsBinaryPropertyAction) {
-    this.chooseFileAsBinaryPropertyAction = chooseFileAsBinaryPropertyAction;
+  public void setOpenFileAsBinaryPropertyAction(
+      IDisplayableAction openFileAsBinaryPropertyAction) {
+    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
   }
 
   /**
-   * Sets the downloadBinaryPropertyAsFileAction.
+   * Sets the saveBinaryPropertyAsFileAction.
    * 
-   * @param downloadBinaryPropertyAsFileAction
-   *          the downloadBinaryPropertyAsFileAction to set.
+   * @param saveBinaryPropertyAsFileAction
+   *          the saveBinaryPropertyAsFileAction to set.
    */
-  public void setDownloadBinaryPropertyAsFileAction(
-      IDisplayableAction downloadBinaryPropertyAsFileAction) {
-    this.downloadBinaryPropertyAsFileAction = downloadBinaryPropertyAsFileAction;
+  public void setSaveBinaryPropertyAsFileAction(
+      IDisplayableAction saveBinaryPropertyAsFileAction) {
+    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
   }
 
   /**

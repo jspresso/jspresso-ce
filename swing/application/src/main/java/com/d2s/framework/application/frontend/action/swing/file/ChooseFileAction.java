@@ -4,24 +4,18 @@
 package com.d2s.framework.application.frontend.action.swing.file;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
-import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
-import com.d2s.framework.application.frontend.file.IFileOpenCallback;
 
 /**
- * Initiates a file choosing action. Then the file content is passed as a byte
- * array to the next action through its context entry ACTION_RESULT.
+ * Initiates a file choosing action.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -32,41 +26,20 @@ import com.d2s.framework.application.frontend.file.IFileOpenCallback;
 public class ChooseFileAction extends AbstractSwingAction {
 
   private Map<String, List<String>> fileFilter;
-  private IFileOpenCallback         fileOpenCallback;
   private JFileChooser              fileChooser;
 
   /**
-   * {@inheritDoc}
+   * Gets the file chooser.
+   * 
+   * @param context
+   *          the action context.
+   * @return the file chooser.
    */
-  @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
-
-    JFileChooser currentFileChooser = getFileChooser(context);
-
-    int returnVal = currentFileChooser.showOpenDialog(SwingUtilities
-        .getWindowAncestor(getSourceComponent(context)));
-    if (returnVal == JFileChooser.APPROVE_OPTION) {
-      File file = currentFileChooser.getSelectedFile();
-      if (file != null) {
-        try {
-          fileOpenCallback.fileOpened(new FileInputStream(file), file
-              .getAbsolutePath(), context);
-        } catch (FileNotFoundException ex) {
-          fileOpenCallback.cancel(context);
-        }
-      } else {
-        fileOpenCallback.cancel(context);
-      }
-    } else {
-      fileOpenCallback.cancel(context);
-    }
-    return super.execute(actionHandler, context);
-  }
-
-  private JFileChooser getFileChooser(Map<String, Object> context) {
+  protected JFileChooser getFileChooser(Map<String, Object> context) {
     if (fileChooser == null) {
       fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context), getLocale(context)));
+      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
+          getLocale(context)));
       if (fileFilter != null) {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
             .entrySet()) {
@@ -76,8 +49,8 @@ public class ChooseFileAction extends AbstractSwingAction {
           }
           extensionsDescription.append(" )");
           fileChooser.addChoosableFileFilter(new FileFilterAdapter(
-              fileTypeEntry.getValue(), getTranslationProvider(context).getTranslation(
-                  fileTypeEntry.getKey(), getLocale(context))
+              fileTypeEntry.getValue(), getTranslationProvider(context)
+                  .getTranslation(fileTypeEntry.getKey(), getLocale(context))
                   + extensionsDescription.toString()));
         }
       }
@@ -99,16 +72,6 @@ public class ChooseFileAction extends AbstractSwingAction {
     if (oldFileFilter != this.fileFilter) {
       fileChooser = null;
     }
-  }
-
-  /**
-   * Sets the fileOpenCallback.
-   * 
-   * @param fileOpenCallback
-   *          the fileOpenCallback to set.
-   */
-  public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
-    this.fileOpenCallback = fileOpenCallback;
   }
 
   private static class FileFilterAdapter extends FileFilter {

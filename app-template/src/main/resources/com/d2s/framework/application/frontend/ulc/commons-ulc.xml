@@ -67,8 +67,11 @@
 	<bean id="lovAction" parent="abstractLovAction"
 		class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" singleton="false" />
 
-	<bean id="chooseFileAsBinaryPropertyAction" parent="abstractChooseFileAction"
-		class="com.d2s.framework.application.frontend.action.ulc.file.ChooseFileAsBinaryPropertyAction" />
+	<bean id="openFileAsBinaryPropertyAction" parent="abstractOpenFileAction"
+		class="com.d2s.framework.application.frontend.action.ulc.file.OpenFileAsBinaryPropertyAction" />
+
+	<bean id="saveBinaryPropertyAsFileAction" parent="abstractSaveFileAction"
+		class="com.d2s.framework.application.frontend.action.ulc.file.SaveBinaryPropertyAsFileAction" />
 
 	<bean id="chooseComponentAction" abstract="true" parent="abstractChooseComponentAction"
 		class="com.d2s.framework.application.frontend.action.ulc.lov.ChooseComponentAction" />
