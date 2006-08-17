@@ -149,8 +149,8 @@ public final class ULCErrorDialog extends ULCDialog {
     gbc.setWeightY(1.0);
     pane.add(detailsPanel, gbc);
 
-    ULCButton button = new ULCButton(translationProvider.getTranslation("copy.name",
-        locale));
+    ULCButton button = new ULCButton(translationProvider.getTranslation(
+        "copy.name", locale));
     button.addActionListener(new IActionListener() {
 
       private static final long serialVersionUID = -3638328336723671191L;
@@ -233,9 +233,10 @@ public final class ULCErrorDialog extends ULCDialog {
       html.append("    " + details.getMessage());
       html.append("</pre>");
       html.append("<div></div>");
-      html.append("<b>"
-          + translationProvider.getTranslation("stacktrace", locale)
-          + " :</b>");
+      html
+          .append("<b>"
+              + translationProvider.getTranslation("stacktrace", locale)
+              + " :</b>");
       html.append("<pre>");
       for (StackTraceElement el : details.getStackTrace()) {
         html.append("    " + el.toString() + "\n");

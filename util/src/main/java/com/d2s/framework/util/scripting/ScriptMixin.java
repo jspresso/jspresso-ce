@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.util.scripting;
 
-
 /**
  * Utility class helping to bring scripting capability in an object.
  * <p>
@@ -15,9 +14,9 @@ package com.d2s.framework.util.scripting;
  */
 public class ScriptMixin implements IScript {
 
-  private String              script;
-  private String              language;
-  private Object              scriptedObject;
+  private String script;
+  private String language;
+  private Object scriptedObject;
 
   /**
    * Constructs a new <code>ScriptMixin</code> instance.
@@ -67,7 +66,6 @@ public class ScriptMixin implements IScript {
     this.script = script;
   }
 
-  
   /**
    * Gets the scriptedObject.
    * 

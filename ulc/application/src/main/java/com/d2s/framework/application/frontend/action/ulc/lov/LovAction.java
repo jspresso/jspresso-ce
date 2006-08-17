@@ -69,8 +69,7 @@ public class LovAction extends ModalDialogAction {
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
     IReferencePropertyDescriptor erqDescriptor = getEntityRefQueryDescriptor(context);
     IView<ULCComponent> lovView = getViewFactory(context).createView(
-        lovViewDescriptorFactory
-            .createLovViewDescriptor(erqDescriptor),
+        lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor),
         actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, lovView);
     context.put(ActionContextConstants.ENTITY_REF_DESCRIPTOR, erqDescriptor);

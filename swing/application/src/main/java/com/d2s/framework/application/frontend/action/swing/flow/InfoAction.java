@@ -28,7 +28,8 @@ public class InfoAction extends AbstractMessageAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     JOptionPane.showInternalMessageDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
         getTranslationProvider(context), getLocale(context)), getI18nName(

@@ -39,7 +39,8 @@ public class AddToMasterAction<E, F, G> extends ActionWrapper<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     if (context == null) {
       context = new HashMap<String, Object>();
     }
@@ -68,10 +69,10 @@ public class AddToMasterAction<E, F, G> extends ActionWrapper<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
     if (elementEntityDescriptor != null) {
-      return translationProvider.getTranslation(
-          "add.element.description",
+      return translationProvider.getTranslation("add.element.description",
           new String[] {elementEntityDescriptor.getI18nName(
               translationProvider, locale)}, locale);
     }
@@ -82,10 +83,10 @@ public class AddToMasterAction<E, F, G> extends ActionWrapper<E, F, G> {
    * {@inheritDoc}
    */
   @Override
-  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
     if (elementEntityDescriptor != null) {
-      return translationProvider.getTranslation(
-          "add.element.name",
+      return translationProvider.getTranslation("add.element.name",
           new String[] {elementEntityDescriptor.getI18nName(
               translationProvider, locale)}, locale);
     }

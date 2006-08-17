@@ -112,7 +112,6 @@ public abstract class AbstractAction implements IAction {
     return getController(context).getTranslationProvider();
   }
 
-  
   /**
    * {@inheritDoc}
    */
@@ -120,11 +119,11 @@ public abstract class AbstractAction implements IAction {
     return grantedRoles;
   }
 
-  
   /**
    * Sets the grantedRoles.
    * 
-   * @param grantedRoles the grantedRoles to set.
+   * @param grantedRoles
+   *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;

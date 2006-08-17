@@ -177,8 +177,8 @@ public final class JErrorDialog extends JDialog {
     gbc.weighty = 1.0;
     this.getContentPane().add(detailsPanel, gbc);
 
-    JButton button = new JButton(translationProvider.getTranslation("copy.name",
-        locale));
+    JButton button = new JButton(translationProvider.getTranslation(
+        "copy.name", locale));
     button.addActionListener(new ActionListener() {
 
       public void actionPerformed(@SuppressWarnings("unused")
@@ -255,9 +255,10 @@ public final class JErrorDialog extends JDialog {
       html.append("    " + details.getMessage());
       html.append("</pre>");
       html.append("<div></div>");
-      html.append("<b>"
-          + translationProvider.getTranslation("stacktrace", locale)
-          + " :</b>");
+      html
+          .append("<b>"
+              + translationProvider.getTranslation("stacktrace", locale)
+              + " :</b>");
       html.append("<pre>");
       for (StackTraceElement el : details.getStackTrace()) {
         html.append("    " + el.toString() + "\n");

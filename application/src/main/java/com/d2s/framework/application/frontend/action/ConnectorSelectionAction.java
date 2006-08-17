@@ -24,7 +24,8 @@ import com.d2s.framework.binding.ICollectionConnector;
  * @param <G>
  *          the actual action type used.
  */
-public class ConnectorSelectionAction<E, F, G> extends AbstractChainedAction<E, F, G> {
+public class ConnectorSelectionAction<E, F, G> extends
+    AbstractChainedAction<E, F, G> {
 
   /**
    * Selects indices on the view collection connector based on the
@@ -33,7 +34,8 @@ public class ConnectorSelectionAction<E, F, G> extends AbstractChainedAction<E, 
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
     int[] connectorSelection = (int[]) context
         .get(ActionContextConstants.SELECTED_INDICES);

@@ -31,8 +31,7 @@ public class BasicBinaryPropertyDescriptor extends
       return maxLength;
     }
     if (getParentDescriptor() != null) {
-      return ((IBinaryPropertyDescriptor) getParentDescriptor())
-          .getMaxLength();
+      return ((IBinaryPropertyDescriptor) getParentDescriptor()).getMaxLength();
     }
     return maxLength;
   }

@@ -212,13 +212,13 @@ public final class SwingUtil {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     } catch (ClassNotFoundException ex) {
-      //NO-OP
+      // NO-OP
     } catch (InstantiationException ex) {
-      //NO-OP
+      // NO-OP
     } catch (IllegalAccessException ex) {
-      //NO-OP
+      // NO-OP
     } catch (UnsupportedLookAndFeelException ex) {
-      //NO-OP
+      // NO-OP
     }
   }
 

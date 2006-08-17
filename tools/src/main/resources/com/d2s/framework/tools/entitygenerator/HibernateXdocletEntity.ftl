@@ -419,7 +419,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateCollectionPropertyAccessors componentDescriptor propertyDescriptor>
   <@generateCollectionGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-  <#if !propertyDescriptor.readOnly>
+  <#if !propertyDescriptor.computed>
     <@generateCollectionSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
     <@generateCollectionAdder componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
@@ -432,7 +432,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor>
   <@generateEntityRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-  <#if !propertyDescriptor.readOnly>
+  <#if !propertyDescriptor.computed>
     <@generateEntityRefSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
   </#if>
@@ -441,7 +441,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#macro generateScalarPropertyAccessors componentDescriptor propertyDescriptor>
   <@generateScalarGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
-  <#if !propertyDescriptor.readOnly>
+  <#if !propertyDescriptor.computed>
     <@generateScalarSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
   </#if>
@@ -460,7 +460,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#if componentDescriptor.declaredPropertyDescriptors?exists>
   <#assign empty=true/>
   <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-    <#if !propertyDescriptor.derived>
+    <#if !propertyDescriptor.overload>
       <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
       <#assign empty=false/>
     </#if>

@@ -82,8 +82,8 @@ public class ModelConnector extends ModelRefPropertyConnector {
   public ModelConnector clone(String newConnectorId) {
     ModelConnector clonedConnector = (ModelConnector) super
         .clone(newConnectorId);
-    clonedConnector.modelProvider = new InnerModelProvider(
-        modelProvider.getModelDescriptor());
+    clonedConnector.modelProvider = new InnerModelProvider(modelProvider
+        .getModelDescriptor());
     clonedConnector.modelProviderChanged(null);
     return clonedConnector;
   }

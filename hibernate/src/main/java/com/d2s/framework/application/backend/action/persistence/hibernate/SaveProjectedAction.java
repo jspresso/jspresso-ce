@@ -58,7 +58,8 @@ public class SaveProjectedAction extends AbstractHibernateAction {
    * @param entity
    *          the entity to save.
    */
-  private void saveEntity(final IEntity entity, final Map<String, Object> context) {
+  private void saveEntity(final IEntity entity,
+      final Map<String, Object> context) {
     getHibernateTemplate(context).execute(new HibernateCallback() {
 
       public Object doInHibernate(Session session) {

@@ -73,7 +73,8 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     List<IReport> reports = new ArrayList<IReport>();
     if (reportDescriptors != null) {
       for (IReportDescriptor descriptor : reportDescriptors) {
-        reports.add(reportFactory.createReportInstance(descriptor, translationProvider, locale));
+        reports.add(reportFactory.createReportInstance(descriptor,
+            translationProvider, locale));
       }
     }
     return reports;
@@ -90,11 +91,11 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     this.beanConnectorFactory = beanConnectorFactory;
   }
 
-  
   /**
    * Sets the reportFactory.
    * 
-   * @param reportFactory the reportFactory to set.
+   * @param reportFactory
+   *          the reportFactory to set.
    */
   public void setReportFactory(IReportFactory reportFactory) {
     this.reportFactory = reportFactory;

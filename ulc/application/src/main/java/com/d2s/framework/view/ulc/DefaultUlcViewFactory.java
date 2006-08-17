@@ -195,6 +195,7 @@ public class DefaultUlcViewFactory implements
   private IDisplayableAction                    lovAction;
   private IDisplayableAction                    openFileAsBinaryPropertyAction;
   private IDisplayableAction                    saveBinaryPropertyAsFileAction;
+  private IDisplayableAction                    resetPropertyAction;
 
   private ULCTranslationDataTypeFactory         translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
 
@@ -1680,8 +1681,10 @@ public class DefaultUlcViewFactory implements
     IAction saveAction = actionFactory.createAction(
         saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
+    IAction resetAction = actionFactory.createAction(resetPropertyAction,
+        actionHandler, viewComponent, propertyDescriptor, connector, locale);
     viewComponent.setActions(Arrays.asList(new IAction[] {openAction,
-        saveAction}));
+        saveAction, resetAction}));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2609,6 +2612,15 @@ public class DefaultUlcViewFactory implements
   }
 
   /**
+   * Gets the actionFactory.
+   * 
+   * @return the actionFactory.
+   */
+  public IActionFactory<IAction, ULCComponent> getActionFactory() {
+    return actionFactory;
+  }
+
+  /**
    * Sets the lovAction.
    * 
    * @param lovAction
@@ -2641,11 +2653,12 @@ public class DefaultUlcViewFactory implements
   }
 
   /**
-   * Gets the actionFactory.
+   * Sets the resetPropertyAction.
    * 
-   * @return the actionFactory.
+   * @param resetPropertyAction
+   *          the resetPropertyAction to set.
    */
-  public IActionFactory<IAction, ULCComponent> getActionFactory() {
-    return actionFactory;
+  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
+    this.resetPropertyAction = resetPropertyAction;
   }
 }

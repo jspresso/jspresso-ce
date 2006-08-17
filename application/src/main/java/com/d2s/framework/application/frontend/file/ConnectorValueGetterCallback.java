@@ -32,8 +32,10 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
     try {
       byte[] connectorValue = (byte[]) ((IValueConnector) context
           .get(ActionContextConstants.VIEW_CONNECTOR)).getConnectorValue();
-      os.write(connectorValue);
-      os.flush();
+      if (connectorValue != null) {
+        os.write(connectorValue);
+        os.flush();
+      }
     } catch (IOException ex) {
       throw new ActionException(ex);
     } finally {

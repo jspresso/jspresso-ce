@@ -29,13 +29,13 @@ import com.ulcjava.base.application.ULCComponent;
  */
 public class ChooseComponentAction extends ModalDialogAction {
 
-  private IDisplayableAction               okAction;
-  private IDisplayableAction               cancelAction;
+  private IDisplayableAction okAction;
+  private IDisplayableAction cancelAction;
 
   /**
    * {@inheritDoc}
    */
-@Override
+  @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
@@ -49,16 +49,19 @@ public class ChooseComponentAction extends ModalDialogAction {
     IModelValueConnector componentsModelConnector = (IModelValueConnector) context
         .get(ActionContextConstants.ACTION_PARAM);
     BasicTableViewDescriptor tableViewDescriptor = new BasicTableViewDescriptor();
-    tableViewDescriptor.setModelDescriptor(componentsModelConnector.getModelDescriptor());
+    tableViewDescriptor.setModelDescriptor(componentsModelConnector
+        .getModelDescriptor());
 
-    IView<ULCComponent> collectionView = getViewFactory(context).createView(tableViewDescriptor,
-        actionHandler, getLocale(context));
+    IView<ULCComponent> collectionView = getViewFactory(context).createView(
+        tableViewDescriptor, actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, collectionView);
 
-    getMvcBinder(context).bind(collectionView.getConnector(), componentsModelConnector);
+    getMvcBinder(context).bind(collectionView.getConnector(),
+        componentsModelConnector);
 
     return super.execute(actionHandler, context);
   }
+
   /**
    * Sets the cancelAction.
    * 

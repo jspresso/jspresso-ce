@@ -37,7 +37,8 @@ public class ModuleConnectorSelectionAction<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     ICollectionConnector parentModuleCollectionConnector = ((ICollectionConnectorProvider) moduleConnector
         .getParentConnector().getParentConnector()).getCollectionConnector();

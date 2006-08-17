@@ -46,8 +46,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<Object>();
     } else {
-      projectedCollection = new ArrayList<Object>(module
-          .getModuleObjects());
+      projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
     IEntity newEntity = getEntityFactory(context).createEntityInstance(
         (Class<? extends IEntity>) projectedComponentDescriptor

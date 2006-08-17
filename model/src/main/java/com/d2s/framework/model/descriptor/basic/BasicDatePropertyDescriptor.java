@@ -43,8 +43,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
       return type;
     }
     if (getParentDescriptor() != null) {
-      return ((IDatePropertyDescriptor) getParentDescriptor())
-          .getType();
+      return ((IDatePropertyDescriptor) getParentDescriptor()).getType();
     }
     return type;
   }

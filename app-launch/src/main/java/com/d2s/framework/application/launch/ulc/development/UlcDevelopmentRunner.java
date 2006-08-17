@@ -72,9 +72,9 @@ public final class UlcDevelopmentRunner {
       });
     }
     SwingUtil.installDefaults();
-    Properties props =
-      ClientEnvironmentAdapter.getClientInfo().getSystemProperties();
-              props.setProperty("java.io.tmpdir", System.getProperty("java.io.tmpdir"));
+    Properties props = ClientEnvironmentAdapter.getClientInfo()
+        .getSystemProperties();
+    props.setProperty("java.io.tmpdir", System.getProperty("java.io.tmpdir"));
     DevelopmentRunner.main(filteredArgs.toArray(new String[0]));
   }
 

@@ -216,6 +216,15 @@
 		<property name="nextAction" ref="connectorSelectionFrontAction" />
 	</bean>
 
+	<bean id="resetPropertyFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+		<property name="iconImageURL" value="classpath:images/reset-48x48.png" />
+		<property name="name" value="reset.name" />
+		<property name="description" value="reset.description" />
+		<property name="wrappedAction">
+			<bean class="com.d2s.framework.application.backend.action.ResetConnectorValueAction" />
+		</property>
+	</bean>
+
 	<!--
 		Hibernate action beans.
 	-->
@@ -330,6 +339,7 @@
 					<list>
 						<ref bean="openFileAsBinaryPropertyAction" />
 						<ref bean="saveBinaryPropertyAsFileAction" />
+						<ref bean="resetPropertyFrontAction" />
 					</list>
 				</entry>
 			</map>

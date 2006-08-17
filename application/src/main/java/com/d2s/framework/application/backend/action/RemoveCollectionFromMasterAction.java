@@ -110,7 +110,8 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
             for (IEntity composedEntity : new ArrayList<IEntity>(
                 (Collection<IEntity>) property.getValue())) {
               cleanRelationshipsOnDeletion(composedEntity,
-                  componentDescriptorRegistry, accessorFactory, applicationSession);
+                  componentDescriptorRegistry, accessorFactory,
+                  applicationSession);
             }
           } else {
             accessorFactory.createPropertyAccessor(property.getKey(),

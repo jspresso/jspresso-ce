@@ -175,7 +175,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
-  public boolean isReadOnly() {
+  public boolean isComputed() {
     return getDelegateClassName() != null;
   }
 
@@ -223,11 +223,11 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   public void setParentDescriptor(IPropertyDescriptor parentDescriptor) {
     this.parentDescriptor = parentDescriptor;
   }
-  
+
   /**
    * {@inheritDoc}
    */
-  public boolean isDerived() {
+  public boolean isOverload() {
     return parentDescriptor != null;
   }
 

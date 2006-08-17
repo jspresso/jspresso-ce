@@ -27,7 +27,7 @@ import com.d2s.framework.util.descriptor.IDescriptor;
 public class BasicReportDescriptor extends BasicComponentDescriptor implements
     IReportDescriptor {
 
-  private String reportDesignUrl;
+  private String                           reportDesignUrl;
 
   /**
    * The (meta) descriptor of the component descriptor.

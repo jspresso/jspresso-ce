@@ -27,7 +27,8 @@ public class OkChooseComponentAction extends OkAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICollectionConnector resultConnector = ((ICollectionConnectorProvider) getViewConnector(context))
         .getCollectionConnector();
     int[] resultSelectedIndices = resultConnector.getSelectedIndices();

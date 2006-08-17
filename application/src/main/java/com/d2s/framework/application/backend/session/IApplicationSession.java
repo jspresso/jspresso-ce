@@ -24,7 +24,8 @@ import com.d2s.framework.security.UserPrincipal;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IApplicationSession extends IEntityDirtAware, IEntityLifecycleHandler {
+public interface IApplicationSession extends IEntityDirtAware,
+    IEntityLifecycleHandler {
 
   /**
    * Registers an entity in this application session.

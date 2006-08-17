@@ -203,7 +203,7 @@ public class UIActionField extends UIComponent implements IEditorComponent {
       ActionEvent evt) {
         if (evt.getSource() instanceof JButton) {
           triggerAction(index, ((JButton) evt.getSource()).getActionCommand());
-          //sendActionText(((JButton) evt.getSource()).getActionCommand());
+          // sendActionText(((JButton) evt.getSource()).getActionCommand());
         } else {
           sendActionText();
         }

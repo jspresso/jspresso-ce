@@ -63,7 +63,8 @@ public class ModelChangeSupport {
    *          The removed listener.
    * @see IModelProvider#removeModelChangeListener( IModelChangeListener)
    */
-  public synchronized void removeModelChangeListener(IModelChangeListener listener) {
+  public synchronized void removeModelChangeListener(
+      IModelChangeListener listener) {
     if (listener != null && listeners != null) {
       listeners.remove(listener);
     }
@@ -78,8 +79,7 @@ public class ModelChangeSupport {
    * @param newValue
    *          The new model provider's model value
    */
-  public void fireModelChange(Object oldValue,
-      Object newValue) {
+  public void fireModelChange(Object oldValue, Object newValue) {
     ModelChangeEvent evt = new ModelChangeEvent(source, oldValue, newValue);
     fireModelChange(evt);
   }

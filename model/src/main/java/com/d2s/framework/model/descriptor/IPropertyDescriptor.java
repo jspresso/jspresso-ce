@@ -60,11 +60,11 @@ public interface IPropertyDescriptor extends IModelDescriptor {
   String getUnicityScope();
 
   /**
-   * Wether the underlying property is read-only.
+   * Wether the underlying property is computed.
    * 
-   * @return true if read-only
+   * @return true if computed
    */
-  boolean isReadOnly();
+  boolean isComputed();
 
   /**
    * Gets wether this kind of property descriptor is queryable.
@@ -78,5 +78,5 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * 
    * @return true if this descriptor is an overload of a parent one.
    */
-  boolean isDerived();
+  boolean isOverload();
 }

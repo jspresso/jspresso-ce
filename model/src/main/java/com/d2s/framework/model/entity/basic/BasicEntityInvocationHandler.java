@@ -147,8 +147,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     } else {
       boolean isLifecycleMethod = false;
       try {
-        isLifecycleMethod = IEntityLifecycle.class.getMethod(methodName,
-            (Class[]) method.getParameterTypes()) != null;
+        isLifecycleMethod = IEntityLifecycle.class.getMethod(methodName, method
+            .getParameterTypes()) != null;
       } catch (NoSuchMethodException ignored) {
         // this is certainly normal.
       }

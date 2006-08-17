@@ -375,10 +375,10 @@ public class DefaultSwingController extends
     glassPane.setOpaque(false);
     glassPane.addMouseListener(new MouseAdapter() {
       // No-op
-      });
+    });
     glassPane.addKeyListener(new KeyAdapter() {
       // No-op
-      });
+    });
     return glassPane;
   }
 

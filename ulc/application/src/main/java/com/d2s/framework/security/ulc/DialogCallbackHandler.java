@@ -95,7 +95,8 @@ public class DialogCallbackHandler implements CallbackHandler {
       TextOutputCallback defaultToc = new TextOutputCallback(
           TextOutputCallback.INFORMATION, translationProvider.getTranslation(
               "credentialMessage", locale));
-      List<Callback> completedCallBacks = new ArrayList<Callback>(Arrays.asList(callbacks));
+      List<Callback> completedCallBacks = new ArrayList<Callback>(Arrays
+          .asList(callbacks));
       completedCallBacks.add(defaultToc);
       callbacks = completedCallBacks
           .toArray(new Callback[callbacks.length + 1]);

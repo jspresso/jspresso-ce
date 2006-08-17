@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.model.descriptor;
 
-
 /**
  * A registry mapping the component contracts with their descriptors.
  * <p>

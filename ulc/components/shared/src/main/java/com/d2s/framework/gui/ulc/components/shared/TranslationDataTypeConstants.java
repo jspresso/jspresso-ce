@@ -22,5 +22,5 @@ public final class TranslationDataTypeConstants {
   /**
    * <code>DICTIONARY</code>.
    */
-  public static final String DICTIONARY   = "dictionary";
+  public static final String DICTIONARY = "dictionary";
 }

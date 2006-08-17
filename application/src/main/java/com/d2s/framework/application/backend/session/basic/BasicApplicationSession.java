@@ -648,11 +648,11 @@ public class BasicApplicationSession implements IApplicationSession {
     this.carbonEntityCloneFactory = carbonEntityCloneFactory;
   }
 
-  
   /**
    * Sets the accessorFactory.
    * 
-   * @param accessorFactory the accessorFactory to set.
+   * @param accessorFactory
+   *          the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;

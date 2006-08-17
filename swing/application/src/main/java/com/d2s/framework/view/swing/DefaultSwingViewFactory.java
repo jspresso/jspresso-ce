@@ -201,6 +201,7 @@ public class DefaultSwingViewFactory implements
   private IDisplayableAction                 lovAction;
   private IDisplayableAction                 openFileAsBinaryPropertyAction;
   private IDisplayableAction                 saveBinaryPropertyAsFileAction;
+  private IDisplayableAction                 resetPropertyAction;
 
   /**
    * Constructs a new <code>DefaultSwingViewFactory</code> instance.
@@ -1701,8 +1702,10 @@ public class DefaultSwingViewFactory implements
     Action saveAction = actionFactory.createAction(
         saveBinaryPropertyAsFileAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
+    Action resetAction = actionFactory.createAction(resetPropertyAction,
+        actionHandler, viewComponent, propertyDescriptor, connector, locale);
     viewComponent.setActions(Arrays.asList(new Action[] {openAction,
-        saveAction}));
+        saveAction, resetAction}));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2575,6 +2578,15 @@ public class DefaultSwingViewFactory implements
   }
 
   /**
+   * Gets the actionFactory.
+   * 
+   * @return the actionFactory.
+   */
+  public IActionFactory<Action, JComponent> getActionFactory() {
+    return actionFactory;
+  }
+
+  /**
    * Sets the lovAction.
    * 
    * @param lovAction
@@ -2607,11 +2619,12 @@ public class DefaultSwingViewFactory implements
   }
 
   /**
-   * Gets the actionFactory.
+   * Sets the resetPropertyAction.
    * 
-   * @return the actionFactory.
+   * @param resetPropertyAction
+   *          the resetPropertyAction to set.
    */
-  public IActionFactory<Action, JComponent> getActionFactory() {
-    return actionFactory;
+  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
+    this.resetPropertyAction = resetPropertyAction;
   }
 }

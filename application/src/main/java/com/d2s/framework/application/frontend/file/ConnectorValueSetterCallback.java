@@ -40,7 +40,8 @@ public class ConnectorValueSetterCallback implements IFileOpenCallback {
       baos.flush();
       byte[] fileContent = baos.toByteArray();
       context.put(ActionContextConstants.ACTION_PARAM, fileContent);
-      ((IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR)).setConnectorValue(fileContent);
+      ((IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR))
+          .setConnectorValue(fileContent);
     } catch (IOException ex) {
       throw new ActionException(ex);
     } finally {

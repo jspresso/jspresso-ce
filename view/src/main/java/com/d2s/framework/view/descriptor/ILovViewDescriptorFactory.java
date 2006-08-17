@@ -23,5 +23,6 @@ public interface ILovViewDescriptorFactory {
    *          the entity reference descriptor.
    * @return the created view descriptor.
    */
-  IViewDescriptor createLovViewDescriptor(IReferencePropertyDescriptor entityRefDescriptor);
+  IViewDescriptor createLovViewDescriptor(
+      IReferencePropertyDescriptor entityRefDescriptor);
 }

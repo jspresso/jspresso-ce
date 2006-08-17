@@ -34,7 +34,8 @@ public class SaveBinaryPropertyAsFileAction extends SaveFileAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     IBinaryPropertyDescriptor modelDescriptor = (IBinaryPropertyDescriptor) context
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
     setFileFilter(modelDescriptor.getFileFilter());

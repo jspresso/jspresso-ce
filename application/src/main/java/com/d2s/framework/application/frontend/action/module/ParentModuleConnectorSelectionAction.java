@@ -38,7 +38,8 @@ public class ParentModuleConnectorSelectionAction<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICompositeValueConnector parentModuleConnector = getParentModuleConnector(context);
     ICompositeValueConnector grandParentModuleConnector = parentModuleConnector
         .getParentConnector();

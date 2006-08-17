@@ -7,7 +7,6 @@ import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 
-
 /**
  * The model connector contract.
  * <p>
@@ -32,5 +31,5 @@ public interface IModelValueConnector extends IValueConnector {
    * @return the modelProvider.
    */
   IModelProvider getModelProvider();
-  
+
 }

@@ -27,12 +27,12 @@ public final class ActionFieldConstants {
   /**
    * <code>TRIGGER_ACTION_REQUEST</code>.
    */
-  public static final String TRIGGER_ACTION_REQUEST  = "triggerAction";
+  public static final String TRIGGER_ACTION_REQUEST   = "triggerAction";
 
   /**
    * <code>SET_ACTION_REQUEST</code>.
    */
-  public static final String SET_ACTIONS_REQUEST       = "setActions";
+  public static final String SET_ACTIONS_REQUEST      = "setActions";
 
   /**
    * <code>SET_EDITING_CELL_REQUEST</code>.
@@ -52,7 +52,7 @@ public final class ActionFieldConstants {
   /**
    * <code>SET_DECORATED_REQUEST</code>.
    */
-  public static final String SET_DECORATED_REQUEST     = "setDecorated";
+  public static final String SET_DECORATED_REQUEST    = "setDecorated";
 
   // anything key constants
   /**
@@ -63,17 +63,17 @@ public final class ActionFieldConstants {
   /**
    * <code>ACTION_INDEX_KEY</code>.
    */
-  public static final String ACTION_INDEX_KEY          = "actionIndex";
+  public static final String ACTION_INDEX_KEY         = "actionIndex";
 
   /**
    * <code>ACTION_KEY</code>.
    */
-  public static final String ACTIONS_KEY               = "action";
+  public static final String ACTIONS_KEY              = "action";
 
   /**
    * <code>ICON_KEY</code>.
    */
-  public static final String ICONS_KEY                 = "icons";
+  public static final String ICONS_KEY                = "icons";
 
   /**
    * <code>EDITING_ROW_KEY</code>.

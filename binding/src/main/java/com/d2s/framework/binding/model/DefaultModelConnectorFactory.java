@@ -25,7 +25,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  */
 public class DefaultModelConnectorFactory implements IModelConnectorFactory {
 
-  private IAccessorFactory          accessorFactory;
+  private IAccessorFactory             accessorFactory;
   private IComponentDescriptorRegistry descriptorRegistry;
 
   /**
@@ -69,7 +69,6 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
     return accessorFactory;
   }
 
-  
   /**
    * Gets the descriptorRegistry.
    * 
@@ -79,11 +78,11 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
     return descriptorRegistry;
   }
 
-  
   /**
    * Sets the descriptorRegistry.
    * 
-   * @param descriptorRegistry the descriptorRegistry to set.
+   * @param descriptorRegistry
+   *          the descriptorRegistry to set.
    */
   public void setDescriptorRegistry(
       IComponentDescriptorRegistry descriptorRegistry) {

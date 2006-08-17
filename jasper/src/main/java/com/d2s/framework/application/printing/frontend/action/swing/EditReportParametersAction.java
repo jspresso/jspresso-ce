@@ -47,18 +47,17 @@ public class EditReportParametersAction extends ModalDialogAction {
 
     okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
         getViewConnector(context));
-    okAction.putInitialContext(ActionContextConstants.ACTION_PARAM,
-        report);
+    okAction.putInitialContext(ActionContextConstants.ACTION_PARAM, report);
     actions.add(okAction);
     actions.add(cancelAction);
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
-
 
     if (report.getReportDescriptor().getRenderedProperties().size() == 0) {
       return actionHandler.execute(okAction, context);
     }
     BasicComponentViewDescriptor reportContextViewDescriptor = new BasicComponentViewDescriptor();
-    reportContextViewDescriptor.setModelDescriptor(report.getReportDescriptor());
+    reportContextViewDescriptor
+        .setModelDescriptor(report.getReportDescriptor());
 
     IView<JComponent> reportContextView = getViewFactory(context).createView(
         reportContextViewDescriptor, actionHandler, getLocale(context));
@@ -67,7 +66,7 @@ public class EditReportParametersAction extends ModalDialogAction {
     IValueConnector reportContextConnector = mapConnectorFactory
         .createModelConnector(report.getReportDescriptor());
     reportContextConnector.setConnectorValue(report.getContext());
-    
+
     getMvcBinder(context).bind(reportContextView.getConnector(),
         reportContextConnector);
 

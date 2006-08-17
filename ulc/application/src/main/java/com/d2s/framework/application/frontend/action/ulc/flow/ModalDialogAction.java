@@ -38,7 +38,8 @@ public class ModalDialogAction extends AbstractUlcAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     final ULCDialog dialog;
     IView<ULCComponent> mainView = getMainView(context);
     ULCWindow window = UlcUtilities

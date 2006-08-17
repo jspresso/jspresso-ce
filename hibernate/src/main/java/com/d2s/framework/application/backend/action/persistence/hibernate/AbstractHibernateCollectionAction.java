@@ -49,7 +49,8 @@ public abstract class AbstractHibernateCollectionAction extends
    * {@inheritDoc}
    */
   @Override
-  public ICollectionDescriptorProvider getModelDescriptor(Map<String, Object> context) {
+  public ICollectionDescriptorProvider getModelDescriptor(
+      Map<String, Object> context) {
     return (ICollectionDescriptorProvider) super.getModelDescriptor(context);
   }
 }

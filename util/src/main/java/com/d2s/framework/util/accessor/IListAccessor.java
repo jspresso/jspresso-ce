@@ -6,7 +6,6 @@ package com.d2s.framework.util.accessor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-
 /**
  * This interface is implemented by any bean value accessor on a list property.
  * <p>

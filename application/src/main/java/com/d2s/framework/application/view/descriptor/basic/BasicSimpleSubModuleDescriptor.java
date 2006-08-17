@@ -67,8 +67,9 @@ public class BasicSimpleSubModuleDescriptor extends
       moduleNodeGroupDescriptor.setName(getName());
       moduleNodeGroupDescriptor.setDescription(getDescription());
       moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
-      moduleNodeGroupDescriptor.setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
-          .getPropertyDescriptor("subModules"));
+      moduleNodeGroupDescriptor
+          .setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
+              .getPropertyDescriptor("subModules"));
       moduleNodeGroupDescriptor.setRenderedProperty("i18nName");
       setNodeGroupDescriptor(moduleNodeGroupDescriptor);
     }
@@ -129,14 +130,16 @@ public class BasicSimpleSubModuleDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public String getI18nName(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
     return descriptor.getI18nName(translationProvider, locale);
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getI18nDescription(ITranslationProvider translationProvider, Locale locale) {
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
     return descriptor.getI18nDescription(translationProvider, locale);
   }
 }

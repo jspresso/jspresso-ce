@@ -22,13 +22,13 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   private Map<String, Map<Dimension, E>> iconStore;
 
-  private String                                okYesIconImageURL;
-  private String                                noIconImageURL;
-  private String                                cancelIconImageURL;
+  private String                         okYesIconImageURL;
+  private String                         noIconImageURL;
+  private String                         cancelIconImageURL;
 
-  private String                                infoIconImageURL;
-  private String                                warningIconImageURL;
-  private String                                errorIconImageURL;
+  private String                         infoIconImageURL;
+  private String                         warningIconImageURL;
+  private String                         errorIconImageURL;
 
   /**
    * Constructs a new <code>AbstractIconFactory</code> instance.

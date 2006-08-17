@@ -70,7 +70,6 @@ public class BasicReferencePropertyDescriptor extends
     return true;
   }
 
-  
   /**
    * Gets the initializationMapping.
    * 
@@ -80,11 +79,11 @@ public class BasicReferencePropertyDescriptor extends
     return initializationMapping;
   }
 
-  
   /**
    * Sets the initializationMapping.
    * 
-   * @param initializationMapping the initializationMapping to set.
+   * @param initializationMapping
+   *          the initializationMapping to set.
    */
   public void setInitializationMapping(Map<String, String> initializationMapping) {
     this.initializationMapping = initializationMapping;

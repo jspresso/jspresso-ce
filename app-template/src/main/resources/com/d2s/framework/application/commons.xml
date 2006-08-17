@@ -130,6 +130,7 @@
 		<property name="lovAction" ref="lovAction" />
 		<property name="openFileAsBinaryPropertyAction" ref="openFileAsBinaryPropertyAction" />
 		<property name="saveBinaryPropertyAsFileAction" ref="saveBinaryPropertyAsFileAction" />
+		<property name="resetPropertyAction" ref="resetPropertyFrontAction" />
 	</bean>
 
 	<bean id="abstractActionFactory" abstract="true">

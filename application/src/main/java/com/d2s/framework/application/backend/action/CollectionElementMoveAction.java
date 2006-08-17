@@ -67,8 +67,8 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       }
       ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
           .straightSetProperty(collectionConnector.getId(), elementList);
-      context.put(ActionContextConstants.SELECTED_INDICES,
-          ConnectorHelper.getIndicesOf(collectionConnector, elementsToMove));
+      context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
+          .getIndicesOf(collectionConnector, elementsToMove));
     }
     return true;
   }

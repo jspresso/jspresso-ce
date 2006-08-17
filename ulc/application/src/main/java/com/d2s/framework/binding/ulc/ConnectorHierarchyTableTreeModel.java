@@ -197,7 +197,8 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
      * {@inheritDoc}
      */
     public void treeNodesRemoved(TreeModelEvent event) {
-      nodesWereRemoved(event.getTreePath(), event.getChildIndices(), event.getChildren());
+      nodesWereRemoved(event.getTreePath(), event.getChildIndices(), event
+          .getChildren());
     }
 
     /**
@@ -208,11 +209,11 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
     }
   }
 
-  
   /**
    * Sets the columnConnectorKeys.
    * 
-   * @param columnConnectorKeys the columnConnectorKeys to set.
+   * @param columnConnectorKeys
+   *          the columnConnectorKeys to set.
    */
   public void setColumnConnectorKeys(List<String> columnConnectorKeys) {
     this.columnConnectorKeys = columnConnectorKeys;

@@ -42,7 +42,8 @@ public class ModalDialogAction extends AbstractSwingAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     final JDialog dialog;
     IView<JComponent> mainView = getMainView(context);
     Window window = SwingUtilities

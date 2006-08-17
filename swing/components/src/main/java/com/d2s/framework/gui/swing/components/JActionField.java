@@ -276,7 +276,7 @@ public class JActionField extends JPanel {
       buttonPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,
           Color.RED.brighter(), Color.RED.darker()));
     } else {
-      setBorder(null);
+      buttonPanel.setBorder(null);
     }
   }
 }

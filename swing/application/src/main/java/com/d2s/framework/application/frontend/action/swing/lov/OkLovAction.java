@@ -31,7 +31,8 @@ public class OkLovAction extends OkAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     ICollectionConnector resultConnector = ((ICollectionConnectorProvider) ((ICompositeValueConnector) getViewConnector(context))
         .getChildConnector(ModelRefPropertyConnector.THIS_PROPERTY))
         .getCollectionConnector();

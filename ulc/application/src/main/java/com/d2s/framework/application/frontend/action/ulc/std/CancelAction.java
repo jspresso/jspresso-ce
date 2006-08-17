@@ -32,7 +32,8 @@ public class CancelAction extends AbstractUlcAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     closeDialog(context);
     return super.execute(actionHandler, context);
   }

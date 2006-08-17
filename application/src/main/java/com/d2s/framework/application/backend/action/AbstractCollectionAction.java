@@ -33,8 +33,9 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
   /**
    * Gets the selected indices from the context. it uses the
    * <code>ActionContextConstants.SELECTED_INDICES</code> key.
-   * @param context the action context.
    * 
+   * @param context
+   *          the action context.
    * @return the selected indices if any.
    */
   public int[] getSelectedIndices(Map<String, Object> context) {
@@ -47,7 +48,8 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public ICollectionDescriptorProvider getModelDescriptor(Map<String, Object> context) {
+  public ICollectionDescriptorProvider getModelDescriptor(
+      Map<String, Object> context) {
     return (ICollectionDescriptorProvider) super.getModelDescriptor(context);
   }
 }

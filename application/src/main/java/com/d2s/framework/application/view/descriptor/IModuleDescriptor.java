@@ -17,7 +17,7 @@ import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
  * @author Vincent Vandenschrick
  */
 public interface IModuleDescriptor extends ITreeViewDescriptor, ISecurable {
-  
+
   /**
    * Gets the action which is executed when the module is launched.
    * 

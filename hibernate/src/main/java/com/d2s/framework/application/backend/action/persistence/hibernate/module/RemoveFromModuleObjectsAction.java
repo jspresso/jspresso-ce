@@ -57,8 +57,7 @@ public class RemoveFromModuleObjectsAction extends
     if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<Object>();
     } else {
-      projectedCollection = new ArrayList<Object>(module
-          .getModuleObjects());
+      projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
 
     final List<IEntity> projectedObjectsToRemove = new ArrayList<IEntity>();

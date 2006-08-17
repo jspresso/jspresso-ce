@@ -20,20 +20,20 @@ import java.util.Map;
  */
 public class UserPrincipal implements Principal, Serializable {
 
-  private static final long   serialVersionUID = 360589456903648696L;
+  private static final long   serialVersionUID  = 360589456903648696L;
 
   private String              name;
   private Map<String, Object> customProperties;
-  
+
   /**
    * <code>OWNER_PROPERTY</code>.
    */
-  public static final String OWNER_PROPERTY = "owner";
+  public static final String  OWNER_PROPERTY    = "owner";
 
   /**
    * <code>LANGUAGE_PROPERTY</code>.
    */
-  public static final String LANGUAGE_PROPERTY = "language";
+  public static final String  LANGUAGE_PROPERTY = "language";
 
   /**
    * Constructs a new <code>UserPrincipal</code> instance.
@@ -113,7 +113,6 @@ public class UserPrincipal implements Principal, Serializable {
     return customProperties.get(propertyName);
   }
 
-  
   /**
    * Gets the customProperties.
    * 

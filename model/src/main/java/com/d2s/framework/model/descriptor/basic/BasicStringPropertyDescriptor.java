@@ -27,8 +27,7 @@ public class BasicStringPropertyDescriptor extends
       return maxLength;
     }
     if (getParentDescriptor() != null) {
-      return ((IStringPropertyDescriptor) getParentDescriptor())
-          .getMaxLength();
+      return ((IStringPropertyDescriptor) getParentDescriptor()).getMaxLength();
     }
     return maxLength;
   }

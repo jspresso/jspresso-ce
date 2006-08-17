@@ -88,8 +88,8 @@ public abstract class AbstractStartup implements IStartup {
    */
   protected IBackendController getBackendController() {
     if (backendController == null) {
-      backendController = (IBackendController) getApplicationContext()
-          .getBean("applicationBackController");
+      backendController = (IBackendController) getApplicationContext().getBean(
+          "applicationBackController");
     }
     return backendController;
 

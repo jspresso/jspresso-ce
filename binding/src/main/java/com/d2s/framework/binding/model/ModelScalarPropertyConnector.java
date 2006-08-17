@@ -7,8 +7,8 @@ import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
 /**
- * This connector is a simple java model property connector. "Simple" means not a
- * model reference and not a collection.
+ * This connector is a simple java model property connector. "Simple" means not
+ * a model reference and not a collection.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -22,7 +22,8 @@ public class ModelScalarPropertyConnector extends ModelPropertyConnector {
   /**
    * Constructs a new model property connector on a simple model property.
    */
-  ModelScalarPropertyConnector(IScalarPropertyDescriptor modelDescriptor, IAccessorFactory accessorFactory) {
+  ModelScalarPropertyConnector(IScalarPropertyDescriptor modelDescriptor,
+      IAccessorFactory accessorFactory) {
     super(modelDescriptor, accessorFactory);
   }
 }

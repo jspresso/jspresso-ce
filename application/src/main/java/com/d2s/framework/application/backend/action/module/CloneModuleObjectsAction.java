@@ -52,8 +52,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
     if (module.getModuleObjects() == null) {
       projectedCollection = new ArrayList<Object>();
     } else {
-      projectedCollection = new ArrayList<Object>(module
-          .getModuleObjects());
+      projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
     Collection<IEntity> entityClones = new ArrayList<IEntity>();
     for (int i = 0; i < selectedIndices.length; i++) {
