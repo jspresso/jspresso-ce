@@ -46,6 +46,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
   private boolean                              locallyReadable;
   private boolean                              locallyWritable;
 
+  private PropertyChangeListener               gatesListener;
+
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
    * bean connector, this identifier must be the bean property the connector
@@ -323,6 +325,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       readabilityGates = new HashSet<IGate>(4);
     }
     readabilityGates.add(gate);
+    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, getGatesListener());
     updateState();
   }
 
@@ -334,6 +337,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       writabilityGates = new HashSet<IGate>(4);
     }
     writabilityGates.add(gate);
+    gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, getGatesListener());
     updateState();
   }
 
@@ -345,6 +349,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return;
     }
     readabilityGates.remove(gate);
+    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY, getGatesListener());
     updateState();
   }
 
@@ -356,6 +361,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
       return;
     }
     writabilityGates.remove(gate);
+    gate.removePropertyChangeListener(IGate.OPEN_PROPERTY, getGatesListener());
     updateState();
   }
 
@@ -496,5 +502,54 @@ public abstract class AbstractValueConnector extends AbstractConnector
     PropertyChangeEvent evt) {
       viewConnector.updateState();
     }
+  }
+
+  /**
+   * Gets the gatesListener.
+   * 
+   * @return the gatesListener.
+   */
+  public PropertyChangeListener getGatesListener() {
+    if (gatesListener == null) {
+      gatesListener = new PropertyChangeListener() {
+
+        public void propertyChange(@SuppressWarnings("unused")
+        PropertyChangeEvent evt) {
+          updateState();
+        }
+      };
+    }
+    return gatesListener;
+  }
+
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  protected Collection<IGate> getReadabilityGates() {
+    return readabilityGates;
+  }
+
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  protected Collection<IGate> getWritabilityGates() {
+    return writabilityGates;
+  }
+
+  /**
+   * Default implementation does nothing.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    boolean readable = isReadable();
+    firePropertyChange(READABLE_PROPERTY, !readable, readable);
+    boolean writable = isWritable();
+    firePropertyChange(READABLE_PROPERTY, !writable, writable);
   }
 }

@@ -17,6 +17,7 @@ import com.d2s.framework.model.IModelChangeListener;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
@@ -88,6 +89,20 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
           this);
     }
 
+    if (getReadabilityGates() != null) {
+      for (IGate gate : getReadabilityGates()) {
+        if (gate instanceof IModelGate) {
+          ((IModelGate) gate).setModelProvider(getModelProvider());
+        }
+      }
+    }
+    if (getWritabilityGates() != null) {
+      for (IGate gate : getWritabilityGates()) {
+        if (gate instanceof IModelGate) {
+          ((IModelGate) gate).setModelProvider(getModelProvider());
+        }
+      }
+    }
     // line below is mainly used to initialize oldConnectorValue (the model
     // property connector is not used as model yet since it is just being linked
     // to its parent). We would like to use the commented modelChange line but
@@ -265,5 +280,49 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    */
   public IModelDescriptor getModelDescriptor() {
     return modelDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addReadabilityGate(IGate gate) {
+    if (gate instanceof IModelGate) {
+      ((IModelGate) gate).setModelProvider(getModelProvider());
+    }
+    super.addReadabilityGate(gate);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addWritabilityGate(IGate gate) {
+    if (gate instanceof IModelGate) {
+      ((IModelGate) gate).setModelProvider(getModelProvider());
+    }
+    super.addWritabilityGate(gate);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void removeReadabilityGate(IGate gate) {
+    if (gate instanceof IModelGate) {
+      ((IModelGate) gate).setModelProvider(null);
+    }
+    super.removeReadabilityGate(gate);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void removeWritabilityGate(IGate gate) {
+    if (gate instanceof IModelGate) {
+      ((IModelGate) gate).setModelProvider(null);
+    }
+    super.removeWritabilityGate(gate);
   }
 }

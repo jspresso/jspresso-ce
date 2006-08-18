@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.entity.basic;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -67,7 +69,18 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    */
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id) {
-    return createEntityInstance(entityContract, id, null);
+    final T createdEntity = createEntityInstance(entityContract, id, null);
+    createdEntity.addPropertyChangeListener(IEntity.VERSION, new PropertyChangeListener() {
+
+      public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getOldValue() == null && evt.getNewValue() != null) {
+          createdEntity.firePropertyChange("persistent", new Boolean(false), new Boolean(true));
+        } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+          createdEntity.firePropertyChange("persistent", new Boolean(true), new Boolean(false));
+        }
+      }
+    });
+    return createdEntity;
   }
 
   @SuppressWarnings("unchecked")

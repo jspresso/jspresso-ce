@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.util;
 
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
+
 /**
  * A simple open / close, true / false interface.
  * <p>
@@ -12,7 +14,12 @@ package com.d2s.framework.util;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IGate {
+public interface IGate extends IPropertyChangeCapable, Cloneable {
+  
+  /**
+   * <code>OPEN_PROPERTY</code>.
+   */
+  String OPEN_PROPERTY = "open";
 
   /**
    * Is the gate open ?
