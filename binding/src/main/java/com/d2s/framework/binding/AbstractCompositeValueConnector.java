@@ -255,7 +255,14 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * {@inheritDoc}
    */
+  public boolean areChildrenReadable() {
+    return isReadable();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean areChildrenWritable() {
-    return true;
+    return isWritable();
   }
 }

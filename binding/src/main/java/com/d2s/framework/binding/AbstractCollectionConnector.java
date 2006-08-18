@@ -356,4 +356,19 @@ public abstract class AbstractCollectionConnector extends
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean areChildrenReadable() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean areChildrenWritable() {
+    return true;
+  }
 }

@@ -25,6 +25,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private IPropertyDescriptor               parentDescriptor;
 
   private Boolean                           mandatory;
+  private Boolean                           readOnly;
   private List<IPropertyIntegrityProcessor> integrityProcessors;
   private String                            delegateClassName;
   private Class                             delegateClass;
@@ -51,6 +52,29 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public void setMandatory(boolean mandatory) {
     this.mandatory = new Boolean(mandatory);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isReadOnly() {
+    if (readOnly != null) {
+      return readOnly.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().isReadOnly();
+    }
+    return false;
+  }
+
+  /**
+   * Sets the readOnly property.
+   * 
+   * @param readOnly
+   *          the readOnly to set.
+   */
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = new Boolean(readOnly);
   }
 
   /**

@@ -87,4 +87,11 @@ public interface IViewDescriptor extends IIconDescriptor {
    * @return the view model descriptor.
    */
   IModelDescriptor getModelDescriptor();
+
+  /**
+   * Gets wether this view is read-only.
+   * 
+   * @return true if the view is read-only.
+   */
+  boolean isReadOnly();
 }

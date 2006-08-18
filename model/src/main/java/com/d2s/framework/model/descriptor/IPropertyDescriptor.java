@@ -79,4 +79,11 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * @return true if this descriptor is an overload of a parent one.
    */
   boolean isOverload();
+
+  /**
+   * Wether the underlying property is read-only.
+   * 
+   * @return true if read-only
+   */
+  boolean isReadOnly();
 }

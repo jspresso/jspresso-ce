@@ -238,6 +238,9 @@ public class DefaultUlcViewFactory implements
     if (viewDescriptor.getFont() != null) {
       view.getPeer().setFont(createUlcFont(viewDescriptor.getFont()));
     }
+    if (viewDescriptor.isReadOnly()) {
+      view.getConnector().setLocallyWritable(false);
+    }
     if (viewDescriptor.getActions() != null) {
       ULCToolBar toolBar = createULCToolBar();
       for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
@@ -1054,12 +1057,13 @@ public class DefaultUlcViewFactory implements
             editorView);
         column.setCellEditor(editor);
       }
-      ITableCellRenderer cellRenderer = createTableCellRenderer(
-          propertyDescriptor, locale);
+      ITableCellRenderer cellRenderer = createTableCellRenderer(column
+          .getModelIndex(), propertyDescriptor, locale);
       if (cellRenderer != null) {
         column.setCellRenderer(cellRenderer);
       } else {
-        column.setCellRenderer(new EvenOddTableCellRenderer());
+        column.setCellRenderer(new EvenOddTableCellRenderer(column
+            .getModelIndex()));
       }
       if (propertyDescriptor instanceof IBooleanPropertyDescriptor
           || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
@@ -1097,29 +1101,29 @@ public class DefaultUlcViewFactory implements
     return translationMapping;
   }
 
-  private ITableCellRenderer createTableCellRenderer(
+  private ITableCellRenderer createTableCellRenderer(int column,
       IPropertyDescriptor propertyDescriptor, Locale locale) {
     ITableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IBooleanPropertyDescriptor) {
       cellRenderer = createBooleanTableCellRenderer(
           (IBooleanPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
-      cellRenderer = createDateTableCellRenderer(
+      cellRenderer = createDateTableCellRenderer(column,
           (IDatePropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
-      cellRenderer = createDurationTableCellRenderer(
+      cellRenderer = createDurationTableCellRenderer(column,
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-      cellRenderer = createEnumerationTableCellRenderer(
+      cellRenderer = createEnumerationTableCellRenderer(column,
           (IEnumerationPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof INumberPropertyDescriptor) {
-      cellRenderer = createNumberTableCellRenderer(
+      cellRenderer = createNumberTableCellRenderer(column,
           (INumberPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       cellRenderer = createRelationshipEndTableCellRenderer(
           (IRelationshipEndPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
-      cellRenderer = createStringTableCellRenderer(
+      cellRenderer = createStringTableCellRenderer(column,
           (IStringPropertyDescriptor) propertyDescriptor, locale);
     }
     return cellRenderer;
@@ -1133,60 +1137,60 @@ public class DefaultUlcViewFactory implements
     return new BooleanTableCellRenderer();
   }
 
-  private ITableCellRenderer createDateTableCellRenderer(
+  private ITableCellRenderer createDateTableCellRenderer(int column,
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createDateDataType(
+    return new FormattedTableCellRenderer(column, createDateDataType(
         propertyDescriptor, locale,
         createDateFormat(propertyDescriptor, locale)));
   }
 
-  private ITableCellRenderer createDurationTableCellRenderer(
+  private ITableCellRenderer createDurationTableCellRenderer(int column,
       IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createDurationDataType(
+    return new FormattedTableCellRenderer(column, createDurationDataType(
         propertyDescriptor, locale, createDurationFormatter(propertyDescriptor,
             locale)));
   }
 
-  private ITableCellRenderer createEnumerationTableCellRenderer(
+  private ITableCellRenderer createEnumerationTableCellRenderer(int column,
       IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
-        locale);
+    return new TranslatedEnumerationTableCellRenderer(column,
+        propertyDescriptor, locale);
   }
 
-  private ITableCellRenderer createNumberTableCellRenderer(
+  private ITableCellRenderer createNumberTableCellRenderer(int column,
       INumberPropertyDescriptor propertyDescriptor, Locale locale) {
     ITableCellRenderer cellRenderer = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
-      cellRenderer = createIntegerTableCellRenderer(
+      cellRenderer = createIntegerTableCellRenderer(column,
           (IIntegerPropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
-      cellRenderer = createDecimalTableCellRenderer(
+      cellRenderer = createDecimalTableCellRenderer(column,
           (IDecimalPropertyDescriptor) propertyDescriptor, locale);
     }
     return cellRenderer;
   }
 
-  private ITableCellRenderer createIntegerTableCellRenderer(
+  private ITableCellRenderer createIntegerTableCellRenderer(int column,
       IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createIntegerDataType(
+    return new FormattedTableCellRenderer(column, createIntegerDataType(
         propertyDescriptor, locale, createIntegerFormat(propertyDescriptor,
             locale)));
   }
 
-  private ITableCellRenderer createDecimalTableCellRenderer(
+  private ITableCellRenderer createDecimalTableCellRenderer(int column,
       IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
-      return createPercentTableCellRenderer(
+      return createPercentTableCellRenderer(column,
           (IPercentPropertyDescriptor) propertyDescriptor, locale);
     }
-    return new FormattedTableCellRenderer(createDecimalDataType(
+    return new FormattedTableCellRenderer(column, createDecimalDataType(
         propertyDescriptor, locale, createDecimalFormat(propertyDescriptor,
             locale)));
   }
 
-  private ITableCellRenderer createPercentTableCellRenderer(
+  private ITableCellRenderer createPercentTableCellRenderer(int column,
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormattedTableCellRenderer(createPercentDataType(
+    return new FormattedTableCellRenderer(column, createPercentDataType(
         propertyDescriptor, locale, createPercentFormat(propertyDescriptor,
             locale)));
   }
@@ -1221,11 +1225,11 @@ public class DefaultUlcViewFactory implements
     return null;
   }
 
-  private ITableCellRenderer createStringTableCellRenderer(
+  private ITableCellRenderer createStringTableCellRenderer(int column,
       @SuppressWarnings("unused")
       IStringPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
       Locale locale) {
-    return new FormattedTableCellRenderer(null);
+    return new FormattedTableCellRenderer(column, null);
   }
 
   private final class TranslatedEnumerationTableCellRenderer extends
@@ -1239,6 +1243,8 @@ public class DefaultUlcViewFactory implements
      * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
      * instance.
      * 
+     * @param column
+     *          the column this renderer is attached to.
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -1246,9 +1252,9 @@ public class DefaultUlcViewFactory implements
      * @param locale
      *          the locale to lookup the translation.
      */
-    public TranslatedEnumerationTableCellRenderer(
+    public TranslatedEnumerationTableCellRenderer(int column,
         IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-      super();
+      super(column);
       this.propertyDescriptor = propertyDescriptor;
       this.locale = locale;
     }

@@ -33,6 +33,10 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
     Component renderer = super.getTableCellRendererComponent(table, value,
         isSelected, hasFocus, row, column);
     SwingUtil.alternateEvenOddBackground(renderer, table, isSelected, row);
+    if (isSelected && hasFocus && table.getModel().isCellEditable(row, column)) {
+      renderer.setBackground(renderer.getBackground().brighter());
+      renderer.setForeground(table.getForeground());
+    }
     return renderer;
   }
 

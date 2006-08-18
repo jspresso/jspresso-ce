@@ -327,6 +327,13 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
+  public boolean areChildrenReadable() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean areChildrenWritable() {
     return true;
   }

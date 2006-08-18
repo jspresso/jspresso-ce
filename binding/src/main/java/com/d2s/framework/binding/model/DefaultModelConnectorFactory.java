@@ -38,16 +38,22 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
       return new ModelCollectionConnector(
           (ICollectionDescriptor) modelDescriptor, this);
     } else if (modelDescriptor instanceof IPropertyDescriptor) {
+      IValueConnector propertyConnector = null;
       if (modelDescriptor instanceof IReferencePropertyDescriptor) {
-        return new ModelRefPropertyConnector(
+        propertyConnector = new ModelRefPropertyConnector(
             (IReferencePropertyDescriptor) modelDescriptor, this);
       } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
-        return new ModelCollectionPropertyConnector(
+        propertyConnector = new ModelCollectionPropertyConnector(
             (ICollectionPropertyDescriptor) modelDescriptor, this);
       } else if (modelDescriptor instanceof IScalarPropertyDescriptor) {
-        return new ModelScalarPropertyConnector(
+        propertyConnector = new ModelScalarPropertyConnector(
             (IScalarPropertyDescriptor) modelDescriptor, accessorFactory);
       }
+      if (propertyConnector != null
+          && ((IPropertyDescriptor) modelDescriptor).isReadOnly()) {
+        propertyConnector.setLocallyWritable(false);
+      }
+      return propertyConnector;
     }
     return null;
   }

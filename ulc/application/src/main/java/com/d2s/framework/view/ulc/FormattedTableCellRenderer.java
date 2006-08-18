@@ -24,11 +24,13 @@ public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
   /**
    * Constructs a new <code>FormattedTableCellRenderer</code> instance.
    * 
+   * @param column
+   *          the column this renderer is attached to.
    * @param dataType
    *          the dataType used to format object values.
    */
-  public FormattedTableCellRenderer(IDataType dataType) {
-    super();
+  public FormattedTableCellRenderer(int column, IDataType dataType) {
+    super(column);
     this.dataType = dataType;
   }
 

@@ -31,17 +31,20 @@ import com.d2s.framework.util.IGate;
 public abstract class AbstractValueConnector extends AbstractConnector
     implements IValueConnector {
 
-  private Object                      oldConnectorValue;
-  private ConnectorValueChangeSupport valueChangeSupport;
-  private ICompositeValueConnector    parentConnector;
+  private Object                               oldConnectorValue;
+  private ConnectorValueChangeSupport          valueChangeSupport;
+  private ICompositeValueConnector             parentConnector;
 
-  private IValueConnector             modelConnector;
+  private IValueConnector                      modelConnector;
 
-  private Collection<IGate>           readabilityGates;
-  private Collection<IGate>           writabilityGates;
+  private ModelConnectorPropertyChangeListener readableListener;
+  private ModelConnectorPropertyChangeListener writableListener;
 
-  private boolean                     locallyReadable;
-  private boolean                     locallyWritable;
+  private Collection<IGate>                    readabilityGates;
+  private Collection<IGate>                    writabilityGates;
+
+  private boolean                              locallyReadable;
+  private boolean                              locallyWritable;
 
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
@@ -233,7 +236,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @return the readable.
    */
   public boolean isReadable() {
-    if (getParentConnector() != null && !getParentConnector().isReadable()) {
+    if (getParentConnector() != null
+        && !getParentConnector().areChildrenReadable()) {
+      return false;
+    }
+    if (getModelConnector() != null && !getModelConnector().isReadable()) {
       return false;
     }
     return locallyReadable && areGatesOpen(readabilityGates);
@@ -247,6 +254,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
   public boolean isWritable() {
     if (getParentConnector() != null
         && !getParentConnector().areChildrenWritable()) {
+      return false;
+    }
+    if (getModelConnector() != null && !getModelConnector().isWritable()) {
       return false;
     }
     return locallyWritable && areGatesOpen(writabilityGates);
@@ -358,33 +368,32 @@ public abstract class AbstractValueConnector extends AbstractConnector
     if (getModelConnector() != null) {
       getModelConnector().removeConnectorValueChangeListener(this);
       removeConnectorValueChangeListener(getModelConnector());
-      ModelConnectorPropertyChangeListener readGate = new ModelConnectorPropertyChangeListener(
-          this);
-      ModelConnectorPropertyChangeListener writeGate = new ModelConnectorPropertyChangeListener(
-          this);
-      getModelConnector().removePropertyChangeListener(
-          IValueConnector.READABLE_PROPERTY, readGate);
-      getModelConnector().removePropertyChangeListener(
-          IValueConnector.WRITABLE_PROPERTY, writeGate);
-      removeReadabilityGate(readGate);
-      removeWritabilityGate(writeGate);
+      if (readableListener != null) {
+        getModelConnector().removePropertyChangeListener(
+            IValueConnector.READABLE_PROPERTY, readableListener);
+      }
+      if (writableListener != null) {
+        getModelConnector().removePropertyChangeListener(
+            IValueConnector.WRITABLE_PROPERTY, writableListener);
+      }
     }
     IValueConnector oldModelConnector = this.modelConnector;
     this.modelConnector = modelConnector;
     if (getModelConnector() != null) {
       getModelConnector().addConnectorValueChangeListener(this);
       addConnectorValueChangeListener(getModelConnector());
-      ModelConnectorPropertyChangeListener readGate = new ModelConnectorPropertyChangeListener(
-          this);
-      ModelConnectorPropertyChangeListener writeGate = new ModelConnectorPropertyChangeListener(
-          this);
+      if (readableListener == null) {
+        readableListener = new ModelConnectorPropertyChangeListener(this);
+      }
+      if (writableListener == null) {
+        writableListener = new ModelConnectorPropertyChangeListener(this);
+      }
       getModelConnector().addPropertyChangeListener(
-          IValueConnector.READABLE_PROPERTY, readGate);
+          IValueConnector.READABLE_PROPERTY, readableListener);
       getModelConnector().addPropertyChangeListener(
-          IValueConnector.WRITABLE_PROPERTY, writeGate);
-      addReadabilityGate(readGate);
-      addWritabilityGate(writeGate);
-      getModelConnector().boundAsModel(this, readGate, writeGate);
+          IValueConnector.WRITABLE_PROPERTY, writableListener);
+      getModelConnector()
+          .boundAsModel(this, readableListener, writableListener);
       connectorModelChange(oldModelConnector, getModelConnector());
     } else {
       setConnectorValue(null);
@@ -431,10 +440,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   private class ModelConnectorPropertyChangeListener implements
-      PropertyChangeListener, IGate {
+      PropertyChangeListener {
 
     private IValueConnector viewConnector;
-    private boolean         open;
 
     /**
      * Constructs a new <code>ConnectorReadabilityChangeListener</code>
@@ -445,23 +453,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
      */
     public ModelConnectorPropertyChangeListener(IValueConnector viewConnector) {
       this.viewConnector = viewConnector;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public boolean isOpen() {
-      return open;
-    }
-
-    /**
-     * Sets the gate open.
-     * 
-     * @param open
-     *          true if open.
-     */
-    private void setOpen(boolean open) {
-      this.open = open;
     }
 
     /**
@@ -500,8 +491,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
     /**
      * {@inheritDoc}
      */
-    public void propertyChange(PropertyChangeEvent evt) {
-      setOpen(((Boolean) evt.getNewValue()).booleanValue());
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
       getViewConnector().updateState();
     }
   }

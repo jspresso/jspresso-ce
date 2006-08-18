@@ -271,6 +271,9 @@ public class DefaultSwingViewFactory implements
     if (viewDescriptor.getFont() != null) {
       view.getPeer().setFont(viewDescriptor.getFont());
     }
+    if (viewDescriptor.isReadOnly()) {
+      view.getConnector().setLocallyWritable(false);
+    }
     if (viewDescriptor.getActions() != null) {
       JToolBar toolBar = createJToolBar();
       toolBar.setRollover(true);

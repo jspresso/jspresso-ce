@@ -205,8 +205,15 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
+  public boolean areChildrenReadable() {
+    return isReadable();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean areChildrenWritable() {
-    return true;
+    return isWritable();
   }
 
   /**

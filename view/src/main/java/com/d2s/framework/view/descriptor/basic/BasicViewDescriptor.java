@@ -35,6 +35,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   private Font             font;
   private ActionMap        actionMap;
   private IModelDescriptor modelDescriptor;
+  private boolean          readOnly;
 
   /**
    * {@inheritDoc}
@@ -180,6 +181,22 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
       return getModelDescriptor().getI18nName(translationProvider, locale);
     }
     return super.getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isReadOnly() {
+    return readOnly;
+  }
+  
+  /**
+   * Sets the readOnly.
+   * 
+   * @param readOnly the readOnly to set.
+   */
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = readOnly;
   }
 
 }
