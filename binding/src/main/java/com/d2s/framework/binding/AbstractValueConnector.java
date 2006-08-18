@@ -466,15 +466,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
     }
 
     /**
-     * Returns the view connector.
-     * 
-     * @return the view connector.
-     */
-    protected IValueConnector getViewConnector() {
-      return viewConnector;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -503,7 +494,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
      */
     public void propertyChange(@SuppressWarnings("unused")
     PropertyChangeEvent evt) {
-      getViewConnector().updateState();
+      viewConnector.updateState();
     }
   }
 }

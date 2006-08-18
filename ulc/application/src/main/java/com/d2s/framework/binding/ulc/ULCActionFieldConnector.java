@@ -34,6 +34,14 @@ public class ULCActionFieldConnector extends
    */
   public ULCActionFieldConnector(String id, ULCActionField actionField) {
     super(id, actionField);
+    if (!getConnectedULCComponent().isShowingTextField()) {
+      addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+        public void connectorValueChange(ConnectorValueChangeEvent evt) {
+          getConnectedULCComponent().setDecorated(evt.getNewValue() != null);
+        }
+      });
+    }
   }
 
   /**
@@ -102,13 +110,5 @@ public class ULCActionFieldConnector extends
   public void updateState() {
     super.updateState();
     getConnectedULCComponent().setEditable(isWritable());
-    if (!getConnectedULCComponent().isShowingTextField()) {
-      addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-        public void connectorValueChange(ConnectorValueChangeEvent evt) {
-          getConnectedULCComponent().setDecorated(evt.getNewValue() != null);
-        }
-      });
-    }
   }
 }

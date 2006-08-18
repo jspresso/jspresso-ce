@@ -33,6 +33,14 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
    */
   public JActionFieldConnector(String id, JActionField actionField) {
     super(id, actionField);
+    if (!getConnectedJComponent().isShowingTextField()) {
+      addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+        public void connectorValueChange(ConnectorValueChangeEvent evt) {
+          getConnectedJComponent().setDecorated(evt.getNewValue() != null);
+        }
+      });
+    }
   }
 
   /**
@@ -91,13 +99,5 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   protected void protectedUpdateState() {
     super.protectedUpdateState();
     getConnectedJComponent().setEditable(isWritable());
-    if (!getConnectedJComponent().isShowingTextField()) {
-      addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-        public void connectorValueChange(ConnectorValueChangeEvent evt) {
-          getConnectedJComponent().setDecorated(evt.getNewValue() != null);
-        }
-      });
-    }
   }
 }
