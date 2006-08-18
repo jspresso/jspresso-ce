@@ -120,6 +120,7 @@ import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
+import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
@@ -273,6 +274,16 @@ public class DefaultSwingViewFactory implements
     }
     if (viewDescriptor.isReadOnly()) {
       view.getConnector().setLocallyWritable(false);
+    }
+    if (viewDescriptor.getReadabilityGates() != null) {
+      for (IGate gate : viewDescriptor.getReadabilityGates()) {
+        view.getConnector().addReadabilityGate(gate.clone());
+      }
+    }
+    if (viewDescriptor.getWritabilityGates() != null) {
+      for (IGate gate : viewDescriptor.getWritabilityGates()) {
+        view.getConnector().addWritabilityGate(gate.clone());
+      }
     }
     if (viewDescriptor.getActions() != null) {
       JToolBar toolBar = createJToolBar();

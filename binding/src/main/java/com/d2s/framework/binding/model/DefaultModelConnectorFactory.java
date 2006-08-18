@@ -12,6 +12,7 @@ import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
+import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
 /**
@@ -49,9 +50,22 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
         propertyConnector = new ModelScalarPropertyConnector(
             (IScalarPropertyDescriptor) modelDescriptor, accessorFactory);
       }
-      if (propertyConnector != null
-          && ((IPropertyDescriptor) modelDescriptor).isReadOnly()) {
-        propertyConnector.setLocallyWritable(false);
+      if (propertyConnector != null) {
+        if (((IPropertyDescriptor) modelDescriptor).isReadOnly()) {
+          propertyConnector.setLocallyWritable(false);
+        }
+        if (((IPropertyDescriptor) modelDescriptor).getReadabilityGates() != null) {
+          for (IGate gate : ((IPropertyDescriptor) modelDescriptor)
+              .getReadabilityGates()) {
+            propertyConnector.addReadabilityGate(gate.clone());
+          }
+        }
+        if (((IPropertyDescriptor) modelDescriptor).getWritabilityGates() != null) {
+          for (IGate gate : ((IPropertyDescriptor) modelDescriptor)
+              .getWritabilityGates()) {
+            propertyConnector.addWritabilityGate(gate.clone());
+          }
+        }
       }
       return propertyConnector;
     }

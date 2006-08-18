@@ -5,10 +5,12 @@ package com.d2s.framework.view.descriptor;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
 import com.d2s.framework.view.action.IDisplayableAction;
 
@@ -94,4 +96,22 @@ public interface IViewDescriptor extends IIconDescriptor {
    * @return true if the view is read-only.
    */
   boolean isReadOnly();
+
+  /**
+   * Gets the collection of gates determining the readability state of this
+   * property.
+   * 
+   * @return the collection of gates determining the readability state of this
+   *         property.
+   */
+  Collection<IGate> getReadabilityGates();
+
+  /**
+   * Gets the collection of gates determining the writability state of this
+   * property.
+   * 
+   * @return the collection of gates determining the writability state of this
+   *         property.
+   */
+  Collection<IGate> getWritabilityGates();
 }

@@ -5,12 +5,14 @@ package com.d2s.framework.view.descriptor.basic;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.action.ActionMap;
@@ -29,13 +31,15 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     implements IViewDescriptor {
 
-  private int              borderType = NONE;
-  private Color            foreground;
-  private Color            background;
-  private Font             font;
-  private ActionMap        actionMap;
-  private IModelDescriptor modelDescriptor;
-  private boolean          readOnly;
+  private int               borderType = NONE;
+  private Color             foreground;
+  private Color             background;
+  private Font              font;
+  private ActionMap         actionMap;
+  private IModelDescriptor  modelDescriptor;
+  private boolean           readOnly;
+  private Collection<IGate> readabilityGates;
+  private Collection<IGate> writabilityGates;
 
   /**
    * {@inheritDoc}
@@ -189,14 +193,55 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
   public boolean isReadOnly() {
     return readOnly;
   }
-  
+
   /**
    * Sets the readOnly.
    * 
-   * @param readOnly the readOnly to set.
+   * @param readOnly
+   *          the readOnly to set.
    */
   public void setReadOnly(boolean readOnly) {
     this.readOnly = readOnly;
+  }
+
+  
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  public Collection<IGate> getReadabilityGates() {
+    return readabilityGates;
+  }
+
+  
+  /**
+   * Sets the readabilityGates.
+   * 
+   * @param readabilityGates the readabilityGates to set.
+   */
+  public void setReadabilityGates(Collection<IGate> readabilityGates) {
+    this.readabilityGates = readabilityGates;
+  }
+
+  
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  public Collection<IGate> getWritabilityGates() {
+    return writabilityGates;
+  }
+
+  
+  /**
+   * Sets the writabilityGates.
+   * 
+   * @param writabilityGates the writabilityGates to set.
+   */
+  public void setWritabilityGates(Collection<IGate> writabilityGates) {
+    this.writabilityGates = writabilityGates;
   }
 
 }

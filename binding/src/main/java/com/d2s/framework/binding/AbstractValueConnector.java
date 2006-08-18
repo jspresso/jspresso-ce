@@ -195,6 +195,16 @@ public abstract class AbstractValueConnector extends AbstractConnector
     clonedConnector.modelConnector = null;
     clonedConnector.readabilityGates = null;
     clonedConnector.writabilityGates = null;
+    if (readabilityGates != null) {
+      for (IGate gate : readabilityGates) {
+        clonedConnector.addReadabilityGate(gate.clone());
+      }
+    }
+    if (writabilityGates != null) {
+      for (IGate gate : writabilityGates) {
+        clonedConnector.addWritabilityGate(gate.clone());
+      }
+    }
     clonedConnector.locallyReadable = locallyReadable;
     clonedConnector.locallyWritable = locallyWritable;
     return clonedConnector;

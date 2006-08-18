@@ -20,4 +20,9 @@ public interface IGate {
    * @return true if open.
    */
   boolean isOpen();
+  
+  /**
+   * {@inheritDoc}
+   */
+  IGate clone();
 }

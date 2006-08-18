@@ -3,10 +3,12 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
+import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.descriptor.DefaultDescriptor;
 import com.d2s.framework.util.exception.NestedRuntimeException;
 
@@ -30,6 +32,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private String                            delegateClassName;
   private Class                             delegateClass;
   private String                            unicityScope;
+  private Collection<IGate>                 readabilityGates;
+  private Collection<IGate>                 writabilityGates;
 
   /**
    * {@inheritDoc}
@@ -253,6 +257,58 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   public boolean isOverload() {
     return parentDescriptor != null;
+  }
+
+  
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  public Collection<IGate> getReadabilityGates() {
+    if (readabilityGates != null) {
+      return readabilityGates;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getReadabilityGates();
+    }
+    return readabilityGates;
+  }
+
+  
+  /**
+   * Sets the readabilityGates.
+   * 
+   * @param readabilityGates the readabilityGates to set.
+   */
+  public void setReadabilityGates(Collection<IGate> readabilityGates) {
+    this.readabilityGates = readabilityGates;
+  }
+
+  
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  public Collection<IGate> getWritabilityGates() {
+    if (writabilityGates != null) {
+      return writabilityGates;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getWritabilityGates();
+    }
+    return writabilityGates;
+  }
+
+  
+  /**
+   * Sets the writabilityGates.
+   * 
+   * @param writabilityGates the writabilityGates to set.
+   */
+  public void setWritabilityGates(Collection<IGate> writabilityGates) {
+    this.writabilityGates = writabilityGates;
   }
 
 }

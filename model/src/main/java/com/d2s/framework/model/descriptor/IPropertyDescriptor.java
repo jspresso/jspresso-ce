@@ -3,9 +3,11 @@
  */
 package com.d2s.framework.model.descriptor;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
+import com.d2s.framework.util.IGate;
 
 /**
  * This interface is the super-interface of all properties descriptors.
@@ -86,4 +88,22 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * @return true if read-only
    */
   boolean isReadOnly();
+
+  /**
+   * Gets the collection of gates determining the readability state of this
+   * property.
+   * 
+   * @return the collection of gates determining the readability state of this
+   *         property.
+   */
+  Collection<IGate> getReadabilityGates();
+
+  /**
+   * Gets the collection of gates determining the writability state of this
+   * property.
+   * 
+   * @return the collection of gates determining the writability state of this
+   *         property.
+   */
+  Collection<IGate> getWritabilityGates();
 }
