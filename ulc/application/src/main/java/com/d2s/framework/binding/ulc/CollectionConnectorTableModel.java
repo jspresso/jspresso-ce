@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.binding.ulc;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,13 +34,13 @@ import com.ulcjava.base.application.table.AbstractTableModel;
  */
 public class CollectionConnectorTableModel extends AbstractTableModel {
 
-  private static final long                               serialVersionUID = -3323472361980315420L;
+  private static final long                           serialVersionUID = -3323472361980315420L;
 
-  private ICollectionConnector                            collectionConnector;
-  private Map<Integer, IConnectorValueChangeListener>     cachedRowListeners;
-  private Map<Coordinates, IConnectorValueChangeListener> cachedCellListeners;
-  private List<String>                                    columnConnectorKeys;
-  private Map<String, Class>                              columnClassesByIds;
+  private ICollectionConnector                        collectionConnector;
+  private Map<Integer, IConnectorValueChangeListener> cachedRowListeners;
+  private Map<Coordinates, CellConnectorListener>     cachedCellListeners;
+  private List<String>                                columnConnectorKeys;
+  private Map<String, Class>                          columnClassesByIds;
 
   /**
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
@@ -165,9 +167,9 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
             .getRenderingConnector().addConnectorValueChangeListener(
                 getChildCellConnectorListener(row, col));
       } else {
-        cellConnector
-            .addConnectorValueChangeListener(getChildCellConnectorListener(row,
-                col));
+        CellConnectorListener listener = getChildCellConnectorListener(row, col);
+        cellConnector.addConnectorValueChangeListener(listener);
+        cellConnector.addPropertyChangeListener(listener);
       }
     }
   }
@@ -185,12 +187,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     return cachedListener;
   }
 
-  private IConnectorValueChangeListener getChildCellConnectorListener(int row,
-      int col) {
+  private CellConnectorListener getChildCellConnectorListener(int row, int col) {
     if (cachedCellListeners == null) {
-      cachedCellListeners = new HashMap<Coordinates, IConnectorValueChangeListener>();
+      cachedCellListeners = new HashMap<Coordinates, CellConnectorListener>();
     }
-    IConnectorValueChangeListener cachedListener = cachedCellListeners
+    CellConnectorListener cachedListener = cachedCellListeners
         .get(new Coordinates(row, col));
     if (cachedListener == null) {
       cachedListener = new CellConnectorListener(row, col);
@@ -259,7 +260,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   }
 
   private final class CellConnectorListener implements
-      IConnectorValueChangeListener {
+      IConnectorValueChangeListener, PropertyChangeListener {
 
     private Coordinates cell;
 
@@ -272,6 +273,18 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
      */
     public void connectorValueChange(@SuppressWarnings("unused")
     ConnectorValueChangeEvent evt) {
+      updateCell();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
+      updateCell();
+    }
+
+    private void updateCell() {
       if (cell.getX() < getRowCount()) {
         fireTableCellUpdated(cell.getX(), cell.getY());
       }
