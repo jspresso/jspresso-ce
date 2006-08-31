@@ -89,10 +89,12 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public void deleteEntity(IEntity entity) {
-    if (entitiesRegisteredForDeletion == null) {
-      entitiesRegisteredForDeletion = new LinkedHashSet<IEntity>();
+    if (entity.isPersistent()) {
+      if (entitiesRegisteredForDeletion == null) {
+        entitiesRegisteredForDeletion = new LinkedHashSet<IEntity>();
+      }
+      entitiesRegisteredForDeletion.add(entity);
     }
-    entitiesRegisteredForDeletion.add(entity);
   }
 
   /**

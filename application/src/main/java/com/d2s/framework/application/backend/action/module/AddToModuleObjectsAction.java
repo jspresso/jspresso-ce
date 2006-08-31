@@ -34,13 +34,10 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
-    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor(context))
-        .getElementDescriptor();
 
     Collection<Object> projectedCollection;
     if (module.getModuleObjects() == null) {
@@ -48,17 +45,36 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     } else {
       projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
-    IEntity newEntity = getEntityFactory(context).createEntityInstance(
-        (Class<? extends IEntity>) projectedComponentDescriptor
-            .getComponentContract());
-    projectedCollection.add(newEntity);
+
+    Object newModuleObject = createNewModuleObject(actionHandler, context);
+    projectedCollection.add(newModuleObject);
     module.setModuleObjects(projectedCollection);
 
     getModelConnector(context).setConnectorValue(projectedCollection);
 
     context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
         .getIndicesOf(getModelConnector(context), Collections
-            .singleton(newEntity)));
+            .singleton(newModuleObject)));
     return true;
+  }
+
+  /**
+   * Creates a new entity to add to the projected object collection.
+   * 
+   * @param actionHandler
+   *          the action handler (generally the controller).
+   * @param context
+   *          the action context.
+   * @return the created entity.
+   */
+  @SuppressWarnings("unchecked")
+  protected Object createNewModuleObject(@SuppressWarnings("unused")
+  IActionHandler actionHandler, Map<String, Object> context) {
+    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor(context))
+        .getElementDescriptor();
+
+    return getEntityFactory(context).createEntityInstance(
+        (Class<? extends IEntity>) projectedComponentDescriptor
+            .getComponentContract());
   }
 }

@@ -197,10 +197,13 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         public Object doInHibernate(Session session) {
           HibernateAwareApplicationSession
               .cleanPersistentCollectionDirtyState(entity);
-          session.lock(entity, LockMode.NONE);
-          // session.setReadOnly(entity, true);
-
           Object initializedProperty = entity.straightGetProperty(propertyName);
+          if (entity.isPersistent()) {
+            session.lock(entity, LockMode.NONE);
+          } else if (initializedProperty instanceof IEntity) {
+            session.lock(initializedProperty, LockMode.NONE);
+          }
+          // session.setReadOnly(entity, true);
 
           Hibernate.initialize(initializedProperty);
           return initializedProperty;

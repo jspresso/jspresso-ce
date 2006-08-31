@@ -155,7 +155,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
 
   private void checkListenerRegistrationForConnector(IValueConnector connector) {
     if (connector instanceof ICollectionConnectorProvider) {
-      checkListenerRegistrationForConnector(connector, 3);
+      checkListenerRegistrationForConnector(connector, 2);
     } else {
       checkListenerRegistrationForConnector(connector, 1);
     }
@@ -278,8 +278,15 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   public void treeNodesInserted(TreeModelEvent event) {
-    checkListenerRegistrationForConnector((IValueConnector) event.getTreePath()
-        .getLastPathComponent());
+    for (Object insertedNode : event.getChildren()) {
+      IValueConnector insertedConnector = (IValueConnector) event.getTreePath()
+          .pathByAddingChild(insertedNode).getLastPathComponent();
+      checkListenerRegistrationForConnector(insertedConnector);
+      if (insertedConnector instanceof ICollectionConnectorListProvider) {
+        CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
+            (ICollectionConnectorListProvider) insertedConnector, false, false);
+      }
+    }
   }
 
   /**

@@ -12,6 +12,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.util.IGate;
+import com.d2s.framework.util.lang.ObjectUtils;
 
 /**
  * This abstract class holds some default implementation for a value connector.
@@ -89,8 +90,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void setConnectorValue(Object aValue) {
-    setConnecteeValue(aValue);
-    fireConnectorValueChange();
+    if (!ObjectUtils.equals(aValue, getOldConnectorValue())) {
+      setConnecteeValue(aValue);
+      fireConnectorValueChange();
+    }
   }
 
   /**

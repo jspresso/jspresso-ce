@@ -106,9 +106,9 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       throws Throwable {
     String methodName = method.getName();
     if ("hashCode".equals(methodName)) {
-      return new Integer(hashCode((IEntity) proxy));
+      return new Integer(computeHashCode());
     } else if ("equals".equals(methodName)) {
-      return new Boolean(equals((IEntity) proxy, args[0]));
+      return new Boolean(computeEquals((IEntity) proxy, args[0]));
     } else if ("toString".equals(methodName)) {
       return toString((IEntity) proxy);
     } else if ("getContract".equals(methodName)) {
@@ -598,25 +598,39 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     }
   }
 
-  private int hashCode(IEntity proxy) {
-    if (proxy.getId() == null) {
+  private int computeHashCode() {
+    Object id = straightGetProperty(IEntity.ID);
+    if (id == null) {
       throw new NullPointerException(
           "Id must be assigned on the entity before its hashcode can be used.");
     }
-    return new HashCodeBuilder(3, 17).append(proxy.getId()).toHashCode();
+    return new HashCodeBuilder(3, 17).append(id).toHashCode();
   }
 
-  private boolean equals(IEntity proxy, Object another) {
+  private boolean computeEquals(IEntity proxy, Object another) {
     if (proxy == another) {
       return true;
     }
-    if (proxy.getId() == null) {
+    Object id = straightGetProperty(IEntity.ID);
+    if (id == null) {
       return false;
     }
     if (another instanceof IEntity) {
-      return new EqualsBuilder().append(proxy.getContract(),
-          ((IEntity) another).getContract()).append(proxy.getId(),
-          ((IEntity) another).getId()).isEquals();
+      Object otherId;
+      Class otherContract;
+
+      if (Proxy.isProxyClass(another.getClass())
+          && Proxy.getInvocationHandler(another) instanceof BasicEntityInvocationHandler) {
+        BasicEntityInvocationHandler otherInvocationHandler = (BasicEntityInvocationHandler) Proxy
+            .getInvocationHandler(another);
+        otherContract = otherInvocationHandler.getEntityContract();
+        otherId = otherInvocationHandler.straightGetProperty(IEntity.ID);
+      } else {
+        otherContract = ((IEntity) another).getContract();
+        otherId = ((IEntity) another).getId();
+      }
+      return new EqualsBuilder().append(getEntityContract(), otherContract)
+          .append(id, otherId).isEquals();
     }
     return false;
   }
