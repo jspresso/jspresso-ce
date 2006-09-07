@@ -235,6 +235,9 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
               // } else {
               nodesWereRemoved(connectorPath, childIndices,
                   removedChildrenConnectors.toArray());
+              if (newCollectionSize == 0) {
+                nodeStructureChanged(connectorPath);
+              }
               // }
             }
           }

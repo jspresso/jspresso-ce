@@ -138,6 +138,26 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
+   * This is a utility method which is able to retrieve the view connector this
+   * action has been executed on from its context. It uses well-known context
+   * keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the the
+   * view value connector the action executes on.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
+   * 
+   * @param context
+   *          the action context.
+   * @return the value connector this model action was triggered on.
+   */
+  public IValueConnector getSourceViewConnector(Map<String, Object> context) {
+    return (IValueConnector) context.get(ActionContextConstants.SOURCE_VIEW_CONNECTOR);
+  }
+
+  /**
    * This is a utility method which is able to retrieve the module view
    * connector this action has been executed on from its context. It uses
    * well-known context keys of the action context which are:

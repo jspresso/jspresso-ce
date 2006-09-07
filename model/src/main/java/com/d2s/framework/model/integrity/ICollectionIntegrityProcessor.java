@@ -30,11 +30,9 @@ public interface ICollectionIntegrityProcessor extends
    *          the actual value of the collection property accessed.
    * @param addedValue
    *          the value added in the collection.
-   * @throws IntegrityException
-   *           thrown whenever this processor does not succeed.
    */
   void preprocessAdderIntegrity(Object target, Collection collection,
-      Object addedValue) throws IntegrityException;
+      Object addedValue);
 
   /**
    * This method gets called whenever a value is about to be removed from a
@@ -48,11 +46,9 @@ public interface ICollectionIntegrityProcessor extends
    *          the actual value of the collection property accessed.
    * @param removedValue
    *          the value removed from the collection.
-   * @throws IntegrityException
-   *           thrown whenever this processor does not succeed.
    */
   void preprocessRemoverIntegrity(Object target, Collection collection,
-      Object removedValue) throws IntegrityException;
+      Object removedValue);
 
   /**
    * This method gets called whenever a value has been added to a collection
@@ -66,11 +62,9 @@ public interface ICollectionIntegrityProcessor extends
    *          the actual value of the collection property accessed.
    * @param addedValue
    *          the value added in the collection.
-   * @throws IntegrityException
-   *           thrown whenever this processor does not succeed.
    */
   void postprocessAdderIntegrity(Object target, Collection collection,
-      Object addedValue) throws IntegrityException;
+      Object addedValue);
 
   /**
    * This method gets called whenever a value has been removed from a collection
@@ -84,9 +78,7 @@ public interface ICollectionIntegrityProcessor extends
    *          the actual value of the collection property accessed.
    * @param removedValue
    *          the value removed from the collection.
-   * @throws IntegrityException
-   *           thrown whenever this processor does not succeed.
    */
   void postprocessRemoverIntegrity(Object target, Collection collection,
-      Object removedValue) throws IntegrityException;
+      Object removedValue);
 }

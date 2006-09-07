@@ -76,7 +76,7 @@ public class RemoveFromModuleObjectsAction extends
                 projectedObjectsToRemove, session, context);
             for (IEntity entityToRemove : mergedCollection) {
               if (entityToRemove.isPersistent()) {
-                session.delete(entityToRemove);
+                deleteEntity(entityToRemove, session);
               }
             }
             return null;
@@ -105,5 +105,17 @@ public class RemoveFromModuleObjectsAction extends
         }
       }
     }
+  }
+
+  /**
+   * Deletes the entity from the persistent store.
+   * 
+   * @param entity
+   *          the entity to remove
+   * @param session
+   *          the session to use.
+   */
+  protected void deleteEntity(IEntity entity, Session session) {
+    session.delete(entity);
   }
 }

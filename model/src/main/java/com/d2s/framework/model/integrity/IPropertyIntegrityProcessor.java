@@ -30,11 +30,9 @@ public interface IPropertyIntegrityProcessor<E, F> {
    *          the old value of the property accessed.
    * @param newPropertyValue
    *          the new value of the property accessed.
-   * @throws IntegrityException
-   *           thrown whenever this processor does not succeed.
    */
   void preprocessSetterIntegrity(E target, F oldPropertyValue,
-      F newPropertyValue) throws IntegrityException;
+      F newPropertyValue);
 
   /**
    * This method gets called whenever a property has been set on an component to
@@ -47,9 +45,7 @@ public interface IPropertyIntegrityProcessor<E, F> {
    *          the old value of the property accessed.
    * @param newPropertyValue
    *          the new value of the property accessed.
-   * @throws IntegrityException
-   *           thrown whenever this processor does not succeed.
    */
   void postprocessSetterIntegrity(E target, F oldPropertyValue,
-      F newPropertyValue) throws IntegrityException;
+      F newPropertyValue);
 }

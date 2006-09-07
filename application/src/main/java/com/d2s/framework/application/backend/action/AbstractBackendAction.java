@@ -43,7 +43,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * action has been executed on from its context. It uses well-known context
    * keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.MODEL_CONNECTOR</code> to get the model
+   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the model
    * value connector of the connector hierarchy.
    * </ul>
    * <p>
@@ -57,6 +57,31 @@ public abstract class AbstractBackendAction extends AbstractAction {
   public IValueConnector getModelConnector(Map<String, Object> context) {
     return ((IValueConnector) context
         .get(ActionContextConstants.VIEW_CONNECTOR)).getModelConnector();
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the source model
+   * connector this action has been executed on from its context. It uses
+   * well-known context keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the
+   * model value connector of the connector hierarchy.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for retrieving the domain object the
+   * action has to be triggered on.
+   * 
+   * @param context
+   *          the action context.
+   * @return the value connector this model action was triggered on.
+   */
+  public IValueConnector getSourceModelConnector(Map<String, Object> context) {
+    if (context.get(ActionContextConstants.SOURCE_VIEW_CONNECTOR) != null) {
+      return ((IValueConnector) context
+          .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR))
+          .getModelConnector();
+    }
+    return null;
   }
 
   /**

@@ -13,6 +13,7 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.binding.ConnectorHelper;
+import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
@@ -50,10 +51,15 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
     projectedCollection.add(newModuleObject);
     module.setModuleObjects(projectedCollection);
 
-    getModelConnector(context).setConnectorValue(projectedCollection);
+    ICollectionConnector moduleObjectsConnector = getSourceModelConnector(context);
+    if (moduleObjectsConnector == null) {
+      moduleObjectsConnector = getModelConnector(context);
+    }
+
+    moduleObjectsConnector.setConnectorValue(projectedCollection);
 
     context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-        .getIndicesOf(getModelConnector(context), Collections
+        .getIndicesOf(moduleObjectsConnector, Collections
             .singleton(newModuleObject)));
     return true;
   }

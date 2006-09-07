@@ -35,6 +35,13 @@
 	<bean id="doPrintAction" parent="abstractDoPrintAction"
 		class="com.d2s.framework.application.frontend.action.ulc.std.OkAction" />
 
+	<bean id="chooseActionOkFrontAction"
+		class="com.d2s.framework.application.frontend.action.ulc.lov.OkChooseComponentAction">
+		<property name="nextAction">
+			<bean class="com.d2s.framework.application.frontend.action.std.ExecuteActionAction" />
+		</property>
+	</bean>
+
 	<bean id="cancelDialogFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.CancelAction" />
 
 	<!-- 

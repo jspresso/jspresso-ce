@@ -3,7 +3,11 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.Locale;
+
 import com.d2s.framework.model.descriptor.INumberPropertyDescriptor;
+import com.d2s.framework.model.integrity.IntegrityException;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Default implementation of a number descriptor.
@@ -64,5 +68,37 @@ public abstract class BasicNumberPropertyDescriptor extends
    */
   public void setMinValue(Double minValue) {
     this.minValue = minValue;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void checkValueIntegrity(final Object component,
+      final Object propertyValue) {
+    super.checkValueIntegrity(component, propertyValue);
+    if (propertyValue != null) {
+      if ((getMinValue() != null && ((Number) propertyValue).doubleValue() < getMinValue()
+          .doubleValue())
+          || (getMaxValue() != null && ((Number) propertyValue).doubleValue() > getMaxValue()
+              .doubleValue())) {
+        IntegrityException ie = new IntegrityException("[" + getName()
+            + "] value is out of bounds on [" + component + "].") {
+
+          private static final long serialVersionUID = 7459823123892198831L;
+
+          @Override
+          public String getI18nMessage(
+              ITranslationProvider translationProvider, Locale locale) {
+            return translationProvider.getTranslation(
+                "integrity.property.outofbounds", new Object[] {
+                    getI18nName(translationProvider, locale), component},
+                locale);
+          }
+
+        };
+        throw ie;
+      }
+    }
   }
 }

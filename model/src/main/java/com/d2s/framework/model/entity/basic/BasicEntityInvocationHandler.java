@@ -35,7 +35,6 @@ import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.IEntityLifecycle;
 import com.d2s.framework.model.integrity.ICollectionIntegrityProcessor;
 import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
-import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.model.service.IComponentService;
 import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.accessor.IAccessor;
@@ -293,8 +292,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   @SuppressWarnings("unchecked")
   private void setProperty(Object proxy,
-      IPropertyDescriptor propertyDescriptor, Object newProperty)
-      throws IntegrityException {
+      IPropertyDescriptor propertyDescriptor, Object newProperty) {
     String propertyName = propertyDescriptor.getName();
 
     Object oldProperty = null;
@@ -410,15 +408,13 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   @SuppressWarnings("unchecked")
   private void addToProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor, Object value)
-      throws IntegrityException {
+      ICollectionPropertyDescriptor propertyDescriptor, Object value) {
     addToProperty(proxy, propertyDescriptor, -1, value);
   }
 
   @SuppressWarnings("unchecked")
   private void addToProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor, int index, Object value)
-      throws IntegrityException {
+      ICollectionPropertyDescriptor propertyDescriptor, int index, Object value) {
     String propertyName = propertyDescriptor.getName();
     try {
       Collection collectionProperty = (Collection) accessorFactory
@@ -472,8 +468,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   private void removeFromProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor, Object value)
-      throws IntegrityException {
+      ICollectionPropertyDescriptor propertyDescriptor, Object value) {
     String propertyName = propertyDescriptor.getName();
     if (!isInitialized(straightGetProperty(propertyName))) {
       return;
@@ -702,7 +697,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   private void preprocessSetter(Object proxy, String propertyName,
-      Object oldValue, Object newValue) throws IntegrityException {
+      Object oldValue, Object newValue) {
     List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
     if (integrityProcessors == null) {
       return;
@@ -713,7 +708,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   private void postprocessSetter(Object proxy, String propertyName,
-      Object oldValue, Object newValue) throws IntegrityException {
+      Object oldValue, Object newValue) {
     List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
     if (integrityProcessors == null) {
       return;
@@ -724,7 +719,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   private void preprocessAdder(Object proxy, String propertyName,
-      Collection collection, Object addedValue) throws IntegrityException {
+      Collection collection, Object addedValue) {
     List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
     if (integrityProcessors == null) {
       return;
@@ -736,7 +731,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   private void postprocessAdder(Object proxy, String propertyName,
-      Collection collection, Object addedValue) throws IntegrityException {
+      Collection collection, Object addedValue) {
     List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
     if (integrityProcessors == null) {
       return;
@@ -748,7 +743,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   private void preprocessRemover(Object proxy, String propertyName,
-      Collection collection, Object removedValue) throws IntegrityException {
+      Collection collection, Object removedValue) {
     List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
     if (integrityProcessors == null) {
       return;
@@ -760,7 +755,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   }
 
   private void postprocessRemover(Object proxy, String propertyName,
-      Collection collection, Object removedValue) throws IntegrityException {
+      Collection collection, Object removedValue) {
     List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
     if (integrityProcessors == null) {
       return;
@@ -858,6 +853,12 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object[] args) {
+    if (IEntityLifecycle.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
+        .getName())
+        || IEntityLifecycle.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
+            .getName())) {
+      checkIntegrity(proxy);
+    }
     boolean interceptorResults = false;
     for (ILifecycleInterceptor lifecycleInterceptor : entityDescriptor
         .getLifecycleInterceptors()) {
@@ -886,6 +887,14 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       }
     }
     return interceptorResults;
+  }
+
+  private void checkIntegrity(Object proxy) {
+    for (IPropertyDescriptor propertyDescriptor : entityDescriptor
+        .getPropertyDescriptors()) {
+      propertyDescriptor
+          .checkValueIntegrity(proxy, straightGetProperty(propertyDescriptor.getName()));
+    }
   }
 
   private static final class NeverEqualsInvocationHandler implements

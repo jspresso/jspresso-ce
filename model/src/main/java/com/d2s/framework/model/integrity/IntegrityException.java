@@ -3,6 +3,10 @@
  */
 package com.d2s.framework.model.integrity;
 
+import java.util.Locale;
+
+import com.d2s.framework.util.i18n.ITranslationProvider;
+
 /**
  * This exception is thrown whenever an integrity problem occurs on an component
  * modification.
@@ -13,47 +17,30 @@ package com.d2s.framework.model.integrity;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class IntegrityException extends Exception {
+public abstract class IntegrityException extends RuntimeException {
 
-  private static final long serialVersionUID = -5444574277286334644L;
-
-  /**
-   * Constructs a new <code>IntegrityException</code> instance.
-   */
-  public IntegrityException() {
-    super();
-  }
+  private static final long serialVersionUID = -5965567517919706757L;
 
   /**
    * Constructs a new <code>IntegrityException</code> instance.
    * 
    * @param message
-   *          the exception message describing the integrity problem.
+   *          the exception message.
    */
-  public IntegrityException(String message) {
+  protected IntegrityException(String message) {
     super(message);
   }
 
   /**
-   * Constructs a new <code>IntegrityException</code> instance.
+   * Gets the exception localized message using a translation provider.
    * 
-   * @param cause
-   *          the nested exception which caused the integrity problem.
+   * @param translationProvider
+   *          the translation provider used to translate the exception message.
+   * @param locale
+   *          the locale to translate the exception to.
+   * @return the translated message.
    */
-  public IntegrityException(Throwable cause) {
-    super(cause);
-  }
-
-  /**
-   * Constructs a new <code>IntegrityException</code> instance.
-   * 
-   * @param message
-   *          the exception message describing the integrity problem.
-   * @param cause
-   *          the nested exception which caused the integrity problem.
-   */
-  public IntegrityException(String message, Throwable cause) {
-    super(message, cause);
-  }
+  public abstract String getI18nMessage(
+      ITranslationProvider translationProvider, Locale locale);
 
 }

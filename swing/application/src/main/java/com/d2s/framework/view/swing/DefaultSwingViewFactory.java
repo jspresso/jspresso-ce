@@ -2426,7 +2426,9 @@ public class DefaultSwingViewFactory implements
    * @return the created button.
    */
   protected JButton createJButton() {
-    return new JButton();
+    JButton button = new JButton();
+    button.setMultiClickThreshhold(300);
+    return button;
   }
 
   /**

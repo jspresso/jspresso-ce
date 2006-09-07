@@ -10,6 +10,7 @@ import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.entity.basic.BasicProxyEntityFactory;
+import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Proxy entity factory aware of an application session to deal with uniqueness
@@ -68,5 +69,13 @@ public class ApplicationSessionAwareProxyEntityFactory extends
   @Override
   protected IEntityLifecycleHandler getEntityLifecycleHandler() {
     return applicationSession;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected UserPrincipal getPrincipal() {
+    return applicationSession.getPrincipal();
   }
 }

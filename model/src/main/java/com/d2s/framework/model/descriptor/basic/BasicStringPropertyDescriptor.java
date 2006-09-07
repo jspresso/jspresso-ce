@@ -3,7 +3,11 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.Locale;
+
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
+import com.d2s.framework.model.integrity.IntegrityException;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Default implementation of a string descriptor.
@@ -47,5 +51,32 @@ public class BasicStringPropertyDescriptor extends
    */
   public Class getModelType() {
     return String.class;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void checkValueIntegrity(final Object component,
+      final Object propertyValue) {
+    super.checkValueIntegrity(component, propertyValue);
+    if (propertyValue != null && getMaxLength() != null
+        && ((String) propertyValue).length() > getMaxLength().intValue()) {
+      IntegrityException ie = new IntegrityException("[" + getName()
+          + "] value is too long on [" + component + "].") {
+
+        private static final long serialVersionUID = 7459823123892198831L;
+
+        @Override
+        public String getI18nMessage(ITranslationProvider translationProvider,
+            Locale locale) {
+          return translationProvider.getTranslation(
+              "integrity.property.outofbounds", new Object[] {
+                  getI18nName(translationProvider, locale), component}, locale);
+        }
+
+      };
+      throw ie;
+    }
   }
 }

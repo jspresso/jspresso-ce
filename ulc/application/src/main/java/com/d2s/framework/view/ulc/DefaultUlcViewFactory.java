@@ -2423,7 +2423,8 @@ public class DefaultUlcViewFactory implements
    * @return the created button.
    */
   protected ULCButton createULCButton() {
-    return new ULCButton();
+    ULCButton ulcButton = new com.d2s.framework.gui.ulc.components.server.ULCButton();
+    return ulcButton;
   }
 
   /**

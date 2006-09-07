@@ -187,11 +187,11 @@
 			<list>
 				<bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
 					<property name="name" value="id" />
-					<property name="mandatory" value="true" />
+					<property name="readOnly" value="true" />
 				</bean>
 				<bean class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
 					<property name="name" value="version" />
-					<property name="mandatory" value="true" />
+					<property name="readOnly" value="true" />
 				</bean>
 			</list>
 		</property>

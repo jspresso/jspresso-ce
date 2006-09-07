@@ -21,4 +21,12 @@ public interface IEntityLifecycleHandler {
    *          the entity to register.
    */
   void deleteEntity(IEntity entity);
+
+  /**
+   * Registers an entity for update.
+   * 
+   * @param entity
+   *          the entity to register.
+   */
+  void updateEntity(IEntity entity);
 }

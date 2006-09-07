@@ -26,7 +26,7 @@ public abstract class EmptyPropertyIntegrityProcessor<E, F> implements
    */
   @SuppressWarnings("unused")
   public void preprocessSetterIntegrity(E target, F oldPropertyValue,
-      F newPropertyValue) throws IntegrityException {
+      F newPropertyValue) {
     // NO-OP
   }
 
@@ -37,7 +37,7 @@ public abstract class EmptyPropertyIntegrityProcessor<E, F> implements
    */
   @SuppressWarnings("unused")
   public void postprocessSetterIntegrity(E target, F oldPropertyValue,
-      F newPropertyValue) throws IntegrityException {
+      F newPropertyValue) {
     // NO-OP
   }
 

@@ -358,6 +358,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#local bidirectional=false/>
     <#local oneToOne=false/>
     <#local reverseOneToOne=false/>
+    <#local composition=propertyDescriptor.composition/>
   </#if>
   /**
    * Gets the ${propertyName}.
@@ -379,7 +380,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           update = "false"
           </#if>
         <#else>
+          <#if composition>
+   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+          <#else>
    *           cascade = "none"
+          </#if>
         </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}_ID"

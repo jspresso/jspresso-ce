@@ -74,6 +74,12 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
        * {@inheritDoc}
        */
       public Object doInHibernate(Session session) {
+        List<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
+        if (entitiesToUpdate != null) {
+          for (IEntity entityToUpdate : entitiesToUpdate) {
+            session.update(entityToUpdate);
+          }
+        }
         Set<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
         if (entitiesToDelete != null) {
           for (IEntity entityToDelete : entitiesToDelete) {

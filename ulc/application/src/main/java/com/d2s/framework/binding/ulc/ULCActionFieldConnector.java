@@ -38,7 +38,12 @@ public class ULCActionFieldConnector extends
       addConnectorValueChangeListener(new IConnectorValueChangeListener() {
 
         public void connectorValueChange(ConnectorValueChangeEvent evt) {
-          getConnectedULCComponent().setDecorated(evt.getNewValue() != null);
+          if (evt.getNewValue() instanceof byte[]) {
+            getConnectedULCComponent().setDecorated(
+                ((byte[]) evt.getNewValue()).length > 0);
+          } else {
+            getConnectedULCComponent().setDecorated(evt.getNewValue() != null);
+          }
         }
       });
     }

@@ -71,6 +71,16 @@
 		</property>
 	</bean>
 
+	<bean id="abstractChooseActionAction" abstract="true"
+		class="com.d2s.framework.application.frontend.action.flow.ChooseActionAction">
+		<property name="beanConnectorFactory" ref="beanConnectorFactory" />
+		<property name="nextAction">
+			<bean parent="chooseComponentAction">
+				<property name="okAction" ref="chooseActionOkFrontAction" />
+			</bean>
+		</property>
+	</bean>
+
 	<bean id="reportAction" class="com.d2s.framework.application.printing.frontend.action.ReportAction">
 		<property name="iconImageURL" value="classpath:images/execute-48x48.png" />
 		<property name="name" value="report.name" />

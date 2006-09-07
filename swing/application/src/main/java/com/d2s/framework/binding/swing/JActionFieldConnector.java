@@ -37,7 +37,12 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
       addConnectorValueChangeListener(new IConnectorValueChangeListener() {
 
         public void connectorValueChange(ConnectorValueChangeEvent evt) {
-          getConnectedJComponent().setDecorated(evt.getNewValue() != null);
+          if (evt.getNewValue() instanceof byte[]) {
+            getConnectedJComponent().setDecorated(
+                ((byte[]) evt.getNewValue()).length > 0);
+          } else {
+            getConnectedJComponent().setDecorated(evt.getNewValue() != null);
+          }
         }
       });
     }

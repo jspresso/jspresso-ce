@@ -36,7 +36,10 @@ public class ConnectorSelectionAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector collectionConnector = (ICollectionConnector) getViewConnector(context);
+    ICollectionConnector collectionConnector = (ICollectionConnector) getSourceViewConnector(context);
+    if (collectionConnector == null) {
+      collectionConnector = (ICollectionConnector) getViewConnector(context);
+    }
     int[] connectorSelection = (int[]) context
         .get(ActionContextConstants.SELECTED_INDICES);
     collectionConnector.setSelectedIndices(connectorSelection);

@@ -17,6 +17,7 @@ import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
+import com.d2s.framework.util.accessor.IListAccessor;
 
 /**
  * An action used in master/detail views to create and add a new detail to a
@@ -54,20 +55,19 @@ public class AddToMasterAction extends AbstractCollectionAction {
                   .getModelDescriptor().getComponentDescriptor()
                   .getComponentContract(), newEntity.getContract());
       try {
-        // int index = -1;
-        // if (collectionAccessor instanceof IListAccessor) {
-        // if (getSelectedIndices(context) != null
-        // && getSelectedIndices(context).length > 0) {
-        // index =
-        // getSelectedIndices(context)[getSelectedIndices(context).length - 1];
-        // }
-        // }
-        // if (index >= 0) {
-        // ((IListAccessor) collectionAccessor).addToValue(master, index + 1,
-        // newEntity);
-        // } else {
-        collectionAccessor.addToValue(master, newEntity);
-        // }
+        int index = -1;
+        if (collectionAccessor instanceof IListAccessor) {
+          if (getSelectedIndices(context) != null
+              && getSelectedIndices(context).length > 0) {
+            index = getSelectedIndices(context)[getSelectedIndices(context).length - 1];
+          }
+        }
+        if (index >= 0) {
+          ((IListAccessor) collectionAccessor).addToValue(master, index + 1,
+              newEntity);
+        } else {
+          collectionAccessor.addToValue(master, newEntity);
+        }
       } catch (IllegalAccessException ex) {
         throw new ActionException(ex);
       } catch (InvocationTargetException ex) {

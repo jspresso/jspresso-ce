@@ -19,6 +19,7 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.gui.ulc.components.server.ULCErrorDialog;
+import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.ulc.DialogCallbackHandler;
 import com.d2s.framework.security.ulc.ICallbackHandlerListener;
@@ -394,6 +395,13 @@ public class DefaultUlcController extends
     if (ex instanceof SecurityException) {
       ULCAlert alert = new ULCAlert(controllerFrame, getTranslationProvider()
           .getTranslation("error", getLocale()), ex.getMessage(),
+          getTranslationProvider().getTranslation("ok", getLocale()), null,
+          null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+      alert.show();
+    } else if (ex instanceof IntegrityException) {
+      ULCAlert alert = new ULCAlert(controllerFrame, getTranslationProvider()
+          .getTranslation("error", getLocale()), ((IntegrityException) ex)
+          .getI18nMessage(getTranslationProvider(), getLocale()),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
           null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
       alert.show();

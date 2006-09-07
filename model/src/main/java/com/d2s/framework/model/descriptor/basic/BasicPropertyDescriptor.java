@@ -5,12 +5,15 @@ package com.d2s.framework.model.descriptor.basic;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
+import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.descriptor.DefaultDescriptor;
 import com.d2s.framework.util.exception.NestedRuntimeException;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Default implementation of a property descriptor.
@@ -259,7 +262,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     return parentDescriptor != null;
   }
 
-  
   /**
    * Gets the readabilityGates.
    * 
@@ -275,17 +277,16 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     return readabilityGates;
   }
 
-  
   /**
    * Sets the readabilityGates.
    * 
-   * @param readabilityGates the readabilityGates to set.
+   * @param readabilityGates
+   *          the readabilityGates to set.
    */
   public void setReadabilityGates(Collection<IGate> readabilityGates) {
     this.readabilityGates = readabilityGates;
   }
 
-  
   /**
    * Gets the writabilityGates.
    * 
@@ -301,14 +302,35 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     return writabilityGates;
   }
 
-  
   /**
    * Sets the writabilityGates.
    * 
-   * @param writabilityGates the writabilityGates to set.
+   * @param writabilityGates
+   *          the writabilityGates to set.
    */
   public void setWritabilityGates(Collection<IGate> writabilityGates) {
     this.writabilityGates = writabilityGates;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public void checkValueIntegrity(final Object component, final Object propertyValue) {
+    if (isMandatory() && propertyValue == null) {
+      IntegrityException ie = new IntegrityException("Mandatory property ["
+          + getName() + "] on component [" + component + "].") {
+
+        private static final long serialVersionUID = 5518554460713051123L;
+
+        @Override
+        public String getI18nMessage(ITranslationProvider translationProvider,
+            Locale locale) {
+          return translationProvider.getTranslation("integrity.property.mandatory",
+              new Object[] {getI18nName(translationProvider, locale), component}, locale);
+        }
+
+      };
+      throw ie;
+    }
+  }
 }

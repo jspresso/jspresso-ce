@@ -53,6 +53,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private IEntityCollectionFactory   collectionFactory;
   private Set<IEntity>               entitiesToMergeBack;
   private Set<IEntity>               entitiesRegisteredForDeletion;
+  private List<IEntity>              entitiesRegisteredForUpdate;
   private Subject                    subject;
   private Locale                     locale;
 
@@ -88,6 +89,27 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
+  public void updateEntity(IEntity entity) {
+    if (entity.isPersistent()) {
+      if (entitiesRegisteredForUpdate == null) {
+        entitiesRegisteredForUpdate = new ArrayList<IEntity>();
+      }
+      entitiesRegisteredForUpdate.add(entity);
+    }
+  }
+
+  /**
+   * Gets the entitiesRegisteredForUpdate.
+   * 
+   * @return the entitiesRegisteredForUpdate.
+   */
+  protected List<IEntity> getEntitiesRegisteredForUpdate() {
+    return entitiesRegisteredForUpdate;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void deleteEntity(IEntity entity) {
     if (entity.isPersistent()) {
       if (entitiesRegisteredForDeletion == null) {
@@ -110,13 +132,14 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   public void performPendingOperations() {
-    entitiesRegisteredForDeletion = null;
+    clearPendingOperations();
   }
 
   /**
    * Clears the pending operations.
    */
   public void clearPendingOperations() {
+    entitiesRegisteredForUpdate = null;
     entitiesRegisteredForDeletion = null;
   }
 

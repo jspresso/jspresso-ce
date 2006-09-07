@@ -44,6 +44,7 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.gui.swing.components.JErrorDialog;
+import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
 import com.d2s.framework.util.swing.SwingUtil;
@@ -490,6 +491,12 @@ public class DefaultSwingController extends
           ex.getMessage(), getTranslationProvider().getTranslation("error",
               getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
               .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+    } else if (ex instanceof IntegrityException) {
+      JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
+          ((IntegrityException) ex).getI18nMessage(
+              getTranslationProvider(), getLocale()), getTranslationProvider()
+              .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else {
       ex.printStackTrace();
       JErrorDialog dialog = JErrorDialog.createInstance((Component) context

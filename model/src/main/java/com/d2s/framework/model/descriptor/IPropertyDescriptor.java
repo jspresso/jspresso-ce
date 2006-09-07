@@ -106,4 +106,16 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    *         property.
    */
   Collection<IGate> getWritabilityGates();
+
+  /**
+   * Checks the basic compliance of a property value against the property
+   * descriptor. Whenever the value might not be compliant, an
+   * <code>IntegrityException</code> should be thrown.
+   * 
+   * @param component
+   *          the component on which the proerty value is checked.
+   * @param propertyValue
+   *          the property value to check the compliance of.
+   */
+  void checkValueIntegrity(Object component, Object propertyValue);
 }

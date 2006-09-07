@@ -31,6 +31,16 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
   }
 
   /**
+   * refined to return a collection connector.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public ICollectionConnector getSourceModelConnector(Map<String, Object> context) {
+    return (ICollectionConnector) super.getSourceModelConnector(context);
+  }
+
+  /**
    * Gets the selected indices from the context. it uses the
    * <code>ActionContextConstants.SELECTED_INDICES</code> key.
    * 

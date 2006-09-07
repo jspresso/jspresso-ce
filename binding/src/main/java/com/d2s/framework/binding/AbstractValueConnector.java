@@ -12,7 +12,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.util.IGate;
-import com.d2s.framework.util.lang.ObjectUtils;
 
 /**
  * This abstract class holds some default implementation for a value connector.
@@ -90,10 +89,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * {@inheritDoc}
    */
   public void setConnectorValue(Object aValue) {
-    if (!ObjectUtils.equals(aValue, getOldConnectorValue())) {
-      setConnecteeValue(aValue);
-      fireConnectorValueChange();
-    }
+    setConnecteeValue(aValue);
+    fireConnectorValueChange();
   }
 
   /**
@@ -143,13 +140,11 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Notifies its listeners about a change in the connector's value.
    */
   protected void fireConnectorValueChange() {
-    if (!valueChangeSupport.isEmpty()) {
-      valueChangeSupport.fireConnectorValueChange(createChangeEvent(
-          oldConnectorValue, getConnecteeValue()));
-      // the change propagated correctly. Save the value propagated as the old
-      // value of the connector.
-      oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
-    }
+    valueChangeSupport.fireConnectorValueChange(createChangeEvent(
+        oldConnectorValue, getConnecteeValue()));
+    // the change propagated correctly. Save the value propagated as the old
+    // value of the connector.
+    oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
   }
 
   /**

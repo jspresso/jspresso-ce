@@ -17,6 +17,26 @@ import com.d2s.framework.security.UserPrincipal;
 public interface IEntityLifecycle {
 
   /**
+   * <code>ON_CREATE_METHOD_NAME</code>.
+   */
+  String ON_CREATE_METHOD_NAME  = "onCreate";
+  
+  /**
+   * <code>ON_PERSIST_METHOD_NAME</code>.
+   */
+  String ON_PERSIST_METHOD_NAME = "onPersist";
+  
+  /**
+   * <code>ON_UPDATE_METHOD_NAME</code>.
+   */
+  String ON_UPDATE_METHOD_NAME  = "onUpdate";
+  
+  /**
+   * <code>ON_DELETE_METHOD_NAME</code>.
+   */
+  String ON_DELETE_METHOD_NAME  = "onDelete";
+
+  /**
    * Called when an entity is created (still transient).
    * 
    * @param entityFactory
