@@ -57,6 +57,12 @@
 		<property name="description" value="save.file.description" />
 	</bean>
 
+	<bean id="abstractBinaryPropertyInfoAction" abstract="true">
+		<property name="iconImageURL" value="classpath:images/info-48x48.png" />
+		<property name="name" value="binary.info.name" />
+		<property name="description" value="binary.info.description" />
+	</bean>
+
 	<bean id="abstractPrintAction" abstract="true"
 		class="com.d2s.framework.application.printing.frontend.action.PrintAction">
 		<property name="iconImageURL" value="classpath:images/print-48x48.png" />

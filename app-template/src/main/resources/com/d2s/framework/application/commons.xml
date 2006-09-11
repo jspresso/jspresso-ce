@@ -131,6 +131,7 @@
 		<property name="openFileAsBinaryPropertyAction" ref="openFileAsBinaryPropertyAction" />
 		<property name="saveBinaryPropertyAsFileAction" ref="saveBinaryPropertyAsFileAction" />
 		<property name="resetPropertyAction" ref="resetPropertyFrontAction" />
+		<property name="binaryPropertyInfoAction" ref="binaryPropertyInfoAction" />
 	</bean>
 
 	<bean id="abstractActionFactory" abstract="true">

@@ -325,10 +325,10 @@ public class UIActionField extends UIComponent implements IEditorComponent {
     public boolean isCellEditable(EventObject evt) {
       if (evt instanceof MouseEvent) {
         MouseEvent me = (MouseEvent) evt;
-        if (getBasicObject().isShowingTextField()) {
-          return (me.getClickCount() >= 2);
-        }
-        return (me.getClickCount() >= 1);
+        // if (getBasicObject().isShowingTextField()) {
+        return (me.getClickCount() >= 2);
+        // }
+        // return (me.getClickCount() >= 1);
       }
       return super.isCellEditable(evt);
     }

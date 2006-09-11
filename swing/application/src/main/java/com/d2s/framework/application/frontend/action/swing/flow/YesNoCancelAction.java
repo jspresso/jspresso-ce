@@ -38,7 +38,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
       Map<String, Object> context) {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
-        getTranslationProvider(context), getLocale(context)), getI18nName(
+        getTranslationProvider(context), getLocale(context), context), getI18nName(
         getTranslationProvider(context), getLocale(context)),
         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE,
         getIconFactory(context).getIcon(getIconImageURL(),

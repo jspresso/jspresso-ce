@@ -37,7 +37,7 @@ public class OkCancelAction extends AbstractMessageAction {
       Map<String, Object> context) {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
-        getTranslationProvider(context), getLocale(context)), getI18nName(
+        getTranslationProvider(context), getLocale(context), context), getI18nName(
         getTranslationProvider(context), getLocale(context)),
         JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,
         getIconFactory(context).getIcon(getIconImageURL(),

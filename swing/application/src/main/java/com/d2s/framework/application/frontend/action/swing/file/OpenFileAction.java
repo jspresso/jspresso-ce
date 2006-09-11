@@ -43,15 +43,15 @@ public class OpenFileAction extends ChooseFileAction {
       if (file != null) {
         try {
           fileOpenCallback.fileChosen(new FileInputStream(file), file
-              .getAbsolutePath(), context);
+              .getAbsolutePath(), actionHandler, context);
         } catch (FileNotFoundException ex) {
-          fileOpenCallback.cancel(context);
+          fileOpenCallback.cancel(actionHandler, context);
         }
       } else {
-        fileOpenCallback.cancel(context);
+        fileOpenCallback.cancel(actionHandler, context);
       }
     } else {
-      fileOpenCallback.cancel(context);
+      fileOpenCallback.cancel(actionHandler, context);
     }
     return super.execute(actionHandler, context);
   }

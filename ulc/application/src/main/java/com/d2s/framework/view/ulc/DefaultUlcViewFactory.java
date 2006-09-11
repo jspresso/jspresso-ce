@@ -196,6 +196,7 @@ public class DefaultUlcViewFactory implements
   private IDisplayableAction                    openFileAsBinaryPropertyAction;
   private IDisplayableAction                    saveBinaryPropertyAsFileAction;
   private IDisplayableAction                    resetPropertyAction;
+  private IDisplayableAction                    binaryPropertyInfoAction;
 
   private ULCTranslationDataTypeFactory         translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
 
@@ -1689,8 +1690,10 @@ public class DefaultUlcViewFactory implements
         propertyDescriptor, connector, locale);
     IAction resetAction = actionFactory.createAction(resetPropertyAction,
         actionHandler, viewComponent, propertyDescriptor, connector, locale);
+    IAction infoAction = actionFactory.createAction(binaryPropertyInfoAction,
+        actionHandler, viewComponent, propertyDescriptor, connector, locale);
     viewComponent.setActions(Arrays.asList(new IAction[] {openAction,
-        saveAction, resetAction}));
+        saveAction, resetAction, infoAction}));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2667,5 +2670,16 @@ public class DefaultUlcViewFactory implements
    */
   public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
     this.resetPropertyAction = resetPropertyAction;
+  }
+
+  
+  /**
+   * Sets the binaryPropertyInfoAction.
+   * 
+   * @param binaryPropertyInfoAction the binaryPropertyInfoAction to set.
+   */
+  public void setBinaryPropertyInfoAction(
+      IDisplayableAction binaryPropertyInfoAction) {
+    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
   }
 }

@@ -97,7 +97,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
     }
     final ULCAlert alert = new ULCAlert(UlcUtilities
         .getRoot(getSourceComponent(context)), getI18nName(translationProvider,
-        locale), getI18nMessage(translationProvider, locale),
+        locale), getI18nMessage(translationProvider, locale, context),
         translatedFirstOption, translatedSecondOption, translatedThirdOption,
         getIconFactory(context).getIcon(getIconImageURL(),
             IIconFactory.LARGE_ICON_SIZE));

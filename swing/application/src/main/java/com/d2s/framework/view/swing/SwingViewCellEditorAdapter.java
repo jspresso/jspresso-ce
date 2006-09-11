@@ -109,12 +109,13 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
   @Override
   public boolean isCellEditable(EventObject anEvent) {
     if (anEvent instanceof MouseEvent) {
-      if (/*
-           * editorView.getPeer() instanceof AbstractButton ||
-           */(editorView.getPeer() instanceof JActionField && !((JActionField) editorView
-          .getPeer()).isShowingTextField())) {
-        return ((MouseEvent) anEvent).getClickCount() >= 1;
-      }
+      // if (/*
+      // * editorView.getPeer() instanceof AbstractButton ||
+      // */(editorView.getPeer() instanceof JActionField && !((JActionField)
+      // editorView
+      // .getPeer()).isShowingTextField())) {
+      // return ((MouseEvent) anEvent).getClickCount() >= 1;
+      // }
       return ((MouseEvent) anEvent).getClickCount() >= 2;
     }
     return super.isCellEditable(anEvent);

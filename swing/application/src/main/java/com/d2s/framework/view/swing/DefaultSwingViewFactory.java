@@ -203,6 +203,7 @@ public class DefaultSwingViewFactory implements
   private IDisplayableAction                 openFileAsBinaryPropertyAction;
   private IDisplayableAction                 saveBinaryPropertyAsFileAction;
   private IDisplayableAction                 resetPropertyAction;
+  private IDisplayableAction                 binaryPropertyInfoAction;
 
   /**
    * Constructs a new <code>DefaultSwingViewFactory</code> instance.
@@ -1718,8 +1719,10 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor, connector, locale);
     Action resetAction = actionFactory.createAction(resetPropertyAction,
         actionHandler, viewComponent, propertyDescriptor, connector, locale);
+    Action infoAction = actionFactory.createAction(binaryPropertyInfoAction,
+        actionHandler, viewComponent, propertyDescriptor, connector, locale);
     viewComponent.setActions(Arrays.asList(new Action[] {openAction,
-        saveAction, resetAction}));
+        saveAction, resetAction, infoAction}));
     adjustSizes(viewComponent, null, null);
     return constructView(viewComponent, null, connector);
   }
@@ -2642,5 +2645,16 @@ public class DefaultSwingViewFactory implements
    */
   public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
     this.resetPropertyAction = resetPropertyAction;
+  }
+
+  
+  /**
+   * Sets the binaryPropertyInfoAction.
+   * 
+   * @param binaryPropertyInfoAction the binaryPropertyInfoAction to set.
+   */
+  public void setBinaryPropertyInfoAction(
+      IDisplayableAction binaryPropertyInfoAction) {
+    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
   }
 }

@@ -4,6 +4,7 @@
 package com.d2s.framework.application.frontend.action.swing.flow;
 
 import java.util.Locale;
+import java.util.Map;
 
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
 import com.d2s.framework.util.i18n.ITranslationProvider;
@@ -48,10 +49,12 @@ public abstract class AbstractMessageAction extends AbstractSwingAction {
    *          the translation provider to use.
    * @param locale
    *          the locale to use.
+   * @param context the action context.
    * @return the I18ed message.
    */
   protected String getI18nMessage(ITranslationProvider translationProvider,
-      Locale locale) {
+      Locale locale, @SuppressWarnings("unused")
+      Map<String, Object> context) {
     return translationProvider.getTranslation(getMessage(), locale);
   }
 }

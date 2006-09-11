@@ -29,7 +29,7 @@ public class OpenFileAction extends ChooseFileAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(IActionHandler actionHandler,
+  public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
     ClientContext.loadFile(new IFileLoadHandler() {
 
@@ -39,14 +39,14 @@ public class OpenFileAction extends ChooseFileAction {
       public void onSuccess(InputStream in, String filePath) {
         if (fileOpenCallback != null) {
           getFileChooser(context).setCurrentDirectory(filePath);
-          fileOpenCallback.fileChosen(in, filePath, context);
+          fileOpenCallback.fileChosen(in, filePath, actionHandler, context);
         }
       }
 
       @SuppressWarnings("unused")
       public void onFailure(int reason, String description) {
         if (fileOpenCallback != null) {
-          fileOpenCallback.cancel(context);
+          fileOpenCallback.cancel(actionHandler, context);
         }
       }
     }, getFileChooser(context));

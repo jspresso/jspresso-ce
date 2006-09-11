@@ -6,6 +6,8 @@ package com.d2s.framework.application.frontend.file;
 import java.io.InputStream;
 import java.util.Map;
 
+import com.d2s.framework.action.IActionHandler;
+
 /**
  * This interface is used react to file open.
  * <p>
@@ -24,16 +26,21 @@ public interface IFileOpenCallback {
    *          the input stream to read the file bytes.
    * @param filePath
    *          the file path.
+   * @param actionHandler
+   *          the action handler.
    * @param context
    *          the action context.
    */
-  void fileChosen(InputStream in, String filePath, Map<String, Object> context);
+  void fileChosen(InputStream in, String filePath,
+      IActionHandler actionHandler, Map<String, Object> context);
 
   /**
    * Called whenever the file opening is cancelled.
    * 
+   * @param actionHandler
+   *          the action handler.
    * @param context
    *          the action context.
    */
-  void cancel(Map<String, Object> context);
+  void cancel(IActionHandler actionHandler, Map<String, Object> context);
 }

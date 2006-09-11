@@ -6,13 +6,11 @@ package com.d2s.framework.application.frontend.file;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.binding.IValueConnector;
 
 /**
- * Default handler implementation to deal with setting binary properties using
- * files.
+ * A callback handler which triggers an arbitrary action.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -20,7 +18,9 @@ import com.d2s.framework.binding.IValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
+public class ActionExecutorCallback extends FileToByteArrayCallback {
+  
+  private IAction action;
 
   /**
    * {@inheritDoc}
@@ -29,7 +29,16 @@ public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
   public void fileChosen(InputStream in, String filePath,
       IActionHandler actionHandler, Map<String, Object> context) {
     super.fileChosen(in, filePath, actionHandler, context);
-    ((IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR))
-        .setConnectorValue(context.get(ActionContextConstants.ACTION_PARAM));
+    actionHandler.execute(action, context);
+  }
+
+  
+  /**
+   * Sets the action.
+   * 
+   * @param action the action to set.
+   */
+  public void setAction(IAction action) {
+    this.action = action;
   }
 }
