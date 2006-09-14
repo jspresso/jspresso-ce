@@ -47,6 +47,7 @@ public class JActionField extends JPanel {
   private JTextField        textField;
   private Object            value;
   private boolean           showTextField;
+  private List<Action>      actions;
   private JPanel            buttonPanel;
 
   /**
@@ -91,32 +92,45 @@ public class JActionField extends JPanel {
   }
 
   /**
+   * Gets the actions.
+   * 
+   * @return the actions.
+   */
+  public List<Action> getActions() {
+    return actions;
+  }
+
+  /**
    * Sets the action field action.
    * 
    * @param actions
    *          the action field actions.
    */
   public void setActions(List<Action> actions) {
-    for (Action action : actions) {
-      JButton actionButton = new JButton();
-      actionButton.setBackground(textField.getBackground());
-      actionButton.setAction(action);
-      actionButton.setActionCommand("%");
-      actionButton.setText("");
-      int buttonSquareSize;
-      if (showTextField) {
-        buttonSquareSize = textField.getPreferredSize().height;
-        if (textField.getAction() == null) {
-          textField.setAction(action);
+    if (!ObjectUtils.equals(this.actions, actions)) {
+      buttonPanel.removeAll();
+      this.actions = actions;
+      for (Action action : actions) {
+        JButton actionButton = new JButton();
+        actionButton.setBackground(textField.getBackground());
+        actionButton.setAction(action);
+        actionButton.setActionCommand("%");
+        actionButton.setText("");
+        int buttonSquareSize;
+        if (showTextField) {
+          buttonSquareSize = textField.getPreferredSize().height;
+          if (textField.getAction() == null) {
+            textField.setAction(action);
+          }
+        } else {
+          buttonSquareSize = actionButton.getPreferredSize().height;
         }
-      } else {
-        buttonSquareSize = actionButton.getPreferredSize().height;
+        actionButton.setPreferredSize(new Dimension(buttonSquareSize,
+            buttonSquareSize));
+        actionButton.setMinimumSize(actionButton.getPreferredSize());
+        actionButton.setMaximumSize(actionButton.getPreferredSize());
+        buttonPanel.add(actionButton);
       }
-      actionButton.setPreferredSize(new Dimension(buttonSquareSize,
-          buttonSquareSize));
-      actionButton.setMinimumSize(actionButton.getPreferredSize());
-      actionButton.setMaximumSize(actionButton.getPreferredSize());
-      buttonPanel.add(actionButton);
     }
   }
 

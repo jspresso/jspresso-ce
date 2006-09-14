@@ -12,6 +12,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -1068,6 +1069,11 @@ public class DefaultSwingViewFactory implements
 
       IView<JComponent> editorView = createPropertyView(propertyDescriptor,
           null, actionHandler, locale);
+      if (editorView.getPeer() instanceof JActionField) {
+        JActionField actionField = (JActionField) editorView.getPeer();
+        actionField.setActions(Collections.singletonList(actionField
+            .getActions().get(0)));
+      }
       if (editorView.getConnector().getParentConnector() == null) {
         editorView.getConnector().setParentConnector(connector);
       }
@@ -1079,17 +1085,22 @@ public class DefaultSwingViewFactory implements
       } else {
         column.setCellRenderer(new EvenOddTableCellRenderer());
       }
+      int minHeaderWidth = computePixelWidth(viewComponent, columnName.length());
       if (propertyDescriptor instanceof IBooleanPropertyDescriptor
           || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-        column.setPreferredWidth(computePixelWidth(viewComponent, 2));
+        column.setPreferredWidth(Math.max(computePixelWidth(viewComponent, 2),
+            minHeaderWidth));
       } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-        column.setPreferredWidth(computePixelWidth(viewComponent,
+        column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
             getMaxTranslationLength(
-                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)));
+                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)),
+            minHeaderWidth));
       } else {
-        column.setPreferredWidth(Math.min(computePixelWidth(viewComponent,
-            getFormatLength(createFormatter(propertyDescriptor, locale),
-                getTemplateValue(propertyDescriptor))), maxColumnSize));
+        column.setPreferredWidth(Math.max(
+            Math.min(computePixelWidth(viewComponent, getFormatLength(
+                createFormatter(propertyDescriptor, locale),
+                getTemplateValue(propertyDescriptor))), maxColumnSize),
+            minHeaderWidth));
       }
     }
     viewComponent.addMouseListener(new PopupListener(viewComponent, view,
@@ -1618,7 +1629,8 @@ public class DefaultSwingViewFactory implements
     JDateFieldConnector connector = new JDateFieldConnector(propertyDescriptor
         .getName(), viewComponent);
     adjustSizes(viewComponent, createFormatter(format),
-        getDateTemplateValue(propertyDescriptor));
+        getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
+            .getScreenResolution() / 10);
     return constructView(viewComponent, null, connector);
   }
 
@@ -2237,18 +2249,25 @@ public class DefaultSwingViewFactory implements
 
   private void adjustSizes(Component component, IFormatter formatter,
       Object templateValue) {
-    Dimension size = new Dimension(computePixelWidth(component,
-        getFormatLength(formatter, templateValue)), component
-        .getPreferredSize().height);
+    adjustSizes(component, formatter, templateValue, 0);
+  }
+
+  private void adjustSizes(Component component, IFormatter formatter,
+      Object templateValue, int extraWidth) {
+    int preferredWidth = computePixelWidth(component, getFormatLength(
+        formatter, templateValue))
+        + extraWidth;
+    Dimension size = new Dimension(preferredWidth,
+        component.getPreferredSize().height);
     component.setPreferredSize(size);
     component.setMinimumSize(size);
     component.setMaximumSize(size);
   }
 
   private int computePixelWidth(Component component, int characterLength) {
-    int charLength = maxCharacterLength + 1;
+    int charLength = maxCharacterLength + 2;
     if (characterLength > 0 && characterLength < maxCharacterLength) {
-      charLength = characterLength + 1;
+      charLength = characterLength + 2;
     }
     return (int) ((component.getFont().getSize() * charLength) / 1.5);
   }
@@ -2647,11 +2666,11 @@ public class DefaultSwingViewFactory implements
     this.resetPropertyAction = resetPropertyAction;
   }
 
-  
   /**
    * Sets the binaryPropertyInfoAction.
    * 
-   * @param binaryPropertyInfoAction the binaryPropertyInfoAction to set.
+   * @param binaryPropertyInfoAction
+   *          the binaryPropertyInfoAction to set.
    */
   public void setBinaryPropertyInfoAction(
       IDisplayableAction binaryPropertyInfoAction) {

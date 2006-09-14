@@ -181,9 +181,9 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   }
 
   /**
-   * Gets the action.
+   * Gets the actions.
    * 
-   * @return the action.
+   * @return the actions.
    */
   public List<IAction> getActions() {
     return actions;

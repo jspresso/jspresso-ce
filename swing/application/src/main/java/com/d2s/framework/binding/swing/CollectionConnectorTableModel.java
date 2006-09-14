@@ -86,10 +86,11 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    */
   public Object getValueAt(int rowIndex, int columnIndex) {
     IValueConnector cellConnector = getConnectorAt(rowIndex, columnIndex);
-    if (cellConnector.getConnectorValue() instanceof byte[]) {
+    Object connectorValue = cellConnector.getConnectorValue();
+    if (connectorValue instanceof byte[]) {
       return null;
     }
-    return cellConnector.getConnectorValue();
+    return connectorValue;
   }
 
   /**

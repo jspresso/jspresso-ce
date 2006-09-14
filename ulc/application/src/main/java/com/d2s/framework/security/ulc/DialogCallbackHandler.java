@@ -118,9 +118,6 @@ public class DialogCallbackHandler implements CallbackHandler {
     }
     callbackDialog
         .setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
-    int screenRes = ClientContext.getScreenResolution();
-    callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
-        * (callbacks.length + 1) / 2));
 
     List<IActionListener> proceedActions = new ArrayList<IActionListener>(2);
 
@@ -194,8 +191,11 @@ public class DialogCallbackHandler implements CallbackHandler {
       callbackDialog.setTitle(dialogTitle);
     }
     callbackDialog.getContentPane().add(dialogPanel);
-    callbackDialog.pack();
+    int screenRes = ClientContext.getScreenResolution();
+    callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
+        * (callbacks.length + 1) / 2));
     UlcUtil.centerOnScreen(callbackDialog);
+    callbackDialog.pack();
     callbackDialog.setVisible(true);
   }
 
@@ -290,10 +290,10 @@ public class DialogCallbackHandler implements CallbackHandler {
     constraints.setGridX(GridBagConstraints.RELATIVE);
     constraints.setGridY(GridBagConstraints.RELATIVE);
     constraints.setGridWidth(1);
-    constraints.setWeightX(1.0d);
-    constraints.setFill(GridBagConstraints.HORIZONTAL);
     inputPanel.add(promptLabel, constraints);
 
+    constraints.setWeightX(1.0d);
+    constraints.setFill(GridBagConstraints.HORIZONTAL);
     constraints.setGridWidth(GridBagConstraints.REMAINDER);
     inputPanel.add(passwordField, constraints);
 
@@ -328,10 +328,10 @@ public class DialogCallbackHandler implements CallbackHandler {
     constraints.setGridX(GridBagConstraints.RELATIVE);
     constraints.setGridY(GridBagConstraints.RELATIVE);
     constraints.setGridWidth(1);
-    constraints.setWeightX(1.0d);
-    constraints.setFill(GridBagConstraints.HORIZONTAL);
     inputPanel.add(promptLabel, constraints);
 
+    constraints.setWeightX(1.0d);
+    constraints.setFill(GridBagConstraints.HORIZONTAL);
     constraints.setGridWidth(GridBagConstraints.REMAINDER);
     inputPanel.add(nameTextField, constraints);
 

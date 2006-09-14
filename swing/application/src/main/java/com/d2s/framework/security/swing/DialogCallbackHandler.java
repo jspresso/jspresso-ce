@@ -2,10 +2,12 @@ package com.d2s.framework.security.swing;
 
 import java.awt.Component;
 import java.awt.Dialog;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -201,8 +203,11 @@ public class DialogCallbackHandler implements CallbackHandler {
       callbackDialog.setTitle(dialogTitle);
     }
     callbackDialog.getContentPane().add(dialogPanel);
-    callbackDialog.pack();
+    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+    callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
+        * (callbacks.length + 1) / 2));
     SwingUtil.centerOnScreen(callbackDialog);
+    callbackDialog.pack();
     callbackDialog.setVisible(true);
   }
 
@@ -295,10 +300,10 @@ public class DialogCallbackHandler implements CallbackHandler {
     constraints.gridx = GridBagConstraints.RELATIVE;
     constraints.gridy = GridBagConstraints.RELATIVE;
     constraints.gridwidth = 1;
-    constraints.weightx = 1.0d;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
     inputPanel.add(promptLabel, constraints);
 
+    constraints.weightx = 1.0d;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.gridwidth = GridBagConstraints.REMAINDER;
     inputPanel.add(passwordField, constraints);
 
@@ -329,10 +334,10 @@ public class DialogCallbackHandler implements CallbackHandler {
     constraints.gridx = GridBagConstraints.RELATIVE;
     constraints.gridy = GridBagConstraints.RELATIVE;
     constraints.gridwidth = 1;
-    constraints.weightx = 1.0d;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
     inputPanel.add(promptLabel, constraints);
 
+    constraints.weightx = 1.0d;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.gridwidth = GridBagConstraints.REMAINDER;
     inputPanel.add(nameTextField, constraints);
 

@@ -112,6 +112,7 @@ import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
 import com.ulcjava.base.application.BorderFactory;
+import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.DefaultComboBoxCellRenderer;
 import com.ulcjava.base.application.GridBagConstraints;
 import com.ulcjava.base.application.IAction;
@@ -1050,6 +1051,11 @@ public class DefaultUlcViewFactory implements
       column.setHeaderValue(columnName.toString());
       IView<ULCComponent> editorView = createPropertyView(propertyDescriptor,
           null, actionHandler, locale);
+      if (editorView.getPeer() instanceof ULCActionField) {
+        ULCActionField actionField = (ULCActionField) editorView.getPeer();
+        actionField.setActions(Collections.singletonList(actionField
+            .getActions().get(0)));
+      }
       if (editorView.getConnector().getParentConnector() == null) {
         editorView.getConnector().setParentConnector(connector);
       }
@@ -1066,9 +1072,11 @@ public class DefaultUlcViewFactory implements
         column.setCellRenderer(new EvenOddTableCellRenderer(column
             .getModelIndex()));
       }
+      int minHeaderWidth = computePixelWidth(viewComponent, columnName.length());
       if (propertyDescriptor instanceof IBooleanPropertyDescriptor
           || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-        column.setPreferredWidth(computePixelWidth(viewComponent, 2));
+        column.setPreferredWidth(Math.max(computePixelWidth(viewComponent, 2),
+            minHeaderWidth));
         if (editorView.getPeer() instanceof ULCAbstractButton) {
           ((ULCAbstractButton) editorView.getPeer())
               .setHorizontalAlignment(IDefaults.CENTER);
@@ -1077,13 +1085,16 @@ public class DefaultUlcViewFactory implements
               .setHorizontalAlignment(IDefaults.CENTER);
         }
       } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-        column.setPreferredWidth(computePixelWidth(viewComponent,
+        column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
             getMaxTranslationLength(
-                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)));
+                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)),
+            minHeaderWidth));
       } else {
-        column.setPreferredWidth(Math.min(computePixelWidth(viewComponent,
-            getFormatLength(createFormatter(propertyDescriptor, locale),
-                getTemplateValue(propertyDescriptor))), maxColumnSize));
+        column.setPreferredWidth(Math.max(
+            Math.min(computePixelWidth(viewComponent, getFormatLength(
+                createFormatter(propertyDescriptor, locale),
+                getTemplateValue(propertyDescriptor))), maxColumnSize),
+            minHeaderWidth));
       }
     }
     viewComponent.setComponentPopupMenu(createPopupMenu(viewComponent, view,
@@ -1570,20 +1581,15 @@ public class DefaultUlcViewFactory implements
       IDatePropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
       IActionHandler actionHandler, Locale locale) {
 
-    // ULCTextField viewComponent = createULCTextField();
     SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
-    // viewComponent.setDataType(createDateDataType(propertyDescriptor, locale,
-    // format));
-    // ULCTextFieldConnector connector = new
-    // ULCTextFieldConnector(
-    // propertyDescriptor.getName(), viewComponent);
 
     ULCDateField viewComponent = createULCDateField(format.toPattern());
     ULCDateFieldConnector connector = new ULCDateFieldConnector(
         propertyDescriptor.getName(), viewComponent);
 
     adjustSizes(viewComponent, createFormatter(format),
-        getDateTemplateValue(propertyDescriptor));
+        getDateTemplateValue(propertyDescriptor), ClientContext
+            .getScreenResolution() / 10);
     return constructView(viewComponent, null, connector);
   }
 
@@ -2266,8 +2272,15 @@ public class DefaultUlcViewFactory implements
 
   private void adjustSizes(ULCComponent component, IFormatter formatter,
       Object templateValue) {
-    Dimension size = new Dimension(computePixelWidth(component,
-        getFormatLength(formatter, templateValue)), component.getFont()
+    adjustSizes(component, formatter, templateValue, 0);
+  }
+
+  private void adjustSizes(ULCComponent component, IFormatter formatter,
+      Object templateValue, int extraWidth) {
+    int preferredWidth = computePixelWidth(component, getFormatLength(
+        formatter, templateValue))
+        + extraWidth;
+    Dimension size = new Dimension(preferredWidth, component.getFont()
         .getSize() + 6);
     component.setPreferredSize(size);
     component.setMinimumSize(size);
@@ -2275,9 +2288,9 @@ public class DefaultUlcViewFactory implements
   }
 
   private int computePixelWidth(ULCComponent component, int characterLength) {
-    int charLength = maxCharacterLength + 1;
+    int charLength = maxCharacterLength + 2;
     if (characterLength > 0 && characterLength < maxCharacterLength) {
-      charLength = characterLength + 1;
+      charLength = characterLength + 2;
     }
     return (int) ((component.getFont().getSize() * charLength) / 1.5);
   }
@@ -2672,11 +2685,11 @@ public class DefaultUlcViewFactory implements
     this.resetPropertyAction = resetPropertyAction;
   }
 
-  
   /**
    * Sets the binaryPropertyInfoAction.
    * 
-   * @param binaryPropertyInfoAction the binaryPropertyInfoAction to set.
+   * @param binaryPropertyInfoAction
+   *          the binaryPropertyInfoAction to set.
    */
   public void setBinaryPropertyInfoAction(
       IDisplayableAction binaryPropertyInfoAction) {
