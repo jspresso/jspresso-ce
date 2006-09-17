@@ -11,7 +11,9 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 
@@ -38,13 +40,14 @@ public class SaveProjectedAction extends AbstractHibernateAction {
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
         ICompositeValueConnector moduleConnector = getModuleConnector(context);
-        BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
-        if (module.getModuleObjects() != null) {
-          for (Object entity : module.getModuleObjects()) {
+        SubModule module = (SubModule) moduleConnector.getConnectorValue();
+        if (module instanceof BeanCollectionModule) {
+          for (Object entity : ((BeanCollectionModule) module)
+              .getModuleObjects()) {
             saveEntity((IEntity) entity, context);
           }
-        } else if (module.getModuleObject() != null) {
-          saveEntity((IEntity) module.getModuleObject(), context);
+        } else if (module instanceof BeanModule) {
+          saveEntity((IEntity) ((BeanModule) module).getModuleObject(), context);
         }
         return null;
       }

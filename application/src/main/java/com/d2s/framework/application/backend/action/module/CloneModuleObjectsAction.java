@@ -10,7 +10,7 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
-import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
@@ -46,7 +46,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
     }
 
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
-    BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
+    BeanCollectionModule module = (BeanCollectionModule) moduleConnector.getConnectorValue();
 
     Collection<Object> projectedCollection;
     if (module.getModuleObjects() == null) {

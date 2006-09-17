@@ -67,10 +67,14 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.syntax.jedit.JEditTextArea;
+import org.syntax.jedit.tokenmarker.TokenMarker;
+
 import net.sf.nachocalendar.components.DefaultDayRenderer;
 import net.sf.nachocalendar.components.DefaultHeaderRenderer;
 
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
@@ -95,6 +99,7 @@ import com.d2s.framework.binding.swing.ITreeSelectionModelBinder;
 import com.d2s.framework.binding.swing.JActionFieldConnector;
 import com.d2s.framework.binding.swing.JComboBoxConnector;
 import com.d2s.framework.binding.swing.JDateFieldConnector;
+import com.d2s.framework.binding.swing.JEditTextAreaConnector;
 import com.d2s.framework.binding.swing.JFormattedFieldConnector;
 import com.d2s.framework.binding.swing.JImageConnector;
 import com.d2s.framework.binding.swing.JTextAreaConnector;
@@ -119,6 +124,7 @@ import com.d2s.framework.model.descriptor.IPercentPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
 import com.d2s.framework.util.IGate;
@@ -506,9 +512,9 @@ public class DefaultSwingViewFactory implements
                     .getConnector();
                 if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
                   if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                    if (cardModel != null && cardModel instanceof BeanModule) {
+                    if (cardModel != null && cardModel instanceof BeanCollectionModule) {
                       childCardConnector.getModelConnector().setConnectorValue(
-                          ((BeanModule) cardModel).getModuleObjects());
+                          ((BeanCollectionModule) cardModel).getModuleObjects());
                     } else {
                       childCardConnector.getModelConnector().setConnectorValue(
                           cardModel);
@@ -1092,9 +1098,9 @@ public class DefaultSwingViewFactory implements
             minHeaderWidth));
       } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
         column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
-            getMaxTranslationLength(
-                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)),
-            minHeaderWidth));
+            getEnumerationTemplateValue(
+                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
+                .length()), minHeaderWidth));
       } else {
         column.setPreferredWidth(Math.max(
             Math.min(computePixelWidth(viewComponent, getFormatLength(
@@ -1453,7 +1459,8 @@ public class DefaultSwingViewFactory implements
           if (propertyView.getPeer() instanceof JTextArea
               || propertyView.getPeer() instanceof JList
               || propertyView.getPeer() instanceof JScrollPane
-              || propertyView.getPeer() instanceof JTable) {
+              || propertyView.getPeer() instanceof JTable
+              || propertyView.getPeer() instanceof JEditTextArea) {
             constraints.anchor = GridBagConstraints.NORTHEAST;
           } else {
             constraints.anchor = GridBagConstraints.EAST;
@@ -1495,7 +1502,8 @@ public class DefaultSwingViewFactory implements
       if (propertyView.getPeer() instanceof JTextArea
           || propertyView.getPeer() instanceof JList
           || propertyView.getPeer() instanceof JScrollPane
-          || propertyView.getPeer() instanceof JTable) {
+          || propertyView.getPeer() instanceof JTable
+          || propertyView.getPeer() instanceof JEditTextArea) {
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
         isSpaceFilled = true;
@@ -1637,7 +1645,11 @@ public class DefaultSwingViewFactory implements
   private IView<JComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    if (propertyDescriptor instanceof ITextPropertyDescriptor) {
+    if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
+      return createSourceCodePropertyView(
+          (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
       return createTextPropertyView(
           (ITextPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
@@ -1661,6 +1673,28 @@ public class DefaultSwingViewFactory implements
     JTextAreaConnector connector = new JTextAreaConnector(propertyDescriptor
         .getName(), viewComponent);
     return constructView(scrollPane, null, connector);
+  }
+
+  private IView<JComponent> createSourceCodePropertyView(
+      ISourceCodePropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused")
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
+    JEditTextArea viewComponent = createJEditTextArea();
+    try {
+      viewComponent.setTokenMarker((TokenMarker) Class.forName(
+          "org.syntax.jedit.tokenmarker." + propertyDescriptor.getLanguage()
+              + "TokenMarker").newInstance());
+    } catch (InstantiationException ex) {
+      // Nothing to do. just don't colorize.
+    } catch (IllegalAccessException ex) {
+      // Nothing to do. just don't colorize.
+    } catch (ClassNotFoundException ex) {
+      // Nothing to do. just don't colorize.
+    }
+    JEditTextAreaConnector connector = new JEditTextAreaConnector(
+        propertyDescriptor.getName(), viewComponent);
+    return constructView(viewComponent, null, connector);
   }
 
   private IView<JComponent> createCollectionPropertyView(
@@ -1786,7 +1820,9 @@ public class DefaultSwingViewFactory implements
     }
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
         propertyDescriptor, locale));
-
+    adjustSizes(viewComponent, null, getEnumerationTemplateValue(
+        propertyDescriptor, locale), Toolkit.getDefaultToolkit()
+        .getScreenResolution() / 3);
     JComboBoxConnector connector = new JComboBoxConnector(propertyDescriptor
         .getName(), viewComponent);
     return constructView(viewComponent, null, connector);
@@ -2143,11 +2179,15 @@ public class DefaultSwingViewFactory implements
     return new DurationFormatter(locale);
   }
 
-  private Object getStringTemplateValue(
+  private String getStringTemplateValue(
       IStringPropertyDescriptor propertyDescriptor) {
+    return getStringTemplateValue(propertyDescriptor.getMaxLength());
+  }
+
+  private String getStringTemplateValue(Integer maxLength) {
     StringBuffer templateValue = new StringBuffer();
-    if (propertyDescriptor.getMaxLength() != null) {
-      for (int i = 0; i < propertyDescriptor.getMaxLength().intValue(); i++) {
+    if (maxLength != null) {
+      for (int i = 0; i < maxLength.intValue(); i++) {
         templateValue.append(TEMPLATE_CHAR);
       }
     }
@@ -2228,7 +2268,7 @@ public class DefaultSwingViewFactory implements
     return formatLength;
   }
 
-  private int getMaxTranslationLength(
+  private String getEnumerationTemplateValue(
       IEnumerationPropertyDescriptor descriptor, Locale locale) {
     int maxTranslationLength = -1;
     if (translationProvider != null) {
@@ -2244,7 +2284,7 @@ public class DefaultSwingViewFactory implements
     if (maxTranslationLength == -1 || maxTranslationLength > maxCharacterLength) {
       maxTranslationLength = maxCharacterLength;
     }
-    return maxTranslationLength;
+    return getStringTemplateValue(new Integer(maxTranslationLength));
   }
 
   private void adjustSizes(Component component, IFormatter formatter,
@@ -2292,6 +2332,16 @@ public class DefaultSwingViewFactory implements
     JTextArea textArea = new JTextArea();
     textArea.setDragEnabled(true);
     textArea.setWrapStyleWord(true);
+    return textArea;
+  }
+
+  /**
+   * Creates a JEdit text area.
+   * 
+   * @return the created text area.
+   */
+  protected JEditTextArea createJEditTextArea() {
+    JEditTextArea textArea = new JEditTextArea();
     return textArea;
   }
 

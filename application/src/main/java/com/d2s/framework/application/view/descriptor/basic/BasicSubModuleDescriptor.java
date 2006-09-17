@@ -6,9 +6,8 @@ package com.d2s.framework.application.view.descriptor.basic;
 import java.util.Locale;
 
 import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
-import com.d2s.framework.application.view.descriptor.ISimpleSubModuleDescriptor;
+import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
-import com.d2s.framework.util.descriptor.IIconDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
@@ -24,17 +23,16 @@ import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicSimpleSubModuleDescriptor extends
-    BasicSimpleTreeLevelDescriptor implements ISimpleSubModuleDescriptor,
-    IIconDescriptor {
+public class BasicSubModuleDescriptor extends
+    BasicSimpleTreeLevelDescriptor implements ISubModuleDescriptor {
 
   private IViewDescriptor       viewDescriptor;
   private DefaultIconDescriptor descriptor;
 
   /**
-   * Constructs a new <code>BasicSimpleSubModuleDescriptor</code> instance.
+   * Constructs a new <code>BasicSubModuleDescriptor</code> instance.
    */
-  public BasicSimpleSubModuleDescriptor() {
+  public BasicSubModuleDescriptor() {
     descriptor = new DefaultIconDescriptor();
   }
 

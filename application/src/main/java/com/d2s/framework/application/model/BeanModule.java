@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.model;
 
-import java.util.Collection;
-
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -20,8 +18,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class BeanModule extends SubModule {
 
-  private Object        moduleObject;
-  private Collection<?> moduleObjects;
+  private Object moduleObject;
 
   /**
    * Gets the module's projected object.
@@ -48,30 +45,6 @@ public class BeanModule extends SubModule {
   }
 
   /**
-   * Gets the module's projected objects.
-   * 
-   * @return the projected objects.
-   */
-  public Collection<?> getModuleObjects() {
-    return moduleObjects;
-  }
-
-  /**
-   * Sets the module's projected object collection.
-   * 
-   * @param moduleObjects
-   *          the projected object collection.
-   */
-  public void setModuleObjects(Collection<?> moduleObjects) {
-    if (ObjectUtils.equals(this.moduleObjects, moduleObjects)) {
-      return;
-    }
-    Object oldValue = getModuleObjects();
-    this.moduleObjects = moduleObjects;
-    firePropertyChange("moduleObjects", oldValue, getModuleObjects());
-  }
-
-  /**
    * Equality based on projected object.
    * <p>
    * {@inheritDoc}
@@ -86,7 +59,7 @@ public class BeanModule extends SubModule {
     }
     BeanModule rhs = (BeanModule) obj;
     return new EqualsBuilder().append(getModuleObject(), rhs.getModuleObject())
-        .append(getModuleObjects(), rhs.getModuleObjects()).isEquals();
+        .isEquals();
   }
 
   /**
@@ -96,7 +69,6 @@ public class BeanModule extends SubModule {
    */
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(23, 53).append(getModuleObject()).append(
-        getModuleObjects()).toHashCode();
+    return new HashCodeBuilder(23, 53).append(getModuleObject()).toHashCode();
   }
 }

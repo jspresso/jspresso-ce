@@ -45,8 +45,13 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
       List<ITreeLevelDescriptor> childrenDescriptors) {
     this.childrenDescriptors = new LinkedHashMap<String, ITreeLevelDescriptor>();
     for (ITreeLevelDescriptor descriptor : childrenDescriptors) {
-      this.childrenDescriptors.put(descriptor.getNodeGroupDescriptor()
-          .getModelDescriptor().getName(), descriptor);
+      // String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
+      // .getName();
+      // if (nodeGroupDescriptorName == null) {
+      String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
+          .getModelDescriptor().getName();
+      // }
+      this.childrenDescriptors.put(nodeGroupDescriptorName, descriptor);
     }
   }
 

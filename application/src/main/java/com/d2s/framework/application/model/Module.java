@@ -37,6 +37,7 @@ public class Module implements IPropertyChangeCapable {
   private String                description;
   private String                i18nName;
   private String                i18nDescription;
+  private String                iconImageURL;
   private List<SubModule>       subModules;
 
   /**
@@ -366,5 +367,25 @@ public class Module implements IPropertyChangeCapable {
       return getI18nName();
     }
     return "";
+  }
+
+  
+  /**
+   * Gets the iconImageURL.
+   * 
+   * @return the iconImageURL.
+   */
+  public String getIconImageURL() {
+    return iconImageURL;
+  }
+
+  
+  /**
+   * Sets the iconImageURL.
+   * 
+   * @param iconImageURL the iconImageURL to set.
+   */
+  public void setIconImageURL(String iconImageURL) {
+    this.iconImageURL = iconImageURL;
   }
 }

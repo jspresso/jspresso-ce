@@ -12,7 +12,9 @@ import org.springframework.transaction.support.TransactionCallback;
 
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 
@@ -40,14 +42,16 @@ public class ReloadProjectedAction extends AbstractHibernateAction {
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
         ICompositeValueConnector moduleConnector = getModuleConnector(context);
-        BeanModule module = (BeanModule) moduleConnector.getConnectorValue();
-        if (module.getModuleObjects() != null) {
-          Collection projectedCollection = module.getModuleObjects();
+        SubModule module = (SubModule) moduleConnector.getConnectorValue();
+        if (module instanceof BeanCollectionModule) {
+          Collection projectedCollection = ((BeanCollectionModule) module)
+              .getModuleObjects();
           for (Object entity : projectedCollection) {
             reloadEntity((IEntity) entity, context);
           }
-        } else if (module.getModuleObject() != null) {
-          reloadEntity((IEntity) module.getModuleObject(), context);
+        } else if (module instanceof BeanModule) {
+          reloadEntity((IEntity) ((BeanModule) module).getModuleObject(),
+              context);
         }
         status.setRollbackOnly();
         return null;

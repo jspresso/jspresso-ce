@@ -99,5 +99,6 @@
 	<classpathentry kind="var" path="M2_REPO/ehcache/ehcache/1.1/ehcache-1.1.jar"/>
 	<classpathentry kind="var" path="M2_REPO/jfree/jcommon/1.0.0/jcommon-1.0.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/jfree/jfreechart/1.0.1/jfreechart-1.0.1.jar"/>
+	<classpathentry kind="var" path="M2_REPO/jedit/jedit-syntax/1.0/jedit-syntax-1.0.jar"/>
 	<classpathentry kind="output" path="target"/>
 </classpath>

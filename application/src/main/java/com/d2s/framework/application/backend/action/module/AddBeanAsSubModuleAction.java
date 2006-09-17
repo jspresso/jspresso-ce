@@ -12,7 +12,6 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.application.model.SubModule;
-import com.d2s.framework.application.view.descriptor.ISimpleSubModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
@@ -56,8 +55,8 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
           .getChildConnector(selectedIndices[i]).getConnectorValue();
       BeanModule nextSubModule = new BeanModule();
       nextSubModule
-          .setDescriptor((ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) parentModule
-              .getDescriptor()).getChildDescriptor());
+          .setDescriptor((ISubModuleDescriptor) parentModule
+              .getDescriptor().getChildDescriptor());
       nextSubModule.setModuleObject(nextselectedProjectedObject);
       nextSubModule.setName(String.valueOf(nextselectedProjectedObject));
       int nextSubModuleIndex = children.indexOf(nextSubModule);

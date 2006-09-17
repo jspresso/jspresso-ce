@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.view.descriptor;
 
+import com.d2s.framework.util.descriptor.IIconDescriptor;
+import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
@@ -15,7 +17,8 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ISubModuleDescriptor extends ITreeLevelDescriptor {
+public interface ISubModuleDescriptor extends ISimpleTreeLevelDescriptor,
+    ITreeLevelDescriptor, IIconDescriptor {
 
   /**
    * Gets the projected view descriptor of this module.

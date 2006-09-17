@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
@@ -466,9 +467,9 @@ public class DefaultUlcViewFactory implements
                     .getConnector();
                 if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
                   if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                    if (cardModel != null && cardModel instanceof BeanModule) {
+                    if (cardModel != null && cardModel instanceof BeanCollectionModule) {
                       childCardConnector.getModelConnector().setConnectorValue(
-                          ((BeanModule) cardModel).getModuleObjects());
+                          ((BeanCollectionModule) cardModel).getModuleObjects());
                     } else {
                       childCardConnector.getModelConnector().setConnectorValue(
                           cardModel);
@@ -1086,9 +1087,9 @@ public class DefaultUlcViewFactory implements
         }
       } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
         column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
-            getMaxTranslationLength(
-                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)),
-            minHeaderWidth));
+            getEnumerationTemplateValue(
+                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
+                .length()), minHeaderWidth));
       } else {
         column.setPreferredWidth(Math.max(
             Math.min(computePixelWidth(viewComponent, getFormatLength(
@@ -1802,7 +1803,8 @@ public class DefaultUlcViewFactory implements
     }
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
         propertyDescriptor, locale));
-
+    adjustSizes(viewComponent, null, getEnumerationTemplateValue(
+        propertyDescriptor, locale), ClientContext.getScreenResolution() / 3);
     ULCComboBoxConnector connector = new ULCComboBoxConnector(
         propertyDescriptor.getName(), viewComponent);
     return constructView(viewComponent, null, connector);
@@ -2141,11 +2143,15 @@ public class DefaultUlcViewFactory implements
     return new DurationFormatter(locale);
   }
 
-  private Object getStringTemplateValue(
+  private String getStringTemplateValue(
       IStringPropertyDescriptor propertyDescriptor) {
+    return getStringTemplateValue(propertyDescriptor.getMaxLength());
+  }
+
+  private String getStringTemplateValue(Integer maxLength) {
     StringBuffer templateValue = new StringBuffer();
-    if (propertyDescriptor.getMaxLength() != null) {
-      for (int i = 0; i < propertyDescriptor.getMaxLength().intValue(); i++) {
+    if (maxLength != null) {
+      for (int i = 0; i < maxLength.intValue(); i++) {
         templateValue.append(TEMPLATE_CHAR);
       }
     }
@@ -2251,7 +2257,7 @@ public class DefaultUlcViewFactory implements
     return formatLength;
   }
 
-  private int getMaxTranslationLength(
+  private String getEnumerationTemplateValue(
       IEnumerationPropertyDescriptor descriptor, Locale locale) {
     int maxTranslationLength = -1;
     if (translationProvider != null) {
@@ -2267,7 +2273,7 @@ public class DefaultUlcViewFactory implements
     if (maxTranslationLength == -1 || maxTranslationLength > maxCharacterLength) {
       maxTranslationLength = maxCharacterLength;
     }
-    return maxTranslationLength;
+    return getStringTemplateValue(new Integer(maxTranslationLength));
   }
 
   private void adjustSizes(ULCComponent component, IFormatter formatter,

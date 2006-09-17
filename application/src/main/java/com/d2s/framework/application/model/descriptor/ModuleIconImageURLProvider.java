@@ -4,6 +4,7 @@
 package com.d2s.framework.application.model.descriptor;
 
 import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.util.IIconImageURLProvider;
 
 /**
@@ -24,9 +25,12 @@ public class ModuleIconImageURLProvider implements IIconImageURLProvider {
    * {@inheritDoc}
    */
   public String getIconImageURLForObject(Object userObject) {
-    if (delegateProvider != null && userObject instanceof BeanModule) {
+    if (delegateProvider != null && userObject instanceof BeanModule
+        && ((BeanModule) userObject).getModuleObject() != null) {
       return delegateProvider
           .getIconImageURLForObject(((BeanModule) userObject).getModuleObject());
+    } else if (userObject instanceof SubModule) {
+      return ((SubModule) userObject).getIconImageURL();
     }
     return null;
   }

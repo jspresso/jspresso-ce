@@ -7,11 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.d2s.framework.application.model.SubModule;
-import com.d2s.framework.application.view.descriptor.ICompositeSubModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
-import com.d2s.framework.application.view.descriptor.ISimpleSubModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
-import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
 
@@ -49,22 +46,9 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
       moduleCards.put(computeKeyForModuleDescriptor(moduleDescriptor),
           projectedObjectViewDescriptor);
     }
-    if (moduleDescriptor instanceof ISimpleSubModuleDescriptor) {
-      if (((ISimpleSubModuleDescriptor) moduleDescriptor).getChildDescriptor() != null) {
-        prepareModuleCards(
-            moduleCards,
-            (ISubModuleDescriptor) ((ISimpleSubModuleDescriptor) moduleDescriptor)
-                .getChildDescriptor());
-      }
-    } else if (moduleDescriptor instanceof ICompositeSubModuleDescriptor) {
-      if (((ICompositeSubModuleDescriptor) moduleDescriptor)
-          .getChildrenDescriptors() != null) {
-        for (ITreeLevelDescriptor subModuleDescriptor : ((ICompositeSubModuleDescriptor) moduleDescriptor)
-            .getChildrenDescriptors()) {
-          prepareModuleCards(moduleCards,
-              (ISubModuleDescriptor) subModuleDescriptor);
-        }
-      }
+    if (moduleDescriptor.getChildDescriptor() != null) {
+      prepareModuleCards(moduleCards, (ISubModuleDescriptor) moduleDescriptor
+          .getChildDescriptor());
     }
   }
 
@@ -79,8 +63,8 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
   }
 
   private String computeKeyForModuleDescriptor(ISubModuleDescriptor descriptor) {
-    if (descriptor.getViewDescriptor().getName() != null) {
-      return descriptor.getViewDescriptor().getName();
+    if (descriptor/* .getViewDescriptor() */.getName() != null) {
+      return descriptor/* .getViewDescriptor() */.getName();
     }
     return descriptor.getViewDescriptor().toString();
   }
