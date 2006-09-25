@@ -42,7 +42,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings({ "unused", "unchecked" })
+  @SuppressWarnings({"unused", "unchecked" })
   public Object instantiate(String entityName, EntityMode entityMode,
       Serializable id) {
     try {

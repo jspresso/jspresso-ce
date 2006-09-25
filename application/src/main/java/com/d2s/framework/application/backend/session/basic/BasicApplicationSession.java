@@ -135,7 +135,7 @@ public class BasicApplicationSession implements IApplicationSession {
   protected Set<IEntity> getEntitiesRegisteredForDeletion() {
     return entitiesRegisteredForDeletion;
   }
-  
+
   /**
    * {@inheritDoc}
    */

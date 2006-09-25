@@ -16,7 +16,8 @@ import com.ulcjava.base.application.event.serializable.IValueChangedListener;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ULCJEditTextAreaConnector extends ULCComponentConnector<ULCJEditTextArea> {
+public class ULCJEditTextAreaConnector extends
+    ULCComponentConnector<ULCJEditTextArea> {
 
   /**
    * Constructs a new <code>ULCJEditTextAreaConnector</code> instance. The

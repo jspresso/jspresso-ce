@@ -204,7 +204,6 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     this.readOnly = readOnly;
   }
 
-  
   /**
    * Gets the readabilityGates.
    * 
@@ -214,17 +213,16 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     return readabilityGates;
   }
 
-  
   /**
    * Sets the readabilityGates.
    * 
-   * @param readabilityGates the readabilityGates to set.
+   * @param readabilityGates
+   *          the readabilityGates to set.
    */
   public void setReadabilityGates(Collection<IGate> readabilityGates) {
     this.readabilityGates = readabilityGates;
   }
 
-  
   /**
    * Gets the writabilityGates.
    * 
@@ -234,11 +232,11 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     return writabilityGates;
   }
 
-  
   /**
    * Sets the writabilityGates.
    * 
-   * @param writabilityGates the writabilityGates to set.
+   * @param writabilityGates
+   *          the writabilityGates to set.
    */
   public void setWritabilityGates(Collection<IGate> writabilityGates) {
     this.writabilityGates = writabilityGates;

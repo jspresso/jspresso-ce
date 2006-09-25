@@ -36,7 +36,8 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public ICollectionConnector getSourceModelConnector(Map<String, Object> context) {
+  public ICollectionConnector getSourceModelConnector(
+      Map<String, Object> context) {
     return (ICollectionConnector) super.getSourceModelConnector(context);
   }
 

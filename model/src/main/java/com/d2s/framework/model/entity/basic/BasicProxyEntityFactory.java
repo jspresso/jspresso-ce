@@ -70,16 +70,19 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id) {
     final T createdEntity = createEntityInstance(entityContract, id, null);
-    createdEntity.addPropertyChangeListener(IEntity.VERSION, new PropertyChangeListener() {
+    createdEntity.addPropertyChangeListener(IEntity.VERSION,
+        new PropertyChangeListener() {
 
-      public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getOldValue() == null && evt.getNewValue() != null) {
-          createdEntity.firePropertyChange("persistent", new Boolean(false), new Boolean(true));
-        } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
-          createdEntity.firePropertyChange("persistent", new Boolean(true), new Boolean(false));
-        }
-      }
-    });
+          public void propertyChange(PropertyChangeEvent evt) {
+            if (evt.getOldValue() == null && evt.getNewValue() != null) {
+              createdEntity.firePropertyChange("persistent",
+                  new Boolean(false), new Boolean(true));
+            } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+              createdEntity.firePropertyChange("persistent", new Boolean(true),
+                  new Boolean(false));
+            }
+          }
+        });
     return createdEntity;
   }
 

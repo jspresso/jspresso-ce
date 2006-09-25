@@ -38,7 +38,8 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
-    BeanCollectionModule module = (BeanCollectionModule) moduleConnector.getConnectorValue();
+    BeanCollectionModule module = (BeanCollectionModule) moduleConnector
+        .getConnectorValue();
 
     Collection<Object> projectedCollection;
     if (module.getModuleObjects() == null) {

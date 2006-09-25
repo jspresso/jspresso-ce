@@ -48,12 +48,11 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
     int[] selectedIndices = getSelectedIndices(context);
     if (selectedIndices != null) {
       IEntityFactory entityFactory = getEntityFactory(context);
-      //Traverse the collection reversly for performance reasons.
+      // Traverse the collection reversly for performance reasons.
       for (int i = selectedIndices.length - 1; i >= 0; i--) {
         int selectedIndex = selectedIndices[i];
         IEntity nextDetailToRemove = (IEntity) collectionConnector
-            .getChildConnector(selectedIndex)
-            .getConnectorValue();
+            .getChildConnector(selectedIndex).getConnectorValue();
         try {
           cleanRelationshipsOnDeletion(nextDetailToRemove, entityFactory,
               getAccessorFactory(context), getApplicationSession(context));

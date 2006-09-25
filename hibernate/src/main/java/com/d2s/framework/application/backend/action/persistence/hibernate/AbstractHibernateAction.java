@@ -109,9 +109,10 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
    * @param context
    *          the action context.
    */
-  protected void saveEntity(final IEntity entity, final Map<String, Object> context) {
+  protected void saveEntity(final IEntity entity,
+      final Map<String, Object> context) {
     getHibernateTemplate(context).execute(new HibernateCallback() {
-  
+
       public Object doInHibernate(Session session) {
         IEntity mergedEntity = mergeInHibernate(entity, session, context);
         session.saveOrUpdate(mergedEntity);

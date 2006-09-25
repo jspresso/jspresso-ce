@@ -13,8 +13,7 @@ package com.d2s.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ISourceCodePropertyDescriptor extends
-    ITextPropertyDescriptor {
+public interface ISourceCodePropertyDescriptor extends ITextPropertyDescriptor {
 
   /**
    * Gets the language the source code is written in.

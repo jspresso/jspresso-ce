@@ -15,7 +15,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * @author Vincent Vandenschrick
  */
 public interface IGate extends IPropertyChangeCapable, Cloneable {
-  
+
   /**
    * <code>OPEN_PROPERTY</code>.
    */
@@ -27,7 +27,7 @@ public interface IGate extends IPropertyChangeCapable, Cloneable {
    * @return true if open.
    */
   boolean isOpen();
-  
+
   /**
    * {@inheritDoc}
    */

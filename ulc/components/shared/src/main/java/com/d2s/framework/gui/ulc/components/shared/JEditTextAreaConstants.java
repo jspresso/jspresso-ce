@@ -22,7 +22,7 @@ public final class JEditTextAreaConstants {
   /**
    * <code>SET_TEXT_REQUEST</code>.
    */
-  public static final String SET_TEXT_REQUEST    = "setText";
+  public static final String SET_TEXT_REQUEST     = "setText";
 
   /**
    * <code>SET_EDITABLE_REQUEST</code>.
@@ -33,7 +33,7 @@ public final class JEditTextAreaConstants {
   /**
    * <code>VALUE_KEY</code>.
    */
-  public static final String TEXT_KEY            = "text";
+  public static final String TEXT_KEY             = "text";
 
   /**
    * <code>LANGUAGE_KEY</code>.

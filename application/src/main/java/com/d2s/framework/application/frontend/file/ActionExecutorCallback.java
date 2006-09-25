@@ -19,7 +19,7 @@ import com.d2s.framework.action.IActionHandler;
  * @author Vincent Vandenschrick
  */
 public class ActionExecutorCallback extends FileToByteArrayCallback {
-  
+
   private IAction action;
 
   /**
@@ -32,11 +32,11 @@ public class ActionExecutorCallback extends FileToByteArrayCallback {
     actionHandler.execute(action, context);
   }
 
-  
   /**
    * Sets the action.
    * 
-   * @param action the action to set.
+   * @param action
+   *          the action to set.
    */
   public void setAction(IAction action) {
     this.action = action;

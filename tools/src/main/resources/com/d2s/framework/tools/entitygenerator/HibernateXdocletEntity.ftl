@@ -120,6 +120,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}"
      <#if (   instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IStringPropertyDescriptor")
+           || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor")
            || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
           )
        && (propertyDescriptor.maxLength?exists)>

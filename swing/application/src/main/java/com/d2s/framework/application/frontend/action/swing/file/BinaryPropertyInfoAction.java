@@ -27,7 +27,8 @@ public class BinaryPropertyInfoAction extends InfoAction {
    * {@inheritDoc}
    */
   @Override
-  protected String getI18nMessage(ITranslationProvider translationProvider, Locale locale, Map<String, Object> context) {
+  protected String getI18nMessage(ITranslationProvider translationProvider,
+      Locale locale, Map<String, Object> context) {
     Integer kbSize = new Integer(0);
     byte[] content = getBinaryContent(context);
     if (content != null) {

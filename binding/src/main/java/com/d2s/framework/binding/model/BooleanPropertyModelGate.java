@@ -117,8 +117,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    */
   @Override
   public void setModelProvider(IModelProvider modelProvider) {
-    if (accessor == null && modelProvider != null
-        && accessorFactory != null) {
+    if (accessor == null && modelProvider != null && accessorFactory != null) {
       accessor = accessorFactory.createPropertyAccessor(booleanPropertyName,
           modelProvider.getModelDescriptor().getModelType());
     }
@@ -140,7 +139,8 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    */
   @Override
   public BooleanPropertyModelGate clone() {
-    BooleanPropertyModelGate clonedGate = (BooleanPropertyModelGate) super.clone();
+    BooleanPropertyModelGate clonedGate = (BooleanPropertyModelGate) super
+        .clone();
     clonedGate.open = true;
     return clonedGate;
   }

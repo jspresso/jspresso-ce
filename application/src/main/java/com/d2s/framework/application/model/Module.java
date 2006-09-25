@@ -369,7 +369,6 @@ public class Module implements IPropertyChangeCapable {
     return "";
   }
 
-  
   /**
    * Gets the iconImageURL.
    * 
@@ -379,11 +378,11 @@ public class Module implements IPropertyChangeCapable {
     return iconImageURL;
   }
 
-  
   /**
    * Sets the iconImageURL.
    * 
-   * @param iconImageURL the iconImageURL to set.
+   * @param iconImageURL
+   *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     this.iconImageURL = iconImageURL;

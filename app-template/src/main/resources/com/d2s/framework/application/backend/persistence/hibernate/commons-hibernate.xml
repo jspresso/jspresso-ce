@@ -2,49 +2,49 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 
 <!--
-	Hibernate root application context for the D2S framework.
+  Hibernate root application context for the D2S framework.
 -->
 <beans default-lazy-init="true">
 
-	<bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+  <bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
 
-	<bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"
-		singleton="false">
-		<property name="transactionManager">
-			<bean class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-				<property name="sessionFactory" ref="hibernateSessionFactory" />
-			</bean>
-		</property>
-	</bean>
+  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"
+    singleton="false">
+    <property name="transactionManager">
+      <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+      </bean>
+    </property>
+  </bean>
 
-	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" singleton="false">
-		<property name="sessionFactory" ref="hibernateSessionFactory" />
-	</bean>
+  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" singleton="false">
+    <property name="sessionFactory" ref="hibernateSessionFactory" />
+  </bean>
 
-	<!--
-		Hibernate root action beans.
-	-->
-	<bean abstract="true" id="abstractHibernateBackAction"
-		class="com.d2s.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
+  <!--
+    Hibernate root action beans.
+  -->
+  <bean abstract="true" id="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
 
-	<bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"
-		class="com.d2s.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction" />
+  <bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction" />
 
-	<bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
-		class="com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController">
-		<property name="applicationSession">
-			<bean parent="abstractApplicationSession"
-				class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession" />
-		</property>
-		<property name="hibernateTemplate" ref="hibernateTemplate" />
-		<property name="transactionTemplate" ref="transactionTemplate" />
-	</bean>
+  <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
+    class="com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController">
+    <property name="applicationSession">
+      <bean parent="abstractApplicationSession"
+        class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession" />
+    </property>
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+    <property name="transactionTemplate" ref="transactionTemplate" />
+  </bean>
 
-	<bean id="smartEntityCloneFactory"
-		class="com.d2s.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory">
-		<property name="accessorFactory" ref="beanAccessorFactory" />
-	</bean>
+  <bean id="smartEntityCloneFactory"
+    class="com.d2s.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory">
+    <property name="accessorFactory" ref="beanAccessorFactory" />
+  </bean>
 </beans>
 

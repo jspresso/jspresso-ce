@@ -10,8 +10,8 @@ import javax.security.auth.Subject;
 
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.entity.IEntityDirtAware;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.security.UserPrincipal;
 
 /**

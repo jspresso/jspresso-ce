@@ -22,8 +22,8 @@ import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicSubModuleDescriptor extends
-    BasicSimpleTreeLevelDescriptor implements ISubModuleDescriptor {
+public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
+    implements ISubModuleDescriptor {
 
   private IViewDescriptor       viewDescriptor;
   private DefaultIconDescriptor descriptor;

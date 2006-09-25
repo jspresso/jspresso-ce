@@ -46,7 +46,8 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
     }
 
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
-    BeanCollectionModule module = (BeanCollectionModule) moduleConnector.getConnectorValue();
+    BeanCollectionModule module = (BeanCollectionModule) moduleConnector
+        .getConnectorValue();
 
     Collection<Object> projectedCollection;
     if (module.getModuleObjects() == null) {

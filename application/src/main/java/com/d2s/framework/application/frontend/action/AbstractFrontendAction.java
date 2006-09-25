@@ -142,8 +142,8 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * action has been executed on from its context. It uses well-known context
    * keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the the
-   * view value connector the action executes on.
+   * <li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the
+   * the view value connector the action executes on.
    * </ul>
    * <p>
    * The returned connector mainly serves for acting on the view component the
@@ -154,7 +154,8 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * @return the value connector this model action was triggered on.
    */
   public IValueConnector getSourceViewConnector(Map<String, Object> context) {
-    return (IValueConnector) context.get(ActionContextConstants.SOURCE_VIEW_CONNECTOR);
+    return (IValueConnector) context
+        .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR);
   }
 
   /**

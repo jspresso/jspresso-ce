@@ -22,13 +22,14 @@ import com.ulcjava.base.application.table.DefaultTableCellRenderer;
 public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
 
   private static final long serialVersionUID = -932556734324432049L;
-  
-  private int column;
+
+  private int               column;
 
   /**
    * Constructs a new <code>EvenOddTableCellRenderer</code> instance.
    * 
-   * @param column the column this renderer is attached to.
+   * @param column
+   *          the column this renderer is attached to.
    */
   public EvenOddTableCellRenderer(int column) {
     this.column = column;

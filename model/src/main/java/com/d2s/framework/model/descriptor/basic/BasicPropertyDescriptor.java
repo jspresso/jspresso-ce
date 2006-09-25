@@ -315,7 +315,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
-  public void checkValueIntegrity(final Object component, final Object propertyValue) {
+  public void checkValueIntegrity(final Object component,
+      final Object propertyValue) {
     if (isMandatory() && propertyValue == null) {
       IntegrityException ie = new IntegrityException("Mandatory property ["
           + getName() + "] on component [" + component + "].") {
@@ -325,8 +326,9 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          return translationProvider.getTranslation("integrity.property.mandatory",
-              new Object[] {getI18nName(translationProvider, locale), component}, locale);
+          return translationProvider.getTranslation(
+              "integrity.property.mandatory", new Object[] {
+                  getI18nName(translationProvider, locale), component}, locale);
         }
 
       };

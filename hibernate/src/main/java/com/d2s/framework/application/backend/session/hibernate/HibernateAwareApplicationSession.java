@@ -77,8 +77,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         List<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
         if (entitiesToUpdate != null) {
           for (IEntity entityToUpdate : entitiesToUpdate) {
-            IEntity sessionEntity = (IEntity) session.get(entityToUpdate.getContract(),
-                entityToUpdate.getId());
+            IEntity sessionEntity = (IEntity) session.get(entityToUpdate
+                .getContract(), entityToUpdate.getId());
             if (sessionEntity != null) {
               session.update(sessionEntity);
             } else {
@@ -89,8 +89,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         Set<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
         if (entitiesToDelete != null) {
           for (IEntity entityToDelete : entitiesToDelete) {
-            IEntity sessionEntity = (IEntity) session.get(entityToDelete.getContract(),
-                entityToDelete.getId());
+            IEntity sessionEntity = (IEntity) session.get(entityToDelete
+                .getContract(), entityToDelete.getId());
             if (sessionEntity != null) {
               session.delete(sessionEntity);
             } else {

@@ -892,8 +892,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   private void checkIntegrity(Object proxy) {
     for (IPropertyDescriptor propertyDescriptor : entityDescriptor
         .getPropertyDescriptors()) {
-      propertyDescriptor
-          .checkValueIntegrity(proxy, straightGetProperty(propertyDescriptor.getName()));
+      propertyDescriptor.checkValueIntegrity(proxy,
+          straightGetProperty(propertyDescriptor.getName()));
     }
   }
 

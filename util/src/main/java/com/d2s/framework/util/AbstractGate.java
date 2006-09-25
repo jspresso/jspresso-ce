@@ -23,7 +23,6 @@ public abstract class AbstractGate implements IGate {
 
   /**
    * Constructs a new <code>AbstractGate</code> instance.
-   * 
    */
   public AbstractGate() {
     propertyChangeSupport = new PropertyChangeSupport(this);
@@ -96,8 +95,7 @@ public abstract class AbstractGate implements IGate {
   public AbstractGate clone() {
     try {
       AbstractGate clonedGate = (AbstractGate) super.clone();
-      clonedGate.propertyChangeSupport = new PropertyChangeSupport(
-          clonedGate);
+      clonedGate.propertyChangeSupport = new PropertyChangeSupport(clonedGate);
       return clonedGate;
     } catch (CloneNotSupportedException ex) {
       throw new NestedRuntimeException(ex);

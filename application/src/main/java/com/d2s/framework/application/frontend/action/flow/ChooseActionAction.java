@@ -16,8 +16,8 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
-import com.d2s.framework.model.descriptor.basic.BasicDescriptorDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicDescriptorDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.action.IDisplayableAction;
 

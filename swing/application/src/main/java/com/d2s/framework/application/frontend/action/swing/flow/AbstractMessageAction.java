@@ -49,7 +49,8 @@ public abstract class AbstractMessageAction extends AbstractSwingAction {
    *          the translation provider to use.
    * @param locale
    *          the locale to use.
-   * @param context the action context.
+   * @param context
+   *          the action context.
    * @return the I18ed message.
    */
   protected String getI18nMessage(ITranslationProvider translationProvider,
