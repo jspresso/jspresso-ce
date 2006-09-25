@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
@@ -56,6 +58,12 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     }
     List<IEntity> queriedEntities = getHibernateTemplate(context)
         .findByCriteria(criteria);
+    IApplicationSession session = getApplicationSession(context);
+    for (Iterator<IEntity> ite = queriedEntities.iterator(); ite.hasNext();) {
+      if (session.isEntityRegisteredForDeletion(ite.next())) {
+        ite.remove();
+      }
+    }
     queryEntity.setQueriedEntities(queriedEntities);
     // return null;
     // }

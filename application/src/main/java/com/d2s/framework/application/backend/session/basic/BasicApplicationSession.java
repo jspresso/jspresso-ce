@@ -110,6 +110,14 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
+  public boolean isEntityRegisteredForUpdate(IEntity entity) {
+    return entitiesRegisteredForUpdate != null
+        && entitiesRegisteredForUpdate.contains(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void deleteEntity(IEntity entity) {
     if (entity.isPersistent()) {
       if (entitiesRegisteredForDeletion == null) {
@@ -126,6 +134,14 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   protected Set<IEntity> getEntitiesRegisteredForDeletion() {
     return entitiesRegisteredForDeletion;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEntityRegisteredForDeletion(IEntity entity) {
+    return entitiesRegisteredForDeletion != null
+        && entitiesRegisteredForDeletion.contains(entity);
   }
 
   /**
