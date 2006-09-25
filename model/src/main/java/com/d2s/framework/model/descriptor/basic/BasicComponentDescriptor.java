@@ -51,6 +51,8 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   private boolean                          computed;
   private List<ILifecycleInterceptor>      lifecycleInterceptors;
 
+  private List<IPropertyDescriptor>        tempPropertyBuffer;
+
   /**
    * Constructs a new <code>BasicComponentDescriptor</code> instance.
    * 
@@ -67,6 +69,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * {@inheritDoc}
    */
   public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
+    processPropertiesBufferIfNecessary();
     if (propertyDescriptors != null) {
       return propertyDescriptors.values();
     }
@@ -91,6 +94,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   }
 
   private IPropertyDescriptor getDeclaredPropertyDescriptor(String propertyName) {
+    processPropertiesBufferIfNecessary();
     if (propertyDescriptors != null) {
       return propertyDescriptors.get(propertyName);
     }
@@ -119,9 +123,24 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    *          the propertyDescriptors to set.
    */
   public void setPropertyDescriptors(Collection<IPropertyDescriptor> descriptors) {
-    propertyDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
-    for (IPropertyDescriptor descriptor : descriptors) {
-      propertyDescriptors.put(descriptor.getName(), descriptor);
+    // This is important to use an intermediate structure since all descriptors
+    // may not have their names fully initialized.
+    if (descriptors != null) {
+      tempPropertyBuffer = new ArrayList<IPropertyDescriptor>(descriptors);
+      propertyDescriptors = null;
+    } else {
+      tempPropertyBuffer = null;
+      propertyDescriptors = null;
+    }
+  }
+
+  private synchronized void processPropertiesBufferIfNecessary() {
+    if (tempPropertyBuffer != null) {
+      propertyDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
+      for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
+        propertyDescriptors.put(descriptor.getName(), descriptor);
+      }
+      tempPropertyBuffer = null;
     }
   }
 
