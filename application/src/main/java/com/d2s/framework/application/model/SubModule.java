@@ -5,7 +5,7 @@ package com.d2s.framework.application.model;
 
 import org.apache.commons.lang.ObjectUtils;
 
-import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
  * A child module is a non-root module (it has a parent). A child module uses a
@@ -19,8 +19,8 @@ import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
  */
 public class SubModule extends Module {
 
-  private Module               parent;
-  private ISubModuleDescriptor descriptor;
+  private Module          parent;
+  private IViewDescriptor viewDescriptor;
 
   /**
    * Gets the module's parent module.
@@ -53,21 +53,21 @@ public class SubModule extends Module {
   }
 
   /**
-   * Gets the descriptor.
+   * Gets the viewDescriptor.
    * 
-   * @return the descriptor.
+   * @return the viewDescriptor.
    */
-  public ISubModuleDescriptor getDescriptor() {
-    return descriptor;
+  public IViewDescriptor getViewDescriptor() {
+    return viewDescriptor;
   }
 
   /**
-   * Sets the descriptor.
+   * Sets the viewDescriptor.
    * 
-   * @param descriptor
-   *          the descriptor to set.
+   * @param viewDescriptor
+   *          the viewDescriptor to set.
    */
-  public void setDescriptor(ISubModuleDescriptor descriptor) {
-    this.descriptor = descriptor;
+  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
+    this.viewDescriptor = viewDescriptor;
   }
 }

@@ -10,8 +10,6 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.TransactionCallback;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
@@ -39,27 +37,29 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     final IQueryEntity queryEntity = (IQueryEntity) ((IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR)).getConnectorValue();
 
-    getTransactionTemplate(context).execute(new TransactionCallback() {
-
-      public Object doInTransaction(@SuppressWarnings("unused")
-      TransactionStatus status) {
-        DetachedCriteria criteria = DetachedCriteria.forEntityName(queryEntity
-            .getContract().getName());
-        criteria.add(Example.create(queryEntity).ignoreCase().enableLike(
-            MatchMode.START));
-        for (Map.Entry<String, Object> property : queryEntity
-            .straightGetProperties().entrySet()) {
-          if (property.getValue() instanceof IEntity) {
-            criteria.add(Restrictions
-                .eq(property.getKey(), property.getValue()));
-          }
-        }
-        List<IEntity> queriedEntities = getHibernateTemplate(context)
-            .findByCriteria(criteria);
-        queryEntity.setQueriedEntities(queriedEntities);
-        return null;
+    // Not using a transaction fixes a bug of registering twice an object
+    // in the
+    // session.
+    // getTransactionTemplate(context).execute(new TransactionCallback() {
+    //
+    // public Object doInTransaction(@SuppressWarnings("unused")
+    // TransactionStatus status) {
+    DetachedCriteria criteria = DetachedCriteria.forEntityName(queryEntity
+        .getContract().getName());
+    criteria.add(Example.create(queryEntity).ignoreCase().enableLike(
+        MatchMode.START));
+    for (Map.Entry<String, Object> property : queryEntity
+        .straightGetProperties().entrySet()) {
+      if (property.getValue() instanceof IEntity) {
+        criteria.add(Restrictions.eq(property.getKey(), property.getValue()));
       }
-    });
+    }
+    List<IEntity> queriedEntities = getHibernateTemplate(context)
+        .findByCriteria(criteria);
+    queryEntity.setQueriedEntities(queriedEntities);
+    // return null;
+    // }
+    // });
     return true;
   }
 

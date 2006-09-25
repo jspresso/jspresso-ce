@@ -25,6 +25,15 @@ public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
   private Collection<String> grantedRoles;
 
   /**
+   * Constructs a new <code>BasicModuleDescriptor</code> instance.
+   */
+  public BasicModuleDescriptor() {
+    BasicSubModuleDescriptor subModuleDescriptor = new BasicSubModuleDescriptor();
+    subModuleDescriptor.setChildDescriptor(subModuleDescriptor);
+    setRootSubtreeDescriptor(subModuleDescriptor);
+  }
+
+  /**
    * {@inheritDoc}
    */
   public IAction getStartupAction() {

@@ -42,7 +42,9 @@ import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.ControllerException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.swing.components.JErrorDialog;
 import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.security.SecurityHelper;
@@ -165,8 +167,10 @@ public class DefaultSwingController extends
     JInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
     if (moduleInternalFrame == null) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      IValueConnector moduleConnector = getBackendController()
+          .getModuleConnector(moduleId);
       IView<JComponent> moduleView = createModuleView(moduleId,
-          moduleDescriptor);
+          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
       moduleInternalFrame = createJInternalFrame(moduleView);
       moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
           moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
@@ -174,8 +178,7 @@ public class DefaultSwingController extends
           .addInternalFrameListener(new ModuleInternalFrameListener(moduleId));
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
-      getMvcBinder().bind(moduleView.getConnector(),
-          getBackendController().getModuleConnector(moduleId));
+      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
       if (moduleDescriptor.getStartupAction() != null) {
         Map<String, Object> context = createEmptyContext();
         context.put(ActionContextConstants.MODULE_ROOT_CONNECTOR, moduleView
@@ -493,10 +496,10 @@ public class DefaultSwingController extends
               .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else if (ex instanceof IntegrityException) {
       JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
-          ((IntegrityException) ex).getI18nMessage(
-              getTranslationProvider(), getLocale()), getTranslationProvider()
-              .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
-          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          ((IntegrityException) ex).getI18nMessage(getTranslationProvider(),
+              getLocale()), getTranslationProvider().getTranslation("error",
+              getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
+              .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else {
       ex.printStackTrace();
       JErrorDialog dialog = JErrorDialog.createInstance((Component) context

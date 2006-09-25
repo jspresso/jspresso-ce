@@ -67,11 +67,11 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.syntax.jedit.JEditTextArea;
-import org.syntax.jedit.tokenmarker.TokenMarker;
-
 import net.sf.nachocalendar.components.DefaultDayRenderer;
 import net.sf.nachocalendar.components.DefaultHeaderRenderer;
+
+import org.syntax.jedit.JEditTextArea;
+import org.syntax.jedit.tokenmarker.TokenMarker;
 
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.model.BeanCollectionModule;
@@ -512,9 +512,12 @@ public class DefaultSwingViewFactory implements
                     .getConnector();
                 if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
                   if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                    if (cardModel != null && cardModel instanceof BeanCollectionModule) {
-                      childCardConnector.getModelConnector().setConnectorValue(
-                          ((BeanCollectionModule) cardModel).getModuleObjects());
+                    if (cardModel != null
+                        && cardModel instanceof BeanCollectionModule) {
+                      childCardConnector.getModelConnector()
+                          .setConnectorValue(
+                              ((BeanCollectionModule) cardModel)
+                                  .getModuleObjects());
                     } else {
                       childCardConnector.getModelConnector().setConnectorValue(
                           cardModel);
@@ -1680,18 +1683,8 @@ public class DefaultSwingViewFactory implements
       @SuppressWarnings("unused")
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
-    JEditTextArea viewComponent = createJEditTextArea();
-    try {
-      viewComponent.setTokenMarker((TokenMarker) Class.forName(
-          "org.syntax.jedit.tokenmarker." + propertyDescriptor.getLanguage()
-              + "TokenMarker").newInstance());
-    } catch (InstantiationException ex) {
-      // Nothing to do. just don't colorize.
-    } catch (IllegalAccessException ex) {
-      // Nothing to do. just don't colorize.
-    } catch (ClassNotFoundException ex) {
-      // Nothing to do. just don't colorize.
-    }
+    JEditTextArea viewComponent = createJEditTextArea(propertyDescriptor
+        .getLanguage());
     JEditTextAreaConnector connector = new JEditTextAreaConnector(
         propertyDescriptor.getName(), viewComponent);
     return constructView(viewComponent, null, connector);
@@ -2338,10 +2331,23 @@ public class DefaultSwingViewFactory implements
   /**
    * Creates a JEdit text area.
    * 
+   * @param language
+   *          the language to add syntax highlighting for.
    * @return the created text area.
    */
-  protected JEditTextArea createJEditTextArea() {
+  protected JEditTextArea createJEditTextArea(String language) {
     JEditTextArea textArea = new JEditTextArea();
+    try {
+      textArea.setTokenMarker((TokenMarker) Class.forName(
+          "org.syntax.jedit.tokenmarker." + language + "TokenMarker")
+          .newInstance());
+    } catch (InstantiationException ex) {
+      // Nothing to do. just don't colorize.
+    } catch (IllegalAccessException ex) {
+      // Nothing to do. just don't colorize.
+    } catch (ClassNotFoundException ex) {
+      // Nothing to do. just don't colorize.
+    }
     return textArea;
   }
 

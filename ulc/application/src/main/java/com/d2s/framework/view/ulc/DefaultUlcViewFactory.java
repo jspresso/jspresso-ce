@@ -44,12 +44,14 @@ import com.d2s.framework.binding.ulc.ULCActionFieldConnector;
 import com.d2s.framework.binding.ulc.ULCComboBoxConnector;
 import com.d2s.framework.binding.ulc.ULCDateFieldConnector;
 import com.d2s.framework.binding.ulc.ULCImageConnector;
+import com.d2s.framework.binding.ulc.ULCJEditTextAreaConnector;
 import com.d2s.framework.binding.ulc.ULCTextAreaConnector;
 import com.d2s.framework.binding.ulc.ULCTextFieldConnector;
 import com.d2s.framework.binding.ulc.ULCToggleButtonConnector;
 import com.d2s.framework.gui.ulc.components.server.ITreePathPopupFactory;
 import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 import com.d2s.framework.gui.ulc.components.server.ULCDateField;
+import com.d2s.framework.gui.ulc.components.server.ULCJEditTextArea;
 import com.d2s.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
 import com.d2s.framework.gui.ulc.components.server.ULCTable;
 import com.d2s.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
@@ -71,6 +73,7 @@ import com.d2s.framework.model.descriptor.IPercentPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
 import com.d2s.framework.util.format.DurationFormatter;
@@ -467,9 +470,12 @@ public class DefaultUlcViewFactory implements
                     .getConnector();
                 if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
                   if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                    if (cardModel != null && cardModel instanceof BeanCollectionModule) {
-                      childCardConnector.getModelConnector().setConnectorValue(
-                          ((BeanCollectionModule) cardModel).getModuleObjects());
+                    if (cardModel != null
+                        && cardModel instanceof BeanCollectionModule) {
+                      childCardConnector.getModelConnector()
+                          .setConnectorValue(
+                              ((BeanCollectionModule) cardModel)
+                                  .getModuleObjects());
                     } else {
                       childCardConnector.getModelConnector().setConnectorValue(
                           cardModel);
@@ -1409,7 +1415,8 @@ public class DefaultUlcViewFactory implements
           if (propertyView.getPeer() instanceof ULCTextArea
               || propertyView.getPeer() instanceof ULCList
               || propertyView.getPeer() instanceof ULCScrollPane
-              || propertyView.getPeer() instanceof ULCTable) {
+              || propertyView.getPeer() instanceof ULCTable
+              || propertyView.getPeer() instanceof ULCJEditTextArea) {
             constraints.setAnchor(GridBagConstraints.NORTHEAST);
           } else {
             constraints.setAnchor(GridBagConstraints.EAST);
@@ -1453,7 +1460,8 @@ public class DefaultUlcViewFactory implements
       if (propertyView.getPeer() instanceof ULCTextArea
           || propertyView.getPeer() instanceof ULCList
           || propertyView.getPeer() instanceof ULCScrollPane
-          || propertyView.getPeer() instanceof ULCTable) {
+          || propertyView.getPeer() instanceof ULCTable
+          || propertyView.getPeer() instanceof ULCJEditTextArea) {
         constraints.setWeightY(1.0);
         constraints.setFill(GridBagConstraints.BOTH);
         isSpaceFilled = true;
@@ -1603,7 +1611,11 @@ public class DefaultUlcViewFactory implements
   private IView<ULCComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    if (propertyDescriptor instanceof ITextPropertyDescriptor) {
+    if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
+      return createSourceCodePropertyView(
+          (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof ITextPropertyDescriptor) {
       return createTextPropertyView(
           (ITextPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
@@ -1627,6 +1639,18 @@ public class DefaultUlcViewFactory implements
     ULCTextAreaConnector connector = new ULCTextAreaConnector(
         propertyDescriptor.getName(), viewComponent);
     return constructView(scrollPane, null, connector);
+  }
+
+  private IView<ULCComponent> createSourceCodePropertyView(
+      ISourceCodePropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused")
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
+    ULCJEditTextArea viewComponent = createULCJEditTextArea(propertyDescriptor
+        .getLanguage());
+    ULCJEditTextAreaConnector connector = new ULCJEditTextAreaConnector(
+        propertyDescriptor.getName(), viewComponent);
+    return constructView(viewComponent, null, connector);
   }
 
   private IView<ULCComponent> createCollectionPropertyView(
@@ -2319,6 +2343,18 @@ public class DefaultUlcViewFactory implements
     ULCTextArea textArea = new ULCTextArea();
     textArea.setDragEnabled(true);
     textArea.setWrapStyleWord(true);
+    return textArea;
+  }
+
+  /**
+   * Creates a ULC JEdit text area.
+   * 
+   * @param language
+   *          the language to add syntax highlighting for.
+   * @return the created text area.
+   */
+  protected ULCJEditTextArea createULCJEditTextArea(String language) {
+    ULCJEditTextArea textArea = new ULCJEditTextArea(language);
     return textArea;
   }
 

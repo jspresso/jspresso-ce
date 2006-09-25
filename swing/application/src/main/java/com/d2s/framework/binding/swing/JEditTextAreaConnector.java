@@ -19,8 +19,6 @@ import org.syntax.jedit.JEditTextArea;
  */
 public class JEditTextAreaConnector extends JComponentConnector<JEditTextArea> {
 
-  // private Color savedSelectedTextColor;
-
   /**
    * Constructs a new <code>JEditTextAreaConnector</code> instance. The
    * connector will listen to <code>focusLost</code> events.
@@ -83,16 +81,6 @@ public class JEditTextAreaConnector extends JComponentConnector<JEditTextArea> {
   @Override
   protected void protectedUpdateState() {
     super.protectedUpdateState();
-    // if (isReadable()) {
-    // if (savedSelectedTextColor != null) {
-    // getConnectedJComponent().setSelectedTextColor(savedSelectedTextColor);
-    // }
-    // savedSelectedTextColor = null;
-    // } else if (savedSelectedTextColor == null) {
-    // savedSelectedTextColor = getConnectedJComponent().getSelectedTextColor();
-    // getConnectedJComponent().setSelectedTextColor(
-    // getConnectedJComponent().getSelectionColor());
-    // }
     getConnectedJComponent().setEditable(isWritable());
   }
 }

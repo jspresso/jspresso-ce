@@ -5,8 +5,6 @@ package com.d2s.framework.application.backend.action.persistence.hibernate;
 
 import java.util.Map;
 
-import org.hibernate.Session;
-import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
@@ -53,23 +51,5 @@ public class SaveProjectedAction extends AbstractHibernateAction {
       }
     });
     return true;
-  }
-
-  /**
-   * Saves an entity in hibernate.
-   * 
-   * @param entity
-   *          the entity to save.
-   */
-  private void saveEntity(final IEntity entity,
-      final Map<String, Object> context) {
-    getHibernateTemplate(context).execute(new HibernateCallback() {
-
-      public Object doInHibernate(Session session) {
-        IEntity mergedEntity = mergeInHibernate(entity, session, context);
-        session.saveOrUpdate(mergedEntity);
-        return null;
-      }
-    });
   }
 }

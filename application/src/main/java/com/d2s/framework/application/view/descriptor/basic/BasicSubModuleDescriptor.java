@@ -9,7 +9,6 @@ import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
@@ -34,6 +33,15 @@ public class BasicSubModuleDescriptor extends
    */
   public BasicSubModuleDescriptor() {
     descriptor = new DefaultIconDescriptor();
+    BasicListViewDescriptor moduleNodeGroupDescriptor = new BasicListViewDescriptor();
+    moduleNodeGroupDescriptor.setName(getName());
+    moduleNodeGroupDescriptor.setDescription(getDescription());
+    moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
+    moduleNodeGroupDescriptor
+        .setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
+            .getPropertyDescriptor("subModules"));
+    moduleNodeGroupDescriptor.setRenderedProperty("i18nName");
+    setNodeGroupDescriptor(moduleNodeGroupDescriptor);
   }
 
   /**
@@ -53,25 +61,6 @@ public class BasicSubModuleDescriptor extends
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IListViewDescriptor getNodeGroupDescriptor() {
-    if (super.getNodeGroupDescriptor() == null) {
-      BasicListViewDescriptor moduleNodeGroupDescriptor = new BasicListViewDescriptor();
-      moduleNodeGroupDescriptor.setName(getName());
-      moduleNodeGroupDescriptor.setDescription(getDescription());
-      moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
-      moduleNodeGroupDescriptor
-          .setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
-              .getPropertyDescriptor("subModules"));
-      moduleNodeGroupDescriptor.setRenderedProperty("i18nName");
-      setNodeGroupDescriptor(moduleNodeGroupDescriptor);
-    }
-    return super.getNodeGroupDescriptor();
   }
 
   /**

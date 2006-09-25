@@ -21,6 +21,10 @@
 			<artifactId>nachocalendar</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>jedit</groupId>
+			<artifactId>jedit-syntax</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>foxtrot</groupId>
 			<artifactId>foxtrot</artifactId>
 			<optional>true</optional>

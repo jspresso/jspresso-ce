@@ -76,6 +76,13 @@ public class BasicReferencePropertyDescriptor extends
    * @return the initializationMapping.
    */
   public Map<String, String> getInitializationMapping() {
+    if (initializationMapping != null) {
+      return initializationMapping;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IReferencePropertyDescriptor) getParentDescriptor())
+          .getInitializationMapping();
+    }
     return initializationMapping;
   }
 

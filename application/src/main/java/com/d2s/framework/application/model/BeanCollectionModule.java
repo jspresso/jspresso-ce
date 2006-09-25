@@ -9,6 +9,8 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+
 /**
  * A bean collection module is a module dealing with a collection of beans.
  * <p>
@@ -20,7 +22,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 public class BeanCollectionModule extends SubModule {
 
-  private Collection<?> moduleObjects;
+  private Collection<?>   moduleObjects;
+  private IViewDescriptor elementViewDescriptor;
 
   /**
    * Gets the module's projected objects.
@@ -72,5 +75,24 @@ public class BeanCollectionModule extends SubModule {
   @Override
   public int hashCode() {
     return new HashCodeBuilder(23, 53).append(getModuleObjects()).toHashCode();
+  }
+
+  /**
+   * Gets the elementViewDescriptor.
+   * 
+   * @return the elementViewDescriptor.
+   */
+  public IViewDescriptor getElementViewDescriptor() {
+    return elementViewDescriptor;
+  }
+
+  /**
+   * Sets the elementViewDescriptor.
+   * 
+   * @param elementViewDescriptor
+   *          the elementViewDescriptor to set.
+   */
+  public void setElementViewDescriptor(IViewDescriptor elementViewDescriptor) {
+    this.elementViewDescriptor = elementViewDescriptor;
   }
 }

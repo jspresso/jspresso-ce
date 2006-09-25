@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.hibernate.LockMode;
 import org.hibernate.Session;
+import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -98,5 +99,24 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
       }
     }
     return mergedEntities;
+  }
+
+  /**
+   * Saves an entity in hibernate.
+   * 
+   * @param entity
+   *          the entity to save.
+   * @param context
+   *          the action context.
+   */
+  protected void saveEntity(final IEntity entity, final Map<String, Object> context) {
+    getHibernateTemplate(context).execute(new HibernateCallback() {
+  
+      public Object doInHibernate(Session session) {
+        IEntity mergedEntity = mergeInHibernate(entity, session, context);
+        session.saveOrUpdate(mergedEntity);
+        return null;
+      }
+    });
   }
 }

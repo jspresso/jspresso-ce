@@ -111,7 +111,6 @@ public abstract class AbstractCollectionConnector extends
     if (!allowLazyChildrenLoading) {
       needsChildrenUpdate = false;
       Collection<String> childConnectorsToRemove = new HashSet<String>();
-      removedChildrenConnectors = new ArrayList<IValueConnector>();
       childConnectorsToRemove.addAll(getChildConnectorKeys());
       if (getModelConnector() != null) {
         int i = 0;
@@ -129,6 +128,7 @@ public abstract class AbstractCollectionConnector extends
           i++;
         }
       }
+      removedChildrenConnectors = new ArrayList<IValueConnector>();
       for (String nextModelConnectorId : childConnectorsToRemove) {
         IValueConnector connectorToRemove = getChildConnector(nextModelConnectorId);
         mvcBinder.bind(connectorToRemove, null);

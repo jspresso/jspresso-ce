@@ -218,6 +218,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             }
             if (((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
               nodesChanged(connectorPath, childIndices);
+              checkListenerRegistrationForConnector(connector);
             } else {
               nodesWereInserted(connectorPath, childIndices);
             }
@@ -229,16 +230,15 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             if (connectorPath != null) {
               List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
                   .getRemovedChildrenConnectors();
-              // if (((CollectionConnectorValueChangeEvent)
-              // evt).isDelayedEvent()) {
-              // nodeStructureChanged(connectorPath);
-              // } else {
-              nodesWereRemoved(connectorPath, childIndices,
-                  removedChildrenConnectors.toArray());
-              if (newCollectionSize == 0) {
+              if (((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
                 nodeStructureChanged(connectorPath);
+              } else {
+                nodesWereRemoved(connectorPath, childIndices,
+                    removedChildrenConnectors.toArray());
+                // if (newCollectionSize == 0) {
+                // nodeStructureChanged(connectorPath);
+                // }
               }
-              // }
             }
           }
         }
@@ -260,8 +260,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             // when the root connector is assigned a null value.
             TreePath connectorPath = getTreePathForConnector(parentConnector);
             if (connectorPath != null) {
-              nodesChanged(getTreePathForConnector(parentConnector),
-                  new int[] {getIndexOfChild(parentConnector, connector)});
+              nodesChanged(connectorPath, new int[] {getIndexOfChild(
+                  parentConnector, connector)});
             }
           }
         }
@@ -339,7 +339,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
         .getPath().getLastPathComponent();
     CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
         expandedConnector, false, false);
-    checkListenerRegistrationForConnector((IValueConnector) event.getPath()
-        .getLastPathComponent());
+    checkListenerRegistrationForConnector(expandedConnector);
   }
 }

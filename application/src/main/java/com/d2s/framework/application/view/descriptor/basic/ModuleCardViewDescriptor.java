@@ -4,11 +4,13 @@
 package com.d2s.framework.application.view.descriptor.basic;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.application.model.BeanCollectionModule;
+import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.model.SubModule;
-import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
-import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
 
@@ -27,28 +29,29 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
   /**
    * Constructs a new <code>ModuleCardViewDescriptor</code> instance.
    * 
-   * @param moduleDescriptor
-   *          the module view descriptor.
+   * @param module
+   *          the module.
    */
-  public ModuleCardViewDescriptor(IModuleDescriptor moduleDescriptor) {
-    ISubModuleDescriptor subModuleDescriptor = (ISubModuleDescriptor) moduleDescriptor
-        .getRootSubtreeDescriptor();
+  public ModuleCardViewDescriptor(Module module) {
     Map<String, IViewDescriptor> moduleCards = new HashMap<String, IViewDescriptor>();
-    prepareModuleCards(moduleCards, subModuleDescriptor);
+    prepareModuleCards(moduleCards, module.getSubModules());
     setCardViewDescriptors(moduleCards);
   }
 
   private void prepareModuleCards(Map<String, IViewDescriptor> moduleCards,
-      ISubModuleDescriptor moduleDescriptor) {
-    if (moduleDescriptor.getViewDescriptor() != null) {
-      IViewDescriptor projectedObjectViewDescriptor = moduleDescriptor
-          .getViewDescriptor();
-      moduleCards.put(computeKeyForModuleDescriptor(moduleDescriptor),
-          projectedObjectViewDescriptor);
-    }
-    if (moduleDescriptor.getChildDescriptor() != null) {
-      prepareModuleCards(moduleCards, (ISubModuleDescriptor) moduleDescriptor
-          .getChildDescriptor());
+      List<SubModule> modules) {
+    if (modules != null) {
+      for (SubModule module : modules) {
+        if (module.getViewDescriptor() != null) {
+          moduleCards.put(module.getName(), module.getViewDescriptor());
+          if (module instanceof BeanCollectionModule
+              && ((BeanCollectionModule) module).getElementViewDescriptor() != null) {
+            moduleCards.put(module.getName() + ".element",
+                ((BeanCollectionModule) module).getElementViewDescriptor());
+          }
+        }
+        prepareModuleCards(moduleCards, module.getSubModules());
+      }
     }
   }
 
@@ -56,16 +59,11 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
    * {@inheritDoc}
    */
   public String getCardNameForModel(Object model) {
-    if (model instanceof SubModule) {
-      return computeKeyForModuleDescriptor(((SubModule) model).getDescriptor());
+    if (model instanceof BeanModule) {
+      return (((BeanModule) model).getParent()).getName() + ".element";
+    } else if (model instanceof SubModule) {
+      return ((SubModule) model).getName();
     }
     return null;
-  }
-
-  private String computeKeyForModuleDescriptor(ISubModuleDescriptor descriptor) {
-    if (descriptor/* .getViewDescriptor() */.getName() != null) {
-      return descriptor/* .getViewDescriptor() */.getName();
-    }
-    return descriptor.getViewDescriptor().toString();
   }
 }

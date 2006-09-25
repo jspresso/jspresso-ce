@@ -17,7 +17,9 @@ import javax.security.auth.login.LoginException;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.ulc.components.server.ULCErrorDialog;
 import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.security.SecurityHelper;
@@ -218,15 +220,16 @@ public class DefaultUlcController extends
     ULCInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
     if (moduleInternalFrame == null) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      IValueConnector moduleConnector = getBackendController()
+          .getModuleConnector(moduleId);
       IView<ULCComponent> moduleView = createModuleView(moduleId,
-          moduleDescriptor);
+          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
       moduleInternalFrame = createULCInternalFrame(moduleView);
       moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
           moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
-      getMvcBinder().bind(moduleView.getConnector(),
-          getBackendController().getModuleConnector(moduleId));
+      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
       if (moduleDescriptor.getStartupAction() != null) {
         Map<String, Object> context = createEmptyContext();
         context.put(ActionContextConstants.MODULE_ROOT_CONNECTOR, moduleView

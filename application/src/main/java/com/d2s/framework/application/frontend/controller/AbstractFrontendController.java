@@ -18,6 +18,7 @@ import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.IFrontendController;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
@@ -359,17 +360,19 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *          the identifier of the module to create the view for.
    * @param moduleDescriptor
    *          the view descriptor of the module to render.
+   * @param module
+   *          the module to create the view for.
    * @return a view rendering the module.
    */
   protected IView<E> createModuleView(final String moduleId,
-      IModuleDescriptor moduleDescriptor) {
+      IModuleDescriptor moduleDescriptor, Module module) {
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
     splitViewDescriptor.setName(moduleDescriptor.getName());
     splitViewDescriptor.setMasterDetail(true);
 
     ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(
-        moduleDescriptor);
+        module);
 
     splitViewDescriptor.setLeftTopViewDescriptor(moduleDescriptor);
     splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
