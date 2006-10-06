@@ -25,6 +25,7 @@ import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.ulc.DialogCallbackHandler;
 import com.d2s.framework.security.ulc.ICallbackHandlerListener;
+import com.d2s.framework.util.html.HtmlHelper;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
@@ -397,16 +398,17 @@ public class DefaultUlcController extends
   public void handleException(Throwable ex, Map<String, Object> context) {
     if (ex instanceof SecurityException) {
       ULCAlert alert = new ULCAlert(controllerFrame, getTranslationProvider()
-          .getTranslation("error", getLocale()), ex.getMessage(),
+          .getTranslation("error", getLocale()), HtmlHelper.emphasis(ex.getMessage()),
           getTranslationProvider().getTranslation("ok", getLocale()), null,
           null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
       alert.show();
     } else if (ex instanceof IntegrityException) {
       ULCAlert alert = new ULCAlert(controllerFrame, getTranslationProvider()
-          .getTranslation("error", getLocale()), ((IntegrityException) ex)
-          .getI18nMessage(getTranslationProvider(), getLocale()),
-          getTranslationProvider().getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          .getTranslation("error", getLocale()),
+          HtmlHelper.emphasis(((IntegrityException) ex).getI18nMessage(
+              getTranslationProvider(), getLocale())), getTranslationProvider()
+              .getTranslation("ok", getLocale()), null, null, getIconFactory()
+              .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
       alert.show();
     } else {
       ex.printStackTrace();
@@ -417,7 +419,7 @@ public class DefaultUlcController extends
           IIconFactory.MEDIUM_ICON_SIZE));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
-      dialog.setMessage(ex.getLocalizedMessage());
+      dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
       dialog.setDetails(ex);
       dialog.pack();
       dialog.setVisible(true);

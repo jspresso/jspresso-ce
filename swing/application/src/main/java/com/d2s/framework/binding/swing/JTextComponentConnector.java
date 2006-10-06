@@ -9,6 +9,8 @@ import java.awt.event.FocusEvent;
 
 import javax.swing.text.JTextComponent;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * This abstract class serves as the base class for all JTextComponent
  * connectors.
@@ -66,7 +68,11 @@ public abstract class JTextComponentConnector<E extends JTextComponent> extends
    */
   @Override
   protected Object getConnecteeValue() {
-    return getConnectedJComponent().getText();
+    String text = getConnectedJComponent().getText();
+    if (StringUtils.isEmpty(text)) {
+      return null;
+    }
+    return text;
   }
 
   /**

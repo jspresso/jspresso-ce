@@ -565,10 +565,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Sets the exceptionHandler.
-   * 
-   * @param exceptionHandler
-   *          the exceptionHandler to set.
+   * {@inheritDoc}
    */
   public void setExceptionHandler(IExceptionHandler exceptionHandler) {
     this.exceptionHandler = exceptionHandler;

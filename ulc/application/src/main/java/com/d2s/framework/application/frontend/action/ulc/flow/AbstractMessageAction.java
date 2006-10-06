@@ -7,6 +7,7 @@ import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
+import com.d2s.framework.util.html.HtmlHelper;
 
 /**
  * Base class for all message ULC actions. It just keeps a reference on the
@@ -28,6 +29,7 @@ public abstract class AbstractMessageAction extends AbstractUlcAction {
    * @return the message.
    */
   protected String getMessage(Map<String, Object> context) {
-    return (String) context.get(ActionContextConstants.ACTION_PARAM);
+    return HtmlHelper.emphasis((String) context
+        .get(ActionContextConstants.ACTION_PARAM));
   }
 }

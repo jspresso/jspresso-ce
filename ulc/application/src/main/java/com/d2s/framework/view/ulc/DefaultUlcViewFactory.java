@@ -1022,6 +1022,7 @@ public class DefaultUlcViewFactory implements
     }
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
+    tableModel.setExceptionHandler(actionHandler);
     tableModel.setColumnClassesByIds(columnClassesByIds);
 
     TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent

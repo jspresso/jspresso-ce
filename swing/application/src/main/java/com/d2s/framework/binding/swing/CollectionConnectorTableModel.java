@@ -20,6 +20,7 @@ import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IRenderableCompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.Coordinates;
+import com.d2s.framework.util.exception.IExceptionHandler;
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**
@@ -43,6 +44,8 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private Map<Coordinates, CellConnectorListener>     cachedCellListeners;
   private List<String>                                columnConnectorKeys;
   private Map<String, Class>                          columnClassesByIds;
+
+  private IExceptionHandler                           exceptionHandler;
 
   /**
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
@@ -112,7 +115,15 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    */
   @Override
   public void setValueAt(Object cellValue, int rowIndex, int columnIndex) {
-    getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
+    try {
+      getConnectorAt(rowIndex, columnIndex).setConnectorValue(cellValue);
+    } catch (RuntimeException ex) {
+      if (exceptionHandler != null) {
+        exceptionHandler.handleException(ex, null);
+      } else {
+        throw ex;
+      }
+    }
   }
 
   /**
@@ -309,5 +320,15 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    */
   public void setColumnClassesByIds(Map<String, Class> columnClassesByIds) {
     this.columnClassesByIds = columnClassesByIds;
+  }
+
+  /**
+   * Sets the exceptionHandler.
+   * 
+   * @param exceptionHandler
+   *          the exceptionHandler to set.
+   */
+  public void setExceptionHandler(IExceptionHandler exceptionHandler) {
+    this.exceptionHandler = exceptionHandler;
   }
 }

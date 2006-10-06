@@ -53,6 +53,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       ((AbstractButton) editorView.getPeer())
           .setHorizontalAlignment(SwingConstants.CENTER);
     }
+    //TODO
     editorView.getConnector().addConnectorValueChangeListener(
         new IConnectorValueChangeListener() {
 
@@ -61,6 +62,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
             stopCellEditing();
           }
         });
+
     // To prevent the editor from being read-only.
     editorView.getConnector().setModelConnector(
         new BasicValueConnector(editorView.getConnector().getId()));

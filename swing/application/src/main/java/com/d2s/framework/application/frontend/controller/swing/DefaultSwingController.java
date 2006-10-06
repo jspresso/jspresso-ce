@@ -49,6 +49,7 @@ import com.d2s.framework.gui.swing.components.JErrorDialog;
 import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
+import com.d2s.framework.util.html.HtmlHelper;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.WaitCursorEventQueue;
 import com.d2s.framework.util.swing.WaitCursorTimer;
@@ -491,15 +492,15 @@ public class DefaultSwingController extends
   public void handleException(Throwable ex, Map<String, Object> context) {
     if (ex instanceof SecurityException) {
       JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
-          ex.getMessage(), getTranslationProvider().getTranslation("error",
-              getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
-              .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          HtmlHelper.emphasis(ex.getMessage()), getTranslationProvider().getTranslation(
+              "error", getLocale()), JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else if (ex instanceof IntegrityException) {
       JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
-          ((IntegrityException) ex).getI18nMessage(getTranslationProvider(),
-              getLocale()), getTranslationProvider().getTranslation("error",
-              getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
-              .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          HtmlHelper.emphasis(((IntegrityException) ex).getI18nMessage(
+              getTranslationProvider(), getLocale())), getTranslationProvider()
+              .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else {
       ex.printStackTrace();
       JErrorDialog dialog = JErrorDialog.createInstance((Component) context
@@ -509,7 +510,7 @@ public class DefaultSwingController extends
           IIconFactory.MEDIUM_ICON_SIZE));
       dialog.setTitle(getTranslationProvider().getTranslation("error",
           getLocale()));
-      dialog.setMessage(ex.getLocalizedMessage());
+      dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
       dialog.setDetails(ex);
       dialog.pack();
       dialog.setVisible(true);

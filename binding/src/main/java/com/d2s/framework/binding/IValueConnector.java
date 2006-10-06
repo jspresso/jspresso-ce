@@ -6,6 +6,7 @@ package com.d2s.framework.binding;
 import java.beans.PropertyChangeListener;
 
 import com.d2s.framework.util.IGate;
+import com.d2s.framework.util.exception.IExceptionHandler;
 
 /**
  * This public interface has to be implemented by any class which implements a
@@ -204,4 +205,12 @@ public interface IValueConnector extends IConnector,
    *          the model connector.
    */
   void setModelConnector(IValueConnector modelConnector);
+
+  /**
+   * Sets the exceptionHandler.
+   * 
+   * @param exceptionHandler
+   *          the exceptionHandler to set.
+   */
+  void setExceptionHandler(IExceptionHandler exceptionHandler);
 }

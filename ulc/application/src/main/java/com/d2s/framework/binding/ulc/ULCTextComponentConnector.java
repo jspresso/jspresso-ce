@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.binding.ulc;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.ulcjava.base.application.ULCTextComponent;
 import com.ulcjava.base.application.event.ValueChangedEvent;
 import com.ulcjava.base.application.event.serializable.IValueChangedListener;
@@ -66,7 +68,11 @@ public abstract class ULCTextComponentConnector<E extends ULCTextComponent>
    */
   @Override
   protected Object getConnecteeValue() {
-    return getConnectedULCComponent().getText();
+    String text = getConnectedULCComponent().getText();
+    if (StringUtils.isEmpty(text)) {
+      return null;
+    }
+    return text;
   }
 
   /**
