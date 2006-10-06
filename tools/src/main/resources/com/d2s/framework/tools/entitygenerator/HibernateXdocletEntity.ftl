@@ -31,7 +31,7 @@ package ${package};
   <#if isEntity>
  * @hibernate.mapping
  *           default-access = "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
- *           package = "${package}"
+<#-- *           package = "${package}"-->
     <#if superEntity?exists>
  * @hibernate.joined-subclass
     <#else>

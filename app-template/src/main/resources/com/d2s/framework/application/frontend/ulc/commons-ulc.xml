@@ -43,6 +43,8 @@
 
   <bean id="cancelDialogFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.CancelAction" />
 
+  <bean id="okDialogFrontAction" class="com.d2s.framework.application.frontend.action.swing.std.OkAction" />
+
   <!-- 
     Action beans
   -->
@@ -93,6 +95,9 @@
 
   <bean id="displayReportAction"
     class="com.d2s.framework.application.printing.frontend.action.ulc.DisplayJasperReportAction" />
+
+  <bean id="editComponentAction" parent="abstractEditComponentAction"
+    class="com.d2s.framework.application.frontend.action.ulc.std.EditComponentAction" />
 
   <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory"
     singleton="false" />

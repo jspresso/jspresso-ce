@@ -74,6 +74,7 @@ public class JDateField extends DateField {
         }
       }
     });
+    setValue(null);
   }
 
   /**

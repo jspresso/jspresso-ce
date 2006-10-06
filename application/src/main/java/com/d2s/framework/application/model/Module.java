@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +11,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.d2s.framework.util.bean.IPropertyChangeCapable;
+import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
  * A module is a central element in the application architecture. It serves as
@@ -30,52 +28,14 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Module implements IPropertyChangeCapable {
+public class Module extends AbstractPropertyChangeCapable {
 
-  private PropertyChangeSupport propertyChangeSupport;
   private String                name;
   private String                description;
   private String                i18nName;
   private String                i18nDescription;
   private String                iconImageURL;
   private List<SubModule>       subModules;
-
-  /**
-   * Constructs a new <code>Module</code> instance.
-   */
-  public Module() {
-    propertyChangeSupport = new PropertyChangeSupport(this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.addPropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addPropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removePropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
-  }
 
   /**
    * Gets the subModules modules.
@@ -181,21 +141,6 @@ public class Module implements IPropertyChangeCapable {
       return false;
     }
     return false;
-  }
-
-  /**
-   * Fires a property change event.
-   * 
-   * @param propertyName
-   *          the name of the changed property.
-   * @param oldValue
-   *          the old value of the property.
-   * @param newValue
-   *          the new value of the property.
-   */
-  protected void firePropertyChange(String propertyName, Object oldValue,
-      Object newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
   }
 
   /**

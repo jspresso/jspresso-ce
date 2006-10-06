@@ -84,6 +84,7 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor implements
     List<String> superRenderedProperties = super.getRenderedProperties();
     if (superRenderedProperties != null) {
       superRenderedProperties.remove(IEntity.ID);
+      superRenderedProperties.remove(IEntity.VERSION);
     }
     return superRenderedProperties;
   }

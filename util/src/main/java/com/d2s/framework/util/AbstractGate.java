@@ -3,10 +3,7 @@
  */
 package com.d2s.framework.util;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-
-import com.d2s.framework.util.exception.NestedRuntimeException;
+import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
  * Base implementation of a gate.
@@ -17,88 +14,15 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractGate implements IGate {
-
-  private PropertyChangeSupport propertyChangeSupport;
-
-  /**
-   * Constructs a new <code>AbstractGate</code> instance.
-   */
-  public AbstractGate() {
-    propertyChangeSupport = new PropertyChangeSupport(this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.addPropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addPropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removePropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
-  }
-
-  /**
-   * Directly delegates to propertyChangeSupport.
-   * 
-   * @param propertyName
-   *          the name of the property.
-   * @param oldValue
-   *          the old property value.
-   * @param newValue
-   *          the new property value.
-   */
-  protected void firePropertyChange(String propertyName, Object oldValue,
-      Object newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
-  }
-
-  /**
-   * Directly delegates to propertyChangeSupport.
-   * 
-   * @param propertyName
-   *          the name of the property.
-   * @param oldValue
-   *          the old property value.
-   * @param newValue
-   *          the new property value.
-   */
-  protected void firePropertyChange(String propertyName, boolean oldValue,
-      boolean newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
-  }
+public abstract class AbstractGate extends AbstractPropertyChangeCapable
+    implements IGate {
 
   /**
    * {@inheritDoc}
    */
   @Override
   public AbstractGate clone() {
-    try {
-      AbstractGate clonedGate = (AbstractGate) super.clone();
-      clonedGate.propertyChangeSupport = new PropertyChangeSupport(clonedGate);
-      return clonedGate;
-    } catch (CloneNotSupportedException ex) {
-      throw new NestedRuntimeException(ex);
-    }
+    AbstractGate clonedGate = (AbstractGate) super.clone();
+    return clonedGate;
   }
 }

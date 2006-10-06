@@ -5,9 +5,10 @@ package com.d2s.framework.application.backend.action;
 
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.util.scripting.IScript;
 import com.d2s.framework.util.scripting.IScriptHandler;
-import com.d2s.framework.util.scripting.ScriptMixin;
 
 /**
  * A scripted backend action.
@@ -21,14 +22,6 @@ import com.d2s.framework.util.scripting.ScriptMixin;
 public class ScriptedBackendAction extends AbstractBackendAction {
 
   private IScriptHandler scriptHandler;
-  private ScriptMixin    scriptMixin;
-
-  /**
-   * Constructs a new <code>ScriptedBackendAction</code> instance.
-   */
-  public ScriptedBackendAction() {
-    scriptMixin = new ScriptMixin(this);
-  }
 
   /**
    * Executes the action script using the script handler.
@@ -38,7 +31,7 @@ public class ScriptedBackendAction extends AbstractBackendAction {
   @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    scriptHandler.execute(scriptMixin, context);
+    scriptHandler.execute((IScript) context.get(ActionContextConstants.ACTION_PARAM), context);
     return true;
   }
 
@@ -50,25 +43,5 @@ public class ScriptedBackendAction extends AbstractBackendAction {
    */
   public void setScriptHandler(IScriptHandler scriptHandler) {
     this.scriptHandler = scriptHandler;
-  }
-
-  /**
-   * Sets the script language this scripted action is written in.
-   * 
-   * @param scriptLanguage
-   *          the scripting language.
-   */
-  public void setScriptLanguage(String scriptLanguage) {
-    scriptMixin.setLanguage(scriptLanguage);
-  }
-
-  /**
-   * Sets the script source code.
-   * 
-   * @param script
-   *          the script source code.
-   */
-  public void setScript(String script) {
-    scriptMixin.setScript(script);
   }
 }

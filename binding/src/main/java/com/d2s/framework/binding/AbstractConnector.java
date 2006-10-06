@@ -3,12 +3,10 @@
  */
 package com.d2s.framework.binding;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.Collection;
 
 import com.d2s.framework.util.IGate;
-import com.d2s.framework.util.exception.NestedRuntimeException;
+import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
  * This abstract class holds some default implementation for connector. All the
@@ -21,10 +19,10 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * @author Vincent Vandenschrick
  */
 
-public abstract class AbstractConnector implements IConnector {
+public abstract class AbstractConnector extends AbstractPropertyChangeCapable
+    implements IConnector {
 
-  private String                id;
-  private PropertyChangeSupport propertyChangeSupport;
+  private String id;
 
   /**
    * Constructs a new AbstractConnector using an identifier. In case of a bean
@@ -36,7 +34,6 @@ public abstract class AbstractConnector implements IConnector {
    */
   public AbstractConnector(String id) {
     this.id = id;
-    propertyChangeSupport = new PropertyChangeSupport(this);
   }
 
   /**
@@ -57,15 +54,9 @@ public abstract class AbstractConnector implements IConnector {
    * {@inheritDoc}
    */
   public AbstractConnector clone(String newConnectorId) {
-    try {
-      AbstractConnector clonedConnector = (AbstractConnector) super.clone();
-      clonedConnector.id = newConnectorId;
-      clonedConnector.propertyChangeSupport = new PropertyChangeSupport(
-          clonedConnector);
-      return clonedConnector;
-    } catch (CloneNotSupportedException ex) {
-      throw new NestedRuntimeException(ex);
-    }
+    AbstractConnector clonedConnector = (AbstractConnector) super.clone();
+    clonedConnector.id = newConnectorId;
+    return clonedConnector;
   }
 
   /**
@@ -74,66 +65,6 @@ public abstract class AbstractConnector implements IConnector {
   @Override
   public AbstractConnector clone() {
     return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addPropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.addPropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addPropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.addPropertyChangeListener(propertyName, listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removePropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
-  }
-
-  /**
-   * Directly delegates to propertyChangeSupport.
-   * 
-   * @param propertyName
-   *          the name of the property.
-   * @param oldValue
-   *          the old property value.
-   * @param newValue
-   *          the new property value.
-   */
-  protected void firePropertyChange(String propertyName, Object oldValue,
-      Object newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
-  }
-
-  /**
-   * Directly delegates to propertyChangeSupport.
-   * 
-   * @param propertyName
-   *          the name of the property.
-   * @param oldValue
-   *          the old property value.
-   * @param newValue
-   *          the new property value.
-   */
-  protected void firePropertyChange(String propertyName, boolean oldValue,
-      boolean newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
   }
 
   /**

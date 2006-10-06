@@ -105,6 +105,8 @@ Design2See Checks
     <module name="PackageHtml">
         <property name="severity" value="ignore"/>
     </module>
-    <module name="NewlineAtEndOfFile"/>
+    <module name="NewlineAtEndOfFile">
+        <property name="lineSeparator" value="lf"/>
+    </module>
     <module name="Translation"/>
 </module>

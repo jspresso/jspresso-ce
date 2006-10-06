@@ -44,6 +44,8 @@
 
   <bean id="cancelDialogFrontAction" class="com.d2s.framework.application.frontend.action.swing.std.CancelAction" />
 
+  <bean id="okDialogFrontAction" class="com.d2s.framework.application.frontend.action.swing.std.OkAction" />
+
   <!-- 
     Action beans
   -->
@@ -88,6 +90,9 @@
 
   <bean id="displayReportAction"
     class="com.d2s.framework.application.printing.frontend.action.swing.DisplayJasperReportAction" />
+
+  <bean id="editComponentAction" parent="abstractEditComponentAction"
+    class="com.d2s.framework.application.frontend.action.swing.std.EditComponentAction" />
 
   <bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory"
     singleton="false">
