@@ -1317,13 +1317,14 @@ public class DefaultUlcViewFactory implements
   // ///////////// //
 
   private IView<ULCComponent> createImageView(
-      IImageViewDescriptor viewDescriptor, @SuppressWarnings("unused")
-      IActionHandler actionHandler, @SuppressWarnings("unused")
+      IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      @SuppressWarnings("unused")
       Locale locale) {
     ULCLabel imageLabel = createULCLabel();
     imageLabel.setHorizontalAlignment(IDefaults.CENTER);
     ULCImageConnector connector = new ULCImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
+    connector.setExceptionHandler(actionHandler);
     ULCBorderLayoutPane viewComponent = createBorderLayoutPane();
     IView<ULCComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -1578,24 +1579,26 @@ public class DefaultUlcViewFactory implements
     IView<ULCComponent> view = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       view = createIntegerPropertyView(
-          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
+          (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
       view = createDecimalPropertyView(
-          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
+          (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     }
     return view;
   }
 
   private IView<ULCComponent> createDatePropertyView(
-      IDatePropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
-      IActionHandler actionHandler, Locale locale) {
+      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
 
     SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
 
     ULCDateField viewComponent = createULCDateField(format.toPattern());
     ULCDateFieldConnector connector = new ULCDateFieldConnector(
         propertyDescriptor.getName(), viewComponent);
-
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), ClientContext
             .getScreenResolution() / 10);
@@ -1622,13 +1625,14 @@ public class DefaultUlcViewFactory implements
     ULCTextField viewComponent = createULCTextField();
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
 
   private IView<ULCComponent> createTextPropertyView(
-      ITextPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
-      IActionHandler actionHandler, @SuppressWarnings("unused")
+      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      @SuppressWarnings("unused")
       Locale locale) {
     ULCTextArea viewComponent = createULCTextArea();
     viewComponent.setLineWrap(true);
@@ -1638,18 +1642,19 @@ public class DefaultUlcViewFactory implements
         .setHorizontalScrollBarPolicy(ULCScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     ULCTextAreaConnector connector = new ULCTextAreaConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(scrollPane, null, connector);
   }
 
   private IView<ULCComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     ULCJEditTextArea viewComponent = createULCJEditTextArea(propertyDescriptor
         .getLanguage());
     ULCJEditTextAreaConnector connector = new ULCJEditTextAreaConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 
@@ -1685,6 +1690,7 @@ public class DefaultUlcViewFactory implements
     ULCActionField viewComponent = createULCActionField(true);
     ULCActionFieldConnector connector = new ULCActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     IAction fieldAction = actionFactory.createAction(lovAction, actionHandler,
         viewComponent, propertyDescriptor, connector, locale);
     fieldAction.putValue(IAction.NAME, getTranslationProvider().getTranslation(
@@ -1713,6 +1719,7 @@ public class DefaultUlcViewFactory implements
     ULCActionField viewComponent = createULCActionField(false);
     ULCActionFieldConnector connector = new ULCActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     IAction openAction = actionFactory.createAction(
         openFileAsBinaryPropertyAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
@@ -1730,10 +1737,12 @@ public class DefaultUlcViewFactory implements
   }
 
   private IView<ULCComponent> createDecimalPropertyView(
-      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+      IDecimalPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return createPercentPropertyView(
-          (IPercentPropertyDescriptor) propertyDescriptor, locale);
+          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     }
     ULCTextField viewComponent = createULCTextField();
     NumberFormat format = createDecimalFormat(propertyDescriptor, locale);
@@ -1743,6 +1752,7 @@ public class DefaultUlcViewFactory implements
 
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
         getDecimalTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1763,7 +1773,8 @@ public class DefaultUlcViewFactory implements
   }
 
   private IView<ULCComponent> createPercentPropertyView(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+      IPercentPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
     NumberFormat format = createPercentFormat(propertyDescriptor, locale);
 
@@ -1771,6 +1782,7 @@ public class DefaultUlcViewFactory implements
         format));
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
         getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1790,7 +1802,8 @@ public class DefaultUlcViewFactory implements
   }
 
   private IView<ULCComponent> createIntegerPropertyView(
-      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+      IIntegerPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
     NumberFormat format = createIntegerFormat(propertyDescriptor, locale);
 
@@ -1799,6 +1812,7 @@ public class DefaultUlcViewFactory implements
 
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
         getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1819,7 +1833,6 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
       IActionHandler actionHandler, Locale locale) {
     ULCComboBox viewComponent = createULCComboBox();
     for (String enumElement : propertyDescriptor.getEnumerationValues()) {
@@ -1831,6 +1844,7 @@ public class DefaultUlcViewFactory implements
         propertyDescriptor, locale), ClientContext.getScreenResolution() / 3);
     ULCComboBoxConnector connector = new ULCComboBoxConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 
@@ -1880,7 +1894,6 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createDurationPropertyView(
       IDurationPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
       IActionHandler actionHandler, Locale locale) {
     ULCTextField viewComponent = createULCTextField();
     DurationFormatter formatter = createDurationFormatter(propertyDescriptor,
@@ -1889,6 +1902,7 @@ public class DefaultUlcViewFactory implements
         locale, formatter));
     ULCTextFieldConnector connector = new ULCTextFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1906,12 +1920,12 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     ULCCheckBox viewComponent = createULCCheckBox();
     ULCToggleButtonConnector connector = new ULCToggleButtonConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 

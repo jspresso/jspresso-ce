@@ -3,11 +3,11 @@
  */
 package com.d2s.framework.application.frontend.action.swing.file;
 
-import java.util.Locale;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.swing.flow.InfoAction;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * A frontend action to display all usefull informations about a binary
@@ -27,15 +27,17 @@ public class BinaryPropertyInfoAction extends InfoAction {
    * {@inheritDoc}
    */
   @Override
-  protected String getI18nMessage(ITranslationProvider translationProvider,
-      Locale locale, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
     Integer kbSize = new Integer(0);
     byte[] content = getBinaryContent(context);
     if (content != null) {
       kbSize = new Integer(content.length / 1024);
     }
-    return translationProvider.getTranslation("binary.info.message",
-        new Object[] {kbSize}, locale);
+    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
+        context).getTranslation("binary.info.message", new Object[] {kbSize},
+        getLocale(context)));
+    return super.execute(actionHandler, context);
   }
 
   /**

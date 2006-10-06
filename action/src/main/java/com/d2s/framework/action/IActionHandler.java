@@ -5,6 +5,8 @@ package com.d2s.framework.action;
 
 import java.util.Map;
 
+import com.d2s.framework.util.exception.IExceptionHandler;
+
 /**
  * This interface establishes the general contract of an object able to axacute
  * actions (controllers for instance). No assumption is made on wether this

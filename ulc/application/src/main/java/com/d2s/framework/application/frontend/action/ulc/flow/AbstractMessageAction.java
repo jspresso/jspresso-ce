@@ -3,11 +3,10 @@
  */
 package com.d2s.framework.application.frontend.action.ulc.flow;
 
-import java.util.Locale;
 import java.util.Map;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Base class for all message ULC actions. It just keeps a reference on the
@@ -21,41 +20,14 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public abstract class AbstractMessageAction extends AbstractUlcAction {
 
-  private String message;
-
-  /**
-   * Sets the message.
-   * 
-   * @param message
-   *          the message to set.
-   */
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
   /**
    * Gets the message.
    * 
+   * @param context
+   *          the actionContext.
    * @return the message.
    */
-  protected String getMessage() {
-    return message;
-  }
-
-  /**
-   * Gets I18ed message.
-   * 
-   * @param translationProvider
-   *          the translation provider to use.
-   * @param locale
-   *          the locale to use.
-   * @param context
-   *          the action context.
-   * @return the I18ed message.
-   */
-  protected String getI18nMessage(ITranslationProvider translationProvider,
-      Locale locale, @SuppressWarnings("unused")
-      Map<String, Object> context) {
-    return translationProvider.getTranslation(getMessage(), locale);
+  protected String getMessage(Map<String, Object> context) {
+    return (String) context.get(ActionContextConstants.ACTION_PARAM);
   }
 }

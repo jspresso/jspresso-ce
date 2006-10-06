@@ -49,10 +49,14 @@
     Action beans
   -->
   <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
-    class="com.d2s.framework.application.frontend.action.ulc.flow.YesNoAction" />
+    class="com.d2s.framework.application.frontend.action.ulc.flow.StaticYesNoAction" />
 
-  <bean id="infoFrontAction" abstract="true"
-    class="com.d2s.framework.application.frontend.action.ulc.flow.InfoAction">
+  <bean id="infoFrontAction" class="com.d2s.framework.application.frontend.action.ulc.flow.InfoAction">
+    <property name="iconImageURL" value="classpath:images/info-48x48.png" />
+  </bean>
+
+  <bean id="staticInfoFrontAction" abstract="true" parent="infoFrontAction"
+    class="com.d2s.framework.application.frontend.action.ulc.flow.StaticInfoAction">
     <property name="iconImageURL" value="classpath:images/info-48x48.png" />
   </bean>
 

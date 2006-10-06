@@ -50,10 +50,12 @@
     Action beans
   -->
   <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
-    class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction" />
+    class="com.d2s.framework.application.frontend.action.swing.flow.StaticYesNoAction" />
 
-  <bean id="infoFrontAction" abstract="true"
-    class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction" />
+  <bean id="infoFrontAction" class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction" />
+
+  <bean id="staticInfoFrontAction" abstract="true" parent="infoFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.flow.StaticInfoAction" />
 
   <!--
     The implementation used as view factory.

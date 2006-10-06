@@ -6,12 +6,14 @@ package com.d2s.framework.binding;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.util.IGate;
+import com.d2s.framework.util.exception.IExceptionHandler;
 
 /**
  * This abstract class holds some default implementation for a value connector.
@@ -47,6 +49,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
   private boolean                              locallyWritable;
 
   private PropertyChangeListener               gatesListener;
+
+  private IExceptionHandler                    exceptionHandler;
 
   /**
    * Constructs a new AbstractValueConnector using an identifier. In case of a
@@ -140,8 +144,17 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Notifies its listeners about a change in the connector's value.
    */
   protected void fireConnectorValueChange() {
-    valueChangeSupport.fireConnectorValueChange(createChangeEvent(
-        oldConnectorValue, getConnecteeValue()));
+    try {
+      valueChangeSupport.fireConnectorValueChange(createChangeEvent(
+          oldConnectorValue, getConnecteeValue()));
+    } catch (RuntimeException ex) {
+      setConnecteeValue(oldConnectorValue);
+      if (exceptionHandler != null) {
+        exceptionHandler.handleException(ex, new HashMap<String, Object>());
+      } else {
+        throw ex;
+      }
+    }
     // the change propagated correctly. Save the value propagated as the old
     // value of the connector.
     oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
@@ -549,5 +562,15 @@ public abstract class AbstractValueConnector extends AbstractConnector
     firePropertyChange(READABLE_PROPERTY, !readable, readable);
     boolean writable = isWritable();
     firePropertyChange(READABLE_PROPERTY, !writable, writable);
+  }
+
+  /**
+   * Sets the exceptionHandler.
+   * 
+   * @param exceptionHandler
+   *          the exceptionHandler to set.
+   */
+  public void setExceptionHandler(IExceptionHandler exceptionHandler) {
+    this.exceptionHandler = exceptionHandler;
   }
 }

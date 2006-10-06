@@ -36,12 +36,11 @@ public class YesNoAction extends AbstractMessageAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
-        .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
-        getTranslationProvider(context), getLocale(context), context),
-        getI18nName(getTranslationProvider(context), getLocale(context)),
-        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
-        getIconFactory(context).getIcon(getIconImageURL(),
-            IIconFactory.LARGE_ICON_SIZE));
+        .getWindowOrInternalFrame(getSourceComponent(context)),
+        getMessage(context), getI18nName(getTranslationProvider(context),
+            getLocale(context)), JOptionPane.YES_NO_OPTION,
+        JOptionPane.QUESTION_MESSAGE, getIconFactory(context).getIcon(
+            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
     if (selectedOption == JOptionPane.YES_OPTION) {
       context.put(ActionContextConstants.NEXT_ACTION, yesAction);
     } else {

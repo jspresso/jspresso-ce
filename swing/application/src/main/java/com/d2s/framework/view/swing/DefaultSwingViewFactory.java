@@ -1351,13 +1351,14 @@ public class DefaultSwingViewFactory implements
   // ///////////// //
 
   private IView<JComponent> createImageView(
-      IImageViewDescriptor viewDescriptor, @SuppressWarnings("unused")
-      IActionHandler actionHandler, @SuppressWarnings("unused")
+      IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      @SuppressWarnings("unused")
       Locale locale) {
     JLabel imageLabel = createJLabel();
     imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
     JImageConnector connector = new JImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
+    connector.setExceptionHandler(actionHandler);
     JPanel viewComponent = createJPanel();
     BorderLayout layout = new BorderLayout();
     viewComponent.setLayout(layout);
@@ -1617,28 +1618,31 @@ public class DefaultSwingViewFactory implements
   }
 
   private IView<JComponent> createNumberPropertyView(
-      INumberPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      INumberPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     IView<JComponent> view = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       view = createIntegerPropertyView(
-          (IIntegerPropertyDescriptor) propertyDescriptor, locale);
+          (IIntegerPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     } else if (propertyDescriptor instanceof IDecimalPropertyDescriptor) {
       view = createDecimalPropertyView(
-          (IDecimalPropertyDescriptor) propertyDescriptor, locale);
+          (IDecimalPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     }
     return view;
   }
 
   private IView<JComponent> createDatePropertyView(
-      IDatePropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
-      IActionHandler actionHandler, Locale locale) {
+      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
     JDateField viewComponent = createJDateField();
     DateFormat format = createDateFormat(propertyDescriptor, locale);
     viewComponent.getFormattedTextField().setFormatterFactory(
         new DefaultFormatterFactory(new DateFormatter(format)));
     JDateFieldConnector connector = new JDateFieldConnector(propertyDescriptor
         .getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
             .getScreenResolution() / 10);
@@ -1659,13 +1663,14 @@ public class DefaultSwingViewFactory implements
     JTextField viewComponent = createJTextField();
     JTextFieldConnector connector = new JTextFieldConnector(propertyDescriptor
         .getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
 
   private IView<JComponent> createTextPropertyView(
-      ITextPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
-      IActionHandler actionHandler, @SuppressWarnings("unused")
+      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      @SuppressWarnings("unused")
       Locale locale) {
     JTextArea viewComponent = createJTextArea();
     viewComponent.setLineWrap(true);
@@ -1675,18 +1680,20 @@ public class DefaultSwingViewFactory implements
         .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
     JTextAreaConnector connector = new JTextAreaConnector(propertyDescriptor
         .getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(scrollPane, null, connector);
   }
 
   private IView<JComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
+
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     JEditTextArea viewComponent = createJEditTextArea(propertyDescriptor
         .getLanguage());
     JEditTextAreaConnector connector = new JEditTextAreaConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 
@@ -1722,6 +1729,7 @@ public class DefaultSwingViewFactory implements
     JActionField viewComponent = createJActionField(true);
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     Action fieldAction = actionFactory.createAction(lovAction, actionHandler,
         viewComponent, propertyDescriptor, connector, locale);
     fieldAction.putValue(Action.NAME, getTranslationProvider().getTranslation(
@@ -1750,6 +1758,7 @@ public class DefaultSwingViewFactory implements
     JActionField viewComponent = createJActionField(false);
     JActionFieldConnector connector = new JActionFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     Action openAction = actionFactory.createAction(
         openFileAsBinaryPropertyAction, actionHandler, viewComponent,
         propertyDescriptor, connector, locale);
@@ -1767,37 +1776,44 @@ public class DefaultSwingViewFactory implements
   }
 
   private IView<JComponent> createDecimalPropertyView(
-      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+      IDecimalPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     if (propertyDescriptor instanceof IPercentPropertyDescriptor) {
       return createPercentPropertyView(
-          (IPercentPropertyDescriptor) propertyDescriptor, locale);
+          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
     }
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
     JFormattedFieldConnector connector = new JFormattedFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getDecimalTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
 
   private IView<JComponent> createPercentPropertyView(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+      IPercentPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
     JFormattedFieldConnector connector = new JFormattedFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getPercentTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
 
   private IView<JComponent> createIntegerPropertyView(
-      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+      IIntegerPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, Locale locale) {
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
     JFormattedFieldConnector connector = new JFormattedFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getIntegerTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1805,7 +1821,6 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
       IActionHandler actionHandler, Locale locale) {
     JComboBox viewComponent = createJComboBox();
     for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
@@ -1818,6 +1833,7 @@ public class DefaultSwingViewFactory implements
         .getScreenResolution() / 3);
     JComboBoxConnector connector = new JComboBoxConnector(propertyDescriptor
         .getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 
@@ -1871,12 +1887,12 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createDurationPropertyView(
       IDurationPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
       IActionHandler actionHandler, Locale locale) {
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
     JFormattedFieldConnector connector = new JFormattedFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
+    connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
         getDurationTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
@@ -1884,12 +1900,12 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     JCheckBox viewComponent = createJCheckBox();
     JToggleButtonConnector connector = new JToggleButtonConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 

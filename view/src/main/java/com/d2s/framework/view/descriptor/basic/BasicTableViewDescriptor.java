@@ -6,6 +6,7 @@ package com.d2s.framework.view.descriptor.basic;
 import java.util.List;
 
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.view.descriptor.ITableViewDescriptor;
 
 /**
@@ -27,9 +28,18 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    */
   public List<String> getRenderedProperties() {
     if (renderedProperties == null) {
-      return ((ICollectionDescriptorProvider) getModelDescriptor())
+      ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) getModelDescriptor());
+      List<String> modelRenderedProperties = modelDescriptor
           .getCollectionDescriptor().getElementDescriptor()
           .getRenderedProperties();
+      if (modelDescriptor instanceof ICollectionPropertyDescriptor
+          && ((ICollectionPropertyDescriptor) modelDescriptor)
+              .getReverseRelationEnd() != null) {
+        modelRenderedProperties
+            .remove(((ICollectionPropertyDescriptor) modelDescriptor)
+                .getReverseRelationEnd().getName());
+      }
+      return modelRenderedProperties;
     }
     return renderedProperties;
   }

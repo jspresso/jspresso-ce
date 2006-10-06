@@ -31,11 +31,11 @@ public class InfoAction extends AbstractMessageAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     JOptionPane.showInternalMessageDialog(SwingUtil
-        .getWindowOrInternalFrame(getSourceComponent(context)), getI18nMessage(
-        getTranslationProvider(context), getLocale(context), context),
-        getI18nName(getTranslationProvider(context), getLocale(context)),
-        JOptionPane.INFORMATION_MESSAGE, getIconFactory(context).getIcon(
-            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+        .getWindowOrInternalFrame(getSourceComponent(context)),
+        getMessage(context), getI18nName(getTranslationProvider(context),
+            getLocale(context)), JOptionPane.INFORMATION_MESSAGE,
+        getIconFactory(context).getIcon(getIconImageURL(),
+            IIconFactory.LARGE_ICON_SIZE));
     return super.execute(actionHandler, context);
   }
 }

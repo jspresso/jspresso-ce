@@ -168,7 +168,7 @@
     <property name="name" value="remove.name" />
     <property name="description" value="remove.description" />
     <property name="acceleratorAsString" value="alt D" />
-    <property name="message" value="remove.selected.message" />
+    <property name="messageCode" value="remove.selected.message" />
     <property name="yesAction">
       <bean class="com.d2s.framework.application.backend.action.RemoveCollectionFromMasterAction" />
     </property>

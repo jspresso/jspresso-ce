@@ -17,6 +17,7 @@ import com.d2s.framework.model.IModelChangeListener;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
@@ -324,5 +325,19 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
       ((IModelGate) gate).setModelProvider(null);
     }
     super.removeWritabilityGate(gate);
+  }
+
+  /**
+   * Performs check.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setConnectorValue(Object aValue) {
+    if (getModelDescriptor() instanceof IPropertyDescriptor) {
+      ((IPropertyDescriptor) getModelDescriptor()).checkValueIntegrity(
+          getModelProvider().getModel(), aValue);
+    }
+    super.setConnectorValue(aValue);
   }
 }

@@ -20,4 +20,12 @@ public interface IStringPropertyDescriptor extends IScalarPropertyDescriptor {
    * @return the string property maximum length.
    */
   Integer getMaxLength();
+
+  /**
+   * Gets the regular expression pattern this string preoperty must conform to.
+   * 
+   * @return the regular expression pattern this string preoperty must conform
+   *         to.
+   */
+  String getRegexpPattern();
 }

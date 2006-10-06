@@ -343,7 +343,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
       }
       return allProperties;
     }
-    return renderedProperties;
+    return new ArrayList<String>(renderedProperties);
   }
 
   /**
