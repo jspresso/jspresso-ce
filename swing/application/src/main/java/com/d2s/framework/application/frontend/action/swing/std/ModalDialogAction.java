@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.frontend.action.swing.flow;
+package com.d2s.framework.application.frontend.action.swing.std;
 
 import java.awt.BorderLayout;
 import java.awt.Dialog;

@@ -94,18 +94,23 @@ public class LdapLoginModule extends LdapExtLoginModule {
             }
           }
         } else {
-          Attribute attr = attrs.get(attributeId);
-          if (attr.size() > 0) {
-            if (attr.size() == 1) {
-              userPrincipal.putCustomProperty(option.getKey().substring(
-                  CUSTOM_PROPERTY_OPT.length()), attr.get());
-            } else {
-              List<Object> values = new ArrayList<Object>();
-              for (NamingEnumeration<?> avne = attr.getAll(); avne.hasMore();) {
-                values.add(avne.next());
+          if ("DN".equalsIgnoreCase(attributeId)) {
+            userPrincipal.putCustomProperty(option.getKey().substring(
+                CUSTOM_PROPERTY_OPT.length()), userDN);
+          } else {
+            Attribute attr = attrs.get(attributeId);
+            if (attr.size() > 0) {
+              if (attr.size() == 1) {
+                userPrincipal.putCustomProperty(option.getKey().substring(
+                    CUSTOM_PROPERTY_OPT.length()), attr.get());
+              } else {
+                List<Object> values = new ArrayList<Object>();
+                for (NamingEnumeration<?> avne = attr.getAll(); avne.hasMore();) {
+                  values.add(avne.next());
+                }
+                userPrincipal.putCustomProperty(option.getKey().substring(
+                    CUSTOM_PROPERTY_OPT.length()), values);
               }
-              userPrincipal.putCustomProperty(option.getKey().substring(
-                  CUSTOM_PROPERTY_OPT.length()), values);
             }
           }
         }

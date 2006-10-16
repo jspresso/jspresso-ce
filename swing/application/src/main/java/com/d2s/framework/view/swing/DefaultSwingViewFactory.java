@@ -42,6 +42,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -102,6 +103,7 @@ import com.d2s.framework.binding.swing.JDateFieldConnector;
 import com.d2s.framework.binding.swing.JEditTextAreaConnector;
 import com.d2s.framework.binding.swing.JFormattedFieldConnector;
 import com.d2s.framework.binding.swing.JImageConnector;
+import com.d2s.framework.binding.swing.JPasswordFieldConnector;
 import com.d2s.framework.binding.swing.JTextAreaConnector;
 import com.d2s.framework.binding.swing.JTextFieldConnector;
 import com.d2s.framework.binding.swing.JToggleButtonConnector;
@@ -120,6 +122,7 @@ import com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IIntegerPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.INumberPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IPasswordPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPercentPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -1653,7 +1656,11 @@ public class DefaultSwingViewFactory implements
   private IView<JComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
+    if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
+      return createPasswordPropertyView(
+          (IPasswordPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    } else if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
       return createSourceCodePropertyView(
           (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
           locale);
@@ -1666,6 +1673,17 @@ public class DefaultSwingViewFactory implements
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  private IView<JComponent> createPasswordPropertyView(
+      IPasswordPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      @SuppressWarnings("unused")
+      Locale locale) {
+    JPasswordField viewComponent = createJPasswordField();
+    JPasswordFieldConnector connector = new JPasswordFieldConnector(propertyDescriptor
+        .getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 
@@ -2331,6 +2349,16 @@ public class DefaultSwingViewFactory implements
     JTextField textField = new JTextField();
     SwingUtil.enableSelectionOnFocusGained(textField);
     return textField;
+  }
+
+  /**
+   * Creates a password field.
+   * 
+   * @return the created password field.
+   */
+  protected JPasswordField createJPasswordField() {
+    JPasswordField passwordField = new JPasswordField();
+    return passwordField;
   }
 
   /**

@@ -45,6 +45,7 @@ import com.d2s.framework.binding.ulc.ULCComboBoxConnector;
 import com.d2s.framework.binding.ulc.ULCDateFieldConnector;
 import com.d2s.framework.binding.ulc.ULCImageConnector;
 import com.d2s.framework.binding.ulc.ULCJEditTextAreaConnector;
+import com.d2s.framework.binding.ulc.ULCPasswordFieldConnector;
 import com.d2s.framework.binding.ulc.ULCTextAreaConnector;
 import com.d2s.framework.binding.ulc.ULCTextFieldConnector;
 import com.d2s.framework.binding.ulc.ULCToggleButtonConnector;
@@ -69,6 +70,7 @@ import com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IIntegerPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.INumberPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IPasswordPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPercentPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -134,6 +136,7 @@ import com.ulcjava.base.application.ULCGridLayoutPane;
 import com.ulcjava.base.application.ULCLabel;
 import com.ulcjava.base.application.ULCList;
 import com.ulcjava.base.application.ULCMenuItem;
+import com.ulcjava.base.application.ULCPasswordField;
 import com.ulcjava.base.application.ULCPopupMenu;
 import com.ulcjava.base.application.ULCScrollPane;
 import com.ulcjava.base.application.ULCSplitPane;
@@ -1617,6 +1620,11 @@ public class DefaultUlcViewFactory implements
   private IView<ULCComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
+    if (propertyDescriptor instanceof IPasswordPropertyDescriptor) {
+      return createPasswordPropertyView(
+          (IPasswordPropertyDescriptor) propertyDescriptor, actionHandler,
+          locale);
+    }
     if (propertyDescriptor instanceof ISourceCodePropertyDescriptor) {
       return createSourceCodePropertyView(
           (ISourceCodePropertyDescriptor) propertyDescriptor, actionHandler,
@@ -1630,6 +1638,17 @@ public class DefaultUlcViewFactory implements
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
+  private IView<ULCComponent> createPasswordPropertyView(
+      IPasswordPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
+    ULCPasswordField viewComponent = createULCPasswordField();
+    ULCPasswordFieldConnector connector = new ULCPasswordFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 
@@ -2349,6 +2368,16 @@ public class DefaultUlcViewFactory implements
    */
   protected ULCTextField createULCTextField() {
     return new ULCOnFocusSelectTextField();
+  }
+
+  /**
+   * Creates a password field.
+   * 
+   * @return the created password field.
+   */
+  protected ULCPasswordField createULCPasswordField() {
+    ULCPasswordField passwordField = new ULCPasswordField();
+    return passwordField;
   }
 
   /**

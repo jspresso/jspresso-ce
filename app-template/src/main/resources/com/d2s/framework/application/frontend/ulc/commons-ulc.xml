@@ -74,7 +74,7 @@
     singleton="false" />
 
   <bean id="abstractModalDialogAction" abstract="true"
-    class="com.d2s.framework.application.frontend.action.ulc.flow.ModalDialogAction" />
+    class="com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction" />
 
   <bean id="lovAction" parent="abstractLovAction"
     class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" singleton="false" />

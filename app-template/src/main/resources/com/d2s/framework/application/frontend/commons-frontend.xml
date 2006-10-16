@@ -102,7 +102,7 @@
   </bean>
 
   <bean id="abstractEditReportParametersAction" abstract="true">
-    <property name="mapConnectorFactory" ref="mapConnectorFactory" />
+    <property name="modelConnectorFactory" ref="mapConnectorFactory" />
     <property name="okAction" ref="doPrintAction" />
     <property name="cancelAction" ref="cancelDialogFrontAction" />
   </bean>

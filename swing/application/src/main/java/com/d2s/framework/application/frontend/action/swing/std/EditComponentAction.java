@@ -12,7 +12,6 @@ import javax.swing.JComponent;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
-import com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.view.IView;
@@ -53,12 +52,12 @@ public class EditComponentAction extends ModalDialogAction {
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
 
     IView<JComponent> componentView = getViewFactory(context).createView(
-        viewDescriptor, actionHandler, getLocale(context));
+        getViewDescriptor(context), actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, componentView);
 
     IValueConnector componentConnector = modelConnectorFactory
-        .createModelConnector(viewDescriptor.getModelDescriptor());
-    componentConnector.setConnectorValue(component);
+        .createModelConnector(getViewDescriptor(context).getModelDescriptor());
+    componentConnector.setConnectorValue(getModel(context));
 
     getMvcBinder(context).bind(componentView.getConnector(),
         componentConnector);
@@ -104,5 +103,28 @@ public class EditComponentAction extends ModalDialogAction {
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
+  }
+  
+  /**
+   * Gets the viewDescriptor.
+   * 
+   * @param context
+   *          the action context.
+   * @return the viewDescriptor.
+   */
+  protected IViewDescriptor getViewDescriptor(@SuppressWarnings("unused")
+  Map<String, Object> context) {
+    return viewDescriptor;
+  }
+
+  /**
+   * Gets the model.
+   * 
+   * @param context
+   *          the action context.
+   * @return the model.
+   */
+  protected Object getModel(Map<String, Object> context) {
+    return context.get(ActionContextConstants.ACTION_PARAM);
   }
 }

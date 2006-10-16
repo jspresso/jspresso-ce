@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
-import com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction;
+import com.d2s.framework.application.frontend.action.swing.std.ModalDialogAction;
 import com.d2s.framework.binding.model.IModelValueConnector;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;

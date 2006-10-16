@@ -26,6 +26,11 @@ public class UserPrincipal implements Principal, Serializable {
   private Map<String, Object> customProperties;
 
   /**
+   * <code>USER_PROPERTY</code>.
+   */
+  public static final String  USERDN_PROPERTY    = "userDn";
+
+  /**
    * <code>OWNER_PROPERTY</code>.
    */
   public static final String  OWNER_PROPERTY    = "owner";

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.application.frontend.action.ulc.flow;
+package com.d2s.framework.application.frontend.action.ulc.std;
 
 import java.util.List;
 import java.util.Map;

@@ -15,7 +15,7 @@ import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.action.CreateQueryEntityAction;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
-import com.d2s.framework.application.frontend.action.swing.flow.ModalDialogAction;
+import com.d2s.framework.application.frontend.action.swing.std.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
