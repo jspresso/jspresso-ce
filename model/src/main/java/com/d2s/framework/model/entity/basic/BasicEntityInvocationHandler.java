@@ -22,6 +22,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -253,7 +254,12 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       return getReferenceProperty(proxy,
           (IReferencePropertyDescriptor) propertyDescriptor);
     }
-    return properties.get(propertyDescriptor.getName());
+    Object propertyValue = properties.get(propertyDescriptor.getName());
+    if (propertyValue == null
+        && propertyDescriptor instanceof IBooleanPropertyDescriptor) {
+      return Boolean.FALSE;
+    }
+    return propertyValue;
   }
 
   /**

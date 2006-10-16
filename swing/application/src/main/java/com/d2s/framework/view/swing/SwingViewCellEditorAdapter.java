@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.table.TableCellEditor;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeCellEditor;
 
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
@@ -53,15 +54,17 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       ((AbstractButton) editorView.getPeer())
           .setHorizontalAlignment(SwingConstants.CENTER);
     }
-    //TODO
-    editorView.getConnector().addConnectorValueChangeListener(
-        new IConnectorValueChangeListener() {
 
-          public void connectorValueChange(@SuppressWarnings("unused")
-          ConnectorValueChangeEvent evt) {
-            stopCellEditing();
-          }
-        });
+    if (!(editorView.getPeer() instanceof JTextComponent)) {
+      editorView.getConnector().addConnectorValueChangeListener(
+          new IConnectorValueChangeListener() {
+
+            public void connectorValueChange(@SuppressWarnings("unused")
+            ConnectorValueChangeEvent evt) {
+              stopCellEditing();
+            }
+          });
+    }
 
     // To prevent the editor from being read-only.
     editorView.getConnector().setModelConnector(
@@ -111,10 +114,9 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
   @Override
   public boolean isCellEditable(EventObject anEvent) {
     if (anEvent instanceof MouseEvent) {
-      if (/*
-           * editorView.getPeer() instanceof AbstractButton ||
-           */(editorView.getPeer() instanceof JActionField && !((JActionField) editorView
-          .getPeer()).isShowingTextField())) {
+      if (editorView.getPeer() instanceof AbstractButton
+          || (editorView.getPeer() instanceof JActionField && !((JActionField) editorView
+              .getPeer()).isShowingTextField())) {
         return ((MouseEvent) anEvent).getClickCount() >= 1;
       }
       return ((MouseEvent) anEvent).getClickCount() >= 2;

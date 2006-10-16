@@ -1015,6 +1015,8 @@ public class DefaultUlcViewFactory implements
           .getPropertyDescriptor(columnId);
       if (columnDescriptor instanceof IReferencePropertyDescriptor) {
         columnClassesByIds.put(columnId, String.class);
+      } else if (columnDescriptor instanceof IBooleanPropertyDescriptor) {
+        columnClassesByIds.put(columnId, Boolean.class);
       } else {
         columnClassesByIds.put(columnId, columnDescriptor.getModelType());
       }

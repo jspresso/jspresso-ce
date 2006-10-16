@@ -21,7 +21,7 @@ public class BasicBooleanPropertyDescriptor extends
    * {@inheritDoc}
    */
   public Class getModelType() {
-    return Boolean.class;
+    return Boolean.TYPE;
   }
 
 }

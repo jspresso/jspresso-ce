@@ -39,7 +39,8 @@ public class SaveProjectedAction extends AbstractHibernateAction {
       TransactionStatus status) {
         ICompositeValueConnector moduleConnector = getModuleConnector(context);
         SubModule module = (SubModule) moduleConnector.getConnectorValue();
-        if (module instanceof BeanCollectionModule) {
+        if (module instanceof BeanCollectionModule
+            && ((BeanCollectionModule) module).getModuleObjects() != null) {
           for (Object entity : ((BeanCollectionModule) module)
               .getModuleObjects()) {
             saveEntity((IEntity) entity, context);

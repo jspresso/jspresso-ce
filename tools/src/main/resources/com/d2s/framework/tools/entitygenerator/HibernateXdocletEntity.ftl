@@ -102,62 +102,66 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   /**
    * Gets the ${propertyName}.
    * 
-   <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
+  <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
    * @hibernate.property
-     <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDatePropertyDescriptor")>
-       <#if propertyDescriptor.type = "DATE">
+    <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDatePropertyDescriptor")>
+      <#if propertyDescriptor.type = "DATE">
    *           type = "date"
-       <#elseif propertyDescriptor.type = "TIME">
+      <#elseif propertyDescriptor.type = "TIME">
    *           type = "time"
-       <#else>
+      <#else>
    *           type = "timestamp"
-       </#if>
+      </#if>
 <#-- <#elseif    instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
               && !(propertyDescriptor.maxLength?exists)>
    *           type = "blob"
 -->
-     </#if>
+    </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}"
-     <#if (   instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IStringPropertyDescriptor")
-           || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor")
-           || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
-          )
-       && (propertyDescriptor.maxLength?exists)>
+    <#if (   instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IStringPropertyDescriptor")
+          || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor")
+          || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
+         )
+      && (propertyDescriptor.maxLength?exists)>
    *           length = "${propertyDescriptor.maxLength?c}"
-     </#if>
-     <#if propertyDescriptor.mandatory>
+    </#if>
+    <#if propertyDescriptor.mandatory>
    *           not-null = "true"
-     </#if>
-     <#if propertyDescriptor.unicityScope?exists>
+    </#if>
+    <#if propertyDescriptor.unicityScope?exists>
    *           unique-key = "${generateSQLName(propertyDescriptor.unicityScope)}_UNQ"
-     </#if>
-     <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.INumberPropertyDescriptor")>
-       <#if (propertyDescriptor.minValue?exists)
-          &&(propertyDescriptor.maxValue?exists)>
-         <#local infLength=propertyDescriptor.minValue?int?c?length/>
-         <#local supLength=propertyDescriptor.maxValue?int?c?length/>
-         <#if (infLength > supLength)>
-           <#local length=infLength/>
-         <#else>
-           <#local length=supLength/>
-         </#if>
+    </#if>
+    <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.INumberPropertyDescriptor")>
+      <#if (propertyDescriptor.minValue?exists)
+         &&(propertyDescriptor.maxValue?exists)>
+        <#local infLength=propertyDescriptor.minValue?int?c?length/>
+        <#local supLength=propertyDescriptor.maxValue?int?c?length/>
+        <#if (infLength > supLength)>
+          <#local length=infLength/>
+        <#else>
+          <#local length=supLength/>
+        </#if>
    *           scale = "${length?c}"
-       <#else>
+      <#else>
    *           scale = "10"
-       </#if>
-       <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor")>
-         <#if propertyDescriptor.maxFractionDigit?exists>
+      </#if>
+      <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor")>
+        <#if propertyDescriptor.maxFractionDigit?exists>
    *           precision = "${propertyDescriptor.maxFractionDigit?c}"
-         <#else>
+        <#else>
    *           precision = "2"
-         </#if>
-       </#if>
-     </#if>
-   </#if>
+        </#if>
+      </#if>
+    </#if>
+  </#if>
    * @return the ${propertyName}.
    */
+  <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor")>
+  ${propertyType} is${propertyName?cap_first}();
+  <#else>
   ${propertyType} get${propertyName?cap_first}();
+  </#if>
 </#macro>
 
 <#macro generateCollectionSetter componentDescriptor propertyDescriptor>

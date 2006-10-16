@@ -2500,7 +2500,8 @@ public class DefaultSwingViewFactory implements
       }
     };
     table.setSurrendersFocusOnKeystroke(true);
-    table.setDragEnabled(true);
+    // There is a bug regarding editing table when drag is enabled.
+    //table.setDragEnabled(true);
     return table;
   }
 
