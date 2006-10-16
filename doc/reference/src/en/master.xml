@@ -1,0 +1,25 @@
+<?xml version='1.0'?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3b2/docbookx.dtd">
+<book lang="en" revision="1.0">
+
+  <bookinfo>
+
+    <title>D2S : The Design To See Framework</title>
+
+    <subtitle>D2S Reference Manual</subtitle>
+
+    <releaseinfo>1.0</releaseinfo>
+
+  </bookinfo>
+
+  <toc />
+  <preface id="preface">
+
+    <title>Preface</title>
+
+    <para />
+
+  </preface>
+
+</book>
+
