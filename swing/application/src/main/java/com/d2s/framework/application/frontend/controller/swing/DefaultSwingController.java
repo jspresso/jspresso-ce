@@ -483,15 +483,17 @@ public class DefaultSwingController extends
    */
   public void handleException(Throwable ex, Map<String, Object> context) {
     if (ex instanceof SecurityException) {
-      JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
-          HtmlHelper.emphasis(ex.getMessage()), getTranslationProvider()
-              .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
-          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+      JOptionPane.showMessageDialog((Component) context
+          .get(ActionContextConstants.SOURCE_COMPONENT), HtmlHelper.emphasis(ex
+          .getMessage()), getTranslationProvider().getTranslation("error",
+          getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
+          .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else if (ex instanceof BusinessException) {
-      JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
-          HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
+      JOptionPane.showMessageDialog((Component) context
+          .get(ActionContextConstants.SOURCE_COMPONENT), HtmlHelper
+          .emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale())), getTranslationProvider()
-              .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
+          .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else {
       ex.printStackTrace();

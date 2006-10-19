@@ -50,14 +50,15 @@ public abstract class AbstractChangePasswordAction extends
   public static final IComponentDescriptor PASSWD_CHANGE_DESCRIPTOR = createPasswordChangeModel();
 
   private static IComponentDescriptor createPasswordChangeModel() {
-    BasicComponentDescriptor passwordChangeModel = new BasicComponentDescriptor(
-        Map.class.getName());
+    BasicComponentDescriptor passwordChangeModel = new BasicComponentDescriptor(null);
     BasicPasswordPropertyDescriptor currentPassword = new BasicPasswordPropertyDescriptor();
     currentPassword.setName(PASSWD_CURRENT);
     BasicPasswordPropertyDescriptor typedPassword = new BasicPasswordPropertyDescriptor();
     typedPassword.setName(PASSWD_TYPED);
+    typedPassword.setMaxLength(new Integer(15));
     BasicPasswordPropertyDescriptor retypedPassword = new BasicPasswordPropertyDescriptor();
     retypedPassword.setName(PASSWD_RETYPED);
+    retypedPassword.setMaxLength(new Integer(15));
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     propertyDescriptors.add(currentPassword);
@@ -84,8 +85,14 @@ public abstract class AbstractChangePasswordAction extends
           "password.typed.retyped.different");
     }
     UserPrincipal principal = getApplicationSession(context).getPrincipal();
-    return changePassword(principal, (char[]) actionParam.get(PASSWD_CURRENT),
-        typedPasswd);
+    if (changePassword(principal, (char[]) actionParam.get(PASSWD_CURRENT),
+        typedPasswd)) {
+      context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
+          context)
+          .getTranslation("password.change.success", getLocale(context)));
+      return true;
+    }
+    return false;
   }
 
   /**

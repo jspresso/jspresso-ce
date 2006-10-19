@@ -121,6 +121,7 @@
     <property name="okAction">
       <bean parent="okDialogFrontAction">
         <property name="wrappedAction" ref="changePasswordBackAction" />
+        <property name="nextAction" ref="infoFrontAction" />
       </bean>
     </property>
   </bean>

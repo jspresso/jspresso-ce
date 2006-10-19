@@ -82,17 +82,29 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
+   * Performs the necessary transformations to build a tring out of a property
+   * value.
+   * 
+   * @param value
+   *          the raw property value.
+   * @return the resulting string.
+   */
+  protected String getValueAsString(Object value) {
+    return (String) value;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
-  public void checkValueIntegrity(final Object component,
-      final Object propertyValue) {
+  public void checkValueIntegrity(final Object component, Object propertyValue) {
     super.checkValueIntegrity(component, propertyValue);
-    if (propertyValue != null && getMaxLength() != null
-        && ((String) propertyValue).length() > getMaxLength().intValue()) {
+    final String propertyValueAsString = getValueAsString(propertyValue);
+    if (propertyValueAsString != null && getMaxLength() != null
+        && propertyValueAsString.length() > getMaxLength().intValue()) {
       IntegrityException ie = new IntegrityException("[" + getName()
-          + "] value (" + propertyValue + ") is too long on [" + component
-          + "].") {
+          + "] value (" + propertyValueAsString + ") is too long on ["
+          + component + "].") {
 
         private static final long serialVersionUID = 7459823123892198831L;
 
@@ -101,16 +113,17 @@ public class BasicStringPropertyDescriptor extends
             Locale locale) {
           return translationProvider.getTranslation(
               "integrity.property.outofbounds", new Object[] {
-                  getI18nName(translationProvider, locale), propertyValue, component}, locale);
+                  getI18nName(translationProvider, locale),
+                  propertyValueAsString, component}, locale);
         }
 
       };
       throw ie;
     }
-    if (propertyValue != null && getRegexpPattern() != null
-        && !Pattern.matches(getRegexpPattern(), (String) propertyValue)) {
+    if (propertyValueAsString != null && getRegexpPattern() != null
+        && !Pattern.matches(getRegexpPattern(), propertyValueAsString)) {
       IntegrityException ie = new IntegrityException("[" + getName()
-          + "] value (" + propertyValue + ") does not match pattern ["
+          + "] value (" + propertyValueAsString + ") does not match pattern ["
           + getRegexpPattern() + "] on [" + component + "].") {
 
         private static final long serialVersionUID = 7459823123892198831L;
@@ -118,10 +131,10 @@ public class BasicStringPropertyDescriptor extends
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          return translationProvider.getTranslation(
-              "integrity.property.pattern", new Object[] {
-                  getI18nName(translationProvider, locale), propertyValue, getRegexpPattern(),
-                  component}, locale);
+          return translationProvider
+              .getTranslation("integrity.property.pattern", new Object[] {
+                  getI18nName(translationProvider, locale),
+                  propertyValueAsString, getRegexpPattern(), component}, locale);
         }
 
       };

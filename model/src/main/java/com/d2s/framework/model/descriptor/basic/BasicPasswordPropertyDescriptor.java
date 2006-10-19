@@ -24,4 +24,15 @@ public class BasicPasswordPropertyDescriptor extends
   public Class getModelType() {
     return char[].class;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getValueAsString(Object value) {
+    if (value != null) {
+      return new String((char[]) value);
+    }
+    return null;
+  }
 }

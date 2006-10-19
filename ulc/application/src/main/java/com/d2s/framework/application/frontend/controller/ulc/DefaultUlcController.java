@@ -43,6 +43,7 @@ import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
 import com.ulcjava.base.application.ULCPollingTimer;
+import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
@@ -397,14 +398,19 @@ public class DefaultUlcController extends
    */
   public void handleException(Throwable ex, Map<String, Object> context) {
     if (ex instanceof SecurityException) {
-      ULCAlert alert = new ULCAlert(controllerFrame, getTranslationProvider()
-          .getTranslation("error", getLocale()), HtmlHelper.emphasis(ex.getMessage()),
-          getTranslationProvider().getTranslation("ok", getLocale()), null,
-          null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+      ULCAlert alert = new ULCAlert(UlcUtilities
+          .windowForComponent((ULCComponent) context
+              .get(ActionContextConstants.SOURCE_COMPONENT)),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          HtmlHelper.emphasis(ex.getMessage()), getTranslationProvider()
+              .getTranslation("ok", getLocale()), null, null, getIconFactory()
+              .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
       alert.show();
     } else if (ex instanceof BusinessException) {
-      ULCAlert alert = new ULCAlert(controllerFrame, getTranslationProvider()
-          .getTranslation("error", getLocale()),
+      ULCAlert alert = new ULCAlert(UlcUtilities
+          .windowForComponent((ULCComponent) context
+              .get(ActionContextConstants.SOURCE_COMPONENT)),
+          getTranslationProvider().getTranslation("error", getLocale()),
           HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale())), getTranslationProvider()
               .getTranslation("ok", getLocale()), null, null, getIconFactory()

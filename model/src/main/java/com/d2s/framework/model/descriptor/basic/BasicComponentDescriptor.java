@@ -148,7 +148,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * {@inheritDoc}
    */
   public Class<?> getComponentContract() {
-    if (componentContract == null) {
+    if (componentContract == null && getName() != null) {
       try {
         componentContract = Class.forName(getName());
       } catch (ClassNotFoundException ex) {

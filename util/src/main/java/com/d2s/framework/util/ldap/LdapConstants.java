@@ -21,10 +21,15 @@ public final class LdapConstants {
   /**
    * <code>TOP_OBJECTCLASS</code>.
    */
-  public static final String TOP_OBJECTCLASS = "top";
+  public static final String TOP_OBJECTCLASS       = "top";
 
   /**
    * <code>PASSWORD_ATTIBUTE</code>.
    */
-  public static final String PASSWORD_ATTIBUTE      = "userPassword";
+  public static final String PASSWORD_ATTIBUTE     = "userPassword";
+
+  /**
+   * <code>DESCRIPTION_ATTRIBUTE</code>.
+   */
+  public static final String DESCRIPTION_ATTRIBUTE = "description";
 }
