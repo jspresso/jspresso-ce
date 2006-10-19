@@ -82,13 +82,13 @@
     <property name="collectionFactory" ref="entityCollectionFactory" />
     <property name="accessorFactory" ref="beanAccessorFactory" />
     <property name="entityRegistry">
-      <bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" />
+      <bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" scope="prototype" />
     </property>
     <property name="unitOfWork">
-      <bean class="com.d2s.framework.application.backend.session.basic.BasicEntityUnitOfWork" />
+      <bean class="com.d2s.framework.application.backend.session.basic.BasicEntityUnitOfWork" scope="prototype" />
     </property>
     <property name="carbonEntityCloneFactory">
-      <bean class="com.d2s.framework.model.entity.CarbonEntityCloneFactory" />
+      <bean class="com.d2s.framework.model.entity.CarbonEntityCloneFactory" scope="prototype" />
     </property>
   </bean>
 
@@ -171,7 +171,8 @@
     class="com.d2s.framework.application.backend.DefaultBackendController">
     <property name="entityFactory">
       <bean parent="basicEntityFactory"
-        class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory" />
+        class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory"
+        scope="prototype" />
     </property>
     <property name="accessorFactory" ref="beanAccessorFactory" />
     <property name="beanConnectorFactory" ref="beanConnectorFactory" />

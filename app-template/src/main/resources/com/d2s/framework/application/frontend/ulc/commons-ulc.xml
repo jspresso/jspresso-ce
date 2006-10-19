@@ -21,10 +21,10 @@
     Root action beans.
   -->
   <bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
-    class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false" />
+    class="com.d2s.framework.application.frontend.action.std.FindAction" scope="prototype" />
 
   <bean id="lovOkFrontAction" class="com.d2s.framework.application.frontend.action.ulc.lov.OkLovAction"
-    singleton="false">
+    scope="prototype">
     <property name="nextAction" ref="sourceViewConnectorSetAction" />
   </bean>
 
@@ -69,16 +69,16 @@
     This icon factory is defined as non-singleton since it implements a per ulc session cache.
   -->
   <bean id="iconFactory" parent="abstractIconFactory" class="com.d2s.framework.view.ulc.UlcIconFactory"
-    singleton="false" />
+    scope="prototype" />
 
   <bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.ulc.UlcActionFactory"
-    singleton="false" />
+    scope="prototype" />
 
   <bean id="abstractModalDialogAction" abstract="true"
     class="com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction" />
 
   <bean id="lovAction" parent="abstractLovAction"
-    class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" singleton="false" />
+    class="com.d2s.framework.application.frontend.action.ulc.lov.LovAction" scope="prototype" />
 
   <bean id="openFileAction" parent="abstractOpenFileAction"
     class="com.d2s.framework.application.frontend.action.ulc.file.OpenFileAction" />
@@ -108,13 +108,13 @@
     class="com.d2s.framework.application.frontend.action.ulc.security.ChangePasswordAction" />
 
   <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory"
-    singleton="false" />
+    scope="prototype" />
 
   <!--
     The controllers.
   -->
   <bean id="frontController" abstract="true" parent="abstractFrontController"
-    class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController" singleton="false">
+    class="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController" scope="prototype">
   </bean>
 
 </beans>

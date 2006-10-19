@@ -21,10 +21,10 @@
     Root action beans.
   -->
   <bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
-    class="com.d2s.framework.application.frontend.action.std.FindAction" singleton="false" />
+    class="com.d2s.framework.application.frontend.action.std.FindAction" scope="prototype" />
 
   <bean id="lovOkFrontAction" class="com.d2s.framework.application.frontend.action.swing.lov.OkLovAction"
-    singleton="false">
+    scope="prototype">
     <property name="nextAction" ref="sourceViewConnectorSetAction" />
   </bean>
 
@@ -62,16 +62,16 @@
     The implementation used as view factory.
   -->
   <bean id="iconFactory" parent="abstractIconFactory" class="com.d2s.framework.view.swing.SwingIconFactory"
-    singleton="false" />
+    scope="prototype" />
 
   <bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.swing.SwingActionFactory"
-    singleton="false" />
+    scope="prototype" />
 
   <bean id="abstractModalDialogAction" abstract="true"
     class="com.d2s.framework.application.frontend.action.swing.std.ModalDialogAction" />
 
   <bean id="lovAction" parent="abstractLovAction"
-    class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" singleton="false" />
+    class="com.d2s.framework.application.frontend.action.swing.lov.LovAction" scope="prototype" />
 
   <bean id="openFileAction" parent="abstractOpenFileAction"
     class="com.d2s.framework.application.frontend.action.swing.file.OpenFileAction" />
@@ -101,7 +101,7 @@
     class="com.d2s.framework.application.frontend.action.swing.security.ChangePasswordAction" />
 
   <bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory"
-    singleton="false">
+    scope="prototype">
     <!--
       <constructor-arg index="0" value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
       <constructor-arg index="0"
@@ -116,7 +116,7 @@
   </bean>
 
   <bean id="jgoodiesViewFactory" class="com.d2s.framework.view.swing.jgoodies.JGoodiesSwingViewFactory"
-    parent="viewFactory" singleton="false" />
+    parent="viewFactory" scope="prototype" />
 
   <!--
     The controllers.

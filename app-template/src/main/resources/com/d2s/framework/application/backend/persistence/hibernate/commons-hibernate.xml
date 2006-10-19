@@ -12,7 +12,7 @@
   </bean>
 
   <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"
-    singleton="false">
+    scope="prototype">
     <property name="transactionManager">
       <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory" ref="hibernateSessionFactory" />
@@ -20,7 +20,7 @@
     </property>
   </bean>
 
-  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" singleton="false">
+  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" scope="prototype">
     <property name="sessionFactory" ref="hibernateSessionFactory" />
   </bean>
 
@@ -37,7 +37,8 @@
     class="com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController">
     <property name="applicationSession">
       <bean parent="abstractApplicationSession"
-        class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession" />
+        class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession"
+        scope="prototype" />
     </property>
     <property name="hibernateTemplate" ref="hibernateTemplate" />
     <property name="transactionTemplate" ref="transactionTemplate" />
