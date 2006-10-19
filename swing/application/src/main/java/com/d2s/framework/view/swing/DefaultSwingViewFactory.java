@@ -1677,13 +1677,14 @@ public class DefaultSwingViewFactory implements
   }
 
   private IView<JComponent> createPasswordPropertyView(
-      IPasswordPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused")
+      IPasswordPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     JPasswordField viewComponent = createJPasswordField();
-    JPasswordFieldConnector connector = new JPasswordFieldConnector(propertyDescriptor
-        .getName(), viewComponent);
+    JPasswordFieldConnector connector = new JPasswordFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
 
@@ -2214,10 +2215,12 @@ public class DefaultSwingViewFactory implements
 
   private String getStringTemplateValue(Integer maxLength) {
     StringBuffer templateValue = new StringBuffer();
+    int fieldLength = maxCharacterLength;
     if (maxLength != null) {
-      for (int i = 0; i < maxLength.intValue(); i++) {
-        templateValue.append(TEMPLATE_CHAR);
-      }
+      fieldLength = maxLength.intValue();
+    }
+    for (int i = 0; i < fieldLength; i++) {
+      templateValue.append(TEMPLATE_CHAR);
     }
     return templateValue.toString();
   }
@@ -2529,7 +2532,7 @@ public class DefaultSwingViewFactory implements
     };
     table.setSurrendersFocusOnKeystroke(true);
     // There is a bug regarding editing table when drag is enabled.
-    //table.setDragEnabled(true);
+    // table.setDragEnabled(true);
     return table;
   }
 

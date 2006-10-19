@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true">
 
-<!--
-  Swing root application context for the D2S framework.
--->
-<beans default-lazy-init="true">
+  <!--
+    Swing root application context for the D2S framework.
+  -->
 
   <!--
     The implementation used as ListSelectionModelBinder.
@@ -95,6 +96,9 @@
 
   <bean id="editComponentAction" parent="abstractEditComponentAction"
     class="com.d2s.framework.application.frontend.action.swing.std.EditComponentAction" />
+
+  <bean id="changePasswordAction" parent="abstractChangePasswordAction"
+    class="com.d2s.framework.application.frontend.action.swing.security.ChangePasswordAction" />
 
   <bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory"
     singleton="false">

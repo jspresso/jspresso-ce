@@ -46,9 +46,9 @@ import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.swing.components.JErrorDialog;
-import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
+import com.d2s.framework.util.exception.BusinessException;
 import com.d2s.framework.util.html.HtmlHelper;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.WaitCursorEventQueue;
@@ -155,10 +155,14 @@ public class DefaultSwingController extends
    */
   @Override
   public boolean stop() {
-    if (controllerFrame != null) {
-      controllerFrame.dispose();
+    if (super.stop()) {
+      if (controllerFrame != null) {
+        controllerFrame.dispose();
+      }
+      System.exit(0);
+      return true;
     }
-    return true;
+    return false;
   }
 
   private void displayModule(String moduleId) {
@@ -428,18 +432,6 @@ public class DefaultSwingController extends
   @Override
   protected final void executeFrontend(final IAction action,
       final Map<String, Object> context) {
-    // return (Map<String, Object>) SwingUtil.performLongOperation(new Job() {
-    //
-    // /**
-    // * Decorates the super implementation with the foxtrot job.
-    // * <p>
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public Object run() {
-    // return protectedExecuteFrontend(action);
-    // }
-    // });
     protectedExecuteFrontend(action, context);
   }
 
@@ -492,12 +484,12 @@ public class DefaultSwingController extends
   public void handleException(Throwable ex, Map<String, Object> context) {
     if (ex instanceof SecurityException) {
       JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
-          HtmlHelper.emphasis(ex.getMessage()), getTranslationProvider().getTranslation(
-              "error", getLocale()), JOptionPane.ERROR_MESSAGE,
+          HtmlHelper.emphasis(ex.getMessage()), getTranslationProvider()
+              .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
-    } else if (ex instanceof IntegrityException) {
+    } else if (ex instanceof BusinessException) {
       JOptionPane.showInternalMessageDialog(controllerFrame.getContentPane(),
-          HtmlHelper.emphasis(((IntegrityException) ex).getI18nMessage(
+          HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale())), getTranslationProvider()
               .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));

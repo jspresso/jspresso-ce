@@ -1,509 +1,510 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.design2see</groupId>
-	<artifactId>d2s-framework</artifactId>
-	<packaging>pom</packaging>
-	<version>1.0</version>
-	<name>Design2See Application Framework</name>
-	<organization>
-		<name>Design2See</name>
-		<url>http://www.design2see.com</url>
-	</organization>
-	<inceptionYear>2005</inceptionYear>
-	<scm>
-		<connection>scm:svn:http://saturne/svnrep:design2see/framework/trunk</connection>
-	</scm>
-	<mailingLists>
-		<mailingList>
-			<name>${pom.name} Dev List</name>
-			<subscribe>dev-subscribe@design2see.com</subscribe>
-			<unsubscribe>dev-unsubscribe@design2see.com</unsubscribe>
-		</mailingList>
-		<mailingList>
-			<name>${pom.name} User List</name>
-			<subscribe>users-subscribe@design2see.com</subscribe>
-			<unsubscribe>users-unsubscribe@design2see.com</unsubscribe>
-		</mailingList>
-	</mailingLists>
-	<developers>
-		<developer>
-			<name>Vincent Vandenschrick</name>
-			<id>vvandens</id>
-			<email>vandenschrick.v@free.fr</email>
-			<organization>Design 2 See</organization>
-		</developer>
-	</developers>
-	<modules>
-		<module>aop</module>
-		<module>application</module>
-		<module>binding</module>
-		<module>action</module>
-		<module>model</module>
-		<module>tools</module>
-		<module>util</module>
-		<module>security</module>
-		<module>view</module>
-		<module>hibernate</module>
-		<module>swing</module>
-		<module>ulc</module>
-		<module>jasper</module>
-		<module>app-launch</module>
-		<module>app-template</module>
-	</modules>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-aop</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-application</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-binding</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-action</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-model</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-tools</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-util</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-security</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-view</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-hibernate</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-swing</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-swing-application</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-swing-components</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-ulc</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-ulc-application</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-ulc-components</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-ulc-components-server</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-ulc-components-shared</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-ulc-components-client</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-app-template</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-jasper</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.design2see</groupId>
-				<artifactId>d2s-app-launch</artifactId>
-				<version>${pom.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging</artifactId>
-				<version>1.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>1.2.8</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>2.1</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate</artifactId>
-				<version>3.1.3</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-beanutils</groupId>
-				<artifactId>commons-beanutils</artifactId>
-				<version>1.7.0</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring</artifactId>
-				<version>1.2.6</version>
-			</dependency>
-			<dependency>
-				<groupId>aspectwerkz</groupId>
-				<artifactId>aspectwerkz-core</artifactId>
-				<version>2.0</version>
-			</dependency>
-			<dependency>
-				<groupId>aspectwerkz</groupId>
-				<artifactId>aspectwerkz</artifactId>
-				<version>2.0</version>
-			</dependency>
-			<dependency>
-				<groupId>aspectwerkz</groupId>
-				<artifactId>aspectwerkz-jdk5</artifactId>
-				<version>2.0</version>
-			</dependency>
-			<dependency>
-				<groupId>joda-time</groupId>
-				<artifactId>joda-time</artifactId>
-				<version>1.0</version>
-			</dependency>
-			<dependency>
-				<groupId>bsf</groupId>
-				<artifactId>bsf</artifactId>
-				<version>2.3.0</version>
-			</dependency>
-			<dependency>
-				<groupId>jython</groupId>
-				<artifactId>jython</artifactId>
-				<version>2.1</version>
-			</dependency>
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.design2see</groupId>
+  <artifactId>d2s-framework</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0</version>
+  <name>Design2See Application Framework</name>
+  <organization>
+    <name>Design2See</name>
+    <url>http://www.design2see.com</url>
+  </organization>
+  <inceptionYear>2005</inceptionYear>
+  <scm>
+    <connection>scm:svn:http://saturne/svnrep:design2see/framework/trunk</connection>
+  </scm>
+  <mailingLists>
+    <mailingList>
+      <name>${pom.name} Dev List</name>
+      <subscribe>dev-subscribe@design2see.com</subscribe>
+      <unsubscribe>dev-unsubscribe@design2see.com</unsubscribe>
+    </mailingList>
+    <mailingList>
+      <name>${pom.name} User List</name>
+      <subscribe>users-subscribe@design2see.com</subscribe>
+      <unsubscribe>users-unsubscribe@design2see.com</unsubscribe>
+    </mailingList>
+  </mailingLists>
+  <developers>
+    <developer>
+      <name>Vincent Vandenschrick</name>
+      <id>vvandens</id>
+      <email>vandenschrick.v@free.fr</email>
+      <organization>Design 2 See</organization>
+    </developer>
+  </developers>
+  <modules>
+    <module>aop</module>
+    <module>application</module>
+    <module>binding</module>
+    <module>action</module>
+    <module>model</module>
+    <module>tools</module>
+    <module>util</module>
+    <module>security</module>
+    <module>view</module>
+    <module>hibernate</module>
+    <module>swing</module>
+    <module>ulc</module>
+    <module>jasper</module>
+    <module>app-launch</module>
+    <module>app-template</module>
+  </modules>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-aop</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-application</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-binding</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-action</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-model</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-tools</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-util</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-security</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-view</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-hibernate</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-swing</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-swing-application</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-swing-components</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-ulc</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-ulc-application</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-ulc-components</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-ulc-components-server</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-ulc-components-shared</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-ulc-components-client</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-app-template</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-jasper</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.design2see</groupId>
+        <artifactId>d2s-app-launch</artifactId>
+        <version>${pom.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.8</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate</artifactId>
+        <version>3.1.3</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-beanutils</groupId>
+        <artifactId>commons-beanutils</artifactId>
+        <version>1.7.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring</artifactId>
+        <version>2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-ldap</artifactId>
+        <version>1.1</version>
+      </dependency>
+      <dependency>
+        <groupId>aspectwerkz</groupId>
+        <artifactId>aspectwerkz-core</artifactId>
+        <version>2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>aspectwerkz</groupId>
+        <artifactId>aspectwerkz</artifactId>
+        <version>2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>aspectwerkz</groupId>
+        <artifactId>aspectwerkz-jdk5</artifactId>
+        <version>2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>joda-time</groupId>
+        <artifactId>joda-time</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>bsf</groupId>
+        <artifactId>bsf</artifactId>
+        <version>2.3.0</version>
+      </dependency>
+      <dependency>
+        <groupId>jython</groupId>
+        <artifactId>jython</artifactId>
+        <version>2.1</version>
+      </dependency>
       <dependency>
         <groupId>org.beanshell</groupId>
         <artifactId>bsh</artifactId>
         <version>2.0b4</version>
       </dependency>
-			<dependency>
-				<groupId>foxtrot</groupId>
-				<artifactId>foxtrot</artifactId>
-				<version>2.0</version>
-			</dependency>
-			<dependency>
-				<groupId>jgoodies</groupId>
-				<artifactId>looks</artifactId>
-				<version>1.3.2</version>
-			</dependency>
-			<dependency>
-				<groupId>nachocalendar</groupId>
-				<artifactId>nachocalendar</artifactId>
-				<version>0.22</version>
-			</dependency>
-			<dependency>
-				<groupId>jedit</groupId>
-				<artifactId>jedit-syntax</artifactId>
-				<version>1.0</version>
-			</dependency>
-			<dependency>
-				<groupId>jgoodies</groupId>
-				<artifactId>uif_lite</artifactId>
-				<version>1.3.2</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-cli</groupId>
-				<artifactId>commons-cli</artifactId>
-				<version>1.0</version>
-			</dependency>
-			<dependency>
-				<groupId>commons-collections</groupId>
-				<artifactId>commons-collections</artifactId>
-				<version>3.1</version>
-			</dependency>
-			<dependency>
-				<groupId>freemarker</groupId>
-				<artifactId>freemarker</artifactId>
-				<version>2.3.3</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
-				<artifactId>ulc-base-development</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>jboss</groupId>
-				<artifactId>jbosssx</artifactId>
-				<version>4.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>jboss</groupId>
-				<artifactId>jboss-common</artifactId>
-				<version>4.0.2</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
-				<artifactId>ulc-base-client</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
-				<artifactId>ulc-base-server</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
-				<artifactId>ulc-jnlp-client</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
-				<artifactId>ulc-servlet-server</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
-				<artifactId>ulc-servlet-client</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
-				<artifactId>ulc-base-trusted</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>ulc</groupId>
-				<artifactId>ulc-deployment-key</artifactId>
-				<version>6.0.4</version>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>3.8.1</version>
-			</dependency>
-			<dependency>
-				<groupId>jasperreports</groupId>
-				<artifactId>jasperreports</artifactId>
-				<version>1.2.6</version>
-			</dependency>
-			<dependency>
-				<groupId>jfree</groupId>
-				<artifactId>jfreechart</artifactId>
-				<version>1.0.1</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
-				<version>2.4</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-	<build>
-		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-		<testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
-		<outputDirectory>${basedir}/target/classes</outputDirectory>
-		<testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
-		<resources>
-			<resource>
-				<directory>${basedir}/src/main/resources</directory>
-				<filtering>false</filtering>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>${basedir}/src/test/resources</directory>
-				<filtering>false</filtering>
-			</testResource>
-		</testResources>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>**/*Test.java</include>
-						<include>**/*Tests.java</include>
-					</includes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<linksource>false</linksource>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>javadoc</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>obfuscate</id>
-						<phase>package</phase>
-						<configuration>
-							<tasks>
-								<taskdef resource="proguard/ant/task.properties" />
-								<taskdef resource="net/sf/antcontrib/antlib.xml" />
-								<if>
-									<equals arg1="${project.packaging}" arg2="jar" />
-									<then>
-										<proguard note="false" verbose="false" renamesourcefileattribute="SourceFile">
-											<injar file="${project.artifact.file}" />
-											<outjar
-												file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}" />
-											<libraryjar file="${java.home}/lib/rt.jar" />
-											<libraryjar refid="maven.dependency.classpath" />
+      <dependency>
+        <groupId>foxtrot</groupId>
+        <artifactId>foxtrot</artifactId>
+        <version>2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>jgoodies</groupId>
+        <artifactId>looks</artifactId>
+        <version>1.3.2</version>
+      </dependency>
+      <dependency>
+        <groupId>nachocalendar</groupId>
+        <artifactId>nachocalendar</artifactId>
+        <version>0.22</version>
+      </dependency>
+      <dependency>
+        <groupId>jedit</groupId>
+        <artifactId>jedit-syntax</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>jgoodies</groupId>
+        <artifactId>uif_lite</artifactId>
+        <version>1.3.2</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>1.0</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-collections</groupId>
+        <artifactId>commons-collections</artifactId>
+        <version>3.1</version>
+      </dependency>
+      <dependency>
+        <groupId>freemarker</groupId>
+        <artifactId>freemarker</artifactId>
+        <version>2.3.3</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-base-development</artifactId>
+        <version>6.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>jboss</groupId>
+        <artifactId>jbosssx</artifactId>
+        <version>4.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>jboss</groupId>
+        <artifactId>jboss-common</artifactId>
+        <version>4.0.2</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-base-client</artifactId>
+        <version>6.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-base-server</artifactId>
+        <version>6.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-jnlp-client</artifactId>
+        <version>6.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-servlet-server</artifactId>
+        <version>6.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-servlet-client</artifactId>
+        <version>6.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-base-trusted</artifactId>
+        <version>6.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-deployment-key</artifactId>
+        <version>6.0.4</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>3.8.1</version>
+      </dependency>
+      <dependency>
+        <groupId>jasperreports</groupId>
+        <artifactId>jasperreports</artifactId>
+        <version>1.2.6</version>
+      </dependency>
+      <dependency>
+        <groupId>jfree</groupId>
+        <artifactId>jfreechart</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>servlet-api</artifactId>
+        <version>2.4</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+  <build>
+    <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
+    <outputDirectory>${basedir}/target/classes</outputDirectory>
+    <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/resources</directory>
+        <filtering>false</filtering>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>${basedir}/src/test/resources</directory>
+        <filtering>false</filtering>
+      </testResource>
+    </testResources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <includes>
+            <include>**/*Test.java</include>
+            <include>**/*Tests.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.5</source>
+          <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <linksource>false</linksource>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>obfuscate</id>
+            <phase>package</phase>
+            <configuration>
+              <tasks>
+                <taskdef resource="proguard/ant/task.properties" />
+                <taskdef resource="net/sf/antcontrib/antlib.xml" />
+                <if>
+                  <equals arg1="${project.packaging}" arg2="jar" />
+                  <then>
+                    <proguard note="false" verbose="false" renamesourcefileattribute="SourceFile">
+                      <injar file="${project.artifact.file}" />
+                      <outjar
+                        file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}" />
+                      <libraryjar file="${java.home}/lib/rt.jar" />
+                      <libraryjar refid="maven.dependency.classpath" />
 
-											<!-- Keep some useful attributes. -->
+                      <!-- Keep some useful attributes. -->
 
-											<keepattribute name="InnerClasses" />
-											<keepattribute name="SourceFile" />
-											<keepattribute name="LineNumberTable" />
-											<keepattribute name="Deprecated" />
-											<keepattribute name="Signature" />
-											<keepattribute name="*Annotation*" />
-											<keepattribute name="EnclosingMethod" />
+                      <keepattribute name="InnerClasses" />
+                      <keepattribute name="SourceFile" />
+                      <keepattribute name="LineNumberTable" />
+                      <keepattribute name="Deprecated" />
+                      <keepattribute name="Signature" />
+                      <keepattribute name="*Annotation*" />
+                      <keepattribute name="EnclosingMethod" />
 
-											<!-- Preserve all public classes, and their public and protected fields
-												and methods. -->
+                      <!-- Preserve all public classes, and their public and protected fields
+                        and methods. -->
 
-											<keep access="public">
-												<field access="public protected" />
-												<method access="public protected" />
-											</keep>
+                      <keep access="public">
+                        <field access="public protected" />
+                        <method access="public protected" />
+                      </keep>
 
-											<!-- Preserve all .class method names. -->
+                      <!-- Preserve all .class method names. -->
 
-											<keepclassmembernames access="public">
-												<method type="java.lang.Class" name="class$"
-													parameters="java.lang.String" />
-												<method type="java.lang.Class" name="class$"
-													parameters="java.lang.String,boolean" />
-											</keepclassmembernames>
+                      <keepclassmembernames access="public">
+                        <method type="java.lang.Class" name="class$" parameters="java.lang.String" />
+                        <method type="java.lang.Class" name="class$" parameters="java.lang.String,boolean" />
+                      </keepclassmembernames>
 
-											<!-- Preserve all native method names and the names of their classes. -->
+                      <!-- Preserve all native method names and the names of their classes. -->
 
-											<keepclasseswithmembernames>
-												<method access="native" />
-											</keepclasseswithmembernames>
+                      <keepclasseswithmembernames>
+                        <method access="native" />
+                      </keepclasseswithmembernames>
 
-											<!-- Preserve a method that is required in all enumeration classes. -->
+                      <!-- Preserve a method that is required in all enumeration classes. -->
 
-											<keepclassmembers extends="java.lang.Enum">
-												<method access="public" type="**[]" name="values" parameters="" />
-											</keepclassmembers>
+                      <keepclassmembers extends="java.lang.Enum">
+                        <method access="public" type="**[]" name="values" parameters="" />
+                      </keepclassmembers>
 
-											<!-- Explicitly preserve all serialization members. The Serializable
-												interface is only a marker interface, so it wouldn't save them.
-												You can comment this out if your library doesn't use serialization.
-												If your code contains serializable classes that have to be backward
-												compatible, please refer to the manual. -->
+                      <!-- Explicitly preserve all serialization members. The Serializable
+                        interface is only a marker interface, so it wouldn't save them.
+                        You can comment this out if your library doesn't use serialization.
+                        If your code contains serializable classes that have to be backward
+                        compatible, please refer to the manual. -->
 
-											<keepclassmembers implements="java.io.Serializable">
-												<field access="static final" type="long" name="serialVersionUID" />
-												<method access="private" type="void" name="writeObject"
-													parameters="java.io.ObjectOutputStream" />
-												<method access="private" type="void" name="readObject"
-													parameters="java.io.ObjectOutputStream" />
-												<method type="java.lang.Object" name="writeReplace" parameters="" />
-												<method type="java.lang.Object" name="readResolve" parameters="" />
-											</keepclassmembers>
+                      <keepclassmembers implements="java.io.Serializable">
+                        <field access="static final" type="long" name="serialVersionUID" />
+                        <method access="private" type="void" name="writeObject" parameters="java.io.ObjectOutputStream" />
+                        <method access="private" type="void" name="readObject" parameters="java.io.ObjectOutputStream" />
+                        <method type="java.lang.Object" name="writeReplace" parameters="" />
+                        <method type="java.lang.Object" name="readResolve" parameters="" />
+                      </keepclassmembers>
 
-											<!-- Your application may contain more items that need to be preserved;
-												typically classes that are dynamically created using Class.forName -->
-										</proguard>
-										<move
-											file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}"
-											tofile="${project.artifact.file}" />
-									</then>
-								</if>
-							</tasks>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>net.sf.proguard</groupId>
-						<artifactId>proguard</artifactId>
-						<version>3.5</version>
-					</dependency>
-					<dependency>
-						<groupId>ant-contrib</groupId>
-						<artifactId>ant-contrib</artifactId>
-						<version>1.0b2</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</reporting>
+                      <!-- Your application may contain more items that need to be preserved;
+                        typically classes that are dynamically created using Class.forName -->
+                    </proguard>
+                    <move
+                      file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}"
+                      tofile="${project.artifact.file}" />
+                  </then>
+                </if>
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.proguard</groupId>
+            <artifactId>proguard</artifactId>
+            <version>3.5</version>
+          </dependency>
+          <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b2</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting>
 </project>

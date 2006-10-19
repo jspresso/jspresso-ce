@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true">
 
-<!--
-  ULC root application context for the D2S framework.
--->
-<beans default-lazy-init="true">
+  <!--
+    ULC root application context for the D2S framework.
+  -->
 
   <!--
     The implementation used as ListSelectionModelBinder.
@@ -43,7 +44,7 @@
 
   <bean id="cancelDialogFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.CancelAction" />
 
-  <bean id="okDialogFrontAction" class="com.d2s.framework.application.frontend.action.swing.std.OkAction" />
+  <bean id="okDialogFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.OkAction" />
 
   <!-- 
     Action beans
@@ -102,6 +103,9 @@
 
   <bean id="editComponentAction" parent="abstractEditComponentAction"
     class="com.d2s.framework.application.frontend.action.ulc.std.EditComponentAction" />
+
+  <bean id="changePasswordAction" parent="abstractChangePasswordAction"
+    class="com.d2s.framework.application.frontend.action.ulc.security.ChangePasswordAction" />
 
   <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory"
     singleton="false" />

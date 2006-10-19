@@ -32,6 +32,7 @@ public class WaitCursorTimer extends Thread {
    *          cursor.
    */
   public WaitCursorTimer(int delay) {
+    super("WaitCursorTimer");
     this.delay = delay;
   }
 

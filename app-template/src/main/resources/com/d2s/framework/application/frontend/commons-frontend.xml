@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true">
 
-<!--
-  Test view description context.
--->
-<beans default-lazy-init="true">
+  <!--
+    Test view description context.
+  -->
+
   <!--
     View factories
   -->
@@ -110,6 +112,17 @@
   <bean id="abstractEditComponentAction" abstract="true">
     <property name="modelConnectorFactory" ref="beanConnectorFactory" />
     <property name="cancelAction" ref="cancelDialogFrontAction" />
+  </bean>
+
+  <bean id="abstractChangePasswordAction" abstract="true" parent="abstractEditComponentAction">
+    <property name="name" value="password.change" />
+    <property name="iconImageURL" value="classpath:images/password-48x48.png" />
+    <property name="modelConnectorFactory" ref="mapConnectorFactory" />
+    <property name="okAction">
+      <bean parent="okDialogFrontAction">
+        <property name="wrappedAction" ref="changePasswordBackAction" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="connectorSelectionFrontAction"

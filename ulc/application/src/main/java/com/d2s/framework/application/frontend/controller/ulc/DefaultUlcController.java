@@ -21,10 +21,10 @@ import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.ulc.components.server.ULCErrorDialog;
-import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.ulc.DialogCallbackHandler;
 import com.d2s.framework.security.ulc.ICallbackHandlerListener;
+import com.d2s.framework.util.exception.BusinessException;
 import com.d2s.framework.util.html.HtmlHelper;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
@@ -402,10 +402,10 @@ public class DefaultUlcController extends
           getTranslationProvider().getTranslation("ok", getLocale()), null,
           null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
       alert.show();
-    } else if (ex instanceof IntegrityException) {
+    } else if (ex instanceof BusinessException) {
       ULCAlert alert = new ULCAlert(controllerFrame, getTranslationProvider()
           .getTranslation("error", getLocale()),
-          HtmlHelper.emphasis(((IntegrityException) ex).getI18nMessage(
+          HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale())), getTranslationProvider()
               .getTranslation("ok", getLocale()), null, null, getIconFactory()
               .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));

@@ -1649,6 +1649,7 @@ public class DefaultUlcViewFactory implements
     ULCPasswordFieldConnector connector = new ULCPasswordFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
 
@@ -2210,10 +2211,12 @@ public class DefaultUlcViewFactory implements
 
   private String getStringTemplateValue(Integer maxLength) {
     StringBuffer templateValue = new StringBuffer();
+    int fieldLength = maxCharacterLength;
     if (maxLength != null) {
-      for (int i = 0; i < maxLength.intValue(); i++) {
-        templateValue.append(TEMPLATE_CHAR);
-      }
+      fieldLength = maxLength.intValue();
+    }
+    for (int i = 0; i < fieldLength; i++) {
+      templateValue.append(TEMPLATE_CHAR);
     }
     return templateValue.toString();
   }
