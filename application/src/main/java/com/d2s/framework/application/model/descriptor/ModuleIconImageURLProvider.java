@@ -14,7 +14,7 @@ import com.d2s.framework.util.IIconImageURLProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,7 +27,8 @@ public class ModuleIconImageURLProvider implements IIconImageURLProvider {
    */
   public String getIconImageURLForObject(Object userObject) {
     if (delegateProvider != null && userObject instanceof BeanModule
-        && ((BeanModule) userObject).getModuleObject() != null) {
+        && ((BeanModule) userObject).getModuleObject() != null
+        && ((BeanModule) userObject).getIconImageURL() == null) {
       return delegateProvider
           .getIconImageURLForObject(((BeanModule) userObject).getModuleObject());
     } else if (userObject instanceof SubModule) {
@@ -40,7 +41,7 @@ public class ModuleIconImageURLProvider implements IIconImageURLProvider {
 
   /**
    * Sets the delegateProvider.
-   * 
+   *
    * @param delegateProvider
    *          the delegateProvider to set.
    */
