@@ -6,7 +6,6 @@ package com.d2s.framework.application.backend;
 import java.util.Locale;
 
 import com.d2s.framework.application.IController;
-import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
@@ -20,7 +19,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,7 +29,7 @@ public interface IBackendController extends IController {
    * Asks this backend controller to perform any necessary action upon startup.
    * One of this action should be to construct the root connector based on the
    * root model descriptor.
-   * 
+   *
    * @param locale
    *          the locale this backend controller should start with.
    * @return true if the controller successfully started.
@@ -40,7 +39,7 @@ public interface IBackendController extends IController {
   /**
    * Given a module identifier, this method returns the composite connector used
    * as model connector for the associated module.
-   * 
+   *
    * @param moduleId
    *          the modulen identifier.
    * @return the associated module connector.
@@ -51,7 +50,7 @@ public interface IBackendController extends IController {
    * Creates a model connector out of a model descriptor. It should be either a
    * bean connector or a bean collection connector depending on the type of
    * model descriptor.
-   * 
+   *
    * @param modelDescriptor
    *          the model descriptor to create the connector for.
    * @return the created model connector.
@@ -59,29 +58,22 @@ public interface IBackendController extends IController {
   IValueConnector createModelConnector(IModelDescriptor modelDescriptor);
 
   /**
-   * Gets the applicationSession for this backend controller.
-   * 
-   * @return the current controller application session.
-   */
-  IApplicationSession getApplicationSession();
-
-  /**
    * Gets the entityFactory for this backend controller.
-   * 
+   *
    * @return the entityFactory for this backend controller.
    */
   IEntityFactory getEntityFactory();
 
   /**
-   * Gets the accessorFactory for this backend controller.
-   * 
-   * @return the accessorFactory for this backend controller.
+   * Gets the beanAccessorFactory for this backend controller.
+   *
+   * @return the beanAccessorFactory for this backend controller.
    */
-  IAccessorFactory getAccessorFactory();
+  IAccessorFactory getBeanAccessorFactory();
 
   /**
    * Gets the beanConnectorFactory for this backend controller.
-   * 
+   *
    * @return the beanConnectorFactory for this backend controller.
    */
   IModelConnectorFactory getBeanConnectorFactory();
@@ -90,4 +82,13 @@ public interface IBackendController extends IController {
    * Translate modules based on the locale set.
    */
   void translateModules();
+
+  /**
+   * Checks authorization for module access. It shoud throw a SecurityException
+   * whenever access should not be granted.
+   *
+   * @param moduleId
+   *          the id of the module access to check.
+   */
+  void checkModuleAccess(String moduleId);
 }

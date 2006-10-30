@@ -78,6 +78,7 @@ import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
+import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
@@ -167,7 +168,7 @@ import com.ulcjava.base.shared.IDefaults;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -236,63 +237,69 @@ public class DefaultUlcViewFactory implements
       view = createTreeView((ITreeViewDescriptor) viewDescriptor,
           actionHandler, locale);
     }
-    if (viewDescriptor.getForeground() != null) {
-      view.getPeer().setForeground(
-          createUlcColor(viewDescriptor.getForeground()));
-    }
-    if (viewDescriptor.getBackground() != null) {
-      view.getPeer().setBackground(
-          createUlcColor(viewDescriptor.getBackground()));
-    }
-    if (viewDescriptor.getFont() != null) {
-      view.getPeer().setFont(createUlcFont(viewDescriptor.getFont()));
-    }
-    if (viewDescriptor.isReadOnly()) {
-      view.getConnector().setLocallyWritable(false);
-    }
-    if (viewDescriptor.getActions() != null) {
-      ULCToolBar toolBar = createULCToolBar();
-      for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-          .getActions().entrySet().iterator(); iter.hasNext();) {
-        Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
-        for (IDisplayableAction action : nextActionSet.getValue()) {
-          IAction ulcAction = actionFactory.createAction(action, actionHandler,
-              view, locale);
-          ULCButton actionButton = createULCButton();
-          actionButton.setAction(ulcAction);
-
-          if (action.getAcceleratorAsString() != null) {
-            KeyStroke ks = KeyStroke.getKeyStroke(action
-                .getAcceleratorAsString());
-            view.getPeer().registerKeyboardAction(ulcAction, ks,
-                ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-            String acceleratorString = java.awt.event.KeyEvent
-                .getKeyModifiersText(ks.getModifiers())
-                + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
-            actionButton.setToolTipText("<HTML>"
-                + actionButton.getToolTipText()
-                + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                + "</FONT></HTML>");
-          }
-
-          actionButton.setText("");
-          toolBar.add(actionButton);
-        }
-        if (iter.hasNext()) {
-          toolBar.addSeparator();
-        }
+    try {
+      actionHandler.checkAccess(viewDescriptor);
+      if (viewDescriptor.getForeground() != null) {
+        view.getPeer().setForeground(
+            createUlcColor(viewDescriptor.getForeground()));
       }
+      if (viewDescriptor.getBackground() != null) {
+        view.getPeer().setBackground(
+            createUlcColor(viewDescriptor.getBackground()));
+      }
+      if (viewDescriptor.getFont() != null) {
+        view.getPeer().setFont(createUlcFont(viewDescriptor.getFont()));
+      }
+      if (viewDescriptor.isReadOnly()) {
+        view.getConnector().setLocallyWritable(false);
+      }
+      if (viewDescriptor.getActions() != null) {
+        ULCToolBar toolBar = createULCToolBar();
+        for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
+            .getActions().entrySet().iterator(); iter.hasNext();) {
+          Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
+              .next();
+          for (IDisplayableAction action : nextActionSet.getValue()) {
+            IAction ulcAction = actionFactory.createAction(action,
+                actionHandler, view, locale);
+            ULCButton actionButton = createULCButton();
+            actionButton.setAction(ulcAction);
 
-      ULCBorderLayoutPane viewPanel = createBorderLayoutPane();
-      viewPanel.add(toolBar, ULCBorderLayoutPane.NORTH);
-      viewPanel.add(view.getPeer(), ULCBorderLayoutPane.CENTER);
-      view.setPeer(viewPanel);
-    }
-    decorateWithBorder(view, locale);
-    if (viewDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
-          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-              + TOOLTIP_ELLIPSIS);
+            if (action.getAcceleratorAsString() != null) {
+              KeyStroke ks = KeyStroke.getKeyStroke(action
+                  .getAcceleratorAsString());
+              view.getPeer().registerKeyboardAction(ulcAction, ks,
+                  ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+              String acceleratorString = java.awt.event.KeyEvent
+                  .getKeyModifiersText(ks.getModifiers())
+                  + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
+              actionButton.setToolTipText("<HTML>"
+                  + actionButton.getToolTipText()
+                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                  + "</FONT></HTML>");
+            }
+
+            actionButton.setText("");
+            toolBar.add(actionButton);
+          }
+          if (iter.hasNext()) {
+            toolBar.addSeparator();
+          }
+        }
+
+        ULCBorderLayoutPane viewPanel = createBorderLayoutPane();
+        viewPanel.add(toolBar, ULCBorderLayoutPane.NORTH);
+        viewPanel.add(view.getPeer(), ULCBorderLayoutPane.CENTER);
+        view.setPeer(viewPanel);
+      }
+      decorateWithBorder(view, locale);
+      if (viewDescriptor.getDescription() != null) {
+        view.getPeer().setToolTipText(
+            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+                + TOOLTIP_ELLIPSIS);
+      }
+    } catch (Throwable ex) {
+      view.setPeer(createSecurityPanel());
     }
     return view;
   }
@@ -308,7 +315,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Decorates the created view with the apropriate border.
-   * 
+   *
    * @param view
    *          the view to descorate.
    * @param locale
@@ -440,6 +447,7 @@ public class DefaultUlcViewFactory implements
 
     viewComponent.add(createBorderLayoutPane(),
         ICardViewDescriptor.DEFAULT_CARD);
+    viewComponent.add(createSecurityPanel(), ICardViewDescriptor.SECURITY_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
         .getCardViewDescriptors().entrySet()) {
@@ -449,12 +457,12 @@ public class DefaultUlcViewFactory implements
       childrenViews.put(childViewDescriptor.getKey(), childView);
     }
     view.setChildren(childrenViews);
-    view.setConnector(createCardViewConnector(view));
+    view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
   }
 
   private IValueConnector createCardViewConnector(
-      final IMapView<ULCComponent> cardView) {
+      final IMapView<ULCComponent> cardView, final IActionHandler actionHandler) {
     IValueConnector cardViewConnector = connectorFactory
         .createValueConnector(cardView.getDescriptor().getName());
     cardViewConnector
@@ -462,47 +470,60 @@ public class DefaultUlcViewFactory implements
 
           public void connectorValueChange(ConnectorValueChangeEvent evt) {
             Object cardModel = evt.getNewValue();
-            String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
-                .getCardNameForModel(cardModel);
+            boolean accessGranted = true;
+            if (cardModel instanceof ISecurable) {
+              try {
+                actionHandler.checkAccess((ISecurable) cardModel);
+              } catch (SecurityException se) {
+                accessGranted = false;
+              }
+            }
             ULCCardPane cardPanel = (ULCCardPane) cardView.getPeer();
-            if (cardName != null) {
-              IView<ULCComponent> childCardView = cardView.getChild(cardName);
-              if (childCardView != null) {
-                cardPanel.setSelectedName(cardName);
-                IValueConnector childCardConnector = childCardView
-                    .getConnector();
-                if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
-                  if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                    if (cardModel != null
-                        && cardModel instanceof BeanCollectionModule) {
-                      childCardConnector.getModelConnector()
-                          .setConnectorValue(
-                              ((BeanCollectionModule) cardModel)
-                                  .getModuleObjects());
+            if (accessGranted) {
+              String cardName = ((ICardViewDescriptor) cardView.getDescriptor())
+                  .getCardNameForModel(cardModel);
+              if (cardName != null) {
+                IView<ULCComponent> childCardView = cardView.getChild(cardName);
+                if (childCardView != null) {
+                  cardPanel.setSelectedName(cardName);
+                  IValueConnector childCardConnector = childCardView
+                      .getConnector();
+                  if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
+                    if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
+                      if (cardModel != null
+                          && cardModel instanceof BeanCollectionModule) {
+                        childCardConnector.getModelConnector()
+                            .setConnectorValue(
+                                ((BeanCollectionModule) cardModel)
+                                    .getModuleObjects());
+                      } else {
+                        childCardConnector.getModelConnector()
+                            .setConnectorValue(cardModel);
+                      }
                     } else {
-                      childCardConnector.getModelConnector().setConnectorValue(
-                          cardModel);
+                      if (cardModel != null && cardModel instanceof BeanModule) {
+                        childCardConnector.getModelConnector()
+                            .setConnectorValue(
+                                ((BeanModule) cardModel).getModuleObject());
+                      } else {
+                        childCardConnector.getModelConnector()
+                            .setConnectorValue(cardModel);
+                      }
                     }
                   } else {
-                    if (cardModel != null && cardModel instanceof BeanModule) {
-                      childCardConnector.getModelConnector().setConnectorValue(
-                          ((BeanModule) cardModel).getModuleObject());
-                    } else {
-                      childCardConnector.getModelConnector().setConnectorValue(
-                          cardModel);
+                    if (childCardConnector != null) {
+                      mvcBinder.bind(childCardConnector, cardView
+                          .getConnector().getModelConnector());
                     }
                   }
                 } else {
-                  if (childCardConnector != null) {
-                    mvcBinder.bind(childCardConnector, cardView.getConnector()
-                        .getModelConnector());
-                  }
+                  cardPanel.setSelectedName(ICardViewDescriptor.DEFAULT_CARD);
                 }
               } else {
                 cardPanel.setSelectedName(ICardViewDescriptor.DEFAULT_CARD);
               }
             } else {
-              cardPanel.setSelectedName(ICardViewDescriptor.DEFAULT_CARD);
+              cardPanel.setSelectedName(ICardViewDescriptor.SECURITY_CARD);
             }
           }
         });
@@ -828,7 +849,7 @@ public class DefaultUlcViewFactory implements
 
     /**
      * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
-     * 
+     *
      * @param viewDescriptor
      *          the tree view descriptor used by the tree view.
      * @param locale
@@ -1267,7 +1288,7 @@ public class DefaultUlcViewFactory implements
     /**
      * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
      * instance.
-     * 
+     *
      * @param column
      *          the column this renderer is attached to.
      * @param propertyDescriptor
@@ -1881,7 +1902,7 @@ public class DefaultUlcViewFactory implements
     /**
      * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
      * instance.
-     * 
+     *
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -2066,7 +2087,7 @@ public class DefaultUlcViewFactory implements
 
     /**
      * Constructs a new <code>TreeNodePopupFactory</code> instance.
-     * 
+     *
      * @param tree
      * @param view
      * @param actionHandler
@@ -2366,7 +2387,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a text field.
-   * 
+   *
    * @return the created text field.
    */
   protected ULCTextField createULCTextField() {
@@ -2375,7 +2396,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a password field.
-   * 
+   *
    * @return the created password field.
    */
   protected ULCPasswordField createULCPasswordField() {
@@ -2385,7 +2406,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a text field.
-   * 
+   *
    * @return the created text field.
    */
   protected ULCTextArea createULCTextArea() {
@@ -2397,7 +2418,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a ULC JEdit text area.
-   * 
+   *
    * @param language
    *          the language to add syntax highlighting for.
    * @return the created text area.
@@ -2409,7 +2430,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates an action field.
-   * 
+   *
    * @param showTextField
    *          is the text field visible to the user.
    * @return the created action field.
@@ -2420,7 +2441,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a date field.
-   * 
+   *
    * @param formatPattern
    *          the (simple date format) pattern this date field uses.
    * @return the created date field.
@@ -2431,7 +2452,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a combo box.
-   * 
+   *
    * @return the created combo box.
    */
   protected ULCComboBox createULCComboBox() {
@@ -2440,7 +2461,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a label.
-   * 
+   *
    * @return the created label.
    */
   protected ULCLabel createULCLabel() {
@@ -2449,7 +2470,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a tool bar.
-   * 
+   *
    * @return the created tool bar.
    */
   protected ULCToolBar createULCToolBar() {
@@ -2461,7 +2482,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a tabbed pane.
-   * 
+   *
    * @return the created tabbed pane.
    */
   protected ULCTabbedPane createULCTabbedPane() {
@@ -2470,7 +2491,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a split pane.
-   * 
+   *
    * @return the created split pane.
    */
   protected ULCSplitPane createULCSplitPane() {
@@ -2482,7 +2503,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a tree.
-   * 
+   *
    * @return the created tree.
    */
   protected ULCTree createULCTree() {
@@ -2493,7 +2514,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a table tree.
-   * 
+   *
    * @return the created table tree.
    */
   protected ULCTableTree createULCTableTree() {
@@ -2504,7 +2525,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a table.
-   * 
+   *
    * @return the created table.
    */
   protected ULCTable createULCTable() {
@@ -2515,7 +2536,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a list.
-   * 
+   *
    * @return the created list.
    */
   protected ULCList createULCList() {
@@ -2526,7 +2547,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a button.
-   * 
+   *
    * @return the created button.
    */
   protected ULCButton createULCButton() {
@@ -2536,7 +2557,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a popup menu.
-   * 
+   *
    * @return the created popup menu.
    */
   protected ULCPopupMenu createULCPopupMenu() {
@@ -2545,7 +2566,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a menu item.
-   * 
+   *
    * @return the created menu item.
    */
   protected ULCMenuItem createULCMenuItem() {
@@ -2554,7 +2575,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a scroll pane.
-   * 
+   *
    * @return the created scroll pane.
    */
   protected ULCScrollPane createULCScrollPane() {
@@ -2565,7 +2586,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a check box.
-   * 
+   *
    * @return the created check box.
    */
   protected ULCCheckBox createULCCheckBox() {
@@ -2574,7 +2595,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a borderlayout pane.
-   * 
+   *
    * @return the created borderlayout pane.
    */
   protected ULCBorderLayoutPane createBorderLayoutPane() {
@@ -2583,8 +2604,23 @@ public class DefaultUlcViewFactory implements
   }
 
   /**
+   * Creates a security pane.
+   *
+   * @return the created security pane.
+   */
+  protected ULCBorderLayoutPane createSecurityPanel() {
+    ULCBorderLayoutPane panel = new ULCBorderLayoutPane();
+    ULCLabel label = createULCLabel();
+    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
+    label.setHorizontalAlignment(IDefaults.CENTER);
+    label.setVerticalAlignment(IDefaults.CENTER);
+    panel.add(label, ULCBorderLayoutPane.CENTER);
+    return panel;
+  }
+
+  /**
    * Creates a gridlayout pane.
-   * 
+   *
    * @return the created gridlayout pane.
    */
   protected ULCGridLayoutPane createGridLayoutPane() {
@@ -2594,7 +2630,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a cardlayout pane.
-   * 
+   *
    * @return the created cardlayout pane.
    */
   protected ULCCardPane createCardPane() {
@@ -2604,7 +2640,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a gridbaglayout pane.
-   * 
+   *
    * @return the created gridbaglayout pane.
    */
   protected ULCGridBagLayoutPane createGridBagLayoutPane() {
@@ -2618,7 +2654,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the connectorFactory.
-   * 
+   *
    * @param connectorFactory
    *          the connectorFactory to set.
    */
@@ -2628,7 +2664,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the mvcBinder.
-   * 
+   *
    * @param mvcBinder
    *          the mvcBinder to set.
    */
@@ -2638,7 +2674,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */
@@ -2648,7 +2684,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Gets the translationProvider.
-   * 
+   *
    * @return the translationProvider.
    */
   protected ITranslationProvider getTranslationProvider() {
@@ -2657,7 +2693,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the listSelectionModelBinder.
-   * 
+   *
    * @param listSelectionModelBinder
    *          the listSelectionModelBinder to set.
    */
@@ -2668,7 +2704,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the treeSelectionModelBinder.
-   * 
+   *
    * @param treeSelectionModelBinder
    *          the treeSelectionModelBinder to set.
    */
@@ -2679,7 +2715,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the masterDetailBinder.
-   * 
+   *
    * @param masterDetailBinder
    *          the masterDetailBinder to set.
    */
@@ -2689,7 +2725,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the maxCharacterLength.
-   * 
+   *
    * @param maxCharacterLength
    *          the maxCharacterLength to set.
    */
@@ -2699,7 +2735,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -2716,7 +2752,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the actionFactory.
-   * 
+   *
    * @param actionFactory
    *          the actionFactory to set.
    */
@@ -2727,7 +2763,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Gets the actionFactory.
-   * 
+   *
    * @return the actionFactory.
    */
   public IActionFactory<IAction, ULCComponent> getActionFactory() {
@@ -2736,7 +2772,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the lovAction.
-   * 
+   *
    * @param lovAction
    *          the lovAction to set.
    */
@@ -2746,7 +2782,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the openFileAsBinaryPropertyAction.
-   * 
+   *
    * @param openFileAsBinaryPropertyAction
    *          the openFileAsBinaryPropertyAction to set.
    */
@@ -2757,7 +2793,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the saveBinaryPropertyAsFileAction.
-   * 
+   *
    * @param saveBinaryPropertyAsFileAction
    *          the saveBinaryPropertyAsFileAction to set.
    */
@@ -2768,7 +2804,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the resetPropertyAction.
-   * 
+   *
    * @param resetPropertyAction
    *          the resetPropertyAction to set.
    */
@@ -2778,7 +2814,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the binaryPropertyInfoAction.
-   * 
+   *
    * @param binaryPropertyInfoAction
    *          the binaryPropertyInfoAction to set.
    */

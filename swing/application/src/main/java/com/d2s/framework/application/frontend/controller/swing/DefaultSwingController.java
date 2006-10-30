@@ -12,7 +12,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -46,7 +48,6 @@ import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.swing.components.JErrorDialog;
-import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
 import com.d2s.framework.util.exception.BusinessException;
 import com.d2s.framework.util.html.HtmlHelper;
@@ -56,6 +57,7 @@ import com.d2s.framework.util.swing.WaitCursorTimer;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.IDisplayableAction;
 
 import foxtrot.Job;
 
@@ -65,7 +67,7 @@ import foxtrot.Job;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -76,7 +78,6 @@ public class DefaultSwingController extends
   private Map<String, JInternalFrame> moduleInternalFrames;
 
   private WaitCursorTimer             waitTimer;
-  private String                      selectedModuleId;
 
   /**
    * Creates the initial view from the root view descriptor, then a JFrame
@@ -113,12 +114,13 @@ public class DefaultSwingController extends
     controllerFrame.setSize(12 * screenRes, 8 * screenRes);
     controllerFrame.setSize(1100, 800);
     SwingUtil.centerOnScreen(controllerFrame);
+    updateFrameTitle();
     controllerFrame.setVisible(true);
   }
 
   /**
    * Performs login using JAAS configuration.
-   * 
+   *
    * @return true if login is successful.
    */
   private boolean performLogin() {
@@ -191,6 +193,7 @@ public class DefaultSwingController extends
         execute(moduleDescriptor.getStartupAction(), context);
       }
       moduleInternalFrame.pack();
+      moduleInternalFrame.setSize(controllerFrame.getSize());
     }
     moduleInternalFrame.setVisible(true);
     if (moduleInternalFrame.isIcon()) {
@@ -205,7 +208,20 @@ public class DefaultSwingController extends
     } catch (PropertyVetoException ex) {
       throw new ControllerException(ex);
     }
+    setSelectedModuleId(moduleId);
     moduleInternalFrame.toFront();
+  }
+
+  private void updateFrameTitle() {
+    String moduleId = getSelectedModuleId();
+    if (moduleId != null) {
+      controllerFrame.setTitle(getModuleDescriptor(getSelectedModuleId())
+          .getI18nDescription(getTranslationProvider(), getLocale())
+          + " - " + getI18nName(getTranslationProvider(), getLocale()));
+    } else {
+      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
+          getLocale()));
+    }
   }
 
   private final class ModuleInternalFrameListener extends InternalFrameAdapter {
@@ -214,7 +230,7 @@ public class DefaultSwingController extends
 
     /**
      * Constructs a new <code>ModuleInternalFrameListener</code> instance.
-     * 
+     *
      * @param moduleId
      *          the root module identifier this listener is attached to.
      */
@@ -228,7 +244,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameActivated(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      selectedModuleId = moduleId;
+      setSelectedModuleId(moduleId);
     }
 
     /**
@@ -237,7 +253,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameDeiconified(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      selectedModuleId = moduleId;
+      setSelectedModuleId(moduleId);
     }
 
     /**
@@ -246,18 +262,45 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameOpened(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      selectedModuleId = moduleId;
+      setSelectedModuleId(moduleId);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameDeactivated(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
+      setSelectedModuleId(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameIconified(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
+      setSelectedModuleId(null);
+    }
+
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void setSelectedModuleId(String moduleId) {
+    super.setSelectedModuleId(moduleId);
+    updateFrameTitle();
   }
 
   private JFrame createControllerFrame() {
-    JFrame frame = new JFrame(
-        getI18nName(getTranslationProvider(), getLocale()));
+    JFrame frame = new JFrame();
     frame.setContentPane(new JDesktopPane());
     frame.setIconImage(((ImageIcon) getIconFactory().getIcon(getIconImageURL(),
         IIconFactory.SMALL_ICON_SIZE)).getImage());
     frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    frame.setJMenuBar(getApplicationMenuBar());
+    frame.setJMenuBar(createApplicationMenuBar());
     frame.setGlassPane(createHermeticGlassPane());
     frame.addWindowListener(new WindowAdapter() {
 
@@ -273,17 +316,23 @@ public class DefaultSwingController extends
     return frame;
   }
 
-  private JMenuBar getApplicationMenuBar() {
+  private JMenuBar createApplicationMenuBar() {
     JMenuBar applicationMenuBar = new JMenuBar();
-    applicationMenuBar.add(getModulesMenu());
+    applicationMenuBar.add(createModulesMenu());
+    List<JMenu> actionMenus = createActionMenus();
+    if (actionMenus != null) {
+      for (JMenu actionMenu : actionMenus) {
+        applicationMenuBar.add(actionMenu);
+      }
+    }
     return applicationMenuBar;
   }
 
-  private JMenu getModulesMenu() {
+  private JMenu createModulesMenu() {
     JMenu modulesMenu = new JMenu(getTranslationProvider().getTranslation(
         "modules", getLocale()));
-    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
-        IIconFactory.SMALL_ICON_SIZE));
+    // modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+    // IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       JMenuItem moduleMenuItem = new JMenuItem(new ModuleSelectionAction(
@@ -302,7 +351,7 @@ public class DefaultSwingController extends
 
     /**
      * Constructs a new <code>ModuleSelectionAction</code> instance.
-     * 
+     *
      * @param moduleId
      * @param moduleDescriptor
      */
@@ -326,10 +375,7 @@ public class DefaultSwingController extends
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
-        SecurityHelper.checkAccess(getBackendController()
-            .getApplicationSession().getSubject(),
-            getModuleDescriptor(moduleId), getTranslationProvider(),
-            getLocale());
+        getBackendController().checkModuleAccess(moduleId);
         displayModule(moduleId);
       } catch (SecurityException ex) {
         handleException(ex, null);
@@ -362,17 +408,44 @@ public class DefaultSwingController extends
     }
   }
 
+  private List<JMenu> createActionMenus() {
+    Map<String, List<IDisplayableAction>> actions = getActions();
+    List<JMenu> actionMenus = new ArrayList<JMenu>();
+    if (actions != null) {
+      for (Map.Entry<String, List<IDisplayableAction>> actionList : actions
+          .entrySet()) {
+        actionMenus.add(createActionMenu(actionList.getKey(), actionList
+            .getValue()));
+      }
+    }
+    return actionMenus;
+  }
+
+  private JMenu createActionMenu(String titleKey,
+      List<IDisplayableAction> actionList) {
+    JMenu menu = new JMenu(getTranslationProvider().getTranslation(titleKey,
+        getLocale()));
+    for (IDisplayableAction action : actionList) {
+      menu.add(new JMenuItem(getViewFactory().getActionFactory().createAction(
+          action, this, menu, null, null, getLocale())));
+    }
+    return menu;
+  }
+
   /**
    * Creates a new JInternalFrame and populates it with a view.
-   * 
+   *
    * @param view
    *          the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
   private JInternalFrame createJInternalFrame(IView<JComponent> view) {
     JInternalFrame internalFrame = new JInternalFrame(view.getDescriptor()
-        .getI18nName(getTranslationProvider(), getLocale()), true, false, true,
-        true);
+        .getI18nName(getTranslationProvider(), getLocale()));
+    internalFrame.setResizable(true);
+    internalFrame.setClosable(false);
+    internalFrame.setMaximizable(true);
+    internalFrame.setIconifiable(true);
     internalFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);
     internalFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     internalFrame.setGlassPane(createHermeticGlassPane());
@@ -481,24 +554,23 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void handleException(Throwable ex, Map<String, Object> context) {
+  public void handleException(Throwable ex, @SuppressWarnings("unused")
+  Map<String, Object> context) {
+    Component sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
-      JOptionPane.showMessageDialog((Component) context
-          .get(ActionContextConstants.SOURCE_COMPONENT), HtmlHelper.emphasis(ex
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
           .getMessage()), getTranslationProvider().getTranslation("error",
           getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
           .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else if (ex instanceof BusinessException) {
-      JOptionPane.showMessageDialog((Component) context
-          .get(ActionContextConstants.SOURCE_COMPONENT), HtmlHelper
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale())), getTranslationProvider()
           .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
     } else {
       ex.printStackTrace();
-      JErrorDialog dialog = JErrorDialog.createInstance((Component) context
-          .get(ActionContextConstants.SOURCE_COMPONENT),
+      JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,
           getTranslationProvider(), getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
           IIconFactory.MEDIUM_ICON_SIZE));
@@ -506,7 +578,10 @@ public class DefaultSwingController extends
           getLocale()));
       dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
       dialog.setDetails(ex);
+      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+      dialog.setSize(8 * screenRes, 3 * screenRes);
       dialog.pack();
+      SwingUtil.centerOnScreen(dialog);
       dialog.setVisible(true);
     }
   }
@@ -521,13 +596,5 @@ public class DefaultSwingController extends
     callbackHandler.setTranslationProvider(getTranslationProvider());
     callbackHandler.setIconFactory(getIconFactory());
     return callbackHandler;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getSelectedModuleId() {
-    return selectedModuleId;
   }
 }

@@ -11,9 +11,9 @@ import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.ulcjava.base.application.ULCAlert;
-import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IWindowListener;
 
@@ -22,7 +22,7 @@ import com.ulcjava.base.application.event.serializable.IWindowListener;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -51,7 +51,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
 
   /**
    * Constructs a new <code>AbstractFlowAction</code> instance.
-   * 
+   *
    * @param firstOption
    *          the label for the 1st option.
    * @param secondOption
@@ -95,9 +95,9 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
           locale);
       optionReverseDictionary.put(translatedThirdOption, thirdOption);
     }
-    final ULCAlert alert = new ULCAlert(UlcUtilities
-        .getRoot(getSourceComponent(context)), getI18nName(translationProvider,
-        locale), getMessage(context),
+    final ULCAlert alert = new ULCAlert(UlcUtil
+        .getVisibleWindow(getSourceComponent(context)), getI18nName(
+        translationProvider, locale), getMessage(context),
         translatedFirstOption, translatedSecondOption, translatedThirdOption,
         getIconFactory(context).getIcon(getIconImageURL(),
             IIconFactory.LARGE_ICON_SIZE));
@@ -118,7 +118,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
 
   /**
    * Gets the action to execute next based on the user selected option.
-   * 
+   *
    * @param selectedOption
    *          the user selected option.
    * @return the action to execute next.
@@ -127,7 +127,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
 
   /**
    * Calls the super-implementation to execute the next action.
-   * 
+   *
    * @param actionHandler
    *          the action handler responsible for the action execution.
    * @param context

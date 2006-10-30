@@ -31,7 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import com.d2s.framework.util.i18n.ITranslationProvider;
@@ -43,7 +42,7 @@ import com.d2s.framework.view.IIconFactory;
  * Uses a Swing dialog to query the user for answers to authentication
  * questions. This can be used by a JAAS application to instantiate a
  * CallbackHandler
- * 
+ *
  * @see javax.security.auth.callback
  */
 public class DialogCallbackHandler implements CallbackHandler {
@@ -73,7 +72,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Handles the specified set of callbacks.
-   * 
+   *
    * @param callbacks
    *          the callbacks to handle
    * @throws UnsupportedCallbackException
@@ -108,12 +107,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
     final JDialog callbackDialog;
     if (parentComponent != null) {
-      Window parentWindow;
-      if (parentComponent instanceof Window) {
-        parentWindow = (Window) parentComponent;
-      } else {
-        parentWindow = SwingUtilities.windowForComponent(parentComponent);
-      }
+      Window parentWindow = SwingUtil.getVisibleWindow(parentComponent);
       if (parentWindow instanceof Dialog) {
         callbackDialog = new JDialog((Dialog) parentWindow, true);
       } else {
@@ -406,7 +400,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the locale.
-   * 
+   *
    * @param locale
    *          the locale to set.
    */
@@ -416,7 +410,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the parentComponent.
-   * 
+   *
    * @param parentComponent
    *          the parentComponent to set.
    */
@@ -426,7 +420,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -436,7 +430,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */

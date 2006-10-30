@@ -10,7 +10,7 @@ import java.awt.Dimension;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -37,7 +37,7 @@ public interface IIconFactory<E> {
 
   /**
    * Creates an icon from an image url or get it from a local cache.
-   * 
+   *
    * @param urlSpec
    *          the url of the image to be used on the icon.
    * @param iconSize
@@ -49,7 +49,7 @@ public interface IIconFactory<E> {
 
   /**
    * Gets the standard error icon.
-   * 
+   *
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
    *          nacessary to match the requested size.
@@ -59,7 +59,7 @@ public interface IIconFactory<E> {
 
   /**
    * Gets the standard warning icon.
-   * 
+   *
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
    *          nacessary to match the requested size.
@@ -69,7 +69,7 @@ public interface IIconFactory<E> {
 
   /**
    * Gets the standard info icon.
-   * 
+   *
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
    *          nacessary to match the requested size.
@@ -79,7 +79,7 @@ public interface IIconFactory<E> {
 
   /**
    * Gets the standard cancel icon.
-   * 
+   *
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
    *          nacessary to match the requested size.
@@ -89,7 +89,7 @@ public interface IIconFactory<E> {
 
   /**
    * Gets the standard ok / yes icon.
-   * 
+   *
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
    *          nacessary to match the requested size.
@@ -99,12 +99,42 @@ public interface IIconFactory<E> {
 
   /**
    * Gets the standard no icon.
-   * 
+   *
    * @param iconSize
    *          the size of the constructed icon. The image will be resized if
    *          nacessary to match the requested size.
    * @return the constructed icon.
    */
   E getNoIcon(Dimension iconSize);
+
+  /**
+   * Gets the standard forbidden icon.
+   *
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getForbiddenIcon(Dimension iconSize);
+
+  /**
+   * Gets the standard Back icon.
+   *
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getBackwardIcon(Dimension iconSize);
+
+  /**
+   * Gets the standard Forward icon.
+   *
+   * @param iconSize
+   *          the size of the constructed icon. The image will be resized if
+   *          nacessary to match the requested size.
+   * @return the constructed icon.
+   */
+  E getForwardIcon(Dimension iconSize);
 
 }

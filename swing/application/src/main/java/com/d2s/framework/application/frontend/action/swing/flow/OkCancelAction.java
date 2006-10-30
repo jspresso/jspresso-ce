@@ -18,7 +18,7 @@ import com.d2s.framework.view.IIconFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -35,7 +35,7 @@ public class OkCancelAction extends AbstractMessageAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    int selectedOption = JOptionPane.showInternalConfirmDialog(SwingUtil
+    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)),
         getMessage(context), getI18nName(getTranslationProvider(context),
             getLocale(context)), JOptionPane.OK_CANCEL_OPTION,
@@ -51,7 +51,7 @@ public class OkCancelAction extends AbstractMessageAction {
 
   /**
    * Sets the cancelAction.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -61,7 +61,7 @@ public class OkCancelAction extends AbstractMessageAction {
 
   /**
    * Sets the okAction.
-   * 
+   *
    * @param okAction
    *          the okAction to set.
    */

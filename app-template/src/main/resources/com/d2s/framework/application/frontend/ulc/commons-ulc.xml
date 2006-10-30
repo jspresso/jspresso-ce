@@ -46,7 +46,7 @@
 
   <bean id="okDialogFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.OkAction" />
 
-  <!-- 
+  <!--
     Action beans
   -->
   <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
@@ -65,7 +65,7 @@
     The implementation used as view factory.
   -->
 
-  <!-- 
+  <!--
     This icon factory is defined as non-singleton since it implements a per ulc session cache.
   -->
   <bean id="iconFactory" parent="abstractIconFactory" class="com.d2s.framework.view.ulc.UlcIconFactory"
@@ -106,6 +106,9 @@
 
   <bean id="changePasswordAction" parent="abstractChangePasswordAction"
     class="com.d2s.framework.application.frontend.action.ulc.security.ChangePasswordAction" />
+
+  <bean id="wizardAction" parent="abstractWizardAction"
+    class="com.d2s.framework.application.frontend.action.ulc.wizard.WizardAction" />
 
   <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.ulc.DefaultUlcViewFactory"
     scope="prototype" />

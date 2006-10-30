@@ -9,17 +9,17 @@ import java.io.FileNotFoundException;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
 
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.file.IFileOpenCallback;
+import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * Initiates a file open action.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,8 +36,8 @@ public class OpenFileAction extends ChooseFileAction {
 
     JFileChooser currentFileChooser = getFileChooser(context);
 
-    int returnVal = currentFileChooser.showOpenDialog(SwingUtilities
-        .getWindowAncestor(getSourceComponent(context)));
+    int returnVal = currentFileChooser.showOpenDialog(SwingUtil
+        .getVisibleWindow(getSourceComponent(context)));
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
@@ -58,7 +58,7 @@ public class OpenFileAction extends ChooseFileAction {
 
   /**
    * Sets the fileOpenCallback.
-   * 
+   *
    * @param fileOpenCallback
    *          the fileOpenCallback to set.
    */

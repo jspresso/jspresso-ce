@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.application.view.descriptor.basic;
 
-import java.util.Collection;
-
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
@@ -14,7 +12,7 @@ import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +20,6 @@ public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
     IModuleDescriptor {
 
   private IAction            startupAction;
-  private Collection<String> grantedRoles;
 
   /**
    * Constructs a new <code>BasicModuleDescriptor</code> instance.
@@ -42,30 +39,11 @@ public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
 
   /**
    * Sets the startupAction.
-   * 
+   *
    * @param startupAction
    *          the startupAction to set.
    */
   public void setStartupAction(IAction startupAction) {
     this.startupAction = startupAction;
-  }
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
-  }
-
-  /**
-   * Sets the grantedRoles.
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
   }
 }

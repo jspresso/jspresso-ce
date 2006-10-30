@@ -12,7 +12,7 @@
   -->
   <bean id="lovViewDescriptorFactory" class="com.d2s.framework.view.descriptor.basic.BasicLovViewDescriptorFactory" />
 
-  <!-- 
+  <!--
     Report descriptors
   -->
   <bean id="abstractReportDescriptor" abstract="true"
@@ -126,6 +126,12 @@
     </property>
   </bean>
 
+  <bean id="abstractWizardAction" abstract="true">
+    <property name="name" value="wizard.name" />
+    <property name="iconImageURL" value="classpath:images/wizard-48x48.png" />
+    <property name="modelConnectorFactory" ref="mapConnectorFactory" />
+  </bean>
+
   <bean id="connectorSelectionFrontAction"
     class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction" />
 
@@ -141,8 +147,6 @@
 
   <bean id="abstractAddToMasterFrontAction" abstract="true"
     class="com.d2s.framework.application.frontend.action.std.AddToMasterAction">
-    <property name="name" value="add.name" />
-    <property name="description" value="add.description" />
     <property name="wrappedAction">
       <bean class="com.d2s.framework.application.backend.action.AddToMasterAction" />
     </property>

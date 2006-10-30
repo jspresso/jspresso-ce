@@ -11,6 +11,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
@@ -24,22 +25,24 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class Module extends AbstractPropertyChangeCapable {
+public class Module extends AbstractPropertyChangeCapable implements ISecurable {
 
-  private String                name;
-  private String                description;
-  private String                i18nName;
-  private String                i18nDescription;
-  private String                iconImageURL;
-  private List<SubModule>       subModules;
+  private String             name;
+  private String             description;
+  private String             i18nName;
+  private String             i18nDescription;
+  private String             iconImageURL;
+  private List<SubModule>    subModules;
+
+  private Collection<String> grantedRoles;
 
   /**
    * Gets the subModules modules.
-   * 
+   *
    * @return the list of subModules modules.
    */
   public List<SubModule> getSubModules() {
@@ -49,7 +52,7 @@ public class Module extends AbstractPropertyChangeCapable {
   /**
    * Sets the subModules modules. It will fire a "subModules" property change
    * event.
-   * 
+   *
    * @param subModules
    *          the subModules modules to set.
    */
@@ -64,7 +67,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Adds a child module.
-   * 
+   *
    * @param child
    *          the child module to add. It will fire a "subModules" property
    *          change event.
@@ -85,7 +88,7 @@ public class Module extends AbstractPropertyChangeCapable {
   /**
    * Adds a subModules module collection. It will fire a "subModules" property
    * change event.
-   * 
+   *
    * @param subModulesToAdd
    *          the subModules modules to add.
    * @return <code>true</code> if the subModules module collection was
@@ -105,7 +108,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Removes a child module. It will fire a "subModules" property change event.
-   * 
+   *
    * @param subModule
    *          the child module to remove.
    * @return <code>true</code> if the module was succesfully removed.
@@ -125,7 +128,7 @@ public class Module extends AbstractPropertyChangeCapable {
   /**
    * Removes a subModules module collection. It will fire a "subModules"
    * property change event.
-   * 
+   *
    * @param childrenToRemove
    *          the subModules modules to remove.
    * @return <code>true</code> if the subModules module collection was
@@ -147,7 +150,7 @@ public class Module extends AbstractPropertyChangeCapable {
    * This method will set the parent module to the new subModules modules and
    * remove the parent of the old removed subModules modules. It will fire the
    * "subModules" property change event.
-   * 
+   *
    * @param oldChildren
    *          the old subModules collection property.
    * @param newChildren
@@ -174,7 +177,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the module's name. It may serve for the module's view.
-   * 
+   *
    * @return the module's name.
    */
   public String getName() {
@@ -183,7 +186,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the module's name. It may serve for the module's view.
-   * 
+   *
    * @param name
    *          the module's name.
    */
@@ -198,7 +201,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the module's description. It may serve for the module's view.
-   * 
+   *
    * @return the module's description.
    */
   public String getDescription() {
@@ -207,7 +210,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the module's description. It may serve for the module's view.
-   * 
+   *
    * @param description
    *          the module's description.
    */
@@ -222,7 +225,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the i18nDescription.
-   * 
+   *
    * @return the i18nDescription.
    */
   public String getI18nDescription() {
@@ -234,7 +237,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the i18nName.
-   * 
+   *
    * @return the i18nName.
    */
   public String getI18nName() {
@@ -246,7 +249,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the i18nDescription.
-   * 
+   *
    * @param i18nDescription
    *          the i18nDescription to set.
    */
@@ -261,7 +264,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the i18nName.
-   * 
+   *
    * @param i18nName
    *          the i18nName to set.
    */
@@ -316,7 +319,7 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Gets the iconImageURL.
-   * 
+   *
    * @return the iconImageURL.
    */
   public String getIconImageURL() {
@@ -325,11 +328,30 @@ public class Module extends AbstractPropertyChangeCapable {
 
   /**
    * Sets the iconImageURL.
-   * 
+   *
    * @param iconImageURL
    *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     this.iconImageURL = iconImageURL;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   *
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Sets the grantedRoles.
+   *
+   * @param grantedRoles
+   *          the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 }

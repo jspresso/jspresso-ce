@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.gui.ulc.components.client;
 
-import javax.swing.JButton;
-
 import com.ulcjava.base.client.UiJButton;
 import com.ulcjava.base.shared.internal.Anything;
 
@@ -14,7 +12,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -26,7 +24,7 @@ public class UIButton extends com.ulcjava.base.client.UIButton {
   @Override
   protected Object createBasicObject(@SuppressWarnings("unused")
   Anything args) {
-    JButton button = new UiJButton();
+    UiJButton button = (UiJButton) super.createBasicObject(args);
     button.setMultiClickThreshhold(300);
     return button;
   }

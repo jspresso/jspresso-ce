@@ -47,7 +47,7 @@
 
   <bean id="okDialogFrontAction" class="com.d2s.framework.application.frontend.action.swing.std.OkAction" />
 
-  <!-- 
+  <!--
     Action beans
   -->
   <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
@@ -99,6 +99,9 @@
 
   <bean id="changePasswordAction" parent="abstractChangePasswordAction"
     class="com.d2s.framework.application.frontend.action.swing.security.ChangePasswordAction" />
+
+  <bean id="wizardAction" parent="abstractWizardAction"
+    class="com.d2s.framework.application.frontend.action.swing.wizard.WizardAction" />
 
   <bean id="viewFactory" class="com.d2s.framework.view.swing.DefaultSwingViewFactory" parent="abstractViewFactory"
     scope="prototype">

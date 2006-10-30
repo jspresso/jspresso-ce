@@ -8,7 +8,7 @@ package com.d2s.framework.util.ldap;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,4 +32,14 @@ public final class LdapConstants {
    * <code>DESCRIPTION_ATTRIBUTE</code>.
    */
   public static final String DESCRIPTION_ATTRIBUTE = "description";
+
+  /**
+   * <code>MAIL_ATTRIBUTE</code>.
+   */
+  public static final String MAIL_ATTRIBUTE = "mail";
+
+  /**
+   * <code>SERIALNUMBER_ATTRIBUTE</code>.
+   */
+  public static final String SERIALNUMBER_ATTRIBUTE = "serialNumber";
 }

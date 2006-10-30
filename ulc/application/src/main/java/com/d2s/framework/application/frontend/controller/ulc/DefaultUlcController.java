@@ -4,7 +4,9 @@
 package com.d2s.framework.application.frontend.controller.ulc;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -21,7 +23,9 @@ import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.ulc.components.server.ULCErrorDialog;
-import com.d2s.framework.security.SecurityHelper;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedInternalFrame;
+import com.d2s.framework.gui.ulc.components.server.event.ExtendedInternalFrameEvent;
+import com.d2s.framework.gui.ulc.components.server.event.IExtendedInternalFrameListener;
 import com.d2s.framework.security.ulc.DialogCallbackHandler;
 import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.exception.BusinessException;
@@ -30,6 +34,7 @@ import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.IDisplayableAction;
 import com.ulcjava.base.application.AbstractAction;
 import com.ulcjava.base.application.ApplicationContext;
 import com.ulcjava.base.application.ClientContext;
@@ -38,12 +43,10 @@ import com.ulcjava.base.application.ULCAlert;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDesktopPane;
 import com.ulcjava.base.application.ULCFrame;
-import com.ulcjava.base.application.ULCInternalFrame;
 import com.ulcjava.base.application.ULCMenu;
 import com.ulcjava.base.application.ULCMenuBar;
 import com.ulcjava.base.application.ULCMenuItem;
 import com.ulcjava.base.application.ULCPollingTimer;
-import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.WindowEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
@@ -57,7 +60,7 @@ import com.ulcjava.base.shared.IWindowConstants;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -65,13 +68,13 @@ public class DefaultUlcController extends
     AbstractFrontendController<ULCComponent, ULCIcon, IAction> implements
     ICallbackHandlerListener {
 
-  private ULCFrame                      controllerFrame;
-  private Map<String, ULCInternalFrame> moduleInternalFrames;
-  private Callback[]                    loginCallbacks;
-  private ULCPollingTimer               loginTimer;
-  private int                           loginRetries;
-  private boolean                       loginSuccessful;
-  private boolean                       loginComplete;
+  private ULCFrame                              controllerFrame;
+  private Map<String, ULCExtendedInternalFrame> moduleInternalFrames;
+  private Callback[]                            loginCallbacks;
+  private ULCPollingTimer                       loginTimer;
+  private int                                   loginRetries;
+  private boolean                               loginSuccessful;
+  private boolean                               loginComplete;
 
   /**
    * Creates the initial view from the root view descriptor, then a JFrame
@@ -139,6 +142,7 @@ public class DefaultUlcController extends
     int screenRes = ClientContext.getScreenResolution();
     controllerFrame.setSize(12 * screenRes, 8 * screenRes);
     UlcUtil.centerOnScreen(controllerFrame);
+    updateFrameTitle();
     controllerFrame.setVisible(true);
   }
 
@@ -217,18 +221,22 @@ public class DefaultUlcController extends
 
   private void displayModule(String moduleId) {
     if (moduleInternalFrames == null) {
-      moduleInternalFrames = new HashMap<String, ULCInternalFrame>();
+      moduleInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
     }
-    ULCInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
+    ULCExtendedInternalFrame moduleInternalFrame = moduleInternalFrames
+        .get(moduleId);
     if (moduleInternalFrame == null) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       IValueConnector moduleConnector = getBackendController()
           .getModuleConnector(moduleId);
       IView<ULCComponent> moduleView = createModuleView(moduleId,
           moduleDescriptor, (Module) moduleConnector.getConnectorValue());
-      moduleInternalFrame = createULCInternalFrame(moduleView);
+      moduleInternalFrame = createULCExtendedInternalFrame(moduleView);
       moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
           moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+      moduleInternalFrame
+          .addExtendedInternalFrameListener(new ModuleInternalFrameListener(
+              moduleId));
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
@@ -239,38 +247,102 @@ public class DefaultUlcController extends
         execute(moduleDescriptor.getStartupAction(), context);
       }
       moduleInternalFrame.pack();
+      moduleInternalFrame.setSize(controllerFrame.getSize());
     }
     moduleInternalFrame.setVisible(true);
     if (moduleInternalFrame.isIcon()) {
       moduleInternalFrame.setIcon(false);
     }
     moduleInternalFrame.setMaximum(true);
+    setSelectedModuleId(moduleId);
     moduleInternalFrame.moveToFront();
+  }
+
+  private void updateFrameTitle() {
+    String moduleId = getSelectedModuleId();
+    if (moduleId != null) {
+      controllerFrame.setTitle(getModuleDescriptor(getSelectedModuleId())
+          .getI18nDescription(getTranslationProvider(), getLocale())
+          + " - " + getI18nName(getTranslationProvider(), getLocale()));
+    } else {
+      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
+          getLocale()));
+    }
+  }
+
+  private final class ModuleInternalFrameListener implements
+      IExtendedInternalFrameListener {
+
+    private String moduleId;
+
+    /**
+     * Constructs a new <code>ModuleInternalFrameListener</code> instance.
+     *
+     * @param moduleId
+     *          the root module identifier this listener is attached to.
+     */
+    public ModuleInternalFrameListener(String moduleId) {
+      this.moduleId = moduleId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void internalFrameActivated(@SuppressWarnings("unused")
+    ExtendedInternalFrameEvent e) {
+      setSelectedModuleId(moduleId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void internalFrameDeactivated(@SuppressWarnings("unused")
+    ExtendedInternalFrameEvent e) {
+      setSelectedModuleId(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void internalFrameDeiconified(@SuppressWarnings("unused")
+    ExtendedInternalFrameEvent event) {
+      setSelectedModuleId(moduleId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void internalFrameIconified(@SuppressWarnings("unused")
+    ExtendedInternalFrameEvent event) {
+      setSelectedModuleId(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void internalFrameOpened(@SuppressWarnings("unused")
+    ExtendedInternalFrameEvent event) {
+      setSelectedModuleId(moduleId);
+    }
+
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected String getSelectedModuleId() {
-    for (Map.Entry<String, ULCInternalFrame> moduleIdAndFrame : moduleInternalFrames
-        .entrySet()) {
-      if (moduleIdAndFrame.getValue() != null
-          && moduleIdAndFrame.getValue().isSelected()) {
-        return moduleIdAndFrame.getKey();
-      }
-    }
-    return null;
+  protected void setSelectedModuleId(String moduleId) {
+    super.setSelectedModuleId(moduleId);
+    updateFrameTitle();
   }
 
   private ULCFrame createControllerFrame() {
-    ULCFrame frame = new ULCFrame(getI18nName(getTranslationProvider(),
-        getLocale()));
+    ULCFrame frame = new ULCFrame();
     frame.setContentPane(new ULCDesktopPane());
     frame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
         IIconFactory.SMALL_ICON_SIZE));
     frame.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
-    frame.setMenuBar(getApplicationMenuBar());
+    frame.setMenuBar(createApplicationMenuBar(frame));
     frame.addWindowListener(new IWindowListener() {
 
       private static final long serialVersionUID = -7845554617417316256L;
@@ -283,17 +355,23 @@ public class DefaultUlcController extends
     return frame;
   }
 
-  private ULCMenuBar getApplicationMenuBar() {
+  private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {
     ULCMenuBar applicationMenuBar = new ULCMenuBar();
-    applicationMenuBar.add(getModulesMenu());
+    applicationMenuBar.add(createModulesMenu());
+    List<ULCMenu> actionMenus = createActionMenus(sourceComponent);
+    if (actionMenus != null) {
+      for (ULCMenu actionMenu : actionMenus) {
+        applicationMenuBar.add(actionMenu);
+      }
+    }
     return applicationMenuBar;
   }
 
-  private ULCMenu getModulesMenu() {
+  private ULCMenu createModulesMenu() {
     ULCMenu modulesMenu = new ULCMenu(getTranslationProvider().getTranslation(
         "modules", getLocale()));
-    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
-        IIconFactory.SMALL_ICON_SIZE));
+    // modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+    // IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       ULCMenuItem moduleMenuItem = new ULCMenuItem(new ModuleSelectionAction(
@@ -312,7 +390,7 @@ public class DefaultUlcController extends
 
     /**
      * Constructs a new <code>ModuleSelectionAction</code> instance.
-     * 
+     *
      * @param moduleId
      * @param moduleDescriptor
      */
@@ -339,10 +417,7 @@ public class DefaultUlcController extends
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
-        SecurityHelper.checkAccess(getBackendController()
-            .getApplicationSession().getSubject(),
-            getModuleDescriptor(moduleId), getTranslationProvider(),
-            getLocale());
+        getBackendController().checkModuleAccess(moduleId);
         displayModule(moduleId);
       } catch (SecurityException ex) {
         handleException(ex, null);
@@ -377,17 +452,47 @@ public class DefaultUlcController extends
     }
   }
 
+  private List<ULCMenu> createActionMenus(ULCComponent sourceComponent) {
+    Map<String, List<IDisplayableAction>> actions = getActions();
+    List<ULCMenu> actionMenus = new ArrayList<ULCMenu>();
+    if (actions != null) {
+      for (Map.Entry<String, List<IDisplayableAction>> actionList : actions
+          .entrySet()) {
+        actionMenus.add(createActionMenu(actionList.getKey(), actionList
+            .getValue(), sourceComponent));
+      }
+    }
+    return actionMenus;
+  }
+
+  private ULCMenu createActionMenu(String titleKey,
+      List<IDisplayableAction> actionList, ULCComponent sourceComponent) {
+    ULCMenu menu = new ULCMenu(getTranslationProvider().getTranslation(
+        titleKey, getLocale()));
+    for (IDisplayableAction action : actionList) {
+      menu
+          .add(new ULCMenuItem(getViewFactory().getActionFactory()
+              .createAction(action, this, sourceComponent, null, null,
+                  getLocale())));
+    }
+    return menu;
+  }
+
   /**
-   * Creates a new ULCInternalFrame and populates it with a view.
-   * 
+   * Creates a new ULCExtendedInternalFrame and populates it with a view.
+   *
    * @param view
    *          the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
-  private ULCInternalFrame createULCInternalFrame(IView<ULCComponent> view) {
-    ULCInternalFrame internalFrame = new ULCInternalFrame(view.getDescriptor()
-        .getI18nName(getTranslationProvider(), getLocale()), true, false, true,
-        true);
+  private ULCExtendedInternalFrame createULCExtendedInternalFrame(
+      IView<ULCComponent> view) {
+    ULCExtendedInternalFrame internalFrame = new ULCExtendedInternalFrame(view
+        .getDescriptor().getI18nName(getTranslationProvider(), getLocale()));
+    internalFrame.setResizable(true);
+    internalFrame.setClosable(false);
+    internalFrame.setMaximizable(true);
+    internalFrame.setIconifiable(true);
     internalFrame.getContentPane().add(view.getPeer());
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;
@@ -396,20 +501,18 @@ public class DefaultUlcController extends
   /**
    * {@inheritDoc}
    */
-  public void handleException(Throwable ex, Map<String, Object> context) {
+  public void handleException(Throwable ex, @SuppressWarnings("unused")
+  Map<String, Object> context) {
+    ULCComponent sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
-      ULCAlert alert = new ULCAlert(UlcUtilities
-          .windowForComponent((ULCComponent) context
-              .get(ActionContextConstants.SOURCE_COMPONENT)),
+      ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
           HtmlHelper.emphasis(ex.getMessage()), getTranslationProvider()
               .getTranslation("ok", getLocale()), null, null, getIconFactory()
               .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
       alert.show();
     } else if (ex instanceof BusinessException) {
-      ULCAlert alert = new ULCAlert(UlcUtilities
-          .windowForComponent((ULCComponent) context
-              .get(ActionContextConstants.SOURCE_COMPONENT)),
+      ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
           getTranslationProvider().getTranslation("error", getLocale()),
           HtmlHelper.emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale())), getTranslationProvider()
@@ -418,8 +521,7 @@ public class DefaultUlcController extends
       alert.show();
     } else {
       ex.printStackTrace();
-      ULCErrorDialog dialog = ULCErrorDialog.createInstance(
-          (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT),
+      ULCErrorDialog dialog = ULCErrorDialog.createInstance(sourceComponent,
           getTranslationProvider(), getLocale());
       dialog.setMessageIcon(getIconFactory().getErrorIcon(
           IIconFactory.MEDIUM_ICON_SIZE));
@@ -427,7 +529,10 @@ public class DefaultUlcController extends
           getLocale()));
       dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
       dialog.setDetails(ex);
+      int screenRes = ClientContext.getScreenResolution();
+      dialog.setSize(8 * screenRes, 3 * screenRes);
       dialog.pack();
+      UlcUtil.centerOnScreen(dialog);
       dialog.setVisible(true);
     }
   }

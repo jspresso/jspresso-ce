@@ -12,7 +12,7 @@ import java.util.Map;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -30,6 +30,11 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
   private String                         warningIconImageURL;
   private String                         errorIconImageURL;
 
+  private String                         forbiddenIconUrl;
+
+  private String                         forwardIconUrl;
+  private String                         backwardIconUrl;
+
   /**
    * Constructs a new <code>AbstractIconFactory</code> instance.
    */
@@ -39,7 +44,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Creates a swing icon from an image url.
-   * 
+   *
    * @param urlSpec
    *          the url of the image to be used on the icon.
    * @param iconSize
@@ -68,7 +73,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the cancelIconImageURL.
-   * 
+   *
    * @param cancelIconImageURL
    *          the cancelIconImageURL to set.
    */
@@ -78,7 +83,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the errorIconImageURL.
-   * 
+   *
    * @param errorIconImageURL
    *          the errorIconImageURL to set.
    */
@@ -88,7 +93,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the infoIconImageURL.
-   * 
+   *
    * @param infoIconImageURL
    *          the infoIconImageURL to set.
    */
@@ -98,7 +103,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the noIconImageURL.
-   * 
+   *
    * @param noIconImageURL
    *          the noIconImageURL to set.
    */
@@ -108,7 +113,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the okYesIconImageURL.
-   * 
+   *
    * @param okYesIconImageURL
    *          the okYesIconImageURL to set.
    */
@@ -118,7 +123,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the warningIconImageURL.
-   * 
+   *
    * @param warningIconImageURL
    *          the warningIconImageURL to set.
    */
@@ -166,5 +171,56 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
    */
   public E getWarningIcon(Dimension iconSize) {
     return getIcon(warningIconImageURL, iconSize);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getForbiddenIcon(Dimension iconSize) {
+    return getIcon(forbiddenIconUrl, iconSize);
+  }
+
+
+  /**
+   * Sets the forbiddenIconUrl.
+   *
+   * @param forbiddenIconUrl the forbiddenIconUrl to set.
+   */
+  public void setForbiddenIconUrl(String forbiddenIconUrl) {
+    this.forbiddenIconUrl = forbiddenIconUrl;
+  }
+
+
+  /**
+   * Sets the backwardIconUrl.
+   *
+   * @param backwardIconUrl the backwardIconUrl to set.
+   */
+  public void setBackwardIconUrl(String backwardIconUrl) {
+    this.backwardIconUrl = backwardIconUrl;
+  }
+
+
+  /**
+   * Sets the forwardIconUrl.
+   *
+   * @param forwardIconUrl the forwardIconUrl to set.
+   */
+  public void setForwardIconUrl(String forwardIconUrl) {
+    this.forwardIconUrl = forwardIconUrl;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getBackwardIcon(Dimension iconSize) {
+    return getIcon(backwardIconUrl, iconSize);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public E getForwardIcon(Dimension iconSize) {
+    return getIcon(forwardIconUrl, iconSize);
   }
 }

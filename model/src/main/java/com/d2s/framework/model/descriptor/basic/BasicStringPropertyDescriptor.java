@@ -15,7 +15,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -40,7 +40,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Sets the maxLength property.
-   * 
+   *
    * @param maxLength
    *          the maxLength to set.
    */
@@ -50,7 +50,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Gets the regexpPattern.
-   * 
+   *
    * @return the regexpPattern.
    */
   public String getRegexpPattern() {
@@ -66,7 +66,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Sets the regexpPattern.
-   * 
+   *
    * @param regexpPattern
    *          the regexpPattern to set.
    */
@@ -84,7 +84,7 @@ public class BasicStringPropertyDescriptor extends
   /**
    * Performs the necessary transformations to build a tring out of a property
    * value.
-   * 
+   *
    * @param value
    *          the raw property value.
    * @return the resulting string.
@@ -113,8 +113,7 @@ public class BasicStringPropertyDescriptor extends
             Locale locale) {
           return translationProvider.getTranslation(
               "integrity.property.outofbounds", new Object[] {
-                  getI18nName(translationProvider, locale),
-                  propertyValueAsString, component}, locale);
+                  getI18nName(translationProvider, locale), component}, locale);
         }
 
       };
@@ -131,10 +130,9 @@ public class BasicStringPropertyDescriptor extends
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
-          return translationProvider
-              .getTranslation("integrity.property.pattern", new Object[] {
-                  getI18nName(translationProvider, locale),
-                  propertyValueAsString, getRegexpPattern(), component}, locale);
+          return translationProvider.getTranslation(
+              "integrity.property.pattern", new Object[] {
+                  getI18nName(translationProvider, locale), component}, locale);
         }
 
       };

@@ -9,15 +9,18 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
+import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.ulcjava.base.application.ULCBorderLayoutPane;
+import com.ulcjava.base.application.ULCBoxLayoutPane;
 import com.ulcjava.base.application.ULCButton;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDialog;
-import com.ulcjava.base.application.ULCGridLayoutPane;
+import com.ulcjava.base.application.ULCFiller;
 import com.ulcjava.base.application.ULCWindow;
-import com.ulcjava.base.application.UlcUtilities;
+import com.ulcjava.base.application.border.ULCEmptyBorder;
+import com.ulcjava.base.application.util.Insets;
 import com.ulcjava.base.shared.IWindowConstants;
 
 /**
@@ -25,7 +28,7 @@ import com.ulcjava.base.shared.IWindowConstants;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,21 +45,28 @@ public class ModalDialogAction extends AbstractUlcAction {
       Map<String, Object> context) {
     final ULCDialog dialog;
     IView<ULCComponent> mainView = getMainView(context);
-    ULCWindow window = UlcUtilities
-        .getWindowAncestor(getSourceComponent(context));
+    ULCWindow window = UlcUtil
+        .getVisibleWindow((getSourceComponent(context)));
     dialog = new ULCDialog(window, getI18nName(getTranslationProvider(context),
         getLocale(context)), true);
-    ULCGridLayoutPane actionPanel = new ULCGridLayoutPane(1, 0, 5, 10);
+
+    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(ULCBoxLayoutPane.LINE_AXIS);
+    buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
+
     ULCButton defaultButton = null;
     for (IDisplayableAction action : getActions(context)) {
       ULCButton actionButton = new ULCButton();
       actionButton.setAction(getActionFactory(context).createAction(action,
           actionHandler, mainView, getLocale(context)));
-      actionPanel.add(actionButton);
+      buttonBox.add(actionButton);
+      buttonBox.add(ULCFiller.createHorizontalStrut(10));
       if (defaultButton == null) {
         defaultButton = actionButton;
       }
     }
+    ULCBorderLayoutPane actionPanel = new ULCBorderLayoutPane();
+    actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
+
     ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
     mainPanel.add(mainView.getPeer(), ULCBorderLayoutPane.CENTER);
     mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
@@ -72,7 +82,7 @@ public class ModalDialogAction extends AbstractUlcAction {
 
   /**
    * Gets the actions.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the actions.
@@ -85,7 +95,7 @@ public class ModalDialogAction extends AbstractUlcAction {
 
   /**
    * Gets the mainView.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the mainView.

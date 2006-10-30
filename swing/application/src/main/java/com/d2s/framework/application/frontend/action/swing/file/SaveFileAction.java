@@ -9,17 +9,17 @@ import java.io.FileOutputStream;
 import java.util.Map;
 
 import javax.swing.JFileChooser;
-import javax.swing.SwingUtilities;
 
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.file.IFileSaveCallback;
+import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * Initiates a file save action.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,8 +36,8 @@ public class SaveFileAction extends ChooseFileAction {
 
     JFileChooser currentFileChooser = getFileChooser(context);
 
-    int returnVal = currentFileChooser.showSaveDialog(SwingUtilities
-        .getWindowAncestor(getSourceComponent(context)));
+    int returnVal = currentFileChooser.showSaveDialog(SwingUtil
+        .getVisibleWindow(getSourceComponent(context)));
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = currentFileChooser.getSelectedFile();
       if (file != null) {
@@ -58,7 +58,7 @@ public class SaveFileAction extends ChooseFileAction {
 
   /**
    * Sets the fileSaveCallback.
-   * 
+   *
    * @param fileSaveCallback
    *          the fileSaveCallback to set.
    */

@@ -15,7 +15,7 @@ import java.util.Map;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,7 +27,7 @@ public class ActionMap {
   /**
    * Gets the map of action sets composing the parent actionmaps with the local
    * one.
-   * 
+   *
    * @return the actionMap.
    */
   public Map<String, List<IDisplayableAction>> getActionMap() {
@@ -55,14 +55,21 @@ public class ActionMap {
           globalActionList = new ArrayList<IDisplayableAction>();
           globalActionMap.put(actionListEntry.getKey(), globalActionList);
         }
-        globalActionList.addAll(actionListEntry.getValue());
+        for (IDisplayableAction localAction : actionListEntry.getValue()) {
+          int existingIndex = globalActionList.indexOf(localAction);
+          if (existingIndex >= 0) {
+            globalActionList.set(existingIndex, localAction);
+          } else {
+            globalActionList.add(localAction);
+          }
+        }
       }
     }
   }
 
   /**
    * Sets the actionMap.
-   * 
+   *
    * @param actionMap
    *          the actionMap to set.
    */
@@ -72,7 +79,7 @@ public class ActionMap {
 
   /**
    * Sets the parentActionMaps.
-   * 
+   *
    * @param parentActionMaps
    *          the parentActionMaps to set.
    */

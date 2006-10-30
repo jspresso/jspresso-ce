@@ -18,6 +18,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -336,5 +337,38 @@ public final class SwingUtil {
     Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
     w.setLocation((screenDim.width - w.getWidth()) / 2, (screenDim.height - w
         .getHeight()) / 2);
+  }
+
+  /**
+   * Center a window on screen.
+   * 
+   * @param w
+   *          the window to center on screen.
+   */
+  public static void centerInParent(Window w) {
+    Container parent = w.getParent();
+    if (parent != null) {
+      Dimension parentSize = parent.getSize();
+      w.setLocation((parentSize.width - w.getWidth()) / 2,
+          (parentSize.height - w.getHeight()) / 2);
+    }
+  }
+
+  /**
+   * Gets the visible parent window.
+   * 
+   * @param component
+   *          the component to start from
+   * @return the visible parent window or null.
+   */
+  public static Window getVisibleWindow(Component component) {
+    if (component instanceof JWindow) {
+      return (JWindow) component;
+    }
+    Window w = SwingUtilities.getWindowAncestor(component);
+    if (w != null && !w.isVisible() && w.getParent() != null) {
+      return getVisibleWindow(w.getParent());
+    }
+    return w;
   }
 }

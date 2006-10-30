@@ -42,7 +42,9 @@ Design2See Checks
             <property name="tabWidth" value="2"/>
         </module>
         <module name="MethodLength"/>
-        <module name="ParameterNumber"/>
+        <module name="ParameterNumber">
+            <property name="severity" value="ignore"/>
+        </module>
         <module name="EmptyForIteratorPad"/>
         <module name="MethodParamPad"/>
         <module name="NoWhitespaceAfter">

@@ -14,7 +14,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -39,7 +39,7 @@ public class BasicDurationPropertyDescriptor extends
 
   /**
    * Sets the maxMillis property.
-   * 
+   *
    * @param maxMillis
    *          the maxMillis to set.
    */

@@ -14,7 +14,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -52,7 +52,7 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   /**
    * Sets the maxValue property.
-   * 
+   *
    * @param maxValue
    *          the maxValue to set.
    */
@@ -62,7 +62,7 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   /**
    * Sets the minValue property.
-   * 
+   *
    * @param minValue
    *          the minValue to set.
    */

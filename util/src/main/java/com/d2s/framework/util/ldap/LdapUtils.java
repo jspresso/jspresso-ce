@@ -73,4 +73,18 @@ public final class LdapUtils {
     }
     return null;
   }
+
+  /**
+   * Formats an integer attribute.
+   *
+   * @param value
+   *          the integer value.
+   * @return the parsed integer or null.
+   */
+  public static String formatInteger(Integer value) {
+    if (value != null) {
+      return value.toString();
+    }
+    return null;
+  }
 }

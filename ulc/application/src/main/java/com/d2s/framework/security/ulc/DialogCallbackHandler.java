@@ -26,7 +26,6 @@ import com.ulcjava.base.application.ULCLabel;
 import com.ulcjava.base.application.ULCPasswordField;
 import com.ulcjava.base.application.ULCTextField;
 import com.ulcjava.base.application.ULCWindow;
-import com.ulcjava.base.application.UlcUtilities;
 import com.ulcjava.base.application.event.ActionEvent;
 import com.ulcjava.base.application.event.serializable.IActionListener;
 import com.ulcjava.base.application.util.Dimension;
@@ -39,7 +38,7 @@ import com.ulcjava.base.shared.IWindowConstants;
  * <p>
  * Uses a ULC dialog to query the user for answers to authentication questions.
  * This can be used by a JAAS application to instantiate a CallbackHandler
- * 
+ *
  * @see javax.security.auth.callback
  */
 public class DialogCallbackHandler implements CallbackHandler {
@@ -71,7 +70,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Handles the specified set of callbacks.
-   * 
+   *
    * @param callbacks
    *          the callbacks to handle
    * @throws UnsupportedCallbackException
@@ -110,7 +109,7 @@ public class DialogCallbackHandler implements CallbackHandler {
       if (parentComponent instanceof ULCWindow) {
         parentWindow = (ULCWindow) parentComponent;
       } else {
-        parentWindow = UlcUtilities.windowForComponent(parentComponent);
+        parentWindow = UlcUtil.getVisibleWindow(parentComponent);
       }
       callbackDialog = new ULCDialog(parentWindow, true);
     } else {
@@ -413,7 +412,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -423,7 +422,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the locale.
-   * 
+   *
    * @param locale
    *          the locale to set.
    */
@@ -433,7 +432,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the parentComponent.
-   * 
+   *
    * @param parentComponent
    *          the parentComponent to set.
    */
@@ -443,7 +442,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the callbackHandlerListener.
-   * 
+   *
    * @param callbackHandlerListener
    *          the callbackHandlerListener to set.
    */
@@ -454,7 +453,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */

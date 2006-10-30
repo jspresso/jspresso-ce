@@ -5,27 +5,27 @@
   <parent>
     <groupId>com.design2see</groupId>
     <artifactId>d2s-framework</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
   </parent>
   <artifactId>d2s-jasper</artifactId>
   <packaging>jar</packaging>
   <name>Design2See Application Framework - JasperReports</name>
   <dependencies>
-		<dependency>
-			<groupId>com.design2see</groupId>
-			<artifactId>d2s-action</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.design2see</groupId>
-			<artifactId>d2s-swing-application</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.design2see</groupId>
-			<artifactId>d2s-ulc-application</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-action</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-swing-application</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-ulc-application</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jasperreports</groupId>
+      <artifactId>jasperreports</artifactId>
+    </dependency>
   </dependencies>
 </project>

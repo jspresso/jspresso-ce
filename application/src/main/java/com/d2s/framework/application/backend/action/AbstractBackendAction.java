@@ -140,7 +140,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * @return the accessorFactory.
    */
   protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
-    return getController(context).getAccessorFactory();
+    return getController(context).getBeanAccessorFactory();
   }
 
   /**

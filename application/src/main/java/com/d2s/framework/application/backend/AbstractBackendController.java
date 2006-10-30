@@ -22,6 +22,7 @@ import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
@@ -32,14 +33,14 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
-  private IAccessorFactory             accessorFactory;
+  private IAccessorFactory             beanAccessorFactory;
   private IEntityFactory               entityFactory;
   private IModelConnectorFactory       beanConnectorFactory;
   private Map<String, IValueConnector> moduleConnectors;
@@ -96,7 +97,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Gets the locale used by this controller. The locale is actually held by the
    * session.
-   * 
+   *
    * @return locale used by this controller.
    */
   public Locale getLocale() {
@@ -112,7 +113,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the beanConnectorFactory.
-   * 
+   *
    * @param beanConnectorFactory
    *          the beanConnectorFactory to set.
    */
@@ -142,7 +143,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Sets the model controller modules. These modules are not kept as-is. Their
    * connectors are.
-   * 
+   *
    * @param modules
    *          A map containing the modules indexed by a well-known key used to
    *          bind them with their views.
@@ -173,7 +174,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the applicationSession.
-   * 
+   *
    * @param applicationSession
    *          the applicationSession to set.
    */
@@ -209,7 +210,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the entityFactory.
-   * 
+   *
    * @param entityFactory
    *          the entityFactory to set.
    */
@@ -232,18 +233,18 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IAccessorFactory getAccessorFactory() {
-    return accessorFactory;
+  public IAccessorFactory getBeanAccessorFactory() {
+    return beanAccessorFactory;
   }
 
   /**
-   * Sets the accessorFactory.
-   * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
+   * Sets the beanAccessorFactory.
+   *
+   * @param beanAccessorFactory
+   *          the beanAccessorFactory to set.
    */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
+  public void setBeanAccessorFactory(IAccessorFactory beanAccessorFactory) {
+    this.beanAccessorFactory = beanAccessorFactory;
   }
 
   private void linkSessionArtifacts() {
@@ -261,5 +262,13 @@ public abstract class AbstractBackendController extends AbstractController
   @SuppressWarnings("unused")
   public void handleException(Throwable ex, Map<String, Object> context) {
     // NO-OP
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void checkModuleAccess(String moduleId) {
+    checkAccess((ISecurable) getModuleConnector(moduleId)
+        .getConnectorValue());
   }
 }

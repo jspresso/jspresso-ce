@@ -24,7 +24,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -57,7 +57,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the mnemonic of the action.
-   * 
+   *
    * @param mnemonicStringRep
    *          the mnemonic to set represented as a string as KeyStroke factory
    *          would parse it.
@@ -89,7 +89,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the description.
-   * 
+   *
    * @param description
    *          the description to set.
    */
@@ -99,7 +99,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the iconImageURL.
-   * 
+   *
    * @param iconImageURL
    *          the iconImageURL to set.
    */
@@ -109,7 +109,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the name.
-   * 
+   *
    * @param name
    *          the name to set.
    */
@@ -128,7 +128,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the value connector this model action was triggered on.
@@ -148,7 +148,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the value connector this model action was triggered on.
@@ -169,7 +169,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the value connector this model action was triggered on.
@@ -190,7 +190,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the parent value connector this model action was triggered on.
@@ -211,7 +211,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the acceleratorAsString.
-   * 
+   *
    * @param acceleratorAsString
    *          the acceleratorAsString to set.
    */
@@ -230,7 +230,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the frontend controller out of the action context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the frontend controller.
@@ -245,7 +245,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the mvcBinder.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the mvcBinder.
@@ -256,7 +256,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the viewFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the viewFactory.
@@ -267,7 +267,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the iconFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the iconFactory.
@@ -278,7 +278,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the actionFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the actionFactory.
@@ -312,5 +312,44 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     return actionDescriptor.getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * TODO Comment needed.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result;
+    if (getName() != null) {
+      result += getName().hashCode();
+    }
+    return result;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final AbstractFrontendAction other = (AbstractFrontendAction) obj;
+    if (getName() == null) {
+      return false;
+    } else if (!getName().equals(other.getName())) {
+      return false;
+    }
+    return true;
   }
 }

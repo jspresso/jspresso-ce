@@ -5,6 +5,7 @@ package com.d2s.framework.action;
 
 import java.util.Map;
 
+import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.util.exception.IExceptionHandler;
 
 /**
@@ -14,7 +15,7 @@ import com.d2s.framework.util.exception.IExceptionHandler;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,7 +25,7 @@ public interface IActionHandler extends IExceptionHandler {
    * Executes an action. Implementors should delegate the execution to the
    * action itself but are free to set the context of the execution (action
    * context, synchronous or not, transactionality, ...).
-   * 
+   *
    * @param action
    *          the action to be executed.
    * @param context
@@ -38,7 +39,7 @@ public interface IActionHandler extends IExceptionHandler {
    * Retrieves the initial action context from the controller. This context is
    * passed to the action chain and contains application-wide context key-value
    * pairs.
-   * 
+   *
    * @return the map representing the initial context provided by this
    *         controller.
    */
@@ -46,8 +47,17 @@ public interface IActionHandler extends IExceptionHandler {
 
   /**
    * Creates an empty action context.
-   * 
+   *
    * @return an empty action context.
    */
   Map<String, Object> createEmptyContext();
+
+  /**
+   * Checks authorization for secured access. It shoud throw a SecurityException
+   * whenever access should not be granted.
+   *
+   * @param securable
+   *          the id of the secured access to check.
+   */
+  void checkAccess(ISecurable securable);
 }

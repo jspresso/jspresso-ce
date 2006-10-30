@@ -23,7 +23,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -50,7 +50,7 @@ public abstract class AbstractChangePasswordAction extends
   public static final IComponentDescriptor PASSWD_CHANGE_DESCRIPTOR = createPasswordChangeModel();
 
   private static IComponentDescriptor createPasswordChangeModel() {
-    BasicComponentDescriptor passwordChangeModel = new BasicComponentDescriptor(null);
+    BasicComponentDescriptor passwordChangeModel = new BasicComponentDescriptor();
     BasicPasswordPropertyDescriptor currentPassword = new BasicPasswordPropertyDescriptor();
     currentPassword.setName(PASSWD_CURRENT);
     BasicPasswordPropertyDescriptor typedPassword = new BasicPasswordPropertyDescriptor();
@@ -97,7 +97,7 @@ public abstract class AbstractChangePasswordAction extends
 
   /**
    * Performs the effective password change depending on the underlying storage.
-   * 
+   *
    * @param userPrincipal
    *          the connected user principal.
    * @param currentPassword

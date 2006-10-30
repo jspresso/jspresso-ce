@@ -6,21 +6,24 @@ package com.d2s.framework.application.frontend.action.swing.std;
 import java.awt.BorderLayout;
 import java.awt.Dialog;
 import java.awt.Frame;
-import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.Window;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
+import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;
 
@@ -29,7 +32,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -46,8 +49,7 @@ public class ModalDialogAction extends AbstractSwingAction {
       Map<String, Object> context) {
     final JDialog dialog;
     IView<JComponent> mainView = getMainView(context);
-    Window window = SwingUtilities
-        .getWindowAncestor(getSourceComponent(context));
+    Window window = SwingUtil.getVisibleWindow(getSourceComponent(context));
     if (window instanceof Dialog) {
       dialog = new JDialog((Dialog) window, getI18nName(
           getTranslationProvider(context), getLocale(context)), true);
@@ -55,18 +57,25 @@ public class ModalDialogAction extends AbstractSwingAction {
       dialog = new JDialog((Frame) window, getI18nName(
           getTranslationProvider(context), getLocale(context)), true);
     }
-    JPanel actionPanel = new JPanel();
-    actionPanel.setLayout(new GridLayout(1, 0, 5, 10));
+
+    Box buttonBox = new Box(BoxLayout.LINE_AXIS);
+    buttonBox.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+
     JButton defaultButton = null;
     for (IDisplayableAction action : getActions(context)) {
       JButton actionButton = new JButton();
       actionButton.setAction(getActionFactory(context).createAction(action,
           actionHandler, mainView, getLocale(context)));
-      actionPanel.add(actionButton);
+      buttonBox.add(actionButton);
+      buttonBox.add(Box.createHorizontalStrut(10));
       if (defaultButton == null) {
         defaultButton = actionButton;
       }
     }
+    JPanel actionPanel = new JPanel();
+    actionPanel.setLayout(new BorderLayout());
+    actionPanel.add(buttonBox, BorderLayout.EAST);
+
     JPanel mainPanel = new JPanel();
     mainPanel.setLayout(new BorderLayout());
     mainPanel.add(mainView.getPeer(), BorderLayout.CENTER);
@@ -77,18 +86,14 @@ public class ModalDialogAction extends AbstractSwingAction {
       dialog.getRootPane().setDefaultButton(defaultButton);
     }
     dialog.pack();
-    if (window != null) {
-      dialog.setLocation(window.getX()
-          + (window.getWidth() - dialog.getWidth()) / 2, window.getY()
-          + (window.getHeight() - dialog.getHeight()) / 2);
-    }
+    SwingUtil.centerInParent(dialog);
     dialog.setVisible(true);
     return super.execute(actionHandler, context);
   }
 
   /**
    * Gets the actions.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the actions.
@@ -101,7 +106,7 @@ public class ModalDialogAction extends AbstractSwingAction {
 
   /**
    * Gets the mainView.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the mainView.

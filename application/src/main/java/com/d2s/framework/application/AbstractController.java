@@ -6,6 +6,8 @@ package com.d2s.framework.application;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.d2s.framework.security.ISecurable;
+import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -13,7 +15,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,7 +32,7 @@ public abstract class AbstractController implements IController {
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */
@@ -40,10 +42,18 @@ public abstract class AbstractController implements IController {
 
   /**
    * Gets the translationProvider.
-   * 
+   *
    * @return the translationProvider.
    */
   public ITranslationProvider getTranslationProvider() {
     return translationProvider;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void checkAccess(ISecurable securable) {
+    SecurityHelper.checkAccess(getApplicationSession().getSubject(), securable,
+        getTranslationProvider(), getLocale());
   }
 }

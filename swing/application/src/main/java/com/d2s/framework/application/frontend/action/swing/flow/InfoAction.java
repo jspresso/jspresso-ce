@@ -16,7 +16,7 @@ import com.d2s.framework.view.IIconFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,7 +30,7 @@ public class InfoAction extends AbstractMessageAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    JOptionPane.showInternalMessageDialog(SwingUtil
+    JOptionPane.showMessageDialog(SwingUtil
         .getWindowOrInternalFrame(getSourceComponent(context)),
         getMessage(context), getI18nName(getTranslationProvider(context),
             getLocale(context)), JOptionPane.INFORMATION_MESSAGE,
