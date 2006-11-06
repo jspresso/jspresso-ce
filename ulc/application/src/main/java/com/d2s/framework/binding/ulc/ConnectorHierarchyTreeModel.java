@@ -28,7 +28,7 @@ import com.ulcjava.base.application.tree.TreePath;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -41,7 +41,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
 
   /**
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
-   * 
+   *
    * @param rootConnector
    *          the connector being the root node of the tree.
    * @param tree
@@ -247,7 +247,9 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
           connector = connector.getParentConnector();
         }
         if (connector == rootConnector) {
-          nodeChanged(getTreePathForConnector(connector));
+          //TODO Check ULC bug UBA-920. Root node does not get updated on nodeChanged event.
+          //nodeChanged(getTreePathForConnector(connector));
+          nodeStructureChanged(getTreePathForConnector(connector));
         } else if (connector.getConnectorValue() != null) {
           IValueConnector parentConnector = connector.getParentConnector();
           while (parentConnector != null

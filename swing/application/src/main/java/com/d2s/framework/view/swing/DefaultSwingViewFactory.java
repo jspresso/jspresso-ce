@@ -2577,7 +2577,7 @@ public class DefaultSwingViewFactory implements
    */
   protected JButton createJButton() {
     JButton button = new JButton();
-    button.setMultiClickThreshhold(300);
+    SwingUtil.configureButton(button);
     return button;
   }
 

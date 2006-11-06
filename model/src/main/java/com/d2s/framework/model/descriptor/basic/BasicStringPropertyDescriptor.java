@@ -24,6 +24,7 @@ public class BasicStringPropertyDescriptor extends
 
   private Integer maxLength;
   private String  regexpPattern;
+  private String  regexpPatternSample;
 
   /**
    * {@inheritDoc}
@@ -111,9 +112,14 @@ public class BasicStringPropertyDescriptor extends
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
+          StringBuffer boundsSpec = new StringBuffer("l");
+          if (getMaxLength() != null) {
+            boundsSpec.append(" <= ").append(getMaxLength());
+          }
           return translationProvider.getTranslation(
               "integrity.property.outofbounds", new Object[] {
-                  getI18nName(translationProvider, locale), component}, locale);
+                  getI18nName(translationProvider, locale), component,
+                  boundsSpec}, locale);
         }
 
       };
@@ -132,11 +138,38 @@ public class BasicStringPropertyDescriptor extends
             Locale locale) {
           return translationProvider.getTranslation(
               "integrity.property.pattern", new Object[] {
-                  getI18nName(translationProvider, locale), component}, locale);
+                  getI18nName(translationProvider, locale),
+                  getRegexpPatternSample(), component}, locale);
         }
 
       };
       throw ie;
     }
+  }
+
+  /**
+   * Sets the regexpPatternSample.
+   *
+   * @param regexpPatternSample
+   *          the regexpPatternSample to set.
+   */
+  public void setRegexpPatternSample(String regexpPatternSample) {
+    this.regexpPatternSample = regexpPatternSample;
+  }
+
+  /**
+   * Gets the regexpPatternSample.
+   *
+   * @return the regexpPatternSample.
+   */
+  public String getRegexpPatternSample() {
+    if (regexpPatternSample != null) {
+      return regexpPatternSample;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IStringPropertyDescriptor) getParentDescriptor())
+          .getRegexpPatternSample();
+    }
+    return regexpPatternSample;
   }
 }

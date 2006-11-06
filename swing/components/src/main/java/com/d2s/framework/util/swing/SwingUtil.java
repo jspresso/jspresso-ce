@@ -13,6 +13,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.lang.reflect.InvocationTargetException;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
@@ -33,7 +34,7 @@ import foxtrot.Worker;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -56,7 +57,7 @@ public final class SwingUtil {
   /**
    * Tests wether in swing event dispatch thread. If not, use SwingUtilities to
    * invoke runnable and wait.
-   * 
+   *
    * @param runnable
    *          the runnable operation which updates the GUI.
    */
@@ -81,7 +82,7 @@ public final class SwingUtil {
 
   /**
    * Gets the window or the internal frame holding the component.
-   * 
+   *
    * @param component
    *          the component to look the window or internal frame for.
    * @return the window (frame or dialog) or the internal frame in the component
@@ -98,7 +99,7 @@ public final class SwingUtil {
 
   /**
    * Executes a job avoiding the common swing UI freeze.
-   * 
+   *
    * @param foxtrotJob
    *          the potentially long running job to execute.
    * @return the job execution result.
@@ -112,7 +113,7 @@ public final class SwingUtil {
 
   /**
    * Retrieves the first contained component of a certain type.
-   * 
+   *
    * @param component
    *          the component to start from.
    * @param childComponentType
@@ -139,7 +140,7 @@ public final class SwingUtil {
 
   /**
    * Make a color scaled using a defined factor.
-   * 
+   *
    * @param color
    *          the color to scale.
    * @param factor
@@ -178,7 +179,7 @@ public final class SwingUtil {
   /**
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
-   * 
+   *
    * @param renderer
    *          the renderer to work on.
    * @param collectionComponent
@@ -225,7 +226,7 @@ public final class SwingUtil {
 
   /**
    * Is the component passed in parameter used as an editor ?
-   * 
+   *
    * @param comp
    *          the component to test.
    * @return true if the component is currently used as an editor.
@@ -243,9 +244,9 @@ public final class SwingUtil {
   }
 
   /**
-   * configures a textfield so that it selects its content when getting focus by
+   * Configures a textfield so that it selects its content when getting focus by
    * another mean than the mouse.
-   * 
+   *
    * @param textField
    *          the textfield to work on.
    */
@@ -283,7 +284,7 @@ public final class SwingUtil {
 
     /**
      * Constructs a new <code>FocusGainedTask</code> instance.
-     * 
+     *
      * @param textField
      *          the text field to run on.
      */
@@ -307,7 +308,7 @@ public final class SwingUtil {
 
     /**
      * Constructs a new <code>FocusLostTask</code> instance.
-     * 
+     *
      * @param textField
      *          the text field to run on.
      */
@@ -328,8 +329,18 @@ public final class SwingUtil {
   }
 
   /**
+   * Configures a jbutton with default behaviour like the multi-click treshold.
+   *
+   * @param button
+   *          the button to work on.
+   */
+  public static void configureButton(JButton button) {
+    button.setMultiClickThreshhold(300);
+  }
+
+    /**
    * Center a window on screen.
-   * 
+   *
    * @param w
    *          the window to center on screen.
    */
@@ -341,7 +352,7 @@ public final class SwingUtil {
 
   /**
    * Center a window on screen.
-   * 
+   *
    * @param w
    *          the window to center on screen.
    */
@@ -356,7 +367,7 @@ public final class SwingUtil {
 
   /**
    * Gets the visible parent window.
-   * 
+   *
    * @param component
    *          the component to start from
    * @return the visible parent window or null.

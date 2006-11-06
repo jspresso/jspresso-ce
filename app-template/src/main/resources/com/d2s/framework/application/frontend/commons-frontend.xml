@@ -274,6 +274,11 @@
       <bean parent="abstractHibernateBackAction"
         class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveProjectedAction" />
     </property>
+    <property name="nextAction">
+      <bean parent="staticInfoFrontAction">
+        <property name="messageCode" value="save.successful" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="reloadProjectedFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">

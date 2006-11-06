@@ -36,7 +36,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -52,7 +52,7 @@ public class JActionField extends JPanel {
 
   /**
    * Constructs a new <code>JActionField</code> instance.
-   * 
+   *
    * @param showTextField
    *          is the text field visible to the user.
    */
@@ -93,7 +93,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the actions.
-   * 
+   *
    * @return the actions.
    */
   public List<Action> getActions() {
@@ -102,7 +102,7 @@ public class JActionField extends JPanel {
 
   /**
    * Sets the action field action.
-   * 
+   *
    * @param actions
    *          the action field actions.
    */
@@ -112,6 +112,7 @@ public class JActionField extends JPanel {
       this.actions = actions;
       for (Action action : actions) {
         JButton actionButton = new JButton();
+        SwingUtil.configureButton(actionButton);
         actionButton.setBackground(textField.getBackground());
         actionButton.setAction(action);
         actionButton.setActionCommand("%");
@@ -136,7 +137,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the value.
-   * 
+   *
    * @return the value.
    */
   public Object getValue() {
@@ -145,7 +146,7 @@ public class JActionField extends JPanel {
 
   /**
    * Sets the value.
-   * 
+   *
    * @param value
    *          the value to set.
    */
@@ -156,7 +157,7 @@ public class JActionField extends JPanel {
 
   /**
    * Adds a focus listener to the text field.
-   * 
+   *
    * @param l
    *          the listener to remove.
    */
@@ -166,7 +167,7 @@ public class JActionField extends JPanel {
 
   /**
    * Removes a focus listener from the text field.
-   * 
+   *
    * @param l
    *          the listener to remove.
    */
@@ -185,7 +186,7 @@ public class JActionField extends JPanel {
   /**
    * Gets wether this action field text is synchronized with its underlying
    * value.
-   * 
+   *
    * @return true if this action field text is synchronized with its underlying
    *         value.
    */
@@ -202,7 +203,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the action field text.
-   * 
+   *
    * @return the action field text.
    */
   public String getActionText() {
@@ -211,7 +212,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the action field text.
-   * 
+   *
    * @param actionText
    *          the action field text.
    */
@@ -238,7 +239,7 @@ public class JActionField extends JPanel {
 
   /**
    * Turns the date field to be editable or not.
-   * 
+   *
    * @param editable
    *          true if editable.
    */
@@ -251,7 +252,7 @@ public class JActionField extends JPanel {
 
   /**
    * Turns the date field to be enabled or not.
-   * 
+   *
    * @param enabled
    *          true if enabled.
    */
@@ -272,7 +273,7 @@ public class JActionField extends JPanel {
 
   /**
    * Gets the showTextField.
-   * 
+   *
    * @return the showTextField.
    */
   public boolean isShowingTextField() {
@@ -281,7 +282,7 @@ public class JActionField extends JPanel {
 
   /**
    * Decorates the component with a marker.
-   * 
+   *
    * @param decorated
    *          if the component should be decorated.
    */

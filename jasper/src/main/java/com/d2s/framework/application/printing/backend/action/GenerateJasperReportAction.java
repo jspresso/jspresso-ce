@@ -14,6 +14,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,7 +32,7 @@ import com.d2s.framework.util.url.UrlHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -47,10 +48,17 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
     try {
       IReport reportDesign = (IReport) context
           .get(ActionContextConstants.ACTION_PARAM);
-      final JasperReport jasperReport = JasperCompileManager
-          .compileReport(UrlHelper.createURL(
-              reportDesign.getReportDescriptor().getReportDesignUrl())
-              .openStream());
+      String urlSpec = reportDesign.getReportDescriptor().getReportDesignUrl();
+      final JasperReport jasperReport;
+      if (urlSpec.endsWith("xml")) {
+        jasperReport = JasperCompileManager.compileReport(UrlHelper.createURL(
+            reportDesign.getReportDescriptor().getReportDesignUrl())
+            .openStream());
+      } else {
+        jasperReport = (JasperReport) JRLoader.loadObject(UrlHelper.createURL(
+            reportDesign.getReportDescriptor().getReportDesignUrl())
+            .openStream());
+      }
       final Map<String, Object> reportContext = new HashMap<String, Object>(
           reportDesign.getContext());
       reportContext.putAll(context);
@@ -81,7 +89,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
 
   /**
    * Sets the jdbcTemplate.
-   * 
+   *
    * @param jdbcTemplate
    *          the jdbcTemplate to set.
    */

@@ -31,7 +31,7 @@ import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -43,6 +43,7 @@ public class LovAction extends ModalDialogAction {
   private IDisplayableAction           cancelAction;
   private IDisplayableAction           findAction;
   private IReferencePropertyDescriptor entityRefQueryDescriptor;
+  private boolean                      autoquery;
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -51,6 +52,7 @@ public class LovAction extends ModalDialogAction {
     setName("lov.name");
     setDescription("lov.description");
     setIconImageURL("classpath:images/find-48x48.png");
+    setAutoquery(true);
   }
 
   /**
@@ -82,7 +84,8 @@ public class LovAction extends ModalDialogAction {
         queryEntityConnector);
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_COMMAND);
-    if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {
+    if (autoquery && queryPropertyValue != null
+        && !queryPropertyValue.equals("%")) {
       actionHandler.execute(findAction, context);
       IQueryEntity queryEntity = (IQueryEntity) queryEntityConnector
           .getConnectorValue();
@@ -99,7 +102,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the lovViewDescriptorFactory.
-   * 
+   *
    * @param lovViewDescriptorFactory
    *          the lovViewDescriptorFactory to set.
    */
@@ -110,7 +113,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the createQueryEntityAction.
-   * 
+   *
    * @param createQueryEntityAction
    *          the createQueryEntityAction to set.
    */
@@ -121,7 +124,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the cancelAction.
-   * 
+   *
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -131,7 +134,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the findAction.
-   * 
+   *
    * @param findAction
    *          the findAction to set.
    */
@@ -141,7 +144,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the okAction.
-   * 
+   *
    * @param okAction
    *          the okAction to set.
    */
@@ -151,7 +154,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Gets the entityRefQueryDescriptor.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the entityRefQueryDescriptor.
@@ -171,12 +174,22 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the entityRefQueryDescriptor.
-   * 
+   *
    * @param entityRefQueryDescriptor
    *          the entityRefQueryDescriptor to set.
    */
   public void setEntityRefQueryDescriptor(
       IReferencePropertyDescriptor entityRefQueryDescriptor) {
     this.entityRefQueryDescriptor = entityRefQueryDescriptor;
+  }
+
+  /**
+   * Sets the autoquery.
+   *
+   * @param autoquery
+   *          the autoquery to set.
+   */
+  public void setAutoquery(boolean autoquery) {
+    this.autoquery = autoquery;
   }
 }

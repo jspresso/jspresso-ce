@@ -16,7 +16,7 @@ import com.d2s.framework.binding.IValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -29,7 +29,9 @@ public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
   public void fileChosen(InputStream in, String filePath,
       IActionHandler actionHandler, Map<String, Object> context) {
     super.fileChosen(in, filePath, actionHandler, context);
-    ((IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR))
-        .setConnectorValue(context.get(ActionContextConstants.ACTION_PARAM));
+    if (context.containsKey(context.get(ActionContextConstants.ACTION_PARAM))) {
+      ((IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR))
+          .setConnectorValue(context.get(ActionContextConstants.ACTION_PARAM));
+    }
   }
 }

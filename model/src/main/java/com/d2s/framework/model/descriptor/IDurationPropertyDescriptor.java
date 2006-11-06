@@ -8,7 +8,7 @@ package com.d2s.framework.model.descriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,9 +42,9 @@ public interface IDurationPropertyDescriptor extends IScalarPropertyDescriptor {
   /**
    * Gets the upper bound of this duration property in milliseconds. The method
    * should use the constants defined above.
-   * 
+   *
    * @return the maximum number of milliseconds this duration property can take.
    */
-  long getMaxMillis();
+  Long getMaxMillis();
 
 }

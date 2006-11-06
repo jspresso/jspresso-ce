@@ -90,10 +90,18 @@ public abstract class BasicNumberPropertyDescriptor extends
           @Override
           public String getI18nMessage(
               ITranslationProvider translationProvider, Locale locale) {
+            StringBuffer boundsSpec = new StringBuffer();
+            if (getMinValue() != null) {
+              boundsSpec.append(getMinValue()).append(" <= ");
+            }
+            boundsSpec.append("x");
+            if (getMaxValue() != null) {
+              boundsSpec.append(" <= ").append(getMaxValue());
+            }
             return translationProvider.getTranslation(
                 "integrity.property.outofbounds", new Object[] {
-                    getI18nName(translationProvider, locale), component},
-                locale);
+                    getI18nName(translationProvider, locale), component,
+                    boundsSpec}, locale);
           }
 
         };

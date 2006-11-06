@@ -26,15 +26,15 @@ public class BasicDurationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public long getMaxMillis() {
+  public Long getMaxMillis() {
     if (maxMillis != null) {
-      return maxMillis.longValue();
+      return maxMillis;
     }
     if (getParentDescriptor() != null) {
       return ((IDurationPropertyDescriptor) getParentDescriptor())
           .getMaxMillis();
     }
-    return 0;
+    return maxMillis;
   }
 
   /**
@@ -61,8 +61,8 @@ public class BasicDurationPropertyDescriptor extends
   public void checkValueIntegrity(final Object component,
       final Object propertyValue) {
     super.checkValueIntegrity(component, propertyValue);
-    if (propertyValue != null && getMaxMillis() > 0
-        && ((Long) propertyValue).longValue() > getMaxMillis()) {
+    if (propertyValue != null && getMaxMillis() != null
+        && ((Long) propertyValue).longValue() > getMaxMillis().longValue()) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value is too high on [" + component + "].") {
 
@@ -71,9 +71,15 @@ public class BasicDurationPropertyDescriptor extends
         @Override
         public String getI18nMessage(ITranslationProvider translationProvider,
             Locale locale) {
+          StringBuffer boundsSpec = new StringBuffer();
+          boundsSpec.append("x");
+          if (getMaxMillis() != null) {
+            boundsSpec.append(" <= ").append(getMaxMillis());
+          }
           return translationProvider.getTranslation(
               "integrity.property.outofbounds", new Object[] {
-                  getI18nName(translationProvider, locale), component}, locale);
+                  getI18nName(translationProvider, locale), component,
+                  boundsSpec}, locale);
         }
 
       };

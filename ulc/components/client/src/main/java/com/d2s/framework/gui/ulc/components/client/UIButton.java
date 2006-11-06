@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.gui.ulc.components.client;
 
+import com.d2s.framework.util.swing.SwingUtil;
 import com.ulcjava.base.client.UiJButton;
 import com.ulcjava.base.shared.internal.Anything;
 
@@ -25,7 +26,7 @@ public class UIButton extends com.ulcjava.base.client.UIButton {
   protected Object createBasicObject(@SuppressWarnings("unused")
   Anything args) {
     UiJButton button = (UiJButton) super.createBasicObject(args);
-    button.setMultiClickThreshhold(300);
+    SwingUtil.configureButton(button);
     return button;
   }
 

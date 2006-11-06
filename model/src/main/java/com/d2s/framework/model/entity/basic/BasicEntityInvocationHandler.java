@@ -50,7 +50,7 @@ import com.d2s.framework.util.collection.CollectionHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -71,7 +71,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Constructs a new <code>BasicEntityInvocationHandler</code> instance.
-   * 
+   *
    * @param entityDescriptor
    *          The descriptor of the proxy entity.
    * @param collectionFactory
@@ -226,7 +226,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Wether the object is fully initialized.
-   * 
+   *
    * @param objectOrProxy
    *          the object to test.
    * @return true if the object is fully initialized.
@@ -238,7 +238,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Gets a property value.
-   * 
+   *
    * @param proxy
    *          the proxy to get the property of.
    * @param propertyDescriptor
@@ -264,7 +264,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Gets a collection property value.
-   * 
+   *
    * @param proxy
    *          the proxy to get the property of.
    * @param propertyDescriptor
@@ -284,7 +284,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Gets a reference property value.
-   * 
+   *
    * @param proxy
    *          the proxy to get the property of.
    * @param propertyDescriptor
@@ -688,7 +688,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Sets the collectionFactory.
-   * 
+   *
    * @param collectionFactory
    *          the collectionFactory to set.
    */
@@ -792,13 +792,18 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   /**
    * Directly get a property value out of the property store without any other
    * operation.
-   * 
+   *
    * @param propertyName
    *          the name of the property.
    * @return the property value or null.
    */
   protected Object straightGetProperty(String propertyName) {
-    return properties.get(propertyName);
+    Object propertyValue = properties.get(propertyName);
+    if (propertyValue == null
+        && entityDescriptor.getPropertyDescriptor(propertyName) instanceof IBooleanPropertyDescriptor) {
+      return Boolean.FALSE;
+    }
+    return propertyValue;
   }
 
   private void straightSetProperties(Map<String, Object> backendProperties) {
@@ -813,7 +818,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Gets the interface class being the contract of this entity.
-   * 
+   *
    * @return the entity interface contract.
    */
   public Class<? extends IEntity> getEntityContract() {
@@ -847,7 +852,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   /**
    * Direct write access to the properties map without any other operation. Use
    * with caution only in subclasses.
-   * 
+   *
    * @param propertyName
    *          the property name.
    * @param propertyValue

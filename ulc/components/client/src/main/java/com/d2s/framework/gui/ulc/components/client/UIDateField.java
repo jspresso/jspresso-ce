@@ -42,7 +42,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -255,7 +255,7 @@ public class UIDateField extends UIComponent implements IEditorComponent {
     public boolean isCellEditable(EventObject evt) {
       if (evt instanceof MouseEvent) {
         MouseEvent me = (MouseEvent) evt;
-        return (me.getClickCount() > 1);
+        return (me.getClickCount() >= 2);
       }
       return super.isCellEditable(evt);
     }

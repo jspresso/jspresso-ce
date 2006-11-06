@@ -87,4 +87,29 @@ public final class LdapUtils {
     }
     return null;
   }
+
+  /**
+   * Parses an boolean attribute.
+   *
+   * @param booleanAsString
+   *          the string representation of the boolean.
+   * @return the parsed boolean or null.
+   */
+  public static boolean parseBoolean(String booleanAsString) {
+    if (booleanAsString != null) {
+      return Boolean.parseBoolean(booleanAsString);
+    }
+    return false;
+  }
+
+  /**
+   * Formats an boolean attribute.
+   *
+   * @param value
+   *          the boolean value.
+   * @return the parsed boolean.
+   */
+  public static String formatBoolean(boolean value) {
+    return new Boolean(value).toString().toUpperCase();
+  }
 }

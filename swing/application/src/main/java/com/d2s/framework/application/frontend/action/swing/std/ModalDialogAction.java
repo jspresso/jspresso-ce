@@ -64,6 +64,7 @@ public class ModalDialogAction extends AbstractSwingAction {
     JButton defaultButton = null;
     for (IDisplayableAction action : getActions(context)) {
       JButton actionButton = new JButton();
+      SwingUtil.configureButton(actionButton);
       actionButton.setAction(getActionFactory(context).createAction(action,
           actionHandler, mainView, getLocale(context)));
       buttonBox.add(actionButton);

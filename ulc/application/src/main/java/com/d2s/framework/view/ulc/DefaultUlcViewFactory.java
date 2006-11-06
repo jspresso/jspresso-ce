@@ -2456,7 +2456,7 @@ public class DefaultUlcViewFactory implements
    * @return the created combo box.
    */
   protected ULCComboBox createULCComboBox() {
-    return new ULCComboBox();
+    return new com.d2s.framework.gui.ulc.components.server.ULCComboBox();
   }
 
   /**
