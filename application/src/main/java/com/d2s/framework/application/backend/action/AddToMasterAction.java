@@ -25,7 +25,7 @@ import com.d2s.framework.util.accessor.IListAccessor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -44,8 +44,14 @@ public class AddToMasterAction extends AbstractCollectionAction {
       return false;
     }
 
-    IEntity newEntity = getNewEntity(context);
-    if (newEntity != null) {
+    Object newComponent = getNewComponent(context);
+    if (newComponent != null) {
+      Class newComponentContract;
+      if (newComponent instanceof IEntity) {
+        newComponentContract = ((IEntity) newComponent).getContract();
+      } else {
+        newComponentContract = newComponent.getClass();
+      }
       Object master = collectionConnector.getParentConnector()
           .getConnectorValue();
       ICollectionAccessor collectionAccessor = getAccessorFactory(context)
@@ -53,7 +59,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
               collectionConnector.getId(),
               ((IModelValueConnector) collectionConnector).getModelProvider()
                   .getModelDescriptor().getComponentDescriptor()
-                  .getComponentContract(), newEntity.getContract());
+                  .getComponentContract(), newComponentContract);
       try {
         int index = -1;
         if (collectionAccessor instanceof IListAccessor) {
@@ -64,9 +70,9 @@ public class AddToMasterAction extends AbstractCollectionAction {
         }
         if (index >= 0) {
           ((IListAccessor) collectionAccessor).addToValue(master, index + 1,
-              newEntity);
+              newComponent);
         } else {
-          collectionAccessor.addToValue(master, newEntity);
+          collectionAccessor.addToValue(master, newComponent);
         }
       } catch (IllegalAccessException ex) {
         throw new ActionException(ex);
@@ -76,7 +82,8 @@ public class AddToMasterAction extends AbstractCollectionAction {
         throw new ActionException(ex);
       }
       context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-          .getIndicesOf(collectionConnector, Collections.singleton(newEntity)));
+          .getIndicesOf(collectionConnector, Collections
+              .singleton(newComponent)));
     }
     return true;
   }
@@ -84,13 +91,13 @@ public class AddToMasterAction extends AbstractCollectionAction {
   /**
    * Gets the new entity to add. It is createdusing the informations contained
    * in the context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the entity to add to the collection.
    */
   @SuppressWarnings("unchecked")
-  protected IEntity getNewEntity(Map<String, Object> context) {
+  protected Object getNewComponent(Map<String, Object> context) {
     IComponentDescriptor elementDescriptor = (IComponentDescriptor) context
         .get(ActionContextConstants.ELEMENT_DESCRIPTOR);
     if (elementDescriptor == null) {

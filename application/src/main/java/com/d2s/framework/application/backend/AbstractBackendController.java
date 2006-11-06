@@ -41,8 +41,10 @@ public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
   private IAccessorFactory             beanAccessorFactory;
+  private IAccessorFactory             mapAccessorFactory;
   private IEntityFactory               entityFactory;
   private IModelConnectorFactory       beanConnectorFactory;
+  private IModelConnectorFactory       mapConnectorFactory;
   private Map<String, IValueConnector> moduleConnectors;
   private IApplicationSession          applicationSession;
 
@@ -120,6 +122,17 @@ public abstract class AbstractBackendController extends AbstractController
   public void setBeanConnectorFactory(
       IModelConnectorFactory beanConnectorFactory) {
     this.beanConnectorFactory = beanConnectorFactory;
+  }
+
+  /**
+   * Sets the mapConnectorFactory.
+   *
+   * @param mapConnectorFactory
+   *          the mapConnectorFactory to set.
+   */
+  public void setMapConnectorFactory(
+      IModelConnectorFactory mapConnectorFactory) {
+    this.mapConnectorFactory = mapConnectorFactory;
   }
 
   /**
@@ -209,6 +222,13 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public IModelConnectorFactory getMapConnectorFactory() {
+    return mapConnectorFactory;
+  }
+
+  /**
    * Sets the entityFactory.
    *
    * @param entityFactory
@@ -238,6 +258,13 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public IAccessorFactory getMapAccessorFactory() {
+    return mapAccessorFactory;
+  }
+
+  /**
    * Sets the beanAccessorFactory.
    *
    * @param beanAccessorFactory
@@ -245,6 +272,16 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void setBeanAccessorFactory(IAccessorFactory beanAccessorFactory) {
     this.beanAccessorFactory = beanAccessorFactory;
+  }
+
+  /**
+   * Sets the mapAccessorFactory.
+   *
+   * @param mapAccessorFactory
+   *          the mapAccessorFactory to set.
+   */
+  public void setMapAccessorFactory(IAccessorFactory mapAccessorFactory) {
+    this.mapAccessorFactory = mapAccessorFactory;
   }
 
   private void linkSessionArtifacts() {
@@ -268,7 +305,6 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   public void checkModuleAccess(String moduleId) {
-    checkAccess((ISecurable) getModuleConnector(moduleId)
-        .getConnectorValue());
+    checkAccess((ISecurable) getModuleConnector(moduleId).getConnectorValue());
   }
 }

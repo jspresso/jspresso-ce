@@ -72,11 +72,25 @@ public interface IBackendController extends IController {
   IAccessorFactory getBeanAccessorFactory();
 
   /**
+   * Gets the mapAccessorFactory for this backend controller.
+   *
+   * @return the mapAccessorFactory for this backend controller.
+   */
+  IAccessorFactory getMapAccessorFactory();
+
+  /**
    * Gets the beanConnectorFactory for this backend controller.
    *
    * @return the beanConnectorFactory for this backend controller.
    */
   IModelConnectorFactory getBeanConnectorFactory();
+
+  /**
+   * Gets the mapConnectorFactory for this backend controller.
+   *
+   * @return the mapConnectorFactory for this backend controller.
+   */
+  IModelConnectorFactory getMapConnectorFactory();
 
   /**
    * Translate modules based on the locale set.

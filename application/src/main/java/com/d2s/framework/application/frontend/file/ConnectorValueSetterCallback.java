@@ -29,7 +29,7 @@ public class ConnectorValueSetterCallback extends FileToByteArrayCallback {
   public void fileChosen(InputStream in, String filePath,
       IActionHandler actionHandler, Map<String, Object> context) {
     super.fileChosen(in, filePath, actionHandler, context);
-    if (context.containsKey(context.get(ActionContextConstants.ACTION_PARAM))) {
+    if (context.containsKey(ActionContextConstants.ACTION_PARAM)) {
       ((IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR))
           .setConnectorValue(context.get(ActionContextConstants.ACTION_PARAM));
     }

@@ -179,6 +179,8 @@
     </property>
     <property name="beanAccessorFactory" ref="beanAccessorFactory" />
     <property name="beanConnectorFactory" ref="beanConnectorFactory" />
+    <property name="mapAccessorFactory" ref="mapAccessorFactory" />
+    <property name="mapConnectorFactory" ref="mapConnectorFactory" />
     <property name="translationProvider" ref="translationProvider" />
   </bean>
 
