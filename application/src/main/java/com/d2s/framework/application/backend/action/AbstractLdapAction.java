@@ -19,8 +19,6 @@ public abstract class AbstractLdapAction extends AbstractBackendAction implement
   private LdapTemplate ldapTemplate;
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   public void setLdapTemplate(LdapTemplate ldapTemplate) {

@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.gui.ulc.components.server;
 
+import com.ulcjava.base.application.ULCButton;
 import com.ulcjava.base.application.util.ULCIcon;
 
 /**
@@ -15,7 +16,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ULCButton extends com.ulcjava.base.application.ULCButton {
+public class ULCExtendedButton extends ULCButton {
 
   private static final long serialVersionUID = 9221025686823039202L;
 
@@ -24,23 +25,23 @@ public class ULCButton extends com.ulcjava.base.application.ULCButton {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIButton";
+    return "com.d2s.framework.gui.ulc.components.client.UIExtendedButton";
   }
 
   /**
-   * Constructs a new <code>ULCButton</code> instance.
+   * Constructs a new <code>ULCExtendedButton</code> instance.
    *
    */
-  public ULCButton() {
+  public ULCExtendedButton() {
     super();
   }
 
   /**
-   * Constructs a new <code>ULCButton</code> instance.
+   * Constructs a new <code>ULCExtendedButton</code> instance.
    *
    * @param icon the button icon
    */
-  public ULCButton(ULCIcon icon) {
+  public ULCExtendedButton(ULCIcon icon) {
     super(icon);
   }
 

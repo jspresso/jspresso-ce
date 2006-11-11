@@ -8,7 +8,7 @@ import com.ulcjava.base.application.event.IEventListener;
 import com.ulcjava.base.application.event.UlcEvent;
 
 /**
- * TODO Comment needed.
+ * Event for ExtendedInternalFrame.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

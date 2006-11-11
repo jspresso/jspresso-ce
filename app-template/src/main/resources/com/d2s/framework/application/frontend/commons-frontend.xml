@@ -187,17 +187,11 @@
     <property name="description" value="remove.description" />
     <property name="acceleratorAsString" value="alt D" />
     <property name="messageCode" value="remove.selected.message" />
-    <property name="yesAction">
-      <bean class="com.d2s.framework.application.backend.action.RemoveCollectionFromMasterAction" />
-    </property>
+    <property name="yesAction" ref="removeCollectionFromMasterBackAction" />
   </bean>
 
   <bean id="removeFromProjectedFrontAction" parent="removeCollectionFromMasterFrontAction">
-    <property name="yesAction">
-      <bean parent="abstractHibernateBackAction"
-        class="com.d2s.framework.application.backend.action.persistence.hibernate.module.RemoveFromModuleObjectsAction">
-      </bean>
-    </property>
+    <property name="yesAction" ref="removeFromModuleObjectsAction" />
   </bean>
 
   <bean id="cloneProjectedFrontAction" parent="cloneCollectionFrontAction">
@@ -264,16 +258,13 @@
   </bean>
 
   <!--
-    Hibernate action beans.
+    Persistence action beans.
   -->
   <bean id="saveProjectedFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property name="iconImageURL" value="classpath:images/save-48x48.png" />
     <property name="name" value="save.name" />
     <property name="description" value="save.description" />
-    <property name="wrappedAction">
-      <bean parent="abstractHibernateBackAction"
-        class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveProjectedAction" />
-    </property>
+    <property name="wrappedAction" ref="saveProjectedBackAction" />
     <property name="nextAction">
       <bean parent="staticInfoFrontAction">
         <property name="messageCode" value="save.successful" />
@@ -285,10 +276,7 @@
     <property name="iconImageURL" value="classpath:images/reload-48x48.png" />
     <property name="name" value="reload.name" />
     <property name="description" value="reload.description" />
-    <property name="wrappedAction">
-      <bean parent="abstractHibernateBackAction"
-        class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadProjectedAction" />
-    </property>
+    <property name="wrappedAction" ref="reloadProjectedBackAction" />
   </bean>
 
   <!--

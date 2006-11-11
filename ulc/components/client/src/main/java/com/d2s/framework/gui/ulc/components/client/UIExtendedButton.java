@@ -4,6 +4,7 @@
 package com.d2s.framework.gui.ulc.components.client;
 
 import com.d2s.framework.util.swing.SwingUtil;
+import com.ulcjava.base.client.UIButton;
 import com.ulcjava.base.client.UiJButton;
 import com.ulcjava.base.shared.internal.Anything;
 
@@ -17,7 +18,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class UIButton extends com.ulcjava.base.client.UIButton {
+public class UIExtendedButton extends UIButton {
 
   /**
    * {@inheritDoc}

@@ -8,7 +8,7 @@ import java.util.Map;
 
 
 /**
- * TODO Comment needed.
+ * An actionable object.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

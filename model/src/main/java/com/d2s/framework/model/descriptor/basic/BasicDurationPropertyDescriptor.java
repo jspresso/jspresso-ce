@@ -78,8 +78,8 @@ public class BasicDurationPropertyDescriptor extends
           }
           return translationProvider.getTranslation(
               "integrity.property.outofbounds", new Object[] {
-                  getI18nName(translationProvider, locale), component,
-                  boundsSpec}, locale);
+                  getI18nName(translationProvider, locale), boundsSpec,
+                  component}, locale);
         }
 
       };

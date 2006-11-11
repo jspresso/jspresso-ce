@@ -4,17 +4,17 @@
 package com.d2s.framework.gui.ulc.components.shared;
 
 /**
- * Constants shared by ULCTree and UITree.
+ * Constants shared by ULCExtendedTree and UIExtendedTree.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public final class TreeConstants {
+public final class ExtendedTreeConstants {
 
-  private TreeConstants() {
+  private ExtendedTreeConstants() {
     // Empty constructor for utility class
   }
 
@@ -29,4 +29,19 @@ public final class TreeConstants {
    * <code>ROW_KEY</code>.
    */
   public static final String ROW_KEY               = "row";
+
+  /**
+   * <code>EXTENDED_TREE_EXPANSION_EVENT</code>.
+   */
+  public static final int EXTENDED_TREE_EXPANSION_EVENT = 10002;
+
+  /**
+   * <code>EXTENDED_TREE_WILL_EXPAND</code>.
+   */
+  public static final int EXTENDED_TREE_WILL_EXPAND = 1;
+
+  /**
+   * <code>EXTENDED_TREE_WILL_COLLAPSE</code>.
+   */
+  public static final int EXTENDED_TREE_WILL_COLLAPSE = 2;
 }

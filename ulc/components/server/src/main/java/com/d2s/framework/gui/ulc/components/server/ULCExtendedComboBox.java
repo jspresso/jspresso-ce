@@ -4,6 +4,7 @@
 package com.d2s.framework.gui.ulc.components.server;
 
 import com.ulcjava.base.application.IComboBoxModel;
+import com.ulcjava.base.application.ULCComboBox;
 
 /**
  * This subclass implements some default behaviors which are not yet
@@ -15,11 +16,8 @@ import com.ulcjava.base.application.IComboBoxModel;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ULCComboBox extends com.ulcjava.base.application.ULCComboBox {
+public class ULCExtendedComboBox extends ULCComboBox {
 
-  /**
-   * TODO Comment needed for <code>serialVersionUID</code>.
-   */
   private static final long serialVersionUID = -7959139931231333809L;
 
   /**
@@ -27,23 +25,23 @@ public class ULCComboBox extends com.ulcjava.base.application.ULCComboBox {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIComboBox";
+    return "com.d2s.framework.gui.ulc.components.client.UIExtendedComboBox";
   }
 
   /**
-   * Constructs a new <code>ULCComboBox</code> instance.
+   * Constructs a new <code>ULCExtendedComboBox</code> instance.
    */
-  public ULCComboBox() {
+  public ULCExtendedComboBox() {
     super();
   }
 
   /**
-   * Constructs a new <code>ULCComboBox</code> instance.
+   * Constructs a new <code>ULCExtendedComboBox</code> instance.
    *
    * @param model
    *          the combobox model.
    */
-  public ULCComboBox(IComboBoxModel model) {
+  public ULCExtendedComboBox(IComboBoxModel model) {
     super(model);
   }
 

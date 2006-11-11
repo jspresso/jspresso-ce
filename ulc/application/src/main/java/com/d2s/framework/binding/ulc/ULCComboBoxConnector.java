@@ -24,7 +24,7 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
    * @param id
    *          the id of the connector.
    * @param comboBox
-   *          the connected ULCComboBox.
+   *          the connected ULCExtendedComboBox.
    */
   public ULCComboBoxConnector(String id, ULCComboBox comboBox) {
     super(id, comboBox);

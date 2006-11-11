@@ -15,7 +15,7 @@ import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 import com.d2s.framework.application.frontend.action.wizard.IWizardStepDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
-import com.d2s.framework.gui.ulc.components.server.ULCButton;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedButton;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
@@ -90,15 +90,15 @@ public class WizardAction extends AbstractUlcAction {
 
     final ULCCardPane cardPanel = new ULCCardPane();
 
-    final ULCButton backButton = new ULCButton(getIconFactory(context)
+    final ULCExtendedButton backButton = new ULCExtendedButton(getIconFactory(context)
         .getBackwardIcon(IIconFactory.SMALL_ICON_SIZE));
-    final ULCButton nextButton = new ULCButton(getIconFactory(context)
+    final ULCExtendedButton nextButton = new ULCExtendedButton(getIconFactory(context)
         .getForwardIcon(IIconFactory.SMALL_ICON_SIZE));
-    final ULCButton finishButton = new ULCButton(getIconFactory(context)
+    final ULCExtendedButton finishButton = new ULCExtendedButton(getIconFactory(context)
         .getIcon(finishAction.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     finishButton.setText(finishAction.getI18nName(
         getTranslationProvider(context), getLocale(context)));
-    ULCButton cancelButton = new ULCButton(getIconFactory(context)
+    ULCExtendedButton cancelButton = new ULCExtendedButton(getIconFactory(context)
         .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
     cancelButton.setText(getTranslationProvider(context).getTranslation(
         "cancel", getLocale(context)));
@@ -195,8 +195,8 @@ public class WizardAction extends AbstractUlcAction {
   }
 
   private void show(ULCDialog dialog, ULCCardPane cardPanel, Set<String> alreadyDisplayedSteps,
-      IWizardStepDescriptor wizardStep, ULCButton backButton,
-      ULCButton nextButton, ULCButton finishButton,
+      IWizardStepDescriptor wizardStep, ULCExtendedButton backButton,
+      ULCExtendedButton nextButton, ULCExtendedButton finishButton,
       IValueConnector modelConnector, IActionHandler actionHandler,
       Map<String, Object> context) {
     String cardName = wizardStep.getName();

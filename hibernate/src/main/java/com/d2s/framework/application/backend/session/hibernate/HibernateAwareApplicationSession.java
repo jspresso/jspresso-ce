@@ -33,13 +33,14 @@ import com.d2s.framework.util.bean.PropertyHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class HibernateAwareApplicationSession extends BasicApplicationSession {
 
   private HibernateTemplate hibernateTemplate;
+  private boolean           traversedPendingOperations = false;
 
   /**
    * Does the unit of work back merge in the scope of an hibernate session.
@@ -48,19 +49,43 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    */
   @Override
   public void commitUnitOfWork() {
-    hibernateTemplate.execute(new HibernateCallback() {
+    try {
+      hibernateTemplate.execute(new HibernateCallback() {
 
-      /**
-       * {@inheritDoc}
-       */
-      public Object doInHibernate(Session session) {
-        for (IEntity entityToMergeBack : getEntitiesToMergeBack()) {
-          session.lock(entityToMergeBack, LockMode.NONE);
+        /**
+         * {@inheritDoc}
+         */
+        public Object doInHibernate(Session session) {
+          for (IEntity entityToMergeBack : getEntitiesToMergeBack()) {
+            if (entityToMergeBack.isPersistent()) {
+              try {
+                session.lock(entityToMergeBack, LockMode.NONE);
+              } catch (Exception ex) {
+                session.evict(session.get(entityToMergeBack.getContract(),
+                    entityToMergeBack.getId()));
+                session.lock(entityToMergeBack, LockMode.NONE);
+              }
+            }
+          }
+          performActualUnitOfWorkCommit();
+          return null;
         }
-        performActualUnitOfWorkCommit();
-        return null;
-      }
-    });
+      });
+    } finally {
+      traversedPendingOperations = false;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void rollbackUnitOfWork() {
+    try {
+      super.rollbackUnitOfWork();
+    } finally {
+      traversedPendingOperations = false;
+    }
   }
 
   /**
@@ -68,39 +93,56 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    */
   @Override
   public void performPendingOperations() {
-    hibernateTemplate.execute(new HibernateCallback() {
+    if (!traversedPendingOperations) {
+      traversedPendingOperations = true;
+      hibernateTemplate.execute(new HibernateCallback() {
 
-      /**
-       * {@inheritDoc}
-       */
-      public Object doInHibernate(Session session) {
-        List<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
-        if (entitiesToUpdate != null) {
-          for (IEntity entityToUpdate : entitiesToUpdate) {
-            IEntity sessionEntity = (IEntity) session.get(entityToUpdate
-                .getContract(), entityToUpdate.getId());
-            if (sessionEntity != null) {
-              session.update(sessionEntity);
-            } else {
-              session.update(entityToUpdate);
+        /**
+         * {@inheritDoc}
+         */
+        public Object doInHibernate(Session session) {
+          boolean flushIsNecessary = false;
+          List<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
+          if (entitiesToUpdate != null) {
+            for (IEntity entityToUpdate : entitiesToUpdate) {
+              IEntity sessionEntity;
+              try {
+                session.lock(entityToUpdate, LockMode.NONE);
+                cloneInUnitOfWork(entityToUpdate);
+                sessionEntity = entityToUpdate;
+              } catch (Exception ex) {
+                sessionEntity = (IEntity) session.get(entityToUpdate
+                    .getContract(), entityToUpdate.getId());
+              }
+              session.saveOrUpdate(sessionEntity);
+              flushIsNecessary = true;
             }
           }
-        }
-        Set<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
-        if (entitiesToDelete != null) {
-          for (IEntity entityToDelete : entitiesToDelete) {
-            IEntity sessionEntity = (IEntity) session.get(entityToDelete
-                .getContract(), entityToDelete.getId());
-            if (sessionEntity != null) {
+          if (flushIsNecessary) {
+            session.flush();
+          }
+          Set<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
+          if (entitiesToDelete != null) {
+            for (IEntity entityToDelete : entitiesToDelete) {
+              IEntity sessionEntity;
+              try {
+                session.lock(entityToDelete, LockMode.NONE);
+                sessionEntity = entityToDelete;
+              } catch (Exception ex) {
+                sessionEntity = (IEntity) session.get(entityToDelete
+                    .getContract(), entityToDelete.getId());
+              }
               session.delete(sessionEntity);
-            } else {
-              session.delete(entityToDelete);
+              flushIsNecessary = true;
             }
           }
+          if (flushIsNecessary) {
+            session.flush();
+          }
+          return null;
         }
-        return null;
-      }
-    });
+      });
+    }
   }
 
   private void performActualUnitOfWorkCommit() {
@@ -163,7 +205,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
 
   /**
    * Sets the hibernateTemplate.
-   * 
+   *
    * @param hibernateTemplate
    *          the hibernateTemplate to set.
    */
@@ -217,11 +259,21 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
               .cleanPersistentCollectionDirtyState(entity);
           Object initializedProperty = entity.straightGetProperty(propertyName);
           if (entity.isPersistent()) {
-            session.lock(entity, LockMode.NONE);
+            try {
+              session.lock(entity, LockMode.NONE);
+            } catch (Exception ex) {
+              session.evict(session.get(entity.getContract(), entity.getId()));
+              session.lock(entity, LockMode.NONE);
+            }
           } else if (initializedProperty instanceof IEntity) {
-            session.lock(initializedProperty, LockMode.NONE);
+            try {
+              session.lock(initializedProperty, LockMode.NONE);
+            } catch (Exception ex) {
+              session.evict(session.get(((IEntity) initializedProperty)
+                  .getContract(), ((IEntity) initializedProperty).getId()));
+              session.lock(initializedProperty, LockMode.NONE);
+            }
           }
-          // session.setReadOnly(entity, true);
 
           Hibernate.initialize(initializedProperty);
           return initializedProperty;
@@ -243,7 +295,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * Whenever the entity has dirty persistent collection, make them clean to
    * workaround a "bug" with hibernate since hibernate cannot re-attach a
    * "dirty" detached collection.
-   * 
+   *
    * @param entity
    *          the entity to clean the collections dirty state of.
    */
@@ -262,4 +314,5 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
       }
     }
   }
+
 }

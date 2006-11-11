@@ -22,7 +22,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -38,7 +38,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Gets the hibernateTemplate.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the hibernateTemplate.
@@ -49,7 +49,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Gets the transactionTemplate.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the transactionTemplate.
@@ -62,7 +62,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
   /**
    * This method must be called to (re)attach application session entities to
    * the current hibernate session.
-   * 
+   *
    * @param entity
    *          the entity to merge.
    * @param hibernateSession
@@ -80,7 +80,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
   /**
    * This method must be called to (re)attach application session entities to
    * the current hibernate session.
-   * 
+   *
    * @param entities
    *          the entities to merge.
    * @param hibernateSession
@@ -95,7 +95,13 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         .cloneInUnitOfWork(entities);
     for (IEntity mergedEntity : mergedEntities) {
       if (mergedEntity.isPersistent()) {
-        hibernateSession.lock(mergedEntity, LockMode.NONE);
+        try {
+          hibernateSession.lock(mergedEntity, LockMode.NONE);
+        } catch (Exception ex) {
+          hibernateSession.evict(hibernateSession.get(mergedEntity
+              .getContract(), mergedEntity.getId()));
+          hibernateSession.lock(mergedEntity, LockMode.NONE);
+        }
       }
     }
     return mergedEntities;
@@ -103,7 +109,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Saves an entity in hibernate.
-   * 
+   *
    * @param entity
    *          the entity to save.
    * @param context
@@ -116,6 +122,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
       public Object doInHibernate(Session session) {
         IEntity mergedEntity = mergeInHibernate(entity, session, context);
         session.saveOrUpdate(mergedEntity);
+        session.flush();
         return null;
       }
     });

@@ -19,7 +19,7 @@ import com.ulcjava.base.application.tabletree.AbstractTableTreeModel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -33,7 +33,7 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
 
   /**
    * Constructs a new <code>ConnectorHierarchyTableTreeModel</code> instance.
-   * 
+   *
    * @param rootConnector
    *          the connector being the root node of the tree.
    * @param tree
@@ -42,9 +42,11 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
    *          lazy-load the tree hierarchy.
    */
   public ConnectorHierarchyTableTreeModel(
-      ICompositeValueConnector rootConnector, ULCTableTree tree) {
+      ICompositeValueConnector rootConnector, @SuppressWarnings("unused")
+      ULCTableTree tree) {
     treeModelDelegate = new ConnectorHierarchyTreeModel(rootConnector, null);
-    tree.addTreeExpansionListener(treeModelDelegate);
+    // FIXME on extende tabletree
+    // tree.addTreeExpansionListener(treeModelDelegate);
     treeModelDelegate.addTreeModelListener(new TreeModelListenerAdapter());
   }
 
@@ -167,7 +169,7 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
 
   /**
    * Sets the columnClassesByIds.
-   * 
+   *
    * @param columnClassesByIds
    *          the columnClassesByIds to set.
    */
@@ -211,7 +213,7 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
 
   /**
    * Sets the columnConnectorKeys.
-   * 
+   *
    * @param columnConnectorKeys
    *          the columnConnectorKeys to set.
    */

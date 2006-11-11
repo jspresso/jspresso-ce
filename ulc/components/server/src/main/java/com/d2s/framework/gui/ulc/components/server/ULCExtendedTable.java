@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.gui.ulc.components.server;
 
+import com.ulcjava.base.application.ULCTable;
+
 /**
  * This subclass implements some default behaviors which are not yet
  * configurable using ULC.
@@ -13,7 +15,7 @@ package com.d2s.framework.gui.ulc.components.server;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ULCTable extends com.ulcjava.base.application.ULCTable {
+public class ULCExtendedTable extends ULCTable {
 
   private static final long serialVersionUID = 6066465803426487503L;
 
@@ -22,7 +24,7 @@ public class ULCTable extends com.ulcjava.base.application.ULCTable {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UITable";
+    return "com.d2s.framework.gui.ulc.components.client.UIExtendedTable";
   }
 
 }

@@ -52,11 +52,12 @@ import com.d2s.framework.binding.ulc.ULCToggleButtonConnector;
 import com.d2s.framework.gui.ulc.components.server.ITreePathPopupFactory;
 import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 import com.d2s.framework.gui.ulc.components.server.ULCDateField;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedButton;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedTree;
 import com.d2s.framework.gui.ulc.components.server.ULCJEditTextArea;
 import com.d2s.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
-import com.d2s.framework.gui.ulc.components.server.ULCTable;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedTable;
 import com.d2s.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
-import com.d2s.framework.gui.ulc.components.server.ULCTree;
 import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -146,6 +147,7 @@ import com.ulcjava.base.application.ULCTableTree;
 import com.ulcjava.base.application.ULCTextArea;
 import com.ulcjava.base.application.ULCTextField;
 import com.ulcjava.base.application.ULCToolBar;
+import com.ulcjava.base.application.ULCTree;
 import com.ulcjava.base.application.datatype.ULCDateDataType;
 import com.ulcjava.base.application.datatype.ULCNumberDataType;
 import com.ulcjava.base.application.datatype.ULCPercentDataType;
@@ -739,7 +741,7 @@ public class DefaultUlcViewFactory implements
       ((IConnectorSelector) connector).setTracksChildrenSelection(true);
     }
 
-    ULCTree viewComponent = createULCTree();
+    ULCExtendedTree viewComponent = createULCTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
         connector, viewComponent);
 
@@ -1011,7 +1013,7 @@ public class DefaultUlcViewFactory implements
     ICollectionConnector connector = connectorFactory
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
             rowConnectorPrototype);
-    ULCTable viewComponent = createULCTable();
+    ULCExtendedTable viewComponent = createULCTable();
     ULCScrollPane scrollPane = createULCScrollPane();
     scrollPane.setViewPortView(viewComponent);
     ULCLabel iconLabel = createULCLabel();
@@ -1443,7 +1445,7 @@ public class DefaultUlcViewFactory implements
           if (propertyView.getPeer() instanceof ULCTextArea
               || propertyView.getPeer() instanceof ULCList
               || propertyView.getPeer() instanceof ULCScrollPane
-              || propertyView.getPeer() instanceof ULCTable
+              || propertyView.getPeer() instanceof ULCExtendedTable
               || propertyView.getPeer() instanceof ULCJEditTextArea) {
             constraints.setAnchor(GridBagConstraints.NORTHEAST);
           } else {
@@ -1488,7 +1490,7 @@ public class DefaultUlcViewFactory implements
       if (propertyView.getPeer() instanceof ULCTextArea
           || propertyView.getPeer() instanceof ULCList
           || propertyView.getPeer() instanceof ULCScrollPane
-          || propertyView.getPeer() instanceof ULCTable
+          || propertyView.getPeer() instanceof ULCExtendedTable
           || propertyView.getPeer() instanceof ULCJEditTextArea) {
         constraints.setWeightY(1.0);
         constraints.setFill(GridBagConstraints.BOTH);
@@ -2003,14 +2005,14 @@ public class DefaultUlcViewFactory implements
 
   private ULCPopupMenu createPopupMenu(ULCComponent sourceComponent,
       IView<ULCComponent> view, IActionHandler actionHandler, Locale locale) {
-    if (sourceComponent instanceof ULCTable) {
-      return createULCTablePopupMenu((ULCTable) sourceComponent, view,
+    if (sourceComponent instanceof ULCExtendedTable) {
+      return createULCTablePopupMenu((ULCExtendedTable) sourceComponent, view,
           actionHandler, locale);
     }
     return null;
   }
 
-  private ULCPopupMenu createULCTablePopupMenu(ULCTable table,
+  private ULCPopupMenu createULCTablePopupMenu(ULCExtendedTable table,
       IView<ULCComponent> tableView, IActionHandler actionHandler, Locale locale) {
 
     IValueConnector elementConnector = tableView.getConnector();
@@ -2456,7 +2458,7 @@ public class DefaultUlcViewFactory implements
    * @return the created combo box.
    */
   protected ULCComboBox createULCComboBox() {
-    return new com.d2s.framework.gui.ulc.components.server.ULCComboBox();
+    return new com.d2s.framework.gui.ulc.components.server.ULCExtendedComboBox();
   }
 
   /**
@@ -2506,8 +2508,8 @@ public class DefaultUlcViewFactory implements
    *
    * @return the created tree.
    */
-  protected ULCTree createULCTree() {
-    ULCTree tree = new ULCTree();
+  protected ULCExtendedTree createULCTree() {
+    ULCExtendedTree tree = new ULCExtendedTree();
     tree.setDragEnabled(true);
     return tree;
   }
@@ -2528,8 +2530,8 @@ public class DefaultUlcViewFactory implements
    *
    * @return the created table.
    */
-  protected ULCTable createULCTable() {
-    ULCTable table = new com.d2s.framework.gui.ulc.components.server.ULCTable();
+  protected ULCExtendedTable createULCTable() {
+    ULCExtendedTable table = new com.d2s.framework.gui.ulc.components.server.ULCExtendedTable();
     table.setDragEnabled(true);
     return table;
   }
@@ -2551,7 +2553,7 @@ public class DefaultUlcViewFactory implements
    * @return the created button.
    */
   protected ULCButton createULCButton() {
-    ULCButton ulcButton = new com.d2s.framework.gui.ulc.components.server.ULCButton();
+    ULCButton ulcButton = new ULCExtendedButton();
     return ulcButton;
   }
 

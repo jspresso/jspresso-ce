@@ -335,7 +335,7 @@ public final class SwingUtil {
    *          the button to work on.
    */
   public static void configureButton(JButton button) {
-    button.setMultiClickThreshhold(300);
+    button.setMultiClickThreshhold(500);
   }
 
     /**

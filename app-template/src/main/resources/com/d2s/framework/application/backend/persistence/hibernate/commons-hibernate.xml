@@ -33,6 +33,18 @@
   <bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"
     class="com.d2s.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction" />
 
+  <bean id="removeCollectionFromMasterBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction" />
+
+  <bean id="removeFromModuleObjectsAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.module.RemoveFromModuleObjectsAction" />
+
+  <bean id="saveProjectedBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveProjectedAction" />
+
+  <bean id="reloadProjectedBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadProjectedAction" />
+
   <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
     class="com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController">
     <property name="applicationSession">

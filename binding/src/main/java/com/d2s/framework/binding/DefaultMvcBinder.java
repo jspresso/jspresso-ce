@@ -48,7 +48,6 @@ public class DefaultMvcBinder implements IMvcBinder {
         }
         bind(nextChildViewConnector, nextChildModelConnector);
       } else {
-        //TODO check for regression
         bind(nextChildViewConnector, null);
       }
     }

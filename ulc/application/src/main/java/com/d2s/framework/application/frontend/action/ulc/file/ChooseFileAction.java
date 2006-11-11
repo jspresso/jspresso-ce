@@ -14,7 +14,7 @@ import com.ulcjava.base.shared.FileChooserConfig;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,7 +25,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
 
   /**
    * Gets the file chooser configuration used to build this file chooser.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the file chooser configuration.
@@ -39,15 +39,20 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
         for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
             .entrySet()) {
           StringBuffer extensionsDescription = new StringBuffer("( ");
+          String[] allowedExtensions = new String[fileTypeEntry.getValue()
+              .size() * 2];
+          int i = 0;
           for (String fileExtension : fileTypeEntry.getValue()) {
             extensionsDescription.append("*").append(fileExtension).append(" ");
+            allowedExtensions[i++] = fileExtension.toLowerCase();
+            allowedExtensions[i++] = fileExtension.toUpperCase();
           }
           extensionsDescription.append(" )");
           fileChooser
               .addFileFilterConfig(new FileChooserConfig.FileFilterConfig(
-                  fileTypeEntry.getValue().toArray(new String[0]),
-                  getTranslationProvider(context).getTranslation(
-                      fileTypeEntry.getKey(), getLocale(context))
+                  allowedExtensions, getTranslationProvider(context)
+                      .getTranslation(fileTypeEntry.getKey(),
+                          getLocale(context))
                       + extensionsDescription.toString()));
         }
       }
@@ -58,7 +63,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
   /**
    * Sets the fileFilter. Filter file types are a map of descriptions keying
    * file extension arays.
-   * 
+   *
    * @param fileFilter
    *          the fileFilter to set.
    */

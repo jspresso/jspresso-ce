@@ -9,7 +9,7 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
-import com.d2s.framework.gui.ulc.components.server.ULCButton;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedButton;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;
@@ -53,9 +53,9 @@ public class ModalDialogAction extends AbstractUlcAction {
     ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(ULCBoxLayoutPane.LINE_AXIS);
     buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
 
-    ULCButton defaultButton = null;
+    ULCExtendedButton defaultButton = null;
     for (IDisplayableAction action : getActions(context)) {
-      ULCButton actionButton = new ULCButton();
+      ULCExtendedButton actionButton = new ULCExtendedButton();
       actionButton.setAction(getActionFactory(context).createAction(action,
           actionHandler, mainView, getLocale(context)));
       buttonBox.add(actionButton);

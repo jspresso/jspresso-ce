@@ -285,7 +285,6 @@ public final class JErrorDialog extends JDialog {
       } else {
         height = expandedHeight;
       }
-      setSize(getWidth(), height);
       detailsPanel.setVisible(true);
       detailsButton.setText(translationProvider.getTranslation("details",
           locale)
@@ -293,6 +292,7 @@ public final class JErrorDialog extends JDialog {
       detailsPanel.applyComponentOrientation(detailsButton
           .getComponentOrientation());
       detailsPane.setCaretPosition(0);
+      setSize(getWidth(), height);
     } else {
       expandedHeight = getHeight();
       detailsPanel.setVisible(false);
@@ -303,6 +303,7 @@ public final class JErrorDialog extends JDialog {
       messagePane.setSize(messagePane.getPreferredSize());
       setSize(getWidth(), collapsedHeight);
     }
+    invalidate();
     repaint();
   }
 

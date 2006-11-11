@@ -263,11 +263,11 @@ public final class ULCErrorDialog extends ULCDialog {
       } else {
         height = expandedHeight;
       }
-      setSize(getWidth(), height);
       detailsPanel.setVisible(true);
       detailsButton.setText(translationProvider.getTranslation("details",
           locale)
           + " <<");
+      setSize(getWidth(), height);
     } else {
       detailsPanel.setVisible(false);
       detailsButton.setText(translationProvider.getTranslation("details",

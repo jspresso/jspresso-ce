@@ -9,7 +9,7 @@ import com.ulcjava.base.application.ULCListSelectionModel;
 
 /**
  * Helper class used to bind collection view connectors to list selection models
- * (used in <code>ULCList</code> and <code>ULCTable</code>).
+ * (used in <code>ULCList</code> and <code>ULCExtendedTable</code>).
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

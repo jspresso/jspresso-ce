@@ -16,7 +16,7 @@ import javax.swing.table.TableCellEditor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class UIComboBox extends com.ulcjava.base.client.UIComboBox {
+public class UIExtendedComboBox extends com.ulcjava.base.client.UIComboBox {
 
   /**
    * {@inheritDoc}

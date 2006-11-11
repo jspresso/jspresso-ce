@@ -25,7 +25,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -38,7 +38,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
 
   /**
    * Sets the applicationSession.
-   * 
+   *
    * @param applicationSession
    *          the applicationSession to set.
    */
@@ -115,21 +115,13 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void preFlush(Iterator entities) {
-    applicationSession.performPendingOperations();
-    super.preFlush(entities);
-  }
-
-  /**
    * Notifies the application session of the entity flush.
    * <p>
    * {@inheritDoc}
    */
   @Override
   public void postFlush(Iterator entities) {
+    applicationSession.performPendingOperations();
     while (entities.hasNext()) {
       Object entity = entities.next();
       if (entity instanceof IEntity) {

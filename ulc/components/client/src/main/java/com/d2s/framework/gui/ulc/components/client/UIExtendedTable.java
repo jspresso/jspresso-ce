@@ -7,6 +7,7 @@ import java.awt.event.FocusListener;
 
 import javax.swing.JTable;
 
+import com.ulcjava.base.client.UITable;
 import com.ulcjava.base.shared.internal.Anything;
 
 /**
@@ -15,11 +16,11 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class UITable extends com.ulcjava.base.client.UITable {
+public class UIExtendedTable extends UITable {
 
   /**
    * {@inheritDoc}

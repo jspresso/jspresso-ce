@@ -315,8 +315,6 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
-   * TODO Comment needed.
-   * <p>
    * {@inheritDoc}
    */
   @Override

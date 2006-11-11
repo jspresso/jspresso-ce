@@ -29,7 +29,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -41,7 +41,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
 
   /**
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
-   * 
+   *
    * @param rootConnector
    *          the connector being the root node of the tree.
    * @param tree
@@ -271,17 +271,16 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   public void treeNodesChanged(@SuppressWarnings("unused")
-  TreeModelEvent e) {
+  TreeModelEvent event) {
     // NO-OP as of now.
   }
 
   /**
    * {@inheritDoc}
    */
-  public void treeNodesInserted(TreeModelEvent e) {
-    for (Object insertedNode : e.getChildren()) {
-      checkListenerRegistrationForConnector((IValueConnector) e.getTreePath()
-          .pathByAddingChild(insertedNode).getLastPathComponent());
+  public void treeNodesInserted(TreeModelEvent event) {
+    for (Object insertedNode : event.getChildren()) {
+      checkListenerRegistrationForConnector((IValueConnector) insertedNode);
     }
   }
 
@@ -289,16 +288,17 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   public void treeNodesRemoved(@SuppressWarnings("unused")
-  TreeModelEvent e) {
+  TreeModelEvent event) {
     // NO-OP as of now.
   }
 
   /**
    * {@inheritDoc}
    */
-  public void treeStructureChanged(TreeModelEvent e) {
-    ICollectionConnectorListProvider changedConnector = (ICollectionConnectorListProvider) e
+  public void treeStructureChanged(TreeModelEvent event) {
+    ICollectionConnectorListProvider changedConnector = (ICollectionConnectorListProvider) event
         .getTreePath().getLastPathComponent();
+    checkListenerRegistrationForConnector(changedConnector);
     if (changedConnector == rootConnector) {
       for (ICollectionConnector collectionConnector : ((ICollectionConnectorListProvider) rootConnector)
           .getCollectionConnectors()) {
@@ -311,7 +311,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
           changedConnector, true, true);
     }
-    checkListenerRegistrationForConnector(changedConnector);
   }
 
   /**
