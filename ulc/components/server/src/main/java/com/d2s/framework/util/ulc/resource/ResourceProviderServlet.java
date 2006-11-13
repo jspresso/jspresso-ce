@@ -58,7 +58,10 @@ public class ResourceProviderServlet extends HttpServlet {
     }
 
     response.setContentType(resource.getMimeType());
-    response.setContentLength(resource.getLength());
+    int resourceLength = resource.getLength();
+    if (resourceLength > 0) {
+      response.setContentLength(resourceLength);
+    }
 
     BufferedInputStream inputStream = new BufferedInputStream(resource
         .getContent());

@@ -29,7 +29,7 @@ import com.ulcjava.base.application.table.AbstractTableModel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -47,7 +47,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
-   * 
+   *
    * @param collectionConnector
    *          the collection connector holding the values of this table model.
    * @param columnConnectorKeys
@@ -170,21 +170,24 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
   private void bindChildRowConnector(int row) {
     ICompositeValueConnector rowConnector = (ICompositeValueConnector) collectionConnector
         .getChildConnector(row);
-    rowConnector
-        .addConnectorValueChangeListener(getChildRowConnectorListener(row));
-    for (int col = 0; col < columnConnectorKeys.size(); col++) {
-      IValueConnector cellConnector = rowConnector
-          .getChildConnector(columnConnectorKeys.get(col));
-      if (cellConnector instanceof IRenderableCompositeValueConnector
-          && ((IRenderableCompositeValueConnector) cellConnector)
-              .getRenderingConnector() != null) {
-        ((IRenderableCompositeValueConnector) cellConnector)
-            .getRenderingConnector().addConnectorValueChangeListener(
-                getChildCellConnectorListener(row, col));
-      } else {
-        CellConnectorListener listener = getChildCellConnectorListener(row, col);
-        cellConnector.addConnectorValueChangeListener(listener);
-        cellConnector.addPropertyChangeListener(listener);
+    if (rowConnector != null) {
+      rowConnector
+          .addConnectorValueChangeListener(getChildRowConnectorListener(row));
+      for (int col = 0; col < columnConnectorKeys.size(); col++) {
+        IValueConnector cellConnector = rowConnector
+            .getChildConnector(columnConnectorKeys.get(col));
+        if (cellConnector instanceof IRenderableCompositeValueConnector
+            && ((IRenderableCompositeValueConnector) cellConnector)
+                .getRenderingConnector() != null) {
+          ((IRenderableCompositeValueConnector) cellConnector)
+              .getRenderingConnector().addConnectorValueChangeListener(
+                  getChildCellConnectorListener(row, col));
+        } else {
+          CellConnectorListener listener = getChildCellConnectorListener(row,
+              col);
+          cellConnector.addConnectorValueChangeListener(listener);
+          cellConnector.addPropertyChangeListener(listener);
+        }
       }
     }
   }
@@ -308,7 +311,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the columnClassesByIds.
-   * 
+   *
    * @param columnClassesByIds
    *          the columnClassesByIds to set.
    */
@@ -318,7 +321,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the exceptionHandler.
-   * 
+   *
    * @param exceptionHandler
    *          the exceptionHandler to set.
    */
