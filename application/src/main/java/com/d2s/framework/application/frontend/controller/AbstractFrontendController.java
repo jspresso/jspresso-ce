@@ -244,6 +244,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
         }
       }
     }
+    initialActionContext.put(ActionContextConstants.MODULE_DESCRIPTOR,
+        getModuleDescriptor(getSelectedModuleId()));
+
     return initialActionContext;
   }
 
@@ -459,6 +462,20 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public boolean stop() {
     return getBackendController().stop();
+  }
+
+  /**
+   * Displays a module.
+   *
+   * @param moduleId
+   *          the module identifier.
+   */
+  protected void displayModule(String moduleId) {
+    IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+    if (moduleDescriptor.getStartupAction() != null) {
+      Map<String, Object> context = createEmptyContext();
+      execute(moduleDescriptor.getStartupAction(), context);
+    }
   }
 
   /**

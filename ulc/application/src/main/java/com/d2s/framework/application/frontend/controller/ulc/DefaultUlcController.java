@@ -16,7 +16,6 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
-import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.model.Module;
@@ -219,7 +218,11 @@ public class DefaultUlcController extends
     return true;
   }
 
-  private void displayModule(String moduleId) {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void displayModule(String moduleId) {
     if (moduleInternalFrames == null) {
       moduleInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
     }
@@ -240,12 +243,6 @@ public class DefaultUlcController extends
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
-      if (moduleDescriptor.getStartupAction() != null) {
-        Map<String, Object> context = createEmptyContext();
-        context.put(ActionContextConstants.MODULE_ROOT_CONNECTOR, moduleView
-            .getConnector());
-        execute(moduleDescriptor.getStartupAction(), context);
-      }
       moduleInternalFrame.pack();
       moduleInternalFrame.setSize(controllerFrame.getSize());
     }
@@ -256,6 +253,7 @@ public class DefaultUlcController extends
     moduleInternalFrame.setMaximum(true);
     setSelectedModuleId(moduleId);
     moduleInternalFrame.moveToFront();
+    super.displayModule(moduleId);
   }
 
   private void updateFrameTitle() {

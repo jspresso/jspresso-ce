@@ -167,7 +167,11 @@ public class DefaultSwingController extends
     return false;
   }
 
-  private void displayModule(String moduleId) {
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void displayModule(String moduleId) {
     if (moduleInternalFrames == null) {
       moduleInternalFrames = new HashMap<String, JInternalFrame>();
     }
@@ -186,12 +190,6 @@ public class DefaultSwingController extends
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
-      if (moduleDescriptor.getStartupAction() != null) {
-        Map<String, Object> context = createEmptyContext();
-        context.put(ActionContextConstants.MODULE_ROOT_CONNECTOR, moduleView
-            .getConnector());
-        execute(moduleDescriptor.getStartupAction(), context);
-      }
       moduleInternalFrame.pack();
       moduleInternalFrame.setSize(controllerFrame.getSize());
     }
@@ -210,6 +208,7 @@ public class DefaultSwingController extends
     }
     setSelectedModuleId(moduleId);
     moduleInternalFrame.toFront();
+    super.displayModule(moduleId);
   }
 
   private void updateFrameTitle() {

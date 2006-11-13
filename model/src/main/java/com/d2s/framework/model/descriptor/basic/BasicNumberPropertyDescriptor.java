@@ -98,10 +98,16 @@ public abstract class BasicNumberPropertyDescriptor extends
             if (getMaxValue() != null) {
               boundsSpec.append(" <= ").append(getMaxValue());
             }
-            return translationProvider.getTranslation(
-                "integrity.property.outofbounds", new Object[] {
-                    getI18nName(translationProvider, locale), boundsSpec,
-                    component}, locale);
+            String messageKey = null;
+            if ((getMinValue() != null && ((Number) propertyValue)
+                .doubleValue() < getMinValue().doubleValue())) {
+              messageKey = "integrity.property.toosmall";
+            } else {
+              messageKey = "integrity.property.toobig";
+            }
+            return translationProvider.getTranslation(messageKey,
+                new Object[] {getI18nName(translationProvider, locale),
+                    boundsSpec, component}, locale);
           }
 
         };

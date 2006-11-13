@@ -8,7 +8,7 @@ package com.d2s.framework.action;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -50,11 +50,6 @@ public final class ActionContextConstants {
    * The module view connector the action was triggered on.
    */
   public static final String MODULE_VIEW_CONNECTOR   = "MODULE_VIEW_CONNECTOR";
-
-  /**
-   * The module root view connector the action was triggered on.
-   */
-  public static final String MODULE_ROOT_CONNECTOR   = "MODULE_ROOT_CONNECTOR";
 
   /**
    * An arbitrary action param.
@@ -115,4 +110,9 @@ public final class ActionContextConstants {
    * A parametrized entity descriptor.
    */
   public static final String ENTITY_REF_DESCRIPTOR   = "ENTITY_REF_DESCRIPTOR";
+
+  /**
+   * The module descriptor the action was triggered on.
+   */
+  public static final String MODULE_DESCRIPTOR       = "MODULE_DESCRIPTOR";
 }

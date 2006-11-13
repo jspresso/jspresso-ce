@@ -224,6 +224,12 @@
     </property>
   </bean>
 
+  <bean id="restartModuleFrontAction" class="com.d2s.framework.application.frontend.action.module.ModuleRestartAction">
+    <property name="iconImageURL" value="classpath:images/restart-48x48.png" />
+    <property name="name" value="module.restart" />
+    <property name="description" value="module.restart.description" />
+  </bean>
+
   <bean id="moveUpFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property name="iconImageURL" value="classpath:images/up-48x48.png" />
     <property name="name" value="moveUp.name" />
@@ -301,6 +307,7 @@
       <map>
         <entry key="FILE">
           <list>
+            <ref local="restartModuleFrontAction" />
             <ref local="saveProjectedFrontAction" />
             <ref local="reloadProjectedFrontAction" />
           </list>

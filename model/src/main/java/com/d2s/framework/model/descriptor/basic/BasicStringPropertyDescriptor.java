@@ -117,7 +117,7 @@ public class BasicStringPropertyDescriptor extends
             boundsSpec.append(" <= ").append(getMaxLength());
           }
           return translationProvider.getTranslation(
-              "integrity.property.outofbounds", new Object[] {
+              "integrity.property.toobig", new Object[] {
                   getI18nName(translationProvider, locale), boundsSpec,
                   component}, locale);
         }

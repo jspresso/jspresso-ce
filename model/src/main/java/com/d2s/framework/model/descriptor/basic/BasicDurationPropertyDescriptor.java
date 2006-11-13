@@ -77,7 +77,7 @@ public class BasicDurationPropertyDescriptor extends
             boundsSpec.append(" <= ").append(getMaxMillis());
           }
           return translationProvider.getTranslation(
-              "integrity.property.outofbounds", new Object[] {
+              "integrity.property.toobig", new Object[] {
                   getI18nName(translationProvider, locale), boundsSpec,
                   component}, locale);
         }
