@@ -11,10 +11,13 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.session.IApplicationSession;
+import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
@@ -24,7 +27,7 @@ import com.d2s.framework.model.entity.IQueryEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -39,35 +42,35 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     final IQueryEntity queryEntity = (IQueryEntity) ((IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR)).getConnectorValue();
 
-    // Not using a transaction fixes a bug of registering twice an object
-    // in the
-    // session.
-    // getTransactionTemplate(context).execute(new TransactionCallback() {
-    //
-    // public Object doInTransaction(@SuppressWarnings("unused")
-    // TransactionStatus status) {
-    DetachedCriteria criteria = DetachedCriteria.forEntityName(queryEntity
-        .getContract().getName());
-    criteria.add(Example.create(queryEntity).ignoreCase().enableLike(
-        MatchMode.START));
-    for (Map.Entry<String, Object> property : queryEntity
-        .straightGetProperties().entrySet()) {
-      if (property.getValue() instanceof IEntity) {
-        criteria.add(Restrictions.eq(property.getKey(), property.getValue()));
+    List<IEntity> queriedEntities = (List<IEntity>) getTransactionTemplate(
+        context).execute(new TransactionCallback() {
+
+      public Object doInTransaction(@SuppressWarnings("unused")
+      TransactionStatus status) {
+        DetachedCriteria criteria = DetachedCriteria.forEntityName(queryEntity
+            .getContract().getName());
+        criteria.add(Example.create(queryEntity).ignoreCase().enableLike(
+            MatchMode.START));
+        for (Map.Entry<String, Object> property : queryEntity
+            .straightGetProperties().entrySet()) {
+          if (property.getValue() instanceof IEntity) {
+            criteria.add(Restrictions
+                .eq(property.getKey(), property.getValue()));
+          }
+        }
+        List entities = getHibernateTemplate(context).findByCriteria(criteria);
+        status.setRollbackOnly();
+        return entities;
       }
-    }
-    List<IEntity> queriedEntities = getHibernateTemplate(context)
-        .findByCriteria(criteria);
+    });
     IApplicationSession session = getApplicationSession(context);
     for (Iterator<IEntity> ite = queriedEntities.iterator(); ite.hasNext();) {
       if (session.isEntityRegisteredForDeletion(ite.next())) {
         ite.remove();
       }
     }
-    queryEntity.setQueriedEntities(queriedEntities);
-    // return null;
-    // }
-    // });
+    queryEntity.setQueriedEntities(session.merge(queriedEntities,
+        MergeMode.MERGE_KEEP));
     return true;
   }
 
