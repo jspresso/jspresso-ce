@@ -107,6 +107,12 @@
   <bean id="changePasswordAction" parent="abstractChangePasswordAction"
     class="com.d2s.framework.application.frontend.action.ulc.security.ChangePasswordAction" />
 
+  <bean id="displayUrlFrontAction" class="com.d2s.framework.application.frontend.action.ulc.std.DisplayUrlAction" />
+
+  <bean id="staticDisplayUrlFrontAction" abstract="true" parent="displayUrlFrontAction"
+    class="com.d2s.framework.application.frontend.action.ulc.std.DisplayStaticUrlAction" />
+
+
   <bean id="wizardAction" parent="abstractWizardAction"
     class="com.d2s.framework.application.frontend.action.ulc.wizard.WizardAction" />
 

@@ -46,7 +46,7 @@ public final class ResourceManager {
 
   /**
    * Singleton pattern.
-   * 
+   *
    * @return the singleton instance.
    */
   public static ResourceManager getInstance() {
@@ -55,7 +55,7 @@ public final class ResourceManager {
 
   /**
    * Returns the registered resource or null.
-   * 
+   *
    * @param id
    *          the identifier under which the resource has been registered.
    * @return the registsred resource or null.
@@ -66,7 +66,7 @@ public final class ResourceManager {
 
   /**
    * Registers a resource.
-   * 
+   *
    * @param id
    *          the identifier under which the resource must be registered.
    * @param resource
@@ -78,7 +78,7 @@ public final class ResourceManager {
 
   /**
    * Registers a resource.
-   * 
+   *
    * @param resource
    *          the resource to be registered.
    * @return the generated identifier under which the resource has been
@@ -121,7 +121,7 @@ public final class ResourceManager {
 
   /**
    * Shows the document for which a resource entry has been registered.
-   * 
+   *
    * @param id
    *          the identifier under which the resource has been registered.
    * @throws IOException
@@ -133,7 +133,7 @@ public final class ResourceManager {
 
   /**
    * Shows the document for which a resource entry has been registered.
-   * 
+   *
    * @param id
    *          the identifier under which the resource has been registered.
    * @param target
@@ -146,7 +146,8 @@ public final class ResourceManager {
       IResource resourceProvider = ResourceManager.getInstance().getRegistered(
           id);
       String fileExtension = ".tmp";
-      if (resourceProvider.getMimeType().startsWith(APPLICATION_PREFIX)) {
+      if (resourceProvider.getMimeType() != null
+          && resourceProvider.getMimeType().startsWith(APPLICATION_PREFIX)) {
         fileExtension = "."
             + resourceProvider.getMimeType().substring(
                 APPLICATION_PREFIX.length());
