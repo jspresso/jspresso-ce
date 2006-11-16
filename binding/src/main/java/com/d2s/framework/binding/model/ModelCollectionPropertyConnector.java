@@ -30,7 +30,7 @@ import com.d2s.framework.util.event.SelectionChangeSupport;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -48,7 +48,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * Constructs a new model property connector on a model collection property.
    * This constructor does not specify the element class of this collection
    * connector. It must be setted afterwards using the apropriate setter.
-   * 
+   *
    * @param modelDescriptor
    *          the model descriptor backing this connector.
    * @param modelConnectorFactory
@@ -77,7 +77,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
 
   /**
    * Adds a new child connector.
-   * 
+   *
    * @param connector
    *          the connector to be added as composite.
    */
@@ -87,7 +87,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
 
   /**
    * Removes a child connector.
-   * 
+   *
    * @param connector
    *          the connector to be removed.
    */

@@ -21,7 +21,7 @@ import com.d2s.framework.util.event.SelectionChangeSupport;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -41,7 +41,7 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Creates a new <code>AbstractCollectionConnector</code>.
-   * 
+   *
    * @param id
    *          the connector id.
    * @param binder
@@ -161,7 +161,11 @@ public abstract class AbstractCollectionConnector extends
     clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
         clonedConnector);
     clonedConnector.removedChildrenConnectors = null;
-    clonedConnector.allowLazyChildrenLoading = allowLazyChildrenLoading;
+    clonedConnector.allowLazyChildrenLoading = false;
+    clonedConnector.needsChildrenUpdate = false;
+    clonedConnector.needsFireConnectorValueChange = false;
+    clonedConnector.isDelayedEvent = false;
+    clonedConnector.setAllowLazyChildrenLoading(allowLazyChildrenLoading);
     return clonedConnector;
   }
 
@@ -192,7 +196,7 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Gets the childConnectorPrototype.
-   * 
+   *
    * @return the childConnectorPrototype.
    */
   public ICompositeValueConnector getChildConnectorPrototype() {
@@ -318,7 +322,7 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Sets the allowLazyChildrenLoading.
-   * 
+   *
    * @param allowLazyChildrenLoading
    *          the allowLazyChildrenLoading to set.
    */

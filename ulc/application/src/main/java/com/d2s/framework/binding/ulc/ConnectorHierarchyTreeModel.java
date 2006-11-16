@@ -155,9 +155,9 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
 
   private void checkListenerRegistrationForConnector(IValueConnector connector) {
     if (connector instanceof ICollectionConnectorProvider) {
-      checkListenerRegistrationForConnector(connector, 2);
+      checkListenerRegistrationForConnector(connector, 3);
     } else {
-      checkListenerRegistrationForConnector(connector, 1);
+      checkListenerRegistrationForConnector(connector, 2);
     }
   }
 
@@ -211,12 +211,16 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
           if (newCollection != null) {
             newCollectionSize = newCollection.size();
           }
+          int changedSize = 0;
           if (newCollectionSize > oldCollectionSize) {
             int[] childIndices = new int[newCollectionSize - oldCollectionSize];
             for (int i = oldCollectionSize; i < newCollectionSize; i++) {
               childIndices[i - oldCollectionSize] = i;
             }
-            nodesWereInserted(connectorPath, childIndices);
+            if (!((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
+              nodesWereInserted(connectorPath, childIndices);
+            }
+            changedSize = oldCollectionSize;
           } else if (newCollectionSize < oldCollectionSize) {
             int[] childIndices = new int[oldCollectionSize - newCollectionSize];
             for (int i = newCollectionSize; i < oldCollectionSize; i++) {
@@ -224,44 +228,35 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             }
             List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
                 .getRemovedChildrenConnectors();
-            nodesWereRemoved(connectorPath, childIndices,
-                removedChildrenConnectors.toArray());
-          }
-          for (int i = 0; i < newCollectionSize; i++) {
-            IValueConnector childConnector = ((ICollectionConnector) connector)
-                .getChildConnector(i);
-            checkListenerRegistrationForConnector(childConnector);
-            if (childConnector instanceof ICollectionConnectorListProvider) {
-              CollectionConnectorHelper
-                  .setAllowLazyChildrenLoadingForConnector(
-                      (ICollectionConnectorListProvider) childConnector, false,
-                      false);
+            if (!((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
+              nodesWereRemoved(connectorPath, childIndices,
+                  removedChildrenConnectors.toArray());
             }
+            changedSize = newCollectionSize;
+          } else {
+            changedSize = newCollectionSize;
+          }
+          for (int i = 0; i < changedSize; i++) {
+            nodeStructureChanged(connectorPath
+                .pathByAddingChild(((ICollectionConnector) connector)
+                    .getChildConnector(i)));
           }
         }
       } else {
         while (!(connector instanceof ICollectionConnectorListProvider)) {
           connector = connector.getParentConnector();
         }
+        TreePath connectorPath = getTreePathForConnector(connector);
         if (connector == rootConnector) {
           // TODO Check ULC bug UBA-920. Root node does not get updated on
           // nodeChanged event.
           // nodeChanged(connectorPath);
-          nodeStructureChanged(getTreePathForConnector(connector));
+          nodeStructureChanged(connectorPath);
         } else if (connector.getConnectorValue() != null) {
-          IValueConnector parentConnector = connector.getParentConnector();
-          while (parentConnector != null
-              && !(parentConnector instanceof ICollectionConnectorProvider)) {
-            parentConnector = parentConnector.getParentConnector();
-          }
-          if (parentConnector != null
-              && parentConnector.getConnectorValue() != null) {
-            // don't know why but this fixes a tree repaint bug
-            // when the root connector is assigned a null value.
-            TreePath connectorPath = getTreePathForConnector(parentConnector);
-            if (connectorPath != null) {
-              nodeChanged(connectorPath);
-            }
+          // don't know why but this fixes a tree repaint bug
+          // when the root connector is assigned a null value.
+          if (connectorPath != null) {
+            nodeChanged(connectorPath);
           }
         }
       }
@@ -281,6 +276,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    */
   public void treeNodesInserted(TreeModelEvent event) {
     for (Object insertedConnector : event.getChildren()) {
+      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
+          (ICollectionConnectorListProvider) insertedConnector, false, false);
       checkListenerRegistrationForConnector((IValueConnector) insertedConnector);
     }
   }
@@ -330,8 +327,21 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   public void treeExpanded(TreeExpansionEvent event) {
     ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
         .getPath().getLastPathComponent();
+    checkListenerRegistrationForConnector(expandedConnector);
     CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
         expandedConnector, false, false);
-    checkListenerRegistrationForConnector(expandedConnector);
+    if (expandedConnector instanceof ICollectionConnectorProvider
+        && expandedConnector != rootConnector) {
+      // expandedConnector != rootConnector fixes a buggy behaviour in ULC
+      // because ulc thinks the root node gets expanded whenever a child node
+      // is.
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) expandedConnector)
+          .getCollectionConnector();
+      for (int i = 0; i < collectionConnector.getChildConnectorCount(); i++) {
+        CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
+            (ICollectionConnectorListProvider) collectionConnector
+                .getChildConnector(i), false, false);
+      }
+    }
   }
 }
