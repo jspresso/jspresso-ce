@@ -243,14 +243,26 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
         while (!(connector instanceof ICollectionConnectorListProvider)) {
           connector = connector.getParentConnector();
         }
-        TreePath connectorPath = getTreePathForConnector(connector);
         if (connector == rootConnector) {
           // TODO Check ULC bug UBA-920. Root node does not get updated on
           // nodeChanged event.
           // nodeChanged(connectorPath);
-          nodeStructureChanged(connectorPath);
+          nodeStructureChanged(getTreePathForConnector(connector));
         } else if (connector.getConnectorValue() != null) {
-          nodeChanged(connectorPath);
+          IValueConnector parentConnector = connector.getParentConnector();
+          while (parentConnector != null
+              && !(parentConnector instanceof ICollectionConnectorProvider)) {
+            parentConnector = parentConnector.getParentConnector();
+          }
+          if (parentConnector != null
+              && parentConnector.getConnectorValue() != null) {
+            // don't know why but this fixes a tree repaint bug
+            // when the root connector is assigned a null value.
+            TreePath connectorPath = getTreePathForConnector(parentConnector);
+            if (connectorPath != null) {
+              nodeChanged(connectorPath);
+            }
+          }
         }
       }
     }

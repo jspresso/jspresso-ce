@@ -56,8 +56,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
     tree.addTreeWillExpandListener(this);
-    // treeWillExpand(new TreeExpansionEvent(tree, new
-    // TreePath(rootConnector)));
   }
 
   /**
@@ -71,17 +69,16 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   public Object getChild(Object parent, int index) {
-    Object child = null;
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
           .getCollectionConnector();
       collectionConnector.setAllowLazyChildrenLoading(false);
-      child = collectionConnector.getChildConnector(index);
+      return collectionConnector.getChildConnector(index);
     } else if (parent instanceof ICollectionConnectorListProvider) {
-      child = ((ICollectionConnectorListProvider) parent)
+      return ((ICollectionConnectorListProvider) parent)
           .getCollectionConnectors().get(index);
     }
-    return child;
+    return null;
   }
 
   /**
@@ -156,7 +153,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
 
   private void checkListenerRegistrationForConnector(IValueConnector connector,
       int depth) {
-    if (depth >= 0) {
+    if (connector != null && depth >= 0) {
       depth--;
       // we can add the listener many times since the backing store listener
       // collection is a Set.
@@ -226,13 +223,11 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                 for (int i = newCollectionSize; i < oldCollectionSize; i++) {
                   childIndices[i - newCollectionSize] = i;
                 }
-                if (connectorPath != null) {
                   List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
                       .getRemovedChildrenConnectors();
                   fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
                       connectorPath.getPath(), childIndices,
                       removedChildrenConnectors.toArray());
-                }
               }
             }
           } else {
@@ -279,8 +274,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * {@inheritDoc}
    */
   public void treeNodesInserted(TreeModelEvent event) {
-    for (Object insertedNode : event.getChildren()) {
-      checkListenerRegistrationForConnector((IValueConnector) insertedNode);
+    for (Object insertedConnector : event.getChildren()) {
+      checkListenerRegistrationForConnector((IValueConnector) insertedConnector);
     }
   }
 
