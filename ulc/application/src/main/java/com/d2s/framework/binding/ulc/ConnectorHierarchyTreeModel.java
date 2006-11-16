@@ -38,6 +38,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   private static final long        serialVersionUID = -1578891934062045656L;
   private ICompositeValueConnector rootConnector;
   private TreeConnectorsListener   connectorsListener;
+  private ULCTree                  myTree;
 
   /**
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
@@ -60,6 +61,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       // treetable.
       tree.addTreeExpansionListener(this);
     }
+    myTree = tree;
   }
 
   /**
@@ -276,8 +278,11 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    */
   public void treeNodesInserted(TreeModelEvent event) {
     for (Object insertedConnector : event.getChildren()) {
-      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-          (ICollectionConnectorListProvider) insertedConnector, false, false);
+      if (myTree.isVisible(event.getTreePath().pathByAddingChild(
+          insertedConnector))) {
+        CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
+            (ICollectionConnectorListProvider) insertedConnector, false, false);
+      }
       checkListenerRegistrationForConnector((IValueConnector) insertedConnector);
     }
   }
@@ -305,9 +310,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       }
       CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
           changedConnector, false, false);
-    } else {
-      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-          changedConnector, true, true);
     }
   }
 

@@ -56,8 +56,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
     tree.addTreeWillExpandListener(this);
-    // treeWillExpand(new TreeExpansionEvent(tree, new
-    // TreePath(rootConnector)));
   }
 
   /**
@@ -306,9 +304,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       }
       CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
           changedConnector, false, false);
-    } else {
-      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-          changedConnector, true, true);
     }
   }
 
