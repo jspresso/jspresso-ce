@@ -216,38 +216,17 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             for (int i = oldCollectionSize; i < newCollectionSize; i++) {
               childIndices[i - oldCollectionSize] = i;
             }
-            // if (((CollectionConnectorValueChangeEvent) evt).isDelayedEvent())
-            // {
-            // if (oldCollectionSize == 0) {
-            // nodeStructureChanged(connectorPath);
-            // } else {
-            // nodeChanged(connectorPath);
-            // }
-            // } else {
             nodesWereInserted(connectorPath, childIndices);
-            // }
           } else if (newCollectionSize < oldCollectionSize) {
             int[] childIndices = new int[oldCollectionSize - newCollectionSize];
             for (int i = newCollectionSize; i < oldCollectionSize; i++) {
               childIndices[i - newCollectionSize] = i;
             }
-            if (connectorPath != null) {
-              List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
-                  .getRemovedChildrenConnectors();
-              // if (((CollectionConnectorValueChangeEvent)
-              // evt).isDelayedEvent()) {
-              // if (newCollectionSize == 0) {
-              // nodeStructureChanged(connectorPath);
-              // } else {
-              // nodeChanged(connectorPath);
-              // }
-              // } else {
-              nodesWereRemoved(connectorPath, childIndices,
-                  removedChildrenConnectors.toArray());
-              // }
-            }
+            List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
+                .getRemovedChildrenConnectors();
+            nodesWereRemoved(connectorPath, childIndices,
+                removedChildrenConnectors.toArray());
           }
-          // if (((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
           for (int i = 0; i < newCollectionSize; i++) {
             IValueConnector childConnector = ((ICollectionConnector) connector)
                 .getChildConnector(i);
@@ -259,7 +238,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                       false);
             }
           }
-          // }
         }
       } else {
         while (!(connector instanceof ICollectionConnectorListProvider)) {
