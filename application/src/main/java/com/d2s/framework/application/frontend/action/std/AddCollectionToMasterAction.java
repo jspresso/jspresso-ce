@@ -28,7 +28,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * @param <G>
  *          the actual action type used.
  */
-public class AddToMasterAction<E, F, G> extends ActionWrapper<E, F, G> {
+public class AddCollectionToMasterAction<E, F, G> extends ActionWrapper<E, F, G> {
 
   private IEntityDescriptor elementEntityDescriptor;
 

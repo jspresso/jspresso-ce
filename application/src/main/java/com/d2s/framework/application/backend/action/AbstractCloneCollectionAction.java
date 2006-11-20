@@ -11,8 +11,6 @@ import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityCloneFactory;
 
 /**
  * An action used duplicate a collection of domain objects. Cloning an entity
@@ -20,13 +18,12 @@ import com.d2s.framework.model.entity.IEntityCloneFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CloneCollectionAction extends AbstractCollectionAction {
-
-  private IEntityCloneFactory entityCloneFactory;
+public abstract class AbstractCloneCollectionAction extends
+    AbstractCollectionAction {
 
   /**
    * Retrieves the managed collection from the model connector then clones the
@@ -42,25 +39,27 @@ public class CloneCollectionAction extends AbstractCollectionAction {
         || collectionConnector == null) {
       return false;
     }
-    Collection<IEntity> entityClones = new ArrayList<IEntity>();
+    Collection<Object> elementClones = new ArrayList<Object>();
     for (int i = 0; i < selectedIndices.length; i++) {
-      entityClones.add(entityCloneFactory.cloneEntity(
-          ((IEntity) collectionConnector.getChildConnector(selectedIndices[i])
-              .getConnectorValue()), getEntityFactory(context)));
+      Object element = collectionConnector
+          .getChildConnector(selectedIndices[i]).getConnectorValue();
+      elementClones.add(cloneElement(element, context));
     }
     context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-        .getIndicesOf(collectionConnector, entityClones));
+        .getIndicesOf(collectionConnector, elementClones));
     return true;
   }
 
   /**
-   * Sets the entityCloneFactory.
-   * 
-   * @param entityCloneFactory
-   *          the entityCloneFactory to set.
+   * Clones an element.
+   *
+   * @param element
+   *          the element to clone.
+   * @param context
+   *          the action context.
+   * @return the cloned element.
    */
-  public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
-    this.entityCloneFactory = entityCloneFactory;
-  }
+  protected abstract Object cloneElement(Object element,
+      Map<String, Object> context);
 
 }

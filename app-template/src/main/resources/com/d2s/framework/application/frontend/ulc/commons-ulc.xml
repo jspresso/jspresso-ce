@@ -49,7 +49,7 @@
   <!--
     Action beans
   -->
-  <bean id="removeCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
+  <bean id="removeEntityCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
     class="com.d2s.framework.application.frontend.action.ulc.flow.StaticYesNoAction" />
 
   <bean id="infoFrontAction" class="com.d2s.framework.application.frontend.action.ulc.flow.InfoAction">

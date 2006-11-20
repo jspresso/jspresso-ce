@@ -8,6 +8,7 @@ import java.util.Locale;
 import com.d2s.framework.application.IController;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
+import com.d2s.framework.model.datatransfer.ComponentTransferStructure;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.util.accessor.IAccessorFactory;
@@ -105,4 +106,21 @@ public interface IBackendController extends IController {
    *          the id of the module access to check.
    */
   void checkModuleAccess(String moduleId);
+
+  /**
+   * Acts as a clipboard for storing component references along with their
+   * descriptors.
+   *
+   * @param components
+   *          the component transfer structure to store.
+   */
+  void storeComponents(ComponentTransferStructure components);
+
+  /**
+   * Acts as a clipboard for retrieving previously stored component references
+   * along with their descriptors.
+   *
+   * @return components the component transfer structure to retrieve.
+   */
+  ComponentTransferStructure retrieveComponents();
 }

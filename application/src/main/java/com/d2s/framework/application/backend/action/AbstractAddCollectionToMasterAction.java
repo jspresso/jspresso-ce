@@ -4,7 +4,7 @@
 package com.d2s.framework.application.backend.action;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
@@ -13,11 +13,10 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.model.IModelValueConnector;
-import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.binding.model.ModelPropertyConnector;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
 import com.d2s.framework.util.accessor.IListAccessor;
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * An action used in master/detail views to create and add a new detail to a
@@ -29,7 +28,8 @@ import com.d2s.framework.util.accessor.IListAccessor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class AddToMasterAction extends AbstractCollectionAction {
+public abstract class AbstractAddCollectionToMasterAction extends
+    AbstractCollectionAction {
 
   /**
    * Retrieves the master and its managed collection from the model connector
@@ -37,6 +37,7 @@ public class AddToMasterAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
@@ -44,14 +45,11 @@ public class AddToMasterAction extends AbstractCollectionAction {
       return false;
     }
 
-    Object newComponent = getNewComponent(context);
-    if (newComponent != null) {
-      Class newComponentContract;
-      if (newComponent instanceof IEntity) {
-        newComponentContract = ((IEntity) newComponent).getContract();
-      } else {
-        newComponentContract = newComponent.getClass();
-      }
+    List<?> newComponents = getAddedComponents(context);
+    if (newComponents != null && newComponents.size() > 0) {
+      Class newComponentContract = getModelDescriptor(context)
+          .getCollectionDescriptor().getElementDescriptor()
+          .getComponentContract();
       Object master = collectionConnector.getParentConnector()
           .getConnectorValue();
       ICollectionAccessor collectionAccessor = getAccessorFactory(context)
@@ -68,11 +66,17 @@ public class AddToMasterAction extends AbstractCollectionAction {
             index = getSelectedIndices(context)[getSelectedIndices(context).length - 1];
           }
         }
-        if (index >= 0) {
-          ((IListAccessor) collectionAccessor).addToValue(master, index + 1,
-              newComponent);
-        } else {
-          collectionAccessor.addToValue(master, newComponent);
+        for (int i = 0; i < newComponents.size(); i++) {
+          if (index >= 0) {
+            ((IListAccessor) collectionAccessor).addToValue(master, index + 1
+                + i, newComponents.get(i));
+          } else {
+            collectionAccessor.addToValue(master, newComponents.get(i));
+          }
+        }
+        if (!(master instanceof IPropertyChangeCapable)
+            && collectionConnector instanceof ModelPropertyConnector) {
+          ((ModelPropertyConnector) collectionConnector).propertyChange(null);
         }
       } catch (IllegalAccessException ex) {
         throw new ActionException(ex);
@@ -82,14 +86,13 @@ public class AddToMasterAction extends AbstractCollectionAction {
         throw new ActionException(ex);
       }
       context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
-          .getIndicesOf(collectionConnector, Collections
-              .singleton(newComponent)));
+          .getIndicesOf(collectionConnector, newComponents));
     }
     return true;
   }
 
   /**
-   * Gets the new entity to add. It is createdusing the informations contained
+   * Gets the new entity to add. It is created using the informations contained
    * in the context.
    *
    * @param context
@@ -97,16 +100,5 @@ public class AddToMasterAction extends AbstractCollectionAction {
    * @return the entity to add to the collection.
    */
   @SuppressWarnings("unchecked")
-  protected Object getNewComponent(Map<String, Object> context) {
-    IComponentDescriptor elementDescriptor = (IComponentDescriptor) context
-        .get(ActionContextConstants.ELEMENT_DESCRIPTOR);
-    if (elementDescriptor == null) {
-      elementDescriptor = ((ICollectionPropertyDescriptor) getModelDescriptor(context))
-          .getReferencedDescriptor().getElementDescriptor();
-    }
-
-    IEntity newEntity = getEntityFactory(context).createEntityInstance(
-        (Class<? extends IEntity>) elementDescriptor.getComponentContract());
-    return newEntity;
-  }
+  protected abstract List<?> getAddedComponents(Map<String, Object> context);
 }

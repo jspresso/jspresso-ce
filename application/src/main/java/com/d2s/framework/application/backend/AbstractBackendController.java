@@ -19,6 +19,7 @@ import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
+import com.d2s.framework.model.datatransfer.ComponentTransferStructure;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
@@ -47,6 +48,8 @@ public abstract class AbstractBackendController extends AbstractController
   private IModelConnectorFactory       mapConnectorFactory;
   private Map<String, IValueConnector> moduleConnectors;
   private IApplicationSession          applicationSession;
+
+  private ComponentTransferStructure   transferStructure;
 
   /**
    * Directly delegates execution to the action after having completed its
@@ -130,8 +133,7 @@ public abstract class AbstractBackendController extends AbstractController
    * @param mapConnectorFactory
    *          the mapConnectorFactory to set.
    */
-  public void setMapConnectorFactory(
-      IModelConnectorFactory mapConnectorFactory) {
+  public void setMapConnectorFactory(IModelConnectorFactory mapConnectorFactory) {
     this.mapConnectorFactory = mapConnectorFactory;
   }
 
@@ -306,5 +308,19 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void checkModuleAccess(String moduleId) {
     checkAccess((ISecurable) getModuleConnector(moduleId).getConnectorValue());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void storeComponents(ComponentTransferStructure components) {
+    this.transferStructure = components;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ComponentTransferStructure retrieveComponents() {
+    return transferStructure;
   }
 }

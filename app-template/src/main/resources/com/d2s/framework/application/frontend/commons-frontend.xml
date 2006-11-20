@@ -146,9 +146,9 @@
   </bean>
 
   <bean id="abstractAddToMasterFrontAction" abstract="true"
-    class="com.d2s.framework.application.frontend.action.std.AddToMasterAction">
+    class="com.d2s.framework.application.frontend.action.std.AddCollectionToMasterAction">
     <property name="wrappedAction">
-      <bean class="com.d2s.framework.application.backend.action.AddToMasterAction" />
+      <bean class="com.d2s.framework.application.backend.action.AddEntityCollectionToMasterAction" />
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
@@ -161,17 +161,76 @@
     <property name="acceleratorAsString" value="alt A" />
   </bean>
 
-  <bean id="cloneCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+  <bean id="addMapToMasterFrontAction" parent="addToMasterFrontAction">
+    <property name="wrappedAction">
+      <bean class="com.d2s.framework.application.backend.action.AddMapToMasterAction" />
+    </property>
+  </bean>
+
+  <bean id="removeMapFromMasterFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
+    <property name="yesAction">
+      <bean class="com.d2s.framework.application.backend.action.RemoveCollectionFromMapAction" />
+    </property>
+  </bean>
+
+  <bean id="cloneEntityCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property name="iconImageURL" value="classpath:images/edit_clone-48x48.png" />
     <property name="name" value="clone.name" />
     <property name="description" value="clone.description" />
     <property name="acceleratorAsString" value="alt C" />
     <property name="wrappedAction">
-      <bean class="com.d2s.framework.application.backend.action.CloneCollectionAction">
+      <bean class="com.d2s.framework.application.backend.action.CloneEntityCollectionAction">
         <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
       </bean>
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
+  </bean>
+
+  <bean id="cloneMapCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    <property name="iconImageURL" value="classpath:images/edit_clone-48x48.png" />
+    <property name="name" value="clone.name" />
+    <property name="description" value="clone.description" />
+    <property name="acceleratorAsString" value="alt C" />
+    <property name="wrappedAction">
+      <bean class="com.d2s.framework.application.backend.action.CloneMapCollectionAction"/>
+    </property>
+    <property name="nextAction" ref="connectorSelectionFrontAction" />
+  </bean>
+
+  <bean id="copyCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    <property name="iconImageURL" value="classpath:images/edit_copy-48x48.png" />
+    <property name="name" value="copy.name" />
+    <property name="description" value="copy.description" />
+    <property name="acceleratorAsString" value="ctrl C" />
+    <property name="wrappedAction">
+      <bean class="com.d2s.framework.application.backend.action.TransferCollectionAction">
+        <property name="transferMode" value="COPY" />
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="cutCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    <property name="iconImageURL" value="classpath:images/edit_cut-48x48.png" />
+    <property name="name" value="cut.name" />
+    <property name="description" value="cut.description" />
+    <property name="acceleratorAsString" value="ctrl X" />
+    <property name="wrappedAction">
+      <bean class="com.d2s.framework.application.backend.action.TransferCollectionAction">
+        <property name="transferMode" value="MOVE" />
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="pasteCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    <property name="iconImageURL" value="classpath:images/edit_paste-48x48.png" />
+    <property name="name" value="paste.name" />
+    <property name="description" value="paste.description" />
+    <property name="acceleratorAsString" value="ctrl V" />
+    <property name="wrappedAction">
+      <bean class="com.d2s.framework.application.backend.action.PasteCollectionToMasterAction">
+        <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
+      </bean>
+    </property>
   </bean>
 
   <bean id="addToProjectedFrontAction" parent="addToMasterFrontAction">
@@ -190,11 +249,11 @@
     <property name="yesAction" ref="removeCollectionFromMasterBackAction" />
   </bean>
 
-  <bean id="removeFromProjectedFrontAction" parent="removeCollectionFromMasterFrontAction">
+  <bean id="removeFromProjectedFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
     <property name="yesAction" ref="removeFromModuleObjectsAction" />
   </bean>
 
-  <bean id="cloneProjectedFrontAction" parent="cloneCollectionFrontAction">
+  <bean id="cloneProjectedFrontAction" parent="cloneEntityCollectionFrontAction">
     <property name="wrappedAction">
       <bean class="com.d2s.framework.application.backend.action.module.CloneModuleObjectsAction">
         <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
@@ -213,7 +272,7 @@
     <property name="nextAction" ref="moduleConnectorSelectionFrontAction" />
   </bean>
 
-  <bean id="removeModuleFromParentFrontAction" parent="removeCollectionFromMasterFrontAction">
+  <bean id="removeModuleFromParentFrontAction" parent="removeEntityCollectionFromMasterFrontAction">
     <property name="yesAction">
       <bean class="com.d2s.framework.application.frontend.action.ActionWrapper">
         <property name="wrappedAction">
@@ -291,11 +350,18 @@
   <bean id="masterDetailActionMap" class="com.d2s.framework.view.action.ActionMap">
     <property name="actionMap">
       <map>
-        <entry key="EDIT">
+        <entry key="ACTION">
           <list>
             <ref local="addToMasterFrontAction" />
-            <ref bean="removeCollectionFromMasterFrontAction" />
-            <ref local="cloneCollectionFrontAction" />
+            <ref bean="removeEntityCollectionFromMasterFrontAction" />
+            <ref local="cloneEntityCollectionFrontAction" />
+          </list>
+        </entry>
+        <entry key="EDIT">
+          <list>
+            <ref local="copyCollectionFrontAction" />
+            <ref bean="cutCollectionFrontAction" />
+            <ref local="pasteCollectionFrontAction" />
           </list>
         </entry>
       </map>
@@ -330,7 +396,7 @@
             <ref local="reloadProjectedFrontAction" />
           </list>
         </entry>
-        <entry key="EDIT">
+        <entry key="ACTION">
           <list>
             <ref local="addToProjectedFrontAction" />
             <ref local="removeFromProjectedFrontAction" />
@@ -348,7 +414,7 @@
   <bean id="moduleActionMap" class="com.d2s.framework.view.action.ActionMap">
     <property name="actionMap">
       <map>
-        <entry key="EDIT">
+        <entry key="ACTION">
           <list>
             <ref local="removeModuleFromParentFrontAction" />
           </list>
@@ -385,4 +451,17 @@
     </property>
   </bean>
 
+  <bean id="mapMasterDetailActionMap" class="com.d2s.framework.view.action.ActionMap">
+    <property name="actionMap">
+      <map>
+        <entry key="ACTION">
+          <list>
+            <ref local="addMapToMasterFrontAction" />
+            <ref local="removeMapFromMasterFrontAction" />
+            <ref local="cloneMapCollectionFrontAction" />
+          </list>
+        </entry>
+      </map>
+    </property>
+  </bean>
 </beans>
