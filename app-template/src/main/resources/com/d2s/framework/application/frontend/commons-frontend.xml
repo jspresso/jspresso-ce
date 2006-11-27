@@ -147,6 +147,7 @@
 
   <bean id="abstractAddToMasterFrontAction" abstract="true"
     class="com.d2s.framework.application.frontend.action.std.AddCollectionToMasterAction">
+    <property name="description" value="add.description" />
     <property name="wrappedAction">
       <bean class="com.d2s.framework.application.backend.action.AddEntityCollectionToMasterAction" />
     </property>
@@ -192,7 +193,7 @@
     <property name="description" value="clone.description" />
     <property name="acceleratorAsString" value="alt C" />
     <property name="wrappedAction">
-      <bean class="com.d2s.framework.application.backend.action.CloneMapCollectionAction"/>
+      <bean class="com.d2s.framework.application.backend.action.CloneMapCollectionAction" />
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
@@ -221,16 +222,17 @@
     </property>
   </bean>
 
+  <bean id="pasteCollectionBackAction"
+    class="com.d2s.framework.application.backend.action.PasteCollectionToMasterAction">
+    <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
+  </bean>
+
   <bean id="pasteCollectionFrontAction" class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property name="iconImageURL" value="classpath:images/edit_paste-48x48.png" />
     <property name="name" value="paste.name" />
     <property name="description" value="paste.description" />
     <property name="acceleratorAsString" value="ctrl V" />
-    <property name="wrappedAction">
-      <bean class="com.d2s.framework.application.backend.action.PasteCollectionToMasterAction">
-        <property name="entityCloneFactory" ref="smartEntityCloneFactory" />
-      </bean>
-    </property>
+    <property name="wrappedAction" ref="pasteCollectionBackAction"></property>
   </bean>
 
   <bean id="addToProjectedFrontAction" parent="addToMasterFrontAction">
@@ -283,7 +285,8 @@
     </property>
   </bean>
 
-  <bean id="restartModuleFrontAction" class="com.d2s.framework.application.frontend.action.module.ModuleRestartAction">
+  <bean id="restartModuleFrontAction"
+    class="com.d2s.framework.application.frontend.action.module.ModuleRestartAction">
     <property name="iconImageURL" value="classpath:images/restart-48x48.png" />
     <property name="name" value="module.restart" />
     <property name="description" value="module.restart.description" />

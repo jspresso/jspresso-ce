@@ -15,7 +15,7 @@ import org.joda.time.format.PeriodFormatter;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,14 +25,13 @@ public class DurationFormatter implements IFormatter {
 
   /**
    * Constructs a new <code>DurationFormatter</code> instance.
-   * 
+   *
    * @param locale
    *          the locale the formatter must be constructed in.
    */
-  public DurationFormatter(@SuppressWarnings("unused")
-  Locale locale) {
+  public DurationFormatter(Locale locale) {
     super();
-    this.formatter = PeriodFormat.getDefault();
+    this.formatter = PeriodFormat.getDefault().withLocale(locale);
   }
 
   /**

@@ -278,8 +278,9 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    */
   public void treeNodesInserted(TreeModelEvent event) {
     for (Object insertedConnector : event.getChildren()) {
-      if (myTree.isVisible(event.getTreePath().pathByAddingChild(
-          insertedConnector))) {
+      if ((event.getTreePath().getLastPathComponent() == rootConnector && getChildCount(insertedConnector) == 0)
+          || myTree.isVisible(event.getTreePath().pathByAddingChild(
+              insertedConnector))) {
         CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
             (ICollectionConnectorListProvider) insertedConnector, false, false);
       }

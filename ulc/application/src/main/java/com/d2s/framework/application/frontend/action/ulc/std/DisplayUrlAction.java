@@ -21,6 +21,8 @@ import com.ulcjava.base.application.ClientContext;
  */
 public class DisplayUrlAction extends AbstractUlcAction {
 
+  private String baseUrl;
+
   /**
    * {@inheritDoc}
    */
@@ -30,5 +32,25 @@ public class DisplayUrlAction extends AbstractUlcAction {
     String urlSpec = (String) context.get(ActionContextConstants.ACTION_PARAM);
     ClientContext.showDocument(urlSpec);
     return true;
+  }
+
+
+  /**
+   * Gets the baseUrl.
+   *
+   * @return the baseUrl.
+   */
+  protected String getBaseUrl() {
+    return baseUrl;
+  }
+
+
+  /**
+   * Sets the baseUrl.
+   *
+   * @param baseUrl the baseUrl to set.
+   */
+  public void setBaseUrl(String baseUrl) {
+    this.baseUrl = baseUrl;
   }
 }

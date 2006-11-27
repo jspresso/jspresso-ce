@@ -299,6 +299,11 @@ public class DefaultSwingViewFactory implements
           view.getConnector().addWritabilityGate(gate.clone());
         }
       }
+      if (viewDescriptor.getDescription() != null) {
+        view.getPeer().setToolTipText(
+            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+                + TOOLTIP_ELLIPSIS);
+      }
       if (viewDescriptor.getActions() != null) {
         JToolBar toolBar = createJToolBar();
         toolBar.setRollover(true);
@@ -342,11 +347,6 @@ public class DefaultSwingViewFactory implements
         view.setPeer(viewPanel);
       }
       decorateWithBorder(view, locale);
-      if (viewDescriptor.getDescription() != null) {
-        view.getPeer().setToolTipText(
-            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-                + TOOLTIP_ELLIPSIS);
-      }
     } catch (Throwable ex) {
       view.setPeer(createSecurityPanel());
     }

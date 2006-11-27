@@ -23,6 +23,8 @@ import com.d2s.framework.util.swing.BrowserControl;
  */
 public class DisplayUrlAction extends AbstractSwingAction {
 
+  private String baseUrl;
+
   /**
    * {@inheritDoc}
    */
@@ -37,5 +39,25 @@ public class DisplayUrlAction extends AbstractSwingAction {
       throw new ActionException(ex);
     }
     return true;
+  }
+
+
+  /**
+   * Gets the baseUrl.
+   *
+   * @return the baseUrl.
+   */
+  protected String getBaseUrl() {
+    return baseUrl;
+  }
+
+
+  /**
+   * Sets the baseUrl.
+   *
+   * @param baseUrl the baseUrl to set.
+   */
+  public void setBaseUrl(String baseUrl) {
+    this.baseUrl = baseUrl;
   }
 }

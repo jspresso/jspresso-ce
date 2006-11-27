@@ -52,11 +52,13 @@ import com.d2s.framework.binding.ulc.ULCToggleButtonConnector;
 import com.d2s.framework.gui.ulc.components.server.ITreePathPopupFactory;
 import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 import com.d2s.framework.gui.ulc.components.server.ULCDateField;
+import com.d2s.framework.gui.ulc.components.server.ULCDurationDataType;
+import com.d2s.framework.gui.ulc.components.server.ULCDurationDataTypeFactory;
 import com.d2s.framework.gui.ulc.components.server.ULCExtendedButton;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedTable;
 import com.d2s.framework.gui.ulc.components.server.ULCExtendedTree;
 import com.d2s.framework.gui.ulc.components.server.ULCJEditTextArea;
 import com.d2s.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
-import com.d2s.framework.gui.ulc.components.server.ULCExtendedTable;
 import com.d2s.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
 import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
@@ -210,6 +212,7 @@ public class DefaultUlcViewFactory implements
   private IDisplayableAction                    binaryPropertyInfoAction;
 
   private ULCTranslationDataTypeFactory         translationDataTypeFactory  = new ULCTranslationDataTypeFactory();
+  private ULCDurationDataTypeFactory            durationDataTypeFactory     = new ULCDurationDataTypeFactory();
 
   /**
    * {@inheritDoc}
@@ -238,6 +241,11 @@ public class DefaultUlcViewFactory implements
     } else if (viewDescriptor instanceof ITreeViewDescriptor) {
       view = createTreeView((ITreeViewDescriptor) viewDescriptor,
           actionHandler, locale);
+    }
+    if (viewDescriptor.getDescription() != null) {
+      view.getPeer().setToolTipText(
+          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+              + TOOLTIP_ELLIPSIS);
     }
     try {
       actionHandler.checkAccess(viewDescriptor);
@@ -295,11 +303,6 @@ public class DefaultUlcViewFactory implements
         view.setPeer(viewPanel);
       }
       decorateWithBorder(view, locale);
-      if (viewDescriptor.getDescription() != null) {
-        view.getPeer().setToolTipText(
-            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-                + TOOLTIP_ELLIPSIS);
-      }
     } catch (Throwable ex) {
       view.setPeer(createSecurityPanel());
     }
@@ -1954,14 +1957,14 @@ public class DefaultUlcViewFactory implements
     return constructView(viewComponent, null, connector);
   }
 
-  // FIXME Duration formatted tf.
-  private ULCNumberDataType createDurationDataType(@SuppressWarnings("unused")
-  IDurationPropertyDescriptor propertyDescriptor, Locale locale,
+  private ULCDurationDataType createDurationDataType(
+      @SuppressWarnings("unused")
+      IDurationPropertyDescriptor propertyDescriptor, Locale locale,
       @SuppressWarnings("unused")
       DurationFormatter formatter) {
-    ULCNumberDataType numberDataType = new ULCNumberDataType(locale);
-    numberDataType.setInteger(true);
-    return numberDataType;
+    ULCDurationDataType durationDataType = durationDataTypeFactory
+        .getTranslationDataType(locale);
+    return durationDataType;
   }
 
   private IView<ULCComponent> createBooleanPropertyView(
