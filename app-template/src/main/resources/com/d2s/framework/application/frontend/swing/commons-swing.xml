@@ -79,7 +79,10 @@
   <bean id="openFileAsBinaryPropertyAction" parent="abstractOpenFileAction"
     class="com.d2s.framework.application.frontend.action.swing.file.OpenFileAsBinaryPropertyAction" />
 
-  <bean id="saveBinaryPropertyAsFileAction" parent="abstractSaveFileAction"
+  <bean id="saveFileAction" parent="abstractSaveFileAction"
+    class="com.d2s.framework.application.frontend.action.swing.file.SaveFileAction" />
+
+  <bean id="saveBinaryPropertyAsFileAction" parent="saveFileAction"
     class="com.d2s.framework.application.frontend.action.swing.file.SaveBinaryPropertyAsFileAction" />
 
   <bean id="binaryPropertyInfoAction" parent="abstractBinaryPropertyInfoAction"

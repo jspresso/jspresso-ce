@@ -22,6 +22,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
 
   private Map<String, List<String>> fileFilter;
   private FileChooserConfig         fileChooser;
+  private String                    defaultFileName;
 
   /**
    * Gets the file chooser configuration used to build this file chooser.
@@ -54,6 +55,9 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
                       .getTranslation(fileTypeEntry.getKey(),
                           getLocale(context))
                       + extensionsDescription.toString()));
+          if (defaultFileName != null) {
+            fileChooser.setSelectedFile(defaultFileName);
+          }
         }
       }
     }
@@ -73,5 +77,15 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
     if (oldFileFilter != this.fileFilter) {
       fileChooser = null;
     }
+  }
+
+  /**
+   * Sets the defaultFileName.
+   *
+   * @param defaultFileName
+   *          the defaultFileName to set.
+   */
+  public void setDefaultFileName(String defaultFileName) {
+    this.defaultFileName = defaultFileName;
   }
 }

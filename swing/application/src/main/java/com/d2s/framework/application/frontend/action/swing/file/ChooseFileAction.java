@@ -19,7 +19,7 @@ import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,10 +27,11 @@ public class ChooseFileAction extends AbstractSwingAction {
 
   private Map<String, List<String>> fileFilter;
   private JFileChooser              fileChooser;
+  private String                    defaultFileName;
 
   /**
    * Gets the file chooser.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the file chooser.
@@ -55,6 +56,9 @@ public class ChooseFileAction extends AbstractSwingAction {
         }
       }
       fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+      if (defaultFileName != null) {
+        fileChooser.setSelectedFile(new File(defaultFileName));
+      }
     }
     return fileChooser;
   }
@@ -62,7 +66,7 @@ public class ChooseFileAction extends AbstractSwingAction {
   /**
    * Sets the fileFilter. Filter file types are a map of descriptions keying
    * file extension arays.
-   * 
+   *
    * @param fileFilter
    *          the fileFilter to set.
    */
@@ -81,7 +85,7 @@ public class ChooseFileAction extends AbstractSwingAction {
 
     /**
      * Constructs a new <code>FileFilterAdapter</code> instance.
-     * 
+     *
      * @param description
      * @param allowedExtensions
      */
@@ -116,5 +120,15 @@ public class ChooseFileAction extends AbstractSwingAction {
       return description;
     }
 
+  }
+
+  /**
+   * Sets the defaultFileName.
+   *
+   * @param defaultFileName
+   *          the defaultFileName to set.
+   */
+  public void setDefaultFileName(String defaultFileName) {
+    this.defaultFileName = defaultFileName;
   }
 }
