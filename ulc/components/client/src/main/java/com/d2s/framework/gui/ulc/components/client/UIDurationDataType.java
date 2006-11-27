@@ -5,12 +5,8 @@ package com.d2s.framework.gui.ulc.components.client;
 
 import java.util.Locale;
 
-import org.joda.time.Instant;
-import org.joda.time.Period;
-import org.joda.time.format.PeriodFormat;
-import org.joda.time.format.PeriodFormatter;
-
 import com.d2s.framework.gui.ulc.components.shared.DurationDataTypeConstants;
+import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.lang.ObjectUtils;
 import com.ulcjava.base.client.datatype.UIDataType;
 import com.ulcjava.base.shared.internal.Anything;
@@ -27,8 +23,8 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIDurationDataType extends UIDataType {
 
-  private PeriodFormatter formatter;
-  private Locale          locale;
+  private DurationFormatter formatter;
+  private Locale            locale;
 
   /**
    * {@inheritDoc}
@@ -42,10 +38,7 @@ public class UIDurationDataType extends UIDataType {
       locale = new Locale(args.get(DurationDataTypeConstants.LOCALE, Locale
           .getDefault().getLanguage()));
     }
-    formatter = PeriodFormat.getDefault();
-    if (locale != null) {
-      formatter = formatter.withLocale(locale);
-    }
+    formatter = new DurationFormatter(locale);
   }
 
   /**
@@ -54,11 +47,7 @@ public class UIDurationDataType extends UIDataType {
   @Override
   public Object convertToObject(String newString, @SuppressWarnings("unused")
   Object previousValue) {
-    if (newString == null) {
-      return null;
-    }
-    return new Long(formatter.parsePeriod(newString).toDurationFrom(
-        new Instant(0)).getMillis());
+    return formatter.parse(newString);
   }
 
   /**
@@ -67,10 +56,7 @@ public class UIDurationDataType extends UIDataType {
   @Override
   public String convertToString(Object object, @SuppressWarnings("unused")
   boolean forEditing) {
-    if (object == null) {
-      return "";
-    }
-    return formatter.print(new Period(0, ((Number) object).longValue()));
+    return formatter.format(object);
   }
 
   /**

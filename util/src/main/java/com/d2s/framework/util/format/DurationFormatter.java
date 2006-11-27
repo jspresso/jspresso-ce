@@ -4,11 +4,12 @@
 package com.d2s.framework.util.format;
 
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.joda.time.Instant;
 import org.joda.time.Period;
-import org.joda.time.format.PeriodFormat;
 import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 /**
  * A formatter / parser to deal with duration properties.
@@ -31,7 +32,21 @@ public class DurationFormatter implements IFormatter {
    */
   public DurationFormatter(Locale locale) {
     super();
-    this.formatter = PeriodFormat.getDefault().withLocale(locale);
+    ResourceBundle bundle = ResourceBundle.getBundle(getClass().getName(),
+        locale);
+    PeriodFormatterBuilder builder = new PeriodFormatterBuilder();
+    builder.appendDays();
+    builder.appendSuffix(" " + bundle.getString("day"), " "
+        + bundle.getString("days"));
+    builder.appendSeparator(" ");
+    builder.appendHours();
+    builder.appendSuffix(" " + bundle.getString("hour"), " "
+        + bundle.getString("hours"));
+    builder.appendSeparator(" ");
+    builder.appendMinutes();
+    builder.appendSuffix(" " + bundle.getString("minute"), " "
+        + bundle.getString("minutes"));
+    this.formatter = builder.toFormatter().withLocale(locale);
   }
 
   /**
@@ -41,8 +56,12 @@ public class DurationFormatter implements IFormatter {
     if (source == null || source.length() == 0) {
       return null;
     }
-    return new Long(formatter.parsePeriod(source)
-        .toDurationFrom(new Instant(0)).getMillis());
+    try {
+      return new Long(formatter.parsePeriod(source).toDurationFrom(
+          new Instant(0)).getMillis());
+    } catch (Throwable t) {
+      return null;
+    }
   }
 
   /**
@@ -52,6 +71,10 @@ public class DurationFormatter implements IFormatter {
     if (value == null) {
       return null;
     }
-    return formatter.print(new Period(0, ((Number) value).longValue()));
+    try {
+      return formatter.print(new Period(0, ((Number) value).longValue()));
+    } catch (Throwable t) {
+      return null;
+    }
   }
 }

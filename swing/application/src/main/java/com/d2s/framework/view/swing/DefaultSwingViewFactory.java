@@ -2353,8 +2353,8 @@ public class DefaultSwingViewFactory implements
         + extraWidth;
     Dimension size = new Dimension(preferredWidth,
         component.getPreferredSize().height);
+    component.setMinimumSize(new Dimension(size.width / 2, size.height));
     component.setPreferredSize(size);
-    component.setMinimumSize(size);
     component.setMaximumSize(size);
   }
 

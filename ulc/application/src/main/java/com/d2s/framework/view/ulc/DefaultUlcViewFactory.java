@@ -2377,8 +2377,9 @@ public class DefaultUlcViewFactory implements
         + extraWidth;
     Dimension size = new Dimension(preferredWidth, component.getFont()
         .getSize() + 6);
+    component.setMinimumSize(new Dimension(size.getWidth() / 2, size
+        .getHeight()));
     component.setPreferredSize(size);
-    component.setMinimumSize(size);
     component.setMaximumSize(size);
   }
 
