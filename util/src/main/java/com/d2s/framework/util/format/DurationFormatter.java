@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.util.format;
 
+import java.text.ParseException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -52,7 +53,7 @@ public class DurationFormatter implements IFormatter {
   /**
    * {@inheritDoc}
    */
-  public Object parse(String source) {
+  public Object parse(String source) throws ParseException {
     if (source == null || source.length() == 0) {
       return null;
     }
@@ -60,7 +61,7 @@ public class DurationFormatter implements IFormatter {
       return new Long(formatter.parsePeriod(source).toDurationFrom(
           new Instant(0)).getMillis());
     } catch (Throwable t) {
-      return null;
+      throw new ParseException(t.getMessage(), 0);
     }
   }
 

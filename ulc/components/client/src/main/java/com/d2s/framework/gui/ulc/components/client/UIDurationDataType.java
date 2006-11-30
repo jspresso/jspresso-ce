@@ -3,11 +3,13 @@
  */
 package com.d2s.framework.gui.ulc.components.client;
 
+import java.text.ParseException;
 import java.util.Locale;
 
 import com.d2s.framework.gui.ulc.components.shared.DurationDataTypeConstants;
 import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.lang.ObjectUtils;
+import com.ulcjava.base.client.datatype.DataTypeConversionException;
 import com.ulcjava.base.client.datatype.UIDataType;
 import com.ulcjava.base.shared.internal.Anything;
 
@@ -46,8 +48,12 @@ public class UIDurationDataType extends UIDataType {
    */
   @Override
   public Object convertToObject(String newString, @SuppressWarnings("unused")
-  Object previousValue) {
-    return formatter.parse(newString);
+  Object previousValue) throws DataTypeConversionException {
+    try {
+      return formatter.parse(newString);
+    } catch (ParseException ex) {
+      throw new DataTypeConversionException(ex.getMessage(), newString);
+    }
   }
 
   /**

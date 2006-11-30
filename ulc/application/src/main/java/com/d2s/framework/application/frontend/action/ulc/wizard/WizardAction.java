@@ -64,6 +64,7 @@ public class WizardAction extends AbstractUlcAction {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
@@ -73,7 +74,12 @@ public class WizardAction extends AbstractUlcAction {
         .createModelConnector(firstWizardStep.getViewDescriptor()
             .getModelDescriptor());
 
+    Map<String, Object> wizardModelInit = (Map<String, Object>) context
+        .get(ActionContextConstants.ACTION_PARAM);
     Map<String, Object> wizardModel = new HashMap<String, Object>();
+    if (wizardModelInit != null) {
+      wizardModel.putAll(wizardModelInit);
+    }
     modelConnector.setConnectorValue(wizardModel);
     context.put(ActionContextConstants.ACTION_PARAM, wizardModel);
 
@@ -90,16 +96,17 @@ public class WizardAction extends AbstractUlcAction {
 
     final ULCCardPane cardPanel = new ULCCardPane();
 
-    final ULCExtendedButton backButton = new ULCExtendedButton(getIconFactory(context)
-        .getBackwardIcon(IIconFactory.SMALL_ICON_SIZE));
-    final ULCExtendedButton nextButton = new ULCExtendedButton(getIconFactory(context)
-        .getForwardIcon(IIconFactory.SMALL_ICON_SIZE));
-    final ULCExtendedButton finishButton = new ULCExtendedButton(getIconFactory(context)
-        .getIcon(finishAction.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+    final ULCExtendedButton backButton = new ULCExtendedButton(getIconFactory(
+        context).getBackwardIcon(IIconFactory.SMALL_ICON_SIZE));
+    final ULCExtendedButton nextButton = new ULCExtendedButton(getIconFactory(
+        context).getForwardIcon(IIconFactory.SMALL_ICON_SIZE));
+    final ULCExtendedButton finishButton = new ULCExtendedButton(
+        getIconFactory(context).getIcon(finishAction.getIconImageURL(),
+            IIconFactory.SMALL_ICON_SIZE));
     finishButton.setText(finishAction.getI18nName(
         getTranslationProvider(context), getLocale(context)));
-    ULCExtendedButton cancelButton = new ULCExtendedButton(getIconFactory(context)
-        .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
+    ULCExtendedButton cancelButton = new ULCExtendedButton(getIconFactory(
+        context).getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
     cancelButton.setText(getTranslationProvider(context).getTranslation(
         "cancel", getLocale(context)));
 
@@ -112,8 +119,9 @@ public class WizardAction extends AbstractUlcAction {
         IWizardStepDescriptor currentWizardStep = getCurrentWizardStep(context);
         IWizardStepDescriptor backWizardStep = currentWizardStep
             .getPreviousStepDescriptor(context);
-        show(dialog, cardPanel, alreadyDisplayedSteps, backWizardStep, backButton,
-            nextButton, finishButton, modelConnector, actionHandler, context);
+        show(dialog, cardPanel, alreadyDisplayedSteps, backWizardStep,
+            backButton, nextButton, finishButton, modelConnector,
+            actionHandler, context);
       }
     });
 
@@ -129,8 +137,9 @@ public class WizardAction extends AbstractUlcAction {
                 context)) {
           IWizardStepDescriptor nextWizardStep = currentWizardStep
               .getNextStepDescriptor(context);
-          show(dialog, cardPanel, alreadyDisplayedSteps, nextWizardStep, backButton,
-              nextButton, finishButton, modelConnector, actionHandler, context);
+          show(dialog, cardPanel, alreadyDisplayedSteps, nextWizardStep,
+              backButton, nextButton, finishButton, modelConnector,
+              actionHandler, context);
           if (nextWizardStep.getOnEnterAction() != null) {
             actionHandler.execute(nextWizardStep.getOnEnterAction(), context);
           }
@@ -148,6 +157,7 @@ public class WizardAction extends AbstractUlcAction {
         if (currentWizardStep.getOnLeaveAction() == null
             || actionHandler.execute(currentWizardStep.getOnLeaveAction(),
                 context)) {
+          dialog.setVisible(false);
           actionHandler.execute(finishAction, context);
         }
       }
@@ -194,11 +204,11 @@ public class WizardAction extends AbstractUlcAction {
     return super.execute(actionHandler, context);
   }
 
-  private void show(ULCDialog dialog, ULCCardPane cardPanel, Set<String> alreadyDisplayedSteps,
-      IWizardStepDescriptor wizardStep, ULCExtendedButton backButton,
-      ULCExtendedButton nextButton, ULCExtendedButton finishButton,
-      IValueConnector modelConnector, IActionHandler actionHandler,
-      Map<String, Object> context) {
+  private void show(ULCDialog dialog, ULCCardPane cardPanel,
+      Set<String> alreadyDisplayedSteps, IWizardStepDescriptor wizardStep,
+      ULCExtendedButton backButton, ULCExtendedButton nextButton,
+      ULCExtendedButton finishButton, IValueConnector modelConnector,
+      IActionHandler actionHandler, Map<String, Object> context) {
     String cardName = wizardStep.getName();
     if (!alreadyDisplayedSteps.contains(cardName)) {
       alreadyDisplayedSteps.add(cardName);

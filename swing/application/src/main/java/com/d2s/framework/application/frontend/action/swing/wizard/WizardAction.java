@@ -68,6 +68,7 @@ public class WizardAction extends AbstractSwingAction {
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
@@ -77,7 +78,12 @@ public class WizardAction extends AbstractSwingAction {
         .createModelConnector(firstWizardStep.getViewDescriptor()
             .getModelDescriptor());
 
+    Map<String, Object> wizardModelInit = (Map<String, Object>) context
+        .get(ActionContextConstants.ACTION_PARAM);
     Map<String, Object> wizardModel = new HashMap<String, Object>();
+    if (wizardModelInit != null) {
+      wizardModel.putAll(wizardModelInit);
+    }
     modelConnector.setConnectorValue(wizardModel);
     context.put(ActionContextConstants.ACTION_PARAM, wizardModel);
 
@@ -155,6 +161,7 @@ public class WizardAction extends AbstractSwingAction {
         if (currentWizardStep.getOnLeaveAction() == null
             || actionHandler.execute(currentWizardStep.getOnLeaveAction(),
                 context)) {
+          dialog.dispose();
           actionHandler.execute(finishAction, context);
         }
       }

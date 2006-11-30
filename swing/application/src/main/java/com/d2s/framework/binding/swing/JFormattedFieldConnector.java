@@ -10,7 +10,6 @@ import javax.swing.JTextField;
 
 import org.apache.commons.lang.StringUtils;
 
-import com.d2s.framework.binding.ConnectorBindingException;
 import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
 
@@ -22,7 +21,7 @@ import com.d2s.framework.util.format.IFormatter;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,7 +31,7 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   * 
+   *
    * @param id
    *          the id of the connector.
    * @param textField
@@ -48,7 +47,7 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   * 
+   *
    * @param id
    *          the id of the connector.
    * @param textField
@@ -75,7 +74,8 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
       try {
         return formatter.parse(getConnectedJComponent().getText());
       } catch (ParseException ex) {
-        throw new ConnectorBindingException(ex);
+        setConnecteeValue(null);
+        return null;
       }
     }
     return super.getConnecteeValue();

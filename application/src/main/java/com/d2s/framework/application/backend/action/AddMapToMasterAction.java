@@ -59,9 +59,9 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
    * @param <V>
    *          the value class.
    */
-  protected class ObjectEqualityMap<K, V> extends HashMap<K, V> {
+  public static class ObjectEqualityMap<K, V> extends HashMap<K, V> {
 
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 8981204989863563244L;
 
     /**
      * Constructs a new <code>ObjectEqualityMap</code> instance.
