@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.util.collection.ObjectEqualityMap;
 
 /**
  * An action used duplicate a collection of map domain objects. Cloning a map

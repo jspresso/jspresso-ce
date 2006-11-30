@@ -84,6 +84,7 @@ public class WizardAction extends AbstractSwingAction {
     if (wizardModelInit != null) {
       wizardModel.putAll(wizardModelInit);
     }
+    completeInitialWizardModel(wizardModel, context);
     modelConnector.setConnectorValue(wizardModel);
     context.put(ActionContextConstants.ACTION_PARAM, wizardModel);
 
@@ -291,5 +292,20 @@ public class WizardAction extends AbstractSwingAction {
    */
   public void setFinishAction(IDisplayableAction finishAction) {
     this.finishAction = finishAction;
+  }
+
+  /**
+   * Creates (and initializes) the wizard model.
+   *
+   * @param initialWizardModel
+   *          the initial wizard model.
+   * @param context
+   *          the action context.
+   */
+  protected void completeInitialWizardModel(
+      @SuppressWarnings("unused")
+      Map<String, Object> initialWizardModel, @SuppressWarnings("unused")
+      Map<String, Object> context) {
+    // No-op by default.
   }
 }
