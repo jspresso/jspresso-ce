@@ -37,7 +37,7 @@ import com.d2s.framework.util.IIndexMapper;
  * numbers have been translated via the internal mapping array. This way, the
  * TableSorter appears to hold another copy of the table with the rows in a
  * different order. <p/> TableSorter registers itself as a listener to the
- * underlying model, just as the JTable itself would. Events recieved from the
+ * underlying model, just as the JTable itself would. Events received from the
  * model are examined, sometimes manipulated (typically widened), and then
  * passed on to the TableSorter's listeners (typically the JTable). If a change
  * to the model has invalidated the order of TableSorter's rows, a note of this

@@ -19,7 +19,7 @@ import com.d2s.framework.binding.IValueConnector;
 /**
  * This class implements a list model backed by a collection connector. As
  * expected, this list model will fire necessary events depending on connectors
- * recieved events.
+ * received events.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

@@ -24,7 +24,7 @@ import com.d2s.framework.util.Coordinates;
 /**
  * This class implements a table model backed by a collection connector. As
  * expected, this table model will fire necessary events depending on connectors
- * recieved events. Its column are determined by the prototype connector which
+ * received events. Its column are determined by the prototype connector which
  * serves as model for the table rows.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
