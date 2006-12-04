@@ -18,7 +18,7 @@ import com.ulcjava.base.shared.FileChooserConfig;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -37,14 +37,12 @@ public class SaveFileAction extends ChooseFileAction {
 
         private static final long serialVersionUID = -1025629868916915262L;
 
-        @SuppressWarnings("unused")
         public void prepareFile(OutputStream out) {
           if (fileSaveCallback != null) {
             fileSaveCallback.fileChosen(out, context);
           }
         }
 
-        @SuppressWarnings("unused")
         public void onSuccess(String filePath) {
           getFileChooser(context).setCurrentDirectory(filePath);
           if (fileSaveCallback != null) {
@@ -79,7 +77,7 @@ public class SaveFileAction extends ChooseFileAction {
 
   /**
    * Sets the fileSaveCallback.
-   * 
+   *
    * @param fileSaveCallback
    *          the fileSaveCallback to set.
    */

@@ -39,7 +39,12 @@ public final class LdapConstants {
   public static final String MAIL_ATTRIBUTE = "mail";
 
   /**
-   * <code>SERIALNUMBER_ATTRIBUTE</code>.
+   * <code>SERIAL_NUMBER_ATTRIBUTE</code>.
    */
-  public static final String SERIALNUMBER_ATTRIBUTE = "serialNumber";
+  public static final String SERIAL_NUMBER_ATTRIBUTE = "serialNumber";
+
+  /**
+   * <code>DISPLAY_NAME_ATTRIBUTE</code>.
+   */
+  public static final String DISPLAY_NAME_ATTRIBUTE = "displayName";
 }
