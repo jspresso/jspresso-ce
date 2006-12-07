@@ -15,6 +15,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import com.d2s.framework.application.backend.action.AbstractBackendAction;
 import com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController;
+import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -126,5 +127,22 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         return null;
       }
     });
+  }
+
+  /**
+   * Reloads an entity in hibernate.
+   *
+   * @param entity
+   *          the entity to save.
+   * @param context
+   *          the action context.
+   */
+  protected void reloadEntity(IEntity entity, Map<String, Object> context) {
+    if (entity.isPersistent()) {
+      HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
+      getApplicationSession(context).merge(
+          (IEntity) hibernateTemplate.load(entity.getContract().getName(),
+              entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
+    }
   }
 }
