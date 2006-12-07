@@ -36,6 +36,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
@@ -71,7 +72,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
     }
     queryEntity.setQueriedEntities(session.merge(queriedEntities,
         MergeMode.MERGE_KEEP));
-    return true;
+    return super.execute(actionHandler, context);
   }
 
 }

@@ -72,6 +72,7 @@ public abstract class AbstractChangePasswordAction extends
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
@@ -90,7 +91,7 @@ public abstract class AbstractChangePasswordAction extends
       context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
           context)
           .getTranslation("password.change.success", getLocale(context)));
-      return true;
+      return super.execute(actionHandler, context);
     }
     return false;
   }

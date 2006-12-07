@@ -18,7 +18,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,6 +32,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
@@ -70,12 +71,12 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
           .getIndicesOf(collectionConnector, elementsToMove));
     }
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**
    * Sets the offset.
-   * 
+   *
    * @param offset
    *          the offset to set.
    */

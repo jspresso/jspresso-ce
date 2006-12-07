@@ -147,6 +147,7 @@
 
   <bean id="abstractAddToMasterFrontAction" abstract="true"
     class="com.d2s.framework.application.frontend.action.std.AddCollectionToMasterAction">
+    <property name="name" value="add.name" />
     <property name="description" value="add.description" />
     <property name="wrappedAction">
       <bean class="com.d2s.framework.application.backend.action.AddEntityCollectionToMasterAction" />

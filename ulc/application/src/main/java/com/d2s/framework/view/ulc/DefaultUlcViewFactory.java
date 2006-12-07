@@ -32,6 +32,7 @@ import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.basic.BasicValueConnector;
 import com.d2s.framework.binding.masterdetail.IMasterDetailBinder;
 import com.d2s.framework.binding.model.ModelRefPropertyConnector;
 import com.d2s.framework.binding.ulc.CollectionConnectorListModel;
@@ -46,6 +47,7 @@ import com.d2s.framework.binding.ulc.ULCDateFieldConnector;
 import com.d2s.framework.binding.ulc.ULCImageConnector;
 import com.d2s.framework.binding.ulc.ULCJEditTextAreaConnector;
 import com.d2s.framework.binding.ulc.ULCPasswordFieldConnector;
+import com.d2s.framework.binding.ulc.ULCReferenceFieldConnector;
 import com.d2s.framework.binding.ulc.ULCTextAreaConnector;
 import com.d2s.framework.binding.ulc.ULCTextFieldConnector;
 import com.d2s.framework.binding.ulc.ULCToggleButtonConnector;
@@ -1777,8 +1779,10 @@ public class DefaultUlcViewFactory implements
       IReferencePropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCActionField viewComponent = createULCActionField(true);
-    ULCActionFieldConnector connector = new ULCActionFieldConnector(
+    ULCReferenceFieldConnector connector = new ULCReferenceFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setToStringPropertyConnector(new BasicValueConnector(
+        propertyDescriptor.getComponentDescriptor().getToStringProperty()));
     connector.setExceptionHandler(actionHandler);
     IAction fieldAction = actionFactory.createAction(lovAction, actionHandler,
         viewComponent, propertyDescriptor, connector, locale);

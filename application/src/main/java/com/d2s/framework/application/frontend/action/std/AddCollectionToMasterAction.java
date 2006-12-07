@@ -18,7 +18,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -28,7 +28,8 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * @param <G>
  *          the actual action type used.
  */
-public class AddCollectionToMasterAction<E, F, G> extends ActionWrapper<E, F, G> {
+public class AddCollectionToMasterAction<E, F, G> extends
+    ActionWrapper<E, F, G> {
 
   private IEntityDescriptor elementEntityDescriptor;
 
@@ -53,7 +54,7 @@ public class AddCollectionToMasterAction<E, F, G> extends ActionWrapper<E, F, G>
    * Sets the elementEntityDescriptor. Entities of this type (which must be a
    * subclass of the collection element) are created and added to the detail
    * collection.
-   * 
+   *
    * @param elementEntityDescriptor
    *          the elementEntityDescriptor to set.
    */
@@ -92,4 +93,33 @@ public class AddCollectionToMasterAction<E, F, G> extends ActionWrapper<E, F, G>
     }
     return super.getI18nName(translationProvider, locale);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (super.equals(obj)) {
+      if (elementEntityDescriptor != null
+          && obj instanceof AddCollectionToMasterAction) {
+        return elementEntityDescriptor
+            .equals(((AddCollectionToMasterAction) obj).elementEntityDescriptor);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    int hash = super.hashCode();
+    if (elementEntityDescriptor != null) {
+      hash += elementEntityDescriptor.hashCode();
+    }
+    return hash;
+  }
+
 }

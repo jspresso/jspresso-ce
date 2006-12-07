@@ -23,7 +23,7 @@ import com.d2s.framework.binding.ICompositeValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,6 +34,7 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector parentModuleConnector = getModuleConnector(context)
@@ -57,6 +58,6 @@ public class RemoveSubModuleFromParentAction extends AbstractCollectionAction {
             ((ICollectionConnectorProvider) parentModuleConnector
                 .getParentConnector()).getCollectionConnector(), Collections
                 .singleton(parentModuleConnector.getConnectorValue())));
-    return true;
+    return super.execute(actionHandler, context);
   }
 }

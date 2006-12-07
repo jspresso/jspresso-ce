@@ -29,6 +29,7 @@ public class SaveAction extends AbstractHibernateAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
     getTransactionTemplate(context).execute(new TransactionCallback() {
@@ -43,7 +44,7 @@ public class SaveAction extends AbstractHibernateAction {
         return null;
       }
     });
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**

@@ -21,7 +21,7 @@ import com.d2s.framework.binding.ICompositeValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,6 +32,7 @@ public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
@@ -61,7 +62,7 @@ public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
     module.setModuleObjects(projectedCollection);
 
     getModelConnector(context).setConnectorValue(projectedCollection);
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   private static void removeFromSubModules(Module parentModule,

@@ -22,7 +22,7 @@ import com.d2s.framework.model.entity.IEntityCloneFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -35,6 +35,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
@@ -68,12 +69,12 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
 
     context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
         .getIndicesOf(collectionConnector, entityClones));
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**
    * Sets the entityCloneFactory.
-   * 
+   *
    * @param entityCloneFactory
    *          the entityCloneFactory to set.
    */

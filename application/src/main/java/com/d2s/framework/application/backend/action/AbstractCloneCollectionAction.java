@@ -31,6 +31,7 @@ public abstract class AbstractCloneCollectionAction extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
@@ -47,7 +48,7 @@ public abstract class AbstractCloneCollectionAction extends
     }
     context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
         .getIndicesOf(collectionConnector, elementClones));
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**

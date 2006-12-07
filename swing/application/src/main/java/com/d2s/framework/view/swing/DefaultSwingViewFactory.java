@@ -89,6 +89,7 @@ import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.basic.BasicValueConnector;
 import com.d2s.framework.binding.masterdetail.IMasterDetailBinder;
 import com.d2s.framework.binding.model.ModelRefPropertyConnector;
 import com.d2s.framework.binding.swing.CollectionConnectorListModel;
@@ -107,6 +108,7 @@ import com.d2s.framework.binding.swing.JPasswordFieldConnector;
 import com.d2s.framework.binding.swing.JTextAreaConnector;
 import com.d2s.framework.binding.swing.JTextFieldConnector;
 import com.d2s.framework.binding.swing.JToggleButtonConnector;
+import com.d2s.framework.binding.swing.JReferenceFieldConnector;
 import com.d2s.framework.gui.swing.components.JActionField;
 import com.d2s.framework.gui.swing.components.JDateField;
 import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
@@ -1798,8 +1800,10 @@ public class DefaultSwingViewFactory implements
       IReferencePropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JActionField viewComponent = createJActionField(true);
-    JActionFieldConnector connector = new JActionFieldConnector(
+    JReferenceFieldConnector connector = new JReferenceFieldConnector(
         propertyDescriptor.getName(), viewComponent);
+    connector.setToStringPropertyConnector(new BasicValueConnector(
+        propertyDescriptor.getComponentDescriptor().getToStringProperty()));
     connector.setExceptionHandler(actionHandler);
     Action fieldAction = actionFactory.createAction(lovAction, actionHandler,
         viewComponent, propertyDescriptor, connector, locale);

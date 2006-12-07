@@ -39,10 +39,16 @@
   <bean id="removeFromModuleObjectsAction" parent="abstractHibernateBackAction"
     class="com.d2s.framework.application.backend.action.persistence.hibernate.module.RemoveFromModuleObjectsAction" />
 
-  <bean id="saveProjectedBackAction" parent="abstractHibernateBackAction"
+  <bean id="saveBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveAction" />
+
+  <bean id="saveProjectedBackAction" parent="saveBackAction"
     class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveProjectedAction" />
 
-  <bean id="reloadProjectedBackAction" parent="abstractHibernateBackAction"
+  <bean id="reloadBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadAction" />
+
+  <bean id="reloadProjectedBackAction" parent="reloadBackAction"
     class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadProjectedAction" />
 
   <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"

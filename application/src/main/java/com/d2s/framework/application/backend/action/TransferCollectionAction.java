@@ -32,6 +32,7 @@ public class TransferCollectionAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
@@ -49,7 +50,7 @@ public class TransferCollectionAction extends AbstractCollectionAction {
         new ComponentTransferStructure(getModelDescriptor(context)
             .getCollectionDescriptor().getElementDescriptor(),
             transferedComponents, transferMode));
-    return true;
+    return super.execute(actionHandler, context);
   }
 
 

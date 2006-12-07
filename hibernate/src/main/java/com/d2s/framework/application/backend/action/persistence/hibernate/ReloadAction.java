@@ -29,6 +29,7 @@ public class ReloadAction extends AbstractHibernateAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
     getApplicationSession(context).clearPendingOperations();
@@ -44,7 +45,7 @@ public class ReloadAction extends AbstractHibernateAction {
         return null;
       }
     });
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**

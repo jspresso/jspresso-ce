@@ -37,6 +37,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
@@ -85,10 +86,11 @@ public abstract class AbstractAddCollectionToMasterAction extends
       } catch (NoSuchMethodException ex) {
         throw new ActionException(ex);
       }
+      context.put(ActionContextConstants.ACTION_PARAM, newComponents);
       context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
           .getIndicesOf(collectionConnector, newComponents));
     }
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**

@@ -32,6 +32,7 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
@@ -71,6 +72,6 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
         ((ModelPropertyConnector) collectionConnector).propertyChange(null);
       }
     }
-    return true;
+    return super.execute(actionHandler, context);
   }
 }

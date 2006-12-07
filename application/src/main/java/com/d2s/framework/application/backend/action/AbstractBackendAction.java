@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.action.AbstractAction;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
@@ -25,11 +26,13 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractBackendAction extends AbstractAction {
+
+  private AbstractBackendAction nextAction;
 
   /**
    * {@inheritDoc}
@@ -49,7 +52,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * <p>
    * The returned connector mainly serves for retrieving the domain object the
    * action has to be triggered on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the value connector this model action was triggered on.
@@ -70,7 +73,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * <p>
    * The returned connector mainly serves for retrieving the domain object the
    * action has to be triggered on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the value connector this model action was triggered on.
@@ -91,7 +94,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * <ul>
    * <li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code>.
    * </ul>
-   * 
+   *
    * @param context
    *          the action context.
    * @return the model descriptor this action executes on.
@@ -108,7 +111,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * <ul>
    * <li> <code>ActionContextConstants.MODULE_MODEL_CONNECTOR</code>.
    * </ul>
-   * 
+   *
    * @param context
    *          the action context.
    * @return the module model connector this action executes on.
@@ -120,7 +123,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
 
   /**
    * Gets the frontend controller out of the action context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the frontend controller.
@@ -134,7 +137,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
 
   /**
    * Gets the accessorFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the accessorFactory.
@@ -145,7 +148,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
 
   /**
    * Gets the entityFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the entityFactory.
@@ -156,7 +159,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
 
   /**
    * Gets the beanConnectorFactory.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the beanConnectorFactory.
@@ -176,7 +179,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
 
   /**
    * Gets the current application session.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the current application session.
@@ -184,5 +187,37 @@ public abstract class AbstractBackendAction extends AbstractAction {
   protected IApplicationSession getApplicationSession(
       Map<String, Object> context) {
     return getController(context).getApplicationSession();
+  }
+
+  /**
+   * Executes the next action.
+   * <p>
+   * {@inheritDoc}
+   */
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    if (getNextAction() != null) {
+      return actionHandler.execute(getNextAction(), context);
+    }
+    return true;
+  }
+
+  /**
+   * Gets the nextAction.
+   *
+   * @return the nextAction.
+   */
+  protected AbstractBackendAction getNextAction() {
+    return nextAction;
+  }
+
+  /**
+   * Sets the nextAction.
+   *
+   * @param nextAction
+   *          the nextAction to set.
+   */
+  public void setNextAction(AbstractBackendAction nextAction) {
+    this.nextAction = nextAction;
   }
 }

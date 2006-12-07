@@ -43,6 +43,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
   /**
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     try {
@@ -84,7 +85,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
     } catch (IOException ex) {
       throw new ActionException(ex);
     }
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**

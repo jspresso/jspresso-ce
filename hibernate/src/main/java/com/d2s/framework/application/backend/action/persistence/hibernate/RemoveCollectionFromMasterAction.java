@@ -36,6 +36,7 @@ public class RemoveCollectionFromMasterAction extends
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
@@ -60,7 +61,7 @@ public class RemoveCollectionFromMasterAction extends
         }
       }
     }
-    return true;
+    return super.execute(actionHandler, context);
   }
 
   /**

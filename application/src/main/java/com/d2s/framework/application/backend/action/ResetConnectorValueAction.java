@@ -12,7 +12,7 @@ import com.d2s.framework.action.IActionHandler;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,10 +23,11 @@ public class ResetConnectorValueAction extends AbstractBackendAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     getModelConnector(context).setConnectorValue(null);
-    return true;
+    return super.execute(actionHandler, context);
   }
 
 }

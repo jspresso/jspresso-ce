@@ -27,7 +27,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -40,6 +40,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
    * <p>
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
@@ -111,6 +112,6 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
           .setConnectorValue(queryPropertyValue);
     }
     context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
-    return true;
+    return super.execute(actionHandler, context);
   }
 }
