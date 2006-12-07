@@ -12,14 +12,14 @@ import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
     IModuleDescriptor {
 
-  private IAction            startupAction;
+  private IAction startupAction;
 
   /**
    * Constructs a new <code>BasicModuleDescriptor</code> instance.
@@ -39,7 +39,7 @@ public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
 
   /**
    * Sets the startupAction.
-   *
+   * 
    * @param startupAction
    *          the startupAction to set.
    */

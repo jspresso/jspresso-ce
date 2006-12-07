@@ -5,13 +5,12 @@ package com.d2s.framework.binding.echo;
 
 import nextapp.echo2.app.PasswordField;
 
-
 /**
  * PasswordField connector.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -19,9 +18,11 @@ public class PasswordFieldConnector extends TextFieldConnector {
 
   /**
    * Constructs a new <code>PasswordFieldConnector</code> instance.
-   *
-   * @param id the id of the connector.
-   * @param passwordField the connected PasswordField.
+   * 
+   * @param id
+   *          the id of the connector.
+   * @param passwordField
+   *          the connected PasswordField.
    */
   public PasswordFieldConnector(String id, PasswordField passwordField) {
     super(id, passwordField);

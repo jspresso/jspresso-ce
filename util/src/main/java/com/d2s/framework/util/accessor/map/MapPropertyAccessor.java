@@ -13,7 +13,7 @@ import com.d2s.framework.util.accessor.IAccessor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,7 +23,7 @@ public class MapPropertyAccessor implements IAccessor {
 
   /**
    * Constructs a map property accessor.
-   *
+   * 
    * @param property
    *          the property accessed.
    */
@@ -53,7 +53,7 @@ public class MapPropertyAccessor implements IAccessor {
 
   /**
    * Gets the property property.
-   *
+   * 
    * @return the property.
    */
   protected String getProperty() {
@@ -62,7 +62,7 @@ public class MapPropertyAccessor implements IAccessor {
 
   /**
    * Gets the writable.
-   *
+   * 
    * @return the writable.
    */
   public boolean isWritable() {

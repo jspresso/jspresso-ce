@@ -24,7 +24,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -68,7 +68,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
 
   /**
    * Creates a new entity to add to the projected object collection.
-   *
+   * 
    * @param actionHandler
    *          the action handler (generally the controller).
    * @param context

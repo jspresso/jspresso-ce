@@ -16,7 +16,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -52,7 +52,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Sets the nextStepDescriptor.
-   *
+   * 
    * @param nextStepDescriptor
    *          the nextStepDescriptor to set.
    */
@@ -81,7 +81,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Sets the viewDescriptor.
-   *
+   * 
    * @param viewDescriptor
    *          the viewDescriptor to set.
    */
@@ -98,7 +98,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Gets the onEnterAction.
-   *
+   * 
    * @return the onEnterAction.
    */
   public IAction getOnEnterAction() {
@@ -107,7 +107,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Sets the onEnterAction.
-   *
+   * 
    * @param onEnterAction
    *          the onEnterAction to set.
    */
@@ -117,7 +117,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Gets the onLeaveAction.
-   *
+   * 
    * @return the onLeaveAction.
    */
   public IAction getOnLeaveAction() {
@@ -126,7 +126,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Sets the onLeaveAction.
-   *
+   * 
    * @param onLeaveAction
    *          the onLeaveAction to set.
    */
@@ -136,7 +136,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Gets the nextLabelKey.
-   *
+   * 
    * @return the nextLabelKey.
    */
   public String getNextLabelKey() {
@@ -145,7 +145,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Sets the nextLabelKey.
-   *
+   * 
    * @param nextLabelKey
    *          the nextLabelKey to set.
    */
@@ -155,7 +155,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Gets the previousLabelKey.
-   *
+   * 
    * @return the previousLabelKey.
    */
   public String getPreviousLabelKey() {
@@ -164,7 +164,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * Sets the previousLabelKey.
-   *
+   * 
    * @param previousLabelKey
    *          the previousLabelKey to set.
    */

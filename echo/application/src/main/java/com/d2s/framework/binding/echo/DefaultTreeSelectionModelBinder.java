@@ -29,7 +29,7 @@ import echopointng.tree.TreeSelectionModel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -137,13 +137,13 @@ public class DefaultTreeSelectionModelBinder implements
   private class CollectionConnectorsSelectionListener implements
       ISelectionChangeListener {
 
-    private IValueConnector       rootConnector;
+    private IValueConnector    rootConnector;
     private TreeSelectionModel selectionModel;
 
     /**
      * Constructs a new <code>CollectionConnectorsSelectionListener</code>
      * instance.
-     *
+     * 
      * @param rootConnector
      * @param selectionModel
      */
@@ -192,7 +192,7 @@ public class DefaultTreeSelectionModelBinder implements
 
     /**
      * Constructs a new <code>TreeConnectorsListener</code> instance.
-     *
+     * 
      * @param rootConnector
      *          the root connector of the connector hierarchy.
      * @param selectionModel

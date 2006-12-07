@@ -24,22 +24,22 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     implements IViewDescriptor {
 
-  private int               borderType = NONE;
-  private Color             foreground;
-  private Color             background;
-  private Font              font;
-  private ActionMap         actionMap;
-  private IModelDescriptor  modelDescriptor;
-  private boolean           readOnly;
-  private Collection<IGate> readabilityGates;
-  private Collection<IGate> writabilityGates;
+  private int                borderType = NONE;
+  private Color              foreground;
+  private Color              background;
+  private Font               font;
+  private ActionMap          actionMap;
+  private IModelDescriptor   modelDescriptor;
+  private boolean            readOnly;
+  private Collection<IGate>  readabilityGates;
+  private Collection<IGate>  writabilityGates;
 
   private Collection<String> grantedRoles;
 
@@ -66,7 +66,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the background.
-   *
+   * 
    * @param background
    *          the background to set.
    */
@@ -76,7 +76,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the font.
-   *
+   * 
    * @param font
    *          the font to set.
    */
@@ -86,7 +86,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the foreground.
-   *
+   * 
    * @param foreground
    *          the foreground to set.
    */
@@ -103,7 +103,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the borderType.
-   *
+   * 
    * @param borderType
    *          the borderType to set.
    */
@@ -113,7 +113,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Gets the actionMap.
-   *
+   * 
    * @return the actionMap.
    */
   public Map<String, List<IDisplayableAction>> getActions() {
@@ -125,7 +125,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the actionMap.
-   *
+   * 
    * @param actionMap
    *          the actionMap to set.
    */
@@ -135,7 +135,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Gets the modelDescriptor.
-   *
+   * 
    * @return the modelDescriptor.
    */
   public IModelDescriptor getModelDescriptor() {
@@ -144,7 +144,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the modelDescriptor.
-   *
+   * 
    * @param modelDescriptor
    *          the modelDescriptor to set.
    */
@@ -198,7 +198,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the readOnly.
-   *
+   * 
    * @param readOnly
    *          the readOnly to set.
    */
@@ -208,7 +208,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Gets the readabilityGates.
-   *
+   * 
    * @return the readabilityGates.
    */
   public Collection<IGate> getReadabilityGates() {
@@ -217,7 +217,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the readabilityGates.
-   *
+   * 
    * @param readabilityGates
    *          the readabilityGates to set.
    */
@@ -227,7 +227,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Gets the writabilityGates.
-   *
+   * 
    * @return the writabilityGates.
    */
   public Collection<IGate> getWritabilityGates() {
@@ -236,7 +236,7 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
 
   /**
    * Sets the writabilityGates.
-   *
+   * 
    * @param writabilityGates
    *          the writabilityGates to set.
    */
@@ -244,21 +244,20 @@ public abstract class BasicViewDescriptor extends DefaultIconDescriptor
     this.writabilityGates = writabilityGates;
   }
 
-
   /**
    * Gets the grantedRoles.
-   *
+   * 
    * @return the grantedRoles.
    */
   public Collection<String> getGrantedRoles() {
     return grantedRoles;
   }
 
-
   /**
    * Sets the grantedRoles.
-   *
-   * @param grantedRoles the grantedRoles to set.
+   * 
+   * @param grantedRoles
+   *          the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;

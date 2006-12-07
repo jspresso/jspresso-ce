@@ -17,7 +17,7 @@ import org.apache.commons.lang.StringUtils;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -30,7 +30,7 @@ public abstract class TextComponentConnector<E extends TextComponent> extends
    * Constructs a new <code>TextComponentConnector</code> instance. The
    * connector will listen to <code>focusLost</code> events so subclass only
    * need to listen to other unhandled events if necessary.
-   *
+   * 
    * @param id
    *          the connector identifier.
    * @param textComponent

@@ -23,7 +23,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -98,7 +98,7 @@ public abstract class AbstractChangePasswordAction extends
 
   /**
    * Performs the effective password change depending on the underlying storage.
-   *
+   * 
    * @param userPrincipal
    *          the connected user principal.
    * @param currentPassword

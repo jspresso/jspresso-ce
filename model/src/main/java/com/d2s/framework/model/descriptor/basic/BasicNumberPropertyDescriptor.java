@@ -14,7 +14,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -52,7 +52,7 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   /**
    * Sets the maxValue property.
-   *
+   * 
    * @param maxValue
    *          the maxValue to set.
    */
@@ -62,7 +62,7 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   /**
    * Sets the minValue property.
-   *
+   * 
    * @param minValue
    *          the minValue to set.
    */
@@ -92,11 +92,11 @@ public abstract class BasicNumberPropertyDescriptor extends
               ITranslationProvider translationProvider, Locale locale) {
             StringBuffer boundsSpec = new StringBuffer();
             if (getMinValue() != null) {
-              boundsSpec.append(getMinValue()).append(" <= ");
+              boundsSpec.append(getMinValue()).append(" &lt= ");
             }
             boundsSpec.append("x");
             if (getMaxValue() != null) {
-              boundsSpec.append(" <= ").append(getMaxValue());
+              boundsSpec.append(" &lt= ").append(getMaxValue());
             }
             String messageKey = null;
             if ((getMinValue() != null && ((Number) propertyValue)

@@ -15,7 +15,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -41,7 +41,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Sets the maxLength property.
-   *
+   * 
    * @param maxLength
    *          the maxLength to set.
    */
@@ -51,7 +51,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Gets the regexpPattern.
-   *
+   * 
    * @return the regexpPattern.
    */
   public String getRegexpPattern() {
@@ -67,7 +67,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Sets the regexpPattern.
-   *
+   * 
    * @param regexpPattern
    *          the regexpPattern to set.
    */
@@ -85,7 +85,7 @@ public class BasicStringPropertyDescriptor extends
   /**
    * Performs the necessary transformations to build a tring out of a property
    * value.
-   *
+   * 
    * @param value
    *          the raw property value.
    * @return the resulting string.
@@ -114,10 +114,10 @@ public class BasicStringPropertyDescriptor extends
             Locale locale) {
           StringBuffer boundsSpec = new StringBuffer("l");
           if (getMaxLength() != null) {
-            boundsSpec.append(" <= ").append(getMaxLength());
+            boundsSpec.append(" &lt= ").append(getMaxLength());
           }
           return translationProvider.getTranslation(
-              "integrity.property.toobig", new Object[] {
+              "integrity.property.toolong", new Object[] {
                   getI18nName(translationProvider, locale), boundsSpec,
                   component}, locale);
         }
@@ -149,7 +149,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Sets the regexpPatternSample.
-   *
+   * 
    * @param regexpPatternSample
    *          the regexpPatternSample to set.
    */
@@ -159,7 +159,7 @@ public class BasicStringPropertyDescriptor extends
 
   /**
    * Gets the regexpPatternSample.
-   *
+   * 
    * @return the regexpPatternSample.
    */
   public String getRegexpPatternSample() {

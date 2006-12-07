@@ -19,7 +19,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -58,7 +58,7 @@ public class OpenFileAction extends ChooseFileAction {
 
   /**
    * Sets the fileOpenCallback.
-   *
+   * 
    * @param fileOpenCallback
    *          the fileOpenCallback to set.
    */

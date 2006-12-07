@@ -15,7 +15,7 @@ import com.d2s.framework.util.format.IFormatter;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -26,7 +26,7 @@ public class FormattedTableCellRenderer extends EvenOddTableCellRenderer {
 
   /**
    * Constructs a new <code>FormattedTableCellRenderer</code> instance.
-   *
+   * 
    * @param formatter
    *          the formatter used to format object values.
    */

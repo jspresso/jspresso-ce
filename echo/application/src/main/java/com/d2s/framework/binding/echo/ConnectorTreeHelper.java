@@ -18,7 +18,7 @@ import echopointng.tree.TreePath;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,7 +30,7 @@ public final class ConnectorTreeHelper {
 
   /**
    * Retrieves a connector tree path following the parent/child relationship.
-   *
+   * 
    * @param rootConnector
    *          the root connector of the hierarchy. The returned tree path will
    *          start from this connector.

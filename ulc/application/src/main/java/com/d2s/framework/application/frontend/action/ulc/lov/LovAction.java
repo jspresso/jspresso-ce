@@ -30,7 +30,7 @@ import com.ulcjava.base.application.ULCComponent;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -101,7 +101,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the lovViewDescriptorFactory.
-   *
+   * 
    * @param lovViewDescriptorFactory
    *          the lovViewDescriptorFactory to set.
    */
@@ -112,7 +112,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the createQueryEntityAction.
-   *
+   * 
    * @param createQueryEntityAction
    *          the createQueryEntityAction to set.
    */
@@ -123,7 +123,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the cancelAction.
-   *
+   * 
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -133,7 +133,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the findAction.
-   *
+   * 
    * @param findAction
    *          the findAction to set.
    */
@@ -143,7 +143,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the okAction.
-   *
+   * 
    * @param okAction
    *          the okAction to set.
    */
@@ -153,7 +153,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Gets the entityRefQueryDescriptor.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the entityRefQueryDescriptor.
@@ -173,7 +173,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the entityRefQueryDescriptor.
-   *
+   * 
    * @param entityRefQueryDescriptor
    *          the entityRefQueryDescriptor to set.
    */
@@ -184,7 +184,7 @@ public class LovAction extends ModalDialogAction {
 
   /**
    * Sets the autoquery.
-   *
+   * 
    * @param autoquery
    *          the autoquery to set.
    */

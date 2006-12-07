@@ -34,7 +34,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -102,7 +102,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Gets the locale used by this controller. The locale is actually held by the
    * session.
-   *
+   * 
    * @return locale used by this controller.
    */
   public Locale getLocale() {
@@ -118,7 +118,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the beanConnectorFactory.
-   *
+   * 
    * @param beanConnectorFactory
    *          the beanConnectorFactory to set.
    */
@@ -129,7 +129,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the mapConnectorFactory.
-   *
+   * 
    * @param mapConnectorFactory
    *          the mapConnectorFactory to set.
    */
@@ -158,7 +158,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * Sets the model controller modules. These modules are not kept as-is. Their
    * connectors are.
-   *
+   * 
    * @param modules
    *          A map containing the modules indexed by a well-known key used to
    *          bind them with their views.
@@ -189,7 +189,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the applicationSession.
-   *
+   * 
    * @param applicationSession
    *          the applicationSession to set.
    */
@@ -232,7 +232,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the entityFactory.
-   *
+   * 
    * @param entityFactory
    *          the entityFactory to set.
    */
@@ -268,7 +268,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the beanAccessorFactory.
-   *
+   * 
    * @param beanAccessorFactory
    *          the beanAccessorFactory to set.
    */
@@ -278,7 +278,7 @@ public abstract class AbstractBackendController extends AbstractController
 
   /**
    * Sets the mapAccessorFactory.
-   *
+   * 
    * @param mapAccessorFactory
    *          the mapAccessorFactory to set.
    */

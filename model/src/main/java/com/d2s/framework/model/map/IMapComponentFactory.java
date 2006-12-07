@@ -15,7 +15,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,7 +23,7 @@ public interface IMapComponentFactory {
 
   /**
    * Creates a new component map based on the component descriptor.
-   *
+   * 
    * @param componentDescriptor
    *          the component descriptor the map must conform to.
    * @param entityFactory

@@ -17,19 +17,19 @@ import com.d2s.framework.gui.swing.components.JActionField;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class JReferenceFieldConnector extends JActionFieldConnector
-    implements ICompositeValueConnector {
+public class JReferenceFieldConnector extends JActionFieldConnector implements
+    ICompositeValueConnector {
 
   private IValueConnector               toStringPropertyConnector;
   private IConnectorValueChangeListener toStringListener;
 
   /**
    * Constructs a new <code>JActionFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param actionField
@@ -117,7 +117,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector
 
   /**
    * Sets the toStringPropertyConnector.
-   *
+   * 
    * @param toStringPropertyConnector
    *          the toStringPropertyConnector to set.
    */

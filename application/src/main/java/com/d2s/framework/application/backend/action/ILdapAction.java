@@ -10,7 +10,7 @@ import org.springframework.ldap.LdapTemplate;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -18,7 +18,7 @@ public interface ILdapAction {
 
   /**
    * Sets the ldapTemplate.
-   *
+   * 
    * @param ldapTemplate
    *          the ldapTemplate to set.
    */

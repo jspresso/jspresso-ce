@@ -8,7 +8,7 @@ package com.d2s.framework.gui.ulc.components.shared;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,26 +22,26 @@ public final class ExtendedTreeConstants {
   /**
    * <code>PREPARE_POPUP_REQUEST</code>.
    */
-  public static final String PREPARE_POPUP_REQUEST = "preparePopup";
+  public static final String PREPARE_POPUP_REQUEST         = "preparePopup";
 
   // anything key constants
   /**
    * <code>ROW_KEY</code>.
    */
-  public static final String ROW_KEY               = "row";
+  public static final String ROW_KEY                       = "row";
 
   /**
    * <code>EXTENDED_TREE_EXPANSION_EVENT</code>.
    */
-  public static final int EXTENDED_TREE_EXPANSION_EVENT = 10002;
+  public static final int    EXTENDED_TREE_EXPANSION_EVENT = 10002;
 
   /**
    * <code>EXTENDED_TREE_WILL_EXPAND</code>.
    */
-  public static final int EXTENDED_TREE_WILL_EXPAND = 1;
+  public static final int    EXTENDED_TREE_WILL_EXPAND     = 1;
 
   /**
    * <code>EXTENDED_TREE_WILL_COLLAPSE</code>.
    */
-  public static final int EXTENDED_TREE_WILL_COLLAPSE = 2;
+  public static final int    EXTENDED_TREE_WILL_COLLAPSE   = 2;
 }

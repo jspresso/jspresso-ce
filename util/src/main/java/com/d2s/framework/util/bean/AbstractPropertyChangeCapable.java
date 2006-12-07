@@ -111,7 +111,8 @@ public abstract class AbstractPropertyChangeCapable implements
    */
   protected void firePropertyChange(String propertyName, long oldValue,
       long newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, new Long(oldValue), new Long(newValue));
+    propertyChangeSupport.firePropertyChange(propertyName, new Long(oldValue),
+        new Long(newValue));
   }
 
   /**

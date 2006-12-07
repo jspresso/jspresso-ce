@@ -18,7 +18,7 @@ import com.d2s.framework.binding.ICollectionConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -53,7 +53,7 @@ public abstract class AbstractCloneCollectionAction extends
 
   /**
    * Clones an element.
-   *
+   * 
    * @param element
    *          the element to clone.
    * @param context

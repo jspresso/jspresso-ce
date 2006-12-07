@@ -11,7 +11,7 @@ import com.d2s.framework.util.url.UrlHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,7 +21,7 @@ public class UrlResource extends AbstractResource {
 
   /**
    * Constructs a new <code>UrlResource</code> instance.
-   *
+   * 
    * @param mimeType
    *          the resource mime type.
    * @param urlSpec
@@ -36,7 +36,7 @@ public class UrlResource extends AbstractResource {
    * {@inheritDoc}
    */
   public int getLength() {
-    return -1; //unknown.
+    return -1; // unknown.
   }
 
   /**

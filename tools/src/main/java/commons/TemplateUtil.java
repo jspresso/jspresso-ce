@@ -12,7 +12,7 @@ public class TemplateUtil {
 
   /**
    * Returns the current date.
-   *
+   * 
    * @return the current date.
    */
   public Date getDateNow() {

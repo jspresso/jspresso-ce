@@ -21,7 +21,7 @@ import com.d2s.framework.util.format.IFormatter;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -31,7 +31,7 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param textField
@@ -47,7 +47,7 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param textField

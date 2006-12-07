@@ -12,7 +12,7 @@ import echopointng.ImageIcon;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +22,7 @@ public class ImageConnector extends ComponentConnector<ImageIcon> {
 
   /**
    * Constructs a new <code>ImageConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param connectedComponent
@@ -56,7 +56,8 @@ public class ImageConnector extends ComponentConnector<ImageIcon> {
     this.binaryValue = (byte[]) connecteeValue;
     if (binaryValue != null) {
       getConnectedComponent().setIcon(
-          new AwtImageReference(new javax.swing.ImageIcon(binaryValue).getImage()));
+          new AwtImageReference(new javax.swing.ImageIcon(binaryValue)
+              .getImage()));
     } else {
       getConnectedComponent().setIcon(null);
     }

@@ -12,7 +12,7 @@ import nextapp.echo2.app.event.ActionListener;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -20,7 +20,7 @@ public class ToggleButtonConnector extends ComponentConnector<ToggleButton> {
 
   /**
    * Constructs a new <code>ToggleButtonConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param toggleButton

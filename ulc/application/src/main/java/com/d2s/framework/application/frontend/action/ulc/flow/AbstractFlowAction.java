@@ -22,7 +22,7 @@ import com.ulcjava.base.application.event.serializable.IWindowListener;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -51,7 +51,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
 
   /**
    * Constructs a new <code>AbstractFlowAction</code> instance.
-   *
+   * 
    * @param firstOption
    *          the label for the 1st option.
    * @param secondOption
@@ -118,7 +118,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
 
   /**
    * Gets the action to execute next based on the user selected option.
-   *
+   * 
    * @param selectedOption
    *          the user selected option.
    * @return the action to execute next.
@@ -127,7 +127,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
 
   /**
    * Calls the super-implementation to execute the next action.
-   *
+   * 
    * @param actionHandler
    *          the action handler responsible for the action execution.
    * @param context

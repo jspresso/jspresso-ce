@@ -10,7 +10,7 @@ import nextapp.echo2.app.TextArea;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -18,7 +18,7 @@ public class TextAreaConnector extends TextComponentConnector<TextArea> {
 
   /**
    * Constructs a new <code>JTextfieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param textArea

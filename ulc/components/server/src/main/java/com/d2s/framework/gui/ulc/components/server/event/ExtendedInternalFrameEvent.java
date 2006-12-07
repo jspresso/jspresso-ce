@@ -12,7 +12,7 @@ import com.ulcjava.base.application.event.UlcEvent;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -20,11 +20,11 @@ public class ExtendedInternalFrameEvent extends UlcEvent {
 
   private static final long serialVersionUID = 2154665669592922088L;
 
-  private int fId;
+  private int               fId;
 
   /**
    * Constructs a new <code>ExtendedInternalFrameEvent</code> instance.
-   *
+   * 
    * @param source
    *          the event source.
    * @param id

@@ -11,7 +11,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,7 +23,7 @@ public class ComponentTransferStructure {
 
   /**
    * Constructs a new <code>ComponentTransferStructure</code> instance.
-   *
+   * 
    * @param componentDescriptor
    *          the descriptor of the components contained in the structure.
    * @param content
@@ -40,7 +40,7 @@ public class ComponentTransferStructure {
 
   /**
    * Gets the componentDescriptor.
-   *
+   * 
    * @return the componentDescriptor.
    */
   public IComponentDescriptor getComponentDescriptor() {
@@ -49,17 +49,16 @@ public class ComponentTransferStructure {
 
   /**
    * Gets the content.
-   *
+   * 
    * @return the content.
    */
   public Object getContent() {
     return content;
   }
 
-
   /**
    * Gets the transferMode.
-   *
+   * 
    * @return the transferMode.
    */
   public TransferMode getTransferMode() {

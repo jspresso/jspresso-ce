@@ -23,20 +23,20 @@ import com.d2s.framework.binding.IValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorListModel extends AbstractListModel {
 
-  private static final long serialVersionUID = 2325842203445704285L;
+  private static final long                           serialVersionUID = 2325842203445704285L;
 
   private ICollectionConnector                        collectionConnector;
   private Map<Integer, IConnectorValueChangeListener> cachedListeners;
 
   /**
    * Constructs a new <code>CollectionConnectorListModel</code> instance.
-   *
+   * 
    * @param collectionConnector
    *          the collection connector holding the values of this list model.
    */

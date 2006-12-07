@@ -19,7 +19,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,12 +27,12 @@ public class ULCDurationDataType extends ULCProxy implements IDataType {
 
   private static final long serialVersionUID = 8987100370651810472L;
 
-  private Locale locale;
+  private Locale            locale;
 
   /**
    * Constructs a new <code>ULCDurationDataType</code> instance. This
    * constructor has default visibility to prevent for direct instanciation.
-   *
+   * 
    * @param locale
    *          the locale for the translations.
    */

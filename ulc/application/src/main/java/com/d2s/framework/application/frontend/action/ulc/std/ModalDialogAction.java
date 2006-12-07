@@ -28,7 +28,7 @@ import com.ulcjava.base.shared.IWindowConstants;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -45,12 +45,12 @@ public class ModalDialogAction extends AbstractUlcAction {
       Map<String, Object> context) {
     final ULCDialog dialog;
     IView<ULCComponent> mainView = getMainView(context);
-    ULCWindow window = UlcUtil
-        .getVisibleWindow((getSourceComponent(context)));
+    ULCWindow window = UlcUtil.getVisibleWindow((getSourceComponent(context)));
     dialog = new ULCDialog(window, getI18nName(getTranslationProvider(context),
         getLocale(context)), true);
 
-    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(ULCBoxLayoutPane.LINE_AXIS);
+    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
+        ULCBoxLayoutPane.LINE_AXIS);
     buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
 
     ULCExtendedButton defaultButton = null;
@@ -82,7 +82,7 @@ public class ModalDialogAction extends AbstractUlcAction {
 
   /**
    * Gets the actions.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the actions.
@@ -95,7 +95,7 @@ public class ModalDialogAction extends AbstractUlcAction {
 
   /**
    * Gets the mainView.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the mainView.

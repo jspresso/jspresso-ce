@@ -20,7 +20,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,7 +32,7 @@ public abstract class AbstractUlcAction extends
    * determine the root window or dialog for instance. It uses a well-known
    * action context key which is :
    * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the source widget this action was triggered from.
@@ -43,7 +43,7 @@ public abstract class AbstractUlcAction extends
 
   /**
    * Retrieves the widget which triggered the action from the action context.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the widget which triggered the action.
@@ -54,13 +54,12 @@ public abstract class AbstractUlcAction extends
 
   /**
    * If the ancestor of the action widget is a dialog, dispose it.
-   *
+   * 
    * @param context
    *          the action context.
    */
   protected void closeDialog(Map<String, Object> context) {
-    ULCWindow actionWindow = UlcUtil
-        .getVisibleWindow(getActionWidget(context));
+    ULCWindow actionWindow = UlcUtil.getVisibleWindow(getActionWidget(context));
     if (actionWindow instanceof ULCDialog) {
       actionWindow.setVisible(false);
     }

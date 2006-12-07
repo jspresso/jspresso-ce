@@ -29,13 +29,13 @@ import com.d2s.framework.util.Coordinates;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorTableModel extends AbstractTableModel {
 
-  private static final long serialVersionUID = -5216602907606895000L;
+  private static final long                           serialVersionUID = -5216602907606895000L;
 
   private ICollectionConnector                        collectionConnector;
   private Map<Integer, IConnectorValueChangeListener> cachedRowListeners;
@@ -45,7 +45,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
-   *
+   * 
    * @param collectionConnector
    *          the collection connector holding the values of this table model.
    * @param columnConnectorKeys
@@ -264,7 +264,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the columnClassesByIds.
-   *
+   * 
    * @param columnClassesByIds
    *          the columnClassesByIds to set.
    */

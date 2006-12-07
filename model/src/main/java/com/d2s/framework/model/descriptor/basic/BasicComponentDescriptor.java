@@ -31,7 +31,7 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -62,7 +62,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Constructs a new <code>BasicComponentDescriptor</code> instance.
-   *
+   * 
    * @param name
    *          the name of the descriptor which has to be the fully-qualified
    *          class name of its contract.
@@ -125,7 +125,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the propertyDescriptors property.
-   *
+   * 
    * @param descriptors
    *          the propertyDescriptors to set.
    */
@@ -190,7 +190,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * the component and of its ancestors one. A component may have multiple
    * ancestors which means that complex multi-inheritance hierarchy can be
    * mapped.
-   *
+   * 
    * @param ancestorDescriptors
    *          The list of ancestor component descriptors.
    */
@@ -205,7 +205,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * are the union of the declared property descriptors of the component and of
    * its ancestors one. A component may have multiple ancestors which means that
    * complex multi-inheritance hierarchy can be mapped.
-   *
+   * 
    * @return ancestorDescriptors The list of ancestor entity descriptors.
    */
   public List<IComponentDescriptor> getAncestorDescriptors() {
@@ -215,7 +215,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   /**
    * Registers the service delegates which help the component to implement the
    * services defined by its contract.
-   *
+   * 
    * @param servicesByServiceContracts
    *          the component services to be registered keyed by their contract. A
    *          service contract is an interface class defining the service
@@ -298,7 +298,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the unclonedProperties.
-   *
+   * 
    * @param unclonedProperties
    *          the unclonedProperties to set.
    */
@@ -308,7 +308,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the orderingProperties.
-   *
+   * 
    * @param orderingProperties
    *          the orderingProperties to set.
    */
@@ -328,7 +328,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the queryableProperties.
-   *
+   * 
    * @param queryableProperties
    *          the queryableProperties to set.
    */
@@ -355,7 +355,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the renderedProperties.
-   *
+   * 
    * @param renderedProperties
    *          the renderedProperties to set.
    */
@@ -365,7 +365,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Gets the toStringProperty.
-   *
+   * 
    * @return the toStringProperty.
    */
   public String getToStringProperty() {
@@ -385,7 +385,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the toStringProperty.
-   *
+   * 
    * @param toStringProperty
    *          the toStringProperty to set.
    */
@@ -402,7 +402,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the computed.
-   *
+   * 
    * @param computed
    *          the computed to set.
    */
@@ -426,7 +426,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Gets the lifecycleInterceptors.
-   *
+   * 
    * @return the lifecycleInterceptors.
    */
   public List<ILifecycleInterceptor> getLifecycleInterceptors() {
@@ -444,7 +444,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the lifecycleInterceptors.
-   *
+   * 
    * @param lifecycleInterceptors
    *          the lifecycleInterceptors to set.
    */

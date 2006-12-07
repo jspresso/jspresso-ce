@@ -14,7 +14,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -31,7 +31,7 @@ public interface IWizardStepDescriptor extends IDescriptor {
 
   /**
    * Gets the previous wizard step descriptor if any.
-   *
+   * 
    * @param context
    *          the current value of the context.
    * @return the previous wizard step descriptor if any.
@@ -40,7 +40,7 @@ public interface IWizardStepDescriptor extends IDescriptor {
 
   /**
    * Gets the next wizard step descriptor if any.
-   *
+   * 
    * @param context
    *          the current value of the context.
    * @return the next wizard step descriptor if any.
@@ -49,7 +49,7 @@ public interface IWizardStepDescriptor extends IDescriptor {
 
   /**
    * Gets wether this wizard step descriptor can finish the wizard.
-   *
+   * 
    * @param context
    *          the current value of the context.
    * @return wether this wizard step descriptor can finish the wizard.
@@ -58,28 +58,28 @@ public interface IWizardStepDescriptor extends IDescriptor {
 
   /**
    * Gets the view to display in the wizard view.
-   *
+   * 
    * @return the view to display in the wizard view.
    */
   IViewDescriptor getViewDescriptor();
 
   /**
    * Gets the action, if any, triggered by entering this step.
-   *
+   * 
    * @return the action, if any, triggered by entering this step.
    */
   IAction getOnEnterAction();
 
   /**
    * Gets the action, if any, triggered by leaving this step.
-   *
+   * 
    * @return the action, if any, triggered by leaving this step.
    */
   IAction getOnLeaveAction();
 
   /**
    * Gets the label key to use for the next action. Defaults to "next" if null.
-   *
+   * 
    * @return the label key to use for the next action.
    */
   String getNextLabelKey();
@@ -87,7 +87,7 @@ public interface IWizardStepDescriptor extends IDescriptor {
   /**
    * Gets the label key to use for the previous action. Defaults to "back" if
    * null.
-   *
+   * 
    * @return the label key to use for the previous action.
    */
   String getPreviousLabelKey();

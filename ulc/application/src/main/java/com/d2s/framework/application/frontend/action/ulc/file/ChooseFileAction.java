@@ -14,7 +14,7 @@ import com.ulcjava.base.shared.FileChooserConfig;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -26,7 +26,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
 
   /**
    * Gets the file chooser configuration used to build this file chooser.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the file chooser configuration.
@@ -67,7 +67,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
   /**
    * Sets the fileFilter. Filter file types are a map of descriptions keying
    * file extension arays.
-   *
+   * 
    * @param fileFilter
    *          the fileFilter to set.
    */
@@ -81,7 +81,7 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
 
   /**
    * Sets the defaultFileName.
-   *
+   * 
    * @param defaultFileName
    *          the defaultFileName to set.
    */

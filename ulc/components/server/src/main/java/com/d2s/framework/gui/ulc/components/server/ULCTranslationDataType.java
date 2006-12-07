@@ -15,8 +15,8 @@ import com.ulcjava.base.application.datatype.IDataType;
 import com.ulcjava.base.shared.internal.Anything;
 
 /**
- * An ULC datatype to provide translated renderers on ULCExtendedTable, ULCList, ...
- * They are used in conjunction with ULCLabels.
+ * An ULC datatype to provide translated renderers on ULCExtendedTable, ULCList,
+ * ... They are used in conjunction with ULCLabels.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

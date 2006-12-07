@@ -15,7 +15,7 @@ import com.ulcjava.base.application.ClientContext;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,21 +34,20 @@ public class DisplayUrlAction extends AbstractUlcAction {
     return true;
   }
 
-
   /**
    * Gets the baseUrl.
-   *
+   * 
    * @return the baseUrl.
    */
   protected String getBaseUrl() {
     return baseUrl;
   }
 
-
   /**
    * Sets the baseUrl.
-   *
-   * @param baseUrl the baseUrl to set.
+   * 
+   * @param baseUrl
+   *          the baseUrl to set.
    */
   public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;

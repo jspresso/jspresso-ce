@@ -49,7 +49,7 @@ import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -94,7 +94,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the peer model controller.
-   *
+   * 
    * @return the backend controller this frontend controller is attached to.
    */
   public IBackendController getBackendController() {
@@ -103,7 +103,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the backend controller this controller is attached to.
-   *
+   * 
    * @param backendController
    *          the backend controller to set.
    */
@@ -140,7 +140,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Executes a backend action.
-   *
+   * 
    * @param action
    *          the backend action to execute.
    * @param context
@@ -152,7 +152,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Executes a frontend action.
-   *
+   * 
    * @param action
    *          the frontend action to execute.
    * @param context
@@ -185,7 +185,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the description.
-   *
+   * 
    * @param description
    *          the description to set.
    */
@@ -195,7 +195,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the iconImageURL.
-   *
+   * 
    * @param iconImageURL
    *          the iconImageURL to set.
    */
@@ -205,7 +205,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the name.
-   *
+   * 
    * @param name
    *          the name to set.
    */
@@ -253,7 +253,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Sets the moduleDescriptors. Module view descriptors are used by the
    * frontend controller to give a user access on the domain window.
-   *
+   * 
    * @param moduleDescriptors
    *          the moduleDescriptors to set.
    */
@@ -264,7 +264,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the viewFactory.
-   *
+   * 
    * @param viewFactory
    *          the viewFactory to set.
    */
@@ -274,7 +274,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the viewFactory.
-   *
+   * 
    * @return the viewFactory.
    */
   public IViewFactory<E, F, G> getViewFactory() {
@@ -284,7 +284,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Given a well-kown module identifier, this method returns the associated
    * module view descriptor.
-   *
+   * 
    * @param moduleId
    *          the identifier of the module.
    * @return the view descriptor of the selected module.
@@ -296,7 +296,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Returns the list of module identifiers. This list defines the set of
    * modules the user have access to.
-   *
+   * 
    * @return the list of module identifiers.
    */
   protected List<String> getModuleIds() {
@@ -305,7 +305,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the mvcBinder.
-   *
+   * 
    * @return the mvcBinder.
    */
   public IMvcBinder getMvcBinder() {
@@ -314,7 +314,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the mvcBinder.
-   *
+   * 
    * @param mvcBinder
    *          the mvcBinder to set.
    */
@@ -324,7 +324,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the locale.
-   *
+   * 
    * @return the locale.
    */
   public Locale getLocale() {
@@ -333,7 +333,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the selectedModuleConnectors.
-   *
+   * 
    * @return the selectedModuleConnectors.
    */
   protected Map<String, ICompositeValueConnector> getSelectedModuleConnectors() {
@@ -342,7 +342,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the iconFactory.
-   *
+   * 
    * @return the iconFactory.
    */
   protected IIconFactory<F> getIconFactory() {
@@ -365,7 +365,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates a root module view.
-   *
+   * 
    * @param moduleId
    *          the identifier of the module to create the view for.
    * @param moduleDescriptor
@@ -411,7 +411,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the modulesMenuIconImageUrl.
-   *
+   * 
    * @return the modulesMenuIconImageUrl.
    */
   protected String getModulesMenuIconImageUrl() {
@@ -420,7 +420,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the modulesMenuIconImageUrl.
-   *
+   * 
    * @param modulesMenuIconImageUrl
    *          the modulesMenuIconImageUrl to set.
    */
@@ -430,7 +430,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the loginContextName.
-   *
+   * 
    * @param loginContextName
    *          the loginContextName to set.
    */
@@ -440,7 +440,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the loginCallbackHandler.
-   *
+   * 
    * @return the loginCallbackHandler.
    */
   protected CallbackHandler getLoginCallbackHandler() {
@@ -452,7 +452,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Creates a new login callback handler.
-   *
+   * 
    * @return a new login callback handler
    */
   protected abstract CallbackHandler createLoginCallbackHandler();
@@ -466,7 +466,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Displays a module.
-   *
+   * 
    * @param moduleId
    *          the module identifier.
    */
@@ -480,7 +480,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the loginContextName.
-   *
+   * 
    * @return the loginContextName.
    */
   protected String getLoginContextName() {
@@ -505,7 +505,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * This method installs the security subject into the application session.
-   *
+   * 
    * @param subject
    *          the authenticated user subject.
    */
@@ -523,7 +523,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the actionMap.
-   *
+   * 
    * @return the actionMap.
    */
   public Map<String, List<IDisplayableAction>> getActions() {
@@ -535,7 +535,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the actionMap.
-   *
+   * 
    * @param actionMap
    *          the actionMap to set.
    */
@@ -552,7 +552,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Sets the selectedModuleId.
-   *
+   * 
    * @param selectedModuleId
    *          the selectedModuleId to set.
    */
@@ -562,7 +562,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   /**
    * Gets the selectedModuleId.
-   *
+   * 
    * @return the selectedModuleId.
    */
   protected String getSelectedModuleId() {

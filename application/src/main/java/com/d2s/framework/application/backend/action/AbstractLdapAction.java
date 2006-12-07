@@ -10,11 +10,12 @@ import org.springframework.ldap.LdapTemplate;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class AbstractLdapAction extends AbstractBackendAction implements ILdapAction {
+public abstract class AbstractLdapAction extends AbstractBackendAction
+    implements ILdapAction {
 
   private LdapTemplate ldapTemplate;
 
@@ -25,10 +26,9 @@ public abstract class AbstractLdapAction extends AbstractBackendAction implement
     this.ldapTemplate = ldapTemplate;
   }
 
-
   /**
    * Gets the ldapTemplate.
-   *
+   * 
    * @return the ldapTemplate.
    */
   protected LdapTemplate getLdapTemplate() {

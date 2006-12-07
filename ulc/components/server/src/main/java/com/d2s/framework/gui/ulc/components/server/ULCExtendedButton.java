@@ -12,7 +12,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,7 +30,6 @@ public class ULCExtendedButton extends ULCButton {
 
   /**
    * Constructs a new <code>ULCExtendedButton</code> instance.
-   *
    */
   public ULCExtendedButton() {
     super();
@@ -38,8 +37,9 @@ public class ULCExtendedButton extends ULCButton {
 
   /**
    * Constructs a new <code>ULCExtendedButton</code> instance.
-   *
-   * @param icon the button icon
+   * 
+   * @param icon
+   *          the button icon
    */
   public ULCExtendedButton(ULCIcon icon) {
     super(icon);

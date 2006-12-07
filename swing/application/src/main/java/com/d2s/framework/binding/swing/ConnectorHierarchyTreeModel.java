@@ -29,7 +29,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -41,7 +41,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
 
   /**
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
-   *
+   * 
    * @param rootConnector
    *          the connector being the root node of the tree.
    * @param tree

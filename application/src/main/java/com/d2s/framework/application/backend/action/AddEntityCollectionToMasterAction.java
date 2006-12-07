@@ -18,16 +18,17 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class AddEntityCollectionToMasterAction extends AbstractAddCollectionToMasterAction {
+public class AddEntityCollectionToMasterAction extends
+    AbstractAddCollectionToMasterAction {
 
   /**
    * Gets the new entity to add. It is created using the informations contained
    * in the context.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the entity to add to the collection.

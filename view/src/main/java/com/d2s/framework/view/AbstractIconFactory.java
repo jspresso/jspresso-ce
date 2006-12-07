@@ -12,7 +12,7 @@ import java.util.Map;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -44,7 +44,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Creates a swing icon from an image url.
-   *
+   * 
    * @param urlSpec
    *          the url of the image to be used on the icon.
    * @param iconSize
@@ -73,7 +73,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the cancelIconImageURL.
-   *
+   * 
    * @param cancelIconImageURL
    *          the cancelIconImageURL to set.
    */
@@ -83,7 +83,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the errorIconImageURL.
-   *
+   * 
    * @param errorIconImageURL
    *          the errorIconImageURL to set.
    */
@@ -93,7 +93,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the infoIconImageURL.
-   *
+   * 
    * @param infoIconImageURL
    *          the infoIconImageURL to set.
    */
@@ -103,7 +103,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the noIconImageURL.
-   *
+   * 
    * @param noIconImageURL
    *          the noIconImageURL to set.
    */
@@ -113,7 +113,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the okYesIconImageURL.
-   *
+   * 
    * @param okYesIconImageURL
    *          the okYesIconImageURL to set.
    */
@@ -123,7 +123,7 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
 
   /**
    * Sets the warningIconImageURL.
-   *
+   * 
    * @param warningIconImageURL
    *          the warningIconImageURL to set.
    */
@@ -180,31 +180,31 @@ public abstract class AbstractIconFactory<E> implements IIconFactory<E> {
     return getIcon(forbiddenIconUrl, iconSize);
   }
 
-
   /**
    * Sets the forbiddenIconUrl.
-   *
-   * @param forbiddenIconUrl the forbiddenIconUrl to set.
+   * 
+   * @param forbiddenIconUrl
+   *          the forbiddenIconUrl to set.
    */
   public void setForbiddenIconUrl(String forbiddenIconUrl) {
     this.forbiddenIconUrl = forbiddenIconUrl;
   }
 
-
   /**
    * Sets the backwardIconUrl.
-   *
-   * @param backwardIconUrl the backwardIconUrl to set.
+   * 
+   * @param backwardIconUrl
+   *          the backwardIconUrl to set.
    */
   public void setBackwardIconUrl(String backwardIconUrl) {
     this.backwardIconUrl = backwardIconUrl;
   }
 
-
   /**
    * Sets the forwardIconUrl.
-   *
-   * @param forwardIconUrl the forwardIconUrl to set.
+   * 
+   * @param forwardIconUrl
+   *          the forwardIconUrl to set.
    */
   public void setForwardIconUrl(String forwardIconUrl) {
     this.forwardIconUrl = forwardIconUrl;

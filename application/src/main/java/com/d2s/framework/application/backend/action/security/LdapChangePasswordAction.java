@@ -89,8 +89,8 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
     this.ldapUrl = ldapUrl;
   }
 
-  private String digest(char[] newPassword)
-      throws NoSuchAlgorithmException, IOException {
+  private String digest(char[] newPassword) throws NoSuchAlgorithmException,
+      IOException {
     if (digestAlgorithm != null) {
       String prefix = "{" + digestAlgorithm + "}";
       MessageDigest md = MessageDigest.getInstance(digestAlgorithm);

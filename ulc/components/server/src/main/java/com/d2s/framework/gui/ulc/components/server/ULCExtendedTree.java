@@ -21,7 +21,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -40,7 +40,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
 
   /**
    * Constructs a new <code>ULCExtendedTree</code> instance.
-   *
+   * 
    * @param model
    *          the tree model.
    */
@@ -50,7 +50,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
 
   /**
    * Constructs a new <code>ULCExtendedTree</code> instance.
-   *
+   * 
    * @param root
    *          the root node.
    */
@@ -60,7 +60,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
 
   /**
    * Constructs a new <code>ULCExtendedTree</code> instance.
-   *
+   * 
    * @param children
    *          the list of nodes.
    */
@@ -70,7 +70,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
 
   /**
    * Constructs a new <code>ULCExtendedTree</code> instance.
-   *
+   * 
    * @param children
    *          the map of children nodes.
    */
@@ -80,7 +80,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
 
   /**
    * Constructs a new <code>ULCExtendedTree</code> instance.
-   *
+   * 
    * @param children
    *          the array of children nodes.
    */
@@ -102,7 +102,8 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
   @Override
   protected void handleEvent(int listenerType, int eventId, Anything args) {
     if (listenerType == ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT) {
-      TreePath treePath = getPathForRow(args.get(ExtendedTreeConstants.ROW_KEY, 0));
+      TreePath treePath = getPathForRow(args.get(ExtendedTreeConstants.ROW_KEY,
+          0));
       distributeToListeners(new ExtendedTreeExpansionEvent(this, eventId,
           treePath));
     } else {
@@ -112,7 +113,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
 
   /**
    * Adds an extended listener.
-   *
+   * 
    * @param listener
    *          the listener.
    */
@@ -123,7 +124,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
 
   /**
    * Removes an extended listener.
-   *
+   * 
    * @param listener
    *          the listener.
    */
@@ -155,7 +156,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
 
   /**
    * Sets the popupFactory.
-   *
+   * 
    * @param popupFactory
    *          the popupFactory to set.
    */

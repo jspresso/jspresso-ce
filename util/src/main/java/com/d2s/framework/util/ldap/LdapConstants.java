@@ -8,7 +8,7 @@ package com.d2s.framework.util.ldap;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,22 +21,22 @@ public final class LdapConstants {
   /**
    * <code>TOP_OBJECTCLASS</code>.
    */
-  public static final String TOP_OBJECTCLASS       = "top";
+  public static final String TOP_OBJECTCLASS         = "top";
 
   /**
    * <code>PASSWORD_ATTIBUTE</code>.
    */
-  public static final String PASSWORD_ATTIBUTE     = "userPassword";
+  public static final String PASSWORD_ATTIBUTE       = "userPassword";
 
   /**
    * <code>DESCRIPTION_ATTRIBUTE</code>.
    */
-  public static final String DESCRIPTION_ATTRIBUTE = "description";
+  public static final String DESCRIPTION_ATTRIBUTE   = "description";
 
   /**
    * <code>MAIL_ATTRIBUTE</code>.
    */
-  public static final String MAIL_ATTRIBUTE = "mail";
+  public static final String MAIL_ATTRIBUTE          = "mail";
 
   /**
    * <code>SERIAL_NUMBER_ATTRIBUTE</code>.
@@ -46,5 +46,5 @@ public final class LdapConstants {
   /**
    * <code>DISPLAY_NAME_ATTRIBUTE</code>.
    */
-  public static final String DISPLAY_NAME_ATTRIBUTE = "displayName";
+  public static final String DISPLAY_NAME_ATTRIBUTE  = "displayName";
 }

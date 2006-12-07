@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.util.html;
 
-
 /**
  * This is a simple helper class to be able to cope with html.
  * <p>
@@ -18,7 +17,7 @@ public final class HtmlHelper {
   private HtmlHelper() {
     // private constructor for helper class.
   }
-  
+
   /**
    * Transforms a string to html and emphasis.
    * 

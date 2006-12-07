@@ -16,7 +16,7 @@ import com.d2s.framework.binding.AbstractValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -31,7 +31,7 @@ public abstract class ComponentConnector<E extends Component> extends
 
   /**
    * Constructs a new <code>ComponentConnector</code> instance.
-   *
+   * 
    * @param id
    *          the connector identifier.
    * @param connectedComponent
@@ -46,7 +46,7 @@ public abstract class ComponentConnector<E extends Component> extends
 
   /**
    * Gets the connectedComponent.
-   *
+   * 
    * @return the connectedComponent.
    */
   protected E getConnectedComponent() {

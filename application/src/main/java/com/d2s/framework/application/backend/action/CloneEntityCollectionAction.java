@@ -14,7 +14,7 @@ import com.d2s.framework.model.entity.IEntityCloneFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,7 +24,7 @@ public class CloneEntityCollectionAction extends AbstractCloneCollectionAction {
 
   /**
    * Sets the entityCloneFactory.
-   *
+   * 
    * @param entityCloneFactory
    *          the entityCloneFactory to set.
    */

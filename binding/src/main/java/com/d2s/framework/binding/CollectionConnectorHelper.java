@@ -13,7 +13,7 @@ import java.util.List;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @see com.d2s.framework.binding.model.ModelCollectionPropertyConnector
  * @see com.d2s.framework.binding.AbstractCollectionConnector
  * @version $LastChangedRevision$
@@ -31,7 +31,7 @@ public final class CollectionConnectorHelper {
   /**
    * Builds a connector id from a base id and an index. This serves as child
    * connector ids in collection connectors. As of now it returns "baseId[i]"
-   *
+   * 
    * @param baseId
    *          the base identifier to be used to compose the new connector id.
    * @param i
@@ -44,7 +44,7 @@ public final class CollectionConnectorHelper {
 
   /**
    * Turns on/off lazy children update on collection connectors.
-   *
+   * 
    * @param connector
    *          the collection connector list provider to work on.
    * @param state
@@ -77,7 +77,7 @@ public final class CollectionConnectorHelper {
 
   /**
    * Computes the array of element indices which where added to a collection.
-   *
+   * 
    * @param smallCollection
    *          the original collection.
    * @param bigCollection

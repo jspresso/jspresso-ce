@@ -16,7 +16,7 @@ import com.d2s.framework.util.collection.ObjectEqualityMap;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -44,7 +44,7 @@ public class CloneMapCollectionAction extends AddMapToMasterAction {
 
   /**
    * Clones a map.
-   *
+   * 
    * @param element
    *          the map to clone.
    * @param context

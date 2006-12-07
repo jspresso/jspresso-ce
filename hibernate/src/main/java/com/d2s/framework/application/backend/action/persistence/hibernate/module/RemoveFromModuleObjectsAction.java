@@ -28,7 +28,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -112,7 +112,7 @@ public class RemoveFromModuleObjectsAction extends
 
   /**
    * Deletes the entity from the persistent store.
-   *
+   * 
    * @param entity
    *          the entity to remove
    * @param session

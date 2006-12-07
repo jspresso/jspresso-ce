@@ -59,8 +59,8 @@ public class EditComponentAction extends ModalDialogAction {
         .createModelConnector(getViewDescriptor(context).getModelDescriptor());
     componentConnector.setConnectorValue(getModel(context));
 
-    getMvcBinder(context).bind(componentView.getConnector(),
-        componentConnector);
+    getMvcBinder(context)
+        .bind(componentView.getConnector(), componentConnector);
 
     return super.execute(actionHandler, context);
   }
@@ -99,12 +99,13 @@ public class EditComponentAction extends ModalDialogAction {
   /**
    * Sets the viewDescriptor.
    * 
-   * @param viewDescriptor the viewDescriptor to set.
+   * @param viewDescriptor
+   *          the viewDescriptor to set.
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
   }
-  
+
   /**
    * Gets the viewDescriptor.
    * 

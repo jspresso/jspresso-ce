@@ -14,7 +14,7 @@ import com.d2s.framework.util.IIconImageURLProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -41,7 +41,7 @@ public class ModuleIconImageURLProvider implements IIconImageURLProvider {
 
   /**
    * Sets the delegateProvider.
-   *
+   * 
    * @param delegateProvider
    *          the delegateProvider to set.
    */

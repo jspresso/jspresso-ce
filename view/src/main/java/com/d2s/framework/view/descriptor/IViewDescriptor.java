@@ -18,11 +18,12 @@ import com.d2s.framework.view.action.IActionable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IViewDescriptor extends IIconDescriptor, IActionable, ISecurable {
+public interface IViewDescriptor extends IIconDescriptor, IActionable,
+    ISecurable {
 
   /**
    * <code>NONE</code> border constant.
@@ -41,28 +42,28 @@ public interface IViewDescriptor extends IIconDescriptor, IActionable, ISecurabl
 
   /**
    * Gets the foreground color of this view.
-   *
+   * 
    * @return this view's foreground color.
    */
   Color getForeground();
 
   /**
    * Gets the background color of this view.
-   *
+   * 
    * @return this view's foreground color.
    */
   Color getBackground();
 
   /**
    * Gets the font of this view.
-   *
+   * 
    * @return this view's font.
    */
   Font getFont();
 
   /**
    * Gets the border type used to surround view.
-   *
+   * 
    * @return the border type :
    *         <li> <code>NONE</code> means no border.
    *         <li> <code>SIMPLE</code> means a simple line border.
@@ -73,14 +74,14 @@ public interface IViewDescriptor extends IIconDescriptor, IActionable, ISecurabl
 
   /**
    * Gets the model descriptor this view descriptor acts on.
-   *
+   * 
    * @return the view model descriptor.
    */
   IModelDescriptor getModelDescriptor();
 
   /**
    * Gets wether this view is read-only.
-   *
+   * 
    * @return true if the view is read-only.
    */
   boolean isReadOnly();
@@ -88,7 +89,7 @@ public interface IViewDescriptor extends IIconDescriptor, IActionable, ISecurabl
   /**
    * Gets the collection of gates determining the readability state of this
    * property.
-   *
+   * 
    * @return the collection of gates determining the readability state of this
    *         property.
    */
@@ -97,7 +98,7 @@ public interface IViewDescriptor extends IIconDescriptor, IActionable, ISecurabl
   /**
    * Gets the collection of gates determining the writability state of this
    * property.
-   *
+   * 
    * @return the collection of gates determining the writability state of this
    *         property.
    */

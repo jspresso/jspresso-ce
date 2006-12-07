@@ -32,7 +32,7 @@ import com.d2s.framework.util.url.UrlHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -90,7 +90,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
 
   /**
    * Sets the jdbcTemplate.
-   *
+   * 
    * @param jdbcTemplate
    *          the jdbcTemplate to set.
    */

@@ -8,7 +8,7 @@ package com.d2s.framework.gui.ulc.components.shared;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,12 +21,12 @@ public final class ExtendedInternalFrameConstants {
   /**
    * <code>EXTENDED_INTERNAL_FRAME_EVENT</code>.
    */
-  public static final int EXTENDED_INTERNAL_FRAME_EVENT = 10001;
+  public static final int EXTENDED_INTERNAL_FRAME_EVENT       = 10001;
 
   /**
    * <code>EXTENDED_INTERNAL_FRAME_ACTIVATED</code>.
    */
-  public static final int EXTENDED_INTERNAL_FRAME_ACTIVATED = 1;
+  public static final int EXTENDED_INTERNAL_FRAME_ACTIVATED   = 1;
 
   /**
    * <code>EXTENDED_INTERNAL_FRAME_DEACTIVATED</code>.
@@ -41,10 +41,10 @@ public final class ExtendedInternalFrameConstants {
   /**
    * <code>EXTENDED_INTERNAL_FRAME_ICONIFIED</code>.
    */
-  public static final int EXTENDED_INTERNAL_FRAME_ICONIFIED = 4;
+  public static final int EXTENDED_INTERNAL_FRAME_ICONIFIED   = 4;
 
   /**
    * <code>EXTENDED_INTERNAL_FRAME_OPENED</code>.
    */
-  public static final int EXTENDED_INTERNAL_FRAME_OPENED = 5;
+  public static final int EXTENDED_INTERNAL_FRAME_OPENED      = 5;
 }

@@ -5,7 +5,6 @@ package com.d2s.framework.binding.swing;
 
 import javax.swing.JPasswordField;
 
-
 /**
  * JPasswordField connector.
  * <p>
@@ -20,8 +19,10 @@ public class JPasswordFieldConnector extends JTextFieldConnector {
   /**
    * Constructs a new <code>JPasswordFieldConnector</code> instance.
    * 
-   * @param id the id of the connector.
-   * @param passwordField the connected JPasswordField.
+   * @param id
+   *          the id of the connector.
+   * @param passwordField
+   *          the connected JPasswordField.
    */
   public JPasswordFieldConnector(String id, JPasswordField passwordField) {
     super(id, passwordField);

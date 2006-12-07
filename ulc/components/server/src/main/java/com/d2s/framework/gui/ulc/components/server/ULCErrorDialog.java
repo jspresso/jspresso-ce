@@ -27,7 +27,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -50,7 +50,7 @@ public final class ULCErrorDialog extends ULCDialog {
 
   /**
    * Factory method for error dialog.
-   *
+   * 
    * @param sourceComponent
    *          one of the components insinde the owning window.
    * @param translationProvider
@@ -62,8 +62,7 @@ public final class ULCErrorDialog extends ULCDialog {
   public static ULCErrorDialog createInstance(ULCComponent sourceComponent,
       ITranslationProvider translationProvider, Locale locale) {
     ULCErrorDialog errorDialog;
-    errorDialog = new ULCErrorDialog(UlcUtil
-        .getVisibleWindow(sourceComponent));
+    errorDialog = new ULCErrorDialog(UlcUtil.getVisibleWindow(sourceComponent));
     errorDialog.translationProvider = translationProvider;
     errorDialog.locale = locale;
     errorDialog.initGui();
@@ -76,7 +75,7 @@ public final class ULCErrorDialog extends ULCDialog {
 
   /**
    * Specifies the icon to use.
-   *
+   * 
    * @param messageIcon
    *          the Icon to use. If null, the default error icon will be used
    */
@@ -196,7 +195,7 @@ public final class ULCErrorDialog extends ULCDialog {
    * Set the details section of the error dialog. If the details are either null
    * or an empty string, then hide the detailsPane button and hide the detail
    * scroll pane. Otherwise, just set the detailsPane section.
-   *
+   * 
    * @param details
    *          Details to be shown in the detail section of the dialog. This can
    *          be null if you do not want to display the details section of the
@@ -217,7 +216,7 @@ public final class ULCErrorDialog extends ULCDialog {
    * Set the details section of the error dialog. If the details are either null
    * or an empty string, then hide the detailsPane button and hide the detail
    * scroll pane. Otherwise, just set the detailsPane section.
-   *
+   * 
    * @param details
    *          Details to be shown in the detail section of the dialog. This can
    *          be null if you do not want to display the details section of the
@@ -250,7 +249,7 @@ public final class ULCErrorDialog extends ULCDialog {
   /**
    * Set the detailsPane section to be either visible or invisible. Set the text
    * of the Details button accordingly.
-   *
+   * 
    * @param b
    *          if true detailsPane section will be visible
    */
@@ -280,7 +279,7 @@ public final class ULCErrorDialog extends ULCDialog {
 
   /**
    * Set the error message for the dialog box.
-   *
+   * 
    * @param message
    *          Message for the error dialog
    */

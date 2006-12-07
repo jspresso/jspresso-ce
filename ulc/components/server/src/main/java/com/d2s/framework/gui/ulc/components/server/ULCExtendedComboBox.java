@@ -12,7 +12,7 @@ import com.ulcjava.base.application.ULCComboBox;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -37,7 +37,7 @@ public class ULCExtendedComboBox extends ULCComboBox {
 
   /**
    * Constructs a new <code>ULCExtendedComboBox</code> instance.
-   *
+   * 
    * @param model
    *          the combobox model.
    */

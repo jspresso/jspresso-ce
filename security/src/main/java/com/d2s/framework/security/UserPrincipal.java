@@ -28,7 +28,7 @@ public class UserPrincipal implements Principal, Serializable {
   /**
    * <code>USER_PROPERTY</code>.
    */
-  public static final String  USERDN_PROPERTY    = "userDn";
+  public static final String  USERDN_PROPERTY   = "userDn";
 
   /**
    * <code>OWNER_PROPERTY</code>.

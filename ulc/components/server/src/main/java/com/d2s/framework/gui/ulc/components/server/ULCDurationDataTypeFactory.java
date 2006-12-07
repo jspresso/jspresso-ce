@@ -12,7 +12,7 @@ import java.util.Map;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -29,7 +29,7 @@ public class ULCDurationDataTypeFactory {
 
   /**
    * Gets a (cached) duration data type.
-   *
+   * 
    * @param locale
    *          the locale the duration data type uses.
    * @return the corresponding duration data type.

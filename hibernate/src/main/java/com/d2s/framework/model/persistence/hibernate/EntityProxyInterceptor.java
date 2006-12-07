@@ -23,7 +23,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -130,7 +130,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Sets the entityFactory.
-   * 
+   *
    * @param entityFactory
    *          the entityFactory to set.
    */
@@ -140,7 +140,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Gets the entityFactory.
-   * 
+   *
    * @return the entityFactory.
    */
   protected IEntityFactory getEntityFactory() {
@@ -149,7 +149,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Gets the principal owning the session.
-   * 
+   *
    * @return the principal owning the session.
    */
   protected UserPrincipal getPrincipal() {
@@ -158,7 +158,7 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Gets the lifecycle handler.
-   * 
+   *
    * @return the entity lifecycle handler.
    */
   protected IEntityLifecycleHandler getEntityLifecycleHandler() {

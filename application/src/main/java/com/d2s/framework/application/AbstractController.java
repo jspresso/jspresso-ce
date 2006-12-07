@@ -15,7 +15,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,7 +32,7 @@ public abstract class AbstractController implements IController {
 
   /**
    * Sets the translationProvider.
-   *
+   * 
    * @param translationProvider
    *          the translationProvider to set.
    */
@@ -42,7 +42,7 @@ public abstract class AbstractController implements IController {
 
   /**
    * Gets the translationProvider.
-   *
+   * 
    * @return the translationProvider.
    */
   public ITranslationProvider getTranslationProvider() {

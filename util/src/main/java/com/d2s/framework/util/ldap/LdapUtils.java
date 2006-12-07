@@ -12,7 +12,7 @@ import java.util.Date;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,7 +24,7 @@ public final class LdapUtils {
 
   /**
    * Parses a generalized time as a date ignoring hour minute seconds.
-   *
+   * 
    * @param generalizedTime
    *          the string representation of the date/time in the format
    *          YYYYMMDDHHMMSS.
@@ -43,7 +43,7 @@ public final class LdapUtils {
 
   /**
    * Parses a generalized time as a date and time.
-   *
+   * 
    * @param generalizedTime
    *          the string representation of the date/time in the format
    *          YYYYMMDDHHMMSS.
@@ -62,7 +62,7 @@ public final class LdapUtils {
 
   /**
    * Parses an integer attribute.
-   *
+   * 
    * @param integerAsString
    *          the string representation of the integer.
    * @return the parsed integer or null.
@@ -76,7 +76,7 @@ public final class LdapUtils {
 
   /**
    * Formats an integer attribute.
-   *
+   * 
    * @param value
    *          the integer value.
    * @return the parsed integer or null.
@@ -90,7 +90,7 @@ public final class LdapUtils {
 
   /**
    * Parses an boolean attribute.
-   *
+   * 
    * @param booleanAsString
    *          the string representation of the boolean.
    * @return the parsed boolean or null.
@@ -104,7 +104,7 @@ public final class LdapUtils {
 
   /**
    * Formats an boolean attribute.
-   *
+   * 
    * @param value
    *          the boolean value.
    * @return the parsed boolean.

@@ -13,7 +13,7 @@ import com.ulcjava.base.application.tree.TreePath;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,7 +23,7 @@ public class ExtendedTreeExpansionEvent extends TreeExpansionEvent {
 
   /**
    * Constructs a new <code>ExtendedTreeExpansionEvent</code> instance.
-   *
+   * 
    * @param source
    *          the event source.
    * @param id

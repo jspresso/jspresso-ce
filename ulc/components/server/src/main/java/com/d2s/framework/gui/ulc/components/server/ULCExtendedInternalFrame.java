@@ -13,7 +13,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,7 +24,7 @@ public class ULCExtendedInternalFrame extends
 
   /**
    * Constructs a new <code>ULCExtendedInternalFrame</code> instance.
-   *
+   * 
    * @param title
    *          the frame title.
    */
@@ -54,7 +54,7 @@ public class ULCExtendedInternalFrame extends
 
   /**
    * Adds an extended listener.
-   *
+   * 
    * @param listener
    *          the listener.
    */
@@ -66,7 +66,7 @@ public class ULCExtendedInternalFrame extends
 
   /**
    * Removes an extended listener.
-   *
+   * 
    * @param listener
    *          the listener.
    */

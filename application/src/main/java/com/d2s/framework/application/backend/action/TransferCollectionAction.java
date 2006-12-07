@@ -18,7 +18,7 @@ import com.d2s.framework.model.datatransfer.TransferMode;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -53,11 +53,11 @@ public class TransferCollectionAction extends AbstractCollectionAction {
     return super.execute(actionHandler, context);
   }
 
-
   /**
    * Sets the transferMode.
-   *
-   * @param transferMode the transferMode to set.
+   * 
+   * @param transferMode
+   *          the transferMode to set.
    */
   public void setTransferMode(TransferMode transferMode) {
     this.transferMode = transferMode;

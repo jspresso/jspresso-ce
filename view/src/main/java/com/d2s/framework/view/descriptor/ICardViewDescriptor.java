@@ -12,7 +12,7 @@ import java.util.Map;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,7 +21,7 @@ public interface ICardViewDescriptor extends IViewDescriptor {
   /**
    * <code>DEFAULT_CARD</code>.
    */
-  String DEFAULT_CARD = "DEFAULT_CARD";
+  String DEFAULT_CARD  = "DEFAULT_CARD";
 
   /**
    * <code>SECURITY_CARD</code>.
@@ -31,14 +31,14 @@ public interface ICardViewDescriptor extends IViewDescriptor {
   /**
    * Gets the children views registered in the card view and indexed by their
    * card names.
-   *
+   * 
    * @return the children view descriptors.
    */
   Map<String, IViewDescriptor> getCardViewDescriptors();
 
   /**
    * Gets the card name to use to present the model.
-   *
+   * 
    * @param model
    *          the model to back the view.
    * @return the card name to look up the view.

@@ -10,7 +10,7 @@ import com.ulcjava.base.application.event.IEventListener;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -18,7 +18,7 @@ public interface IExtendedTreeWillExpandListener extends IEventListener {
 
   /**
    * Whenever the tree will be expanded.
-   *
+   * 
    * @param event
    *          the event.
    */
@@ -26,7 +26,7 @@ public interface IExtendedTreeWillExpandListener extends IEventListener {
 
   /**
    * Whenever the tree will be collapsed.
-   *
+   * 
    * @param event
    *          the event.
    */

@@ -26,7 +26,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -65,7 +65,7 @@ public class EchoActionFactory implements
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
-     *
+     * 
      * @param action
      * @param actionHandler
      * @param sourceComponent

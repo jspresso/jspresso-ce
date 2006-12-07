@@ -17,7 +17,7 @@ import echopointng.DateField;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,7 +25,7 @@ public class DateFieldConnector extends ComponentConnector<DateField> {
 
   /**
    * Constructs a new <code>JDateField</code> instance.
-   *
+   * 
    * @param id
    *          the connector identifier.
    * @param dateField

@@ -20,7 +20,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,8 +32,8 @@ public class DefaultListSelectionModelBinder implements
    */
   public void bindSelectionModel(ISelectable selectable,
       ListSelectionModel selectionModel, IIndexMapper rowMapper) {
-    selectionModel.addChangeListener(new SelectionModelListener(
-        selectable, rowMapper));
+    selectionModel.addChangeListener(new SelectionModelListener(selectable,
+        rowMapper));
     selectable.addSelectionChangeListener(new SelectionChangeListener(
         selectionModel, rowMapper));
   }
@@ -46,7 +46,7 @@ public class DefaultListSelectionModelBinder implements
 
     /**
      * Constructs a new <code>SelectionChangeListener</code> instance.
-     *
+     * 
      * @param selectionModel
      *          the selection model to forward the changes to.
      * @param rowMapper
@@ -96,17 +96,16 @@ public class DefaultListSelectionModelBinder implements
     }
   }
 
-  private static final class SelectionModelListener implements
-      ChangeListener {
+  private static final class SelectionModelListener implements ChangeListener {
 
     private static final long serialVersionUID = -2095104121255697027L;
 
-    private ISelectable  viewSelectable;
-    private IIndexMapper rowMapper;
+    private ISelectable       viewSelectable;
+    private IIndexMapper      rowMapper;
 
     /**
      * Constructs a new <code>SelectionModelListener</code> instance.
-     *
+     * 
      * @param viewSelectable
      *          the selectable to forward the changes to.
      * @param rowMapper

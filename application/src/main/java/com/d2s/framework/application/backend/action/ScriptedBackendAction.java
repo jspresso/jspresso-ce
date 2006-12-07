@@ -15,7 +15,7 @@ import com.d2s.framework.util.scripting.IScriptHandler;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,13 +32,14 @@ public class ScriptedBackendAction extends AbstractBackendAction {
   @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    scriptHandler.execute((IScript) context.get(ActionContextConstants.ACTION_PARAM), context);
+    scriptHandler.execute((IScript) context
+        .get(ActionContextConstants.ACTION_PARAM), context);
     return super.execute(actionHandler, context);
   }
 
   /**
    * Sets the scriptHandler.
-   *
+   * 
    * @param scriptHandler
    *          the scriptHandler to set.
    */

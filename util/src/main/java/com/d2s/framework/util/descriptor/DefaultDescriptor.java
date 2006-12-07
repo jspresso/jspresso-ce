@@ -13,7 +13,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,7 +24,7 @@ public class DefaultDescriptor implements IDescriptor {
 
   /**
    * The description getter.
-   *
+   * 
    * @return the description.
    */
   public String getDescription() {
@@ -33,7 +33,7 @@ public class DefaultDescriptor implements IDescriptor {
 
   /**
    * The description setter.
-   *
+   * 
    * @param description
    *          the description to set.
    */
@@ -43,7 +43,7 @@ public class DefaultDescriptor implements IDescriptor {
 
   /**
    * The name getter.
-   *
+   * 
    * @return the name.
    */
   public String getName() {
@@ -52,7 +52,7 @@ public class DefaultDescriptor implements IDescriptor {
 
   /**
    * The name setter.
-   *
+   * 
    * @param name
    *          the name to set.
    */

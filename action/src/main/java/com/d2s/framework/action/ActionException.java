@@ -6,7 +6,8 @@ package com.d2s.framework.action;
 import com.d2s.framework.util.exception.NestedRuntimeException;
 
 /**
- * This exception is thrown whenever an unexpected exception occurs on an action.
+ * This exception is thrown whenever an unexpected exception occurs on an
+ * action.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>

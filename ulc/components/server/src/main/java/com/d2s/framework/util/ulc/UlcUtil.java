@@ -16,7 +16,7 @@ import com.ulcjava.base.application.util.Dimension;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,7 +30,7 @@ public final class UlcUtil {
 
   /**
    * Retrieves the first contained component of a certain type.
-   *
+   * 
    * @param component
    *          the component to start from.
    * @param childComponentType
@@ -57,7 +57,7 @@ public final class UlcUtil {
 
   /**
    * Make a color scaled using a defined factor.
-   *
+   * 
    * @param color
    *          the color to scale.
    * @param factor
@@ -96,7 +96,7 @@ public final class UlcUtil {
   /**
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
-   *
+   * 
    * @param renderer
    *          the renderer to work on.
    * @param collectionComponent
@@ -121,7 +121,7 @@ public final class UlcUtil {
 
   /**
    * Center a window on screen.
-   *
+   * 
    * @param w
    *          the window to center on screen.
    */
@@ -132,7 +132,7 @@ public final class UlcUtil {
 
   /**
    * Center a window on screen.
-   *
+   * 
    * @param w
    *          the window to center on screen.
    */
@@ -140,14 +140,14 @@ public final class UlcUtil {
     ULCWindow parent = (ULCWindow) w.getParent();
     if (parent != null) {
       Dimension parentSize = parent.getSize();
-      w.setLocation((parentSize.getWidth() - w.getWidth()) / 2,
-          (parentSize.getHeight() - w.getHeight()) / 2);
+      w.setLocation((parentSize.getWidth() - w.getWidth()) / 2, (parentSize
+          .getHeight() - w.getHeight()) / 2);
     }
   }
 
   /**
    * Gets the visible parent window.
-   *
+   * 
    * @param component
    *          the component to start from
    * @return the visible parent window or null.

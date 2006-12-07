@@ -15,7 +15,7 @@ import java.util.Map;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,7 +27,7 @@ public class ActionMap {
   /**
    * Gets the map of action sets composing the parent actionmaps with the local
    * one.
-   *
+   * 
    * @return the actionMap.
    */
   public Map<String, List<IDisplayableAction>> getActionMap() {
@@ -69,7 +69,7 @@ public class ActionMap {
 
   /**
    * Sets the actionMap.
-   *
+   * 
    * @param actionMap
    *          the actionMap to set.
    */
@@ -79,7 +79,7 @@ public class ActionMap {
 
   /**
    * Sets the parentActionMaps.
-   *
+   * 
    * @param parentActionMaps
    *          the parentActionMaps to set.
    */

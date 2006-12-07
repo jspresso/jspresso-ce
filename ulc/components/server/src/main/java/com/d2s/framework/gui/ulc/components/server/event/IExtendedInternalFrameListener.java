@@ -10,7 +10,7 @@ import com.ulcjava.base.application.event.IEventListener;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -18,7 +18,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
 
   /**
    * Whenever the internal frame gets activated.
-   *
+   * 
    * @param event
    *          the event.
    */
@@ -26,7 +26,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
 
   /**
    * Whenever the internal frame gets deactivated.
-   *
+   * 
    * @param event
    *          the event.
    */
@@ -34,7 +34,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
 
   /**
    * Whenever the internal frame gets deiconified.
-   *
+   * 
    * @param event
    *          the event.
    */
@@ -42,7 +42,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
 
   /**
    * Whenever the internal frame gets iconified.
-   *
+   * 
    * @param event
    *          the event.
    */
@@ -50,7 +50,7 @@ public interface IExtendedInternalFrameListener extends IEventListener {
 
   /**
    * Whenever the internal frame gets opened.
-   *
+   * 
    * @param event
    *          the event.
    */

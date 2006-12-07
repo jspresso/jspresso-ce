@@ -12,7 +12,7 @@ import nextapp.echo2.app.event.ActionListener;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -20,7 +20,7 @@ public class SelectFieldConnector extends ComponentConnector<SelectField> {
 
   /**
    * Constructs a new <code>SelectFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param comboBox

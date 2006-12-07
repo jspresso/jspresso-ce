@@ -23,7 +23,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -66,7 +66,7 @@ public class RemoveCollectionFromMasterAction extends
 
   /**
    * Performs necessary cleanings when an entity is deleted.
-   *
+   * 
    * @param entity
    *          the deleted entity.
    * @param context
