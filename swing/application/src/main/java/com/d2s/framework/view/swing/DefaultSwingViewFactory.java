@@ -130,6 +130,7 @@ import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ITimePropertyDescriptor;
 import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.format.DurationFormatter;
@@ -194,6 +195,8 @@ public class DefaultSwingViewFactory implements
   private int                                maxColumnCharacterLength    = 15;
   private static final char                  TEMPLATE_CHAR               = 'O';
   private static final Date                  TEMPLATE_DATE               = new Date(
+                                                                             3661 * 1000);
+  private static final Date                  TEMPLATE_TIME               = new Date(
                                                                              3661 * 1000);
   private static final Long                  TEMPLATE_DURATION           = new Long(
                                                                              IDurationPropertyDescriptor.ONE_SECOND
@@ -1177,6 +1180,9 @@ public class DefaultSwingViewFactory implements
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       cellRenderer = createDateTableCellRenderer(
           (IDatePropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      cellRenderer = createTimeTableCellRenderer(
+          (ITimePropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       cellRenderer = createDurationTableCellRenderer(
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
@@ -1207,6 +1213,12 @@ public class DefaultSwingViewFactory implements
   private TableCellRenderer createDateTableCellRenderer(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormattedTableCellRenderer(createDateFormatter(
+        propertyDescriptor, locale));
+  }
+
+  private TableCellRenderer createTimeTableCellRenderer(
+      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(createTimeFormatter(
         propertyDescriptor, locale));
   }
 
@@ -1595,6 +1607,9 @@ public class DefaultSwingViewFactory implements
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       view = createDatePropertyView(
           (IDatePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      view = createTimePropertyView(
+          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       view = createDurationPropertyView(
           (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
@@ -1673,6 +1688,19 @@ public class DefaultSwingViewFactory implements
     adjustSizes(viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
             .getScreenResolution() / 10);
+    return constructView(viewComponent, null, connector);
+  }
+
+  private IView<JComponent> createTimePropertyView(
+      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    JTextField viewComponent = createJTextField();
+    IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
+    JFormattedFieldConnector connector = new JFormattedFieldConnector(
+        propertyDescriptor.getName(), viewComponent, formatter);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, formatter,
+        getTimeTemplateValue(propertyDescriptor));
     return constructView(viewComponent, null, connector);
   }
 
@@ -2152,6 +2180,8 @@ public class DefaultSwingViewFactory implements
   private Object getTemplateValue(IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return getDateTemplateValue((IDatePropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      return getTimeTemplateValue((ITimePropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       return getDurationTemplateValue((IDurationPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
@@ -2176,6 +2206,9 @@ public class DefaultSwingViewFactory implements
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
           locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
+          locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       return createDurationFormatter(
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
@@ -2197,14 +2230,16 @@ public class DefaultSwingViewFactory implements
     return TEMPLATE_DATE;
   }
 
+  private Object getTimeTemplateValue(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor) {
+    return TEMPLATE_TIME;
+  }
+
   private DateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
     if (IDatePropertyDescriptor.DATE_TYPE.equals(propertyDescriptor.getType())) {
       format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-    } else if (IDatePropertyDescriptor.TIME_TYPE.equals(propertyDescriptor
-        .getType())) {
-      format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
     } else {
       format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
           DateFormat.SHORT, locale);
@@ -2215,6 +2250,17 @@ public class DefaultSwingViewFactory implements
   private IFormatter createDateFormatter(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createDateFormat(propertyDescriptor, locale));
+  }
+
+  private DateFormat createTimeFormat(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+    return format;
+  }
+
+  private IFormatter createTimeFormatter(
+      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    return createFormatter(createTimeFormat(propertyDescriptor, locale));
   }
 
   private IFormatter createFormatter(Format format) {

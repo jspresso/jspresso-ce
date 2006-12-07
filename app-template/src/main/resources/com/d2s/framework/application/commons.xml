@@ -212,11 +212,6 @@
       <value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TYPE</value>
     </property>
   </bean>
-  <bean id="TIME" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
-    <property name="staticField">
-      <value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.TIME_TYPE</value>
-    </property>
-  </bean>
   <bean id="DATE_TIME" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TIME_TYPE</value>

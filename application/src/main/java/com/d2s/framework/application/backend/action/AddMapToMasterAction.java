@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.collection.ObjectEqualityMap;
 
@@ -43,6 +44,17 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
   @SuppressWarnings("unchecked")
   protected List<?> getAddedComponents(@SuppressWarnings("unused")
   Map<String, Object> context) {
-    return Collections.singletonList(new ObjectEqualityMap<String, Object>());
+    Map<String, Object> newMap = new ObjectEqualityMap<String, Object>();
+    List<ILifecycleInterceptor> interceptors = getModelDescriptor(context)
+        .getCollectionDescriptor().getElementDescriptor()
+        .getLifecycleInterceptors();
+    if (interceptors != null) {
+      for (ILifecycleInterceptor<Map<String, Object>> interceptor : interceptors) {
+        interceptor.onCreate(newMap, getEntityFactory(context),
+            getApplicationSession(context).getPrincipal(),
+            getApplicationSession(context));
+      }
+    }
+    return Collections.singletonList(newMap);
   }
 }

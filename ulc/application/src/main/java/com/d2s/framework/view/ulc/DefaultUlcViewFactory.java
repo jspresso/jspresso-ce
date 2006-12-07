@@ -81,6 +81,7 @@ import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ITimePropertyDescriptor;
 import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.format.FormatAdapter;
@@ -166,6 +167,7 @@ import com.ulcjava.base.application.util.Insets;
 import com.ulcjava.base.application.util.KeyStroke;
 import com.ulcjava.base.application.util.ULCIcon;
 import com.ulcjava.base.shared.IDefaults;
+import com.ulcjava.base.shared.IUlcEventConstants;
 
 /**
  * Factory for ULC views.
@@ -189,6 +191,8 @@ public class DefaultUlcViewFactory implements
   private int                                   maxColumnCharacterLength    = 15;
   private static final char                     TEMPLATE_CHAR               = 'O';
   private static final Date                     TEMPLATE_DATE               = new Date(
+                                                                                3661 * 1000);
+  private static final Date                     TEMPLATE_TIME               = new Date(
                                                                                 3661 * 1000);
   private static final Long                     TEMPLATE_DURATION           = new Long(
                                                                                 IDurationPropertyDescriptor.ONE_SECOND
@@ -1161,6 +1165,9 @@ public class DefaultUlcViewFactory implements
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       cellRenderer = createDateTableCellRenderer(column,
           (IDatePropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      cellRenderer = createTimeTableCellRenderer(column,
+          (ITimePropertyDescriptor) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       cellRenderer = createDurationTableCellRenderer(column,
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
@@ -1193,6 +1200,13 @@ public class DefaultUlcViewFactory implements
     return new FormattedTableCellRenderer(column, createDateDataType(
         propertyDescriptor, locale,
         createDateFormat(propertyDescriptor, locale)));
+  }
+
+  private ITableCellRenderer createTimeTableCellRenderer(int column,
+      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormattedTableCellRenderer(column, createTimeDataType(
+        propertyDescriptor, locale,
+        createTimeFormat(propertyDescriptor, locale)));
   }
 
   private ITableCellRenderer createDurationTableCellRenderer(int column,
@@ -1556,6 +1570,9 @@ public class DefaultUlcViewFactory implements
     } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       view = createDatePropertyView(
           (IDatePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      view = createTimePropertyView(
+          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       view = createDurationPropertyView(
           (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
@@ -1637,8 +1654,31 @@ public class DefaultUlcViewFactory implements
     return constructView(viewComponent, null, connector);
   }
 
+  private IView<ULCComponent> createTimePropertyView(
+      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    ULCTextField viewComponent = createULCTextField();
+    SimpleDateFormat format = createTimeFormat(propertyDescriptor, locale);
+
+    viewComponent.setDataType(createTimeDataType(propertyDescriptor, locale,
+        format));
+
+    ULCTextFieldConnector connector = new ULCTextFieldConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    adjustSizes(viewComponent, createFormatter(format),
+        getTimeTemplateValue(propertyDescriptor));
+    return constructView(viewComponent, null, connector);
+  }
+
   private ULCDateDataType createDateDataType(@SuppressWarnings("unused")
   IDatePropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+  Locale locale, SimpleDateFormat format) {
+    return new ULCDateDataType(format.toPattern());
+  }
+
+  private ULCDateDataType createTimeDataType(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
   Locale locale, SimpleDateFormat format) {
     return new ULCDateDataType(format.toPattern());
   }
@@ -2151,6 +2191,8 @@ public class DefaultUlcViewFactory implements
   private Object getTemplateValue(IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return getDateTemplateValue((IDatePropertyDescriptor) propertyDescriptor);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      return getTimeTemplateValue((ITimePropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       return getDurationTemplateValue((IDurationPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
@@ -2175,6 +2217,9 @@ public class DefaultUlcViewFactory implements
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
           locale);
+    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+      return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
+          locale);
     } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
       return createDurationFormatter(
           (IDurationPropertyDescriptor) propertyDescriptor, locale);
@@ -2196,14 +2241,16 @@ public class DefaultUlcViewFactory implements
     return TEMPLATE_DATE;
   }
 
+  private Object getTimeTemplateValue(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor) {
+    return TEMPLATE_TIME;
+  }
+
   private SimpleDateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
     if (IDatePropertyDescriptor.DATE_TYPE.equals(propertyDescriptor.getType())) {
       format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-    } else if (IDatePropertyDescriptor.TIME_TYPE.equals(propertyDescriptor
-        .getType())) {
-      format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
     } else {
       format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
           DateFormat.SHORT, locale);
@@ -2214,6 +2261,17 @@ public class DefaultUlcViewFactory implements
   private IFormatter createDateFormatter(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     return createFormatter(createDateFormat(propertyDescriptor, locale));
+  }
+
+  private SimpleDateFormat createTimeFormat(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+    return (SimpleDateFormat) format;
+  }
+
+  private IFormatter createTimeFormatter(
+      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+    return createFormatter(createTimeFormat(propertyDescriptor, locale));
   }
 
   private IFormatter createFormatter(Format format) {
@@ -2397,7 +2455,10 @@ public class DefaultUlcViewFactory implements
    * @return the created text field.
    */
   protected ULCTextField createULCTextField() {
-    return new ULCOnFocusSelectTextField();
+    ULCTextField textField = new ULCOnFocusSelectTextField();
+    ClientContext.setEventDeliveryMode(textField,
+        IUlcEventConstants.FOCUS_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
+    return textField;
   }
 
   /**
@@ -2419,6 +2480,8 @@ public class DefaultUlcViewFactory implements
     ULCTextArea textArea = new ULCTextArea();
     textArea.setDragEnabled(true);
     textArea.setWrapStyleWord(true);
+    ClientContext.setEventDeliveryMode(textArea,
+        IUlcEventConstants.FOCUS_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
     return textArea;
   }
 
@@ -2453,7 +2516,10 @@ public class DefaultUlcViewFactory implements
    * @return the created date field.
    */
   protected ULCDateField createULCDateField(String formatPattern) {
-    return new ULCDateField(formatPattern);
+    ULCDateField dateField = new ULCDateField(formatPattern);
+    ClientContext.setEventDeliveryMode(dateField,
+        IUlcEventConstants.VALUE_CHANGED_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
+    return dateField;
   }
 
   /**
