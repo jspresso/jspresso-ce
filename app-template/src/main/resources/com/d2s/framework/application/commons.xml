@@ -109,6 +109,11 @@
   </bean>
 
   <!--
+    The implementation used as MapComponentFactory.
+  -->
+  <bean id="basicMapComponentFactory" class="com.d2s.framework.model.map.basic.BasicMapComponentFactory" />
+
+  <!--
     Root action beans.
   -->
 

@@ -164,7 +164,9 @@
 
   <bean id="addMapToMasterFrontAction" parent="addToMasterFrontAction">
     <property name="wrappedAction">
-      <bean class="com.d2s.framework.application.backend.action.AddMapToMasterAction" />
+      <bean class="com.d2s.framework.application.backend.action.AddMapToMasterAction">
+        <property name="mapComponentFactory" ref="basicMapComponentFactory" />
+      </bean>
     </property>
   </bean>
 
@@ -193,7 +195,9 @@
     <property name="description" value="clone.description" />
     <property name="acceleratorAsString" value="alt C" />
     <property name="wrappedAction">
-      <bean class="com.d2s.framework.application.backend.action.CloneMapCollectionAction" />
+      <bean class="com.d2s.framework.application.backend.action.CloneMapCollectionAction">
+        <property name="mapComponentFactory" ref="basicMapComponentFactory" />
+      </bean>
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>
