@@ -19,6 +19,7 @@ import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -138,6 +139,7 @@ import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
+import com.d2s.framework.util.format.NullableSimpleDateFormat;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.view.BasicCompositeView;
@@ -2243,10 +2245,13 @@ public class DefaultSwingViewFactory implements
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
     if (IDatePropertyDescriptor.DATE_TYPE.equals(propertyDescriptor.getType())) {
-      format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
+      format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
+          .getDateInstance(DateFormat.SHORT, locale)).toLocalizedPattern(),
+          locale);
     } else {
-      format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-          DateFormat.SHORT, locale);
+      format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
+          .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale))
+          .toLocalizedPattern(), locale);
     }
     return format;
   }

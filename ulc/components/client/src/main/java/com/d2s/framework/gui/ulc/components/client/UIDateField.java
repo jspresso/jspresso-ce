@@ -30,6 +30,7 @@ import net.sf.nachocalendar.components.DefaultHeaderRenderer;
 import com.d2s.framework.gui.swing.components.JDateField;
 import com.d2s.framework.gui.ulc.components.shared.ActionFieldConstants;
 import com.d2s.framework.gui.ulc.components.shared.DateFieldConstants;
+import com.d2s.framework.util.format.NullableSimpleDateFormat;
 import com.d2s.framework.util.gui.GuiException;
 import com.ulcjava.base.client.IEditorComponent;
 import com.ulcjava.base.client.UIComponent;
@@ -42,7 +43,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -78,7 +79,7 @@ public class UIDateField extends UIComponent implements IEditorComponent {
     dateField.setHeaderRenderer(new DefaultHeaderRenderer());
 
     dateField.getFormattedTextField().setFormatterFactory(
-        new DefaultFormatterFactory(new DateFormatter(new SimpleDateFormat(args
+        new DefaultFormatterFactory(new DateFormatter(new NullableSimpleDateFormat(args
             .get(DateFieldConstants.FORMAT_PATTERN_KEY,
                 ((SimpleDateFormat) DateFormat
                     .getDateInstance(DateFormat.SHORT)).toPattern())))));

@@ -352,6 +352,13 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
   <build>
     <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
     <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
@@ -417,12 +424,13 @@
                 <if>
                   <equals arg1="${project.packaging}" arg2="jar" />
                   <then>
+                    <echo message="${maven.dependency.classpath}"/>
                     <proguard note="false" verbose="false" renamesourcefileattribute="SourceFile">
                       <injar file="${project.artifact.file}" />
                       <outjar
                         file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}" />
                       <libraryjar file="${java.home}/lib/rt.jar" />
-                      <libraryjar refid="maven.dependency.classpath" />
+                      <libraryjar refid="maven.runtime.classpath" />
 
                       <!-- Keep some useful attributes. -->
 
