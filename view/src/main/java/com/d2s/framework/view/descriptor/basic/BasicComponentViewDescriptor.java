@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.view.descriptor.basic;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -70,7 +71,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the columnCount.
-   * 
+   *
    * @param columnCount
    *          the columnCount to set.
    */
@@ -80,7 +81,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the labelsPosition.
-   * 
+   *
    * @param labelsPosition
    *          the labelsPosition to set.
    */
@@ -90,17 +91,26 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the propertyWidths.
-   * 
+   *
    * @param propertyWidths
    *          the propertyWidths to set.
    */
-  public void setPropertyWidths(Map<String, Integer> propertyWidths) {
-    this.propertyWidths = propertyWidths;
+  public void setPropertyWidths(Map<String, Object> propertyWidths) {
+    this.propertyWidths = new HashMap<String, Integer>();
+    for (Map.Entry<String, Object> propertyWidth : propertyWidths.entrySet()) {
+      if (propertyWidth.getValue() instanceof String) {
+        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
+            (String) propertyWidth.getValue()));
+      } else {
+        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
+            ((Number) propertyWidth.getValue()).intValue()));
+      }
+    }
   }
 
   /**
    * Sets the renderedProperties.
-   * 
+   *
    * @param renderedProperties
    *          the renderedProperties to set.
    */
@@ -133,7 +143,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the renderedChildProperties.
-   * 
+   *
    * @param renderedChildProperties
    *          the renderedChildProperties to set.
    */

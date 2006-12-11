@@ -26,7 +26,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -61,7 +61,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
       if (option.getKey().startsWith(CUSTOM_PROPERTY_OPT)) {
         String attributeId = option.getValue();
         if (option.getValue().contains(SLICE_START)) {
-          attributeId = attributeId.substring(0, attributeId
+          String attributeIdBase = attributeId.substring(0, attributeId
               .indexOf(SLICE_START));
 
           String[] indices = option.getValue().substring(
@@ -71,13 +71,34 @@ public class LdapLoginModule extends LdapExtLoginModule {
           int startIndex = Integer.parseInt(indices[0]);
           int endIndex = Integer.parseInt(indices[1]);
 
-          if ("DN".equalsIgnoreCase(attributeId)) {
-            userPrincipal.putCustomProperty(option.getKey().substring(
-                CUSTOM_PROPERTY_OPT.length()), extractSlice(userDN, nameParser,
-                startIndex, endIndex));
+          if ("DN".equalsIgnoreCase(attributeIdBase)) {
+            String dnSlice = extractSlice(userDN, nameParser, startIndex,
+                endIndex);
+            int dotIndex = attributeId.indexOf(".");
+            if (dotIndex > -1) {
+              Attributes nestedAttrs = ctx.getAttributes(dnSlice, null);
+              Attribute attr = nestedAttrs.get(attributeId.substring(dotIndex + 1));
+              if (attr != null && attr.size() > 0) {
+                if (attr.size() == 1) {
+                  userPrincipal.putCustomProperty(option.getKey().substring(
+                      CUSTOM_PROPERTY_OPT.length()), attr.get());
+                } else {
+                  List<Object> values = new ArrayList<Object>();
+                  for (NamingEnumeration<?> avne = attr.getAll(); avne
+                      .hasMore();) {
+                    values.add(avne.next());
+                  }
+                  userPrincipal.putCustomProperty(option.getKey().substring(
+                      CUSTOM_PROPERTY_OPT.length()), values);
+                }
+              }
+            } else {
+              userPrincipal.putCustomProperty(option.getKey().substring(
+                  CUSTOM_PROPERTY_OPT.length()), dnSlice);
+            }
           } else {
             Attribute attr = attrs.get(attributeId);
-            if (attr.size() > 0) {
+            if (attr != null && attr.size() > 0) {
               if (attr.size() == 1) {
                 userPrincipal.putCustomProperty(option.getKey().substring(
                     CUSTOM_PROPERTY_OPT.length()), extractSlice((String) attr
@@ -99,7 +120,7 @@ public class LdapLoginModule extends LdapExtLoginModule {
                 CUSTOM_PROPERTY_OPT.length()), userDN);
           } else {
             Attribute attr = attrs.get(attributeId);
-            if (attr.size() > 0) {
+            if (attr != null && attr.size() > 0) {
               if (attr.size() == 1) {
                 userPrincipal.putCustomProperty(option.getKey().substring(
                     CUSTOM_PROPERTY_OPT.length()), attr.get());

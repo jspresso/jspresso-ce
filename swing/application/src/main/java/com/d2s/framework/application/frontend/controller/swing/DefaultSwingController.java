@@ -67,7 +67,7 @@ import foxtrot.Job;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -97,6 +97,7 @@ public class DefaultSwingController extends
       }
       if (performLogin()) {
         displayControllerFrame();
+        execute(getStartupAction(), getInitialActionContext());
         return true;
       }
       stop();
@@ -120,7 +121,7 @@ public class DefaultSwingController extends
 
   /**
    * Performs login using JAAS configuration.
-   * 
+   *
    * @return true if login is successful.
    */
   private boolean performLogin() {
@@ -229,7 +230,7 @@ public class DefaultSwingController extends
 
     /**
      * Constructs a new <code>ModuleInternalFrameListener</code> instance.
-     * 
+     *
      * @param moduleId
      *          the root module identifier this listener is attached to.
      */
@@ -350,7 +351,7 @@ public class DefaultSwingController extends
 
     /**
      * Constructs a new <code>ModuleSelectionAction</code> instance.
-     * 
+     *
      * @param moduleId
      * @param moduleDescriptor
      */
@@ -433,7 +434,7 @@ public class DefaultSwingController extends
 
   /**
    * Creates a new JInternalFrame and populates it with a view.
-   * 
+   *
    * @param view
    *          the view to be set into the internal frame.
    * @return the constructed internal frame.
@@ -471,10 +472,10 @@ public class DefaultSwingController extends
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected final void executeBackend(final IAction action,
+  protected final boolean executeBackend(final IAction action,
       final Map<String, Object> context) {
     if (action.isLongOperation()) {
-      SwingUtil.performLongOperation(new Job() {
+      Boolean success = (Boolean) SwingUtil.performLongOperation(new Job() {
 
         /**
          * Decorates the super implementation with the foxtrot job.
@@ -483,18 +484,17 @@ public class DefaultSwingController extends
          */
         @Override
         public Object run() {
-          protectedExecuteBackend(action, context);
-          return null;
+          return new Boolean(protectedExecuteBackend(action, context));
         }
       });
-    } else {
-      protectedExecuteBackend(action, context);
+      return success.booleanValue();
     }
+    return protectedExecuteBackend(action, context);
   }
 
-  private void protectedExecuteBackend(IAction action,
+  private boolean protectedExecuteBackend(IAction action,
       Map<String, Object> context) {
-    super.executeBackend(action, context);
+    return super.executeBackend(action, context);
   }
 
   /**
@@ -502,14 +502,14 @@ public class DefaultSwingController extends
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected final void executeFrontend(final IAction action,
+  protected final boolean executeFrontend(final IAction action,
       final Map<String, Object> context) {
-    protectedExecuteFrontend(action, context);
+    return protectedExecuteFrontend(action, context);
   }
 
-  private void protectedExecuteFrontend(IAction action,
+  private boolean protectedExecuteFrontend(IAction action,
       Map<String, Object> context) {
-    super.executeFrontend(action, context);
+    return super.executeFrontend(action, context);
   }
 
   /**

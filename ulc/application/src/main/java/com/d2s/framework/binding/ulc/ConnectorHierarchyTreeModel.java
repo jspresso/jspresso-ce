@@ -28,7 +28,7 @@ import com.ulcjava.base.application.tree.TreePath;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,7 +42,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
 
   /**
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
-   * 
+   *
    * @param rootConnector
    *          the connector being the root node of the tree.
    * @param tree
@@ -309,6 +309,11 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
         CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
             collectionConnector, true, true);
       }
+      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
+          changedConnector, false, false);
+    } else if (event.getTreePath().getParentPath() != null
+        && event.getTreePath().getParentPath().getLastPathComponent() == rootConnector
+        && getChildCount(changedConnector) == 0) {
       CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
           changedConnector, false, false);
     }
