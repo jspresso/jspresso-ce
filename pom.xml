@@ -424,7 +424,6 @@
                 <if>
                   <equals arg1="${project.packaging}" arg2="jar" />
                   <then>
-                    <echo message="${maven.dependency.classpath}"/>
                     <proguard note="false" verbose="false" renamesourcefileattribute="SourceFile">
                       <injar file="${project.artifact.file}" />
                       <outjar
