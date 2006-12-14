@@ -7,6 +7,7 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,7 +34,7 @@ import com.d2s.framework.util.bean.PropertyHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -205,7 +206,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
 
   /**
    * Sets the hibernateTemplate.
-   * 
+   *
    * @param hibernateTemplate
    *          the hibernateTemplate to set.
    */
@@ -284,18 +285,24 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         if (propertyValue instanceof PersistentCollection) {
           ((PersistentCollection) propertyValue).clearDirty();
         }
+        for (Iterator<IEntity> ite = ((Collection) propertyValue).iterator(); ite
+            .hasNext();) {
+          IEntity collectionElement = ite.next();
+          if (isEntityRegisteredForDeletion(collectionElement)) {
+            ite.remove();
+          }
+        }
       }
     } finally {
       getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
     }
-    return;
   }
 
   /**
    * Whenever the entity has dirty persistent collection, make them clean to
    * workaround a "bug" with hibernate since hibernate cannot re-attach a
    * "dirty" detached collection.
-   * 
+   *
    * @param entity
    *          the entity to clean the collections dirty state of.
    */

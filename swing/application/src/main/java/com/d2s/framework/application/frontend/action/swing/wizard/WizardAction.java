@@ -11,7 +11,6 @@ import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -33,6 +32,7 @@ import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
 import com.d2s.framework.application.frontend.action.wizard.IWizardStepDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
+import com.d2s.framework.util.collection.ObjectEqualityMap;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.view.IIconFactory;
@@ -44,7 +44,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -57,7 +57,7 @@ public class WizardAction extends AbstractSwingAction {
 
   /**
    * Sets the firstWizardStep.
-   * 
+   *
    * @param firstWizardStep
    *          the firstWizardStep to set.
    */
@@ -80,7 +80,7 @@ public class WizardAction extends AbstractSwingAction {
 
     Map<String, Object> wizardModelInit = (Map<String, Object>) context
         .get(ActionContextConstants.ACTION_PARAM);
-    Map<String, Object> wizardModel = new HashMap<String, Object>();
+    Map<String, Object> wizardModel = new ObjectEqualityMap<String, Object>();
     if (wizardModelInit != null) {
       wizardModel.putAll(wizardModelInit);
     }
@@ -275,7 +275,7 @@ public class WizardAction extends AbstractSwingAction {
 
   /**
    * Sets the modelConnectorFactory.
-   * 
+   *
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
    */
@@ -286,7 +286,7 @@ public class WizardAction extends AbstractSwingAction {
 
   /**
    * Sets the finishAction.
-   * 
+   *
    * @param finishAction
    *          the finishAction to set.
    */
@@ -296,7 +296,7 @@ public class WizardAction extends AbstractSwingAction {
 
   /**
    * Creates (and initializes) the wizard model.
-   * 
+   *
    * @param initialWizardModel
    *          the initial wizard model.
    * @param context

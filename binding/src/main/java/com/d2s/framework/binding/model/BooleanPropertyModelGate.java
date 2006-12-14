@@ -20,7 +20,7 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -56,7 +56,8 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
     boolean oldOpen = isOpen();
     if (accessor != null && evt.getNewValue() != null) {
       try {
-        this.open = ((Boolean) accessor.getValue(getModel())).booleanValue();
+        Boolean modelValue = (Boolean) accessor.getValue(getModel());
+        this.open = (modelValue != null && modelValue.booleanValue());
         if (!openOnTrue) {
           this.open = !this.open;
         }
@@ -75,7 +76,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
 
   /**
    * Sets the booleanPropertyName.
-   * 
+   *
    * @param booleanPropertyName
    *          the booleanPropertyName to set.
    */
@@ -104,7 +105,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
 
   /**
    * Sets the accessorFactory.
-   * 
+   *
    * @param accessorFactory
    *          the accessorFactory to set.
    */
@@ -126,7 +127,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
 
   /**
    * Sets the openOnTrue.
-   * 
+   *
    * @param openOnTrue
    *          the openOnTrue to set.
    */
