@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
-import com.d2s.framework.model.integrity.IntegrityException;
+import com.d2s.framework.util.bean.integrity.IntegrityException;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**

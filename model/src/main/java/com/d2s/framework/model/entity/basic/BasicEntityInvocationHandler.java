@@ -34,14 +34,14 @@ import com.d2s.framework.model.entity.IEntityCollectionFactory;
 import com.d2s.framework.model.entity.IEntityExtension;
 import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.IEntityLifecycle;
-import com.d2s.framework.model.integrity.ICollectionIntegrityProcessor;
-import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
 import com.d2s.framework.model.service.IComponentService;
 import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
 import com.d2s.framework.util.bean.AccessorInfo;
+import com.d2s.framework.util.bean.integrity.ICollectionIntegrityProcessor;
+import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
 import com.d2s.framework.util.collection.CollectionHelper;
 
 /**

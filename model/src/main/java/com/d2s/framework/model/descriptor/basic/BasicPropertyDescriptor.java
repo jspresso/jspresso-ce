@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Locale;
 
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
-import com.d2s.framework.model.integrity.IPropertyIntegrityProcessor;
-import com.d2s.framework.model.integrity.IntegrityException;
 import com.d2s.framework.util.IGate;
+import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
+import com.d2s.framework.util.bean.integrity.IntegrityException;
 import com.d2s.framework.util.descriptor.DefaultDescriptor;
 import com.d2s.framework.util.exception.NestedRuntimeException;
 import com.d2s.framework.util.i18n.ITranslationProvider;
