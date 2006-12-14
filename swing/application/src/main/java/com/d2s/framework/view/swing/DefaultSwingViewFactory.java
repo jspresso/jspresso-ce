@@ -176,6 +176,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.TreeDescriptorHelper;
 import com.d2s.framework.view.descriptor.ViewConstraints;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
 
 /**
@@ -1069,7 +1070,9 @@ public class DefaultSwingViewFactory implements
 
     Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
     List<String> columnConnectorKeys = new ArrayList<String>();
-    for (String columnId : viewDescriptor.getRenderedProperties()) {
+    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+        .getColumnViewDescriptors()) {
+      String columnId = columnViewDescriptor.getName();
       IValueConnector columnConnector = createColumnConnector(columnId,
           modelDescriptor.getCollectionDescriptor().getElementDescriptor());
       rowConnectorPrototype.addChildConnector(columnConnector);
@@ -1077,21 +1080,17 @@ public class DefaultSwingViewFactory implements
           .getCollectionDescriptor().getElementDescriptor()
           .getPropertyDescriptor(columnId).getModelType());
       columnConnectorKeys.add(columnId);
-      ISubViewDescriptor columnViewDescriptor = viewDescriptor
-          .getColumnViewDescriptor(columnId);
-      if (columnViewDescriptor != null) {
-        if (columnViewDescriptor.getReadabilityGates() != null) {
-          for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-            columnConnector.addReadabilityGate(gate.clone());
-          }
+      if (columnViewDescriptor.getReadabilityGates() != null) {
+        for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+          columnConnector.addReadabilityGate(gate.clone());
         }
-        if (columnViewDescriptor.getWritabilityGates() != null) {
-          for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-            columnConnector.addWritabilityGate(gate.clone());
-          }
-        }
-        columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
       }
+      if (columnViewDescriptor.getWritabilityGates() != null) {
+        for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+          columnConnector.addWritabilityGate(gate.clone());
+        }
+      }
+      columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
     }
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
@@ -1112,9 +1111,10 @@ public class DefaultSwingViewFactory implements
         .getSelectionModel(), sorterDecorator);
     int maxColumnSize = computePixelWidth(viewComponent,
         maxColumnCharacterLength);
-    for (int i = 0; i < viewDescriptor.getRenderedProperties().size(); i++) {
+    for (int i = 0; i < viewDescriptor.getColumnViewDescriptors().size(); i++) {
       TableColumn column = viewComponent.getColumnModel().getColumn(i);
-      String propertyName = viewDescriptor.getRenderedProperties().get(i);
+      String propertyName = viewDescriptor.getColumnViewDescriptors().get(i)
+          .getName();
       column.setIdentifier(propertyName);
       IPropertyDescriptor propertyDescriptor = modelDescriptor
           .getCollectionDescriptor().getElementDescriptor()
@@ -1488,7 +1488,9 @@ public class DefaultSwingViewFactory implements
 
     boolean isSpaceFilled = false;
 
-    for (String propertyName : viewDescriptor.getRenderedProperties()) {
+    for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
+        .getPropertyViewDescriptors()) {
+      String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
           .getPropertyDescriptor(propertyName);
@@ -1502,22 +1504,18 @@ public class DefaultSwingViewFactory implements
           actionHandler, locale);
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
-      ISubViewDescriptor propertyViewDescriptor = viewDescriptor
-          .getPropertyViewDescriptor(propertyName);
-      if (propertyViewDescriptor != null) {
-        if (propertyViewDescriptor.getReadabilityGates() != null) {
-          for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
-            propertyView.getConnector().addReadabilityGate(gate.clone());
-          }
+      if (propertyViewDescriptor.getReadabilityGates() != null) {
+        for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
+          propertyView.getConnector().addReadabilityGate(gate.clone());
         }
-        if (propertyViewDescriptor.getWritabilityGates() != null) {
-          for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
-            propertyView.getConnector().addWritabilityGate(gate.clone());
-          }
-        }
-        propertyView.getConnector().setLocallyWritable(
-            !propertyViewDescriptor.isReadOnly());
       }
+      if (propertyViewDescriptor.getWritabilityGates() != null) {
+        for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
+          propertyView.getConnector().addWritabilityGate(gate.clone());
+        }
+      }
+      propertyView.getConnector().setLocallyWritable(
+          !propertyViewDescriptor.isReadOnly());
       JLabel propertyLabel = createPropertyLabel(propertyDescriptor,
           propertyView.getPeer(), locale);
 
@@ -1814,7 +1812,13 @@ public class DefaultSwingViewFactory implements
     if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
       BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
       viewDescriptor.setModelDescriptor(propertyDescriptor);
-      viewDescriptor.setRenderedProperties(renderedChildProperties);
+      List<ISubViewDescriptor> columnViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      for (String renderedProperty : renderedChildProperties) {
+        BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
+        columnDescriptor.setName(renderedProperty);
+        columnViewDescriptors.add(columnDescriptor);
+      }
+      viewDescriptor.setColumnViewDescriptors(columnViewDescriptors);
       viewDescriptor.setName(propertyDescriptor.getName());
       view = createTableView(viewDescriptor, actionHandler, locale);
     } else {

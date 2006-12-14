@@ -30,14 +30,6 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
   int ASIDE = 2;
 
   /**
-   * Gets the names of the underlying model properties which are made visible by
-   * the view.
-   *
-   * @return the names of the underlying model rendered properties.
-   */
-  List<String> getRenderedProperties();
-
-  /**
    * Gets the position of the labels naming the displayed properties.
    *
    * @return the relative position of the labels (<code>ABOVE</code> or
@@ -72,10 +64,9 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
   List<String> getRenderedChildProperties(String propertyName);
 
   /**
-   * Gets the property subview descriptor (if defined) of the rendered property.
+   * Gets the property view descriptors.
    *
-   * @param propertyName the rendered property.
-   * @return the sub-view descriptor (if defined) of the rendered property or null.
+   * @return the property view descriptors.
    */
-  ISubViewDescriptor getPropertyViewDescriptor(String propertyName);
+  List<ISubViewDescriptor> getPropertyViewDescriptors();
 }

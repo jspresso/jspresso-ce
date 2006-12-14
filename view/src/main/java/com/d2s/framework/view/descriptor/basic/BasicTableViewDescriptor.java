@@ -3,11 +3,12 @@
  */
 package com.d2s.framework.view.descriptor.basic;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 import com.d2s.framework.view.descriptor.ITableViewDescriptor;
 
@@ -23,39 +24,7 @@ import com.d2s.framework.view.descriptor.ITableViewDescriptor;
 public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     implements ITableViewDescriptor {
 
-  private List<String>                    renderedProperties;
-  private Map<String, ISubViewDescriptor> columnViewDescriptors;
-
-  /**
-   * Sets the renderedProperties.
-   *
-   * @param renderedProperties
-   *          the renderedProperties to set.
-   */
-  public void setRenderedProperties(List<String> renderedProperties) {
-    this.renderedProperties = renderedProperties;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<String> getRenderedProperties() {
-    if (renderedProperties == null) {
-      ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) getModelDescriptor());
-      List<String> modelRenderedProperties = modelDescriptor
-          .getCollectionDescriptor().getElementDescriptor()
-          .getRenderedProperties();
-      if (modelDescriptor instanceof ICollectionPropertyDescriptor
-          && ((ICollectionPropertyDescriptor) modelDescriptor)
-              .getReverseRelationEnd() != null) {
-        modelRenderedProperties
-            .remove(((ICollectionPropertyDescriptor) modelDescriptor)
-                .getReverseRelationEnd().getName());
-      }
-      return modelRenderedProperties;
-    }
-    return renderedProperties;
-  }
+  private List<ISubViewDescriptor> columnViewDescriptors;
 
   /**
    * Sets the columnViewDescriptors.
@@ -64,18 +33,36 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    *          the columnViewDescriptors to set.
    */
   public void setColumnViewDescriptors(
-      Map<String, ISubViewDescriptor> columnViewDescriptors) {
+      List<ISubViewDescriptor> columnViewDescriptors) {
     this.columnViewDescriptors = columnViewDescriptors;
   }
 
   /**
    * {@inheritDoc}
    */
-  public ISubViewDescriptor getColumnViewDescriptor(String propertyName) {
-    if (columnViewDescriptors != null) {
-      return columnViewDescriptors.get(propertyName);
+  public List<ISubViewDescriptor> getColumnViewDescriptors() {
+    if (columnViewDescriptors == null) {
+      ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) getModelDescriptor());
+      IComponentDescriptor rowModelDescriptor = modelDescriptor
+          .getCollectionDescriptor().getElementDescriptor();
+      List<String> modelRenderedProperties = rowModelDescriptor
+          .getRenderedProperties();
+      if (modelDescriptor instanceof ICollectionPropertyDescriptor
+          && ((ICollectionPropertyDescriptor) modelDescriptor)
+              .getReverseRelationEnd() != null) {
+        modelRenderedProperties
+            .remove(((ICollectionPropertyDescriptor) modelDescriptor)
+                .getReverseRelationEnd().getName());
+      }
+      List<ISubViewDescriptor> defaultColumnViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      for (String renderedProperty : modelRenderedProperties) {
+        BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
+        columnDescriptor.setName(renderedProperty);
+        defaultColumnViewDescriptors.add(columnDescriptor);
+      }
+      return defaultColumnViewDescriptors;
     }
-    return null;
+    return columnViewDescriptors;
   }
 
 }

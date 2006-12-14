@@ -14,6 +14,7 @@ import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescripto
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
 import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
+import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -21,7 +22,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -61,7 +62,14 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
         queryProperties.add(queryProperty);
       }
     }
-    queryComponentViewDescriptor.setRenderedProperties(queryProperties);
+    List<ISubViewDescriptor> queryPropertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
+    for (String renderedProperty : queryProperties) {
+      BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
+      propertyDescriptor.setName(renderedProperty);
+      queryPropertyViewDescriptors.add(propertyDescriptor);
+    }
+    queryComponentViewDescriptor
+        .setPropertyViewDescriptors(queryPropertyViewDescriptors);
 
     return queryComponentViewDescriptor;
   }

@@ -3,11 +3,13 @@
  */
 package com.d2s.framework.view.descriptor.basic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -26,23 +28,11 @@ import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentViewDescriptor {
 
-  private List<String>                    renderedProperties;
-  private int                             labelsPosition = ASIDE;
-  private int                             columnCount    = 1;
-  private Map<String, Integer>            propertyWidths;
-  private Map<String, List<String>>       renderedChildProperties;
-  private Map<String, ISubViewDescriptor> propertyViewDescriptors;
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<String> getRenderedProperties() {
-    if (renderedProperties == null) {
-      return ((IComponentDescriptorProvider) getModelDescriptor())
-          .getComponentDescriptor().getRenderedProperties();
-    }
-    return renderedProperties;
-  }
+  private int                       labelsPosition = ASIDE;
+  private int                       columnCount    = 1;
+  private Map<String, Integer>      propertyWidths;
+  private Map<String, List<String>> renderedChildProperties;
+  private List<ISubViewDescriptor>  propertyViewDescriptors;
 
   /**
    * {@inheritDoc}
@@ -111,16 +101,6 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the renderedProperties.
-   *
-   * @param renderedProperties
-   *          the renderedProperties to set.
-   */
-  public void setRenderedProperties(List<String> renderedProperties) {
-    this.renderedProperties = renderedProperties;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public List<String> getRenderedChildProperties(String propertyName) {
@@ -174,17 +154,27 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    *          the propertyViewDescriptors to set.
    */
   public void setPropertyViewDescriptors(
-      Map<String, ISubViewDescriptor> propertyViewDescriptors) {
+      List<ISubViewDescriptor> propertyViewDescriptors) {
     this.propertyViewDescriptors = propertyViewDescriptors;
   }
 
   /**
    * {@inheritDoc}
    */
-  public ISubViewDescriptor getPropertyViewDescriptor(String propertyName) {
-    if (propertyViewDescriptors != null) {
-      return propertyViewDescriptors.get(propertyName);
+  public List<ISubViewDescriptor> getPropertyViewDescriptors() {
+    if (propertyViewDescriptors == null) {
+      IComponentDescriptor componentDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
+          .getComponentDescriptor();
+      List<String> modelRenderedProperties = componentDescriptor
+          .getRenderedProperties();
+      List<ISubViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      for (String renderedProperty : modelRenderedProperties) {
+        BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
+        propertyDescriptor.setName(renderedProperty);
+        defaultPropertyViewDescriptors.add(propertyDescriptor);
+      }
+      return defaultPropertyViewDescriptors;
     }
-    return null;
+    return propertyViewDescriptors;
   }
 }

@@ -19,20 +19,9 @@ import java.util.List;
 public interface ITableViewDescriptor extends ICollectionViewDescriptor {
 
   /**
-   * Gets the names of the underlying model properties which are made visible by
-   * each column of the table.
+   * Gets the column view descriptors.
    *
-   * @return the names of the underlying model rendered properties.
+   * @return the column view descriptors.
    */
-  List<String> getRenderedProperties();
-
-  /**
-   * Gets the sub-view descriptor (if defined) of the rendered property.
-   *
-   * @param propertyName
-   *          the rendered property.
-   * @return the sub-view descriptor (if defined) of the rendered property or
-   *         null.
-   */
-  ISubViewDescriptor getColumnViewDescriptor(String propertyName);
+  List<ISubViewDescriptor> getColumnViewDescriptors();
 }
