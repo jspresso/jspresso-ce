@@ -5,12 +5,8 @@ package com.d2s.framework.view.descriptor;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Collection;
 
-import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.security.ISecurable;
-import com.d2s.framework.util.IGate;
-import com.d2s.framework.util.descriptor.IIconDescriptor;
 import com.d2s.framework.view.action.IActionable;
 
 /**
@@ -18,11 +14,11 @@ import com.d2s.framework.view.action.IActionable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IViewDescriptor extends IIconDescriptor, IActionable,
+public interface IViewDescriptor extends ISubViewDescriptor, IActionable,
     ISecurable {
 
   /**
@@ -42,28 +38,28 @@ public interface IViewDescriptor extends IIconDescriptor, IActionable,
 
   /**
    * Gets the foreground color of this view.
-   * 
+   *
    * @return this view's foreground color.
    */
   Color getForeground();
 
   /**
    * Gets the background color of this view.
-   * 
+   *
    * @return this view's foreground color.
    */
   Color getBackground();
 
   /**
    * Gets the font of this view.
-   * 
+   *
    * @return this view's font.
    */
   Font getFont();
 
   /**
    * Gets the border type used to surround view.
-   * 
+   *
    * @return the border type :
    *         <li> <code>NONE</code> means no border.
    *         <li> <code>SIMPLE</code> means a simple line border.
@@ -71,36 +67,4 @@ public interface IViewDescriptor extends IIconDescriptor, IActionable,
    *         the name of the view.
    */
   int getBorderType();
-
-  /**
-   * Gets the model descriptor this view descriptor acts on.
-   * 
-   * @return the view model descriptor.
-   */
-  IModelDescriptor getModelDescriptor();
-
-  /**
-   * Gets wether this view is read-only.
-   * 
-   * @return true if the view is read-only.
-   */
-  boolean isReadOnly();
-
-  /**
-   * Gets the collection of gates determining the readability state of this
-   * property.
-   * 
-   * @return the collection of gates determining the readability state of this
-   *         property.
-   */
-  Collection<IGate> getReadabilityGates();
-
-  /**
-   * Gets the collection of gates determining the writability state of this
-   * property.
-   * 
-   * @return the collection of gates determining the writability state of this
-   *         property.
-   */
-  Collection<IGate> getWritabilityGates();
 }

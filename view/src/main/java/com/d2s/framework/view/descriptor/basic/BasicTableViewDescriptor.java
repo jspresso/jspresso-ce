@@ -4,9 +4,11 @@
 package com.d2s.framework.view.descriptor.basic;
 
 import java.util.List;
+import java.util.Map;
 
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 import com.d2s.framework.view.descriptor.ITableViewDescriptor;
 
 /**
@@ -14,14 +16,25 @@ import com.d2s.framework.view.descriptor.ITableViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     implements ITableViewDescriptor {
 
-  private List<String> renderedProperties;
+  private List<String>                    renderedProperties;
+  private Map<String, ISubViewDescriptor> columnViewDescriptors;
+
+  /**
+   * Sets the renderedProperties.
+   *
+   * @param renderedProperties
+   *          the renderedProperties to set.
+   */
+  public void setRenderedProperties(List<String> renderedProperties) {
+    this.renderedProperties = renderedProperties;
+  }
 
   /**
    * {@inheritDoc}
@@ -45,12 +58,24 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   }
 
   /**
-   * Sets the renderedProperties.
-   * 
-   * @param renderedProperties
-   *          the renderedProperties to set.
+   * Sets the columnViewDescriptors.
+   *
+   * @param columnViewDescriptors
+   *          the columnViewDescriptors to set.
    */
-  public void setRenderedProperties(List<String> renderedProperties) {
-    this.renderedProperties = renderedProperties;
+  public void setColumnViewDescriptors(
+      Map<String, ISubViewDescriptor> columnViewDescriptors) {
+    this.columnViewDescriptors = columnViewDescriptors;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ISubViewDescriptor getColumnViewDescriptor(String propertyName) {
+    if (columnViewDescriptors != null) {
+      return columnViewDescriptors.get(propertyName);
+    }
+    return null;
+  }
+
 }

@@ -12,6 +12,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
+import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 
 /**
  * Default implementation of a component view descriptor.
@@ -25,11 +26,12 @@ import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
 public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentViewDescriptor {
 
-  private List<String>              renderedProperties;
-  private int                       labelsPosition = ASIDE;
-  private int                       columnCount    = 1;
-  private Map<String, Integer>      propertyWidths;
-  private Map<String, List<String>> renderedChildProperties;
+  private List<String>                    renderedProperties;
+  private int                             labelsPosition = ASIDE;
+  private int                             columnCount    = 1;
+  private Map<String, Integer>            propertyWidths;
+  private Map<String, List<String>>       renderedChildProperties;
+  private Map<String, ISubViewDescriptor> propertyViewDescriptors;
 
   /**
    * {@inheritDoc}
@@ -163,5 +165,26 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
           .getComponentDescriptor().getIconImageURL();
     }
     return iconImageURL;
+  }
+
+  /**
+   * Sets the propertyViewDescriptors.
+   *
+   * @param propertyViewDescriptors
+   *          the propertyViewDescriptors to set.
+   */
+  public void setPropertyViewDescriptors(
+      Map<String, ISubViewDescriptor> propertyViewDescriptors) {
+    this.propertyViewDescriptors = propertyViewDescriptors;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ISubViewDescriptor getPropertyViewDescriptor(String propertyName) {
+    if (propertyViewDescriptors != null) {
+      return propertyViewDescriptors.get(propertyName);
+    }
+    return null;
   }
 }

@@ -85,6 +85,7 @@ import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITimePropertyDescriptor;
 import com.d2s.framework.security.ISecurable;
+import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
@@ -115,6 +116,7 @@ import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.INestingViewDescriptor;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
+import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 import com.d2s.framework.view.descriptor.ITabViewDescriptor;
 import com.d2s.framework.view.descriptor.ITableViewDescriptor;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
@@ -1045,17 +1047,32 @@ public class DefaultUlcViewFactory implements
       IValueConnector columnConnector = createColumnConnector(columnId,
           modelDescriptor.getCollectionDescriptor().getElementDescriptor());
       rowConnectorPrototype.addChildConnector(columnConnector);
-      IPropertyDescriptor columnDescriptor = modelDescriptor
+      IPropertyDescriptor columnModelDescriptor = modelDescriptor
           .getCollectionDescriptor().getElementDescriptor()
           .getPropertyDescriptor(columnId);
-      if (columnDescriptor instanceof IReferencePropertyDescriptor) {
+      if (columnModelDescriptor instanceof IReferencePropertyDescriptor) {
         columnClassesByIds.put(columnId, String.class);
-      } else if (columnDescriptor instanceof IBooleanPropertyDescriptor) {
+      } else if (columnModelDescriptor instanceof IBooleanPropertyDescriptor) {
         columnClassesByIds.put(columnId, Boolean.class);
       } else {
-        columnClassesByIds.put(columnId, columnDescriptor.getModelType());
+        columnClassesByIds.put(columnId, columnModelDescriptor.getModelType());
       }
       columnConnectorKeys.add(columnId);
+      ISubViewDescriptor columnViewDescriptor = viewDescriptor
+          .getColumnViewDescriptor(columnId);
+      if (columnViewDescriptor != null) {
+        if (columnViewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+            columnConnector.addReadabilityGate(gate.clone());
+          }
+        }
+        if (columnViewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+            columnConnector.addWritabilityGate(gate.clone());
+          }
+        }
+        columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+      }
     }
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
@@ -1444,6 +1461,22 @@ public class DefaultUlcViewFactory implements
           actionHandler, locale);
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
+      ISubViewDescriptor propertyViewDescriptor = viewDescriptor
+          .getPropertyViewDescriptor(propertyName);
+      if (propertyViewDescriptor != null) {
+        if (propertyViewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
+            propertyView.getConnector().addReadabilityGate(gate.clone());
+          }
+        }
+        if (propertyViewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
+            propertyView.getConnector().addWritabilityGate(gate.clone());
+          }
+        }
+        propertyView.getConnector().setLocallyWritable(
+            !propertyViewDescriptor.isReadOnly());
+      }
       ULCLabel propertyLabel = createPropertyLabel(propertyDescriptor,
           propertyView.getPeer(), locale);
 
@@ -2522,7 +2555,8 @@ public class DefaultUlcViewFactory implements
   protected ULCDateField createULCDateField(String formatPattern) {
     ULCDateField dateField = new ULCDateField(formatPattern);
     ClientContext.setEventDeliveryMode(dateField,
-        IUlcEventConstants.VALUE_CHANGED_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
+        IUlcEventConstants.VALUE_CHANGED_EVENT,
+        IUlcEventConstants.ASYNCHRONOUS_MODE);
     return dateField;
   }
 

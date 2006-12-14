@@ -54,7 +54,7 @@ import com.d2s.framework.view.IViewFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -934,6 +934,16 @@ public abstract class DefaultEchoViewFactory implements
   // .getCollectionDescriptor().getElementDescriptor()
   // .getPropertyDescriptor(columnId).getModelType());
   // columnConnectorKeys.add(columnId);
+  // if (viewDescriptor.getReadabilityGates(columnId) != null) {
+  // for (IGate gate : viewDescriptor.getReadabilityGates(columnId)) {
+  // columnConnector.addReadabilityGate(gate.clone());
+  // }
+  // }
+  // if (viewDescriptor.getWritabilityGates(columnId) != null) {
+  // for (IGate gate : viewDescriptor.getWritabilityGates(columnId)) {
+  // columnConnector.addWritabilityGate(gate.clone());
+  // }
+  // }
   // }
   // CollectionConnectorTableModel tableModel = new
   // CollectionConnectorTableModel(
@@ -1339,6 +1349,16 @@ public abstract class DefaultEchoViewFactory implements
   // actionHandler, locale);
   // propertyView.setParent(view);
   // connector.addChildConnector(propertyView.getConnector());
+  // if (viewDescriptor.getReadabilityGates(propertyName) != null) {
+  // for (IGate gate : viewDescriptor.getReadabilityGates(propertyName)) {
+  // propertyView.getConnector().addReadabilityGate(gate.clone());
+  // }
+  // }
+  // if (viewDescriptor.getWritabilityGates(propertyName) != null) {
+  // for (IGate gate : viewDescriptor.getWritabilityGates(propertyName)) {
+  // propertyView.getConnector().addWritabilityGate(gate.clone());
+  // }
+  // }
   // JLabel propertyLabel = createPropertyLabel(propertyDescriptor,
   // propertyView.getPeer(), locale);
   //

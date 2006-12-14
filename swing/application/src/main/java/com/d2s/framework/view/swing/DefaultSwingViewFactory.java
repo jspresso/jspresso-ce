@@ -167,6 +167,7 @@ import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.INestingViewDescriptor;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
+import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 import com.d2s.framework.view.descriptor.ITabViewDescriptor;
 import com.d2s.framework.view.descriptor.ITableViewDescriptor;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
@@ -1076,6 +1077,21 @@ public class DefaultSwingViewFactory implements
           .getCollectionDescriptor().getElementDescriptor()
           .getPropertyDescriptor(columnId).getModelType());
       columnConnectorKeys.add(columnId);
+      ISubViewDescriptor columnViewDescriptor = viewDescriptor
+          .getColumnViewDescriptor(columnId);
+      if (columnViewDescriptor != null) {
+        if (columnViewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+            columnConnector.addReadabilityGate(gate.clone());
+          }
+        }
+        if (columnViewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+            columnConnector.addWritabilityGate(gate.clone());
+          }
+        }
+        columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+      }
     }
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
@@ -1486,6 +1502,22 @@ public class DefaultSwingViewFactory implements
           actionHandler, locale);
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
+      ISubViewDescriptor propertyViewDescriptor = viewDescriptor
+          .getPropertyViewDescriptor(propertyName);
+      if (propertyViewDescriptor != null) {
+        if (propertyViewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
+            propertyView.getConnector().addReadabilityGate(gate.clone());
+          }
+        }
+        if (propertyViewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
+            propertyView.getConnector().addWritabilityGate(gate.clone());
+          }
+        }
+        propertyView.getConnector().setLocallyWritable(
+            !propertyViewDescriptor.isReadOnly());
+      }
       JLabel propertyLabel = createPropertyLabel(propertyDescriptor,
           propertyView.getPeer(), locale);
 

@@ -12,7 +12,7 @@ import java.util.List;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,8 +21,18 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
   /**
    * Gets the names of the underlying model properties which are made visible by
    * each column of the table.
-   * 
+   *
    * @return the names of the underlying model rendered properties.
    */
   List<String> getRenderedProperties();
+
+  /**
+   * Gets the sub-view descriptor (if defined) of the rendered property.
+   *
+   * @param propertyName
+   *          the rendered property.
+   * @return the sub-view descriptor (if defined) of the rendered property or
+   *         null.
+   */
+  ISubViewDescriptor getColumnViewDescriptor(String propertyName);
 }
