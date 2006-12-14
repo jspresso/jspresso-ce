@@ -40,8 +40,6 @@ import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
 import com.d2s.framework.util.bean.AccessorInfo;
-import com.d2s.framework.util.bean.integrity.ICollectionIntegrityProcessor;
-import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
 import com.d2s.framework.util.collection.CollectionHelper;
 
 /**
@@ -50,7 +48,7 @@ import com.d2s.framework.util.collection.CollectionHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -71,7 +69,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Constructs a new <code>BasicEntityInvocationHandler</code> instance.
-   * 
+   *
    * @param entityDescriptor
    *          The descriptor of the proxy entity.
    * @param collectionFactory
@@ -226,7 +224,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Wether the object is fully initialized.
-   * 
+   *
    * @param objectOrProxy
    *          the object to test.
    * @return true if the object is fully initialized.
@@ -238,7 +236,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Gets a property value.
-   * 
+   *
    * @param proxy
    *          the proxy to get the property of.
    * @param propertyDescriptor
@@ -264,7 +262,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Gets a collection property value.
-   * 
+   *
    * @param proxy
    *          the proxy to get the property of.
    * @param propertyDescriptor
@@ -284,7 +282,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Gets a reference property value.
-   * 
+   *
    * @param proxy
    *          the proxy to get the property of.
    * @param propertyDescriptor
@@ -315,7 +313,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     if (ObjectUtils.equals(oldProperty, newProperty)) {
       return;
     }
-    preprocessSetter(proxy, propertyName, oldProperty, newProperty);
+    propertyDescriptor.preprocessSetter(proxy, oldProperty, newProperty);
     if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       // It's a relation end
       IRelationshipEndPropertyDescriptor reversePropertyDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
@@ -409,7 +407,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       storeProperty(propertyName, newProperty);
     }
     firePropertyChange(propertyName, oldProperty, newProperty);
-    postprocessSetter(proxy, propertyName, oldProperty, newProperty);
+    propertyDescriptor.postprocessSetter(proxy, oldProperty, newProperty);
   }
 
   @SuppressWarnings("unchecked")
@@ -426,7 +424,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       Collection collectionProperty = (Collection) accessorFactory
           .createPropertyAccessor(propertyName,
               entityDescriptor.getComponentContract()).getValue(proxy);
-      preprocessAdder(proxy, propertyName, collectionProperty, value);
+      propertyDescriptor.preprocessAdder(proxy, collectionProperty, value);
       IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
           .getReverseRelationEnd();
       if (reversePropertyDescriptor != null) {
@@ -459,7 +457,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       if (inserted) {
         firePropertyChange(propertyName, oldCollectionSnapshot,
             collectionProperty);
-        postprocessAdder(proxy, propertyName, collectionProperty, value);
+        propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
       }
     } catch (IllegalAccessException ex) {
       // This cannot happen but throw anyway.
@@ -483,7 +481,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       Collection collectionProperty = (Collection) accessorFactory
           .createPropertyAccessor(propertyName,
               entityDescriptor.getComponentContract()).getValue(proxy);
-      preprocessRemover(proxy, propertyName, collectionProperty, value);
+      propertyDescriptor.preprocessRemover(proxy, collectionProperty, value);
       if (collectionProperty.contains(value)) {
         IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
             .getReverseRelationEnd();
@@ -509,7 +507,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
         if (collectionProperty.remove(value)) {
           firePropertyChange(propertyName, oldCollectionSnapshot,
               collectionProperty);
-          postprocessRemover(proxy, propertyName, collectionProperty, value);
+          propertyDescriptor.postprocessRemover(proxy, collectionProperty, value);
         }
       }
     } catch (IllegalAccessException ex) {
@@ -688,88 +686,12 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Sets the collectionFactory.
-   * 
+   *
    * @param collectionFactory
    *          the collectionFactory to set.
    */
   public void setCollectionFactory(IEntityCollectionFactory collectionFactory) {
     this.collectionFactory = collectionFactory;
-  }
-
-  private List<IPropertyIntegrityProcessor> getIntegrityProcessors(
-      String propertyName) {
-    return entityDescriptor.getPropertyDescriptor(propertyName)
-        .getIntegrityProcessors();
-  }
-
-  private void preprocessSetter(Object proxy, String propertyName,
-      Object oldValue, Object newValue) {
-    List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
-    if (integrityProcessors == null) {
-      return;
-    }
-    for (IPropertyIntegrityProcessor<Object, Object> processor : integrityProcessors) {
-      processor.preprocessSetterIntegrity(proxy, oldValue, newValue);
-    }
-  }
-
-  private void postprocessSetter(Object proxy, String propertyName,
-      Object oldValue, Object newValue) {
-    List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
-    if (integrityProcessors == null) {
-      return;
-    }
-    for (IPropertyIntegrityProcessor<Object, Object> processor : integrityProcessors) {
-      processor.postprocessSetterIntegrity(proxy, oldValue, newValue);
-    }
-  }
-
-  private void preprocessAdder(Object proxy, String propertyName,
-      Collection collection, Object addedValue) {
-    List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
-    if (integrityProcessors == null) {
-      return;
-    }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : integrityProcessors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
-      processor.preprocessAdderIntegrity(proxy, collection, addedValue);
-    }
-  }
-
-  private void postprocessAdder(Object proxy, String propertyName,
-      Collection collection, Object addedValue) {
-    List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
-    if (integrityProcessors == null) {
-      return;
-    }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : integrityProcessors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
-      processor.postprocessAdderIntegrity(proxy, collection, addedValue);
-    }
-  }
-
-  private void preprocessRemover(Object proxy, String propertyName,
-      Collection collection, Object removedValue) {
-    List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
-    if (integrityProcessors == null) {
-      return;
-    }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : integrityProcessors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
-      processor.preprocessRemoverIntegrity(proxy, collection, removedValue);
-    }
-  }
-
-  private void postprocessRemover(Object proxy, String propertyName,
-      Collection collection, Object removedValue) {
-    List<IPropertyIntegrityProcessor> integrityProcessors = getIntegrityProcessors(propertyName);
-    if (integrityProcessors == null) {
-      return;
-    }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : integrityProcessors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
-      processor.postprocessRemoverIntegrity(proxy, collection, removedValue);
-    }
   }
 
   @SuppressWarnings("unchecked")
@@ -792,7 +714,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   /**
    * Directly get a property value out of the property store without any other
    * operation.
-   * 
+   *
    * @param propertyName
    *          the name of the property.
    * @return the property value or null.
@@ -818,7 +740,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   /**
    * Gets the interface class being the contract of this entity.
-   * 
+   *
    * @return the entity interface contract.
    */
   public Class<? extends IEntity> getEntityContract() {
@@ -852,7 +774,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
   /**
    * Direct write access to the properties map without any other operation. Use
    * with caution only in subclasses.
-   * 
+   *
    * @param propertyName
    *          the property name.
    * @param propertyValue

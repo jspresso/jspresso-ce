@@ -28,7 +28,7 @@
   -->
   <bean id="beanAccessorFactory" class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory" />
 
-  <bean id="mapAccessorFactory" class="com.d2s.framework.util.accessor.map.MapAccessorFactory" />
+  <bean id="mapAccessorFactory" class="com.d2s.framework.model.map.DescriptorAwareMapAccessorFactory" />
 
   <bean id="reportFactory" class="com.d2s.framework.application.printing.model.basic.BasicReportFactory" />
 

@@ -194,9 +194,7 @@
     <property name="description" value="clone.description" />
     <property name="acceleratorAsString" value="alt C" />
     <property name="wrappedAction">
-      <bean class="com.d2s.framework.application.backend.action.CloneMapCollectionAction">
-        <property name="mapComponentFactory" ref="basicMapComponentFactory" />
-      </bean>
+      <bean class="com.d2s.framework.application.backend.action.CloneMapCollectionAction" />
     </property>
     <property name="nextAction" ref="connectorSelectionFrontAction" />
   </bean>

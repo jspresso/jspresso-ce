@@ -20,7 +20,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -53,7 +53,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the mandatory property.
-   * 
+   *
    * @param mandatory
    *          the mandatory to set.
    */
@@ -76,7 +76,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the readOnly property.
-   * 
+   *
    * @param readOnly
    *          the readOnly to set.
    */
@@ -99,7 +99,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the integrityProcessors.
-   * 
+   *
    * @param integrityProcessors
    *          the integrityProcessors to set.
    */
@@ -127,7 +127,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the delegate class name.
-   * 
+   *
    * @param delegateClassName
    *          The class name of the extension delegate used to compute this
    *          property.
@@ -138,7 +138,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the delegate class name.
-   * 
+   *
    * @return The class name of the extension delegate used to compute this
    *         property.
    */
@@ -195,7 +195,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the unicityScope.
-   * 
+   *
    * @param unicityScope
    *          the unicityScope to set.
    */
@@ -238,7 +238,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Gets the parentDescriptor.
-   * 
+   *
    * @return the parentDescriptor.
    */
   protected IPropertyDescriptor getParentDescriptor() {
@@ -247,7 +247,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the parentDescriptor.
-   * 
+   *
    * @param parentDescriptor
    *          the parentDescriptor to set.
    */
@@ -264,7 +264,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Gets the readabilityGates.
-   * 
+   *
    * @return the readabilityGates.
    */
   public Collection<IGate> getReadabilityGates() {
@@ -279,7 +279,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the readabilityGates.
-   * 
+   *
    * @param readabilityGates
    *          the readabilityGates to set.
    */
@@ -289,7 +289,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Gets the writabilityGates.
-   * 
+   *
    * @return the writabilityGates.
    */
   public Collection<IGate> getWritabilityGates() {
@@ -304,7 +304,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * Sets the writabilityGates.
-   * 
+   *
    * @param writabilityGates
    *          the writabilityGates to set.
    */
@@ -333,6 +333,34 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
       };
       throw ie;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void preprocessSetter(Object component, Object oldValue,
+      Object newValue) {
+    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor<Object, Object> processor : processors) {
+      processor.preprocessSetterIntegrity(component, oldValue, newValue);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void postprocessSetter(Object component, Object oldValue,
+      Object newValue) {
+    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor<Object, Object> processor : processors) {
+      processor.postprocessSetterIntegrity(component, oldValue, newValue);
     }
   }
 }

@@ -17,6 +17,7 @@ import com.d2s.framework.model.IModelChangeListener;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.accessor.IAccessor;
@@ -28,7 +29,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,7 +43,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Constructs a new model connector on a model property.
-   * 
+   *
    * @param modelDescriptor
    *          The model descriptor to which the connector is bound at.
    * @param accessorFactory
@@ -60,7 +61,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    * This method must be called whenever the connector's model provider changes.
    * This method performs any necessary cleaning, attachements and notification
    * needed.
-   * 
+   *
    * @param oldModelProvider
    *          the old model provider or null if none.
    */
@@ -72,6 +73,9 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
         && accessor == null && accessorFactory != null) {
       accessor = accessorFactory.createPropertyAccessor(modelDescriptor
           .getName(), getModelProvider().getModelDescriptor().getModelType());
+      if (accessor instanceof IModelDescriptorAware) {
+        ((IModelDescriptorAware) accessor).setModelDescriptor(modelDescriptor);
+      }
     }
     if (oldModelProvider != null) {
       oldModel = oldModelProvider.getModel();
@@ -222,7 +226,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Gets the modelProvider.
-   * 
+   *
    * @return the modelProvider.
    */
   public IModelProvider getModelProvider() {
@@ -267,7 +271,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Wether this is a 'real' property connector (a opposed to a ModelConnector).
-   * 
+   *
    * @return true if this is a 'real' property connector.
    */
   protected boolean isValueAccessedAsProperty() {
@@ -276,7 +280,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
 
   /**
    * Gets the modelDescriptor.
-   * 
+   *
    * @return the modelDescriptor.
    */
   public IModelDescriptor getModelDescriptor() {

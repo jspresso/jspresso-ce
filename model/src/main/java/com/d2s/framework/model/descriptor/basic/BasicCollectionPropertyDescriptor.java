@@ -3,17 +3,20 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.util.bean.integrity.ICollectionIntegrityProcessor;
+import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
 
 /**
  * Default implementation of a collection descriptor.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,7 +30,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Gets the referencedDescriptor.
-   * 
+   *
    * @return the referencedDescriptor.
    */
   public ICollectionDescriptor getReferencedDescriptor() {
@@ -43,7 +46,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Sets the referencedDescriptor.
-   * 
+   *
    * @param referencedDescriptor
    *          the referencedDescriptor to set.
    */
@@ -67,7 +70,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Gets the manyToMany.
-   * 
+   *
    * @return the manyToMany.
    */
   public boolean isManyToMany() {
@@ -87,7 +90,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Sets the manyToMany.
-   * 
+   *
    * @param manyToMany
    *          the manyToMany to set.
    */
@@ -97,7 +100,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Gets the orderingProperties.
-   * 
+   *
    * @return the orderingProperties.
    */
   public List<String> getOrderingProperties() {
@@ -114,11 +117,72 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Sets the orderingProperties.
-   * 
+   *
    * @param orderingProperties
    *          the orderingProperties to set.
    */
   public void setOrderingProperties(List<String> orderingProperties) {
     this.orderingProperties = orderingProperties;
+  }
+
+
+  /**
+   * {@inheritDoc}
+   */
+  public void preprocessAdder(Object component,
+      Collection collection, Object addedValue) {
+    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+      processor.preprocessAdderIntegrity(component, collection, addedValue);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void postprocessAdder(Object component,
+      Collection collection, Object addedValue) {
+    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+      processor.postprocessAdderIntegrity(component, collection, addedValue);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void preprocessRemover(Object component,
+      Collection collection, Object removedValue) {
+    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+      processor.preprocessRemoverIntegrity(component, collection, removedValue);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void postprocessRemover(Object component,
+      Collection collection, Object removedValue) {
+    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+      processor.postprocessRemoverIntegrity(component, collection, removedValue);
+    }
   }
 }
