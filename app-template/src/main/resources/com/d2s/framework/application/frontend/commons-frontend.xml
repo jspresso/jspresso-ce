@@ -165,9 +165,7 @@
 
   <bean id="addMapToMasterFrontAction" parent="addToMasterFrontAction">
     <property name="wrappedAction">
-      <bean class="com.d2s.framework.application.backend.action.AddMapToMasterAction">
-        <property name="mapComponentFactory" ref="basicMapComponentFactory" />
-      </bean>
+      <bean class="com.d2s.framework.application.backend.action.AddMapToMasterAction" />
     </property>
   </bean>
 
