@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Properties;
 
 import com.d2s.framework.application.launch.ulc.ClassInvoker;
+import com.d2s.framework.application.launch.ulc.ExtendedFileService;
+import com.d2s.framework.application.launch.ulc.FileExists;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.splash.SplashWindow;
 import com.d2s.framework.util.url.UrlHelper;
@@ -20,7 +22,7 @@ import com.ulcjava.base.development.DevelopmentRunner;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,7 +36,7 @@ public final class UlcDevelopmentRunner {
 
   /**
    * Overriden to cope with formatted textfield font bug.
-   * 
+   *
    * @param args
    *          arguments.
    */
@@ -50,6 +52,9 @@ public final class UlcDevelopmentRunner {
       }
     });
     registerMessageHandler(new ClassInvoker());
+    registerMessageHandler(new FileExists());
+    ClientEnvironmentAdapter.setFileService(new ExtendedFileService());
+
     String splashUrl = null;
     List<String> filteredArgs = new ArrayList<String>();
     for (int i = 0; i < args.length; i++) {
@@ -80,7 +85,7 @@ public final class UlcDevelopmentRunner {
 
   /**
    * Registers a new message handler to which client messages will be delivered.
-   * 
+   *
    * @param messageHandler
    *          the new message handler to be delivered.
    */

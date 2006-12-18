@@ -9,12 +9,13 @@ import java.util.List;
 import java.util.Properties;
 
 import com.d2s.framework.application.launch.ulc.ClassInvoker;
+import com.d2s.framework.application.launch.ulc.ExtendedFileService;
+import com.d2s.framework.application.launch.ulc.FileExists;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.splash.SplashWindow;
 import com.d2s.framework.util.url.UrlHelper;
 import com.ulcjava.base.client.ClientEnvironmentAdapter;
 import com.ulcjava.base.client.IMessageService;
-import com.ulcjava.base.trusted.AllPermissionsFileService;
 import com.ulcjava.environment.jnlp.client.DefaultJnlpLauncher;
 
 /**
@@ -22,7 +23,7 @@ import com.ulcjava.environment.jnlp.client.DefaultJnlpLauncher;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,7 +37,7 @@ public final class UlcJnlpLauncher {
 
   /**
    * Overriden to cope with formatted textfield font bug.
-   * 
+   *
    * @param args
    *          arguments.
    * @throws MalformedURLException
@@ -44,6 +45,7 @@ public final class UlcJnlpLauncher {
    */
   public static void main(String[] args) throws MalformedURLException {
     registerMessageHandler(new ClassInvoker());
+    registerMessageHandler(new FileExists());
     String splashUrl = null;
     List<String> filteredArgs = new ArrayList<String>();
     for (int i = 0; i < args.length; i++) {
@@ -80,12 +82,12 @@ public final class UlcJnlpLauncher {
         }
       }
     });
-    ClientEnvironmentAdapter.setFileService(new AllPermissionsFileService());
+    ClientEnvironmentAdapter.setFileService(new ExtendedFileService());
   }
 
   /**
    * Registers a new message handler to which client messages will be delivered.
-   * 
+   *
    * @param messageHandler
    *          the new message handler to be delivered.
    */

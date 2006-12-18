@@ -7,7 +7,6 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -280,17 +279,10 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           return initializedProperty;
         }
       });
+      super.initializePropertyIfNeeded(entity, propertyDescriptor);
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        sortCollectionProperty(entity, propertyName);
         if (propertyValue instanceof PersistentCollection) {
           ((PersistentCollection) propertyValue).clearDirty();
-        }
-        for (Iterator<IEntity> ite = ((Collection) propertyValue).iterator(); ite
-            .hasNext();) {
-          IEntity collectionElement = ite.next();
-          if (isEntityRegisteredForDeletion(collectionElement)) {
-            ite.remove();
-          }
         }
       }
     } finally {

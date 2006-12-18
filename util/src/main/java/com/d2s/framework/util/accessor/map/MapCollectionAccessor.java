@@ -13,7 +13,7 @@ import com.d2s.framework.util.accessor.ICollectionAccessor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +22,7 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
 
   /**
    * Constructs a new default java bean collection property accessor.
-   * 
+   *
    * @param property
    *          the property to be accessed.
    */
@@ -38,9 +38,10 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
     Collection mapValue = getValue(target);
     if (mapValue == null) {
       mapValue = new ArrayList<Object>();
-      setValue(target, mapValue);
     }
     mapValue.add(value);
+    // to trigger a propertyChange.
+    setValue(target, mapValue);
   }
 
   /**
@@ -50,6 +51,8 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
     Collection mapValue = getValue(target);
     if (mapValue != null) {
       mapValue.remove(value);
+      // to trigger a propertyChange.
+      setValue(target, mapValue);
     }
   }
 

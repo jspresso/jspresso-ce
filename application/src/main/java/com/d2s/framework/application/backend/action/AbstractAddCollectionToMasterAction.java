@@ -14,6 +14,7 @@ import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.model.IModelValueConnector;
 import com.d2s.framework.binding.model.ModelPropertyConnector;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
 import com.d2s.framework.util.accessor.IListAccessor;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
@@ -24,7 +25,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -59,6 +60,10 @@ public abstract class AbstractAddCollectionToMasterAction extends
               ((IModelValueConnector) collectionConnector).getModelProvider()
                   .getModelDescriptor().getComponentDescriptor()
                   .getComponentContract(), newComponentContract);
+      if (collectionAccessor instanceof IModelDescriptorAware) {
+        ((IModelDescriptorAware) collectionAccessor)
+            .setModelDescriptor(getModelDescriptor(context));
+      }
       try {
         int index = -1;
         if (collectionAccessor instanceof IListAccessor) {
@@ -96,7 +101,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
   /**
    * Gets the new entity to add. It is created using the informations contained
    * in the context.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the entity to add to the collection.

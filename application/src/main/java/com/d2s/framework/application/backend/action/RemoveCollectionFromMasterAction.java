@@ -11,6 +11,7 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.model.IModelValueConnector;
 import com.d2s.framework.binding.model.ModelPropertyConnector;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
@@ -20,7 +21,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -52,6 +53,10 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
               ((IModelValueConnector) collectionConnector).getModelProvider()
                   .getModelDescriptor().getComponentDescriptor()
                   .getComponentContract(), newComponentContract);
+      if (collectionAccessor instanceof IModelDescriptorAware) {
+        ((IModelDescriptorAware) collectionAccessor)
+            .setModelDescriptor(getModelDescriptor(context));
+      }
       // Traverse the collection reversly for performance reasons.
       for (int i = selectedIndices.length - 1; i >= 0; i--) {
         int selectedIndex = selectedIndices[i];

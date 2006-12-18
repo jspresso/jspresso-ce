@@ -5,6 +5,10 @@ package com.d2s.framework.util.collection;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,9 +30,9 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
 public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
     IPropertyChangeCapable {
 
-  private static final long     serialVersionUID = 8981204989863563244L;
+  private static final long               serialVersionUID = 8981204989863563244L;
 
-  private PropertyChangeSupport propertyChangeSupport;
+  private transient PropertyChangeSupport propertyChangeSupport;
 
   /**
    * Constructs a new <code>ObjectEqualityMap</code> instance.
@@ -126,9 +130,37 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    */
   @Override
   public V put(K key, V value) {
-    V oldValue = get(key);
+    Object oldValue = get(key);
+    if (oldValue instanceof Collection) {
+      oldValue = new ArrayList<Object>((Collection<?>) oldValue) {
+
+        private static final long serialVersionUID = 7466229820747338355L;
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public boolean equals(Object o) {
+          return this == o;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int hashCode() {
+          return super.hashCode();
+        }
+      };
+    }
     V putVal = super.put(key, value);
     propertyChangeSupport.firePropertyChange(key.toString(), oldValue, value);
     return putVal;
+  }
+
+  private void readObject(ObjectInputStream in) throws IOException,
+      ClassNotFoundException {
+    in.defaultReadObject();
+    propertyChangeSupport = new PropertyChangeSupport(this);
   }
 }

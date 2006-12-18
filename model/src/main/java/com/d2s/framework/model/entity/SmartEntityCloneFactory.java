@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
@@ -22,7 +23,7 @@ import com.d2s.framework.util.accessor.ICollectionAccessor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -99,6 +100,10 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
       ICollectionAccessor collectionAccessor = accessorFactory
           .createCollectionPropertyAccessor(collectionDescriptor.getName(),
               masterContract, clonedEntity.getContract());
+      if (collectionAccessor instanceof IModelDescriptorAware) {
+        ((IModelDescriptorAware) collectionAccessor)
+            .setModelDescriptor(collectionDescriptor);
+      }
       try {
         collectionAccessor.addToValue(collectionEntry.getKey(), clonedEntity);
       } catch (IllegalAccessException ex) {
@@ -114,7 +119,7 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
 
   /**
    * Wether the object is fully initialized.
-   * 
+   *
    * @param objectOrProxy
    *          the object to test.
    * @return true if the object is fully initialized.
@@ -126,7 +131,7 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
 
   /**
    * Sets the accessorFactory.
-   * 
+   *
    * @param accessorFactory
    *          the accessorFactory to set.
    */

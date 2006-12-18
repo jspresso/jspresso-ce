@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -38,7 +39,7 @@ import com.d2s.framework.util.bean.BeanPropertyChangeRecorder;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -100,7 +101,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the entitiesRegisteredForUpdate.
-   * 
+   *
    * @return the entitiesRegisteredForUpdate.
    */
   protected List<IEntity> getEntitiesRegisteredForUpdate() {
@@ -129,7 +130,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the entitiesRegisteredForDeletion.
-   * 
+   *
    * @return the entitiesRegisteredForDeletion.
    */
   protected Set<IEntity> getEntitiesRegisteredForDeletion() {
@@ -295,10 +296,21 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
+  @SuppressWarnings("unchecked")
   public void initializePropertyIfNeeded(IEntity entity,
-      IPropertyDescriptor propertyName) {
-    // NO-OP;
+      IPropertyDescriptor propertyDescriptor) {
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      String propertyName = propertyDescriptor.getName();
+      Object propertyValue = entity.straightGetProperty(propertyName);
+      sortCollectionProperty(entity, propertyName);
+      for (Iterator<IEntity> ite = ((Collection<IEntity>) propertyValue).iterator(); ite
+          .hasNext();) {
+        IEntity collectionElement = ite.next();
+        if (isEntityRegisteredForDeletion(collectionElement)) {
+          ite.remove();
+        }
+      }
+    }
   }
 
   /**
@@ -310,7 +322,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the entityRegistry.
-   * 
+   *
    * @param entityRegistry
    *          the entityRegistry to set.
    */
@@ -494,7 +506,7 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * Creates a transient collection instance, in respect to the type of
    * collection passed as parameter.
-   * 
+   *
    * @param collection
    *          the collection to take the type from (List, Set, ...)
    * @return a transient collection instance with the same interface type as the
@@ -515,7 +527,7 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * Gives a chance to the session to wrap a collection before making it part of
    * the unit of work.
-   * 
+   *
    * @param entity
    *          the entity the collection belongs to.
    * @param transientCollection
@@ -537,7 +549,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sorts an entity collection property.
-   * 
+   *
    * @param entity
    *          the entity to sort the collection property of.
    * @param propertyName
@@ -578,7 +590,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the unitOfWork.
-   * 
+   *
    * @param unitOfWork
    *          the unitOfWork to set.
    */
@@ -588,7 +600,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the collectionFactory.
-   * 
+   *
    * @param collectionFactory
    *          the collectionFactory to set.
    */
@@ -598,7 +610,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the entitiesToMergeBack.
-   * 
+   *
    * @return the entitiesToMergeBack.
    */
   protected Set<IEntity> getEntitiesToMergeBack() {
@@ -614,7 +626,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the entity dirt recorder. To be used by subclasses.
-   * 
+   *
    * @return the entity dirt recorder.
    */
   protected BeanPropertyChangeRecorder getDirtRecorder() {
@@ -623,7 +635,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the owner.
-   * 
+   *
    * @return the owner.
    */
   public Subject getSubject() {
@@ -642,7 +654,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the owner.
-   * 
+   *
    * @param subject
    *          the owner to set.
    */
@@ -652,7 +664,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the entityFactory.
-   * 
+   *
    * @param entityFactory
    *          the entityFactory to set.
    */
@@ -662,7 +674,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Gets the locale.
-   * 
+   *
    * @return the locale.
    */
   public Locale getLocale() {
@@ -671,7 +683,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the locale.
-   * 
+   *
    * @param locale
    *          the locale to set.
    */
@@ -681,7 +693,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the carbonEntityCloneFactory.
-   * 
+   *
    * @param carbonEntityCloneFactory
    *          the carbonEntityCloneFactory to set.
    */
@@ -692,7 +704,7 @@ public class BasicApplicationSession implements IApplicationSession {
 
   /**
    * Sets the accessorFactory.
-   * 
+   *
    * @param accessorFactory
    *          the accessorFactory to set.
    */

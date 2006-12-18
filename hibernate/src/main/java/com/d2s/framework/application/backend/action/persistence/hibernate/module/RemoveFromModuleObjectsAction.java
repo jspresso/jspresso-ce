@@ -13,6 +13,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
+import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.persistence.hibernate.AbstractHibernateCollectionAction;
 import com.d2s.framework.application.model.BeanCollectionModule;
@@ -28,7 +29,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -79,7 +80,7 @@ public class RemoveFromModuleObjectsAction extends
                 projectedObjectsToRemove, session, context);
             for (IEntity entityToRemove : mergedCollection) {
               if (entityToRemove.isPersistent()) {
-                deleteEntity(entityToRemove, session);
+                deleteEntity(entityToRemove, session, context);
               }
             }
             return null;
@@ -94,6 +95,7 @@ public class RemoveFromModuleObjectsAction extends
     }
     module.setModuleObjects(projectedCollection);
     collectionConnector.setConnectorValue(projectedCollection);
+    context.put(ActionContextConstants.ACTION_PARAM, projectedObjectsToRemove);
     return super.execute(actionHandler, context);
   }
 
@@ -112,13 +114,17 @@ public class RemoveFromModuleObjectsAction extends
 
   /**
    * Deletes the entity from the persistent store.
-   * 
+   *
    * @param entity
    *          the entity to remove
    * @param session
    *          the session to use.
+   * @param context
+   *          the action context.
    */
-  protected void deleteEntity(IEntity entity, Session session) {
+  protected void deleteEntity(IEntity entity, Session session,
+      @SuppressWarnings("unused")
+      Map<String, Object> context) {
     session.delete(entity);
   }
 }

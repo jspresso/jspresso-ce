@@ -43,12 +43,13 @@ public class DescriptorAwareMapCollectionAccessor extends
     Collection mapValue = getValue(target);
     if (mapValue == null) {
       mapValue = new ArrayList<Object>();
-      setValue(target, mapValue);
     }
     if (getModelDescriptor() != null) {
       getModelDescriptor().preprocessAdder(this, mapValue, value);
     }
     mapValue.add(value);
+    // to trigger a propertyChange.
+    setValue(target, mapValue);
     if (getModelDescriptor() != null) {
       getModelDescriptor().postprocessAdder(this, mapValue, value);
     }
@@ -64,6 +65,8 @@ public class DescriptorAwareMapCollectionAccessor extends
     }
     if (mapValue != null) {
       mapValue.remove(value);
+      // to trigger a propertyChange.
+      setValue(target, mapValue);
     }
     if (getModelDescriptor() != null) {
       getModelDescriptor().postprocessRemover(this, mapValue, value);

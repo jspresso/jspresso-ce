@@ -477,7 +477,7 @@
                       <keepclassmembers implements="java.io.Serializable">
                         <field access="static final" type="long" name="serialVersionUID" />
                         <method access="private" type="void" name="writeObject" parameters="java.io.ObjectOutputStream" />
-                        <method access="private" type="void" name="readObject" parameters="java.io.ObjectOutputStream" />
+                        <method access="private" type="void" name="readObject" parameters="java.io.ObjectInputStream" />
                         <method type="java.lang.Object" name="writeReplace" parameters="" />
                         <method type="java.lang.Object" name="readResolve" parameters="" />
                       </keepclassmembers>
