@@ -3,8 +3,12 @@
  */
 package com.d2s.framework.view.echo;
 
-//import java.awt.Dimension;
+//import java.text.DateFormat;
+//import java.text.Format;
+//import java.text.NumberFormat;
+//import java.text.SimpleDateFormat;
 //import java.util.ArrayList;
+//import java.util.Collections;
 //import java.util.Date;
 //import java.util.HashMap;
 //import java.util.Iterator;
@@ -23,8 +27,15 @@ import nextapp.echo2.app.ImageReference;
 //import nextapp.echo2.app.Label;
 //import nextapp.echo2.app.Row;
 //import nextapp.echo2.app.SplitPane;
+//import nextapp.echo2.app.Table;
+//import nextapp.echo2.app.TextField;
 import nextapp.echo2.app.event.ActionListener;
 //import nextapp.echo2.app.layout.GridLayoutData;
+//import nextapp.echo2.app.list.DefaultListCellRenderer;
+//import nextapp.echo2.app.list.DefaultListModel;
+//import nextapp.echo2.app.table.TableCellRenderer;
+//import nextapp.echo2.app.table.TableColumn;
+//import nextapp.echo2.app.text.TextComponent;
 //import nextapp.echo2.extras.app.BorderPane;
 //import nextapp.echo2.extras.app.TabPane;
 //import nextapp.echo2.extras.app.layout.TabPaneLayoutData;
@@ -35,44 +46,95 @@ import nextapp.echo2.app.event.ActionListener;
 //import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 //import com.d2s.framework.binding.ConnectorValueChangeEvent;
 //import com.d2s.framework.binding.ICollectionConnector;
+//import com.d2s.framework.binding.ICollectionConnectorProvider;
 //import com.d2s.framework.binding.ICompositeValueConnector;
+//import com.d2s.framework.binding.IConfigurableCollectionConnectorListProvider;
 //import com.d2s.framework.binding.IConfigurableCollectionConnectorProvider;
 //import com.d2s.framework.binding.IConfigurableConnectorFactory;
+//import com.d2s.framework.binding.IConnectorSelector;
 //import com.d2s.framework.binding.IConnectorValueChangeListener;
 //import com.d2s.framework.binding.IMvcBinder;
 //import com.d2s.framework.binding.IValueConnector;
+//import com.d2s.framework.binding.echo.CollectionConnectorListModel;
+//import com.d2s.framework.binding.echo.CollectionConnectorTableModel;
+//import com.d2s.framework.binding.echo.ConnectorHierarchyTreeModel;
+//import com.d2s.framework.binding.echo.ConnectorTreeHelper;
+//import com.d2s.framework.binding.echo.DateFieldConnector;
+//import com.d2s.framework.binding.echo.FormattedFieldConnector;
 //import com.d2s.framework.binding.echo.IListSelectionModelBinder;
 //import com.d2s.framework.binding.echo.ITreeSelectionModelBinder;
+//import com.d2s.framework.binding.echo.ImageConnector;
+//import com.d2s.framework.binding.echo.PasswordFieldConnector;
+//import com.d2s.framework.binding.echo.SelectFieldConnector;
+//import com.d2s.framework.binding.echo.TextAreaConnector;
+//import com.d2s.framework.binding.echo.TextFieldConnector;
+//import com.d2s.framework.binding.echo.ToggleButtonConnector;
 //import com.d2s.framework.binding.masterdetail.IMasterDetailBinder;
 //import com.d2s.framework.binding.model.ModelRefPropertyConnector;
+//import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+//import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IComponentDescriptor;
+//import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
+//import com.d2s.framework.model.descriptor.IDatePropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor;
 //import com.d2s.framework.model.descriptor.IDurationPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IIntegerPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.INumberPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IPasswordPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IPercentPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor;
+//import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
+//import com.d2s.framework.model.descriptor.ITimePropertyDescriptor;
 //import com.d2s.framework.security.ISecurable;
 //import com.d2s.framework.util.IGate;
+//import com.d2s.framework.util.format.DurationFormatter;
+//import com.d2s.framework.util.format.FormatAdapter;
+//import com.d2s.framework.util.format.IFormatter;
+//import com.d2s.framework.util.format.NullableSimpleDateFormat;
 //import com.d2s.framework.util.i18n.ITranslationProvider;
 //import com.d2s.framework.view.BasicCompositeView;
 //import com.d2s.framework.view.BasicMapView;
+//import com.d2s.framework.view.BasicView;
 //import com.d2s.framework.view.IActionFactory;
 //import com.d2s.framework.view.ICompositeView;
 //import com.d2s.framework.view.IIconFactory;
 //import com.d2s.framework.view.IMapView;
 //import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+//import com.d2s.framework.view.ViewException;
 //import com.d2s.framework.view.action.IDisplayableAction;
 //import com.d2s.framework.view.descriptor.IBorderViewDescriptor;
 //import com.d2s.framework.view.descriptor.ICardViewDescriptor;
 //import com.d2s.framework.view.descriptor.ICollectionViewDescriptor;
 //import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
+//import com.d2s.framework.view.descriptor.ICompositeTreeLevelDescriptor;
 //import com.d2s.framework.view.descriptor.ICompositeViewDescriptor;
 //import com.d2s.framework.view.descriptor.IConstrainedGridViewDescriptor;
 //import com.d2s.framework.view.descriptor.IEvenGridViewDescriptor;
 //import com.d2s.framework.view.descriptor.IGridViewDescriptor;
 //import com.d2s.framework.view.descriptor.IImageViewDescriptor;
+//import com.d2s.framework.view.descriptor.IListViewDescriptor;
 //import com.d2s.framework.view.descriptor.INestingViewDescriptor;
+//import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 //import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
+//import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 //import com.d2s.framework.view.descriptor.ITabViewDescriptor;
+//import com.d2s.framework.view.descriptor.ITableViewDescriptor;
+//import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 //import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 //import com.d2s.framework.view.descriptor.IViewDescriptor;
+//import com.d2s.framework.view.descriptor.TreeDescriptorHelper;
 //import com.d2s.framework.view.descriptor.ViewConstraints;
+//import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
+//import com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor;
+//import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
 //
 //import echopointng.ButtonEx;
 //import echopointng.CheckBoxEx;
@@ -80,6 +142,7 @@ import com.d2s.framework.view.IViewFactory;
 //import echopointng.ContentPaneEx;
 //import echopointng.DateField;
 //import echopointng.ExtentEx;
+//import echopointng.ImageIcon;
 //import echopointng.LabelEx;
 //import echopointng.ListBoxEx;
 //import echopointng.MenuItem;
@@ -92,12 +155,18 @@ import com.d2s.framework.view.IViewFactory;
 //import echopointng.TextFieldEx;
 //import echopointng.TitleBar;
 //import echopointng.Tree;
+//import echopointng.able.Scrollable;
 //import echopointng.able.ToolTipable;
+//import echopointng.able.Widthable;
 //import echopointng.tabbedpane.DefaultTabModel;
+//import echopointng.table.PageableSortableTable;
 //import echopointng.table.TableEx;
+//import echopointng.tree.DefaultTreeCellRenderer;
+//import echopointng.tree.TreePath;
+//import echopointng.tree.TreeSelectionModel;
 
 /**
- * Factory for swing views.
+ * Factory for echo views.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -119,6 +188,8 @@ public abstract class DefaultEchoViewFactory implements
 //  private static final char                         TEMPLATE_CHAR               = 'O';
 //  private static final Date                         TEMPLATE_DATE               = new Date(
 //                                                                                    3661 * 1000);
+//  private static final Date                         TEMPLATE_TIME               = new Date(
+//                                                                                    3661 * 1000);
 //  private static final Long                         TEMPLATE_DURATION           = new Long(
 //                                                                                    IDurationPropertyDescriptor.ONE_SECOND
 //                                                                                        + IDurationPropertyDescriptor.ONE_MINUTE
@@ -129,9 +200,6 @@ public abstract class DefaultEchoViewFactory implements
 //  private static final int                          DEF_DISP_MAX_FRACTION_DIGIT = 2;
 //  private static final double                       DEF_DISP_TEMPLATE_PERCENT   = 99;
 //
-//  private static final Dimension                    MINIMUM_AREA_SIZE           = new Dimension(
-//                                                                                    100,
-//                                                                                    100);
 //  private IIconFactory<ImageReference>              iconFactory;
 //  private IActionFactory<ActionListener, Component> actionFactory;
 //  private IDisplayableAction                        lovAction;
@@ -226,7 +294,7 @@ public abstract class DefaultEchoViewFactory implements
 //        SplitPane viewPanel = createSplitPane();
 //        viewPanel.setOrientation(SplitPane.ORIENTATION_VERTICAL_TOP_BOTTOM);
 //        viewPanel.setResizable(false);
-//        viewPanel.setSeparatorHeight(new ExtentEx(2, ExtentEx.PX));
+//        viewPanel.setSeparatorHeight(new ExtentEx(2));
 //        viewPanel.add(toolBar);
 //        viewPanel.add(view.getPeer());
 //        view.setPeer(viewPanel);
@@ -266,7 +334,7 @@ public abstract class DefaultEchoViewFactory implements
 //        SplitPane splitPane = createSplitPane();
 //        splitPane.setOrientation(SplitPane.ORIENTATION_VERTICAL_TOP_BOTTOM);
 //        splitPane.setResizable(false);
-//        splitPane.setSeparatorHeight(new ExtentEx(1, ExtentEx.PX));
+//        splitPane.setSeparatorHeight(new ExtentEx(1));
 //        splitPane.add(new TitleBar(view.getDescriptor().getI18nName(
 //            getTranslationProvider(), locale)));
 //        view.setPeer(splitPane);
@@ -589,42 +657,39 @@ public abstract class DefaultEchoViewFactory implements
 //  private ICompositeView<Component> createBorderView(
 //      IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
 //      Locale locale) {
-//    JPanel viewComponent = createJPanel();
+//    BorderLayoutPane viewComponent = createBorderLayoutPane();
 //    BasicCompositeView<Component> view = constructCompositeView(viewComponent,
 //        viewDescriptor);
 //    List<IView<Component>> childrenViews = new ArrayList<IView<Component>>();
 //
-//    BorderLayout layout = new BorderLayout();
-//    viewComponent.setLayout(layout);
-//
 //    if (viewDescriptor.getEastViewDescriptor() != null) {
 //      IView<Component> eastView = createView(viewDescriptor
 //          .getEastViewDescriptor(), actionHandler, locale);
-//      viewComponent.add(eastView.getPeer(), BorderLayout.EAST);
+//      viewComponent.add(eastView.getPeer(), BorderLayoutPane.EAST);
 //      childrenViews.add(eastView);
 //    }
 //    if (viewDescriptor.getNorthViewDescriptor() != null) {
 //      IView<Component> northView = createView(viewDescriptor
 //          .getNorthViewDescriptor(), actionHandler, locale);
-//      viewComponent.add(northView.getPeer(), BorderLayout.NORTH);
+//      viewComponent.add(northView.getPeer(), BorderLayoutPane.NORTH);
 //      childrenViews.add(northView);
 //    }
 //    if (viewDescriptor.getCenterViewDescriptor() != null) {
 //      IView<Component> centerView = createView(viewDescriptor
 //          .getCenterViewDescriptor(), actionHandler, locale);
-//      viewComponent.add(centerView.getPeer(), BorderLayout.CENTER);
+//      viewComponent.add(centerView.getPeer(), BorderLayoutPane.CENTER);
 //      childrenViews.add(centerView);
 //    }
 //    if (viewDescriptor.getWestViewDescriptor() != null) {
 //      IView<Component> westView = createView(viewDescriptor
 //          .getWestViewDescriptor(), actionHandler, locale);
-//      viewComponent.add(westView.getPeer(), BorderLayout.WEST);
+//      viewComponent.add(westView.getPeer(), BorderLayoutPane.WEST);
 //      childrenViews.add(westView);
 //    }
 //    if (viewDescriptor.getSouthViewDescriptor() != null) {
 //      IView<Component> southView = createView(viewDescriptor
 //          .getSouthViewDescriptor(), actionHandler, locale);
-//      viewComponent.add(southView.getPeer(), BorderLayout.SOUTH);
+//      viewComponent.add(southView.getPeer(), BorderLayoutPane.SOUTH);
 //      childrenViews.add(southView);
 //    }
 //    view.setChildren(childrenViews);
@@ -681,7 +746,7 @@ public abstract class DefaultEchoViewFactory implements
 //      ((IConnectorSelector) connector).setTracksChildrenSelection(true);
 //    }
 //
-//    JTree viewComponent = createJTree();
+//    Tree viewComponent = createTree();
 //    ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
 //        connector, viewComponent);
 //    viewComponent.getSelectionModel().setSelectionMode(
@@ -690,11 +755,9 @@ public abstract class DefaultEchoViewFactory implements
 //    viewComponent.setCellRenderer(new ConnectorTreeCellRenderer(viewDescriptor,
 //        locale));
 //    treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
-//    JScrollPane scrollPane = createJScrollPane();
-//    scrollPane.setViewportView(viewComponent);
+//    ContainerEx scrollPane = createScrollPane();
+//    scrollPane.add(viewComponent);
 //    IView<Component> view = constructView(scrollPane, viewDescriptor, connector);
-//    viewComponent.addMouseListener(new PopupListener(viewComponent, view,
-//        actionHandler, locale));
 //    return view;
 //  }
 //
@@ -789,15 +852,14 @@ public abstract class DefaultEchoViewFactory implements
 //     * {@inheritDoc}
 //     */
 //    @Override
-//    public Component getTreeCellRendererComponent(JTree tree, Object value,
-//        boolean sel, boolean expanded, boolean leaf, int row,
-//        boolean nodeHasFocus) {
+//    public Component getTreeCellRendererComponent(Tree tree, Object value,
+//        boolean sel, boolean expanded, boolean leaf) {
 //      Component renderer = super.getTreeCellRendererComponent(tree, value, sel,
-//          expanded, leaf, row, nodeHasFocus);
+//          expanded, leaf);
 //      if (value instanceof IValueConnector) {
 //        IValueConnector rootConnector = (IValueConnector) tree.getModel()
 //            .getRoot();
-//        Icon nodeIcon = null;
+//        ImageReference nodeIcon = null;
 //        nodeIcon = iconFactory.getIcon(viewDescriptor
 //            .getIconImageURLForUserObject(((IValueConnector) value)
 //                .getConnectorValue()), IIconFactory.SMALL_ICON_SIZE);
@@ -836,7 +898,6 @@ public abstract class DefaultEchoViewFactory implements
 //          labelText = nodeGroupDescriptor.getI18nName(getTranslationProvider(),
 //              locale);
 //          if (nodeGroupDescriptor.getDescription() != null) {
-//            ToolTipManager.sharedInstance().registerComponent(tree);
 //            toolTipText = nodeGroupDescriptor.getI18nDescription(
 //                getTranslationProvider(), locale)
 //                + TOOLTIP_ELLIPSIS;
@@ -901,9 +962,9 @@ public abstract class DefaultEchoViewFactory implements
 //    ICollectionConnector connector = connectorFactory
 //        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
 //            rowConnectorPrototype);
-//    JList viewComponent = createJList();
-//    JScrollPane scrollPane = createJScrollPane();
-//    scrollPane.setViewportView(viewComponent);
+//    ListBoxEx viewComponent = createListBox();
+//    ContainerEx scrollPane = createScrollPane();
+//    scrollPane.add(viewComponent);
 //    IView<Component> view = constructView(scrollPane, viewDescriptor, connector);
 //
 //    if (viewDescriptor.getRenderedProperty() != null) {
@@ -930,23 +991,16 @@ public abstract class DefaultEchoViewFactory implements
 //    ICollectionConnector connector = connectorFactory
 //        .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
 //            rowConnectorPrototype);
-//    JTable viewComponent = createJTable();
-//    JScrollPane scrollPane = createJScrollPane();
-//    scrollPane.setViewportView(viewComponent);
-//    JLabel iconLabel = createJLabel();
-//    iconLabel.setIcon(iconFactory.getIcon(modelDescriptor
-//        .getCollectionDescriptor().getElementDescriptor().getIconImageURL(),
-//        IIconFactory.TINY_ICON_SIZE));
-//    iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
-//    scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
-//    scrollPane
-//        .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+//    TableEx viewComponent = createTable();
+//    ContainerEx scrollPane = createScrollPane();
+//    scrollPane.add(viewComponent);
 //    IView<Component> view = constructView(scrollPane, viewDescriptor, connector);
-//    viewComponent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 //
 //    Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
 //    List<String> columnConnectorKeys = new ArrayList<String>();
-//    for (String columnId : viewDescriptor.getRenderedProperties()) {
+//    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+//        .getColumnViewDescriptors()) {
+//      String columnId = columnViewDescriptor.getName();
 //      IValueConnector columnConnector = createColumnConnector(columnId,
 //          modelDescriptor.getCollectionDescriptor().getElementDescriptor());
 //      rowConnectorPrototype.addChildConnector(columnConnector);
@@ -954,39 +1008,30 @@ public abstract class DefaultEchoViewFactory implements
 //          .getCollectionDescriptor().getElementDescriptor()
 //          .getPropertyDescriptor(columnId).getModelType());
 //      columnConnectorKeys.add(columnId);
-//      if (viewDescriptor.getReadabilityGates(columnId) != null) {
-//        for (IGate gate : viewDescriptor.getReadabilityGates(columnId)) {
+//      if (columnViewDescriptor.getReadabilityGates() != null) {
+//        for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
 //          columnConnector.addReadabilityGate(gate.clone());
 //        }
 //      }
-//      if (viewDescriptor.getWritabilityGates(columnId) != null) {
-//        for (IGate gate : viewDescriptor.getWritabilityGates(columnId)) {
+//      if (columnViewDescriptor.getWritabilityGates() != null) {
+//        for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
 //          columnConnector.addWritabilityGate(gate.clone());
 //        }
 //      }
+//      columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
 //    }
 //    CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
 //        connector, columnConnectorKeys);
-//    tableModel.setExceptionHandler(actionHandler);
 //    tableModel.setColumnClassesByIds(columnClassesByIds);
-//    TableSorter sorterDecorator = new TableSorter(tableModel, viewComponent
-//        .getTableHeader());
-//    Dimension iconSize = new Dimension(viewComponent.getTableHeader().getFont()
-//        .getSize(), viewComponent.getTableHeader().getFont().getSize());
-//    sorterDecorator.setUpIcon(iconFactory.getIcon(
-//        "classpath:images/1uparrow-48x48.png", iconSize));
-//    sorterDecorator.setDownIcon(iconFactory.getIcon(
-//        "classpath:images/1downarrow-48x48.png", iconSize));
-//    sorterDecorator.setColumnComparator(String.class,
-//        String.CASE_INSENSITIVE_ORDER);
-//    viewComponent.setModel(sorterDecorator);
+//    viewComponent.setModel(tableModel);
 //    listSelectionModelBinder.bindSelectionModel(connector, viewComponent
-//        .getSelectionModel(), sorterDecorator);
+//        .getSelectionModel(), null);
 //    int maxColumnSize = computePixelWidth(viewComponent,
 //        maxColumnCharacterLength);
-//    for (int i = 0; i < viewDescriptor.getRenderedProperties().size(); i++) {
+//    for (int i = 0; i < viewDescriptor.getColumnViewDescriptors().size(); i++) {
 //      TableColumn column = viewComponent.getColumnModel().getColumn(i);
-//      String propertyName = viewDescriptor.getRenderedProperties().get(i);
+//      String propertyName = viewDescriptor.getColumnViewDescriptors().get(i)
+//          .getName();
 //      column.setIdentifier(propertyName);
 //      IPropertyDescriptor propertyDescriptor = modelDescriptor
 //          .getCollectionDescriptor().getElementDescriptor()
@@ -997,18 +1042,6 @@ public abstract class DefaultEchoViewFactory implements
 //        columnName.append("*");
 //      }
 //      column.setHeaderValue(columnName.toString());
-//
-//      IView<Component> editorView = createPropertyView(propertyDescriptor,
-//          null, actionHandler, locale);
-//      if (editorView.getPeer() instanceof JActionField) {
-//        JActionField actionField = (JActionField) editorView.getPeer();
-//        actionField.setActions(Collections.singletonList(actionField
-//            .getActions().get(0)));
-//      }
-//      if (editorView.getConnector().getParentConnector() == null) {
-//        editorView.getConnector().setParentConnector(connector);
-//      }
-//      column.setCellEditor(createTableCellEditor(editorView));
 //      TableCellRenderer cellRenderer = createTableCellRenderer(
 //          propertyDescriptor, locale);
 //      if (cellRenderer != null) {
@@ -1019,48 +1052,22 @@ public abstract class DefaultEchoViewFactory implements
 //      int minHeaderWidth = computePixelWidth(viewComponent, columnName.length());
 //      if (propertyDescriptor instanceof IBooleanPropertyDescriptor
 //          || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-//        column.setPreferredWidth(Math.max(computePixelWidth(viewComponent, 2),
-//            minHeaderWidth));
+//        column.setWidth(new ExtentEx(Math.max(computePixelWidth(viewComponent,
+//            2), minHeaderWidth)));
 //      } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-//        column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
+//        column.setWidth(new ExtentEx(Math.max(computePixelWidth(viewComponent,
 //            getEnumerationTemplateValue(
 //                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-//                .length()), minHeaderWidth));
+//                .length()), minHeaderWidth)));
 //      } else {
-//        column.setPreferredWidth(Math.max(
+//        column.setWidth(new ExtentEx(Math.max(
 //            Math.min(computePixelWidth(viewComponent, getFormatLength(
 //                createFormatter(propertyDescriptor, locale),
 //                getTemplateValue(propertyDescriptor))), maxColumnSize),
-//            minHeaderWidth));
+//            minHeaderWidth)));
 //      }
 //    }
-//    viewComponent.addMouseListener(new PopupListener(viewComponent, view,
-//        actionHandler, locale));
 //    return view;
-//  }
-//
-//  private TableCellEditor createTableCellEditor(IView<Component> editorView) {
-//    SwingViewCellEditorAdapter editor;
-//    if (editorView.getPeer() instanceof JActionField) {
-//      editor = new SwingViewCellEditorAdapter(editorView) {
-//
-//        private static final long serialVersionUID = -1551909997448473681L;
-//
-//        @Override
-//        public boolean stopCellEditing() {
-//          if (((JActionField) getEditorView().getPeer()).isSynchronized()) {
-//            fireEditingStopped();
-//            return true;
-//          }
-//          ((JActionFieldConnector) getEditorView().getConnector())
-//              .performActionIfNeeded();
-//          return false;
-//        }
-//      };
-//    } else {
-//      editor = new SwingViewCellEditorAdapter(editorView);
-//    }
-//    return editor;
 //  }
 //
 //  private TableCellRenderer createTableCellRenderer(
@@ -1072,6 +1079,9 @@ public abstract class DefaultEchoViewFactory implements
 //    } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
 //      cellRenderer = createDateTableCellRenderer(
 //          (IDatePropertyDescriptor) propertyDescriptor, locale);
+//    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+//      cellRenderer = createTimeTableCellRenderer(
+//          (ITimePropertyDescriptor) propertyDescriptor, locale);
 //    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
 //      cellRenderer = createDurationTableCellRenderer(
 //          (IDurationPropertyDescriptor) propertyDescriptor, locale);
@@ -1102,6 +1112,12 @@ public abstract class DefaultEchoViewFactory implements
 //  private TableCellRenderer createDateTableCellRenderer(
 //      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
 //    return new FormattedTableCellRenderer(createDateFormatter(
+//        propertyDescriptor, locale));
+//  }
+//
+//  private TableCellRenderer createTimeTableCellRenderer(
+//      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+//    return new FormattedTableCellRenderer(createTimeFormatter(
 //        propertyDescriptor, locale));
 //  }
 //
@@ -1218,37 +1234,33 @@ public abstract class DefaultEchoViewFactory implements
 //     * {@inheritDoc}
 //     */
 //    @Override
-//    public Component getTableCellRendererComponent(JTable table, Object value,
-//        boolean isSelected, boolean hasFocus, int row, int column) {
-//      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
-//          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
-//      return super.getTableCellRendererComponent(table, value, isSelected,
-//          hasFocus, row, column);
-//    }
-//
-//    /**
-//     * {@inheritDoc}
-//     */
-//    @Override
-//    protected void setValue(Object value) {
+//    public Component getTableCellRendererComponent(Table table, Object value,
+//        int column, int row) {
+//      Label renderer = (Label) super.getTableCellRendererComponent(table,
+//          value, row, column);
+//      renderer
+//          .setIcon(iconFactory.getIcon(propertyDescriptor
+//              .getIconImageURL(String.valueOf(value)),
+//              IIconFactory.TINY_ICON_SIZE));
 //      if (value instanceof IValueConnector) {
 //        Object connectorValue = ((IValueConnector) value).getConnectorValue();
 //        if (connectorValue != null) {
-//          super.setValue(translationProvider.getTranslation(
+//          renderer.setText(translationProvider.getTranslation(
 //              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
 //                  connectorValue), locale));
 //        } else {
-//          super.setValue(connectorValue);
+//          renderer.setText(String.valueOf(connectorValue));
 //        }
 //      } else {
 //        if (value != null) {
-//          super.setValue(translationProvider.getTranslation(
+//          renderer.setText(translationProvider.getTranslation(
 //              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
 //                  value), locale));
 //        } else {
-//          super.setValue(value);
+//          renderer.setText(String.valueOf(value));
 //        }
 //      }
+//      return renderer;
 //    }
 //  }
 //
@@ -1275,19 +1287,13 @@ public abstract class DefaultEchoViewFactory implements
 //  private IView<Component> createImageView(IImageViewDescriptor viewDescriptor,
 //      IActionHandler actionHandler, @SuppressWarnings("unused")
 //      Locale locale) {
-//    JLabel imageLabel = createJLabel();
-//    imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-//    JImageConnector connector = new JImageConnector(viewDescriptor
+//    ImageIcon imageLabel = createImageIcon();
+//    ImageConnector connector = new ImageConnector(viewDescriptor
 //        .getModelDescriptor().getName(), imageLabel);
 //    connector.setExceptionHandler(actionHandler);
-//    JPanel viewComponent = createJPanel();
-//    BorderLayout layout = new BorderLayout();
-//    viewComponent.setLayout(layout);
-//    IView<Component> view = constructView(viewComponent, viewDescriptor,
-//        connector);
-//    JScrollPane scrollPane = createJScrollPane();
-//    scrollPane.setViewportView(imageLabel);
-//    viewComponent.add(scrollPane, BorderLayout.CENTER);
+//    ContainerEx scrollPane = createScrollPane();
+//    scrollPane.add(imageLabel);
+//    IView<Component> view = constructView(scrollPane, viewDescriptor, connector);
 //    return view;
 //  }
 //
@@ -1303,9 +1309,7 @@ public abstract class DefaultEchoViewFactory implements
 //        .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
 //            .getName(), null);
 //
-//    JPanel viewComponent = createJPanel();
-//    BorderLayout layout = new BorderLayout();
-//    viewComponent.setLayout(layout);
+//    ContainerEx viewComponent = createPaneContainer();
 //
 //    IView<Component> view = constructView(viewComponent, viewDescriptor,
 //        connector);
@@ -1315,7 +1319,7 @@ public abstract class DefaultEchoViewFactory implements
 //
 //    connector.addChildConnector(nestedView.getConnector());
 //
-//    viewComponent.add(nestedView.getPeer(), BorderLayout.CENTER);
+//    viewComponent.add(nestedView.getPeer());
 //
 //    return view;
 //  }
@@ -1338,19 +1342,18 @@ public abstract class DefaultEchoViewFactory implements
 //    ICompositeValueConnector connector = connectorFactory
 //        .createCompositeValueConnector(
 //            getConnectorIdForComponentView(viewDescriptor), null);
-//    JPanel viewComponent = createJPanel();
+//    Grid viewComponent = createGrid();
 //    IView<Component> view = constructView(viewComponent, viewDescriptor,
 //        connector);
-//
-//    GridBagLayout layout = new GridBagLayout();
-//    viewComponent.setLayout(layout);
 //
 //    int currentX = 0;
 //    int currentY = 0;
 //
 //    boolean isSpaceFilled = false;
 //
-//    for (String propertyName : viewDescriptor.getRenderedProperties()) {
+//    for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
+//        .getPropertyViewDescriptors()) {
+//      String propertyName = propertyViewDescriptor.getName();
 //      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
 //          .getModelDescriptor()).getComponentDescriptor()
 //          .getPropertyDescriptor(propertyName);
@@ -1364,17 +1367,19 @@ public abstract class DefaultEchoViewFactory implements
 //          actionHandler, locale);
 //      propertyView.setParent(view);
 //      connector.addChildConnector(propertyView.getConnector());
-//      if (viewDescriptor.getReadabilityGates(propertyName) != null) {
-//        for (IGate gate : viewDescriptor.getReadabilityGates(propertyName)) {
+//      if (propertyViewDescriptor.getReadabilityGates() != null) {
+//        for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
 //          propertyView.getConnector().addReadabilityGate(gate.clone());
 //        }
 //      }
-//      if (viewDescriptor.getWritabilityGates(propertyName) != null) {
-//        for (IGate gate : viewDescriptor.getWritabilityGates(propertyName)) {
+//      if (propertyViewDescriptor.getWritabilityGates() != null) {
+//        for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
 //          propertyView.getConnector().addWritabilityGate(gate.clone());
 //        }
 //      }
-//      JLabel propertyLabel = createPropertyLabel(propertyDescriptor,
+//      propertyView.getConnector().setLocallyWritable(
+//          !propertyViewDescriptor.isReadOnly());
+//      Label propertyLabel = createPropertyLabel(propertyDescriptor,
 //          propertyView.getPeer(), locale);
 //
 //      int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
@@ -1387,19 +1392,10 @@ public abstract class DefaultEchoViewFactory implements
 //      }
 //
 //      // label positionning
-//      GridBagConstraints constraints = new GridBagConstraints();
+//      GridLayoutData constraints = new GridLayoutData();
 //      switch (viewDescriptor.getLabelsPosition()) {
 //        case IComponentViewDescriptor.ASIDE:
-//          constraints.insets = new Insets(5, 5, 5, 5);
-//          if (propertyView.getPeer() instanceof JTextArea
-//              || propertyView.getPeer() instanceof JList
-//              || propertyView.getPeer() instanceof JScrollPane
-//              || propertyView.getPeer() instanceof JTable
-//              || propertyView.getPeer() instanceof JEditTextArea) {
-//            constraints.anchor = GridBagConstraints.NORTHEAST;
-//          } else {
-//            constraints.anchor = GridBagConstraints.EAST;
-//          }
+//          constraints.setInsets(new Insets(5, 5, 5, 5));
 //          constraints.gridx = currentX * 2;
 //          constraints.gridy = currentY;
 //          break;
@@ -1473,9 +1469,9 @@ public abstract class DefaultEchoViewFactory implements
 //    return view;
 //  }
 //
-//  private JLabel createPropertyLabel(IPropertyDescriptor propertyDescriptor,
+//  private Label createPropertyLabel(IPropertyDescriptor propertyDescriptor,
 //      Component propertyComponent, Locale locale) {
-//    JLabel propertyLabel = createJLabel();
+//    Label propertyLabel = createLabel();
 //    StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
 //        getTranslationProvider(), locale));
 //    if (propertyDescriptor.isMandatory()) {
@@ -1483,7 +1479,6 @@ public abstract class DefaultEchoViewFactory implements
 //      propertyLabel.setForeground(Color.RED);
 //    }
 //    propertyLabel.setText(labelText.toString());
-//    propertyLabel.setLabelFor(propertyComponent);
 //    return propertyLabel;
 //  }
 //
@@ -1499,6 +1494,9 @@ public abstract class DefaultEchoViewFactory implements
 //    } else if (propertyDescriptor instanceof IDatePropertyDescriptor) {
 //      view = createDatePropertyView(
 //          (IDatePropertyDescriptor) propertyDescriptor, actionHandler, locale);
+//    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+//      view = createTimePropertyView(
+//          (ITimePropertyDescriptor) propertyDescriptor, actionHandler, locale);
 //    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
 //      view = createDurationPropertyView(
 //          (IDurationPropertyDescriptor) propertyDescriptor, actionHandler,
@@ -1521,11 +1519,11 @@ public abstract class DefaultEchoViewFactory implements
 //      view = createBinaryPropertyView(
 //          (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
 //    }
-//    if (propertyDescriptor.getDescription() != null) {
-//      view.getPeer().setToolTipText(
-//          propertyDescriptor.getI18nDescription(getTranslationProvider(),
-//              locale)
-//              + TOOLTIP_ELLIPSIS);
+//    if (propertyDescriptor.getDescription() != null
+//        && view.getPeer() instanceof ToolTipable) {
+//      ((ToolTipable) view.getPeer()).setToolTipText(propertyDescriptor
+//          .getI18nDescription(getTranslationProvider(), locale)
+//          + TOOLTIP_ELLIPSIS);
 //    }
 //    return view;
 //  }
@@ -1567,16 +1565,27 @@ public abstract class DefaultEchoViewFactory implements
 //  private IView<Component> createDatePropertyView(
 //      IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
 //      Locale locale) {
-//    JDateField viewComponent = createJDateField();
+//    DateField viewComponent = createDateField();
 //    DateFormat format = createDateFormat(propertyDescriptor, locale);
-//    viewComponent.getFormattedTextField().setFormatterFactory(
-//        new DefaultFormatterFactory(new DateFormatter(format)));
-//    JDateFieldConnector connector = new JDateFieldConnector(propertyDescriptor
+//    viewComponent.setDateFormat(format);
+//    DateFieldConnector connector = new DateFieldConnector(propertyDescriptor
 //        .getName(), viewComponent);
 //    connector.setExceptionHandler(actionHandler);
 //    adjustSizes(viewComponent, createFormatter(format),
-//        getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
-//            .getScreenResolution() / 10);
+//        getDateTemplateValue(propertyDescriptor), 5);
+//    return constructView(viewComponent, null, connector);
+//  }
+//
+//  private IView<Component> createTimePropertyView(
+//      ITimePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
+//      Locale locale) {
+//    TextField viewComponent = createTextField();
+//    IFormatter formatter = createTimeFormatter(propertyDescriptor, locale);
+//    FormattedFieldConnector connector = new FormattedFieldConnector(
+//        propertyDescriptor.getName(), viewComponent, formatter);
+//    connector.setExceptionHandler(actionHandler);
+//    adjustSizes(viewComponent, formatter,
+//        getTimeTemplateValue(propertyDescriptor));
 //    return constructView(viewComponent, null, connector);
 //  }
 //
@@ -1595,8 +1604,8 @@ public abstract class DefaultEchoViewFactory implements
 //      return createTextPropertyView(
 //          (ITextPropertyDescriptor) propertyDescriptor, actionHandler, locale);
 //    }
-//    JTextField viewComponent = createJTextField();
-//    JTextFieldConnector connector = new JTextFieldConnector(propertyDescriptor
+//    TextFieldEx viewComponent = createTextField();
+//    TextFieldConnector connector = new TextFieldConnector(propertyDescriptor
 //        .getName(), viewComponent);
 //    connector.setExceptionHandler(actionHandler);
 //    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
@@ -1607,8 +1616,8 @@ public abstract class DefaultEchoViewFactory implements
 //      IPasswordPropertyDescriptor propertyDescriptor,
 //      IActionHandler actionHandler, @SuppressWarnings("unused")
 //      Locale locale) {
-//    JPasswordField viewComponent = createJPasswordField();
-//    JPasswordFieldConnector connector = new JPasswordFieldConnector(
+//    PasswordFieldEx viewComponent = createPasswordField();
+//    PasswordFieldConnector connector = new PasswordFieldConnector(
 //        propertyDescriptor.getName(), viewComponent);
 //    connector.setExceptionHandler(actionHandler);
 //    adjustSizes(viewComponent, null, getStringTemplateValue(propertyDescriptor));
@@ -1619,16 +1628,11 @@ public abstract class DefaultEchoViewFactory implements
 //      ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
 //      @SuppressWarnings("unused")
 //      Locale locale) {
-//    JTextArea viewComponent = createJTextArea();
-//    viewComponent.setLineWrap(true);
-//    JScrollPane scrollPane = createJScrollPane();
-//    scrollPane.setViewportView(viewComponent);
-//    scrollPane
-//        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//    JTextAreaConnector connector = new JTextAreaConnector(propertyDescriptor
+//    TextAreaEx viewComponent = createTextArea();
+//    TextAreaConnector connector = new TextAreaConnector(propertyDescriptor
 //        .getName(), viewComponent);
 //    connector.setExceptionHandler(actionHandler);
-//    return constructView(scrollPane, null, connector);
+//    return constructView(viewComponent, null, connector);
 //  }
 //
 //  private IView<Component> createSourceCodePropertyView(
@@ -1636,12 +1640,7 @@ public abstract class DefaultEchoViewFactory implements
 //
 //      IActionHandler actionHandler, @SuppressWarnings("unused")
 //      Locale locale) {
-//    JEditTextArea viewComponent = createJEditTextArea(propertyDescriptor
-//        .getLanguage());
-//    JEditTextAreaConnector connector = new JEditTextAreaConnector(
-//        propertyDescriptor.getName(), viewComponent);
-//    connector.setExceptionHandler(actionHandler);
-//    return constructView(viewComponent, null, connector);
+//    return createTextPropertyView(propertyDescriptor, actionHandler, locale);
 //  }
 //
 //  private IView<Component> createCollectionPropertyView(
@@ -1654,7 +1653,13 @@ public abstract class DefaultEchoViewFactory implements
 //    if (renderedChildProperties != null && renderedChildProperties.size() > 1) {
 //      BasicTableViewDescriptor viewDescriptor = new BasicTableViewDescriptor();
 //      viewDescriptor.setModelDescriptor(propertyDescriptor);
-//      viewDescriptor.setRenderedProperties(renderedChildProperties);
+//      List<ISubViewDescriptor> columnViewDescriptors = new ArrayList<ISubViewDescriptor>();
+//      for (String renderedProperty : renderedChildProperties) {
+//        BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
+//        columnDescriptor.setName(renderedProperty);
+//        columnViewDescriptors.add(columnDescriptor);
+//      }
+//      viewDescriptor.setColumnViewDescriptors(columnViewDescriptors);
 //      viewDescriptor.setName(propertyDescriptor.getName());
 //      view = createTableView(viewDescriptor, actionHandler, locale);
 //    } else {
@@ -1730,9 +1735,9 @@ public abstract class DefaultEchoViewFactory implements
 //          (IPercentPropertyDescriptor) propertyDescriptor, actionHandler,
 //          locale);
 //    }
-//    JTextField viewComponent = createJTextField();
+//    TextFieldEx viewComponent = createTextField();
 //    IFormatter formatter = createDecimalFormatter(propertyDescriptor, locale);
-//    JFormattedFieldConnector connector = new JFormattedFieldConnector(
+//    FormattedFieldConnector connector = new FormattedFieldConnector(
 //        propertyDescriptor.getName(), viewComponent, formatter);
 //    connector.setExceptionHandler(actionHandler);
 //    adjustSizes(viewComponent, formatter,
@@ -1743,9 +1748,9 @@ public abstract class DefaultEchoViewFactory implements
 //  private IView<Component> createPercentPropertyView(
 //      IPercentPropertyDescriptor propertyDescriptor,
 //      IActionHandler actionHandler, Locale locale) {
-//    JTextField viewComponent = createJTextField();
+//    TextFieldEx viewComponent = createTextField();
 //    IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
-//    JFormattedFieldConnector connector = new JFormattedFieldConnector(
+//    FormattedFieldConnector connector = new FormattedFieldConnector(
 //        propertyDescriptor.getName(), viewComponent, formatter);
 //    connector.setExceptionHandler(actionHandler);
 //    adjustSizes(viewComponent, formatter,
@@ -1756,9 +1761,9 @@ public abstract class DefaultEchoViewFactory implements
 //  private IView<Component> createIntegerPropertyView(
 //      IIntegerPropertyDescriptor propertyDescriptor,
 //      IActionHandler actionHandler, Locale locale) {
-//    JTextField viewComponent = createJTextField();
+//    TextFieldEx viewComponent = createTextField();
 //    IFormatter formatter = createIntegerFormatter(propertyDescriptor, locale);
-//    JFormattedFieldConnector connector = new JFormattedFieldConnector(
+//    FormattedFieldConnector connector = new FormattedFieldConnector(
 //        propertyDescriptor.getName(), viewComponent, formatter);
 //    connector.setExceptionHandler(actionHandler);
 //    adjustSizes(viewComponent, formatter,
@@ -1769,17 +1774,15 @@ public abstract class DefaultEchoViewFactory implements
 //  private IView<Component> createEnumerationPropertyView(
 //      IEnumerationPropertyDescriptor propertyDescriptor,
 //      IActionHandler actionHandler, Locale locale) {
-//    JComboBox viewComponent = createJComboBox();
-//    for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
-//      viewComponent.addItem(enumElement);
-//    }
-//    viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
+//    SelectFieldEx viewComponent = createSelectField();
+//    viewComponent.setModel(new DefaultListModel(propertyDescriptor
+//        .getEnumerationValues().toArray()));
+//    viewComponent.setCellRenderer(new TranslatedEnumerationListCellRenderer(
 //        propertyDescriptor, locale));
 //    adjustSizes(viewComponent, null, getEnumerationTemplateValue(
-//        propertyDescriptor, locale), Toolkit.getDefaultToolkit()
-//        .getScreenResolution() / 3);
-//    JComboBoxConnector connector = new JComboBoxConnector(propertyDescriptor
-//        .getName(), viewComponent);
+//        propertyDescriptor, locale), 5);
+//    SelectFieldConnector connector = new SelectFieldConnector(
+//        propertyDescriptor.getName(), viewComponent);
 //    connector.setExceptionHandler(actionHandler);
 //    return constructView(viewComponent, null, connector);
 //  }
@@ -1812,16 +1815,16 @@ public abstract class DefaultEchoViewFactory implements
 //     * {@inheritDoc}
 //     */
 //    @Override
-//    public Component getListCellRendererComponent(JList list, Object value,
-//        int index, boolean isSelected, boolean cellHasFocus) {
-//      JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
-//          index, isSelected, cellHasFocus);
+//    public Object getListCellRendererComponent(@SuppressWarnings("unused")
+//    Component list, Object value, @SuppressWarnings("unused")
+//    int index) {
+//      Label label = new Label();
 //      label
 //          .setIcon(iconFactory.getIcon(propertyDescriptor
 //              .getIconImageURL(String.valueOf(value)),
 //              IIconFactory.TINY_ICON_SIZE));
 //      if (value != null) {
-//        setText(translationProvider.getTranslation(computeEnumerationKey(
+//        label.setText(translationProvider.getTranslation(computeEnumerationKey(
 //            propertyDescriptor.getEnumerationName(), value), locale));
 //      }
 //      return label;
@@ -1835,9 +1838,9 @@ public abstract class DefaultEchoViewFactory implements
 //  private IView<Component> createDurationPropertyView(
 //      IDurationPropertyDescriptor propertyDescriptor,
 //      IActionHandler actionHandler, Locale locale) {
-//    JTextField viewComponent = createJTextField();
+//    TextFieldEx viewComponent = createTextField();
 //    IFormatter formatter = createDurationFormatter(propertyDescriptor, locale);
-//    JFormattedFieldConnector connector = new JFormattedFieldConnector(
+//    FormattedFieldConnector connector = new FormattedFieldConnector(
 //        propertyDescriptor.getName(), viewComponent, formatter);
 //    connector.setExceptionHandler(actionHandler);
 //    adjustSizes(viewComponent, formatter,
@@ -1849,8 +1852,8 @@ public abstract class DefaultEchoViewFactory implements
 //      IBooleanPropertyDescriptor propertyDescriptor,
 //      IActionHandler actionHandler, @SuppressWarnings("unused")
 //      Locale locale) {
-//    JCheckBox viewComponent = createJCheckBox();
-//    JToggleButtonConnector connector = new JToggleButtonConnector(
+//    CheckBoxEx viewComponent = createCheckBox();
+//    ToggleButtonConnector connector = new ToggleButtonConnector(
 //        propertyDescriptor.getName(), viewComponent);
 //    connector.setExceptionHandler(actionHandler);
 //    return constructView(viewComponent, null, connector);
@@ -1877,175 +1880,6 @@ public abstract class DefaultEchoViewFactory implements
 //    BasicMapView<Component> view = new BasicMapView<Component>(viewComponent);
 //    view.setDescriptor(descriptor);
 //    return view;
-//  }
-//
-//  // ////////////////// //
-//  // Popup menu Section //
-//  // ////////////////// //
-//
-//  private final class PopupListener extends MouseAdapter {
-//
-//    private Component        sourceComponent;
-//    private IView<Component> view;
-//    private IActionHandler   actionHandler;
-//    private Locale           locale;
-//
-//    /**
-//     * Constructs a new <code>PopupListener</code> instance.
-//     *
-//     * @param sourceComponent
-//     * @param view
-//     * @param actionHandler
-//     * @param locale
-//     */
-//    public PopupListener(Component sourceComponent, IView<Component> view,
-//        IActionHandler actionHandler, Locale locale) {
-//      this.sourceComponent = sourceComponent;
-//      this.view = view;
-//      this.actionHandler = actionHandler;
-//      this.locale = locale;
-//    }
-//
-//    /**
-//     * {@inheritDoc}
-//     */
-//    @Override
-//    public void mousePressed(MouseEvent evt) {
-//      maybeShowPopup(evt);
-//    }
-//
-//    /**
-//     * {@inheritDoc}
-//     */
-//    @Override
-//    public void mouseReleased(MouseEvent evt) {
-//      maybeShowPopup(evt);
-//    }
-//
-//    private void maybeShowPopup(MouseEvent evt) {
-//      if (evt.isPopupTrigger()) {
-//        showPopupMenu(sourceComponent, view, evt, actionHandler, locale);
-//      }
-//    }
-//  }
-//
-//  private void showPopupMenu(Component sourceComponent, IView<Component> view,
-//      MouseEvent evt, IActionHandler actionHandler, Locale locale) {
-//    if (sourceComponent instanceof JTree) {
-//      showJTreePopupMenu((JTree) sourceComponent, view, evt, actionHandler,
-//          locale);
-//    } else if (sourceComponent instanceof JTable) {
-//      showJTablePopupMenu((JTable) sourceComponent, view, evt, actionHandler,
-//          locale);
-//    }
-//  }
-//
-//  private void showJTreePopupMenu(JTree tree, IView<Component> treeView,
-//      MouseEvent evt, IActionHandler actionHandler, Locale locale) {
-//    TreePath path = tree.getPathForLocation(evt.getX(), evt.getY());
-//    if (path == null) {
-//      return;
-//    }
-//
-//    if (!tree.isPathSelected(path)) {
-//      tree.setSelectionPath(path);
-//    }
-//    if (path.getLastPathComponent() instanceof ICollectionConnector) {
-//      TreePath[] allNodePaths = new TreePath[((ICollectionConnector) path
-//          .getLastPathComponent()).getChildConnectorCount()];
-//      for (int i = 0; i < allNodePaths.length; i++) {
-//        allNodePaths[i] = path.pathByAddingChild(((ICollectionConnector) path
-//            .getLastPathComponent()).getChildConnector(i));
-//      }
-//      tree.addSelectionPaths(allNodePaths);
-//    }
-//
-//    IValueConnector viewConnector = (IValueConnector) path
-//        .getLastPathComponent();
-//    IModelDescriptor modelDescriptor;
-//    Map<String, List<IDisplayableAction>> actionMap;
-//    IViewDescriptor viewDescriptor;
-//    if (viewConnector == tree.getModel().getRoot()) {
-//      modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-//      actionMap = treeView.getDescriptor().getActions();
-//      viewDescriptor = treeView.getDescriptor();
-//    } else {
-//      viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
-//          ((ITreeViewDescriptor) treeView.getDescriptor())
-//              .getRootSubtreeDescriptor(),
-//          getDescriptorPathFromConnectorTreePath(path))
-//          .getNodeGroupDescriptor();
-//      modelDescriptor = viewDescriptor.getModelDescriptor();
-//      actionMap = viewDescriptor.getActions();
-//      if (!(viewConnector instanceof ICollectionConnector)) {
-//        viewConnector = viewConnector.getParentConnector();
-//      }
-//    }
-//
-//    if (actionMap == null) {
-//      return;
-//    }
-//
-//    JPopupMenu popupMenu = createJPopupMenu(tree, actionMap, modelDescriptor,
-//        viewDescriptor, viewConnector, actionHandler, locale);
-//    popupMenu.show(tree, evt.getX(), evt.getY());
-//  }
-//
-//  private void showJTablePopupMenu(JTable table, IView<Component> tableView,
-//      MouseEvent evt, IActionHandler actionHandler, Locale locale) {
-//    int row = table.rowAtPoint(evt.getPoint());
-//    if (row < 0) {
-//      return;
-//    }
-//
-//    if (!table.isRowSelected(row)) {
-//      table.setRowSelectionInterval(row, row);
-//    }
-//
-//    IValueConnector elementConnector = tableView.getConnector();
-//    IModelDescriptor modelDescriptor = tableView.getDescriptor()
-//        .getModelDescriptor();
-//    Map<String, List<IDisplayableAction>> actionMap = ((ICollectionViewDescriptor) tableView
-//        .getDescriptor()).getActions();
-//
-//    if (actionMap == null) {
-//      return;
-//    }
-//
-//    JPopupMenu popupMenu = createJPopupMenu(table, actionMap, modelDescriptor,
-//        tableView.getDescriptor(), elementConnector, actionHandler, locale);
-//    popupMenu.show(table, evt.getX(), evt.getY());
-//  }
-//
-//  private JPopupMenu createJPopupMenu(Component sourceComponent,
-//      Map<String, List<IDisplayableAction>> actionMap,
-//      IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
-//      IValueConnector viewConnector, IActionHandler actionHandler, Locale locale) {
-//    JPopupMenu popupMenu = createJPopupMenu();
-//    JLabel titleLabel = createJLabel();
-//    titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
-//        locale));
-//    titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-//        IIconFactory.TINY_ICON_SIZE));
-//    titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-//    titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//    popupMenu.add(titleLabel);
-//    popupMenu.addSeparator();
-//    for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = actionMap
-//        .entrySet().iterator(); iter.hasNext();) {
-//      Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
-//      for (IDisplayableAction action : nextActionSet.getValue()) {
-//        Action swingAction = actionFactory.createAction(action, actionHandler,
-//            sourceComponent, modelDescriptor, viewConnector, locale);
-//        JMenuItem actionItem = createJMenuItem();
-//        actionItem.setAction(swingAction);
-//        popupMenu.add(actionItem);
-//      }
-//      if (iter.hasNext()) {
-//        popupMenu.addSeparator();
-//      }
-//    }
-//    return popupMenu;
 //  }
 //
 //  // /////////////// //
@@ -2079,6 +1913,9 @@ public abstract class DefaultEchoViewFactory implements
 //    if (propertyDescriptor instanceof IDatePropertyDescriptor) {
 //      return createDateFormatter((IDatePropertyDescriptor) propertyDescriptor,
 //          locale);
+//    } else if (propertyDescriptor instanceof ITimePropertyDescriptor) {
+//      return createTimeFormatter((ITimePropertyDescriptor) propertyDescriptor,
+//          locale);
 //    } else if (propertyDescriptor instanceof IDurationPropertyDescriptor) {
 //      return createDurationFormatter(
 //          (IDurationPropertyDescriptor) propertyDescriptor, locale);
@@ -2100,17 +1937,22 @@ public abstract class DefaultEchoViewFactory implements
 //    return TEMPLATE_DATE;
 //  }
 //
+//  private Object getTimeTemplateValue(@SuppressWarnings("unused")
+//  ITimePropertyDescriptor propertyDescriptor) {
+//    return TEMPLATE_TIME;
+//  }
+//
 //  private DateFormat createDateFormat(
 //      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
 //    DateFormat format;
 //    if (IDatePropertyDescriptor.DATE_TYPE.equals(propertyDescriptor.getType())) {
-//      format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
-//    } else if (IDatePropertyDescriptor.TIME_TYPE.equals(propertyDescriptor
-//        .getType())) {
-//      format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+//      format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
+//          .getDateInstance(DateFormat.SHORT, locale)).toLocalizedPattern(),
+//          locale);
 //    } else {
-//      format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
-//          DateFormat.SHORT, locale);
+//      format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
+//          .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale))
+//          .toLocalizedPattern(), locale);
 //    }
 //    return format;
 //  }
@@ -2118,6 +1960,17 @@ public abstract class DefaultEchoViewFactory implements
 //  private IFormatter createDateFormatter(
 //      IDatePropertyDescriptor propertyDescriptor, Locale locale) {
 //    return createFormatter(createDateFormat(propertyDescriptor, locale));
+//  }
+//
+//  private DateFormat createTimeFormat(@SuppressWarnings("unused")
+//  ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+//    DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+//    return format;
+//  }
+//
+//  private IFormatter createTimeFormatter(
+//      ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+//    return createFormatter(createTimeFormat(propertyDescriptor, locale));
 //  }
 //
 //  private IFormatter createFormatter(Format format) {
@@ -2251,14 +2104,14 @@ public abstract class DefaultEchoViewFactory implements
 //
 //  private void adjustSizes(Component component, IFormatter formatter,
 //      Object templateValue, int extraWidth) {
-//    int preferredWidth = computePixelWidth(component, getFormatLength(
-//        formatter, templateValue))
+//    int preferredWidth = computePixelWidth((Component) component,
+//        getFormatLength(formatter, templateValue))
 //        + extraWidth;
-//    Dimension size = new Dimension(preferredWidth,
-//        component.getPreferredSize().height);
-//    component.setPreferredSize(size);
-//    component.setMinimumSize(size);
-//    component.setMaximumSize(size);
+//    if (component instanceof Widthable) {
+//      ((Widthable) component).setWidth(new ExtentEx(preferredWidth));
+//    } else if (component instanceof TextComponent) {
+//      ((TextComponent) component).setWidth(new ExtentEx(preferredWidth));
+//    }
 //  }
 //
 //  private int computePixelWidth(Component component, int characterLength) {
@@ -2335,6 +2188,15 @@ public abstract class DefaultEchoViewFactory implements
 //  }
 //
 //  /**
+//   * Creates an image icon.
+//   *
+//   * @return the created image icon.
+//   */
+//  protected ImageIcon createImageIcon() {
+//    return new ImageIcon();
+//  }
+//
+//  /**
 //   * Creates a row.
 //   *
 //   * @return the created row.
@@ -2371,6 +2233,15 @@ public abstract class DefaultEchoViewFactory implements
 //  }
 //
 //  /**
+//   * Creates a border layout pane.
+//   *
+//   * @return the created border layout pane.
+//   */
+//  protected BorderLayoutPane createBorderLayoutPane() {
+//    return new BorderLayoutPane();
+//  }
+//
+//  /**
 //   * Creates a tree.
 //   *
 //   * @return the created tree.
@@ -2385,7 +2256,7 @@ public abstract class DefaultEchoViewFactory implements
 //   * @return the created table.
 //   */
 //  protected TableEx createTable() {
-//    return new TableEx();
+//    return new PageableSortableTable();
 //  }
 //
 //  /**
@@ -2458,6 +2329,17 @@ public abstract class DefaultEchoViewFactory implements
 //   */
 //  protected ContainerEx createPaneContainer() {
 //    return new ContainerEx();
+//  }
+//
+//  /**
+//   * Creates a scroll pane.
+//   *
+//   * @return the created scroll pane.
+//   */
+//  protected ContainerEx createScrollPane() {
+//    ContainerEx scrollPane = createPaneContainer();
+//    scrollPane.setScrollBarPolicy(Scrollable.AUTO);
+//    return scrollPane;
 //  }
 //
 //  /**
