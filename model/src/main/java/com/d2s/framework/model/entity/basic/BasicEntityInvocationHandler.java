@@ -24,6 +24,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
@@ -155,59 +156,57 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       }
       AccessorInfo accessorInfo = new AccessorInfo(method);
       int accessorType = accessorInfo.getAccessorType();
+      IPropertyDescriptor propertyDescriptor = null;
       if (accessorType != AccessorInfo.NONE) {
         String accessedPropertyName = accessorInfo.getAccessedPropertyName();
         if (accessedPropertyName != null) {
-          IPropertyDescriptor propertyDescriptor = entityDescriptor
+          propertyDescriptor = entityDescriptor
               .getPropertyDescriptor(accessedPropertyName);
-          if (propertyDescriptor != null) {
-            Class extensionClass = propertyDescriptor.getDelegateClass();
-            if (extensionClass != null) {
-              IEntityExtension extensionDelegate = getExtensionInstance(
-                  extensionClass, proxy);
-              return invokeExtensionMethod(extensionDelegate, method, args);
-            }
-            if (accessorInfo.isModifier()) {
-              if (modifierMonitors != null
-                  && modifierMonitors.contains(methodName)) {
-                return null;
+        }
+      }
+      if (propertyDescriptor != null) {
+        Class extensionClass = propertyDescriptor.getDelegateClass();
+        if (extensionClass != null) {
+          IEntityExtension extensionDelegate = getExtensionInstance(
+              extensionClass, proxy);
+          return invokeExtensionMethod(extensionDelegate, method, args);
+        }
+        if (accessorInfo.isModifier()) {
+          if (modifierMonitors != null && modifierMonitors.contains(methodName)) {
+            return null;
+          }
+          if (modifierMonitors == null) {
+            modifierMonitors = new HashSet<String>();
+          }
+          modifierMonitors.add(methodName);
+        }
+        try {
+          switch (accessorType) {
+            case AccessorInfo.GETTER:
+              return getProperty(proxy, propertyDescriptor);
+            case AccessorInfo.SETTER:
+              setProperty(proxy, propertyDescriptor, args[0]);
+              return null;
+            case AccessorInfo.ADDER:
+              if (args.length == 2) {
+                addToProperty(proxy,
+                    (ICollectionPropertyDescriptor) propertyDescriptor,
+                    ((Integer) args[0]).intValue(), args[1]);
+              } else {
+                addToProperty(proxy,
+                    (ICollectionPropertyDescriptor) propertyDescriptor, args[0]);
               }
-              if (modifierMonitors == null) {
-                modifierMonitors = new HashSet<String>();
-              }
-              modifierMonitors.add(methodName);
-            }
-            try {
-              switch (accessorType) {
-                case AccessorInfo.GETTER:
-                  return getProperty(proxy, propertyDescriptor);
-                case AccessorInfo.SETTER:
-                  setProperty(proxy, propertyDescriptor, args[0]);
-                  return null;
-                case AccessorInfo.ADDER:
-                  if (args.length == 2) {
-                    addToProperty(proxy,
-                        (ICollectionPropertyDescriptor) propertyDescriptor,
-                        ((Integer) args[0]).intValue(), args[1]);
-                  } else {
-                    addToProperty(proxy,
-                        (ICollectionPropertyDescriptor) propertyDescriptor,
-                        args[0]);
-                  }
-                  return null;
-                case AccessorInfo.REMOVER:
-                  removeFromProperty(proxy,
-                      (ICollectionPropertyDescriptor) propertyDescriptor,
-                      args[0]);
-                  return null;
-                default:
-                  break;
-              }
-            } finally {
-              if (modifierMonitors != null && accessorInfo.isModifier()) {
-                modifierMonitors.remove(methodName);
-              }
-            }
+              return null;
+            case AccessorInfo.REMOVER:
+              removeFromProperty(proxy,
+                  (ICollectionPropertyDescriptor) propertyDescriptor, args[0]);
+              return null;
+            default:
+              break;
+          }
+        } finally {
+          if (modifierMonitors != null && accessorInfo.isModifier()) {
+            modifierMonitors.remove(methodName);
           }
         }
       } else {
@@ -346,6 +345,10 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
                       ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
                           .getCollectionDescriptor().getElementDescriptor()
                           .getComponentContract());
+              if (reversePropertyAccessor instanceof IModelDescriptorAware) {
+                ((IModelDescriptorAware) reversePropertyAccessor)
+                    .setModelDescriptor(reversePropertyDescriptor);
+              }
               if (oldProperty != null) {
                 reversePropertyAccessor.removeFromValue(oldProperty, proxy);
               }
@@ -435,13 +438,18 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
                   .getElementDescriptor().getComponentContract()).setValue(
               value, proxy);
         } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-          accessorFactory.createCollectionPropertyAccessor(
-              reversePropertyDescriptor.getName(),
-              propertyDescriptor.getReferencedDescriptor()
-                  .getElementDescriptor().getComponentContract(),
-              ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
-                  .getCollectionDescriptor().getElementDescriptor()
-                  .getComponentContract()).addToValue(value, proxy);
+          ICollectionAccessor collectionAccessor = accessorFactory.createCollectionPropertyAccessor(
+                        reversePropertyDescriptor.getName(),
+                        propertyDescriptor.getReferencedDescriptor()
+                            .getElementDescriptor().getComponentContract(),
+                        ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                            .getCollectionDescriptor().getElementDescriptor()
+                            .getComponentContract());
+          if (collectionAccessor instanceof IModelDescriptorAware) {
+            ((IModelDescriptorAware) collectionAccessor)
+                .setModelDescriptor(reversePropertyDescriptor);
+          }
+          collectionAccessor.addToValue(value, proxy);
         }
       }
       Collection oldCollectionSnapshot = CollectionHelper
@@ -493,13 +501,18 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
                     .getElementDescriptor().getComponentContract()).setValue(
                 value, null);
           } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-            accessorFactory.createCollectionPropertyAccessor(
-                reversePropertyDescriptor.getName(),
-                propertyDescriptor.getReferencedDescriptor()
-                    .getElementDescriptor().getComponentContract(),
-                ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
-                    .getCollectionDescriptor().getElementDescriptor()
-                    .getComponentContract()).removeFromValue(value, proxy);
+            ICollectionAccessor collectionAccessor = accessorFactory.createCollectionPropertyAccessor(
+                            reversePropertyDescriptor.getName(),
+                            propertyDescriptor.getReferencedDescriptor()
+                                .getElementDescriptor().getComponentContract(),
+                            ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                                .getCollectionDescriptor().getElementDescriptor()
+                                .getComponentContract());
+            if (collectionAccessor instanceof IModelDescriptorAware) {
+              ((IModelDescriptorAware) collectionAccessor)
+                  .setModelDescriptor(reversePropertyDescriptor);
+            }
+            collectionAccessor.removeFromValue(value, proxy);
           }
         }
         Collection oldCollectionSnapshot = CollectionHelper
@@ -507,7 +520,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
         if (collectionProperty.remove(value)) {
           firePropertyChange(propertyName, oldCollectionSnapshot,
               collectionProperty);
-          propertyDescriptor.postprocessRemover(proxy, collectionProperty, value);
+          propertyDescriptor.postprocessRemover(proxy, collectionProperty,
+              value);
         }
       }
     } catch (IllegalAccessException ex) {

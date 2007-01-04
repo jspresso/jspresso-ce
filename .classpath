@@ -50,7 +50,7 @@
 	<classpathentry kind="var" path="M2_REPO/commons-beanutils/commons-beanutils-core/1.7.0/commons-beanutils-core-1.7.0.jar" sourcepath="/ENVDEV/commons-beanutils-1.7.0/commons-beanutils-1.7.0-src/src/java"/>
 	<classpathentry kind="var" path="M2_REPO/aspectwerkz/aspectwerkz/2.0/aspectwerkz-2.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/foxtrot/foxtrot/2.0/foxtrot-2.0.jar"/>
-	<classpathentry kind="var" path="M2_REPO/freemarker/freemarker/2.3.3/freemarker-2.3.3.jar" sourcepath="/ENVDEV/freemarker-2.3.3/src"/>
+	<classpathentry kind="var" path="M2_REPO/freemarker/freemarker/2.3.3/freemarker-2.3.3.jar" sourcepath="/ENVDEV/freemarker-2.3.4/src"/>
 	<classpathentry kind="var" path="M2_REPO/nachocalendar/nachocalendar/0.22/nachocalendar-0.22.jar" sourcepath="/ENVDEV/nachocalendar-0.22/src"/>
 	<classpathentry kind="var" path="M2_REPO/ulc/ulc-base-development/6.0.4/ulc-base-development-6.0.4.jar" sourcepath="/ENVDEV/ulc-6.0.4/base/src/ulc-base-development-src.jar"/>
 	<classpathentry kind="src" output="aop/target/classes" path="aop/src/main/java"/>

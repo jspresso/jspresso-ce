@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +28,7 @@ import com.d2s.framework.model.entity.IQueryEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -52,14 +53,24 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
             .getContract().getName());
         criteria.add(Example.create(queryEntity).ignoreCase().enableLike(
             MatchMode.START));
+        boolean abort = false;
         for (Map.Entry<String, Object> property : queryEntity
             .straightGetProperties().entrySet()) {
           if (property.getValue() instanceof IEntity) {
-            criteria.add(Restrictions
-                .eq(property.getKey(), property.getValue()));
+            if (!((IEntity) property.getValue()).isPersistent()) {
+              abort = true;
+            } else {
+              criteria.add(Restrictions.eq(property.getKey(), property
+                  .getValue()));
+            }
           }
         }
-        List entities = getHibernateTemplate(context).findByCriteria(criteria);
+        List entities;
+        if (abort) {
+          entities = new ArrayList<IEntity>();
+        } else {
+          entities = getHibernateTemplate(context).findByCriteria(criteria);
+        }
         status.setRollbackOnly();
         return entities;
       }
