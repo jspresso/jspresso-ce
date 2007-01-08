@@ -100,6 +100,11 @@ public class AccessorInfo {
         accessedPropertyName = computePropertyName(methodName, REMOVER_PREFIX);
         accessorType = REMOVER;
       }
+    } else if (methodArguments.length == 2) {
+      if (methodName.startsWith(ADDER_PREFIX)) {
+        accessedPropertyName = computePropertyName(methodName, ADDER_PREFIX);
+        accessorType = ADDER;
+      }
     }
   }
 
