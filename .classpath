@@ -86,6 +86,8 @@
 	<classpathentry kind="src" output="app-launch/target/classes" path="app-launch/src/main/java"/>
 	<classpathentry kind="src" output="echo/application/target" path="echo/application/src/main/java"/>
 	<classpathentry kind="src" output="echo/application/target" path="echo/application/src/main/resources"/>
+	<classpathentry kind="src" path="echo/components/src/main/java"/>
+	<classpathentry kind="src" path="echo/components/src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="M2_REPO/ulc/ulc-jnlp-client/6.0.4/ulc-jnlp-client-6.0.4.jar" sourcepath="/ENVDEV/ulc-6.0.4/environment/jnlp/src/ulc-jnlp-client-src.jar"/>
 	<classpathentry kind="src" output="app-launch/target/classes" path="app-launch/src/main/resources"/>
