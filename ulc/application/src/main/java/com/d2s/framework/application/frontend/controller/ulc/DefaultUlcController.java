@@ -16,6 +16,8 @@ import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 
+import org.springframework.dao.ConcurrencyFailureException;
+
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.model.Module;
@@ -517,6 +519,14 @@ public class DefaultUlcController extends
               getTranslationProvider(), getLocale())), getTranslationProvider()
               .getTranslation("ok", getLocale()), null, null, getIconFactory()
               .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+      alert.show();
+    } else if (ex instanceof ConcurrencyFailureException) {
+      ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          HtmlHelper.emphasis(getTranslationProvider().getTranslation(
+              "concurrency.error.description", getLocale())),
+          getTranslationProvider().getTranslation("ok", getLocale()), null,
+          null, getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
       alert.show();
     } else {
       ex.printStackTrace();

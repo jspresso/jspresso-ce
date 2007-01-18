@@ -39,6 +39,8 @@ import javax.swing.WindowConstants;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
+import org.springframework.dao.ConcurrencyFailureException;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.ControllerException;
@@ -567,6 +569,13 @@ public class DefaultSwingController extends
               getTranslationProvider(), getLocale())), getTranslationProvider()
           .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
           getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+    } else if (ex instanceof ConcurrencyFailureException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .emphasis(getTranslationProvider().getTranslation(
+              "concurrency.error.description", getLocale())),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
+              IIconFactory.LARGE_ICON_SIZE));
     } else {
       ex.printStackTrace();
       JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,

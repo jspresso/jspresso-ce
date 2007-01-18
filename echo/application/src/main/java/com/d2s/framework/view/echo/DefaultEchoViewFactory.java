@@ -19,7 +19,6 @@ import java.util.Map;
 
 import nextapp.echo2.app.Button;
 import nextapp.echo2.app.Color;
-import nextapp.echo2.app.Column;
 import nextapp.echo2.app.Component;
 import nextapp.echo2.app.Extent;
 import nextapp.echo2.app.Font;
@@ -79,7 +78,6 @@ import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IDatePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IDurationPropertyDescriptor;
