@@ -24,12 +24,17 @@
     <dependency>
       <groupId>ulc</groupId>
       <artifactId>ulc-base-development</artifactId>
-			<optional>true</optional>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>ulc</groupId>
       <artifactId>ulc-jnlp-client</artifactId>
-			<optional>true</optional>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>ulc</groupId>
+      <artifactId>ulc-servlet-client</artifactId>
+      <optional>true</optional>
     </dependency>
   </dependencies>
 </project>

@@ -112,5 +112,6 @@
 	<classpathentry kind="lib" path="C:/envdev/echo2/BinaryLibraries/Echo2_App.jar" sourcepath="C:/envdev/echo2/SourceCode/src"/>
 	<classpathentry kind="lib" path="C:/envdev/echo2_Extras/BinaryLibraries/Echo2_Extras_App.jar" sourcepath="C:/envdev/echo2_Extras/SourceCode/src/app/java"/>
 	<classpathentry kind="lib" path="C:/envdev/echopointng/jar/echopointng-2.1.0rc3.jar" sourcepath="C:/envdev/echopointng/projects/jar/src/app"/>
+	<classpathentry kind="var" path="M2_REPO/ulc/ulc-servlet-client/6.0.4/ulc-servlet-client-6.0.4.jar"/>
 	<classpathentry kind="output" path="target"/>
 </classpath>
