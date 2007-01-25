@@ -6,7 +6,7 @@ package com.d2s.framework.binding.model;
 import com.d2s.framework.model.IModelChangeListener;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.ModelChangeEvent;
-import com.d2s.framework.util.AbstractGate;
+import com.d2s.framework.util.gate.AbstractGate;
 
 /**
  * Base implementation of a model based gate.

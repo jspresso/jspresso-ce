@@ -6,8 +6,8 @@ package com.d2s.framework.model.descriptor;
 import java.util.Collection;
 import java.util.List;
 
-import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
+import com.d2s.framework.util.gate.IGate;
 
 /**
  * This interface is the super-interface of all properties descriptors.

@@ -12,8 +12,8 @@ import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
-import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.gate.IGate;
 
 /**
  * Default implementation for model connectors factory.

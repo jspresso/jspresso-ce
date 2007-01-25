@@ -6,8 +6,8 @@ package com.d2s.framework.view.descriptor;
 import java.util.Collection;
 
 import com.d2s.framework.model.descriptor.IModelDescriptor;
-import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
+import com.d2s.framework.util.gate.IGate;
 
 
 /**

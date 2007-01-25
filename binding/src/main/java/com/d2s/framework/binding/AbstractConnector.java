@@ -3,9 +3,6 @@
  */
 package com.d2s.framework.binding;
 
-import java.util.Collection;
-
-import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
 
 /**
@@ -14,7 +11,7 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -28,7 +25,7 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
    * Constructs a new AbstractConnector using an identifier. In case of a bean
    * connector, this identifier must be the bean property the connector
    * connects.
-   * 
+   *
    * @param id
    *          The connector identifier.
    */
@@ -65,24 +62,6 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
   @Override
   public AbstractConnector clone() {
     return clone(getId());
-  }
-
-  /**
-   * Returns true if and only if gates are null, empty or all open.
-   * 
-   * @param gates
-   *          the gates collection.
-   * @return gates status.
-   */
-  protected static boolean areGatesOpen(Collection<IGate> gates) {
-    if (gates != null) {
-      for (IGate gate : gates) {
-        if (!gate.isOpen()) {
-          return false;
-        }
-      }
-    }
-    return true;
   }
 
   /**

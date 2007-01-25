@@ -5,8 +5,8 @@ package com.d2s.framework.binding;
 
 import java.beans.PropertyChangeListener;
 
-import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.exception.IExceptionHandler;
+import com.d2s.framework.util.gate.IGate;
 
 /**
  * This public interface has to be implemented by any class which implements a

@@ -19,10 +19,10 @@ import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
-import com.d2s.framework.util.IGate;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
+import com.d2s.framework.util.gate.IGate;
 
 /**
  * This connector is a model property connector.

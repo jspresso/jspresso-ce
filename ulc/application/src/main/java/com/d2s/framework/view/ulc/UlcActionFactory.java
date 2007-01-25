@@ -3,16 +3,25 @@
  */
 package com.d2s.framework.view.ulc;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.swing.KeyStroke;
-
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
+import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.model.IModelGate;
+import com.d2s.framework.model.EmbeddedModelProvider;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.util.gate.GateHelper;
+import com.d2s.framework.util.gate.IGate;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IIconFactory;
@@ -21,6 +30,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.event.ActionEvent;
+import com.ulcjava.base.application.util.KeyStroke;
 import com.ulcjava.base.application.util.ULCIcon;
 
 /**
@@ -28,7 +38,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -53,8 +63,60 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       IActionHandler actionHandler, ULCComponent sourceComponent,
       IModelDescriptor modelDescriptor, IValueConnector viewConnector,
       Locale locale) {
-    return new ActionAdapter(action, actionHandler, sourceComponent,
-        modelDescriptor, viewConnector, locale);
+    IAction ulcAction = new ActionAdapter(action, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector, locale);
+    if (action.getActionabilityGates() != null) {
+      Collection<IGate> clonedGates = new HashSet<IGate>();
+      for (IGate gate : action.getActionabilityGates()) {
+        final IGate clonedGate = gate.clone();
+        if (modelDescriptor instanceof IComponentDescriptorProvider
+            && clonedGate instanceof IModelGate) {
+          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
+              (IComponentDescriptorProvider) modelDescriptor));
+          viewConnector
+              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                      .getModelProvider()).setModel(evt.getNewValue());
+                }
+              });
+        }
+        clonedGates.add(clonedGate);
+      }
+      new GatesListener(ulcAction, clonedGates);
+    }
+    return ulcAction;
+  }
+
+  private final class GatesListener implements PropertyChangeListener {
+
+    private IAction           action;
+    private Collection<IGate> gates;
+
+    /**
+     * Constructs a new <code>GatesListener</code> instance.
+     *
+     * @param action
+     *          the action to (de)activate based on gates state.
+     * @param gates
+     *          the gates that determine action state.
+     */
+    public GatesListener(IAction action, Collection<IGate> gates) {
+      this.action = action;
+      this.gates = gates;
+      for (IGate gate : gates) {
+        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
+      action.setEnabled(GateHelper.areGatesOpen(gates));
+    }
   }
 
   private final class ActionAdapter extends
@@ -70,7 +132,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
-     * 
+     *
      * @param action
      * @param actionHandler
      * @param sourceComponent
@@ -143,7 +205,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -153,7 +215,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */
