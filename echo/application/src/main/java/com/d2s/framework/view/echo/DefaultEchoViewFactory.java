@@ -19,6 +19,7 @@ import java.util.Map;
 
 import nextapp.echo2.app.Button;
 import nextapp.echo2.app.Color;
+import nextapp.echo2.app.Column;
 import nextapp.echo2.app.Component;
 import nextapp.echo2.app.Extent;
 import nextapp.echo2.app.Font;
@@ -78,6 +79,7 @@ import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IDatePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IDurationPropertyDescriptor;
@@ -1332,127 +1334,72 @@ public abstract class DefaultEchoViewFactory implements
     return viewDescriptor.getModelDescriptor().getName();
   }
 
-//FIXME uncomment
   private IView<Component> createComponentView(
       IComponentViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-//    ICompositeValueConnector connector = connectorFactory
-//        .createCompositeValueConnector(
-//            getConnectorIdForComponentView(viewDescriptor), null);
-//    Grid viewComponent = createGrid();
-//    viewComponent.setSize(viewDescriptor.getColumnCount());
-//    viewComponent.setOrientation(Grid.ORIENTATION_HORIZONTAL);
-//    IView<Component> view = constructView(viewComponent, viewDescriptor,
-//        connector);
-//
-//    for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
-//        .getPropertyViewDescriptors()) {
-//      String propertyName = propertyViewDescriptor.getName();
-//      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
-//          .getModelDescriptor()).getComponentDescriptor()
-//          .getPropertyDescriptor(propertyName);
-//      if (propertyDescriptor == null) {
-//        throw new ViewException("Property descriptor [" + propertyName
-//            + "] does not exist for model descriptor "
-//            + viewDescriptor.getModelDescriptor().getName() + ".");
-//      }
-//      IView<Component> propertyView = createPropertyView(propertyDescriptor,
-//          viewDescriptor.getRenderedChildProperties(propertyName),
-//          actionHandler, locale);
-//      propertyView.setParent(view);
-//      connector.addChildConnector(propertyView.getConnector());
-//      if (propertyViewDescriptor.getReadabilityGates() != null) {
-//        for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
-//          propertyView.getConnector().addReadabilityGate(gate.clone());
-//        }
-//      }
-//      if (propertyViewDescriptor.getWritabilityGates() != null) {
-//        for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
-//          propertyView.getConnector().addWritabilityGate(gate.clone());
-//        }
-//      }
-//      propertyView.getConnector().setLocallyWritable(
-//          !propertyViewDescriptor.isReadOnly());
-//      Label propertyLabel = createPropertyLabel(propertyDescriptor,
-//          propertyView.getPeer(), locale);
-//
-//      int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
-//      if (propertyWidth > viewDescriptor.getColumnCount()) {
-//        propertyWidth = viewDescriptor.getColumnCount();
-//      }
-//      // label positionning
-//      GridLayoutData constraints = new GridLayoutData();
-//      constraints.setColumnSpan(propertyWidth);
-//      Component cell = null;
-//      switch (viewDescriptor.getLabelsPosition()) {
-//        case IComponentViewDescriptor.ASIDE:
-//          cell = new Row();
-//          break;
-//        case IComponentViewDescriptor.ABOVE:
-//          cell = new Column();
-//          break;
-//        default:
-//          break;
-//      }
-//      viewComponent.add(propertyLabel, constraints);
-//
-//      // component positionning
-//      switch (viewDescriptor.getLabelsPosition()) {
-//        case IComponentViewDescriptor.ASIDE:
-//          constraints.gridx++;
-//          constraints.insets = new Insets(5, 0, 5, 5);
-//          constraints.gridwidth = propertyWidth * 2 - 1;
-//          break;
-//        case IComponentViewDescriptor.ABOVE:
-//          constraints.gridy++;
-//          constraints.insets = new Insets(0, 5, 0, 5);
-//          constraints.gridwidth = propertyWidth;
-//          break;
-//        default:
-//          break;
-//      }
-//
-//      constraints.anchor = GridBagConstraints.WEST;
-//      // constraints.weightx = 1.0;
-//      constraints.weightx = propertyView.getPeer().getPreferredSize().width;
-//      if (propertyView.getPeer() instanceof JTextArea
-//          || propertyView.getPeer() instanceof JList
-//          || propertyView.getPeer() instanceof JScrollPane
-//          || propertyView.getPeer() instanceof JTable
-//          || propertyView.getPeer() instanceof JEditTextArea) {
-//        constraints.weighty = 1.0;
-//        constraints.fill = GridBagConstraints.BOTH;
-//        isSpaceFilled = true;
-//      } else {
-//        constraints.fill = GridBagConstraints.NONE;
-//      }
-//      viewComponent.add(propertyView.getPeer(), constraints);
-//
-//      currentX += propertyWidth;
-//    }
-//    if (!isSpaceFilled) {
-//      JPanel filler = createJPanel();
-//      GridBagConstraints constraints = new GridBagConstraints();
-//      constraints.gridx = 0;
-//      constraints.weightx = 1.0;
-//      constraints.weighty = 1.0;
-//      constraints.fill = GridBagConstraints.BOTH;
-//      switch (viewDescriptor.getLabelsPosition()) {
-//        case IComponentViewDescriptor.ASIDE:
-//          constraints.gridy = currentY + 1;
-//          constraints.gridwidth = viewDescriptor.getColumnCount() * 2;
-//          break;
-//        case IComponentViewDescriptor.ABOVE:
-//          constraints.gridy = (currentY + 1) * 2;
-//          constraints.gridwidth = viewDescriptor.getColumnCount();
-//          break;
-//        default:
-//          break;
-//      }
-//      viewComponent.add(filler, constraints);
-//    }
-//    return view;
-    return null;
+    ICompositeValueConnector connector = connectorFactory
+        .createCompositeValueConnector(
+            getConnectorIdForComponentView(viewDescriptor), null);
+    Grid viewComponent = createGrid();
+    viewComponent.setSize(viewDescriptor.getColumnCount());
+    viewComponent.setOrientation(Grid.ORIENTATION_HORIZONTAL);
+    IView<Component> view = constructView(viewComponent, viewDescriptor,
+        connector);
+
+    for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
+        .getPropertyViewDescriptors()) {
+      String propertyName = propertyViewDescriptor.getName();
+      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
+          .getModelDescriptor()).getComponentDescriptor()
+          .getPropertyDescriptor(propertyName);
+      if (propertyDescriptor == null) {
+        throw new ViewException("Property descriptor [" + propertyName
+            + "] does not exist for model descriptor "
+            + viewDescriptor.getModelDescriptor().getName() + ".");
+      }
+      IView<Component> propertyView = createPropertyView(propertyDescriptor,
+          viewDescriptor.getRenderedChildProperties(propertyName),
+          actionHandler, locale);
+      propertyView.setParent(view);
+      connector.addChildConnector(propertyView.getConnector());
+      if (propertyViewDescriptor.getReadabilityGates() != null) {
+        for (IGate gate : propertyViewDescriptor.getReadabilityGates()) {
+          propertyView.getConnector().addReadabilityGate(gate.clone());
+        }
+      }
+      if (propertyViewDescriptor.getWritabilityGates() != null) {
+        for (IGate gate : propertyViewDescriptor.getWritabilityGates()) {
+          propertyView.getConnector().addWritabilityGate(gate.clone());
+        }
+      }
+      propertyView.getConnector().setLocallyWritable(
+          !propertyViewDescriptor.isReadOnly());
+      Label propertyLabel = createPropertyLabel(propertyDescriptor,
+          propertyView.getPeer(), locale);
+
+      int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
+      if (propertyWidth > viewDescriptor.getColumnCount()) {
+        propertyWidth = viewDescriptor.getColumnCount();
+      }
+      // label positionning
+      GridLayoutData constraints = new GridLayoutData();
+      constraints.setColumnSpan(propertyWidth);
+      Component cell = null;
+      switch (viewDescriptor.getLabelsPosition()) {
+        case IComponentViewDescriptor.ASIDE:
+          cell = new Row();
+          break;
+        case IComponentViewDescriptor.ABOVE:
+          cell = new Column();
+          break;
+        default:
+          break;
+      }
+      cell.add(propertyLabel);
+      cell.add(propertyView.getPeer());
+      cell.setLayoutData(constraints);
+    }
+    return view;
   }
 
   private Label createPropertyLabel(IPropertyDescriptor propertyDescriptor,
