@@ -89,6 +89,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
 
     resultViewDescriptor.setName("queriedEntities.table");
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
+    resultViewDescriptor.setReadOnly(true);
     return resultViewDescriptor;
   }
 }
