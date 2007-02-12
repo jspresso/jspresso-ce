@@ -4,14 +4,7 @@
 package com.d2s.framework.application.frontend.controller.wings;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.MouseAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,39 +16,32 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JComponent;
-import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
 
 import org.springframework.dao.ConcurrencyFailureException;
+import org.wings.SBorderLayout;
+import org.wings.SComponent;
+import org.wings.SDesktopPane;
+import org.wings.SFrame;
+import org.wings.SIcon;
+import org.wings.SInternalFrame;
+import org.wings.SMenu;
+import org.wings.SMenuBar;
+import org.wings.SMenuItem;
+import org.wings.SOptionPane;
+import org.wings.SSeparator;
+import org.wings.event.SInternalFrameAdapter;
+import org.wings.event.SInternalFrameEvent;
 
-import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
-import com.d2s.framework.application.ControllerException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.gui.swing.components.JErrorDialog;
-import com.d2s.framework.security.swing.DialogCallbackHandler;
+import com.d2s.framework.security.wings.DialogCallbackHandler;
 import com.d2s.framework.util.exception.BusinessException;
 import com.d2s.framework.util.html.HtmlHelper;
 import com.d2s.framework.util.swing.SwingUtil;
-import com.d2s.framework.util.swing.WaitCursorEventQueue;
-import com.d2s.framework.util.swing.WaitCursorTimer;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
@@ -64,7 +50,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
 import foxtrot.Job;
 
 /**
- * Default implementation of a swing frontend controller. This implementation is
+ * Default implementation of a wings frontend controller. This implementation is
  * usable "as-is".
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
@@ -74,15 +60,13 @@ import foxtrot.Job;
  * @author Vincent Vandenschrick
  */
 public class DefaultWingsController extends
-    AbstractFrontendController<JComponent, Icon, Action> {
+    AbstractFrontendController<SComponent, SIcon, Action> {
 
-  private JFrame                      controllerFrame;
-  private Map<String, JInternalFrame> moduleInternalFrames;
-
-  private WaitCursorTimer             waitTimer;
+  private SFrame                      controllerFrame;
+  private Map<String, SInternalFrame> moduleInternalFrames;
 
   /**
-   * Creates the initial view from the root view descriptor, then a JFrame
+   * Creates the initial view from the root view descriptor, then a SFrame
    * containing this view and presents it to the user.
    * <p>
    * {@inheritDoc}
@@ -90,8 +74,6 @@ public class DefaultWingsController extends
   @Override
   public boolean start(IBackendController backendController, Locale locale) {
     if (super.start(backendController, locale)) {
-      Toolkit.getDefaultToolkit().getSystemEventQueue().push(
-          new WaitCursorEventQueue(500));
       CallbackHandler callbackHandler = getLoginCallbackHandler();
       if (callbackHandler instanceof DialogCallbackHandler) {
         ((DialogCallbackHandler) callbackHandler)
@@ -108,15 +90,7 @@ public class DefaultWingsController extends
   }
 
   private void displayControllerFrame() {
-    waitTimer = new WaitCursorTimer(500);
-    waitTimer.setDaemon(true);
-    waitTimer.start();
     controllerFrame = createControllerFrame();
-    controllerFrame.pack();
-    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-    controllerFrame.setSize(1100, 800);
-    SwingUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
     controllerFrame.setVisible(true);
   }
@@ -161,10 +135,7 @@ public class DefaultWingsController extends
   @Override
   public boolean stop() {
     if (super.stop()) {
-      if (controllerFrame != null) {
-        controllerFrame.dispose();
-      }
-      System.exit(0);
+      controllerFrame.getSession().exit();
       return true;
     }
     return false;
@@ -176,41 +147,30 @@ public class DefaultWingsController extends
   @Override
   protected void displayModule(String moduleId) {
     if (moduleInternalFrames == null) {
-      moduleInternalFrames = new HashMap<String, JInternalFrame>();
+      moduleInternalFrames = new HashMap<String, SInternalFrame>();
     }
-    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
+    SInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
     if (moduleInternalFrame == null) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       IValueConnector moduleConnector = getBackendController()
           .getModuleConnector(moduleId);
-      IView<JComponent> moduleView = createModuleView(moduleId,
+      IView<SComponent> moduleView = createModuleView(moduleId,
           moduleDescriptor, (Module) moduleConnector.getConnectorValue());
       moduleInternalFrame = createJInternalFrame(moduleView);
-      moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
+      moduleInternalFrame.setIcon(getIconFactory().getIcon(
           moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
       moduleInternalFrame
           .addInternalFrameListener(new ModuleInternalFrameListener(moduleId));
       moduleInternalFrames.put(moduleId, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
-      moduleInternalFrame.pack();
-      moduleInternalFrame.setSize(controllerFrame.getSize());
     }
     moduleInternalFrame.setVisible(true);
-    if (moduleInternalFrame.isIcon()) {
-      try {
-        moduleInternalFrame.setIcon(false);
-      } catch (PropertyVetoException ex) {
-        throw new ControllerException(ex);
-      }
+    if (moduleInternalFrame.isIconified()) {
+      moduleInternalFrame.setIconified(false);
     }
-    try {
-      moduleInternalFrame.setMaximum(true);
-    } catch (PropertyVetoException ex) {
-      throw new ControllerException(ex);
-    }
+    moduleInternalFrame.setMaximized(true);
     setSelectedModuleId(moduleId);
-    moduleInternalFrame.toFront();
     super.displayModule(moduleId);
   }
 
@@ -226,7 +186,7 @@ public class DefaultWingsController extends
     }
   }
 
-  private final class ModuleInternalFrameListener extends InternalFrameAdapter {
+  private final class ModuleInternalFrameListener extends SInternalFrameAdapter {
 
     private String moduleId;
 
@@ -244,8 +204,8 @@ public class DefaultWingsController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameActivated(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    public void internalFrameMaximized(@SuppressWarnings("unused")
+    SInternalFrameEvent e) {
       setSelectedModuleId(moduleId);
     }
 
@@ -254,7 +214,7 @@ public class DefaultWingsController extends
      */
     @Override
     public void internalFrameDeiconified(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    SInternalFrameEvent e) {
       setSelectedModuleId(moduleId);
     }
 
@@ -263,7 +223,7 @@ public class DefaultWingsController extends
      */
     @Override
     public void internalFrameOpened(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    SInternalFrameEvent e) {
       setSelectedModuleId(moduleId);
     }
 
@@ -271,17 +231,8 @@ public class DefaultWingsController extends
      * {@inheritDoc}
      */
     @Override
-    public void internalFrameDeactivated(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedModuleId(null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void internalFrameIconified(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
+    SInternalFrameEvent e) {
       setSelectedModuleId(null);
     }
 
@@ -293,56 +244,53 @@ public class DefaultWingsController extends
   @Override
   protected void setSelectedModuleId(String moduleId) {
     super.setSelectedModuleId(moduleId);
+    for (Map.Entry<String, SInternalFrame> moduleEntry : moduleInternalFrames
+        .entrySet()) {
+      SInternalFrame moduleFrame = moduleEntry.getValue();
+      if (moduleId != null && moduleId.equals(moduleEntry.getKey())) {
+        if (moduleFrame.isIconified()) {
+          moduleFrame.setIconified(false);
+        }
+      } else {
+        moduleFrame.setIconified(true);
+      }
+    }
     updateFrameTitle();
   }
 
-  private JFrame createControllerFrame() {
-    JFrame frame = new JFrame();
-    frame.setContentPane(new JDesktopPane());
-    frame.setIconImage(((ImageIcon) getIconFactory().getIcon(getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE)).getImage());
-    frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    frame.setJMenuBar(createApplicationMenuBar());
-    frame.setGlassPane(createHermeticGlassPane());
-    frame.addWindowListener(new WindowAdapter() {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void windowClosing(@SuppressWarnings("unused")
-      WindowEvent e) {
-        stop();
-      }
-    });
+  private SFrame createControllerFrame() {
+    SFrame frame = new SFrame();
+    frame.setContentPane(new SDesktopPane());
+    frame.getContentPane().setLayout(new SBorderLayout());
+    frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
     return frame;
   }
 
-  private JMenuBar createApplicationMenuBar() {
-    JMenuBar applicationMenuBar = new JMenuBar();
+  private SMenuBar createApplicationMenuBar() {
+    SMenuBar applicationMenuBar = new SMenuBar();
     applicationMenuBar.add(createModulesMenu());
-    List<JMenu> actionMenus = createActionMenus();
+    List<SMenu> actionMenus = createActionMenus();
     if (actionMenus != null) {
-      for (JMenu actionMenu : actionMenus) {
+      for (SMenu actionMenu : actionMenus) {
         applicationMenuBar.add(actionMenu);
       }
     }
     return applicationMenuBar;
   }
 
-  private JMenu createModulesMenu() {
-    JMenu modulesMenu = new JMenu(getTranslationProvider().getTranslation(
+  private SMenu createModulesMenu() {
+    SMenu modulesMenu = new SMenu(getTranslationProvider().getTranslation(
         "modules", getLocale()));
     // modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
     // IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      JMenuItem moduleMenuItem = new JMenuItem(new ModuleSelectionAction(
+      SMenuItem moduleMenuItem = new SMenuItem(new ModuleSelectionAction(
           moduleId, moduleDescriptor));
       modulesMenu.add(moduleMenuItem);
     }
-    modulesMenu.addSeparator();
-    modulesMenu.add(new JMenuItem(new QuitAction()));
+    modulesMenu.add(new SSeparator());
+    modulesMenu.add(new SMenuItem(new QuitAction()));
     return modulesMenu;
   }
 
@@ -410,9 +358,9 @@ public class DefaultWingsController extends
     }
   }
 
-  private List<JMenu> createActionMenus() {
+  private List<SMenu> createActionMenus() {
     Map<String, List<IDisplayableAction>> actions = getActions();
-    List<JMenu> actionMenus = new ArrayList<JMenu>();
+    List<SMenu> actionMenus = new ArrayList<SMenu>();
     if (actions != null) {
       for (Map.Entry<String, List<IDisplayableAction>> actionList : actions
           .entrySet()) {
@@ -423,47 +371,33 @@ public class DefaultWingsController extends
     return actionMenus;
   }
 
-  private JMenu createActionMenu(String titleKey,
+  private SMenu createActionMenu(String titleKey,
       List<IDisplayableAction> actionList) {
-    JMenu menu = new JMenu(getTranslationProvider().getTranslation(titleKey,
+    SMenu menu = new SMenu(getTranslationProvider().getTranslation(titleKey,
         getLocale()));
     for (IDisplayableAction action : actionList) {
-      menu.add(new JMenuItem(getViewFactory().getActionFactory().createAction(
+      menu.add(new SMenuItem(getViewFactory().getActionFactory().createAction(
           action, this, menu, null, null, getLocale())));
     }
     return menu;
   }
 
   /**
-   * Creates a new JInternalFrame and populates it with a view.
+   * Creates a new SInternalFrame and populates it with a view.
    *
    * @param view
    *          the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
-  private JInternalFrame createJInternalFrame(IView<JComponent> view) {
-    JInternalFrame internalFrame = new JInternalFrame(view.getDescriptor()
-        .getI18nName(getTranslationProvider(), getLocale()));
-    internalFrame.setResizable(true);
+  private SInternalFrame createJInternalFrame(IView<SComponent> view) {
+    SInternalFrame internalFrame = new SInternalFrame();
+    internalFrame.setTitle(view.getDescriptor().getI18nName(
+        getTranslationProvider(), getLocale()));
     internalFrame.setClosable(false);
     internalFrame.setMaximizable(true);
-    internalFrame.setIconifiable(true);
+    internalFrame.setIconifyable(true);
     internalFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);
-    internalFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
-    internalFrame.setGlassPane(createHermeticGlassPane());
     return internalFrame;
-  }
-
-  private JComponent createHermeticGlassPane() {
-    JPanel glassPane = new JPanel();
-    glassPane.setOpaque(false);
-    glassPane.addMouseListener(new MouseAdapter() {
-      // No-op
-    });
-    glassPane.addKeyListener(new KeyAdapter() {
-      // No-op
-    });
-    return glassPane;
   }
 
   /**
@@ -517,80 +451,42 @@ public class DefaultWingsController extends
   /**
    * {@inheritDoc}
    */
-  @Override
-  public boolean execute(IAction action, Map<String, Object> context) {
-    if (action == null) {
-      return true;
-    }
-    JComponent sourceComponent = (JComponent) context
-        .get(ActionContextConstants.SOURCE_COMPONENT);
-    Component windowOrInternalFrame = null;
-    if (sourceComponent != null) {
-      windowOrInternalFrame = SwingUtil
-          .getWindowOrInternalFrame(sourceComponent);
-    }
-    if (windowOrInternalFrame instanceof JFrame) {
-      ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(true);
-    } else if (windowOrInternalFrame instanceof JInternalFrame) {
-      ((JInternalFrame) windowOrInternalFrame).getGlassPane().setVisible(true);
-    } else if (windowOrInternalFrame instanceof JDialog) {
-      ((JDialog) windowOrInternalFrame).getGlassPane().setVisible(true);
-    }
-    waitTimer.startTimer(sourceComponent);
-    try {
-      return super.execute(action, context);
-    } finally {
-      if (windowOrInternalFrame instanceof JFrame) {
-        ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(false);
-      } else if (windowOrInternalFrame instanceof JInternalFrame) {
-        ((JInternalFrame) windowOrInternalFrame).getGlassPane().setVisible(
-            false);
-      } else if (windowOrInternalFrame instanceof JDialog) {
-        ((JDialog) windowOrInternalFrame).getGlassPane().setVisible(false);
-      }
-      waitTimer.stopTimer();
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void handleException(Throwable ex, @SuppressWarnings("unused")
   Map<String, Object> context) {
-    Component sourceComponent = controllerFrame;
+    SComponent sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
+      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
           .getMessage()), getTranslationProvider().getTranslation("error",
-          getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
-          .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          getLocale()), SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof BusinessException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .emphasis(((BusinessException) ex).getI18nMessage(
               getTranslationProvider(), getLocale())), getTranslationProvider()
-          .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
-          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+          .getTranslation("error", getLocale()), SOptionPane.ERROR_MESSAGE);
     } else if (ex instanceof ConcurrencyFailureException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
           .emphasis(getTranslationProvider().getTranslation(
               "concurrency.error.description", getLocale())),
           getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
+          SOptionPane.ERROR_MESSAGE);
     } else {
       ex.printStackTrace();
-      JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,
-          getTranslationProvider(), getLocale());
-      dialog.setMessageIcon(getIconFactory().getErrorIcon(
-          IIconFactory.MEDIUM_ICON_SIZE));
-      dialog.setTitle(getTranslationProvider().getTranslation("error",
-          getLocale()));
-      dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
-      dialog.setDetails(ex);
-      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-      dialog.setSize(8 * screenRes, 3 * screenRes);
-      dialog.pack();
-      SwingUtil.centerOnScreen(dialog);
-      dialog.setVisible(true);
+      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
+          .getMessage()), getTranslationProvider().getTranslation("error",
+          getLocale()), SOptionPane.ERROR_MESSAGE);
+      // FIXME handle detailed error dialogs.
+      // JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,
+      // getTranslationProvider(), getLocale());
+      // dialog.setMessageIcon(getIconFactory().getErrorIcon(
+      // IIconFactory.MEDIUM_ICON_SIZE));
+      // dialog.setTitle(getTranslationProvider().getTranslation("error",
+      // getLocale()));
+      // dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
+      // dialog.setDetails(ex);
+      // int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+      // dialog.setSize(8 * screenRes, 3 * screenRes);
+      // dialog.pack();
+      // dialog.setVisible(true);
     }
   }
 
