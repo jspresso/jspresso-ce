@@ -84,10 +84,10 @@
 	<classpathentry kind="src" output="app-template/target/classes" path="app-template/src/main/java"/>
 	<classpathentry kind="src" output="app-template/target/classes" path="app-template/src/main/resources"/>
 	<classpathentry kind="src" output="app-launch/target/classes" path="app-launch/src/main/java"/>
-	<classpathentry kind="src" output="echo/application/target" path="echo/application/src/main/java"/>
-	<classpathentry kind="src" output="echo/application/target" path="echo/application/src/main/resources"/>
-	<classpathentry kind="src" path="echo/components/src/main/java"/>
-	<classpathentry kind="src" path="echo/components/src/main/resources"/>
+	<classpathentry kind="src" output="wings/application/target/classes" path="wings/application/src/main/java"/>
+	<classpathentry kind="src" output="wings/components/target/classes" path="wings/components/src/main/java"/>
+	<classpathentry kind="src" output="wings/components/target/classes" path="wings/components/src/main/resources"/>
+	<classpathentry kind="src" output="wings/application/target/classes" path="wings/application/src/main/resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="M2_REPO/ulc/ulc-jnlp-client/6.0.4/ulc-jnlp-client-6.0.4.jar" sourcepath="/ENVDEV/ulc-6.0.4/environment/jnlp/src/ulc-jnlp-client-src.jar"/>
 	<classpathentry kind="src" output="app-launch/target/classes" path="app-launch/src/main/resources"/>
@@ -113,5 +113,7 @@
 	<classpathentry kind="lib" path="C:/envdev/echo2_Extras/BinaryLibraries/Echo2_Extras_App.jar" sourcepath="C:/envdev/echo2_Extras/SourceCode/src/app/java"/>
 	<classpathentry kind="lib" path="C:/envdev/echopointng/jar/echopointng-2.1.0rc3.jar" sourcepath="C:/envdev/echopointng/projects/jar/src/app"/>
 	<classpathentry kind="var" path="M2_REPO/ulc/ulc-servlet-client/6.0.4/ulc-servlet-client-6.0.4.jar"/>
-	<classpathentry kind="output" path="target"/>
+	<classpathentry kind="lib" path="C:/envdev/WingS/wings2/build/web/WEB-INF/lib/wings.jar" sourcepath="C:/envdev/WingS/wings2/src/java"/>
+	<classpathentry kind="lib" path="C:/envdev/WingS/wingx2/build/web/WEB-INF/lib/wingx.jar" sourcepath="C:/envdev/WingS/wingx2/src/java"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

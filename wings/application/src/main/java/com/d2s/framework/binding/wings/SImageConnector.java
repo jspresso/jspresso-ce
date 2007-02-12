@@ -1,10 +1,10 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.binding.swing;
+package com.d2s.framework.binding.wings;
 
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
+import org.wings.SByteArrayIcon;
+import org.wings.SLabel;
 
 /**
  * A connector on a label whose role is to render an image based on its binary
@@ -12,31 +12,31 @@ import javax.swing.JLabel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class JImageConnector extends JComponentConnector<JLabel> {
+public class SImageConnector extends SComponentConnector<SLabel> {
 
   private byte[] binaryValue;
 
   /**
    * Constructs a new <code>JImageConnector</code> instance.
-   * 
+   *
    * @param id
    *          the id of the connector.
-   * @param connectedJComponent
-   *          the connected JLabel.
+   * @param label
+   *          the connected SLabel.
    */
-  public JImageConnector(String id, JLabel connectedJComponent) {
-    super(id, connectedJComponent);
+  public SImageConnector(String id, SLabel label) {
+    super(id, label);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected void bindJComponent() {
+  protected void bindSComponent() {
     // NO-OP. this is a "read-only" connector.
   }
 
@@ -52,12 +52,12 @@ public class JImageConnector extends JComponentConnector<JLabel> {
    * {@inheritDoc}
    */
   @Override
-  protected void protectedSetConnecteeValue(Object connecteeValue) {
+  protected void setConnecteeValue(Object connecteeValue) {
     this.binaryValue = (byte[]) connecteeValue;
     if (binaryValue != null) {
-      getConnectedJComponent().setIcon(new ImageIcon(binaryValue));
+      getConnectedSComponent().setIcon(new SByteArrayIcon(binaryValue));
     } else {
-      getConnectedJComponent().setIcon(null);
+      getConnectedSComponent().setIcon(null);
     }
   }
 }
