@@ -7,8 +7,6 @@ import org.wings.SComponent;
 import org.wings.STable;
 import org.wings.table.SDefaultTableCellRenderer;
 
-import com.d2s.framework.util.wings.WingsUtil;
-
 /**
  * A default table cell renderer rendering even and odd rows background slightly
  * differently.
@@ -29,14 +27,15 @@ public class EvenOddTableCellRenderer extends SDefaultTableCellRenderer {
   @Override
   public SComponent getTableCellRendererComponent(STable table, Object value,
       boolean isSelected, int row, int column) {
-    SComponent renderer = super.getTableCellRendererComponent(table, value,
-        isSelected, row, column);
-    WingsUtil.alternateEvenOddBackground(renderer, table, isSelected, row);
-    if (isSelected && table.getModel().isCellEditable(row, column)) {
-      renderer.setBackground(renderer.getBackground().brighter());
-      renderer.setForeground(table.getForeground());
-    }
-    return renderer;
+    // SComponent renderer = super.getTableCellRendererComponent(table, value,
+    // isSelected, row, column);
+    // WingsUtil.alternateEvenOddBackground(renderer, table, isSelected, row);
+    // if (isSelected && table.getModel().isCellEditable(row, column)) {
+    // renderer.setBackground(renderer.getBackground().brighter());
+    // renderer.setForeground(table.getForeground());
+    // }
+    return super.getTableCellRendererComponent(table, value, isSelected, row,
+        column);
   }
 
 }

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
+	<configExtensions>
+		<configExtension>xml</configExtension>
+	</configExtensions>
 	<configs>
-		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/ulc/commons-ulc.xml</config>
 		<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
-		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/swing/commons-swing.xml</config>
-		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/wings/commons-wings.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/ulc/commons-ulc.xml</config>
 		<config>app-template/src/main/resources/com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/swing/commons-swing.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
-			<name>d2s-template-swing</name>
+			<name>D2sTemplateSwing</name>
 			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
 			<incomplete>true</incomplete>
 			<configs>
@@ -20,7 +24,7 @@
 			</configs>
 		</configSet>
 		<configSet>
-			<name>d2s-template-ulc</name>
+			<name>D2sTemplateUlc</name>
 			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
 			<incomplete>true</incomplete>
 			<configs>
@@ -28,6 +32,17 @@
 				<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
 				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
 				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/ulc/commons-ulc.xml</config>
+			</configs>
+		</configSet>
+		<configSet>
+			<name>D2sTemplateWings</name>
+			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
+			<incomplete>true</incomplete>
+			<configs>
+				<config>app-template/src/main/resources/com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/wings/commons-wings.xml</config>
 			</configs>
 		</configSet>
 	</configSets>

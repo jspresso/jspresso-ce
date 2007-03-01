@@ -14,13 +14,10 @@ import javax.swing.Action;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SDimension;
-import org.wings.SForm;
 import org.wings.SGridBagLayout;
 import org.wings.SPanel;
 import org.wings.STextField;
 import org.wings.border.SBevelBorder;
-import org.wings.border.SBorder;
-import org.wings.border.SEmptyBorder;
 import org.wings.event.SDocumentListener;
 
 import com.d2s.framework.util.lang.ObjectUtils;
@@ -37,7 +34,7 @@ import com.d2s.framework.util.lang.ObjectUtils;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SActionField extends SForm {
+public class SActionField extends SPanel  {
 
   private static final long serialVersionUID = 5741890319182521808L;
 
@@ -61,9 +58,7 @@ public class SActionField extends SForm {
       add(textField, new GridBagConstraints(0, 0, 1, 1, 1, 0,
           GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
               0, 0, 0, 0), 0, 0));
-      SBorder border = textField.getBorder();
-      textField.setBorder(new SEmptyBorder(1, 5, 1, 5));
-      setBorder(border);
+      textField.setPreferredSize(SDimension.FULLWIDTH);
     }
     this.showTextField = showTextField;
     buttonPanel = new SPanel();
@@ -101,22 +96,15 @@ public class SActionField extends SForm {
       this.actions = actions;
       for (Action action : actions) {
         SButton actionButton = new SButton();
-        actionButton.setBackground(textField.getBackground());
         actionButton.setAction(action);
         actionButton.setActionCommand("%");
-        actionButton.setText("");
-        int buttonSquareSize;
+        actionButton.setText(null);
         if (showTextField) {
-          buttonSquareSize = textField.getPreferredSize().getHeightInt();
           if (defaultAction == null) {
             defaultAction = action;
             textField.addActionListener(action);
           }
-        } else {
-          buttonSquareSize = actionButton.getPreferredSize().getHeightInt();
         }
-        actionButton.setPreferredSize(new SDimension(buttonSquareSize,
-            buttonSquareSize));
         buttonPanel.add(actionButton);
       }
     }
@@ -166,8 +154,7 @@ public class SActionField extends SForm {
    * performs the registered action programatically.
    */
   public void performAction() {
-    defaultAction.actionPerformed(
-        new ActionEvent(this, 0, getActionText()));
+    defaultAction.actionPerformed(new ActionEvent(this, 0, getActionText()));
   }
 
   /**

@@ -21,7 +21,6 @@ import com.d2s.framework.binding.IRenderableCompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.Coordinates;
 import com.d2s.framework.util.exception.IExceptionHandler;
-import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * This class implements a table model backed by a collection connector. As
@@ -212,37 +211,32 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(final ConnectorValueChangeEvent evt) {
-      SwingUtil.updateSwingGui(new Runnable() {
-
-        public void run() {
-          Collection<?> oldCollection = null;
-          if (evt.getOldValue() instanceof Collection) {
-            oldCollection = (Collection<?>) evt.getOldValue();
-          }
-          Collection<?> newCollection = (Collection<?>) evt.getNewValue();
-          int oldCollectionSize = 0;
-          int newCollectionSize = 0;
-          if (oldCollection != null) {
-            oldCollectionSize = oldCollection.size();
-          }
-          if (newCollection != null) {
-            newCollectionSize = newCollection.size();
-          }
-          if (newCollectionSize > oldCollectionSize) {
-            fireTableRowsInserted(oldCollectionSize, newCollectionSize - 1);
-            for (int row = oldCollectionSize; row < newCollectionSize; row++) {
-              bindChildRowConnector(row);
-            }
-          } else if (newCollectionSize < oldCollectionSize) {
-            fireTableRowsDeleted(newCollectionSize, oldCollectionSize - 1);
-          }
-          if (evt.getNewValue() != null
-              && !((Collection<?>) evt.getNewValue()).isEmpty()) {
-            collectionConnector.setSelectedIndices(new int[] {0});
-          }
+    public void connectorValueChange(ConnectorValueChangeEvent evt) {
+      Collection<?> oldCollection = null;
+      if (evt.getOldValue() instanceof Collection) {
+        oldCollection = (Collection<?>) evt.getOldValue();
+      }
+      Collection<?> newCollection = (Collection<?>) evt.getNewValue();
+      int oldCollectionSize = 0;
+      int newCollectionSize = 0;
+      if (oldCollection != null) {
+        oldCollectionSize = oldCollection.size();
+      }
+      if (newCollection != null) {
+        newCollectionSize = newCollection.size();
+      }
+      if (newCollectionSize > oldCollectionSize) {
+        fireTableRowsInserted(oldCollectionSize, newCollectionSize - 1);
+        for (int row = oldCollectionSize; row < newCollectionSize; row++) {
+          bindChildRowConnector(row);
         }
-      });
+      } else if (newCollectionSize < oldCollectionSize) {
+        fireTableRowsDeleted(newCollectionSize, oldCollectionSize - 1);
+      }
+      if (evt.getNewValue() != null
+          && !((Collection<?>) evt.getNewValue()).isEmpty()) {
+        collectionConnector.setSelectedIndices(new int[] {0});
+      }
     }
   }
 
@@ -259,21 +253,15 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
      * {@inheritDoc}
      */
     public void connectorValueChange(@SuppressWarnings("unused")
-    final ConnectorValueChangeEvent evt) {
-      SwingUtil.updateSwingGui(new Runnable() {
-
-        public void run() {
-          if (row < getRowCount()) {
-            fireTableRowsUpdated(row, row);
-          }
-          if (collectionConnector.getSelectedIndices() != null) {
-            if (Arrays.binarySearch(collectionConnector.getSelectedIndices(),
-                row) >= 0) {
-              collectionConnector.setSelectedIndices(new int[0]);
-            }
-          }
+    ConnectorValueChangeEvent evt) {
+      if (row < getRowCount()) {
+        fireTableRowsUpdated(row, row);
+      }
+      if (collectionConnector.getSelectedIndices() != null) {
+        if (Arrays.binarySearch(collectionConnector.getSelectedIndices(), row) >= 0) {
+          collectionConnector.setSelectedIndices(new int[0]);
         }
-      });
+      }
     }
   }
 
@@ -303,14 +291,9 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     }
 
     private void updateCell() {
-      SwingUtil.updateSwingGui(new Runnable() {
-
-        public void run() {
-          if (cell.getX() < getRowCount()) {
-            fireTableCellUpdated(cell.getX(), cell.getY());
-          }
-        }
-      });
+      if (cell.getX() < getRowCount()) {
+        fireTableCellUpdated(cell.getX(), cell.getY());
+      }
     }
   }
 

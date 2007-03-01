@@ -14,7 +14,6 @@ import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IRenderableCompositeValueConnector;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * This class implements a list model backed by a collection connector. As
@@ -23,7 +22,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -35,7 +34,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
 
   /**
    * Constructs a new <code>CollectionConnectorListModel</code> instance.
-   * 
+   *
    * @param collectionConnector
    *          the collection connector holding the values of this list model.
    */
@@ -107,31 +106,26 @@ public class CollectionConnectorListModel extends AbstractListModel {
      * {@inheritDoc}
      */
     public void connectorValueChange(final ConnectorValueChangeEvent evt) {
-      SwingUtil.updateSwingGui(new Runnable() {
-
-        public void run() {
-          Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
-          Collection<?> newCollection = (Collection<?>) evt.getNewValue();
-          int oldCollectionSize = 0;
-          int newCollectionSize = 0;
-          if (oldCollection != null) {
-            oldCollectionSize = oldCollection.size();
-          }
-          if (newCollection != null) {
-            newCollectionSize = newCollection.size();
-          }
-          if (newCollectionSize > oldCollectionSize) {
-            fireIntervalAdded(CollectionConnectorListModel.this,
-                oldCollectionSize, newCollectionSize);
-            for (int index = oldCollectionSize; index < newCollectionSize; index++) {
-              bindChildConnector(index);
-            }
-          } else if (newCollectionSize < oldCollectionSize) {
-            fireIntervalRemoved(CollectionConnectorListModel.this,
-                oldCollectionSize, newCollectionSize);
-          }
+      Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
+      Collection<?> newCollection = (Collection<?>) evt.getNewValue();
+      int oldCollectionSize = 0;
+      int newCollectionSize = 0;
+      if (oldCollection != null) {
+        oldCollectionSize = oldCollection.size();
+      }
+      if (newCollection != null) {
+        newCollectionSize = newCollection.size();
+      }
+      if (newCollectionSize > oldCollectionSize) {
+        fireIntervalAdded(CollectionConnectorListModel.this, oldCollectionSize,
+            newCollectionSize);
+        for (int index = oldCollectionSize; index < newCollectionSize; index++) {
+          bindChildConnector(index);
         }
-      });
+      } else if (newCollectionSize < oldCollectionSize) {
+        fireIntervalRemoved(CollectionConnectorListModel.this,
+            oldCollectionSize, newCollectionSize);
+      }
     }
   }
 
@@ -148,13 +142,8 @@ public class CollectionConnectorListModel extends AbstractListModel {
      * {@inheritDoc}
      */
     public void connectorValueChange(@SuppressWarnings("unused")
-    final ConnectorValueChangeEvent evt) {
-      SwingUtil.updateSwingGui(new Runnable() {
-
-        public void run() {
-          fireContentsChanged(CollectionConnectorListModel.this, index, index);
-        }
-      });
+    ConnectorValueChangeEvent evt) {
+      fireContentsChanged(CollectionConnectorListModel.this, index, index);
     }
   }
 }

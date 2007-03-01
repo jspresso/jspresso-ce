@@ -14,7 +14,6 @@ import com.d2s.framework.util.IIndexMapper;
 import com.d2s.framework.util.event.ISelectable;
 import com.d2s.framework.util.event.ISelectionChangeListener;
 import com.d2s.framework.util.event.SelectionChangeEvent;
-import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * Default implementation of <code>IListSelectionModelBinder</code>.
@@ -43,7 +42,7 @@ public class DefaultListSelectionModelBinder implements
       ISelectionChangeListener {
 
     private SListSelectionModel selectionModel;
-    private IIndexMapper       rowMapper;
+    private IIndexMapper        rowMapper;
 
     /**
      * Constructs a new <code>SelectionChangeListener</code> instance.
@@ -63,59 +62,53 @@ public class DefaultListSelectionModelBinder implements
      * <p>
      * {@inheritDoc}
      */
-    public void selectionChange(final SelectionChangeEvent evt) {
-      SwingUtil.updateSwingGui(new Runnable() {
+    public void selectionChange(SelectionChangeEvent evt) {
+      if (evt.getNewSelection() == null || evt.getNewSelection().length == 0) {
+        selectionModel.clearSelection();
+        return;
+      }
+      int[] viewIndices;
+      if (rowMapper != null) {
+        int[] modelIndices = evt.getNewSelection().clone();
+        viewIndices = new int[modelIndices.length];
+        for (int i = 0; i < modelIndices.length; i++) {
+          viewIndices[i] = rowMapper.viewIndex(modelIndices[i]);
+        }
+      } else {
+        viewIndices = evt.getNewSelection().clone();
+      }
 
-        public void run() {
-          if (evt.getNewSelection() == null
-              || evt.getNewSelection().length == 0) {
-            selectionModel.clearSelection();
-            return;
-          }
-          int[] viewIndices;
-          if (rowMapper != null) {
-            int[] modelIndices = evt.getNewSelection().clone();
-            viewIndices = new int[modelIndices.length];
-            for (int i = 0; i < modelIndices.length; i++) {
-              viewIndices[i] = rowMapper.viewIndex(modelIndices[i]);
-            }
-          } else {
-            viewIndices = evt.getNewSelection().clone();
-          }
+      Arrays.sort(viewIndices);
+      int[] selectedIndices = getSelectedIndices(selectionModel);
+      Arrays.sort(selectedIndices);
+      if (Arrays.equals(viewIndices, selectedIndices)) {
+        return;
+      }
 
-          Arrays.sort(viewIndices);
-          int[] selectedIndices = getSelectedIndices(selectionModel);
-          Arrays.sort(selectedIndices);
-          if (Arrays.equals(viewIndices, selectedIndices)) {
-            return;
-          }
-
-          int nextRangeMin = viewIndices[0];
-          int nextRangeMax = nextRangeMin;
-          boolean firstSelection = true;
-          for (int index : viewIndices) {
-            if (index == nextRangeMax + 1) {
-              // contiguous selection
-              nextRangeMax = index;
-            } else if (index != nextRangeMax) {
-              if (firstSelection) {
-                selectionModel.setSelectionInterval(nextRangeMin, nextRangeMax);
-                firstSelection = false;
-              } else {
-                selectionModel.addSelectionInterval(nextRangeMin, nextRangeMax);
-              }
-              nextRangeMin = index;
-              nextRangeMax = nextRangeMin;
-            }
-          }
+      int nextRangeMin = viewIndices[0];
+      int nextRangeMax = nextRangeMin;
+      boolean firstSelection = true;
+      for (int index : viewIndices) {
+        if (index == nextRangeMax + 1) {
+          // contiguous selection
+          nextRangeMax = index;
+        } else if (index != nextRangeMax) {
           if (firstSelection) {
             selectionModel.setSelectionInterval(nextRangeMin, nextRangeMax);
             firstSelection = false;
           } else {
             selectionModel.addSelectionInterval(nextRangeMin, nextRangeMax);
           }
+          nextRangeMin = index;
+          nextRangeMax = nextRangeMin;
         }
-      });
+      }
+      if (firstSelection) {
+        selectionModel.setSelectionInterval(nextRangeMin, nextRangeMax);
+        firstSelection = false;
+      } else {
+        selectionModel.addSelectionInterval(nextRangeMin, nextRangeMax);
+      }
     }
   }
 

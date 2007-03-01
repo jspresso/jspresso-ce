@@ -7,8 +7,10 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.net.URL;
 
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
+
+import org.wings.SIcon;
+import org.wings.SImageIcon;
 
 import com.d2s.framework.util.url.UrlHelper;
 import com.d2s.framework.view.AbstractIconFactory;
@@ -18,17 +20,17 @@ import com.d2s.framework.view.AbstractIconFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class WingsIconFactory extends AbstractIconFactory<Icon> {
+public class WingsIconFactory extends AbstractIconFactory<SIcon> {
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected Icon createIcon(String urlSpec, Dimension iconSize) {
+  protected SIcon createIcon(String urlSpec, Dimension iconSize) {
     if (urlSpec != null) {
       URL imageURL = UrlHelper.createURL(urlSpec);
       if (imageURL != null) {
@@ -36,7 +38,7 @@ public class WingsIconFactory extends AbstractIconFactory<Icon> {
         imageIcon.setImage(imageIcon.getImage().getScaledInstance(
             (int) iconSize.getWidth(), (int) iconSize.getHeight(),
             Image.SCALE_SMOOTH));
-        return imageIcon;
+        return new SImageIcon(imageIcon);
       }
     }
     return null;

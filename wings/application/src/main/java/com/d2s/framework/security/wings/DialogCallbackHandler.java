@@ -29,6 +29,7 @@ import org.wings.SPanel;
 import org.wings.SPasswordField;
 import org.wings.STextField;
 
+import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.IIconFactory;
 
@@ -42,12 +43,14 @@ import com.d2s.framework.view.IIconFactory;
  */
 public class DialogCallbackHandler implements CallbackHandler {
 
-  private SComponent            parentComponent;
-  private IIconFactory<SIcon>   iconFactory;
-  private static final Insets  DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
+  private SComponent               parentComponent;
+  private ICallbackHandlerListener callbackHandlerListener;
 
-  private Locale               locale;
-  private ITranslationProvider translationProvider;
+  private IIconFactory<SIcon>      iconFactory;
+  private static final Insets      DEFAULT_INSETS = new Insets(5, 5, 5, 5);
+
+  private Locale                   locale;
+  private ITranslationProvider     translationProvider;
 
   private SIcon getIcon(TextOutputCallback callback)
       throws UnsupportedCallbackException {
@@ -210,7 +213,7 @@ public class DialogCallbackHandler implements CallbackHandler {
           public void actionPerformed(@SuppressWarnings("unused")
           ActionEvent e) {
             cc.setSelectedIndex(optionIndex);
-            callbackDialog.dispose();
+            endClientSideLoginProcess(callbackDialog);
           }
         });
         optionPanel.add(optionButton, constraints);
@@ -344,7 +347,7 @@ public class DialogCallbackHandler implements CallbackHandler {
             proceedAction.actionPerformed(e);
           }
           cc.setSelectedIndex(option);
-          callbackDialog.dispose();
+          endClientSideLoginProcess(callbackDialog);
         }
       });
     } else {
@@ -360,7 +363,7 @@ public class DialogCallbackHandler implements CallbackHandler {
         public void actionPerformed(@SuppressWarnings("unused")
         ActionEvent e) {
           cc.setSelectedIndex(option);
-          callbackDialog.dispose();
+          endClientSideLoginProcess(callbackDialog);
         }
       });
     }
@@ -388,6 +391,24 @@ public class DialogCallbackHandler implements CallbackHandler {
    */
   public void setParentComponent(SComponent parentComponent) {
     this.parentComponent = parentComponent;
+  }
+
+  /**
+   * Sets the callbackHandlerListener.
+   *
+   * @param callbackHandlerListener
+   *          the callbackHandlerListener to set.
+   */
+  public void setCallbackHandlerListener(
+      ICallbackHandlerListener callbackHandlerListener) {
+    this.callbackHandlerListener = callbackHandlerListener;
+  }
+
+  private void endClientSideLoginProcess(SDialog callbackDialog) {
+    if (callbackHandlerListener != null) {
+      callbackHandlerListener.callbackHandlingComplete();
+    }
+    callbackDialog.dispose();
   }
 
   /**

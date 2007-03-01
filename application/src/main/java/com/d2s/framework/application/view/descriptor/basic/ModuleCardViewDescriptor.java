@@ -20,7 +20,7 @@ import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -28,7 +28,7 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
 
   /**
    * Constructs a new <code>ModuleCardViewDescriptor</code> instance.
-   * 
+   *
    * @param module
    *          the module.
    */

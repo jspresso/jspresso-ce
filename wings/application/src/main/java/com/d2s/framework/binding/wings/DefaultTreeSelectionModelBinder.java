@@ -24,7 +24,6 @@ import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.event.ISelectionChangeListener;
 import com.d2s.framework.util.event.SelectionChangeEvent;
-import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * Default implementation of <code>ITreeSelectionModelBinder</code>.
@@ -158,37 +157,28 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * {@inheritDoc}
      */
-    public void selectionChange(final SelectionChangeEvent evt) {
-      SwingUtil.updateSwingGui(new Runnable() {
+    public void selectionChange(SelectionChangeEvent evt) {
+      ICollectionConnector connector = (ICollectionConnector) evt.getSource();
+      int[] oldSelection = evt.getOldSelection();
+      int[] newSelection = evt.getNewSelection();
 
-        public void run() {
-          ICollectionConnector connector = (ICollectionConnector) evt
-              .getSource();
-          int[] oldSelection = evt.getOldSelection();
-          int[] newSelection = evt.getNewSelection();
-
-          if (oldSelection != null) {
-            for (int i : oldSelection) {
-              if (newSelection == null
-                  || Arrays.binarySearch(newSelection, i) < 0) {
-                selectionModel
-                    .removeSelectionPath(getTreePathForConnector(connector
-                        .getChildConnector(i)));
-              }
-            }
-          }
-          if (newSelection != null) {
-            for (int i : newSelection) {
-              if (oldSelection == null
-                  || Arrays.binarySearch(oldSelection, i) < 0) {
-                selectionModel
-                    .addSelectionPath(getTreePathForConnector(connector
-                        .getChildConnector(i)));
-              }
-            }
+      if (oldSelection != null) {
+        for (int i : oldSelection) {
+          if (newSelection == null || Arrays.binarySearch(newSelection, i) < 0) {
+            selectionModel
+                .removeSelectionPath(getTreePathForConnector(connector
+                    .getChildConnector(i)));
           }
         }
-      });
+      }
+      if (newSelection != null) {
+        for (int i : newSelection) {
+          if (oldSelection == null || Arrays.binarySearch(oldSelection, i) < 0) {
+            selectionModel.addSelectionPath(getTreePathForConnector(connector
+                .getChildConnector(i)));
+          }
+        }
+      }
     }
 
     private TreePath getTreePathForConnector(IValueConnector connector) {

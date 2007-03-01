@@ -12,7 +12,6 @@ import org.wings.STable;
 import org.wings.table.STableCellRenderer;
 
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.util.wings.WingsUtil;
 
 /**
  * Renders a table cell using a checkbox.
@@ -80,7 +79,8 @@ public class BooleanTableCellRenderer extends SCheckBox implements
    * {@inheritDoc}
    */
   public SComponent getTableCellRendererComponent(STable table, Object value,
-      boolean isSelected, int row, @SuppressWarnings("unused")
+      boolean isSelected, @SuppressWarnings("unused")
+      int row, @SuppressWarnings("unused")
       int column) {
     if (isSelected) {
       super.setForeground(table.getSelectionForeground());
@@ -104,7 +104,6 @@ public class BooleanTableCellRenderer extends SCheckBox implements
     } else {
       setSelected((value != null && ((Boolean) value).booleanValue()));
     }
-    WingsUtil.alternateEvenOddBackground(this, table, isSelected, row);
     return this;
   }
 }

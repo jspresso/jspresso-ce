@@ -421,11 +421,10 @@ public abstract class AbstractValueConnector extends AbstractConnector
           IValueConnector.WRITABLE_PROPERTY, writableListener);
       getModelConnector()
           .boundAsModel(this, readableListener, writableListener);
-      connectorModelChange(oldModelConnector, getModelConnector());
     } else {
       setConnectorValue(null);
-      updateState();
     }
+    connectorModelChange(oldModelConnector, getModelConnector());
   }
 
   /**
@@ -439,7 +438,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   @SuppressWarnings("unused")
   protected void connectorModelChange(IValueConnector oldModelConnector,
       IValueConnector newModelConnector) {
-    // Default empty impl.
+    updateState();
   }
 
   /**
@@ -561,7 +560,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     boolean readable = isReadable();
     firePropertyChange(READABLE_PROPERTY, !readable, readable);
     boolean writable = isWritable();
-    firePropertyChange(READABLE_PROPERTY, !writable, writable);
+    firePropertyChange(WRITABLE_PROPERTY, !writable, writable);
   }
 
   /**

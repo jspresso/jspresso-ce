@@ -13,7 +13,7 @@ import com.d2s.framework.action.IActionHandler;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,15 +27,14 @@ public class DisplayStaticUrlAction extends DisplayUrlAction {
   @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    context.put(ActionContextConstants.ACTION_PARAM, getBaseUrl()
-        + getTranslationProvider(context).getTranslation(urlKey,
-            getLocale(context)));
+    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
+        context).getTranslation(urlKey, getLocale(context)));
     return super.execute(actionHandler, context);
   }
 
   /**
    * Sets the urlKey.
-   * 
+   *
    * @param urlKey
    *          the urlKey to set.
    */

@@ -6,12 +6,14 @@ package com.d2s.framework.view.wings;
 import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
+import javax.swing.event.CellEditorListener;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.EventListenerList;
+
 import org.wings.SAbstractButton;
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.SDefaultCellEditor;
 import org.wings.STable;
-import org.wings.STextComponent;
 import org.wings.table.STableCellEditor;
 
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
@@ -31,11 +33,13 @@ import com.d2s.framework.view.IView;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
-    STableCellEditor {
+public class WingsViewCellEditorAdapter implements STableCellEditor,
+    IConnectorValueChangeListener {
 
   private static final long serialVersionUID = 8182961519931949735L;
   private IView<SComponent> editorView;
+  private EventListenerList listenerList;
+  private IValueConnector   modelConnector;
 
   /**
    * Constructs a new <code>WingsViewCellEditorAdapter</code> instance.
@@ -44,27 +48,16 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
    *          the swing view used as editor.
    */
   public WingsViewCellEditorAdapter(IView<SComponent> editorView) {
-    super(editorView.getPeer(), true);
+    this.listenerList = new EventListenerList();
     this.editorView = editorView;
     if (editorView.getPeer() instanceof SAbstractButton) {
       ((SAbstractButton) editorView.getPeer())
           .setHorizontalAlignment(SConstants.CENTER);
     }
 
-    if (!(editorView.getPeer() instanceof STextComponent)) {
-      editorView.getConnector().addConnectorValueChangeListener(
-          new IConnectorValueChangeListener() {
-
-            public void connectorValueChange(@SuppressWarnings("unused")
-            ConnectorValueChangeEvent evt) {
-              stopCellEditing();
-            }
-          });
-    }
-
+    modelConnector = new BasicValueConnector(editorView.getConnector().getId());
     // To prevent the editor from being read-only.
-    editorView.getConnector().setModelConnector(
-        new BasicValueConnector(editorView.getConnector().getId()));
+    editorView.getConnector().setModelConnector(modelConnector);
   }
 
   /**
@@ -72,19 +65,18 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
    * <p>
    * {@inheritDoc}
    */
-  @Override
   @SuppressWarnings("unused")
   public SComponent getTableCellEditorComponent(STable table, Object value,
       boolean isSelected, int row, int column) {
-    IValueConnector editorConnector = editorView.getConnector();
+    modelConnector.removeConnectorValueChangeListener(this);
     if (value instanceof IValueConnector) {
-      editorConnector.setConnectorValue(((IValueConnector) value)
+      modelConnector.setConnectorValue(((IValueConnector) value)
           .getConnectorValue());
     } else {
-      editorConnector.setConnectorValue(value);
+      modelConnector.setConnectorValue(value);
     }
-    return super.getTableCellEditorComponent(table, value, isSelected, row,
-        column);
+    modelConnector.addConnectorValueChangeListener(this);
+    return editorView.getPeer();
   }
 
   /**
@@ -92,7 +84,6 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public Object getCellEditorValue() {
     return editorView.getConnector().getConnectorValue();
   }
@@ -104,7 +95,6 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
    *          an event object
    * @return true
    */
-  @Override
   public boolean shouldSelectCell(@SuppressWarnings("unused")
   EventObject anEvent) {
     return true;
@@ -115,7 +105,6 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
    *
    * @return true
    */
-  @Override
   public boolean stopCellEditing() {
     fireEditingStopped();
     return true;
@@ -124,7 +113,6 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
   /**
    * Calls <code>fireEditingCanceled</code>.
    */
-  @Override
   public void cancelCellEditing() {
     fireEditingCanceled();
   }
@@ -134,7 +122,6 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public boolean isCellEditable(EventObject anEvent) {
     if (anEvent instanceof MouseEvent) {
       if (editorView.getPeer() instanceof SAbstractButton
@@ -144,7 +131,7 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
       }
       return ((MouseEvent) anEvent).getClickCount() >= 2;
     }
-    return super.isCellEditable(anEvent);
+    return true;
   }
 
   /**
@@ -156,4 +143,65 @@ public class WingsViewCellEditorAdapter extends SDefaultCellEditor implements
     return editorView;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public void addCellEditorListener(CellEditorListener l) {
+    listenerList.add(CellEditorListener.class, l);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeCellEditorListener(CellEditorListener l) {
+    listenerList.remove(CellEditorListener.class, l);
+  }
+
+  private ChangeEvent changeEvent = null;
+
+  /**
+   * Notify all listeners that have registered interest for notification on this
+   * event type. The event instance is lazily created using the parameters
+   * passed into the fire method.
+   *
+   * @see EventListenerList
+   */
+  protected void fireEditingStopped() {
+    Object[] listeners = listenerList.getListenerList();
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+      if (listeners[i] == CellEditorListener.class) {
+        if (changeEvent == null) {
+          changeEvent = new ChangeEvent(this);
+        }
+        ((CellEditorListener) listeners[i + 1]).editingStopped(changeEvent);
+      }
+    }
+  }
+
+  /**
+   * Notify all listeners that have registered interest for notification on this
+   * event type. The event instance is lazily created using the parameters
+   * passed into the fire method.
+   *
+   * @see EventListenerList
+   */
+  protected void fireEditingCanceled() {
+    Object[] listeners = listenerList.getListenerList();
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+      if (listeners[i] == CellEditorListener.class) {
+        if (changeEvent == null) {
+          changeEvent = new ChangeEvent(this);
+        }
+        ((CellEditorListener) listeners[i + 1]).editingCanceled(changeEvent);
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void connectorValueChange(@SuppressWarnings("unused")
+  ConnectorValueChangeEvent evt) {
+    stopCellEditing();
+  }
 }

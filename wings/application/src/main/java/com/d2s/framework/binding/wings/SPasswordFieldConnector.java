@@ -41,6 +41,10 @@ public class SPasswordFieldConnector extends STextFieldConnector {
    */
   @Override
   protected Object getConnecteeValue() {
-    return getConnectedSComponent().getText();
+    String password = (String) super.getConnecteeValue();
+    if (password != null) {
+      return password.toCharArray();
+    }
+    return null;
   }
 }

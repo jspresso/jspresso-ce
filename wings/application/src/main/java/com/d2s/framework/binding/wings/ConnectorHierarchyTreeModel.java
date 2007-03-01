@@ -23,7 +23,6 @@ import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * This tree model maps a connector hierarchy.
@@ -180,88 +179,81 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     /**
      * {@inheritDoc}
      */
-    public void connectorValueChange(final ConnectorValueChangeEvent evt) {
-      SwingUtil.updateSwingGui(new Runnable() {
-
-        public void run() {
-          IValueConnector connector = evt.getSource();
-          if (connector == rootConnector) {
-            fireTreeStructureChanged(ConnectorHierarchyTreeModel.this,
-                new TreePath(rootConnector));
-            return;
+    public void connectorValueChange(ConnectorValueChangeEvent evt) {
+      IValueConnector connector = evt.getSource();
+      if (connector == rootConnector) {
+        fireTreeStructureChanged(ConnectorHierarchyTreeModel.this,
+            new TreePath(rootConnector));
+        return;
+      }
+      if (connector instanceof ICollectionConnector
+          && connector.getConnectorValue() != null) {
+        // don't know why but this fixes a tree repaint bug
+        // when the root connector is assigned a null value.
+        TreePath connectorPath = getTreePathForConnector(connector);
+        if (connectorPath != null) {
+          Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
+          Collection<?> newCollection = (Collection<?>) evt.getNewValue();
+          int oldCollectionSize = 0;
+          int newCollectionSize = 0;
+          if (oldCollection != null) {
+            oldCollectionSize = oldCollection.size();
           }
-          if (connector instanceof ICollectionConnector
-              && connector.getConnectorValue() != null) {
-            // don't know why but this fixes a tree repaint bug
-            // when the root connector is assigned a null value.
-            TreePath connectorPath = getTreePathForConnector(connector);
+          if (newCollection != null) {
+            newCollectionSize = newCollection.size();
+          }
+          if (newCollectionSize > oldCollectionSize) {
+            Object[] insertedChildren = new Object[newCollectionSize
+                - oldCollectionSize];
+            int[] childIndices = new int[newCollectionSize - oldCollectionSize];
+            for (int i = oldCollectionSize; i < newCollectionSize; i++) {
+              insertedChildren[i - oldCollectionSize] = ((ICollectionConnector) connector)
+                  .getChildConnector(i);
+              childIndices[i - oldCollectionSize] = i;
+            }
+            fireTreeNodesInserted(ConnectorHierarchyTreeModel.this,
+                connectorPath.getPath(), childIndices, insertedChildren);
+          } else if (newCollectionSize < oldCollectionSize) {
+            int[] childIndices = new int[oldCollectionSize - newCollectionSize];
+            for (int i = newCollectionSize; i < oldCollectionSize; i++) {
+              childIndices[i - newCollectionSize] = i;
+            }
             if (connectorPath != null) {
-              Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
-              Collection<?> newCollection = (Collection<?>) evt.getNewValue();
-              int oldCollectionSize = 0;
-              int newCollectionSize = 0;
-              if (oldCollection != null) {
-                oldCollectionSize = oldCollection.size();
-              }
-              if (newCollection != null) {
-                newCollectionSize = newCollection.size();
-              }
-              if (newCollectionSize > oldCollectionSize) {
-                Object[] insertedChildren = new Object[newCollectionSize
-                    - oldCollectionSize];
-                int[] childIndices = new int[newCollectionSize
-                    - oldCollectionSize];
-                for (int i = oldCollectionSize; i < newCollectionSize; i++) {
-                  insertedChildren[i - oldCollectionSize] = ((ICollectionConnector) connector)
-                      .getChildConnector(i);
-                  childIndices[i - oldCollectionSize] = i;
-                }
-                fireTreeNodesInserted(ConnectorHierarchyTreeModel.this,
-                    connectorPath.getPath(), childIndices, insertedChildren);
-              } else if (newCollectionSize < oldCollectionSize) {
-                int[] childIndices = new int[oldCollectionSize
-                    - newCollectionSize];
-                for (int i = newCollectionSize; i < oldCollectionSize; i++) {
-                  childIndices[i - newCollectionSize] = i;
-                }
-                if (connectorPath != null) {
-                  List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
-                      .getRemovedChildrenConnectors();
-                  fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
-                      connectorPath.getPath(), childIndices,
-                      removedChildrenConnectors.toArray());
-                }
-              }
-            }
-          } else {
-            while (!(connector instanceof ICollectionConnectorListProvider)) {
-              connector = connector.getParentConnector();
-            }
-            if (connector == rootConnector) {
-              fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
-                  getTreePathForConnector(connector).getPath(), null, null);
-            } else if (connector.getConnectorValue() != null) {
-              IValueConnector parentConnector = connector.getParentConnector();
-              while (parentConnector != null
-                  && !(parentConnector instanceof ICollectionConnectorProvider)) {
-                parentConnector = parentConnector.getParentConnector();
-              }
-              if (parentConnector != null
-                  && parentConnector.getConnectorValue() != null) {
-                // don't know why but this fixes a tree repaint bug
-                // when the root connector is assigned a null value.
-                TreePath connectorPath = getTreePathForConnector(parentConnector);
-                if (connectorPath != null) {
-                  fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
-                      getTreePathForConnector(parentConnector).getPath(),
-                      new int[] {getIndexOfChild(parentConnector, connector)},
-                      new Object[] {connector});
-                }
-              }
+              List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
+                  .getRemovedChildrenConnectors();
+              fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
+                  connectorPath.getPath(), childIndices,
+                  removedChildrenConnectors.toArray());
             }
           }
         }
-      });
+      } else {
+        while (!(connector instanceof ICollectionConnectorListProvider)) {
+          connector = connector.getParentConnector();
+        }
+        if (connector == rootConnector) {
+          fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
+              getTreePathForConnector(connector).getPath(), null, null);
+        } else if (connector.getConnectorValue() != null) {
+          IValueConnector parentConnector = connector.getParentConnector();
+          while (parentConnector != null
+              && !(parentConnector instanceof ICollectionConnectorProvider)) {
+            parentConnector = parentConnector.getParentConnector();
+          }
+          if (parentConnector != null
+              && parentConnector.getConnectorValue() != null) {
+            // don't know why but this fixes a tree repaint bug
+            // when the root connector is assigned a null value.
+            TreePath connectorPath = getTreePathForConnector(parentConnector);
+            if (connectorPath != null) {
+              fireTreeNodesChanged(ConnectorHierarchyTreeModel.this,
+                  getTreePathForConnector(parentConnector).getPath(),
+                  new int[] {getIndexOfChild(parentConnector, connector)},
+                  new Object[] {connector});
+            }
+          }
+        }
+      }
     }
   }
 

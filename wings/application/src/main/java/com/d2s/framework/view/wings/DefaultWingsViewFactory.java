@@ -8,6 +8,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -23,17 +24,14 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.Action;
-import javax.swing.JComponent;
 import javax.swing.KeyStroke;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.wings.SBorderLayout;
 import org.wings.SButton;
 import org.wings.SCardLayout;
+import org.wings.SCellRendererPane;
 import org.wings.SCheckBox;
 import org.wings.SComboBox;
 import org.wings.SComponent;
@@ -41,7 +39,6 @@ import org.wings.SConstants;
 import org.wings.SDefaultListCellRenderer;
 import org.wings.SDimension;
 import org.wings.SFont;
-import org.wings.SForm;
 import org.wings.SGridBagLayout;
 import org.wings.SGridLayout;
 import org.wings.SIcon;
@@ -60,16 +57,20 @@ import org.wings.STextField;
 import org.wings.SToolBar;
 import org.wings.SToolTipManager;
 import org.wings.STree;
+import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
 import org.wings.border.STitledBorder;
 import org.wings.event.SMouseEvent;
 import org.wings.event.SMouseListener;
+import org.wings.io.Device;
 import org.wings.table.STableCellEditor;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
 import org.wings.text.SDateFormatter;
 import org.wings.tree.SDefaultTreeCellRenderer;
 import org.wingx.XCalendar;
+import org.wingx.XTable;
+import org.wingx.table.XTableColumn;
 
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.model.BeanCollectionModule;
@@ -135,7 +136,6 @@ import com.d2s.framework.util.format.IFormatter;
 import com.d2s.framework.util.format.NullableSimpleDateFormat;
 import com.d2s.framework.util.gate.IGate;
 import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.view.BasicCompositeView;
 import com.d2s.framework.view.BasicMapView;
 import com.d2s.framework.view.BasicView;
@@ -217,36 +217,6 @@ public class DefaultWingsViewFactory implements
   private IDisplayableAction                 binaryPropertyInfoAction;
 
   /**
-   * Constructs a new <code>DefaultSwingViewFactory</code> instance.
-   */
-  public DefaultWingsViewFactory() {
-    this(null);
-  }
-
-  /**
-   * Constructs a new <code>DefaultSwingViewFactory</code> instance.
-   *
-   * @param lookAndFeel
-   *          the look and feel class name
-   */
-  public DefaultWingsViewFactory(String lookAndFeel) {
-    if (lookAndFeel != null) {
-      try {
-        UIManager.setLookAndFeel(lookAndFeel);
-      } catch (ClassNotFoundException ex) {
-        throw new ViewException(ex);
-      } catch (InstantiationException ex) {
-        throw new ViewException(ex);
-      } catch (IllegalAccessException ex) {
-        throw new ViewException(ex);
-      } catch (UnsupportedLookAndFeelException ex) {
-        throw new ViewException(ex);
-      }
-    }
-    SwingUtil.installDefaults();
-  }
-
-  /**
    * {@inheritDoc}
    */
   public IView<SComponent> createView(IViewDescriptor viewDescriptor,
@@ -315,6 +285,7 @@ public class DefaultWingsViewFactory implements
             Action swingAction = actionFactory.createAction(action,
                 actionHandler, view, locale);
             SButton actionButton = createSButton();
+            actionButton.setShowAsFormComponent(false);
             actionButton.setAction(swingAction);
             if (action.getAcceleratorAsString() != null) {
               KeyStroke ks = KeyStroke.getKeyStroke(action
@@ -322,8 +293,8 @@ public class DefaultWingsViewFactory implements
               view.getPeer().getActionMap().put(
                   swingAction.getValue(Action.NAME), swingAction);
               view.getPeer().getInputMap(
-                  JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                  swingAction.getValue(Action.NAME));
+                  SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
+                  .put(ks, swingAction.getValue(Action.NAME));
               String acceleratorString = KeyEvent.getKeyModifiersText(ks
                   .getModifiers())
                   + "-" + KeyEvent.getKeyText(ks.getKeyCode());
@@ -461,17 +432,20 @@ public class DefaultWingsViewFactory implements
           actionHandler, locale);
       SIcon childIcon = iconFactory.getIcon(childViewDescriptor
           .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
+      SComponent tabView = childView.getPeer();
+      tabView.setPreferredSize(SDimension.FULLAREA);
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale), childIcon, childView.getPeer(),
+            getTranslationProvider(), locale), childIcon, tabView,
             childViewDescriptor.getI18nDescription(getTranslationProvider(),
                 locale));
       } else {
         viewComponent.addTab(childViewDescriptor.getI18nName(
-            getTranslationProvider(), locale), childIcon, childView.getPeer());
+            getTranslationProvider(), locale), childIcon, tabView);
       }
       childrenViews.add(childView);
     }
+    viewComponent.setPreferredSize(SDimension.FULLAREA);
     view.setChildren(childrenViews);
     return view;
   }
@@ -496,6 +470,7 @@ public class DefaultWingsViewFactory implements
       viewComponent.add(childView.getPeer(), childViewDescriptor.getKey());
       childrenViews.put(childViewDescriptor.getKey(), childView);
     }
+    viewComponent.setPreferredSize(SDimension.FULLAREA);
     view.setChildren(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
@@ -578,7 +553,7 @@ public class DefaultWingsViewFactory implements
       ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
     SPanel viewComponent = createSPanel();
-    viewComponent.setLayout(new SBorderLayout());
+    viewComponent.setLayout(new SGridBagLayout());
     BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
@@ -586,12 +561,22 @@ public class DefaultWingsViewFactory implements
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
       IView<SComponent> leftTopView = createView(viewDescriptor
           .getLeftTopViewDescriptor(), actionHandler, locale);
+      leftTopView.getPeer().setHorizontalAlignment(SConstants.LEFT_ALIGN);
+      leftTopView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
       switch (viewDescriptor.getOrientation()) {
         case ISplitViewDescriptor.HORIZONTAL:
-          viewComponent.add(leftTopView.getPeer(), SBorderLayout.EAST);
+          double weightx = 0.3d;
+          if (viewDescriptor.getLeftTopViewDescriptor() instanceof ITreeViewDescriptor) {
+            weightx = 0.0d;
+          }
+          viewComponent.add(leftTopView.getPeer(), new GridBagConstraints(0, 0,
+              1, 1, weightx, 1.0d, GridBagConstraints.NORTHWEST,
+              GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
           break;
         case ISplitViewDescriptor.VERTICAL:
-          viewComponent.add(leftTopView.getPeer(), SBorderLayout.NORTH);
+          viewComponent.add(leftTopView.getPeer(), new GridBagConstraints(0, 0,
+              1, 1, 1.0d, 0.0d, GridBagConstraints.NORTHWEST,
+              GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
           break;
         default:
           break;
@@ -601,7 +586,27 @@ public class DefaultWingsViewFactory implements
     if (viewDescriptor.getRightBottomViewDescriptor() != null) {
       IView<SComponent> rightBottomView = createView(viewDescriptor
           .getRightBottomViewDescriptor(), actionHandler, locale);
-      viewComponent.add(rightBottomView.getPeer(), SBorderLayout.CENTER);
+      rightBottomView.getPeer().setHorizontalAlignment(SConstants.LEFT_ALIGN);
+      rightBottomView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
+      int gridx = 0;
+      int gridy = 0;
+      switch (viewDescriptor.getOrientation()) {
+        case ISplitViewDescriptor.HORIZONTAL:
+          gridx = 1;
+          gridy = 0;
+          break;
+        case ISplitViewDescriptor.VERTICAL:
+          gridx = 0;
+          gridy = 1;
+          break;
+        default:
+          break;
+      }
+      viewComponent.add(rightBottomView.getPeer(), new GridBagConstraints(
+          gridx, gridy, GridBagConstraints.REMAINDER,
+          GridBagConstraints.REMAINDER, 1.0d, 1.0d,
+          GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0,
+              0, 0, 0), 0, 0));
       childrenViews.add(rightBottomView);
     }
     view.setChildren(childrenViews);
@@ -798,12 +803,15 @@ public class DefaultWingsViewFactory implements
     viewComponent.setCellRenderer(new ConnectorTreeCellRenderer(viewDescriptor,
         locale));
     treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
+
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
+    scrollPane.setPreferredSize(new SDimension("170px", null));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    viewComponent.addMouseListener(new PopupListener(viewComponent, view,
-        actionHandler, locale));
+    // FIXME MouseListener
+    // viewComponent.addMouseListener(new PopupListener(viewComponent, view,
+    // actionHandler, locale));
     return view;
   }
 
@@ -1012,6 +1020,7 @@ public class DefaultWingsViewFactory implements
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
             rowConnectorPrototype);
     SList viewComponent = createSList();
+
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
@@ -1043,12 +1052,6 @@ public class DefaultWingsViewFactory implements
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
             rowConnectorPrototype);
     STable viewComponent = createSTable();
-    SScrollPane scrollPane = createSScrollPane();
-    scrollPane.setViewportView(viewComponent);
-    scrollPane
-        .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-    IView<SComponent> view = constructView(scrollPane, viewDescriptor,
-        connector);
 
     Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
     List<String> columnConnectorKeys = new ArrayList<String>();
@@ -1085,6 +1088,9 @@ public class DefaultWingsViewFactory implements
         maxColumnCharacterLength);
     for (int i = 0; i < viewDescriptor.getColumnViewDescriptors().size(); i++) {
       STableColumn column = viewComponent.getColumnModel().getColumn(i);
+      if (column instanceof XTableColumn) {
+        ((XTableColumn) column).setSortable(true);
+      }
       String propertyName = viewDescriptor.getColumnViewDescriptors().get(i)
           .getName();
       column.setIdentifier(propertyName);
@@ -1136,32 +1142,22 @@ public class DefaultWingsViewFactory implements
             + "px");
       }
     }
-    viewComponent.addMouseListener(new PopupListener(viewComponent, view,
-        actionHandler, locale));
+
+    SScrollPane scrollPane = createSScrollPane();
+    scrollPane.setViewportView(viewComponent);
+    IView<SComponent> view = constructView(scrollPane, viewDescriptor,
+        connector);
+    scrollPane.setPreferredSize(new SDimension("99%", null));
+
+    // FIXME MouseListener
+    // viewComponent.addMouseListener(new PopupListener(viewComponent, view,
+    // actionHandler, locale));
     return view;
   }
 
   private STableCellEditor createTableCellEditor(IView<SComponent> editorView) {
     WingsViewCellEditorAdapter editor;
-    if (editorView.getPeer() instanceof SActionField) {
-      editor = new WingsViewCellEditorAdapter(editorView) {
-
-        private static final long serialVersionUID = -1551909997448473681L;
-
-        @Override
-        public boolean stopCellEditing() {
-          if (((SActionField) getEditorView().getPeer()).isSynchronized()) {
-            fireEditingStopped();
-            return true;
-          }
-          ((SActionFieldConnector) getEditorView().getConnector())
-              .performActionIfNeeded();
-          return false;
-        }
-      };
-    } else {
-      editor = new WingsViewCellEditorAdapter(editorView);
-    }
+    editor = new WingsViewCellEditorAdapter(editorView);
     return editor;
   }
 
@@ -1331,27 +1327,31 @@ public class DefaultWingsViewFactory implements
     @Override
     public SComponent getTableCellRendererComponent(STable table, Object value,
         boolean isSelected, int row, int column) {
-      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
-          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
+      SLabel renderer = (SLabel) super.getTableCellRendererComponent(table,
+          value, isSelected, row, column);
+      renderer
+          .setIcon(iconFactory.getIcon(propertyDescriptor
+              .getIconImageURL(String.valueOf(value)),
+              IIconFactory.TINY_ICON_SIZE));
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
         if (connectorValue != null) {
-          setText(translationProvider.getTranslation(computeEnumerationKey(
-              propertyDescriptor.getEnumerationName(), connectorValue), locale));
+          renderer.setText(translationProvider.getTranslation(
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  connectorValue), locale));
         } else {
-          setText(null);
+          renderer.setText(null);
         }
       } else {
         if (value != null) {
-          super.setText(translationProvider.getTranslation(
+          renderer.setText(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {
-          setText(null);
+          renderer.setText(null);
         }
       }
-      return super.getTableCellRendererComponent(table, value, isSelected, row,
-          column);
+      return renderer;
     }
   }
 
@@ -1389,9 +1389,11 @@ public class DefaultWingsViewFactory implements
     viewComponent.setLayout(layout);
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-    SScrollPane scrollPane = createSScrollPane();
-    scrollPane.setViewportView(imageLabel);
-    viewComponent.add(scrollPane, SBorderLayout.CENTER);
+    // SScrollPane scrollPane = createSScrollPane();
+    // scrollPane.setMode(SScrollPane.MODE_COMPLETE);
+    // scrollPane.setViewportView(imageLabel);
+    // viewComponent.add(scrollPane, SBorderLayout.CENTER);
+    viewComponent.add(imageLabel, SBorderLayout.CENTER);
     return view;
   }
 
@@ -1442,7 +1444,7 @@ public class DefaultWingsViewFactory implements
     ICompositeValueConnector connector = connectorFactory
         .createCompositeValueConnector(
             getConnectorIdForComponentView(viewDescriptor), null);
-    SForm viewComponent = createSForm();
+    SPanel viewComponent = createSPanel();
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
 
@@ -1539,9 +1541,7 @@ public class DefaultWingsViewFactory implements
       }
 
       constraints.anchor = GridBagConstraints.WEST;
-      // constraints.weightx = 1.0;
-      constraints.weightx = propertyView.getPeer().getPreferredSize()
-          .getWidthInt();
+      constraints.weightx = 1.0;
       if (propertyView.getPeer() instanceof STextArea
           || propertyView.getPeer() instanceof SList
           || propertyView.getPeer() instanceof SScrollPane
@@ -1677,7 +1677,7 @@ public class DefaultWingsViewFactory implements
   private IView<SComponent> createDatePropertyView(
       IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    XCalendar viewComponent = createJDateField();
+    XCalendar viewComponent = createDateField();
     DateFormat format = createDateFormat(propertyDescriptor, locale);
     viewComponent.getFormattedTextField().setFormatter(
         new SDateFormatter(format));
@@ -1744,14 +1744,13 @@ public class DefaultWingsViewFactory implements
       Locale locale) {
     STextArea viewComponent = createSTextArea();
     viewComponent.setLineWrap(STextArea.VIRTUAL_WRAP);
-    SScrollPane scrollPane = createSScrollPane();
-    scrollPane.setViewportView(viewComponent);
-    scrollPane
-        .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
     STextAreaConnector connector = new STextAreaConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
-    return constructView(scrollPane, null, connector);
+
+    IView<SComponent> view = constructView(viewComponent, null, connector);
+    return view;
   }
 
   private IView<SComponent> createSourceCodePropertyView(
@@ -1977,8 +1976,8 @@ public class DefaultWingsViewFactory implements
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     SCheckBox viewComponent = createSCheckBox();
-    SCheckBoxConnector connector = new SCheckBoxConnector(
-        propertyDescriptor.getName(), viewComponent);
+    SCheckBoxConnector connector = new SCheckBoxConnector(propertyDescriptor
+        .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
@@ -2395,8 +2394,7 @@ public class DefaultWingsViewFactory implements
     int preferredWidth = computePixelWidth(component, getFormatLength(
         formatter, templateValue))
         + extraWidth;
-    SDimension size = new SDimension(preferredWidth, component
-        .getPreferredSize().getHeightInt());
+    SDimension size = new SDimension(preferredWidth + "px", null);
     component.setPreferredSize(size);
   }
 
@@ -2405,7 +2403,11 @@ public class DefaultWingsViewFactory implements
     if (characterLength > 0 && characterLength < maxCharacterLength) {
       charLength = characterLength + 2;
     }
-    return (int) ((component.getFont().getSize() * charLength) / 1.5);
+    int fontSize = 10;
+    if (component.getFont() != null) {
+      fontSize = component.getFont().getSize();
+    }
+    return (int) ((fontSize * charLength) / 2.0);
   }
 
   /**
@@ -2415,6 +2417,7 @@ public class DefaultWingsViewFactory implements
    */
   protected STextField createSTextField() {
     STextField textField = new STextField();
+    textField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return textField;
   }
 
@@ -2425,6 +2428,7 @@ public class DefaultWingsViewFactory implements
    */
   protected SPasswordField createSPasswordField() {
     SPasswordField passwordField = new SPasswordField();
+    passwordField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return passwordField;
   }
 
@@ -2435,6 +2439,7 @@ public class DefaultWingsViewFactory implements
    */
   protected STextArea createSTextArea() {
     STextArea textArea = new STextArea();
+    textArea.setPreferredSize(SDimension.FULLAREA);
     return textArea;
   }
 
@@ -2446,7 +2451,9 @@ public class DefaultWingsViewFactory implements
    * @return the created action field.
    */
   protected SActionField createSActionField(boolean showTextField) {
-    return new SActionField(showTextField);
+    SActionField actionField = new SActionField(showTextField);
+    actionField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return actionField;
   }
 
   /**
@@ -2454,8 +2461,9 @@ public class DefaultWingsViewFactory implements
    *
    * @return the created date field.
    */
-  protected XCalendar createJDateField() {
+  protected XCalendar createDateField() {
     XCalendar dateField = new XCalendar();
+    dateField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return dateField;
   }
 
@@ -2465,7 +2473,9 @@ public class DefaultWingsViewFactory implements
    * @return the created combo box.
    */
   protected SComboBox createSComboBox() {
-    return new SComboBox();
+    SComboBox comboBox = new SComboBox();
+    comboBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return comboBox;
   }
 
   /**
@@ -2483,7 +2493,10 @@ public class DefaultWingsViewFactory implements
    * @return the created tool bar.
    */
   protected SToolBar createSToolBar() {
-    return new SToolBar();
+    SToolBar toolBar = new SToolBar();
+    toolBar.setBorder(new SEmptyBorder(2, 2, 2, 2));
+    toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return toolBar;
   }
 
   /**
@@ -2492,7 +2505,11 @@ public class DefaultWingsViewFactory implements
    * @return the created tabbed pane.
    */
   protected STabbedPane createSTabbedPane() {
-    return new STabbedPane();
+    STabbedPane tabbedPane = new STabbedPane();
+    tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
+    tabbedPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    tabbedPane.setPreferredSize(SDimension.FULLAREA);
+    return tabbedPane;
   }
 
   /**
@@ -2502,6 +2519,8 @@ public class DefaultWingsViewFactory implements
    */
   protected STree createSTree() {
     STree tree = new STree();
+    tree.setVerticalAlignment(SConstants.TOP_ALIGN);
+    tree.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return tree;
   }
 
@@ -2511,7 +2530,46 @@ public class DefaultWingsViewFactory implements
    * @return the created table.
    */
   protected STable createSTable() {
-    STable table = new STable();
+    STable table = new XTable() {
+
+      private static final long serialVersionUID = -8821125434835138650L;
+      private SCellRendererPane cellRendererPane = new SCellRendererPane() {
+
+                                                   private static final long serialVersionUID = 3159574506651887983L;
+
+                                                   @Override
+                                                   public void writeComponent(
+                                                       Device d, SComponent c,
+                                                       SComponent p)
+                                                       throws IOException {
+                                                     if (c != null
+                                                         && p instanceof STable) {
+                                                       STable renderedTable = (STable) p;
+                                                       if (renderedTable
+                                                           .isEditing()
+                                                           && renderedTable
+                                                               .getEditorComponent() == c) {
+                                                         addComponent(c);
+                                                         c.write(d);
+                                                       } else {
+                                                         super.writeComponent(
+                                                             d, c, p);
+                                                       }
+                                                     } else {
+                                                       super.writeComponent(d,
+                                                           c, p);
+                                                     }
+                                                   }
+                                                 };
+
+      @Override
+      public SCellRendererPane getCellRendererPane() {
+        return cellRendererPane;
+      }
+    };
+    table.setVerticalAlignment(SConstants.TOP_ALIGN);
+    table.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    table.setSelectable(true);
     return table;
   }
 
@@ -2560,6 +2618,8 @@ public class DefaultWingsViewFactory implements
    */
   protected SScrollPane createSScrollPane() {
     SScrollPane scrollPane = new SScrollPane();
+    scrollPane.setMode(SScrollPane.MODE_COMPLETE);
+    scrollPane.setPreferredSize(SDimension.FULLAREA);
     return scrollPane;
   }
 
@@ -2569,7 +2629,9 @@ public class DefaultWingsViewFactory implements
    * @return the created check box.
    */
   protected SCheckBox createSCheckBox() {
-    return new SCheckBox();
+    SCheckBox checkBox = new SCheckBox();
+    checkBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return checkBox;
   }
 
   /**
@@ -2579,17 +2641,8 @@ public class DefaultWingsViewFactory implements
    */
   protected SPanel createSPanel() {
     SPanel panel = new SPanel();
+    panel.setPreferredSize(SDimension.FULLAREA);
     return panel;
-  }
-
-  /**
-   * Creates a form.
-   *
-   * @return the created form.
-   */
-  protected SForm createSForm() {
-    SForm form = new SForm();
-    return form;
   }
 
   /**
