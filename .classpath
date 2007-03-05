@@ -65,7 +65,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/javax/transaction/jta/1.0.1B/jta-1.0.1B.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate/3.2.0.ga/hibernate-3.2.0.ga.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate/3.2.0.ga/hibernate-3.2.0.ga.jar" sourcepath="/ENVDEV/hibernate-3.2/src"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/log4j/log4j/1.2.8/log4j-1.2.8.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/swarmcache/swarmcache/1.0RC2/swarmcache-1.0RC2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/trove/trove/1.0.2/trove-1.0.2.jar"/>
@@ -85,7 +85,6 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-lang/commons-lang/2.1/commons-lang-2.1.jar" sourcepath="/ENVDEV/commons-lang-2.1/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/com/lowagie/itext/1.3.1/itext-1.3.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-digester/commons-digester/1.7/commons-digester-1.7.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/net/sf/ehcache/ehcache/1.2/ehcache-1.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jcommon/1.0.0/jcommon-1.0.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jfreechart/1.0.1/jfreechart-1.0.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jedit/jedit-syntax/1.0/jedit-syntax-1.0.jar"/>
@@ -115,5 +114,6 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/kdeclassic-lfgr/3.0/kdeclassic-lfgr-3.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/cxx/3.0/cxx-3.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/css/3.0/css-3.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/net/sf/ehcache/ehcache/1.2.4/ehcache-1.2.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
