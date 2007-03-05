@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -7,29 +8,33 @@
     <artifactId>d2s-framework</artifactId>
     <version>1.1</version>
   </parent>
-  <artifactId>d2s-jasper</artifactId>
+  <artifactId>d2s-wings-application</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - JasperReports</name>
+  <name>Design2See Application Framework - Wings - Application</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>
-      <artifactId>d2s-action</artifactId>
+      <artifactId>d2s-wings-components</artifactId>
     </dependency>
     <dependency>
       <groupId>com.design2see</groupId>
-      <artifactId>d2s-swing-application</artifactId>
+      <artifactId>d2s-binding</artifactId>
     </dependency>
     <dependency>
       <groupId>com.design2see</groupId>
-      <artifactId>d2s-ulc-application</artifactId>
+      <artifactId>d2s-view</artifactId>
     </dependency>
     <dependency>
       <groupId>com.design2see</groupId>
-      <artifactId>d2s-wings-application</artifactId>
+      <artifactId>d2s-application</artifactId>
     </dependency>
     <dependency>
-      <groupId>jasperreports</groupId>
-      <artifactId>jasperreports</artifactId>
+      <groupId>org.wings</groupId>
+      <artifactId>wings</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.wings</groupId>
+      <artifactId>wingx</artifactId>
     </dependency>
   </dependencies>
 </project>

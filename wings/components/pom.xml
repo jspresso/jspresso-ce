@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -7,25 +8,21 @@
     <artifactId>d2s-framework</artifactId>
     <version>1.1</version>
   </parent>
-  <artifactId>d2s-security</artifactId>
+  <artifactId>d2s-wings-components</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - Security</name>
+  <name>Design2See Application Framework - Wings - Components</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>
       <artifactId>d2s-util</artifactId>
     </dependency>
     <dependency>
-      <groupId>jboss</groupId>
-      <artifactId>jbosssx</artifactId>
+      <groupId>org.wings</groupId>
+      <artifactId>wings</artifactId>
     </dependency>
     <dependency>
-      <groupId>jboss</groupId>
-      <artifactId>jboss-common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
+      <groupId>org.wings</groupId>
+      <artifactId>wingx</artifactId>
     </dependency>
   </dependencies>
 </project>
