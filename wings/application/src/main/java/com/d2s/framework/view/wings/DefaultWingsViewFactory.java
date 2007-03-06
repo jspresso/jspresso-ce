@@ -6,7 +6,6 @@ package com.d2s.framework.view.wings;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -1685,8 +1684,7 @@ public class DefaultWingsViewFactory implements
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
-        getDateTemplateValue(propertyDescriptor), Toolkit.getDefaultToolkit()
-            .getScreenResolution() / 10);
+        getDateTemplateValue(propertyDescriptor), 24);
     return constructView(viewComponent, null, connector);
   }
 
@@ -1902,8 +1900,7 @@ public class DefaultWingsViewFactory implements
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
         propertyDescriptor, locale));
     adjustSizes(viewComponent, null, getEnumerationTemplateValue(
-        propertyDescriptor, locale), Toolkit.getDefaultToolkit()
-        .getScreenResolution() / 3);
+        propertyDescriptor, locale), 24);
     SComboBoxConnector connector = new SComboBoxConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
