@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
   /**
    * <code>SUCCESS_DEFAULT</code>="main.html".
    */
-  public static final String SUCCESS_DEFAULT      = "main.html";
+  public static final String SUCCESS_DEFAULT      = "/main.html";
   /**
    * <code>SUCCESS_PARAM_NAME</code>="success.redirect".
    */
@@ -51,7 +51,7 @@ public class LoginServlet extends HttpServlet {
   /**
    * <code>ERROR_DEFAULT</code>="login-error.html".
    */
-  public static final String ERROR_DEFAULT        = "login-error.html";
+  public static final String ERROR_DEFAULT        = "/login-error.html";
   /**
    * <code>ERROR_PARAM_NAME</code>"error.redirect".
    */

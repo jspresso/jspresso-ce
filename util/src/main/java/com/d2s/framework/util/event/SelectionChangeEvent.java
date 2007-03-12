@@ -12,7 +12,7 @@ import java.util.EventObject;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -20,28 +20,24 @@ public class SelectionChangeEvent extends EventObject {
 
   private static final long serialVersionUID = -3165899293226869795L;
 
-  /**
-   * New value for selection.
-   */
   private int[]             newSelection;
-
-  /**
-   * Old value for selection.
-   */
   private int[]             oldSelection;
+  private int               leadingIndex;
 
   /**
    * Constructs a new <code>SelectionChangeEvent</code>.
-   * 
+   *
    * @param source
    *          The object that initiated the event.
    * @param oldSelection
    *          The old selection of the source.
    * @param newSelection
    *          The new selection of the source.
+   * @param leadingIndex
+   *          the leadingIndex selecton index.
    */
   public SelectionChangeEvent(ISelectable source, int[] oldSelection,
-      int[] newSelection) {
+      int[] newSelection, int leadingIndex) {
     super(source);
     this.newSelection = newSelection;
     this.oldSelection = oldSelection;
@@ -51,11 +47,12 @@ public class SelectionChangeEvent extends EventObject {
     if (this.oldSelection != null) {
       Arrays.sort(this.oldSelection);
     }
+    this.leadingIndex = leadingIndex;
   }
 
   /**
    * Gets the new selection. The indices array is ordered.
-   * 
+   *
    * @return the new selection.
    */
   public int[] getNewSelection() {
@@ -64,7 +61,7 @@ public class SelectionChangeEvent extends EventObject {
 
   /**
    * Gets the old selection. The indices array is ordered.
-   * 
+   *
    * @return the old selection.
    */
   public int[] getOldSelection() {
@@ -79,5 +76,15 @@ public class SelectionChangeEvent extends EventObject {
   @Override
   public ISelectable getSource() {
     return (ISelectable) source;
+  }
+
+
+  /**
+   * Gets the leadingIndex.
+   *
+   * @return the leadingIndex.
+   */
+  public int getLeadingIndex() {
+    return leadingIndex;
   }
 }

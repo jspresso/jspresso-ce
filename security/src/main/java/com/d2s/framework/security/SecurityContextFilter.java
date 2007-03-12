@@ -26,7 +26,7 @@ public class SecurityContextFilter implements Filter {
   /**
    * <code>LOGIN_DEFAULT</code>="login.html".
    */
-  public static final String LOGIN_DEFAULT    = "login.html";
+  public static final String LOGIN_DEFAULT    = "/login.html";
   /**
    * <code>LOGIN_PARAM_NAME</code>="login.redirect".
    */

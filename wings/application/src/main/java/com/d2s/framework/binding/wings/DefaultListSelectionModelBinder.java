@@ -156,7 +156,7 @@ public class DefaultListSelectionModelBinder implements
       } else {
         modelIndices = selectedIndices;
       }
-      viewSelectable.setSelectedIndices(modelIndices);
+      viewSelectable.setSelectedIndices(modelIndices, sm.getLeadSelectionIndex());
     }
   }
 

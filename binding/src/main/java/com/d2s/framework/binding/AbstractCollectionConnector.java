@@ -21,7 +21,7 @@ import com.d2s.framework.util.event.SelectionChangeSupport;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -41,7 +41,7 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Creates a new <code>AbstractCollectionConnector</code>.
-   * 
+   *
    * @param id
    *          the connector id.
    * @param binder
@@ -196,7 +196,7 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Gets the childConnectorPrototype.
-   * 
+   *
    * @return the childConnectorPrototype.
    */
   public ICompositeValueConnector getChildConnectorPrototype() {
@@ -221,11 +221,22 @@ public abstract class AbstractCollectionConnector extends
    * {@inheritDoc}
    */
   public void setSelectedIndices(int[] newSelectedIndices) {
-    selectionChangeSupport.setSelectedIndices(newSelectedIndices);
+    int leadingIndex = -1;
+    if (newSelectedIndices != null && newSelectedIndices.length > 0) {
+      leadingIndex = newSelectedIndices[newSelectedIndices.length - 1];
+    }
+    setSelectedIndices(newSelectedIndices, leadingIndex);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
+    selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
     if (newSelectedIndices == null || newSelectedIndices.length == 0) {
       implFireSelectedConnectorChange((IValueConnector) null);
     } else {
-      implFireSelectedConnectorChange(getChildConnector(newSelectedIndices[0]));
+      implFireSelectedConnectorChange(getChildConnector(leadingIndex));
     }
   }
 
@@ -245,7 +256,7 @@ public abstract class AbstractCollectionConnector extends
           .addInhibitedListener((ISelectionChangeListener) evt.getSource());
     }
     try {
-      setSelectedIndices(evt.getNewSelection());
+      setSelectedIndices(evt.getNewSelection(), evt.getLeadingIndex());
     } finally {
       if (evt.getSource() instanceof ISelectionChangeListener) {
         selectionChangeSupport
@@ -322,7 +333,7 @@ public abstract class AbstractCollectionConnector extends
 
   /**
    * Sets the allowLazyChildrenLoading.
-   * 
+   *
    * @param allowLazyChildrenLoading
    *          the allowLazyChildrenLoading to set.
    */
