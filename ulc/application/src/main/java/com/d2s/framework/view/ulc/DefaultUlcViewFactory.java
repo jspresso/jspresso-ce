@@ -114,6 +114,7 @@ import com.d2s.framework.view.descriptor.IGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IImageViewDescriptor;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.INestingViewDescriptor;
+import com.d2s.framework.view.descriptor.IPropertyViewDescriptor;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.ISubViewDescriptor;
@@ -238,6 +239,9 @@ public class DefaultUlcViewFactory implements
     } else if (viewDescriptor instanceof IImageViewDescriptor) {
       view = createImageView((IImageViewDescriptor) viewDescriptor,
           actionHandler, locale);
+    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
+      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
+          actionHandler, locale);
     } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
       view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
           actionHandler, locale);
@@ -312,7 +316,7 @@ public class DefaultUlcViewFactory implements
         view.setPeer(viewPanel);
       }
       decorateWithBorder(view, locale);
-    } catch (Throwable ex) {
+    } catch (SecurityException ex) {
       view.setPeer(createSecurityPanel());
     }
     return view;
@@ -1589,6 +1593,15 @@ public class DefaultUlcViewFactory implements
     propertyLabel.setLabelFor(propertyComponent);
 
     return propertyLabel;
+  }
+
+  private IView<ULCComponent> createPropertyView(
+      IPropertyViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<ULCComponent> view = createPropertyView((IPropertyDescriptor) viewDescriptor
+        .getModelDescriptor(), viewDescriptor
+        .getRenderedChildProperties(), actionHandler, locale);
+    return constructView(view.getPeer(), viewDescriptor, view.getConnector());
   }
 
   private IView<ULCComponent> createPropertyView(

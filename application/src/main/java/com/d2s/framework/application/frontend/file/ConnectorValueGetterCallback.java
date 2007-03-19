@@ -18,7 +18,7 @@ import com.d2s.framework.binding.IValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,10 +30,16 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
   public void fileChosen(OutputStream out, Map<String, Object> context) {
     OutputStream os = new BufferedOutputStream(out);
     try {
-      byte[] connectorValue = (byte[]) ((IValueConnector) context
+      Object connectorValue = ((IValueConnector) context
           .get(ActionContextConstants.VIEW_CONNECTOR)).getConnectorValue();
+      byte[] content;
+      if (connectorValue instanceof String) {
+        content = ((String) connectorValue).getBytes();
+      } else {
+        content = (byte[]) connectorValue;
+      }
       if (connectorValue != null) {
-        os.write(connectorValue);
+        os.write(content);
         os.flush();
       }
     } catch (IOException ex) {

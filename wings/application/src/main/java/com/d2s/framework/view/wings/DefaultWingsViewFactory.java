@@ -158,6 +158,7 @@ import com.d2s.framework.view.descriptor.IGridViewDescriptor;
 import com.d2s.framework.view.descriptor.IImageViewDescriptor;
 import com.d2s.framework.view.descriptor.IListViewDescriptor;
 import com.d2s.framework.view.descriptor.INestingViewDescriptor;
+import com.d2s.framework.view.descriptor.IPropertyViewDescriptor;
 import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.ISubViewDescriptor;
@@ -229,6 +230,9 @@ public class DefaultWingsViewFactory implements
           actionHandler, locale);
     } else if (viewDescriptor instanceof IImageViewDescriptor) {
       view = createImageView((IImageViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
+      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
           actionHandler, locale);
     } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
       view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
@@ -316,7 +320,7 @@ public class DefaultWingsViewFactory implements
         view.setPeer(viewPanel);
       }
       decorateWithBorder(view, locale);
-    } catch (Throwable ex) {
+    } catch (SecurityException ex) {
       view.setPeer(createSecurityPanel());
     }
     return view;
@@ -1591,6 +1595,15 @@ public class DefaultWingsViewFactory implements
     }
     propertyLabel.setText(labelText.toString());
     return propertyLabel;
+  }
+
+  private IView<SComponent> createPropertyView(
+      IPropertyViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<SComponent> view = createPropertyView((IPropertyDescriptor) viewDescriptor
+        .getModelDescriptor(), viewDescriptor
+        .getRenderedChildProperties(), actionHandler, locale);
+    return constructView(view.getPeer(), viewDescriptor, view.getConnector());
   }
 
   private IView<SComponent> createPropertyView(

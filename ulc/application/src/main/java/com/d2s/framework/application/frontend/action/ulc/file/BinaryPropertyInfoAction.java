@@ -15,7 +15,7 @@ import com.d2s.framework.application.frontend.action.ulc.flow.InfoAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,13 +42,19 @@ public class BinaryPropertyInfoAction extends InfoAction {
 
   /**
    * Retrieve the binary content to display the infos on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return The binary content to display the infos on or null.
    */
   protected byte[] getBinaryContent(Map<String, Object> context) {
-    byte[] content = (byte[]) getViewConnector(context).getConnectorValue();
+    Object connectorValue = getViewConnector(context).getConnectorValue();
+    byte[] content;
+    if (connectorValue instanceof String) {
+      content = ((String) connectorValue).getBytes();
+    } else {
+      content = (byte[]) connectorValue;
+    }
     return content;
   }
 }

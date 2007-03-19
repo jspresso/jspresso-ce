@@ -10,8 +10,7 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.wings.flow.InfoAction;
 
 /**
- * A frontend action to display all useful informations about a binary
- * property.
+ * A frontend action to display all useful informations about a binary property.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -48,7 +47,13 @@ public class BinaryPropertyInfoAction extends InfoAction {
    * @return The binary content to display the infos on or null.
    */
   protected byte[] getBinaryContent(Map<String, Object> context) {
-    byte[] content = (byte[]) getViewConnector(context).getConnectorValue();
+    Object connectorValue = getViewConnector(context).getConnectorValue();
+    byte[] content;
+    if (connectorValue instanceof String) {
+      content = ((String) connectorValue).getBytes();
+    } else {
+      content = (byte[]) connectorValue;
+    }
     return content;
   }
 }

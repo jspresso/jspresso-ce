@@ -8,7 +8,7 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.file.ConnectorValueGetterCallback;
-import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IFileFilterable;
 
 /**
  * Lets the user browse the local file system and choose a file to store the
@@ -17,7 +17,7 @@ import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,7 +36,7 @@ public class SaveBinaryPropertyAsFileAction extends SaveFileAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IBinaryPropertyDescriptor modelDescriptor = (IBinaryPropertyDescriptor) context
+    IFileFilterable modelDescriptor = (IFileFilterable) context
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
     setFileFilter(modelDescriptor.getFileFilter());
     return super.execute(actionHandler, context);

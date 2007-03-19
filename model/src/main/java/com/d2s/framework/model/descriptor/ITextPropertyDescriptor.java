@@ -8,10 +8,11 @@ package com.d2s.framework.model.descriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface ITextPropertyDescriptor extends IStringPropertyDescriptor {
+public interface ITextPropertyDescriptor extends IStringPropertyDescriptor,
+    IFileFilterable {
   // Empty as of now.
 }
