@@ -198,7 +198,7 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate</artifactId>
-        <version>3.2.0.ga</version>
+        <version>3.2.2.ga</version>
         <exclusions>
           <exclusion>
             <groupId>pull-parser</groupId>
