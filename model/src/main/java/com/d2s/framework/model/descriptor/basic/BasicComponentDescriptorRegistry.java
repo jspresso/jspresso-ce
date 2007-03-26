@@ -26,7 +26,7 @@ public class BasicComponentDescriptorRegistry implements
   /**
    * {@inheritDoc}
    */
-  public IComponentDescriptor getComponentDescriptor(Class componentContract) {
+  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
     return (IComponentDescriptor) componentApplicationContext
         .getBean(componentContract.getName());
   }

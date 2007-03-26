@@ -43,12 +43,12 @@
   <!--
     The implementation used as EntityCollectionFactory.
   -->
-  <bean id="entityCollectionFactory" class="com.d2s.framework.model.entity.DefaultEntityCollectionFactory" />
+  <bean id="entityCollectionFactory" class="com.d2s.framework.model.component.DefaultComponentCollectionFactory" />
 
   <!--
     The implementation used as EntityExtensionFactory.
   -->
-  <bean id="entityExtensionFactory" class="com.d2s.framework.model.entity.DefaultEntityExtensionFactory" />
+  <bean id="entityExtensionFactory" class="com.d2s.framework.model.component.DefaultComponentExtensionFactory" />
 
   <!--
     The implementation used as ModelConnectorFactory.

@@ -32,6 +32,7 @@ public class TransferCollectionAction extends AbstractCollectionAction {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {

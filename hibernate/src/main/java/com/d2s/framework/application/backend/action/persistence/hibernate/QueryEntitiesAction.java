@@ -28,7 +28,7 @@ import com.d2s.framework.model.entity.IQueryEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */

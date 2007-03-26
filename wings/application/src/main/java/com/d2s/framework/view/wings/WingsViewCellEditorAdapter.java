@@ -29,7 +29,7 @@ import com.d2s.framework.view.IView;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -43,7 +43,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
 
   /**
    * Constructs a new <code>WingsViewCellEditorAdapter</code> instance.
-   *
+   * 
    * @param editorView
    *          the swing view used as editor.
    */
@@ -90,7 +90,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
 
   /**
    * Returns true.
-   *
+   * 
    * @param anEvent
    *          an event object
    * @return true
@@ -102,7 +102,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
 
   /**
    * Calls <code>fireEditingStopped</code> and returns true.
-   *
+   * 
    * @return true
    */
   public boolean stopCellEditing() {
@@ -136,7 +136,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
 
   /**
    * Gets the editorView.
-   *
+   * 
    * @return the editorView.
    */
   protected IView<SComponent> getEditorView() {
@@ -163,7 +163,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    * Notify all listeners that have registered interest for notification on this
    * event type. The event instance is lazily created using the parameters
    * passed into the fire method.
-   *
+   * 
    * @see EventListenerList
    */
   protected void fireEditingStopped() {
@@ -182,7 +182,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    * Notify all listeners that have registered interest for notification on this
    * event type. The event instance is lazily created using the parameters
    * passed into the fire method.
-   *
+   * 
    * @see EventListenerList
    */
   protected void fireEditingCanceled() {

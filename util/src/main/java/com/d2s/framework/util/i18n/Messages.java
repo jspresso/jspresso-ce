@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -28,7 +28,7 @@ public final class Messages {
 
   /**
    * Gets an internationalized string.
-   *
+   * 
    * @param key
    *          the i18n key
    * @return the internationalized string.

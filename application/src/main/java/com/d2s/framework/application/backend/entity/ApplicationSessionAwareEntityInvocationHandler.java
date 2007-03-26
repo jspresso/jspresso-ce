@@ -4,12 +4,12 @@
 package com.d2s.framework.application.backend.entity;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityCollectionFactory;
-import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
@@ -20,7 +20,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,7 +34,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   /**
    * Constructs a new
    * <code>ApplicationSessionAwareEntityInvocationHandler</code> instance.
-   * 
+   *
    * @param entityDescriptor
    *          The descriptor of the proxy entity.
    * @param collectionFactory
@@ -49,10 +49,10 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    *          the current application session.
    */
   protected ApplicationSessionAwareEntityInvocationHandler(
-      IEntityDescriptor entityDescriptor,
-      IEntityCollectionFactory collectionFactory,
+      IComponentDescriptor<IEntity> entityDescriptor,
+      IComponentCollectionFactory<IEntity> collectionFactory,
       IAccessorFactory accessorFactory,
-      IEntityExtensionFactory extensionFactory,
+      IComponentExtensionFactory extensionFactory,
       IApplicationSession applicationSession) {
     super(entityDescriptor, collectionFactory, accessorFactory,
         extensionFactory);

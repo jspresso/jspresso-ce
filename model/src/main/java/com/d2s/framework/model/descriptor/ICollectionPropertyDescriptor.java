@@ -11,37 +11,39 @@ import java.util.List;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete collection component element type.
  */
-public interface ICollectionPropertyDescriptor extends
+public interface ICollectionPropertyDescriptor<E> extends
     IRelationshipEndPropertyDescriptor, ICollectionDescriptorProvider {
 
   /**
    * Gets the descriptor of the collection referenced by this property.
-   *
+   * 
    * @return the referenced collection descriptor.
    */
-  ICollectionDescriptor getReferencedDescriptor();
+  ICollectionDescriptor<E> getReferencedDescriptor();
 
   /**
    * Gets whether this collection property descriptor is a many-to-many end.
-   *
+   * 
    * @return true if this collection property descriptor is a many-to-many end.
    */
   boolean isManyToMany();
 
   /**
    * Get the list of properties ordering this collection.
-   *
+   * 
    * @return the list of properties ordering this collection.
    */
   List<String> getOrderingProperties();
 
   /**
    * Triggers all adder preprocessors.
-   *
+   * 
    * @param component
    *          the component targetted by the adder.
    * @param collection
@@ -54,7 +56,7 @@ public interface ICollectionPropertyDescriptor extends
 
   /**
    * Triggers all adder postprocessors.
-   *
+   * 
    * @param component
    *          the component targetted by the adder.
    * @param collection
@@ -67,7 +69,7 @@ public interface ICollectionPropertyDescriptor extends
 
   /**
    * Triggers all remer preprocessors.
-   *
+   * 
    * @param component
    *          the component targetted by the remer.
    * @param collection
@@ -80,7 +82,7 @@ public interface ICollectionPropertyDescriptor extends
 
   /**
    * Triggers all remer postprocessors.
-   *
+   * 
    * @param component
    *          the component targetted by the remer.
    * @param collection
@@ -90,4 +92,11 @@ public interface ICollectionPropertyDescriptor extends
    */
   void postprocessRemover(Object component, Collection collection,
       Object removedValue);
+
+  /**
+   * Narrowed to a collection type.
+   * 
+   * @return the type of the model.
+   */
+  Class<? extends Collection> getModelType();
 }

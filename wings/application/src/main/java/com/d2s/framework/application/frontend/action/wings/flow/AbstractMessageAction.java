@@ -16,7 +16,7 @@ import com.d2s.framework.util.html.HtmlHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,7 +24,7 @@ public abstract class AbstractMessageAction extends AbstractWingsAction {
 
   /**
    * Gets the message.
-   *
+   * 
    * @param context
    *          the actionContext.
    * @return the message.
@@ -36,7 +36,7 @@ public abstract class AbstractMessageAction extends AbstractWingsAction {
 
   /**
    * Calls the super-implementation to execute the next action.
-   *
+   * 
    * @param actionHandler
    *          the action handler responsible for the action execution.
    * @param context

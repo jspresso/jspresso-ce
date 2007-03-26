@@ -32,8 +32,8 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
     }
     Class<?> modelClass = userObject.getClass();
     for (IComponentDescriptor componentDescriptor : componentDescriptors) {
-      if (componentDescriptor.getComponentContract().isAssignableFrom(
-          modelClass)) {
+      if (((Class<?>) componentDescriptor.getComponentContract())
+          .isAssignableFrom(modelClass)) {
         return componentDescriptor.getIconImageURL();
       }
     }

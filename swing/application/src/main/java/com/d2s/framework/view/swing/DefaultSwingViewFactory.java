@@ -185,7 +185,7 @@ import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -235,7 +235,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Constructs a new <code>DefaultSwingViewFactory</code> instance.
-   *
+   * 
    * @param lookAndFeel
    *          the look and feel class name
    */
@@ -368,7 +368,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Decorates the created view with the apropriate border.
-   *
+   * 
    * @param view
    *          the view to descorate.
    * @param locale
@@ -899,7 +899,7 @@ public class DefaultSwingViewFactory implements
 
     /**
      * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
-     *
+     * 
      * @param viewDescriptor
      *          the tree view descriptor used by the tree view.
      * @param locale
@@ -1340,7 +1340,7 @@ public class DefaultSwingViewFactory implements
     /**
      * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
      * instance.
-     *
+     * 
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -1634,11 +1634,11 @@ public class DefaultSwingViewFactory implements
   }
 
   private IView<JComponent> createPropertyView(
-      IPropertyViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<JComponent> view = createPropertyView((IPropertyDescriptor) viewDescriptor
-        .getModelDescriptor(), viewDescriptor
-        .getRenderedChildProperties(), actionHandler, locale);
+      IPropertyViewDescriptor viewDescriptor, IActionHandler actionHandler,
+      Locale locale) {
+    IView<JComponent> view = createPropertyView(
+        (IPropertyDescriptor) viewDescriptor.getModelDescriptor(),
+        viewDescriptor.getRenderedChildProperties(), actionHandler, locale);
     return constructView(view.getPeer(), viewDescriptor, view.getConnector());
   }
 
@@ -1973,7 +1973,7 @@ public class DefaultSwingViewFactory implements
     /**
      * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
      * instance.
-     *
+     * 
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -2071,7 +2071,7 @@ public class DefaultSwingViewFactory implements
 
     /**
      * Constructs a new <code>PopupListener</code> instance.
-     *
+     * 
      * @param sourceComponent
      * @param view
      * @param actionHandler
@@ -2472,7 +2472,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a text field.
-   *
+   * 
    * @return the created text field.
    */
   protected JTextField createJTextField() {
@@ -2483,7 +2483,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a password field.
-   *
+   * 
    * @return the created password field.
    */
   protected JPasswordField createJPasswordField() {
@@ -2493,7 +2493,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a text area.
-   *
+   * 
    * @return the created text area.
    */
   protected JTextArea createJTextArea() {
@@ -2505,7 +2505,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a JEdit text area.
-   *
+   * 
    * @param language
    *          the language to add syntax highlighting for.
    * @return the created text area.
@@ -2528,7 +2528,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates an action field.
-   *
+   * 
    * @param showTextField
    *          is the text field visible to the user.
    * @return the created action field.
@@ -2539,7 +2539,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a date field.
-   *
+   * 
    * @return the created date field.
    */
   protected JDateField createJDateField() {
@@ -2551,7 +2551,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a combo box.
-   *
+   * 
    * @return the created combo box.
    */
   protected JComboBox createJComboBox() {
@@ -2560,7 +2560,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a label.
-   *
+   * 
    * @return the created label.
    */
   protected JLabel createJLabel() {
@@ -2569,7 +2569,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a tool bar.
-   *
+   * 
    * @return the created tool bar.
    */
   protected JToolBar createJToolBar() {
@@ -2578,7 +2578,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a tabbed pane.
-   *
+   * 
    * @return the created tabbed pane.
    */
   protected JTabbedPane createJTabbedPane() {
@@ -2587,7 +2587,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a split pane.
-   *
+   * 
    * @return the created split pane.
    */
   protected JSplitPane createJSplitPane() {
@@ -2599,7 +2599,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a tree.
-   *
+   * 
    * @return the created tree.
    */
   protected JTree createJTree() {
@@ -2610,7 +2610,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a table.
-   *
+   * 
    * @return the created table.
    */
   protected JTable createJTable() {
@@ -2665,7 +2665,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a list.
-   *
+   * 
    * @return the created list.
    */
   protected JList createJList() {
@@ -2676,7 +2676,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a button.
-   *
+   * 
    * @return the created button.
    */
   protected JButton createJButton() {
@@ -2687,7 +2687,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a popup menu.
-   *
+   * 
    * @return the created popup menu.
    */
   protected JPopupMenu createJPopupMenu() {
@@ -2696,7 +2696,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a menu item.
-   *
+   * 
    * @return the created menu item.
    */
   protected JMenuItem createJMenuItem() {
@@ -2705,7 +2705,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a scroll pane.
-   *
+   * 
    * @return the created scroll pane.
    */
   protected JScrollPane createJScrollPane() {
@@ -2716,7 +2716,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a check box.
-   *
+   * 
    * @return the created check box.
    */
   protected JCheckBox createJCheckBox() {
@@ -2725,7 +2725,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a panel.
-   *
+   * 
    * @return the created panel.
    */
   protected JPanel createJPanel() {
@@ -2735,7 +2735,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a security panel.
-   *
+   * 
    * @return the created security panel.
    */
   protected JPanel createSecurityPanel() {
@@ -2755,7 +2755,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the connectorFactory.
-   *
+   * 
    * @param connectorFactory
    *          the connectorFactory to set.
    */
@@ -2765,7 +2765,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the mvcBinder.
-   *
+   * 
    * @param mvcBinder
    *          the mvcBinder to set.
    */
@@ -2775,7 +2775,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the translationProvider.
-   *
+   * 
    * @param translationProvider
    *          the translationProvider to set.
    */
@@ -2785,7 +2785,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Gets the translationProvider.
-   *
+   * 
    * @return the translationProvider.
    */
   protected ITranslationProvider getTranslationProvider() {
@@ -2794,7 +2794,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the listSelectionModelBinder.
-   *
+   * 
    * @param listSelectionModelBinder
    *          the listSelectionModelBinder to set.
    */
@@ -2805,7 +2805,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the treeSelectionModelBinder.
-   *
+   * 
    * @param treeSelectionModelBinder
    *          the treeSelectionModelBinder to set.
    */
@@ -2816,7 +2816,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the masterDetailBinder.
-   *
+   * 
    * @param masterDetailBinder
    *          the masterDetailBinder to set.
    */
@@ -2826,7 +2826,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the maxCharacterLength.
-   *
+   * 
    * @param maxCharacterLength
    *          the maxCharacterLength to set.
    */
@@ -2836,7 +2836,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the iconFactory.
-   *
+   * 
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -2846,7 +2846,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Gets the iconFactory.
-   *
+   * 
    * @return the iconFactory.
    */
   public IIconFactory<Icon> getIconFactory() {
@@ -2855,7 +2855,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the actionFactory.
-   *
+   * 
    * @param actionFactory
    *          the actionFactory to set.
    */
@@ -2865,7 +2865,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Gets the actionFactory.
-   *
+   * 
    * @return the actionFactory.
    */
   public IActionFactory<Action, JComponent> getActionFactory() {
@@ -2874,7 +2874,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the lovAction.
-   *
+   * 
    * @param lovAction
    *          the lovAction to set.
    */
@@ -2884,7 +2884,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the openFileAsBinaryPropertyAction.
-   *
+   * 
    * @param openFileAsBinaryPropertyAction
    *          the openFileAsBinaryPropertyAction to set.
    */
@@ -2895,7 +2895,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the saveBinaryPropertyAsFileAction.
-   *
+   * 
    * @param saveBinaryPropertyAsFileAction
    *          the saveBinaryPropertyAsFileAction to set.
    */
@@ -2906,7 +2906,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the resetPropertyAction.
-   *
+   * 
    * @param resetPropertyAction
    *          the resetPropertyAction to set.
    */
@@ -2916,7 +2916,7 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Sets the binaryPropertyInfoAction.
-   *
+   * 
    * @param binaryPropertyInfoAction
    *          the binaryPropertyInfoAction to set.
    */

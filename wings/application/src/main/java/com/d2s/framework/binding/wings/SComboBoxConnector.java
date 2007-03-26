@@ -8,13 +8,12 @@ import java.awt.event.ActionListener;
 
 import org.wings.SComboBox;
 
-
 /**
  * SComboBox connector.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +21,7 @@ public class SComboBoxConnector extends SComponentConnector<SComboBox> {
 
   /**
    * Constructs a new <code>SComboBoxConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param comboBox

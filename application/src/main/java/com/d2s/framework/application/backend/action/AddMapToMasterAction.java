@@ -7,8 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.model.component.service.ILifecycleInterceptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.collection.ObjectEqualityMap;
 
@@ -18,7 +18,7 @@ import com.d2s.framework.util.collection.ObjectEqualityMap;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,7 +36,7 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
 
   /**
    * Gets the new map component to add.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the map to add to the collection.

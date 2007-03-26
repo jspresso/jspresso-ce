@@ -17,7 +17,7 @@ import com.d2s.framework.binding.IValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -49,7 +49,7 @@ public class SetConnectorValueAction<E, F, G> extends
 
   /**
    * Sets the connectorActionContextKey.
-   *
+   * 
    * @param connectorActionContextKey
    *          the connectorActionContextKey to set.
    */

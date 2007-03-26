@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
@@ -21,7 +22,7 @@ import com.d2s.framework.view.descriptor.ISubViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -63,7 +64,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the columnCount.
-   *
+   * 
    * @param columnCount
    *          the columnCount to set.
    */
@@ -73,7 +74,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the labelsPosition.
-   *
+   * 
    * @param labelsPosition
    *          the labelsPosition to set.
    */
@@ -83,7 +84,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the propertyWidths.
-   *
+   * 
    * @param propertyWidths
    *          the propertyWidths to set.
    */
@@ -112,11 +113,11 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
           .getComponentDescriptor().getPropertyDescriptor(propertyName);
       if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        return ((ICollectionPropertyDescriptor) childPropertyDescriptor)
-            .getCollectionDescriptor().getElementDescriptor()
+        return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor) childPropertyDescriptor)
+            .getCollectionDescriptor()).getElementDescriptor()
             .getRenderedProperties();
       } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor) {
-        return ((IReferencePropertyDescriptor) childPropertyDescriptor)
+        return ((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
             .getReferencedDescriptor().getRenderedProperties();
       }
     }
@@ -125,7 +126,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the renderedChildProperties.
-   *
+   * 
    * @param renderedChildProperties
    *          the renderedChildProperties to set.
    */
@@ -149,7 +150,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the propertyViewDescriptors.
-   *
+   * 
    * @param propertyViewDescriptors
    *          the propertyViewDescriptors to set.
    */
@@ -163,7 +164,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    */
   public List<ISubViewDescriptor> getPropertyViewDescriptors() {
     if (propertyViewDescriptors == null) {
-      IComponentDescriptor componentDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
           .getComponentDescriptor();
       List<String> modelRenderedProperties = componentDescriptor
           .getRenderedProperties();

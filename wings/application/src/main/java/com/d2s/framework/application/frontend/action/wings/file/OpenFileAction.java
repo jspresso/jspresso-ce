@@ -21,7 +21,7 @@ import com.d2s.framework.application.frontend.file.IFileOpenCallback;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -48,7 +48,7 @@ public class OpenFileAction extends ChooseFileAction {
 
   /**
    * Sets the fileOpenCallback.
-   *
+   * 
    * @param fileOpenCallback
    *          the fileOpenCallback to set.
    */

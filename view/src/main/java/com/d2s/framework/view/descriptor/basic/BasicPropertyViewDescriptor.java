@@ -12,7 +12,7 @@ import com.d2s.framework.view.descriptor.IPropertyViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,7 +23,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Gets the renderedChildProperties.
-   *
+   * 
    * @return the renderedChildProperties.
    */
   public List<String> getRenderedChildProperties() {
@@ -32,7 +32,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
 
   /**
    * Sets the renderedChildProperties.
-   *
+   * 
    * @param renderedChildProperties
    *          the renderedChildProperties to set.
    */

@@ -23,7 +23,7 @@ import com.d2s.framework.util.accessor.ICollectionAccessor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -119,7 +119,7 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
 
   /**
    * Wether the object is fully initialized.
-   *
+   * 
    * @param objectOrProxy
    *          the object to test.
    * @return true if the object is fully initialized.
@@ -131,7 +131,7 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
 
   /**
    * Sets the accessorFactory.
-   *
+   * 
    * @param accessorFactory
    *          the accessorFactory to set.
    */

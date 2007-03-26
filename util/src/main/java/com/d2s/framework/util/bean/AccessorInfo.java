@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -74,7 +74,7 @@ public class AccessorInfo {
    * Constructs a new <code>AccessorInfo</code> instance. If the method passed
    * in parameter is not an accessor, the <code>getAccessorType</code> method
    * will return <code>NONE</code>.
-   *
+   * 
    * @param method
    *          the method supposed to be an accessor.
    */
@@ -110,7 +110,7 @@ public class AccessorInfo {
 
   /**
    * Gets the accessorType.
-   *
+   * 
    * @return the accessorType.
    */
   public int getAccessorType() {
@@ -119,7 +119,7 @@ public class AccessorInfo {
 
   /**
    * Gets the accessedPropertyName.
-   *
+   * 
    * @return the accessedPropertyName.
    */
   public String getAccessedPropertyName() {
@@ -136,7 +136,7 @@ public class AccessorInfo {
   /**
    * Returns wether the underlying accessor is a modifier (setter, adder or
    * remover).
-   *
+   * 
    * @return true if the underlying accessor is a modifier.
    */
   public boolean isModifier() {
@@ -153,7 +153,7 @@ public class AccessorInfo {
   /**
    * Retrieves the collection element class based on the ElementClass
    * annotation.
-   *
+   * 
    * @param beanClass
    *          the bean class.
    * @param property

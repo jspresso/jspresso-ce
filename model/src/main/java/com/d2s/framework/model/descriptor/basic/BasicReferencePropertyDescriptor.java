@@ -16,23 +16,26 @@ import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete component type.
  */
-public class BasicReferencePropertyDescriptor extends
+public class BasicReferencePropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
-    IReferencePropertyDescriptor {
+    IReferencePropertyDescriptor<E> {
 
-  private IComponentDescriptor referencedDescriptor;
-  private Map<String, String>  initializationMapping;
+  private IComponentDescriptor<E> referencedDescriptor;
+  private Map<String, String>     initializationMapping;
 
   /**
    * {@inheritDoc}
    */
-  public IComponentDescriptor getReferencedDescriptor() {
+  @SuppressWarnings("unchecked")
+  public IComponentDescriptor<E> getReferencedDescriptor() {
     if (referencedDescriptor != null) {
       return referencedDescriptor;
     }
     if (getParentDescriptor() != null) {
-      return ((IReferencePropertyDescriptor) getParentDescriptor())
+      return ((IReferencePropertyDescriptor<E>) getParentDescriptor())
           .getReferencedDescriptor();
     }
     return referencedDescriptor;
@@ -44,7 +47,8 @@ public class BasicReferencePropertyDescriptor extends
    * @param referencedDescriptor
    *          the referencedDescriptor to set.
    */
-  public void setReferencedDescriptor(IComponentDescriptor referencedDescriptor) {
+  public void setReferencedDescriptor(
+      IComponentDescriptor<E> referencedDescriptor) {
     this.referencedDescriptor = referencedDescriptor;
   }
 
@@ -80,7 +84,7 @@ public class BasicReferencePropertyDescriptor extends
       return initializationMapping;
     }
     if (getParentDescriptor() != null) {
-      return ((IReferencePropertyDescriptor) getParentDescriptor())
+      return ((IReferencePropertyDescriptor<?>) getParentDescriptor())
           .getInitializationMapping();
     }
     return initializationMapping;

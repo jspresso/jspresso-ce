@@ -42,12 +42,10 @@ public class PasteCollectionToMasterAction extends
         .retrieveComponents();
     if (transferStructure.getContent() != null) {
       List<Object> componentsToTransfer;
-      if (getModelDescriptor(context)
-          .getCollectionDescriptor()
-          .getElementDescriptor()
-          .getComponentContract()
-          .isAssignableFrom(
-              transferStructure.getComponentDescriptor().getComponentContract())) {
+      if (((Class<?>) getModelDescriptor(context).getCollectionDescriptor()
+          .getElementDescriptor().getComponentContract())
+          .isAssignableFrom(transferStructure.getComponentDescriptor()
+              .getComponentContract())) {
         if (transferStructure.getContent() instanceof Collection<?>) {
           componentsToTransfer = new ArrayList<Object>(
               (Collection<?>) transferStructure.getContent());

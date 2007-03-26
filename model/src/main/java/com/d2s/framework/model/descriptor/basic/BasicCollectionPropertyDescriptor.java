@@ -16,29 +16,32 @@ import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete collection component element type.
  */
-public class BasicCollectionPropertyDescriptor extends
+public class BasicCollectionPropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
-    ICollectionPropertyDescriptor {
+    ICollectionPropertyDescriptor<E> {
 
-  private ICollectionDescriptor referencedDescriptor;
-  private Boolean               manyToMany;
-  private List<String>          orderingProperties;
+  private ICollectionDescriptor<E> referencedDescriptor;
+  private Boolean                  manyToMany;
+  private List<String>             orderingProperties;
 
   /**
    * Gets the referencedDescriptor.
-   *
+   * 
    * @return the referencedDescriptor.
    */
-  public ICollectionDescriptor getReferencedDescriptor() {
+  @SuppressWarnings("unchecked")
+  public ICollectionDescriptor<E> getReferencedDescriptor() {
     if (referencedDescriptor != null) {
       return referencedDescriptor;
     }
     if (getParentDescriptor() != null) {
-      return ((ICollectionPropertyDescriptor) getParentDescriptor())
+      return ((ICollectionPropertyDescriptor<E>) getParentDescriptor())
           .getReferencedDescriptor();
     }
     return referencedDescriptor;
@@ -46,18 +49,19 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Sets the referencedDescriptor.
-   *
+   * 
    * @param referencedDescriptor
    *          the referencedDescriptor to set.
    */
-  public void setReferencedDescriptor(ICollectionDescriptor referencedDescriptor) {
+  public void setReferencedDescriptor(
+      ICollectionDescriptor<E> referencedDescriptor) {
     this.referencedDescriptor = referencedDescriptor;
   }
 
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<? extends Collection> getModelType() {
     return getReferencedDescriptor().getCollectionInterface();
   }
 
@@ -70,7 +74,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Gets the manyToMany.
-   *
+   * 
    * @return the manyToMany.
    */
   public boolean isManyToMany() {
@@ -90,7 +94,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Sets the manyToMany.
-   *
+   * 
    * @param manyToMany
    *          the manyToMany to set.
    */
@@ -100,7 +104,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Gets the orderingProperties.
-   *
+   * 
    * @return the orderingProperties.
    */
   public List<String> getOrderingProperties() {
@@ -108,7 +112,7 @@ public class BasicCollectionPropertyDescriptor extends
       return orderingProperties;
     }
     if (getParentDescriptor() != null) {
-      return ((ICollectionPropertyDescriptor) getParentDescriptor())
+      return ((ICollectionPropertyDescriptor<?>) getParentDescriptor())
           .getOrderingProperties();
     }
     return getReferencedDescriptor().getElementDescriptor()
@@ -117,7 +121,7 @@ public class BasicCollectionPropertyDescriptor extends
 
   /**
    * Sets the orderingProperties.
-   *
+   * 
    * @param orderingProperties
    *          the orderingProperties to set.
    */
@@ -125,12 +129,11 @@ public class BasicCollectionPropertyDescriptor extends
     this.orderingProperties = orderingProperties;
   }
 
-
   /**
    * {@inheritDoc}
    */
-  public void preprocessAdder(Object component,
-      Collection collection, Object addedValue) {
+  public void preprocessAdder(Object component, Collection collection,
+      Object addedValue) {
     List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
@@ -144,8 +147,8 @@ public class BasicCollectionPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public void postprocessAdder(Object component,
-      Collection collection, Object addedValue) {
+  public void postprocessAdder(Object component, Collection collection,
+      Object addedValue) {
     List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
@@ -159,8 +162,8 @@ public class BasicCollectionPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public void preprocessRemover(Object component,
-      Collection collection, Object removedValue) {
+  public void preprocessRemover(Object component, Collection collection,
+      Object removedValue) {
     List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
@@ -174,15 +177,16 @@ public class BasicCollectionPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public void postprocessRemover(Object component,
-      Collection collection, Object removedValue) {
+  public void postprocessRemover(Object component, Collection collection,
+      Object removedValue) {
     List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
     for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
       ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
-      processor.postprocessRemoverIntegrity(component, collection, removedValue);
+      processor
+          .postprocessRemoverIntegrity(component, collection, removedValue);
     }
   }
 }

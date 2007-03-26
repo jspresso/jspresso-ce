@@ -57,7 +57,7 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    BasicCollectionDescriptor modelDescriptor = new BasicCollectionDescriptor();
+    BasicCollectionDescriptor<IReport> modelDescriptor = new BasicCollectionDescriptor<IReport>();
     modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
     IValueConnector reportsConnector = beanConnectorFactory

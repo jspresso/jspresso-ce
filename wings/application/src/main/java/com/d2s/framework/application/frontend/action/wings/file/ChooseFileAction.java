@@ -13,7 +13,7 @@ import com.d2s.framework.application.frontend.action.wings.AbstractWingsAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,7 +25,7 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
   /**
    * Sets the fileFilter. Filter file types are a map of descriptions keying
    * file extension arays.
-   *
+   * 
    * @param fileFilter
    *          the fileFilter to set.
    */
@@ -35,7 +35,7 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
 
   /**
    * Sets the defaultFileName.
-   *
+   * 
    * @param defaultFileName
    *          the defaultFileName to set.
    */
@@ -43,20 +43,18 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
     this.defaultFileName = defaultFileName;
   }
 
-
   /**
    * Gets the defaultFileName.
-   *
+   * 
    * @return the defaultFileName.
    */
   protected String getDefaultFileName() {
     return defaultFileName;
   }
 
-
   /**
    * Gets the fileFilter.
-   *
+   * 
    * @return the fileFilter.
    */
   protected Map<String, List<String>> getFileFilter() {

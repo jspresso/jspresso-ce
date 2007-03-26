@@ -15,7 +15,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,7 +25,7 @@ public class ModelConnector extends ModelRefPropertyConnector {
 
   /**
    * Constructs a new instance based on the model class passed as parameter.
-   *
+   * 
    * @param modelDescriptor
    *          the model descriptor backing this connector.
    * @param modelConnectorFactory

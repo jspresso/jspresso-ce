@@ -12,7 +12,7 @@ import java.util.List;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -20,7 +20,7 @@ public interface ITableViewDescriptor extends ICollectionViewDescriptor {
 
   /**
    * Gets the column view descriptors.
-   *
+   * 
    * @return the column view descriptors.
    */
   List<ISubViewDescriptor> getColumnViewDescriptors();

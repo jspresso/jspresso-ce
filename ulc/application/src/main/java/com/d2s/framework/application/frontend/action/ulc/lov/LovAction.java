@@ -36,13 +36,13 @@ import com.ulcjava.base.application.ULCComponent;
  */
 public class LovAction extends ModalDialogAction {
 
-  private ILovViewDescriptorFactory    lovViewDescriptorFactory;
-  private CreateQueryEntityAction      createQueryEntityAction;
-  private IDisplayableAction           okAction;
-  private IDisplayableAction           cancelAction;
-  private IDisplayableAction           findAction;
-  private IReferencePropertyDescriptor entityRefQueryDescriptor;
-  private boolean                      autoquery;
+  private ILovViewDescriptorFactory             lovViewDescriptorFactory;
+  private CreateQueryEntityAction               createQueryEntityAction;
+  private IDisplayableAction                    okAction;
+  private IDisplayableAction                    cancelAction;
+  private IDisplayableAction                    findAction;
+  private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
+  private boolean                               autoquery;
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -69,7 +69,7 @@ public class LovAction extends ModalDialogAction {
     actions.add(okAction);
     actions.add(cancelAction);
     context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
-    IReferencePropertyDescriptor erqDescriptor = getEntityRefQueryDescriptor(context);
+    IReferencePropertyDescriptor<IEntity> erqDescriptor = getEntityRefQueryDescriptor(context);
     IView<ULCComponent> lovView = getViewFactory(context).createView(
         lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor),
         actionHandler, getLocale(context));
@@ -158,7 +158,8 @@ public class LovAction extends ModalDialogAction {
    *          the action context.
    * @return the entityRefQueryDescriptor.
    */
-  protected IReferencePropertyDescriptor getEntityRefQueryDescriptor(
+  @SuppressWarnings("unchecked")
+  protected IReferencePropertyDescriptor<IEntity> getEntityRefQueryDescriptor(
       Map<String, Object> context) {
     if (entityRefQueryDescriptor != null) {
       return entityRefQueryDescriptor;
@@ -166,7 +167,7 @@ public class LovAction extends ModalDialogAction {
     IModelDescriptor modelDescriptor = (IModelDescriptor) context
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
     if (modelDescriptor instanceof IReferencePropertyDescriptor) {
-      return (IReferencePropertyDescriptor) modelDescriptor;
+      return (IReferencePropertyDescriptor<IEntity>) modelDescriptor;
     }
     return null;
   }
@@ -178,7 +179,7 @@ public class LovAction extends ModalDialogAction {
    *          the entityRefQueryDescriptor to set.
    */
   public void setEntityRefQueryDescriptor(
-      IReferencePropertyDescriptor entityRefQueryDescriptor) {
+      IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor) {
     this.entityRefQueryDescriptor = entityRefQueryDescriptor;
   }
 

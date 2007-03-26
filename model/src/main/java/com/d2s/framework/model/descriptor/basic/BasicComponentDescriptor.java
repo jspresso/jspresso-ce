@@ -16,13 +16,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import com.d2s.framework.model.component.service.IComponentService;
+import com.d2s.framework.model.component.service.ILifecycleInterceptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
-import com.d2s.framework.model.service.IComponentService;
-import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.exception.NestedRuntimeException;
 
@@ -34,15 +34,17 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete type of components.
  */
-public class BasicComponentDescriptor extends DefaultIconDescriptor implements
-    IComponentDescriptor {
+public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
+    implements IComponentDescriptor<E> {
 
   private Class                            componentContract;
   private Map<String, IPropertyDescriptor> propertyDescriptors;
   private Collection<String>               unclonedProperties;
   private Map<Method, IComponentService>   serviceDelegates;
-  private List<IComponentDescriptor>       ancestorDescriptors;
+  private List<IComponentDescriptor<?>>    ancestorDescriptors;
   private Set<Class>                       serviceContracts;
   private List<String>                     orderingProperties;
   private List<String>                     renderedProperties;
@@ -89,7 +91,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   public Collection<IPropertyDescriptor> getPropertyDescriptors() {
     Set<IPropertyDescriptor> allDescriptors = new LinkedHashSet<IPropertyDescriptor>();
     if (ancestorDescriptors != null) {
-      for (IComponentDescriptor ancestorDescriptor : ancestorDescriptors) {
+      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescriptors) {
         allDescriptors.addAll(ancestorDescriptor.getPropertyDescriptors());
       }
     }
@@ -114,8 +116,8 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
     IPropertyDescriptor descriptor = getDeclaredPropertyDescriptor(propertyName);
     if (descriptor == null && ancestorDescriptors != null) {
-      for (Iterator<IComponentDescriptor> ite = ancestorDescriptors.iterator(); descriptor == null
-          && ite.hasNext();) {
+      for (Iterator<IComponentDescriptor<?>> ite = ancestorDescriptors
+          .iterator(); descriptor == null && ite.hasNext();) {
         IComponentDescriptor ancestorDescriptor = ite.next();
         descriptor = ancestorDescriptor.getPropertyDescriptor(propertyName);
       }
@@ -154,7 +156,8 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public Class<?> getComponentContract() {
+  @SuppressWarnings("cast")
+  public Class<? extends E> getComponentContract() {
     if (componentContract == null && getName() != null) {
       try {
         componentContract = Class.forName(getName());
@@ -162,7 +165,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
         throw new NestedRuntimeException(ex);
       }
     }
-    return componentContract;
+    return (Class<? extends E>) componentContract;
   }
 
   /**
@@ -174,8 +177,8 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
       service = serviceDelegates.get(targetMethod);
     }
     if (service == null && ancestorDescriptors != null) {
-      for (Iterator<IComponentDescriptor> ite = ancestorDescriptors.iterator(); service == null
-          && ite.hasNext();) {
+      for (Iterator<IComponentDescriptor<?>> ite = ancestorDescriptors
+          .iterator(); service == null && ite.hasNext();) {
         IComponentDescriptor ancestorDescriptor = ite.next();
         service = ancestorDescriptor.getServiceDelegate(targetMethod);
       }
@@ -195,7 +198,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    *          The list of ancestor component descriptors.
    */
   public void setAncestorDescriptors(
-      List<IComponentDescriptor> ancestorDescriptors) {
+      List<IComponentDescriptor<?>> ancestorDescriptors) {
     this.ancestorDescriptors = ancestorDescriptors;
   }
 
@@ -208,7 +211,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
    * 
    * @return ancestorDescriptors The list of ancestor entity descriptors.
    */
-  public List<IComponentDescriptor> getAncestorDescriptors() {
+  public List<IComponentDescriptor<?>> getAncestorDescriptors() {
     return ancestorDescriptors;
   }
 
@@ -244,7 +247,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
       properties.addAll(unclonedProperties);
     }
     if (ancestorDescriptors != null) {
-      for (IComponentDescriptor ancestorDescriptor : ancestorDescriptors) {
+      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescriptors) {
         properties.addAll(ancestorDescriptor.getUnclonedProperties());
       }
     }
@@ -261,7 +264,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
       properties.addAll(orderingProperties);
     }
     if (ancestorDescriptors != null) {
-      for (IComponentDescriptor ancestorDescriptor : ancestorDescriptors) {
+      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescriptors) {
         if (ancestorDescriptor.getOrderingProperties() != null) {
           properties.addAll(ancestorDescriptor.getOrderingProperties());
         }
@@ -413,7 +416,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public IComponentDescriptor getComponentDescriptor() {
+  public IComponentDescriptor<E> getComponentDescriptor() {
     return this;
   }
 
@@ -432,7 +435,7 @@ public class BasicComponentDescriptor extends DefaultIconDescriptor implements
   public List<ILifecycleInterceptor> getLifecycleInterceptors() {
     List<ILifecycleInterceptor> allInterceptors = new ArrayList<ILifecycleInterceptor>();
     if (getAncestorDescriptors() != null) {
-      for (IComponentDescriptor ancestorDescriptor : getAncestorDescriptors()) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
         allInterceptors.addAll(ancestorDescriptor.getLifecycleInterceptors());
       }
     }

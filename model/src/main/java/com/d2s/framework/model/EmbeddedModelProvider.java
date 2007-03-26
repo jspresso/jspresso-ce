@@ -10,7 +10,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +22,7 @@ public class EmbeddedModelProvider implements IModelProvider {
 
   /**
    * Constructs a new <code>EmbeddedModelProvider</code> instance.
-   *
+   * 
    * @param modelDescriptor
    *          the model descriptor of this model provider.
    */
@@ -73,7 +73,7 @@ public class EmbeddedModelProvider implements IModelProvider {
    * Sets a new internally held model instance and forwards the change to all
    * <code>IModelChangeListener</code>s. In this case this is the enclosing
    * <code>ModelConnector</code>.
-   *
+   * 
    * @param newModel
    *          the new model instance.
    */

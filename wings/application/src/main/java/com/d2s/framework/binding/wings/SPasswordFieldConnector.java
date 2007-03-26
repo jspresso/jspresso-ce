@@ -10,7 +10,7 @@ import org.wings.SPasswordField;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -18,7 +18,7 @@ public class SPasswordFieldConnector extends STextFieldConnector {
 
   /**
    * Constructs a new <code>SPasswordFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param passwordField

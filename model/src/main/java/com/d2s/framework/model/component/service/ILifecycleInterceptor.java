@@ -1,18 +1,18 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.model.service;
+package com.d2s.framework.model.component.service;
 
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.security.UserPrincipal;
 
 /**
- * Defines all the entity lifecycle hooks.
+ * Defines all the components lifecycle hooks.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -22,8 +22,8 @@ public interface ILifecycleInterceptor<E> {
 
   /**
    * Called whenever an entity is created in memory.
-   * 
-   * @param entity
+   *
+   * @param component
    *          the created entity.
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
@@ -34,13 +34,13 @@ public interface ILifecycleInterceptor<E> {
    *          entityLifecycleHandler.
    * @return true if the state of the entity has been updated.
    */
-  boolean onCreate(E entity, IEntityFactory entityFactory,
+  boolean onCreate(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called whenever an entity is made persistent for the first time.
-   * 
-   * @param entity
+   *
+   * @param component
    *          the persisted entity.
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
@@ -51,13 +51,13 @@ public interface ILifecycleInterceptor<E> {
    *          entityLifecycleHandler.
    * @return true if the state of the entity has been updated.
    */
-  boolean onPersist(E entity, IEntityFactory entityFactory,
+  boolean onPersist(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called whenever an persistent entity is updated.
-   * 
-   * @param entity
+   *
+   * @param component
    *          the updated entity.
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
@@ -68,13 +68,13 @@ public interface ILifecycleInterceptor<E> {
    *          entityLifecycleHandler.
    * @return true if the state of the entity has been updated.
    */
-  boolean onUpdate(E entity, IEntityFactory entityFactory,
+  boolean onUpdate(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
    * Called whenever an persistent entity is deleted.
-   * 
-   * @param entity
+   *
+   * @param component
    *          the deleted entity.
    * @param entityFactory
    *          an entity factory instance which can be used to complete the
@@ -85,6 +85,6 @@ public interface ILifecycleInterceptor<E> {
    *          entityLifecycleHandler.
    * @return true if the state of the entity has been updated.
    */
-  boolean onDelete(E entity, IEntityFactory entityFactory,
+  boolean onDelete(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 }

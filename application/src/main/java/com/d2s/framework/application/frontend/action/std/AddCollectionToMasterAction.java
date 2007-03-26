@@ -10,7 +10,8 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ActionWrapper;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -18,7 +19,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -31,7 +32,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public class AddCollectionToMasterAction<E, F, G> extends
     ActionWrapper<E, F, G> {
 
-  private IEntityDescriptor elementEntityDescriptor;
+  private IComponentDescriptor<IEntity> elementEntityDescriptor;
 
   /**
    * Completes the action context with the element entity descriptor
@@ -54,12 +55,12 @@ public class AddCollectionToMasterAction<E, F, G> extends
    * Sets the elementEntityDescriptor. Entities of this type (which must be a
    * subclass of the collection element) are created and added to the detail
    * collection.
-   *
+   * 
    * @param elementEntityDescriptor
    *          the elementEntityDescriptor to set.
    */
   public void setElementEntityDescriptor(
-      IEntityDescriptor elementEntityDescriptor) {
+      IComponentDescriptor<IEntity> elementEntityDescriptor) {
     this.elementEntityDescriptor = elementEntityDescriptor;
     if (elementEntityDescriptor != null) {
       setIconImageURL(elementEntityDescriptor.getIconImageURL());

@@ -14,7 +14,7 @@ import com.d2s.framework.util.wings.WingsUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,9 +27,9 @@ public class EvenOddListCellRenderer extends SDefaultListCellRenderer {
    */
   @Override
   public SComponent getListCellRendererComponent(SComponent list, Object value,
-       boolean isSelected, int index) {
-    SComponent renderer = super.getListCellRendererComponent(list, value, isSelected, index
-        );
+      boolean isSelected, int index) {
+    SComponent renderer = super.getListCellRendererComponent(list, value,
+        isSelected, index);
     WingsUtil.alternateEvenOddBackground(renderer, list, isSelected, index);
     return renderer;
   }

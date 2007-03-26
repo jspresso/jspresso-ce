@@ -27,7 +27,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -50,7 +50,7 @@ public final class SErrorDialog extends SDialog {
 
   /**
    * Factory method for error dialog.
-   *
+   * 
    * @param sourceComponent
    *          one of the components insinde the owning window.
    * @param translationProvider
@@ -75,7 +75,7 @@ public final class SErrorDialog extends SDialog {
 
   /**
    * Specifies the icon to use.
-   *
+   * 
    * @param messageIcon
    *          the Icon to use. If null, the default error icon will be used
    */
@@ -194,7 +194,7 @@ public final class SErrorDialog extends SDialog {
    * Set the details section of the error dialog. If the details are either null
    * or an empty string, then hide the detailsPane button and hide the detail
    * scroll pane. Otherwise, just set the detailsPane section.
-   *
+   * 
    * @param details
    *          Details to be shown in the detail section of the dialog. This can
    *          be null if you do not want to display the details section of the
@@ -215,7 +215,7 @@ public final class SErrorDialog extends SDialog {
    * Set the details section of the error dialog. If the details are either null
    * or an empty string, then hide the detailsPane button and hide the detail
    * scroll pane. Otherwise, just set the detailsPane section.
-   *
+   * 
    * @param details
    *          Details to be shown in the detail section of the dialog. This can
    *          be null if you do not want to display the details section of the
@@ -248,7 +248,7 @@ public final class SErrorDialog extends SDialog {
   /**
    * Set the detailsPane section to be either visible or invisible. Set the text
    * of the Details button accordingly.
-   *
+   * 
    * @param b
    *          if true detailsPane section will be visible
    */
@@ -277,7 +277,7 @@ public final class SErrorDialog extends SDialog {
 
   /**
    * Set the error message for the dialog box.
-   *
+   * 
    * @param message
    *          Message for the error dialog
    */

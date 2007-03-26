@@ -11,7 +11,7 @@ import com.d2s.framework.util.gate.IGate;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -19,7 +19,7 @@ public interface IModelGate extends IGate {
 
   /**
    * Sets the modelProvider driving this gate.
-   *
+   * 
    * @param modelProvider
    *          the modelProvider driving this gate.
    */
@@ -27,9 +27,8 @@ public interface IModelGate extends IGate {
 
   /**
    * Gets the modelProvider driving this gate.
-   *
-   * @return
-   *          the modelProvider driving this gate.
+   * 
+   * @return the modelProvider driving this gate.
    */
   IModelProvider getModelProvider();
 }

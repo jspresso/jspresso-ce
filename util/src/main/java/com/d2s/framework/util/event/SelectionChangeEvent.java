@@ -12,7 +12,7 @@ import java.util.EventObject;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -26,7 +26,7 @@ public class SelectionChangeEvent extends EventObject {
 
   /**
    * Constructs a new <code>SelectionChangeEvent</code>.
-   *
+   * 
    * @param source
    *          The object that initiated the event.
    * @param oldSelection
@@ -52,7 +52,7 @@ public class SelectionChangeEvent extends EventObject {
 
   /**
    * Gets the new selection. The indices array is ordered.
-   *
+   * 
    * @return the new selection.
    */
   public int[] getNewSelection() {
@@ -61,7 +61,7 @@ public class SelectionChangeEvent extends EventObject {
 
   /**
    * Gets the old selection. The indices array is ordered.
-   *
+   * 
    * @return the old selection.
    */
   public int[] getOldSelection() {
@@ -78,10 +78,9 @@ public class SelectionChangeEvent extends EventObject {
     return (ISelectable) source;
   }
 
-
   /**
    * Gets the leadingIndex.
-   *
+   * 
    * @return the leadingIndex.
    */
   public int getLeadingIndex() {

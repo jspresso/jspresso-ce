@@ -12,7 +12,7 @@ import org.wings.SLabel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +22,7 @@ public class SImageConnector extends SComponentConnector<SLabel> {
 
   /**
    * Constructs a new <code>JImageConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param label

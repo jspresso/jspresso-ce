@@ -23,7 +23,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -67,7 +67,7 @@ public class EditComponentAction extends ModalDialogAction {
 
   /**
    * Sets the cancelAction.
-   *
+   * 
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -77,7 +77,7 @@ public class EditComponentAction extends ModalDialogAction {
 
   /**
    * Sets the okAction.
-   *
+   * 
    * @param okAction
    *          the okAction to set.
    */
@@ -87,7 +87,7 @@ public class EditComponentAction extends ModalDialogAction {
 
   /**
    * Sets the modelConnectorFactory.
-   *
+   * 
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
    */
@@ -98,7 +98,7 @@ public class EditComponentAction extends ModalDialogAction {
 
   /**
    * Sets the viewDescriptor.
-   *
+   * 
    * @param viewDescriptor
    *          the viewDescriptor to set.
    */
@@ -108,7 +108,7 @@ public class EditComponentAction extends ModalDialogAction {
 
   /**
    * Gets the viewDescriptor.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the viewDescriptor.
@@ -120,7 +120,7 @@ public class EditComponentAction extends ModalDialogAction {
 
   /**
    * Gets the model.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the model.

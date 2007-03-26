@@ -25,7 +25,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -47,7 +47,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Constructs a new <code>ULCDateField</code> instance.
-   *
+   * 
    * @param formatPattern
    *          the date format pattern to be used in the date field.
    */
@@ -77,7 +77,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Gets the date field value.
-   *
+   * 
    * @return the date field value.
    */
   public Date getValue() {
@@ -86,7 +86,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Sets the date field value.
-   *
+   * 
    * @param value
    *          the date field value.
    */
@@ -101,7 +101,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Adds a value change listener.
-   *
+   * 
    * @param listener
    *          the listener to add.
    */
@@ -111,7 +111,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Removes a value change listener.
-   *
+   * 
    * @param listener
    *          the listener to remove.
    */
@@ -204,7 +204,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Gets the editable.
-   *
+   * 
    * @return the editable.
    */
   public boolean isEditable() {
@@ -213,7 +213,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Sets the editable.
-   *
+   * 
    * @param editable
    *          the editable to set.
    */

@@ -9,15 +9,14 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityCollectionFactory;
-import com.d2s.framework.model.entity.IEntityExtensionFactory;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.entity.IQueryEntity;
@@ -31,17 +30,17 @@ import com.d2s.framework.util.uid.IGUIDGenerator;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class BasicProxyEntityFactory implements IEntityFactory {
 
-  private IAccessorFactory             accessorFactory;
-  private IEntityCollectionFactory     entityCollectionFactory;
-  private IEntityExtensionFactory      entityExtensionFactory;
-  private IGUIDGenerator               entityGUIDGenerator;
-  private IComponentDescriptorRegistry entityDescriptorRegistry;
+  private IAccessorFactory                     accessorFactory;
+  private IComponentCollectionFactory<IEntity> entityCollectionFactory;
+  private IComponentExtensionFactory           entityExtensionFactory;
+  private IGUIDGenerator                       entityGUIDGenerator;
+  private IComponentDescriptorRegistry         entityDescriptorRegistry;
 
   /**
    * {@inheritDoc}
@@ -56,7 +55,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
             .straightSetProperty(
                 propertyDescriptor.getName(),
                 entityCollectionFactory
-                    .createEntityCollection(((ICollectionPropertyDescriptor) propertyDescriptor)
+                    .createEntityCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                         .getModelType()));
       }
     }
@@ -89,7 +88,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id, Class[] extraInterfaces) {
-    IEntityDescriptor entityDescriptor = (IEntityDescriptor) entityDescriptorRegistry
+    IComponentDescriptor entityDescriptor = entityDescriptorRegistry
         .getComponentDescriptor(entityContract);
     if (entityDescriptor.isPurelyAbstract()) {
       throw new EntityException(entityDescriptor.getName()
@@ -115,13 +114,13 @@ public class BasicProxyEntityFactory implements IEntityFactory {
 
   /**
    * Creates the entity proxy invocation handler.
-   * 
+   *
    * @param entityDescriptor
    *          the entity descriptor.
    * @return the entity proxy invocation handler.
    */
   protected InvocationHandler createEntityInvocationHandler(
-      IEntityDescriptor entityDescriptor) {
+      IComponentDescriptor<IEntity> entityDescriptor) {
     return new BasicEntityInvocationHandler(entityDescriptor,
         entityCollectionFactory, accessorFactory, entityExtensionFactory);
   }
@@ -143,7 +142,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
 
   /**
    * Sets the accessorFactory used by this entity factory.
-   * 
+   *
    * @param accessorFactory
    *          the accessorFactory to set.
    */
@@ -153,29 +152,29 @@ public class BasicProxyEntityFactory implements IEntityFactory {
 
   /**
    * Sets the entityCollectionFactory property.
-   * 
+   *
    * @param entityCollectionFactory
    *          the entityCollectionFactory to set.
    */
   public void setEntityCollectionFactory(
-      IEntityCollectionFactory entityCollectionFactory) {
+      IComponentCollectionFactory<IEntity> entityCollectionFactory) {
     this.entityCollectionFactory = entityCollectionFactory;
   }
 
   /**
    * Sets the entityExtensionFactory property.
-   * 
+   *
    * @param entityExtensionFactory
    *          the entityCollectionFactory to set.
    */
   public void setEntityExtensionFactory(
-      IEntityExtensionFactory entityExtensionFactory) {
+      IComponentExtensionFactory entityExtensionFactory) {
     this.entityExtensionFactory = entityExtensionFactory;
   }
 
   /**
    * Sets the entityGUIDGenerator.
-   * 
+   *
    * @param entityGUIDGenerator
    *          the entityGUIDGenerator to set.
    */
@@ -185,7 +184,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
 
   /**
    * Gets the accessorFactory.
-   * 
+   *
    * @return the accessorFactory.
    */
   protected IAccessorFactory getAccessorFactory() {
@@ -194,25 +193,25 @@ public class BasicProxyEntityFactory implements IEntityFactory {
 
   /**
    * Gets the entityCollectionFactory.
-   * 
+   *
    * @return the entityCollectionFactory.
    */
-  protected IEntityCollectionFactory getEntityCollectionFactory() {
+  protected IComponentCollectionFactory<IEntity> getEntityCollectionFactory() {
     return entityCollectionFactory;
   }
 
   /**
    * Gets the entityExtensionFactory.
-   * 
+   *
    * @return the entityExtensionFactory.
    */
-  protected IEntityExtensionFactory getEntityExtensionFactory() {
+  protected IComponentExtensionFactory getEntityExtensionFactory() {
     return entityExtensionFactory;
   }
 
   /**
    * Gets the principal using the factory.
-   * 
+   *
    * @return the principal using the factory.
    */
   protected UserPrincipal getPrincipal() {
@@ -221,7 +220,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
 
   /**
    * Sets the entityDescriptorRegistry.
-   * 
+   *
    * @param entityDescriptorRegistry
    *          the entityDescriptorRegistry to set.
    */
@@ -233,13 +232,13 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   /**
    * {@inheritDoc}
    */
-  public IComponentDescriptor getComponentDescriptor(Class componentContract) {
+  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
     return entityDescriptorRegistry.getComponentDescriptor(componentContract);
   }
 
   /**
    * Gets the entity lifecycle handler.
-   * 
+   *
    * @return the entity lifecycle handler.
    */
   protected IEntityLifecycleHandler getEntityLifecycleHandler() {

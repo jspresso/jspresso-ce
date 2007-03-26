@@ -21,5 +21,5 @@ public interface IComponentDescriptorRegistry {
    *          the component contract.
    * @return th component descriptor.
    */
-  IComponentDescriptor getComponentDescriptor(Class componentContract);
+  IComponentDescriptor<?> getComponentDescriptor(Class componentContract);
 }

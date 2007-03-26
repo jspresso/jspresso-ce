@@ -11,13 +11,15 @@ package com.d2s.framework.model.descriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete collection component type.
  */
-public interface ICollectionDescriptorProvider extends IModelDescriptor {
+public interface ICollectionDescriptorProvider<E> extends IModelDescriptor {
 
   /**
    * Gets the collection descriptor.
    * 
    * @return the collection descriptor.
    */
-  ICollectionDescriptor getCollectionDescriptor();
+  ICollectionDescriptor<E> getCollectionDescriptor();
 }

@@ -18,7 +18,7 @@ import com.d2s.framework.action.IActionHandler;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,10 +36,10 @@ public class YesNoCancelAction extends AbstractMessageAction {
   @Override
   public boolean execute(final IActionHandler actionHandler,
       final Map<String, Object> context) {
-    SOptionPane.showConfirmDialog(
-        getSourceComponent(context), getMessage(context), getI18nName(
-            getTranslationProvider(context), getLocale(context)),
-        SOptionPane.YES_NO_CANCEL_OPTION, new ActionListener() {
+    SOptionPane.showConfirmDialog(getSourceComponent(context),
+        getMessage(context), getI18nName(getTranslationProvider(context),
+            getLocale(context)), SOptionPane.YES_NO_CANCEL_OPTION,
+        new ActionListener() {
 
           public void actionPerformed(ActionEvent e) {
             if (SOptionPane.YES_ACTION.equals(e.getActionCommand())) {
@@ -58,7 +58,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
 
   /**
    * Sets the cancelAction.
-   *
+   * 
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -68,7 +68,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
 
   /**
    * Sets the noAction.
-   *
+   * 
    * @param noAction
    *          the noAction to set.
    */
@@ -78,7 +78,7 @@ public class YesNoCancelAction extends AbstractMessageAction {
 
   /**
    * Sets the yesAction.
-   *
+   * 
    * @param yesAction
    *          the yesAction to set.
    */

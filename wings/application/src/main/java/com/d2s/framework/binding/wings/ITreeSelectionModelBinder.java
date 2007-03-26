@@ -13,7 +13,7 @@ import com.d2s.framework.binding.IValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,7 +21,7 @@ public interface ITreeSelectionModelBinder {
 
   /**
    * Binds a collection connector to keep track of a selection model selections.
-   *
+   * 
    * @param rootConnector
    *          the root connector of the connector hierarchy.
    * @param tree

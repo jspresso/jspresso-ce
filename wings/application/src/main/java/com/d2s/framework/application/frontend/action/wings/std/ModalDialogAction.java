@@ -27,7 +27,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -79,7 +79,7 @@ public class ModalDialogAction extends AbstractWingsAction {
 
   /**
    * Gets the actions.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the actions.
@@ -92,7 +92,7 @@ public class ModalDialogAction extends AbstractWingsAction {
 
   /**
    * Gets the mainView.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the mainView.

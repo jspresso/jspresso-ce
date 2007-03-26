@@ -18,7 +18,7 @@ import com.d2s.framework.application.frontend.action.wings.AbstractWingsAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -43,7 +43,7 @@ public class DisplayUrlAction extends AbstractWingsAction {
 
   /**
    * Sets the baseUrl.
-   *
+   * 
    * @param baseUrl
    *          the baseUrl to set.
    */

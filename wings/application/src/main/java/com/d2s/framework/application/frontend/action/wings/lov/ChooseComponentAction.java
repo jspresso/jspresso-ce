@@ -24,7 +24,7 @@ import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -65,7 +65,7 @@ public class ChooseComponentAction extends ModalDialogAction {
 
   /**
    * Sets the cancelAction.
-   *
+   * 
    * @param cancelAction
    *          the cancelAction to set.
    */
@@ -75,7 +75,7 @@ public class ChooseComponentAction extends ModalDialogAction {
 
   /**
    * Sets the okAction.
-   *
+   * 
    * @param okAction
    *          the okAction to set.
    */

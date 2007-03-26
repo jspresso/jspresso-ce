@@ -49,8 +49,8 @@ public abstract class AbstractChangePasswordAction extends
    */
   public static final IComponentDescriptor PASSWD_CHANGE_DESCRIPTOR = createPasswordChangeModel();
 
-  private static IComponentDescriptor createPasswordChangeModel() {
-    BasicComponentDescriptor passwordChangeModel = new BasicComponentDescriptor();
+  private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
+    BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();
     BasicPasswordPropertyDescriptor currentPassword = new BasicPasswordPropertyDescriptor();
     currentPassword.setName(PASSWD_CURRENT);
     BasicPasswordPropertyDescriptor typedPassword = new BasicPasswordPropertyDescriptor();

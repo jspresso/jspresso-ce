@@ -14,7 +14,7 @@ import com.d2s.framework.util.event.ISelectable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +22,7 @@ public interface IListSelectionModelBinder {
 
   /**
    * Binds a collection connector to keep track of a selection model selections.
-   *
+   * 
    * @param selectable
    *          the connector to bind.
    * @param selectionModel

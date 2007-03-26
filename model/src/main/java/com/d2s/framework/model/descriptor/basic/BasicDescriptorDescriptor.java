@@ -29,10 +29,10 @@ public final class BasicDescriptorDescriptor {
   /**
    * The descriptor of the component descriptor.
    */
-  public static final IComponentDescriptor INSTANCE = createInstance();
+  public static final IComponentDescriptor<IDescriptor> INSTANCE = createInstance();
 
-  private static IComponentDescriptor createInstance() {
-    BasicComponentDescriptor instance = new BasicComponentDescriptor(
+  private static IComponentDescriptor<IDescriptor> createInstance() {
+    BasicComponentDescriptor<IDescriptor> instance = new BasicComponentDescriptor<IDescriptor>(
         IDescriptor.class.getName());
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();

@@ -18,7 +18,7 @@ import com.d2s.framework.binding.IValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -40,7 +40,7 @@ public class BooleanTableCellRenderer extends SCheckBox implements
   /**
    * Overrides <code>JComponent.setForeground</code> to assign the
    * unselected-foreground color to the specified color.
-   *
+   * 
    * @param c
    *          set the foreground color to this value
    */
@@ -53,7 +53,7 @@ public class BooleanTableCellRenderer extends SCheckBox implements
   /**
    * Overrides <code>JComponent.setBackground</code> to assign the
    * unselected-background color to the specified color.
-   *
+   * 
    * @param c
    *          set the background color to this value
    */

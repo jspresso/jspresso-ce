@@ -13,7 +13,7 @@ import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,15 +30,14 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
       return fileFilter;
     }
     if (getParentDescriptor() != null) {
-      return ((ITextPropertyDescriptor) getParentDescriptor())
-          .getFileFilter();
+      return ((ITextPropertyDescriptor) getParentDescriptor()).getFileFilter();
     }
     return fileFilter;
   }
 
   /**
    * Sets the fileFilter.
-   *
+   * 
    * @param fileFilter
    *          the fileFilter to set.
    */

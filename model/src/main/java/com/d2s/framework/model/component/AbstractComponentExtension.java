@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.model.entity;
+package com.d2s.framework.model.component;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -9,52 +9,52 @@ import java.beans.PropertyChangeListener;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
- * This abstract class is a helper base class for entity extensions. Developpers
- * should inherit from it and use the <code>getEntity()</code> to access the
- * extended entity instance.
+ * This abstract class is a helper base class for components extensions.
+ * Developpers should inherit from it and use the <code>getComponent()</code>
+ * to access the extended component instance.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <T>
- *          the parametrized entity class on which these extensions work on.
+ *          the parametrized component class on which these extensions work on.
  */
-public abstract class AbstractEntityExtension<T extends IEntity> implements
-    IEntityExtension<T> {
+public abstract class AbstractComponentExtension<T extends IComponent> implements
+    IComponentExtension<T> {
 
-  private final T extendedEntity;
+  private final T extendedComponent;
 
   /**
-   * Constructs a new <code>AbstractEntityExtension</code> instance.
-   * 
-   * @param entity
-   *          The extended entity instance.
+   * Constructs a new <code>AbstractComponentExtension</code> instance.
+   *
+   * @param component
+   *          The extended component instance.
    */
-  public AbstractEntityExtension(T entity) {
-    this.extendedEntity = entity;
+  public AbstractComponentExtension(T component) {
+    this.extendedComponent = component;
   }
 
   /**
    * {@inheritDoc}
    */
-  public T getEntity() {
-    return extendedEntity;
+  public T getComponent() {
+    return extendedComponent;
   }
 
   /**
    * Computes the entity type.
-   * 
+   *
    * @return The entity type.
    */
   public String getType() {
-    return getEntity().getContract().getName();
+    return getComponent().getContract().getName();
   }
 
   /**
    * Registers a property change listener to forward property changes.
-   * 
+   *
    * @param sourceBean
    *          the source bean.
    * @param sourceProperty
@@ -70,7 +70,7 @@ public abstract class AbstractEntityExtension<T extends IEntity> implements
 
           public void propertyChange(@SuppressWarnings("unused")
           PropertyChangeEvent evt) {
-            getEntity().firePropertyChange(forwardedProperty,
+            getComponent().firePropertyChange(forwardedProperty,
                 evt.getOldValue(), evt.getNewValue());
           }
         });

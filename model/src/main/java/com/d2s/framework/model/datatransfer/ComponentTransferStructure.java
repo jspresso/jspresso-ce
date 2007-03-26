@@ -14,12 +14,14 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete component type.
  */
-public class ComponentTransferStructure {
+public class ComponentTransferStructure<E> {
 
-  private IComponentDescriptor componentDescriptor;
-  private Object               content;
-  private TransferMode         transferMode;
+  private IComponentDescriptor<E> componentDescriptor;
+  private Object                  content;
+  private TransferMode            transferMode;
 
   /**
    * Constructs a new <code>ComponentTransferStructure</code> instance.
@@ -31,8 +33,9 @@ public class ComponentTransferStructure {
    * @param transferMode
    *          the transfer mode (copy or move).
    */
-  public ComponentTransferStructure(IComponentDescriptor componentDescriptor,
-      Object content, TransferMode transferMode) {
+  public ComponentTransferStructure(
+      IComponentDescriptor<E> componentDescriptor, Object content,
+      TransferMode transferMode) {
     this.componentDescriptor = componentDescriptor;
     this.content = content;
     this.transferMode = transferMode;
@@ -43,7 +46,7 @@ public class ComponentTransferStructure {
    * 
    * @return the componentDescriptor.
    */
-  public IComponentDescriptor getComponentDescriptor() {
+  public IComponentDescriptor<E> getComponentDescriptor() {
     return componentDescriptor;
   }
 

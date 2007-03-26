@@ -16,7 +16,7 @@ import com.d2s.framework.binding.ConnectorBindingException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,7 +25,7 @@ public class SFormattedTextFieldConnector extends
 
   /**
    * Constructs a new <code>SFormattedTextFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param textField

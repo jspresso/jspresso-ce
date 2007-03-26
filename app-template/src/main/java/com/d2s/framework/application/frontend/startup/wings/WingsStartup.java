@@ -14,7 +14,7 @@ import com.d2s.framework.application.frontend.startup.AbstractStartup;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +22,6 @@ public abstract class WingsStartup extends AbstractStartup {
 
   /**
    * Constructs a new <code>WingsStartup</code> instance.
-   *
    */
   public WingsStartup() {
     start();

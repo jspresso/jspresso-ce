@@ -16,7 +16,6 @@ import com.d2s.framework.binding.model.ModelConnector;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.descriptor.entity.basic.BasicQueryEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
@@ -101,8 +100,8 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
     }
     ModelConnector modelConnector = (ModelConnector) getBeanConnectorFactory(
         context).createModelConnector(
-        new BasicQueryEntityDescriptor((IEntityDescriptor) erqDescriptor
-            .getReferencedDescriptor(), queryEntity.getClass()));
+        new BasicQueryEntityDescriptor(erqDescriptor.getReferencedDescriptor(),
+            queryEntity.getClass()));
     modelConnector.setConnectorValue(queryEntity);
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_COMMAND);

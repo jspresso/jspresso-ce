@@ -26,7 +26,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -77,7 +77,8 @@ public class LdapLoginModule extends LdapExtLoginModule {
             int dotIndex = attributeId.indexOf(".");
             if (dotIndex > -1) {
               Attributes nestedAttrs = ctx.getAttributes(dnSlice, null);
-              Attribute attr = nestedAttrs.get(attributeId.substring(dotIndex + 1));
+              Attribute attr = nestedAttrs.get(attributeId
+                  .substring(dotIndex + 1));
               if (attr != null && attr.size() > 0) {
                 if (attr.size() == 1) {
                   userPrincipal.putCustomProperty(option.getKey().substring(

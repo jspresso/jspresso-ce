@@ -18,6 +18,7 @@ import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicDescriptorDescriptor;
+import com.d2s.framework.util.descriptor.IDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.action.IDisplayableAction;
 
@@ -54,10 +55,11 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    BasicCollectionDescriptor modelDescriptor = new BasicCollectionDescriptor();
+    BasicCollectionDescriptor<IDescriptor> modelDescriptor = new BasicCollectionDescriptor<IDescriptor>();
     modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
     IValueConnector actionsConnector = beanConnectorFactory

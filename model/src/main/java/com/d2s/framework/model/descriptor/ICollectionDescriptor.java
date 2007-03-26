@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor;
 
+import java.util.Collection;
+
 /**
  * This interface is implemented by descriptors of collections.
  * <p>
@@ -11,8 +13,10 @@ package com.d2s.framework.model.descriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete component element type.
  */
-public interface ICollectionDescriptor extends IModelDescriptor,
+public interface ICollectionDescriptor<E> extends IModelDescriptor,
     ICollectionDescriptorProvider {
 
   /**
@@ -22,12 +26,12 @@ public interface ICollectionDescriptor extends IModelDescriptor,
    * 
    * @return the collection interface.
    */
-  Class getCollectionInterface();
+  Class<? extends Collection> getCollectionInterface();
 
   /**
    * Gets the component descriptor of the elements contained in this collection.
    * 
    * @return The collection's component descriptor.
    */
-  IComponentDescriptor getElementDescriptor();
+  IComponentDescriptor<E> getElementDescriptor();
 }

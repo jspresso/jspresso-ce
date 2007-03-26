@@ -15,7 +15,7 @@ import com.d2s.framework.view.descriptor.ISubViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -29,7 +29,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Gets the modelDescriptor.
-   *
+   * 
    * @return the modelDescriptor.
    */
   public IModelDescriptor getModelDescriptor() {
@@ -38,7 +38,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the modelDescriptor.
-   *
+   * 
    * @param modelDescriptor
    *          the modelDescriptor to set.
    */
@@ -55,7 +55,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the readOnly.
-   *
+   * 
    * @param readOnly
    *          the readOnly to set.
    */
@@ -65,7 +65,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Gets the readabilityGates.
-   *
+   * 
    * @return the readabilityGates.
    */
   public Collection<IGate> getReadabilityGates() {
@@ -74,7 +74,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the readabilityGates.
-   *
+   * 
    * @param readabilityGates
    *          the readabilityGates to set.
    */
@@ -84,7 +84,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Gets the writabilityGates.
-   *
+   * 
    * @return the writabilityGates.
    */
   public Collection<IGate> getWritabilityGates() {
@@ -93,7 +93,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
 
   /**
    * Sets the writabilityGates.
-   *
+   * 
    * @param writabilityGates
    *          the writabilityGates to set.
    */

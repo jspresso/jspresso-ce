@@ -13,7 +13,7 @@ import org.wings.SToggleButton;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,7 +21,7 @@ public class SToggleButtonConnector extends SComponentConnector<SToggleButton> {
 
   /**
    * Constructs a new <code>SToggleButtonConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param toggleButton

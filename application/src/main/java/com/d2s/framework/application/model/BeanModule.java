@@ -17,7 +17,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,7 +27,7 @@ public class BeanModule extends SubModule implements PropertyChangeListener {
 
   /**
    * Gets the module's projected object.
-   *
+   * 
    * @return the projected object.
    */
   public Object getModuleObject() {
@@ -36,7 +36,7 @@ public class BeanModule extends SubModule implements PropertyChangeListener {
 
   /**
    * Sets the module's projected object.
-   *
+   * 
    * @param moduleObject
    *          the projected object.
    */

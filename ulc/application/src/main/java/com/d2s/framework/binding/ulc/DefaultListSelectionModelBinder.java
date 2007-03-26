@@ -18,7 +18,7 @@ import com.ulcjava.base.application.event.serializable.IListSelectionListener;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -44,7 +44,7 @@ public class DefaultListSelectionModelBinder implements
 
     /**
      * Constructs a new <code>SelectionChangeListener</code> instance.
-     *
+     * 
      * @param selectionModel
      *          the selection model to forward the changes to.
      * @param rowMapper
@@ -120,7 +120,7 @@ public class DefaultListSelectionModelBinder implements
 
     /**
      * Constructs a new <code>SelectionModelListener</code> instance.
-     *
+     * 
      * @param viewSelectable
      *          the selectable to forward the changes to.
      * @param rowMapper

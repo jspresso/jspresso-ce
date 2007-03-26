@@ -22,7 +22,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -31,6 +31,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   public IViewDescriptor createLovViewDescriptor(
       IReferencePropertyDescriptor entityRefDescriptor) {
     BasicSplitViewDescriptor lovViewDescriptor = new BasicSplitViewDescriptor();
@@ -46,7 +47,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   }
 
   private IViewDescriptor createQueryComponentViewDescriptor(
-      IComponentDescriptor entityDescriptor) {
+      IComponentDescriptor<?> entityDescriptor) {
     BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
     queryComponentViewDescriptor.setModelDescriptor(entityDescriptor);
     queryComponentViewDescriptor.setName("queryEntity");
@@ -75,14 +76,14 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   }
 
   private IViewDescriptor createResultViewDescriptor(
-      IComponentDescriptor entityDescriptor) {
+      IComponentDescriptor<Object> entityDescriptor) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
-    BasicCollectionDescriptor queriedEntitiesListDescriptor = new BasicCollectionDescriptor();
+    BasicCollectionDescriptor<Object> queriedEntitiesListDescriptor = new BasicCollectionDescriptor<Object>();
     queriedEntitiesListDescriptor.setCollectionInterface(List.class);
     queriedEntitiesListDescriptor.setElementDescriptor(entityDescriptor);
 
-    BasicCollectionPropertyDescriptor queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor();
+    BasicCollectionPropertyDescriptor<Object> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<Object>();
     queriedEntitiesDescriptor
         .setReferencedDescriptor(queriedEntitiesListDescriptor);
     queriedEntitiesDescriptor.setName(IQueryEntity.QUERIED_ENTITIES);

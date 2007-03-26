@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.model.entity;
 
-import com.d2s.framework.util.exception.NestedRuntimeException;
+import com.d2s.framework.model.component.ComponentException;
 
 /**
  * This exception is thrown whenever an unexpected exception occurs on an
@@ -15,7 +15,7 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class EntityException extends NestedRuntimeException {
+public class EntityException extends ComponentException {
 
   private static final long serialVersionUID = -3659844614276359719L;
 

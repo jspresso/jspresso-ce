@@ -11,13 +11,15 @@ package com.d2s.framework.model.descriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete component type.
  */
-public interface IComponentDescriptorProvider extends IModelDescriptor {
+public interface IComponentDescriptorProvider<E> extends IModelDescriptor {
 
   /**
    * Gets the referenced component descriptor.
    * 
    * @return the referenced component descriptor.
    */
-  IComponentDescriptor getComponentDescriptor();
+  IComponentDescriptor<E> getComponentDescriptor();
 }

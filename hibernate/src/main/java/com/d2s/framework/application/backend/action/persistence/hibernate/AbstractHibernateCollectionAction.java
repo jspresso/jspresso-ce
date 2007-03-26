@@ -22,7 +22,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,7 +42,7 @@ public abstract class AbstractHibernateCollectionAction extends
   /**
    * Gets the selected indices from the context. it uses the
    * <code>ActionContextConstants.SELECTED_INDICES</code> key.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the selected indices if any.
@@ -64,7 +64,7 @@ public abstract class AbstractHibernateCollectionAction extends
 
   /**
    * Performs necessary cleanings when an entity is deleted.
-   *
+   * 
    * @param entity
    *          the deleted entity.
    * @param context

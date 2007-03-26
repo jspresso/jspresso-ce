@@ -17,7 +17,7 @@ import com.d2s.framework.view.descriptor.ITableViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -28,7 +28,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
 
   /**
    * Sets the columnViewDescriptors.
-   *
+   * 
    * @param columnViewDescriptors
    *          the columnViewDescriptors to set.
    */
@@ -43,7 +43,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   public List<ISubViewDescriptor> getColumnViewDescriptors() {
     if (columnViewDescriptors == null) {
       ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) getModelDescriptor());
-      IComponentDescriptor rowModelDescriptor = modelDescriptor
+      IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
           .getCollectionDescriptor().getElementDescriptor();
       List<String> modelRenderedProperties = rowModelDescriptor
           .getRenderedProperties();

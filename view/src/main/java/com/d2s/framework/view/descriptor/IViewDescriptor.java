@@ -14,7 +14,7 @@ import com.d2s.framework.view.action.IActionable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -38,28 +38,28 @@ public interface IViewDescriptor extends ISubViewDescriptor, IActionable,
 
   /**
    * Gets the foreground color of this view.
-   *
+   * 
    * @return this view's foreground color.
    */
   Color getForeground();
 
   /**
    * Gets the background color of this view.
-   *
+   * 
    * @return this view's foreground color.
    */
   Color getBackground();
 
   /**
    * Gets the font of this view.
-   *
+   * 
    * @return this view's font.
    */
   Font getFont();
 
   /**
    * Gets the border type used to surround view.
-   *
+   * 
    * @return the border type :
    *         <li> <code>NONE</code> means no border.
    *         <li> <code>SIMPLE</code> means a simple line border.

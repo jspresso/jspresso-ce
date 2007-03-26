@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.Collection;
+
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.util.descriptor.DefaultDescriptor;
@@ -15,17 +17,19 @@ import com.d2s.framework.util.descriptor.DefaultDescriptor;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          the concrete collection component element type.
  */
-public class BasicCollectionDescriptor extends DefaultDescriptor implements
-    ICollectionDescriptor {
+public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
+    ICollectionDescriptor<E> {
 
-  private Class                collectionInterface;
-  private IComponentDescriptor elementDescriptor;
+  private Class<? extends Collection> collectionInterface;
+  private IComponentDescriptor<E>     elementDescriptor;
 
   /**
    * {@inheritDoc}
    */
-  public Class getCollectionInterface() {
+  public Class<? extends Collection> getCollectionInterface() {
     return collectionInterface;
   }
 
@@ -35,14 +39,15 @@ public class BasicCollectionDescriptor extends DefaultDescriptor implements
    * @param collectionInterface
    *          the collectionInterface to set.
    */
+  @SuppressWarnings("cast")
   public void setCollectionInterface(Class collectionInterface) {
-    this.collectionInterface = collectionInterface;
+    this.collectionInterface = (Class<? extends Collection>) collectionInterface;
   }
 
   /**
    * {@inheritDoc}
    */
-  public IComponentDescriptor getElementDescriptor() {
+  public IComponentDescriptor<E> getElementDescriptor() {
     return elementDescriptor;
   }
 
@@ -52,7 +57,7 @@ public class BasicCollectionDescriptor extends DefaultDescriptor implements
    * @param elementDescriptor
    *          the elementDescriptor to set.
    */
-  public void setElementDescriptor(IComponentDescriptor elementDescriptor) {
+  public void setElementDescriptor(IComponentDescriptor<E> elementDescriptor) {
     this.elementDescriptor = elementDescriptor;
   }
 
@@ -66,7 +71,7 @@ public class BasicCollectionDescriptor extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<? extends Collection> getModelType() {
     return getCollectionInterface();
   }
 }

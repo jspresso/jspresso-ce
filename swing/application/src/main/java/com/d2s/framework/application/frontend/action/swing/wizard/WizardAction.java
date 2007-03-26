@@ -44,7 +44,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -57,7 +57,7 @@ public class WizardAction extends AbstractSwingAction {
 
   /**
    * Sets the firstWizardStep.
-   *
+   * 
    * @param firstWizardStep
    *          the firstWizardStep to set.
    */
@@ -275,7 +275,7 @@ public class WizardAction extends AbstractSwingAction {
 
   /**
    * Sets the modelConnectorFactory.
-   *
+   * 
    * @param modelConnectorFactory
    *          the modelConnectorFactory to set.
    */
@@ -286,7 +286,7 @@ public class WizardAction extends AbstractSwingAction {
 
   /**
    * Sets the finishAction.
-   *
+   * 
    * @param finishAction
    *          the finishAction to set.
    */
@@ -296,7 +296,7 @@ public class WizardAction extends AbstractSwingAction {
 
   /**
    * Creates (and initializes) the wizard model.
-   *
+   * 
    * @param initialWizardModel
    *          the initial wizard model.
    * @param context

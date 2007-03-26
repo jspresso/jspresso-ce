@@ -13,7 +13,7 @@ import com.d2s.framework.action.IActionHandler;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,7 +34,7 @@ public class DisplayStaticUrlAction extends DisplayUrlAction {
 
   /**
    * Sets the urlKey.
-   *
+   * 
    * @param urlKey
    *          the urlKey to set.
    */

@@ -25,7 +25,7 @@ import com.d2s.framework.util.gate.IGate;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -56,7 +56,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Constructs a new AbstractValueConnector using an identifier. In case of a
    * bean connector, this identifier must be the bean property the connector
    * connects.
-   *
+   * 
    * @param id
    *          The connector identifier.
    */
@@ -69,14 +69,14 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Retrieves the value from the peer connectee.
-   *
+   * 
    * @return the connectee value.
    */
   protected abstract Object getConnecteeValue();
 
   /**
    * Sets the value to the peer connectee.
-   *
+   * 
    * @param connecteeValue
    *          the connectee value to set
    */
@@ -163,7 +163,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * Gives a chance to the connector to create a specific subclass of connector
    * value change event.
-   *
+   * 
    * @param oldValue
    *          the old connector value.
    * @param newValue
@@ -184,7 +184,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * be of any help since it never changes, preventing the notification to
    * happen. In that case, a clone of the model collection can be built to keep
    * track of the collection content change.
-   *
+   * 
    * @param connectorValue
    *          the value to take a snapshot of.
    * @return the value to keep a reference on as the
@@ -255,7 +255,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the readable.
-   *
+   * 
    * @return the readable.
    */
   public boolean isReadable() {
@@ -271,7 +271,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the writable.
-   *
+   * 
    * @return the writable.
    */
   public boolean isWritable() {
@@ -311,7 +311,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the parentConnector.
-   *
+   * 
    * @return the parentConnector.
    */
   public ICompositeValueConnector getParentConnector() {
@@ -320,7 +320,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Sets the parentConnector.
-   *
+   * 
    * @param parentConnector
    *          the parentConnector to set.
    */
@@ -378,7 +378,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the modelConnector.
-   *
+   * 
    * @return the modelConnector.
    */
   public IValueConnector getModelConnector() {
@@ -387,7 +387,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Sets the modelConnector.
-   *
+   * 
    * @param modelConnector
    *          the modelConnector to set.
    */
@@ -429,7 +429,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gives a chance to the connector to react on a model connector change.
-   *
+   * 
    * @param oldModelConnector
    *          the old model connector.
    * @param newModelConnector
@@ -473,7 +473,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
     /**
      * Constructs a new <code>ConnectorReadabilityChangeListener</code>
      * instance.
-     *
+     * 
      * @param viewConnector
      *          the view connector
      */
@@ -516,7 +516,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the gatesListener.
-   *
+   * 
    * @return the gatesListener.
    */
   public PropertyChangeListener getGatesListener() {
@@ -534,7 +534,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the readabilityGates.
-   *
+   * 
    * @return the readabilityGates.
    */
   protected Collection<IGate> getReadabilityGates() {
@@ -543,7 +543,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
 
   /**
    * Gets the writabilityGates.
-   *
+   * 
    * @return the writabilityGates.
    */
   protected Collection<IGate> getWritabilityGates() {

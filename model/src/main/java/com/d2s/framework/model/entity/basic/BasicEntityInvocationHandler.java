@@ -22,21 +22,21 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtension;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.ILifecycleCapable;
+import com.d2s.framework.model.component.service.IComponentService;
+import com.d2s.framework.model.component.service.ILifecycleInterceptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityCollectionFactory;
-import com.d2s.framework.model.entity.IEntityExtension;
-import com.d2s.framework.model.entity.IEntityExtensionFactory;
-import com.d2s.framework.model.entity.IEntityLifecycle;
-import com.d2s.framework.model.service.IComponentService;
-import com.d2s.framework.model.service.ILifecycleInterceptor;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
@@ -56,17 +56,17 @@ import com.d2s.framework.util.collection.CollectionHelper;
 public class BasicEntityInvocationHandler implements InvocationHandler,
     Serializable {
 
-  private static final long            serialVersionUID = 6078989823404409653L;
+  private static final long                        serialVersionUID = 6078989823404409653L;
 
-  private IEntityDescriptor            entityDescriptor;
-  private PropertyChangeSupport        changeSupport;
-  private Map<String, Object>          properties;
-  private Map<Class, IEntityExtension> entityExtensions;
-  private IEntityCollectionFactory     collectionFactory;
-  private IAccessorFactory             accessorFactory;
-  private IEntityExtensionFactory      extensionFactory;
+  private IComponentDescriptor<IEntity>            entityDescriptor;
+  private PropertyChangeSupport                    changeSupport;
+  private Map<String, Object>                      properties;
+  private Map<Class, IComponentExtension<IEntity>> entityExtensions;
+  private IComponentCollectionFactory<IEntity>     collectionFactory;
+  private IAccessorFactory                         accessorFactory;
+  private IComponentExtensionFactory               extensionFactory;
 
-  private Set<String>                  modifierMonitors;
+  private Set<String>                              modifierMonitors;
 
   /**
    * Constructs a new <code>BasicEntityInvocationHandler</code> instance.
@@ -82,9 +82,11 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    *          The factory used to create entity extensions based on their
    *          classes.
    */
-  protected BasicEntityInvocationHandler(IEntityDescriptor entityDescriptor,
-      IEntityCollectionFactory collectionFactory,
-      IAccessorFactory accessorFactory, IEntityExtensionFactory extensionFactory) {
+  protected BasicEntityInvocationHandler(
+      IComponentDescriptor<IEntity> entityDescriptor,
+      IComponentCollectionFactory<IEntity> collectionFactory,
+      IAccessorFactory accessorFactory,
+      IComponentExtensionFactory extensionFactory) {
     this.properties = createPropertyMap();
     this.entityDescriptor = entityDescriptor;
     this.collectionFactory = collectionFactory;
@@ -146,7 +148,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     } else {
       boolean isLifecycleMethod = false;
       try {
-        isLifecycleMethod = IEntityLifecycle.class.getMethod(methodName, method
+        isLifecycleMethod = ILifecycleCapable.class.getMethod(methodName, method
             .getParameterTypes()) != null;
       } catch (NoSuchMethodException ignored) {
         // this is certainly normal.
@@ -167,7 +169,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       if (propertyDescriptor != null) {
         Class extensionClass = propertyDescriptor.getDelegateClass();
         if (extensionClass != null) {
-          IEntityExtension extensionDelegate = getExtensionInstance(
+          IComponentExtension extensionDelegate = getExtensionInstance(
               extensionClass, proxy);
           return invokeExtensionMethod(extensionDelegate, method, args);
         }
@@ -246,7 +248,7 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
       IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       return getCollectionProperty(proxy,
-          (ICollectionPropertyDescriptor) propertyDescriptor);
+          (ICollectionPropertyDescriptor<? extends IEntity>) propertyDescriptor);
     } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return getReferenceProperty(proxy,
           (IReferencePropertyDescriptor) propertyDescriptor);
@@ -269,7 +271,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    * @return the property value.
    */
   protected Object getCollectionProperty(@SuppressWarnings("unused")
-  Object proxy, ICollectionPropertyDescriptor propertyDescriptor) {
+  Object proxy,
+      ICollectionPropertyDescriptor<? extends IEntity> propertyDescriptor) {
     Object property = properties.get(propertyDescriptor.getName());
     if (property == null) {
       property = collectionFactory.createEntityCollection(propertyDescriptor
@@ -438,13 +441,13 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
                   .getElementDescriptor().getComponentContract()).setValue(
               value, proxy);
         } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-          ICollectionAccessor collectionAccessor = accessorFactory.createCollectionPropertyAccessor(
-                        reversePropertyDescriptor.getName(),
-                        propertyDescriptor.getReferencedDescriptor()
-                            .getElementDescriptor().getComponentContract(),
-                        ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
-                            .getCollectionDescriptor().getElementDescriptor()
-                            .getComponentContract());
+          ICollectionAccessor collectionAccessor = accessorFactory
+              .createCollectionPropertyAccessor(reversePropertyDescriptor
+                  .getName(), propertyDescriptor.getReferencedDescriptor()
+                  .getElementDescriptor().getComponentContract(),
+                  ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                      .getCollectionDescriptor().getElementDescriptor()
+                      .getComponentContract());
           if (collectionAccessor instanceof IModelDescriptorAware) {
             ((IModelDescriptorAware) collectionAccessor)
                 .setModelDescriptor(reversePropertyDescriptor);
@@ -501,13 +504,13 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
                     .getElementDescriptor().getComponentContract()).setValue(
                 value, null);
           } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-            ICollectionAccessor collectionAccessor = accessorFactory.createCollectionPropertyAccessor(
-                            reversePropertyDescriptor.getName(),
-                            propertyDescriptor.getReferencedDescriptor()
-                                .getElementDescriptor().getComponentContract(),
-                            ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
-                                .getCollectionDescriptor().getElementDescriptor()
-                                .getComponentContract());
+            ICollectionAccessor collectionAccessor = accessorFactory
+                .createCollectionPropertyAccessor(reversePropertyDescriptor
+                    .getName(), propertyDescriptor.getReferencedDescriptor()
+                    .getElementDescriptor().getComponentContract(),
+                    ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                        .getCollectionDescriptor().getElementDescriptor()
+                        .getComponentContract());
             if (collectionAccessor instanceof IModelDescriptorAware) {
               ((IModelDescriptorAware) collectionAccessor)
                   .setModelDescriptor(reversePropertyDescriptor);
@@ -536,24 +539,24 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
     }
   }
 
-  private synchronized IEntityExtension getExtensionInstance(
-      Class extensionClass, Object proxy) {
-    IEntityExtension extension;
+  private synchronized IComponentExtension getExtensionInstance(
+      Class<IComponentExtension<IEntity>> extensionClass, Object proxy) {
+    IComponentExtension<IEntity> extension;
     if (entityExtensions == null) {
-      entityExtensions = new HashMap<Class, IEntityExtension>();
+      entityExtensions = new HashMap<Class, IComponentExtension<IEntity>>();
       extension = null;
     } else {
       extension = entityExtensions.get(extensionClass);
     }
     if (extension == null) {
-      extension = extensionFactory.createEntityExtension(extensionClass,
+      extension = extensionFactory.createComponentExtension(extensionClass,
           entityDescriptor.getComponentContract(), (IEntity) proxy);
       entityExtensions.put(extensionClass, extension);
     }
     return extension;
   }
 
-  private Object invokeExtensionMethod(IEntityExtension entityExtension,
+  private Object invokeExtensionMethod(IComponentExtension entityExtension,
       Method method, Object[] args) {
     try {
       return MethodUtils.invokeMethod(entityExtension, method.getName(), args,
@@ -704,7 +707,8 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
    * @param collectionFactory
    *          the collectionFactory to set.
    */
-  public void setCollectionFactory(IEntityCollectionFactory collectionFactory) {
+  public void setCollectionFactory(
+      IComponentCollectionFactory<IEntity> collectionFactory) {
     this.collectionFactory = collectionFactory;
   }
 
@@ -800,9 +804,9 @@ public class BasicEntityInvocationHandler implements InvocationHandler,
 
   private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object[] args) {
-    if (IEntityLifecycle.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
+    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
         .getName())
-        || IEntityLifecycle.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
+        || ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
             .getName())) {
       checkIntegrity(proxy);
     }

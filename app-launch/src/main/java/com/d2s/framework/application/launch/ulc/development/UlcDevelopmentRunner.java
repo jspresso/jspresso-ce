@@ -22,7 +22,7 @@ import com.ulcjava.base.development.DevelopmentRunner;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,7 +36,7 @@ public final class UlcDevelopmentRunner {
 
   /**
    * Overriden to cope with formatted textfield font bug.
-   *
+   * 
    * @param args
    *          arguments.
    */
@@ -85,7 +85,7 @@ public final class UlcDevelopmentRunner {
 
   /**
    * Registers a new message handler to which client messages will be delivered.
-   *
+   * 
    * @param messageHandler
    *          the new message handler to be delivered.
    */

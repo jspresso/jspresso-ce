@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.printing.model.descriptor;
 
+import com.d2s.framework.application.printing.model.IReport;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 
 /**
@@ -15,7 +16,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IReportDescriptor extends IComponentDescriptor {
+public interface IReportDescriptor extends IComponentDescriptor<IReport> {
 
   /**
    * Gets the url to the report design resource.

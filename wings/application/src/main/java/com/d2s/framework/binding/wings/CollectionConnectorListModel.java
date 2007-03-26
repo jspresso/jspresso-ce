@@ -22,7 +22,7 @@ import com.d2s.framework.binding.IValueConnector;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,7 +34,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
 
   /**
    * Constructs a new <code>CollectionConnectorListModel</code> instance.
-   *
+   * 
    * @param collectionConnector
    *          the collection connector holding the values of this list model.
    */

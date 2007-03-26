@@ -17,7 +17,7 @@ import com.d2s.framework.gui.wings.components.SActionField;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -29,7 +29,7 @@ public class SReferenceFieldConnector extends SActionFieldConnector implements
 
   /**
    * Constructs a new <code>SActionFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param actionField
@@ -117,7 +117,7 @@ public class SReferenceFieldConnector extends SActionFieldConnector implements
 
   /**
    * Sets the toStringPropertyConnector.
-   *
+   * 
    * @param toStringPropertyConnector
    *          the toStringPropertyConnector to set.
    */

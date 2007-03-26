@@ -30,11 +30,11 @@ import com.d2s.framework.util.lang.ObjectUtils;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SActionField extends SPanel  {
+public class SActionField extends SPanel {
 
   private static final long serialVersionUID = 5741890319182521808L;
 
@@ -47,7 +47,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Constructs a new <code>SActionField</code> instance.
-   *
+   * 
    * @param showTextField
    *          is the text field visible to the user.
    */
@@ -77,7 +77,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Gets the actions.
-   *
+   * 
    * @return the actions.
    */
   public List<Action> getActions() {
@@ -86,7 +86,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Sets the action field action.
-   *
+   * 
    * @param actions
    *          the action field actions.
    */
@@ -112,7 +112,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Gets the value.
-   *
+   * 
    * @return the value.
    */
   public Object getValue() {
@@ -121,7 +121,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Sets the value.
-   *
+   * 
    * @param value
    *          the value to set.
    */
@@ -132,7 +132,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Adds a focus listener to the text field.
-   *
+   * 
    * @param l
    *          the listener to add.
    */
@@ -142,7 +142,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Removes a focus listener from the text field.
-   *
+   * 
    * @param l
    *          the listener to remove.
    */
@@ -160,7 +160,7 @@ public class SActionField extends SPanel  {
   /**
    * Gets wether this action field text is synchronized with its underlying
    * value.
-   *
+   * 
    * @return true if this action field text is synchronized with its underlying
    *         value.
    */
@@ -177,7 +177,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Gets the action field text.
-   *
+   * 
    * @return the action field text.
    */
   public String getActionText() {
@@ -186,7 +186,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Gets the action field text.
-   *
+   * 
    * @param actionText
    *          the action field text.
    */
@@ -196,7 +196,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Turns the date field to be editable or not.
-   *
+   * 
    * @param editable
    *          true if editable.
    */
@@ -209,7 +209,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Turns the date field to be enabled or not.
-   *
+   * 
    * @param enabled
    *          true if enabled.
    */
@@ -223,7 +223,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Gets the showTextField.
-   *
+   * 
    * @return the showTextField.
    */
   public boolean isShowingTextField() {
@@ -232,7 +232,7 @@ public class SActionField extends SPanel  {
 
   /**
    * Decorates the component with a marker.
-   *
+   * 
    * @param decorated
    *          if the component should be decorated.
    */

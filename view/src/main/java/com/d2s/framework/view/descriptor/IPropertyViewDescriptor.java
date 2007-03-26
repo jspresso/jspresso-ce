@@ -11,7 +11,7 @@ import java.util.List;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -19,7 +19,7 @@ public interface IPropertyViewDescriptor extends IViewDescriptor {
 
   /**
    * Gets the child properties to display in case of a complex property.
-   *
+   * 
    * @return The list of displayed properties in the case of a complex property.
    */
   List<String> getRenderedChildProperties();

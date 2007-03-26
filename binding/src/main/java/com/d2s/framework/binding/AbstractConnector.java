@@ -11,7 +11,7 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,7 +25,7 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
    * Constructs a new AbstractConnector using an identifier. In case of a bean
    * connector, this identifier must be the bean property the connector
    * connects.
-   *
+   * 
    * @param id
    *          The connector identifier.
    */

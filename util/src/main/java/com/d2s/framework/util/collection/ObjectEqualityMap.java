@@ -19,7 +19,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <K>
@@ -44,7 +44,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
 
   /**
    * Constructs a new <code>ObjectEqualityMap</code> instance.
-   *
+   * 
    * @param initialCapacity
    *          initialCapacity.
    * @param loadFactor
@@ -57,7 +57,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
 
   /**
    * Constructs a new <code>ObjectEqualityMap</code> instance.
-   *
+   * 
    * @param initialCapacity
    *          initialCapacity.
    */
@@ -68,7 +68,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
 
   /**
    * Constructs a new <code>ObjectEqualityMap</code> instance.
-   *
+   * 
    * @param m
    *          map.
    */

@@ -13,7 +13,7 @@ import org.wings.SCheckBox;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,7 +21,7 @@ public class SCheckBoxConnector extends SComponentConnector<SCheckBox> {
 
   /**
    * Constructs a new <code>SCheckBoxConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param checkBox

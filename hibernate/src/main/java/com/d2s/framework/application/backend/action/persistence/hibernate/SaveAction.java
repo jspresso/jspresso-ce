@@ -18,7 +18,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -49,7 +49,7 @@ public class SaveAction extends AbstractHibernateAction {
 
   /**
    * Gets the list of entities to save.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the list of entities to save.

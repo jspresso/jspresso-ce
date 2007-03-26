@@ -17,7 +17,7 @@ import com.d2s.framework.gui.ulc.components.server.ULCActionField;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -29,7 +29,7 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
 
   /**
    * Constructs a new <code>ULCReferenceFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param actionField
@@ -117,7 +117,7 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
 
   /**
    * Sets the toStringPropertyConnector.
-   *
+   * 
    * @param toStringPropertyConnector
    *          the toStringPropertyConnector to set.
    */

@@ -13,7 +13,7 @@ import java.util.Set;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,7 +30,7 @@ public class SelectionChangeSupport implements ISelectable {
 
   /**
    * Constructs a new support.
-   *
+   * 
    * @param source
    *          The selectable to which this support is attached. It will serve as
    *          <code>source</code> of fired <code>SelectionChangeEvent</code>s
@@ -109,7 +109,7 @@ public class SelectionChangeSupport implements ISelectable {
   /**
    * Propagates the <code>SelectionChangeEvent</code> as is (i.e. whithout
    * modifying its source) to the listeners.
-   *
+   * 
    * @param evt
    *          the propagated <code>BeanChangeEvent</code>
    */
@@ -137,7 +137,7 @@ public class SelectionChangeSupport implements ISelectable {
    * Registers a listener to be excluded (generally temporarily) from the
    * notification process without being removed from the actual listeners
    * collection.
-   *
+   * 
    * @param listener
    *          the excluded listener.
    */
@@ -151,7 +151,7 @@ public class SelectionChangeSupport implements ISelectable {
   /**
    * Registers a listener to be re-included to the notification process without
    * being re-added to the actual listeners collection.
-   *
+   * 
    * @param listener
    *          the previously excluded listener.
    */

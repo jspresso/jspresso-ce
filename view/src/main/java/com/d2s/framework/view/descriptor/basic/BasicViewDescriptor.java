@@ -21,7 +21,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -59,7 +59,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
 
   /**
    * Sets the background.
-   *
+   * 
    * @param background
    *          the background to set.
    */
@@ -69,7 +69,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
 
   /**
    * Sets the font.
-   *
+   * 
    * @param font
    *          the font to set.
    */
@@ -79,7 +79,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
 
   /**
    * Sets the foreground.
-   *
+   * 
    * @param foreground
    *          the foreground to set.
    */
@@ -96,7 +96,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
 
   /**
    * Sets the borderType.
-   *
+   * 
    * @param borderType
    *          the borderType to set.
    */
@@ -106,7 +106,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
 
   /**
    * Gets the actionMap.
-   *
+   * 
    * @return the actionMap.
    */
   public Map<String, List<IDisplayableAction>> getActions() {
@@ -118,7 +118,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
 
   /**
    * Sets the actionMap.
-   *
+   * 
    * @param actionMap
    *          the actionMap to set.
    */
@@ -165,7 +165,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
 
   /**
    * Gets the grantedRoles.
-   *
+   * 
    * @return the grantedRoles.
    */
   public Collection<String> getGrantedRoles() {
@@ -174,7 +174,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
 
   /**
    * Sets the grantedRoles.
-   *
+   * 
    * @param grantedRoles
    *          the grantedRoles to set.
    */

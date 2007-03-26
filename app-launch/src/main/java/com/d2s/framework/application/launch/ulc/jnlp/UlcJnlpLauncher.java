@@ -38,7 +38,7 @@ import com.ulcjava.environment.jnlp.client.AbstractJnlpLauncher;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -91,7 +91,7 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
 
   /**
    * Overriden to cope with formatted textfield font bug.
-   *
+   * 
    * @param args
    *          arguments.
    * @throws MalformedURLException
@@ -145,7 +145,7 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
 
   /**
    * Registers a new message handler to which client messages will be delivered.
-   *
+   * 
    * @param messageHandler
    *          the new message handler to be delivered.
    */

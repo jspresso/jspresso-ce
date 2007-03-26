@@ -6,7 +6,7 @@ package com.d2s.framework.application.backend.entity;
 import java.lang.reflect.InvocationHandler;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.model.entity.basic.BasicProxyEntityFactory;
@@ -18,7 +18,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,7 +42,7 @@ public class ApplicationSessionAwareProxyEntityFactory extends
 
   /**
    * Sets the applicationSession.
-   * 
+   *
    * @param applicationSession
    *          the applicationSession to set.
    */
@@ -55,7 +55,7 @@ public class ApplicationSessionAwareProxyEntityFactory extends
    */
   @Override
   protected InvocationHandler createEntityInvocationHandler(
-      IEntityDescriptor entityDescriptor) {
+      IComponentDescriptor<IEntity> entityDescriptor) {
     return new ApplicationSessionAwareEntityInvocationHandler(entityDescriptor,
         getEntityCollectionFactory(), getAccessorFactory(),
         getEntityExtensionFactory(), applicationSession);

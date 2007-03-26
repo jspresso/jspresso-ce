@@ -6,7 +6,6 @@ package com.d2s.framework.model.descriptor.entity.basic;
 import java.util.List;
 
 import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
-import com.d2s.framework.model.descriptor.entity.IEntityDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -14,18 +13,17 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicEntityDescriptor extends BasicComponentDescriptor implements
-    IEntityDescriptor {
+public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
 
   private boolean purelyAbstract;
 
   /**
    * Constructs a new <code>BasicEntityDescriptor</code> instance.
-   * 
+   *
    * @param name
    *          the name of the descriptor which has to be the fully-qualified
    *          class name of its contract.
@@ -49,7 +47,7 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor implements
 
   /**
    * Gets the purelyAbstract.
-   * 
+   *
    * @return the purelyAbstract.
    */
   @Override
@@ -59,21 +57,12 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor implements
 
   /**
    * Sets the purelyAbstract.
-   * 
+   *
    * @param purelyAbstract
    *          the purelyAbstract to set.
    */
   public void setPurelyAbstract(boolean purelyAbstract) {
     this.purelyAbstract = purelyAbstract;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public Class<? extends IEntity> getComponentContract() {
-    return (Class<? extends IEntity>) super.getComponentContract();
   }
 
   /**

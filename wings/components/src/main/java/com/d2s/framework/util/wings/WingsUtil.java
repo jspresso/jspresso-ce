@@ -20,15 +20,15 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class WingsUtil {
 
-  private static final double  DARKER_COLOR_FACTOR                         = 0.93;
+  private static final double  DARKER_COLOR_FACTOR = 0.93;
 
-  private static final boolean DISABLE_THREADING                           = false;
+  private static final boolean DISABLE_THREADING   = false;
 
   private WingsUtil() {
     // Helper class private constructor.
@@ -37,7 +37,7 @@ public final class WingsUtil {
   /**
    * Tests wether in swing event dispatch thread. If not, use SwingUtilities to
    * invoke runnable and wait.
-   *
+   * 
    * @param runnable
    *          the runnable operation which updates the GUI.
    */
@@ -62,7 +62,7 @@ public final class WingsUtil {
 
   /**
    * Gets the window or the internal frame holding the component.
-   *
+   * 
    * @param component
    *          the component to look the window or internal frame for.
    * @return the window (frame or dialog) or the internal frame in the component
@@ -79,7 +79,7 @@ public final class WingsUtil {
 
   /**
    * Retrieves the first contained component of a certain type.
-   *
+   * 
    * @param component
    *          the component to start from.
    * @param childSComponentType
@@ -106,7 +106,7 @@ public final class WingsUtil {
 
   /**
    * Make a color scaled using a defined factor.
-   *
+   * 
    * @param color
    *          the color to scale.
    * @param factor
@@ -145,7 +145,7 @@ public final class WingsUtil {
   /**
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
-   *
+   * 
    * @param renderer
    *          the renderer to work on.
    * @param collectionSComponent
@@ -170,7 +170,7 @@ public final class WingsUtil {
 
   /**
    * Gets the visible parent window.
-   *
+   * 
    * @param component
    *          the component to start from
    * @return the visible parent window or null.

@@ -15,7 +15,7 @@ import com.ulcjava.base.application.ClientContext;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -29,14 +29,15 @@ public class DisplayUrlAction extends AbstractUlcAction {
   @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    String urlSpec = baseUrl + (String) context.get(ActionContextConstants.ACTION_PARAM);
+    String urlSpec = baseUrl
+        + (String) context.get(ActionContextConstants.ACTION_PARAM);
     ClientContext.showDocument(urlSpec);
     return true;
   }
 
   /**
    * Sets the baseUrl.
-   *
+   * 
    * @param baseUrl
    *          the baseUrl to set.
    */

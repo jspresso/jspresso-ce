@@ -14,7 +14,7 @@ import com.d2s.framework.util.accessor.map.MapPropertyAccessor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -26,7 +26,7 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
   /**
    * Constructs a new <code>DescriptorAwareMapPropertyAccessor</code>
    * instance.
-   *
+   * 
    * @param property
    *          the property to create the accessor for.
    */
@@ -58,7 +58,7 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
 
   /**
    * Gets the modelDescriptor.
-   *
+   * 
    * @return the modelDescriptor.
    */
   protected IPropertyDescriptor getModelDescriptor() {

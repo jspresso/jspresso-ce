@@ -16,7 +16,7 @@ import com.d2s.framework.util.accessor.ICollectionAccessor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,7 +27,7 @@ public class DescriptorAwareMapCollectionAccessor extends
   /**
    * Constructs a new <code>DescriptorAwareMapCollectionAccessor</code>
    * instance.
-   *
+   * 
    * @param property
    *          the property to create the accessor for.
    */
@@ -83,7 +83,7 @@ public class DescriptorAwareMapCollectionAccessor extends
 
   /**
    * Gets the modelDescriptor.
-   *
+   * 
    * @return the modelDescriptor.
    */
   @Override

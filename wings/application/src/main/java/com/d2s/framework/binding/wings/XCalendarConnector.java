@@ -14,7 +14,7 @@ import org.wingx.XCalendar;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,7 +22,7 @@ public class XCalendarConnector extends SComponentConnector<XCalendar> {
 
   /**
    * Constructs a new <code>XCalendar</code> instance.
-   *
+   * 
    * @param id
    *          the connector identifier.
    * @param dateField

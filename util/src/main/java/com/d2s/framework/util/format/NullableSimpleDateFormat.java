@@ -15,7 +15,7 @@ import java.util.Locale;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,7 +32,7 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
 
   /**
    * Constructs a new <code>NullableSimpleDateFormat</code> instance.
-   *
+   * 
    * @param pattern
    *          pattern.
    * @param formatSymbols
@@ -45,7 +45,7 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
 
   /**
    * Constructs a new <code>NullableSimpleDateFormat</code> instance.
-   *
+   * 
    * @param pattern
    *          pattern.
    * @param locale
@@ -57,7 +57,7 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
 
   /**
    * Constructs a new <code>NullableSimpleDateFormat</code> instance.
-   *
+   * 
    * @param pattern
    *          pattern.
    */

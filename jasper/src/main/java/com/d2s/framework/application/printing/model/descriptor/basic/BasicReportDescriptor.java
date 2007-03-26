@@ -24,15 +24,15 @@ import com.d2s.framework.util.descriptor.IDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicReportDescriptor extends BasicComponentDescriptor implements
-    IReportDescriptor {
+public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
+    implements IReportDescriptor {
 
-  private String                           reportDesignUrl;
+  private String                                    reportDesignUrl;
 
   /**
    * The (meta) descriptor of the component descriptor.
    */
-  public static final IComponentDescriptor INSTANCE = createInstance();
+  public static final IComponentDescriptor<IReport> INSTANCE = createInstance();
 
   /**
    * Constructs a new <code>BasicReportDescriptor</code> instance.
@@ -57,7 +57,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor implements
    * {@inheritDoc}
    */
   @Override
-  public Class<?> getComponentContract() {
+  public Class<? extends IReport> getComponentContract() {
     return IReport.class;
   }
 
@@ -71,8 +71,8 @@ public class BasicReportDescriptor extends BasicComponentDescriptor implements
     this.reportDesignUrl = reportDesignUrl;
   }
 
-  private static IComponentDescriptor createInstance() {
-    BasicComponentDescriptor instance = new BasicComponentDescriptor(
+  private static IComponentDescriptor<IReport> createInstance() {
+    BasicComponentDescriptor<IReport> instance = new BasicComponentDescriptor<IReport>(
         IReport.class.getName());
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();

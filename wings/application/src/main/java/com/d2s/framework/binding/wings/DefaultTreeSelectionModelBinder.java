@@ -30,7 +30,7 @@ import com.d2s.framework.util.event.SelectionChangeEvent;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -144,7 +144,7 @@ public class DefaultTreeSelectionModelBinder implements
     /**
      * Constructs a new <code>CollectionConnectorsSelectionListener</code>
      * instance.
-     *
+     * 
      * @param rootConnector
      * @param selectionModel
      */
@@ -193,7 +193,7 @@ public class DefaultTreeSelectionModelBinder implements
 
     /**
      * Constructs a new <code>TreeConnectorsListener</code> instance.
-     *
+     * 
      * @param rootConnector
      *          the root connector of the connector hierarchy.
      * @param selectionModel

@@ -22,7 +22,7 @@ import com.d2s.framework.util.wings.WingsUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,7 +34,7 @@ public abstract class AbstractWingsAction extends
    * determine the root window or dialog for instance. It uses a well-known
    * action context key which is :
    * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the source widget this action was triggered from.
@@ -45,7 +45,7 @@ public abstract class AbstractWingsAction extends
 
   /**
    * Retrieves the widget which triggered the action from the action context.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the widget which triggered the action.
@@ -56,12 +56,13 @@ public abstract class AbstractWingsAction extends
 
   /**
    * If the ancestor of the action widget is a dialog, dispose it.
-   *
+   * 
    * @param context
    *          the action context.
    */
   protected void closeDialog(Map<String, Object> context) {
-    SContainer actionWindow = WingsUtil.getVisibleWindow(getActionWidget(context));
+    SContainer actionWindow = WingsUtil
+        .getVisibleWindow(getActionWidget(context));
     if (actionWindow instanceof SDialog) {
       ((SDialog) actionWindow).dispose();
     }

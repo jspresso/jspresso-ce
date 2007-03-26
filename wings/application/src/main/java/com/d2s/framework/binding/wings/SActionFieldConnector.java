@@ -16,7 +16,7 @@ import com.d2s.framework.gui.wings.components.SActionField;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,7 +24,7 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
 
   /**
    * Constructs a new <code>SActionFieldConnector</code> instance.
-   *
+   * 
    * @param id
    *          the id of the connector.
    * @param actionField

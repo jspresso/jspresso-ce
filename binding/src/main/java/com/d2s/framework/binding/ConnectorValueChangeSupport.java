@@ -14,7 +14,7 @@ import org.apache.commons.lang.ObjectUtils;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -27,7 +27,7 @@ public class ConnectorValueChangeSupport {
 
   /**
    * Constructs a new Connector change support.
-   *
+   * 
    * @param sourceConnector
    *          The connector to which this ConnectorValueChangeSupport is
    *          attached. sourceConnector will serve as <code>source</code> of
@@ -42,7 +42,7 @@ public class ConnectorValueChangeSupport {
 
   /**
    * Adds a new listener to this connector.
-   *
+   * 
    * @param listener
    *          The added listener.
    * @see IValueConnector#addConnectorValueChangeListener(IConnectorValueChangeListener)
@@ -61,7 +61,7 @@ public class ConnectorValueChangeSupport {
 
   /**
    * Removes a new <code>IConnectorValueChangeListener</code>.
-   *
+   * 
    * @param listener
    *          The removed listener.
    * @see IValueConnector#removeConnectorValueChangeListener(IConnectorValueChangeListener)
@@ -76,7 +76,7 @@ public class ConnectorValueChangeSupport {
   /**
    * Fires a new <code>ConnectorValueChangeEvent</code> built with
    * <code>source</code> as source and parameters as old and new values.
-   *
+   * 
    * @param oldValue
    *          The old connector's value
    * @param newValue
@@ -91,7 +91,7 @@ public class ConnectorValueChangeSupport {
   /**
    * Propagates the <code>ConnectorValueChangeEvent</code> as is (i.e.
    * whithout modifying its source) to the listeners.
-   *
+   * 
    * @param evt
    *          the propagated <code>ConnectorValueChangeEvent</code>
    */
@@ -118,7 +118,7 @@ public class ConnectorValueChangeSupport {
    * Registers a listener to be excluded (generally temporarily) from the
    * notification process without being removed from the actual listeners
    * collection.
-   *
+   * 
    * @param listener
    *          the excluded listener.
    */
@@ -132,7 +132,7 @@ public class ConnectorValueChangeSupport {
   /**
    * Registers a listener to be re-included to the notification process without
    * being re-added to the actual listeners collection.
-   *
+   * 
    * @param listener
    *          the previously excluded listener.
    */
@@ -145,7 +145,7 @@ public class ConnectorValueChangeSupport {
 
   /**
    * Gets wether the listener collection is empty.
-   *
+   * 
    * @return true if the listener collection is empty.
    */
   public boolean isEmpty() {

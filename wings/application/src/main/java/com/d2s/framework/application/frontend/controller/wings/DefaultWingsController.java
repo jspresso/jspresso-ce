@@ -52,7 +52,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -198,7 +198,7 @@ public class DefaultWingsController extends
 
     /**
      * Constructs a new <code>ModuleSelectionAction</code> instance.
-     *
+     * 
      * @param moduleId
      * @param moduleDescriptor
      */
@@ -281,7 +281,7 @@ public class DefaultWingsController extends
 
   /**
    * Creates a new SInternalFrame and populates it with a view.
-   *
+   * 
    * @param view
    *          the view to be set into the internal frame.
    * @return the constructed internal frame.

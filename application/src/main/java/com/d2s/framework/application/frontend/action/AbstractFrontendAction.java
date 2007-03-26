@@ -27,7 +27,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -61,7 +61,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the mnemonic of the action.
-   *
+   * 
    * @param mnemonicStringRep
    *          the mnemonic to set represented as a string as KeyStroke factory
    *          would parse it.
@@ -93,7 +93,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the description.
-   *
+   * 
    * @param description
    *          the description to set.
    */
@@ -103,7 +103,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the iconImageURL.
-   *
+   * 
    * @param iconImageURL
    *          the iconImageURL to set.
    */
@@ -113,7 +113,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the name.
-   *
+   * 
    * @param name
    *          the name to set.
    */
@@ -132,7 +132,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the value connector this model action was triggered on.
@@ -152,7 +152,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the value connector this model action was triggered on.
@@ -173,7 +173,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the value connector this model action was triggered on.
@@ -191,7 +191,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <li> <code>ActionContextConstants.MODULE_DESCRIPTOR</code> to get the the
    * module descriptor the action executes on.
    * </ul>
-   *
+   * 
    * @param context
    *          the action context.
    * @return the module descriptor this action was triggered on.
@@ -212,7 +212,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * <p>
    * The returned connector mainly serves for acting on the view component the
    * action has to be triggered on.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the parent value connector this model action was triggered on.
@@ -233,7 +233,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Sets the acceleratorAsString.
-   *
+   * 
    * @param acceleratorAsString
    *          the acceleratorAsString to set.
    */
@@ -252,7 +252,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the frontend controller out of the action context.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the frontend controller.
@@ -267,7 +267,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the mvcBinder.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the mvcBinder.
@@ -278,7 +278,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the viewFactory.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the viewFactory.
@@ -289,7 +289,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the iconFactory.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the iconFactory.
@@ -300,7 +300,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
 
   /**
    * Gets the actionFactory.
-   *
+   * 
    * @param context
    *          the action context.
    * @return the actionFactory.
@@ -373,21 +373,20 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
     return true;
   }
 
-
   /**
    * Gets the actionabilityGates.
-   *
+   * 
    * @return the actionabilityGates.
    */
   public Collection<IGate> getActionabilityGates() {
     return actionabilityGates;
   }
 
-
   /**
    * Sets the actionabilityGates.
-   *
-   * @param actionabilityGates the actionabilityGates to set.
+   * 
+   * @param actionabilityGates
+   *          the actionabilityGates to set.
    */
   public void setActionabilityGates(Collection<IGate> actionabilityGates) {
     this.actionabilityGates = actionabilityGates;

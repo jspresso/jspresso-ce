@@ -18,7 +18,7 @@ import com.d2s.framework.action.IActionHandler;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -54,7 +54,7 @@ public class YesNoAction extends AbstractMessageAction {
 
   /**
    * Sets the noAction.
-   *
+   * 
    * @param noAction
    *          the noAction to set.
    */
@@ -64,7 +64,7 @@ public class YesNoAction extends AbstractMessageAction {
 
   /**
    * Sets the yesAction.
-   *
+   * 
    * @param yesAction
    *          the yesAction to set.
    */
