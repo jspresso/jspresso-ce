@@ -52,10 +52,6 @@ public class BasicProxyComponentFactory implements IComponentFactory {
       Class<T> componentContract, Object delegate, Class[] extraInterfaces) {
     IComponentDescriptor componentDescriptor = componentDescriptorRegistry
         .getComponentDescriptor(componentContract);
-    if (componentDescriptor.isPurelyAbstract()) {
-      throw new EntityException(componentDescriptor.getName()
-          + " is purely abstract. It cannot be instanciated.");
-    }
     InvocationHandler componentHandler = createComponentInvocationHandler(
         componentDescriptor, delegate);
     Class[] implementedClasses;
