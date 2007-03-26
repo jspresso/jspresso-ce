@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -42,7 +43,7 @@ import freemarker.template.TemplateException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -54,6 +55,7 @@ public class EntityGenerator {
   private static final String OUTPUT_DIR              = "outputDir";
   private static final String COMPONENT_NAMES         = "componentNames";
   private static final String INCLUDE_PACKAGES        = "includePackages";
+  private static final String EXCLUDE_PATTERN         = "excludePatterns";
   private static final String GENERATE_ANNOTATIONS    = "generateAnnotations";
 
   private String              applicationContextKey;
@@ -61,6 +63,7 @@ public class EntityGenerator {
   private String              templateName;
   private String              outputDir;
   private String[]            includePackages;
+  private String[]            excludePatterns;
   private boolean             generateAnnotations;
   private String[]            componentNames;
 
@@ -77,7 +80,17 @@ public class EntityGenerator {
         for (String componentName : allComponentNames) {
           for (String pkg : includePackages) {
             if (componentName.startsWith(pkg)) {
-              filteredComponentNames.add(componentName);
+              boolean include = true;
+              if (excludePatterns != null) {
+                for (String excludePattern : excludePatterns) {
+                  if (include && Pattern.matches(excludePattern, componentName)) {
+                    include = false;
+                  }
+                }
+              }
+              if (include) {
+                filteredComponentNames.add(componentName);
+              }
             }
           }
         }
@@ -147,7 +160,7 @@ public class EntityGenerator {
 
   /**
    * Starts Code generation for an component.
-   * 
+   *
    * @param args
    *          the command line arguments.
    */
@@ -180,6 +193,10 @@ public class EntityGenerator {
             .withDescription(
                 "generate code for the component descriptors declared in the listed packages.")
             .create(INCLUDE_PACKAGES));
+    options.addOption(OptionBuilder.withArgName(EXCLUDE_PATTERN).hasArgs()
+        .withValueSeparator(',').withDescription(
+            "exclude classes whose names match the regular expression.")
+        .create(EXCLUDE_PATTERN));
     options
         .addOption(OptionBuilder
             .withArgName(GENERATE_ANNOTATIONS)
@@ -213,6 +230,7 @@ public class EntityGenerator {
     generator.setTemplateName(cmd.getOptionValue(TEMPLATE_NAME));
     generator.setOutputDir(cmd.getOptionValue(OUTPUT_DIR));
     generator.setIncludePackages(cmd.getOptionValues(INCLUDE_PACKAGES));
+    generator.setExcludePatterns(cmd.getOptionValues(EXCLUDE_PATTERN));
     generator.setGenerateAnnotations(cmd.hasOption(GENERATE_ANNOTATIONS));
     generator.setComponentNames(cmd.getOptionValues(COMPONENT_NAMES));
     generator.generateComponents();
@@ -220,7 +238,7 @@ public class EntityGenerator {
 
   /**
    * Sets the applicationContextKey.
-   * 
+   *
    * @param applicationContextKey
    *          the applicationContextKey to set.
    */
@@ -230,7 +248,7 @@ public class EntityGenerator {
 
   /**
    * Sets the componentNames.
-   * 
+   *
    * @param componentNames
    *          the componentNames to set.
    */
@@ -240,7 +258,7 @@ public class EntityGenerator {
 
   /**
    * Sets the generateAnnotations.
-   * 
+   *
    * @param generateAnnotations
    *          the generateAnnotations to set.
    */
@@ -250,7 +268,7 @@ public class EntityGenerator {
 
   /**
    * Sets the includePackages.
-   * 
+   *
    * @param includePackages
    *          the includePackages to set.
    */
@@ -259,8 +277,18 @@ public class EntityGenerator {
   }
 
   /**
+   * Sets the excludePatterns.
+   *
+   * @param excludePatterns
+   *          the excludePatterns to set.
+   */
+  public void setExcludePatterns(String[] excludePatterns) {
+    this.excludePatterns = excludePatterns;
+  }
+
+  /**
    * Sets the outputDir.
-   * 
+   *
    * @param outputDir
    *          the outputDir to set.
    */
@@ -270,7 +298,7 @@ public class EntityGenerator {
 
   /**
    * Sets the templateName.
-   * 
+   *
    * @param templateName
    *          the templateName to set.
    */
@@ -280,7 +308,7 @@ public class EntityGenerator {
 
   /**
    * Sets the templateResourcePath.
-   * 
+   *
    * @param templateResourcePath
    *          the templateResourcePath to set.
    */
