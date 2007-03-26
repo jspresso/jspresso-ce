@@ -77,4 +77,12 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
     }
     return superRenderedProperties;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isEntity() {
+    return true;
+  }
 }

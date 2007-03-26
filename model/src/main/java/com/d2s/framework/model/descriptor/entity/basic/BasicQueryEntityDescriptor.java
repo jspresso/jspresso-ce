@@ -231,4 +231,11 @@ public class BasicQueryEntityDescriptor implements
     return entityDescriptor.isPurelyAbstract();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isEntity() {
+    return entityDescriptor.isEntity();
+  }
+
 }

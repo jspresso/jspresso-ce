@@ -31,7 +31,7 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
@@ -64,7 +64,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Constructs a new <code>BasicComponentDescriptor</code> instance.
-   * 
+   *
    * @param name
    *          the name of the descriptor which has to be the fully-qualified
    *          class name of its contract.
@@ -127,7 +127,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the propertyDescriptors property.
-   * 
+   *
    * @param descriptors
    *          the propertyDescriptors to set.
    */
@@ -193,7 +193,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
    * the component and of its ancestors one. A component may have multiple
    * ancestors which means that complex multi-inheritance hierarchy can be
    * mapped.
-   * 
+   *
    * @param ancestorDescriptors
    *          The list of ancestor component descriptors.
    */
@@ -208,7 +208,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
    * are the union of the declared property descriptors of the component and of
    * its ancestors one. A component may have multiple ancestors which means that
    * complex multi-inheritance hierarchy can be mapped.
-   * 
+   *
    * @return ancestorDescriptors The list of ancestor entity descriptors.
    */
   public List<IComponentDescriptor<?>> getAncestorDescriptors() {
@@ -218,7 +218,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   /**
    * Registers the service delegates which help the component to implement the
    * services defined by its contract.
-   * 
+   *
    * @param servicesByServiceContracts
    *          the component services to be registered keyed by their contract. A
    *          service contract is an interface class defining the service
@@ -301,7 +301,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the unclonedProperties.
-   * 
+   *
    * @param unclonedProperties
    *          the unclonedProperties to set.
    */
@@ -311,7 +311,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the orderingProperties.
-   * 
+   *
    * @param orderingProperties
    *          the orderingProperties to set.
    */
@@ -331,7 +331,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the queryableProperties.
-   * 
+   *
    * @param queryableProperties
    *          the queryableProperties to set.
    */
@@ -358,7 +358,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the renderedProperties.
-   * 
+   *
    * @param renderedProperties
    *          the renderedProperties to set.
    */
@@ -368,7 +368,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Gets the toStringProperty.
-   * 
+   *
    * @return the toStringProperty.
    */
   public String getToStringProperty() {
@@ -388,7 +388,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the toStringProperty.
-   * 
+   *
    * @param toStringProperty
    *          the toStringProperty to set.
    */
@@ -405,7 +405,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the computed.
-   * 
+   *
    * @param computed
    *          the computed to set.
    */
@@ -429,7 +429,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Gets the lifecycleInterceptors.
-   * 
+   *
    * @return the lifecycleInterceptors.
    */
   public List<ILifecycleInterceptor> getLifecycleInterceptors() {
@@ -447,7 +447,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the lifecycleInterceptors.
-   * 
+   *
    * @param lifecycleInterceptors
    *          the lifecycleInterceptors to set.
    */
@@ -461,5 +461,15 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
    */
   public Class getModelType() {
     return getComponentContract();
+  }
+
+
+  /**
+   * Gets the entity.
+   *
+   * @return the entity.
+   */
+  public boolean isEntity() {
+    return false;
   }
 }

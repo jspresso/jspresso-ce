@@ -141,4 +141,11 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * @return the list of entity lifecycle interceptors.
    */
   List<ILifecycleInterceptor> getLifecycleInterceptors();
+
+  /**
+   * Gets wether the component described is an entity.
+   *
+   * @return true if the component described is an entity.
+   */
+  boolean isEntity();
 }
