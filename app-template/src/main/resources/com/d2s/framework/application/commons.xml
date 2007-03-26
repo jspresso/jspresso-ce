@@ -29,7 +29,7 @@
   <bean id="beanAccessorFactory" class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory" />
 
   <!--
-  <bean id="mapAccessorFactory" class="com.d2s.framework.util.accessor.map.MapAccessorFactory" />
+    <bean id="mapAccessorFactory" class="com.d2s.framework.util.accessor.map.MapAccessorFactory" />
   -->
   <bean id="mapAccessorFactory" class="com.d2s.framework.model.map.DescriptorAwareMapAccessorFactory" />
 
@@ -41,21 +41,23 @@
   <bean id="connectorFactory" class="com.d2s.framework.binding.basic.BasicConnectorFactory" />
 
   <!--
-    The implementation used as EntityCollectionFactory.
+    The implementation used as ComponentCollectionFactory.
   -->
-  <bean id="entityCollectionFactory" class="com.d2s.framework.model.component.DefaultComponentCollectionFactory" />
+  <bean id="componentCollectionFactory" class="com.d2s.framework.model.component.DefaultComponentCollectionFactory" />
 
   <!--
-    The implementation used as EntityExtensionFactory.
+    The implementation used as ComponentExtensionFactory.
   -->
-  <bean id="entityExtensionFactory" class="com.d2s.framework.model.component.DefaultComponentExtensionFactory" />
+  <bean id="componentExtensionFactory" class="com.d2s.framework.model.component.DefaultComponentExtensionFactory">
+    <property name="componentFactory" ref="basicComponentFactory" />
+  </bean>
 
   <!--
     The implementation used as ModelConnectorFactory.
   -->
   <bean id="beanConnectorFactory" class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
     <property name="accessorFactory" ref="beanAccessorFactory" />
-    <property name="descriptorRegistry" ref="entityDescriptorRegistry" />
+    <property name="descriptorRegistry" ref="componentDescriptorRegistry" />
   </bean>
 
   <bean id="mapConnectorFactory" class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
@@ -82,7 +84,7 @@
   -->
   <bean id="abstractApplicationSession" abstract="true"
     class="com.d2s.framework.application.backend.session.basic.BasicApplicationSession">
-    <property name="collectionFactory" ref="entityCollectionFactory" />
+    <property name="collectionFactory" ref="componentCollectionFactory" />
     <property name="accessorFactory" ref="beanAccessorFactory" />
     <property name="entityRegistry">
       <bean class="com.d2s.framework.model.entity.basic.BasicEntityRegistry" scope="prototype" />
@@ -96,19 +98,30 @@
   </bean>
 
   <!--
-    The implementation used as EntityDescriptorRegistry.
+    The implementation used as ComponentDescriptorRegistry.
   -->
-  <bean id="entityDescriptorRegistry" class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
+  <bean id="componentDescriptorRegistry"
+    class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
+
+  <!--
+    The implementation used as ComponentFactory.
+  -->
+  <bean id="basicComponentFactory" class="com.d2s.framework.model.component.basic.BasicProxyComponentFactory">
+    <property name="accessorFactory" ref="beanAccessorFactory" />
+    <property name="componentCollectionFactory" ref="componentCollectionFactory" />
+    <property name="componentExtensionFactory" ref="componentExtensionFactory" />
+    <property name="componentDescriptorRegistry" ref="componentDescriptorRegistry" />
+  </bean>
 
   <!--
     The implementation used as EntityFactory.
   -->
   <bean id="basicEntityFactory" class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
     <property name="accessorFactory" ref="beanAccessorFactory" />
-    <property name="entityCollectionFactory" ref="entityCollectionFactory" />
-    <property name="entityExtensionFactory" ref="entityExtensionFactory" />
+    <property name="entityCollectionFactory" ref="componentCollectionFactory" />
+    <property name="entityExtensionFactory" ref="componentExtensionFactory" />
     <property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
-    <property name="entityDescriptorRegistry" ref="entityDescriptorRegistry" />
+    <property name="entityDescriptorRegistry" ref="componentDescriptorRegistry" />
   </bean>
 
   <!--

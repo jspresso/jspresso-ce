@@ -21,10 +21,11 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * @param <T>
  *          the parametrized component class on which these extensions work on.
  */
-public abstract class AbstractComponentExtension<T extends IComponent> implements
-    IComponentExtension<T> {
+public abstract class AbstractComponentExtension<T extends IComponent>
+    implements IComponentExtension<T>, IComponentFactoryAware {
 
-  private final T extendedComponent;
+  private final T           extendedComponent;
+  private IComponentFactory componentFactory;
 
   /**
    * Constructs a new <code>AbstractComponentExtension</code> instance.
@@ -74,5 +75,24 @@ public abstract class AbstractComponentExtension<T extends IComponent> implement
                 evt.getOldValue(), evt.getNewValue());
           }
         });
+  }
+
+  /**
+   * Gets the componentFactory.
+   *
+   * @return the componentFactory.
+   */
+  protected IComponentFactory getComponentFactory() {
+    return componentFactory;
+  }
+
+  /**
+   * Sets the componentFactory.
+   *
+   * @param componentFactory
+   *          the componentFactory to set.
+   */
+  public void setComponentFactory(IComponentFactory componentFactory) {
+    this.componentFactory = componentFactory;
   }
 }

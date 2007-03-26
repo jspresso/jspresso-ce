@@ -12,7 +12,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,7 +21,7 @@ public interface IEntityFactory extends IComponentDescriptorRegistry {
   /**
    * Creates a new entity instance based on the entity descriptor. The entity
    * will be initialized with any necessary starting state.
-   * 
+   *
    * @param <T>
    *          the concrete class of the created entity.
    * @param entityContract
@@ -32,7 +32,7 @@ public interface IEntityFactory extends IComponentDescriptorRegistry {
 
   /**
    * Creates a new entity instance based on the entity descriptor.
-   * 
+   *
    * @param <T>
    *          the concrete class of the created entity.
    * @param entityContract
@@ -46,7 +46,7 @@ public interface IEntityFactory extends IComponentDescriptorRegistry {
 
   /**
    * Creates a new query entity instance based on the entity descriptor.
-   * 
+   *
    * @param <T>
    *          the concrete class of the created query entity.
    * @param entityContract
