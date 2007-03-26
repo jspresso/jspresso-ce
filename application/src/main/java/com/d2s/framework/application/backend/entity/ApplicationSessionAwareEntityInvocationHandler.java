@@ -4,6 +4,7 @@
 package com.d2s.framework.application.backend.entity;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -49,8 +50,8 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    *          the current application session.
    */
   protected ApplicationSessionAwareEntityInvocationHandler(
-      IComponentDescriptor<IEntity> entityDescriptor,
-      IComponentCollectionFactory<IEntity> collectionFactory,
+      IComponentDescriptor<IComponent> entityDescriptor,
+      IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory,
       IApplicationSession applicationSession) {

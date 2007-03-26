@@ -19,7 +19,7 @@ import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -35,7 +35,7 @@ public class EntityTracingAspect extends AbstractTracingAspect {
 
   /**
    * The main advice used to trace modifier calls on entities.
-   * 
+   *
    * @param joinPoint
    *          The jointpoint reached by the flow.
    * @return The value returned by the underlying called method.
@@ -48,7 +48,7 @@ public class EntityTracingAspect extends AbstractTracingAspect {
         GET_SET_LENGTH);
     MethodRtti rtti = (MethodRtti) joinPoint.getRtti();
     Class entityClass = ((BasicEntityInvocationHandler) joinPoint.getCallee())
-        .getEntityContract();
+        .getComponentContract();
     Object[] parameterValues = rtti.getParameterValues();
     logMethodEntry(entityClass, parameterValues[0], "[" + accessType + "]"
         + ((IPropertyDescriptor) parameterValues[1]).getName());

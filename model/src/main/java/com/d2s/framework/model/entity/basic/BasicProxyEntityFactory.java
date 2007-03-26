@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
@@ -36,11 +37,11 @@ import com.d2s.framework.util.uid.IGUIDGenerator;
  */
 public class BasicProxyEntityFactory implements IEntityFactory {
 
-  private IAccessorFactory                     accessorFactory;
-  private IComponentCollectionFactory<IEntity> entityCollectionFactory;
-  private IComponentExtensionFactory           entityExtensionFactory;
-  private IGUIDGenerator                       entityGUIDGenerator;
-  private IComponentDescriptorRegistry         entityDescriptorRegistry;
+  private IAccessorFactory                        accessorFactory;
+  private IComponentCollectionFactory<IComponent> entityCollectionFactory;
+  private IComponentExtensionFactory              entityExtensionFactory;
+  private IGUIDGenerator                          entityGUIDGenerator;
+  private IComponentDescriptorRegistry            entityDescriptorRegistry;
 
   /**
    * {@inheritDoc}
@@ -120,7 +121,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    * @return the entity proxy invocation handler.
    */
   protected InvocationHandler createEntityInvocationHandler(
-      IComponentDescriptor<IEntity> entityDescriptor) {
+      IComponentDescriptor<IComponent> entityDescriptor) {
     return new BasicEntityInvocationHandler(entityDescriptor,
         entityCollectionFactory, accessorFactory, entityExtensionFactory);
   }
@@ -157,7 +158,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    *          the entityCollectionFactory to set.
    */
   public void setEntityCollectionFactory(
-      IComponentCollectionFactory<IEntity> entityCollectionFactory) {
+      IComponentCollectionFactory<IComponent> entityCollectionFactory) {
     this.entityCollectionFactory = entityCollectionFactory;
   }
 
@@ -196,7 +197,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    *
    * @return the entityCollectionFactory.
    */
-  protected IComponentCollectionFactory<IEntity> getEntityCollectionFactory() {
+  protected IComponentCollectionFactory<IComponent> getEntityCollectionFactory() {
     return entityCollectionFactory;
   }
 

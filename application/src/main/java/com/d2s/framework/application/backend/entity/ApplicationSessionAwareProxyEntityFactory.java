@@ -6,6 +6,7 @@ package com.d2s.framework.application.backend.entity;
 import java.lang.reflect.InvocationHandler;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
@@ -55,7 +56,7 @@ public class ApplicationSessionAwareProxyEntityFactory extends
    */
   @Override
   protected InvocationHandler createEntityInvocationHandler(
-      IComponentDescriptor<IEntity> entityDescriptor) {
+      IComponentDescriptor<IComponent> entityDescriptor) {
     return new ApplicationSessionAwareEntityInvocationHandler(entityDescriptor,
         getEntityCollectionFactory(), getAccessorFactory(),
         getEntityExtensionFactory(), applicationSession);
