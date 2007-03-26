@@ -12,7 +12,6 @@ import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
-import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.accessor.IAccessorFactory;
