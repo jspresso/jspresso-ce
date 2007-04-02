@@ -143,4 +143,14 @@ public class BasicEntityInvocationHandler extends
   protected void storeProperty(String propertyName, Object propertyValue) {
     properties.put(propertyName, propertyValue);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IComponent decorateReferent(IComponent referent,
+      @SuppressWarnings("unused")
+      IComponentDescriptor<IComponent> referentDescriptor) {
+    return referent;
+  }
 }

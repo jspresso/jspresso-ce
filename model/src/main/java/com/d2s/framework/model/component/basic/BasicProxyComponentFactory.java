@@ -71,7 +71,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
 
   private InvocationHandler createComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
-    return new BasicComponentInvocationHandler(delegate, componentDescriptor,
+    return new BasicComponentInvocationHandler(delegate, this, componentDescriptor,
         componentCollectionFactory, accessorFactory, componentExtensionFactory);
   }
 

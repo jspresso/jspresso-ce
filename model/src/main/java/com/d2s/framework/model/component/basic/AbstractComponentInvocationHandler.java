@@ -132,6 +132,19 @@ public abstract class AbstractComponentInvocationHandler implements
   protected abstract boolean computeEquals(IComponent proxy, Object another);
 
   /**
+   * Gives a chance to the implementor to decorate a component reference before
+   * returning it when fetching association ends.
+   *
+   * @param referent
+   *          the component reference to decorate.
+   * @param referentDescriptor
+   *          the component descriptor of the referent.
+   * @return the decorated component.
+   */
+  protected abstract IComponent decorateReferent(IComponent referent,
+      IComponentDescriptor<IComponent> referentDescriptor);
+
+  /**
    * Handles methods invocations on the component proxy. Either :
    * <li>delegates to one of its extension if the accessed property is
    * registered as being part of an extension
@@ -280,6 +293,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *          the property descriptor to get the value for.
    * @return the property value.
    */
+  @SuppressWarnings("unchecked")
   protected Object getProperty(Object proxy,
       IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
@@ -287,7 +301,7 @@ public abstract class AbstractComponentInvocationHandler implements
           (ICollectionPropertyDescriptor<? extends Object>) propertyDescriptor);
     } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return getReferenceProperty(proxy,
-          (IReferencePropertyDescriptor) propertyDescriptor);
+          (IReferencePropertyDescriptor<IComponent>) propertyDescriptor);
     }
     Object propertyValue = straightGetProperty(propertyDescriptor.getName());
     return propertyValue;
@@ -302,6 +316,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *          the property descriptor to get the value for.
    * @return the property value.
    */
+  @SuppressWarnings("unchecked")
   protected Object getCollectionProperty(@SuppressWarnings("unused")
   Object proxy,
       ICollectionPropertyDescriptor<? extends Object> propertyDescriptor) {
@@ -310,6 +325,28 @@ public abstract class AbstractComponentInvocationHandler implements
       property = collectionFactory.createEntityCollection(propertyDescriptor
           .getReferencedDescriptor().getCollectionInterface());
       storeProperty(propertyDescriptor.getName(), property);
+    }
+    if (property instanceof List) {
+      List<IComponent> propertyAsList = (List<IComponent>) property;
+      for (int i = 0; i < propertyAsList.size(); i++) {
+        IComponent referent = propertyAsList.get(i);
+        IComponent decorated = decorateReferent(referent, propertyDescriptor
+            .getReferencedDescriptor().getElementDescriptor()
+            .getComponentDescriptor());
+        if (decorated != referent) {
+          propertyAsList.set(i, decorated);
+        }
+      }
+    } else if (property instanceof Set) {
+      Set<IComponent> propertyAsSet = (Set<IComponent>) property;
+      for (IComponent referent : new HashSet<IComponent>(propertyAsSet)) {
+        IComponent decorated = decorateReferent(referent, propertyDescriptor
+            .getReferencedDescriptor().getElementDescriptor()
+            .getComponentDescriptor());
+        if (decorated != referent) {
+          propertyAsSet.add(decorated);
+        }
+      }
     }
     return property;
   }
@@ -324,8 +361,11 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return the property value.
    */
   protected Object getReferenceProperty(@SuppressWarnings("unused")
-  Object proxy, IReferencePropertyDescriptor propertyDescriptor) {
-    return straightGetProperty(propertyDescriptor.getName());
+  Object proxy, IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+    IComponent property = (IComponent) straightGetProperty(propertyDescriptor
+        .getName());
+    return decorateReferent(property, propertyDescriptor
+        .getReferencedDescriptor());
   }
 
   @SuppressWarnings("unchecked")

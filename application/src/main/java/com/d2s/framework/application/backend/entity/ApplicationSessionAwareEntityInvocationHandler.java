@@ -65,7 +65,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    */
   @Override
   protected Object getReferenceProperty(Object proxy,
-      IReferencePropertyDescriptor propertyDescriptor) {
+      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     applicationSession.initializePropertyIfNeeded((IEntity) proxy,
         propertyDescriptor);
     return super.getReferenceProperty(proxy, propertyDescriptor);

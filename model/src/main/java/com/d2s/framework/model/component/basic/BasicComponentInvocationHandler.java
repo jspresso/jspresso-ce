@@ -11,6 +11,7 @@ import com.d2s.framework.model.component.ComponentException;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
 import com.d2s.framework.util.accessor.IAccessorFactory;
@@ -30,6 +31,7 @@ public class BasicComponentInvocationHandler extends
 
   private static final long serialVersionUID = 4064763209800159366L;
 
+  private IComponentFactory componentFactory;
   private Object            delegate;
 
   /**
@@ -37,6 +39,8 @@ public class BasicComponentInvocationHandler extends
    *
    * @param delegate
    *          the delegate to which getters and setters are delegated.
+   * @param componentFactory
+   *          the factory used to decorate referenced components.
    * @param componentDescriptor
    *          The descriptor of the proxy component.
    * @param collectionFactory
@@ -49,6 +53,7 @@ public class BasicComponentInvocationHandler extends
    *          classes.
    */
   protected BasicComponentInvocationHandler(Object delegate,
+      IComponentFactory componentFactory,
       IComponentDescriptor<IComponent> componentDescriptor,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
@@ -56,6 +61,7 @@ public class BasicComponentInvocationHandler extends
     super(componentDescriptor, collectionFactory, accessorFactory,
         extensionFactory);
     this.delegate = delegate;
+    this.componentFactory = componentFactory;
   }
 
   /**
@@ -145,5 +151,20 @@ public class BasicComponentInvocationHandler extends
             + " is not supported on the component " + getComponentContract());
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IComponent decorateReferent(IComponent referent,
+      @SuppressWarnings("unused")
+      IComponentDescriptor<IComponent> referentDescriptor) {
+    if (Proxy.isProxyClass(referent.getClass())
+        && Proxy.getInvocationHandler(referent) instanceof AbstractComponentInvocationHandler) {
+      return referent;
+    }
+    return componentFactory.createComponentInstance(referentDescriptor
+        .getComponentContract(), delegate);
   }
 }
