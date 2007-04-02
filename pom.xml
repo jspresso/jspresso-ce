@@ -299,7 +299,7 @@
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-development</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>jboss</groupId>
@@ -314,37 +314,37 @@
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-client</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-server</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-jnlp-client</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-servlet-server</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-servlet-client</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-trusted</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-deployment-key</artifactId>
-        <version>6.0.4</version>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>

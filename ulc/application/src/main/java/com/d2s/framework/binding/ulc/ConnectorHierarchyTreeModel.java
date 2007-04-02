@@ -28,7 +28,7 @@ import com.ulcjava.base.application.tree.TreePath;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,7 +42,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
 
   /**
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
-   * 
+   *
    * @param rootConnector
    *          the connector being the root node of the tree.
    * @param tree
@@ -67,7 +67,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public Object getRoot() {
     return rootConnector;
   }
@@ -75,7 +74,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public Object getChild(Object parent, int index) {
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
@@ -92,7 +90,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public int getChildCount(Object parent) {
     if (parent instanceof IValueConnector
         && ((IValueConnector) parent).getConnectorValue() == null) {
@@ -116,7 +113,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public boolean isLeaf(Object node) {
     if (node == rootConnector) {
       return false;
@@ -127,7 +123,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  @Override
   public int getIndexOfChild(Object parent, Object child) {
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)

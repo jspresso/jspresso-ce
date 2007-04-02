@@ -58,7 +58,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * </ul>
  * <p/> This is a long overdue rewrite of a class of the same name that first
  * appeared in the swing table demos in 1997.
- * 
+ *
  * @author Philip Milne
  * @author Brendon McLean
  * @author Dan van Enckevort
@@ -138,7 +138,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Constructs a new <code>TableSorter</code> instance.
-   * 
+   *
    * @param tableModel
    *          tableModel.
    */
@@ -149,7 +149,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Constructs a new <code>TableSorter</code> instance.
-   * 
+   *
    * @param tableModel
    *          tableModel.
    * @param tableHeader
@@ -168,7 +168,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Gets tableModel.
-   * 
+   *
    * @return tableModel.
    */
   public ITableModel getTableModel() {
@@ -177,7 +177,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Sets tableModel.
-   * 
+   *
    * @param tableModel
    *          tableModel.
    */
@@ -197,7 +197,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Gets tableHeader.
-   * 
+   *
    * @return tableHeader.
    */
   public ULCTableHeader getTableHeader() {
@@ -206,7 +206,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Sets tableHeader.
-   * 
+   *
    * @param tableHeader
    *          tableHeader.
    */
@@ -222,7 +222,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * is sorting ?
-   * 
+   *
    * @return true if sorting
    */
   public boolean isSorting() {
@@ -241,7 +241,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Gets sorting status.
-   * 
+   *
    * @param column
    *          column.
    * @return sorting status.
@@ -260,7 +260,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Sets column sorting status.
-   * 
+   *
    * @param column
    *          column.
    * @param status
@@ -280,7 +280,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Gets HeaderRendererIcon.
-   * 
+   *
    * @param column
    *          column.
    * @param size
@@ -307,7 +307,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Sets ColumnComparator.
-   * 
+   *
    * @param type
    *          type.
    * @param comparator
@@ -324,7 +324,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Gets Comparator.
-   * 
+   *
    * @param column
    *          column.
    * @return Comparator.
@@ -358,7 +358,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * modelIndex.
-   * 
+   *
    * @param viewIndex
    *          viewIndex.
    * @return modelIndex.
@@ -369,7 +369,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * viewIndex.
-   * 
+   *
    * @param modelIndex
    *          modelIndex
    * @return viewIndex
@@ -394,7 +394,6 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   /**
    * {@inheritDoc}
    */
-  @Override
   public int getRowCount() {
     if (tableModel == null) {
       return 0;
@@ -405,7 +404,6 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   /**
    * {@inheritDoc}
    */
-  @Override
   public int getColumnCount() {
     if (tableModel == null) {
       return 0;
@@ -440,7 +438,6 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Object getValueAt(int row, int column) {
     return tableModel.getValueAt(modelIndex(row), column);
   }
@@ -461,7 +458,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
     /**
      * Constructs a new <code>Row</code> instance.
-     * 
+     *
      * @param index
      */
     public Row(int index) {
@@ -470,7 +467,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
     /**
      * compareTo.
-     * 
+     *
      * @param o
      * @return comparison.
      */
@@ -533,7 +530,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
       // We can map a cell event through to the view without widening
       // when the following conditions apply:
-      // 
+      //
       // a) all the changes are on one row (e.getFirstRow() == e.getLastRow())
       // and,
       // b) all the changes are in one column (column !=
@@ -544,7 +541,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
       //
       // Note: INSERT and DELETE events fail this test as they have column ==
       // ALL_COLUMNS.
-      // 
+      //
       // The last check, for (modelToView != null) is to see if modelToView
       // is already allocated. If we don't do this check; sorting can become
       // a performance bottleneck for applications where cells
@@ -618,7 +615,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
     /**
      * Constructs a new <code>SortableHeaderRenderer</code> instance.
-     * 
+     *
      * @param column
      *          the column this renderer is used for.
      */
@@ -647,7 +644,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
     /**
      * Constructs a new <code>Directive</code> instance.
-     * 
+     *
      * @param column
      * @param direction
      */
@@ -659,7 +656,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Sets the downIcon.
-   * 
+   *
    * @param downIcon
    *          the downIcon to set.
    */
@@ -669,7 +666,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
   /**
    * Sets the upIcon.
-   * 
+   *
    * @param upIcon
    *          the upIcon to set.
    */

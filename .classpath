@@ -73,7 +73,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/asm/asm-util/1.5.3/asm-util-1.5.3.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/proxool/proxool/0.8.3/proxool-0.8.3.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-server/6.0.4/ulc-servlet-server-6.0.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-server/6.0.5/ulc-servlet-server-6.0.5.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-cli/commons-cli/1.0/commons-cli-1.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/joda-time/joda-time/1.4/joda-time-1.4.jar" sourcepath="/ENVDEV/joda-time-1.4/joda-time-1.4-src-ide.zip">
 		<attributes>
@@ -88,14 +88,14 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jfreechart/1.0.1/jfreechart-1.0.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jedit/jedit-syntax/1.0/jedit-syntax-1.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-ldap/1.1/spring-ldap-1.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-client/6.0.4/ulc-servlet-client-6.0.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-client/6.0.5/ulc-servlet-client-6.0.5.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jrexx/jrexx/1.1.1/jrexx-1.1.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/hsqldb/hsqldb/1.8.0.1/hsqldb-1.8.0.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jython/jython/2.1/jython-2.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-core/2.0/aspectwerkz-core-2.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-jnlp-client/6.0.4/ulc-jnlp-client-6.0.4.jar" sourcepath="/ENVDEV/ulc-6.0.4/environment/jnlp/src/ulc-jnlp-client-src.jar"/>
+	<classpathentry kind="var" path="M2_REPO/ulc/ulc-jnlp-client/6.0.5/ulc-jnlp-client-6.0.5.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring/2.0/spring-2.0.jar" sourcepath="/ENVDEV/spring-framework-2.0/src"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/opensymphony/oscache/2.1/oscache-2.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-jdk5/2.0/aspectwerkz-jdk5-2.0.jar"/>
@@ -107,7 +107,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/foxtrot/foxtrot/2.0/foxtrot-2.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/freemarker/freemarker/2.3.3/freemarker-2.3.3.jar" sourcepath="/ENVDEV/freemarker-2.3.4/src"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/nachocalendar/nachocalendar/0.22/nachocalendar-0.22.jar" sourcepath="/ENVDEV/nachocalendar-0.22/src"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-base-development/6.0.4/ulc-base-development-6.0.4.jar" sourcepath="/ENVDEV/ulc-6.0.4/base/src/ulc-base-development-src.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-base-development/6.0.5/ulc-base-development-6.0.5.jar" sourcepath="/ENVDEV/ulc-6.0.5/base/src/ulc-base-development-src.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.0/wings-3.0.jar" sourcepath="/ENVDEV/WingS/wings2/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.0/wingx-3.0.jar" sourcepath="/ENVDEV/WingS/wingx2/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/kdeclassic-lfgr/3.0/kdeclassic-lfgr-3.0.jar"/>

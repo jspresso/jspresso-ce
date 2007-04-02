@@ -29,7 +29,7 @@ import com.ulcjava.base.application.table.AbstractTableModel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -47,7 +47,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Constructs a new <code>CollectionConnectorTableModel</code> instance.
-   * 
+   *
    * @param collectionConnector
    *          the collection connector holding the values of this table model.
    * @param columnConnectorKeys
@@ -66,7 +66,6 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public int getRowCount() {
     return collectionConnector.getChildConnectorCount();
   }
@@ -76,7 +75,6 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public int getColumnCount() {
     return columnConnectorKeys.size();
   }
@@ -87,7 +85,6 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public Object getValueAt(int rowIndex, int columnIndex) {
     IValueConnector cellConnector = getConnectorAt(rowIndex, columnIndex);
     if (cellConnector instanceof ICompositeValueConnector) {
@@ -313,7 +310,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the columnClassesByIds.
-   * 
+   *
    * @param columnClassesByIds
    *          the columnClassesByIds to set.
    */
@@ -323,7 +320,7 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
 
   /**
    * Sets the exceptionHandler.
-   * 
+   *
    * @param exceptionHandler
    *          the exceptionHandler to set.
    */

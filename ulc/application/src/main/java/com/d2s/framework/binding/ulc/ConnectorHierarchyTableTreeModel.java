@@ -19,7 +19,7 @@ import com.ulcjava.base.application.tabletree.AbstractTableTreeModel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -33,7 +33,7 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
 
   /**
    * Constructs a new <code>ConnectorHierarchyTableTreeModel</code> instance.
-   * 
+   *
    * @param rootConnector
    *          the connector being the root node of the tree.
    * @param tree
@@ -53,7 +53,6 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
   /**
    * {@inheritDoc}
    */
-  @Override
   public int getIndexOfChild(Object parent, Object child) {
     return treeModelDelegate.getIndexOfChild(parent, child);
   }
@@ -61,7 +60,6 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
   /**
    * {@inheritDoc}
    */
-  @Override
   public boolean isLeaf(Object node) {
     return treeModelDelegate.isLeaf(node);
   }
@@ -69,7 +67,6 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
   /**
    * {@inheritDoc}
    */
-  @Override
   public int getChildCount(Object node) {
     return treeModelDelegate.getChildCount(node);
   }
@@ -77,7 +74,6 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Object getChild(Object parent, int index) {
     return treeModelDelegate.getChild(parent, index);
   }
@@ -85,7 +81,6 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Object getRoot() {
     return treeModelDelegate.getRoot();
   }
@@ -93,7 +88,6 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
   /**
    * {@inheritDoc}
    */
-  @Override
   public Object getValueAt(Object node, int column) {
     if (node instanceof ICompositeValueConnector
         && !(node instanceof ICollectionConnector)) {
@@ -112,7 +106,6 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
   /**
    * {@inheritDoc}
    */
-  @Override
   public int getColumnCount() {
     return columnConnectorKeys.size();
   }
@@ -169,7 +162,7 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
 
   /**
    * Sets the columnClassesByIds.
-   * 
+   *
    * @param columnClassesByIds
    *          the columnClassesByIds to set.
    */
@@ -213,7 +206,7 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
 
   /**
    * Sets the columnConnectorKeys.
-   * 
+   *
    * @param columnConnectorKeys
    *          the columnConnectorKeys to set.
    */

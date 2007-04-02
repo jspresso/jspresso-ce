@@ -61,7 +61,7 @@ import com.ulcjava.base.shared.IWindowConstants;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -278,7 +278,7 @@ public class DefaultUlcController extends
 
     /**
      * Constructs a new <code>ModuleInternalFrameListener</code> instance.
-     * 
+     *
      * @param moduleId
      *          the root module identifier this listener is attached to.
      */
@@ -391,7 +391,7 @@ public class DefaultUlcController extends
 
     /**
      * Constructs a new <code>ModuleSelectionAction</code> instance.
-     * 
+     *
      * @param moduleId
      * @param moduleDescriptor
      */
@@ -414,7 +414,6 @@ public class DefaultUlcController extends
      * <p>
      * {@inheritDoc}
      */
-    @Override
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
@@ -446,7 +445,6 @@ public class DefaultUlcController extends
      * <p>
      * {@inheritDoc}
      */
-    @Override
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       stop();
@@ -481,7 +479,7 @@ public class DefaultUlcController extends
 
   /**
    * Creates a new ULCExtendedInternalFrame and populates it with a view.
-   * 
+   *
    * @param view
    *          the view to be set into the internal frame.
    * @return the constructed internal frame.

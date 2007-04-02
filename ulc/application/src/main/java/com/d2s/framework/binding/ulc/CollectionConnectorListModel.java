@@ -22,7 +22,7 @@ import com.ulcjava.base.application.AbstractListModel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,7 +34,7 @@ public class CollectionConnectorListModel extends AbstractListModel {
 
   /**
    * Constructs a new <code>CollectionConnectorListModel</code> instance.
-   * 
+   *
    * @param collectionConnector
    *          the collection connector holding the values of this list model.
    */
@@ -49,7 +49,6 @@ public class CollectionConnectorListModel extends AbstractListModel {
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public int getSize() {
     return collectionConnector.getChildConnectorCount();
   }
@@ -60,7 +59,6 @@ public class CollectionConnectorListModel extends AbstractListModel {
    * <p>
    * {@inheritDoc}
    */
-  @Override
   public Object getElementAt(int index) {
     IValueConnector cellConnector = collectionConnector
         .getChildConnector(index);
