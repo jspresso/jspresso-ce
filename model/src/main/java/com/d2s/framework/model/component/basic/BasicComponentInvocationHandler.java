@@ -4,6 +4,7 @@
 package com.d2s.framework.model.component.basic;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 import com.d2s.framework.model.component.ComponentException;
@@ -29,7 +30,7 @@ public class BasicComponentInvocationHandler extends
 
   private static final long serialVersionUID = 4064763209800159366L;
 
-  private Object delegate;
+  private Object            delegate;
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
@@ -70,7 +71,7 @@ public class BasicComponentInvocationHandler extends
           && Proxy.getInvocationHandler(another) instanceof BasicEntityInvocationHandler) {
         BasicComponentInvocationHandler otherInvocationHandler = (BasicComponentInvocationHandler) Proxy
             .getInvocationHandler(another);
-        return delegate.equals(otherInvocationHandler.getDelegate());
+        return delegate.equals(otherInvocationHandler.delegate);
       }
       return delegate.equals(another);
     }
@@ -120,12 +121,29 @@ public class BasicComponentInvocationHandler extends
   }
 
   /**
-   * Gets the delegate.
-   *
-   * @return the delegate.
+   * Gives a chance to the delegate to service the method.
+   * <p>
+   * {@inheritDoc}
    */
-  private Object getDelegate() {
-    return delegate;
+  @Override
+  protected Object invokeServiceMethod(Object proxy, Method method,
+      Object[] args) throws NoSuchMethodException {
+    try {
+      return super.invokeServiceMethod(proxy, method, args);
+    } catch (NoSuchMethodException ex) {
+      try {
+        return delegate.getClass().getMethod(method.getName(),
+            method.getParameterTypes()).invoke(delegate, args);
+      } catch (IllegalArgumentException ex1) {
+        throw new ComponentException(method.toString()
+            + " is not supported on the component " + getComponentContract());
+      } catch (IllegalAccessException ex1) {
+        throw new ComponentException(method.toString()
+            + " is not supported on the component " + getComponentContract());
+      } catch (InvocationTargetException ex1) {
+        throw new ComponentException(method.toString()
+            + " is not supported on the component " + getComponentContract());
+      }
+    }
   }
-
 }

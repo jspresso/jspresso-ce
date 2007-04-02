@@ -247,10 +247,10 @@ public abstract class AbstractComponentInvocationHandler implements
           }
         }
       } else {
-        IComponentService service = componentDescriptor
-            .getServiceDelegate(method);
-        if (service != null) {
-          return invokeServiceMethod(service, proxy, method, args);
+        try {
+          return invokeServiceMethod(proxy, method, args);
+        } catch (NoSuchMethodException ignored) {
+          // it will fall back in the general case.
         }
       }
     }
@@ -602,29 +602,46 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private Object invokeServiceMethod(IComponentService service, Object proxy,
-      Method method, Object[] args) {
-    int signatureSize = method.getParameterTypes().length + 1;
-    Class[] parameterTypes = new Class[signatureSize];
-    Object[] parameters = new Object[signatureSize];
+  /**
+   * Invokes a service method on the component.
+   *
+   * @param proxy
+   *          the component to invoke the service on.
+   * @param method
+   *          the method implemented by the component.
+   * @param args
+   *          the arguments of the method implemented by the component.
+   * @return the value returned by the method execution if any.
+   * @throws NoSuchMethodException
+   *           if no mean could be found to service the method.
+   */
+  protected Object invokeServiceMethod(Object proxy, Method method,
+      Object[] args) throws NoSuchMethodException {
+    IComponentService service = componentDescriptor.getServiceDelegate(method);
+    if (service != null) {
+      int signatureSize = method.getParameterTypes().length + 1;
+      Class[] parameterTypes = new Class[signatureSize];
+      Object[] parameters = new Object[signatureSize];
 
-    parameterTypes[0] = componentDescriptor.getComponentContract();
-    parameters[0] = proxy;
+      parameterTypes[0] = componentDescriptor.getComponentContract();
+      parameters[0] = proxy;
 
-    for (int i = 1; i < signatureSize; i++) {
-      parameterTypes[i] = method.getParameterTypes()[i - 1];
-      parameters[i] = args[i - 1];
+      for (int i = 1; i < signatureSize; i++) {
+        parameterTypes[i] = method.getParameterTypes()[i - 1];
+        parameters[i] = args[i - 1];
+      }
+      try {
+        return MethodUtils.invokeMethod(service, method.getName(), parameters,
+            parameterTypes);
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new ComponentException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ComponentException(ex);
+      }
     }
-    try {
-      return MethodUtils.invokeMethod(service, method.getName(), parameters,
-          parameterTypes);
-    } catch (IllegalAccessException ex) {
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
-    }
+    throw new NoSuchMethodException(method.toString());
   }
 
   private String toString(Object proxy) {
