@@ -178,7 +178,7 @@ import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -328,7 +328,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Decorates the created view with the apropriate border.
-   * 
+   *
    * @param view
    *          the view to descorate.
    * @param locale
@@ -895,7 +895,7 @@ public class DefaultWingsViewFactory implements
 
     /**
      * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
-     * 
+     *
      * @param viewDescriptor
      *          the tree view descriptor used by the tree view.
      * @param locale
@@ -1309,7 +1309,7 @@ public class DefaultWingsViewFactory implements
     /**
      * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
      * instance.
-     * 
+     *
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -1338,20 +1338,20 @@ public class DefaultWingsViewFactory implements
               IIconFactory.TINY_ICON_SIZE));
       if (value instanceof IValueConnector) {
         Object connectorValue = ((IValueConnector) value).getConnectorValue();
-        if (connectorValue != null) {
+        if (connectorValue != null && propertyDescriptor.isTranslated()) {
           renderer.setText(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   connectorValue), locale));
         } else {
-          renderer.setText(null);
+          renderer.setText(String.valueOf(connectorValue));
         }
       } else {
-        if (value != null) {
+        if (value != null && propertyDescriptor.isTranslated()) {
           renderer.setText(translationProvider.getTranslation(
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {
-          renderer.setText(null);
+          renderer.setText(String.valueOf(value));
         }
       }
       return renderer;
@@ -1930,7 +1930,7 @@ public class DefaultWingsViewFactory implements
     /**
      * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
      * instance.
-     * 
+     *
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -1956,9 +1956,11 @@ public class DefaultWingsViewFactory implements
           .setIcon(iconFactory.getIcon(propertyDescriptor
               .getIconImageURL(String.valueOf(value)),
               IIconFactory.TINY_ICON_SIZE));
-      if (value != null) {
+      if (value != null && propertyDescriptor.isTranslated()) {
         setText(translationProvider.getTranslation(computeEnumerationKey(
             propertyDescriptor.getEnumerationName(), value), locale));
+      } else {
+        setText(String.valueOf(value));
       }
       return label;
     }
@@ -2028,7 +2030,7 @@ public class DefaultWingsViewFactory implements
 
     /**
      * Constructs a new <code>PopupListener</code> instance.
-     * 
+     *
      * @param sourceComponent
      * @param view
      * @param actionHandler
@@ -2378,7 +2380,7 @@ public class DefaultWingsViewFactory implements
   private String getEnumerationTemplateValue(
       IEnumerationPropertyDescriptor descriptor, Locale locale) {
     int maxTranslationLength = -1;
-    if (translationProvider != null) {
+    if (translationProvider != null && descriptor.isTranslated()) {
       for (Object enumerationValue : descriptor.getEnumerationValues()) {
         String translation = translationProvider.getTranslation(
             computeEnumerationKey(descriptor.getEnumerationName(),
@@ -2387,6 +2389,8 @@ public class DefaultWingsViewFactory implements
           maxTranslationLength = translation.length();
         }
       }
+    } else {
+      maxTranslationLength = descriptor.getMaxLength().intValue();
     }
     if (maxTranslationLength == -1 || maxTranslationLength > maxCharacterLength) {
       maxTranslationLength = maxCharacterLength;
@@ -2422,7 +2426,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a text field.
-   * 
+   *
    * @return the created text field.
    */
   protected STextField createSTextField() {
@@ -2433,7 +2437,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a password field.
-   * 
+   *
    * @return the created password field.
    */
   protected SPasswordField createSPasswordField() {
@@ -2444,7 +2448,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a text area.
-   * 
+   *
    * @return the created text area.
    */
   protected STextArea createSTextArea() {
@@ -2455,7 +2459,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates an action field.
-   * 
+   *
    * @param showTextField
    *          is the text field visible to the user.
    * @return the created action field.
@@ -2468,7 +2472,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a date field.
-   * 
+   *
    * @return the created date field.
    */
   protected XCalendar createDateField() {
@@ -2479,7 +2483,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a combo box.
-   * 
+   *
    * @return the created combo box.
    */
   protected SComboBox createSComboBox() {
@@ -2490,7 +2494,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a label.
-   * 
+   *
    * @return the created label.
    */
   protected SLabel createSLabel() {
@@ -2499,7 +2503,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a tool bar.
-   * 
+   *
    * @return the created tool bar.
    */
   protected SToolBar createSToolBar() {
@@ -2511,7 +2515,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a tabbed pane.
-   * 
+   *
    * @return the created tabbed pane.
    */
   protected STabbedPane createSTabbedPane() {
@@ -2524,7 +2528,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a tree.
-   * 
+   *
    * @return the created tree.
    */
   protected STree createSTree() {
@@ -2536,7 +2540,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a table.
-   * 
+   *
    * @return the created table.
    */
   protected STable createSTable() {
@@ -2585,7 +2589,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a list.
-   * 
+   *
    * @return the created list.
    */
   protected SList createSList() {
@@ -2595,7 +2599,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a button.
-   * 
+   *
    * @return the created button.
    */
   protected SButton createSButton() {
@@ -2605,7 +2609,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a popup menu.
-   * 
+   *
    * @return the created popup menu.
    */
   protected SPopupMenu createSPopupMenu() {
@@ -2614,7 +2618,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a menu item.
-   * 
+   *
    * @return the created menu item.
    */
   protected SMenuItem createSMenuItem() {
@@ -2623,7 +2627,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a scroll pane.
-   * 
+   *
    * @return the created scroll pane.
    */
   protected SScrollPane createSScrollPane() {
@@ -2635,7 +2639,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a check box.
-   * 
+   *
    * @return the created check box.
    */
   protected SCheckBox createSCheckBox() {
@@ -2646,7 +2650,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a panel.
-   * 
+   *
    * @return the created panel.
    */
   protected SPanel createSPanel() {
@@ -2657,7 +2661,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Creates a security panel.
-   * 
+   *
    * @return the created security panel.
    */
   protected SPanel createSecurityPanel() {
@@ -2677,7 +2681,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the connectorFactory.
-   * 
+   *
    * @param connectorFactory
    *          the connectorFactory to set.
    */
@@ -2687,7 +2691,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the mvcBinder.
-   * 
+   *
    * @param mvcBinder
    *          the mvcBinder to set.
    */
@@ -2697,7 +2701,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */
@@ -2707,7 +2711,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Gets the translationProvider.
-   * 
+   *
    * @return the translationProvider.
    */
   protected ITranslationProvider getTranslationProvider() {
@@ -2716,7 +2720,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the listSelectionModelBinder.
-   * 
+   *
    * @param listSelectionModelBinder
    *          the listSelectionModelBinder to set.
    */
@@ -2727,7 +2731,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the treeSelectionModelBinder.
-   * 
+   *
    * @param treeSelectionModelBinder
    *          the treeSelectionModelBinder to set.
    */
@@ -2738,7 +2742,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the masterDetailBinder.
-   * 
+   *
    * @param masterDetailBinder
    *          the masterDetailBinder to set.
    */
@@ -2748,7 +2752,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the maxCharacterLength.
-   * 
+   *
    * @param maxCharacterLength
    *          the maxCharacterLength to set.
    */
@@ -2758,7 +2762,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -2768,7 +2772,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Gets the iconFactory.
-   * 
+   *
    * @return the iconFactory.
    */
   public IIconFactory<SIcon> getIconFactory() {
@@ -2777,7 +2781,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the actionFactory.
-   * 
+   *
    * @param actionFactory
    *          the actionFactory to set.
    */
@@ -2787,7 +2791,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Gets the actionFactory.
-   * 
+   *
    * @return the actionFactory.
    */
   public IActionFactory<Action, SComponent> getActionFactory() {
@@ -2796,7 +2800,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the lovAction.
-   * 
+   *
    * @param lovAction
    *          the lovAction to set.
    */
@@ -2806,7 +2810,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the openFileAsBinaryPropertyAction.
-   * 
+   *
    * @param openFileAsBinaryPropertyAction
    *          the openFileAsBinaryPropertyAction to set.
    */
@@ -2817,7 +2821,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the saveBinaryPropertyAsFileAction.
-   * 
+   *
    * @param saveBinaryPropertyAsFileAction
    *          the saveBinaryPropertyAsFileAction to set.
    */
@@ -2828,7 +2832,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the resetPropertyAction.
-   * 
+   *
    * @param resetPropertyAction
    *          the resetPropertyAction to set.
    */
@@ -2838,7 +2842,7 @@ public class DefaultWingsViewFactory implements
 
   /**
    * Sets the binaryPropertyInfoAction.
-   * 
+   *
    * @param binaryPropertyInfoAction
    *          the binaryPropertyInfoAction to set.
    */

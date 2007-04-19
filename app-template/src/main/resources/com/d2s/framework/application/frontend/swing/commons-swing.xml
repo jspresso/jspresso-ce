@@ -53,10 +53,18 @@
   <bean id="removeEntityCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
     class="com.d2s.framework.application.frontend.action.swing.flow.StaticYesNoAction" />
 
-  <bean id="infoFrontAction" class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction" />
+  <bean id="infoFrontAction" class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction">
+    <property name="iconImageURL" value="classpath:images/info-48x48.png" />
+  </bean>
 
   <bean id="staticInfoFrontAction" abstract="true" parent="infoFrontAction"
-    class="com.d2s.framework.application.frontend.action.swing.flow.StaticInfoAction" />
+    class="com.d2s.framework.application.frontend.action.swing.flow.StaticInfoAction">
+  </bean>
+
+  <bean id="yesNoFrontAction" class="com.d2s.framework.application.frontend.action.swing.flow.YesNoAction" />
+
+  <bean id="staticYesNoFrontAction" abstract="true" parent="yesNoFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.flow.StaticYesNoAction" />
 
   <!--
     The implementation used as view factory.

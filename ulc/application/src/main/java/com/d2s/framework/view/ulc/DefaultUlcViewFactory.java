@@ -180,7 +180,7 @@ import com.ulcjava.base.shared.IUlcEventConstants;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -333,7 +333,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Decorates the created view with the apropriate border.
-   * 
+   *
    * @param view
    *          the view to descorate.
    * @param locale
@@ -867,7 +867,7 @@ public class DefaultUlcViewFactory implements
 
     /**
      * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
-     * 
+     *
      * @param viewDescriptor
      *          the tree view descriptor used by the tree view.
      * @param locale
@@ -1330,7 +1330,7 @@ public class DefaultUlcViewFactory implements
     /**
      * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
      * instance.
-     * 
+     *
      * @param column
      *          the column this renderer is attached to.
      * @param propertyDescriptor
@@ -1354,9 +1354,11 @@ public class DefaultUlcViewFactory implements
     public IRendererComponent getTableCellRendererComponent(
         com.ulcjava.base.application.ULCTable table, Object value,
         boolean isSelected, boolean hasFocus, int row) {
-      setDataType(translationDataTypeFactory.getTranslationDataType(
-          propertyDescriptor.getEnumerationName(), locale,
-          computeTranslationMapping(propertyDescriptor, locale)));
+      if (propertyDescriptor.isTranslated()) {
+        setDataType(translationDataTypeFactory.getTranslationDataType(
+            propertyDescriptor.getEnumerationName(), locale,
+            computeTranslationMapping(propertyDescriptor, locale)));
+      }
       setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
           .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
@@ -2001,7 +2003,7 @@ public class DefaultUlcViewFactory implements
     /**
      * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
      * instance.
-     * 
+     *
      * @param propertyDescriptor
      *          the property descriptor from which the enumeration name is
      *          taken. The prefix used to lookup translation keys in the form
@@ -2021,9 +2023,11 @@ public class DefaultUlcViewFactory implements
     @Override
     public IRendererComponent getComboBoxCellRendererComponent(
         ULCComboBox comboBox, Object value, boolean isSelected, int index) {
-      setDataType(translationDataTypeFactory.getTranslationDataType(
-          propertyDescriptor.getEnumerationName(), locale,
-          computeTranslationMapping(propertyDescriptor, locale)));
+      if (propertyDescriptor.isTranslated()) {
+        setDataType(translationDataTypeFactory.getTranslationDataType(
+            propertyDescriptor.getEnumerationName(), locale,
+            computeTranslationMapping(propertyDescriptor, locale)));
+      }
       setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
           .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       return super.getComboBoxCellRendererComponent(comboBox, value,
@@ -2186,7 +2190,7 @@ public class DefaultUlcViewFactory implements
 
     /**
      * Constructs a new <code>TreeNodePopupFactory</code> instance.
-     * 
+     *
      * @param tree
      * @param view
      * @param actionHandler
@@ -2461,7 +2465,7 @@ public class DefaultUlcViewFactory implements
   private String getEnumerationTemplateValue(
       IEnumerationPropertyDescriptor descriptor, Locale locale) {
     int maxTranslationLength = -1;
-    if (translationProvider != null) {
+    if (translationProvider != null && descriptor.isTranslated()) {
       for (Object enumerationValue : descriptor.getEnumerationValues()) {
         String translation = translationProvider.getTranslation(
             computeEnumerationKey(descriptor.getEnumerationName(),
@@ -2470,6 +2474,8 @@ public class DefaultUlcViewFactory implements
           maxTranslationLength = translation.length();
         }
       }
+    } else {
+      maxTranslationLength = descriptor.getMaxLength().intValue();
     }
     if (maxTranslationLength == -1 || maxTranslationLength > maxCharacterLength) {
       maxTranslationLength = maxCharacterLength;
@@ -2505,7 +2511,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a text field.
-   * 
+   *
    * @return the created text field.
    */
   protected ULCTextField createULCTextField() {
@@ -2517,7 +2523,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a password field.
-   * 
+   *
    * @return the created password field.
    */
   protected ULCPasswordField createULCPasswordField() {
@@ -2527,7 +2533,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a text field.
-   * 
+   *
    * @return the created text field.
    */
   protected ULCTextArea createULCTextArea() {
@@ -2541,7 +2547,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a ULC JEdit text area.
-   * 
+   *
    * @param language
    *          the language to add syntax highlighting for.
    * @return the created text area.
@@ -2553,7 +2559,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates an action field.
-   * 
+   *
    * @param showTextField
    *          is the text field visible to the user.
    * @return the created action field.
@@ -2564,7 +2570,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a date field.
-   * 
+   *
    * @param formatPattern
    *          the (simple date format) pattern this date field uses.
    * @return the created date field.
@@ -2579,7 +2585,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a combo box.
-   * 
+   *
    * @return the created combo box.
    */
   protected ULCComboBox createULCComboBox() {
@@ -2588,7 +2594,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a label.
-   * 
+   *
    * @return the created label.
    */
   protected ULCLabel createULCLabel() {
@@ -2597,7 +2603,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a tool bar.
-   * 
+   *
    * @return the created tool bar.
    */
   protected ULCToolBar createULCToolBar() {
@@ -2609,7 +2615,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a tabbed pane.
-   * 
+   *
    * @return the created tabbed pane.
    */
   protected ULCTabbedPane createULCTabbedPane() {
@@ -2618,7 +2624,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a split pane.
-   * 
+   *
    * @return the created split pane.
    */
   protected ULCSplitPane createULCSplitPane() {
@@ -2630,7 +2636,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a tree.
-   * 
+   *
    * @return the created tree.
    */
   protected ULCExtendedTree createULCTree() {
@@ -2641,7 +2647,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a table tree.
-   * 
+   *
    * @return the created table tree.
    */
   protected ULCTableTree createULCTableTree() {
@@ -2652,7 +2658,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a table.
-   * 
+   *
    * @return the created table.
    */
   protected ULCExtendedTable createULCTable() {
@@ -2663,7 +2669,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a list.
-   * 
+   *
    * @return the created list.
    */
   protected ULCList createULCList() {
@@ -2674,7 +2680,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a button.
-   * 
+   *
    * @return the created button.
    */
   protected ULCButton createULCButton() {
@@ -2684,7 +2690,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a popup menu.
-   * 
+   *
    * @return the created popup menu.
    */
   protected ULCPopupMenu createULCPopupMenu() {
@@ -2693,7 +2699,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a menu item.
-   * 
+   *
    * @return the created menu item.
    */
   protected ULCMenuItem createULCMenuItem() {
@@ -2702,7 +2708,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a scroll pane.
-   * 
+   *
    * @return the created scroll pane.
    */
   protected ULCScrollPane createULCScrollPane() {
@@ -2713,7 +2719,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a check box.
-   * 
+   *
    * @return the created check box.
    */
   protected ULCCheckBox createULCCheckBox() {
@@ -2722,7 +2728,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a borderlayout pane.
-   * 
+   *
    * @return the created borderlayout pane.
    */
   protected ULCBorderLayoutPane createBorderLayoutPane() {
@@ -2732,7 +2738,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a security pane.
-   * 
+   *
    * @return the created security pane.
    */
   protected ULCBorderLayoutPane createSecurityPanel() {
@@ -2747,7 +2753,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a gridlayout pane.
-   * 
+   *
    * @return the created gridlayout pane.
    */
   protected ULCGridLayoutPane createGridLayoutPane() {
@@ -2757,7 +2763,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a cardlayout pane.
-   * 
+   *
    * @return the created cardlayout pane.
    */
   protected ULCCardPane createCardPane() {
@@ -2767,7 +2773,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Creates a gridbaglayout pane.
-   * 
+   *
    * @return the created gridbaglayout pane.
    */
   protected ULCGridBagLayoutPane createGridBagLayoutPane() {
@@ -2781,7 +2787,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the connectorFactory.
-   * 
+   *
    * @param connectorFactory
    *          the connectorFactory to set.
    */
@@ -2791,7 +2797,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the mvcBinder.
-   * 
+   *
    * @param mvcBinder
    *          the mvcBinder to set.
    */
@@ -2801,7 +2807,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the translationProvider.
-   * 
+   *
    * @param translationProvider
    *          the translationProvider to set.
    */
@@ -2811,7 +2817,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Gets the translationProvider.
-   * 
+   *
    * @return the translationProvider.
    */
   protected ITranslationProvider getTranslationProvider() {
@@ -2820,7 +2826,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the listSelectionModelBinder.
-   * 
+   *
    * @param listSelectionModelBinder
    *          the listSelectionModelBinder to set.
    */
@@ -2831,7 +2837,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the treeSelectionModelBinder.
-   * 
+   *
    * @param treeSelectionModelBinder
    *          the treeSelectionModelBinder to set.
    */
@@ -2842,7 +2848,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the masterDetailBinder.
-   * 
+   *
    * @param masterDetailBinder
    *          the masterDetailBinder to set.
    */
@@ -2852,7 +2858,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the maxCharacterLength.
-   * 
+   *
    * @param maxCharacterLength
    *          the maxCharacterLength to set.
    */
@@ -2862,7 +2868,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the iconFactory.
-   * 
+   *
    * @param iconFactory
    *          the iconFactory to set.
    */
@@ -2879,7 +2885,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the actionFactory.
-   * 
+   *
    * @param actionFactory
    *          the actionFactory to set.
    */
@@ -2890,7 +2896,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Gets the actionFactory.
-   * 
+   *
    * @return the actionFactory.
    */
   public IActionFactory<IAction, ULCComponent> getActionFactory() {
@@ -2899,7 +2905,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the lovAction.
-   * 
+   *
    * @param lovAction
    *          the lovAction to set.
    */
@@ -2909,7 +2915,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the openFileAsBinaryPropertyAction.
-   * 
+   *
    * @param openFileAsBinaryPropertyAction
    *          the openFileAsBinaryPropertyAction to set.
    */
@@ -2920,7 +2926,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the saveBinaryPropertyAsFileAction.
-   * 
+   *
    * @param saveBinaryPropertyAsFileAction
    *          the saveBinaryPropertyAsFileAction to set.
    */
@@ -2931,7 +2937,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the resetPropertyAction.
-   * 
+   *
    * @param resetPropertyAction
    *          the resetPropertyAction to set.
    */
@@ -2941,7 +2947,7 @@ public class DefaultUlcViewFactory implements
 
   /**
    * Sets the binaryPropertyInfoAction.
-   * 
+   *
    * @param binaryPropertyInfoAction
    *          the binaryPropertyInfoAction to set.
    */

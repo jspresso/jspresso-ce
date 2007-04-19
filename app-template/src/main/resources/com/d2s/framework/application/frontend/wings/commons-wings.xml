@@ -28,7 +28,8 @@
     <property name="nextAction" ref="sourceViewConnectorSetAction" />
   </bean>
 
-  <bean id="printOkFrontAction" class="com.d2s.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
+  <bean id="printOkFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
     <property name="nextAction" ref="editReportParametersAction" />
   </bean>
 
@@ -58,8 +59,12 @@
 
   <bean id="staticInfoFrontAction" abstract="true" parent="infoFrontAction"
     class="com.d2s.framework.application.frontend.action.wings.flow.StaticInfoAction">
-    <property name="iconImageURL" value="classpath:images/info-48x48.png" />
   </bean>
+
+  <bean id="yesNoFrontAction" class="com.d2s.framework.application.frontend.action.wings.flow.YesNoAction" />
+
+  <bean id="staticYesNoFrontAction" abstract="true" parent="yesNoFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
 
   <!--
     The implementation used as view factory.

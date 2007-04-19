@@ -3,6 +3,9 @@
  */
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +19,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.d2s.framework.application.backend.action.AbstractBackendAction;
 import com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController;
 import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -23,7 +30,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -39,7 +46,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Gets the hibernateTemplate.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the hibernateTemplate.
@@ -50,7 +57,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Gets the transactionTemplate.
-   * 
+   *
    * @param context
    *          the action context.
    * @return the transactionTemplate.
@@ -63,7 +70,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
   /**
    * This method must be called to (re)attach application session entities to
    * the current hibernate session.
-   * 
+   *
    * @param entity
    *          the entity to merge.
    * @param hibernateSession
@@ -81,7 +88,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
   /**
    * This method must be called to (re)attach application session entities to
    * the current hibernate session.
-   * 
+   *
    * @param entities
    *          the entities to merge.
    * @param hibernateSession
@@ -110,7 +117,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Saves an entity in hibernate.
-   * 
+   *
    * @param entity
    *          the entity to save.
    * @param context
@@ -131,7 +138,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Reloads an entity in hibernate.
-   * 
+   *
    * @param entity
    *          the entity to save.
    * @param context
@@ -144,5 +151,52 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
           (IEntity) hibernateTemplate.load(entity.getContract().getName(),
               entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
     }
+  }
+
+  /**
+   * Performs necessary cleanings when an entity is deleted.
+   *
+   * @param entity
+   *          the deleted entity.
+   * @param context
+   *          The action context.
+   * @throws IllegalAccessException
+   *           whenever this kind of exception occurs.
+   * @throws InvocationTargetException
+   *           whenever this kind of exception occurs.
+   * @throws NoSuchMethodException
+   *           whenever this kind of exception occurs.
+   */
+  @SuppressWarnings("unchecked")
+  protected void cleanRelationshipsOnDeletion(IEntity entity,
+      Map<String, Object> context) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
+    IComponentDescriptor entityDescriptor = getEntityFactory(context)
+        .getComponentDescriptor(entity.getContract());
+    for (Map.Entry<String, Object> property : entity.straightGetProperties()
+        .entrySet()) {
+      if (property.getValue() != null) {
+        IPropertyDescriptor propertyDescriptor = entityDescriptor
+            .getPropertyDescriptor(property.getKey());
+        if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+          getAccessorFactory(context).createPropertyAccessor(property.getKey(),
+              entity.getContract()).setValue(entity, null);
+        } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+          if (((ICollectionPropertyDescriptor) propertyDescriptor)
+              .isComposition()) {
+            getApplicationSession(context).initializePropertyIfNeeded(entity,
+                propertyDescriptor);
+            for (IEntity composedEntity : new ArrayList<IEntity>(
+                (Collection<IEntity>) property.getValue())) {
+              cleanRelationshipsOnDeletion(composedEntity, context);
+            }
+          } else {
+            getAccessorFactory(context).createPropertyAccessor(
+                property.getKey(), entity.getContract()).setValue(entity, null);
+          }
+        }
+      }
+    }
+    getApplicationSession(context).deleteEntity(entity);
   }
 }

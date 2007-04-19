@@ -15,7 +15,7 @@ import com.d2s.framework.application.frontend.action.swing.flow.InfoAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -29,20 +29,34 @@ public class BinaryPropertyInfoAction extends InfoAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    Integer kbSize = new Integer(0);
+    Integer size = new Integer(0);
+    String unit = "Ko";
     byte[] content = getBinaryContent(context);
     if (content != null) {
-      kbSize = new Integer(content.length / 1024);
+      if (content.length < 1024) {
+        size = new Integer(content.length);
+        unit = "o";
+      } else if (content.length >= 1024 && content.length < 1024 * 1024) {
+        size = new Integer(content.length / 1024);
+        unit = "Ko";
+      } else if (content.length >= 1024 * 1024
+          && content.length < 1024 * 1024 * 1024) {
+        size = new Integer(content.length / (1024 * 1024));
+        unit = "Mo";
+      } else if (content.length >= 1024 * 1024 * 1024) {
+        size = new Integer(content.length / (1024 * 1024 * 1024));
+        unit = "Go";
+      }
     }
     context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
-        context).getTranslation("binary.info.message", new Object[] {kbSize},
-        getLocale(context)));
+        context).getTranslation("binary.info.message",
+        new Object[] {size, unit}, getLocale(context)));
     return super.execute(actionHandler, context);
   }
 
   /**
    * Retrieve the binary content to display the infos on.
-   * 
+   *
    * @param context
    *          the action context.
    * @return The binary content to display the infos on or null.
