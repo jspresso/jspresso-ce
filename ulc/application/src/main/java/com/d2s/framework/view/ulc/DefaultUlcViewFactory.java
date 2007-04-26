@@ -2518,6 +2518,8 @@ public class DefaultUlcViewFactory implements
     ULCTextField textField = new ULCOnFocusSelectTextField();
     ClientContext.setEventDeliveryMode(textField,
         IUlcEventConstants.FOCUS_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
+    ClientContext.setEventDeliveryMode(textField,
+        IUlcEventConstants.VALUE_CHANGED_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
     return textField;
   }
 
