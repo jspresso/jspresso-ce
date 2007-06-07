@@ -59,8 +59,6 @@ import org.wings.STree;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
 import org.wings.border.STitledBorder;
-import org.wings.event.SMouseEvent;
-import org.wings.event.SMouseListener;
 import org.wings.io.Device;
 import org.wings.table.STableCellEditor;
 import org.wings.table.STableCellRenderer;
@@ -117,7 +115,6 @@ import com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IDurationPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IIntegerPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.INumberPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPasswordPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPercentPropertyDescriptor;
@@ -2021,163 +2018,163 @@ public class DefaultWingsViewFactory implements
   // Popup menu Section //
   // ////////////////// //
 
-  private final class PopupListener implements SMouseListener {
-
-    private SComponent        sourceComponent;
-    private IView<SComponent> view;
-    private IActionHandler    actionHandler;
-    private Locale            locale;
-
-    /**
-     * Constructs a new <code>PopupListener</code> instance.
-     *
-     * @param sourceComponent
-     * @param view
-     * @param actionHandler
-     * @param locale
-     */
-    public PopupListener(SComponent sourceComponent, IView<SComponent> view,
-        IActionHandler actionHandler, Locale locale) {
-      this.sourceComponent = sourceComponent;
-      this.view = view;
-      this.actionHandler = actionHandler;
-      this.locale = locale;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void mouseClicked(SMouseEvent evt) {
-      maybeShowPopup(evt);
-    }
-
-    private void maybeShowPopup(SMouseEvent evt) {
-      // FIXME popup trigger
-      showPopupMenu(sourceComponent, view, evt, actionHandler, locale);
-    }
-  }
-
-  private void showPopupMenu(SComponent sourceComponent,
-      IView<SComponent> view, SMouseEvent evt, IActionHandler actionHandler,
-      Locale locale) {
-    if (sourceComponent instanceof STree) {
-      showSTreePopupMenu((STree) sourceComponent, view, evt, actionHandler,
-          locale);
-    } else if (sourceComponent instanceof STable) {
-      showSTablePopupMenu((STable) sourceComponent, view, evt, actionHandler,
-          locale);
-    }
-  }
-
-  private void showSTreePopupMenu(STree tree, IView<SComponent> treeView,
-      SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
-    TreePath path = tree.getPathForRow(tree.getRowForLocation(evt.getPoint()));
-    if (path == null) {
-      return;
-    }
-
-    if (!tree.isPathSelected(path)) {
-      tree.setSelectionPath(path);
-    }
-    if (path.getLastPathComponent() instanceof ICollectionConnector) {
-      TreePath[] allNodePaths = new TreePath[((ICollectionConnector) path
-          .getLastPathComponent()).getChildConnectorCount()];
-      for (int i = 0; i < allNodePaths.length; i++) {
-        allNodePaths[i] = path.pathByAddingChild(((ICollectionConnector) path
-            .getLastPathComponent()).getChildConnector(i));
-      }
-      tree.addSelectionPaths(allNodePaths);
-    }
-
-    IValueConnector viewConnector = (IValueConnector) path
-        .getLastPathComponent();
-    IModelDescriptor modelDescriptor;
-    Map<String, List<IDisplayableAction>> actionMap;
-    IViewDescriptor viewDescriptor;
-    if (viewConnector == tree.getModel().getRoot()) {
-      modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-      actionMap = treeView.getDescriptor().getActions();
-      viewDescriptor = treeView.getDescriptor();
-    } else {
-      viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
-          ((ITreeViewDescriptor) treeView.getDescriptor())
-              .getRootSubtreeDescriptor(),
-          getDescriptorPathFromConnectorTreePath(path))
-          .getNodeGroupDescriptor();
-      modelDescriptor = viewDescriptor.getModelDescriptor();
-      actionMap = viewDescriptor.getActions();
-      if (!(viewConnector instanceof ICollectionConnector)) {
-        viewConnector = viewConnector.getParentConnector();
-      }
-    }
-
-    if (actionMap == null) {
-      return;
-    }
-
-    SPopupMenu popupMenu = createSPopupMenu(tree, actionMap, modelDescriptor,
-        viewDescriptor, viewConnector, actionHandler, locale);
-    // FIXME popup
-    popupMenu.setVisible(true);
-  }
-
-  private void showSTablePopupMenu(STable table, IView<SComponent> tableView,
-      SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
-    int row = table.rowAtPoint(evt.getPoint());
-    if (row < 0) {
-      return;
-    }
-
-    if (!table.isRowSelected(row)) {
-      table.setSelectedRow(row);
-    }
-
-    IValueConnector elementConnector = tableView.getConnector();
-    IModelDescriptor modelDescriptor = tableView.getDescriptor()
-        .getModelDescriptor();
-    Map<String, List<IDisplayableAction>> actionMap = ((ICollectionViewDescriptor) tableView
-        .getDescriptor()).getActions();
-
-    if (actionMap == null) {
-      return;
-    }
-
-    SPopupMenu popupMenu = createSPopupMenu(table, actionMap, modelDescriptor,
-        tableView.getDescriptor(), elementConnector, actionHandler, locale);
-    // FIXME popup
-    popupMenu.setVisible(true);
-  }
-
-  private SPopupMenu createSPopupMenu(SComponent sourceComponent,
-      Map<String, List<IDisplayableAction>> actionMap,
-      IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
-      IValueConnector viewConnector, IActionHandler actionHandler, Locale locale) {
-    SPopupMenu popupMenu = createSPopupMenu();
-    SLabel titleLabel = createSLabel();
-    titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
-        locale));
-    titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-        IIconFactory.TINY_ICON_SIZE));
-    titleLabel.setHorizontalAlignment(SConstants.CENTER);
-    titleLabel.setHorizontalAlignment(SConstants.CENTER_ALIGN);
-    popupMenu.add(titleLabel);
-    popupMenu.add(new SSeparator());
-    for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = actionMap
-        .entrySet().iterator(); iter.hasNext();) {
-      Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
-      for (IDisplayableAction action : nextActionSet.getValue()) {
-        Action swingAction = actionFactory.createAction(action, actionHandler,
-            sourceComponent, modelDescriptor, viewConnector, locale);
-        SMenuItem actionItem = createSMenuItem();
-        actionItem.setAction(swingAction);
-        popupMenu.add(actionItem);
-      }
-      if (iter.hasNext()) {
-        popupMenu.add(new SSeparator());
-      }
-    }
-    return popupMenu;
-  }
+//  private final class PopupListener implements SMouseListener {
+//
+//    private SComponent        sourceComponent;
+//    private IView<SComponent> view;
+//    private IActionHandler    actionHandler;
+//    private Locale            locale;
+//
+//    /**
+//     * Constructs a new <code>PopupListener</code> instance.
+//     *
+//     * @param sourceComponent
+//     * @param view
+//     * @param actionHandler
+//     * @param locale
+//     */
+//    public PopupListener(SComponent sourceComponent, IView<SComponent> view,
+//        IActionHandler actionHandler, Locale locale) {
+//      this.sourceComponent = sourceComponent;
+//      this.view = view;
+//      this.actionHandler = actionHandler;
+//      this.locale = locale;
+//    }
+//
+//    /**
+//     * {@inheritDoc}
+//     */
+//    public void mouseClicked(SMouseEvent evt) {
+//      maybeShowPopup(evt);
+//    }
+//
+//    private void maybeShowPopup(SMouseEvent evt) {
+//      // FIXME popup trigger
+//      showPopupMenu(sourceComponent, view, evt, actionHandler, locale);
+//    }
+//  }
+//
+//  private void showPopupMenu(SComponent sourceComponent,
+//      IView<SComponent> view, SMouseEvent evt, IActionHandler actionHandler,
+//      Locale locale) {
+//    if (sourceComponent instanceof STree) {
+//      showSTreePopupMenu((STree) sourceComponent, view, evt, actionHandler,
+//          locale);
+//    } else if (sourceComponent instanceof STable) {
+//      showSTablePopupMenu((STable) sourceComponent, view, evt, actionHandler,
+//          locale);
+//    }
+//  }
+//
+//  private void showSTreePopupMenu(STree tree, IView<SComponent> treeView,
+//      SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
+//    TreePath path = tree.getPathForRow(tree.getRowForLocation(evt.getPoint()));
+//    if (path == null) {
+//      return;
+//    }
+//
+//    if (!tree.isPathSelected(path)) {
+//      tree.setSelectionPath(path);
+//    }
+//    if (path.getLastPathComponent() instanceof ICollectionConnector) {
+//      TreePath[] allNodePaths = new TreePath[((ICollectionConnector) path
+//          .getLastPathComponent()).getChildConnectorCount()];
+//      for (int i = 0; i < allNodePaths.length; i++) {
+//        allNodePaths[i] = path.pathByAddingChild(((ICollectionConnector) path
+//            .getLastPathComponent()).getChildConnector(i));
+//      }
+//      tree.addSelectionPaths(allNodePaths);
+//    }
+//
+//    IValueConnector viewConnector = (IValueConnector) path
+//        .getLastPathComponent();
+//    IModelDescriptor modelDescriptor;
+//    Map<String, List<IDisplayableAction>> actionMap;
+//    IViewDescriptor viewDescriptor;
+//    if (viewConnector == tree.getModel().getRoot()) {
+//      modelDescriptor = treeView.getDescriptor().getModelDescriptor();
+//      actionMap = treeView.getDescriptor().getActions();
+//      viewDescriptor = treeView.getDescriptor();
+//    } else {
+//      viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
+//          ((ITreeViewDescriptor) treeView.getDescriptor())
+//              .getRootSubtreeDescriptor(),
+//          getDescriptorPathFromConnectorTreePath(path))
+//          .getNodeGroupDescriptor();
+//      modelDescriptor = viewDescriptor.getModelDescriptor();
+//      actionMap = viewDescriptor.getActions();
+//      if (!(viewConnector instanceof ICollectionConnector)) {
+//        viewConnector = viewConnector.getParentConnector();
+//      }
+//    }
+//
+//    if (actionMap == null) {
+//      return;
+//    }
+//
+//    SPopupMenu popupMenu = createSPopupMenu(tree, actionMap, modelDescriptor,
+//        viewDescriptor, viewConnector, actionHandler, locale);
+//    // FIXME popup
+//    popupMenu.setVisible(true);
+//  }
+//
+//  private void showSTablePopupMenu(STable table, IView<SComponent> tableView,
+//      SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
+//    int row = table.rowAtPoint(evt.getPoint());
+//    if (row < 0) {
+//      return;
+//    }
+//
+//    if (!table.isRowSelected(row)) {
+//      table.setSelectedRow(row);
+//    }
+//
+//    IValueConnector elementConnector = tableView.getConnector();
+//    IModelDescriptor modelDescriptor = tableView.getDescriptor()
+//        .getModelDescriptor();
+//    Map<String, List<IDisplayableAction>> actionMap = ((ICollectionViewDescriptor) tableView
+//        .getDescriptor()).getActions();
+//
+//    if (actionMap == null) {
+//      return;
+//    }
+//
+//    SPopupMenu popupMenu = createSPopupMenu(table, actionMap, modelDescriptor,
+//        tableView.getDescriptor(), elementConnector, actionHandler, locale);
+//    // FIXME popup
+//    popupMenu.setVisible(true);
+//  }
+//
+//  private SPopupMenu createSPopupMenu(SComponent sourceComponent,
+//      Map<String, List<IDisplayableAction>> actionMap,
+//      IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
+//      IValueConnector viewConnector, IActionHandler actionHandler, Locale locale) {
+//    SPopupMenu popupMenu = createSPopupMenu();
+//    SLabel titleLabel = createSLabel();
+//    titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
+//        locale));
+//    titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
+//        IIconFactory.TINY_ICON_SIZE));
+//    titleLabel.setHorizontalAlignment(SConstants.CENTER);
+//    titleLabel.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+//    popupMenu.add(titleLabel);
+//    popupMenu.add(new SSeparator());
+//    for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = actionMap
+//        .entrySet().iterator(); iter.hasNext();) {
+//      Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
+//      for (IDisplayableAction action : nextActionSet.getValue()) {
+//        Action swingAction = actionFactory.createAction(action, actionHandler,
+//            sourceComponent, modelDescriptor, viewConnector, locale);
+//        SMenuItem actionItem = createSMenuItem();
+//        actionItem.setAction(swingAction);
+//        popupMenu.add(actionItem);
+//      }
+//      if (iter.hasNext()) {
+//        popupMenu.add(new SSeparator());
+//      }
+//    }
+//    return popupMenu;
+//  }
 
   // /////////////// //
   // Helpers Section //
