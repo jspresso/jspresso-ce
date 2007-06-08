@@ -6,6 +6,7 @@ package com.d2s.framework.gui.swing.components;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyEvent;
+import java.util.Locale;
 
 import javax.swing.BorderFactory;
 import javax.swing.JTextField;
@@ -13,6 +14,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.DateFormatter;
 
 import net.sf.nachocalendar.components.DateField;
+import net.sf.nachocalendar.components.FormatSymbols;
 
 import com.d2s.framework.util.swing.SwingUtil;
 
@@ -22,7 +24,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,35 +34,44 @@ public class JDateField extends DateField {
 
   /**
    * Constructs a new <code>JDateField</code> instance.
-   * 
+   *
    * @param showWeekNumbers
    *          true if the week numbers must be shown.
+   * @param locale
+   *          the user locale.
    */
-  public JDateField(boolean showWeekNumbers) {
+  public JDateField(boolean showWeekNumbers, Locale locale) {
     super(showWeekNumbers);
-    initDefaultBehaviour();
+    initDefaultBehaviour(locale);
   }
 
   /**
    * Constructs a new <code>JDateField</code> instance.
+   *
+   * @param locale
+   *          the user locale.
    */
-  public JDateField() {
+  public JDateField(Locale locale) {
     super();
-    initDefaultBehaviour();
+    initDefaultBehaviour(locale);
   }
 
   /**
    * Constructs a new <code>JDateField</code> instance.
-   * 
+   *
    * @param formatter
    *          formatter used for the textfield.
+   * @param locale
+   *          the user locale.
    */
-  public JDateField(DateFormatter formatter) {
+  public JDateField(DateFormatter formatter, Locale locale) {
     super(formatter);
-    initDefaultBehaviour();
+    initDefaultBehaviour(locale);
   }
 
-  private void initDefaultBehaviour() {
+  private void initDefaultBehaviour(Locale locale) {
+    new FormatSymbols((DateFormatter) getFormattedTextField().getFormatter(),
+        locale);
     getFormattedTextField().setBorder(
         BorderFactory.createEmptyBorder(1, 5, 1, 5));
     SwingUtil.enableSelectionOnFocusGained(getFormattedTextField());
@@ -97,7 +108,7 @@ public class JDateField extends DateField {
 
   /**
    * Turns the date field to be editable or not.
-   * 
+   *
    * @param editable
    *          true if editable.
    */

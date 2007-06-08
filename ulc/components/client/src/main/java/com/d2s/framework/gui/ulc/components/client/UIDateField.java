@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.EventObject;
+import java.util.Locale;
 
 import javax.swing.AbstractCellEditor;
 import javax.swing.ComboBoxEditor;
@@ -43,7 +44,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -56,7 +57,13 @@ public class UIDateField extends UIComponent implements IEditorComponent {
    */
   @Override
   protected Object createBasicObject(Anything args) {
-    JDateField dateField = new JDateField() {
+    DateFormatter formatter = new DateFormatter(new NullableSimpleDateFormat(
+        args.get(DateFieldConstants.FORMAT_PATTERN_KEY,
+            ((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT))
+                .toPattern())));
+    Locale locale = new Locale(args.get(DateFieldConstants.LANGUAGE_KEY, Locale
+        .getDefault().getLanguage()));
+    JDateField dateField = new JDateField(formatter, locale) {
 
       private static final long serialVersionUID = 6298852573281209804L;
 
@@ -79,11 +86,7 @@ public class UIDateField extends UIComponent implements IEditorComponent {
     dateField.setHeaderRenderer(new DefaultHeaderRenderer());
 
     dateField.getFormattedTextField().setFormatterFactory(
-        new DefaultFormatterFactory(new DateFormatter(
-            new NullableSimpleDateFormat(args.get(
-                DateFieldConstants.FORMAT_PATTERN_KEY,
-                ((SimpleDateFormat) DateFormat
-                    .getDateInstance(DateFormat.SHORT)).toPattern())))));
+        new DefaultFormatterFactory(formatter));
     return dateField;
   }
 

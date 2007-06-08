@@ -1725,7 +1725,7 @@ public class DefaultSwingViewFactory implements
   private IView<JComponent> createDatePropertyView(
       IDatePropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    JDateField viewComponent = createJDateField();
+    JDateField viewComponent = createJDateField(locale);
     DateFormat format = createDateFormat(propertyDescriptor, locale);
     viewComponent.getFormattedTextField().setFormatterFactory(
         new DefaultFormatterFactory(new DateFormatter(format)));
@@ -2543,11 +2543,12 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a date field.
+   * @param locale the user locale.
    *
    * @return the created date field.
    */
-  protected JDateField createJDateField() {
-    JDateField dateField = new JDateField();
+  protected JDateField createJDateField(Locale locale) {
+    JDateField dateField = new JDateField(locale);
     dateField.setRenderer(new DefaultDayRenderer());
     dateField.setHeaderRenderer(new DefaultHeaderRenderer());
     return dateField;

@@ -6,6 +6,7 @@ package com.d2s.framework.gui.ulc.components.server;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
@@ -25,7 +26,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -35,6 +36,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   private Date              value;
   private String            formatPattern;
+  private Locale            locale;
   private boolean           editable;
 
   /**
@@ -42,17 +44,31 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
    */
   public ULCDateField() {
     this(((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT))
-        .toLocalizedPattern());
+        .toLocalizedPattern(), Locale.getDefault());
   }
 
   /**
    * Constructs a new <code>ULCDateField</code> instance.
-   * 
+   *
+   * @param locale
+   *          the user locale.
+   */
+  public ULCDateField(Locale locale) {
+    this(((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT))
+        .toLocalizedPattern(), locale);
+  }
+
+  /**
+   * Constructs a new <code>ULCDateField</code> instance.
+   *
    * @param formatPattern
    *          the date format pattern to be used in the date field.
+   * @param locale
+   *          the user locale.
    */
-  public ULCDateField(String formatPattern) {
+  public ULCDateField(String formatPattern, Locale locale) {
     this.formatPattern = formatPattern;
+    this.locale = locale;
     editable = true;
   }
 
@@ -64,6 +80,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
     super.saveState(a);
     valueToAnything(a);
     a.put(DateFieldConstants.FORMAT_PATTERN_KEY, formatPattern);
+    a.put(DateFieldConstants.LANGUAGE_KEY, locale.getLanguage());
     editableToAnything(a);
   }
 
@@ -77,7 +94,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Gets the date field value.
-   * 
+   *
    * @return the date field value.
    */
   public Date getValue() {
@@ -86,7 +103,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Sets the date field value.
-   * 
+   *
    * @param value
    *          the date field value.
    */
@@ -101,7 +118,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Adds a value change listener.
-   * 
+   *
    * @param listener
    *          the listener to add.
    */
@@ -111,7 +128,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Removes a value change listener.
-   * 
+   *
    * @param listener
    *          the listener to remove.
    */
@@ -157,6 +174,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
   public void copyAttributes(ICellComponent source) {
     ULCDateField sourceDateField = (ULCDateField) source;
     formatPattern = sourceDateField.formatPattern;
+    locale = sourceDateField.locale;
   }
 
   /**
@@ -204,7 +222,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Gets the editable.
-   * 
+   *
    * @return the editable.
    */
   public boolean isEditable() {
@@ -213,7 +231,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Sets the editable.
-   * 
+   *
    * @param editable
    *          the editable to set.
    */

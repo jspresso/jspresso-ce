@@ -10,7 +10,7 @@ import java.util.ListResourceBundle;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -46,15 +46,15 @@ public final class LoginUtils {
   }
 
   /**
-   * Default RB.
+   * English RB.
    * <p>
    * Copyright 2005 Design2See. All rights reserved.
    * <p>
-   * 
+   *
    * @version $LastChangedRevision$
    * @author Vincent Vandenschrick
    */
-  public static class DlmBundle extends ListResourceBundle {
+  public static class DlmBundle_en extends ListResourceBundle {
 
     static final Object[][] CONTENTS = {
                                          {USER, "User"},
@@ -80,7 +80,7 @@ public final class LoginUtils {
    * <p>
    * Copyright 2005 Design2See. All rights reserved.
    * <p>
-   * 
+   *
    * @version $LastChangedRevision$
    * @author Vincent Vandenschrick
    */

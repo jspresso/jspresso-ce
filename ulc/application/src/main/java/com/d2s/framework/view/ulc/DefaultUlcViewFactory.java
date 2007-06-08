@@ -1692,7 +1692,8 @@ public class DefaultUlcViewFactory implements
 
     SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
 
-    ULCDateField viewComponent = createULCDateField(format.toLocalizedPattern());
+    ULCDateField viewComponent = createULCDateField(
+        format.toLocalizedPattern(), locale);
     ULCDateFieldConnector connector = new ULCDateFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
@@ -2519,7 +2520,8 @@ public class DefaultUlcViewFactory implements
     ClientContext.setEventDeliveryMode(textField,
         IUlcEventConstants.FOCUS_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
     ClientContext.setEventDeliveryMode(textField,
-        IUlcEventConstants.VALUE_CHANGED_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
+        IUlcEventConstants.VALUE_CHANGED_EVENT,
+        IUlcEventConstants.ASYNCHRONOUS_MODE);
     return textField;
   }
 
@@ -2575,10 +2577,12 @@ public class DefaultUlcViewFactory implements
    *
    * @param formatPattern
    *          the (simple date format) pattern this date field uses.
+   * @param locale
+   *          the user locale.
    * @return the created date field.
    */
-  protected ULCDateField createULCDateField(String formatPattern) {
-    ULCDateField dateField = new ULCDateField(formatPattern);
+  protected ULCDateField createULCDateField(String formatPattern, Locale locale) {
+    ULCDateField dateField = new ULCDateField(formatPattern, locale);
     ClientContext.setEventDeliveryMode(dateField,
         IUlcEventConstants.VALUE_CHANGED_EVENT,
         IUlcEventConstants.ASYNCHRONOUS_MODE);
