@@ -18,7 +18,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -47,11 +47,12 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       return false;
     }
 
-    List elementList = new ArrayList<Object>((List) collectionConnector
-        .getConnectorValue());
+    List originalList = (List) collectionConnector
+        .getConnectorValue();
+    List targetList = new ArrayList<Object>(originalList);
     List<Object> elementsToMove = new ArrayList<Object>();
     for (int indexToMove : indicesToMove) {
-      elementsToMove.add(elementList.get(indexToMove));
+      elementsToMove.add(targetList.get(indexToMove));
     }
 
     int[] targetIndices = new int[indicesToMove.length];
@@ -59,15 +60,19 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       targetIndices[i] = indicesToMove[i] + offset;
     }
     if (targetIndices[0] >= 0
-        && targetIndices[targetIndices.length - 1] < elementList.size()) {
+        && targetIndices[targetIndices.length - 1] < targetList.size()) {
       for (int i = indicesToMove.length - 1; i >= 0; i--) {
-        elementList.remove(indicesToMove[i]);
+        targetList.remove(indicesToMove[i]);
       }
       for (int i = 0; i < indicesToMove.length; i++) {
-        elementList.add(targetIndices[i], elementsToMove.get(i));
+        targetList.add(targetIndices[i], elementsToMove.get(i));
       }
       ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
-          .straightSetProperty(collectionConnector.getId(), elementList);
+          .straightSetProperty(collectionConnector.getId(), null);
+      originalList.clear();
+      originalList.addAll(targetList);
+      ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
+      .straightSetProperty(collectionConnector.getId(), originalList);
       context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
           .getIndicesOf(collectionConnector, elementsToMove));
     }
@@ -76,7 +81,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
 
   /**
    * Sets the offset.
-   * 
+   *
    * @param offset
    *          the offset to set.
    */

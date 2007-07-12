@@ -1,25 +1,29 @@
-<?xml version='1.0'?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" "http://www.oasis-open.org/docbook/xml/4.3b2/docbookx.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+"http://www.oasis-open.org/docbook/xml/4.3b2/docbookx.dtd">
 <book lang="en" revision="1.0">
-
   <bookinfo>
+    <title>D2S : The <trademark>Design2See</trademark> Framework</title>
 
-    <title>D2S : The Design To See Framework</title>
-
-    <subtitle>D2S Reference Manual</subtitle>
+    <subtitle><trademark>D2S</trademark> Reference Manual</subtitle>
 
     <releaseinfo>1.0</releaseinfo>
 
+    <abstract>
+      <para>This document is a reference manual for the
+      <trademark>Design2See</trademark> (<trademark>D2S</trademark>)
+      framework. It deals with all the building blocks of a
+      <trademark>D2S</trademark> application.</para>
+    </abstract>
   </bookinfo>
 
-  <toc />
-  <preface id="preface">
+  <toc></toc>
 
+  <preface id="preface">
     <title>Preface</title>
 
-    <para />
-
+    <para>Software development requires many different skills. This is even
+    more true when you have to deal with a distributed business application.
+    </para>
   </preface>
-
 </book>
-
