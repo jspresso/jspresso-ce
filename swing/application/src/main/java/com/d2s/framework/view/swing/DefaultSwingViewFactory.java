@@ -2000,10 +2000,14 @@ public class DefaultSwingViewFactory implements
               .getIconImageURL(String.valueOf(value)),
               IIconFactory.TINY_ICON_SIZE));
       if (value != null && propertyDescriptor.isTranslated()) {
-        setText(translationProvider.getTranslation(computeEnumerationKey(
+        label.setText(translationProvider.getTranslation(computeEnumerationKey(
             propertyDescriptor.getEnumerationName(), value), locale));
       } else {
-        setText(String.valueOf(value));
+        if (value == null) {
+          label.setText("");
+        } else {
+          label.setText(String.valueOf(value));
+        }
       }
       return label;
     }
@@ -2543,8 +2547,9 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Creates a date field.
-   * @param locale the user locale.
    *
+   * @param locale
+   *          the user locale.
    * @return the created date field.
    */
   protected JDateField createJDateField(Locale locale) {

@@ -32,7 +32,7 @@ import com.d2s.framework.util.url.UrlHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -53,12 +53,10 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
       final JasperReport jasperReport;
       if (urlSpec.endsWith("xml")) {
         jasperReport = JasperCompileManager.compileReport(UrlHelper.createURL(
-            reportDesign.getReportDescriptor().getReportDesignUrl())
-            .openStream());
+            urlSpec).openStream());
       } else {
         jasperReport = (JasperReport) JRLoader.loadObject(UrlHelper.createURL(
-            reportDesign.getReportDescriptor().getReportDesignUrl())
-            .openStream());
+            urlSpec).openStream());
       }
       final Map<String, Object> reportContext = new HashMap<String, Object>(
           reportDesign.getContext());
@@ -67,6 +65,12 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
           .getPrincipal();
       reportContext.putAll(user.getCustomProperties());
       reportContext.put(JRParameter.REPORT_LOCALE, getLocale(context));
+      if (reportDesign.getReportDescriptor().getBeforeAction() != null) {
+        if (!actionHandler.execute(reportDesign.getReportDescriptor()
+            .getBeforeAction(), reportContext)) {
+          return false;
+        }
+      }
       JasperPrint jasperPrint = (JasperPrint) jdbcTemplate
           .execute(new ConnectionCallback() {
 
@@ -90,7 +94,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
 
   /**
    * Sets the jdbcTemplate.
-   * 
+   *
    * @param jdbcTemplate
    *          the jdbcTemplate to set.
    */

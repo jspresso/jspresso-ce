@@ -256,9 +256,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           cascade = "none"
        <#else>
          <#if propertyDescriptor.composition>
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate,delete"
+   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate,delete"
          <#else>
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate"
          </#if>
        </#if>
      <#if manyToMany>
@@ -372,21 +372,21 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if isEntity>
       <#if reverseOneToOne>
    * @hibernate.one-to-one
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate"
    *           property-ref = "${propertyDescriptor.reverseRelationEnd.name}"
       <#else>
    * @hibernate.many-to-one
         <#if oneToOne>
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate"
         <#elseif bidirectional>
-   *           cascade = "persist,merge,save-update"
+   *           cascade = "lock,persist,merge,save-update"
           <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"
           </#if>
         <#else>
           <#if composition>
-   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate"
           <#else>
    *           cascade = "none"
           </#if>
@@ -470,7 +470,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#if componentDescriptor.declaredPropertyDescriptors?exists>
   <#assign empty=true/>
   <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-    <#if !propertyDescriptor.overload>
+    <#if !(instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor")
+           && propertyDescriptor.overload)>
       <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
       <#assign empty=false/>
     </#if>
