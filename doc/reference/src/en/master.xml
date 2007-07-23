@@ -33,18 +33,35 @@
       </listitem>
 
       <listitem>
-        <para>System architecture (failover, load-balancing, ...)</para>
+        <para>System architecture (fail over, load-balancing, ...)</para>
       </listitem>
 
       <listitem>
         <para>Software architecture and best practices (design patterns,
-        security, manageability, logging, ...)</para>
+        security, manageability, logging, low coupling, ...)</para>
       </listitem>
 
       <listitem>
-        <para>Up-to-date tecnology building blocks (technology standards,
-        )</para>
+        <para>Up-to-date technology building blocks (standards, )</para>
       </listitem>
     </itemizedlist>
   </preface>
+
+  <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter3.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
 </book>
