@@ -78,7 +78,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
           .getCollectionConnector();
-      collectionConnector.setAllowLazyChildrenLoading(false);
+      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
+          collectionConnector, false, false);
       return collectionConnector.getChildConnector(index);
     } else if (parent instanceof ICollectionConnectorListProvider) {
       return ((ICollectionConnectorListProvider) parent)
@@ -237,6 +238,16 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             nodeStructureChanged(connectorPath
                 .pathByAddingChild(((ICollectionConnector) connector)
                     .getChildConnector(i)));
+          }
+        }
+        if (connector.getParentConnector() == rootConnector) {
+          // This is the only chance we have to handle listener registration on
+          // the tree 1st level.
+          for (int i = 0; i < ((ICollectionConnector) connector)
+              .getChildConnectorCount(); i++) {
+            CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
+                (ICollectionConnectorListProvider) ((ICollectionConnector) connector)
+                .getChildConnector(i), false, false);
           }
         }
       } else {

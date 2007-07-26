@@ -256,9 +256,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           cascade = "none"
        <#else>
          <#if propertyDescriptor.composition>
-   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate,delete"
+   *           cascade = "persist,merge,save-update,refresh,evict,replicate,delete"
          <#else>
-   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
          </#if>
        </#if>
      <#if manyToMany>
@@ -372,21 +372,21 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if isEntity>
       <#if reverseOneToOne>
    * @hibernate.one-to-one
-   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
    *           property-ref = "${propertyDescriptor.reverseRelationEnd.name}"
       <#else>
    * @hibernate.many-to-one
         <#if oneToOne>
-   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
         <#elseif bidirectional>
-   *           cascade = "lock,persist,merge,save-update"
+   *           cascade = "persist,merge,save-update"
           <#if !managesPersistence>
    *           insert = "false"
    *           update = "false"
           </#if>
         <#else>
           <#if composition>
-   *           cascade = "lock,persist,merge,save-update,refresh,evict,replicate"
+   *           cascade = "persist,merge,save-update,refresh,evict,replicate"
           <#else>
    *           cascade = "none"
           </#if>

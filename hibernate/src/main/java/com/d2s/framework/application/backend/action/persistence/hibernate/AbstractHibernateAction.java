@@ -7,9 +7,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
@@ -101,18 +105,42 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
       Session hibernateSession, Map<String, Object> context) {
     List<IEntity> mergedEntities = getApplicationSession(context)
         .cloneInUnitOfWork(entities);
+    Set<IEntity> alreadyLocked = new HashSet<IEntity>();
     for (IEntity mergedEntity : mergedEntities) {
-      if (mergedEntity.isPersistent()) {
+      lockInHibernate(mergedEntity, hibernateSession, alreadyLocked);
+    }
+    return mergedEntities;
+  }
+
+  @SuppressWarnings("unchecked")
+  private void lockInHibernate(IEntity entity, Session hibernateSession,
+      Set<IEntity> alreadyLocked) {
+    if (alreadyLocked.add(entity)) {
+      if (entity.isPersistent()) {
         try {
-          hibernateSession.lock(mergedEntity, LockMode.NONE);
+          hibernateSession.lock(entity, LockMode.NONE);
         } catch (Exception ex) {
-          hibernateSession.evict(hibernateSession.get(mergedEntity
-              .getContract(), mergedEntity.getId()));
-          hibernateSession.lock(mergedEntity, LockMode.NONE);
+          hibernateSession.evict(hibernateSession.get(entity.getContract(),
+              entity.getId()));
+          hibernateSession.lock(entity, LockMode.NONE);
+        }
+        Map<String, Object> entityProperties = entity.straightGetProperties();
+        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+          if (Hibernate.isInitialized(property.getValue())) {
+            if (property.getValue() instanceof IEntity) {
+              lockInHibernate((IEntity) property.getValue(), hibernateSession,
+                  alreadyLocked);
+            } else if (property.getValue() instanceof Collection) {
+              for (Iterator<IEntity> ite = ((Collection<IEntity>) property
+                  .getValue()).iterator(); ite.hasNext();) {
+                lockInHibernate(ite.next(), hibernateSession,
+                    alreadyLocked);
+              }
+            }
+          }
         }
       }
     }
-    return mergedEntities;
   }
 
   /**
