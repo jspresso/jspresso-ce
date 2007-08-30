@@ -71,7 +71,7 @@ public class UIColorPicker extends UIComponent implements IEditorComponent {
   private void handleSetValue(Anything args) {
     String hexColor = args.get(ColorPickerConstants.VALUE_KEY, "");
     Color value = null;
-    if (hexColor != "") {
+    if (hexColor.length() > 0) {
       int[] rgba = ColorHelper.fromHexString(hexColor);
       value = new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
     }

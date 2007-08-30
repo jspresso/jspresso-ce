@@ -10,10 +10,8 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
- * @see com.d2s.framework.binding.IValueConnector#getConnectorValue()
- * @see com.d2s.framework.binding.IValueConnector#setConnectorValue(Object)
  * @author Vincent Vandenschrick
  */
 public class MissingPropertyException extends NestedRuntimeException {
@@ -22,7 +20,7 @@ public class MissingPropertyException extends NestedRuntimeException {
 
   /**
    * Constructs a new <code>MissingPropertyException</code>.
-   * 
+   *
    * @param message
    *          the exception message.
    */

@@ -10,7 +10,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,13 +23,15 @@ public interface IGate extends IPropertyChangeCapable, Cloneable {
 
   /**
    * Is the gate open ?
-   * 
+   *
    * @return true if open.
    */
   boolean isOpen();
 
   /**
-   * {@inheritDoc}
+   * Clones the gate.
+   *
+   * @return the cloned gate.
    */
   IGate clone();
 }

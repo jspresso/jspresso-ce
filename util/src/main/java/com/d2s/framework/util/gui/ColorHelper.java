@@ -34,9 +34,9 @@ public final class ColorHelper {
   public static String toHexString(int r, int g, int b, int a) {
     StringBuffer hexString = new StringBuffer("0x");
     hexString.append(formatByteToPaddedHex(a, 2));
-    hexString.append(formatByteToPaddedHex(b, 2));
-    hexString.append(formatByteToPaddedHex(g, 2));
     hexString.append(formatByteToPaddedHex(r, 2));
+    hexString.append(formatByteToPaddedHex(g, 2));
+    hexString.append(formatByteToPaddedHex(b, 2));
     return hexString.toString();
   }
 
@@ -49,10 +49,10 @@ public final class ColorHelper {
    */
   public static int[] fromHexString(String hexString) {
     int[] rgba = new int[4];
-    for (int i = 3; i >= 0; i--) {
-      rgba[3 - i] = Integer.parseInt(hexString.substring(2 * i + 2, 2 * i + 4),
-          16);
-    }
+    rgba[3] = Integer.parseInt(hexString.substring(2, 4), 16);
+    rgba[0] = Integer.parseInt(hexString.substring(4, 6), 16);
+    rgba[1] = Integer.parseInt(hexString.substring(6, 8), 16);
+    rgba[2] = Integer.parseInt(hexString.substring(8, 10), 16);
     return rgba;
   }
 

@@ -59,6 +59,7 @@ import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
 import org.wings.border.STitledBorder;
 import org.wings.io.Device;
+import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellEditor;
 import org.wings.table.STableCellRenderer;
 import org.wings.table.STableColumn;
@@ -94,6 +95,7 @@ import com.d2s.framework.binding.wings.IListSelectionModelBinder;
 import com.d2s.framework.binding.wings.ITreeSelectionModelBinder;
 import com.d2s.framework.binding.wings.SActionFieldConnector;
 import com.d2s.framework.binding.wings.SCheckBoxConnector;
+import com.d2s.framework.binding.wings.SColorPickerConnector;
 import com.d2s.framework.binding.wings.SComboBoxConnector;
 import com.d2s.framework.binding.wings.SFormattedFieldConnector;
 import com.d2s.framework.binding.wings.SImageConnector;
@@ -104,10 +106,12 @@ import com.d2s.framework.binding.wings.STextAreaConnector;
 import com.d2s.framework.binding.wings.STextFieldConnector;
 import com.d2s.framework.binding.wings.XCalendarConnector;
 import com.d2s.framework.gui.wings.components.SActionField;
+import com.d2s.framework.gui.wings.components.SColorPicker;
 import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IColorPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IDatePropertyDescriptor;
@@ -131,6 +135,7 @@ import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
 import com.d2s.framework.util.format.NullableSimpleDateFormat;
 import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.gui.ColorHelper;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.BasicCompositeView;
 import com.d2s.framework.view.BasicMapView;
@@ -1188,6 +1193,9 @@ public class DefaultWingsViewFactory implements
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       cellRenderer = createStringTableCellRenderer(
           (IStringPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
+      cellRenderer = createColorTableCellRenderer(
+          (IColorPropertyDescriptor) propertyDescriptor, locale);
     }
     return cellRenderer;
   }
@@ -1352,6 +1360,34 @@ public class DefaultWingsViewFactory implements
         }
       }
       return renderer;
+    }
+  }
+
+  private STableCellRenderer createColorTableCellRenderer(
+      @SuppressWarnings("unused")
+      IColorPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
+    return new ColorTableCellRenderer();
+  }
+
+  private final class ColorTableCellRenderer extends SDefaultTableCellRenderer {
+
+    private static final long serialVersionUID = 2463885562098867443L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SComponent getTableCellRendererComponent(STable table, Object value,
+        boolean isSelected, int row, int column) {
+      if (value != null) {
+        int[] rgba = ColorHelper.fromHexString((String) value);
+        setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+      } else {
+        setBackground(null);
+      }
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          row, column);
     }
   }
 
@@ -1639,6 +1675,9 @@ public class DefaultWingsViewFactory implements
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
       view = createBinaryPropertyView(
           (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
+      view = createColorPropertyView(
+          (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
@@ -1853,6 +1892,17 @@ public class DefaultWingsViewFactory implements
     viewComponent.setActions(Arrays.asList(new Action[] {openAction,
         saveAction, resetAction, infoAction}));
     adjustSizes(viewComponent, null, null);
+    return constructView(viewComponent, null, connector);
+  }
+
+  private IView<SComponent> createColorPropertyView(
+      IColorPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
+    SColorPicker viewComponent = createSColorPicker();
+    SColorPickerConnector connector = new SColorPickerConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 
@@ -2498,6 +2548,15 @@ public class DefaultWingsViewFactory implements
     SActionField actionField = new SActionField(showTextField);
     actionField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return actionField;
+  }
+
+  /**
+   * Creates an color picker.
+   *
+   * @return the created color picker.
+   */
+  protected SColorPicker createSColorPicker() {
+    return new SColorPicker();
   }
 
   /**
