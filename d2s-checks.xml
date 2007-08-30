@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	This configuration file was written by the eclipse-cs plugin configuration editor
+    This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-Checkstyle-Configuration: D2S Checks
-Description:
-Design2See Checks
+    Checkstyle-Configuration: D2S Checks
+    Description: 
+Design2See checks
 -->
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">
@@ -35,7 +35,7 @@ Design2See Checks
         <module name="RedundantImport"/>
         <module name="UnusedImports"/>
         <module name="FileLength">
-            <property name="max" value="3000"/>
+            <property name="max" value="4000"/>
         </module>
         <module name="LineLength">
             <property name="max" value="130"/>

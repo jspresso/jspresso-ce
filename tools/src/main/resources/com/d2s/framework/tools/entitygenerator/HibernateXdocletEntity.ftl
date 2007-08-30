@@ -107,11 +107,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDatePropertyDescriptor")>
       <#if propertyDescriptor.type = "DATE">
    *           type = "date"
-      <#elseif propertyDescriptor.type = "TIME">
-   *           type = "time"
       <#else>
    *           type = "timestamp"
       </#if>
+    <#elseif instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.ITimePropertyDescriptor")>
+   *           type = "time"
 <#-- <#elseif    instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
               && !(propertyDescriptor.maxLength?exists)>
    *           type = "blob"
@@ -125,6 +125,8 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
          )
       && (propertyDescriptor.maxLength?exists)>
    *           length = "${propertyDescriptor.maxLength?c}"
+    <#elseif instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IColorPropertyDescriptor")>
+   *           length = "10"
     </#if>
     <#if propertyDescriptor.mandatory>
    *           not-null = "true"

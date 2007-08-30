@@ -20,7 +20,7 @@ import com.d2s.framework.util.format.IFormatter;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,7 +30,7 @@ public class SFormattedFieldConnector extends STextFieldConnector {
 
   /**
    * Constructs a new <code>SFormattedFieldConnector</code> instance.
-   * 
+   *
    * @param id
    *          the id of the connector.
    * @param textField
@@ -46,7 +46,7 @@ public class SFormattedFieldConnector extends STextFieldConnector {
 
   /**
    * Constructs a new <code>SFormattedFieldConnector</code> instance.
-   * 
+   *
    * @param id
    *          the id of the connector.
    * @param textField
@@ -71,13 +71,27 @@ public class SFormattedFieldConnector extends STextFieldConnector {
     }
     if (formatter != null) {
       try {
-        return formatter.parse(getConnectedSComponent().getText());
+        Object value = formatter.parse(getTextForParser(getConnectedSComponent()
+            .getText()));
+        getConnectedSComponent().setText(formatter.format(value));
+        return value;
       } catch (ParseException ex) {
         setConnecteeValue(null);
         return null;
       }
     }
     return super.getConnecteeValue();
+  }
+
+  /**
+   * Allows for text reformatting when a non lenient parser is used.
+   *
+   * @param rawText
+   *          the raw text as entered in the textfield.
+   * @return the text to give to the parser.
+   */
+  protected String getTextForParser(String rawText) {
+    return rawText;
   }
 
   /**

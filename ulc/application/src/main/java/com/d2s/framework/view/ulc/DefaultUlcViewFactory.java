@@ -42,6 +42,7 @@ import com.d2s.framework.binding.ulc.ConnectorTreeHelper;
 import com.d2s.framework.binding.ulc.IListSelectionModelBinder;
 import com.d2s.framework.binding.ulc.ITreeSelectionModelBinder;
 import com.d2s.framework.binding.ulc.ULCActionFieldConnector;
+import com.d2s.framework.binding.ulc.ULCColorPickerConnector;
 import com.d2s.framework.binding.ulc.ULCComboBoxConnector;
 import com.d2s.framework.binding.ulc.ULCDateFieldConnector;
 import com.d2s.framework.binding.ulc.ULCImageConnector;
@@ -53,6 +54,7 @@ import com.d2s.framework.binding.ulc.ULCTextFieldConnector;
 import com.d2s.framework.binding.ulc.ULCToggleButtonConnector;
 import com.d2s.framework.gui.ulc.components.server.ITreePathPopupFactory;
 import com.d2s.framework.gui.ulc.components.server.ULCActionField;
+import com.d2s.framework.gui.ulc.components.server.ULCColorPicker;
 import com.d2s.framework.gui.ulc.components.server.ULCDateField;
 import com.d2s.framework.gui.ulc.components.server.ULCDurationDataType;
 import com.d2s.framework.gui.ulc.components.server.ULCDurationDataTypeFactory;
@@ -66,6 +68,7 @@ import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IColorPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IDatePropertyDescriptor;
@@ -89,6 +92,7 @@ import com.d2s.framework.util.format.DurationFormatter;
 import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
 import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.gui.ColorHelper;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.BasicCompositeView;
@@ -160,6 +164,7 @@ import com.ulcjava.base.application.ULCTree;
 import com.ulcjava.base.application.datatype.ULCDateDataType;
 import com.ulcjava.base.application.datatype.ULCNumberDataType;
 import com.ulcjava.base.application.datatype.ULCPercentDataType;
+import com.ulcjava.base.application.table.DefaultTableCellRenderer;
 import com.ulcjava.base.application.table.DefaultTableHeaderCellRenderer;
 import com.ulcjava.base.application.table.ITableCellRenderer;
 import com.ulcjava.base.application.table.ULCTableColumn;
@@ -1206,6 +1211,9 @@ public class DefaultUlcViewFactory implements
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       cellRenderer = createStringTableCellRenderer(column,
           (IStringPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
+      cellRenderer = createColorTableCellRenderer(
+          (IColorPropertyDescriptor) propertyDescriptor, locale);
     }
     return cellRenderer;
   }
@@ -1362,6 +1370,35 @@ public class DefaultUlcViewFactory implements
       setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
           .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
       UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row);
+    }
+  }
+
+  private ITableCellRenderer createColorTableCellRenderer(
+      @SuppressWarnings("unused")
+      IColorPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
+    return new ColorTableCellRenderer();
+  }
+
+  private final class ColorTableCellRenderer extends DefaultTableCellRenderer {
+
+    private static final long serialVersionUID = -8013724509060227795L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public IRendererComponent getTableCellRendererComponent(
+        com.ulcjava.base.application.ULCTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row) {
+      if (value != null) {
+        int[] rgba = ColorHelper.fromHexString((String) value);
+        setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+      } else {
+        setBackground(null);
+      }
       return super.getTableCellRendererComponent(table, value, isSelected,
           hasFocus, row);
     }
@@ -1642,6 +1679,9 @@ public class DefaultUlcViewFactory implements
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
       view = createBinaryPropertyView(
           (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
+      view = createColorPropertyView(
+          (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
@@ -1879,6 +1919,17 @@ public class DefaultUlcViewFactory implements
     viewComponent.setActions(Arrays.asList(new IAction[] {openAction,
         saveAction, resetAction, infoAction}));
     adjustSizes(viewComponent, null, null);
+    return constructView(viewComponent, null, connector);
+  }
+
+  private IView<ULCComponent> createColorPropertyView(
+      IColorPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
+    ULCColorPicker viewComponent = createULCColorPicker();
+    ULCColorPickerConnector connector = new ULCColorPickerConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
     return constructView(viewComponent, null, connector);
   }
 
@@ -2387,13 +2438,16 @@ public class DefaultUlcViewFactory implements
     return createFormatter(createDecimalFormat(propertyDescriptor, locale));
   }
 
-  private NumberFormat createDecimalFormat(@SuppressWarnings("unused")
-  IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+  private NumberFormat createDecimalFormat(
+      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getNumberInstance(locale);
     if (propertyDescriptor.getMaxFractionDigit() != null) {
       format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
           .intValue());
+    } else {
+      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
     }
+    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;
   }
 
@@ -2412,7 +2466,7 @@ public class DefaultUlcViewFactory implements
       decimalPart += Math.pow(10.0D, -i);
     }
     templateValue += decimalPart;
-    return new Double(templateValue);
+    return new Double(templateValue / 100.0D);
   }
 
   private IFormatter createPercentFormatter(
@@ -2426,7 +2480,10 @@ public class DefaultUlcViewFactory implements
     if (propertyDescriptor.getMaxFractionDigit() != null) {
       format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
           .intValue());
+    } else {
+      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
     }
+    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
     return format;
   }
 
@@ -2486,7 +2543,7 @@ public class DefaultUlcViewFactory implements
 
   private void adjustSizes(ULCComponent component, IFormatter formatter,
       Object templateValue) {
-    adjustSizes(component, formatter, templateValue, 0);
+    adjustSizes(component, formatter, templateValue, 32);
   }
 
   private void adjustSizes(ULCComponent component, IFormatter formatter,
@@ -2507,7 +2564,7 @@ public class DefaultUlcViewFactory implements
     if (characterLength > 0 && characterLength < maxCharacterLength) {
       charLength = characterLength + 2;
     }
-    return (int) ((component.getFont().getSize() * charLength) / 1.5);
+    return component.getFont().getSize() * charLength;
   }
 
   /**
@@ -2570,6 +2627,15 @@ public class DefaultUlcViewFactory implements
    */
   protected ULCActionField createULCActionField(boolean showTextField) {
     return new ULCActionField(showTextField);
+  }
+
+  /**
+   * Creates a color picker.
+   *
+   * @return the created color picker.
+   */
+  protected ULCColorPicker createULCColorPicker() {
+    return new ULCColorPicker();
   }
 
   /**

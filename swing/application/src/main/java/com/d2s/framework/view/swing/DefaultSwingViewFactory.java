@@ -60,6 +60,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -100,22 +101,26 @@ import com.d2s.framework.binding.swing.ConnectorTreeHelper;
 import com.d2s.framework.binding.swing.IListSelectionModelBinder;
 import com.d2s.framework.binding.swing.ITreeSelectionModelBinder;
 import com.d2s.framework.binding.swing.JActionFieldConnector;
+import com.d2s.framework.binding.swing.JColorPickerConnector;
 import com.d2s.framework.binding.swing.JComboBoxConnector;
 import com.d2s.framework.binding.swing.JDateFieldConnector;
 import com.d2s.framework.binding.swing.JEditTextAreaConnector;
 import com.d2s.framework.binding.swing.JFormattedFieldConnector;
 import com.d2s.framework.binding.swing.JImageConnector;
 import com.d2s.framework.binding.swing.JPasswordFieldConnector;
+import com.d2s.framework.binding.swing.JPercentFieldConnector;
 import com.d2s.framework.binding.swing.JReferenceFieldConnector;
 import com.d2s.framework.binding.swing.JTextAreaConnector;
 import com.d2s.framework.binding.swing.JTextFieldConnector;
 import com.d2s.framework.binding.swing.JToggleButtonConnector;
 import com.d2s.framework.gui.swing.components.JActionField;
+import com.d2s.framework.gui.swing.components.JColorPicker;
 import com.d2s.framework.gui.swing.components.JDateField;
 import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IColorPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IDatePropertyDescriptor;
@@ -140,6 +145,7 @@ import com.d2s.framework.util.format.FormatAdapter;
 import com.d2s.framework.util.format.IFormatter;
 import com.d2s.framework.util.format.NullableSimpleDateFormat;
 import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.gui.ColorHelper;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.view.BasicCompositeView;
@@ -1222,6 +1228,9 @@ public class DefaultSwingViewFactory implements
     } else if (propertyDescriptor instanceof IStringPropertyDescriptor) {
       cellRenderer = createStringTableCellRenderer(
           (IStringPropertyDescriptor) propertyDescriptor, locale);
+    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
+      cellRenderer = createColorTableCellRenderer(
+          (IColorPropertyDescriptor) propertyDescriptor, locale);
     }
     return cellRenderer;
   }
@@ -1390,6 +1399,34 @@ public class DefaultSwingViewFactory implements
           super.setValue(String.valueOf(value));
         }
       }
+    }
+  }
+
+  private TableCellRenderer createColorTableCellRenderer(
+      @SuppressWarnings("unused")
+      IColorPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
+    return new ColorTableCellRenderer();
+  }
+
+  private final class ColorTableCellRenderer extends DefaultTableCellRenderer {
+
+    private static final long serialVersionUID = 6014260077437906330L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+      if (value != null) {
+        int[] rgba = ColorHelper.fromHexString((String) value);
+        setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+      } else {
+        setBackground(null);
+      }
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row, column);
     }
   }
 
@@ -1678,6 +1715,9 @@ public class DefaultSwingViewFactory implements
     } else if (propertyDescriptor instanceof IBinaryPropertyDescriptor) {
       view = createBinaryPropertyView(
           (IBinaryPropertyDescriptor) propertyDescriptor, actionHandler, locale);
+    } else if (propertyDescriptor instanceof IColorPropertyDescriptor) {
+      view = createColorPropertyView(
+          (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
     if (propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
@@ -1901,6 +1941,17 @@ public class DefaultSwingViewFactory implements
     return constructView(viewComponent, null, connector);
   }
 
+  private IView<JComponent> createColorPropertyView(
+      IColorPropertyDescriptor propertyDescriptor,
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
+    JColorPicker viewComponent = createJColorPicker();
+    JColorPickerConnector connector = new JColorPickerConnector(
+        propertyDescriptor.getName(), viewComponent);
+    connector.setExceptionHandler(actionHandler);
+    return constructView(viewComponent, null, connector);
+  }
+
   private IView<JComponent> createDecimalPropertyView(
       IDecimalPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1924,7 +1975,7 @@ public class DefaultSwingViewFactory implements
       IActionHandler actionHandler, Locale locale) {
     JTextField viewComponent = createJTextField();
     IFormatter formatter = createPercentFormatter(propertyDescriptor, locale);
-    JFormattedFieldConnector connector = new JFormattedFieldConnector(
+    JPercentFieldConnector connector = new JPercentFieldConnector(
         propertyDescriptor.getName(), viewComponent, formatter);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, formatter,
@@ -2369,16 +2420,29 @@ public class DefaultSwingViewFactory implements
       maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
     }
     double decimalPart = 0;
-    for (int i = 0; i < maxFractionDigit; i++) {
+    for (int i = 1; i <= maxFractionDigit; i++) {
       decimalPart += Math.pow(10.0D, -i);
     }
     templateValue += decimalPart;
     return new Double(templateValue);
   }
 
-  private IFormatter createDecimalFormatter(@SuppressWarnings("unused")
-  IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormatAdapter(NumberFormat.getNumberInstance(locale));
+  private IFormatter createDecimalFormatter(
+      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormatAdapter(createDecimalFormat(propertyDescriptor, locale));
+  }
+
+  private NumberFormat createDecimalFormat(
+      IDecimalPropertyDescriptor propertyDescriptor, Locale locale) {
+    NumberFormat format = NumberFormat.getNumberInstance(locale);
+    if (propertyDescriptor.getMaxFractionDigit() != null) {
+      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
+          .intValue());
+    } else {
+      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
+    }
+    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
+    return format;
   }
 
   private Object getPercentTemplateValue(
@@ -2392,16 +2456,29 @@ public class DefaultSwingViewFactory implements
       maxFractionDigit = propertyDescriptor.getMaxFractionDigit().intValue();
     }
     double decimalPart = 0;
-    for (int i = 0; i < maxFractionDigit; i++) {
+    for (int i = 1; i <= maxFractionDigit; i++) {
       decimalPart += Math.pow(10.0D, -i);
     }
     templateValue += decimalPart;
-    return new Double(templateValue);
+    return new Double(templateValue / 100.0D);
   }
 
-  private IFormatter createPercentFormatter(@SuppressWarnings("unused")
-  IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormatAdapter(NumberFormat.getPercentInstance(locale));
+  private IFormatter createPercentFormatter(
+      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormatAdapter(createPercentFormat(propertyDescriptor, locale));
+  }
+
+  private NumberFormat createPercentFormat(
+      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+    NumberFormat format = NumberFormat.getPercentInstance(locale);
+    if (propertyDescriptor.getMaxFractionDigit() != null) {
+      format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
+          .intValue());
+    } else {
+      format.setMaximumFractionDigits(DEF_DISP_MAX_FRACTION_DIGIT);
+    }
+    format.setMinimumFractionDigits(format.getMaximumFractionDigits());
+    return format;
   }
 
   private Object getIntegerTemplateValue(
@@ -2413,9 +2490,14 @@ public class DefaultSwingViewFactory implements
     return new Integer((int) templateValue);
   }
 
-  private IFormatter createIntegerFormatter(@SuppressWarnings("unused")
+  private IFormatter createIntegerFormatter(
+      IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+    return new FormatAdapter(createIntegerFormat(propertyDescriptor, locale));
+  }
+
+  private NumberFormat createIntegerFormat(@SuppressWarnings("unused")
   IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
-    return new FormatAdapter(NumberFormat.getIntegerInstance(locale));
+    return NumberFormat.getIntegerInstance(locale);
   }
 
   private int getFormatLength(IFormatter formatter, Object templateValue) {
@@ -2455,7 +2537,7 @@ public class DefaultSwingViewFactory implements
 
   private void adjustSizes(Component component, IFormatter formatter,
       Object templateValue) {
-    adjustSizes(component, formatter, templateValue, 0);
+    adjustSizes(component, formatter, templateValue, 32);
   }
 
   private void adjustSizes(Component component, IFormatter formatter,
@@ -2475,7 +2557,7 @@ public class DefaultSwingViewFactory implements
     if (characterLength > 0 && characterLength < maxCharacterLength) {
       charLength = characterLength + 2;
     }
-    return (int) ((component.getFont().getSize() * charLength) / 1.5);
+    return component.getFont().getSize() * charLength;
   }
 
   /**
@@ -2543,6 +2625,15 @@ public class DefaultSwingViewFactory implements
    */
   protected JActionField createJActionField(boolean showTextField) {
     return new JActionField(showTextField);
+  }
+
+  /**
+   * Creates an color picker.
+   *
+   * @return the created color picker.
+   */
+  protected JColorPicker createJColorPicker() {
+    return new JColorPicker();
   }
 
   /**

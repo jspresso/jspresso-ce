@@ -21,7 +21,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,9 +42,9 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
 
   /**
    * Constructs a new <code>ULCJEditTextArea</code> instance.
-   * 
+   *
    * @param language
-   *          the date format pattern to be used in the date field.
+   *          the coding language used in this editor.
    */
   public ULCJEditTextArea(String language) {
     this.language = language;
@@ -71,19 +71,19 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
   }
 
   /**
-   * Gets the date field text.
-   * 
-   * @return the date field text.
+   * Gets the editor text.
+   *
+   * @return the editor text.
    */
   public String getText() {
     return text;
   }
 
   /**
-   * Sets the date field text.
-   * 
+   * Sets the editor text.
+   *
    * @param text
-   *          the date field text.
+   *          the editor text.
    */
   public void setText(String text) {
     if (!ObjectUtils.equals(this.text, text)) {
@@ -96,7 +96,7 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
 
   /**
    * Adds a value change listener.
-   * 
+   *
    * @param listener
    *          the listener to add.
    */
@@ -106,7 +106,7 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
 
   /**
    * Removes a value change listener.
-   * 
+   *
    * @param listener
    *          the listener to remove.
    */
@@ -146,8 +146,8 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
    * {@inheritDoc}
    */
   public void copyAttributes(ICellComponent source) {
-    ULCJEditTextArea sourceDateField = (ULCJEditTextArea) source;
-    language = sourceDateField.language;
+    ULCJEditTextArea sourceEditTextArea = (ULCJEditTextArea) source;
+    language = sourceEditTextArea.language;
   }
 
   /**
@@ -160,8 +160,8 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
     if (this == component) {
       return true;
     }
-    ULCJEditTextArea sourceDateField = (ULCJEditTextArea) component;
-    return new EqualsBuilder().append(language, sourceDateField.language)
+    ULCJEditTextArea sourceEditTextArea = (ULCJEditTextArea) component;
+    return new EqualsBuilder().append(language, sourceEditTextArea.language)
         .isEquals();
   }
 
@@ -190,7 +190,7 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
 
   /**
    * Gets the editable.
-   * 
+   *
    * @return the editable.
    */
   public boolean isEditable() {
@@ -199,7 +199,7 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
 
   /**
    * Sets the editable.
-   * 
+   *
    * @param editable
    *          the editable to set.
    */
