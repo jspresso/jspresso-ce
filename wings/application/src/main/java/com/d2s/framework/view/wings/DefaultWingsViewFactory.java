@@ -2507,7 +2507,7 @@ public class DefaultWingsViewFactory implements
     if (component.getFont() != null) {
       fontSize = component.getFont().getSize();
     }
-    return fontSize * charLength;
+    return (int) ((fontSize * charLength) / 4.0);
   }
 
   /**

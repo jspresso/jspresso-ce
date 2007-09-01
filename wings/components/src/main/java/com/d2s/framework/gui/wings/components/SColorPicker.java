@@ -29,15 +29,15 @@ import org.wingx.XColorPicker;
  */
 public class SColorPicker extends SPanel {
 
-  private static final long serialVersionUID = -9175630518246041139L;
+  private static final long     serialVersionUID = -9175630518246041139L;
 
   private Color                 value;
   private Color                 resetValue;
   private SButton               chooseButton;
   private SButton               resetButton;
 
-  private transient ChangeEvent changeEvent  = null;
-  private EventListenerList     listenerList = new EventListenerList();
+  private transient ChangeEvent changeEvent      = null;
+  private EventListenerList     listenerList     = new EventListenerList();
 
   /**
    * Constructs a new <code>SColorPicker</code> instance.
@@ -158,6 +158,11 @@ public class SColorPicker extends SPanel {
     SButton okButton = new SButton("OK");
     SButton cancelButton = new SButton("Cancel");
     SButton restoreButton = new SButton("Restore");
+
+    if (getValue() != null) {
+      colorPicker.setSelectedColor(getValue().getRed(), getValue().getGreen(),
+          getValue().getBlue());
+    }
 
     okButton.addActionListener(new ActionListener() {
 
