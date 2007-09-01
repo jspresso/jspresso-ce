@@ -4,6 +4,7 @@
 package com.d2s.framework.gui.ulc.components.server;
 
 import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.gui.ulc.components.shared.ColorPickerConstants;
@@ -32,6 +33,7 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
 
   private static final long serialVersionUID = 5230716348564257623L;
   private Color             value;
+  private Color             resetValue;
 
   /**
    * {@inheritDoc}
@@ -40,6 +42,7 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
   protected void saveState(Anything a) {
     super.saveState(a);
     valueToAnything(a);
+    resetValueToAnything(a);
   }
 
   /**
@@ -60,6 +63,15 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
   }
 
   /**
+   * Gets the color picker resetValue.
+   *
+   * @return the color picker value.
+   */
+  public Color getResetValue() {
+    return resetValue;
+  }
+
+  /**
    * Sets the color picker value.
    *
    * @param value
@@ -71,6 +83,21 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
       Anything valueAnything = new Anything();
       valueToAnything(valueAnything);
       sendUI(ColorPickerConstants.SET_VALUE_REQUEST, valueAnything);
+    }
+  }
+
+  /**
+   * Sets the color picker resetValue.
+   *
+   * @param resetValue
+   *          the color picker resetValue.
+   */
+  public void setResetValue(Color resetValue) {
+    if (!ObjectUtils.equals(this.resetValue, resetValue)) {
+      this.resetValue = resetValue;
+      Anything resetValueAnything = new Anything();
+      resetValueToAnything(resetValueAnything);
+      sendUI(ColorPickerConstants.SET_RESETVALUE_REQUEST, resetValueAnything);
     }
   }
 
@@ -123,13 +150,22 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
     args.put(ColorPickerConstants.VALUE_KEY, hexColor);
   }
 
+  private void resetValueToAnything(Anything args) {
+    String hexColor = "";
+    if (resetValue != null) {
+      hexColor = ColorHelper.toHexString(resetValue.getRed(), resetValue
+          .getGreen(), resetValue.getBlue(), resetValue.getAlpha());
+    }
+    args.put(ColorPickerConstants.RESETVALUE_KEY, hexColor);
+  }
+
   /**
    * {@inheritDoc}
    */
   public void copyAttributes(@SuppressWarnings("unused")
   ICellComponent source) {
-    // no specific copy to achieve.
-    // All attributes except value are identical.
+    ULCColorPicker sourceColorPicker = (ULCColorPicker) source;
+    resetValue = sourceColorPicker.resetValue;
   }
 
   /**
@@ -139,16 +175,19 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
     if (!(component instanceof ULCColorPicker)) {
       return false;
     }
-    // no specific copy to achieve.
-    // All attributes except value are identical.
-    return true;
+    if (this == component) {
+      return true;
+    }
+    ULCColorPicker sourceColorPicker = (ULCColorPicker) component;
+    return new EqualsBuilder().append(resetValue, sourceColorPicker.resetValue)
+        .isEquals();
   }
 
   /**
    * {@inheritDoc}
    */
   public int attributesHashCode() {
-    return new HashCodeBuilder(13, 37).toHashCode();
+    return new HashCodeBuilder(13, 37).append(resetValue).toHashCode();
   }
 
   /**

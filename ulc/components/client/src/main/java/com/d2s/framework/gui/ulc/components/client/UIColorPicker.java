@@ -63,6 +63,8 @@ public class UIColorPicker extends UIComponent implements IEditorComponent {
   public void handleRequest(String request, Anything args) {
     if (request.equals(ColorPickerConstants.SET_VALUE_REQUEST)) {
       handleSetValue(args);
+    } else if (request.equals(ColorPickerConstants.SET_RESETVALUE_REQUEST)) {
+      handleSetResetValue(args);
     } else {
       super.handleRequest(request, args);
     }
@@ -78,6 +80,26 @@ public class UIColorPicker extends UIComponent implements IEditorComponent {
     getBasicObject().setValue(value);
   }
 
+  private void handleResetValue(Anything args) {
+    String hexColor = args.get(ColorPickerConstants.RESETVALUE_KEY, "");
+    Color resetValue = null;
+    if (hexColor.length() > 0) {
+      int[] rgba = ColorHelper.fromHexString(hexColor);
+      resetValue = new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
+    }
+    getBasicObject().setResetValue(resetValue);
+  }
+
+  private void handleSetResetValue(Anything args) {
+    String hexColor = args.get(ColorPickerConstants.RESETVALUE_KEY, "");
+    Color resetValue = null;
+    if (hexColor.length() > 0) {
+      int[] rgba = ColorHelper.fromHexString(hexColor);
+      resetValue = new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
+    }
+    getBasicObject().setResetValue(resetValue);
+  }
+
   /**
    * {@inheritDoc}
    */
@@ -85,6 +107,7 @@ public class UIColorPicker extends UIComponent implements IEditorComponent {
   public void restoreState(Anything args) {
     super.restoreState(args);
     handleSetValue(args);
+    handleResetValue(args);
     getBasicObject().addChangeListener(new ChangeListener() {
 
       public void stateChanged(@SuppressWarnings("unused")
@@ -147,7 +170,7 @@ public class UIColorPicker extends UIComponent implements IEditorComponent {
 
     private static final long serialVersionUID = 1775568960846323577L;
 
-    private ChangeListener editingStopChangeListener;
+    private ChangeListener    editingStopChangeListener;
 
     /**
      * Constructs a new <code>ColorPickerTableCellEditor</code> instance.

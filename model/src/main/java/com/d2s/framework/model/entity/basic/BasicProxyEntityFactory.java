@@ -16,6 +16,7 @@ import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
 import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
@@ -58,6 +59,10 @@ public class BasicProxyEntityFactory implements IEntityFactory {
                 entityCollectionFactory
                     .createEntityCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
                         .getModelType()));
+      } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
+          && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
+        createdEntity.straightSetProperty(propertyDescriptor.getName(),
+            ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
       }
     }
     createdEntity.onCreate(this, getPrincipal(), getEntityLifecycleHandler());

@@ -1946,6 +1946,12 @@ public class DefaultSwingViewFactory implements
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     JColorPicker viewComponent = createJColorPicker();
+    if (propertyDescriptor.getDefaultValue() != null) {
+      int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
+          .getDefaultValue());
+      viewComponent
+          .setResetValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+    }
     JColorPickerConnector connector = new JColorPickerConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);

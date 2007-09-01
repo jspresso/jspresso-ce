@@ -33,6 +33,7 @@ public class JColorPicker extends JPanel {
   private static final long     serialVersionUID = -1151212557773199513L;
 
   private Color                 value;
+  private Color                 resetValue;
   private JButton               chooseButton;
   private JButton               resetButton;
 
@@ -76,7 +77,7 @@ public class JColorPicker extends JPanel {
 
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent e) {
-        setValue(null);
+        setValue(resetValue);
       }
     });
 
@@ -166,5 +167,25 @@ public class JColorPicker extends JPanel {
     this.value = value;
     chooseButton.repaint();
     fireStateChanged();
+  }
+
+
+  /**
+   * Gets the resetValue.
+   *
+   * @return the resetValue.
+   */
+  public Color getResetValue() {
+    return resetValue;
+  }
+
+
+  /**
+   * Sets the resetValue.
+   *
+   * @param resetValue the resetValue to set.
+   */
+  public void setResetValue(Color resetValue) {
+    this.resetValue = resetValue;
   }
 }

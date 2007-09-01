@@ -32,6 +32,7 @@ public class SColorPicker extends SPanel {
   private static final long serialVersionUID = -9175630518246041139L;
 
   private Color                 value;
+  private Color                 resetValue;
   private SButton               chooseButton;
   private SButton               resetButton;
 
@@ -57,7 +58,7 @@ public class SColorPicker extends SPanel {
 
       public void actionPerformed(@SuppressWarnings("unused")
       ActionEvent e) {
-        setValue(null);
+        setValue(resetValue);
       }
     });
 
@@ -201,5 +202,25 @@ public class SColorPicker extends SPanel {
     colorPickerDialog.add(mainPanel);
 
     colorPickerDialog.setVisible(true);
+  }
+
+
+  /**
+   * Gets the resetValue.
+   *
+   * @return the resetValue.
+   */
+  public Color getResetValue() {
+    return resetValue;
+  }
+
+
+  /**
+   * Sets the resetValue.
+   *
+   * @param resetValue the resetValue to set.
+   */
+  public void setResetValue(Color resetValue) {
+    this.resetValue = resetValue;
   }
 }

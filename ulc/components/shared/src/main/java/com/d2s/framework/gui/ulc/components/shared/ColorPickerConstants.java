@@ -22,11 +22,21 @@ public final class ColorPickerConstants {
   /**
    * <code>SET_VALUE_REQUEST</code>.
    */
-  public static final String SET_VALUE_REQUEST    = "setValue";
+  public static final String SET_VALUE_REQUEST      = "setValue";
+
+  /**
+   * <code>SET_RESETVALUE_REQUEST</code>.
+   */
+  public static final String SET_RESETVALUE_REQUEST = "setResetValue";
 
   // anything key constants
   /**
    * <code>VALUE_KEY</code>.
    */
-  public static final String VALUE_KEY            = "value";
+  public static final String VALUE_KEY              = "value";
+
+  /**
+   * <code>RESETVALUE_KEY</code>.
+   */
+  public static final String RESETVALUE_KEY              = "resetValue";
 }

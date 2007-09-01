@@ -8,11 +8,17 @@ package com.d2s.framework.model.descriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- * 
+ *
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @see com.d2s.framework.model.descriptor.IComponentDescriptor
  */
 public interface IScalarPropertyDescriptor extends IPropertyDescriptor {
-  // Just a marker interface as of now.
+
+  /**
+   * Gets the default initial value of this scalar property.
+   *
+   * @return the default initial value of this scalar property.
+   */
+  Object getDefaultValue();
 }

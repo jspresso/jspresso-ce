@@ -1900,6 +1900,12 @@ public class DefaultWingsViewFactory implements
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     SColorPicker viewComponent = createSColorPicker();
+    if (propertyDescriptor.getDefaultValue() != null) {
+      int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
+          .getDefaultValue());
+      viewComponent
+          .setResetValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+    }
     SColorPickerConnector connector = new SColorPickerConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);

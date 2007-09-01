@@ -48,6 +48,7 @@ import com.d2s.framework.binding.ulc.ULCDateFieldConnector;
 import com.d2s.framework.binding.ulc.ULCImageConnector;
 import com.d2s.framework.binding.ulc.ULCJEditTextAreaConnector;
 import com.d2s.framework.binding.ulc.ULCPasswordFieldConnector;
+import com.d2s.framework.binding.ulc.ULCPercentFieldConnector;
 import com.d2s.framework.binding.ulc.ULCReferenceFieldConnector;
 import com.d2s.framework.binding.ulc.ULCTextAreaConnector;
 import com.d2s.framework.binding.ulc.ULCTextFieldConnector;
@@ -1287,8 +1288,7 @@ public class DefaultUlcViewFactory implements
   private ITableCellRenderer createPercentTableCellRenderer(int column,
       IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     return new FormattedTableCellRenderer(column, createPercentDataType(
-        propertyDescriptor, locale, createPercentFormat(propertyDescriptor,
-            locale)));
+        propertyDescriptor, locale));
   }
 
   private ITableCellRenderer createRelationshipEndTableCellRenderer(
@@ -1927,6 +1927,12 @@ public class DefaultUlcViewFactory implements
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
     ULCColorPicker viewComponent = createULCColorPicker();
+    if (propertyDescriptor.getDefaultValue() != null) {
+      int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
+          .getDefaultValue());
+      viewComponent
+          .setResetValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+    }
     ULCColorPickerConnector connector = new ULCColorPickerConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
@@ -1975,9 +1981,8 @@ public class DefaultUlcViewFactory implements
     ULCTextField viewComponent = createULCTextField();
     NumberFormat format = createPercentFormat(propertyDescriptor, locale);
 
-    viewComponent.setDataType(createPercentDataType(propertyDescriptor, locale,
-        format));
-    ULCTextFieldConnector connector = new ULCTextFieldConnector(
+    viewComponent.setDataType(createPercentDataType(propertyDescriptor, locale));
+    ULCPercentFieldConnector connector = new ULCPercentFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
@@ -1988,8 +1993,7 @@ public class DefaultUlcViewFactory implements
   private ULCPercentDataType createPercentDataType(
       IPercentPropertyDescriptor propertyDescriptor,
       @SuppressWarnings("unused")
-      Locale locale, @SuppressWarnings("unused")
-      NumberFormat format) {
+      Locale locale) {
     ULCPercentDataType percentDataType = new ULCPercentDataType();
     if (propertyDescriptor.getMaxFractionDigit() != null) {
       percentDataType.setFractionalDigits(propertyDescriptor
