@@ -56,6 +56,19 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
    * {@inheritDoc}
    */
   @Override
+  protected Object getConnecteeValue() {
+    Color value = getConnectedJComponent().getValue();
+    if (value != null) {
+      return ColorHelper.toHexString(value.getRed(), value.getGreen(), value
+          .getBlue(), value.getAlpha());
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected void protectedSetConnecteeValue(Object aValue) {
     if (aValue != null) {
       int[] rgba = ColorHelper.fromHexString((String) aValue);
@@ -64,19 +77,6 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
     } else {
       getConnectedJComponent().setValue(null);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object getConnecteeValue() {
-    Color value = getConnectedJComponent().getValue();
-    if (value != null) {
-      return ColorHelper.toHexString(value.getRed(), value.getGreen(), value
-          .getBlue(), value.getAlpha());
-    }
-    return null;
   }
 
   /**

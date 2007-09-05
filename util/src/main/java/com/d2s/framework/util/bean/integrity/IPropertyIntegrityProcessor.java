@@ -20,21 +20,6 @@ package com.d2s.framework.util.bean.integrity;
 public interface IPropertyIntegrityProcessor<E, F> {
 
   /**
-   * This method gets called whenever a property is about to be set on an
-   * component to which this processor is registered. This method should throw
-   * an <code>IntegrityException</code> if pre-checks are not valid.
-   * 
-   * @param target
-   *          the component the processor is ran on.
-   * @param oldPropertyValue
-   *          the old value of the property accessed.
-   * @param newPropertyValue
-   *          the new value of the property accessed.
-   */
-  void preprocessSetterIntegrity(E target, F oldPropertyValue,
-      F newPropertyValue);
-
-  /**
    * This method gets called whenever a property has been set on an component to
    * which this processor is registered. This method should throw an
    * <code>IntegrityException</code> if post-checks are not valid.
@@ -47,5 +32,20 @@ public interface IPropertyIntegrityProcessor<E, F> {
    *          the new value of the property accessed.
    */
   void postprocessSetterIntegrity(E target, F oldPropertyValue,
+      F newPropertyValue);
+
+  /**
+   * This method gets called whenever a property is about to be set on an
+   * component to which this processor is registered. This method should throw
+   * an <code>IntegrityException</code> if pre-checks are not valid.
+   * 
+   * @param target
+   *          the component the processor is ran on.
+   * @param oldPropertyValue
+   *          the old value of the property accessed.
+   * @param newPropertyValue
+   *          the new value of the property accessed.
+   */
+  void preprocessSetterIntegrity(E target, F oldPropertyValue,
       F newPropertyValue);
 }

@@ -60,42 +60,6 @@ public class BasicEntityInvocationHandler extends
     this.properties = createPropertyMap();
   }
 
-  private Map<String, Object> createPropertyMap() {
-    return new HashMap<String, Object>();
-  }
-
-  /**
-   * Handles methods invocations on the entity proxy. Either :
-   * <li>delegates to one of its extension if the accessed property is
-   * registered as being part of an extension
-   * <li>handles property access internally
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  public synchronized Object invoke(Object proxy, Method method, Object[] args)
-      throws Throwable {
-    String methodName = method.getName();
-    if ("isPersistent".equals(methodName)) {
-      return new Boolean(((IEntity) proxy).getVersion() != null);
-    }
-    return super.invoke(proxy, method, args);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected int computeHashCode() {
-    Object id = straightGetProperty(IEntity.ID);
-    if (id == null) {
-      throw new NullPointerException(
-          "Id must be assigned on the entity before its hashcode can be used.");
-    }
-    return new HashCodeBuilder(3, 17).append(id).toHashCode();
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -132,16 +96,17 @@ public class BasicEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Object retrievePropertyValue(String propertyName) {
-    return properties.get(propertyName);
+  protected int computeHashCode() {
+    Object id = straightGetProperty(IEntity.ID);
+    if (id == null) {
+      throw new NullPointerException(
+          "Id must be assigned on the entity before its hashcode can be used.");
+    }
+    return new HashCodeBuilder(3, 17).append(id).toHashCode();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void storeProperty(String propertyName, Object propertyValue) {
-    properties.put(propertyName, propertyValue);
+  private Map<String, Object> createPropertyMap() {
+    return new HashMap<String, Object>();
   }
 
   /**
@@ -152,5 +117,40 @@ public class BasicEntityInvocationHandler extends
       @SuppressWarnings("unused")
       IComponentDescriptor<IComponent> referentDescriptor) {
     return referent;
+  }
+
+  /**
+   * Handles methods invocations on the entity proxy. Either :
+   * <li>delegates to one of its extension if the accessed property is
+   * registered as being part of an extension
+   * <li>handles property access internally
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public synchronized Object invoke(Object proxy, Method method, Object[] args)
+      throws Throwable {
+    String methodName = method.getName();
+    if ("isPersistent".equals(methodName)) {
+      return new Boolean(((IEntity) proxy).getVersion() != null);
+    }
+    return super.invoke(proxy, method, args);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object retrievePropertyValue(String propertyName) {
+    return properties.get(propertyName);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void storeProperty(String propertyName, Object propertyValue) {
+    properties.put(propertyName, propertyValue);
   }
 }

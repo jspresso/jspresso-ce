@@ -19,9 +19,9 @@ import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
     ITreeViewDescriptor {
 
-  private ITreeLevelDescriptor  rootSubtreeDescriptor;
-  private int                   maxDepth = 10;
   private IIconImageURLProvider iconImageURLProvider;
+  private int                   maxDepth = 10;
+  private ITreeLevelDescriptor  rootSubtreeDescriptor;
 
   /**
    * {@inheritDoc}
@@ -39,19 +39,11 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public ITreeLevelDescriptor getRootSubtreeDescriptor() {
-    return rootSubtreeDescriptor;
-  }
-
-  /**
-   * Sets the rootSubtreeDescriptor.
-   * 
-   * @param rootSubtreeDescriptor
-   *          the rootSubtreeDescriptor to set.
-   */
-  public void setRootSubtreeDescriptor(
-      ITreeLevelDescriptor rootSubtreeDescriptor) {
-    this.rootSubtreeDescriptor = rootSubtreeDescriptor;
+  public String getIconImageURLForUserObject(Object userObject) {
+    if (iconImageURLProvider != null) {
+      return iconImageURLProvider.getIconImageURLForObject(userObject);
+    }
+    return null;
   }
 
   /**
@@ -62,13 +54,10 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the maxDepth.
-   * 
-   * @param maxDepth
-   *          the maxDepth to set.
+   * {@inheritDoc}
    */
-  public void setMaxDepth(int maxDepth) {
-    this.maxDepth = maxDepth;
+  public ITreeLevelDescriptor getRootSubtreeDescriptor() {
+    return rootSubtreeDescriptor;
   }
 
   /**
@@ -82,12 +71,23 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the maxDepth.
+   * 
+   * @param maxDepth
+   *          the maxDepth to set.
    */
-  public String getIconImageURLForUserObject(Object userObject) {
-    if (iconImageURLProvider != null) {
-      return iconImageURLProvider.getIconImageURLForObject(userObject);
-    }
-    return null;
+  public void setMaxDepth(int maxDepth) {
+    this.maxDepth = maxDepth;
+  }
+
+  /**
+   * Sets the rootSubtreeDescriptor.
+   * 
+   * @param rootSubtreeDescriptor
+   *          the rootSubtreeDescriptor to set.
+   */
+  public void setRootSubtreeDescriptor(
+      ITreeLevelDescriptor rootSubtreeDescriptor) {
+    this.rootSubtreeDescriptor = rootSubtreeDescriptor;
   }
 }

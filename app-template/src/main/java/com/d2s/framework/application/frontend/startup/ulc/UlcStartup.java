@@ -22,6 +22,13 @@ public abstract class UlcStartup extends AbstractStartup implements
     IApplication {
 
   /**
+   * {@inheritDoc}
+   */
+  public void activate() {
+    // NO-OP
+  }
+
+  /**
    * Returns the client context default locale.
    * <p>
    * {@inheritDoc}
@@ -34,14 +41,8 @@ public abstract class UlcStartup extends AbstractStartup implements
   /**
    * {@inheritDoc}
    */
-  public void stop() {
-    // NO-OP
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void activate() {
+  public void handleMessage(@SuppressWarnings("unused")
+  String message) {
     // NO-OP
   }
 
@@ -55,8 +56,7 @@ public abstract class UlcStartup extends AbstractStartup implements
   /**
    * {@inheritDoc}
    */
-  public void handleMessage(@SuppressWarnings("unused")
-  String message) {
+  public void stop() {
     // NO-OP
   }
 }

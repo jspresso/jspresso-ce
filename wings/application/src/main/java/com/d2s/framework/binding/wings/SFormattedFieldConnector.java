@@ -35,13 +35,11 @@ public class SFormattedFieldConnector extends STextFieldConnector {
    *          the id of the connector.
    * @param textField
    *          the connected STextField.
-   * @param formatter
-   *          the formatter to use to extract the object value.
+   * @param format
+   *          the j2se format to use to extract the object value.
    */
-  public SFormattedFieldConnector(String id, STextField textField,
-      IFormatter formatter) {
-    super(id, textField);
-    this.formatter = formatter;
+  public SFormattedFieldConnector(String id, STextField textField, Format format) {
+    this(id, textField, new FormatAdapter(format));
   }
 
   /**
@@ -51,11 +49,13 @@ public class SFormattedFieldConnector extends STextFieldConnector {
    *          the id of the connector.
    * @param textField
    *          the connected STextField.
-   * @param format
-   *          the j2se format to use to extract the object value.
+   * @param formatter
+   *          the formatter to use to extract the object value.
    */
-  public SFormattedFieldConnector(String id, STextField textField, Format format) {
-    this(id, textField, new FormatAdapter(format));
+  public SFormattedFieldConnector(String id, STextField textField,
+      IFormatter formatter) {
+    super(id, textField);
+    this.formatter = formatter;
   }
 
   /**

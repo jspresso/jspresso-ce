@@ -19,8 +19,8 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
     implements ISplitViewDescriptor {
 
   private IViewDescriptor leftTopViewDescriptor;
-  private IViewDescriptor rightBottomViewDescriptor;
   private int             orientation = VERTICAL;
+  private IViewDescriptor rightBottomViewDescriptor;
 
   /**
    * {@inheritDoc}
@@ -32,15 +32,15 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
-  public IViewDescriptor getRightBottomViewDescriptor() {
-    return rightBottomViewDescriptor;
+  public int getOrientation() {
+    return orientation;
   }
 
   /**
    * {@inheritDoc}
    */
-  public int getOrientation() {
-    return orientation;
+  public IViewDescriptor getRightBottomViewDescriptor() {
+    return rightBottomViewDescriptor;
   }
 
   /**

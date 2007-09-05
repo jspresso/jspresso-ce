@@ -36,17 +36,17 @@ public class OpenFileAction extends ChooseFileAction {
       private static final long serialVersionUID = -1025629868916915262L;
 
       @SuppressWarnings("unused")
-      public void onSuccess(InputStream in, String filePath) {
+      public void onFailure(int reason, String description) {
         if (fileOpenCallback != null) {
-          getFileChooser(context).setCurrentDirectory(filePath);
-          fileOpenCallback.fileChosen(in, filePath, actionHandler, context);
+          fileOpenCallback.cancel(actionHandler, context);
         }
       }
 
       @SuppressWarnings("unused")
-      public void onFailure(int reason, String description) {
+      public void onSuccess(InputStream in, String filePath) {
         if (fileOpenCallback != null) {
-          fileOpenCallback.cancel(actionHandler, context);
+          getFileChooser(context).setCurrentDirectory(filePath);
+          fileOpenCallback.fileChosen(in, filePath, actionHandler, context);
         }
       }
     }, getFileChooser(context));

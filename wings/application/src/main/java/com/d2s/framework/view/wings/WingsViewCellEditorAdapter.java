@@ -37,8 +37,10 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
     IConnectorValueChangeListener {
 
   private static final long serialVersionUID = 8182961519931949735L;
+  private ChangeEvent changeEvent = null;
   private IView<SComponent> editorView;
   private EventListenerList listenerList;
+
   private IValueConnector   modelConnector;
 
   /**
@@ -61,53 +63,10 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   }
 
   /**
-   * Returns the SComponent peer of the wings view.
-   * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
-  public SComponent getTableCellEditorComponent(STable table, Object value,
-      boolean isSelected, int row, int column) {
-    modelConnector.removeConnectorValueChangeListener(this);
-    if (value instanceof IValueConnector) {
-      modelConnector.setConnectorValue(((IValueConnector) value)
-          .getConnectorValue());
-    } else {
-      modelConnector.setConnectorValue(value);
-    }
-    modelConnector.addConnectorValueChangeListener(this);
-    return editorView.getPeer();
-  }
-
-  /**
-   * Returns the value of the swing view's connector.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Object getCellEditorValue() {
-    return editorView.getConnector().getConnectorValue();
-  }
-
-  /**
-   * Returns true.
-   * 
-   * @param anEvent
-   *          an event object
-   * @return true
-   */
-  public boolean shouldSelectCell(@SuppressWarnings("unused")
-  EventObject anEvent) {
-    return true;
-  }
-
-  /**
-   * Calls <code>fireEditingStopped</code> and returns true.
-   * 
-   * @return true
-   */
-  public boolean stopCellEditing() {
-    fireEditingStopped();
-    return true;
+  public void addCellEditorListener(CellEditorListener l) {
+    listenerList.add(CellEditorListener.class, l);
   }
 
   /**
@@ -118,64 +77,11 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   }
 
   /**
-   * Returns false if the event object is a single mouse click.
-   * <p>
    * {@inheritDoc}
    */
-  public boolean isCellEditable(EventObject anEvent) {
-    if (anEvent instanceof MouseEvent) {
-      if (editorView.getPeer() instanceof SAbstractButton
-          || (editorView.getPeer() instanceof SActionField && !((SActionField) editorView
-              .getPeer()).isShowingTextField())) {
-        return ((MouseEvent) anEvent).getClickCount() >= 1;
-      }
-      return ((MouseEvent) anEvent).getClickCount() >= 2;
-    }
-    return true;
-  }
-
-  /**
-   * Gets the editorView.
-   * 
-   * @return the editorView.
-   */
-  protected IView<SComponent> getEditorView() {
-    return editorView;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addCellEditorListener(CellEditorListener l) {
-    listenerList.add(CellEditorListener.class, l);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removeCellEditorListener(CellEditorListener l) {
-    listenerList.remove(CellEditorListener.class, l);
-  }
-
-  private ChangeEvent changeEvent = null;
-
-  /**
-   * Notify all listeners that have registered interest for notification on this
-   * event type. The event instance is lazily created using the parameters
-   * passed into the fire method.
-   * 
-   * @see EventListenerList
-   */
-  protected void fireEditingStopped() {
-    Object[] listeners = listenerList.getListenerList();
-    for (int i = listeners.length - 2; i >= 0; i -= 2) {
-      if (listeners[i] == CellEditorListener.class) {
-        if (changeEvent == null) {
-          changeEvent = new ChangeEvent(this);
-        }
-        ((CellEditorListener) listeners[i + 1]).editingStopped(changeEvent);
-      }
-    }
+  public void connectorValueChange(@SuppressWarnings("unused")
+  ConnectorValueChangeEvent evt) {
+    stopCellEditing();
   }
 
   /**
@@ -198,10 +104,104 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   }
 
   /**
+   * Notify all listeners that have registered interest for notification on this
+   * event type. The event instance is lazily created using the parameters
+   * passed into the fire method.
+   * 
+   * @see EventListenerList
+   */
+  protected void fireEditingStopped() {
+    Object[] listeners = listenerList.getListenerList();
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+      if (listeners[i] == CellEditorListener.class) {
+        if (changeEvent == null) {
+          changeEvent = new ChangeEvent(this);
+        }
+        ((CellEditorListener) listeners[i + 1]).editingStopped(changeEvent);
+      }
+    }
+  }
+
+  /**
+   * Returns the value of the swing view's connector.
+   * <p>
    * {@inheritDoc}
    */
-  public void connectorValueChange(@SuppressWarnings("unused")
-  ConnectorValueChangeEvent evt) {
-    stopCellEditing();
+  public Object getCellEditorValue() {
+    return editorView.getConnector().getConnectorValue();
+  }
+
+  /**
+   * Gets the editorView.
+   * 
+   * @return the editorView.
+   */
+  protected IView<SComponent> getEditorView() {
+    return editorView;
+  }
+
+  /**
+   * Returns the SComponent peer of the wings view.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  public SComponent getTableCellEditorComponent(STable table, Object value,
+      boolean isSelected, int row, int column) {
+    modelConnector.removeConnectorValueChangeListener(this);
+    if (value instanceof IValueConnector) {
+      modelConnector.setConnectorValue(((IValueConnector) value)
+          .getConnectorValue());
+    } else {
+      modelConnector.setConnectorValue(value);
+    }
+    modelConnector.addConnectorValueChangeListener(this);
+    return editorView.getPeer();
+  }
+
+  /**
+   * Returns false if the event object is a single mouse click.
+   * <p>
+   * {@inheritDoc}
+   */
+  public boolean isCellEditable(EventObject anEvent) {
+    if (anEvent instanceof MouseEvent) {
+      if (editorView.getPeer() instanceof SAbstractButton
+          || (editorView.getPeer() instanceof SActionField && !((SActionField) editorView
+              .getPeer()).isShowingTextField())) {
+        return ((MouseEvent) anEvent).getClickCount() >= 1;
+      }
+      return ((MouseEvent) anEvent).getClickCount() >= 2;
+    }
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeCellEditorListener(CellEditorListener l) {
+    listenerList.remove(CellEditorListener.class, l);
+  }
+
+  /**
+   * Returns true.
+   * 
+   * @param anEvent
+   *          an event object
+   * @return true
+   */
+  public boolean shouldSelectCell(@SuppressWarnings("unused")
+  EventObject anEvent) {
+    return true;
+  }
+
+  /**
+   * Calls <code>fireEditingStopped</code> and returns true.
+   * 
+   * @return true
+   */
+  public boolean stopCellEditing() {
+    fireEditingStopped();
+    return true;
   }
 }

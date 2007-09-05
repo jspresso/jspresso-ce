@@ -20,21 +20,21 @@ public abstract class BasicScalarPropertyDescriptor extends
   private Object defaultValue;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isQueryable() {
-    return true;
-  }
-
-
-  /**
    * Gets the defaultValue.
    *
    * @return the defaultValue.
    */
   public Object getDefaultValue() {
     return defaultValue;
+  }
+
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isQueryable() {
+    return true;
   }
 
 

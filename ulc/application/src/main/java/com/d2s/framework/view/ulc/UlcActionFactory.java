@@ -44,81 +44,6 @@ import com.ulcjava.base.application.util.ULCIcon;
  */
 public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
-  private ITranslationProvider  translationProvider;
-  private IIconFactory<ULCIcon> iconFactory;
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction createAction(IDisplayableAction action,
-      IActionHandler actionHandler, IView<ULCComponent> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction createAction(IDisplayableAction action,
-      IActionHandler actionHandler, ULCComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
-    IAction ulcAction = new ActionAdapter(action, actionHandler,
-        sourceComponent, modelDescriptor, viewConnector, locale);
-    if (action.getActionabilityGates() != null) {
-      Collection<IGate> clonedGates = new HashSet<IGate>();
-      for (IGate gate : action.getActionabilityGates()) {
-        final IGate clonedGate = gate.clone();
-        if (modelDescriptor instanceof IComponentDescriptorProvider
-            && clonedGate instanceof IModelGate) {
-          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
-              (IComponentDescriptorProvider) modelDescriptor));
-          viewConnector
-              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                      .getModelProvider()).setModel(evt.getNewValue());
-                }
-              });
-        }
-        clonedGates.add(clonedGate);
-      }
-      new GatesListener(ulcAction, clonedGates);
-    }
-    return ulcAction;
-  }
-
-  private final class GatesListener implements PropertyChangeListener {
-
-    private IAction           action;
-    private Collection<IGate> gates;
-
-    /**
-     * Constructs a new <code>GatesListener</code> instance.
-     *
-     * @param action
-     *          the action to (de)activate based on gates state.
-     * @param gates
-     *          the gates that determine action state.
-     */
-    public GatesListener(IAction action, Collection<IGate> gates) {
-      this.action = action;
-      this.gates = gates;
-      for (IGate gate : gates) {
-        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
-      action.setEnabled(GateHelper.areGatesOpen(gates));
-    }
-  }
-
   private final class ActionAdapter extends
       com.ulcjava.base.application.AbstractAction {
 
@@ -126,8 +51,8 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
     private com.d2s.framework.action.IAction action;
     private IActionHandler                   actionHandler;
-    private ULCComponent                     sourceComponent;
     private IModelDescriptor                 modelDescriptor;
+    private ULCComponent                     sourceComponent;
     private IValueConnector                  viewConnector;
 
     /**
@@ -200,6 +125,81 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       }
     }
 
+  }
+  private final class GatesListener implements PropertyChangeListener {
+
+    private IAction           action;
+    private Collection<IGate> gates;
+
+    /**
+     * Constructs a new <code>GatesListener</code> instance.
+     *
+     * @param action
+     *          the action to (de)activate based on gates state.
+     * @param gates
+     *          the gates that determine action state.
+     */
+    public GatesListener(IAction action, Collection<IGate> gates) {
+      this.action = action;
+      this.gates = gates;
+      for (IGate gate : gates) {
+        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
+      action.setEnabled(GateHelper.areGatesOpen(gates));
+    }
+  }
+
+  private IIconFactory<ULCIcon> iconFactory;
+
+  private ITranslationProvider  translationProvider;
+
+  /**
+   * {@inheritDoc}
+   */
+  public IAction createAction(IDisplayableAction action,
+      IActionHandler actionHandler, IView<ULCComponent> view, Locale locale) {
+    return createAction(action, actionHandler, view.getPeer(), view
+        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IAction createAction(IDisplayableAction action,
+      IActionHandler actionHandler, ULCComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
+    IAction ulcAction = new ActionAdapter(action, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector, locale);
+    if (action.getActionabilityGates() != null) {
+      Collection<IGate> clonedGates = new HashSet<IGate>();
+      for (IGate gate : action.getActionabilityGates()) {
+        final IGate clonedGate = gate.clone();
+        if (modelDescriptor instanceof IComponentDescriptorProvider
+            && clonedGate instanceof IModelGate) {
+          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
+              (IComponentDescriptorProvider) modelDescriptor));
+          viewConnector
+              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                      .getModelProvider()).setModel(evt.getNewValue());
+                }
+              });
+        }
+        clonedGates.add(clonedGate);
+      }
+      new GatesListener(ulcAction, clonedGates);
+    }
+    return ulcAction;
   }
 
   /**

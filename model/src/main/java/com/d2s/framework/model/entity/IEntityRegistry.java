@@ -20,14 +20,6 @@ package com.d2s.framework.model.entity;
 public interface IEntityRegistry {
 
   /**
-   * Registers an entity in the registry.
-   * 
-   * @param entity
-   *          the entity to register.
-   */
-  void register(IEntity entity);
-
-  /**
    * Get an entity from the registry.
    * 
    * @param entityContract
@@ -37,4 +29,12 @@ public interface IEntityRegistry {
    * @return the registered entity or <tt>null</tt>
    */
   IEntity get(Class entityContract, Object id);
+
+  /**
+   * Registers an entity in the registry.
+   * 
+   * @param entity
+   *          the entity to register.
+   */
+  void register(IEntity entity);
 }

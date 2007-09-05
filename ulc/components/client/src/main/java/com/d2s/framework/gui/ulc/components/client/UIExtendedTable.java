@@ -22,17 +22,6 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIExtendedTable extends UITable {
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object createBasicObject(@SuppressWarnings("unused")
-  Anything args) {
-    JTable table = new UiJTable();
-    table.setSurrendersFocusOnKeystroke(true);
-    return table;
-  }
-
   private class UiJTable extends com.ulcjava.base.client.UITable.UiJTable {
 
     private static final long serialVersionUID = -2086620865057853061L;
@@ -47,6 +36,17 @@ public class UIExtendedTable extends UITable {
       }
       super.addFocusListener(l);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object createBasicObject(@SuppressWarnings("unused")
+  Anything args) {
+    JTable table = new UiJTable();
+    table.setSurrendersFocusOnKeystroke(true);
+    return table;
   }
 
 }

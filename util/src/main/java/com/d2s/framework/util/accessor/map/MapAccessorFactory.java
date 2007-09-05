@@ -19,17 +19,6 @@ import com.d2s.framework.util.accessor.ICollectionAccessor;
 public class MapAccessorFactory implements IAccessorFactory {
 
   /**
-   * Creates a new <code>MapPropertyAccessor</code> on the property.
-   * <p>
-   * {@inheritDoc}
-   */
-  public IAccessor createPropertyAccessor(String property,
-      @SuppressWarnings("unused")
-      Class beanClass) {
-    return new MapPropertyAccessor(property);
-  }
-
-  /**
    * Creates a new <code>MapCollectionAccessor</code> on the collection
    * property.
    * <p>
@@ -40,5 +29,16 @@ public class MapAccessorFactory implements IAccessorFactory {
       Class beanClass, @SuppressWarnings("unused")
       Class elementClass) {
     return new MapCollectionAccessor(property);
+  }
+
+  /**
+   * Creates a new <code>MapPropertyAccessor</code> on the property.
+   * <p>
+   * {@inheritDoc}
+   */
+  public IAccessor createPropertyAccessor(String property,
+      @SuppressWarnings("unused")
+      Class beanClass) {
+    return new MapPropertyAccessor(property);
   }
 }

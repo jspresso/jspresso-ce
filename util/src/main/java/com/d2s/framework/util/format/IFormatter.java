@@ -17,6 +17,15 @@ import java.text.ParseException;
 public interface IFormatter {
 
   /**
+   * Formats an object to it's userfriendly string representation.
+   * 
+   * @param value
+   *          the object to format.
+   * @return The formatted string representation.
+   */
+  String format(Object value);
+
+  /**
    * Parses a string and transform it to an Object value.
    * 
    * @param source
@@ -26,13 +35,4 @@ public interface IFormatter {
    *           thrown whenever a parsing error ocurred.
    */
   Object parse(String source) throws ParseException;
-
-  /**
-   * Formats an object to it's userfriendly string representation.
-   * 
-   * @param value
-   *          the object to format.
-   * @return The formatted string representation.
-   */
-  String format(Object value);
 }

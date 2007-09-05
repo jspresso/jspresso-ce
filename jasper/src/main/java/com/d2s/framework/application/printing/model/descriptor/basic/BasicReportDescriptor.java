@@ -28,51 +28,10 @@ import com.d2s.framework.util.descriptor.IDescriptor;
 public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
     implements IReportDescriptor {
 
-  private String                                    reportDesignUrl;
-  private IAction                                   beforeAction;
-
   /**
    * The (meta) descriptor of the component descriptor.
    */
   public static final IComponentDescriptor<IReport> INSTANCE = createInstance();
-
-  /**
-   * Constructs a new <code>BasicReportDescriptor</code> instance.
-   *
-   * @param name
-   *          the name of the report.
-   */
-  public BasicReportDescriptor(String name) {
-    super(name);
-  }
-
-  /**
-   * Gets the reportDesignUrl.
-   *
-   * @return the reportDesignUrl.
-   */
-  public String getReportDesignUrl() {
-    return reportDesignUrl;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class<? extends IReport> getComponentContract() {
-    return IReport.class;
-  }
-
-  /**
-   * Sets the reportDesignUrl.
-   *
-   * @param reportDesignUrl
-   *          the reportDesignUrl to set.
-   */
-  public void setReportDesignUrl(String reportDesignUrl) {
-    this.reportDesignUrl = reportDesignUrl;
-  }
-
   private static IComponentDescriptor<IReport> createInstance() {
     BasicComponentDescriptor<IReport> instance = new BasicComponentDescriptor<IReport>(
         IReport.class.getName());
@@ -92,6 +51,20 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
     return instance;
   }
 
+  private IAction                                   beforeAction;
+
+  private String                                    reportDesignUrl;
+
+  /**
+   * Constructs a new <code>BasicReportDescriptor</code> instance.
+   *
+   * @param name
+   *          the name of the report.
+   */
+  public BasicReportDescriptor(String name) {
+    super(name);
+  }
+
   /**
    * Gets the beforeAction.
    *
@@ -102,6 +75,23 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Class<? extends IReport> getComponentContract() {
+    return IReport.class;
+  }
+
+  /**
+   * Gets the reportDesignUrl.
+   *
+   * @return the reportDesignUrl.
+   */
+  public String getReportDesignUrl() {
+    return reportDesignUrl;
+  }
+
+  /**
    * Sets the beforeAction.
    *
    * @param beforeAction
@@ -109,6 +99,16 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
    */
   public void setBeforeAction(IAction beforeAction) {
     this.beforeAction = beforeAction;
+  }
+
+  /**
+   * Sets the reportDesignUrl.
+   *
+   * @param reportDesignUrl
+   *          the reportDesignUrl to set.
+   */
+  public void setReportDesignUrl(String reportDesignUrl) {
+    this.reportDesignUrl = reportDesignUrl;
   }
 
 }

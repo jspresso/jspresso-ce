@@ -21,14 +21,6 @@ public class ULCExtendedButton extends ULCButton {
   private static final long serialVersionUID = 9221025686823039202L;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedButton";
-  }
-
-  /**
    * Constructs a new <code>ULCExtendedButton</code> instance.
    */
   public ULCExtendedButton() {
@@ -43,6 +35,14 @@ public class ULCExtendedButton extends ULCButton {
    */
   public ULCExtendedButton(ULCIcon icon) {
     super(icon);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIExtendedButton";
   }
 
 }

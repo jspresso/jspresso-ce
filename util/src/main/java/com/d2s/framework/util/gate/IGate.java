@@ -22,16 +22,16 @@ public interface IGate extends IPropertyChangeCapable, Cloneable {
   String OPEN_PROPERTY = "open";
 
   /**
-   * Is the gate open ?
-   *
-   * @return true if open.
-   */
-  boolean isOpen();
-
-  /**
    * Clones the gate.
    *
    * @return the cloned gate.
    */
   IGate clone();
+
+  /**
+   * Is the gate open ?
+   *
+   * @return true if open.
+   */
+  boolean isOpen();
 }

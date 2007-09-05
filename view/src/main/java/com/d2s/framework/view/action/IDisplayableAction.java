@@ -22,14 +22,6 @@ import com.d2s.framework.util.gate.IGate;
 public interface IDisplayableAction extends IAction, IIconDescriptor {
 
   /**
-   * Provides the action mnemonic to the runtime framework using its string
-   * representation.
-   * 
-   * @return the mnemonic string representation.
-   */
-  String getMnemonicAsString();
-
-  /**
    * Provides the action accelerator to the runtime framework using its string
    * representation.
    * 
@@ -45,4 +37,12 @@ public interface IDisplayableAction extends IAction, IIconDescriptor {
    *         action.
    */
   Collection<IGate> getActionabilityGates();
+
+  /**
+   * Provides the action mnemonic to the runtime framework using its string
+   * representation.
+   * 
+   * @return the mnemonic string representation.
+   */
+  String getMnemonicAsString();
 }

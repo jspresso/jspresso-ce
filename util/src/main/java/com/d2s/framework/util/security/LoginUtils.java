@@ -17,35 +17,6 @@ import java.util.ListResourceBundle;
 public final class LoginUtils {
 
   /**
-   * <code>USER</code>.
-   */
-  public static final String USER            = "user";
-  /**
-   * <code>PASSWORD</code>.
-   */
-  public static final String PASSWORD        = "password";
-  /**
-   * <code>CRED_MESSAGE</code>.
-   */
-  public static final String CRED_MESSAGE    = "credentialMessage";
-  /**
-   * <code>USER_FAILED</code>.
-   */
-  public static final String USER_FAILED     = "userIncorrect";
-  /**
-   * <code>PASSWORD_FAILED</code>.
-   */
-  public static final String PASSWORD_FAILED = "passwordIncorrect";
-  /**
-   * <code>LOGIN_FAILED</code>.
-   */
-  public static final String LOGIN_FAILED    = "loginFailed";
-
-  private LoginUtils() {
-    // Helper class constructor.
-  }
-
-  /**
    * English RB.
    * <p>
    * Copyright 2005 Design2See. All rights reserved.
@@ -74,7 +45,6 @@ public final class LoginUtils {
     }
 
   }
-
   /**
    * French RB.
    * <p>
@@ -105,5 +75,35 @@ public final class LoginUtils {
       return CONTENTS;
     }
 
+  }
+  /**
+   * <code>CRED_MESSAGE</code>.
+   */
+  public static final String CRED_MESSAGE    = "credentialMessage";
+  /**
+   * <code>LOGIN_FAILED</code>.
+   */
+  public static final String LOGIN_FAILED    = "loginFailed";
+  /**
+   * <code>PASSWORD</code>.
+   */
+  public static final String PASSWORD        = "password";
+  /**
+   * <code>PASSWORD_FAILED</code>.
+   */
+  public static final String PASSWORD_FAILED = "passwordIncorrect";
+
+  /**
+   * <code>USER</code>.
+   */
+  public static final String USER            = "user";
+
+  /**
+   * <code>USER_FAILED</code>.
+   */
+  public static final String USER_FAILED     = "userIncorrect";
+
+  private LoginUtils() {
+    // Helper class constructor.
   }
 }

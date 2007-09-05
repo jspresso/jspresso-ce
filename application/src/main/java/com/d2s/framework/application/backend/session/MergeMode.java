@@ -15,10 +15,12 @@ package com.d2s.framework.application.backend.session;
 public enum MergeMode {
 
   /**
-   * <code>MERGE_KEEP</code> means that the registered instance will be kept
-   * whatever its state is.
+   * <code>MERGE_CLEAN_EAGER</code> means that the whole object graph will be
+   * traversed independently of the state of the walked entities. This is
+   * generally used for "reload" behaviour whenever an entity deep in the graph
+   * might have been updated in memory.
    */
-  MERGE_KEEP,
+  MERGE_CLEAN_EAGER,
 
   /**
    * <code>MERGE_CLEAN_LAZY</code> means that a clean registered instance will
@@ -29,10 +31,8 @@ public enum MergeMode {
   MERGE_CLEAN_LAZY,
 
   /**
-   * <code>MERGE_CLEAN_EAGER</code> means that the whole object graph will be
-   * traversed independently of the state of the walked entities. This is
-   * generally used for "reload" behaviour whenever an entity deep in the graph
-   * might have been updated in memory.
+   * <code>MERGE_KEEP</code> means that the registered instance will be kept
+   * whatever its state is.
    */
-  MERGE_CLEAN_EAGER
+  MERGE_KEEP
 }

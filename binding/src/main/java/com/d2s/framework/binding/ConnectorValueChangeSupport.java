@@ -20,10 +20,10 @@ import org.apache.commons.lang.ObjectUtils;
  */
 public class ConnectorValueChangeSupport {
 
-  private IValueConnector                    source;
+  private Set<IConnectorValueChangeListener> inhibitedListeners;
 
   private Set<IConnectorValueChangeListener> listeners;
-  private Set<IConnectorValueChangeListener> inhibitedListeners;
+  private IValueConnector                    source;
 
   /**
    * Constructs a new Connector change support.
@@ -60,32 +60,18 @@ public class ConnectorValueChangeSupport {
   }
 
   /**
-   * Removes a new <code>IConnectorValueChangeListener</code>.
+   * Registers a listener to be excluded (generally temporarily) from the
+   * notification process without being removed from the actual listeners
+   * collection.
    * 
    * @param listener
-   *          The removed listener.
-   * @see IValueConnector#removeConnectorValueChangeListener(IConnectorValueChangeListener)
+   *          the excluded listener.
    */
-  public synchronized void removeConnectorValueChangeListener(
-      IConnectorValueChangeListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
+  public void addInhibitedListener(IConnectorValueChangeListener listener) {
+    if (inhibitedListeners == null && listener != null) {
+      inhibitedListeners = new HashSet<IConnectorValueChangeListener>(4);
     }
-  }
-
-  /**
-   * Fires a new <code>ConnectorValueChangeEvent</code> built with
-   * <code>source</code> as source and parameters as old and new values.
-   * 
-   * @param oldValue
-   *          The old connector's value
-   * @param newValue
-   *          The new connector's value
-   */
-  public void fireConnectorValueChange(Object oldValue, Object newValue) {
-    ConnectorValueChangeEvent evt = new ConnectorValueChangeEvent(source,
-        oldValue, newValue);
-    fireConnectorValueChange(evt);
+    inhibitedListeners.add(listener);
   }
 
   /**
@@ -115,18 +101,41 @@ public class ConnectorValueChangeSupport {
   }
 
   /**
-   * Registers a listener to be excluded (generally temporarily) from the
-   * notification process without being removed from the actual listeners
-   * collection.
+   * Fires a new <code>ConnectorValueChangeEvent</code> built with
+   * <code>source</code> as source and parameters as old and new values.
+   * 
+   * @param oldValue
+   *          The old connector's value
+   * @param newValue
+   *          The new connector's value
+   */
+  public void fireConnectorValueChange(Object oldValue, Object newValue) {
+    ConnectorValueChangeEvent evt = new ConnectorValueChangeEvent(source,
+        oldValue, newValue);
+    fireConnectorValueChange(evt);
+  }
+
+  /**
+   * Gets wether the listener collection is empty.
+   * 
+   * @return true if the listener collection is empty.
+   */
+  public boolean isEmpty() {
+    return listeners == null || listeners.isEmpty();
+  }
+
+  /**
+   * Removes a new <code>IConnectorValueChangeListener</code>.
    * 
    * @param listener
-   *          the excluded listener.
+   *          The removed listener.
+   * @see IValueConnector#removeConnectorValueChangeListener(IConnectorValueChangeListener)
    */
-  public void addInhibitedListener(IConnectorValueChangeListener listener) {
-    if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<IConnectorValueChangeListener>(4);
+  public synchronized void removeConnectorValueChangeListener(
+      IConnectorValueChangeListener listener) {
+    if (listener != null && listeners != null) {
+      listeners.remove(listener);
     }
-    inhibitedListeners.add(listener);
   }
 
   /**
@@ -141,14 +150,5 @@ public class ConnectorValueChangeSupport {
       return;
     }
     inhibitedListeners.remove(listener);
-  }
-
-  /**
-   * Gets wether the listener collection is empty.
-   * 
-   * @return true if the listener collection is empty.
-   */
-  public boolean isEmpty() {
-    return listeners == null || listeners.isEmpty();
   }
 }

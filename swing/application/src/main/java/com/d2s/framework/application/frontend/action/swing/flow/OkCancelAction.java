@@ -24,8 +24,8 @@ import com.d2s.framework.view.IIconFactory;
  */
 public class OkCancelAction extends AbstractMessageAction {
 
-  private IAction okAction;
   private IAction cancelAction;
+  private IAction okAction;
 
   /**
    * Displays the message using a <code>JOptionPane.OK_CANCEL_OPTION</code>.

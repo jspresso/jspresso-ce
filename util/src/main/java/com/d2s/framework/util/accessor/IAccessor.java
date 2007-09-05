@@ -17,24 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 public interface IAccessor {
 
   /**
-   * Sets the value on the target of this accessor.
-   * 
-   * @param target
-   *          the target on which to set the value.
-   * @param value
-   *          the value to set.
-   * @throws InvocationTargetException
-   *           if the underlying method throws an exception.
-   * @throws IllegalAccessException
-   *           if this <code>Method</code> object enforces Java language
-   *           access control and the underlying method is inaccessible.
-   * @throws NoSuchMethodException
-   *           if a matching method is not found.
-   */
-  void setValue(Object target, Object value) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException;
-
-  /**
    * Gets the value from the target of this accessor.
    * 
    * @param target
@@ -57,4 +39,22 @@ public interface IAccessor {
    * @return true if this accessor has a mutator.
    */
   boolean isWritable();
+
+  /**
+   * Sets the value on the target of this accessor.
+   * 
+   * @param target
+   *          the target on which to set the value.
+   * @param value
+   *          the value to set.
+   * @throws InvocationTargetException
+   *           if the underlying method throws an exception.
+   * @throws IllegalAccessException
+   *           if this <code>Method</code> object enforces Java language
+   *           access control and the underlying method is inaccessible.
+   * @throws NoSuchMethodException
+   *           if a matching method is not found.
+   */
+  void setValue(Object target, Object value) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException;
 }

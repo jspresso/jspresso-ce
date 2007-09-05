@@ -24,8 +24,21 @@ import com.d2s.framework.gui.swing.components.JActionField;
 public class JReferenceFieldConnector extends JActionFieldConnector implements
     ICompositeValueConnector {
 
-  private IValueConnector               toStringPropertyConnector;
+  private final class ToStringConnectorListener implements
+      IConnectorValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(@SuppressWarnings("unused")
+    ConnectorValueChangeEvent evt) {
+      protectedSetConnecteeValue(getConnecteeValue());
+    }
+
+  }
   private IConnectorValueChangeListener toStringListener;
+
+  private IValueConnector               toStringPropertyConnector;
 
   /**
    * Constructs a new <code>JActionFieldConnector</code> instance.
@@ -66,6 +79,28 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
+  public JReferenceFieldConnector clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public JReferenceFieldConnector clone(String newConnectorId) {
+    JReferenceFieldConnector clonedConnector = (JReferenceFieldConnector) super
+        .clone(newConnectorId);
+    if (toStringPropertyConnector != null) {
+      clonedConnector.toStringPropertyConnector = toStringPropertyConnector
+          .clone();
+    }
+    return clonedConnector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IValueConnector getChildConnector(String connectorKey) {
     if (connectorKey.equals(toStringPropertyConnector.getId())) {
       return toStringPropertyConnector;
@@ -94,28 +129,6 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public JReferenceFieldConnector clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public JReferenceFieldConnector clone(String newConnectorId) {
-    JReferenceFieldConnector clonedConnector = (JReferenceFieldConnector) super
-        .clone(newConnectorId);
-    if (toStringPropertyConnector != null) {
-      clonedConnector.toStringPropertyConnector = toStringPropertyConnector
-          .clone();
-    }
-    return clonedConnector;
-  }
-
-  /**
    * Sets the toStringPropertyConnector.
    * 
    * @param toStringPropertyConnector
@@ -132,18 +145,5 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
       this.toStringPropertyConnector
           .addConnectorValueChangeListener(toStringListener);
     }
-  }
-
-  private final class ToStringConnectorListener implements
-      IConnectorValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
-      protectedSetConnecteeValue(getConnecteeValue());
-    }
-
   }
 }

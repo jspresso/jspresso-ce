@@ -16,8 +16,8 @@ import com.d2s.framework.action.IAction;
  */
 public class OkCancelAction extends AbstractFlowAction {
 
-  private IAction okAction;
   private IAction cancelAction;
+  private IAction okAction;
 
   /**
    * Constructs a new <code>OkCancelAction</code> instance.

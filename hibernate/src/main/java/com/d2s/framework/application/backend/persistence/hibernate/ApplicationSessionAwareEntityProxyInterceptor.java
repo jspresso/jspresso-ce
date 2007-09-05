@@ -37,13 +37,29 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   private IApplicationSession applicationSession;
 
   /**
-   * Sets the applicationSession.
-   * 
-   * @param applicationSession
-   *          the applicationSession to set.
+   * Begins the application session current unit of work.
+   * <p>
+   * {@inheritDoc}
    */
-  public void setApplicationSession(IApplicationSession applicationSession) {
-    this.applicationSession = applicationSession;
+  @Override
+  public void afterTransactionBegin(Transaction tx) {
+    applicationSession.beginUnitOfWork();
+    super.afterTransactionBegin(tx);
+  }
+
+  /**
+   * Either commits or rollbacks the application session current unit of work.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void afterTransactionCompletion(Transaction tx) {
+    if (tx.wasCommitted()) {
+      applicationSession.commitUnitOfWork();
+    } else {
+      applicationSession.rollbackUnitOfWork();
+    }
+    super.afterTransactionCompletion(tx);
   }
 
   /**
@@ -89,49 +105,6 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   }
 
   /**
-   * Begins the application session current unit of work.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void afterTransactionBegin(Transaction tx) {
-    applicationSession.beginUnitOfWork();
-    super.afterTransactionBegin(tx);
-  }
-
-  /**
-   * Either commits or rollbacks the application session current unit of work.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void afterTransactionCompletion(Transaction tx) {
-    if (tx.wasCommitted()) {
-      applicationSession.commitUnitOfWork();
-    } else {
-      applicationSession.rollbackUnitOfWork();
-    }
-    super.afterTransactionCompletion(tx);
-  }
-
-  /**
-   * Notifies the application session of the entity flush.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void postFlush(Iterator entities) {
-    applicationSession.performPendingOperations();
-    while (entities.hasNext()) {
-      Object entity = entities.next();
-      if (entity instanceof IEntity) {
-        applicationSession.recordAsSynchronized((IEntity) entity);
-      }
-    }
-    super.postFlush(entities);
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -160,16 +133,8 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  public boolean onLoad(Object entity, Serializable id, Object[] state,
-      String[] propertyNames, Type[] types) {
-    if (!applicationSession.isUnitOfWorkActive()) {
-      if (entity instanceof IEntity
-          && applicationSession.getRegisteredEntity(((IEntity) entity)
-              .getContract(), id) == null) {
-        applicationSession.registerEntity((IEntity) entity, false);
-      }
-    }
-    return super.onLoad(entity, id, state, propertyNames, types);
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return applicationSession;
   }
 
   /**
@@ -186,7 +151,42 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    * {@inheritDoc}
    */
   @Override
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return applicationSession;
+  public boolean onLoad(Object entity, Serializable id, Object[] state,
+      String[] propertyNames, Type[] types) {
+    if (!applicationSession.isUnitOfWorkActive()) {
+      if (entity instanceof IEntity
+          && applicationSession.getRegisteredEntity(((IEntity) entity)
+              .getContract(), id) == null) {
+        applicationSession.registerEntity((IEntity) entity, false);
+      }
+    }
+    return super.onLoad(entity, id, state, propertyNames, types);
+  }
+
+  /**
+   * Notifies the application session of the entity flush.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void postFlush(Iterator entities) {
+    applicationSession.performPendingOperations();
+    while (entities.hasNext()) {
+      Object entity = entities.next();
+      if (entity instanceof IEntity) {
+        applicationSession.recordAsSynchronized((IEntity) entity);
+      }
+    }
+    super.postFlush(entities);
+  }
+
+  /**
+   * Sets the applicationSession.
+   * 
+   * @param applicationSession
+   *          the applicationSession to set.
+   */
+  public void setApplicationSession(IApplicationSession applicationSession) {
+    this.applicationSession = applicationSession;
   }
 }

@@ -31,14 +31,14 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
   }
 
   /**
-   * refined to return a collection connector.
+   * Refined to return a collection descriptor.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  public ICollectionConnector getSourceModelConnector(
+  public ICollectionDescriptorProvider getModelDescriptor(
       Map<String, Object> context) {
-    return (ICollectionConnector) super.getSourceModelConnector(context);
+    return (ICollectionDescriptorProvider) super.getModelDescriptor(context);
   }
 
   /**
@@ -54,13 +54,13 @@ public abstract class AbstractCollectionAction extends AbstractBackendAction {
   }
 
   /**
-   * Refined to return a collection descriptor.
+   * refined to return a collection connector.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  public ICollectionDescriptorProvider getModelDescriptor(
+  public ICollectionConnector getSourceModelConnector(
       Map<String, Object> context) {
-    return (ICollectionDescriptorProvider) super.getModelDescriptor(context);
+    return (ICollectionConnector) super.getSourceModelConnector(context);
   }
 }

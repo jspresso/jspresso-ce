@@ -23,10 +23,6 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  */
 public final class CollectionHelper {
 
-  private CollectionHelper() {
-    // private constructor for helper class
-  }
-
   /**
    * Clones a collection trying to invoke the <code>clone()</code> method
    * reflectively. If the latter is unsuccessful, returns an HashSet for a Set
@@ -69,5 +65,9 @@ public final class CollectionHelper {
       }
     }
     return clonedCollection;
+  }
+
+  private CollectionHelper() {
+    // private constructor for helper class
   }
 }

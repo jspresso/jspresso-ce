@@ -74,6 +74,14 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getConnecteeValue() {
+    return getConnectedSComponent().getValue();
+  }
+
+  /**
    * Performs the action field action if the action field is not synchronized.
    */
   public void performActionIfNeeded() {
@@ -92,14 +100,6 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedSComponent().setValue(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object getConnecteeValue() {
-    return getConnectedSComponent().getValue();
   }
 
   /**

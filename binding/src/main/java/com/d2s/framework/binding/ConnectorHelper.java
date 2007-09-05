@@ -19,33 +19,6 @@ import java.util.List;
  */
 public final class ConnectorHelper {
 
-  private ConnectorHelper() {
-    // Hidden class.
-  }
-
-  /**
-   * Retrieves a connector complete path following the parent/child
-   * relationship.
-   * 
-   * @param connector
-   *          the connector to look the tree path for.
-   * @return the list of connector identifiers from the root connector to the
-   *         looked-up connector.
-   */
-  public static List<String> getPathToConnector(IValueConnector connector) {
-    if (connector == null) {
-      return null;
-    }
-    List<String> path = new ArrayList<String>();
-    IValueConnector parentConnector = connector;
-    while (parentConnector != null) {
-      path.add(parentConnector.getId());
-      parentConnector = parentConnector.getParentConnector();
-    }
-    Collections.reverse(path);
-    return path;
-  }
-
   /**
    * Given a starting connector and a connector path, this method retrieves a
    * target connector from the connector parent/child tree.
@@ -67,25 +40,6 @@ public final class ConnectorHelper {
           .getChildConnector(connectorPath.get(i));
     }
     return nextConnector;
-  }
-
-  /**
-   * Given a connector, this method loops upward to the parent/child
-   * relationship to determine the first connector of the hierarchy.
-   * 
-   * @param connector
-   *          the connector to look the root parent connector for.
-   * @return the root parent connector.
-   */
-  public static IValueConnector getRootConnector(IValueConnector connector) {
-    if (connector == null) {
-      return null;
-    }
-    IValueConnector parentConnector = connector;
-    while (parentConnector.getParentConnector() != null) {
-      parentConnector = parentConnector.getParentConnector();
-    }
-    return parentConnector;
   }
 
   /**
@@ -119,5 +73,51 @@ public final class ConnectorHelper {
     int[] indices = new int[n];
     System.arraycopy(tmpArray, 0, indices, 0, n);
     return indices;
+  }
+
+  /**
+   * Retrieves a connector complete path following the parent/child
+   * relationship.
+   * 
+   * @param connector
+   *          the connector to look the tree path for.
+   * @return the list of connector identifiers from the root connector to the
+   *         looked-up connector.
+   */
+  public static List<String> getPathToConnector(IValueConnector connector) {
+    if (connector == null) {
+      return null;
+    }
+    List<String> path = new ArrayList<String>();
+    IValueConnector parentConnector = connector;
+    while (parentConnector != null) {
+      path.add(parentConnector.getId());
+      parentConnector = parentConnector.getParentConnector();
+    }
+    Collections.reverse(path);
+    return path;
+  }
+
+  /**
+   * Given a connector, this method loops upward to the parent/child
+   * relationship to determine the first connector of the hierarchy.
+   * 
+   * @param connector
+   *          the connector to look the root parent connector for.
+   * @return the root parent connector.
+   */
+  public static IValueConnector getRootConnector(IValueConnector connector) {
+    if (connector == null) {
+      return null;
+    }
+    IValueConnector parentConnector = connector;
+    while (parentConnector.getParentConnector() != null) {
+      parentConnector = parentConnector.getParentConnector();
+    }
+    return parentConnector;
+  }
+
+  private ConnectorHelper() {
+    // Hidden class.
   }
 }

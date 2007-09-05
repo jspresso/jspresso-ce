@@ -89,11 +89,14 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
   }
 
   /**
-   * {@inheritDoc}
+   * Adds an extended listener.
+   * 
+   * @param listener
+   *          the listener.
    */
-  @Override
-  protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedTree";
+  public void addTreeWillExpandListener(IExtendedTreeWillExpandListener listener) {
+    internalAddListener(ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT,
+        listener);
   }
 
   /**
@@ -111,15 +114,24 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
     }
   }
 
+  private void handlePreparePopup(int row) {
+    if (popupFactory != null) {
+      ULCPopupMenu popupMenu = popupFactory
+          .createPopupForTreepath(getPathForRow(row));
+      setComponentPopupMenu(popupMenu);
+    }
+  }
+
   /**
-   * Adds an extended listener.
-   * 
-   * @param listener
-   *          the listener.
+   * {@inheritDoc}
    */
-  public void addTreeWillExpandListener(IExtendedTreeWillExpandListener listener) {
-    internalAddListener(ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT,
-        listener);
+  @Override
+  public void handleRequest(String request, Anything args) {
+    if (request.equals(ExtendedTreeConstants.PREPARE_POPUP_REQUEST)) {
+      handlePreparePopup(args.get(ExtendedTreeConstants.ROW_KEY, 0));
+    } else {
+      super.handleRequest(request, args);
+    }
   }
 
   /**
@@ -135,26 +147,6 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void handleRequest(String request, Anything args) {
-    if (request.equals(ExtendedTreeConstants.PREPARE_POPUP_REQUEST)) {
-      handlePreparePopup(args.get(ExtendedTreeConstants.ROW_KEY, 0));
-    } else {
-      super.handleRequest(request, args);
-    }
-  }
-
-  private void handlePreparePopup(int row) {
-    if (popupFactory != null) {
-      ULCPopupMenu popupMenu = popupFactory
-          .createPopupForTreepath(getPathForRow(row));
-      setComponentPopupMenu(popupMenu);
-    }
-  }
-
-  /**
    * Sets the popupFactory.
    * 
    * @param popupFactory
@@ -162,5 +154,13 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    */
   public void setPopupFactory(ITreePathPopupFactory popupFactory) {
     this.popupFactory = popupFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIExtendedTree";
   }
 }

@@ -53,6 +53,20 @@ public class DurationFormatter implements IFormatter {
   /**
    * {@inheritDoc}
    */
+  public String format(Object value) {
+    if (value == null) {
+      return null;
+    }
+    try {
+      return formatter.print(new Period(0, ((Number) value).longValue()));
+    } catch (Throwable t) {
+      return null;
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Object parse(String source) throws ParseException {
     if (source == null || source.length() == 0) {
       return null;
@@ -62,20 +76,6 @@ public class DurationFormatter implements IFormatter {
           new Instant(0)).getMillis());
     } catch (Throwable t) {
       throw new ParseException(t.getMessage(), 0);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String format(Object value) {
-    if (value == null) {
-      return null;
-    }
-    try {
-      return formatter.print(new Period(0, ((Number) value).longValue()));
-    } catch (Throwable t) {
-      return null;
     }
   }
 }

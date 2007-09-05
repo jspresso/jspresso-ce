@@ -19,6 +19,22 @@ public interface ICollectionConnector extends ICompositeValueConnector,
     ISelectable, ISelectionChangeListener, ICollectionConnectorProvider {
 
   /**
+   * Clones this connector.
+   * 
+   * @return the connector's clone.
+   */
+  ICollectionConnector clone();
+
+  /**
+   * Clones this connector.
+   * 
+   * @param newConnectorId
+   *          the identifier of the clone connector
+   * @return the connector's clone.
+   */
+  ICollectionConnector clone(String newConnectorId);
+
+  /**
    * Creates a new collection element connector.
    * 
    * @param connectorId
@@ -38,20 +54,11 @@ public interface ICollectionConnector extends ICompositeValueConnector,
   IValueConnector getChildConnector(int index);
 
   /**
-   * Clones this connector.
+   * Gets wether this connector is configured to load its children lazilly.
    * 
-   * @param newConnectorId
-   *          the identifier of the clone connector
-   * @return the connector's clone.
+   * @return true if this connector is configured to load its children lazilly.
    */
-  ICollectionConnector clone(String newConnectorId);
-
-  /**
-   * Clones this connector.
-   * 
-   * @return the connector's clone.
-   */
-  ICollectionConnector clone();
+  boolean isAllowLazyChildrenLoading();
 
   /**
    * Allows this collection connector to behave lazilly. Once turned on, the
@@ -63,11 +70,4 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    *          true if lazy behaviour has to be turned on. false otherwise.
    */
   void setAllowLazyChildrenLoading(boolean b);
-
-  /**
-   * Gets wether this connector is configured to load its children lazilly.
-   * 
-   * @return true if this connector is configured to load its children lazilly.
-   */
-  boolean isAllowLazyChildrenLoading();
 }

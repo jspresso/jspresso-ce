@@ -47,11 +47,9 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    * 
    * @param initialCapacity
    *          initialCapacity.
-   * @param loadFactor
-   *          loadFactor.
    */
-  public ObjectEqualityMap(int initialCapacity, float loadFactor) {
-    super(initialCapacity, loadFactor);
+  public ObjectEqualityMap(int initialCapacity) {
+    super(initialCapacity);
     propertyChangeSupport = new PropertyChangeSupport(this);
   }
 
@@ -60,9 +58,11 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    * 
    * @param initialCapacity
    *          initialCapacity.
+   * @param loadFactor
+   *          loadFactor.
    */
-  public ObjectEqualityMap(int initialCapacity) {
-    super(initialCapacity);
+  public ObjectEqualityMap(int initialCapacity, float loadFactor) {
+    super(initialCapacity, loadFactor);
     propertyChangeSupport = new PropertyChangeSupport(this);
   }
 
@@ -75,24 +75,6 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   public ObjectEqualityMap(Map<? extends K, ? extends V> m) {
     super(m);
     propertyChangeSupport = new PropertyChangeSupport(this);
-  }
-
-  /**
-   * Solely based on object's equality.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean equals(Object o) {
-    return this == o;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int hashCode() {
-    return super.hashCode();
   }
 
   /**
@@ -111,18 +93,21 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   }
 
   /**
+   * Solely based on object's equality.
+   * <p>
    * {@inheritDoc}
    */
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(listener);
+  @Override
+  public boolean equals(Object o) {
+    return this == o;
   }
 
   /**
    * {@inheritDoc}
    */
-  public void removePropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+  @Override
+  public int hashCode() {
+    return super.hashCode();
   }
 
   /**
@@ -162,5 +147,20 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
       ClassNotFoundException {
     in.defaultReadObject();
     propertyChangeSupport = new PropertyChangeSupport(this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    propertyChangeSupport.removePropertyChangeListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removePropertyChangeListener(String propertyName,
+      PropertyChangeListener listener) {
+    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
   }
 }

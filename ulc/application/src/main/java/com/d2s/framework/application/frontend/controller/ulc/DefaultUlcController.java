@@ -69,115 +69,6 @@ public class DefaultUlcController extends
     AbstractFrontendController<ULCComponent, ULCIcon, IAction> implements
     ICallbackHandlerListener {
 
-  private ULCFrame                              controllerFrame;
-  private Map<String, ULCExtendedInternalFrame> moduleInternalFrames;
-  private Callback[]                            loginCallbacks;
-  private ULCPollingTimer                       loginTimer;
-  private int                                   loginRetries;
-  private boolean                               loginSuccessful;
-  private boolean                               loginComplete;
-
-  /**
-   * Creates the initial view from the root view descriptor, then a JFrame
-   * containing this view and presents it to the user.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean start(IBackendController backendController, Locale locale) {
-    if (super.start(backendController, locale)) {
-      loginRetries = 0;
-      loginSuccessful = false;
-      loginComplete = false;
-      CallbackHandler callbackHandler = getLoginCallbackHandler();
-      if (callbackHandler instanceof DialogCallbackHandler) {
-        ((DialogCallbackHandler) callbackHandler)
-            .setParentComponent(controllerFrame);
-        ((DialogCallbackHandler) callbackHandler)
-            .setCallbackHandlerListener(this);
-      }
-      performLogin();
-      return true;
-    }
-    return false;
-  }
-
-  private void performLogin() {
-    new LoginThread().start();
-    loginTimer = new ULCPollingTimer(2000, new IActionListener() {
-
-      private static final long serialVersionUID = 5630061795918376362L;
-
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent event) {
-        if (loginCallbacks != null) {
-          Callback[] loginCallbacksCopy = loginCallbacks;
-          loginCallbacks = null;
-          try {
-            getLoginCallbackHandler().handle(loginCallbacksCopy);
-          } catch (IOException ex) {
-            // NO-OP
-          } catch (UnsupportedCallbackException ex) {
-            // NO-OP
-          }
-        }
-        if (loginComplete) {
-          loginTimer.stop();
-          loginTimer = null;
-          ClientContext.sendMessage("appStarted");
-          if (loginSuccessful) {
-            displayControllerFrame();
-            execute(getStartupAction(), getInitialActionContext());
-          } else {
-            stop();
-          }
-        }
-      }
-    });
-    loginTimer.setInitialDelay(100);
-    loginTimer.start();
-  }
-
-  private void displayControllerFrame() {
-    controllerFrame = createControllerFrame();
-    controllerFrame.pack();
-    int screenRes = ClientContext.getScreenResolution();
-    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
-    UlcUtil.centerOnScreen(controllerFrame);
-    updateFrameTitle();
-    controllerFrame.setVisible(true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void callbackHandlingComplete() {
-    notifyWaiters();
-  }
-
-  private synchronized void waitForNotification() {
-    try {
-      wait();
-    } catch (InterruptedException ex) {
-      // NO-OP.
-    }
-  }
-
-  private synchronized void notifyWaiters() {
-    notifyAll();
-  }
-
-  private class ThreadBlockingCallbackHandler implements CallbackHandler {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void handle(Callback[] callbacks) {
-      loginCallbacks = callbacks;
-      waitForNotification();
-    }
-  }
-
   private class LoginThread extends Thread {
 
     /**
@@ -208,69 +99,6 @@ public class DefaultUlcController extends
       loginComplete = true;
     }
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean stop() {
-    if (controllerFrame != null) {
-      controllerFrame.setVisible(false);
-    }
-    ApplicationContext.terminate();
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void displayModule(String moduleId) {
-    if (moduleInternalFrames == null) {
-      moduleInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
-    }
-    ULCExtendedInternalFrame moduleInternalFrame = moduleInternalFrames
-        .get(moduleId);
-    if (moduleInternalFrame == null) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      IValueConnector moduleConnector = getBackendController()
-          .getModuleConnector(moduleId);
-      IView<ULCComponent> moduleView = createModuleView(moduleId,
-          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
-      moduleInternalFrame = createULCExtendedInternalFrame(moduleView);
-      moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
-      moduleInternalFrame
-          .addExtendedInternalFrameListener(new ModuleInternalFrameListener(
-              moduleId));
-      moduleInternalFrames.put(moduleId, moduleInternalFrame);
-      controllerFrame.getContentPane().add(moduleInternalFrame);
-      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
-      moduleInternalFrame.pack();
-      moduleInternalFrame.setSize(controllerFrame.getSize());
-    }
-    moduleInternalFrame.setVisible(true);
-    if (moduleInternalFrame.isIcon()) {
-      moduleInternalFrame.setIcon(false);
-    }
-    moduleInternalFrame.setMaximum(true);
-    setSelectedModuleId(moduleId);
-    moduleInternalFrame.moveToFront();
-    super.displayModule(moduleId);
-  }
-
-  private void updateFrameTitle() {
-    String moduleId = getSelectedModuleId();
-    if (moduleId != null) {
-      controllerFrame.setTitle(getModuleDescriptor(getSelectedModuleId())
-          .getI18nDescription(getTranslationProvider(), getLocale())
-          + " - " + getI18nName(getTranslationProvider(), getLocale()));
-    } else {
-      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
-          getLocale()));
-    }
-  }
-
   private final class ModuleInternalFrameListener implements
       IExtendedInternalFrameListener {
 
@@ -327,63 +155,6 @@ public class DefaultUlcController extends
     }
 
   }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setSelectedModuleId(String moduleId) {
-    super.setSelectedModuleId(moduleId);
-    updateFrameTitle();
-  }
-
-  private ULCFrame createControllerFrame() {
-    ULCFrame frame = new ULCFrame();
-    frame.setContentPane(new ULCDesktopPane());
-    frame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
-    frame.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
-    frame.setMenuBar(createApplicationMenuBar(frame));
-    frame.addWindowListener(new IWindowListener() {
-
-      private static final long serialVersionUID = -7845554617417316256L;
-
-      public void windowClosing(@SuppressWarnings("unused")
-      WindowEvent event) {
-        stop();
-      }
-    });
-    return frame;
-  }
-
-  private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {
-    ULCMenuBar applicationMenuBar = new ULCMenuBar();
-    applicationMenuBar.add(createModulesMenu());
-    List<ULCMenu> actionMenus = createActionMenus(sourceComponent);
-    if (actionMenus != null) {
-      for (ULCMenu actionMenu : actionMenus) {
-        applicationMenuBar.add(actionMenu);
-      }
-    }
-    return applicationMenuBar;
-  }
-
-  private ULCMenu createModulesMenu() {
-    ULCMenu modulesMenu = new ULCMenu(getTranslationProvider().getTranslation(
-        "modules", getLocale()));
-    // modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
-    // IIconFactory.SMALL_ICON_SIZE));
-    for (String moduleId : getModuleIds()) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      ULCMenuItem moduleMenuItem = new ULCMenuItem(new ModuleSelectionAction(
-          moduleId, moduleDescriptor));
-      modulesMenu.add(moduleMenuItem);
-    }
-    modulesMenu.addSeparator();
-    modulesMenu.add(new ULCMenuItem(new QuitAction()));
-    return modulesMenu;
-  }
-
   private final class ModuleSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
@@ -424,7 +195,6 @@ public class DefaultUlcController extends
       }
     }
   }
-
   private final class QuitAction extends AbstractAction {
 
     private static final long serialVersionUID = -1476651758085260422L;
@@ -450,6 +220,48 @@ public class DefaultUlcController extends
       stop();
     }
   }
+  private class ThreadBlockingCallbackHandler implements CallbackHandler {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void handle(Callback[] callbacks) {
+      loginCallbacks = callbacks;
+      waitForNotification();
+    }
+  }
+  private ULCFrame                              controllerFrame;
+  private Callback[]                            loginCallbacks;
+
+  private boolean                               loginComplete;
+
+  private int                                   loginRetries;
+
+  private boolean                               loginSuccessful;
+
+  private ULCPollingTimer                       loginTimer;
+
+  private Map<String, ULCExtendedInternalFrame> moduleInternalFrames;
+
+  /**
+   * {@inheritDoc}
+   */
+  public void callbackHandlingComplete() {
+    notifyWaiters();
+  }
+
+  private ULCMenu createActionMenu(String titleKey,
+      List<IDisplayableAction> actionList, ULCComponent sourceComponent) {
+    ULCMenu menu = new ULCMenu(getTranslationProvider().getTranslation(
+        titleKey, getLocale()));
+    for (IDisplayableAction action : actionList) {
+      menu
+          .add(new ULCMenuItem(getViewFactory().getActionFactory()
+              .createAction(action, this, sourceComponent, null, null,
+                  getLocale())));
+    }
+    return menu;
+  }
 
   private List<ULCMenu> createActionMenus(ULCComponent sourceComponent) {
     Map<String, List<IDisplayableAction>> actions = getActions();
@@ -464,17 +276,63 @@ public class DefaultUlcController extends
     return actionMenus;
   }
 
-  private ULCMenu createActionMenu(String titleKey,
-      List<IDisplayableAction> actionList, ULCComponent sourceComponent) {
-    ULCMenu menu = new ULCMenu(getTranslationProvider().getTranslation(
-        titleKey, getLocale()));
-    for (IDisplayableAction action : actionList) {
-      menu
-          .add(new ULCMenuItem(getViewFactory().getActionFactory()
-              .createAction(action, this, sourceComponent, null, null,
-                  getLocale())));
+  private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {
+    ULCMenuBar applicationMenuBar = new ULCMenuBar();
+    applicationMenuBar.add(createModulesMenu());
+    List<ULCMenu> actionMenus = createActionMenus(sourceComponent);
+    if (actionMenus != null) {
+      for (ULCMenu actionMenu : actionMenus) {
+        applicationMenuBar.add(actionMenu);
+      }
     }
-    return menu;
+    return applicationMenuBar;
+  }
+
+  private ULCFrame createControllerFrame() {
+    ULCFrame frame = new ULCFrame();
+    frame.setContentPane(new ULCDesktopPane());
+    frame.setIconImage(getIconFactory().getIcon(getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
+    frame.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    frame.setMenuBar(createApplicationMenuBar(frame));
+    frame.addWindowListener(new IWindowListener() {
+
+      private static final long serialVersionUID = -7845554617417316256L;
+
+      public void windowClosing(@SuppressWarnings("unused")
+      WindowEvent event) {
+        stop();
+      }
+    });
+    return frame;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected CallbackHandler createLoginCallbackHandler() {
+    DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
+    callbackHandler.setLocale(getLocale());
+    callbackHandler.setTranslationProvider(getTranslationProvider());
+    callbackHandler.setIconFactory(getIconFactory());
+    return callbackHandler;
+  }
+
+  private ULCMenu createModulesMenu() {
+    ULCMenu modulesMenu = new ULCMenu(getTranslationProvider().getTranslation(
+        "modules", getLocale()));
+    // modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+    // IIconFactory.SMALL_ICON_SIZE));
+    for (String moduleId : getModuleIds()) {
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      ULCMenuItem moduleMenuItem = new ULCMenuItem(new ModuleSelectionAction(
+          moduleId, moduleDescriptor));
+      modulesMenu.add(moduleMenuItem);
+    }
+    modulesMenu.addSeparator();
+    modulesMenu.add(new ULCMenuItem(new QuitAction()));
+    return modulesMenu;
   }
 
   /**
@@ -495,6 +353,54 @@ public class DefaultUlcController extends
     internalFrame.getContentPane().add(view.getPeer());
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;
+  }
+
+  private void displayControllerFrame() {
+    controllerFrame = createControllerFrame();
+    controllerFrame.pack();
+    int screenRes = ClientContext.getScreenResolution();
+    controllerFrame.setSize(12 * screenRes, 8 * screenRes);
+    UlcUtil.centerOnScreen(controllerFrame);
+    updateFrameTitle();
+    controllerFrame.setVisible(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void displayModule(String moduleId) {
+    if (moduleInternalFrames == null) {
+      moduleInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
+    }
+    ULCExtendedInternalFrame moduleInternalFrame = moduleInternalFrames
+        .get(moduleId);
+    if (moduleInternalFrame == null) {
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      IValueConnector moduleConnector = getBackendController()
+          .getModuleConnector(moduleId);
+      IView<ULCComponent> moduleView = createModuleView(moduleId,
+          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
+      moduleInternalFrame = createULCExtendedInternalFrame(moduleView);
+      moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
+          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+      moduleInternalFrame
+          .addExtendedInternalFrameListener(new ModuleInternalFrameListener(
+              moduleId));
+      moduleInternalFrames.put(moduleId, moduleInternalFrame);
+      controllerFrame.getContentPane().add(moduleInternalFrame);
+      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
+      moduleInternalFrame.pack();
+      moduleInternalFrame.setSize(controllerFrame.getSize());
+    }
+    moduleInternalFrame.setVisible(true);
+    if (moduleInternalFrame.isIcon()) {
+      moduleInternalFrame.setIcon(false);
+    }
+    moduleInternalFrame.setMaximum(true);
+    setSelectedModuleId(moduleId);
+    moduleInternalFrame.moveToFront();
+    super.displayModule(moduleId);
   }
 
   /**
@@ -544,15 +450,109 @@ public class DefaultUlcController extends
     }
   }
 
+  private synchronized void notifyWaiters() {
+    notifyAll();
+  }
+
+  private void performLogin() {
+    new LoginThread().start();
+    loginTimer = new ULCPollingTimer(2000, new IActionListener() {
+
+      private static final long serialVersionUID = 5630061795918376362L;
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent event) {
+        if (loginCallbacks != null) {
+          Callback[] loginCallbacksCopy = loginCallbacks;
+          loginCallbacks = null;
+          try {
+            getLoginCallbackHandler().handle(loginCallbacksCopy);
+          } catch (IOException ex) {
+            // NO-OP
+          } catch (UnsupportedCallbackException ex) {
+            // NO-OP
+          }
+        }
+        if (loginComplete) {
+          loginTimer.stop();
+          loginTimer = null;
+          ClientContext.sendMessage("appStarted");
+          if (loginSuccessful) {
+            displayControllerFrame();
+            execute(getStartupAction(), getInitialActionContext());
+          } else {
+            stop();
+          }
+        }
+      }
+    });
+    loginTimer.setInitialDelay(100);
+    loginTimer.start();
+  }
+
   /**
    * {@inheritDoc}
    */
   @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
-    callbackHandler.setLocale(getLocale());
-    callbackHandler.setTranslationProvider(getTranslationProvider());
-    callbackHandler.setIconFactory(getIconFactory());
-    return callbackHandler;
+  protected void setSelectedModuleId(String moduleId) {
+    super.setSelectedModuleId(moduleId);
+    updateFrameTitle();
+  }
+
+  /**
+   * Creates the initial view from the root view descriptor, then a JFrame
+   * containing this view and presents it to the user.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean start(IBackendController backendController, Locale locale) {
+    if (super.start(backendController, locale)) {
+      loginRetries = 0;
+      loginSuccessful = false;
+      loginComplete = false;
+      CallbackHandler callbackHandler = getLoginCallbackHandler();
+      if (callbackHandler instanceof DialogCallbackHandler) {
+        ((DialogCallbackHandler) callbackHandler)
+            .setParentComponent(controllerFrame);
+        ((DialogCallbackHandler) callbackHandler)
+            .setCallbackHandlerListener(this);
+      }
+      performLogin();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    if (controllerFrame != null) {
+      controllerFrame.setVisible(false);
+    }
+    ApplicationContext.terminate();
+    return true;
+  }
+
+  private void updateFrameTitle() {
+    String moduleId = getSelectedModuleId();
+    if (moduleId != null) {
+      controllerFrame.setTitle(getModuleDescriptor(getSelectedModuleId())
+          .getI18nDescription(getTranslationProvider(), getLocale())
+          + " - " + getI18nName(getTranslationProvider(), getLocale()));
+    } else {
+      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
+          getLocale()));
+    }
+  }
+
+  private synchronized void waitForNotification() {
+    try {
+      wait();
+    } catch (InterruptedException ex) {
+      // NO-OP.
+    }
   }
 }

@@ -32,74 +32,8 @@ import com.ulcjava.base.shared.internal.Anything;
 public class ULCColorPicker extends ULCComponent implements IEditorComponent {
 
   private static final long serialVersionUID = 5230716348564257623L;
-  private Color             value;
   private Color             resetValue;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void saveState(Anything a) {
-    super.saveState(a);
-    valueToAnything(a);
-    resetValueToAnything(a);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIColorPicker";
-  }
-
-  /**
-   * Gets the color picker value.
-   *
-   * @return the color picker value.
-   */
-  public Color getValue() {
-    return value;
-  }
-
-  /**
-   * Gets the color picker resetValue.
-   *
-   * @return the color picker value.
-   */
-  public Color getResetValue() {
-    return resetValue;
-  }
-
-  /**
-   * Sets the color picker value.
-   *
-   * @param value
-   *          the color picker value.
-   */
-  public void setValue(Color value) {
-    if (!ObjectUtils.equals(this.value, value)) {
-      this.value = value;
-      Anything valueAnything = new Anything();
-      valueToAnything(valueAnything);
-      sendUI(ColorPickerConstants.SET_VALUE_REQUEST, valueAnything);
-    }
-  }
-
-  /**
-   * Sets the color picker resetValue.
-   *
-   * @param resetValue
-   *          the color picker resetValue.
-   */
-  public void setResetValue(Color resetValue) {
-    if (!ObjectUtils.equals(this.resetValue, resetValue)) {
-      this.resetValue = resetValue;
-      Anything resetValueAnything = new Anything();
-      resetValueToAnything(resetValueAnything);
-      sendUI(ColorPickerConstants.SET_RESETVALUE_REQUEST, resetValueAnything);
-    }
-  }
+  private Color             value;
 
   /**
    * Adds a value change listener.
@@ -109,63 +43,6 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
    */
   public void addValueChangedListener(IValueChangedListener listener) {
     internalAddListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
-  }
-
-  /**
-   * Removes a value change listener.
-   *
-   * @param listener
-   *          the listener to remove.
-   */
-  public void removeValueChangedListener(IValueChangedListener listener) {
-    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void handleEvent(int listenerType, int eventId, Anything args) {
-    if (listenerType == IUlcEventConstants.VALUE_CHANGED_EVENT) {
-      distributeToListeners(new ValueChangedEvent(this));
-    } else {
-      super.handleEvent(listenerType, eventId, args);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getPropertyPrefix() {
-    return "Panel";
-  }
-
-  private void valueToAnything(Anything args) {
-    String hexColor = "";
-    if (value != null) {
-      hexColor = ColorHelper.toHexString(value.getRed(), value.getGreen(),
-          value.getBlue(), value.getAlpha());
-    }
-    args.put(ColorPickerConstants.VALUE_KEY, hexColor);
-  }
-
-  private void resetValueToAnything(Anything args) {
-    String hexColor = "";
-    if (resetValue != null) {
-      hexColor = ColorHelper.toHexString(resetValue.getRed(), resetValue
-          .getGreen(), resetValue.getBlue(), resetValue.getAlpha());
-    }
-    args.put(ColorPickerConstants.RESETVALUE_KEY, hexColor);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void copyAttributes(@SuppressWarnings("unused")
-  ICellComponent source) {
-    ULCColorPicker sourceColorPicker = (ULCColorPicker) source;
-    resetValue = sourceColorPicker.resetValue;
   }
 
   /**
@@ -193,6 +70,53 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
   /**
    * {@inheritDoc}
    */
+  public void copyAttributes(@SuppressWarnings("unused")
+  ICellComponent source) {
+    ULCColorPicker sourceColorPicker = (ULCColorPicker) source;
+    resetValue = sourceColorPicker.resetValue;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getPropertyPrefix() {
+    return "Panel";
+  }
+
+  /**
+   * Gets the color picker resetValue.
+   *
+   * @return the color picker value.
+   */
+  public Color getResetValue() {
+    return resetValue;
+  }
+
+  /**
+   * Gets the color picker value.
+   *
+   * @return the color picker value.
+   */
+  public Color getValue() {
+    return value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void handleEvent(int listenerType, int eventId, Anything args) {
+    if (listenerType == IUlcEventConstants.VALUE_CHANGED_EVENT) {
+      distributeToListeners(new ValueChangedEvent(this));
+    } else {
+      super.handleEvent(listenerType, eventId, args);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void handleRequest(String request, Anything args) {
     if (request.equals(ColorPickerConstants.SET_VALUE_REQUEST)) {
@@ -210,5 +134,81 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
       newValue = new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
     }
     this.value = newValue;
+  }
+
+  /**
+   * Removes a value change listener.
+   *
+   * @param listener
+   *          the listener to remove.
+   */
+  public void removeValueChangedListener(IValueChangedListener listener) {
+    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
+  }
+
+  private void resetValueToAnything(Anything args) {
+    String hexColor = "";
+    if (resetValue != null) {
+      hexColor = ColorHelper.toHexString(resetValue.getRed(), resetValue
+          .getGreen(), resetValue.getBlue(), resetValue.getAlpha());
+    }
+    args.put(ColorPickerConstants.RESETVALUE_KEY, hexColor);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void saveState(Anything a) {
+    super.saveState(a);
+    valueToAnything(a);
+    resetValueToAnything(a);
+  }
+
+  /**
+   * Sets the color picker resetValue.
+   *
+   * @param resetValue
+   *          the color picker resetValue.
+   */
+  public void setResetValue(Color resetValue) {
+    if (!ObjectUtils.equals(this.resetValue, resetValue)) {
+      this.resetValue = resetValue;
+      Anything resetValueAnything = new Anything();
+      resetValueToAnything(resetValueAnything);
+      sendUI(ColorPickerConstants.SET_RESETVALUE_REQUEST, resetValueAnything);
+    }
+  }
+
+  /**
+   * Sets the color picker value.
+   *
+   * @param value
+   *          the color picker value.
+   */
+  public void setValue(Color value) {
+    if (!ObjectUtils.equals(this.value, value)) {
+      this.value = value;
+      Anything valueAnything = new Anything();
+      valueToAnything(valueAnything);
+      sendUI(ColorPickerConstants.SET_VALUE_REQUEST, valueAnything);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIColorPicker";
+  }
+
+  private void valueToAnything(Anything args) {
+    String hexColor = "";
+    if (value != null) {
+      hexColor = ColorHelper.toHexString(value.getRed(), value.getGreen(),
+          value.getBlue(), value.getAlpha());
+    }
+    args.put(ColorPickerConstants.VALUE_KEY, hexColor);
   }
 }

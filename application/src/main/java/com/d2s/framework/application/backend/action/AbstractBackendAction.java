@@ -35,10 +35,84 @@ public abstract class AbstractBackendAction extends AbstractAction {
   private AbstractBackendAction nextAction;
 
   /**
+   * Executes the next action.
+   * <p>
    * {@inheritDoc}
    */
-  public boolean isBackend() {
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    if (getNextAction() != null) {
+      return actionHandler.execute(getNextAction(), context);
+    }
     return true;
+  }
+
+  /**
+   * Gets the accessorFactory.
+   * 
+   * @param context
+   *          the action context.
+   * @return the accessorFactory.
+   */
+  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
+    return getController(context).getBeanAccessorFactory();
+  }
+
+  /**
+   * Gets the current application session.
+   * 
+   * @param context
+   *          the action context.
+   * @return the current application session.
+   */
+  protected IApplicationSession getApplicationSession(
+      Map<String, Object> context) {
+    return getController(context).getApplicationSession();
+  }
+
+  /**
+   * Gets the beanConnectorFactory.
+   * 
+   * @param context
+   *          the action context.
+   * @return the beanConnectorFactory.
+   */
+  protected IModelConnectorFactory getBeanConnectorFactory(
+      Map<String, Object> context) {
+    return getController(context).getBeanConnectorFactory();
+  }
+
+  /**
+   * Gets the frontend controller out of the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the frontend controller.
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  protected IBackendController getController(Map<String, Object> context) {
+    return (IBackendController) context
+        .get(ActionContextConstants.BACK_CONTROLLER);
+  }
+
+  /**
+   * Gets the entityFactory.
+   * 
+   * @param context
+   *          the action context.
+   * @return the entityFactory.
+   */
+  protected IEntityFactory getEntityFactory(Map<String, Object> context) {
+    return getController(context).getEntityFactory();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Locale getLocale(Map<String, Object> context) {
+    return getController(context).getLocale();
   }
 
   /**
@@ -60,31 +134,6 @@ public abstract class AbstractBackendAction extends AbstractAction {
   public IValueConnector getModelConnector(Map<String, Object> context) {
     return ((IValueConnector) context
         .get(ActionContextConstants.VIEW_CONNECTOR)).getModelConnector();
-  }
-
-  /**
-   * This is a utility method which is able to retrieve the source model
-   * connector this action has been executed on from its context. It uses
-   * well-known context keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the
-   * model value connector of the connector hierarchy.
-   * </ul>
-   * <p>
-   * The returned connector mainly serves for retrieving the domain object the
-   * action has to be triggered on.
-   * 
-   * @param context
-   *          the action context.
-   * @return the value connector this model action was triggered on.
-   */
-  public IValueConnector getSourceModelConnector(Map<String, Object> context) {
-    if (context.get(ActionContextConstants.SOURCE_VIEW_CONNECTOR) != null) {
-      return ((IValueConnector) context
-          .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR))
-          .getModelConnector();
-    }
-    return null;
   }
 
   /**
@@ -122,93 +171,44 @@ public abstract class AbstractBackendAction extends AbstractAction {
   }
 
   /**
-   * Gets the frontend controller out of the action context.
-   * 
-   * @param context
-   *          the action context.
-   * @return the frontend controller.
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  protected IBackendController getController(Map<String, Object> context) {
-    return (IBackendController) context
-        .get(ActionContextConstants.BACK_CONTROLLER);
-  }
-
-  /**
-   * Gets the accessorFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
-    return getController(context).getBeanAccessorFactory();
-  }
-
-  /**
-   * Gets the entityFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the entityFactory.
-   */
-  protected IEntityFactory getEntityFactory(Map<String, Object> context) {
-    return getController(context).getEntityFactory();
-  }
-
-  /**
-   * Gets the beanConnectorFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the beanConnectorFactory.
-   */
-  protected IModelConnectorFactory getBeanConnectorFactory(
-      Map<String, Object> context) {
-    return getController(context).getBeanConnectorFactory();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Locale getLocale(Map<String, Object> context) {
-    return getController(context).getLocale();
-  }
-
-  /**
-   * Gets the current application session.
-   * 
-   * @param context
-   *          the action context.
-   * @return the current application session.
-   */
-  protected IApplicationSession getApplicationSession(
-      Map<String, Object> context) {
-    return getController(context).getApplicationSession();
-  }
-
-  /**
-   * Executes the next action.
-   * <p>
-   * {@inheritDoc}
-   */
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    if (getNextAction() != null) {
-      return actionHandler.execute(getNextAction(), context);
-    }
-    return true;
-  }
-
-  /**
    * Gets the nextAction.
    * 
    * @return the nextAction.
    */
   protected AbstractBackendAction getNextAction() {
     return nextAction;
+  }
+
+  /**
+   * This is a utility method which is able to retrieve the source model
+   * connector this action has been executed on from its context. It uses
+   * well-known context keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the
+   * model value connector of the connector hierarchy.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for retrieving the domain object the
+   * action has to be triggered on.
+   * 
+   * @param context
+   *          the action context.
+   * @return the value connector this model action was triggered on.
+   */
+  public IValueConnector getSourceModelConnector(Map<String, Object> context) {
+    if (context.get(ActionContextConstants.SOURCE_VIEW_CONNECTOR) != null) {
+      return ((IValueConnector) context
+          .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR))
+          .getModelConnector();
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isBackend() {
+    return true;
   }
 
   /**

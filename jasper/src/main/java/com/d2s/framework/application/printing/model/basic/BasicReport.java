@@ -20,21 +20,21 @@ import com.d2s.framework.util.descriptor.DefaultDescriptor;
  */
 public class BasicReport extends DefaultDescriptor implements IReport {
 
-  private IReportDescriptor   reportDescriptor;
   private Map<String, Object> context;
-
-  /**
-   * {@inheritDoc}
-   */
-  public IReportDescriptor getReportDescriptor() {
-    return reportDescriptor;
-  }
+  private IReportDescriptor   reportDescriptor;
 
   /**
    * {@inheritDoc}
    */
   public Map<String, Object> getContext() {
     return context;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IReportDescriptor getReportDescriptor() {
+    return reportDescriptor;
   }
 
   /**

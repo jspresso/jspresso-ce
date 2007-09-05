@@ -14,12 +14,12 @@ package com.d2s.framework.view.descriptor;
  */
 public class ViewConstraints {
 
-  private int     row;
   private int     column;
-  private int     width;
   private int     height;
-  private boolean widthResizable;
   private boolean heightResizable;
+  private int     row;
+  private int     width;
+  private boolean widthResizable;
 
   /**
    * Constructs a new <code>ViewConstraints</code> instance.
@@ -77,15 +77,6 @@ public class ViewConstraints {
   }
 
   /**
-   * Gets the heightResizable.
-   * 
-   * @return the heightResizable.
-   */
-  public boolean isHeightResizable() {
-    return heightResizable;
-  }
-
-  /**
    * Gets the row.
    * 
    * @return the row.
@@ -101,6 +92,15 @@ public class ViewConstraints {
    */
   public int getWidth() {
     return width;
+  }
+
+  /**
+   * Gets the heightResizable.
+   * 
+   * @return the heightResizable.
+   */
+  public boolean isHeightResizable() {
+    return heightResizable;
   }
 
   /**

@@ -35,18 +35,18 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
 
   private static final long     serialVersionUID = 8107147713298807811L;
 
+  private List<IAction>         actions;
+
+  private String                actionText;
+  private boolean               decorated;
+  private boolean               editable;
+  private int                   editingColumn;
+  private int                   editingRow;
   private PropertyChangeSupport propertyChangeSupport;
+  private boolean               showTextField;
+  private ULCActionField        sourceActionField;
 
   private Object                value;
-  private String                actionText;
-  private boolean               editable;
-  private boolean               decorated;
-  private boolean               showTextField;
-  private List<IAction>         actions;
-  private int                   editingRow;
-  private int                   editingColumn;
-
-  private ULCActionField        sourceActionField;
 
   /**
    * Constructs a new <code>ULCActionField</code> instance.
@@ -65,160 +65,6 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     propertyChangeSupport = new PropertyChangeSupport(this);
     editable = true;
     this.showTextField = showTextField;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void saveState(Anything a) {
-    super.saveState(a);
-
-    a.put(ActionFieldConstants.SHOW_TEXTFIELD_KEY, showTextField);
-    a.put(ActionFieldConstants.ACTION_TEXT_KEY, actionText);
-
-    Anything actionIconsAnything = new Anything();
-    Anything actionsAnything = new Anything();
-
-    fillActionData(actionsAnything, actionIconsAnything);
-
-    a.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
-    a.put(ActionFieldConstants.ACTIONS_KEY, actionsAnything);
-
-    editableToAnything(a);
-  }
-
-  private void fillActionData(Anything actionsAnything, Anything iconsAnything) {
-    if (actions != null) {
-      for (IAction action : actions) {
-        actionsAnything.append(actionToAnything(action));
-        ULCIcon icon = (ULCIcon) action.getValue(IAction.SMALL_ICON);
-        icon.upload();
-        iconsAnything.append(icon.getRef());
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIActionField";
-  }
-
-  /**
-   * Gets the action field value.
-   * 
-   * @return the action field value.
-   */
-  public Object getValue() {
-    return value;
-  }
-
-  /**
-   * Sets the action field value.
-   * 
-   * @param value
-   *          the action field value.
-   */
-  public void setValue(Object value) {
-    updateValue(value, true);
-  }
-
-  private void updateValue(Object aValue, boolean notifyClient) {
-    if (!ObjectUtils.equals(this.value, aValue)) {
-      Object oldValue = this.value;
-      this.value = aValue;
-      firePropertyChange("value", oldValue, aValue);
-    }
-    if (sourceActionField != null) {
-      sourceActionField.updateValue(aValue, notifyClient);
-    }
-    updateActionText(valueToString(), notifyClient);
-  }
-
-  private String valueToString() {
-    if (value == null) {
-      return "";
-    }
-    return value.toString();
-  }
-
-  /**
-   * Gets the action field text.
-   * 
-   * @return the action field text.
-   */
-  public String getActionText() {
-    return actionText;
-  }
-
-  /**
-   * Sets the action field text.
-   * 
-   * @param actionText
-   *          the action field text.
-   */
-  public void setActionText(String actionText) {
-    updateActionText(actionText, true);
-  }
-
-  private void updateActionText(String text, boolean notifyClient) {
-    if (!ObjectUtils.equals(this.actionText, text)) {
-      String oldActionText = this.actionText;
-      this.actionText = text;
-      if (notifyClient) {
-        Anything actionTextAnything = new Anything();
-        actionTextAnything.put(ActionFieldConstants.ACTION_TEXT_KEY, text);
-        sendUI(ActionFieldConstants.SET_ACTION_TEXT_REQUEST, actionTextAnything);
-      }
-      firePropertyChange("actionText", oldActionText, text);
-    }
-    if (sourceActionField != null) {
-      sourceActionField.updateActionText(text, notifyClient);
-    }
-  }
-
-  /**
-   * Gets the actions.
-   * 
-   * @return the actions.
-   */
-  public List<IAction> getActions() {
-    return actions;
-  }
-
-  /**
-   * Sets the action.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(List<IAction> actions) {
-    if (!ObjectUtils.equals(this.actions, actions)) {
-      this.actions = actions;
-
-      Anything actionsAnything = new Anything();
-      Anything actionIconsAnything = new Anything();
-      fillActionData(actionsAnything, actionIconsAnything);
-
-      Anything args = new Anything();
-      args.put(ActionFieldConstants.ACTIONS_KEY, actionsAnything);
-      args.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
-
-      sendUI(ActionFieldConstants.SET_ACTIONS_REQUEST, args);
-    }
-  }
-
-  /**
-   * Gets wether this action text is synchronized with the value.
-   * 
-   * @return true if this action field text is synchronized with its underlying
-   *         value.
-   */
-  public boolean isSynchronized() {
-    return ObjectUtils.equals(valueToString(), actionText);
   }
 
   private Anything actionToAnything(IAction action) {
@@ -247,135 +93,6 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     actionAnything.put(ActionFieldConstants.SHORT_DESCRIPTION, (String) action
         .getValue(IAction.SHORT_DESCRIPTION));
     return actionAnything;
-  }
-
-  private void editableToAnything(Anything args) {
-    args.put(ActionFieldConstants.EDITABLE_KEY, editable);
-  }
-
-  private void decoratedToAnything(Anything args) {
-    args.put(ActionFieldConstants.DECORATED_KEY, decorated);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getPropertyPrefix() {
-    return "Panel";
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void copyAttributes(ICellComponent source) {
-    sourceActionField = (ULCActionField) source;
-    setActions(sourceActionField.actions);
-    showTextField = sourceActionField.showTextField;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean areAttributesEqual(ICellComponent component) {
-    if (!(component instanceof ULCActionField)) {
-      return false;
-    }
-    if (this == component) {
-      return true;
-    }
-    ULCActionField otherActionField = (ULCActionField) component;
-    return new EqualsBuilder().append(actions, otherActionField.actions)
-        .isEquals();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int attributesHashCode() {
-    return new HashCodeBuilder(17, 53).append(actions).toHashCode();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void handleRequest(String request, Anything args) {
-    if (request.equals(ActionFieldConstants.SET_ACTION_TEXT_REQUEST)) {
-      handleSetActionText(args);
-    } else if (request.equals(ActionFieldConstants.TRIGGER_ACTION_REQUEST)) {
-      handleTriggerAction(args);
-    } else if (request.equals(ActionFieldConstants.SET_EDITING_CELL_REQUEST)) {
-      handleSetEditingCell(args);
-    } else if (request.equals(ActionFieldConstants.SYNC_STATE_REQUEST)) {
-      handleSyncState(args);
-    } else {
-      super.handleRequest(request, args);
-    }
-  }
-
-  private void handleSetActionText(Anything args) {
-    updateActionText(args.get(ActionFieldConstants.ACTION_TEXT_KEY, ""), false);
-  }
-
-  private void handleTriggerAction(Anything args) {
-    performAction(args.get(ActionFieldConstants.ACTION_INDEX_KEY, 0), args.get(
-        ActionFieldConstants.ACTION_TEXT_KEY, ""));
-  }
-
-  private void handleSyncState(Anything args) {
-    updateValue(args.get(ActionFieldConstants.ACTION_TEXT_KEY, ""), false);
-  }
-
-  private void handleSetEditingCell(Anything args) {
-    setEditingRow(args.get(ActionFieldConstants.EDITING_ROW_KEY, -1));
-    setEditingColumn(args.get(ActionFieldConstants.EDITING_COLUMN_KEY, -1));
-  }
-
-  /**
-   * performs the registered action programatically.
-   * 
-   * @param index
-   *          the index of the action to be triggerred.
-   */
-  public void performAction(int index) {
-    performAction(index, actionText);
-  }
-
-  private void performAction(int index, String command) {
-    actions.get(index).actionPerformed(new ActionEvent(this, command));
-  }
-
-  /**
-   * Gets the editingColumn.
-   * 
-   * @return the editingColumn.
-   */
-  public int getEditingColumn() {
-    return editingColumn;
-  }
-
-  /**
-   * Gets the editingRow.
-   * 
-   * @return the editingRow.
-   */
-  public int getEditingRow() {
-    return editingRow;
-  }
-
-  private void setEditingColumn(int editingColumn) {
-    this.editingColumn = editingColumn;
-    if (sourceActionField != null) {
-      sourceActionField.setEditingColumn(editingColumn);
-    }
-  }
-
-  private void setEditingRow(int editingRow) {
-    this.editingRow = editingRow;
-    if (sourceActionField != null) {
-      sourceActionField.setEditingRow(editingRow);
-    }
   }
 
   /**
@@ -413,6 +130,217 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public boolean areAttributesEqual(ICellComponent component) {
+    if (!(component instanceof ULCActionField)) {
+      return false;
+    }
+    if (this == component) {
+      return true;
+    }
+    ULCActionField otherActionField = (ULCActionField) component;
+    return new EqualsBuilder().append(actions, otherActionField.actions)
+        .isEquals();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int attributesHashCode() {
+    return new HashCodeBuilder(17, 53).append(actions).toHashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void copyAttributes(ICellComponent source) {
+    sourceActionField = (ULCActionField) source;
+    setActions(sourceActionField.actions);
+    showTextField = sourceActionField.showTextField;
+  }
+
+  private void decoratedToAnything(Anything args) {
+    args.put(ActionFieldConstants.DECORATED_KEY, decorated);
+  }
+
+  private void editableToAnything(Anything args) {
+    args.put(ActionFieldConstants.EDITABLE_KEY, editable);
+  }
+
+  private void fillActionData(Anything actionsAnything, Anything iconsAnything) {
+    if (actions != null) {
+      for (IAction action : actions) {
+        actionsAnything.append(actionToAnything(action));
+        ULCIcon icon = (ULCIcon) action.getValue(IAction.SMALL_ICON);
+        icon.upload();
+        iconsAnything.append(icon.getRef());
+      }
+    }
+  }
+
+  /**
+   * Directly delegates to propertyChangeSupport.
+   * 
+   * @param propertyName
+   *          the name of the property.
+   * @param oldValue
+   *          the old property value.
+   * @param newValue
+   *          the new property value.
+   */
+  protected void firePropertyChange(String propertyName, boolean oldValue,
+      boolean newValue) {
+    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+  }
+
+  /**
+   * Directly delegates to propertyChangeSupport.
+   * 
+   * @param propertyName
+   *          the name of the property.
+   * @param oldValue
+   *          the old property value.
+   * @param newValue
+   *          the new property value.
+   */
+  protected void firePropertyChange(String propertyName, Object oldValue,
+      Object newValue) {
+    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
+  }
+
+  /**
+   * Gets the actions.
+   * 
+   * @return the actions.
+   */
+  public List<IAction> getActions() {
+    return actions;
+  }
+
+  /**
+   * Gets the action field text.
+   * 
+   * @return the action field text.
+   */
+  public String getActionText() {
+    return actionText;
+  }
+
+  /**
+   * Gets the editingColumn.
+   * 
+   * @return the editingColumn.
+   */
+  public int getEditingColumn() {
+    return editingColumn;
+  }
+
+  /**
+   * Gets the editingRow.
+   * 
+   * @return the editingRow.
+   */
+  public int getEditingRow() {
+    return editingRow;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getPropertyPrefix() {
+    return "Panel";
+  }
+
+  /**
+   * Gets the action field value.
+   * 
+   * @return the action field value.
+   */
+  public Object getValue() {
+    return value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void handleRequest(String request, Anything args) {
+    if (request.equals(ActionFieldConstants.SET_ACTION_TEXT_REQUEST)) {
+      handleSetActionText(args);
+    } else if (request.equals(ActionFieldConstants.TRIGGER_ACTION_REQUEST)) {
+      handleTriggerAction(args);
+    } else if (request.equals(ActionFieldConstants.SET_EDITING_CELL_REQUEST)) {
+      handleSetEditingCell(args);
+    } else if (request.equals(ActionFieldConstants.SYNC_STATE_REQUEST)) {
+      handleSyncState(args);
+    } else {
+      super.handleRequest(request, args);
+    }
+  }
+
+  private void handleSetActionText(Anything args) {
+    updateActionText(args.get(ActionFieldConstants.ACTION_TEXT_KEY, ""), false);
+  }
+
+  private void handleSetEditingCell(Anything args) {
+    setEditingRow(args.get(ActionFieldConstants.EDITING_ROW_KEY, -1));
+    setEditingColumn(args.get(ActionFieldConstants.EDITING_COLUMN_KEY, -1));
+  }
+
+  private void handleSyncState(Anything args) {
+    updateValue(args.get(ActionFieldConstants.ACTION_TEXT_KEY, ""), false);
+  }
+
+  private void handleTriggerAction(Anything args) {
+    performAction(args.get(ActionFieldConstants.ACTION_INDEX_KEY, 0), args.get(
+        ActionFieldConstants.ACTION_TEXT_KEY, ""));
+  }
+
+  /**
+   * Gets the editable.
+   * 
+   * @return the editable.
+   */
+  public boolean isEditable() {
+    return editable;
+  }
+
+  /**
+   * Gets the showTextField.
+   * 
+   * @return the showTextField.
+   */
+  public boolean isShowingTextField() {
+    return showTextField;
+  }
+
+  /**
+   * Gets wether this action text is synchronized with the value.
+   * 
+   * @return true if this action field text is synchronized with its underlying
+   *         value.
+   */
+  public boolean isSynchronized() {
+    return ObjectUtils.equals(valueToString(), actionText);
+  }
+
+  /**
+   * performs the registered action programatically.
+   * 
+   * @param index
+   *          the index of the action to be triggerred.
+   */
+  public void performAction(int index) {
+    performAction(index, actionText);
+  }
+
+  private void performAction(int index, String command) {
+    actions.get(index).actionPerformed(new ActionEvent(this, command));
+  }
+
+  /**
    * Directly delegates to propertyChangeSupport.
    * 
    * @param listener
@@ -436,53 +364,71 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
   }
 
   /**
-   * Directly delegates to propertyChangeSupport.
-   * 
-   * @param propertyName
-   *          the name of the property.
-   * @param oldValue
-   *          the old property value.
-   * @param newValue
-   *          the new property value.
-   */
-  protected void firePropertyChange(String propertyName, Object oldValue,
-      Object newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
-  }
-
-  /**
-   * Directly delegates to propertyChangeSupport.
-   * 
-   * @param propertyName
-   *          the name of the property.
-   * @param oldValue
-   *          the old property value.
-   * @param newValue
-   *          the new property value.
-   */
-  protected void firePropertyChange(String propertyName, boolean oldValue,
-      boolean newValue) {
-    propertyChangeSupport.firePropertyChange(propertyName, oldValue, newValue);
-  }
-
-  /**
-   * Only to be used when ULCAction field is used as an editor inside a ULC
-   * table.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public void setParent(ULCContainer parent) {
-    super.setParent(parent);
+  protected void saveState(Anything a) {
+    super.saveState(a);
+
+    a.put(ActionFieldConstants.SHOW_TEXTFIELD_KEY, showTextField);
+    a.put(ActionFieldConstants.ACTION_TEXT_KEY, actionText);
+
+    Anything actionIconsAnything = new Anything();
+    Anything actionsAnything = new Anything();
+
+    fillActionData(actionsAnything, actionIconsAnything);
+
+    a.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
+    a.put(ActionFieldConstants.ACTIONS_KEY, actionsAnything);
+
+    editableToAnything(a);
   }
 
   /**
-   * Gets the editable.
+   * Sets the action.
    * 
-   * @return the editable.
+   * @param actions
+   *          the actions to set.
    */
-  public boolean isEditable() {
-    return editable;
+  public void setActions(List<IAction> actions) {
+    if (!ObjectUtils.equals(this.actions, actions)) {
+      this.actions = actions;
+
+      Anything actionsAnything = new Anything();
+      Anything actionIconsAnything = new Anything();
+      fillActionData(actionsAnything, actionIconsAnything);
+
+      Anything args = new Anything();
+      args.put(ActionFieldConstants.ACTIONS_KEY, actionsAnything);
+      args.put(ActionFieldConstants.ICONS_KEY, actionIconsAnything);
+
+      sendUI(ActionFieldConstants.SET_ACTIONS_REQUEST, args);
+    }
+  }
+
+  /**
+   * Sets the action field text.
+   * 
+   * @param actionText
+   *          the action field text.
+   */
+  public void setActionText(String actionText) {
+    updateActionText(actionText, true);
+  }
+
+  /**
+   * Decorates the component with a marker.
+   * 
+   * @param decorated
+   *          if the component should be decorated.
+   */
+  public void setDecorated(boolean decorated) {
+    if (this.decorated != decorated) {
+      this.decorated = decorated;
+      Anything decoratedAnything = new Anything();
+      decoratedToAnything(decoratedAnything);
+      sendUI(ActionFieldConstants.SET_DECORATED_REQUEST, decoratedAnything);
+    }
   }
 
   /**
@@ -500,27 +446,81 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
     }
   }
 
-  /**
-   * Gets the showTextField.
-   * 
-   * @return the showTextField.
-   */
-  public boolean isShowingTextField() {
-    return showTextField;
+  private void setEditingColumn(int editingColumn) {
+    this.editingColumn = editingColumn;
+    if (sourceActionField != null) {
+      sourceActionField.setEditingColumn(editingColumn);
+    }
+  }
+
+  private void setEditingRow(int editingRow) {
+    this.editingRow = editingRow;
+    if (sourceActionField != null) {
+      sourceActionField.setEditingRow(editingRow);
+    }
   }
 
   /**
-   * Decorates the component with a marker.
-   * 
-   * @param decorated
-   *          if the component should be decorated.
+   * Only to be used when ULCAction field is used as an editor inside a ULC
+   * table.
+   * <p>
+   * {@inheritDoc}
    */
-  public void setDecorated(boolean decorated) {
-    if (this.decorated != decorated) {
-      this.decorated = decorated;
-      Anything decoratedAnything = new Anything();
-      decoratedToAnything(decoratedAnything);
-      sendUI(ActionFieldConstants.SET_DECORATED_REQUEST, decoratedAnything);
+  @Override
+  public void setParent(ULCContainer parent) {
+    super.setParent(parent);
+  }
+
+  /**
+   * Sets the action field value.
+   * 
+   * @param value
+   *          the action field value.
+   */
+  public void setValue(Object value) {
+    updateValue(value, true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIActionField";
+  }
+
+  private void updateActionText(String text, boolean notifyClient) {
+    if (!ObjectUtils.equals(this.actionText, text)) {
+      String oldActionText = this.actionText;
+      this.actionText = text;
+      if (notifyClient) {
+        Anything actionTextAnything = new Anything();
+        actionTextAnything.put(ActionFieldConstants.ACTION_TEXT_KEY, text);
+        sendUI(ActionFieldConstants.SET_ACTION_TEXT_REQUEST, actionTextAnything);
+      }
+      firePropertyChange("actionText", oldActionText, text);
     }
+    if (sourceActionField != null) {
+      sourceActionField.updateActionText(text, notifyClient);
+    }
+  }
+
+  private void updateValue(Object aValue, boolean notifyClient) {
+    if (!ObjectUtils.equals(this.value, aValue)) {
+      Object oldValue = this.value;
+      this.value = aValue;
+      firePropertyChange("value", oldValue, aValue);
+    }
+    if (sourceActionField != null) {
+      sourceActionField.updateValue(aValue, notifyClient);
+    }
+    updateActionText(valueToString(), notifyClient);
+  }
+
+  private String valueToString() {
+    if (value == null) {
+      return "";
+    }
+    return value.toString();
   }
 }

@@ -48,89 +48,14 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class SwingActionFactory implements IActionFactory<Action, JComponent> {
 
-  private ITranslationProvider translationProvider;
-  private IIconFactory<Icon>   iconFactory;
-
-  /**
-   * {@inheritDoc}
-   */
-  public Action createAction(IDisplayableAction action,
-      IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Action createAction(IDisplayableAction action,
-      IActionHandler actionHandler, JComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
-    Action swingAction = new ActionAdapter(action, actionHandler,
-        sourceComponent, modelDescriptor, viewConnector, locale);
-    if (action.getActionabilityGates() != null) {
-      Collection<IGate> clonedGates = new HashSet<IGate>();
-      for (IGate gate : action.getActionabilityGates()) {
-        final IGate clonedGate = gate.clone();
-        if (modelDescriptor instanceof IComponentDescriptorProvider
-            && clonedGate instanceof IModelGate) {
-          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
-              (IComponentDescriptorProvider) modelDescriptor));
-          viewConnector
-              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                      .getModelProvider()).setModel(evt.getNewValue());
-                }
-              });
-        }
-        clonedGates.add(clonedGate);
-      }
-      new GatesListener(swingAction, clonedGates);
-    }
-    return swingAction;
-  }
-
-  private final class GatesListener implements PropertyChangeListener {
-
-    private Action            action;
-    private Collection<IGate> gates;
-
-    /**
-     * Constructs a new <code>GatesListener</code> instance.
-     * 
-     * @param action
-     *          the action to (de)activate based on gates state.
-     * @param gates
-     *          the gates that determine action state.
-     */
-    public GatesListener(Action action, Collection<IGate> gates) {
-      this.action = action;
-      this.gates = gates;
-      for (IGate gate : gates) {
-        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
-      action.setEnabled(GateHelper.areGatesOpen(gates));
-    }
-  }
-
   private final class ActionAdapter extends AbstractAction {
 
     private static final long serialVersionUID = 5819377672533326496L;
 
     private IAction           action;
     private IActionHandler    actionHandler;
-    private JComponent        sourceComponent;
     private IModelDescriptor  modelDescriptor;
+    private JComponent        sourceComponent;
     private IValueConnector   viewConnector;
 
     /**
@@ -207,6 +132,81 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
         actionHandler.execute(action, actionContext);
       }
     }
+  }
+  private final class GatesListener implements PropertyChangeListener {
+
+    private Action            action;
+    private Collection<IGate> gates;
+
+    /**
+     * Constructs a new <code>GatesListener</code> instance.
+     * 
+     * @param action
+     *          the action to (de)activate based on gates state.
+     * @param gates
+     *          the gates that determine action state.
+     */
+    public GatesListener(Action action, Collection<IGate> gates) {
+      this.action = action;
+      this.gates = gates;
+      for (IGate gate : gates) {
+        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
+      action.setEnabled(GateHelper.areGatesOpen(gates));
+    }
+  }
+
+  private IIconFactory<Icon>   iconFactory;
+
+  private ITranslationProvider translationProvider;
+
+  /**
+   * {@inheritDoc}
+   */
+  public Action createAction(IDisplayableAction action,
+      IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
+    return createAction(action, actionHandler, view.getPeer(), view
+        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Action createAction(IDisplayableAction action,
+      IActionHandler actionHandler, JComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
+    Action swingAction = new ActionAdapter(action, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector, locale);
+    if (action.getActionabilityGates() != null) {
+      Collection<IGate> clonedGates = new HashSet<IGate>();
+      for (IGate gate : action.getActionabilityGates()) {
+        final IGate clonedGate = gate.clone();
+        if (modelDescriptor instanceof IComponentDescriptorProvider
+            && clonedGate instanceof IModelGate) {
+          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
+              (IComponentDescriptorProvider) modelDescriptor));
+          viewConnector
+              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                      .getModelProvider()).setModel(evt.getNewValue());
+                }
+              });
+        }
+        clonedGates.add(clonedGate);
+      }
+      new GatesListener(swingAction, clonedGates);
+    }
+    return swingAction;
   }
 
   /**

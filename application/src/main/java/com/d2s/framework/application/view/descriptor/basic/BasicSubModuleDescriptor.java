@@ -25,8 +25,8 @@ import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
 public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
     implements ISubModuleDescriptor {
 
-  private IViewDescriptor       viewDescriptor;
   private DefaultIconDescriptor descriptor;
+  private IViewDescriptor       viewDescriptor;
 
   /**
    * Constructs a new <code>BasicSubModuleDescriptor</code> instance.
@@ -45,29 +45,26 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
   }
 
   /**
-   * Gets the viewDescriptor.
-   * 
-   * @return the viewDescriptor.
+   * {@inheritDoc}
    */
-  public IViewDescriptor getViewDescriptor() {
-    return viewDescriptor;
-  }
-
-  /**
-   * Sets the viewDescriptor.
-   * 
-   * @param viewDescriptor
-   *          the viewDescriptor to set.
-   */
-  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
-    this.viewDescriptor = viewDescriptor;
+  public String getDescription() {
+    return descriptor.getDescription();
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getDescription() {
-    return descriptor.getDescription();
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
+    return descriptor.getI18nDescription(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
+    return descriptor.getI18nName(translationProvider, locale);
   }
 
   /**
@@ -82,6 +79,15 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
    */
   public String getName() {
     return descriptor.getName();
+  }
+
+  /**
+   * Gets the viewDescriptor.
+   * 
+   * @return the viewDescriptor.
+   */
+  public IViewDescriptor getViewDescriptor() {
+    return viewDescriptor;
   }
 
   /**
@@ -115,18 +121,12 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the viewDescriptor.
+   * 
+   * @param viewDescriptor
+   *          the viewDescriptor to set.
    */
-  public String getI18nName(ITranslationProvider translationProvider,
-      Locale locale) {
-    return descriptor.getI18nName(translationProvider, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getI18nDescription(ITranslationProvider translationProvider,
-      Locale locale) {
-    return descriptor.getI18nDescription(translationProvider, locale);
+  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
+    this.viewDescriptor = viewDescriptor;
   }
 }

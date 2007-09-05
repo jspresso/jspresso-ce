@@ -21,54 +21,8 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public abstract class BasicNumberPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements INumberPropertyDescriptor {
 
-  private Double minValue;
   private Double maxValue;
-
-  /**
-   * {@inheritDoc}
-   */
-  public Double getMinValue() {
-    if (minValue != null) {
-      return minValue;
-    }
-    if (getParentDescriptor() != null) {
-      return ((INumberPropertyDescriptor) getParentDescriptor()).getMinValue();
-    }
-    return minValue;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Double getMaxValue() {
-    if (maxValue != null) {
-      return maxValue;
-    }
-    if (getParentDescriptor() != null) {
-      return ((INumberPropertyDescriptor) getParentDescriptor()).getMaxValue();
-    }
-    return maxValue;
-  }
-
-  /**
-   * Sets the maxValue property.
-   * 
-   * @param maxValue
-   *          the maxValue to set.
-   */
-  public void setMaxValue(Double maxValue) {
-    this.maxValue = maxValue;
-  }
-
-  /**
-   * Sets the minValue property.
-   * 
-   * @param minValue
-   *          the minValue to set.
-   */
-  public void setMinValue(Double minValue) {
-    this.minValue = minValue;
-  }
+  private Double minValue;
 
   /**
    * {@inheritDoc}
@@ -114,5 +68,51 @@ public abstract class BasicNumberPropertyDescriptor extends
         throw ie;
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Double getMaxValue() {
+    if (maxValue != null) {
+      return maxValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((INumberPropertyDescriptor) getParentDescriptor()).getMaxValue();
+    }
+    return maxValue;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Double getMinValue() {
+    if (minValue != null) {
+      return minValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((INumberPropertyDescriptor) getParentDescriptor()).getMinValue();
+    }
+    return minValue;
+  }
+
+  /**
+   * Sets the maxValue property.
+   * 
+   * @param maxValue
+   *          the maxValue to set.
+   */
+  public void setMaxValue(Double maxValue) {
+    this.maxValue = maxValue;
+  }
+
+  /**
+   * Sets the minValue property.
+   * 
+   * @param minValue
+   *          the minValue to set.
+   */
+  public void setMinValue(Double minValue) {
+    this.minValue = minValue;
   }
 }

@@ -18,11 +18,11 @@ import java.util.List;
 public class RangeEnumerationPropertyDescriptor extends
     AbstractEnumerationPropertyDescriptor {
 
-  private Integer      minValue;
-  private Integer      maxValue;
-  private Integer      rangeStep;
-
   private List<String> enumerationValues;
+  private Integer      maxValue;
+  private Integer      minValue;
+
+  private Integer      rangeStep;
 
   /**
    * {@inheritDoc}
@@ -74,16 +74,6 @@ public class RangeEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the maxValue.
-   *
-   * @param maxValue
-   *          the maxValue to set.
-   */
-  public void setMaxValue(Integer maxValue) {
-    this.maxValue = maxValue;
-  }
-
-  /**
    * Gets the minValue.
    *
    * @return the minValue.
@@ -97,16 +87,6 @@ public class RangeEnumerationPropertyDescriptor extends
           .getMinValue();
     }
     return minValue;
-  }
-
-  /**
-   * Sets the minValue.
-   *
-   * @param minValue
-   *          the minValue to set.
-   */
-  public void setMinValue(Integer minValue) {
-    this.minValue = minValue;
   }
 
   /**
@@ -126,6 +106,33 @@ public class RangeEnumerationPropertyDescriptor extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public boolean isTranslated() {
+    return false;
+  }
+
+  /**
+   * Sets the maxValue.
+   *
+   * @param maxValue
+   *          the maxValue to set.
+   */
+  public void setMaxValue(Integer maxValue) {
+    this.maxValue = maxValue;
+  }
+
+  /**
+   * Sets the minValue.
+   *
+   * @param minValue
+   *          the minValue to set.
+   */
+  public void setMinValue(Integer minValue) {
+    this.minValue = minValue;
+  }
+
+  /**
    * Sets the rangeStep.
    *
    * @param rangeStep
@@ -133,12 +140,5 @@ public class RangeEnumerationPropertyDescriptor extends
    */
   public void setRangeStep(Integer rangeStep) {
     this.rangeStep = rangeStep;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isTranslated() {
-    return false;
   }
 }

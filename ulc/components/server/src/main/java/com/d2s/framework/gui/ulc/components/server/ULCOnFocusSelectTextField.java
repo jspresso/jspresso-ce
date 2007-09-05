@@ -40,11 +40,9 @@ public class ULCOnFocusSelectTextField extends ULCTextField {
    * 
    * @param text
    *          field text.
-   * @param columns
-   *          field columns.
    */
-  public ULCOnFocusSelectTextField(String text, int columns) {
-    super(text, columns);
+  public ULCOnFocusSelectTextField(String text) {
+    super(text);
   }
 
   /**
@@ -52,9 +50,11 @@ public class ULCOnFocusSelectTextField extends ULCTextField {
    * 
    * @param text
    *          field text.
+   * @param columns
+   *          field columns.
    */
-  public ULCOnFocusSelectTextField(String text) {
-    super(text);
+  public ULCOnFocusSelectTextField(String text, int columns) {
+    super(text, columns);
   }
 
   /**

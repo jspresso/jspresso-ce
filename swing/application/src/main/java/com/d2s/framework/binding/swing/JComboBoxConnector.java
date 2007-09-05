@@ -32,6 +32,23 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void bindJComponent() {
+    getConnectedJComponent().addActionListener(new ActionListener() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        fireConnectorValueChange();
+      }
+    });
+  }
+
+  /**
    * Returns the selected object in the combobox.
    * <p>
    * {@inheritDoc}
@@ -49,23 +66,6 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox> {
   @Override
   protected void protectedSetConnecteeValue(Object aValue) {
     getConnectedJComponent().setSelectedItem(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void bindJComponent() {
-    getConnectedJComponent().addActionListener(new ActionListener() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
-        fireConnectorValueChange();
-      }
-    });
   }
 
   /**

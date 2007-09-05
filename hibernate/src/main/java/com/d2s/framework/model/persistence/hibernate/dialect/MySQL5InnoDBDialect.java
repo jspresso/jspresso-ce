@@ -20,14 +20,6 @@ public class MySQL5InnoDBDialect extends MySQL5Dialect {
    * {@inheritDoc}
    */
   @Override
-  public boolean supportsCascadeDelete() {
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public String getTableTypeString() {
     return " type=InnoDB";
   }
@@ -37,6 +29,14 @@ public class MySQL5InnoDBDialect extends MySQL5Dialect {
    */
   @Override
   public boolean hasSelfReferentialForeignKeyBug() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean supportsCascadeDelete() {
     return true;
   }
 }

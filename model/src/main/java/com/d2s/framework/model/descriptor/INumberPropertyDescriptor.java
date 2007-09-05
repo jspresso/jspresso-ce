@@ -15,17 +15,17 @@ package com.d2s.framework.model.descriptor;
 public interface INumberPropertyDescriptor extends IScalarPropertyDescriptor {
 
   /**
-   * Gets the minimum value this property can have.
-   * 
-   * @return the minimum admissible value.
-   */
-  Double getMinValue();
-
-  /**
    * Gets the maximum value this property can have.
    * 
    * @return the maximum admissible value
    */
   Double getMaxValue();
+
+  /**
+   * Gets the minimum value this property can have.
+   * 
+   * @return the minimum admissible value.
+   */
+  Double getMinValue();
 
 }

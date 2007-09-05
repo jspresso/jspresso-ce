@@ -96,34 +96,15 @@ public class BasicComponentInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected Object retrievePropertyValue(String propertyName) {
-    try {
-      return getAccessorFactory().createPropertyAccessor(propertyName,
-          getComponentContract()).getValue(delegate);
-    } catch (IllegalAccessException ex) {
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex);
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
+  protected IComponent decorateReferent(IComponent referent,
+      @SuppressWarnings("unused")
+      IComponentDescriptor<IComponent> referentDescriptor) {
+    if (Proxy.isProxyClass(referent.getClass())
+        && Proxy.getInvocationHandler(referent) instanceof AbstractComponentInvocationHandler) {
+      return referent;
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void storeProperty(String propertyName, Object propertyValue) {
-    try {
-      getAccessorFactory().createPropertyAccessor(propertyName,
-          getComponentContract()).setValue(delegate, propertyValue);
-    } catch (IllegalAccessException ex) {
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex);
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
-    }
+    return componentFactory.createComponentInstance(referentDescriptor
+        .getComponentContract(), delegate);
   }
 
   /**
@@ -157,14 +138,33 @@ public class BasicComponentInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  protected IComponent decorateReferent(IComponent referent,
-      @SuppressWarnings("unused")
-      IComponentDescriptor<IComponent> referentDescriptor) {
-    if (Proxy.isProxyClass(referent.getClass())
-        && Proxy.getInvocationHandler(referent) instanceof AbstractComponentInvocationHandler) {
-      return referent;
+  protected Object retrievePropertyValue(String propertyName) {
+    try {
+      return getAccessorFactory().createPropertyAccessor(propertyName,
+          getComponentContract()).getValue(delegate);
+    } catch (IllegalAccessException ex) {
+      throw new ComponentException(ex);
+    } catch (InvocationTargetException ex) {
+      throw new ComponentException(ex);
+    } catch (NoSuchMethodException ex) {
+      throw new ComponentException(ex);
     }
-    return componentFactory.createComponentInstance(referentDescriptor
-        .getComponentContract(), delegate);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void storeProperty(String propertyName, Object propertyValue) {
+    try {
+      getAccessorFactory().createPropertyAccessor(propertyName,
+          getComponentContract()).setValue(delegate, propertyValue);
+    } catch (IllegalAccessException ex) {
+      throw new ComponentException(ex);
+    } catch (InvocationTargetException ex) {
+      throw new ComponentException(ex);
+    } catch (NoSuchMethodException ex) {
+      throw new ComponentException(ex);
+    }
   }
 }

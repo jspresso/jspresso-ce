@@ -25,6 +25,15 @@ public interface IConnectorSelector {
   void addConnectorSelectionListener(IConnectorSelectionListener listener);
 
   /**
+   * Triggers notification of a connector selection event. This method has to be
+   * made public to cope with notification of the children selection events.
+   * 
+   * @param evt
+   *          the event to be propagated.
+   */
+  void fireSelectedConnectorChange(ConnectorSelectionEvent evt);
+
+  /**
    * Removes a connector selection listener to this connector selector.
    * 
    * @param listener
@@ -42,13 +51,4 @@ public interface IConnectorSelector {
    *          selections.
    */
   void setTracksChildrenSelection(boolean tracksChildrenSelection);
-
-  /**
-   * Triggers notification of a connector selection event. This method has to be
-   * made public to cope with notification of the children selection events.
-   * 
-   * @param evt
-   *          the event to be propagated.
-   */
-  void fireSelectedConnectorChange(ConnectorSelectionEvent evt);
 }

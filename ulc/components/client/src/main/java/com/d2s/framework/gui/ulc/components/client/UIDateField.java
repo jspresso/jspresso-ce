@@ -50,6 +50,74 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIDateField extends UIComponent implements IEditorComponent {
 
+  private final class DateFieldTableCellEditor extends AbstractCellEditor
+      implements TableCellEditor {
+
+    private static final long      serialVersionUID = 2486701057600652062L;
+    private PropertyChangeListener editingStopChangeListener;
+
+    /**
+     * Constructs a new <code>DateFieldTableCellEditor</code> instance.
+     */
+    public DateFieldTableCellEditor() {
+      editingStopChangeListener = new PropertyChangeListener() {
+
+        public void propertyChange(PropertyChangeEvent evt) {
+          if (evt.getNewValue() == null && evt.getOldValue() == null) {
+            return;
+          }
+          stopCellEditing();
+        }
+      };
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getCellEditorValue() {
+      // don't call getValue() due to bad focusevent delivery order of
+      // JFormattedTextField.
+      // return dateField.getValue();
+      if (getBasicObject().getFormattedTextField().getText() == null
+          || getBasicObject().getFormattedTextField().getText().length() == 0) {
+        return null;
+      }
+      try {
+        return getBasicObject().getFormattedTextField().getFormatter()
+            .stringToValue(getBasicObject().getFormattedTextField().getText());
+      } catch (ParseException ex) {
+        throw new GuiException(ex);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unused")
+    public Component getTableCellEditorComponent(JTable table, Object value,
+        boolean isSelected, int row, int col) {
+      getBasicObject().getFormattedTextField().removePropertyChangeListener(
+          "value", editingStopChangeListener);
+      getBasicObject().setValue(value);
+      getBasicObject().getFormattedTextField().selectAll();
+      getBasicObject().getFormattedTextField().addPropertyChangeListener(
+          "value", editingStopChangeListener);
+      return getBasicObject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCellEditable(EventObject evt) {
+      if (evt instanceof MouseEvent) {
+        MouseEvent me = (MouseEvent) evt;
+        return (me.getClickCount() >= 2);
+      }
+      return super.isCellEditable(evt);
+    }
+  }
+
   private TableCellEditor tableCellEditor;
 
   /**
@@ -101,6 +169,37 @@ public class UIDateField extends UIComponent implements IEditorComponent {
   /**
    * {@inheritDoc}
    */
+  public ComboBoxEditor getComboBoxEditor() {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public TableCellEditor getTableCellEditor() {
+    if (tableCellEditor == null) {
+      tableCellEditor = new DateFieldTableCellEditor();
+    }
+    return tableCellEditor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public TableTreeCellEditor getTableTreeCellEditor() {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public TreeCellEditor getTreeCellEditor() {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public void handleRequest(String request, Anything args) {
     if (request.equals(DateFieldConstants.SET_VALUE_REQUEST)) {
@@ -112,6 +211,11 @@ public class UIDateField extends UIComponent implements IEditorComponent {
     }
   }
 
+  private void handleSetEditable(Anything args) {
+    getBasicObject().setEditable(
+        args.get(DateFieldConstants.EDITABLE_KEY, true));
+  }
+
   private void handleSetValue(Anything args) {
     long timeMillis = args.get(DateFieldConstants.VALUE_KEY, 0L);
     Date value = null;
@@ -121,9 +225,12 @@ public class UIDateField extends UIComponent implements IEditorComponent {
     getBasicObject().setValue(value);
   }
 
-  private void handleSetEditable(Anything args) {
-    getBasicObject().setEditable(
-        args.get(DateFieldConstants.EDITABLE_KEY, true));
+  private void notifyULCValueChange(Object newValue) {
+    Anything args = new Anything();
+    valueToAnything((Date) newValue, args);
+    sendULC(DateFieldConstants.SET_VALUE_REQUEST, args);
+    sendOptionalEventULC(IUlcEventConstants.VALUE_CHANGED_EVENT,
+        IUlcEventConstants.VALUE_CHANGED);
   }
 
   /**
@@ -157,112 +264,5 @@ public class UIDateField extends UIComponent implements IEditorComponent {
       timeMillis = value.getTime();
     }
     args.put(DateFieldConstants.VALUE_KEY, timeMillis);
-  }
-
-  private void notifyULCValueChange(Object newValue) {
-    Anything args = new Anything();
-    valueToAnything((Date) newValue, args);
-    sendULC(DateFieldConstants.SET_VALUE_REQUEST, args);
-    sendOptionalEventULC(IUlcEventConstants.VALUE_CHANGED_EVENT,
-        IUlcEventConstants.VALUE_CHANGED);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public TableCellEditor getTableCellEditor() {
-    if (tableCellEditor == null) {
-      tableCellEditor = new DateFieldTableCellEditor();
-    }
-    return tableCellEditor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public TableTreeCellEditor getTableTreeCellEditor() {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public TreeCellEditor getTreeCellEditor() {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public ComboBoxEditor getComboBoxEditor() {
-    throw new UnsupportedOperationException();
-  }
-
-  private final class DateFieldTableCellEditor extends AbstractCellEditor
-      implements TableCellEditor {
-
-    private static final long      serialVersionUID = 2486701057600652062L;
-    private PropertyChangeListener editingStopChangeListener;
-
-    /**
-     * Constructs a new <code>DateFieldTableCellEditor</code> instance.
-     */
-    public DateFieldTableCellEditor() {
-      editingStopChangeListener = new PropertyChangeListener() {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-          if (evt.getNewValue() == null && evt.getOldValue() == null) {
-            return;
-          }
-          stopCellEditing();
-        }
-      };
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unused")
-    public Component getTableCellEditorComponent(JTable table, Object value,
-        boolean isSelected, int row, int col) {
-      getBasicObject().getFormattedTextField().removePropertyChangeListener(
-          "value", editingStopChangeListener);
-      getBasicObject().setValue(value);
-      getBasicObject().getFormattedTextField().selectAll();
-      getBasicObject().getFormattedTextField().addPropertyChangeListener(
-          "value", editingStopChangeListener);
-      return getBasicObject();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object getCellEditorValue() {
-      // don't call getValue() due to bad focusevent delivery order of
-      // JFormattedTextField.
-      // return dateField.getValue();
-      if (getBasicObject().getFormattedTextField().getText() == null
-          || getBasicObject().getFormattedTextField().getText().length() == 0) {
-        return null;
-      }
-      try {
-        return getBasicObject().getFormattedTextField().getFormatter()
-            .stringToValue(getBasicObject().getFormattedTextField().getText());
-      } catch (ParseException ex) {
-        throw new GuiException(ex);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isCellEditable(EventObject evt) {
-      if (evt instanceof MouseEvent) {
-        MouseEvent me = (MouseEvent) evt;
-        return (me.getClickCount() >= 2);
-      }
-      return super.isCellEditable(evt);
-    }
   }
 }

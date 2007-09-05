@@ -27,6 +27,38 @@ public class HibernateBackendController extends DefaultBackendController {
   private TransactionTemplate transactionTemplate;
 
   /**
+   * Gets the hibernateTemplate.
+   * 
+   * @return the hibernateTemplate.
+   */
+  public HibernateTemplate getHibernateTemplate() {
+    return hibernateTemplate;
+  }
+
+  /**
+   * Gets the transactionTemplate.
+   * 
+   * @return the transactionTemplate.
+   */
+  public TransactionTemplate getTransactionTemplate() {
+    return transactionTemplate;
+  }
+
+  private void linkHibernateArtifacts() {
+    if (getApplicationSession() != null && getHibernateTemplate() != null
+        && getTransactionTemplate() != null && getEntityFactory() != null) {
+      ApplicationSessionAwareEntityProxyInterceptor entityInterceptor = new ApplicationSessionAwareEntityProxyInterceptor();
+      entityInterceptor.setApplicationSession(getApplicationSession());
+      entityInterceptor.setEntityFactory(getEntityFactory());
+      getHibernateTemplate().setEntityInterceptor(entityInterceptor);
+      ((HibernateTransactionManager) getTransactionTemplate()
+          .getTransactionManager()).setEntityInterceptor(entityInterceptor);
+      ((HibernateAwareApplicationSession) getApplicationSession())
+          .setHibernateTemplate(getHibernateTemplate());
+    }
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -49,24 +81,6 @@ public class HibernateBackendController extends DefaultBackendController {
   }
 
   /**
-   * Gets the hibernateTemplate.
-   * 
-   * @return the hibernateTemplate.
-   */
-  public HibernateTemplate getHibernateTemplate() {
-    return hibernateTemplate;
-  }
-
-  /**
-   * Gets the transactionTemplate.
-   * 
-   * @return the transactionTemplate.
-   */
-  public TransactionTemplate getTransactionTemplate() {
-    return transactionTemplate;
-  }
-
-  /**
    * Sets the hibernateTemplate.
    * 
    * @param hibernateTemplate
@@ -86,19 +100,5 @@ public class HibernateBackendController extends DefaultBackendController {
   public void setTransactionTemplate(TransactionTemplate transactionTemplate) {
     this.transactionTemplate = transactionTemplate;
     linkHibernateArtifacts();
-  }
-
-  private void linkHibernateArtifacts() {
-    if (getApplicationSession() != null && getHibernateTemplate() != null
-        && getTransactionTemplate() != null && getEntityFactory() != null) {
-      ApplicationSessionAwareEntityProxyInterceptor entityInterceptor = new ApplicationSessionAwareEntityProxyInterceptor();
-      entityInterceptor.setApplicationSession(getApplicationSession());
-      entityInterceptor.setEntityFactory(getEntityFactory());
-      getHibernateTemplate().setEntityInterceptor(entityInterceptor);
-      ((HibernateTransactionManager) getTransactionTemplate()
-          .getTransactionManager()).setEntityInterceptor(entityInterceptor);
-      ((HibernateAwareApplicationSession) getApplicationSession())
-          .setHibernateTemplate(getHibernateTemplate());
-    }
   }
 }

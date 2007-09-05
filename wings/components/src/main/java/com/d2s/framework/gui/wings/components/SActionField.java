@@ -38,12 +38,12 @@ public class SActionField extends SPanel {
 
   private static final long serialVersionUID = 5741890319182521808L;
 
-  private STextField        textField;
-  private Object            value;
-  private boolean           showTextField;
   private List<Action>      actions;
   private SPanel            buttonPanel;
   private Action            defaultAction;
+  private boolean           showTextField;
+  private STextField        textField;
+  private Object            value;
 
   /**
    * Constructs a new <code>SActionField</code> instance.
@@ -76,12 +76,77 @@ public class SActionField extends SPanel {
   }
 
   /**
+   * Adds a focus listener to the text field.
+   * 
+   * @param l
+   *          the listener to add.
+   */
+  public void addTextFieldDocumentListener(SDocumentListener l) {
+    textField.addDocumentListener(l);
+  }
+
+  /**
    * Gets the actions.
    * 
    * @return the actions.
    */
   public List<Action> getActions() {
     return actions;
+  }
+
+  /**
+   * Gets the action field text.
+   * 
+   * @return the action field text.
+   */
+  public String getActionText() {
+    return textField.getText();
+  }
+
+  /**
+   * Gets the value.
+   * 
+   * @return the value.
+   */
+  public Object getValue() {
+    return value;
+  }
+
+  /**
+   * Gets the showTextField.
+   * 
+   * @return the showTextField.
+   */
+  public boolean isShowingTextField() {
+    return showTextField;
+  }
+
+  /**
+   * Gets wether this action field text is synchronized with its underlying
+   * value.
+   * 
+   * @return true if this action field text is synchronized with its underlying
+   *         value.
+   */
+  public boolean isSynchronized() {
+    return ObjectUtils.equals(valueToString(), textField.getText());
+  }
+
+  /**
+   * performs the registered action programatically.
+   */
+  public void performAction() {
+    defaultAction.actionPerformed(new ActionEvent(this, 0, getActionText()));
+  }
+
+  /**
+   * Removes a focus listener from the text field.
+   * 
+   * @param l
+   *          the listener to remove.
+   */
+  public void removeTextFieldFocusListener(SDocumentListener l) {
+    textField.removeDocumentListener(l);
   }
 
   /**
@@ -111,80 +176,6 @@ public class SActionField extends SPanel {
   }
 
   /**
-   * Gets the value.
-   * 
-   * @return the value.
-   */
-  public Object getValue() {
-    return value;
-  }
-
-  /**
-   * Sets the value.
-   * 
-   * @param value
-   *          the value to set.
-   */
-  public void setValue(Object value) {
-    this.value = value;
-    textField.setText(valueToString());
-  }
-
-  /**
-   * Adds a focus listener to the text field.
-   * 
-   * @param l
-   *          the listener to add.
-   */
-  public void addTextFieldDocumentListener(SDocumentListener l) {
-    textField.addDocumentListener(l);
-  }
-
-  /**
-   * Removes a focus listener from the text field.
-   * 
-   * @param l
-   *          the listener to remove.
-   */
-  public void removeTextFieldFocusListener(SDocumentListener l) {
-    textField.removeDocumentListener(l);
-  }
-
-  /**
-   * performs the registered action programatically.
-   */
-  public void performAction() {
-    defaultAction.actionPerformed(new ActionEvent(this, 0, getActionText()));
-  }
-
-  /**
-   * Gets wether this action field text is synchronized with its underlying
-   * value.
-   * 
-   * @return true if this action field text is synchronized with its underlying
-   *         value.
-   */
-  public boolean isSynchronized() {
-    return ObjectUtils.equals(valueToString(), textField.getText());
-  }
-
-  private String valueToString() {
-    if (value == null) {
-      return "";
-    }
-    return value.toString();
-  }
-
-  /**
-   * Gets the action field text.
-   * 
-   * @return the action field text.
-   */
-  public String getActionText() {
-    return textField.getText();
-  }
-
-  /**
    * Gets the action field text.
    * 
    * @param actionText
@@ -192,6 +183,22 @@ public class SActionField extends SPanel {
    */
   public void setActionText(String actionText) {
     textField.setText(actionText);
+  }
+
+  /**
+   * Decorates the component with a marker.
+   * 
+   * @param decorated
+   *          if the component should be decorated.
+   */
+  public void setDecorated(boolean decorated) {
+    if (decorated) {
+      SBevelBorder border = new SBevelBorder(SBevelBorder.RAISED);
+      border.setColor(Color.red);
+      buttonPanel.setBorder(border);
+    } else {
+      buttonPanel.setBorder(null);
+    }
   }
 
   /**
@@ -222,27 +229,20 @@ public class SActionField extends SPanel {
   }
 
   /**
-   * Gets the showTextField.
+   * Sets the value.
    * 
-   * @return the showTextField.
+   * @param value
+   *          the value to set.
    */
-  public boolean isShowingTextField() {
-    return showTextField;
+  public void setValue(Object value) {
+    this.value = value;
+    textField.setText(valueToString());
   }
 
-  /**
-   * Decorates the component with a marker.
-   * 
-   * @param decorated
-   *          if the component should be decorated.
-   */
-  public void setDecorated(boolean decorated) {
-    if (decorated) {
-      SBevelBorder border = new SBevelBorder(SBevelBorder.RAISED);
-      border.setColor(Color.red);
-      buttonPanel.setBorder(border);
-    } else {
-      buttonPanel.setBorder(null);
+  private String valueToString() {
+    if (value == null) {
+      return "";
     }
+    return value.toString();
   }
 }

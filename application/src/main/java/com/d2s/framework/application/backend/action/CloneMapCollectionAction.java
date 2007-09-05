@@ -23,6 +23,20 @@ import com.d2s.framework.util.collection.ObjectEqualityMap;
 public class CloneMapCollectionAction extends AddMapToMasterAction {
 
   /**
+   * Clones a map.
+   * 
+   * @param element
+   *          the map to clone.
+   * @param context
+   *          the action context.
+   * @return the cloned map.
+   */
+  protected Object cloneElement(Object element, @SuppressWarnings("unused")
+  Map<String, Object> context) {
+    return new ObjectEqualityMap<Object, Object>((Map<?, ?>) element);
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -40,19 +54,5 @@ public class CloneMapCollectionAction extends AddMapToMasterAction {
       elementClones.add(cloneElement(element, context));
     }
     return elementClones;
-  }
-
-  /**
-   * Clones a map.
-   * 
-   * @param element
-   *          the map to clone.
-   * @param context
-   *          the action context.
-   * @return the cloned map.
-   */
-  protected Object cloneElement(Object element, @SuppressWarnings("unused")
-  Map<String, Object> context) {
-    return new ObjectEqualityMap<Object, Object>((Map<?, ?>) element);
   }
 }

@@ -20,38 +20,8 @@ import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
 public class BasicBinaryPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IBinaryPropertyDescriptor {
 
-  private Integer                   maxLength;
   private Map<String, List<String>> fileFilter;
-
-  /**
-   * {@inheritDoc}
-   */
-  public Integer getMaxLength() {
-    if (maxLength != null) {
-      return maxLength;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IBinaryPropertyDescriptor) getParentDescriptor()).getMaxLength();
-    }
-    return maxLength;
-  }
-
-  /**
-   * Sets the maxLength property.
-   * 
-   * @param maxLength
-   *          the maxLength to set.
-   */
-  public void setMaxLength(Integer maxLength) {
-    this.maxLength = maxLength;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class getModelType() {
-    return byte[].class;
-  }
+  private Integer                   maxLength;
 
   /**
    * {@inheritDoc}
@@ -68,6 +38,34 @@ public class BasicBinaryPropertyDescriptor extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public Integer getMaxLength() {
+    if (maxLength != null) {
+      return maxLength;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IBinaryPropertyDescriptor) getParentDescriptor()).getMaxLength();
+    }
+    return maxLength;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class getModelType() {
+    return byte[].class;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isQueryable() {
+    return false;
+  }
+
+  /**
    * Sets the fileFilter.
    * 
    * @param fileFilter
@@ -78,10 +76,12 @@ public class BasicBinaryPropertyDescriptor extends
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the maxLength property.
+   * 
+   * @param maxLength
+   *          the maxLength to set.
    */
-  @Override
-  public boolean isQueryable() {
-    return false;
+  public void setMaxLength(Integer maxLength) {
+    this.maxLength = maxLength;
   }
 }

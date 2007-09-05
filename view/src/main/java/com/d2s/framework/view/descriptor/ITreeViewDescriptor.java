@@ -15,11 +15,15 @@ package com.d2s.framework.view.descriptor;
 public interface ITreeViewDescriptor extends IViewDescriptor {
 
   /**
-   * Gets the root tree level descriptor of this tree view.
+   * Given a user object, this method qives the ability to the tree view
+   * descriptor to return the url of an image used to render the user object.
+   * This method may return null.
    * 
-   * @return the root tree level descriptor of this tree view.
+   * @param userObject
+   *          the user object to render.
+   * @return the url of the image to use for the renderer or null.
    */
-  ITreeLevelDescriptor getRootSubtreeDescriptor();
+  String getIconImageURLForUserObject(Object userObject);
 
   /**
    * It gets the maximum depth of the tree structure whichis mandatory in case
@@ -30,14 +34,10 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
   int getMaxDepth();
 
   /**
-   * Given a user object, this method qives the ability to the tree view
-   * descriptor to return the url of an image used to render the user object.
-   * This method may return null.
+   * Gets the root tree level descriptor of this tree view.
    * 
-   * @param userObject
-   *          the user object to render.
-   * @return the url of the image to use for the renderer or null.
+   * @return the root tree level descriptor of this tree view.
    */
-  String getIconImageURLForUserObject(Object userObject);
+  ITreeLevelDescriptor getRootSubtreeDescriptor();
 
 }

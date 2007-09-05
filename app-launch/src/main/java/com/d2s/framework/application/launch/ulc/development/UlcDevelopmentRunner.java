@@ -30,10 +30,6 @@ public final class UlcDevelopmentRunner {
 
   private static List<IMessageService> messageHandlers;
 
-  private UlcDevelopmentRunner() {
-    // Helper class constructor.
-  }
-
   /**
    * Overriden to cope with formatted textfield font bug.
    * 
@@ -94,5 +90,9 @@ public final class UlcDevelopmentRunner {
       messageHandlers = new ArrayList<IMessageService>();
     }
     messageHandlers.add(messageHandler);
+  }
+
+  private UlcDevelopmentRunner() {
+    // Helper class constructor.
   }
 }

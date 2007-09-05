@@ -26,25 +26,7 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIExtendedTree extends UITree {
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object createBasicObject(Anything a) {
-    JTree tree = (JTree) super.createBasicObject(a);
-    tree.addMouseListener(new PreparePopupListener());
-    return tree;
-  }
-
   private final class PreparePopupListener extends MouseAdapter {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void mousePressed(MouseEvent evt) {
-      maybePreparePopup(evt);
-    }
 
     private void maybePreparePopup(MouseEvent evt) {
       if (evt.getButton() != MouseEvent.BUTTON1) {
@@ -55,6 +37,24 @@ public class UIExtendedTree extends UITree {
         sendULC(ExtendedTreeConstants.PREPARE_POPUP_REQUEST, rowAnything);
       }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void mousePressed(MouseEvent evt) {
+      maybePreparePopup(evt);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object createBasicObject(Anything a) {
+    JTree tree = (JTree) super.createBasicObject(a);
+    tree.addMouseListener(new PreparePopupListener());
+    return tree;
   }
 
   /**

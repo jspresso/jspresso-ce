@@ -28,13 +28,6 @@ public interface ISubViewDescriptor extends IIconDescriptor {
   IModelDescriptor getModelDescriptor();
 
   /**
-   * Gets wether this view is read-only.
-   * 
-   * @return true if the view is read-only.
-   */
-  boolean isReadOnly();
-
-  /**
    * Gets the collection of gates determining the readability state of this
    * property.
    * 
@@ -51,4 +44,11 @@ public interface ISubViewDescriptor extends IIconDescriptor {
    *         property.
    */
   Collection<IGate> getWritabilityGates();
+
+  /**
+   * Gets wether this view is read-only.
+   * 
+   * @return true if the view is read-only.
+   */
+  boolean isReadOnly();
 }

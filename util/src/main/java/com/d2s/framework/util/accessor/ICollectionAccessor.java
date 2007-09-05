@@ -37,6 +37,14 @@ public interface ICollectionAccessor extends IAccessor {
       InvocationTargetException, NoSuchMethodException;
 
   /**
+   * Return type refined.
+   * <p>
+   * {@inheritDoc}
+   */
+  Collection getValue(Object target) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException;
+
+  /**
    * Removes the value from the bean property of this accessor.
    * 
    * @param target
@@ -54,12 +62,4 @@ public interface ICollectionAccessor extends IAccessor {
   void removeFromValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException;
-
-  /**
-   * Return type refined.
-   * <p>
-   * {@inheritDoc}
-   */
-  Collection getValue(Object target) throws IllegalAccessException,
-      InvocationTargetException, NoSuchMethodException;
 }

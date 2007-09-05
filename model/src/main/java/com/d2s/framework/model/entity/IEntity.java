@@ -32,6 +32,23 @@ public interface IEntity extends IComponent,
   String VERSION = "version";
 
   /**
+   * It is important to declare here so that ORM (hibernate for instance)
+   * detects it has to delegate to the underlying instance when proxiing.
+   *
+   * @param o
+   *          the instance to compare to.
+   * @return true if both instances are equal.
+   */
+  boolean equals(Object o);
+
+  /**
+   * Gets the interface or class establishing the entity contract.
+   *
+   * @return the entity contract.
+   */
+  Class<? extends IEntity> getContract();
+
+  /**
    * Gets the id used to uniquely identify an entity (surrogate key). The id is
    * assigned to the entity instance as soon as the entity is created in memory
    * an is afterwards made immutable so that <code>equals()</code> and
@@ -51,20 +68,6 @@ public interface IEntity extends IComponent,
   Integer getVersion();
 
   /**
-   * Gets the interface or class establishing the entity contract.
-   *
-   * @return the entity contract.
-   */
-  Class<? extends IEntity> getContract();
-
-  /**
-   * Gets wether this entity has already been saved in the backing store.
-   *
-   * @return true if the entity is not transient.
-   */
-  boolean isPersistent();
-
-  /**
    * It is important to declare here so that ORM (hibernate for instance)
    * detects it has to delegate to the underlying instance when proxiing.
    *
@@ -73,12 +76,9 @@ public interface IEntity extends IComponent,
   int hashCode();
 
   /**
-   * It is important to declare here so that ORM (hibernate for instance)
-   * detects it has to delegate to the underlying instance when proxiing.
+   * Gets wether this entity has already been saved in the backing store.
    *
-   * @param o
-   *          the instance to compare to.
-   * @return true if both instances are equal.
+   * @return true if the entity is not transient.
    */
-  boolean equals(Object o);
+  boolean isPersistent();
 }

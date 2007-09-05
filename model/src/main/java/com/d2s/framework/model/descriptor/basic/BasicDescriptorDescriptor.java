@@ -21,11 +21,6 @@ import com.d2s.framework.util.descriptor.IDescriptor;
  */
 public final class BasicDescriptorDescriptor {
 
-  private BasicDescriptorDescriptor() {
-    super();
-    // Helper constructor
-  }
-
   /**
    * The descriptor of the component descriptor.
    */
@@ -48,5 +43,10 @@ public final class BasicDescriptorDescriptor {
     instance.setPropertyDescriptors(propertyDescriptors);
 
     return instance;
+  }
+
+  private BasicDescriptorDescriptor() {
+    super();
+    // Helper constructor
   }
 }

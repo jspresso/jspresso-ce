@@ -19,10 +19,10 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class BasicView<E> implements IView<E> {
 
-  private E               peer;
   private IValueConnector connector;
-  private IView<E>        parent;
   private IViewDescriptor descriptor;
+  private IView<E>        parent;
+  private E               peer;
 
   /**
    * Constructs a new <code>BasicView</code> instance.
@@ -31,25 +31,6 @@ public class BasicView<E> implements IView<E> {
    *          the peer component.
    */
   public BasicView(E peer) {
-    this.peer = peer;
-  }
-
-  /**
-   * Gets the component responsible for implementing the view.
-   * <p>
-   * {@inheritDoc}
-   */
-  public E getPeer() {
-    return peer;
-  }
-
-  /**
-   * Sets the peer.
-   * 
-   * @param peer
-   *          the peer to set.
-   */
-  public void setPeer(E peer) {
     this.peer = peer;
   }
 
@@ -63,13 +44,12 @@ public class BasicView<E> implements IView<E> {
   }
 
   /**
-   * Sets the connector.
+   * Gets the descriptor.
    * 
-   * @param connector
-   *          the connector to set.
+   * @return the descriptor.
    */
-  public void setConnector(IValueConnector connector) {
-    this.connector = connector;
+  public IViewDescriptor getDescriptor() {
+    return descriptor;
   }
 
   /**
@@ -82,22 +62,31 @@ public class BasicView<E> implements IView<E> {
   }
 
   /**
-   * Sets the parent.
-   * 
-   * @param parent
-   *          the parent to set.
+   * Gets the component responsible for implementing the view.
+   * <p>
+   * {@inheritDoc}
    */
-  public void setParent(IView<E> parent) {
-    this.parent = parent;
+  public E getPeer() {
+    return peer;
   }
 
   /**
-   * Gets the descriptor.
-   * 
-   * @return the descriptor.
+   * Returns this view.
+   * <p>
+   * {@inheritDoc}
    */
-  public IViewDescriptor getDescriptor() {
-    return descriptor;
+  public IView<E> getView() {
+    return this;
+  }
+
+  /**
+   * Sets the connector.
+   * 
+   * @param connector
+   *          the connector to set.
+   */
+  public void setConnector(IValueConnector connector) {
+    this.connector = connector;
   }
 
   /**
@@ -111,12 +100,23 @@ public class BasicView<E> implements IView<E> {
   }
 
   /**
-   * Returns this view.
-   * <p>
-   * {@inheritDoc}
+   * Sets the parent.
+   * 
+   * @param parent
+   *          the parent to set.
    */
-  public IView<E> getView() {
-    return this;
+  public void setParent(IView<E> parent) {
+    this.parent = parent;
+  }
+
+  /**
+   * Sets the peer.
+   * 
+   * @param peer
+   *          the peer to set.
+   */
+  public void setPeer(E peer) {
+    this.peer = peer;
   }
 
 }

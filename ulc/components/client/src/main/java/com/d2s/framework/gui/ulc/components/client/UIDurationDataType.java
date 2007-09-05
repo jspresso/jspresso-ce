@@ -31,21 +31,6 @@ public class UIDurationDataType extends UIDataType {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void restoreState(Anything args) {
-    super.restoreState(args);
-
-    if (args.isDefined(DurationDataTypeConstants.LOCALE)) {
-      locale = new Locale(args.get(DurationDataTypeConstants.LOCALE, Locale
-          .getDefault().getLanguage()));
-    }
-    formatter = new DurationFormatter(locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public Object convertToObject(String newString, @SuppressWarnings("unused")
   Object previousValue) throws DataTypeConversionException {
@@ -69,14 +54,6 @@ public class UIDurationDataType extends UIDataType {
    * {@inheritDoc}
    */
   @Override
-  public Object getDefaultValue(String newString) {
-    return newString;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof UIDurationDataType)) {
       return false;
@@ -92,10 +69,33 @@ public class UIDurationDataType extends UIDataType {
    * {@inheritDoc}
    */
   @Override
+  public Object getDefaultValue(String newString) {
+    return newString;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public int hashCode() {
     if (locale == null) {
       return 0;
     }
     return locale.hashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public void restoreState(Anything args) {
+    super.restoreState(args);
+
+    if (args.isDefined(DurationDataTypeConstants.LOCALE)) {
+      locale = new Locale(args.get(DurationDataTypeConstants.LOCALE, Locale
+          .getDefault().getLanguage()));
+    }
+    formatter = new DurationFormatter(locale);
   }
 }

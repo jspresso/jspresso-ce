@@ -23,55 +23,14 @@ public class BasicReferencePropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
     IReferencePropertyDescriptor<E> {
 
-  private IComponentDescriptor<E> referencedDescriptor;
   private Map<String, String>     initializationMapping;
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  public IComponentDescriptor<E> getReferencedDescriptor() {
-    if (referencedDescriptor != null) {
-      return referencedDescriptor;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IReferencePropertyDescriptor<E>) getParentDescriptor())
-          .getReferencedDescriptor();
-    }
-    return referencedDescriptor;
-  }
-
-  /**
-   * Sets the referencedDescriptor property.
-   * 
-   * @param referencedDescriptor
-   *          the referencedDescriptor to set.
-   */
-  public void setReferencedDescriptor(
-      IComponentDescriptor<E> referencedDescriptor) {
-    this.referencedDescriptor = referencedDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class getModelType() {
-    return getReferencedDescriptor().getComponentContract();
-  }
+  private IComponentDescriptor<E> referencedDescriptor;
 
   /**
    * {@inheritDoc}
    */
   public IComponentDescriptor getComponentDescriptor() {
     return getReferencedDescriptor();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isQueryable() {
-    return true;
   }
 
   /**
@@ -91,6 +50,36 @@ public class BasicReferencePropertyDescriptor<E> extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public Class getModelType() {
+    return getReferencedDescriptor().getComponentContract();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public IComponentDescriptor<E> getReferencedDescriptor() {
+    if (referencedDescriptor != null) {
+      return referencedDescriptor;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IReferencePropertyDescriptor<E>) getParentDescriptor())
+          .getReferencedDescriptor();
+    }
+    return referencedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isQueryable() {
+    return true;
+  }
+
+  /**
    * Sets the initializationMapping.
    * 
    * @param initializationMapping
@@ -98,5 +87,16 @@ public class BasicReferencePropertyDescriptor<E> extends
    */
   public void setInitializationMapping(Map<String, String> initializationMapping) {
     this.initializationMapping = initializationMapping;
+  }
+
+  /**
+   * Sets the referencedDescriptor property.
+   * 
+   * @param referencedDescriptor
+   *          the referencedDescriptor to set.
+   */
+  public void setReferencedDescriptor(
+      IComponentDescriptor<E> referencedDescriptor) {
+    this.referencedDescriptor = referencedDescriptor;
   }
 }

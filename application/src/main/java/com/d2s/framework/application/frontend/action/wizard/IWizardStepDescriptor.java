@@ -30,24 +30,6 @@ public interface IWizardStepDescriptor extends IDescriptor {
   String DEFAULT_PREVIOUS_KEY = "previous";
 
   /**
-   * Gets the previous wizard step descriptor if any.
-   * 
-   * @param context
-   *          the current value of the context.
-   * @return the previous wizard step descriptor if any.
-   */
-  IWizardStepDescriptor getPreviousStepDescriptor(Map<String, Object> context);
-
-  /**
-   * Gets the next wizard step descriptor if any.
-   * 
-   * @param context
-   *          the current value of the context.
-   * @return the next wizard step descriptor if any.
-   */
-  IWizardStepDescriptor getNextStepDescriptor(Map<String, Object> context);
-
-  /**
    * Gets wether this wizard step descriptor can finish the wizard.
    * 
    * @param context
@@ -57,11 +39,20 @@ public interface IWizardStepDescriptor extends IDescriptor {
   boolean canFinish(Map<String, Object> context);
 
   /**
-   * Gets the view to display in the wizard view.
+   * Gets the label key to use for the next action. Defaults to "next" if null.
    * 
-   * @return the view to display in the wizard view.
+   * @return the label key to use for the next action.
    */
-  IViewDescriptor getViewDescriptor();
+  String getNextLabelKey();
+
+  /**
+   * Gets the next wizard step descriptor if any.
+   * 
+   * @param context
+   *          the current value of the context.
+   * @return the next wizard step descriptor if any.
+   */
+  IWizardStepDescriptor getNextStepDescriptor(Map<String, Object> context);
 
   /**
    * Gets the action, if any, triggered by entering this step.
@@ -78,18 +69,27 @@ public interface IWizardStepDescriptor extends IDescriptor {
   IAction getOnLeaveAction();
 
   /**
-   * Gets the label key to use for the next action. Defaults to "next" if null.
-   * 
-   * @return the label key to use for the next action.
-   */
-  String getNextLabelKey();
-
-  /**
    * Gets the label key to use for the previous action. Defaults to "back" if
    * null.
    * 
    * @return the label key to use for the previous action.
    */
   String getPreviousLabelKey();
+
+  /**
+   * Gets the previous wizard step descriptor if any.
+   * 
+   * @param context
+   *          the current value of the context.
+   * @return the previous wizard step descriptor if any.
+   */
+  IWizardStepDescriptor getPreviousStepDescriptor(Map<String, Object> context);
+
+  /**
+   * Gets the view to display in the wizard view.
+   * 
+   * @return the view to display in the wizard view.
+   */
+  IViewDescriptor getViewDescriptor();
 
 }

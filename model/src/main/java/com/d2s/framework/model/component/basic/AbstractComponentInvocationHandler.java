@@ -55,13 +55,36 @@ import com.d2s.framework.util.collection.CollectionHelper;
 public abstract class AbstractComponentInvocationHandler implements
     InvocationHandler, Serializable {
 
-  private static final long                           serialVersionUID = -8332414648339056836L;
+  private static final class NeverEqualsInvocationHandler implements
+      InvocationHandler {
 
-  private IComponentDescriptor<IComponent>            componentDescriptor;
-  private PropertyChangeSupport                       changeSupport;
-  private Map<Class, IComponentExtension<IComponent>> componentExtensions;
-  private IComponentCollectionFactory<IComponent>     collectionFactory;
+    private Object delegate;
+
+    private NeverEqualsInvocationHandler(Object delegate) {
+      this.delegate = delegate;
+    }
+
+    /**
+     * Just 'overrides' the equals method to always return false.
+     * <p>
+     * {@inheritDoc}
+     */
+    public Object invoke(@SuppressWarnings("unused")
+    Object proxy, Method method, Object[] args) throws Throwable {
+      if (method.getName().equals("equals") && args.length == 1) {
+        return new Boolean(false);
+      }
+      return method.invoke(delegate, args);
+    }
+  }
+
+  private static final long                           serialVersionUID = -8332414648339056836L;
   private IAccessorFactory                            accessorFactory;
+  private PropertyChangeSupport                       changeSupport;
+  private IComponentCollectionFactory<IComponent>     collectionFactory;
+  private IComponentDescriptor<IComponent>            componentDescriptor;
+  private Map<Class, IComponentExtension<IComponent>> componentExtensions;
+
   private IComponentExtensionFactory                  extensionFactory;
 
   private Set<String>                                 modifierMonitors;
@@ -91,34 +114,101 @@ public abstract class AbstractComponentInvocationHandler implements
     this.extensionFactory = extensionFactory;
   }
 
-  /**
-   * Direct read access to the properties map without any other operation. Use
-   * with caution only in subclasses.
-   *
-   * @param propertyName
-   *          the property name.
-   * @return the property value.
-   */
-  protected abstract Object retrievePropertyValue(String propertyName);
+  private synchronized void addPropertyChangeListener(Object proxy,
+      PropertyChangeListener listener) {
+    if (listener == null) {
+      return;
+    }
+    if (changeSupport == null) {
+      changeSupport = new PropertyChangeSupport(proxy);
+    }
+    changeSupport.addPropertyChangeListener(listener);
+  }
 
-  /**
-   * Direct write access to the properties map without any other operation. Use
-   * with caution only in subclasses.
-   *
-   * @param propertyName
-   *          the property name.
-   * @param propertyValue
-   *          the property value.
-   */
-  protected abstract void storeProperty(String propertyName,
-      Object propertyValue);
+  private synchronized void addPropertyChangeListener(Object proxy,
+      String propertyName, PropertyChangeListener listener) {
+    if (listener == null) {
+      return;
+    }
+    if (changeSupport == null) {
+      changeSupport = new PropertyChangeSupport(proxy);
+    }
+    changeSupport.addPropertyChangeListener(propertyName, listener);
+  }
 
-  /**
-   * Delegate method to compute hashcode.
-   *
-   * @return the computed hashcode.
-   */
-  protected abstract int computeHashCode();
+  @SuppressWarnings("unchecked")
+  private void addToProperty(Object proxy,
+      ICollectionPropertyDescriptor propertyDescriptor, int index, Object value) {
+    String propertyName = propertyDescriptor.getName();
+    try {
+      Collection collectionProperty = (Collection) accessorFactory
+          .createPropertyAccessor(propertyName,
+              componentDescriptor.getComponentContract()).getValue(proxy);
+      propertyDescriptor.preprocessAdder(proxy, collectionProperty, value);
+      IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
+          .getReverseRelationEnd();
+      if (reversePropertyDescriptor != null) {
+        if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+          accessorFactory.createPropertyAccessor(
+              reversePropertyDescriptor.getName(),
+              propertyDescriptor.getReferencedDescriptor()
+                  .getElementDescriptor().getComponentContract()).setValue(
+              value, proxy);
+        } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
+          ICollectionAccessor collectionAccessor = accessorFactory
+              .createCollectionPropertyAccessor(reversePropertyDescriptor
+                  .getName(), propertyDescriptor.getReferencedDescriptor()
+                  .getElementDescriptor().getComponentContract(),
+                  ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                      .getCollectionDescriptor().getElementDescriptor()
+                      .getComponentContract());
+          if (collectionAccessor instanceof IModelDescriptorAware) {
+            ((IModelDescriptorAware) collectionAccessor)
+                .setModelDescriptor(reversePropertyDescriptor);
+          }
+          collectionAccessor.addToValue(value, proxy);
+        }
+      }
+      Collection oldCollectionSnapshot = CollectionHelper
+          .cloneCollection((Collection<?>) collectionProperty);
+      boolean inserted = false;
+      if (collectionProperty instanceof List && index >= 0
+          && index < collectionProperty.size()) {
+        ((List) collectionProperty).add(index, value);
+        inserted = true;
+      } else {
+        inserted = collectionProperty.add(value);
+      }
+      if (inserted) {
+        firePropertyChange(propertyName, oldCollectionSnapshot,
+            collectionProperty);
+        propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
+      }
+    } catch (IllegalAccessException ex) {
+      // This cannot happen but throw anyway.
+      throw new ComponentException(ex);
+    } catch (InvocationTargetException ex) {
+      // This cannot happen but throw anyway.
+      throw new ComponentException(ex.getCause());
+    } catch (NoSuchMethodException ex) {
+      // This cannot happen but throw anyway.
+      throw new ComponentException(ex);
+    }
+  }
+
+  @SuppressWarnings("unchecked")
+  private void addToProperty(Object proxy,
+      ICollectionPropertyDescriptor propertyDescriptor, Object value) {
+    addToProperty(proxy, propertyDescriptor, -1, value);
+  }
+
+  private void checkIntegrity(Object proxy) {
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+        .getPropertyDescriptors()) {
+      propertyDescriptor.checkValueIntegrity(proxy,
+          straightGetProperty(propertyDescriptor.getName()));
+    }
+  }
 
   /**
    * Delegate method to compute object equality.
@@ -132,6 +222,13 @@ public abstract class AbstractComponentInvocationHandler implements
   protected abstract boolean computeEquals(IComponent proxy, Object another);
 
   /**
+   * Delegate method to compute hashcode.
+   *
+   * @return the computed hashcode.
+   */
+  protected abstract int computeHashCode();
+
+  /**
    * Gives a chance to the implementor to decorate a component reference before
    * returning it when fetching association ends.
    *
@@ -143,6 +240,137 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   protected abstract IComponent decorateReferent(IComponent referent,
       IComponentDescriptor<IComponent> referentDescriptor);
+
+  private void firePropertyChange(String propertyName, Object oldValue,
+      Object newValue) {
+    if (changeSupport == null || (oldValue == null && newValue == null)) {
+      return;
+    }
+    if (!isInitialized(oldValue)) {
+      changeSupport.firePropertyChange(propertyName, null, newValue);
+    } else {
+      changeSupport.firePropertyChange(propertyName, oldValue, newValue);
+    }
+  }
+
+  /**
+   * Gets the accessorFactory.
+   *
+   * @return the accessorFactory.
+   */
+  protected IAccessorFactory getAccessorFactory() {
+    return accessorFactory;
+  }
+
+  /**
+   * Gets a collection property value.
+   *
+   * @param proxy
+   *          the proxy to get the property of.
+   * @param propertyDescriptor
+   *          the property descriptor to get the value for.
+   * @return the property value.
+   */
+  @SuppressWarnings("unchecked")
+  protected Object getCollectionProperty(@SuppressWarnings("unused")
+  Object proxy,
+      ICollectionPropertyDescriptor<? extends Object> propertyDescriptor) {
+    Object property = straightGetProperty(propertyDescriptor.getName());
+    if (property == null) {
+      property = collectionFactory.createEntityCollection(propertyDescriptor
+          .getReferencedDescriptor().getCollectionInterface());
+      storeProperty(propertyDescriptor.getName(), property);
+    }
+    if (property instanceof List) {
+      List<IComponent> propertyAsList = (List<IComponent>) property;
+      for (int i = 0; i < propertyAsList.size(); i++) {
+        IComponent referent = propertyAsList.get(i);
+        IComponent decorated = decorateReferent(referent, propertyDescriptor
+            .getReferencedDescriptor().getElementDescriptor()
+            .getComponentDescriptor());
+        if (decorated != referent) {
+          propertyAsList.set(i, decorated);
+        }
+      }
+    } else if (property instanceof Set) {
+      Set<IComponent> propertyAsSet = (Set<IComponent>) property;
+      for (IComponent referent : new HashSet<IComponent>(propertyAsSet)) {
+        IComponent decorated = decorateReferent(referent, propertyDescriptor
+            .getReferencedDescriptor().getElementDescriptor()
+            .getComponentDescriptor());
+        if (decorated != referent) {
+          propertyAsSet.add(decorated);
+        }
+      }
+    }
+    return property;
+  }
+
+  /**
+   * Gets the interface class being the contract of this component.
+   *
+   * @return the component interface contract.
+   */
+  public Class<? extends Object> getComponentContract() {
+    return componentDescriptor.getComponentContract();
+  }
+
+  private synchronized IComponentExtension getExtensionInstance(
+      Class<IComponentExtension<IComponent>> extensionClass, IComponent proxy) {
+    IComponentExtension<IComponent> extension;
+    if (componentExtensions == null) {
+      componentExtensions = new HashMap<Class, IComponentExtension<IComponent>>();
+      extension = null;
+    } else {
+      extension = componentExtensions.get(extensionClass);
+    }
+    if (extension == null) {
+      extension = extensionFactory.createComponentExtension(extensionClass,
+          componentDescriptor.getComponentContract(), proxy);
+      componentExtensions.put(extensionClass, extension);
+    }
+    return extension;
+  }
+
+  /**
+   * Gets a property value.
+   *
+   * @param proxy
+   *          the proxy to get the property of.
+   * @param propertyDescriptor
+   *          the property descriptor to get the value for.
+   * @return the property value.
+   */
+  @SuppressWarnings("unchecked")
+  protected Object getProperty(Object proxy,
+      IPropertyDescriptor propertyDescriptor) {
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      return getCollectionProperty(proxy,
+          (ICollectionPropertyDescriptor<? extends Object>) propertyDescriptor);
+    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+      return getReferenceProperty(proxy,
+          (IReferencePropertyDescriptor<IComponent>) propertyDescriptor);
+    }
+    Object propertyValue = straightGetProperty(propertyDescriptor.getName());
+    return propertyValue;
+  }
+
+  /**
+   * Gets a reference property value.
+   *
+   * @param proxy
+   *          the proxy to get the property of.
+   * @param propertyDescriptor
+   *          the property descriptor to get the value for.
+   * @return the property value.
+   */
+  protected Object getReferenceProperty(@SuppressWarnings("unused")
+  Object proxy, IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+    IComponent property = (IComponent) straightGetProperty(propertyDescriptor
+        .getName());
+    return decorateReferent(property, propertyDescriptor
+        .getReferencedDescriptor());
+  }
 
   /**
    * Handles methods invocations on the component proxy. Either :
@@ -272,6 +500,100 @@ public abstract class AbstractComponentInvocationHandler implements
         + componentDescriptor.getComponentContract());
   }
 
+  private Object invokeExtensionMethod(IComponentExtension componentExtension,
+      Method method, Object[] args) {
+    try {
+      return MethodUtils.invokeMethod(componentExtension, method.getName(),
+          args, method.getParameterTypes());
+    } catch (IllegalAccessException ex) {
+      throw new ComponentException(ex);
+    } catch (InvocationTargetException ex) {
+      throw new ComponentException(ex.getCause());
+    } catch (NoSuchMethodException ex) {
+      throw new ComponentException(ex);
+    }
+  }
+
+  private boolean invokeLifecycleInterceptors(Object proxy,
+      Method lifecycleMethod, Object[] args) {
+    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
+        .getName())
+        || ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
+            .getName())) {
+      checkIntegrity(proxy);
+    }
+    boolean interceptorResults = false;
+    for (ILifecycleInterceptor lifecycleInterceptor : componentDescriptor
+        .getLifecycleInterceptors()) {
+      int signatureSize = lifecycleMethod.getParameterTypes().length + 1;
+      Class[] parameterTypes = new Class[signatureSize];
+      Object[] parameters = new Object[signatureSize];
+
+      parameterTypes[0] = componentDescriptor.getComponentContract();
+      parameters[0] = proxy;
+
+      for (int i = 1; i < signatureSize; i++) {
+        parameterTypes[i] = lifecycleMethod.getParameterTypes()[i - 1];
+        parameters[i] = args[i - 1];
+      }
+      try {
+        interceptorResults = interceptorResults
+            || ((Boolean) MethodUtils.invokeMethod(lifecycleInterceptor,
+                lifecycleMethod.getName(), parameters, parameterTypes))
+                .booleanValue();
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new ComponentException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ComponentException(ex);
+      }
+    }
+    return interceptorResults;
+  }
+
+  /**
+   * Invokes a service method on the component.
+   *
+   * @param proxy
+   *          the component to invoke the service on.
+   * @param method
+   *          the method implemented by the component.
+   * @param args
+   *          the arguments of the method implemented by the component.
+   * @return the value returned by the method execution if any.
+   * @throws NoSuchMethodException
+   *           if no mean could be found to service the method.
+   */
+  protected Object invokeServiceMethod(Object proxy, Method method,
+      Object[] args) throws NoSuchMethodException {
+    IComponentService service = componentDescriptor.getServiceDelegate(method);
+    if (service != null) {
+      int signatureSize = method.getParameterTypes().length + 1;
+      Class[] parameterTypes = new Class[signatureSize];
+      Object[] parameters = new Object[signatureSize];
+
+      parameterTypes[0] = componentDescriptor.getComponentContract();
+      parameters[0] = proxy;
+
+      for (int i = 1; i < signatureSize; i++) {
+        parameterTypes[i] = method.getParameterTypes()[i - 1];
+        parameters[i] = args[i - 1];
+      }
+      try {
+        return MethodUtils.invokeMethod(service, method.getName(), parameters,
+            parameterTypes);
+      } catch (IllegalAccessException ex) {
+        throw new ComponentException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new ComponentException(ex.getCause());
+      } catch (NoSuchMethodException ex) {
+        throw new ComponentException(ex);
+      }
+    }
+    throw new NoSuchMethodException(method.toString());
+  }
+
   /**
    * Wether the object is fully initialized.
    *
@@ -284,88 +606,98 @@ public abstract class AbstractComponentInvocationHandler implements
     return true;
   }
 
-  /**
-   * Gets a property value.
-   *
-   * @param proxy
-   *          the proxy to get the property of.
-   * @param propertyDescriptor
-   *          the property descriptor to get the value for.
-   * @return the property value.
-   */
-  @SuppressWarnings("unchecked")
-  protected Object getProperty(Object proxy,
-      IPropertyDescriptor propertyDescriptor) {
-    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      return getCollectionProperty(proxy,
-          (ICollectionPropertyDescriptor<? extends Object>) propertyDescriptor);
-    } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return getReferenceProperty(proxy,
-          (IReferencePropertyDescriptor<IComponent>) propertyDescriptor);
+  private void removeFromProperty(Object proxy,
+      ICollectionPropertyDescriptor propertyDescriptor, Object value) {
+    String propertyName = propertyDescriptor.getName();
+    if (!isInitialized(straightGetProperty(propertyName))) {
+      return;
     }
-    Object propertyValue = straightGetProperty(propertyDescriptor.getName());
-    return propertyValue;
+    try {
+      Collection collectionProperty = (Collection) accessorFactory
+          .createPropertyAccessor(propertyName,
+              componentDescriptor.getComponentContract()).getValue(proxy);
+      propertyDescriptor.preprocessRemover(proxy, collectionProperty, value);
+      if (collectionProperty.contains(value)) {
+        IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
+            .getReverseRelationEnd();
+        if (reversePropertyDescriptor != null) {
+          if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
+            accessorFactory.createPropertyAccessor(
+                reversePropertyDescriptor.getName(),
+                propertyDescriptor.getReferencedDescriptor()
+                    .getElementDescriptor().getComponentContract()).setValue(
+                value, null);
+          } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
+            ICollectionAccessor collectionAccessor = accessorFactory
+                .createCollectionPropertyAccessor(reversePropertyDescriptor
+                    .getName(), propertyDescriptor.getReferencedDescriptor()
+                    .getElementDescriptor().getComponentContract(),
+                    ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
+                        .getCollectionDescriptor().getElementDescriptor()
+                        .getComponentContract());
+            if (collectionAccessor instanceof IModelDescriptorAware) {
+              ((IModelDescriptorAware) collectionAccessor)
+                  .setModelDescriptor(reversePropertyDescriptor);
+            }
+            collectionAccessor.removeFromValue(value, proxy);
+          }
+        }
+        Collection oldCollectionSnapshot = CollectionHelper
+            .cloneCollection((Collection<?>) collectionProperty);
+        if (collectionProperty.remove(value)) {
+          firePropertyChange(propertyName, oldCollectionSnapshot,
+              collectionProperty);
+          propertyDescriptor.postprocessRemover(proxy, collectionProperty,
+              value);
+        }
+      }
+    } catch (IllegalAccessException ex) {
+      // This cannot happen but throw anyway.
+      throw new ComponentException(ex);
+    } catch (InvocationTargetException ex) {
+      // This cannot happen but throw anyway.
+      throw new ComponentException(ex.getCause());
+    } catch (NoSuchMethodException ex) {
+      // This cannot happen but throw anyway.
+      throw new ComponentException(ex);
+    }
+  }
+
+  private synchronized void removePropertyChangeListener(
+      PropertyChangeListener listener) {
+    if (listener == null || changeSupport == null) {
+      return;
+    }
+    changeSupport.removePropertyChangeListener(listener);
+  }
+
+  private synchronized void removePropertyChangeListener(String propertyName,
+      PropertyChangeListener listener) {
+    if (listener == null || changeSupport == null) {
+      return;
+    }
+    changeSupport.removePropertyChangeListener(propertyName, listener);
   }
 
   /**
-   * Gets a collection property value.
+   * Direct read access to the properties map without any other operation. Use
+   * with caution only in subclasses.
    *
-   * @param proxy
-   *          the proxy to get the property of.
-   * @param propertyDescriptor
-   *          the property descriptor to get the value for.
+   * @param propertyName
+   *          the property name.
    * @return the property value.
    */
-  @SuppressWarnings("unchecked")
-  protected Object getCollectionProperty(@SuppressWarnings("unused")
-  Object proxy,
-      ICollectionPropertyDescriptor<? extends Object> propertyDescriptor) {
-    Object property = straightGetProperty(propertyDescriptor.getName());
-    if (property == null) {
-      property = collectionFactory.createEntityCollection(propertyDescriptor
-          .getReferencedDescriptor().getCollectionInterface());
-      storeProperty(propertyDescriptor.getName(), property);
-    }
-    if (property instanceof List) {
-      List<IComponent> propertyAsList = (List<IComponent>) property;
-      for (int i = 0; i < propertyAsList.size(); i++) {
-        IComponent referent = propertyAsList.get(i);
-        IComponent decorated = decorateReferent(referent, propertyDescriptor
-            .getReferencedDescriptor().getElementDescriptor()
-            .getComponentDescriptor());
-        if (decorated != referent) {
-          propertyAsList.set(i, decorated);
-        }
-      }
-    } else if (property instanceof Set) {
-      Set<IComponent> propertyAsSet = (Set<IComponent>) property;
-      for (IComponent referent : new HashSet<IComponent>(propertyAsSet)) {
-        IComponent decorated = decorateReferent(referent, propertyDescriptor
-            .getReferencedDescriptor().getElementDescriptor()
-            .getComponentDescriptor());
-        if (decorated != referent) {
-          propertyAsSet.add(decorated);
-        }
-      }
-    }
-    return property;
-  }
+  protected abstract Object retrievePropertyValue(String propertyName);
 
   /**
-   * Gets a reference property value.
+   * Sets the collectionFactory.
    *
-   * @param proxy
-   *          the proxy to get the property of.
-   * @param propertyDescriptor
-   *          the property descriptor to get the value for.
-   * @return the property value.
+   * @param collectionFactory
+   *          the collectionFactory to set.
    */
-  protected Object getReferenceProperty(@SuppressWarnings("unused")
-  Object proxy, IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
-    IComponent property = (IComponent) straightGetProperty(propertyDescriptor
-        .getName());
-    return decorateReferent(property, propertyDescriptor
-        .getReferencedDescriptor());
+  public void setCollectionFactory(
+      IComponentCollectionFactory<IComponent> collectionFactory) {
+    this.collectionFactory = collectionFactory;
   }
 
   @SuppressWarnings("unchecked")
@@ -488,297 +820,26 @@ public abstract class AbstractComponentInvocationHandler implements
     propertyDescriptor.postprocessSetter(proxy, oldProperty, newProperty);
   }
 
-  @SuppressWarnings("unchecked")
-  private void addToProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor, Object value) {
-    addToProperty(proxy, propertyDescriptor, -1, value);
-  }
-
-  @SuppressWarnings("unchecked")
-  private void addToProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor, int index, Object value) {
-    String propertyName = propertyDescriptor.getName();
-    try {
-      Collection collectionProperty = (Collection) accessorFactory
-          .createPropertyAccessor(propertyName,
-              componentDescriptor.getComponentContract()).getValue(proxy);
-      propertyDescriptor.preprocessAdder(proxy, collectionProperty, value);
-      IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
-          .getReverseRelationEnd();
-      if (reversePropertyDescriptor != null) {
-        if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
-          accessorFactory.createPropertyAccessor(
-              reversePropertyDescriptor.getName(),
-              propertyDescriptor.getReferencedDescriptor()
-                  .getElementDescriptor().getComponentContract()).setValue(
-              value, proxy);
-        } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-          ICollectionAccessor collectionAccessor = accessorFactory
-              .createCollectionPropertyAccessor(reversePropertyDescriptor
-                  .getName(), propertyDescriptor.getReferencedDescriptor()
-                  .getElementDescriptor().getComponentContract(),
-                  ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
-                      .getCollectionDescriptor().getElementDescriptor()
-                      .getComponentContract());
-          if (collectionAccessor instanceof IModelDescriptorAware) {
-            ((IModelDescriptorAware) collectionAccessor)
-                .setModelDescriptor(reversePropertyDescriptor);
-          }
-          collectionAccessor.addToValue(value, proxy);
-        }
-      }
-      Collection oldCollectionSnapshot = CollectionHelper
-          .cloneCollection((Collection<?>) collectionProperty);
-      boolean inserted = false;
-      if (collectionProperty instanceof List && index >= 0
-          && index < collectionProperty.size()) {
-        ((List) collectionProperty).add(index, value);
-        inserted = true;
-      } else {
-        inserted = collectionProperty.add(value);
-      }
-      if (inserted) {
-        firePropertyChange(propertyName, oldCollectionSnapshot,
-            collectionProperty);
-        propertyDescriptor.postprocessAdder(proxy, collectionProperty, value);
-      }
-    } catch (IllegalAccessException ex) {
-      // This cannot happen but throw anyway.
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      // This cannot happen but throw anyway.
-      throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      // This cannot happen but throw anyway.
-      throw new ComponentException(ex);
-    }
-  }
-
-  private void removeFromProperty(Object proxy,
-      ICollectionPropertyDescriptor propertyDescriptor, Object value) {
-    String propertyName = propertyDescriptor.getName();
-    if (!isInitialized(straightGetProperty(propertyName))) {
-      return;
-    }
-    try {
-      Collection collectionProperty = (Collection) accessorFactory
-          .createPropertyAccessor(propertyName,
-              componentDescriptor.getComponentContract()).getValue(proxy);
-      propertyDescriptor.preprocessRemover(proxy, collectionProperty, value);
-      if (collectionProperty.contains(value)) {
-        IRelationshipEndPropertyDescriptor reversePropertyDescriptor = propertyDescriptor
-            .getReverseRelationEnd();
-        if (reversePropertyDescriptor != null) {
-          if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
-            accessorFactory.createPropertyAccessor(
-                reversePropertyDescriptor.getName(),
-                propertyDescriptor.getReferencedDescriptor()
-                    .getElementDescriptor().getComponentContract()).setValue(
-                value, null);
-          } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-            ICollectionAccessor collectionAccessor = accessorFactory
-                .createCollectionPropertyAccessor(reversePropertyDescriptor
-                    .getName(), propertyDescriptor.getReferencedDescriptor()
-                    .getElementDescriptor().getComponentContract(),
-                    ((ICollectionPropertyDescriptor) reversePropertyDescriptor)
-                        .getCollectionDescriptor().getElementDescriptor()
-                        .getComponentContract());
-            if (collectionAccessor instanceof IModelDescriptorAware) {
-              ((IModelDescriptorAware) collectionAccessor)
-                  .setModelDescriptor(reversePropertyDescriptor);
-            }
-            collectionAccessor.removeFromValue(value, proxy);
-          }
-        }
-        Collection oldCollectionSnapshot = CollectionHelper
-            .cloneCollection((Collection<?>) collectionProperty);
-        if (collectionProperty.remove(value)) {
-          firePropertyChange(propertyName, oldCollectionSnapshot,
-              collectionProperty);
-          propertyDescriptor.postprocessRemover(proxy, collectionProperty,
-              value);
-        }
-      }
-    } catch (IllegalAccessException ex) {
-      // This cannot happen but throw anyway.
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      // This cannot happen but throw anyway.
-      throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      // This cannot happen but throw anyway.
-      throw new ComponentException(ex);
-    }
-  }
-
-  private synchronized IComponentExtension getExtensionInstance(
-      Class<IComponentExtension<IComponent>> extensionClass, IComponent proxy) {
-    IComponentExtension<IComponent> extension;
-    if (componentExtensions == null) {
-      componentExtensions = new HashMap<Class, IComponentExtension<IComponent>>();
-      extension = null;
-    } else {
-      extension = componentExtensions.get(extensionClass);
-    }
-    if (extension == null) {
-      extension = extensionFactory.createComponentExtension(extensionClass,
-          componentDescriptor.getComponentContract(), proxy);
-      componentExtensions.put(extensionClass, extension);
-    }
-    return extension;
-  }
-
-  private Object invokeExtensionMethod(IComponentExtension componentExtension,
-      Method method, Object[] args) {
-    try {
-      return MethodUtils.invokeMethod(componentExtension, method.getName(),
-          args, method.getParameterTypes());
-    } catch (IllegalAccessException ex) {
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex.getCause());
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
-    }
-  }
-
   /**
-   * Invokes a service method on the component.
+   * Direct write access to the properties map without any other operation. Use
+   * with caution only in subclasses.
    *
-   * @param proxy
-   *          the component to invoke the service on.
-   * @param method
-   *          the method implemented by the component.
-   * @param args
-   *          the arguments of the method implemented by the component.
-   * @return the value returned by the method execution if any.
-   * @throws NoSuchMethodException
-   *           if no mean could be found to service the method.
+   * @param propertyName
+   *          the property name.
+   * @param propertyValue
+   *          the property value.
    */
-  protected Object invokeServiceMethod(Object proxy, Method method,
-      Object[] args) throws NoSuchMethodException {
-    IComponentService service = componentDescriptor.getServiceDelegate(method);
-    if (service != null) {
-      int signatureSize = method.getParameterTypes().length + 1;
-      Class[] parameterTypes = new Class[signatureSize];
-      Object[] parameters = new Object[signatureSize];
+  protected abstract void storeProperty(String propertyName,
+      Object propertyValue);
 
-      parameterTypes[0] = componentDescriptor.getComponentContract();
-      parameters[0] = proxy;
-
-      for (int i = 1; i < signatureSize; i++) {
-        parameterTypes[i] = method.getParameterTypes()[i - 1];
-        parameters[i] = args[i - 1];
-      }
-      try {
-        return MethodUtils.invokeMethod(service, method.getName(), parameters,
-            parameterTypes);
-      } catch (IllegalAccessException ex) {
-        throw new ComponentException(ex);
-      } catch (InvocationTargetException ex) {
-        throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
-      }
+  private Map<String, Object> straightGetProperties() {
+    Map<String, Object> allProperties = new HashMap<String, Object>();
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+        .getPropertyDescriptors()) {
+      allProperties.put(propertyDescriptor.getName(),
+          retrievePropertyValue(propertyDescriptor.getName()));
     }
-    throw new NoSuchMethodException(method.toString());
-  }
-
-  private String toString(Object proxy) {
-    try {
-      String toStringPropertyName = componentDescriptor.getToStringProperty();
-      Object toStringValue = accessorFactory.createPropertyAccessor(
-          toStringPropertyName, componentDescriptor.getComponentContract())
-          .getValue(proxy);
-      if (toStringValue == null) {
-        return "";
-      }
-      return toStringValue.toString();
-    } catch (IllegalAccessException ex) {
-      throw new ComponentException(ex);
-    } catch (InvocationTargetException ex) {
-      throw new ComponentException(ex);
-    } catch (NoSuchMethodException ex) {
-      throw new ComponentException(ex);
-    }
-  }
-
-  private synchronized void addPropertyChangeListener(Object proxy,
-      String propertyName, PropertyChangeListener listener) {
-    if (listener == null) {
-      return;
-    }
-    if (changeSupport == null) {
-      changeSupport = new PropertyChangeSupport(proxy);
-    }
-    changeSupport.addPropertyChangeListener(propertyName, listener);
-  }
-
-  private synchronized void removePropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    if (listener == null || changeSupport == null) {
-      return;
-    }
-    changeSupport.removePropertyChangeListener(propertyName, listener);
-  }
-
-  private synchronized void addPropertyChangeListener(Object proxy,
-      PropertyChangeListener listener) {
-    if (listener == null) {
-      return;
-    }
-    if (changeSupport == null) {
-      changeSupport = new PropertyChangeSupport(proxy);
-    }
-    changeSupport.addPropertyChangeListener(listener);
-  }
-
-  private synchronized void removePropertyChangeListener(
-      PropertyChangeListener listener) {
-    if (listener == null || changeSupport == null) {
-      return;
-    }
-    changeSupport.removePropertyChangeListener(listener);
-  }
-
-  private void firePropertyChange(String propertyName, Object oldValue,
-      Object newValue) {
-    if (changeSupport == null || (oldValue == null && newValue == null)) {
-      return;
-    }
-    if (!isInitialized(oldValue)) {
-      changeSupport.firePropertyChange(propertyName, null, newValue);
-    } else {
-      changeSupport.firePropertyChange(propertyName, oldValue, newValue);
-    }
-  }
-
-  /**
-   * Sets the collectionFactory.
-   *
-   * @param collectionFactory
-   *          the collectionFactory to set.
-   */
-  public void setCollectionFactory(
-      IComponentCollectionFactory<IComponent> collectionFactory) {
-    this.collectionFactory = collectionFactory;
-  }
-
-  @SuppressWarnings("unchecked")
-  private void straightSetProperty(String propertyName, Object newPropertyValue) {
-    Object currentPropertyValue = straightGetProperty(propertyName);
-    storeProperty(propertyName, newPropertyValue);
-    if (componentDescriptor.getPropertyDescriptor(propertyName) instanceof ICollectionPropertyDescriptor) {
-      ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) componentDescriptor
-          .getPropertyDescriptor(propertyName);
-      if (currentPropertyValue != null) {
-        currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
-            .getContextClassLoader(), new Class[] {propertyDescriptor
-            .getReferencedDescriptor().getCollectionInterface()},
-            new NeverEqualsInvocationHandler(currentPropertyValue));
-      }
-    }
-    firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
+    return allProperties;
   }
 
   /**
@@ -804,100 +865,39 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  private Map<String, Object> straightGetProperties() {
-    Map<String, Object> allProperties = new HashMap<String, Object>();
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
-      allProperties.put(propertyDescriptor.getName(),
-          retrievePropertyValue(propertyDescriptor.getName()));
-    }
-    return allProperties;
-  }
-
-  /**
-   * Gets the interface class being the contract of this component.
-   *
-   * @return the component interface contract.
-   */
-  public Class<? extends Object> getComponentContract() {
-    return componentDescriptor.getComponentContract();
-  }
-
-  private boolean invokeLifecycleInterceptors(Object proxy,
-      Method lifecycleMethod, Object[] args) {
-    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
-        .getName())
-        || ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
-            .getName())) {
-      checkIntegrity(proxy);
-    }
-    boolean interceptorResults = false;
-    for (ILifecycleInterceptor lifecycleInterceptor : componentDescriptor
-        .getLifecycleInterceptors()) {
-      int signatureSize = lifecycleMethod.getParameterTypes().length + 1;
-      Class[] parameterTypes = new Class[signatureSize];
-      Object[] parameters = new Object[signatureSize];
-
-      parameterTypes[0] = componentDescriptor.getComponentContract();
-      parameters[0] = proxy;
-
-      for (int i = 1; i < signatureSize; i++) {
-        parameterTypes[i] = lifecycleMethod.getParameterTypes()[i - 1];
-        parameters[i] = args[i - 1];
-      }
-      try {
-        interceptorResults = interceptorResults
-            || ((Boolean) MethodUtils.invokeMethod(lifecycleInterceptor,
-                lifecycleMethod.getName(), parameters, parameterTypes))
-                .booleanValue();
-      } catch (IllegalAccessException ex) {
-        throw new ComponentException(ex);
-      } catch (InvocationTargetException ex) {
-        throw new ComponentException(ex.getCause());
-      } catch (NoSuchMethodException ex) {
-        throw new ComponentException(ex);
+  @SuppressWarnings("unchecked")
+  private void straightSetProperty(String propertyName, Object newPropertyValue) {
+    Object currentPropertyValue = straightGetProperty(propertyName);
+    storeProperty(propertyName, newPropertyValue);
+    if (componentDescriptor.getPropertyDescriptor(propertyName) instanceof ICollectionPropertyDescriptor) {
+      ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) componentDescriptor
+          .getPropertyDescriptor(propertyName);
+      if (currentPropertyValue != null) {
+        currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
+            .getContextClassLoader(), new Class[] {propertyDescriptor
+            .getReferencedDescriptor().getCollectionInterface()},
+            new NeverEqualsInvocationHandler(currentPropertyValue));
       }
     }
-    return interceptorResults;
+    firePropertyChange(propertyName, currentPropertyValue, newPropertyValue);
   }
 
-  private void checkIntegrity(Object proxy) {
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
-      propertyDescriptor.checkValueIntegrity(proxy,
-          straightGetProperty(propertyDescriptor.getName()));
-    }
-  }
-
-  private static final class NeverEqualsInvocationHandler implements
-      InvocationHandler {
-
-    private Object delegate;
-
-    private NeverEqualsInvocationHandler(Object delegate) {
-      this.delegate = delegate;
-    }
-
-    /**
-     * Just 'overrides' the equals method to always return false.
-     * <p>
-     * {@inheritDoc}
-     */
-    public Object invoke(@SuppressWarnings("unused")
-    Object proxy, Method method, Object[] args) throws Throwable {
-      if (method.getName().equals("equals") && args.length == 1) {
-        return new Boolean(false);
+  private String toString(Object proxy) {
+    try {
+      String toStringPropertyName = componentDescriptor.getToStringProperty();
+      Object toStringValue = accessorFactory.createPropertyAccessor(
+          toStringPropertyName, componentDescriptor.getComponentContract())
+          .getValue(proxy);
+      if (toStringValue == null) {
+        return "";
       }
-      return method.invoke(delegate, args);
+      return toStringValue.toString();
+    } catch (IllegalAccessException ex) {
+      throw new ComponentException(ex);
+    } catch (InvocationTargetException ex) {
+      throw new ComponentException(ex);
+    } catch (NoSuchMethodException ex) {
+      throw new ComponentException(ex);
     }
-  }
-
-  /**
-   * Gets the accessorFactory.
-   *
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory() {
-    return accessorFactory;
   }
 }

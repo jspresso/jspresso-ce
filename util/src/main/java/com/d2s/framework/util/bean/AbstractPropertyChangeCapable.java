@@ -48,16 +48,16 @@ public abstract class AbstractPropertyChangeCapable implements
   /**
    * {@inheritDoc}
    */
-  public void removePropertyChangeListener(PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removePropertyChangeListener(String propertyName,
-      PropertyChangeListener listener) {
-    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
+  @Override
+  public AbstractPropertyChangeCapable clone() {
+    try {
+      AbstractPropertyChangeCapable clonedBean = (AbstractPropertyChangeCapable) super
+          .clone();
+      clonedBean.propertyChangeSupport = new PropertyChangeSupport(clonedBean);
+      return clonedBean;
+    } catch (CloneNotSupportedException ex) {
+      throw new NestedRuntimeException(ex);
+    }
   }
 
   /**
@@ -165,15 +165,15 @@ public abstract class AbstractPropertyChangeCapable implements
   /**
    * {@inheritDoc}
    */
-  @Override
-  public AbstractPropertyChangeCapable clone() {
-    try {
-      AbstractPropertyChangeCapable clonedBean = (AbstractPropertyChangeCapable) super
-          .clone();
-      clonedBean.propertyChangeSupport = new PropertyChangeSupport(clonedBean);
-      return clonedBean;
-    } catch (CloneNotSupportedException ex) {
-      throw new NestedRuntimeException(ex);
-    }
+  public void removePropertyChangeListener(PropertyChangeListener listener) {
+    propertyChangeSupport.removePropertyChangeListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removePropertyChangeListener(String propertyName,
+      PropertyChangeListener listener) {
+    propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
   }
 }

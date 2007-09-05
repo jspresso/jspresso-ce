@@ -40,10 +40,10 @@ import com.d2s.framework.view.action.IDisplayableAction;
 public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
     implements IDisplayableAction {
 
-  private String                mnemonicAsString;
   private String                acceleratorAsString;
-  private DefaultIconDescriptor actionDescriptor;
   private Collection<IGate>     actionabilityGates;
+  private DefaultIconDescriptor actionDescriptor;
+  private String                mnemonicAsString;
 
   /**
    * Constructs a new <code>AbstractFrontendAction</code> instance.
@@ -55,19 +55,66 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   /**
    * {@inheritDoc}
    */
-  public String getMnemonicAsString() {
-    return mnemonicAsString;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    final IDisplayableAction other = (IDisplayableAction) obj;
+    if (getName() == null) {
+      return false;
+    } else if (!getName().equals(other.getName())) {
+      return false;
+    }
+    return true;
   }
 
   /**
-   * Sets the mnemonic of the action.
-   * 
-   * @param mnemonicStringRep
-   *          the mnemonic to set represented as a string as KeyStroke factory
-   *          would parse it.
+   * {@inheritDoc}
    */
-  public void setMnemonicAsString(String mnemonicStringRep) {
-    this.mnemonicAsString = mnemonicStringRep;
+  public String getAcceleratorAsString() {
+    return acceleratorAsString;
+  }
+
+  /**
+   * Gets the actionabilityGates.
+   * 
+   * @return the actionabilityGates.
+   */
+  public Collection<IGate> getActionabilityGates() {
+    return actionabilityGates;
+  }
+
+  /**
+   * Gets the actionFactory.
+   * 
+   * @param context
+   *          the action context.
+   * @return the actionFactory.
+   */
+  protected IActionFactory<G, E> getActionFactory(Map<String, Object> context) {
+    return getViewFactory(context).getActionFactory();
+  }
+
+  /**
+   * Gets the frontend controller out of the action context.
+   * 
+   * @param context
+   *          the action context.
+   * @return the frontend controller.
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  protected IFrontendController<E, F, G> getController(
+      Map<String, Object> context) {
+    return (IFrontendController<E, F, G>) context
+        .get(ActionContextConstants.FRONT_CONTROLLER);
   }
 
   /**
@@ -80,6 +127,36 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   /**
    * {@inheritDoc}
    */
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
+    if (getDescription() != null) {
+      return actionDescriptor.getI18nDescription(translationProvider, locale);
+    }
+    return getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
+    return actionDescriptor.getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * Gets the iconFactory.
+   * 
+   * @param context
+   *          the action context.
+   * @return the iconFactory.
+   */
+  protected IIconFactory<F> getIconFactory(Map<String, Object> context) {
+    return getViewFactory(context).getIconFactory();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public String getIconImageURL() {
     return actionDescriptor.getIconImageURL();
   }
@@ -87,79 +164,16 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   /**
    * {@inheritDoc}
    */
-  public String getName() {
-    return actionDescriptor.getName();
+  @Override
+  public Locale getLocale(Map<String, Object> context) {
+    return getController(context).getLocale();
   }
 
   /**
-   * Sets the description.
-   * 
-   * @param description
-   *          the description to set.
+   * {@inheritDoc}
    */
-  public void setDescription(String description) {
-    actionDescriptor.setDescription(description);
-  }
-
-  /**
-   * Sets the iconImageURL.
-   * 
-   * @param iconImageURL
-   *          the iconImageURL to set.
-   */
-  public void setIconImageURL(String iconImageURL) {
-    actionDescriptor.setIconImageURL(iconImageURL);
-  }
-
-  /**
-   * Sets the name.
-   * 
-   * @param name
-   *          the name to set.
-   */
-  public void setName(String name) {
-    actionDescriptor.setName(name);
-  }
-
-  /**
-   * This is a utility method which is able to retrieve the view connector this
-   * action has been executed on from its context. It uses well-known context
-   * keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the
-   * view value connector the action executes on.
-   * </ul>
-   * <p>
-   * The returned connector mainly serves for acting on the view component the
-   * action has to be triggered on.
-   * 
-   * @param context
-   *          the action context.
-   * @return the value connector this model action was triggered on.
-   */
-  public IValueConnector getViewConnector(Map<String, Object> context) {
-    return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
-  }
-
-  /**
-   * This is a utility method which is able to retrieve the view connector this
-   * action has been executed on from its context. It uses well-known context
-   * keys of the action context which are:
-   * <ul>
-   * <li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the
-   * the view value connector the action executes on.
-   * </ul>
-   * <p>
-   * The returned connector mainly serves for acting on the view component the
-   * action has to be triggered on.
-   * 
-   * @param context
-   *          the action context.
-   * @return the value connector this model action was triggered on.
-   */
-  public IValueConnector getSourceViewConnector(Map<String, Object> context) {
-    return (IValueConnector) context
-        .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR);
+  public String getMnemonicAsString() {
+    return mnemonicAsString;
   }
 
   /**
@@ -202,6 +216,24 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
+   * Gets the mvcBinder.
+   * 
+   * @param context
+   *          the action context.
+   * @return the mvcBinder.
+   */
+  protected IMvcBinder getMvcBinder(Map<String, Object> context) {
+    return getController(context).getMvcBinder();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getName() {
+    return actionDescriptor.getName();
+  }
+
+  /**
    * This is a utility method which is able to retrieve the parent module view
    * connector this action has been executed on from its context. It uses
    * well-known context keys of the action context which are:
@@ -225,55 +257,44 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public String getAcceleratorAsString() {
-    return acceleratorAsString;
-  }
-
-  /**
-   * Sets the acceleratorAsString.
-   * 
-   * @param acceleratorAsString
-   *          the acceleratorAsString to set.
-   */
-  public void setAcceleratorAsString(String acceleratorAsString) {
-    this.acceleratorAsString = acceleratorAsString;
-  }
-
-  /**
-   * Returns false.
+   * This is a utility method which is able to retrieve the view connector this
+   * action has been executed on from its context. It uses well-known context
+   * keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the
+   * the view value connector the action executes on.
+   * </ul>
    * <p>
-   * {@inheritDoc}
-   */
-  public boolean isBackend() {
-    return false;
-  }
-
-  /**
-   * Gets the frontend controller out of the action context.
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
    * 
    * @param context
    *          the action context.
-   * @return the frontend controller.
+   * @return the value connector this model action was triggered on.
    */
-  @Override
-  @SuppressWarnings("unchecked")
-  protected IFrontendController<E, F, G> getController(
-      Map<String, Object> context) {
-    return (IFrontendController<E, F, G>) context
-        .get(ActionContextConstants.FRONT_CONTROLLER);
+  public IValueConnector getSourceViewConnector(Map<String, Object> context) {
+    return (IValueConnector) context
+        .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR);
   }
 
   /**
-   * Gets the mvcBinder.
+   * This is a utility method which is able to retrieve the view connector this
+   * action has been executed on from its context. It uses well-known context
+   * keys of the action context which are:
+   * <ul>
+   * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the
+   * view value connector the action executes on.
+   * </ul>
+   * <p>
+   * The returned connector mainly serves for acting on the view component the
+   * action has to be triggered on.
    * 
    * @param context
    *          the action context.
-   * @return the mvcBinder.
+   * @return the value connector this model action was triggered on.
    */
-  protected IMvcBinder getMvcBinder(Map<String, Object> context) {
-    return getController(context).getMvcBinder();
+  public IValueConnector getViewConnector(Map<String, Object> context) {
+    return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
   }
 
   /**
@@ -285,55 +306,6 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
     return getController(context).getViewFactory();
-  }
-
-  /**
-   * Gets the iconFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the iconFactory.
-   */
-  protected IIconFactory<F> getIconFactory(Map<String, Object> context) {
-    return getViewFactory(context).getIconFactory();
-  }
-
-  /**
-   * Gets the actionFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the actionFactory.
-   */
-  protected IActionFactory<G, E> getActionFactory(Map<String, Object> context) {
-    return getViewFactory(context).getActionFactory();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Locale getLocale(Map<String, Object> context) {
-    return getController(context).getLocale();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getI18nDescription(ITranslationProvider translationProvider,
-      Locale locale) {
-    if (getDescription() != null) {
-      return actionDescriptor.getI18nDescription(translationProvider, locale);
-    }
-    return getI18nName(translationProvider, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getI18nName(ITranslationProvider translationProvider,
-      Locale locale) {
-    return actionDescriptor.getI18nName(translationProvider, locale);
   }
 
   /**
@@ -351,35 +323,22 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
+   * Returns false.
+   * <p>
    * {@inheritDoc}
    */
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
-      return false;
-    }
-    final AbstractFrontendAction other = (AbstractFrontendAction) obj;
-    if (getName() == null) {
-      return false;
-    } else if (!getName().equals(other.getName())) {
-      return false;
-    }
-    return true;
+  public boolean isBackend() {
+    return false;
   }
 
   /**
-   * Gets the actionabilityGates.
+   * Sets the acceleratorAsString.
    * 
-   * @return the actionabilityGates.
+   * @param acceleratorAsString
+   *          the acceleratorAsString to set.
    */
-  public Collection<IGate> getActionabilityGates() {
-    return actionabilityGates;
+  public void setAcceleratorAsString(String acceleratorAsString) {
+    this.acceleratorAsString = acceleratorAsString;
   }
 
   /**
@@ -390,5 +349,46 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   public void setActionabilityGates(Collection<IGate> actionabilityGates) {
     this.actionabilityGates = actionabilityGates;
+  }
+
+  /**
+   * Sets the description.
+   * 
+   * @param description
+   *          the description to set.
+   */
+  public void setDescription(String description) {
+    actionDescriptor.setDescription(description);
+  }
+
+  /**
+   * Sets the iconImageURL.
+   * 
+   * @param iconImageURL
+   *          the iconImageURL to set.
+   */
+  public void setIconImageURL(String iconImageURL) {
+    actionDescriptor.setIconImageURL(iconImageURL);
+  }
+
+  /**
+   * Sets the mnemonic of the action.
+   * 
+   * @param mnemonicStringRep
+   *          the mnemonic to set represented as a string as KeyStroke factory
+   *          would parse it.
+   */
+  public void setMnemonicAsString(String mnemonicStringRep) {
+    this.mnemonicAsString = mnemonicStringRep;
+  }
+
+  /**
+   * Sets the name.
+   * 
+   * @param name
+   *          the name to set.
+   */
+  public void setName(String name) {
+    actionDescriptor.setName(name);
   }
 }

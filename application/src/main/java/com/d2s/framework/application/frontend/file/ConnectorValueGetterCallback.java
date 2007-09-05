@@ -27,6 +27,14 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
   /**
    * {@inheritDoc}
    */
+  public void cancel(@SuppressWarnings("unused")
+  Map<String, Object> context) {
+    // NO-OP
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void fileChosen(OutputStream out, Map<String, Object> context) {
     OutputStream os = new BufferedOutputStream(out);
     try {
@@ -60,14 +68,6 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
    */
   public void fileWritten(@SuppressWarnings("unused")
   String filePath, @SuppressWarnings("unused")
-  Map<String, Object> context) {
-    // NO-OP
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void cancel(@SuppressWarnings("unused")
   Map<String, Object> context) {
     // NO-OP
   }

@@ -29,17 +29,6 @@ public class BasicEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the valuesAndIconImageUrls property.
-   *
-   * @param valuesAndIconImageUrls
-   *          the valuesAndIconImageUrls to set.
-   */
-  public void setValuesAndIconImageUrls(
-      Map<String, String> valuesAndIconImageUrls) {
-    this.valuesAndIconImageUrls = valuesAndIconImageUrls;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public String getIconImageURL(String value) {
@@ -54,5 +43,16 @@ public class BasicEnumerationPropertyDescriptor extends
    */
   public boolean isTranslated() {
     return true;
+  }
+
+  /**
+   * Sets the valuesAndIconImageUrls property.
+   *
+   * @param valuesAndIconImageUrls
+   *          the valuesAndIconImageUrls to set.
+   */
+  public void setValuesAndIconImageUrls(
+      Map<String, String> valuesAndIconImageUrls) {
+    this.valuesAndIconImageUrls = valuesAndIconImageUrls;
   }
 }

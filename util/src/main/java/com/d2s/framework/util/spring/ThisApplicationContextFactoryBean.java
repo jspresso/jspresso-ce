@@ -23,13 +23,6 @@ public class ThisApplicationContextFactoryBean implements
   private ApplicationContext applicationContext;
 
   /**
-   * {@inheritDoc}
-   */
-  public void setApplicationContext(ApplicationContext applicationContext) {
-    this.applicationContext = applicationContext;
-  }
-
-  /**
    * Returns the application context.
    * <p>
    * {@inheritDoc}
@@ -54,5 +47,12 @@ public class ThisApplicationContextFactoryBean implements
    */
   public boolean isSingleton() {
     return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setApplicationContext(ApplicationContext applicationContext) {
+    this.applicationContext = applicationContext;
   }
 }

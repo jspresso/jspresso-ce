@@ -36,16 +36,6 @@ public interface IPropertyChangeCapable {
   void addPropertyChangeListener(PropertyChangeListener listener);
 
   /**
-   * Removes a new <code>PropertyChangeListener</code>.
-   * 
-   * @param listener
-   *          The removed listener.
-   * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(
-   *      PropertyChangeListener)
-   */
-  void removePropertyChangeListener(PropertyChangeListener listener);
-
-  /**
    * Adds a new <code>PropertyChangeListener</code> on a specific property.
    * 
    * @param propertyName
@@ -57,6 +47,16 @@ public interface IPropertyChangeCapable {
    */
   void addPropertyChangeListener(String propertyName,
       PropertyChangeListener listener);
+
+  /**
+   * Removes a new <code>PropertyChangeListener</code>.
+   * 
+   * @param listener
+   *          The removed listener.
+   * @see java.beans.PropertyChangeSupport#removePropertyChangeListener(
+   *      PropertyChangeListener)
+   */
+  void removePropertyChangeListener(PropertyChangeListener listener);
 
   /**
    * Removes a <code>PropertyChangeListener</code> on a specific property.

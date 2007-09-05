@@ -69,6 +69,14 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getConnecteeValue() {
+    return getConnectedJComponent().getValue();
+  }
+
+  /**
    * Performs the action field action if the action field is not synchronized.
    */
   public void performActionIfNeeded() {
@@ -87,14 +95,6 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   @Override
   protected void protectedSetConnecteeValue(Object aValue) {
     getConnectedJComponent().setValue(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object getConnecteeValue() {
-    return getConnectedJComponent().getValue();
   }
 
   /**

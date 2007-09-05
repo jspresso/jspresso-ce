@@ -28,25 +28,107 @@ public interface IApplicationSession extends IEntityDirtAware,
     IEntityLifecycleHandler {
 
   /**
-   * Registers an entity in this application session.
+   * Begins the current unit of work.
    * 
-   * @param entity
-   *          the entity to register.
-   * @param isEntityTransient
-   *          wether this entity has to be considered as a transient one. It is
-   *          not safe to rely on entity.isPersistent() to determine it.
+   * @see IEntityUnitOfWork#begin()
    */
-  void registerEntity(IEntity entity, boolean isEntityTransient);
-
-  /**
-   * Gives a chance to the session to perform any pending operation.
-   */
-  void performPendingOperations();
+  void beginUnitOfWork();
 
   /**
    * Clears the pending operations.
    */
   void clearPendingOperations();
+
+  /**
+   * Registers an entity (actually a clone of it) and all its graph as taking
+   * part in the unit of work.
+   * 
+   * @param entity
+   *          the entity to make part of the unit of work.
+   * @return the entity (clone of the original one) actually registered in the
+   *         unit of work.
+   */
+  IEntity cloneInUnitOfWork(IEntity entity);
+
+  /**
+   * Registers an list of entities (actually a clone of it) and all their graphs
+   * as taking part in the unit of work.
+   * 
+   * @param entities
+   *          the entities to make part of the unit of work.
+   * @return the entity (clone of the original one) actually registered in the
+   *         unit of work.
+   */
+  List<IEntity> cloneInUnitOfWork(List<IEntity> entities);
+
+  /**
+   * Commits the current unit of work.
+   * 
+   * @see IEntityUnitOfWork#commit()
+   */
+  void commitUnitOfWork();
+
+  /**
+   * Gets the session locale.
+   * 
+   * @return the session locale.
+   */
+  Locale getLocale();
+
+  /**
+   * Gets the session principal as a JAAS principal.
+   * 
+   * @return the session owner.
+   */
+  UserPrincipal getPrincipal();
+
+  /**
+   * Gets a previously registered entity in this application session.
+   * 
+   * @param entityContract
+   *          the entity contract.
+   * @param entityId
+   *          the identifier of the looked-up entity.
+   * @return the registered entity or null.
+   */
+  IEntity getRegisteredEntity(Class entityContract, Object entityId);
+
+  /**
+   * Gets the session owner as a JAAS subject.
+   * 
+   * @return the session owner.
+   */
+  Subject getSubject();
+
+  /**
+   * Whenever a property might not be fully initialized, this method performs
+   * all necessary complementary initializations..
+   * 
+   * @param entity
+   *          the entity holding the property.
+   * @param propertyDescriptor
+   *          the property descriptor.
+   */
+  void initializePropertyIfNeeded(IEntity entity,
+      IPropertyDescriptor propertyDescriptor);
+
+  /**
+   * Wether the object is fully initialized.
+   * 
+   * @param objectOrProxy
+   *          the object to test.
+   * @return true if the object is fully initialized.
+   */
+  boolean isInitialized(Object objectOrProxy);
+
+  /**
+   * Gets wether a transactional unit of work has been started in the
+   * application session.
+   * 
+   * @return true if a transactional unit of work has been started in the
+   *         application session.
+   */
+  boolean isUnitOfWorkActive();
 
   /**
    * Merges an entity in this application session. If the application session
@@ -81,25 +163,9 @@ public interface IApplicationSession extends IEntityDirtAware,
   List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode);
 
   /**
-   * Begins the current unit of work.
-   * 
-   * @see IEntityUnitOfWork#begin()
+   * Gives a chance to the session to perform any pending operation.
    */
-  void beginUnitOfWork();
-
-  /**
-   * Commits the current unit of work.
-   * 
-   * @see IEntityUnitOfWork#commit()
-   */
-  void commitUnitOfWork();
-
-  /**
-   * Rollbacks the current unit of work.
-   * 
-   * @see IEntityUnitOfWork#rollback()
-   */
-  void rollbackUnitOfWork();
+  void performPendingOperations();
 
   /**
    * Records an entity as having been flushed to the persistent store.
@@ -110,89 +176,22 @@ public interface IApplicationSession extends IEntityDirtAware,
   void recordAsSynchronized(IEntity flushedEntity);
 
   /**
-   * Registers an entity (actually a clone of it) and all its graph as taking
-   * part in the unit of work.
+   * Registers an entity in this application session.
    * 
    * @param entity
-   *          the entity to make part of the unit of work.
-   * @return the entity (clone of the original one) actually registered in the
-   *         unit of work.
+   *          the entity to register.
+   * @param isEntityTransient
+   *          wether this entity has to be considered as a transient one. It is
+   *          not safe to rely on entity.isPersistent() to determine it.
    */
-  IEntity cloneInUnitOfWork(IEntity entity);
+  void registerEntity(IEntity entity, boolean isEntityTransient);
 
   /**
-   * Registers an list of entities (actually a clone of it) and all their graphs
-   * as taking part in the unit of work.
+   * Rollbacks the current unit of work.
    * 
-   * @param entities
-   *          the entities to make part of the unit of work.
-   * @return the entity (clone of the original one) actually registered in the
-   *         unit of work.
+   * @see IEntityUnitOfWork#rollback()
    */
-  List<IEntity> cloneInUnitOfWork(List<IEntity> entities);
-
-  /**
-   * Whenever a property might not be fully initialized, this method performs
-   * all necessary complementary initializations..
-   * 
-   * @param entity
-   *          the entity holding the property.
-   * @param propertyDescriptor
-   *          the property descriptor.
-   */
-  void initializePropertyIfNeeded(IEntity entity,
-      IPropertyDescriptor propertyDescriptor);
-
-  /**
-   * Gets wether a transactional unit of work has been started in the
-   * application session.
-   * 
-   * @return true if a transactional unit of work has been started in the
-   *         application session.
-   */
-  boolean isUnitOfWorkActive();
-
-  /**
-   * Gets a previously registered entity in this application session.
-   * 
-   * @param entityContract
-   *          the entity contract.
-   * @param entityId
-   *          the identifier of the looked-up entity.
-   * @return the registered entity or null.
-   */
-  IEntity getRegisteredEntity(Class entityContract, Object entityId);
-
-  /**
-   * Wether the object is fully initialized.
-   * 
-   * @param objectOrProxy
-   *          the object to test.
-   * @return true if the object is fully initialized.
-   */
-  boolean isInitialized(Object objectOrProxy);
-
-  /**
-   * Gets the session owner as a JAAS subject.
-   * 
-   * @return the session owner.
-   */
-  Subject getSubject();
-
-  /**
-   * Gets the session principal as a JAAS principal.
-   * 
-   * @return the session owner.
-   */
-  UserPrincipal getPrincipal();
-
-  /**
-   * Sets the session owner as a JAAS subject.
-   * 
-   * @param sessionOwner
-   *          the session owner.
-   */
-  void setSubject(Subject sessionOwner);
+  void rollbackUnitOfWork();
 
   /**
    * Sets the session locale.
@@ -203,9 +202,10 @@ public interface IApplicationSession extends IEntityDirtAware,
   void setLocale(Locale locale);
 
   /**
-   * Gets the session locale.
+   * Sets the session owner as a JAAS subject.
    * 
-   * @return the session locale.
+   * @param sessionOwner
+   *          the session owner.
    */
-  Locale getLocale();
+  void setSubject(Subject sessionOwner);
 }

@@ -59,138 +59,6 @@ import com.d2s.framework.view.action.IDisplayableAction;
 public class DefaultWingsController extends
     AbstractFrontendController<SComponent, SIcon, Action> {
 
-  private SFrame      controllerFrame;
-
-  private SPanel      cardPanel;
-  private Set<String> moduleViews;
-
-  /**
-   * Creates the initial view from the root view descriptor, then a SFrame
-   * containing this view and presents it to the user.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean start(IBackendController backendController, Locale locale) {
-    if (super.start(backendController, locale)) {
-      loginSuccess((Subject) SessionManager.getSession().getServletRequest()
-          .getSession().getAttribute("SUBJECT"));
-      displayControllerFrame();
-      return true;
-    }
-    return false;
-  }
-
-  private void displayControllerFrame() {
-    controllerFrame = createControllerFrame();
-    updateFrameTitle();
-    // Ajax calendar bug fix
-    controllerFrame.setUpdateEnabled(false);
-    controllerFrame.setVisible(true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean stop() {
-    if (super.stop()) {
-      controllerFrame.getSession().exit();
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void displayModule(String moduleId) {
-    if (moduleViews == null) {
-      moduleViews = new HashSet<String>();
-    }
-    if (!moduleViews.contains(moduleId)) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      IValueConnector moduleConnector = getBackendController()
-          .getModuleConnector(moduleId);
-      IView<SComponent> moduleView = createModuleView(moduleId,
-          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
-      SInternalFrame moduleInternalFrame = createInternalFrame(moduleView);
-      moduleInternalFrame.setIcon(getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
-      moduleViews.add(moduleId);
-      cardPanel.add(moduleInternalFrame, moduleId);
-      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
-      if (!controllerFrame.isUpdateEnabled()) {
-        controllerFrame.setUpdateEnabled(true);
-      }
-    }
-    setSelectedModuleId(moduleId);
-    super.displayModule(moduleId);
-  }
-
-  private void updateFrameTitle() {
-    String moduleId = getSelectedModuleId();
-    if (moduleId != null) {
-      controllerFrame.setTitle(getModuleDescriptor(getSelectedModuleId())
-          .getI18nDescription(getTranslationProvider(), getLocale())
-          + " - " + getI18nName(getTranslationProvider(), getLocale()));
-    } else {
-      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
-          getLocale()));
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setSelectedModuleId(String moduleId) {
-    super.setSelectedModuleId(moduleId);
-    ((SCardLayout) cardPanel.getLayout()).show(moduleId);
-    updateFrameTitle();
-  }
-
-  private SFrame createControllerFrame() {
-    SFrame frame = new SFrame();
-    cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(SDimension.FULLAREA);
-    SPanel contentPane = new SPanel(new SBorderLayout());
-    frame.setContentPane(contentPane);
-    frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
-    frame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
-    return frame;
-  }
-
-  private SMenuBar createApplicationMenuBar() {
-    SMenuBar applicationMenuBar = new SMenuBar();
-    applicationMenuBar.add(createModulesMenu());
-    List<SMenu> actionMenus = createActionMenus();
-    if (actionMenus != null) {
-      for (SMenu actionMenu : actionMenus) {
-        applicationMenuBar.add(actionMenu);
-      }
-    }
-    return applicationMenuBar;
-  }
-
-  private SMenu createModulesMenu() {
-    SMenu modulesMenu = new SMenu(getTranslationProvider().getTranslation(
-        "modules", getLocale()));
-    for (String moduleId : getModuleIds()) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      SMenuItem moduleMenuItem = new SMenuItem(new ModuleSelectionAction(
-          moduleId, moduleDescriptor));
-      modulesMenu.add(moduleMenuItem);
-    }
-    SMenuItem separator = new SMenuItem("---------");
-    separator.setBorder(new SLineBorder(1));
-    modulesMenu.add(separator);
-
-    modulesMenu.add(new SMenuItem(new QuitAction()));
-    return modulesMenu;
-  }
-
   private final class ModuleSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
@@ -254,6 +122,22 @@ public class DefaultWingsController extends
       stop();
     }
   }
+  private SPanel      cardPanel;
+
+  private SFrame      controllerFrame;
+
+  private Set<String> moduleViews;
+
+  private SMenu createActionMenu(String titleKey,
+      List<IDisplayableAction> actionList) {
+    SMenu menu = new SMenu(getTranslationProvider().getTranslation(titleKey,
+        getLocale()));
+    for (IDisplayableAction action : actionList) {
+      menu.add(new SMenuItem(getViewFactory().getActionFactory().createAction(
+          action, this, menu, null, null, getLocale())));
+    }
+    return menu;
+  }
 
   private List<SMenu> createActionMenus() {
     Map<String, List<IDisplayableAction>> actions = getActions();
@@ -268,15 +152,27 @@ public class DefaultWingsController extends
     return actionMenus;
   }
 
-  private SMenu createActionMenu(String titleKey,
-      List<IDisplayableAction> actionList) {
-    SMenu menu = new SMenu(getTranslationProvider().getTranslation(titleKey,
-        getLocale()));
-    for (IDisplayableAction action : actionList) {
-      menu.add(new SMenuItem(getViewFactory().getActionFactory().createAction(
-          action, this, menu, null, null, getLocale())));
+  private SMenuBar createApplicationMenuBar() {
+    SMenuBar applicationMenuBar = new SMenuBar();
+    applicationMenuBar.add(createModulesMenu());
+    List<SMenu> actionMenus = createActionMenus();
+    if (actionMenus != null) {
+      for (SMenu actionMenu : actionMenus) {
+        applicationMenuBar.add(actionMenu);
+      }
     }
-    return menu;
+    return applicationMenuBar;
+  }
+
+  private SFrame createControllerFrame() {
+    SFrame frame = new SFrame();
+    cardPanel = new SPanel(new SCardLayout());
+    cardPanel.setPreferredSize(SDimension.FULLAREA);
+    SPanel contentPane = new SPanel(new SBorderLayout());
+    frame.setContentPane(contentPane);
+    frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
+    frame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
+    return frame;
   }
 
   /**
@@ -299,6 +195,67 @@ public class DefaultWingsController extends
     frameForm.add(view.getPeer());
     internalFrame.getContentPane().add(frameForm, SBorderLayout.CENTER);
     return internalFrame;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected CallbackHandler createLoginCallbackHandler() {
+    return null;
+  }
+
+  private SMenu createModulesMenu() {
+    SMenu modulesMenu = new SMenu(getTranslationProvider().getTranslation(
+        "modules", getLocale()));
+    for (String moduleId : getModuleIds()) {
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      SMenuItem moduleMenuItem = new SMenuItem(new ModuleSelectionAction(
+          moduleId, moduleDescriptor));
+      modulesMenu.add(moduleMenuItem);
+    }
+    SMenuItem separator = new SMenuItem("---------");
+    separator.setBorder(new SLineBorder(1));
+    modulesMenu.add(separator);
+
+    modulesMenu.add(new SMenuItem(new QuitAction()));
+    return modulesMenu;
+  }
+
+  private void displayControllerFrame() {
+    controllerFrame = createControllerFrame();
+    updateFrameTitle();
+    // Ajax calendar bug fix
+    controllerFrame.setUpdateEnabled(false);
+    controllerFrame.setVisible(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void displayModule(String moduleId) {
+    if (moduleViews == null) {
+      moduleViews = new HashSet<String>();
+    }
+    if (!moduleViews.contains(moduleId)) {
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      IValueConnector moduleConnector = getBackendController()
+          .getModuleConnector(moduleId);
+      IView<SComponent> moduleView = createModuleView(moduleId,
+          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
+      SInternalFrame moduleInternalFrame = createInternalFrame(moduleView);
+      moduleInternalFrame.setIcon(getIconFactory().getIcon(
+          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+      moduleViews.add(moduleId);
+      cardPanel.add(moduleInternalFrame, moduleId);
+      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
+      if (!controllerFrame.isUpdateEnabled()) {
+        controllerFrame.setUpdateEnabled(true);
+      }
+    }
+    setSelectedModuleId(moduleId);
+    super.displayModule(moduleId);
   }
 
   /**
@@ -343,7 +300,50 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    return null;
+  protected void setSelectedModuleId(String moduleId) {
+    super.setSelectedModuleId(moduleId);
+    ((SCardLayout) cardPanel.getLayout()).show(moduleId);
+    updateFrameTitle();
+  }
+
+  /**
+   * Creates the initial view from the root view descriptor, then a SFrame
+   * containing this view and presents it to the user.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean start(IBackendController backendController, Locale locale) {
+    if (super.start(backendController, locale)) {
+      loginSuccess((Subject) SessionManager.getSession().getServletRequest()
+          .getSession().getAttribute("SUBJECT"));
+      displayControllerFrame();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    if (super.stop()) {
+      controllerFrame.getSession().exit();
+      return true;
+    }
+    return false;
+  }
+
+  private void updateFrameTitle() {
+    String moduleId = getSelectedModuleId();
+    if (moduleId != null) {
+      controllerFrame.setTitle(getModuleDescriptor(getSelectedModuleId())
+          .getI18nDescription(getTranslationProvider(), getLocale())
+          + " - " + getI18nName(getTranslationProvider(), getLocale()));
+    } else {
+      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
+          getLocale()));
+    }
   }
 }

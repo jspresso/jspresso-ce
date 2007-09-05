@@ -33,6 +33,23 @@ public class ULCDateFieldConnector extends ULCComponentConnector<ULCDateField> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void bindULCComponent() {
+    getConnectedULCComponent().addValueChangedListener(
+        new IValueChangedListener() {
+
+          private static final long serialVersionUID = -7747055134828532559L;
+
+          public void valueChanged(@SuppressWarnings("unused")
+          ValueChangedEvent event) {
+            fireConnectorValueChange();
+          }
+        });
+  }
+
+  /**
    * Returns a <code>Date</code> object mapping the state of the date field.
    * <p>
    * {@inheritDoc}
@@ -50,23 +67,6 @@ public class ULCDateFieldConnector extends ULCComponentConnector<ULCDateField> {
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedULCComponent().setValue((Date) aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void bindULCComponent() {
-    getConnectedULCComponent().addValueChangedListener(
-        new IValueChangedListener() {
-
-          private static final long serialVersionUID = -7747055134828532559L;
-
-          public void valueChanged(@SuppressWarnings("unused")
-          ValueChangedEvent event) {
-            fireConnectorValueChange();
-          }
-        });
   }
 
   /**

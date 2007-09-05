@@ -29,74 +29,6 @@ public class BasicStringPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Integer getMaxLength() {
-    if (maxLength != null) {
-      return maxLength;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IStringPropertyDescriptor) getParentDescriptor()).getMaxLength();
-    }
-    return maxLength;
-  }
-
-  /**
-   * Sets the maxLength property.
-   * 
-   * @param maxLength
-   *          the maxLength to set.
-   */
-  public void setMaxLength(Integer maxLength) {
-    this.maxLength = maxLength;
-  }
-
-  /**
-   * Gets the regexpPattern.
-   * 
-   * @return the regexpPattern.
-   */
-  public String getRegexpPattern() {
-    if (regexpPattern != null) {
-      return regexpPattern;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IStringPropertyDescriptor) getParentDescriptor())
-          .getRegexpPattern();
-    }
-    return regexpPattern;
-  }
-
-  /**
-   * Sets the regexpPattern.
-   * 
-   * @param regexpPattern
-   *          the regexpPattern to set.
-   */
-  public void setRegexpPattern(String regexpPattern) {
-    this.regexpPattern = regexpPattern;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class getModelType() {
-    return String.class;
-  }
-
-  /**
-   * Performs the necessary transformations to build a tring out of a property
-   * value.
-   * 
-   * @param value
-   *          the raw property value.
-   * @return the resulting string.
-   */
-  protected String getValueAsString(Object value) {
-    return (String) value;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void checkValueIntegrity(final Object component, Object propertyValue) {
     super.checkValueIntegrity(component, propertyValue);
@@ -148,13 +80,39 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
-   * Sets the regexpPatternSample.
-   * 
-   * @param regexpPatternSample
-   *          the regexpPatternSample to set.
+   * {@inheritDoc}
    */
-  public void setRegexpPatternSample(String regexpPatternSample) {
-    this.regexpPatternSample = regexpPatternSample;
+  public Integer getMaxLength() {
+    if (maxLength != null) {
+      return maxLength;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IStringPropertyDescriptor) getParentDescriptor()).getMaxLength();
+    }
+    return maxLength;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class getModelType() {
+    return String.class;
+  }
+
+  /**
+   * Gets the regexpPattern.
+   * 
+   * @return the regexpPattern.
+   */
+  public String getRegexpPattern() {
+    if (regexpPattern != null) {
+      return regexpPattern;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IStringPropertyDescriptor) getParentDescriptor())
+          .getRegexpPattern();
+    }
+    return regexpPattern;
   }
 
   /**
@@ -171,5 +129,47 @@ public class BasicStringPropertyDescriptor extends
           .getRegexpPatternSample();
     }
     return regexpPatternSample;
+  }
+
+  /**
+   * Performs the necessary transformations to build a tring out of a property
+   * value.
+   * 
+   * @param value
+   *          the raw property value.
+   * @return the resulting string.
+   */
+  protected String getValueAsString(Object value) {
+    return (String) value;
+  }
+
+  /**
+   * Sets the maxLength property.
+   * 
+   * @param maxLength
+   *          the maxLength to set.
+   */
+  public void setMaxLength(Integer maxLength) {
+    this.maxLength = maxLength;
+  }
+
+  /**
+   * Sets the regexpPattern.
+   * 
+   * @param regexpPattern
+   *          the regexpPattern to set.
+   */
+  public void setRegexpPattern(String regexpPattern) {
+    this.regexpPattern = regexpPattern;
+  }
+
+  /**
+   * Sets the regexpPatternSample.
+   * 
+   * @param regexpPatternSample
+   *          the regexpPatternSample to set.
+   */
+  public void setRegexpPatternSample(String regexpPatternSample) {
+    this.regexpPatternSample = regexpPatternSample;
   }
 }

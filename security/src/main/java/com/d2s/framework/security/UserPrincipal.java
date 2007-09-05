@@ -20,25 +20,25 @@ import java.util.Map;
  */
 public class UserPrincipal implements Principal, Serializable {
 
-  private static final long   serialVersionUID  = 360589456903648696L;
+  /**
+   * <code>LANGUAGE_PROPERTY</code>.
+   */
+  public static final String  LANGUAGE_PROPERTY = "language";
 
-  private String              name;
-  private Map<String, Object> customProperties;
+  /**
+   * <code>OWNER_PROPERTY</code>.
+   */
+  public static final String  OWNER_PROPERTY    = "owner";
+  private static final long   serialVersionUID  = 360589456903648696L;
 
   /**
    * <code>USER_PROPERTY</code>.
    */
   public static final String  USERDN_PROPERTY   = "userDn";
 
-  /**
-   * <code>OWNER_PROPERTY</code>.
-   */
-  public static final String  OWNER_PROPERTY    = "owner";
+  private Map<String, Object> customProperties;
 
-  /**
-   * <code>LANGUAGE_PROPERTY</code>.
-   */
-  public static final String  LANGUAGE_PROPERTY = "language";
+  private String              name;
 
   /**
    * Constructs a new <code>UserPrincipal</code> instance.
@@ -70,6 +70,33 @@ public class UserPrincipal implements Principal, Serializable {
   }
 
   /**
+   * Gets the customProperties.
+   * 
+   * @return the customProperties.
+   */
+  public Map<String, Object> getCustomProperties() {
+    return customProperties;
+  }
+
+  /**
+   * Retrieves a custom property for this user.
+   * 
+   * @param propertyName
+   *          the name of the custom property.
+   * @return the value of the custom property or null if none exists.
+   */
+  public Object getCustomProperty(String propertyName) {
+    return customProperties.get(propertyName);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -78,21 +105,6 @@ public class UserPrincipal implements Principal, Serializable {
       return 0;
     }
     return name.hashCode();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    return name;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getName() {
-    return name;
   }
 
   /**
@@ -108,22 +120,10 @@ public class UserPrincipal implements Principal, Serializable {
   }
 
   /**
-   * Retrieves a custom property for this user.
-   * 
-   * @param propertyName
-   *          the name of the custom property.
-   * @return the value of the custom property or null if none exists.
+   * {@inheritDoc}
    */
-  public Object getCustomProperty(String propertyName) {
-    return customProperties.get(propertyName);
-  }
-
-  /**
-   * Gets the customProperties.
-   * 
-   * @return the customProperties.
-   */
-  public Map<String, Object> getCustomProperties() {
-    return customProperties;
+  @Override
+  public String toString() {
+    return name;
   }
 }

@@ -21,27 +21,33 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public interface IView<E> extends IViewProvider {
 
   /**
-   * Gets the view peer of this view.
-   * 
-   * @return the view peer.
-   */
-  E getPeer();
-
-  /**
-   * Sets the view peer of this view.
-   * 
-   * @param peer
-   *          the view peer.
-   */
-  void setPeer(E peer);
-
-  /**
    * Gets the view connector of this view. This connector is built connected to
    * the view peer.
    * 
    * @return the view connector.
    */
   IValueConnector getConnector();
+
+  /**
+   * Gets the descriptor of this view.
+   * 
+   * @return the view descriptor.
+   */
+  IViewDescriptor getDescriptor();
+
+  /**
+   * Gets the parent view if any or null.
+   * 
+   * @return the parent view.
+   */
+  IView<E> getParent();
+
+  /**
+   * Gets the view peer of this view.
+   * 
+   * @return the view peer.
+   */
+  E getPeer();
 
   /**
    * Sets the view connector of this view. This connector is built connected to
@@ -53,13 +59,6 @@ public interface IView<E> extends IViewProvider {
   void setConnector(IValueConnector connector);
 
   /**
-   * Gets the parent view if any or null.
-   * 
-   * @return the parent view.
-   */
-  IView<E> getParent();
-
-  /**
    * Sets the parent view if any or null.
    * 
    * @param parent
@@ -68,9 +67,10 @@ public interface IView<E> extends IViewProvider {
   void setParent(IView<E> parent);
 
   /**
-   * Gets the descriptor of this view.
+   * Sets the view peer of this view.
    * 
-   * @return the view descriptor.
+   * @param peer
+   *          the view peer.
    */
-  IViewDescriptor getDescriptor();
+  void setPeer(E peer);
 }

@@ -28,12 +28,35 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
     IIconDescriptor, IComponentDescriptorProvider {
 
   /**
-   * Gets the collection of the properties descriptors of this component
-   * descriptor.
+   * Gets the interface class defining the component contract.
+   *
+   * @return the interface class defining the component contract.
+   */
+  Class<? extends E> getComponentContract();
+
+  /**
+   * Gets the collection of the properties descriptors this entity descriptor
+   * declares (excluding the ones of its ancestors).
    *
    * @return the collection of <code>IPropertyDescriptor</code>s.
    */
-  Collection<IPropertyDescriptor> getPropertyDescriptors();
+  Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors();
+
+  /**
+   * Gets the entity lifecycle interceptors.
+   *
+   * @return the list of entity lifecycle interceptors.
+   */
+  List<ILifecycleInterceptor> getLifecycleInterceptors();
+
+  /**
+   * Get the list of properties ordering the collections containing this
+   * component.
+   *
+   * @return the list of properties ordering the collections containing this
+   *         component.
+   */
+  List<String> getOrderingProperties();
 
   /**
    * Retrieves the <code>IPropertyDescriptor</code> describing the property
@@ -47,11 +70,33 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
   IPropertyDescriptor getPropertyDescriptor(String propertyName);
 
   /**
-   * Gets the interface class defining the component contract.
+   * Gets the collection of the properties descriptors of this component
+   * descriptor.
    *
-   * @return the interface class defining the component contract.
+   * @return the collection of <code>IPropertyDescriptor</code>s.
    */
-  Class<? extends E> getComponentContract();
+  Collection<IPropertyDescriptor> getPropertyDescriptors();
+
+  /**
+   * Get the default queryable properties of this component.
+   *
+   * @return the default queryable properties of this component.
+   */
+  List<String> getQueryableProperties();
+
+  /**
+   * Get the default rendered properties of this component.
+   *
+   * @return the default rendered properties of this component.
+   */
+  List<String> getRenderedProperties();
+
+  /**
+   * Retrieves list of service contracts implemented by this entity.
+   *
+   * @return the class establishing the entity service contract.
+   */
+  Collection<Class> getServiceContracts();
 
   /**
    * Retrieves the service delegate implemented by this component.
@@ -64,11 +109,13 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
   IComponentService getServiceDelegate(Method targetMethod);
 
   /**
-   * Retrieves list of service contracts implemented by this entity.
+   * Gets the property used to build the toString() representation of the
+   * component.
    *
-   * @return the class establishing the entity service contract.
+   * @return the property used to build the toString() representation of the
+   *         component.
    */
-  Collection<Class> getServiceContracts();
+  String getToStringProperty();
 
   /**
    * Gets the set of properties which are erased during a clone operation of the
@@ -77,46 +124,6 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * @return the properties which must not be cloned.
    */
   Collection<String> getUnclonedProperties();
-
-  /**
-   * Gets the collection of the properties descriptors this entity descriptor
-   * declares (excluding the ones of its ancestors).
-   *
-   * @return the collection of <code>IPropertyDescriptor</code>s.
-   */
-  Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors();
-
-  /**
-   * Get the list of properties ordering the collections containing this
-   * component.
-   *
-   * @return the list of properties ordering the collections containing this
-   *         component.
-   */
-  List<String> getOrderingProperties();
-
-  /**
-   * Get the default rendered properties of this component.
-   *
-   * @return the default rendered properties of this component.
-   */
-  List<String> getRenderedProperties();
-
-  /**
-   * Get the default queryable properties of this component.
-   *
-   * @return the default queryable properties of this component.
-   */
-  List<String> getQueryableProperties();
-
-  /**
-   * Gets the property used to build the toString() representation of the
-   * component.
-   *
-   * @return the property used to build the toString() representation of the
-   *         component.
-   */
-  String getToStringProperty();
 
   /**
    * Gets wether this component descriptor is itself persistent or if it is only
@@ -128,24 +135,17 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
   boolean isComputed();
 
   /**
+   * Gets wether the component described is an entity.
+   *
+   * @return true if the component described is an entity.
+   */
+  boolean isEntity();
+
+  /**
    * Gets wether this entity descriptor is a pure abstract definition. Only
    * descendents of this descriptor can be instanciated.
    *
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();
-
-  /**
-   * Gets the entity lifecycle interceptors.
-   *
-   * @return the list of entity lifecycle interceptors.
-   */
-  List<ILifecycleInterceptor> getLifecycleInterceptors();
-
-  /**
-   * Gets wether the component described is an entity.
-   *
-   * @return true if the component described is an entity.
-   */
-  boolean isEntity();
 }

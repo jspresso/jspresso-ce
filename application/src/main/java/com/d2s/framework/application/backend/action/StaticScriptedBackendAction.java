@@ -20,8 +20,8 @@ import com.d2s.framework.util.scripting.ScriptMixin;
  */
 public class StaticScriptedBackendAction extends ScriptedBackendAction {
 
-  private String scriptLanguage;
   private String script;
+  private String scriptLanguage;
 
   /**
    * Executes the action script using the script handler.
@@ -40,16 +40,6 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
   }
 
   /**
-   * Sets the script language this scripted action is written in.
-   * 
-   * @param scriptLanguage
-   *          the scripting language.
-   */
-  public void setScriptLanguage(String scriptLanguage) {
-    this.scriptLanguage = scriptLanguage;
-  }
-
-  /**
    * Sets the script source code.
    * 
    * @param script
@@ -57,5 +47,15 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
    */
   public void setScript(String script) {
     this.script = script;
+  }
+
+  /**
+   * Sets the script language this scripted action is written in.
+   * 
+   * @param scriptLanguage
+   *          the scripting language.
+   */
+  public void setScriptLanguage(String scriptLanguage) {
+    this.scriptLanguage = scriptLanguage;
   }
 }

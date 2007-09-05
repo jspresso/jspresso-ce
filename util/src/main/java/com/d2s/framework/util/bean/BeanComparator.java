@@ -21,7 +21,31 @@ import com.d2s.framework.util.accessor.IAccessor;
  */
 public class BeanComparator implements Comparator<Object> {
 
+  private static final class NaturalComparator implements Comparator<Object> {
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unchecked")
+    public int compare(Object o1, Object o2) {
+      if (o1 == o2) {
+        return 0;
+      }
+      if (o1 == null) {
+        return -1;
+      }
+      if (o2 == null) {
+        return 1;
+      }
+      if (o1 instanceof Comparable<?>) {
+        return ((Comparable<Object>) o1).compareTo(o2);
+      }
+      return o1.toString().compareTo(o2.toString());
+    }
+
+  }
   private static final Comparator<Object> NATURAL_COMPARATOR = new NaturalComparator();
+
   private List<IAccessor>                 orderingAccessors;
 
   /**
@@ -66,29 +90,5 @@ public class BeanComparator implements Comparator<Object> {
    */
   public void setOrderingAccessors(List<IAccessor> orderingAccessors) {
     this.orderingAccessors = orderingAccessors;
-  }
-
-  private static final class NaturalComparator implements Comparator<Object> {
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unchecked")
-    public int compare(Object o1, Object o2) {
-      if (o1 == o2) {
-        return 0;
-      }
-      if (o1 == null) {
-        return -1;
-      }
-      if (o2 == null) {
-        return 1;
-      }
-      if (o1 instanceof Comparable<?>) {
-        return ((Comparable<Object>) o1).compareTo(o2);
-      }
-      return o1.toString().compareTo(o2.toString());
-    }
-
   }
 }

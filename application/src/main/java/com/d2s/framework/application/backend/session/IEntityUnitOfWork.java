@@ -29,17 +29,18 @@ public interface IEntityUnitOfWork extends IEntityDirtAware {
   void begin();
 
   /**
+   * Clears the dirty state of the entity in this unit of work.
+   * 
+   * @param flushedEntity
+   *          the entity that was flushed and cleaned.
+   */
+  void clearDirtyState(IEntity flushedEntity);
+
+  /**
    * Commits the unit of work. It should clear it state and be ready for another
    * work.
    */
   void commit();
-
-  /**
-   * Rollbacks the unit of work. It should clear it state, restore the entity
-   * states to the one before the unit of work begining and be ready for another
-   * work.
-   */
-  void rollback();
 
   /**
    * Tests wether this unit of work is currently in use.
@@ -60,10 +61,9 @@ public interface IEntityUnitOfWork extends IEntityDirtAware {
   void register(IEntity entity, Map<String, Object> initialChangedProperties);
 
   /**
-   * Clears the dirty state of the entity in this unit of work.
-   * 
-   * @param flushedEntity
-   *          the entity that was flushed and cleaned.
+   * Rollbacks the unit of work. It should clear it state, restore the entity
+   * states to the one before the unit of work begining and be ready for another
+   * work.
    */
-  void clearDirtyState(IEntity flushedEntity);
+  void rollback();
 }

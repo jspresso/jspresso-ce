@@ -26,12 +26,52 @@ public class BeanModule extends SubModule implements PropertyChangeListener {
   private Object moduleObject;
 
   /**
+   * Equality based on projected object.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof BeanModule)) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
+    BeanModule rhs = (BeanModule) obj;
+    return new EqualsBuilder().append(getModuleObject(), rhs.getModuleObject())
+        .isEquals();
+  }
+
+  /**
    * Gets the module's projected object.
    * 
    * @return the projected object.
    */
   public Object getModuleObject() {
     return moduleObject;
+  }
+
+  /**
+   * Hash code based on projected object.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(23, 53).append(getModuleObject()).toHashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void propertyChange(@SuppressWarnings("unused")
+  PropertyChangeEvent evt) {
+    String oldName = getName();
+    String oldI18nName = getI18nName();
+    setName(String.valueOf(this.moduleObject));
+    firePropertyChange("name", oldName, getName());
+    firePropertyChange("i18nName", oldI18nName, getI18nName());
   }
 
   /**
@@ -55,45 +95,5 @@ public class BeanModule extends SubModule implements PropertyChangeListener {
           .addPropertyChangeListener(this);
     }
     firePropertyChange("moduleObject", oldValue, getModuleObject());
-  }
-
-  /**
-   * Equality based on projected object.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean equals(Object obj) {
-    if (!(obj instanceof BeanModule)) {
-      return false;
-    }
-    if (this == obj) {
-      return true;
-    }
-    BeanModule rhs = (BeanModule) obj;
-    return new EqualsBuilder().append(getModuleObject(), rhs.getModuleObject())
-        .isEquals();
-  }
-
-  /**
-   * Hash code based on projected object.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(23, 53).append(getModuleObject()).toHashCode();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void propertyChange(@SuppressWarnings("unused")
-  PropertyChangeEvent evt) {
-    String oldName = getName();
-    String oldI18nName = getI18nName();
-    setName(String.valueOf(this.moduleObject));
-    firePropertyChange("name", oldName, getName());
-    firePropertyChange("i18nName", oldI18nName, getI18nName());
   }
 }

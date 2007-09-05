@@ -37,6 +37,23 @@ public class ULCColorPickerConnector extends
    * {@inheritDoc}
    */
   @Override
+  protected void bindULCComponent() {
+    getConnectedULCComponent().addValueChangedListener(
+        new IValueChangedListener() {
+
+          private static final long serialVersionUID = -7747055134828532559L;
+
+          public void valueChanged(@SuppressWarnings("unused")
+          ValueChangedEvent event) {
+            fireConnectorValueChange();
+          }
+        });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected Object getConnecteeValue() {
     Color value = getConnectedULCComponent().getValue();
     if (value != null) {
@@ -60,23 +77,6 @@ public class ULCColorPickerConnector extends
     } else {
       getConnectedULCComponent().setValue(null);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void bindULCComponent() {
-    getConnectedULCComponent().addValueChangedListener(
-        new IValueChangedListener() {
-
-          private static final long serialVersionUID = -7747055134828532559L;
-
-          public void valueChanged(@SuppressWarnings("unused")
-          ValueChangedEvent event) {
-            fireConnectorValueChange();
-          }
-        });
   }
 
   /**

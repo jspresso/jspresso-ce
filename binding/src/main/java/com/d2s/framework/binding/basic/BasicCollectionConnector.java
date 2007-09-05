@@ -41,6 +41,25 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicCollectionConnector clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicCollectionConnector clone(String newConnectorId) {
+    BasicCollectionConnector clonedConnector = (BasicCollectionConnector) super
+        .clone(newConnectorId);
+    clonedConnector.connecteeValue = null;
+    return clonedConnector;
+  }
+
+  /**
    * Gets the self-hosted value.
    * 
    * @return the self-hosted value.
@@ -62,24 +81,5 @@ public class BasicCollectionConnector extends AbstractCollectionConnector {
     if (getConnecteeValue() == null) {
       updateChildConnectors();
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicCollectionConnector clone(String newConnectorId) {
-    BasicCollectionConnector clonedConnector = (BasicCollectionConnector) super
-        .clone(newConnectorId);
-    clonedConnector.connecteeValue = null;
-    return clonedConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicCollectionConnector clone() {
-    return clone(getId());
   }
 }

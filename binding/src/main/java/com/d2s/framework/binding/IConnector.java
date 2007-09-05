@@ -22,6 +22,22 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
 public interface IConnector extends IPropertyChangeCapable, Cloneable {
 
   /**
+   * Clones this connector.
+   * 
+   * @return the connector's clone.
+   */
+  IConnector clone();
+
+  /**
+   * Clones this connector.
+   * 
+   * @param newConnectorId
+   *          the identifier of the clone connector
+   * @return the connector's clone.
+   */
+  IConnector clone(String newConnectorId);
+
+  /**
    * Gets the identifier of the connector. In a bean property connector, this
    * identifier will be the property name.
    * 
@@ -37,22 +53,6 @@ public interface IConnector extends IPropertyChangeCapable, Cloneable {
    *          The connector identifier.
    */
   void setId(String id);
-
-  /**
-   * Clones this connector.
-   * 
-   * @param newConnectorId
-   *          the identifier of the clone connector
-   * @return the connector's clone.
-   */
-  IConnector clone(String newConnectorId);
-
-  /**
-   * Clones this connector.
-   * 
-   * @return the connector's clone.
-   */
-  IConnector clone();
 
   /**
    * Tells this connector to fully update its state (readability, writability,

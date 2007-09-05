@@ -18,8 +18,43 @@ import java.util.Date;
  */
 public final class LdapUtils {
 
-  private LdapUtils() {
-    // private constructor for helper class.
+  /**
+   * Formats an boolean attribute.
+   * 
+   * @param value
+   *          the boolean value.
+   * @return the parsed boolean.
+   */
+  public static String formatBoolean(boolean value) {
+    return new Boolean(value).toString().toUpperCase();
+  }
+
+  /**
+   * Formats an integer attribute.
+   * 
+   * @param value
+   *          the integer value.
+   * @return the parsed integer or null.
+   */
+  public static String formatInteger(Integer value) {
+    if (value != null) {
+      return value.toString();
+    }
+    return null;
+  }
+
+  /**
+   * Parses an boolean attribute.
+   * 
+   * @param booleanAsString
+   *          the string representation of the boolean.
+   * @return the parsed boolean or null.
+   */
+  public static boolean parseBoolean(String booleanAsString) {
+    if (booleanAsString != null) {
+      return Boolean.parseBoolean(booleanAsString);
+    }
+    return false;
   }
 
   /**
@@ -74,42 +109,7 @@ public final class LdapUtils {
     return null;
   }
 
-  /**
-   * Formats an integer attribute.
-   * 
-   * @param value
-   *          the integer value.
-   * @return the parsed integer or null.
-   */
-  public static String formatInteger(Integer value) {
-    if (value != null) {
-      return value.toString();
-    }
-    return null;
-  }
-
-  /**
-   * Parses an boolean attribute.
-   * 
-   * @param booleanAsString
-   *          the string representation of the boolean.
-   * @return the parsed boolean or null.
-   */
-  public static boolean parseBoolean(String booleanAsString) {
-    if (booleanAsString != null) {
-      return Boolean.parseBoolean(booleanAsString);
-    }
-    return false;
-  }
-
-  /**
-   * Formats an boolean attribute.
-   * 
-   * @param value
-   *          the boolean value.
-   * @return the parsed boolean.
-   */
-  public static String formatBoolean(boolean value) {
-    return new Boolean(value).toString().toUpperCase();
+  private LdapUtils() {
+    // private constructor for helper class.
   }
 }

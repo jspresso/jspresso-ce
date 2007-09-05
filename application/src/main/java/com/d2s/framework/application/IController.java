@@ -26,6 +26,27 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public interface IController extends IActionHandler {
 
   /**
+   * Gets the applicationSession for this backend controller.
+   * 
+   * @return the current controller application session.
+   */
+  IApplicationSession getApplicationSession();
+
+  /**
+   * Gets the current controller locale.
+   * 
+   * @return the current controller locale.
+   */
+  Locale getLocale();
+
+  /**
+   * Gets the translation provider used by this controller.
+   * 
+   * @return the translation provider used by this controller.
+   */
+  ITranslationProvider getTranslationProvider();
+
+  /**
    * Merges an entity in the application session.
    * 
    * @param entity
@@ -53,25 +74,4 @@ public interface IController extends IActionHandler {
    * @return true if the stop was successful.
    */
   boolean stop();
-
-  /**
-   * Gets the current controller locale.
-   * 
-   * @return the current controller locale.
-   */
-  Locale getLocale();
-
-  /**
-   * Gets the translation provider used by this controller.
-   * 
-   * @return the translation provider used by this controller.
-   */
-  ITranslationProvider getTranslationProvider();
-
-  /**
-   * Gets the applicationSession for this backend controller.
-   * 
-   * @return the current controller application session.
-   */
-  IApplicationSession getApplicationSession();
 }

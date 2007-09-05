@@ -58,6 +58,152 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addReadabilityGate(IGate gate) {
+    if (gate instanceof IModelGate) {
+      ((IModelGate) gate).setModelProvider(getModelProvider());
+    }
+    super.addReadabilityGate(gate);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void addWritabilityGate(IGate gate) {
+    if (gate instanceof IModelGate) {
+      ((IModelGate) gate).setModelProvider(getModelProvider());
+    }
+    super.addWritabilityGate(gate);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ModelPropertyConnector clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ModelPropertyConnector clone(String newConnectorId) {
+    ModelPropertyConnector clonedConnector = (ModelPropertyConnector) super
+        .clone(newConnectorId);
+    return clonedConnector;
+  }
+
+  /**
+   * Accesses the underlying model property and gets its value.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getConnecteeValue() {
+    try {
+      return accessor.getValue(getModelProvider().getModel());
+    } catch (IllegalAccessException ex) {
+      throw new ConnectorBindingException(ex);
+    } catch (InvocationTargetException ex) {
+      throw new ConnectorBindingException(ex);
+    } catch (NoSuchMethodException ex) {
+      // this may be a normal behaviour in case of polymorphism.
+      // don't throw any exception.
+      // throw new ConnectorBindingException(ex);
+      return null;
+    }
+  }
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  public IModelDescriptor getModelDescriptor() {
+    return modelDescriptor;
+  }
+
+  /**
+   * Gets the modelProvider.
+   * 
+   * @return the modelProvider.
+   */
+  public IModelProvider getModelProvider() {
+    if (getParentConnector() instanceof IModelProvider) {
+      return (IModelProvider) getParentConnector();
+    }
+    return null;
+  }
+
+  /**
+   * Wether this is a 'real' property connector (a opposed to a ModelConnector).
+   * 
+   * @return true if this is a 'real' property connector.
+   */
+  protected boolean isValueAccessedAsProperty() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    boolean writable = super.isWritable();
+    if (accessor != null) {
+      writable = writable && accessor.isWritable();
+    }
+    if (getModelProvider() != null) {
+      writable = writable && getModelProvider().getModel() != null;
+    }
+    return writable;
+  }
+
+  /**
+   * Detaches <code>this</code> as <code>PropertyChangeListener</code> on
+   * the old model instance and attaches as <code>PropertyChangeListener</code>
+   * on the new model instance. When this is done, it notifies its
+   * <code>IConnectorValueChangeListener</code> s about a possible change on
+   * the model property value (the new model property).
+   * <p>
+   * {@inheritDoc}
+   */
+  public void modelChange(ModelChangeEvent evt) {
+
+    if (!(getParentConnector() instanceof ICollectionConnector)) {
+      if (evt.getOldValue() != null
+          && evt.getOldValue() instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) evt.getOldValue())
+            .removePropertyChangeListener(getId(), this);
+      }
+      if (evt.getNewValue() != null
+          && evt.getNewValue() instanceof IPropertyChangeCapable) {
+        ((IPropertyChangeCapable) evt.getNewValue()).addPropertyChangeListener(
+            getId(), this);
+      }
+    }
+
+    boolean oldWritability;
+    boolean newWritability;
+    if (evt.getOldValue() != null) {
+      oldWritability = super.isWritable();
+    } else {
+      oldWritability = false;
+    }
+    if (evt.getNewValue() != null) {
+      newWritability = super.isWritable();
+    } else {
+      newWritability = isWritable();
+    }
+    firePropertyChange(WRITABLE_PROPERTY, oldWritability, newWritability);
+    fireConnectorValueChange();
+  }
+
+  /**
    * This method must be called whenever the connector's model provider changes.
    * This method performs any necessary cleaning, attachements and notification
    * needed.
@@ -118,101 +264,6 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   }
 
   /**
-   * Since model provider is usually the parent connector for this kind of
-   * connector, this method is overloaded to call the
-   * <code>modelProviderChanged</code> method.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setParentConnector(ICompositeValueConnector parentConnector) {
-    IModelProvider oldModelProvider = getModelProvider();
-    super.setParentConnector(parentConnector);
-    modelProviderChanged(oldModelProvider);
-  }
-
-  /**
-   * Accesses the underlying model property and gets its value.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object getConnecteeValue() {
-    try {
-      return accessor.getValue(getModelProvider().getModel());
-    } catch (IllegalAccessException ex) {
-      throw new ConnectorBindingException(ex);
-    } catch (InvocationTargetException ex) {
-      throw new ConnectorBindingException(ex);
-    } catch (NoSuchMethodException ex) {
-      // this may be a normal behaviour in case of polymorphism.
-      // don't throw any exception.
-      // throw new ConnectorBindingException(ex);
-      return null;
-    }
-  }
-
-  /**
-   * Accesses the underlying model property and sets its value.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setConnecteeValue(Object aValue) {
-    if (!ObjectUtils.equals(aValue, getConnecteeValue())) {
-      try {
-        accessor.setValue(getModelProvider().getModel(), aValue);
-      } catch (IllegalAccessException ex) {
-        throw new ConnectorBindingException(ex);
-      } catch (InvocationTargetException ex) {
-        throw new ConnectorBindingException(ex);
-      } catch (NoSuchMethodException ex) {
-        throw new ConnectorBindingException(ex);
-      }
-    }
-  }
-
-  /**
-   * Detaches <code>this</code> as <code>PropertyChangeListener</code> on
-   * the old model instance and attaches as <code>PropertyChangeListener</code>
-   * on the new model instance. When this is done, it notifies its
-   * <code>IConnectorValueChangeListener</code> s about a possible change on
-   * the model property value (the new model property).
-   * <p>
-   * {@inheritDoc}
-   */
-  public void modelChange(ModelChangeEvent evt) {
-
-    if (!(getParentConnector() instanceof ICollectionConnector)) {
-      if (evt.getOldValue() != null
-          && evt.getOldValue() instanceof IPropertyChangeCapable) {
-        ((IPropertyChangeCapable) evt.getOldValue())
-            .removePropertyChangeListener(getId(), this);
-      }
-      if (evt.getNewValue() != null
-          && evt.getNewValue() instanceof IPropertyChangeCapable) {
-        ((IPropertyChangeCapable) evt.getNewValue()).addPropertyChangeListener(
-            getId(), this);
-      }
-    }
-
-    boolean oldWritability;
-    boolean newWritability;
-    if (evt.getOldValue() != null) {
-      oldWritability = super.isWritable();
-    } else {
-      oldWritability = false;
-    }
-    if (evt.getNewValue() != null) {
-      newWritability = super.isWritable();
-    } else {
-      newWritability = isWritable();
-    }
-    firePropertyChange(WRITABLE_PROPERTY, oldWritability, newWritability);
-    fireConnectorValueChange();
-  }
-
-  /**
    * Called when the underlying connectee value (the model property) changes.
    * This implementation notifies its <code>IConnectorValueChangeListener</code>
    * s about the change passing the new model property.
@@ -222,91 +273,6 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   public void propertyChange(@SuppressWarnings("unused")
   PropertyChangeEvent evt) {
     fireConnectorValueChange();
-  }
-
-  /**
-   * Gets the modelProvider.
-   * 
-   * @return the modelProvider.
-   */
-  public IModelProvider getModelProvider() {
-    if (getParentConnector() instanceof IModelProvider) {
-      return (IModelProvider) getParentConnector();
-    }
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isWritable() {
-    boolean writable = super.isWritable();
-    if (accessor != null) {
-      writable = writable && accessor.isWritable();
-    }
-    if (getModelProvider() != null) {
-      writable = writable && getModelProvider().getModel() != null;
-    }
-    return writable;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ModelPropertyConnector clone(String newConnectorId) {
-    ModelPropertyConnector clonedConnector = (ModelPropertyConnector) super
-        .clone(newConnectorId);
-    return clonedConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ModelPropertyConnector clone() {
-    return clone(getId());
-  }
-
-  /**
-   * Wether this is a 'real' property connector (a opposed to a ModelConnector).
-   * 
-   * @return true if this is a 'real' property connector.
-   */
-  protected boolean isValueAccessedAsProperty() {
-    return true;
-  }
-
-  /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  public IModelDescriptor getModelDescriptor() {
-    return modelDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addReadabilityGate(IGate gate) {
-    if (gate instanceof IModelGate) {
-      ((IModelGate) gate).setModelProvider(getModelProvider());
-    }
-    super.addReadabilityGate(gate);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void addWritabilityGate(IGate gate) {
-    if (gate instanceof IModelGate) {
-      ((IModelGate) gate).setModelProvider(getModelProvider());
-    }
-    super.addWritabilityGate(gate);
   }
 
   /**
@@ -332,6 +298,26 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   }
 
   /**
+   * Accesses the underlying model property and sets its value.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void setConnecteeValue(Object aValue) {
+    if (!ObjectUtils.equals(aValue, getConnecteeValue())) {
+      try {
+        accessor.setValue(getModelProvider().getModel(), aValue);
+      } catch (IllegalAccessException ex) {
+        throw new ConnectorBindingException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new ConnectorBindingException(ex);
+      } catch (NoSuchMethodException ex) {
+        throw new ConnectorBindingException(ex);
+      }
+    }
+  }
+
+  /**
    * Performs check.
    * <p>
    * {@inheritDoc}
@@ -343,5 +329,19 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
           getModelProvider().getModel(), aValue);
     }
     super.setConnectorValue(aValue);
+  }
+
+  /**
+   * Since model provider is usually the parent connector for this kind of
+   * connector, this method is overloaded to call the
+   * <code>modelProviderChanged</code> method.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setParentConnector(ICompositeValueConnector parentConnector) {
+    IModelProvider oldModelProvider = getModelProvider();
+    super.setParentConnector(parentConnector);
+    modelProviderChanged(oldModelProvider);
   }
 }

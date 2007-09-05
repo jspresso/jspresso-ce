@@ -35,15 +35,15 @@ public class MemoryResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
-  public int getLength() {
-    return resourceBytes.length;
+  public InputStream getContent() {
+    return new ByteArrayInputStream(resourceBytes);
   }
 
   /**
    * {@inheritDoc}
    */
-  public InputStream getContent() {
-    return new ByteArrayInputStream(resourceBytes);
+  public int getLength() {
+    return resourceBytes.length;
   }
 
 }

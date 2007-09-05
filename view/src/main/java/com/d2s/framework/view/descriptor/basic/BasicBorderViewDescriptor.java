@@ -19,16 +19,23 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
     implements IBorderViewDescriptor {
 
   private IViewDescriptor centerViewDescriptor;
-  private IViewDescriptor northViewDescriptor;
-  private IViewDescriptor westViewDescriptor;
-  private IViewDescriptor southViewDescriptor;
   private IViewDescriptor eastViewDescriptor;
+  private IViewDescriptor northViewDescriptor;
+  private IViewDescriptor southViewDescriptor;
+  private IViewDescriptor westViewDescriptor;
 
   /**
    * {@inheritDoc}
    */
   public IViewDescriptor getCenterViewDescriptor() {
     return centerViewDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IViewDescriptor getEastViewDescriptor() {
+    return eastViewDescriptor;
   }
 
   /**
@@ -41,13 +48,6 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
-  public IViewDescriptor getWestViewDescriptor() {
-    return westViewDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public IViewDescriptor getSouthViewDescriptor() {
     return southViewDescriptor;
   }
@@ -55,8 +55,8 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
-  public IViewDescriptor getEastViewDescriptor() {
-    return eastViewDescriptor;
+  public IViewDescriptor getWestViewDescriptor() {
+    return westViewDescriptor;
   }
 
   /**

@@ -32,6 +32,25 @@ public class BasicValueConnector extends AbstractValueConnector {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicValueConnector clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicValueConnector clone(String newConnectorId) {
+    BasicValueConnector clonedConnector = (BasicValueConnector) super
+        .clone(newConnectorId);
+    clonedConnector.connecteeValue = null;
+    return clonedConnector;
+  }
+
+  /**
    * Gets the self-hosted value.
    * 
    * @return the self-hosted value.
@@ -50,24 +69,5 @@ public class BasicValueConnector extends AbstractValueConnector {
   @Override
   protected void setConnecteeValue(Object connecteeValue) {
     this.connecteeValue = connecteeValue;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicValueConnector clone(String newConnectorId) {
-    BasicValueConnector clonedConnector = (BasicValueConnector) super
-        .clone(newConnectorId);
-    clonedConnector.connecteeValue = null;
-    return clonedConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicValueConnector clone() {
-    return clone(getId());
   }
 }

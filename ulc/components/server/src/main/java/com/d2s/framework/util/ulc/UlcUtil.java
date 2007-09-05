@@ -24,8 +24,56 @@ public final class UlcUtil {
 
   private static final double DARKER_COLOR_FACTOR = 0.93;
 
-  private UlcUtil() {
-    // Helper class private constructor.
+  /**
+   * Make even and odd rows background colors slightly different in collection
+   * component (table, list, ...).
+   * 
+   * @param renderer
+   *          the renderer to work on.
+   * @param collectionComponent
+   *          the collection component (table, list, ...) on which this renderer
+   *          is used.
+   * @param isSelected
+   *          is the row selected ?
+   * @param row
+   *          the row to render.
+   */
+  public static void alternateEvenOddBackground(ULCComponent renderer,
+      ULCComponent collectionComponent, boolean isSelected, int row) {
+    if (!isSelected) {
+      if (row % 2 == 1) {
+        renderer.setBackground(getScaledColor(collectionComponent
+            .getBackground(), DARKER_COLOR_FACTOR));
+      } else {
+        renderer.setBackground(collectionComponent.getBackground());
+      }
+    }
+  }
+
+  /**
+   * Center a window on screen.
+   * 
+   * @param w
+   *          the window to center on screen.
+   */
+  public static void centerInParent(ULCWindow w) {
+    ULCWindow parent = (ULCWindow) w.getParent();
+    if (parent != null) {
+      Dimension parentSize = parent.getSize();
+      w.setLocation((parentSize.getWidth() - w.getWidth()) / 2, (parentSize
+          .getHeight() - w.getHeight()) / 2);
+    }
+  }
+
+  /**
+   * Center a window on screen.
+   * 
+   * @param w
+   *          the window to center on screen.
+   */
+  public static void centerOnScreen(ULCWindow w) {
+    w.setLocation((ClientContext.getScreenWidth() - w.getWidth()) / 2,
+        (ClientContext.getScreenHeight() - w.getHeight()) / 2);
   }
 
   /**
@@ -94,58 +142,6 @@ public final class UlcUtil {
   }
 
   /**
-   * Make even and odd rows background colors slightly different in collection
-   * component (table, list, ...).
-   * 
-   * @param renderer
-   *          the renderer to work on.
-   * @param collectionComponent
-   *          the collection component (table, list, ...) on which this renderer
-   *          is used.
-   * @param isSelected
-   *          is the row selected ?
-   * @param row
-   *          the row to render.
-   */
-  public static void alternateEvenOddBackground(ULCComponent renderer,
-      ULCComponent collectionComponent, boolean isSelected, int row) {
-    if (!isSelected) {
-      if (row % 2 == 1) {
-        renderer.setBackground(getScaledColor(collectionComponent
-            .getBackground(), DARKER_COLOR_FACTOR));
-      } else {
-        renderer.setBackground(collectionComponent.getBackground());
-      }
-    }
-  }
-
-  /**
-   * Center a window on screen.
-   * 
-   * @param w
-   *          the window to center on screen.
-   */
-  public static void centerOnScreen(ULCWindow w) {
-    w.setLocation((ClientContext.getScreenWidth() - w.getWidth()) / 2,
-        (ClientContext.getScreenHeight() - w.getHeight()) / 2);
-  }
-
-  /**
-   * Center a window on screen.
-   * 
-   * @param w
-   *          the window to center on screen.
-   */
-  public static void centerInParent(ULCWindow w) {
-    ULCWindow parent = (ULCWindow) w.getParent();
-    if (parent != null) {
-      Dimension parentSize = parent.getSize();
-      w.setLocation((parentSize.getWidth() - w.getWidth()) / 2, (parentSize
-          .getHeight() - w.getHeight()) / 2);
-    }
-  }
-
-  /**
    * Gets the visible parent window.
    * 
    * @param component
@@ -161,5 +157,9 @@ public final class UlcUtil {
       return getVisibleWindow(w.getParent());
     }
     return w;
+  }
+
+  private UlcUtil() {
+    // Helper class private constructor.
   }
 }

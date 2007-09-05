@@ -22,32 +22,8 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class BeanCollectionModule extends SubModule {
 
-  private Collection<?>   moduleObjects;
   private IViewDescriptor elementViewDescriptor;
-
-  /**
-   * Gets the module's projected objects.
-   * 
-   * @return the projected objects.
-   */
-  public Collection<?> getModuleObjects() {
-    return moduleObjects;
-  }
-
-  /**
-   * Sets the module's projected object collection.
-   * 
-   * @param moduleObjects
-   *          the projected object collection.
-   */
-  public void setModuleObjects(Collection<?> moduleObjects) {
-    if (ObjectUtils.equals(this.moduleObjects, moduleObjects)) {
-      return;
-    }
-    Object oldValue = getModuleObjects();
-    this.moduleObjects = moduleObjects;
-    firePropertyChange("moduleObjects", oldValue, getModuleObjects());
-  }
+  private Collection<?>   moduleObjects;
 
   /**
    * Equality based on projected object.
@@ -68,6 +44,24 @@ public class BeanCollectionModule extends SubModule {
   }
 
   /**
+   * Gets the elementViewDescriptor.
+   * 
+   * @return the elementViewDescriptor.
+   */
+  public IViewDescriptor getElementViewDescriptor() {
+    return elementViewDescriptor;
+  }
+
+  /**
+   * Gets the module's projected objects.
+   * 
+   * @return the projected objects.
+   */
+  public Collection<?> getModuleObjects() {
+    return moduleObjects;
+  }
+
+  /**
    * Hash code based on projected object.
    * <p>
    * {@inheritDoc}
@@ -78,15 +72,6 @@ public class BeanCollectionModule extends SubModule {
   }
 
   /**
-   * Gets the elementViewDescriptor.
-   * 
-   * @return the elementViewDescriptor.
-   */
-  public IViewDescriptor getElementViewDescriptor() {
-    return elementViewDescriptor;
-  }
-
-  /**
    * Sets the elementViewDescriptor.
    * 
    * @param elementViewDescriptor
@@ -94,5 +79,20 @@ public class BeanCollectionModule extends SubModule {
    */
   public void setElementViewDescriptor(IViewDescriptor elementViewDescriptor) {
     this.elementViewDescriptor = elementViewDescriptor;
+  }
+
+  /**
+   * Sets the module's projected object collection.
+   * 
+   * @param moduleObjects
+   *          the projected object collection.
+   */
+  public void setModuleObjects(Collection<?> moduleObjects) {
+    if (ObjectUtils.equals(this.moduleObjects, moduleObjects)) {
+      return;
+    }
+    Object oldValue = getModuleObjects();
+    this.moduleObjects = moduleObjects;
+    firePropertyChange("moduleObjects", oldValue, getModuleObjects());
   }
 }

@@ -29,11 +29,31 @@ import com.d2s.framework.view.descriptor.ISubViewDescriptor;
 public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentViewDescriptor {
 
-  private int                       labelsPosition = ASIDE;
   private int                       columnCount    = 1;
+  private int                       labelsPosition = ASIDE;
+  private List<ISubViewDescriptor>  propertyViewDescriptors;
   private Map<String, Integer>      propertyWidths;
   private Map<String, List<String>> renderedChildProperties;
-  private List<ISubViewDescriptor>  propertyViewDescriptors;
+
+  /**
+   * {@inheritDoc}
+   */
+  public int getColumnCount() {
+    return columnCount;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getIconImageURL() {
+    String iconImageURL = super.getIconImageURL();
+    if (iconImageURL == null) {
+      iconImageURL = ((IComponentDescriptorProvider) getModelDescriptor())
+          .getComponentDescriptor().getIconImageURL();
+    }
+    return iconImageURL;
+  }
 
   /**
    * {@inheritDoc}
@@ -45,8 +65,21 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public int getColumnCount() {
-    return columnCount;
+  public List<ISubViewDescriptor> getPropertyViewDescriptors() {
+    if (propertyViewDescriptors == null) {
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
+          .getComponentDescriptor();
+      List<String> modelRenderedProperties = componentDescriptor
+          .getRenderedProperties();
+      List<ISubViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      for (String renderedProperty : modelRenderedProperties) {
+        BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
+        propertyDescriptor.setName(renderedProperty);
+        defaultPropertyViewDescriptors.add(propertyDescriptor);
+      }
+      return defaultPropertyViewDescriptors;
+    }
+    return propertyViewDescriptors;
   }
 
   /**
@@ -60,45 +93,6 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       }
     }
     return 1;
-  }
-
-  /**
-   * Sets the columnCount.
-   * 
-   * @param columnCount
-   *          the columnCount to set.
-   */
-  public void setColumnCount(int columnCount) {
-    this.columnCount = columnCount;
-  }
-
-  /**
-   * Sets the labelsPosition.
-   * 
-   * @param labelsPosition
-   *          the labelsPosition to set.
-   */
-  public void setLabelsPosition(int labelsPosition) {
-    this.labelsPosition = labelsPosition;
-  }
-
-  /**
-   * Sets the propertyWidths.
-   * 
-   * @param propertyWidths
-   *          the propertyWidths to set.
-   */
-  public void setPropertyWidths(Map<String, Object> propertyWidths) {
-    this.propertyWidths = new HashMap<String, Integer>();
-    for (Map.Entry<String, Object> propertyWidth : propertyWidths.entrySet()) {
-      if (propertyWidth.getValue() instanceof String) {
-        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
-            (String) propertyWidth.getValue()));
-      } else {
-        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
-            ((Number) propertyWidth.getValue()).intValue()));
-      }
-    }
   }
 
   /**
@@ -125,27 +119,23 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * Sets the renderedChildProperties.
+   * Sets the columnCount.
    * 
-   * @param renderedChildProperties
-   *          the renderedChildProperties to set.
+   * @param columnCount
+   *          the columnCount to set.
    */
-  public void setRenderedChildProperties(
-      Map<String, List<String>> renderedChildProperties) {
-    this.renderedChildProperties = renderedChildProperties;
+  public void setColumnCount(int columnCount) {
+    this.columnCount = columnCount;
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the labelsPosition.
+   * 
+   * @param labelsPosition
+   *          the labelsPosition to set.
    */
-  @Override
-  public String getIconImageURL() {
-    String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null) {
-      iconImageURL = ((IComponentDescriptorProvider) getModelDescriptor())
-          .getComponentDescriptor().getIconImageURL();
-    }
-    return iconImageURL;
+  public void setLabelsPosition(int labelsPosition) {
+    this.labelsPosition = labelsPosition;
   }
 
   /**
@@ -160,22 +150,32 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the propertyWidths.
+   * 
+   * @param propertyWidths
+   *          the propertyWidths to set.
    */
-  public List<ISubViewDescriptor> getPropertyViewDescriptors() {
-    if (propertyViewDescriptors == null) {
-      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
-          .getComponentDescriptor();
-      List<String> modelRenderedProperties = componentDescriptor
-          .getRenderedProperties();
-      List<ISubViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
-      for (String renderedProperty : modelRenderedProperties) {
-        BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
-        propertyDescriptor.setName(renderedProperty);
-        defaultPropertyViewDescriptors.add(propertyDescriptor);
+  public void setPropertyWidths(Map<String, Object> propertyWidths) {
+    this.propertyWidths = new HashMap<String, Integer>();
+    for (Map.Entry<String, Object> propertyWidth : propertyWidths.entrySet()) {
+      if (propertyWidth.getValue() instanceof String) {
+        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
+            (String) propertyWidth.getValue()));
+      } else {
+        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
+            ((Number) propertyWidth.getValue()).intValue()));
       }
-      return defaultPropertyViewDescriptors;
     }
-    return propertyViewDescriptors;
+  }
+
+  /**
+   * Sets the renderedChildProperties.
+   * 
+   * @param renderedChildProperties
+   *          the renderedChildProperties to set.
+   */
+  public void setRenderedChildProperties(
+      Map<String, List<String>> renderedChildProperties) {
+    this.renderedChildProperties = renderedChildProperties;
   }
 }

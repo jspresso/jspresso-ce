@@ -56,6 +56,19 @@ public class SColorPickerConnector extends SComponentConnector<SColorPicker> {
    * {@inheritDoc}
    */
   @Override
+  protected Object getConnecteeValue() {
+    Color value = getConnectedSComponent().getValue();
+    if (value != null) {
+      return ColorHelper.toHexString(value.getRed(), value.getGreen(), value
+          .getBlue(), value.getAlpha());
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected void setConnecteeValue(Object aValue) {
     if (aValue != null) {
       int[] rgba = ColorHelper.fromHexString((String) aValue);
@@ -64,19 +77,6 @@ public class SColorPickerConnector extends SComponentConnector<SColorPicker> {
     } else {
       getConnectedSComponent().setValue(null);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object getConnecteeValue() {
-    Color value = getConnectedSComponent().getValue();
-    if (value != null) {
-      return ColorHelper.toHexString(value.getRed(), value.getGreen(), value
-          .getBlue(), value.getAlpha());
-    }
-    return null;
   }
 
   /**

@@ -24,9 +24,9 @@ import com.d2s.framework.view.IIconFactory;
  */
 public class YesNoCancelAction extends AbstractMessageAction {
 
-  private IAction yesAction;
-  private IAction noAction;
   private IAction cancelAction;
+  private IAction noAction;
+  private IAction yesAction;
 
   /**
    * Displays the message using a <code>JOptionPane.YES_NO_CANCEL_OPTION</code>.

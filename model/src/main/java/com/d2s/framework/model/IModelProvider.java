@@ -20,6 +20,14 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 public interface IModelProvider {
 
   /**
+   * Adds a new bean listener to this model provider.
+   * 
+   * @param listener
+   *          The added listener
+   */
+  void addModelChangeListener(IModelChangeListener listener);
+
+  /**
    * Gets the bean object of this provider.
    * 
    * @return The bean object
@@ -32,14 +40,6 @@ public interface IModelProvider {
    * @return The bean object
    */
   IComponentDescriptorProvider getModelDescriptor();
-
-  /**
-   * Adds a new bean listener to this model provider.
-   * 
-   * @param listener
-   *          The added listener
-   */
-  void addModelChangeListener(IModelChangeListener listener);
 
   /**
    * Removes a bean listener from this model provider.

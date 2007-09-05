@@ -23,8 +23,8 @@ public abstract class AbstractCompositeValueConnector extends
   private IConnectorMap             childConnectors;
   private ChildConnectorSupport     childConnectorSupport;
   private ConnectorSelectionSupport connectorSelectionSupport;
-  private boolean                   trackingChildrenSelection;
   private String                    renderingChildConnectorId;
+  private boolean                   trackingChildrenSelection;
 
   /**
    * Constructs a new <code>AbstractCompositeValueConnector</code>.
@@ -38,16 +38,6 @@ public abstract class AbstractCompositeValueConnector extends
     connectorSelectionSupport = new ConnectorSelectionSupport();
     trackingChildrenSelection = false;
     childConnectors = new ConnectorMap(this);
-  }
-
-  /**
-   * Returns the connector map of the connectors contained in this connector.
-   * This method should return null if no connector are child in this connector.
-   * 
-   * @return the connector map of the child connectors
-   */
-  public IConnectorMap getConnectorMap() {
-    return childConnectors;
   }
 
   /**
@@ -74,14 +64,25 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * Removes a child connector.
-   * 
-   * @param connector
-   *          the connector to be removed.
+   * {@inheritDoc}
    */
-  protected void removeChildConnector(IValueConnector connector) {
-    getConnectorMap().removeConnector(connector.getId());
-    connector.setParentConnector(null);
+  public boolean areChildrenReadable() {
+    return isReadable();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean areChildrenWritable() {
+    return isWritable();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public AbstractCompositeValueConnector clone() {
+    return clone(getId());
   }
 
   /**
@@ -107,23 +108,8 @@ public abstract class AbstractCompositeValueConnector extends
   /**
    * {@inheritDoc}
    */
-  @Override
-  public AbstractCompositeValueConnector clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public IValueConnector getChildConnector(String connectorKey) {
     return childConnectorSupport.getChildConnector(connectorKey);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<String> getChildConnectorKeys() {
-    return childConnectorSupport.getChildConnectorKeys();
   }
 
   /**
@@ -134,34 +120,20 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * Uses the value to compute the string representation.
-   * <p>
    * {@inheritDoc}
    */
-  @Override
-  public String toString() {
-    IValueConnector renderingConnector = getRenderingConnector();
-    if (renderingConnector != null) {
-      if (renderingConnector.getConnectorValue() != null) {
-        return renderingConnector.getConnectorValue().toString();
-      }
-      return "";
-    }
-    Object value = getConnectorValue();
-    if (value != null) {
-      return value.toString();
-    }
-    return "";
+  public Collection<String> getChildConnectorKeys() {
+    return childConnectorSupport.getChildConnectorKeys();
   }
 
   /**
-   * Sets the renderingChildConnectorId.
+   * Returns the connector map of the connectors contained in this connector.
+   * This method should return null if no connector are child in this connector.
    * 
-   * @param renderingChildConnectorId
-   *          the renderingChildConnectorId to set.
+   * @return the connector map of the child connectors
    */
-  public void setRenderingChildConnectorId(String renderingChildConnectorId) {
-    this.renderingChildConnectorId = renderingChildConnectorId;
+  public IConnectorMap getConnectorMap() {
+    return childConnectors;
   }
 
   /**
@@ -190,12 +162,21 @@ public abstract class AbstractCompositeValueConnector extends
    * Utility implementation to factorize method support. This should only be
    * used by subclasses which implement <code>IConnectorSelector</code>.
    * 
-   * @param listener
-   *          the listener to remove.
+   * @param evt
+   *          the connector selection event to propagate.
    */
-  protected void implRemoveConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    connectorSelectionSupport.removeConnectorSelectionListener(listener);
+  protected void implFireSelectedConnectorChange(ConnectorSelectionEvent evt) {
+    if (evt.getSource() == this || trackingChildrenSelection) {
+      connectorSelectionSupport.fireSelectedConnectorChange(evt);
+    }
+    IValueConnector parentConnector = getParentConnector();
+    while (parentConnector != null
+        && !(parentConnector instanceof IConnectorSelector)) {
+      parentConnector = parentConnector.getParentConnector();
+    }
+    if (parentConnector != null) {
+      ((IConnectorSelector) parentConnector).fireSelectedConnectorChange(evt);
+    }
   }
 
   /**
@@ -215,21 +196,12 @@ public abstract class AbstractCompositeValueConnector extends
    * Utility implementation to factorize method support. This should only be
    * used by subclasses which implement <code>IConnectorSelector</code>.
    * 
-   * @param evt
-   *          the connector selection event to propagate.
+   * @param listener
+   *          the listener to remove.
    */
-  protected void implFireSelectedConnectorChange(ConnectorSelectionEvent evt) {
-    if (evt.getSource() == this || trackingChildrenSelection) {
-      connectorSelectionSupport.fireSelectedConnectorChange(evt);
-    }
-    IValueConnector parentConnector = getParentConnector();
-    while (parentConnector != null
-        && !(parentConnector instanceof IConnectorSelector)) {
-      parentConnector = parentConnector.getParentConnector();
-    }
-    if (parentConnector != null) {
-      ((IConnectorSelector) parentConnector).fireSelectedConnectorChange(evt);
-    }
+  protected void implRemoveConnectorSelectionListener(
+      IConnectorSelectionListener listener) {
+    connectorSelectionSupport.removeConnectorSelectionListener(listener);
   }
 
   /**
@@ -253,16 +225,44 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * {@inheritDoc}
+   * Removes a child connector.
+   * 
+   * @param connector
+   *          the connector to be removed.
    */
-  public boolean areChildrenReadable() {
-    return isReadable();
+  protected void removeChildConnector(IValueConnector connector) {
+    getConnectorMap().removeConnector(connector.getId());
+    connector.setParentConnector(null);
   }
 
   /**
+   * Sets the renderingChildConnectorId.
+   * 
+   * @param renderingChildConnectorId
+   *          the renderingChildConnectorId to set.
+   */
+  public void setRenderingChildConnectorId(String renderingChildConnectorId) {
+    this.renderingChildConnectorId = renderingChildConnectorId;
+  }
+
+  /**
+   * Uses the value to compute the string representation.
+   * <p>
    * {@inheritDoc}
    */
-  public boolean areChildrenWritable() {
-    return isWritable();
+  @Override
+  public String toString() {
+    IValueConnector renderingConnector = getRenderingConnector();
+    if (renderingConnector != null) {
+      if (renderingConnector.getConnectorValue() != null) {
+        return renderingConnector.getConnectorValue().toString();
+      }
+      return "";
+    }
+    Object value = getConnectorValue();
+    if (value != null) {
+      return value.toString();
+    }
+    return "";
   }
 }

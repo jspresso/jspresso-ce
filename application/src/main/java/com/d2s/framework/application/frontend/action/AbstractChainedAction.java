@@ -31,6 +31,19 @@ public abstract class AbstractChainedAction<E, F, G> extends
   private IAction nextAction;
 
   /**
+   * Executes the next action.
+   * <p>
+   * {@inheritDoc}
+   */
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    if (getNextAction(context) != null) {
+      return actionHandler.execute(getNextAction(context), context);
+    }
+    return true;
+  }
+
+  /**
    * Gets the next action reference. If the next action has been configured
    * strongly through the setter method, it is directly returned. If not, it is
    * looked up into the action context.
@@ -55,19 +68,6 @@ public abstract class AbstractChainedAction<E, F, G> extends
    */
   public void setNextAction(IAction nextAction) {
     this.nextAction = nextAction;
-  }
-
-  /**
-   * Executes the next action.
-   * <p>
-   * {@inheritDoc}
-   */
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    if (getNextAction(context) != null) {
-      return actionHandler.execute(getNextAction(context), context);
-    }
-    return true;
   }
 
 }

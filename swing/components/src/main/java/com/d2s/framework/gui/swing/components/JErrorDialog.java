@@ -42,21 +42,36 @@ import com.d2s.framework.util.swing.SwingUtil;
  */
 public final class JErrorDialog extends JDialog {
 
+  private final class DetailsTransferHandler extends TransferHandler {
+
+    private static final long serialVersionUID = -5398570598349570102L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected Transferable createTransferable(@SuppressWarnings("unused")
+    JComponent c) {
+      String text = detailsPane.getSelectedText();
+      if (text == null || text.equals("")) {
+        detailsPane.selectAll();
+        text = detailsPane.getSelectedText();
+        detailsPane.select(-1, -1);
+      }
+      return new StringSelection(text);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getSourceActions(@SuppressWarnings("unused")
+    JComponent c) {
+      return TransferHandler.COPY;
+    }
+  }
+
   private static final long    serialVersionUID = -3122747783739141527L;
-
-  private JEditorPane          messagePane;
-  private JEditorPane          detailsPane;
-
-  private JButton              detailsButton;
-  private JPanel               detailsPanel;
-  private JLabel               iconLabel;
-
-  private Locale               locale;
-  private ITranslationProvider translationProvider;
-
-  private int                  collapsedHeight  = 0;
-  private int                  expandedHeight   = 0;
-
   /**
    * Factory method for error dialog.
    * 
@@ -83,22 +98,26 @@ public final class JErrorDialog extends JDialog {
     return errorDialog;
   }
 
-  private JErrorDialog(Frame owner) {
-    super(owner, true);
-  }
+  private int                  collapsedHeight  = 0;
+  private JButton              detailsButton;
+  private JEditorPane          detailsPane;
+
+  private JPanel               detailsPanel;
+  private int                  expandedHeight   = 0;
+
+  private JLabel               iconLabel;
+  private Locale               locale;
+
+  private JEditorPane          messagePane;
+
+  private ITranslationProvider translationProvider;
 
   private JErrorDialog(Dialog owner) {
     super(owner, true);
   }
 
-  /**
-   * Specifies the icon to use.
-   * 
-   * @param messageIcon
-   *          the Icon to use. If null, the default error icon will be used
-   */
-  public void setMessageIcon(Icon messageIcon) {
-    iconLabel.setIcon(messageIcon);
+  private JErrorDialog(Frame owner) {
+    super(owner, true);
   }
 
   /**
@@ -322,32 +341,13 @@ public final class JErrorDialog extends JDialog {
     this.messagePane.setText(message);
   }
 
-  private final class DetailsTransferHandler extends TransferHandler {
-
-    private static final long serialVersionUID = -5398570598349570102L;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Transferable createTransferable(@SuppressWarnings("unused")
-    JComponent c) {
-      String text = detailsPane.getSelectedText();
-      if (text == null || text.equals("")) {
-        detailsPane.selectAll();
-        text = detailsPane.getSelectedText();
-        detailsPane.select(-1, -1);
-      }
-      return new StringSelection(text);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int getSourceActions(@SuppressWarnings("unused")
-    JComponent c) {
-      return TransferHandler.COPY;
-    }
+  /**
+   * Specifies the icon to use.
+   * 
+   * @param messageIcon
+   *          the Icon to use. If null, the default error icon will be used
+   */
+  public void setMessageIcon(Icon messageIcon) {
+    iconLabel.setIcon(messageIcon);
   }
 }

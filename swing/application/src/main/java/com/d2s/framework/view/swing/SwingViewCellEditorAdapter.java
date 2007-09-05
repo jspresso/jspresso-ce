@@ -72,6 +72,24 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
   }
 
   /**
+   * Returns the value of the swing view's connector.
+   * <p>
+   * {@inheritDoc}
+   */
+  public Object getCellEditorValue() {
+    return editorView.getConnector().getConnectorValue();
+  }
+
+  /**
+   * Gets the editorView.
+   * 
+   * @return the editorView.
+   */
+  protected IView<JComponent> getEditorView() {
+    return editorView;
+  }
+
+  /**
    * Returns the JComponent peer of the swing view.
    * <p>
    * {@inheritDoc}
@@ -98,12 +116,14 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
   }
 
   /**
-   * Returns the value of the swing view's connector.
+   * Gets the component peer of the editor view.
    * <p>
    * {@inheritDoc}
    */
-  public Object getCellEditorValue() {
-    return editorView.getConnector().getConnectorValue();
+  @SuppressWarnings("unused")
+  public Component getTreeCellEditorComponent(JTree tree, Object value,
+      boolean isSelected, boolean expanded, boolean leaf, int row) {
+    return editorView.getPeer();
   }
 
   /**
@@ -122,26 +142,6 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       return ((MouseEvent) anEvent).getClickCount() >= 2;
     }
     return super.isCellEditable(anEvent);
-  }
-
-  /**
-   * Gets the component peer of the editor view.
-   * <p>
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unused")
-  public Component getTreeCellEditorComponent(JTree tree, Object value,
-      boolean isSelected, boolean expanded, boolean leaf, int row) {
-    return editorView.getPeer();
-  }
-
-  /**
-   * Gets the editorView.
-   * 
-   * @return the editorView.
-   */
-  protected IView<JComponent> getEditorView() {
-    return editorView;
   }
 
 }

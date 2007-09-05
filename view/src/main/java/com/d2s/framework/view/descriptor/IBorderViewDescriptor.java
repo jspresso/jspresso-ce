@@ -25,18 +25,18 @@ public interface IBorderViewDescriptor extends ICompositeViewDescriptor {
   IViewDescriptor getCenterViewDescriptor();
 
   /**
+   * Gets the contained view descriptor located at the east position.
+   * 
+   * @return the contained view descriptor or null.
+   */
+  IViewDescriptor getEastViewDescriptor();
+
+  /**
    * Gets the contained view descriptor located at the north position.
    * 
    * @return the contained view descriptor or null.
    */
   IViewDescriptor getNorthViewDescriptor();
-
-  /**
-   * Gets the contained view descriptor located at the west position.
-   * 
-   * @return the contained view descriptor or null.
-   */
-  IViewDescriptor getWestViewDescriptor();
 
   /**
    * Gets the contained view descriptor located at the south position.
@@ -46,9 +46,9 @@ public interface IBorderViewDescriptor extends ICompositeViewDescriptor {
   IViewDescriptor getSouthViewDescriptor();
 
   /**
-   * Gets the contained view descriptor located at the east position.
+   * Gets the contained view descriptor located at the west position.
    * 
    * @return the contained view descriptor or null.
    */
-  IViewDescriptor getEastViewDescriptor();
+  IViewDescriptor getWestViewDescriptor();
 }

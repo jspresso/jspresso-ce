@@ -37,18 +37,76 @@ import com.d2s.framework.util.bean.PropertyHelper;
 public class EntityPropertyAccessor implements PropertyAccessor {
 
   /**
-   * {@inheritDoc}
+   * Implements the getter strategy on the entity proxy implementation to be
+   * used by hibernate.
+   * <p>
+   * Copyright 2005 Design2See. All rights reserved.
+   * <p>
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
    */
-  public Getter getGetter(Class theClass, String propertyName) {
-    return new EntityPropertyGetter(theClass, propertyName);
-  }
+  private static final class EntityPropertyGetter implements Getter {
 
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unused")
-  public Setter getSetter(Class theClass, String propertyName) {
-    return new EntityPropertySetter(propertyName);
+    private static final long serialVersionUID = -7896937881971754040L;
+    private Class             propertyClass;
+    private String            propertyName;
+
+    /**
+     * Constructs a new <code>EntityPropertyGetter</code> instance.
+     * 
+     * @param theClass
+     *          The class of the property.
+     * @param propertyName
+     *          the name of the property to access.
+     */
+    public EntityPropertyGetter(Class theClass, String propertyName) {
+      this.propertyName = propertyName;
+      this.propertyClass = PropertyHelper.getPropertyType(theClass,
+          propertyName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object get(Object target) {
+      return ((IEntity) target).straightGetProperty(propertyName);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unused")
+    public Object getForInsert(Object target, Map mergeMap,
+        SessionImplementor session) {
+      return get(target);
+    }
+
+    /**
+     * Actually returns null.
+     * <p>
+     * {@inheritDoc}
+     */
+    public Method getMethod() {
+      return null;
+    }
+
+    /**
+     * Actually returns null.
+     * <p>
+     * {@inheritDoc}
+     */
+    public String getMethodName() {
+      return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Class getReturnType() {
+      return propertyClass;
+    }
+
   }
 
   /**
@@ -106,75 +164,17 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   }
 
   /**
-   * Implements the getter strategy on the entity proxy implementation to be
-   * used by hibernate.
-   * <p>
-   * Copyright 2005 Design2See. All rights reserved.
-   * <p>
-   * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
+   * {@inheritDoc}
    */
-  private static final class EntityPropertyGetter implements Getter {
+  public Getter getGetter(Class theClass, String propertyName) {
+    return new EntityPropertyGetter(theClass, propertyName);
+  }
 
-    private static final long serialVersionUID = -7896937881971754040L;
-    private String            propertyName;
-    private Class             propertyClass;
-
-    /**
-     * Constructs a new <code>EntityPropertyGetter</code> instance.
-     * 
-     * @param theClass
-     *          The class of the property.
-     * @param propertyName
-     *          the name of the property to access.
-     */
-    public EntityPropertyGetter(Class theClass, String propertyName) {
-      this.propertyName = propertyName;
-      this.propertyClass = PropertyHelper.getPropertyType(theClass,
-          propertyName);
-    }
-
-    /**
-     * Actually returns null.
-     * <p>
-     * {@inheritDoc}
-     */
-    public Method getMethod() {
-      return null;
-    }
-
-    /**
-     * Actually returns null.
-     * <p>
-     * {@inheritDoc}
-     */
-    public String getMethodName() {
-      return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object get(Object target) {
-      return ((IEntity) target).straightGetProperty(propertyName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unused")
-    public Object getForInsert(Object target, Map mergeMap,
-        SessionImplementor session) {
-      return get(target);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Class getReturnType() {
-      return propertyClass;
-    }
-
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  public Setter getSetter(Class theClass, String propertyName) {
+    return new EntityPropertySetter(propertyName);
   }
 }

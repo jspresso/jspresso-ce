@@ -27,22 +27,11 @@ import com.d2s.framework.util.event.SelectionChangeEvent;
 public class DefaultListSelectionModelBinder implements
     IListSelectionModelBinder {
 
-  /**
-   * {@inheritDoc}
-   */
-  public void bindSelectionModel(ISelectable selectable,
-      SListSelectionModel selectionModel, IIndexMapper rowMapper) {
-    selectionModel.addListSelectionListener(new SelectionModelListener(
-        selectable, rowMapper));
-    selectable.addSelectionChangeListener(new SelectionChangeListener(
-        selectionModel, rowMapper));
-  }
-
   private static final class SelectionChangeListener implements
       ISelectionChangeListener {
 
-    private SListSelectionModel selectionModel;
     private IIndexMapper        rowMapper;
+    private SListSelectionModel selectionModel;
 
     /**
      * Constructs a new <code>SelectionChangeListener</code> instance.
@@ -115,8 +104,8 @@ public class DefaultListSelectionModelBinder implements
   private static final class SelectionModelListener implements
       ListSelectionListener {
 
-    private ISelectable  viewSelectable;
     private IIndexMapper rowMapper;
+    private ISelectable  viewSelectable;
 
     /**
      * Constructs a new <code>SelectionModelListener</code> instance.
@@ -179,5 +168,16 @@ public class DefaultListSelectionModelBinder implements
     int[] rv = new int[n];
     System.arraycopy(rvTmp, 0, rv, 0, n);
     return rv;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void bindSelectionModel(ISelectable selectable,
+      SListSelectionModel selectionModel, IIndexMapper rowMapper) {
+    selectionModel.addListSelectionListener(new SelectionModelListener(
+        selectable, rowMapper));
+    selectable.addSelectionChangeListener(new SelectionChangeListener(
+        selectionModel, rowMapper));
   }
 }

@@ -26,10 +26,6 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public final class SecurityHelper {
 
-  private SecurityHelper() {
-    // private constructor for helper class
-  }
-
   /**
    * Check access to a secured resource. Whenever acces might not be granted, a
    * Security exception is thrown.
@@ -69,5 +65,9 @@ public final class SecurityHelper {
     }
     throw new SecurityException(translationProvider.getTranslation(
         "access.denied", locale));
+  }
+
+  private SecurityHelper() {
+    // private constructor for helper class
   }
 }

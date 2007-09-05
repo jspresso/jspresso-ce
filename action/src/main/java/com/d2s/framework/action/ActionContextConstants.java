@@ -14,42 +14,10 @@ package com.d2s.framework.action;
  */
 public final class ActionContextConstants {
 
-  private ActionContextConstants() {
-    // to prevent this class from being instanciated.
-  }
-
   /**
-   * The source widget.
+   * An arbitrary action command.
    */
-  public static final String SOURCE_COMPONENT        = "SOURCE_COMPONENT";
-
-  /**
-   * The selected indices of the view connector in case of a collection
-   * connector. It may serve as storage key for a return value whenever an
-   * action must be chained with selection update on the view.
-   */
-  public static final String SELECTED_INDICES        = "SELECTED_INDICES";
-
-  /**
-   * The the descriptor of the model domain object the action was triggered on.
-   */
-  public static final String MODEL_DESCRIPTOR        = "MODEL_DESCRIPTOR";
-
-  /**
-   * The the descriptor of the model collection element domain object the action
-   * was triggered on.
-   */
-  public static final String ELEMENT_DESCRIPTOR      = "ELEMENT_DESCRIPTOR";
-
-  /**
-   * The view connector the action was triggered on.
-   */
-  public static final String VIEW_CONNECTOR          = "VIEW_CONNECTOR";
-
-  /**
-   * The module view connector the action was triggered on.
-   */
-  public static final String MODULE_VIEW_CONNECTOR   = "MODULE_VIEW_CONNECTOR";
+  public static final String ACTION_COMMAND          = "ACTION_COMMAND";
 
   /**
    * An arbitrary action param.
@@ -57,34 +25,9 @@ public final class ActionContextConstants {
   public static final String ACTION_PARAM            = "ACTION_PARAM";
 
   /**
-   * An arbitrary action command.
-   */
-  public static final String ACTION_COMMAND          = "ACTION_COMMAND";
-
-  /**
    * The widget at the origin of the action.
    */
   public static final String ACTION_WIDGET           = "ACTION_WIDGET";
-
-  /**
-   * The view connector at the origin of the action chain.
-   */
-  public static final String SOURCE_VIEW_CONNECTOR   = "SOURCE_VIEW_CONNECTOR";
-
-  /**
-   * The view descriptor at the origin of the action chain.
-   */
-  public static final String SOURCE_MODEL_DESCRIPTOR = "SOURCE_MODEL_DESCRIPTOR";
-
-  /**
-   * the connector of the query model.
-   */
-  public static final String QUERY_MODEL_CONNECTOR   = "QUERY_MODEL_CONNECTOR";
-
-  /**
-   * the frontend controller.
-   */
-  public static final String FRONT_CONTROLLER        = "FRONT_CONTROLLER";
 
   /**
    * the backend controller.
@@ -102,9 +45,10 @@ public final class ActionContextConstants {
   public static final String DIALOG_VIEW             = "DIALOG_VIEW";
 
   /**
-   * The next action.
+   * The the descriptor of the model collection element domain object the action
+   * was triggered on.
    */
-  public static final String NEXT_ACTION             = "NEXT_ACTION";
+  public static final String ELEMENT_DESCRIPTOR      = "ELEMENT_DESCRIPTOR";
 
   /**
    * A parametrized entity descriptor.
@@ -112,7 +56,63 @@ public final class ActionContextConstants {
   public static final String ENTITY_REF_DESCRIPTOR   = "ENTITY_REF_DESCRIPTOR";
 
   /**
+   * the frontend controller.
+   */
+  public static final String FRONT_CONTROLLER        = "FRONT_CONTROLLER";
+
+  /**
+   * The the descriptor of the model domain object the action was triggered on.
+   */
+  public static final String MODEL_DESCRIPTOR        = "MODEL_DESCRIPTOR";
+
+  /**
    * The module descriptor the action was triggered on.
    */
   public static final String MODULE_DESCRIPTOR       = "MODULE_DESCRIPTOR";
+
+  /**
+   * The module view connector the action was triggered on.
+   */
+  public static final String MODULE_VIEW_CONNECTOR   = "MODULE_VIEW_CONNECTOR";
+
+  /**
+   * The next action.
+   */
+  public static final String NEXT_ACTION             = "NEXT_ACTION";
+
+  /**
+   * the connector of the query model.
+   */
+  public static final String QUERY_MODEL_CONNECTOR   = "QUERY_MODEL_CONNECTOR";
+
+  /**
+   * The selected indices of the view connector in case of a collection
+   * connector. It may serve as storage key for a return value whenever an
+   * action must be chained with selection update on the view.
+   */
+  public static final String SELECTED_INDICES        = "SELECTED_INDICES";
+
+  /**
+   * The source widget.
+   */
+  public static final String SOURCE_COMPONENT        = "SOURCE_COMPONENT";
+
+  /**
+   * The view descriptor at the origin of the action chain.
+   */
+  public static final String SOURCE_MODEL_DESCRIPTOR = "SOURCE_MODEL_DESCRIPTOR";
+
+  /**
+   * The view connector at the origin of the action chain.
+   */
+  public static final String SOURCE_VIEW_CONNECTOR   = "SOURCE_VIEW_CONNECTOR";
+
+  /**
+   * The view connector the action was triggered on.
+   */
+  public static final String VIEW_CONNECTOR          = "VIEW_CONNECTOR";
+
+  private ActionContextConstants() {
+    // to prevent this class from being instanciated.
+  }
 }

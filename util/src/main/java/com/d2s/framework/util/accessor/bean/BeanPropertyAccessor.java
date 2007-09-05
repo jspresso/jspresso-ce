@@ -23,8 +23,8 @@ import com.d2s.framework.util.bean.PropertyHelper;
  */
 public class BeanPropertyAccessor implements IAccessor {
 
-  private String  property;
   private Class   beanClass;
+  private String  property;
   private boolean writable = true;
 
   /**
@@ -51,14 +51,21 @@ public class BeanPropertyAccessor implements IAccessor {
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the beanClass property.
+   * 
+   * @return the beanClass.
    */
-  public void setValue(Object target, Object value)
-      throws IllegalAccessException, InvocationTargetException,
-      NoSuchMethodException {
-    if (target != null) {
-      PropertyUtils.setSimpleProperty(target, property, value);
-    }
+  protected Class getBeanClass() {
+    return beanClass;
+  }
+
+  /**
+   * Gets the property property.
+   * 
+   * @return the property.
+   */
+  protected String getProperty() {
+    return property;
   }
 
   /**
@@ -73,29 +80,22 @@ public class BeanPropertyAccessor implements IAccessor {
   }
 
   /**
-   * Gets the property property.
-   * 
-   * @return the property.
-   */
-  protected String getProperty() {
-    return property;
-  }
-
-  /**
-   * Gets the beanClass property.
-   * 
-   * @return the beanClass.
-   */
-  protected Class getBeanClass() {
-    return beanClass;
-  }
-
-  /**
    * Gets the writable.
    * 
    * @return the writable.
    */
   public boolean isWritable() {
     return writable;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setValue(Object target, Object value)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    if (target != null) {
+      PropertyUtils.setSimpleProperty(target, property, value);
+    }
   }
 }

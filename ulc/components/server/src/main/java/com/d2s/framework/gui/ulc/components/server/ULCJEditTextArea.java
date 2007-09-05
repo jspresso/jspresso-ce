@@ -29,9 +29,9 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
 
   private static final long serialVersionUID = 2839452029572051785L;
 
-  private String            text;
-  private String            language;
   private boolean           editable;
+  private String            language;
+  private String            text;
 
   /**
    * Constructs a new <code>ULCJEditTextArea</code> instance.
@@ -52,49 +52,6 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void saveState(Anything a) {
-    super.saveState(a);
-    textToAnything(a);
-    a.put(JEditTextAreaConstants.LANGUAGE_KEY, language);
-    editableToAnything(a);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIJEditTextArea";
-  }
-
-  /**
-   * Gets the editor text.
-   *
-   * @return the editor text.
-   */
-  public String getText() {
-    return text;
-  }
-
-  /**
-   * Sets the editor text.
-   *
-   * @param text
-   *          the editor text.
-   */
-  public void setText(String text) {
-    if (!ObjectUtils.equals(this.text, text)) {
-      this.text = text;
-      Anything valueAnything = new Anything();
-      textToAnything(valueAnything);
-      sendUI(JEditTextAreaConstants.SET_TEXT_REQUEST, valueAnything);
-    }
-  }
-
-  /**
    * Adds a value change listener.
    *
    * @param listener
@@ -102,52 +59,6 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
    */
   public void addValueChangedListener(IValueChangedListener listener) {
     internalAddListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
-  }
-
-  /**
-   * Removes a value change listener.
-   *
-   * @param listener
-   *          the listener to remove.
-   */
-  public void removeValueChangedListener(IValueChangedListener listener) {
-    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void handleEvent(int listenerType, int eventId, Anything args) {
-    if (listenerType == IUlcEventConstants.VALUE_CHANGED_EVENT) {
-      distributeToListeners(new ValueChangedEvent(this));
-    } else {
-      super.handleEvent(listenerType, eventId, args);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getPropertyPrefix() {
-    return "TextArea";
-  }
-
-  private void textToAnything(Anything args) {
-    args.put(JEditTextAreaConstants.TEXT_KEY, text);
-  }
-
-  private void editableToAnything(Anything args) {
-    args.put(JEditTextAreaConstants.EDITABLE_KEY, editable);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void copyAttributes(ICellComponent source) {
-    ULCJEditTextArea sourceEditTextArea = (ULCJEditTextArea) source;
-    language = sourceEditTextArea.language;
   }
 
   /**
@@ -170,6 +81,47 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
    */
   public int attributesHashCode() {
     return new HashCodeBuilder(13, 57).append(language).toHashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void copyAttributes(ICellComponent source) {
+    ULCJEditTextArea sourceEditTextArea = (ULCJEditTextArea) source;
+    language = sourceEditTextArea.language;
+  }
+
+  private void editableToAnything(Anything args) {
+    args.put(JEditTextAreaConstants.EDITABLE_KEY, editable);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getPropertyPrefix() {
+    return "TextArea";
+  }
+
+  /**
+   * Gets the editor text.
+   *
+   * @return the editor text.
+   */
+  public String getText() {
+    return text;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void handleEvent(int listenerType, int eventId, Anything args) {
+    if (listenerType == IUlcEventConstants.VALUE_CHANGED_EVENT) {
+      distributeToListeners(new ValueChangedEvent(this));
+    } else {
+      super.handleEvent(listenerType, eventId, args);
+    }
   }
 
   /**
@@ -198,6 +150,27 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
   }
 
   /**
+   * Removes a value change listener.
+   *
+   * @param listener
+   *          the listener to remove.
+   */
+  public void removeValueChangedListener(IValueChangedListener listener) {
+    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void saveState(Anything a) {
+    super.saveState(a);
+    textToAnything(a);
+    a.put(JEditTextAreaConstants.LANGUAGE_KEY, language);
+    editableToAnything(a);
+  }
+
+  /**
    * Sets the editable.
    *
    * @param editable
@@ -210,5 +183,32 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
       editableToAnything(editableAnything);
       sendUI(JEditTextAreaConstants.SET_EDITABLE_REQUEST, editableAnything);
     }
+  }
+
+  /**
+   * Sets the editor text.
+   *
+   * @param text
+   *          the editor text.
+   */
+  public void setText(String text) {
+    if (!ObjectUtils.equals(this.text, text)) {
+      this.text = text;
+      Anything valueAnything = new Anything();
+      textToAnything(valueAnything);
+      sendUI(JEditTextAreaConstants.SET_TEXT_REQUEST, valueAnything);
+    }
+  }
+
+  private void textToAnything(Anything args) {
+    args.put(JEditTextAreaConstants.TEXT_KEY, text);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIJEditTextArea";
   }
 }

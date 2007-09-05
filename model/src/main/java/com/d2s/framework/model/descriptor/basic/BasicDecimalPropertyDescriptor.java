@@ -34,6 +34,13 @@ public class BasicDecimalPropertyDescriptor extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public Class getModelType() {
+    return Double.class;
+  }
+
+  /**
    * Sets the maxFractionDigit property.
    * 
    * @param maxFractionDigit
@@ -41,12 +48,5 @@ public class BasicDecimalPropertyDescriptor extends
    */
   public void setMaxFractionDigit(Integer maxFractionDigit) {
     this.maxFractionDigit = maxFractionDigit;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class getModelType() {
-    return Double.class;
   }
 }

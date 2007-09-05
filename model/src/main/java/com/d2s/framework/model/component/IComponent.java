@@ -40,24 +40,12 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
   Class<? extends IComponent> getContract();
 
   /**
-   * This method is used to update a persistent property without triggering any
-   * other behaviour except a <code>PropertyChangeEvent</code>.
+   * This method is used to get all the persistent properties without triggering
+   * any other behaviour.
    *
-   * @param propertyName
-   *          the name of the property to set.
-   * @param backendPropertyValue
-   *          the value to set the property with.
+   * @return the current properties values.
    */
-  void straightSetProperty(String propertyName, Object backendPropertyValue);
-
-  /**
-   * This method is used to update a persistent properties without triggering
-   * any other behaviour except a <code>PropertyChangeEvent</code>.
-   *
-   * @param properties
-   *          the properties to set.
-   */
-  void straightSetProperties(Map<String, Object> properties);
+  Map<String, Object> straightGetProperties();
 
   /**
    * This method is used to get a persistent property without triggering any
@@ -70,10 +58,22 @@ public interface IComponent extends ILifecycleCapable, IPropertyChangeCapable {
   Object straightGetProperty(String propertyName);
 
   /**
-   * This method is used to get all the persistent properties without triggering
-   * any other behaviour.
+   * This method is used to update a persistent properties without triggering
+   * any other behaviour except a <code>PropertyChangeEvent</code>.
    *
-   * @return the current properties values.
+   * @param properties
+   *          the properties to set.
    */
-  Map<String, Object> straightGetProperties();
+  void straightSetProperties(Map<String, Object> properties);
+
+  /**
+   * This method is used to update a persistent property without triggering any
+   * other behaviour except a <code>PropertyChangeEvent</code>.
+   *
+   * @param propertyName
+   *          the name of the property to set.
+   * @param backendPropertyValue
+   *          the value to set the property with.
+   */
+  void straightSetProperty(String propertyName, Object backendPropertyValue);
 }

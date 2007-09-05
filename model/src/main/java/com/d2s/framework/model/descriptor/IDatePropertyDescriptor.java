@@ -15,14 +15,14 @@ package com.d2s.framework.model.descriptor;
 public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor {
 
   /**
-   * Day only date.
-   */
-  String DATE_TYPE      = "DATE";
-
-  /**
    * Date-time date.
    */
   String DATE_TIME_TYPE = "DATE_TIME";
+
+  /**
+   * Day only date.
+   */
+  String DATE_TYPE      = "DATE";
 
   /**
    * Gets the date type. Values are among :

@@ -17,18 +17,18 @@ import com.ulcjava.base.application.event.IEventListener;
 public interface IExtendedTreeWillExpandListener extends IEventListener {
 
   /**
-   * Whenever the tree will be expanded.
-   * 
-   * @param event
-   *          the event.
-   */
-  void treeWillExpand(ExtendedTreeExpansionEvent event);
-
-  /**
    * Whenever the tree will be collapsed.
    * 
    * @param event
    *          the event.
    */
   void treeWillCollapse(ExtendedTreeExpansionEvent event);
+
+  /**
+   * Whenever the tree will be expanded.
+   * 
+   * @param event
+   *          the event.
+   */
+  void treeWillExpand(ExtendedTreeExpansionEvent event);
 }

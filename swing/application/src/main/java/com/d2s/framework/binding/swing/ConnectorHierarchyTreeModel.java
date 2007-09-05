@@ -36,144 +36,6 @@ import com.d2s.framework.util.swing.SwingUtil;
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     TreeWillExpandListener, TreeModelListener {
 
-  private ICompositeValueConnector rootConnector;
-  private TreeConnectorsListener   connectorsListener;
-
-  /**
-   * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
-   * 
-   * @param rootConnector
-   *          the connector being the root node of the tree.
-   * @param tree
-   *          the tree to which this model wiil be attached to. It will be used
-   *          for the model to bea notified of expansions so that it can
-   *          lazy-load the tree hierarchy.
-   */
-  public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector,
-      JTree tree) {
-    this.rootConnector = rootConnector;
-    connectorsListener = new TreeConnectorsListener();
-    checkListenerRegistrationForConnector(rootConnector);
-    addTreeModelListener(this);
-    tree.addTreeWillExpandListener(this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getRoot() {
-    return rootConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getChild(Object parent, int index) {
-    if (parent instanceof ICollectionConnectorProvider) {
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
-          .getCollectionConnector();
-      collectionConnector.setAllowLazyChildrenLoading(false);
-      return collectionConnector.getChildConnector(index);
-    } else if (parent instanceof ICollectionConnectorListProvider) {
-      return ((ICollectionConnectorListProvider) parent)
-          .getCollectionConnectors().get(index);
-    }
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getChildCount(Object parent) {
-    if (parent instanceof IValueConnector
-        && ((IValueConnector) parent).getConnectorValue() == null) {
-      return 0;
-    }
-    if (parent instanceof ICollectionConnectorProvider) {
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
-          .getCollectionConnector();
-      if (collectionConnector == null
-          || collectionConnector.getConnectorValue() == null) {
-        return 0;
-      }
-      return ((Collection) collectionConnector.getConnectorValue()).size();
-    } else if (parent instanceof ICollectionConnectorListProvider) {
-      return ((ICollectionConnectorListProvider) parent)
-          .getCollectionConnectors().size();
-    }
-    return 0;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isLeaf(Object node) {
-    if (node == rootConnector) {
-      return false;
-    }
-    return getChildCount(node) == 0;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getIndexOfChild(Object parent, Object child) {
-    if (parent instanceof ICollectionConnectorProvider) {
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
-          .getCollectionConnector();
-      int childCount = collectionConnector.getChildConnectorCount();
-      for (int i = 0; i < childCount; i++) {
-        if (collectionConnector.getChildConnector(i) == child) {
-          return i;
-        }
-      }
-    } else if (parent instanceof ICollectionConnectorListProvider) {
-      return ((ICollectionConnectorListProvider) parent)
-          .getCollectionConnectors().indexOf(child);
-    }
-    return -1;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void valueForPathChanged(@SuppressWarnings("unused")
-  TreePath path, @SuppressWarnings("unused")
-  Object newValue) {
-    // NO-OP. Not used (yet!)
-  }
-
-  private void checkListenerRegistrationForConnector(IValueConnector connector) {
-    if (connector instanceof ICollectionConnectorProvider) {
-      checkListenerRegistrationForConnector(connector, 3);
-    } else {
-      checkListenerRegistrationForConnector(connector, 2);
-    }
-  }
-
-  private void checkListenerRegistrationForConnector(IValueConnector connector,
-      int depth) {
-    if (connector != null && depth >= 0) {
-      depth--;
-      // we can add the listener many times since the backing store listener
-      // collection is a Set.
-      connector.addConnectorValueChangeListener(connectorsListener);
-      if (connector instanceof ICompositeValueConnector) {
-        for (String childConnectorId : ((ICompositeValueConnector) connector)
-            .getChildConnectorKeys()) {
-          checkListenerRegistrationForConnector(
-              ((ICompositeValueConnector) connector)
-                  .getChildConnector(childConnectorId), depth);
-        }
-      }
-    }
-  }
-
-  private TreePath getTreePathForConnector(IValueConnector connector) {
-    return ConnectorTreeHelper
-        .getTreePathForConnector(rootConnector, connector);
-  }
-
   private class TreeConnectorsListener implements IConnectorValueChangeListener {
 
     /**
@@ -263,6 +125,135 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       });
     }
   }
+  private TreeConnectorsListener   connectorsListener;
+
+  private ICompositeValueConnector rootConnector;
+
+  /**
+   * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
+   * 
+   * @param rootConnector
+   *          the connector being the root node of the tree.
+   * @param tree
+   *          the tree to which this model wiil be attached to. It will be used
+   *          for the model to bea notified of expansions so that it can
+   *          lazy-load the tree hierarchy.
+   */
+  public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector,
+      JTree tree) {
+    this.rootConnector = rootConnector;
+    connectorsListener = new TreeConnectorsListener();
+    checkListenerRegistrationForConnector(rootConnector);
+    addTreeModelListener(this);
+    tree.addTreeWillExpandListener(this);
+  }
+
+  private void checkListenerRegistrationForConnector(IValueConnector connector) {
+    if (connector instanceof ICollectionConnectorProvider) {
+      checkListenerRegistrationForConnector(connector, 3);
+    } else {
+      checkListenerRegistrationForConnector(connector, 2);
+    }
+  }
+
+  private void checkListenerRegistrationForConnector(IValueConnector connector,
+      int depth) {
+    if (connector != null && depth >= 0) {
+      depth--;
+      // we can add the listener many times since the backing store listener
+      // collection is a Set.
+      connector.addConnectorValueChangeListener(connectorsListener);
+      if (connector instanceof ICompositeValueConnector) {
+        for (String childConnectorId : ((ICompositeValueConnector) connector)
+            .getChildConnectorKeys()) {
+          checkListenerRegistrationForConnector(
+              ((ICompositeValueConnector) connector)
+                  .getChildConnector(childConnectorId), depth);
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getChild(Object parent, int index) {
+    if (parent instanceof ICollectionConnectorProvider) {
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
+          .getCollectionConnector();
+      collectionConnector.setAllowLazyChildrenLoading(false);
+      return collectionConnector.getChildConnector(index);
+    } else if (parent instanceof ICollectionConnectorListProvider) {
+      return ((ICollectionConnectorListProvider) parent)
+          .getCollectionConnectors().get(index);
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int getChildCount(Object parent) {
+    if (parent instanceof IValueConnector
+        && ((IValueConnector) parent).getConnectorValue() == null) {
+      return 0;
+    }
+    if (parent instanceof ICollectionConnectorProvider) {
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
+          .getCollectionConnector();
+      if (collectionConnector == null
+          || collectionConnector.getConnectorValue() == null) {
+        return 0;
+      }
+      return ((Collection) collectionConnector.getConnectorValue()).size();
+    } else if (parent instanceof ICollectionConnectorListProvider) {
+      return ((ICollectionConnectorListProvider) parent)
+          .getCollectionConnectors().size();
+    }
+    return 0;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int getIndexOfChild(Object parent, Object child) {
+    if (parent instanceof ICollectionConnectorProvider) {
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
+          .getCollectionConnector();
+      int childCount = collectionConnector.getChildConnectorCount();
+      for (int i = 0; i < childCount; i++) {
+        if (collectionConnector.getChildConnector(i) == child) {
+          return i;
+        }
+      }
+    } else if (parent instanceof ICollectionConnectorListProvider) {
+      return ((ICollectionConnectorListProvider) parent)
+          .getCollectionConnectors().indexOf(child);
+    }
+    return -1;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getRoot() {
+    return rootConnector;
+  }
+
+  private TreePath getTreePathForConnector(IValueConnector connector) {
+    return ConnectorTreeHelper
+        .getTreePathForConnector(rootConnector, connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isLeaf(Object node) {
+    if (node == rootConnector) {
+      return false;
+    }
+    return getChildCount(node) == 0;
+  }
 
   /**
    * {@inheritDoc}
@@ -335,5 +326,14 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                 .getChildConnector(i), false, false);
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void valueForPathChanged(@SuppressWarnings("unused")
+  TreePath path, @SuppressWarnings("unused")
+  Object newValue) {
+    // NO-OP. Not used (yet!)
   }
 }

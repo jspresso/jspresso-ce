@@ -32,6 +32,27 @@ public interface IFrontendController<E, F, G> extends IController,
     IIconDescriptor, IActionable {
 
   /**
+   * Gets the mvc binder used by this controller.
+   *
+   * @return the mvc binder used by this controller.
+   */
+  IMvcBinder getMvcBinder();
+
+  /**
+   * Gets the action which is executed when the controller is started.
+   *
+   * @return the action which is executed when the controller is started.
+   */
+  IAction getStartupAction();
+
+  /**
+   * Gets the view factory used by this controller.
+   *
+   * @return the view factory used by this controller.
+   */
+  IViewFactory<E, F, G> getViewFactory();
+
+  /**
    * Starts the controller. This method performs any necessary initializations
    * (such as binding to the backend controller) and shows the initial view to
    * the user. The initial view is generally built from the root view
@@ -45,25 +66,4 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale locale);
-
-  /**
-   * Gets the view factory used by this controller.
-   *
-   * @return the view factory used by this controller.
-   */
-  IViewFactory<E, F, G> getViewFactory();
-
-  /**
-   * Gets the mvc binder used by this controller.
-   *
-   * @return the mvc binder used by this controller.
-   */
-  IMvcBinder getMvcBinder();
-
-  /**
-   * Gets the action which is executed when the controller is started.
-   *
-   * @return the action which is executed when the controller is started.
-   */
-  IAction getStartupAction();
 }

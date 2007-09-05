@@ -23,14 +23,15 @@ import com.d2s.framework.binding.IValueConnector;
  */
 public class BasicConnectorFactory implements IConfigurableConnectorFactory {
 
-  /**
-   * {@inheritDoc}
-   */
-  public IRenderableCompositeValueConnector createCompositeValueConnector(
-      String id, String renderingConnectorId) {
-    BasicCompositeConnector connector = new BasicCompositeConnector(id);
-    createAndAddRenderingChildConnector(connector, renderingConnectorId);
-    return connector;
+  private void createAndAddRenderingChildConnector(
+      BasicCompositeConnector compositeValueConnector,
+      String renderingConnectorId) {
+    if (renderingConnectorId != null) {
+      compositeValueConnector
+          .addChildConnector(createValueConnector(renderingConnectorId));
+      compositeValueConnector
+          .setRenderingChildConnectorId(renderingConnectorId);
+    }
   }
 
   /**
@@ -44,10 +45,9 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
-  public IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
+  public IRenderableCompositeValueConnector createCompositeValueConnector(
       String id, String renderingConnectorId) {
-    BasicCollectionConnectorProvider connector = new BasicCollectionConnectorProvider(
-        id);
+    BasicCompositeConnector connector = new BasicCompositeConnector(id);
     createAndAddRenderingChildConnector(connector, renderingConnectorId);
     return connector;
   }
@@ -66,18 +66,18 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
   /**
    * {@inheritDoc}
    */
-  public IValueConnector createValueConnector(String id) {
-    return new BasicValueConnector(id);
+  public IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
+      String id, String renderingConnectorId) {
+    BasicCollectionConnectorProvider connector = new BasicCollectionConnectorProvider(
+        id);
+    createAndAddRenderingChildConnector(connector, renderingConnectorId);
+    return connector;
   }
 
-  private void createAndAddRenderingChildConnector(
-      BasicCompositeConnector compositeValueConnector,
-      String renderingConnectorId) {
-    if (renderingConnectorId != null) {
-      compositeValueConnector
-          .addChildConnector(createValueConnector(renderingConnectorId));
-      compositeValueConnector
-          .setRenderingChildConnectorId(renderingConnectorId);
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public IValueConnector createValueConnector(String id) {
+    return new BasicValueConnector(id);
   }
 }

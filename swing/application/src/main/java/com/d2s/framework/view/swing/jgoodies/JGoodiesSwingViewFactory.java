@@ -47,6 +47,14 @@ public class JGoodiesSwingViewFactory extends DefaultSwingViewFactory {
    * {@inheritDoc}
    */
   @Override
+  protected JSplitPane createJSplitPane() {
+    return new UIFSplitPane();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected void decorateWithBorder(IView<JComponent> view, Locale locale) {
     if (view.getDescriptor().getBorderType() == IViewDescriptor.TITLED) {
       SimpleInternalFrame sif = new SimpleInternalFrame(view.getDescriptor()
@@ -72,14 +80,6 @@ public class JGoodiesSwingViewFactory extends DefaultSwingViewFactory {
     } else {
       super.decorateWithBorder(view, locale);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected JSplitPane createJSplitPane() {
-    return new UIFSplitPane();
   }
 
 }

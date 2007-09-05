@@ -23,6 +23,15 @@ public class CloneEntityCollectionAction extends AbstractCloneCollectionAction {
   private IEntityCloneFactory entityCloneFactory;
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object cloneElement(Object element, Map<String, Object> context) {
+    return entityCloneFactory.cloneEntity((IEntity) element,
+        getEntityFactory(context));
+  }
+
+  /**
    * Sets the entityCloneFactory.
    * 
    * @param entityCloneFactory
@@ -30,15 +39,6 @@ public class CloneEntityCollectionAction extends AbstractCloneCollectionAction {
    */
   public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
     this.entityCloneFactory = entityCloneFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object cloneElement(Object element, Map<String, Object> context) {
-    return entityCloneFactory.cloneEntity((IEntity) element,
-        getEntityFactory(context));
   }
 
 }

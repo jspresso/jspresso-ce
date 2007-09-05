@@ -47,6 +47,14 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
   /**
    * {@inheritDoc}
    */
+  @Override
+  public Collection getValue(Object target) {
+    return (Collection) super.getValue(target);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void removeFromValue(Object target, Object value) {
     Collection mapValue = getValue(target);
     if (mapValue != null) {
@@ -54,14 +62,6 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
       // to trigger a propertyChange.
       setValue(target, mapValue);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection getValue(Object target) {
-    return (Collection) super.getValue(target);
   }
 
 }

@@ -29,21 +29,21 @@ import com.ulcjava.base.application.event.serializable.IWindowListener;
 public abstract class AbstractFlowAction extends AbstractMessageAction {
 
   /**
-   * <code>OK_OPTION</code>.
-   */
-  protected static final String OK_OPTION     = "ok";
-  /**
    * <code>CANCEL_OPTION</code>.
    */
   protected static final String CANCEL_OPTION = "cancel";
   /**
-   * <code>YES_OPTION</code>.
-   */
-  protected static final String YES_OPTION    = "yes";
-  /**
    * <code>NO_OPTION</code>.
    */
   protected static final String NO_OPTION     = "no";
+  /**
+   * <code>OK_OPTION</code>.
+   */
+  protected static final String OK_OPTION     = "ok";
+  /**
+   * <code>YES_OPTION</code>.
+   */
+  protected static final String YES_OPTION    = "yes";
 
   private String                firstOption;
   private String                secondOption;
@@ -117,15 +117,6 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
   }
 
   /**
-   * Gets the action to execute next based on the user selected option.
-   * 
-   * @param selectedOption
-   *          the user selected option.
-   * @return the action to execute next.
-   */
-  protected abstract IAction getNextAction(String selectedOption);
-
-  /**
    * Calls the super-implementation to execute the next action.
    * 
    * @param actionHandler
@@ -137,4 +128,13 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
       Map<String, Object> context) {
     super.execute(actionHandler, context);
   }
+
+  /**
+   * Gets the action to execute next based on the user selected option.
+   * 
+   * @param selectedOption
+   *          the user selected option.
+   * @return the action to execute next.
+   */
+  protected abstract IAction getNextAction(String selectedOption);
 }

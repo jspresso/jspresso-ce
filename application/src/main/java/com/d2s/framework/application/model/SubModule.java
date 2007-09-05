@@ -32,6 +32,15 @@ public class SubModule extends Module {
   }
 
   /**
+   * Gets the viewDescriptor.
+   * 
+   * @return the viewDescriptor.
+   */
+  public IViewDescriptor getViewDescriptor() {
+    return viewDescriptor;
+  }
+
+  /**
    * Sets the parent module. It will fire a "parent" property change event.
    * 
    * @param parent
@@ -50,15 +59,6 @@ public class SubModule extends Module {
       getParent().addSubModule(this);
     }
     firePropertyChange("parent", oldParent, getParent());
-  }
-
-  /**
-   * Gets the viewDescriptor.
-   * 
-   * @return the viewDescriptor.
-   */
-  public IViewDescriptor getViewDescriptor() {
-    return viewDescriptor;
   }
 
   /**

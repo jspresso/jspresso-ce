@@ -24,8 +24,8 @@ import com.d2s.framework.action.IActionHandler;
  */
 public class YesNoAction extends AbstractMessageAction {
 
-  private IAction yesAction;
   private IAction noAction;
+  private IAction yesAction;
 
   /**
    * Displays the message using a <code>SOptionPane.YES_NO_OPTION</code>.

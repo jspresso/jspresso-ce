@@ -35,27 +35,6 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
   }
 
   /**
-   * Gets the self-hosted value.
-   * 
-   * @return the self-hosted value.
-   */
-  @Override
-  protected Object getConnecteeValue() {
-    return connecteeValue;
-  }
-
-  /**
-   * Sets the self-hosted value.
-   * 
-   * @param connecteeValue
-   *          the value to host
-   */
-  @Override
-  protected void setConnecteeValue(Object connecteeValue) {
-    this.connecteeValue = connecteeValue;
-  }
-
-  /**
    * Overrides to allow for duplicate Ids. When 2 connectors with the same id
    * are added, instead of replacing the old one, the new one is added with '#x'
    * appended to its id.
@@ -74,8 +53,12 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
     addChildConnector(connectorKey, connector);
   }
 
-  private String getRankedKey(String base, int rank) {
-    return base + "#" + rank;
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicCompositeConnector clone() {
+    return clone(getId());
   }
 
   /**
@@ -90,10 +73,27 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the self-hosted value.
+   * 
+   * @return the self-hosted value.
    */
   @Override
-  public BasicCompositeConnector clone() {
-    return clone(getId());
+  protected Object getConnecteeValue() {
+    return connecteeValue;
+  }
+
+  private String getRankedKey(String base, int rank) {
+    return base + "#" + rank;
+  }
+
+  /**
+   * Sets the self-hosted value.
+   * 
+   * @param connecteeValue
+   *          the value to host
+   */
+  @Override
+  protected void setConnecteeValue(Object connecteeValue) {
+    this.connecteeValue = connecteeValue;
   }
 }

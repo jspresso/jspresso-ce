@@ -14,9 +14,15 @@ package com.d2s.framework.gui.ulc.components.shared;
  */
 public final class ColorPickerConstants {
 
-  private ColorPickerConstants() {
-    // Empty constructor for utility class
-  }
+  /**
+   * <code>RESETVALUE_KEY</code>.
+   */
+  public static final String RESETVALUE_KEY              = "resetValue";
+
+  /**
+   * <code>SET_RESETVALUE_REQUEST</code>.
+   */
+  public static final String SET_RESETVALUE_REQUEST = "setResetValue";
 
   // request constants
   /**
@@ -24,19 +30,13 @@ public final class ColorPickerConstants {
    */
   public static final String SET_VALUE_REQUEST      = "setValue";
 
-  /**
-   * <code>SET_RESETVALUE_REQUEST</code>.
-   */
-  public static final String SET_RESETVALUE_REQUEST = "setResetValue";
-
   // anything key constants
   /**
    * <code>VALUE_KEY</code>.
    */
   public static final String VALUE_KEY              = "value";
 
-  /**
-   * <code>RESETVALUE_KEY</code>.
-   */
-  public static final String RESETVALUE_KEY              = "resetValue";
+  private ColorPickerConstants() {
+    // Empty constructor for utility class
+  }
 }

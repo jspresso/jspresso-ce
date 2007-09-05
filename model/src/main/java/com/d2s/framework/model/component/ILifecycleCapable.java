@@ -24,6 +24,11 @@ public interface ILifecycleCapable {
   String ON_CREATE_METHOD_NAME  = "onCreate";
 
   /**
+   * <code>ON_DELETE_METHOD_NAME</code>.
+   */
+  String ON_DELETE_METHOD_NAME  = "onDelete";
+
+  /**
    * <code>ON_PERSIST_METHOD_NAME</code>.
    */
   String ON_PERSIST_METHOD_NAME = "onPersist";
@@ -32,11 +37,6 @@ public interface ILifecycleCapable {
    * <code>ON_UPDATE_METHOD_NAME</code>.
    */
   String ON_UPDATE_METHOD_NAME  = "onUpdate";
-
-  /**
-   * <code>ON_DELETE_METHOD_NAME</code>.
-   */
-  String ON_DELETE_METHOD_NAME  = "onDelete";
 
   /**
    * Called when an component is created (still transient).
@@ -51,6 +51,21 @@ public interface ILifecycleCapable {
    * @return true if the state of the component has been updated.
    */
   boolean onCreate(IEntityFactory entityFactory, UserPrincipal principal,
+      IEntityLifecycleHandler entityLifecycleHandler);
+
+  /**
+   * Called just before an component is deleted (delete).
+   *
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
+   * @param entityLifecycleHandler
+   *          entityLifecycleHandler.
+   * @return true if the state of the component has been updated.
+   */
+  boolean onDelete(IEntityFactory entityFactory, UserPrincipal principal,
       IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
@@ -81,20 +96,5 @@ public interface ILifecycleCapable {
    * @return true if the state of the component has been updated.
    */
   boolean onUpdate(IEntityFactory entityFactory, UserPrincipal principal,
-      IEntityLifecycleHandler entityLifecycleHandler);
-
-  /**
-   * Called just before an component is deleted (delete).
-   *
-   * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
-   * @param principal
-   *          the principal triggering the action.
-   * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
-   * @return true if the state of the component has been updated.
-   */
-  boolean onDelete(IEntityFactory entityFactory, UserPrincipal principal,
       IEntityLifecycleHandler entityLifecycleHandler);
 }

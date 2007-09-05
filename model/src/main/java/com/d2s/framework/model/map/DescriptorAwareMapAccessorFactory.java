@@ -20,18 +20,6 @@ import com.d2s.framework.util.accessor.ICollectionAccessor;
 public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
 
   /**
-   * Creates a new <code>DescriptorAwareMapPropertyAccessor</code> on the
-   * property.
-   * <p>
-   * {@inheritDoc}
-   */
-  public IAccessor createPropertyAccessor(String property,
-      @SuppressWarnings("unused")
-      Class beanClass) {
-    return new DescriptorAwareMapPropertyAccessor(property);
-  }
-
-  /**
    * Creates a new <code>DescriptorAwareMapCollectionAccessor</code> on the
    * collection property.
    * <p>
@@ -42,6 +30,18 @@ public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
       Class beanClass, @SuppressWarnings("unused")
       Class elementClass) {
     return new DescriptorAwareMapCollectionAccessor(property);
+  }
+
+  /**
+   * Creates a new <code>DescriptorAwareMapPropertyAccessor</code> on the
+   * property.
+   * <p>
+   * {@inheritDoc}
+   */
+  public IAccessor createPropertyAccessor(String property,
+      @SuppressWarnings("unused")
+      Class beanClass) {
+    return new DescriptorAwareMapPropertyAccessor(property);
   }
 
 }

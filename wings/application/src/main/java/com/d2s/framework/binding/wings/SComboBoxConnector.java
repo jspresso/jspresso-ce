@@ -32,6 +32,23 @@ public class SComboBoxConnector extends SComponentConnector<SComboBox> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void bindSComponent() {
+    getConnectedSComponent().addActionListener(new ActionListener() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        fireConnectorValueChange();
+      }
+    });
+  }
+
+  /**
    * Returns the selected object in the combobox.
    * <p>
    * {@inheritDoc}
@@ -49,23 +66,6 @@ public class SComboBoxConnector extends SComponentConnector<SComboBox> {
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedSComponent().setSelectedItem(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void bindSComponent() {
-    getConnectedSComponent().addActionListener(new ActionListener() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
-        fireConnectorValueChange();
-      }
-    });
   }
 
   /**

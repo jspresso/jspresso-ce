@@ -42,16 +42,6 @@ public class ApplicationSessionAwareProxyEntityFactory extends
   }
 
   /**
-   * Sets the applicationSession.
-   *
-   * @param applicationSession
-   *          the applicationSession to set.
-   */
-  public void setApplicationSession(IApplicationSession applicationSession) {
-    this.applicationSession = applicationSession;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -78,5 +68,15 @@ public class ApplicationSessionAwareProxyEntityFactory extends
   @Override
   protected UserPrincipal getPrincipal() {
     return applicationSession.getPrincipal();
+  }
+
+  /**
+   * Sets the applicationSession.
+   *
+   * @param applicationSession
+   *          the applicationSession to set.
+   */
+  public void setApplicationSession(IApplicationSession applicationSession) {
+    this.applicationSession = applicationSession;
   }
 }

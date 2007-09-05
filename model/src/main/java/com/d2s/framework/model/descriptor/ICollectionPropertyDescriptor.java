@@ -21,6 +21,20 @@ public interface ICollectionPropertyDescriptor<E> extends
     IRelationshipEndPropertyDescriptor, ICollectionDescriptorProvider {
 
   /**
+   * Narrowed to a collection type.
+   * 
+   * @return the type of the model.
+   */
+  Class<? extends Collection> getModelType();
+
+  /**
+   * Get the list of properties ordering this collection.
+   * 
+   * @return the list of properties ordering this collection.
+   */
+  List<String> getOrderingProperties();
+
+  /**
    * Gets the descriptor of the collection referenced by this property.
    * 
    * @return the referenced collection descriptor.
@@ -33,26 +47,6 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @return true if this collection property descriptor is a many-to-many end.
    */
   boolean isManyToMany();
-
-  /**
-   * Get the list of properties ordering this collection.
-   * 
-   * @return the list of properties ordering this collection.
-   */
-  List<String> getOrderingProperties();
-
-  /**
-   * Triggers all adder preprocessors.
-   * 
-   * @param component
-   *          the component targetted by the adder.
-   * @param collection
-   *          the collection value.
-   * @param addedValue
-   *          the property added value.
-   */
-  void preprocessAdder(Object component, Collection collection,
-      Object addedValue);
 
   /**
    * Triggers all adder postprocessors.
@@ -68,19 +62,6 @@ public interface ICollectionPropertyDescriptor<E> extends
       Object addedValue);
 
   /**
-   * Triggers all remer preprocessors.
-   * 
-   * @param component
-   *          the component targetted by the remer.
-   * @param collection
-   *          the collection value.
-   * @param removedValue
-   *          the property removed value.
-   */
-  void preprocessRemover(Object component, Collection collection,
-      Object removedValue);
-
-  /**
    * Triggers all remer postprocessors.
    * 
    * @param component
@@ -94,9 +75,28 @@ public interface ICollectionPropertyDescriptor<E> extends
       Object removedValue);
 
   /**
-   * Narrowed to a collection type.
+   * Triggers all adder preprocessors.
    * 
-   * @return the type of the model.
+   * @param component
+   *          the component targetted by the adder.
+   * @param collection
+   *          the collection value.
+   * @param addedValue
+   *          the property added value.
    */
-  Class<? extends Collection> getModelType();
+  void preprocessAdder(Object component, Collection collection,
+      Object addedValue);
+
+  /**
+   * Triggers all remer preprocessors.
+   * 
+   * @param component
+   *          the component targetted by the remer.
+   * @param collection
+   *          the collection value.
+   * @param removedValue
+   *          the property removed value.
+   */
+  void preprocessRemover(Object component, Collection collection,
+      Object removedValue);
 }

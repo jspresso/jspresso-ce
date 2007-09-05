@@ -43,15 +43,66 @@ import com.ulcjava.base.shared.IWindowConstants;
  */
 public class DialogCallbackHandler implements CallbackHandler {
 
-  private ULCComponent             parentComponent;
-  private ICallbackHandlerListener callbackHandlerListener;
-
-  private IIconFactory<ULCIcon>    iconFactory;
   private static final int         DEFAULT_FIELD_LENGTH = 32;
   private static final Insets      DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
 
+  private ICallbackHandlerListener callbackHandlerListener;
+  private IIconFactory<ULCIcon>    iconFactory;
   private Locale                   locale;
+
+  private ULCComponent             parentComponent;
   private ITranslationProvider     translationProvider;
+
+  private ULCButton createOptionButton(final ULCDialog callbackDialog,
+      final ConfirmationCallback cc, final int option, String text,
+      final List<IActionListener> proceedActions) {
+    ULCButton optionButton = new ULCButton(text);
+    if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
+      optionButton.setIcon(iconFactory
+          .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
+      optionButton.addActionListener(new IActionListener() {
+
+        private static final long serialVersionUID = -1794878333128512291L;
+
+        public void actionPerformed(ActionEvent e) {
+          for (IActionListener proceedAction : proceedActions) {
+            proceedAction.actionPerformed(e);
+          }
+          cc.setSelectedIndex(option);
+          endClientSideLoginProcess(callbackDialog);
+        }
+      });
+    } else {
+      if (option == ConfirmationCallback.NO) {
+        optionButton.setIcon(iconFactory
+            .getNoIcon(IIconFactory.SMALL_ICON_SIZE));
+      } else if (option == ConfirmationCallback.CANCEL) {
+        optionButton.setIcon(iconFactory
+            .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
+      }
+      optionButton.addActionListener(new IActionListener() {
+
+        private static final long serialVersionUID = -1787817960559101628L;
+
+        public void actionPerformed(@SuppressWarnings("unused")
+        ActionEvent e) {
+          cc.setSelectedIndex(option);
+          endClientSideLoginProcess(callbackDialog);
+        }
+      });
+    }
+    if (cc.getDefaultOption() == option) {
+      callbackDialog.getRootPane().setDefaultButton(optionButton);
+    }
+    return optionButton;
+  }
+
+  private void endClientSideLoginProcess(ULCDialog callbackDialog) {
+    if (callbackHandlerListener != null) {
+      callbackHandlerListener.callbackHandlingComplete();
+    }
+    callbackDialog.setVisible(false);
+  }
 
   private ULCIcon getIcon(TextOutputCallback callback)
       throws UnsupportedCallbackException {
@@ -270,6 +321,42 @@ public class DialogCallbackHandler implements CallbackHandler {
     }
   }
 
+  private void processNameCallback(final List<IActionListener> proceedActions,
+      ULCGridBagLayoutPane inputPanel, final NameCallback nc) {
+    // ULCLabel promptLabel = new ULCLabel(nc.getPrompt());
+    ULCLabel promptLabel = new ULCLabel(translationProvider.getTranslation(
+        "user", locale)
+        + " :");
+    final ULCTextField nameTextField = new ULCTextField(DEFAULT_FIELD_LENGTH);
+
+    // String defaultName = nc.getDefaultName();
+    // if (defaultName != null) {
+    // nameTextField.setText(defaultName);
+    // }
+
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.setInsets(DEFAULT_INSETS);
+    constraints.setGridX(GridBagConstraints.RELATIVE);
+    constraints.setGridY(GridBagConstraints.RELATIVE);
+    constraints.setGridWidth(1);
+    inputPanel.add(promptLabel, constraints);
+
+    constraints.setWeightX(1.0d);
+    constraints.setFill(GridBagConstraints.HORIZONTAL);
+    constraints.setGridWidth(GridBagConstraints.REMAINDER);
+    inputPanel.add(nameTextField, constraints);
+
+    proceedActions.add(new IActionListener() {
+
+      private static final long serialVersionUID = 974089545700172602L;
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        nc.setName(nameTextField.getText());
+      }
+    });
+  }
+
   private void processPasswordCallback(
       final List<IActionListener> proceedActions,
       ULCGridBagLayoutPane inputPanel, final PasswordCallback pc) {
@@ -309,42 +396,6 @@ public class DialogCallbackHandler implements CallbackHandler {
     });
   }
 
-  private void processNameCallback(final List<IActionListener> proceedActions,
-      ULCGridBagLayoutPane inputPanel, final NameCallback nc) {
-    // ULCLabel promptLabel = new ULCLabel(nc.getPrompt());
-    ULCLabel promptLabel = new ULCLabel(translationProvider.getTranslation(
-        "user", locale)
-        + " :");
-    final ULCTextField nameTextField = new ULCTextField(DEFAULT_FIELD_LENGTH);
-
-    // String defaultName = nc.getDefaultName();
-    // if (defaultName != null) {
-    // nameTextField.setText(defaultName);
-    // }
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.setInsets(DEFAULT_INSETS);
-    constraints.setGridX(GridBagConstraints.RELATIVE);
-    constraints.setGridY(GridBagConstraints.RELATIVE);
-    constraints.setGridWidth(1);
-    inputPanel.add(promptLabel, constraints);
-
-    constraints.setWeightX(1.0d);
-    constraints.setFill(GridBagConstraints.HORIZONTAL);
-    constraints.setGridWidth(GridBagConstraints.REMAINDER);
-    inputPanel.add(nameTextField, constraints);
-
-    proceedActions.add(new IActionListener() {
-
-      private static final long serialVersionUID = 974089545700172602L;
-
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
-        nc.setName(nameTextField.getText());
-      }
-    });
-  }
-
   private void processTextOutputCallback(ULCGridBagLayoutPane messagePanel,
       TextOutputCallback toc) throws UnsupportedCallbackException {
     ULCLabel messageLabel = new ULCLabel(toc.getMessage(), getIcon(toc),
@@ -359,55 +410,15 @@ public class DialogCallbackHandler implements CallbackHandler {
     messagePanel.add(messageLabel, constraints);
   }
 
-  private ULCButton createOptionButton(final ULCDialog callbackDialog,
-      final ConfirmationCallback cc, final int option, String text,
-      final List<IActionListener> proceedActions) {
-    ULCButton optionButton = new ULCButton(text);
-    if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
-      optionButton.setIcon(iconFactory
-          .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
-      optionButton.addActionListener(new IActionListener() {
-
-        private static final long serialVersionUID = -1794878333128512291L;
-
-        public void actionPerformed(ActionEvent e) {
-          for (IActionListener proceedAction : proceedActions) {
-            proceedAction.actionPerformed(e);
-          }
-          cc.setSelectedIndex(option);
-          endClientSideLoginProcess(callbackDialog);
-        }
-      });
-    } else {
-      if (option == ConfirmationCallback.NO) {
-        optionButton.setIcon(iconFactory
-            .getNoIcon(IIconFactory.SMALL_ICON_SIZE));
-      } else if (option == ConfirmationCallback.CANCEL) {
-        optionButton.setIcon(iconFactory
-            .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
-      }
-      optionButton.addActionListener(new IActionListener() {
-
-        private static final long serialVersionUID = -1787817960559101628L;
-
-        public void actionPerformed(@SuppressWarnings("unused")
-        ActionEvent e) {
-          cc.setSelectedIndex(option);
-          endClientSideLoginProcess(callbackDialog);
-        }
-      });
-    }
-    if (cc.getDefaultOption() == option) {
-      callbackDialog.getRootPane().setDefaultButton(optionButton);
-    }
-    return optionButton;
-  }
-
-  private void endClientSideLoginProcess(ULCDialog callbackDialog) {
-    if (callbackHandlerListener != null) {
-      callbackHandlerListener.callbackHandlingComplete();
-    }
-    callbackDialog.setVisible(false);
+  /**
+   * Sets the callbackHandlerListener.
+   * 
+   * @param callbackHandlerListener
+   *          the callbackHandlerListener to set.
+   */
+  public void setCallbackHandlerListener(
+      ICallbackHandlerListener callbackHandlerListener) {
+    this.callbackHandlerListener = callbackHandlerListener;
   }
 
   /**
@@ -438,17 +449,6 @@ public class DialogCallbackHandler implements CallbackHandler {
    */
   public void setParentComponent(ULCComponent parentComponent) {
     this.parentComponent = parentComponent;
-  }
-
-  /**
-   * Sets the callbackHandlerListener.
-   * 
-   * @param callbackHandlerListener
-   *          the callbackHandlerListener to set.
-   */
-  public void setCallbackHandlerListener(
-      ICallbackHandlerListener callbackHandlerListener) {
-    this.callbackHandlerListener = callbackHandlerListener;
   }
 
   /**

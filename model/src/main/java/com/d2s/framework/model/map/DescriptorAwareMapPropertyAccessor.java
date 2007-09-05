@@ -35,6 +35,15 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
   }
 
   /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  protected IPropertyDescriptor getModelDescriptor() {
+    return (IPropertyDescriptor) modelDescriptor;
+  }
+
+  /**
    * {@inheritDoc}
    */
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
@@ -54,14 +63,5 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
     if (getModelDescriptor() != null) {
       getModelDescriptor().postprocessSetter(target, oldValue, value);
     }
-  }
-
-  /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  protected IPropertyDescriptor getModelDescriptor() {
-    return (IPropertyDescriptor) modelDescriptor;
   }
 }

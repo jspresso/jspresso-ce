@@ -28,81 +28,13 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
     implements IViewDescriptor {
 
-  private int                borderType = NONE;
-  private Color              foreground;
-  private Color              background;
-  private Font               font;
   private ActionMap          actionMap;
+  private Color              background;
+  private int                borderType = NONE;
+  private Font               font;
+  private Color              foreground;
 
   private Collection<String> grantedRoles;
-
-  /**
-   * {@inheritDoc}
-   */
-  public Color getForeground() {
-    return foreground;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Color getBackground() {
-    return background;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Font getFont() {
-    return font;
-  }
-
-  /**
-   * Sets the background.
-   * 
-   * @param background
-   *          the background to set.
-   */
-  public void setBackground(Color background) {
-    this.background = background;
-  }
-
-  /**
-   * Sets the font.
-   * 
-   * @param font
-   *          the font to set.
-   */
-  public void setFont(Font font) {
-    this.font = font;
-  }
-
-  /**
-   * Sets the foreground.
-   * 
-   * @param foreground
-   *          the foreground to set.
-   */
-  public void setForeground(Color foreground) {
-    this.foreground = foreground;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getBorderType() {
-    return borderType;
-  }
-
-  /**
-   * Sets the borderType.
-   * 
-   * @param borderType
-   *          the borderType to set.
-   */
-  public void setBorderType(int borderType) {
-    this.borderType = borderType;
-  }
 
   /**
    * Gets the actionMap.
@@ -117,25 +49,40 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   }
 
   /**
-   * Sets the actionMap.
-   * 
-   * @param actionMap
-   *          the actionMap to set.
+   * {@inheritDoc}
    */
-  public void setActionMap(ActionMap actionMap) {
-    this.actionMap = actionMap;
+  public Color getBackground() {
+    return background;
   }
 
   /**
    * {@inheritDoc}
    */
-  @Override
-  public String getIconImageURL() {
-    if (super.getIconImageURL() == null
-        && getModelDescriptor() instanceof IComponentDescriptor) {
-      return ((IComponentDescriptor) getModelDescriptor()).getIconImageURL();
-    }
-    return super.getIconImageURL();
+  public int getBorderType() {
+    return borderType;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Font getFont() {
+    return font;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Color getForeground() {
+    return foreground;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
   }
 
   /**
@@ -164,12 +111,65 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   }
 
   /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
+   * {@inheritDoc}
    */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
+  @Override
+  public String getIconImageURL() {
+    if (super.getIconImageURL() == null
+        && getModelDescriptor() instanceof IComponentDescriptor) {
+      return ((IComponentDescriptor) getModelDescriptor()).getIconImageURL();
+    }
+    return super.getIconImageURL();
+  }
+
+  /**
+   * Sets the actionMap.
+   * 
+   * @param actionMap
+   *          the actionMap to set.
+   */
+  public void setActionMap(ActionMap actionMap) {
+    this.actionMap = actionMap;
+  }
+
+  /**
+   * Sets the background.
+   * 
+   * @param background
+   *          the background to set.
+   */
+  public void setBackground(Color background) {
+    this.background = background;
+  }
+
+  /**
+   * Sets the borderType.
+   * 
+   * @param borderType
+   *          the borderType to set.
+   */
+  public void setBorderType(int borderType) {
+    this.borderType = borderType;
+  }
+
+  /**
+   * Sets the font.
+   * 
+   * @param font
+   *          the font to set.
+   */
+  public void setFont(Font font) {
+    this.font = font;
+  }
+
+  /**
+   * Sets the foreground.
+   * 
+   * @param foreground
+   *          the foreground to set.
+   */
+  public void setForeground(Color foreground) {
+    this.foreground = foreground;
   }
 
   /**

@@ -35,6 +35,15 @@ public abstract class EmptyLifecycleInterceptor<E> implements
    * {@inheritDoc}
    */
   @SuppressWarnings("unused")
+  public boolean onDelete(E component, IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
   public boolean onPersist(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     return false;
@@ -45,15 +54,6 @@ public abstract class EmptyLifecycleInterceptor<E> implements
    */
   @SuppressWarnings("unused")
   public boolean onUpdate(E component, IEntityFactory entityFactory,
-      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unused")
-  public boolean onDelete(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     return false;
   }

@@ -33,13 +33,6 @@ public class FormatAdapter implements IFormatter {
   /**
    * {@inheritDoc}
    */
-  public Object parse(String source) throws ParseException {
-    return format.parseObject(source);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public String format(Object value) {
     if (value != null) {
       return format.format(value);
@@ -54,6 +47,13 @@ public class FormatAdapter implements IFormatter {
    */
   public Format getFormat() {
     return format;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object parse(String source) throws ParseException {
+    return format.parseObject(source);
   }
 
 }

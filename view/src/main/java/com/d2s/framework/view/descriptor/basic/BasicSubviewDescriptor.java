@@ -23,8 +23,8 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
     ISubViewDescriptor {
 
   private IModelDescriptor  modelDescriptor;
-  private boolean           readOnly;
   private Collection<IGate> readabilityGates;
+  private boolean           readOnly;
   private Collection<IGate> writabilityGates;
 
   /**
@@ -34,6 +34,31 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    */
   public IModelDescriptor getModelDescriptor() {
     return modelDescriptor;
+  }
+
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  public Collection<IGate> getReadabilityGates() {
+    return readabilityGates;
+  }
+
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  public Collection<IGate> getWritabilityGates() {
+    return writabilityGates;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isReadOnly() {
+    return readOnly;
   }
 
   /**
@@ -47,32 +72,6 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public boolean isReadOnly() {
-    return readOnly;
-  }
-
-  /**
-   * Sets the readOnly.
-   * 
-   * @param readOnly
-   *          the readOnly to set.
-   */
-  public void setReadOnly(boolean readOnly) {
-    this.readOnly = readOnly;
-  }
-
-  /**
-   * Gets the readabilityGates.
-   * 
-   * @return the readabilityGates.
-   */
-  public Collection<IGate> getReadabilityGates() {
-    return readabilityGates;
-  }
-
-  /**
    * Sets the readabilityGates.
    * 
    * @param readabilityGates
@@ -83,12 +82,13 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
   }
 
   /**
-   * Gets the writabilityGates.
+   * Sets the readOnly.
    * 
-   * @return the writabilityGates.
+   * @param readOnly
+   *          the readOnly to set.
    */
-  public Collection<IGate> getWritabilityGates() {
-    return writabilityGates;
+  public void setReadOnly(boolean readOnly) {
+    this.readOnly = readOnly;
   }
 
   /**

@@ -37,24 +37,56 @@ import com.d2s.framework.util.event.SelectionChangeEvent;
 public class DefaultTreeSelectionModelBinder implements
     ITreeSelectionModelBinder {
 
-  private SelectionModelListener genericSelectionModelListener;
+  private class CollectionConnectorsSelectionListener implements
+      ISelectionChangeListener {
 
-  /**
-   * Constructs a new <code>DefaultTreeSelectionModelBinder</code> instance.
-   */
-  public DefaultTreeSelectionModelBinder() {
-    genericSelectionModelListener = new SelectionModelListener();
-  }
+    private IValueConnector    rootConnector;
+    private TreeSelectionModel selectionModel;
 
-  /**
-   * {@inheritDoc}
-   */
-  public void bindSelectionModel(IValueConnector rootConnector, STree tree) {
-    tree.getSelectionModel().addTreeSelectionListener(
-        genericSelectionModelListener);
-    TreeConnectorsListener connectorsListener = new TreeConnectorsListener(
-        rootConnector, tree.getSelectionModel());
-    tree.getModel().addTreeModelListener(connectorsListener);
+    /**
+     * Constructs a new <code>CollectionConnectorsSelectionListener</code>
+     * instance.
+     * 
+     * @param rootConnector
+     * @param selectionModel
+     */
+    public CollectionConnectorsSelectionListener(IValueConnector rootConnector,
+        TreeSelectionModel selectionModel) {
+      this.rootConnector = rootConnector;
+      this.selectionModel = selectionModel;
+    }
+
+    private TreePath getTreePathForConnector(IValueConnector connector) {
+      return ConnectorTreeHelper.getTreePathForConnector(rootConnector,
+          connector);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void selectionChange(SelectionChangeEvent evt) {
+      ICollectionConnector connector = (ICollectionConnector) evt.getSource();
+      int[] oldSelection = evt.getOldSelection();
+      int[] newSelection = evt.getNewSelection();
+
+      if (oldSelection != null) {
+        for (int i : oldSelection) {
+          if (newSelection == null || Arrays.binarySearch(newSelection, i) < 0) {
+            selectionModel
+                .removeSelectionPath(getTreePathForConnector(connector
+                    .getChildConnector(i)));
+          }
+        }
+      }
+      if (newSelection != null) {
+        for (int i : newSelection) {
+          if (oldSelection == null || Arrays.binarySearch(oldSelection, i) < 0) {
+            selectionModel.addSelectionPath(getTreePathForConnector(connector
+                .getChildConnector(i)));
+          }
+        }
+      }
+    }
   }
 
   private static final class SelectionModelListener implements
@@ -135,58 +167,6 @@ public class DefaultTreeSelectionModelBinder implements
     }
   }
 
-  private class CollectionConnectorsSelectionListener implements
-      ISelectionChangeListener {
-
-    private IValueConnector    rootConnector;
-    private TreeSelectionModel selectionModel;
-
-    /**
-     * Constructs a new <code>CollectionConnectorsSelectionListener</code>
-     * instance.
-     * 
-     * @param rootConnector
-     * @param selectionModel
-     */
-    public CollectionConnectorsSelectionListener(IValueConnector rootConnector,
-        TreeSelectionModel selectionModel) {
-      this.rootConnector = rootConnector;
-      this.selectionModel = selectionModel;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void selectionChange(SelectionChangeEvent evt) {
-      ICollectionConnector connector = (ICollectionConnector) evt.getSource();
-      int[] oldSelection = evt.getOldSelection();
-      int[] newSelection = evt.getNewSelection();
-
-      if (oldSelection != null) {
-        for (int i : oldSelection) {
-          if (newSelection == null || Arrays.binarySearch(newSelection, i) < 0) {
-            selectionModel
-                .removeSelectionPath(getTreePathForConnector(connector
-                    .getChildConnector(i)));
-          }
-        }
-      }
-      if (newSelection != null) {
-        for (int i : newSelection) {
-          if (oldSelection == null || Arrays.binarySearch(oldSelection, i) < 0) {
-            selectionModel.addSelectionPath(getTreePathForConnector(connector
-                .getChildConnector(i)));
-          }
-        }
-      }
-    }
-
-    private TreePath getTreePathForConnector(IValueConnector connector) {
-      return ConnectorTreeHelper.getTreePathForConnector(rootConnector,
-          connector);
-    }
-  }
-
   private class TreeConnectorsListener implements TreeModelListener {
 
     private CollectionConnectorsSelectionListener connectorsSelectionListener;
@@ -247,5 +227,25 @@ public class DefaultTreeSelectionModelBinder implements
           .getTreePath().getLastPathComponent());
     }
 
+  }
+
+  private SelectionModelListener genericSelectionModelListener;
+
+  /**
+   * Constructs a new <code>DefaultTreeSelectionModelBinder</code> instance.
+   */
+  public DefaultTreeSelectionModelBinder() {
+    genericSelectionModelListener = new SelectionModelListener();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void bindSelectionModel(IValueConnector rootConnector, STree tree) {
+    tree.getSelectionModel().addTreeSelectionListener(
+        genericSelectionModelListener);
+    TreeConnectorsListener connectorsListener = new TreeConnectorsListener(
+        rootConnector, tree.getSelectionModel());
+    tree.getModel().addTreeModelListener(connectorsListener);
   }
 }

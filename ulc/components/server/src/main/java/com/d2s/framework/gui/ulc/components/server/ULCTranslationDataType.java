@@ -31,6 +31,13 @@ public class ULCTranslationDataType extends ULCProxy implements IDataType {
   private Map<String, String> dictionary;
 
   /**
+   * Constructs a new <code>ULCTranslationDataType</code> instance.
+   */
+  public ULCTranslationDataType() {
+    this(null);
+  }
+
+  /**
    * Constructs a new <code>ULCTranslationDataType</code> instance. This
    * constructor has default visibility to prevent for direct instanciation.
    * 
@@ -39,36 +46,6 @@ public class ULCTranslationDataType extends ULCProxy implements IDataType {
    */
   ULCTranslationDataType(Map<String, String> dictionary) {
     this.dictionary = dictionary;
-  }
-
-  /**
-   * Constructs a new <code>ULCTranslationDataType</code> instance.
-   */
-  public ULCTranslationDataType() {
-    this(null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void saveState(Anything a) {
-    super.saveState(a);
-    Vector<String> flatDictionary = new Vector<String>();
-    for (Map.Entry<String, String> dictEntry : dictionary.entrySet()) {
-      flatDictionary.add(dictEntry.getKey());
-      flatDictionary.add(dictEntry.getValue());
-    }
-
-    saveState(a, TranslationDataTypeConstants.DICTIONARY, flatDictionary, null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UITranslationDataType";
   }
 
   /**
@@ -92,6 +69,29 @@ public class ULCTranslationDataType extends ULCProxy implements IDataType {
   @Override
   public int hashCode() {
     return new HashCodeBuilder(7, 23).append(dictionary).toHashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void saveState(Anything a) {
+    super.saveState(a);
+    Vector<String> flatDictionary = new Vector<String>();
+    for (Map.Entry<String, String> dictEntry : dictionary.entrySet()) {
+      flatDictionary.add(dictEntry.getKey());
+      flatDictionary.add(dictEntry.getValue());
+    }
+
+    saveState(a, TranslationDataTypeConstants.DICTIONARY, flatDictionary, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UITranslationDataType";
   }
 
 }

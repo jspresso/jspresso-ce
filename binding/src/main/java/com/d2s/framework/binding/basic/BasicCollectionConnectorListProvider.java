@@ -42,23 +42,27 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
-  public List<ICollectionConnector> getCollectionConnectors() {
-    List<ICollectionConnector> collectionConnectors = new ArrayList<ICollectionConnector>();
-    if (collectionConnectorProviders != null) {
-      for (ICollectionConnectorProvider collectionConnectorProvider : collectionConnectorProviders) {
-        collectionConnectors.add(collectionConnectorProvider
-            .getCollectionConnector());
-      }
-    }
-    return collectionConnectors;
+  public void addConnectorSelectionListener(IConnectorSelectionListener listener) {
+    implAddConnectorSelectionListener(listener);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void setCollectionConnectorProviders(
-      List<ICollectionConnectorProvider> collectionConnectorProviders) {
-    this.collectionConnectorProviders = collectionConnectorProviders;
+  @Override
+  public void boundAsView() {
+    super.boundAsView();
+    if (isTrackingChildrenSelection()) {
+      implFireSelectedConnectorChange(this);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicCollectionConnectorListProvider clone() {
+    return clone(getId());
   }
 
   /**
@@ -82,23 +86,22 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
-  @Override
-  public BasicCollectionConnectorListProvider clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addConnectorSelectionListener(IConnectorSelectionListener listener) {
-    implAddConnectorSelectionListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
     implFireSelectedConnectorChange(evt);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<ICollectionConnector> getCollectionConnectors() {
+    List<ICollectionConnector> collectionConnectors = new ArrayList<ICollectionConnector>();
+    if (collectionConnectorProviders != null) {
+      for (ICollectionConnectorProvider collectionConnectorProvider : collectionConnectorProviders) {
+        collectionConnectors.add(collectionConnectorProvider
+            .getCollectionConnector());
+      }
+    }
+    return collectionConnectors;
   }
 
   /**
@@ -112,18 +115,15 @@ public class BasicCollectionConnectorListProvider extends
   /**
    * {@inheritDoc}
    */
-  public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
-    implSetTracksChildrenSelection(tracksChildrenSelection);
+  public void setCollectionConnectorProviders(
+      List<ICollectionConnectorProvider> collectionConnectorProviders) {
+    this.collectionConnectorProviders = collectionConnectorProviders;
   }
 
   /**
    * {@inheritDoc}
    */
-  @Override
-  public void boundAsView() {
-    super.boundAsView();
-    if (isTrackingChildrenSelection()) {
-      implFireSelectedConnectorChange(this);
-    }
+  public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
+    implSetTracksChildrenSelection(tracksChildrenSelection);
   }
 }

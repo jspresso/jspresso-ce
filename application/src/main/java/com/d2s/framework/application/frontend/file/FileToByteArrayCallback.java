@@ -28,6 +28,15 @@ public class FileToByteArrayCallback implements IFileOpenCallback {
   /**
    * {@inheritDoc}
    */
+  public void cancel(@SuppressWarnings("unused")
+  IActionHandler actionHandler, @SuppressWarnings("unused")
+  Map<String, Object> context) {
+    context.remove(ActionContextConstants.ACTION_PARAM);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void fileChosen(InputStream in, @SuppressWarnings("unused")
   String filePath, @SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
@@ -52,15 +61,6 @@ public class FileToByteArrayCallback implements IFileOpenCallback {
         }
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void cancel(@SuppressWarnings("unused")
-  IActionHandler actionHandler, @SuppressWarnings("unused")
-  Map<String, Object> context) {
-    context.remove(ActionContextConstants.ACTION_PARAM);
   }
 
 }

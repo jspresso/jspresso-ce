@@ -20,21 +20,12 @@ import com.d2s.framework.util.resources.IResource;
  */
 public class ResourceProviderServlet extends HttpServlet {
 
-  private static final long  serialVersionUID = 5253634459280974738L;
-
   /**
    * id.
    */
   public static final String ID_PARAMETER     = "id";
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws IOException {
-    doGet(request, response);
-  }
+  private static final long  serialVersionUID = 5253634459280974738L;
 
   /**
    * {@inheritDoc}
@@ -72,5 +63,14 @@ public class ResourceProviderServlet extends HttpServlet {
 
     inputStream.close();
     outputStream.close();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+    doGet(request, response);
   }
 }

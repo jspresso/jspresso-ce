@@ -20,13 +20,6 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
 public interface IReportDescriptor extends IComponentDescriptor<IReport> {
 
   /**
-   * Gets the url to the report design resource.
-   *
-   * @return the url to the report design resource.
-   */
-  String getReportDesignUrl();
-
-  /**
    * Gets the action, if any, launched before the report gets executed. This
    * action may be used to fill the report context with some bitrary computed
    * data.
@@ -34,4 +27,11 @@ public interface IReportDescriptor extends IComponentDescriptor<IReport> {
    * @return An action to be triggered before the report gets executed.
    */
   IAction getBeforeAction();
+
+  /**
+   * Gets the url to the report design resource.
+   *
+   * @return the url to the report design resource.
+   */
+  String getReportDesignUrl();
 }

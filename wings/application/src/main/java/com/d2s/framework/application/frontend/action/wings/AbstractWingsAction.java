@@ -30,17 +30,17 @@ public abstract class AbstractWingsAction extends
     ActionWrapper<SComponent, SIcon, Action> {
 
   /**
-   * Retrieves the widget this action was triggered from. It may serve to
-   * determine the root window or dialog for instance. It uses a well-known
-   * action context key which is :
-   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
+   * If the ancestor of the action widget is a dialog, dispose it.
    * 
    * @param context
    *          the action context.
-   * @return the source widget this action was triggered from.
    */
-  public SComponent getSourceComponent(Map<String, Object> context) {
-    return (SComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  protected void closeDialog(Map<String, Object> context) {
+    SContainer actionWindow = WingsUtil
+        .getVisibleWindow(getActionWidget(context));
+    if (actionWindow instanceof SDialog) {
+      ((SDialog) actionWindow).dispose();
+    }
   }
 
   /**
@@ -55,16 +55,16 @@ public abstract class AbstractWingsAction extends
   }
 
   /**
-   * If the ancestor of the action widget is a dialog, dispose it.
+   * Retrieves the widget this action was triggered from. It may serve to
+   * determine the root window or dialog for instance. It uses a well-known
+   * action context key which is :
+   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
    * 
    * @param context
    *          the action context.
+   * @return the source widget this action was triggered from.
    */
-  protected void closeDialog(Map<String, Object> context) {
-    SContainer actionWindow = WingsUtil
-        .getVisibleWindow(getActionWidget(context));
-    if (actionWindow instanceof SDialog) {
-      ((SDialog) actionWindow).dispose();
-    }
+  public SComponent getSourceComponent(Map<String, Object> context) {
+    return (SComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
   }
 }

@@ -38,11 +38,11 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     implements ICollectionConnector, IConnectorMapProvider {
 
   private IConnectorMap          childConnectors;
-  private IModelConnectorFactory modelConnectorFactory;
-  private SelectionChangeSupport selectionChangeSupport;
   private ChildConnectorSupport  childConnectorSupport;
-
+  private IModelConnectorFactory modelConnectorFactory;
   private boolean                needsChildrenUpdate;
+
+  private SelectionChangeSupport selectionChangeSupport;
 
   /**
    * Constructs a new model property connector on a model collection property.
@@ -66,16 +66,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public IConnectorMap getConnectorMap() {
-    if (needsChildrenUpdate) {
-      updateChildConnectors();
-    }
-    return childConnectors;
-  }
-
-  /**
    * Adds a new child connector.
    * 
    * @param connector
@@ -86,14 +76,77 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
-   * Removes a child connector.
-   * 
-   * @param connector
-   *          the connector to be removed.
+   * {@inheritDoc}
    */
-  protected void removeChildConnector(IValueConnector connector) {
-    getConnectorMap().removeConnector(connector.getId());
-    connector.setParentConnector(null);
+  public void addSelectionChangeListener(ISelectionChangeListener listener) {
+    selectionChangeSupport.addSelectionChangeListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean areChildrenReadable() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean areChildrenWritable() {
+    return true;
+  }
+
+  /**
+   * Updates its child connectors to reflect the collection.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void boundAsModel(
+      IConnectorValueChangeListener modelConnectorListener,
+      PropertyChangeListener readChangeListener,
+      PropertyChangeListener writeChangeListener) {
+    needsChildrenUpdate = true;
+    super.boundAsModel(modelConnectorListener, readChangeListener,
+        writeChangeListener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ModelCollectionPropertyConnector clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ModelCollectionPropertyConnector clone(String newConnectorId) {
+    ModelCollectionPropertyConnector clonedConnector = (ModelCollectionPropertyConnector) super
+        .clone(newConnectorId);
+    clonedConnector.childConnectors = new ConnectorMap(clonedConnector);
+    clonedConnector.childConnectorSupport = new ChildConnectorSupport(
+        clonedConnector);
+    clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
+        clonedConnector);
+    clonedConnector.needsChildrenUpdate = false;
+    return clonedConnector;
+  }
+
+  private String computeConnectorId(int i) {
+    return CollectionConnectorHelper.computeConnectorId(getId(), i);
+  }
+
+  /**
+   * Takes a snapshot of the collection (does not keep the reference itself).
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object computeOldConnectorValue(Object connectorValue) {
+    return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
   }
 
   /**
@@ -112,16 +165,73 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
-   * Before invoking the super implementation which fires the
-   * <code>ConnectorValueChangeEvent</code>, this implementation reconstructs
-   * the child connectors based on the retrieved collection.
+   * {@inheritDoc}
+   */
+  public IValueConnector getChildConnector(int index) {
+    return getChildConnector(computeConnectorId(index));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IValueConnector getChildConnector(String connectorKey) {
+    return childConnectorSupport.getChildConnector(connectorKey);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int getChildConnectorCount() {
+    return getChildConnectorKeys().size();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Collection<String> getChildConnectorKeys() {
+    return childConnectorSupport.getChildConnectorKeys();
+  }
+
+  /**
+   * Returns this.
    * <p>
    * {@inheritDoc}
    */
-  @Override
-  public void propertyChange(PropertyChangeEvent evt) {
-    needsChildrenUpdate = true;
-    super.propertyChange(evt);
+  public ICollectionConnector getCollectionConnector() {
+    return this;
+  }
+
+  /**
+   * Returns singleton list of this.
+   * <p>
+   * {@inheritDoc}
+   */
+  public List<ICollectionConnector> getCollectionConnectors() {
+    return Collections.singletonList((ICollectionConnector) this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IConnectorMap getConnectorMap() {
+    if (needsChildrenUpdate) {
+      updateChildConnectors();
+    }
+    return childConnectors;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int[] getSelectedIndices() {
+    return selectionChangeSupport.getSelectedIndices();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isAllowLazyChildrenLoading() {
+    return true;
   }
 
   /**
@@ -138,22 +248,74 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
-   * Updates its child connectors to reflect the collection.
+   * Before invoking the super implementation which fires the
+   * <code>ConnectorValueChangeEvent</code>, this implementation reconstructs
+   * the child connectors based on the retrieved collection.
    * <p>
    * {@inheritDoc}
    */
   @Override
-  public void boundAsModel(
-      IConnectorValueChangeListener modelConnectorListener,
-      PropertyChangeListener readChangeListener,
-      PropertyChangeListener writeChangeListener) {
+  public void propertyChange(PropertyChangeEvent evt) {
     needsChildrenUpdate = true;
-    super.boundAsModel(modelConnectorListener, readChangeListener,
-        writeChangeListener);
+    super.propertyChange(evt);
   }
 
-  private String computeConnectorId(int i) {
-    return CollectionConnectorHelper.computeConnectorId(getId(), i);
+  /**
+   * Removes a child connector.
+   * 
+   * @param connector
+   *          the connector to be removed.
+   */
+  protected void removeChildConnector(IValueConnector connector) {
+    getConnectorMap().removeConnector(connector.getId());
+    connector.setParentConnector(null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeSelectionChangeListener(ISelectionChangeListener listener) {
+    selectionChangeSupport.removeSelectionChangeListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void selectionChange(SelectionChangeEvent evt) {
+    if (evt.getSource() instanceof ISelectionChangeListener) {
+      selectionChangeSupport
+          .addInhibitedListener((ISelectionChangeListener) evt.getSource());
+    }
+    try {
+      setSelectedIndices(evt.getNewSelection(), evt.getLeadingIndex());
+    } finally {
+      if (evt.getSource() instanceof ISelectionChangeListener) {
+        selectionChangeSupport
+            .removeInhibitedListener((ISelectionChangeListener) evt.getSource());
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setAllowLazyChildrenLoading(@SuppressWarnings("unused")
+  boolean b) {
+    // lazy behaviour can't be turned off.
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSelectedIndices(int[] newSelectedIndices) {
+    selectionChangeSupport.setSelectedIndices(newSelectedIndices);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
+    selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
   }
 
   /**
@@ -181,167 +343,5 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
       IValueConnector childConnector = getChildConnector(computeConnectorId(getChildConnectorCount() - 1));
       removeChildConnector(childConnector);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IValueConnector getChildConnector(String connectorKey) {
-    return childConnectorSupport.getChildConnector(connectorKey);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<String> getChildConnectorKeys() {
-    return childConnectorSupport.getChildConnectorKeys();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IValueConnector getChildConnector(int index) {
-    return getChildConnector(computeConnectorId(index));
-  }
-
-  /**
-   * Takes a snapshot of the collection (does not keep the reference itself).
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object computeOldConnectorValue(Object connectorValue) {
-    return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ModelCollectionPropertyConnector clone(String newConnectorId) {
-    ModelCollectionPropertyConnector clonedConnector = (ModelCollectionPropertyConnector) super
-        .clone(newConnectorId);
-    clonedConnector.childConnectors = new ConnectorMap(clonedConnector);
-    clonedConnector.childConnectorSupport = new ChildConnectorSupport(
-        clonedConnector);
-    clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
-        clonedConnector);
-    clonedConnector.needsChildrenUpdate = false;
-    return clonedConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ModelCollectionPropertyConnector clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addSelectionChangeListener(ISelectionChangeListener listener) {
-    selectionChangeSupport.addSelectionChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removeSelectionChangeListener(ISelectionChangeListener listener) {
-    selectionChangeSupport.removeSelectionChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setSelectedIndices(int[] newSelectedIndices) {
-    selectionChangeSupport.setSelectedIndices(newSelectedIndices);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
-    selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int[] getSelectedIndices() {
-    return selectionChangeSupport.getSelectedIndices();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void selectionChange(SelectionChangeEvent evt) {
-    if (evt.getSource() instanceof ISelectionChangeListener) {
-      selectionChangeSupport
-          .addInhibitedListener((ISelectionChangeListener) evt.getSource());
-    }
-    try {
-      setSelectedIndices(evt.getNewSelection(), evt.getLeadingIndex());
-    } finally {
-      if (evt.getSource() instanceof ISelectionChangeListener) {
-        selectionChangeSupport
-            .removeInhibitedListener((ISelectionChangeListener) evt.getSource());
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getChildConnectorCount() {
-    return getChildConnectorKeys().size();
-  }
-
-  /**
-   * Returns this.
-   * <p>
-   * {@inheritDoc}
-   */
-  public ICollectionConnector getCollectionConnector() {
-    return this;
-  }
-
-  /**
-   * Returns singleton list of this.
-   * <p>
-   * {@inheritDoc}
-   */
-  public List<ICollectionConnector> getCollectionConnectors() {
-    return Collections.singletonList((ICollectionConnector) this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setAllowLazyChildrenLoading(@SuppressWarnings("unused")
-  boolean b) {
-    // lazy behaviour can't be turned off.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isAllowLazyChildrenLoading() {
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean areChildrenReadable() {
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean areChildrenWritable() {
-    return true;
   }
 }

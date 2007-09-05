@@ -38,6 +38,19 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     setCardViewDescriptors(moduleCards);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public String getCardNameForModel(Object model) {
+    if (model instanceof BeanModule
+        && (((BeanModule) model).getParent()) instanceof BeanCollectionModule) {
+      return (((BeanModule) model).getParent()).getName() + ".element";
+    } else if (model instanceof SubModule) {
+      return ((SubModule) model).getName();
+    }
+    return null;
+  }
+
   private void prepareModuleCards(Map<String, IViewDescriptor> moduleCards,
       List<SubModule> modules) {
     if (modules != null) {
@@ -53,18 +66,5 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
         prepareModuleCards(moduleCards, module.getSubModules());
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getCardNameForModel(Object model) {
-    if (model instanceof BeanModule
-        && (((BeanModule) model).getParent()) instanceof BeanCollectionModule) {
-      return (((BeanModule) model).getParent()).getName() + ".element";
-    } else if (model instanceof SubModule) {
-      return ((SubModule) model).getName();
-    }
-    return null;
   }
 }

@@ -39,20 +39,6 @@ public class ConnectorSelectionSupport {
   }
 
   /**
-   * Removes a new <code>IConnectorValueChangeListener</code>.
-   * 
-   * @param listener
-   *          The removed listener.
-   * @see IConnectorSelector#removeConnectorSelectionListener(IConnectorSelectionListener)
-   */
-  public synchronized void removeConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
-    }
-  }
-
-  /**
    * Propagates the <code>ConnectorSelectionEvent</code> as is (i.e. whithout
    * modifying its source) to the listeners.
    * 
@@ -65,6 +51,20 @@ public class ConnectorSelectionSupport {
           listeners)) {
         listener.selectedConnectorChange(evt);
       }
+    }
+  }
+
+  /**
+   * Removes a new <code>IConnectorValueChangeListener</code>.
+   * 
+   * @param listener
+   *          The removed listener.
+   * @see IConnectorSelector#removeConnectorSelectionListener(IConnectorSelectionListener)
+   */
+  public synchronized void removeConnectorSelectionListener(
+      IConnectorSelectionListener listener) {
+    if (listener != null && listeners != null) {
+      listeners.remove(listener);
     }
   }
 }

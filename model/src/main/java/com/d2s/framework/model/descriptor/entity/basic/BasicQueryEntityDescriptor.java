@@ -32,8 +32,8 @@ public class BasicQueryEntityDescriptor implements
     IComponentDescriptor<IEntity> {
 
   private IComponentDescriptor<IEntity>              entityDescriptor;
-  private Class<? extends IEntity>                   queryContract;
   private BasicCollectionPropertyDescriptor<IEntity> queriedEntitiesPropertyDescriptor;
+  private Class<? extends IEntity>                   queryContract;
 
   /**
    * Constructs a new <code>BasicQueryEntityDescriptor</code> instance.
@@ -53,31 +53,8 @@ public class BasicQueryEntityDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
-    Collection<IPropertyDescriptor> declaredPropertyDescriptors = entityDescriptor
-        .getDeclaredPropertyDescriptors();
-    declaredPropertyDescriptors.add(getQueriedEntitiesPropertyDescriptor());
-    return declaredPropertyDescriptors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
-    if (IQueryEntity.QUERIED_ENTITIES.equals(propertyName)) {
-      return getQueriedEntitiesPropertyDescriptor();
-    }
-    return entityDescriptor.getPropertyDescriptor(propertyName);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<IPropertyDescriptor> getPropertyDescriptors() {
-    Collection<IPropertyDescriptor> propertyDescriptors = entityDescriptor
-        .getPropertyDescriptors();
-    propertyDescriptors.add(getQueriedEntitiesPropertyDescriptor());
-    return propertyDescriptors;
+  public Class<? extends IEntity> getComponentContract() {
+    return queryContract;
   }
 
   /**
@@ -88,33 +65,13 @@ public class BasicQueryEntityDescriptor implements
   }
 
   /**
-   * Gets the queriedEntitiesPropertyDescriptor.
-   *
-   * @return the queriedEntitiesPropertyDescriptor.
-   */
-  private BasicCollectionPropertyDescriptor getQueriedEntitiesPropertyDescriptor() {
-    if (queriedEntitiesPropertyDescriptor == null) {
-      BasicCollectionDescriptor<IEntity> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<IEntity>();
-      queriedEntitiesCollectionDescriptor.setCollectionInterface(Set.class);
-      queriedEntitiesCollectionDescriptor
-          .setElementDescriptor(entityDescriptor);
-      queriedEntitiesCollectionDescriptor
-          .setName(IQueryEntity.QUERIED_ENTITIES);
-      queriedEntitiesCollectionDescriptor
-          .setDescription("queriedEntities.description");
-      queriedEntitiesPropertyDescriptor = new BasicCollectionPropertyDescriptor<IEntity>();
-      queriedEntitiesPropertyDescriptor.setName(IQueryEntity.QUERIED_ENTITIES);
-      queriedEntitiesPropertyDescriptor
-          .setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
-    }
-    return queriedEntitiesPropertyDescriptor;
-  }
-
-  /**
    * {@inheritDoc}
    */
-  public Class<? extends IEntity> getComponentContract() {
-    return queryContract;
+  public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
+    Collection<IPropertyDescriptor> declaredPropertyDescriptors = entityDescriptor
+        .getDeclaredPropertyDescriptors();
+    declaredPropertyDescriptors.add(getQueriedEntitiesPropertyDescriptor());
+    return declaredPropertyDescriptors;
   }
 
   /**
@@ -178,6 +135,49 @@ public class BasicQueryEntityDescriptor implements
   /**
    * {@inheritDoc}
    */
+  public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
+    if (IQueryEntity.QUERIED_ENTITIES.equals(propertyName)) {
+      return getQueriedEntitiesPropertyDescriptor();
+    }
+    return entityDescriptor.getPropertyDescriptor(propertyName);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Collection<IPropertyDescriptor> getPropertyDescriptors() {
+    Collection<IPropertyDescriptor> propertyDescriptors = entityDescriptor
+        .getPropertyDescriptors();
+    propertyDescriptors.add(getQueriedEntitiesPropertyDescriptor());
+    return propertyDescriptors;
+  }
+
+  /**
+   * Gets the queriedEntitiesPropertyDescriptor.
+   *
+   * @return the queriedEntitiesPropertyDescriptor.
+   */
+  private BasicCollectionPropertyDescriptor getQueriedEntitiesPropertyDescriptor() {
+    if (queriedEntitiesPropertyDescriptor == null) {
+      BasicCollectionDescriptor<IEntity> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<IEntity>();
+      queriedEntitiesCollectionDescriptor.setCollectionInterface(Set.class);
+      queriedEntitiesCollectionDescriptor
+          .setElementDescriptor(entityDescriptor);
+      queriedEntitiesCollectionDescriptor
+          .setName(IQueryEntity.QUERIED_ENTITIES);
+      queriedEntitiesCollectionDescriptor
+          .setDescription("queriedEntities.description");
+      queriedEntitiesPropertyDescriptor = new BasicCollectionPropertyDescriptor<IEntity>();
+      queriedEntitiesPropertyDescriptor.setName(IQueryEntity.QUERIED_ENTITIES);
+      queriedEntitiesPropertyDescriptor
+          .setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
+    }
+    return queriedEntitiesPropertyDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public List<String> getQueryableProperties() {
     return entityDescriptor.getQueryableProperties();
   }
@@ -227,15 +227,15 @@ public class BasicQueryEntityDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public boolean isPurelyAbstract() {
-    return entityDescriptor.isPurelyAbstract();
+  public boolean isEntity() {
+    return entityDescriptor.isEntity();
   }
 
   /**
    * {@inheritDoc}
    */
-  public boolean isEntity() {
-    return entityDescriptor.isEntity();
+  public boolean isPurelyAbstract() {
+    return entityDescriptor.isPurelyAbstract();
   }
 
 }

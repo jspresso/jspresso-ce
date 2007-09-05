@@ -30,11 +30,11 @@ import com.d2s.framework.util.swing.SwingUtil;
 public class BooleanTableCellRenderer extends JCheckBox implements
     TableCellRenderer {
 
+  private static final Border NO_FOCUS_BORDER  = new EmptyBorder(1, 1, 1, 1);
   private static final long   serialVersionUID = 5944792695339009139L;
-  private Color               unselectedForeground;
   private Color               unselectedBackground;
 
-  private static final Border NO_FOCUS_BORDER  = new EmptyBorder(1, 1, 1, 1);
+  private Color               unselectedForeground;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -46,41 +46,29 @@ public class BooleanTableCellRenderer extends JCheckBox implements
   }
 
   /**
-   * Overrides <code>JComponent.setForeground</code> to assign the
-   * unselected-foreground color to the specified color.
-   * 
-   * @param c
-   *          set the foreground color to this value
+   * Overridden for performance reasons.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
-  public void setForeground(Color c) {
-    super.setForeground(c);
-    unselectedForeground = c;
+  public void firePropertyChange(@SuppressWarnings("unused")
+  String propertyName, @SuppressWarnings("unused")
+  boolean oldValue, @SuppressWarnings("unused")
+  boolean newValue) {
+    // NO-OP
   }
 
   /**
-   * Overrides <code>JComponent.setBackground</code> to assign the
-   * unselected-background color to the specified color.
-   * 
-   * @param c
-   *          set the background color to this value
+   * Overridden for performance reasons.
+   * <p>
+   * {@inheritDoc}
    */
   @Override
-  public void setBackground(Color c) {
-    super.setBackground(c);
-    unselectedBackground = c;
-  }
-
-  /**
-   * Notification from the <code>UIManager</code> that the look and feel [L&F]
-   * has changed. Replaces the current UI object with the latest version from
-   * the <code>UIManager</code>.
-   */
-  @Override
-  public void updateUI() {
-    super.updateUI();
-    setForeground(null);
-    setBackground(null);
+  protected void firePropertyChange(@SuppressWarnings("unused")
+  String propertyName, @SuppressWarnings("unused")
+  Object oldValue, @SuppressWarnings("unused")
+  Object newValue) {
+    // NO-OP
   }
 
   /**
@@ -139,6 +127,16 @@ public class BooleanTableCellRenderer extends JCheckBox implements
     return this;
   }
 
+  /**
+   * Overridden for performance reasons.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void invalidate() {
+    // NO-OP
+  }
+
   /*
    * The following methods are overridden for performance reasons (see
    * DefaultTableCellRenderer comments for a reference).
@@ -168,27 +166,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  public void invalidate() {
-    // NO-OP
-  }
-
-  /**
-   * Overridden for performance reasons.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void validate() {
-    // NO-OP
-  }
-
-  /**
-   * Overridden for performance reasons.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void revalidate() {
+  public void repaint() {
     // NO-OP
   }
 
@@ -224,8 +202,46 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  public void repaint() {
+  public void revalidate() {
     // NO-OP
+  }
+
+  /**
+   * Overrides <code>JComponent.setBackground</code> to assign the
+   * unselected-background color to the specified color.
+   * 
+   * @param c
+   *          set the background color to this value
+   */
+  @Override
+  public void setBackground(Color c) {
+    super.setBackground(c);
+    unselectedBackground = c;
+  }
+
+  /**
+   * Overrides <code>JComponent.setForeground</code> to assign the
+   * unselected-foreground color to the specified color.
+   * 
+   * @param c
+   *          set the foreground color to this value
+   */
+  @Override
+  public void setForeground(Color c) {
+    super.setForeground(c);
+    unselectedForeground = c;
+  }
+
+  /**
+   * Notification from the <code>UIManager</code> that the look and feel [L&F]
+   * has changed. Replaces the current UI object with the latest version from
+   * the <code>UIManager</code>.
+   */
+  @Override
+  public void updateUI() {
+    super.updateUI();
+    setForeground(null);
+    setBackground(null);
   }
 
   /**
@@ -234,23 +250,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   @Override
-  protected void firePropertyChange(@SuppressWarnings("unused")
-  String propertyName, @SuppressWarnings("unused")
-  Object oldValue, @SuppressWarnings("unused")
-  Object newValue) {
-    // NO-OP
-  }
-
-  /**
-   * Overridden for performance reasons.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void firePropertyChange(@SuppressWarnings("unused")
-  String propertyName, @SuppressWarnings("unused")
-  boolean oldValue, @SuppressWarnings("unused")
-  boolean newValue) {
+  public void validate() {
     // NO-OP
   }
 

@@ -40,6 +40,15 @@ public class ConnectorSelectionEvent extends EventObject {
   }
 
   /**
+   * Gets the selectedConnector.
+   * 
+   * @return the selectedConnector.
+   */
+  public IValueConnector getSelectedConnector() {
+    return selectedConnector;
+  }
+
+  /**
    * Narrows return type.
    * <p>
    * {@inheritDoc}
@@ -47,14 +56,5 @@ public class ConnectorSelectionEvent extends EventObject {
   @Override
   public IValueConnector getSource() {
     return (IValueConnector) source;
-  }
-
-  /**
-   * Gets the selectedConnector.
-   * 
-   * @return the selectedConnector.
-   */
-  public IValueConnector getSelectedConnector() {
-    return selectedConnector;
   }
 }

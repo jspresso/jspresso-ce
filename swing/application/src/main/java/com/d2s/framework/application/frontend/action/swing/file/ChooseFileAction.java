@@ -25,63 +25,10 @@ import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
  */
 public class ChooseFileAction extends AbstractSwingAction {
 
-  private Map<String, List<String>> fileFilter;
-  private JFileChooser              fileChooser;
-  private String                    defaultFileName;
-
-  /**
-   * Gets the file chooser.
-   *
-   * @param context
-   *          the action context.
-   * @return the file chooser.
-   */
-  protected JFileChooser getFileChooser(Map<String, Object> context) {
-    if (fileChooser == null) {
-      fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
-          getLocale(context)));
-      if (fileFilter != null) {
-        for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
-            .entrySet()) {
-          StringBuffer extensionsDescription = new StringBuffer(" (");
-          for (String fileExtension : fileTypeEntry.getValue()) {
-            extensionsDescription.append("*").append(fileExtension).append(" ");
-          }
-          extensionsDescription.append(")");
-          fileChooser.addChoosableFileFilter(new FileFilterAdapter(
-              fileTypeEntry.getValue(), getTranslationProvider(context)
-                  .getTranslation(fileTypeEntry.getKey(), getLocale(context))
-                  + extensionsDescription.toString()));
-        }
-      }
-      fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-      if (defaultFileName != null) {
-        fileChooser.setSelectedFile(new File(defaultFileName));
-      }
-    }
-    return fileChooser;
-  }
-
-  /**
-   * Sets the fileFilter. Filter file types are a map of descriptions keying
-   * file extension arays.
-   *
-   * @param fileFilter
-   *          the fileFilter to set.
-   */
-  public void setFileFilter(Map<String, List<String>> fileFilter) {
-    Map<String, List<String>> oldFileFilter = this.fileFilter;
-    this.fileFilter = fileFilter;
-    if (oldFileFilter != this.fileFilter) {
-      fileChooser = null;
-    }
-  }
-
   private static class FileFilterAdapter extends FileFilter {
 
-    private String             description;
     private Collection<String> allowedExtensions;
+    private String             description;
 
     /**
      * Constructs a new <code>FileFilterAdapter</code> instance.
@@ -121,6 +68,53 @@ public class ChooseFileAction extends AbstractSwingAction {
     }
 
   }
+  private String                    defaultFileName;
+  private JFileChooser              fileChooser;
+
+  private Map<String, List<String>> fileFilter;
+
+  /**
+   * Gets the file chooser.
+   *
+   * @param context
+   *          the action context.
+   * @return the file chooser.
+   */
+  protected JFileChooser getFileChooser(Map<String, Object> context) {
+    if (fileChooser == null) {
+      fileChooser = new JFileChooser();
+      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
+          getLocale(context)));
+      if (fileFilter != null) {
+        for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
+            .entrySet()) {
+          StringBuffer extensionsDescription = new StringBuffer(" (");
+          for (String fileExtension : fileTypeEntry.getValue()) {
+            extensionsDescription.append("*").append(fileExtension).append(" ");
+          }
+          extensionsDescription.append(")");
+          fileChooser.addChoosableFileFilter(new FileFilterAdapter(
+              fileTypeEntry.getValue(), getTranslationProvider(context)
+                  .getTranslation(fileTypeEntry.getKey(), getLocale(context))
+                  + extensionsDescription.toString()));
+        }
+      }
+      fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+      if (defaultFileName != null) {
+        fileChooser.setSelectedFile(new File(defaultFileName));
+      }
+    }
+    return fileChooser;
+  }
+
+  /**
+   * Gets the fileFilter.
+   *
+   * @return the fileFilter.
+   */
+  protected Map<String, List<String>> getFileFilter() {
+    return fileFilter;
+  }
 
   /**
    * Sets the defaultFileName.
@@ -133,11 +127,17 @@ public class ChooseFileAction extends AbstractSwingAction {
   }
 
   /**
-   * Gets the fileFilter.
+   * Sets the fileFilter. Filter file types are a map of descriptions keying
+   * file extension arays.
    *
-   * @return the fileFilter.
+   * @param fileFilter
+   *          the fileFilter to set.
    */
-  protected Map<String, List<String>> getFileFilter() {
-    return fileFilter;
+  public void setFileFilter(Map<String, List<String>> fileFilter) {
+    Map<String, List<String>> oldFileFilter = this.fileFilter;
+    this.fileFilter = fileFilter;
+    if (oldFileFilter != this.fileFilter) {
+      fileChooser = null;
+    }
   }
 }

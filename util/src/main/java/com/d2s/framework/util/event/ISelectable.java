@@ -23,6 +23,13 @@ public interface ISelectable {
   void addSelectionChangeListener(ISelectionChangeListener listener);
 
   /**
+   * Gets the selected indices in this selectable.
+   * 
+   * @return the indices to set selected.
+   */
+  int[] getSelectedIndices();
+
+  /**
    * Removes a selection listener from this selectable.
    * 
    * @param listener
@@ -48,11 +55,4 @@ public interface ISelectable {
    *          leading selection index.
    */
   void setSelectedIndices(int[] selectedIndices, int leadingIndex);
-
-  /**
-   * Gets the selected indices in this selectable.
-   * 
-   * @return the indices to set selected.
-   */
-  int[] getSelectedIndices();
 }

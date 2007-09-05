@@ -31,8 +31,8 @@ public class BasicProxyComponentFactory implements IComponentFactory {
 
   private IAccessorFactory                        accessorFactory;
   private IComponentCollectionFactory<IComponent> componentCollectionFactory;
-  private IComponentExtensionFactory              componentExtensionFactory;
   private IComponentDescriptorRegistry            componentDescriptorRegistry;
+  private IComponentExtensionFactory              componentExtensionFactory;
 
   /**
    * {@inheritDoc}
@@ -44,6 +44,12 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     createdComponent
         .onCreate(null, getPrincipal(), getEntityLifecycleHandler());
     return createdComponent;
+  }
+
+  private InvocationHandler createComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
+    return new BasicComponentInvocationHandler(delegate, this, componentDescriptor,
+        componentCollectionFactory, accessorFactory, componentExtensionFactory);
   }
 
   @SuppressWarnings("unchecked")
@@ -69,10 +75,57 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return component;
   }
 
-  private InvocationHandler createComponentInvocationHandler(
-      IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
-    return new BasicComponentInvocationHandler(delegate, this, componentDescriptor,
-        componentCollectionFactory, accessorFactory, componentExtensionFactory);
+  /**
+   * Gets the accessorFactory.
+   *
+   * @return the accessorFactory.
+   */
+  protected IAccessorFactory getAccessorFactory() {
+    return accessorFactory;
+  }
+
+  /**
+   * Gets the componentCollectionFactory.
+   *
+   * @return the componentCollectionFactory.
+   */
+  protected IComponentCollectionFactory<IComponent> getComponentCollectionFactory() {
+    return componentCollectionFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
+    return componentDescriptorRegistry
+        .getComponentDescriptor(componentContract);
+  }
+
+  /**
+   * Gets the componentExtensionFactory.
+   *
+   * @return the componentExtensionFactory.
+   */
+  protected IComponentExtensionFactory getComponentExtensionFactory() {
+    return componentExtensionFactory;
+  }
+
+  /**
+   * Gets the entity lifecycle handler.
+   *
+   * @return the entity lifecycle handler.
+   */
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return null;
+  }
+
+  /**
+   * Gets the principal using the factory.
+   *
+   * @return the principal using the factory.
+   */
+  protected UserPrincipal getPrincipal() {
+    return null;
   }
 
   /**
@@ -97,53 +150,6 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   }
 
   /**
-   * Sets the componentExtensionFactory property.
-   *
-   * @param componentExtensionFactory
-   *          the componentCollectionFactory to set.
-   */
-  public void setComponentExtensionFactory(
-      IComponentExtensionFactory componentExtensionFactory) {
-    this.componentExtensionFactory = componentExtensionFactory;
-  }
-
-  /**
-   * Gets the accessorFactory.
-   *
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory() {
-    return accessorFactory;
-  }
-
-  /**
-   * Gets the componentCollectionFactory.
-   *
-   * @return the componentCollectionFactory.
-   */
-  protected IComponentCollectionFactory<IComponent> getComponentCollectionFactory() {
-    return componentCollectionFactory;
-  }
-
-  /**
-   * Gets the componentExtensionFactory.
-   *
-   * @return the componentExtensionFactory.
-   */
-  protected IComponentExtensionFactory getComponentExtensionFactory() {
-    return componentExtensionFactory;
-  }
-
-  /**
-   * Gets the principal using the factory.
-   *
-   * @return the principal using the factory.
-   */
-  protected UserPrincipal getPrincipal() {
-    return null;
-  }
-
-  /**
    * Sets the componentDescriptorRegistry.
    *
    * @param componentDescriptorRegistry
@@ -155,19 +161,13 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
-    return componentDescriptorRegistry
-        .getComponentDescriptor(componentContract);
-  }
-
-  /**
-   * Gets the entity lifecycle handler.
+   * Sets the componentExtensionFactory property.
    *
-   * @return the entity lifecycle handler.
+   * @param componentExtensionFactory
+   *          the componentCollectionFactory to set.
    */
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return null;
+  public void setComponentExtensionFactory(
+      IComponentExtensionFactory componentExtensionFactory) {
+    this.componentExtensionFactory = componentExtensionFactory;
   }
 }

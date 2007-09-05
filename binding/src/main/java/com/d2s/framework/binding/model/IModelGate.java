@@ -18,17 +18,17 @@ import com.d2s.framework.util.gate.IGate;
 public interface IModelGate extends IGate {
 
   /**
+   * Gets the modelProvider driving this gate.
+   * 
+   * @return the modelProvider driving this gate.
+   */
+  IModelProvider getModelProvider();
+
+  /**
    * Sets the modelProvider driving this gate.
    * 
    * @param modelProvider
    *          the modelProvider driving this gate.
    */
   void setModelProvider(IModelProvider modelProvider);
-
-  /**
-   * Gets the modelProvider driving this gate.
-   * 
-   * @return the modelProvider driving this gate.
-   */
-  IModelProvider getModelProvider();
 }

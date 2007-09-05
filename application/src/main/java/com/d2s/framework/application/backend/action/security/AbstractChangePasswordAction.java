@@ -31,23 +31,23 @@ public abstract class AbstractChangePasswordAction extends
     AbstractBackendAction {
 
   /**
+   * <code>PASSWD_CHANGE_DESCRIPTOR</code> is a unique reference to the model
+   * descriptor of the change password action.
+   */
+  public static final IComponentDescriptor PASSWD_CHANGE_DESCRIPTOR = createPasswordChangeModel();
+  /**
    * <code>PASSWD_CURRENT</code>.
    */
   public static final String               PASSWD_CURRENT           = "password.current";
-  /**
-   * <code>PASSWD_TYPED</code>.
-   */
-  public static final String               PASSWD_TYPED             = "password.typed";
   /**
    * <code>PASSWD_RETYPED</code>.
    */
   public static final String               PASSWD_RETYPED           = "password.retyped";
 
   /**
-   * <code>PASSWD_CHANGE_DESCRIPTOR</code> is a unique reference to the model
-   * descriptor of the change password action.
+   * <code>PASSWD_TYPED</code>.
    */
-  public static final IComponentDescriptor PASSWD_CHANGE_DESCRIPTOR = createPasswordChangeModel();
+  public static final String               PASSWD_TYPED             = "password.typed";
 
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
     BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();
@@ -68,6 +68,20 @@ public abstract class AbstractChangePasswordAction extends
 
     return passwordChangeModel;
   }
+
+  /**
+   * Performs the effective password change depending on the underlying storage.
+   * 
+   * @param userPrincipal
+   *          the connected user principal.
+   * @param currentPassword
+   *          the current password.
+   * @param newPassword
+   *          the new password.
+   * @return true if password was changed succesfully.
+   */
+  protected abstract boolean changePassword(UserPrincipal userPrincipal,
+      char[] currentPassword, char[] newPassword);
 
   /**
    * {@inheritDoc}
@@ -95,18 +109,4 @@ public abstract class AbstractChangePasswordAction extends
     }
     return false;
   }
-
-  /**
-   * Performs the effective password change depending on the underlying storage.
-   * 
-   * @param userPrincipal
-   *          the connected user principal.
-   * @param currentPassword
-   *          the current password.
-   * @param newPassword
-   *          the new password.
-   * @return true if password was changed succesfully.
-   */
-  protected abstract boolean changePassword(UserPrincipal userPrincipal,
-      char[] currentPassword, char[] newPassword);
 }

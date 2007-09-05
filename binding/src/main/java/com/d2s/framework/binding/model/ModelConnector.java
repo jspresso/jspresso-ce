@@ -42,8 +42,13 @@ public class ModelConnector extends ModelRefPropertyConnector {
    * {@inheritDoc}
    */
   @Override
-  public IModelProvider getModelProvider() {
-    return modelProvider;
+  public ModelConnector clone(String newConnectorId) {
+    ModelConnector clonedConnector = (ModelConnector) super
+        .clone(newConnectorId);
+    clonedConnector.modelProvider = new EmbeddedModelProvider(modelProvider
+        .getModelDescriptor());
+    clonedConnector.modelProviderChanged(null);
+    return clonedConnector;
   }
 
   /**
@@ -57,13 +62,11 @@ public class ModelConnector extends ModelRefPropertyConnector {
   }
 
   /**
-   * Sets the model itself (the java model instance).
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  protected void setConnecteeValue(Object aValue) {
-    ((EmbeddedModelProvider) getModelProvider()).setModel(aValue);
+  public IModelProvider getModelProvider() {
+    return modelProvider;
   }
 
   /**
@@ -75,15 +78,12 @@ public class ModelConnector extends ModelRefPropertyConnector {
   }
 
   /**
+   * Sets the model itself (the java model instance).
+   * <p>
    * {@inheritDoc}
    */
   @Override
-  public ModelConnector clone(String newConnectorId) {
-    ModelConnector clonedConnector = (ModelConnector) super
-        .clone(newConnectorId);
-    clonedConnector.modelProvider = new EmbeddedModelProvider(modelProvider
-        .getModelDescriptor());
-    clonedConnector.modelProviderChanged(null);
-    return clonedConnector;
+  protected void setConnecteeValue(Object aValue) {
+    ((EmbeddedModelProvider) getModelProvider()).setModel(aValue);
   }
 }

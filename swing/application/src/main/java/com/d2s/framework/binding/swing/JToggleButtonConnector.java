@@ -32,6 +32,23 @@ public class JToggleButtonConnector extends JComponentConnector<JToggleButton> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void bindJComponent() {
+    getConnectedJComponent().addActionListener(new ActionListener() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        fireConnectorValueChange();
+      }
+    });
+  }
+
+  /**
    * Returns a <code>Boolean</code> object mapping the state of the button.
    * <p>
    * {@inheritDoc}
@@ -53,23 +70,6 @@ public class JToggleButtonConnector extends JComponentConnector<JToggleButton> {
     } else {
       getConnectedJComponent().setSelected(((Boolean) aValue).booleanValue());
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void bindJComponent() {
-    getConnectedJComponent().addActionListener(new ActionListener() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
-        fireConnectorValueChange();
-      }
-    });
   }
 
   /**

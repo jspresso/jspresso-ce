@@ -21,14 +21,6 @@ public class ULCExtendedComboBox extends ULCComboBox {
   private static final long serialVersionUID = -7959139931231333809L;
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedComboBox";
-  }
-
-  /**
    * Constructs a new <code>ULCExtendedComboBox</code> instance.
    */
   public ULCExtendedComboBox() {
@@ -43,6 +35,14 @@ public class ULCExtendedComboBox extends ULCComboBox {
    */
   public ULCExtendedComboBox(IComboBoxModel model) {
     super(model);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIExtendedComboBox";
   }
 
 }

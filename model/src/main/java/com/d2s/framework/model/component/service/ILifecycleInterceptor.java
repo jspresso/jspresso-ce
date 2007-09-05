@@ -38,6 +38,23 @@ public interface ILifecycleInterceptor<E> {
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 
   /**
+   * Called whenever an persistent entity is deleted.
+   *
+   * @param component
+   *          the deleted entity.
+   * @param entityFactory
+   *          an entity factory instance which can be used to complete the
+   *          lifecycle step.
+   * @param principal
+   *          the principal triggering the action.
+   * @param entityLifecycleHandler
+   *          entityLifecycleHandler.
+   * @return true if the state of the entity has been updated.
+   */
+  boolean onDelete(E component, IEntityFactory entityFactory,
+      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
+
+  /**
    * Called whenever an entity is made persistent for the first time.
    *
    * @param component
@@ -69,22 +86,5 @@ public interface ILifecycleInterceptor<E> {
    * @return true if the state of the entity has been updated.
    */
   boolean onUpdate(E component, IEntityFactory entityFactory,
-      UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
-
-  /**
-   * Called whenever an persistent entity is deleted.
-   *
-   * @param component
-   *          the deleted entity.
-   * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
-   * @param principal
-   *          the principal triggering the action.
-   * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
-   * @return true if the state of the entity has been updated.
-   */
-  boolean onDelete(E component, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler);
 }

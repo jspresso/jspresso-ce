@@ -56,6 +56,24 @@ public class DescriptorAwareMapCollectionAccessor extends
   }
 
   /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  @Override
+  protected ICollectionPropertyDescriptor getModelDescriptor() {
+    return (ICollectionPropertyDescriptor) super.getModelDescriptor();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Collection getValue(Object target) {
+    return (Collection) super.getValue(target);
+  }
+
+  /**
    * {@inheritDoc}
    */
   public void removeFromValue(Object target, Object value) {
@@ -71,23 +89,5 @@ public class DescriptorAwareMapCollectionAccessor extends
     if (getModelDescriptor() != null) {
       getModelDescriptor().postprocessRemover(this, mapValue, value);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection getValue(Object target) {
-    return (Collection) super.getValue(target);
-  }
-
-  /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  @Override
-  protected ICollectionPropertyDescriptor getModelDescriptor() {
-    return (ICollectionPropertyDescriptor) super.getModelDescriptor();
   }
 }

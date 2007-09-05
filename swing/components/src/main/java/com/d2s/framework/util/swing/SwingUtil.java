@@ -40,75 +40,162 @@ import foxtrot.Worker;
  */
 public final class SwingUtil {
 
-  private static final double  DARKER_COLOR_FACTOR                         = 0.93;
+  private static final class FocusGainedTask implements Runnable {
 
-  private static final String  TEXTFIELD_FONT_KEY                          = "TextField.font";
-  private static final String  FORMATTED_TEXTFIELD_FONT_KEY                = "FormattedTextField.font";
-  private static final String  PASSWORDFIELD_FONT_KEY                      = "PasswordField.font";
-  private static final String  TEXTFIELD_INACTIVE_BACKGROUND_KEY           = "TextField.inactiveBackground";
-  private static final String  FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY = "FormattedTextField.inactiveBackground";
+    private JTextField textField;
 
-  private static final boolean DISABLE_THREADING                           = false;
+    /**
+     * Constructs a new <code>FocusGainedTask</code> instance.
+     * 
+     * @param textField
+     *          the text field to run on.
+     */
+    public FocusGainedTask(JTextField textField) {
+      this.textField = textField;
+    }
 
-  private SwingUtil() {
-    // Helper class private constructor.
+    /**
+     * {@inheritDoc}
+     */
+    public void run() {
+      if (!isUsedAsEditor(textField)) {
+        textField.selectAll();
+      }
+    }
   }
 
-  /**
-   * Tests wether in swing event dispatch thread. If not, use SwingUtilities to
-   * invoke runnable and wait.
-   * 
-   * @param runnable
-   *          the runnable operation which updates the GUI.
-   */
-  public static void updateSwingGui(Runnable runnable) {
-    if (DISABLE_THREADING) {
-      runnable.run();
-    } else {
-      if (SwingUtilities.isEventDispatchThread()) {
-        runnable.run();
-      } else {
-        try {
-          SwingUtilities.invokeAndWait(runnable);
-        } catch (InterruptedException ex) {
-          throw new NestedRuntimeException(ex);
-        } catch (InvocationTargetException ex) {
-          throw new NestedRuntimeException(ex);
+  private static final class FocusLostTask implements Runnable {
+
+    private JTextField textField;
+
+    /**
+     * Constructs a new <code>FocusLostTask</code> instance.
+     * 
+     * @param textField
+     *          the text field to run on.
+     */
+    public FocusLostTask(JTextField textField) {
+      this.textField = textField;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void run() {
+      if (!isUsedAsEditor(textField)) {
+        if (textField.getText().length() > 0) {
+          textField.getCaret().setDot(textField.getText().length());
         }
-        // SwingUtilities.invokeLater(runnable);
+      }
+    }
+  }
+  private static final double  DARKER_COLOR_FACTOR                         = 0.93;
+  private static final boolean DISABLE_THREADING                           = false;
+  private static final String  FORMATTED_TEXTFIELD_FONT_KEY                = "FormattedTextField.font";
+  private static final String  FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY = "FormattedTextField.inactiveBackground";
+
+  private static final String  PASSWORDFIELD_FONT_KEY                      = "PasswordField.font";
+
+  private static final String  TEXTFIELD_FONT_KEY                          = "TextField.font";
+
+  private static final String  TEXTFIELD_INACTIVE_BACKGROUND_KEY           = "TextField.inactiveBackground";
+
+  /**
+   * Make even and odd rows background colors slightly different in collection
+   * component (table, list, ...).
+   * 
+   * @param renderer
+   *          the renderer to work on.
+   * @param collectionComponent
+   *          the collection component (table, list, ...) on which this renderer
+   *          is used.
+   * @param isSelected
+   *          is the row selected ?
+   * @param row
+   *          the row to render.
+   */
+  public static void alternateEvenOddBackground(Component renderer,
+      Component collectionComponent, boolean isSelected, int row) {
+    if (!isSelected) {
+      if (row % 2 == 1) {
+        renderer.setBackground(SwingUtil.getScaledColor(collectionComponent
+            .getBackground(), DARKER_COLOR_FACTOR));
+      } else {
+        renderer.setBackground(collectionComponent.getBackground());
       }
     }
   }
 
   /**
-   * Gets the window or the internal frame holding the component.
+   * Center a window on screen.
    * 
-   * @param component
-   *          the component to look the window or internal frame for.
-   * @return the window (frame or dialog) or the internal frame in the component
-   *         hierarchy.
+   * @param w
+   *          the window to center on screen.
    */
-  public static Component getWindowOrInternalFrame(Component component) {
-    if ((component instanceof Window) || (component instanceof JInternalFrame)) {
-      return component;
-    } else if (component != null) {
-      return getWindowOrInternalFrame(component.getParent());
+  public static void centerInParent(Window w) {
+    Container parent = w.getParent();
+    if (parent != null) {
+      Dimension parentSize = parent.getSize();
+      w.setLocation((parentSize.width - w.getWidth()) / 2,
+          (parentSize.height - w.getHeight()) / 2);
     }
-    return null;
   }
 
   /**
-   * Executes a job avoiding the common swing UI freeze.
+   * Center a window on screen.
    * 
-   * @param foxtrotJob
-   *          the potentially long running job to execute.
-   * @return the job execution result.
+   * @param w
+   *          the window to center on screen.
    */
-  public static Object performLongOperation(Job foxtrotJob) {
-    if (DISABLE_THREADING) {
-      return foxtrotJob.run();
-    }
-    return Worker.post(foxtrotJob);
+  public static void centerOnScreen(Window w) {
+    Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
+    w.setLocation((screenDim.width - w.getWidth()) / 2, (screenDim.height - w
+        .getHeight()) / 2);
+  }
+
+  /**
+   * Configures a jbutton with default behaviour like the multi-click treshold.
+   * 
+   * @param button
+   *          the button to work on.
+   */
+  public static void configureButton(JButton button) {
+    button.setMultiClickThreshhold(500);
+  }
+
+  /**
+   * Configures a textfield so that it selects its content when getting focus by
+   * another mean than the mouse.
+   * 
+   * @param textField
+   *          the textfield to work on.
+   */
+  public static void enableSelectionOnFocusGained(final JTextField textField) {
+
+    textField.addFocusListener(new FocusListener() {
+
+      public void focusGained(FocusEvent fe) {
+        if (fe.getOppositeComponent() != null) {
+          FocusGainedTask task = new FocusGainedTask(textField);
+          if (textField instanceof JFormattedTextField) {
+            SwingUtilities.invokeLater(task);
+          } else {
+            task.run();
+          }
+        }
+      }
+
+      public void focusLost(FocusEvent fe) {
+        if (!fe.isTemporary()) {
+          FocusLostTask task = new FocusLostTask(textField);
+          if (textField instanceof JFormattedTextField) {
+            SwingUtilities.invokeLater(task);
+          } else {
+            task.run();
+          }
+        }
+      }
+    });
   }
 
   /**
@@ -177,29 +264,38 @@ public final class SwingUtil {
   }
 
   /**
-   * Make even and odd rows background colors slightly different in collection
-   * component (table, list, ...).
+   * Gets the visible parent window.
    * 
-   * @param renderer
-   *          the renderer to work on.
-   * @param collectionComponent
-   *          the collection component (table, list, ...) on which this renderer
-   *          is used.
-   * @param isSelected
-   *          is the row selected ?
-   * @param row
-   *          the row to render.
+   * @param component
+   *          the component to start from
+   * @return the visible parent window or null.
    */
-  public static void alternateEvenOddBackground(Component renderer,
-      Component collectionComponent, boolean isSelected, int row) {
-    if (!isSelected) {
-      if (row % 2 == 1) {
-        renderer.setBackground(SwingUtil.getScaledColor(collectionComponent
-            .getBackground(), DARKER_COLOR_FACTOR));
-      } else {
-        renderer.setBackground(collectionComponent.getBackground());
-      }
+  public static Window getVisibleWindow(Component component) {
+    if (component instanceof JWindow) {
+      return (JWindow) component;
     }
+    Window w = SwingUtilities.getWindowAncestor(component);
+    if (w != null && !w.isVisible() && w.getParent() != null) {
+      return getVisibleWindow(w.getParent());
+    }
+    return w;
+  }
+
+  /**
+   * Gets the window or the internal frame holding the component.
+   * 
+   * @param component
+   *          the component to look the window or internal frame for.
+   * @return the window (frame or dialog) or the internal frame in the component
+   *         hierarchy.
+   */
+  public static Component getWindowOrInternalFrame(Component component) {
+    if ((component instanceof Window) || (component instanceof JInternalFrame)) {
+      return component;
+    } else if (component != null) {
+      return getWindowOrInternalFrame(component.getParent());
+    }
+    return null;
   }
 
   /**
@@ -244,142 +340,46 @@ public final class SwingUtil {
   }
 
   /**
-   * Configures a textfield so that it selects its content when getting focus by
-   * another mean than the mouse.
+   * Executes a job avoiding the common swing UI freeze.
    * 
-   * @param textField
-   *          the textfield to work on.
+   * @param foxtrotJob
+   *          the potentially long running job to execute.
+   * @return the job execution result.
    */
-  public static void enableSelectionOnFocusGained(final JTextField textField) {
+  public static Object performLongOperation(Job foxtrotJob) {
+    if (DISABLE_THREADING) {
+      return foxtrotJob.run();
+    }
+    return Worker.post(foxtrotJob);
+  }
 
-    textField.addFocusListener(new FocusListener() {
-
-      public void focusGained(FocusEvent fe) {
-        if (fe.getOppositeComponent() != null) {
-          FocusGainedTask task = new FocusGainedTask(textField);
-          if (textField instanceof JFormattedTextField) {
-            SwingUtilities.invokeLater(task);
-          } else {
-            task.run();
-          }
+  /**
+   * Tests wether in swing event dispatch thread. If not, use SwingUtilities to
+   * invoke runnable and wait.
+   * 
+   * @param runnable
+   *          the runnable operation which updates the GUI.
+   */
+  public static void updateSwingGui(Runnable runnable) {
+    if (DISABLE_THREADING) {
+      runnable.run();
+    } else {
+      if (SwingUtilities.isEventDispatchThread()) {
+        runnable.run();
+      } else {
+        try {
+          SwingUtilities.invokeAndWait(runnable);
+        } catch (InterruptedException ex) {
+          throw new NestedRuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+          throw new NestedRuntimeException(ex);
         }
-      }
-
-      public void focusLost(FocusEvent fe) {
-        if (!fe.isTemporary()) {
-          FocusLostTask task = new FocusLostTask(textField);
-          if (textField instanceof JFormattedTextField) {
-            SwingUtilities.invokeLater(task);
-          } else {
-            task.run();
-          }
-        }
-      }
-    });
-  }
-
-  private static final class FocusGainedTask implements Runnable {
-
-    private JTextField textField;
-
-    /**
-     * Constructs a new <code>FocusGainedTask</code> instance.
-     * 
-     * @param textField
-     *          the text field to run on.
-     */
-    public FocusGainedTask(JTextField textField) {
-      this.textField = textField;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void run() {
-      if (!isUsedAsEditor(textField)) {
-        textField.selectAll();
+        // SwingUtilities.invokeLater(runnable);
       }
     }
   }
 
-  private static final class FocusLostTask implements Runnable {
-
-    private JTextField textField;
-
-    /**
-     * Constructs a new <code>FocusLostTask</code> instance.
-     * 
-     * @param textField
-     *          the text field to run on.
-     */
-    public FocusLostTask(JTextField textField) {
-      this.textField = textField;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void run() {
-      if (!isUsedAsEditor(textField)) {
-        if (textField.getText().length() > 0) {
-          textField.getCaret().setDot(textField.getText().length());
-        }
-      }
-    }
-  }
-
-  /**
-   * Configures a jbutton with default behaviour like the multi-click treshold.
-   * 
-   * @param button
-   *          the button to work on.
-   */
-  public static void configureButton(JButton button) {
-    button.setMultiClickThreshhold(500);
-  }
-
-  /**
-   * Center a window on screen.
-   * 
-   * @param w
-   *          the window to center on screen.
-   */
-  public static void centerOnScreen(Window w) {
-    Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
-    w.setLocation((screenDim.width - w.getWidth()) / 2, (screenDim.height - w
-        .getHeight()) / 2);
-  }
-
-  /**
-   * Center a window on screen.
-   * 
-   * @param w
-   *          the window to center on screen.
-   */
-  public static void centerInParent(Window w) {
-    Container parent = w.getParent();
-    if (parent != null) {
-      Dimension parentSize = parent.getSize();
-      w.setLocation((parentSize.width - w.getWidth()) / 2,
-          (parentSize.height - w.getHeight()) / 2);
-    }
-  }
-
-  /**
-   * Gets the visible parent window.
-   * 
-   * @param component
-   *          the component to start from
-   * @return the visible parent window or null.
-   */
-  public static Window getVisibleWindow(Component component) {
-    if (component instanceof JWindow) {
-      return (JWindow) component;
-    }
-    Window w = SwingUtilities.getWindowAncestor(component);
-    if (w != null && !w.isVisible() && w.getParent() != null) {
-      return getVisibleWindow(w.getParent());
-    }
-    return w;
+  private SwingUtil() {
+    // Helper class private constructor.
   }
 }

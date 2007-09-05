@@ -36,29 +36,6 @@ public abstract class AbstractTreeModel implements TreeModel {
   }
 
   /**
-   * Removes a listener previously added with <B>addTreeModelListener()</B>.
-   * 
-   * @see #addTreeModelListener
-   * @param l
-   *          the listener to remove
-   */
-  public void removeTreeModelListener(TreeModelListener l) {
-    listenerList.remove(TreeModelListener.class, l);
-  }
-
-  /**
-   * Returns an array of all the tree model listeners registered on this model.
-   * 
-   * @return all of this model's <code>TreeModelListener</code>s or an empty
-   *         array if no tree model listeners are currently registered
-   * @see #addTreeModelListener
-   * @see #removeTreeModelListener
-   */
-  public TreeModelListener[] getTreeModelListeners() {
-    return listenerList.getListeners(TreeModelListener.class);
-  }
-
-  /**
    * Notifies all listeners that have registered interest for notification on
    * this event type. The event instance is lazily created using the parameters
    * passed into the fire method.
@@ -248,5 +225,28 @@ public abstract class AbstractTreeModel implements TreeModel {
    */
   public <T extends EventListener> T[] getListeners(Class<T> listenerType) {
     return listenerList.getListeners(listenerType);
+  }
+
+  /**
+   * Returns an array of all the tree model listeners registered on this model.
+   * 
+   * @return all of this model's <code>TreeModelListener</code>s or an empty
+   *         array if no tree model listeners are currently registered
+   * @see #addTreeModelListener
+   * @see #removeTreeModelListener
+   */
+  public TreeModelListener[] getTreeModelListeners() {
+    return listenerList.getListeners(TreeModelListener.class);
+  }
+
+  /**
+   * Removes a listener previously added with <B>addTreeModelListener()</B>.
+   * 
+   * @see #addTreeModelListener
+   * @param l
+   *          the listener to remove
+   */
+  public void removeTreeModelListener(TreeModelListener l) {
+    listenerList.remove(TreeModelListener.class, l);
   }
 }

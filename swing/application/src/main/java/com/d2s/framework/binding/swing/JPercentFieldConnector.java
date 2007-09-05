@@ -30,12 +30,11 @@ public class JPercentFieldConnector extends JFormattedFieldConnector {
    *          the id of the connector.
    * @param textField
    *          the connected JTextField.
-   * @param formatter
-   *          the formatter to use to extract the object value.
+   * @param format
+   *          the j2se format to use to extract the object value.
    */
-  public JPercentFieldConnector(String id, JTextField textField,
-      IFormatter formatter) {
-    super(id, textField, formatter);
+  public JPercentFieldConnector(String id, JTextField textField, Format format) {
+    this(id, textField, new FormatAdapter(format));
   }
 
   /**
@@ -45,11 +44,12 @@ public class JPercentFieldConnector extends JFormattedFieldConnector {
    *          the id of the connector.
    * @param textField
    *          the connected JTextField.
-   * @param format
-   *          the j2se format to use to extract the object value.
+   * @param formatter
+   *          the formatter to use to extract the object value.
    */
-  public JPercentFieldConnector(String id, JTextField textField, Format format) {
-    this(id, textField, new FormatAdapter(format));
+  public JPercentFieldConnector(String id, JTextField textField,
+      IFormatter formatter) {
+    super(id, textField, formatter);
   }
 
   /**

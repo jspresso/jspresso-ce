@@ -38,31 +38,6 @@ public class BasicEntityRegistry implements IEntityRegistry {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void register(IEntity entity) {
-    IEntity existingRegisteredEntity = get(entity.getContract(), entity.getId());
-    if (existingRegisteredEntity != null) {
-      if (entity != existingRegisteredEntity) {
-        throw new EntityRegistryException(
-            "This entity was previously registered with a different instance"
-                + entity);
-      }
-      // do nothing since the entity is already registered.
-    } else {
-      Map<Object, IEntity> contractStore = backingStore.get(entity
-          .getContract());
-      if (contractStore == null) {
-        contractStore = new ReferenceMap(AbstractReferenceMap.HARD,
-            AbstractReferenceMap.WEAK, true);
-        backingStore.put(entity.getContract(), contractStore);
-      }
-      contractStore.put(entity.getId(), entity);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
   public IEntity get(Class entityContract, Object id) {
     IEntity registeredEntity = null;
     Map<Object, IEntity> contractStore = backingStore.get(entityContract);
@@ -90,5 +65,30 @@ public class BasicEntityRegistry implements IEntityRegistry {
       }
     }
     return registeredEntity;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public void register(IEntity entity) {
+    IEntity existingRegisteredEntity = get(entity.getContract(), entity.getId());
+    if (existingRegisteredEntity != null) {
+      if (entity != existingRegisteredEntity) {
+        throw new EntityRegistryException(
+            "This entity was previously registered with a different instance"
+                + entity);
+      }
+      // do nothing since the entity is already registered.
+    } else {
+      Map<Object, IEntity> contractStore = backingStore.get(entity
+          .getContract());
+      if (contractStore == null) {
+        contractStore = new ReferenceMap(AbstractReferenceMap.HARD,
+            AbstractReferenceMap.WEAK, true);
+        backingStore.put(entity.getContract(), contractStore);
+      }
+      contractStore.put(entity.getId(), entity);
+    }
   }
 }

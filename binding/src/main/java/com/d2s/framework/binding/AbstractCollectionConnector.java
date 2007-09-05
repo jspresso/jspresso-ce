@@ -29,15 +29,15 @@ public abstract class AbstractCollectionConnector extends
     AbstractCompositeValueConnector implements ICollectionConnector,
     IConnectorSelector {
 
-  private IMvcBinder               mvcBinder;
-  private ICompositeValueConnector childConnectorPrototype;
-  private SelectionChangeSupport   selectionChangeSupport;
-  private List<IValueConnector>    removedChildrenConnectors;
-
   private boolean                  allowLazyChildrenLoading;
+  private ICompositeValueConnector childConnectorPrototype;
+  private boolean                  isDelayedEvent;
+  private IMvcBinder               mvcBinder;
+
   private boolean                  needsChildrenUpdate;
   private boolean                  needsFireConnectorValueChange;
-  private boolean                  isDelayedEvent;
+  private List<IValueConnector>    removedChildrenConnectors;
+  private SelectionChangeSupport   selectionChangeSupport;
 
   /**
    * Creates a new <code>AbstractCollectionConnector</code>.
@@ -61,6 +61,87 @@ public abstract class AbstractCollectionConnector extends
     needsChildrenUpdate = false;
     needsFireConnectorValueChange = false;
     isDelayedEvent = false;
+  }
+
+  /**
+   * After having called the super implementation, removes the child connector
+   * from the cache since it is held by the connector itself.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void addChildConnector(IValueConnector connector) {
+    super.addChildConnector(connector);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void addConnectorSelectionListener(IConnectorSelectionListener listener) {
+    implAddConnectorSelectionListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void addSelectionChangeListener(ISelectionChangeListener listener) {
+    selectionChangeSupport.addSelectionChangeListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean areChildrenReadable() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean areChildrenWritable() {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public AbstractCollectionConnector clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public AbstractCollectionConnector clone(String newConnectorId) {
+    AbstractCollectionConnector clonedConnector = (AbstractCollectionConnector) super
+        .clone(newConnectorId);
+    clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
+        clonedConnector);
+    clonedConnector.removedChildrenConnectors = null;
+    clonedConnector.allowLazyChildrenLoading = false;
+    clonedConnector.needsChildrenUpdate = false;
+    clonedConnector.needsFireConnectorValueChange = false;
+    clonedConnector.isDelayedEvent = false;
+    clonedConnector.setAllowLazyChildrenLoading(allowLazyChildrenLoading);
+    return clonedConnector;
+  }
+
+  private String computeConnectorId(int i) {
+    return CollectionConnectorHelper.computeConnectorId(getId(), i);
+  }
+
+  /**
+   * Takes a snapshot of the collection (does not keep the reference itself).
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object computeOldConnectorValue(Object connectorValue) {
+    return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
   }
 
   /**
@@ -93,14 +174,182 @@ public abstract class AbstractCollectionConnector extends
   }
 
   /**
-   * After having called the super implementation, removes the child connector
-   * from the cache since it is held by the connector itself.
+   * creates a new connector cloning the connector prototype.
    * <p>
    * {@inheritDoc}
    */
+  public IValueConnector createChildConnector(String newConnectorId) {
+    return childConnectorPrototype.clone(newConnectorId);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public void addChildConnector(IValueConnector connector) {
-    super.addChildConnector(connector);
+  protected void fireConnectorValueChange() {
+    needsFireConnectorValueChange = true;
+    if (!allowLazyChildrenLoading) {
+      needsFireConnectorValueChange = false;
+      super.fireConnectorValueChange();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
+    implFireSelectedConnectorChange(evt);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IValueConnector getChildConnector(int index) {
+    return getChildConnector(computeConnectorId(index));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Collection<String> getChildConnectorKeys() {
+    if (allowLazyChildrenLoading) {
+      return Collections.<String> emptyList();
+    }
+    return super.getChildConnectorKeys();
+  }
+
+  /**
+   * Gets the childConnectorPrototype.
+   * 
+   * @return the childConnectorPrototype.
+   */
+  public ICompositeValueConnector getChildConnectorPrototype() {
+    return childConnectorPrototype;
+  }
+
+  /**
+   * Returns this.
+   * <p>
+   * {@inheritDoc}
+   */
+  public ICollectionConnector getCollectionConnector() {
+    return this;
+  }
+
+  /**
+   * Returns singleton list of this.
+   * <p>
+   * {@inheritDoc}
+   */
+  public List<ICollectionConnector> getCollectionConnectors() {
+    return Collections.singletonList((ICollectionConnector) this);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int[] getSelectedIndices() {
+    return selectionChangeSupport.getSelectedIndices();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isAllowLazyChildrenLoading() {
+    return allowLazyChildrenLoading;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeConnectorSelectionListener(
+      IConnectorSelectionListener listener) {
+    implRemoveConnectorSelectionListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void removeSelectionChangeListener(ISelectionChangeListener listener) {
+    selectionChangeSupport.removeSelectionChangeListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void selectionChange(SelectionChangeEvent evt) {
+    if (evt.getSource() instanceof ISelectionChangeListener) {
+      selectionChangeSupport
+          .addInhibitedListener((ISelectionChangeListener) evt.getSource());
+    }
+    try {
+      setSelectedIndices(evt.getNewSelection(), evt.getLeadingIndex());
+    } finally {
+      if (evt.getSource() instanceof ISelectionChangeListener) {
+        selectionChangeSupport
+            .removeInhibitedListener((ISelectionChangeListener) evt.getSource());
+      }
+    }
+  }
+
+  /**
+   * Sets the allowLazyChildrenLoading.
+   * 
+   * @param allowLazyChildrenLoading
+   *          the allowLazyChildrenLoading to set.
+   */
+  public void setAllowLazyChildrenLoading(boolean allowLazyChildrenLoading) {
+    this.allowLazyChildrenLoading = allowLazyChildrenLoading;
+    if (needsChildrenUpdate) {
+      updateChildConnectors();
+    }
+    if (needsFireConnectorValueChange) {
+      try {
+        isDelayedEvent = true;
+        fireConnectorValueChange();
+      } finally {
+        isDelayedEvent = false;
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSelectedIndices(int[] newSelectedIndices) {
+    int leadingIndex = -1;
+    if (newSelectedIndices != null && newSelectedIndices.length > 0) {
+      leadingIndex = newSelectedIndices[newSelectedIndices.length - 1];
+    }
+    setSelectedIndices(newSelectedIndices, leadingIndex);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
+    selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
+    if (newSelectedIndices == null || newSelectedIndices.length == 0) {
+      implFireSelectedConnectorChange((IValueConnector) null);
+    } else {
+      implFireSelectedConnectorChange(getChildConnector(leadingIndex));
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
+    implSetTracksChildrenSelection(tracksChildrenSelection);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    return getId();
   }
 
   /**
@@ -136,254 +385,5 @@ public abstract class AbstractCollectionConnector extends
         removeChildConnector(connectorToRemove);
       }
     }
-  }
-
-  private String computeConnectorId(int i) {
-    return CollectionConnectorHelper.computeConnectorId(getId(), i);
-  }
-
-  /**
-   * creates a new connector cloning the connector prototype.
-   * <p>
-   * {@inheritDoc}
-   */
-  public IValueConnector createChildConnector(String newConnectorId) {
-    return childConnectorPrototype.clone(newConnectorId);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public AbstractCollectionConnector clone(String newConnectorId) {
-    AbstractCollectionConnector clonedConnector = (AbstractCollectionConnector) super
-        .clone(newConnectorId);
-    clonedConnector.selectionChangeSupport = new SelectionChangeSupport(
-        clonedConnector);
-    clonedConnector.removedChildrenConnectors = null;
-    clonedConnector.allowLazyChildrenLoading = false;
-    clonedConnector.needsChildrenUpdate = false;
-    clonedConnector.needsFireConnectorValueChange = false;
-    clonedConnector.isDelayedEvent = false;
-    clonedConnector.setAllowLazyChildrenLoading(allowLazyChildrenLoading);
-    return clonedConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public AbstractCollectionConnector clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IValueConnector getChildConnector(int index) {
-    return getChildConnector(computeConnectorId(index));
-  }
-
-  /**
-   * Takes a snapshot of the collection (does not keep the reference itself).
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object computeOldConnectorValue(Object connectorValue) {
-    return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
-  }
-
-  /**
-   * Gets the childConnectorPrototype.
-   * 
-   * @return the childConnectorPrototype.
-   */
-  public ICompositeValueConnector getChildConnectorPrototype() {
-    return childConnectorPrototype;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addSelectionChangeListener(ISelectionChangeListener listener) {
-    selectionChangeSupport.addSelectionChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removeSelectionChangeListener(ISelectionChangeListener listener) {
-    selectionChangeSupport.removeSelectionChangeListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setSelectedIndices(int[] newSelectedIndices) {
-    int leadingIndex = -1;
-    if (newSelectedIndices != null && newSelectedIndices.length > 0) {
-      leadingIndex = newSelectedIndices[newSelectedIndices.length - 1];
-    }
-    setSelectedIndices(newSelectedIndices, leadingIndex);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setSelectedIndices(int[] newSelectedIndices, int leadingIndex) {
-    selectionChangeSupport.setSelectedIndices(newSelectedIndices, leadingIndex);
-    if (newSelectedIndices == null || newSelectedIndices.length == 0) {
-      implFireSelectedConnectorChange((IValueConnector) null);
-    } else {
-      implFireSelectedConnectorChange(getChildConnector(leadingIndex));
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int[] getSelectedIndices() {
-    return selectionChangeSupport.getSelectedIndices();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void selectionChange(SelectionChangeEvent evt) {
-    if (evt.getSource() instanceof ISelectionChangeListener) {
-      selectionChangeSupport
-          .addInhibitedListener((ISelectionChangeListener) evt.getSource());
-    }
-    try {
-      setSelectedIndices(evt.getNewSelection(), evt.getLeadingIndex());
-    } finally {
-      if (evt.getSource() instanceof ISelectionChangeListener) {
-        selectionChangeSupport
-            .removeInhibitedListener((ISelectionChangeListener) evt.getSource());
-      }
-    }
-  }
-
-  /**
-   * Returns this.
-   * <p>
-   * {@inheritDoc}
-   */
-  public ICollectionConnector getCollectionConnector() {
-    return this;
-  }
-
-  /**
-   * Returns singleton list of this.
-   * <p>
-   * {@inheritDoc}
-   */
-  public List<ICollectionConnector> getCollectionConnectors() {
-    return Collections.singletonList((ICollectionConnector) this);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    return getId();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addConnectorSelectionListener(IConnectorSelectionListener listener) {
-    implAddConnectorSelectionListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
-    implFireSelectedConnectorChange(evt);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void removeConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    implRemoveConnectorSelectionListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
-    implSetTracksChildrenSelection(tracksChildrenSelection);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Collection<String> getChildConnectorKeys() {
-    if (allowLazyChildrenLoading) {
-      return Collections.<String> emptyList();
-    }
-    return super.getChildConnectorKeys();
-  }
-
-  /**
-   * Sets the allowLazyChildrenLoading.
-   * 
-   * @param allowLazyChildrenLoading
-   *          the allowLazyChildrenLoading to set.
-   */
-  public void setAllowLazyChildrenLoading(boolean allowLazyChildrenLoading) {
-    this.allowLazyChildrenLoading = allowLazyChildrenLoading;
-    if (needsChildrenUpdate) {
-      updateChildConnectors();
-    }
-    if (needsFireConnectorValueChange) {
-      try {
-        isDelayedEvent = true;
-        fireConnectorValueChange();
-      } finally {
-        isDelayedEvent = false;
-      }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isAllowLazyChildrenLoading() {
-    return allowLazyChildrenLoading;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void fireConnectorValueChange() {
-    needsFireConnectorValueChange = true;
-    if (!allowLazyChildrenLoading) {
-      needsFireConnectorValueChange = false;
-      super.fireConnectorValueChange();
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean areChildrenReadable() {
-    return true;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean areChildrenWritable() {
-    return true;
   }
 }

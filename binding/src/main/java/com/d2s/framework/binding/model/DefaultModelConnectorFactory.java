@@ -79,16 +79,6 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   }
 
   /**
-   * Sets the factory for the accessors used to access the model properties.
-   *
-   * @param accessorFactory
-   *          The <code>IAccessorFactory</code> to use.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public IAccessorFactory getAccessorFactory() {
@@ -102,6 +92,16 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    */
   public IComponentDescriptorRegistry getDescriptorRegistry() {
     return descriptorRegistry;
+  }
+
+  /**
+   * Sets the factory for the accessors used to access the model properties.
+   *
+   * @param accessorFactory
+   *          The <code>IAccessorFactory</code> to use.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
   }
 
   /**

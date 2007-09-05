@@ -32,6 +32,23 @@ public class SToggleButtonConnector extends SComponentConnector<SToggleButton> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void bindSComponent() {
+    getConnectedSComponent().addActionListener(new ActionListener() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        fireConnectorValueChange();
+      }
+    });
+  }
+
+  /**
    * Returns a <code>Boolean</code> object mapping the state of the button.
    * <p>
    * {@inheritDoc}
@@ -53,23 +70,6 @@ public class SToggleButtonConnector extends SComponentConnector<SToggleButton> {
     } else {
       getConnectedSComponent().setSelected(((Boolean) aValue).booleanValue());
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void bindSComponent() {
-    getConnectedSComponent().addActionListener(new ActionListener() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
-        fireConnectorValueChange();
-      }
-    });
   }
 
   /**

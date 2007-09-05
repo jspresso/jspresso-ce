@@ -30,14 +30,6 @@ public interface IConnectorMap {
   void addConnector(String storageKey, IValueConnector connector);
 
   /**
-   * Removes a connector from the connector map.
-   * 
-   * @param storageKey
-   *          The removed connector storage key.
-   */
-  void removeConnector(String storageKey);
-
-  /**
    * Gets a connector based on its storage key.
    * 
    * @param storageKey
@@ -59,4 +51,12 @@ public interface IConnectorMap {
    * @return true if this map holds connectors.
    */
   boolean hasConnectors();
+
+  /**
+   * Removes a connector from the connector map.
+   * 
+   * @param storageKey
+   *          The removed connector storage key.
+   */
+  void removeConnector(String storageKey);
 }

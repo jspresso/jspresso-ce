@@ -31,6 +31,25 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void bindULCComponent() {
+    getConnectedULCComponent().addActionListener(new IActionListener() {
+
+      private static final long serialVersionUID = -4418440147926893407L;
+
+      /**
+       * {@inheritDoc}
+       */
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        fireConnectorValueChange();
+      }
+    });
+  }
+
+  /**
    * Returns the selected object in the combobox.
    * <p>
    * {@inheritDoc}
@@ -48,25 +67,6 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedULCComponent().setSelectedItem(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void bindULCComponent() {
-    getConnectedULCComponent().addActionListener(new IActionListener() {
-
-      private static final long serialVersionUID = -4418440147926893407L;
-
-      /**
-       * {@inheritDoc}
-       */
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
-        fireConnectorValueChange();
-      }
-    });
   }
 
   /**

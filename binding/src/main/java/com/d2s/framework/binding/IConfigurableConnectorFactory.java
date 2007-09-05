@@ -16,18 +16,6 @@ package com.d2s.framework.binding;
 public interface IConfigurableConnectorFactory {
 
   /**
-   * Creates a <code>ICompositeValueConnector</code>.
-   * 
-   * @param id
-   *          the connector identifier.
-   * @param renderingConnectorId
-   *          the child connector used to render the composite connector value.
-   * @return the created connector.
-   */
-  ICompositeValueConnector createCompositeValueConnector(String id,
-      String renderingConnectorId);
-
-  /**
    * Creates a <code>ICollectionConnector</code>.
    * 
    * @param id
@@ -43,7 +31,7 @@ public interface IConfigurableConnectorFactory {
       ICompositeValueConnector childConnectorPrototype);
 
   /**
-   * Creates a <code>IConfigurableCollectionConnectorProvider</code>.
+   * Creates a <code>ICompositeValueConnector</code>.
    * 
    * @param id
    *          the connector identifier.
@@ -51,8 +39,8 @@ public interface IConfigurableConnectorFactory {
    *          the child connector used to render the composite connector value.
    * @return the created connector.
    */
-  IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
-      String id, String renderingConnectorId);
+  ICompositeValueConnector createCompositeValueConnector(String id,
+      String renderingConnectorId);
 
   /**
    * Creates a <code>IConfigurableCollectionConnectorListProvider</code>.
@@ -64,6 +52,18 @@ public interface IConfigurableConnectorFactory {
    * @return the created connector.
    */
   IConfigurableCollectionConnectorListProvider createConfigurableCollectionConnectorListProvider(
+      String id, String renderingConnectorId);
+
+  /**
+   * Creates a <code>IConfigurableCollectionConnectorProvider</code>.
+   * 
+   * @param id
+   *          the connector identifier.
+   * @param renderingConnectorId
+   *          the child connector used to render the composite connector value.
+   * @return the created connector.
+   */
+  IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
       String id, String renderingConnectorId);
 
   /**

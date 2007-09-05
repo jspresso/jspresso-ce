@@ -14,26 +14,10 @@ package com.d2s.framework.gui.ulc.components.shared;
  */
 public final class JEditTextAreaConstants {
 
-  private JEditTextAreaConstants() {
-    // Empty constructor for utility class
-  }
-
-  // request constants
   /**
-   * <code>SET_TEXT_REQUEST</code>.
+   * <code>EDITABLE_KEY</code>.
    */
-  public static final String SET_TEXT_REQUEST     = "setText";
-
-  /**
-   * <code>SET_EDITABLE_REQUEST</code>.
-   */
-  public static final String SET_EDITABLE_REQUEST = "setEditable";
-
-  // anything key constants
-  /**
-   * <code>VALUE_KEY</code>.
-   */
-  public static final String TEXT_KEY             = "text";
+  public static final String EDITABLE_KEY         = "editable";
 
   /**
    * <code>LANGUAGE_KEY</code>.
@@ -41,7 +25,23 @@ public final class JEditTextAreaConstants {
   public static final String LANGUAGE_KEY         = "language";
 
   /**
-   * <code>EDITABLE_KEY</code>.
+   * <code>SET_EDITABLE_REQUEST</code>.
    */
-  public static final String EDITABLE_KEY         = "editable";
+  public static final String SET_EDITABLE_REQUEST = "setEditable";
+
+  // request constants
+  /**
+   * <code>SET_TEXT_REQUEST</code>.
+   */
+  public static final String SET_TEXT_REQUEST     = "setText";
+
+  // anything key constants
+  /**
+   * <code>VALUE_KEY</code>.
+   */
+  public static final String TEXT_KEY             = "text";
+
+  private JEditTextAreaConstants() {
+    // Empty constructor for utility class
+  }
 }

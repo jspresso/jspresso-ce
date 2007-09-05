@@ -38,17 +38,19 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
   private IModelConnectorFactory  beanConnectorFactory;
-  private IReportFactory          reportFactory;
   private List<IReportDescriptor> reportDescriptors;
+  private IReportFactory          reportFactory;
 
-  /**
-   * Sets the reportDescriptors.
-   * 
-   * @param reportDescriptors
-   *          the reportDescriptors to set.
-   */
-  public void setReportDescriptors(List<IReportDescriptor> reportDescriptors) {
-    this.reportDescriptors = reportDescriptors;
+  private List<IReport> createReportInstances(
+      ITranslationProvider translationProvider, Locale locale) {
+    List<IReport> reports = new ArrayList<IReport>();
+    if (reportDescriptors != null) {
+      for (IReportDescriptor descriptor : reportDescriptors) {
+        reports.add(reportFactory.createReportInstance(descriptor,
+            translationProvider, locale));
+      }
+    }
+    return reports;
   }
 
   /**
@@ -68,18 +70,6 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     return super.execute(actionHandler, context);
   }
 
-  private List<IReport> createReportInstances(
-      ITranslationProvider translationProvider, Locale locale) {
-    List<IReport> reports = new ArrayList<IReport>();
-    if (reportDescriptors != null) {
-      for (IReportDescriptor descriptor : reportDescriptors) {
-        reports.add(reportFactory.createReportInstance(descriptor,
-            translationProvider, locale));
-      }
-    }
-    return reports;
-  }
-
   /**
    * Sets the beanConnectorFactory.
    * 
@@ -89,6 +79,16 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   public void setBeanConnectorFactory(
       IModelConnectorFactory beanConnectorFactory) {
     this.beanConnectorFactory = beanConnectorFactory;
+  }
+
+  /**
+   * Sets the reportDescriptors.
+   * 
+   * @param reportDescriptors
+   *          the reportDescriptors to set.
+   */
+  public void setReportDescriptors(List<IReportDescriptor> reportDescriptors) {
+    this.reportDescriptors = reportDescriptors;
   }
 
   /**

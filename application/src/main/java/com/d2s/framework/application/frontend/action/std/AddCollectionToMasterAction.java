@@ -35,6 +35,22 @@ public class AddCollectionToMasterAction<E, F, G> extends
   private IComponentDescriptor<IEntity> elementEntityDescriptor;
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (super.equals(obj)) {
+      if (elementEntityDescriptor != null
+          && obj instanceof AddCollectionToMasterAction) {
+        return elementEntityDescriptor
+            .equals(((AddCollectionToMasterAction<?, ?, ?>) obj).elementEntityDescriptor);
+      }
+      return true;
+    }
+    return false;
+  }
+
+  /**
    * Completes the action context with the element entity descriptor
    * parametrized.
    * <p>
@@ -49,22 +65,6 @@ public class AddCollectionToMasterAction<E, F, G> extends
     context.put(ActionContextConstants.ELEMENT_DESCRIPTOR,
         elementEntityDescriptor);
     return super.execute(actionHandler, context);
-  }
-
-  /**
-   * Sets the elementEntityDescriptor. Entities of this type (which must be a
-   * subclass of the collection element) are created and added to the detail
-   * collection.
-   * 
-   * @param elementEntityDescriptor
-   *          the elementEntityDescriptor to set.
-   */
-  public void setElementEntityDescriptor(
-      IComponentDescriptor<IEntity> elementEntityDescriptor) {
-    this.elementEntityDescriptor = elementEntityDescriptor;
-    if (elementEntityDescriptor != null) {
-      setIconImageURL(elementEntityDescriptor.getIconImageURL());
-    }
   }
 
   /**
@@ -99,28 +99,28 @@ public class AddCollectionToMasterAction<E, F, G> extends
    * {@inheritDoc}
    */
   @Override
-  public boolean equals(Object obj) {
-    if (super.equals(obj)) {
-      if (elementEntityDescriptor != null
-          && obj instanceof AddCollectionToMasterAction) {
-        return elementEntityDescriptor
-            .equals(((AddCollectionToMasterAction) obj).elementEntityDescriptor);
-      }
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public int hashCode() {
     int hash = super.hashCode();
     if (elementEntityDescriptor != null) {
       hash += elementEntityDescriptor.hashCode();
     }
     return hash;
+  }
+
+  /**
+   * Sets the elementEntityDescriptor. Entities of this type (which must be a
+   * subclass of the collection element) are created and added to the detail
+   * collection.
+   * 
+   * @param elementEntityDescriptor
+   *          the elementEntityDescriptor to set.
+   */
+  public void setElementEntityDescriptor(
+      IComponentDescriptor<IEntity> elementEntityDescriptor) {
+    this.elementEntityDescriptor = elementEntityDescriptor;
+    if (elementEntityDescriptor != null) {
+      setIconImageURL(elementEntityDescriptor.getIconImageURL());
+    }
   }
 
 }

@@ -37,25 +37,11 @@ public interface IViewDescriptor extends ISubViewDescriptor, IActionable,
   int TITLED = 2;
 
   /**
-   * Gets the foreground color of this view.
-   * 
-   * @return this view's foreground color.
-   */
-  Color getForeground();
-
-  /**
    * Gets the background color of this view.
    * 
    * @return this view's foreground color.
    */
   Color getBackground();
-
-  /**
-   * Gets the font of this view.
-   * 
-   * @return this view's font.
-   */
-  Font getFont();
 
   /**
    * Gets the border type used to surround view.
@@ -67,4 +53,18 @@ public interface IViewDescriptor extends ISubViewDescriptor, IActionable,
    *         the name of the view.
    */
   int getBorderType();
+
+  /**
+   * Gets the font of this view.
+   * 
+   * @return this view's font.
+   */
+  Font getFont();
+
+  /**
+   * Gets the foreground color of this view.
+   * 
+   * @return this view's foreground color.
+   */
+  Color getForeground();
 }

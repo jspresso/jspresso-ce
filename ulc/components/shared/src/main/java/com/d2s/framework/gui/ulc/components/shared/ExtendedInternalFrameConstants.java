@@ -14,15 +14,6 @@ package com.d2s.framework.gui.ulc.components.shared;
  */
 public final class ExtendedInternalFrameConstants {
 
-  private ExtendedInternalFrameConstants() {
-    // Empty constructor for utility class
-  }
-
-  /**
-   * <code>EXTENDED_INTERNAL_FRAME_EVENT</code>.
-   */
-  public static final int EXTENDED_INTERNAL_FRAME_EVENT       = 10001;
-
   /**
    * <code>EXTENDED_INTERNAL_FRAME_ACTIVATED</code>.
    */
@@ -39,6 +30,11 @@ public final class ExtendedInternalFrameConstants {
   public static final int EXTENDED_INTERNAL_FRAME_DEICONIFIED = 3;
 
   /**
+   * <code>EXTENDED_INTERNAL_FRAME_EVENT</code>.
+   */
+  public static final int EXTENDED_INTERNAL_FRAME_EVENT       = 10001;
+
+  /**
    * <code>EXTENDED_INTERNAL_FRAME_ICONIFIED</code>.
    */
   public static final int EXTENDED_INTERNAL_FRAME_ICONIFIED   = 4;
@@ -47,4 +43,8 @@ public final class ExtendedInternalFrameConstants {
    * <code>EXTENDED_INTERNAL_FRAME_OPENED</code>.
    */
   public static final int EXTENDED_INTERNAL_FRAME_OPENED      = 5;
+
+  private ExtendedInternalFrameConstants() {
+    // Empty constructor for utility class
+  }
 }

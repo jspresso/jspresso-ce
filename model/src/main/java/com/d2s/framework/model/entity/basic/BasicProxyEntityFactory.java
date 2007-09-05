@@ -40,9 +40,9 @@ public class BasicProxyEntityFactory implements IEntityFactory {
 
   private IAccessorFactory                        accessorFactory;
   private IComponentCollectionFactory<IComponent> entityCollectionFactory;
+  private IComponentDescriptorRegistry            entityDescriptorRegistry;
   private IComponentExtensionFactory              entityExtensionFactory;
   private IGUIDGenerator                          entityGUIDGenerator;
-  private IComponentDescriptorRegistry            entityDescriptorRegistry;
 
   /**
    * {@inheritDoc}
@@ -147,54 +147,19 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   }
 
   /**
-   * Sets the accessorFactory used by this entity factory.
-   *
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
-   * Sets the entityCollectionFactory property.
-   *
-   * @param entityCollectionFactory
-   *          the entityCollectionFactory to set.
-   */
-  public void setEntityCollectionFactory(
-      IComponentCollectionFactory<IComponent> entityCollectionFactory) {
-    this.entityCollectionFactory = entityCollectionFactory;
-  }
-
-  /**
-   * Sets the entityExtensionFactory property.
-   *
-   * @param entityExtensionFactory
-   *          the entityCollectionFactory to set.
-   */
-  public void setEntityExtensionFactory(
-      IComponentExtensionFactory entityExtensionFactory) {
-    this.entityExtensionFactory = entityExtensionFactory;
-  }
-
-  /**
-   * Sets the entityGUIDGenerator.
-   *
-   * @param entityGUIDGenerator
-   *          the entityGUIDGenerator to set.
-   */
-  public void setEntityGUIDGenerator(IGUIDGenerator entityGUIDGenerator) {
-    this.entityGUIDGenerator = entityGUIDGenerator;
-  }
-
-  /**
    * Gets the accessorFactory.
    *
    * @return the accessorFactory.
    */
   protected IAccessorFactory getAccessorFactory() {
     return accessorFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
+    return entityDescriptorRegistry.getComponentDescriptor(componentContract);
   }
 
   /**
@@ -216,12 +181,42 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   }
 
   /**
+   * Gets the entity lifecycle handler.
+   *
+   * @return the entity lifecycle handler.
+   */
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return null;
+  }
+
+  /**
    * Gets the principal using the factory.
    *
    * @return the principal using the factory.
    */
   protected UserPrincipal getPrincipal() {
     return null;
+  }
+
+  /**
+   * Sets the accessorFactory used by this entity factory.
+   *
+   * @param accessorFactory
+   *          the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
+  }
+
+  /**
+   * Sets the entityCollectionFactory property.
+   *
+   * @param entityCollectionFactory
+   *          the entityCollectionFactory to set.
+   */
+  public void setEntityCollectionFactory(
+      IComponentCollectionFactory<IComponent> entityCollectionFactory) {
+    this.entityCollectionFactory = entityCollectionFactory;
   }
 
   /**
@@ -236,18 +231,23 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the entityExtensionFactory property.
+   *
+   * @param entityExtensionFactory
+   *          the entityCollectionFactory to set.
    */
-  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
-    return entityDescriptorRegistry.getComponentDescriptor(componentContract);
+  public void setEntityExtensionFactory(
+      IComponentExtensionFactory entityExtensionFactory) {
+    this.entityExtensionFactory = entityExtensionFactory;
   }
 
   /**
-   * Gets the entity lifecycle handler.
+   * Sets the entityGUIDGenerator.
    *
-   * @return the entity lifecycle handler.
+   * @param entityGUIDGenerator
+   *          the entityGUIDGenerator to set.
    */
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return null;
+  public void setEntityGUIDGenerator(IGUIDGenerator entityGUIDGenerator) {
+    this.entityGUIDGenerator = entityGUIDGenerator;
   }
 }

@@ -71,402 +71,141 @@ import com.d2s.framework.util.IIndexMapper;
 
 public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
-  private static final long      serialVersionUID      = -5437879837063286581L;
+  private static class Arrow implements Icon {
 
-  private TableModel             tableModel;
+    private boolean descending;
+    private int     priority;
+    private int     size;
 
-  /**
-   * <code>DESCENDING</code>.
-   */
-  public static final int        DESCENDING            = -1;
-  /**
-   * <code>NOT_SORTED</code>.
-   */
-  public static final int        NOT_SORTED            = 0;
-  /**
-   * <code>ASCENDING</code>.
-   */
-  public static final int        ASCENDING             = 1;
-
-  private static final Directive EMPTY_DIRECTIVE       = new Directive(-1,
-                                                           NOT_SORTED);
-
-  /**
-   * <code>COMPARABLE_COMPARATOR</code>.
-   */
-  public static final Comparator COMPARABLE_COMPARATOR = new Comparator() {
-
-                                                         @SuppressWarnings("unchecked")
-                                                         public int compare(
-                                                             Object o1,
-                                                             Object o2) {
-                                                           return ((Comparable<Object>) o1)
-                                                               .compareTo(o2);
-                                                         }
-                                                       };
-  /**
-   * <code>LEXICAL_COMPARATOR</code>.
-   */
-  public static final Comparator LEXICAL_COMPARATOR    = new Comparator() {
-
-                                                         public int compare(
-                                                             Object o1,
-                                                             Object o2) {
-                                                           return o1
-                                                               .toString()
-                                                               .compareTo(
-                                                                   o2
-                                                                       .toString());
-                                                         }
-                                                       };
-
-  private Row[]                  viewToModel;
-  private int[]                  modelToView;
-
-  private JTableHeader           tableHeader;
-  private MouseListener          mouseListener;
-  private TableModelListener     tableModelListener;
-  private Map<Class, Comparator> columnComparators     = new HashMap<Class, Comparator>();
-  private List<Directive>        sortingColumns        = new ArrayList<Directive>();
-  private Icon                   upIcon;
-  private Icon                   downIcon;
-
-  /**
-   * Constructs a new <code>TableSorter</code> instance.
-   */
-  public TableSorter() {
-    this.mouseListener = new MouseHandler();
-    this.tableModelListener = new TableModelHandler();
-  }
-
-  /**
-   * Constructs a new <code>TableSorter</code> instance.
-   * 
-   * @param tableModel
-   *          tableModel.
-   */
-  public TableSorter(TableModel tableModel) {
-    this();
-    setTableModel(tableModel);
-  }
-
-  /**
-   * Constructs a new <code>TableSorter</code> instance.
-   * 
-   * @param tableModel
-   *          tableModel.
-   * @param tableHeader
-   *          tableHeader.
-   */
-  public TableSorter(TableModel tableModel, JTableHeader tableHeader) {
-    this();
-    setTableHeader(tableHeader);
-    setTableModel(tableModel);
-  }
-
-  private void clearSortingState() {
-    viewToModel = null;
-    modelToView = null;
-  }
-
-  /**
-   * Gets tableModel.
-   * 
-   * @return tableModel.
-   */
-  public TableModel getTableModel() {
-    return tableModel;
-  }
-
-  /**
-   * Sets tableModel.
-   * 
-   * @param tableModel
-   *          tableModel.
-   */
-  public void setTableModel(TableModel tableModel) {
-    if (this.tableModel != null) {
-      this.tableModel.removeTableModelListener(tableModelListener);
+    /**
+     * Constructs a new <code>Arrow</code> instance.
+     * 
+     * @param descending
+     * @param size
+     * @param priority
+     */
+    public Arrow(boolean descending, int size, int priority) {
+      this.descending = descending;
+      this.size = size;
+      this.priority = priority;
     }
 
-    this.tableModel = tableModel;
-    if (this.tableModel != null) {
-      this.tableModel.addTableModelListener(tableModelListener);
+    /**
+     * {@inheritDoc}
+     */
+    public int getIconHeight() {
+      return size;
     }
 
-    clearSortingState();
-    fireTableStructureChanged();
+    /**
+     * {@inheritDoc}
+     */
+    public int getIconWidth() {
+      return size;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void paintIcon(Component c, Graphics g, int x, int y) {
+      Color color;
+      if (c == null) {
+        color = Color.GRAY;
+      } else {
+        color = c.getBackground();
+      }
+      // In a compound sort, make each succesive triangle 20%
+      // smaller than the previous one.
+      int dx = (int) (size / 2 * Math.pow(0.8, priority));
+      int dy;
+      if (descending) {
+        dy = dx;
+      } else {
+        dy = -dx;
+      }
+      // Align icon (roughly) with font baseline.
+      y = y + 5 * size / 6;
+      if (descending) {
+        y += -dy;
+      }
+      int shift;
+      if (descending) {
+        shift = 1;
+      } else {
+        shift = -1;
+      }
+      g.translate(x, y);
+
+      // Right diagonal.
+      g.setColor(color.darker());
+      g.drawLine(dx / 2, dy, 0, 0);
+      g.drawLine(dx / 2, dy + shift, 0, shift);
+
+      // Left diagonal.
+      g.setColor(color.brighter());
+      g.drawLine(dx / 2, dy, dx, 0);
+      g.drawLine(dx / 2, dy + shift, dx, shift);
+
+      // Horizontal line.
+      if (descending) {
+        g.setColor(color.darker().darker());
+      } else {
+        g.setColor(color.brighter().brighter());
+      }
+      g.drawLine(dx, 0, 0, 0);
+
+      g.setColor(color);
+      g.translate(-x, -y);
+    }
   }
 
-  /**
-   * Gets tableHeader.
-   * 
-   * @return tableHeader.
-   */
-  public JTableHeader getTableHeader() {
-    return tableHeader;
+  private static class Directive {
+
+    private int column;
+    private int direction;
+
+    /**
+     * Constructs a new <code>Directive</code> instance.
+     * 
+     * @param column
+     * @param direction
+     */
+    public Directive(int column, int direction) {
+      this.column = column;
+      this.direction = direction;
+    }
   }
 
-  /**
-   * Sets tableHeader.
-   * 
-   * @param tableHeader
-   *          tableHeader.
-   */
-  public void setTableHeader(JTableHeader tableHeader) {
-    if (this.tableHeader != null) {
-      this.tableHeader.removeMouseListener(mouseListener);
-      TableCellRenderer defaultRenderer = this.tableHeader.getDefaultRenderer();
-      if (defaultRenderer instanceof SortableHeaderRenderer) {
-        this.tableHeader
-            .setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).tableCellRenderer);
+  private class MouseHandler extends MouseAdapter {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void mouseClicked(MouseEvent e) {
+      JTableHeader h = (JTableHeader) e.getSource();
+      TableColumnModel columnModel = h.getColumnModel();
+      int viewColumn = columnModel.getColumnIndexAtX(e.getX());
+      int column = columnModel.getColumn(viewColumn).getModelIndex();
+      if (column != -1) {
+        int status = getSortingStatus(column);
+        if (!e.isControlDown()) {
+          cancelSorting();
+        }
+        // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING}
+        // or
+        // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is
+        // pressed.
+        if (e.isShiftDown()) {
+          status -= 1;
+        } else {
+          status += 1;
+        }
+        status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
+        setSortingStatus(column, status);
       }
     }
-    this.tableHeader = tableHeader;
-    if (this.tableHeader != null) {
-      this.tableHeader.addMouseListener(mouseListener);
-      this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(
-          this.tableHeader.getDefaultRenderer()));
-    }
   }
-
-  /**
-   * is sorting ?
-   * 
-   * @return true if sorting
-   */
-  public boolean isSorting() {
-    return sortingColumns.size() != 0;
-  }
-
-  private Directive getDirective(int column) {
-    for (int i = 0; i < sortingColumns.size(); i++) {
-      Directive directive = sortingColumns.get(i);
-      if (directive.column == column) {
-        return directive;
-      }
-    }
-    return EMPTY_DIRECTIVE;
-  }
-
-  /**
-   * Gets sorting status.
-   * 
-   * @param column
-   *          column.
-   * @return sorting status.
-   */
-  public int getSortingStatus(int column) {
-    return getDirective(column).direction;
-  }
-
-  private void sortingStatusChanged() {
-    clearSortingState();
-    fireTableDataChanged();
-    if (tableHeader != null) {
-      tableHeader.repaint();
-    }
-  }
-
-  /**
-   * Sets column sorting status.
-   * 
-   * @param column
-   *          column.
-   * @param status
-   *          status.
-   */
-  @SuppressWarnings("unchecked")
-  public void setSortingStatus(int column, int status) {
-    Directive directive = getDirective(column);
-    if (directive != EMPTY_DIRECTIVE) {
-      sortingColumns.remove(directive);
-    }
-    if (status != NOT_SORTED) {
-      sortingColumns.add(new Directive(column, status));
-    }
-    sortingStatusChanged();
-  }
-
-  /**
-   * Gets HeaderRendererIcon.
-   * 
-   * @param column
-   *          column.
-   * @param size
-   *          size.
-   * @return HeaderRendererIcon
-   */
-  protected Icon getHeaderRendererIcon(int column, int size) {
-    Directive directive = getDirective(column);
-    if (directive == EMPTY_DIRECTIVE) {
-      return null;
-    }
-    if (directive.direction == DESCENDING) {
-      if (downIcon != null) {
-        return downIcon;
-      }
-    } else {
-      if (upIcon != null) {
-        return upIcon;
-      }
-    }
-    return new Arrow(directive.direction == DESCENDING, size, sortingColumns
-        .indexOf(directive));
-  }
-
-  private void cancelSorting() {
-    sortingColumns.clear();
-    sortingStatusChanged();
-  }
-
-  /**
-   * Sets ColumnComparator.
-   * 
-   * @param type
-   *          type.
-   * @param comparator
-   *          comparator.
-   */
-  @SuppressWarnings("unchecked")
-  public void setColumnComparator(Class type, Comparator comparator) {
-    if (comparator == null) {
-      columnComparators.remove(type);
-    } else {
-      columnComparators.put(type, comparator);
-    }
-  }
-
-  /**
-   * Gets Comparator.
-   * 
-   * @param column
-   *          column.
-   * @return Comparator.
-   */
-  protected Comparator getComparator(int column) {
-    Class columnType = tableModel.getColumnClass(column);
-    Comparator comparator = columnComparators.get(columnType);
-    if (comparator != null) {
-      return comparator;
-    }
-    if (Comparable.class.isAssignableFrom(columnType)) {
-      return COMPARABLE_COMPARATOR;
-    }
-    return LEXICAL_COMPARATOR;
-  }
-
-  private Row[] getViewToModel() {
-    if (viewToModel == null) {
-      int tableModelRowCount = tableModel.getRowCount();
-      viewToModel = new Row[tableModelRowCount];
-      for (int row = 0; row < tableModelRowCount; row++) {
-        viewToModel[row] = new Row(row);
-      }
-
-      if (isSorting()) {
-        Arrays.sort(viewToModel);
-      }
-    }
-    return viewToModel;
-  }
-
-  /**
-   * modelIndex.
-   * 
-   * @param viewIndex
-   *          viewIndex.
-   * @return modelIndex.
-   */
-  public int modelIndex(int viewIndex) {
-    return getViewToModel()[viewIndex].modelIndex;
-  }
-
-  /**
-   * viewIndex.
-   * 
-   * @param modelIndex
-   *          modelIndex
-   * @return viewIndex
-   */
-  public int viewIndex(int modelIndex) {
-    return getModelToView()[modelIndex];
-  }
-
-  private int[] getModelToView() {
-    if (modelToView == null) {
-      int n = getViewToModel().length;
-      modelToView = new int[n];
-      for (int i = 0; i < n; i++) {
-        modelToView[modelIndex(i)] = i;
-      }
-    }
-    return modelToView;
-  }
-
-  // TableModel interface methods
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getRowCount() {
-    if (tableModel == null) {
-      return 0;
-    }
-    return tableModel.getRowCount();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getColumnCount() {
-    if (tableModel == null) {
-      return 0;
-    }
-    return tableModel.getColumnCount();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getColumnName(int column) {
-    return tableModel.getColumnName(column);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class<?> getColumnClass(int column) {
-    return tableModel.getColumnClass(column);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isCellEditable(int row, int column) {
-    return tableModel.isCellEditable(modelIndex(row), column);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getValueAt(int row, int column) {
-    return tableModel.getValueAt(modelIndex(row), column);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setValueAt(Object aValue, int row, int column) {
-    tableModel.setValueAt(aValue, modelIndex(row), column);
-  }
-
-  // Helper classes
-
   private class Row implements Comparable {
 
     private int modelIndex;
@@ -516,6 +255,36 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
         }
       }
       return 0;
+    }
+  }
+  private class SortableHeaderRenderer implements TableCellRenderer {
+
+    private TableCellRenderer tableCellRenderer;
+
+    /**
+     * Constructs a new <code>SortableHeaderRenderer</code> instance.
+     * 
+     * @param tableCellRenderer
+     *          the wrapped table cell renderer.
+     */
+    public SortableHeaderRenderer(TableCellRenderer tableCellRenderer) {
+      this.tableCellRenderer = tableCellRenderer;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+      Component c = tableCellRenderer.getTableCellRendererComponent(table,
+          value, isSelected, hasFocus, row, column);
+      if (c instanceof JLabel) {
+        JLabel l = (JLabel) c;
+        l.setHorizontalTextPosition(SwingConstants.LEFT);
+        int modelColumn = table.convertColumnIndexToModel(column);
+        l.setIcon(getHeaderRendererIcon(modelColumn, l.getFont().getSize()));
+      }
+      return c;
     }
   }
 
@@ -581,172 +350,313 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
     }
   }
 
-  private class MouseHandler extends MouseAdapter {
+  /**
+   * <code>ASCENDING</code>.
+   */
+  public static final int        ASCENDING             = 1;
+  /**
+   * <code>COMPARABLE_COMPARATOR</code>.
+   */
+  public static final Comparator COMPARABLE_COMPARATOR = new Comparator() {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void mouseClicked(MouseEvent e) {
-      JTableHeader h = (JTableHeader) e.getSource();
-      TableColumnModel columnModel = h.getColumnModel();
-      int viewColumn = columnModel.getColumnIndexAtX(e.getX());
-      int column = columnModel.getColumn(viewColumn).getModelIndex();
-      if (column != -1) {
-        int status = getSortingStatus(column);
-        if (!e.isControlDown()) {
-          cancelSorting();
-        }
-        // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING}
-        // or
-        // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is
-        // pressed.
-        if (e.isShiftDown()) {
-          status -= 1;
-        } else {
-          status += 1;
-        }
-        status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
-        setSortingStatus(column, status);
+                                                         @SuppressWarnings("unchecked")
+                                                         public int compare(
+                                                             Object o1,
+                                                             Object o2) {
+                                                           return ((Comparable<Object>) o1)
+                                                               .compareTo(o2);
+                                                         }
+                                                       };
+
+  /**
+   * <code>DESCENDING</code>.
+   */
+  public static final int        DESCENDING            = -1;
+  /**
+   * <code>LEXICAL_COMPARATOR</code>.
+   */
+  public static final Comparator LEXICAL_COMPARATOR    = new Comparator() {
+
+                                                         public int compare(
+                                                             Object o1,
+                                                             Object o2) {
+                                                           return o1
+                                                               .toString()
+                                                               .compareTo(
+                                                                   o2
+                                                                       .toString());
+                                                         }
+                                                       };
+
+  /**
+   * <code>NOT_SORTED</code>.
+   */
+  public static final int        NOT_SORTED            = 0;
+  private static final Directive NOT_SORTED_DIRECTIVE       = new Directive(-1,
+                                                           NOT_SORTED);
+  private static final long      serialVersionUID      = -5437879837063286581L;
+  private Map<Class, Comparator> columnComparators     = new HashMap<Class, Comparator>();
+  private Icon                   downIcon;
+  private int[]                  modelToView;
+  private MouseListener          mouseListener;
+
+  private List<Directive>        sortingColumns        = new ArrayList<Directive>();
+
+  private JTableHeader           tableHeader;
+
+  private TableModel             tableModel;
+
+  private TableModelListener     tableModelListener;
+
+  private Icon                   upIcon;
+
+  private Row[]                  viewToModel;
+
+  /**
+   * Constructs a new <code>TableSorter</code> instance.
+   */
+  public TableSorter() {
+    this.mouseListener = new MouseHandler();
+    this.tableModelListener = new TableModelHandler();
+  }
+
+  /**
+   * Constructs a new <code>TableSorter</code> instance.
+   * 
+   * @param tableModel
+   *          tableModel.
+   */
+  public TableSorter(TableModel tableModel) {
+    this();
+    setTableModel(tableModel);
+  }
+
+  /**
+   * Constructs a new <code>TableSorter</code> instance.
+   * 
+   * @param tableModel
+   *          tableModel.
+   * @param tableHeader
+   *          tableHeader.
+   */
+  public TableSorter(TableModel tableModel, JTableHeader tableHeader) {
+    this();
+    setTableHeader(tableHeader);
+    setTableModel(tableModel);
+  }
+
+  private void cancelSorting() {
+    sortingColumns.clear();
+    sortingStatusChanged();
+  }
+
+  private void clearSortingState() {
+    viewToModel = null;
+    modelToView = null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Class<?> getColumnClass(int column) {
+    return tableModel.getColumnClass(column);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int getColumnCount() {
+    if (tableModel == null) {
+      return 0;
+    }
+    return tableModel.getColumnCount();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getColumnName(int column) {
+    return tableModel.getColumnName(column);
+  }
+
+  /**
+   * Gets Comparator.
+   * 
+   * @param column
+   *          column.
+   * @return Comparator.
+   */
+  protected Comparator getComparator(int column) {
+    Class columnType = tableModel.getColumnClass(column);
+    Comparator comparator = columnComparators.get(columnType);
+    if (comparator != null) {
+      return comparator;
+    }
+    if (Comparable.class.isAssignableFrom(columnType)) {
+      return COMPARABLE_COMPARATOR;
+    }
+    return LEXICAL_COMPARATOR;
+  }
+
+  private Directive getDirective(int column) {
+    for (int i = 0; i < sortingColumns.size(); i++) {
+      Directive directive = sortingColumns.get(i);
+      if (directive.column == column) {
+        return directive;
       }
+    }
+    return NOT_SORTED_DIRECTIVE;
+  }
+
+  /**
+   * Gets HeaderRendererIcon.
+   * 
+   * @param column
+   *          column.
+   * @param size
+   *          size.
+   * @return HeaderRendererIcon
+   */
+  protected Icon getHeaderRendererIcon(int column, int size) {
+    Directive directive = getDirective(column);
+    if (directive == NOT_SORTED_DIRECTIVE) {
+      return null;
+    }
+    if (directive.direction == DESCENDING) {
+      if (downIcon != null) {
+        return downIcon;
+      }
+    } else {
+      if (upIcon != null) {
+        return upIcon;
+      }
+    }
+    return new Arrow(directive.direction == DESCENDING, size, sortingColumns
+        .indexOf(directive));
+  }
+
+  private int[] getModelToView() {
+    if (modelToView == null) {
+      int n = getViewToModel().length;
+      modelToView = new int[n];
+      for (int i = 0; i < n; i++) {
+        modelToView[modelIndex(i)] = i;
+      }
+    }
+    return modelToView;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int getRowCount() {
+    if (tableModel == null) {
+      return 0;
+    }
+    return tableModel.getRowCount();
+  }
+
+  /**
+   * Gets sorting status.
+   * 
+   * @param column
+   *          column.
+   * @return sorting status.
+   */
+  public int getSortingStatus(int column) {
+    return getDirective(column).direction;
+  }
+
+  /**
+   * Gets tableHeader.
+   * 
+   * @return tableHeader.
+   */
+  public JTableHeader getTableHeader() {
+    return tableHeader;
+  }
+
+  // TableModel interface methods
+
+  /**
+   * Gets tableModel.
+   * 
+   * @return tableModel.
+   */
+  public TableModel getTableModel() {
+    return tableModel;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getValueAt(int row, int column) {
+    return tableModel.getValueAt(modelIndex(row), column);
+  }
+
+  private Row[] getViewToModel() {
+    if (viewToModel == null) {
+      int tableModelRowCount = tableModel.getRowCount();
+      viewToModel = new Row[tableModelRowCount];
+      for (int row = 0; row < tableModelRowCount; row++) {
+        viewToModel[row] = new Row(row);
+      }
+
+      if (isSorting()) {
+        Arrays.sort(viewToModel);
+      }
+    }
+    return viewToModel;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isCellEditable(int row, int column) {
+    return tableModel.isCellEditable(modelIndex(row), column);
+  }
+
+  /**
+   * is sorting ?
+   * 
+   * @return true if sorting
+   */
+  public boolean isSorting() {
+    return sortingColumns.size() != 0;
+  }
+
+  /**
+   * modelIndex.
+   * 
+   * @param viewIndex
+   *          viewIndex.
+   * @return modelIndex.
+   */
+  public int modelIndex(int viewIndex) {
+    return getViewToModel()[viewIndex].modelIndex;
+  }
+
+  /**
+   * Sets ColumnComparator.
+   * 
+   * @param type
+   *          type.
+   * @param comparator
+   *          comparator.
+   */
+  @SuppressWarnings("unchecked")
+  public void setColumnComparator(Class type, Comparator comparator) {
+    if (comparator == null) {
+      columnComparators.remove(type);
+    } else {
+      columnComparators.put(type, comparator);
     }
   }
 
-  private static class Arrow implements Icon {
-
-    private boolean descending;
-    private int     size;
-    private int     priority;
-
-    /**
-     * Constructs a new <code>Arrow</code> instance.
-     * 
-     * @param descending
-     * @param size
-     * @param priority
-     */
-    public Arrow(boolean descending, int size, int priority) {
-      this.descending = descending;
-      this.size = size;
-      this.priority = priority;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void paintIcon(Component c, Graphics g, int x, int y) {
-      Color color;
-      if (c == null) {
-        color = Color.GRAY;
-      } else {
-        color = c.getBackground();
-      }
-      // In a compound sort, make each succesive triangle 20%
-      // smaller than the previous one.
-      int dx = (int) (size / 2 * Math.pow(0.8, priority));
-      int dy;
-      if (descending) {
-        dy = dx;
-      } else {
-        dy = -dx;
-      }
-      // Align icon (roughly) with font baseline.
-      y = y + 5 * size / 6;
-      if (descending) {
-        y += -dy;
-      }
-      int shift;
-      if (descending) {
-        shift = 1;
-      } else {
-        shift = -1;
-      }
-      g.translate(x, y);
-
-      // Right diagonal.
-      g.setColor(color.darker());
-      g.drawLine(dx / 2, dy, 0, 0);
-      g.drawLine(dx / 2, dy + shift, 0, shift);
-
-      // Left diagonal.
-      g.setColor(color.brighter());
-      g.drawLine(dx / 2, dy, dx, 0);
-      g.drawLine(dx / 2, dy + shift, dx, shift);
-
-      // Horizontal line.
-      if (descending) {
-        g.setColor(color.darker().darker());
-      } else {
-        g.setColor(color.brighter().brighter());
-      }
-      g.drawLine(dx, 0, 0, 0);
-
-      g.setColor(color);
-      g.translate(-x, -y);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int getIconWidth() {
-      return size;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public int getIconHeight() {
-      return size;
-    }
-  }
-
-  private class SortableHeaderRenderer implements TableCellRenderer {
-
-    private TableCellRenderer tableCellRenderer;
-
-    /**
-     * Constructs a new <code>SortableHeaderRenderer</code> instance.
-     * 
-     * @param tableCellRenderer
-     *          the wrapped table cell renderer.
-     */
-    public SortableHeaderRenderer(TableCellRenderer tableCellRenderer) {
-      this.tableCellRenderer = tableCellRenderer;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column) {
-      Component c = tableCellRenderer.getTableCellRendererComponent(table,
-          value, isSelected, hasFocus, row, column);
-      if (c instanceof JLabel) {
-        JLabel l = (JLabel) c;
-        l.setHorizontalTextPosition(SwingConstants.LEFT);
-        int modelColumn = table.convertColumnIndexToModel(column);
-        l.setIcon(getHeaderRendererIcon(modelColumn, l.getFont().getSize()));
-      }
-      return c;
-    }
-  }
-
-  private static class Directive {
-
-    private int column;
-    private int direction;
-
-    /**
-     * Constructs a new <code>Directive</code> instance.
-     * 
-     * @param column
-     * @param direction
-     */
-    public Directive(int column, int direction) {
-      this.column = column;
-      this.direction = direction;
-    }
-  }
+  // Helper classes
 
   /**
    * Sets the downIcon.
@@ -759,6 +669,69 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   }
 
   /**
+   * Sets column sorting status.
+   * 
+   * @param column
+   *          column.
+   * @param status
+   *          status.
+   */
+  @SuppressWarnings("unchecked")
+  public void setSortingStatus(int column, int status) {
+    Directive directive = getDirective(column);
+    if (directive != NOT_SORTED_DIRECTIVE) {
+      sortingColumns.remove(directive);
+    }
+    if (status != NOT_SORTED) {
+      sortingColumns.add(new Directive(column, status));
+    }
+    sortingStatusChanged();
+  }
+
+  /**
+   * Sets tableHeader.
+   * 
+   * @param tableHeader
+   *          tableHeader.
+   */
+  public void setTableHeader(JTableHeader tableHeader) {
+    if (this.tableHeader != null) {
+      this.tableHeader.removeMouseListener(mouseListener);
+      TableCellRenderer defaultRenderer = this.tableHeader.getDefaultRenderer();
+      if (defaultRenderer instanceof SortableHeaderRenderer) {
+        this.tableHeader
+            .setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).tableCellRenderer);
+      }
+    }
+    this.tableHeader = tableHeader;
+    if (this.tableHeader != null) {
+      this.tableHeader.addMouseListener(mouseListener);
+      this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(
+          this.tableHeader.getDefaultRenderer()));
+    }
+  }
+
+  /**
+   * Sets tableModel.
+   * 
+   * @param tableModel
+   *          tableModel.
+   */
+  public void setTableModel(TableModel tableModel) {
+    if (this.tableModel != null) {
+      this.tableModel.removeTableModelListener(tableModelListener);
+    }
+
+    this.tableModel = tableModel;
+    if (this.tableModel != null) {
+      this.tableModel.addTableModelListener(tableModelListener);
+    }
+
+    clearSortingState();
+    fireTableStructureChanged();
+  }
+
+  /**
    * Sets the upIcon.
    * 
    * @param upIcon
@@ -766,5 +739,32 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
    */
   public void setUpIcon(Icon upIcon) {
     this.upIcon = upIcon;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setValueAt(Object aValue, int row, int column) {
+    tableModel.setValueAt(aValue, modelIndex(row), column);
+  }
+
+  private void sortingStatusChanged() {
+    clearSortingState();
+    fireTableDataChanged();
+    if (tableHeader != null) {
+      tableHeader.repaint();
+    }
+  }
+
+  /**
+   * viewIndex.
+   * 
+   * @param modelIndex
+   *          modelIndex
+   * @return viewIndex
+   */
+  public int viewIndex(int modelIndex) {
+    return getModelToView()[modelIndex];
   }
 }

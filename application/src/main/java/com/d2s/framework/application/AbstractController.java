@@ -26,18 +26,16 @@ public abstract class AbstractController implements IController {
   /**
    * {@inheritDoc}
    */
-  public Map<String, Object> createEmptyContext() {
-    return new HashMap<String, Object>();
+  public void checkAccess(ISecurable securable) {
+    SecurityHelper.checkAccess(getApplicationSession().getSubject(), securable,
+        getTranslationProvider(), getLocale());
   }
 
   /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
+   * {@inheritDoc}
    */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
+  public Map<String, Object> createEmptyContext() {
+    return new HashMap<String, Object>();
   }
 
   /**
@@ -50,10 +48,12 @@ public abstract class AbstractController implements IController {
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *          the translationProvider to set.
    */
-  public void checkAccess(ISecurable securable) {
-    SecurityHelper.checkAccess(getApplicationSession().getSubject(), securable,
-        getTranslationProvider(), getLocale());
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 }

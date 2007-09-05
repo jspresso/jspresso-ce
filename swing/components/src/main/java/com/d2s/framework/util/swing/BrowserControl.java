@@ -20,20 +20,16 @@ import java.io.IOException;
 
 public final class BrowserControl {
 
+  // The flag to display a url.
+  private static final String UNIX_FLAG = "-remote openURL";
+  // The default browser under unix.
+  private static final String UNIX_PATH = "netscape";
+  // The flag to display a url.
+  private static final String WIN_FLAG  = "url.dll,FileProtocolHandler";
   // Used to identify the windows platform.
   private static final String WIN_ID    = "Windows";
   // The default system browser under windows.
   private static final String WIN_PATH  = "rundll32";
-  // The flag to display a url.
-  private static final String WIN_FLAG  = "url.dll,FileProtocolHandler";
-  // The default browser under unix.
-  private static final String UNIX_PATH = "netscape";
-  // The flag to display a url.
-  private static final String UNIX_FLAG = "-remote openURL";
-
-  private BrowserControl() {
-    // Helper class private constructor.
-  }
 
   /**
    * Display a file in the system browser. If you want to display a file, you
@@ -89,5 +85,9 @@ public final class BrowserControl {
       return true;
     }
     return false;
+  }
+
+  private BrowserControl() {
+    // Helper class private constructor.
   }
 }

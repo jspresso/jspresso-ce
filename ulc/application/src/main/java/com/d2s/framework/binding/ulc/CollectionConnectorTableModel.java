@@ -35,13 +35,104 @@ import com.ulcjava.base.application.table.AbstractTableModel;
  */
 public class CollectionConnectorTableModel extends AbstractTableModel {
 
+  private final class CellConnectorListener implements
+      IConnectorValueChangeListener, PropertyChangeListener {
+
+    private Coordinates cell;
+
+    private CellConnectorListener(int row, int col) {
+      cell = new Coordinates(row, col);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(@SuppressWarnings("unused")
+    ConnectorValueChangeEvent evt) {
+      updateCell();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
+      updateCell();
+    }
+
+    private void updateCell() {
+      if (cell.getX() < getRowCount()) {
+        fireTableCellUpdated(cell.getX(), cell.getY());
+      }
+    }
+  }
+
+  private final class RowConnectorListener implements
+      IConnectorValueChangeListener {
+
+    private int row;
+
+    private RowConnectorListener(int row) {
+      this.row = row;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(@SuppressWarnings("unused")
+    ConnectorValueChangeEvent evt) {
+      if (row < getRowCount()) {
+        fireTableRowsUpdated(row, row);
+      }
+      if (collectionConnector.getSelectedIndices() != null) {
+        if (Arrays.binarySearch(collectionConnector.getSelectedIndices(), row) >= 0) {
+          collectionConnector.setSelectedIndices(new int[0]);
+        }
+      }
+    }
+  }
+  private class TableConnectorListener implements IConnectorValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(final ConnectorValueChangeEvent evt) {
+      Collection<?> oldCollection = null;
+      if (evt.getOldValue() instanceof Collection) {
+        oldCollection = (Collection<?>) evt.getOldValue();
+      }
+      Collection<?> newCollection = (Collection<?>) evt.getNewValue();
+      int oldCollectionSize = 0;
+      int newCollectionSize = 0;
+      if (oldCollection != null) {
+        oldCollectionSize = oldCollection.size();
+      }
+      if (newCollection != null) {
+        newCollectionSize = newCollection.size();
+      }
+      if (newCollectionSize > oldCollectionSize) {
+        fireTableRowsInserted(oldCollectionSize, newCollectionSize - 1);
+        for (int row = oldCollectionSize; row < newCollectionSize; row++) {
+          bindChildRowConnector(row);
+        }
+      } else if (newCollectionSize < oldCollectionSize) {
+        fireTableRowsDeleted(newCollectionSize, oldCollectionSize - 1);
+      }
+      if (evt.getNewValue() != null
+          && !((Collection<?>) evt.getNewValue()).isEmpty()) {
+        collectionConnector.setSelectedIndices(new int[] {0});
+      }
+    }
+  }
   private static final long                           serialVersionUID = -3323472361980315420L;
+  private Map<Coordinates, CellConnectorListener>     cachedCellListeners;
+  private Map<Integer, IConnectorValueChangeListener> cachedRowListeners;
 
   private ICollectionConnector                        collectionConnector;
-  private Map<Integer, IConnectorValueChangeListener> cachedRowListeners;
-  private Map<Coordinates, CellConnectorListener>     cachedCellListeners;
-  private List<String>                                columnConnectorKeys;
+
   private Map<String, Class>                          columnClassesByIds;
+
+  private List<String>                                columnConnectorKeys;
 
   private IExceptionHandler                           exceptionHandler;
 
@@ -61,13 +152,74 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
     bindConnector();
   }
 
+  private void bindChildRowConnector(int row) {
+    ICompositeValueConnector rowConnector = (ICompositeValueConnector) collectionConnector
+        .getChildConnector(row);
+    if (rowConnector != null) {
+      rowConnector
+          .addConnectorValueChangeListener(getChildRowConnectorListener(row));
+      for (int col = 0; col < columnConnectorKeys.size(); col++) {
+        IValueConnector cellConnector = rowConnector
+            .getChildConnector(columnConnectorKeys.get(col));
+        if (cellConnector instanceof IRenderableCompositeValueConnector
+            && ((IRenderableCompositeValueConnector) cellConnector)
+                .getRenderingConnector() != null) {
+          ((IRenderableCompositeValueConnector) cellConnector)
+              .getRenderingConnector().addConnectorValueChangeListener(
+                  getChildCellConnectorListener(row, col));
+        } else {
+          CellConnectorListener listener = getChildCellConnectorListener(row,
+              col);
+          cellConnector.addConnectorValueChangeListener(listener);
+          cellConnector.addPropertyChangeListener(listener);
+        }
+      }
+    }
+  }
+
+  private void bindConnector() {
+    collectionConnector
+        .addConnectorValueChangeListener(new TableConnectorListener());
+    for (int row = 0; row < collectionConnector.getChildConnectorCount(); row++) {
+      bindChildRowConnector(row);
+    }
+  }
+
+  private CellConnectorListener getChildCellConnectorListener(int row, int col) {
+    if (cachedCellListeners == null) {
+      cachedCellListeners = new HashMap<Coordinates, CellConnectorListener>();
+    }
+    CellConnectorListener cachedListener = cachedCellListeners
+        .get(new Coordinates(row, col));
+    if (cachedListener == null) {
+      cachedListener = new CellConnectorListener(row, col);
+      cachedCellListeners.put(new Coordinates(row, col), cachedListener);
+    }
+    return cachedListener;
+  }
+
+  private IConnectorValueChangeListener getChildRowConnectorListener(int row) {
+    if (cachedRowListeners == null) {
+      cachedRowListeners = new HashMap<Integer, IConnectorValueChangeListener>();
+    }
+    IConnectorValueChangeListener cachedListener = cachedRowListeners
+        .get(new Integer(row));
+    if (cachedListener == null) {
+      cachedListener = new RowConnectorListener(row);
+      cachedRowListeners.put(new Integer(row), cachedListener);
+    }
+    return cachedListener;
+  }
+
   /**
-   * Returns the backed collection connector size.
-   * <p>
    * {@inheritDoc}
    */
-  public int getRowCount() {
-    return collectionConnector.getChildConnectorCount();
+  @Override
+  public Class<?> getColumnClass(int columnIndex) {
+    if (columnClassesByIds != null) {
+      return columnClassesByIds.get(columnConnectorKeys.get(columnIndex));
+    }
+    return super.getColumnClass(columnIndex);
   }
 
   /**
@@ -77,6 +229,21 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    */
   public int getColumnCount() {
     return columnConnectorKeys.size();
+  }
+
+  private IValueConnector getConnectorAt(int rowIndex, int columnIndex) {
+    return ((ICompositeValueConnector) collectionConnector
+        .getChildConnector(rowIndex)).getChildConnector(columnConnectorKeys
+        .get(columnIndex));
+  }
+
+  /**
+   * Returns the backed collection connector size.
+   * <p>
+   * {@inheritDoc}
+   */
+  public int getRowCount() {
+    return collectionConnector.getChildConnectorCount();
   }
 
   /**
@@ -101,11 +268,30 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
    * {@inheritDoc}
    */
   @Override
-  public Class<?> getColumnClass(int columnIndex) {
-    if (columnClassesByIds != null) {
-      return columnClassesByIds.get(columnConnectorKeys.get(columnIndex));
-    }
-    return super.getColumnClass(columnIndex);
+  public boolean isCellEditable(int rowIndex, int columnIndex) {
+    return collectionConnector.isWritable()
+        && collectionConnector.getChildConnector(rowIndex).isWritable()
+        && getConnectorAt(rowIndex, columnIndex).isWritable();
+  }
+
+  /**
+   * Sets the columnClassesByIds.
+   *
+   * @param columnClassesByIds
+   *          the columnClassesByIds to set.
+   */
+  public void setColumnClassesByIds(Map<String, Class> columnClassesByIds) {
+    this.columnClassesByIds = columnClassesByIds;
+  }
+
+  /**
+   * Sets the exceptionHandler.
+   *
+   * @param exceptionHandler
+   *          the exceptionHandler to set.
+   */
+  public void setExceptionHandler(IExceptionHandler exceptionHandler) {
+    this.exceptionHandler = exceptionHandler;
   }
 
   /**
@@ -140,191 +326,5 @@ public class CollectionConnectorTableModel extends AbstractTableModel {
         throw ex;
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isCellEditable(int rowIndex, int columnIndex) {
-    return collectionConnector.isWritable()
-        && collectionConnector.getChildConnector(rowIndex).isWritable()
-        && getConnectorAt(rowIndex, columnIndex).isWritable();
-  }
-
-  private IValueConnector getConnectorAt(int rowIndex, int columnIndex) {
-    return ((ICompositeValueConnector) collectionConnector
-        .getChildConnector(rowIndex)).getChildConnector(columnConnectorKeys
-        .get(columnIndex));
-  }
-
-  private void bindConnector() {
-    collectionConnector
-        .addConnectorValueChangeListener(new TableConnectorListener());
-    for (int row = 0; row < collectionConnector.getChildConnectorCount(); row++) {
-      bindChildRowConnector(row);
-    }
-  }
-
-  private void bindChildRowConnector(int row) {
-    ICompositeValueConnector rowConnector = (ICompositeValueConnector) collectionConnector
-        .getChildConnector(row);
-    if (rowConnector != null) {
-      rowConnector
-          .addConnectorValueChangeListener(getChildRowConnectorListener(row));
-      for (int col = 0; col < columnConnectorKeys.size(); col++) {
-        IValueConnector cellConnector = rowConnector
-            .getChildConnector(columnConnectorKeys.get(col));
-        if (cellConnector instanceof IRenderableCompositeValueConnector
-            && ((IRenderableCompositeValueConnector) cellConnector)
-                .getRenderingConnector() != null) {
-          ((IRenderableCompositeValueConnector) cellConnector)
-              .getRenderingConnector().addConnectorValueChangeListener(
-                  getChildCellConnectorListener(row, col));
-        } else {
-          CellConnectorListener listener = getChildCellConnectorListener(row,
-              col);
-          cellConnector.addConnectorValueChangeListener(listener);
-          cellConnector.addPropertyChangeListener(listener);
-        }
-      }
-    }
-  }
-
-  private IConnectorValueChangeListener getChildRowConnectorListener(int row) {
-    if (cachedRowListeners == null) {
-      cachedRowListeners = new HashMap<Integer, IConnectorValueChangeListener>();
-    }
-    IConnectorValueChangeListener cachedListener = cachedRowListeners
-        .get(new Integer(row));
-    if (cachedListener == null) {
-      cachedListener = new RowConnectorListener(row);
-      cachedRowListeners.put(new Integer(row), cachedListener);
-    }
-    return cachedListener;
-  }
-
-  private CellConnectorListener getChildCellConnectorListener(int row, int col) {
-    if (cachedCellListeners == null) {
-      cachedCellListeners = new HashMap<Coordinates, CellConnectorListener>();
-    }
-    CellConnectorListener cachedListener = cachedCellListeners
-        .get(new Coordinates(row, col));
-    if (cachedListener == null) {
-      cachedListener = new CellConnectorListener(row, col);
-      cachedCellListeners.put(new Coordinates(row, col), cachedListener);
-    }
-    return cachedListener;
-  }
-
-  private class TableConnectorListener implements IConnectorValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(final ConnectorValueChangeEvent evt) {
-      Collection<?> oldCollection = null;
-      if (evt.getOldValue() instanceof Collection) {
-        oldCollection = (Collection<?>) evt.getOldValue();
-      }
-      Collection<?> newCollection = (Collection<?>) evt.getNewValue();
-      int oldCollectionSize = 0;
-      int newCollectionSize = 0;
-      if (oldCollection != null) {
-        oldCollectionSize = oldCollection.size();
-      }
-      if (newCollection != null) {
-        newCollectionSize = newCollection.size();
-      }
-      if (newCollectionSize > oldCollectionSize) {
-        fireTableRowsInserted(oldCollectionSize, newCollectionSize - 1);
-        for (int row = oldCollectionSize; row < newCollectionSize; row++) {
-          bindChildRowConnector(row);
-        }
-      } else if (newCollectionSize < oldCollectionSize) {
-        fireTableRowsDeleted(newCollectionSize, oldCollectionSize - 1);
-      }
-      if (evt.getNewValue() != null
-          && !((Collection<?>) evt.getNewValue()).isEmpty()) {
-        collectionConnector.setSelectedIndices(new int[] {0});
-      }
-    }
-  }
-
-  private final class RowConnectorListener implements
-      IConnectorValueChangeListener {
-
-    private int row;
-
-    private RowConnectorListener(int row) {
-      this.row = row;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
-      if (row < getRowCount()) {
-        fireTableRowsUpdated(row, row);
-      }
-      if (collectionConnector.getSelectedIndices() != null) {
-        if (Arrays.binarySearch(collectionConnector.getSelectedIndices(), row) >= 0) {
-          collectionConnector.setSelectedIndices(new int[0]);
-        }
-      }
-    }
-  }
-
-  private final class CellConnectorListener implements
-      IConnectorValueChangeListener, PropertyChangeListener {
-
-    private Coordinates cell;
-
-    private CellConnectorListener(int row, int col) {
-      cell = new Coordinates(row, col);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
-      updateCell();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
-      updateCell();
-    }
-
-    private void updateCell() {
-      if (cell.getX() < getRowCount()) {
-        fireTableCellUpdated(cell.getX(), cell.getY());
-      }
-    }
-  }
-
-  /**
-   * Sets the columnClassesByIds.
-   *
-   * @param columnClassesByIds
-   *          the columnClassesByIds to set.
-   */
-  public void setColumnClassesByIds(Map<String, Class> columnClassesByIds) {
-    this.columnClassesByIds = columnClassesByIds;
-  }
-
-  /**
-   * Sets the exceptionHandler.
-   *
-   * @param exceptionHandler
-   *          the exceptionHandler to set.
-   */
-  public void setExceptionHandler(IExceptionHandler exceptionHandler) {
-    this.exceptionHandler = exceptionHandler;
   }
 }

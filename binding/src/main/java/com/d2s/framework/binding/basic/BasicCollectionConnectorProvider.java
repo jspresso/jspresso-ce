@@ -41,6 +41,53 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
+  public void addConnectorSelectionListener(IConnectorSelectionListener listener) {
+    implAddConnectorSelectionListener(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void boundAsView() {
+    super.boundAsView();
+    if (isTrackingChildrenSelection()) {
+      implFireSelectedConnectorChange(this);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicCollectionConnectorProvider clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicCollectionConnectorProvider clone(String newConnectorId) {
+    BasicCollectionConnectorProvider clonedConnector = (BasicCollectionConnectorProvider) super
+        .clone(newConnectorId);
+    if (collectionConnectorProvider != null) {
+      clonedConnector.collectionConnectorProvider = (ICollectionConnectorProvider) clonedConnector
+          .getChildConnector(collectionConnectorProvider.getId());
+    }
+    return clonedConnector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
+    implFireSelectedConnectorChange(evt);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public ICollectionConnector getCollectionConnector() {
     if (collectionConnectorProvider != null) {
       return collectionConnectorProvider.getCollectionConnector();
@@ -64,50 +111,6 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
-  public void setCollectionConnectorProvider(
-      ICollectionConnectorProvider collectionConnectorProvider) {
-    this.collectionConnectorProvider = collectionConnectorProvider;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicCollectionConnectorProvider clone(String newConnectorId) {
-    BasicCollectionConnectorProvider clonedConnector = (BasicCollectionConnectorProvider) super
-        .clone(newConnectorId);
-    if (collectionConnectorProvider != null) {
-      clonedConnector.collectionConnectorProvider = (ICollectionConnectorProvider) clonedConnector
-          .getChildConnector(collectionConnectorProvider.getId());
-    }
-    return clonedConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicCollectionConnectorProvider clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addConnectorSelectionListener(IConnectorSelectionListener listener) {
-    implAddConnectorSelectionListener(listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
-    implFireSelectedConnectorChange(evt);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void removeConnectorSelectionListener(
       IConnectorSelectionListener listener) {
     implRemoveConnectorSelectionListener(listener);
@@ -116,18 +119,15 @@ public class BasicCollectionConnectorProvider extends BasicCompositeConnector
   /**
    * {@inheritDoc}
    */
-  public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
-    implSetTracksChildrenSelection(tracksChildrenSelection);
+  public void setCollectionConnectorProvider(
+      ICollectionConnectorProvider collectionConnectorProvider) {
+    this.collectionConnectorProvider = collectionConnectorProvider;
   }
 
   /**
    * {@inheritDoc}
    */
-  @Override
-  public void boundAsView() {
-    super.boundAsView();
-    if (isTrackingChildrenSelection()) {
-      implFireSelectedConnectorChange(this);
-    }
+  public void setTracksChildrenSelection(boolean tracksChildrenSelection) {
+    implSetTracksChildrenSelection(tracksChildrenSelection);
   }
 }

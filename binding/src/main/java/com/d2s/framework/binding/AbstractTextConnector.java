@@ -54,6 +54,23 @@ public abstract class AbstractTextConnector extends AbstractValueConnector {
   }
 
   /**
+   * Gets the connector value as a string. This string will be parsed to
+   * determine the actual connector value.
+   * 
+   * @return the string representation of the connector value.
+   */
+  protected abstract String getConnectorValueAsString();
+
+  /**
+   * Gets the format.
+   * 
+   * @return the format.
+   */
+  private Format getFormat() {
+    return format;
+  }
+
+  /**
    * Sets the value to the connector text after formatting the string
    * representation.
    * <p>
@@ -67,14 +84,6 @@ public abstract class AbstractTextConnector extends AbstractValueConnector {
   }
 
   /**
-   * Gets the connector value as a string. This string will be parsed to
-   * determine the actual connector value.
-   * 
-   * @return the string representation of the connector value.
-   */
-  protected abstract String getConnectorValueAsString();
-
-  /**
    * Sets the connector value as a string. This string has been formatted from
    * the actual connector value using the format set using .
    * 
@@ -83,15 +92,6 @@ public abstract class AbstractTextConnector extends AbstractValueConnector {
    */
   protected abstract void setConnectorValueAsString(
       String connectorValueAsString);
-
-  /**
-   * Gets the format.
-   * 
-   * @return the format.
-   */
-  private Format getFormat() {
-    return format;
-  }
 
   /**
    * Sets the format.

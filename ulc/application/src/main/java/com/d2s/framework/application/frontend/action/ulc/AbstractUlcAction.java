@@ -28,17 +28,16 @@ public abstract class AbstractUlcAction extends
     ActionWrapper<ULCComponent, ULCIcon, IAction> {
 
   /**
-   * Retrieves the widget this action was triggered from. It may serve to
-   * determine the root window or dialog for instance. It uses a well-known
-   * action context key which is :
-   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
+   * If the ancestor of the action widget is a dialog, dispose it.
    * 
    * @param context
    *          the action context.
-   * @return the source widget this action was triggered from.
    */
-  public ULCComponent getSourceComponent(Map<String, Object> context) {
-    return (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  protected void closeDialog(Map<String, Object> context) {
+    ULCWindow actionWindow = UlcUtil.getVisibleWindow(getActionWidget(context));
+    if (actionWindow instanceof ULCDialog) {
+      actionWindow.setVisible(false);
+    }
   }
 
   /**
@@ -53,15 +52,16 @@ public abstract class AbstractUlcAction extends
   }
 
   /**
-   * If the ancestor of the action widget is a dialog, dispose it.
+   * Retrieves the widget this action was triggered from. It may serve to
+   * determine the root window or dialog for instance. It uses a well-known
+   * action context key which is :
+   * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
    * 
    * @param context
    *          the action context.
+   * @return the source widget this action was triggered from.
    */
-  protected void closeDialog(Map<String, Object> context) {
-    ULCWindow actionWindow = UlcUtil.getVisibleWindow(getActionWidget(context));
-    if (actionWindow instanceof ULCDialog) {
-      actionWindow.setVisible(false);
-    }
+  public ULCComponent getSourceComponent(Map<String, Object> context) {
+    return (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
   }
 }

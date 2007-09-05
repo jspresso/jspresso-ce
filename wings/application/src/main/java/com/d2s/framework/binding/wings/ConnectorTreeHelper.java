@@ -24,10 +24,6 @@ import com.d2s.framework.binding.IValueConnector;
  */
 public final class ConnectorTreeHelper {
 
-  private ConnectorTreeHelper() {
-    // Hidden class.
-  }
-
   /**
    * Retrieves a connector tree path following the parent/child relationship.
    * 
@@ -55,5 +51,9 @@ public final class ConnectorTreeHelper {
       return new TreePath(treePath.toArray());
     }
     return null;
+  }
+
+  private ConnectorTreeHelper() {
+    // Hidden class.
   }
 }

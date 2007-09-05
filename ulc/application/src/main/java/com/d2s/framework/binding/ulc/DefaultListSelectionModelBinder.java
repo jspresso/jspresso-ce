@@ -25,22 +25,11 @@ import com.ulcjava.base.application.event.serializable.IListSelectionListener;
 public class DefaultListSelectionModelBinder implements
     IListSelectionModelBinder {
 
-  /**
-   * {@inheritDoc}
-   */
-  public void bindSelectionModel(ISelectable selectable,
-      ULCListSelectionModel selectionModel, IIndexMapper rowMapper) {
-    selectionModel.addListSelectionListener(new SelectionModelListener(
-        selectable, rowMapper));
-    selectable.addSelectionChangeListener(new SelectionChangeListener(
-        selectionModel, rowMapper));
-  }
-
   private static final class SelectionChangeListener implements
       ISelectionChangeListener {
 
-    private ULCListSelectionModel selectionModel;
     private IIndexMapper          rowMapper;
+    private ULCListSelectionModel selectionModel;
 
     /**
      * Constructs a new <code>SelectionChangeListener</code> instance.
@@ -115,8 +104,8 @@ public class DefaultListSelectionModelBinder implements
 
     private static final long serialVersionUID = 5463656526630255326L;
 
-    private ISelectable       viewSelectable;
     private IIndexMapper      rowMapper;
+    private ISelectable       viewSelectable;
 
     /**
      * Constructs a new <code>SelectionModelListener</code> instance.
@@ -175,5 +164,16 @@ public class DefaultListSelectionModelBinder implements
     int[] rv = new int[n];
     System.arraycopy(rvTmp, 0, rv, 0, n);
     return rv;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void bindSelectionModel(ISelectable selectable,
+      ULCListSelectionModel selectionModel, IIndexMapper rowMapper) {
+    selectionModel.addListSelectionListener(new SelectionModelListener(
+        selectable, rowMapper));
+    selectable.addSelectionChangeListener(new SelectionChangeListener(
+        selectionModel, rowMapper));
   }
 }

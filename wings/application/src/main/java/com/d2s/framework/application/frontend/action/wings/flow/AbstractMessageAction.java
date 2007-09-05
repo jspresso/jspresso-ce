@@ -23,18 +23,6 @@ import com.d2s.framework.util.html.HtmlHelper;
 public abstract class AbstractMessageAction extends AbstractWingsAction {
 
   /**
-   * Gets the message.
-   * 
-   * @param context
-   *          the actionContext.
-   * @return the message.
-   */
-  protected String getMessage(Map<String, Object> context) {
-    return HtmlHelper.emphasis((String) context
-        .get(ActionContextConstants.ACTION_PARAM));
-  }
-
-  /**
    * Calls the super-implementation to execute the next action.
    * 
    * @param actionHandler
@@ -45,5 +33,17 @@ public abstract class AbstractMessageAction extends AbstractWingsAction {
   protected void executeNextAction(IActionHandler actionHandler,
       Map<String, Object> context) {
     super.execute(actionHandler, context);
+  }
+
+  /**
+   * Gets the message.
+   * 
+   * @param context
+   *          the actionContext.
+   * @return the message.
+   */
+  protected String getMessage(Map<String, Object> context) {
+    return HtmlHelper.emphasis((String) context
+        .get(ActionContextConstants.ACTION_PARAM));
   }
 }

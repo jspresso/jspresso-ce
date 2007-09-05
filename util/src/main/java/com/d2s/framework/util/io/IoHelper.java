@@ -18,10 +18,6 @@ import java.io.OutputStream;
  */
 public final class IoHelper {
 
-  private IoHelper() {
-    // private constructor for helper class.
-  }
-
   /**
    * Copies the content of an input stream to an output stream.
    * 
@@ -39,5 +35,9 @@ public final class IoHelper {
     while ((n = inputStream.read(b)) != -1) {
       outputStream.write(b, 0, n);
     }
+  }
+
+  private IoHelper() {
+    // private constructor for helper class.
   }
 }

@@ -20,9 +20,9 @@ public class SelectionChangeEvent extends EventObject {
 
   private static final long serialVersionUID = -3165899293226869795L;
 
+  private int               leadingIndex;
   private int[]             newSelection;
   private int[]             oldSelection;
-  private int               leadingIndex;
 
   /**
    * Constructs a new <code>SelectionChangeEvent</code>.
@@ -51,6 +51,15 @@ public class SelectionChangeEvent extends EventObject {
   }
 
   /**
+   * Gets the leadingIndex.
+   * 
+   * @return the leadingIndex.
+   */
+  public int getLeadingIndex() {
+    return leadingIndex;
+  }
+
+  /**
    * Gets the new selection. The indices array is ordered.
    * 
    * @return the new selection.
@@ -76,14 +85,5 @@ public class SelectionChangeEvent extends EventObject {
   @Override
   public ISelectable getSource() {
     return (ISelectable) source;
-  }
-
-  /**
-   * Gets the leadingIndex.
-   * 
-   * @return the leadingIndex.
-   */
-  public int getLeadingIndex() {
-    return leadingIndex;
   }
 }

@@ -20,13 +20,6 @@ public interface IReferencePropertyDescriptor<E> extends
     IRelationshipEndPropertyDescriptor, IComponentDescriptorProvider {
 
   /**
-   * Gets the descriptor of the component referenced by this property.
-   * 
-   * @return the referenced component descriptor
-   */
-  IComponentDescriptor<E> getReferencedDescriptor();
-
-  /**
    * Gets the initialization map between master object attributes and query
    * entity for LOV. For instance, a mapping holding (attrA,attrB) will indicate
    * that the lov query entity should be initialized with its 'attrA' value
@@ -35,5 +28,12 @@ public interface IReferencePropertyDescriptor<E> extends
    * @return the initialisation mapping.
    */
   Map<String, String> getInitializationMapping();
+
+  /**
+   * Gets the descriptor of the component referenced by this property.
+   * 
+   * @return the referenced component descriptor
+   */
+  IComponentDescriptor<E> getReferencedDescriptor();
 
 }

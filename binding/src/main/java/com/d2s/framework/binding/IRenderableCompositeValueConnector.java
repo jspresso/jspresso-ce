@@ -17,11 +17,11 @@ public interface IRenderableCompositeValueConnector extends
     ICompositeValueConnector {
 
   /**
-   * Gets the connector responsible for rendering the composite connector.
+   * Clones this connector.
    * 
-   * @return the rendering connector.
+   * @return the connector's clone.
    */
-  IValueConnector getRenderingConnector();
+  IRenderableCompositeValueConnector clone();
 
   /**
    * Clones this connector.
@@ -33,9 +33,9 @@ public interface IRenderableCompositeValueConnector extends
   IRenderableCompositeValueConnector clone(String newConnectorId);
 
   /**
-   * Clones this connector.
+   * Gets the connector responsible for rendering the composite connector.
    * 
-   * @return the connector's clone.
+   * @return the rendering connector.
    */
-  IRenderableCompositeValueConnector clone();
+  IValueConnector getRenderingConnector();
 }

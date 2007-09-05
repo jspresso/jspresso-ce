@@ -30,51 +30,30 @@ public final class WingsUtil {
 
   private static final boolean DISABLE_THREADING   = false;
 
-  private WingsUtil() {
-    // Helper class private constructor.
-  }
-
   /**
-   * Tests wether in swing event dispatch thread. If not, use SwingUtilities to
-   * invoke runnable and wait.
+   * Make even and odd rows background colors slightly different in collection
+   * component (table, list, ...).
    * 
-   * @param runnable
-   *          the runnable operation which updates the GUI.
+   * @param renderer
+   *          the renderer to work on.
+   * @param collectionSComponent
+   *          the collection component (table, list, ...) on which this renderer
+   *          is used.
+   * @param isSelected
+   *          is the row selected ?
+   * @param row
+   *          the row to render.
    */
-  public static void updateSwingGui(Runnable runnable) {
-    if (DISABLE_THREADING) {
-      runnable.run();
-    } else {
-      if (SwingUtilities.isEventDispatchThread()) {
-        runnable.run();
+  public static void alternateEvenOddBackground(SComponent renderer,
+      SComponent collectionSComponent, boolean isSelected, int row) {
+    if (!isSelected) {
+      if (row % 2 == 1) {
+        renderer.setBackground(WingsUtil.getScaledColor(collectionSComponent
+            .getBackground(), DARKER_COLOR_FACTOR));
       } else {
-        try {
-          SwingUtilities.invokeAndWait(runnable);
-        } catch (InterruptedException ex) {
-          throw new NestedRuntimeException(ex);
-        } catch (InvocationTargetException ex) {
-          throw new NestedRuntimeException(ex);
-        }
-        // SwingUtilities.invokeLater(runnable);
+        renderer.setBackground(collectionSComponent.getBackground());
       }
     }
-  }
-
-  /**
-   * Gets the window or the internal frame holding the component.
-   * 
-   * @param component
-   *          the component to look the window or internal frame for.
-   * @return the window (frame or dialog) or the internal frame in the component
-   *         hierarchy.
-   */
-  public static SContainer getWindowOrInternalFrame(SComponent component) {
-    if ((component instanceof SRootContainer) || (component instanceof SDialog)) {
-      return (SContainer) component;
-    } else if (component != null) {
-      return getWindowOrInternalFrame(component.getParent());
-    }
-    return null;
   }
 
   /**
@@ -143,32 +122,6 @@ public final class WingsUtil {
   }
 
   /**
-   * Make even and odd rows background colors slightly different in collection
-   * component (table, list, ...).
-   * 
-   * @param renderer
-   *          the renderer to work on.
-   * @param collectionSComponent
-   *          the collection component (table, list, ...) on which this renderer
-   *          is used.
-   * @param isSelected
-   *          is the row selected ?
-   * @param row
-   *          the row to render.
-   */
-  public static void alternateEvenOddBackground(SComponent renderer,
-      SComponent collectionSComponent, boolean isSelected, int row) {
-    if (!isSelected) {
-      if (row % 2 == 1) {
-        renderer.setBackground(WingsUtil.getScaledColor(collectionSComponent
-            .getBackground(), DARKER_COLOR_FACTOR));
-      } else {
-        renderer.setBackground(collectionSComponent.getBackground());
-      }
-    }
-  }
-
-  /**
    * Gets the visible parent window.
    * 
    * @param component
@@ -177,5 +130,52 @@ public final class WingsUtil {
    */
   public static SContainer getVisibleWindow(SComponent component) {
     return getWindowOrInternalFrame(component);
+  }
+
+  /**
+   * Gets the window or the internal frame holding the component.
+   * 
+   * @param component
+   *          the component to look the window or internal frame for.
+   * @return the window (frame or dialog) or the internal frame in the component
+   *         hierarchy.
+   */
+  public static SContainer getWindowOrInternalFrame(SComponent component) {
+    if ((component instanceof SRootContainer) || (component instanceof SDialog)) {
+      return (SContainer) component;
+    } else if (component != null) {
+      return getWindowOrInternalFrame(component.getParent());
+    }
+    return null;
+  }
+
+  /**
+   * Tests wether in swing event dispatch thread. If not, use SwingUtilities to
+   * invoke runnable and wait.
+   * 
+   * @param runnable
+   *          the runnable operation which updates the GUI.
+   */
+  public static void updateSwingGui(Runnable runnable) {
+    if (DISABLE_THREADING) {
+      runnable.run();
+    } else {
+      if (SwingUtilities.isEventDispatchThread()) {
+        runnable.run();
+      } else {
+        try {
+          SwingUtilities.invokeAndWait(runnable);
+        } catch (InterruptedException ex) {
+          throw new NestedRuntimeException(ex);
+        } catch (InvocationTargetException ex) {
+          throw new NestedRuntimeException(ex);
+        }
+        // SwingUtilities.invokeLater(runnable);
+      }
+    }
+  }
+
+  private WingsUtil() {
+    // Helper class private constructor.
   }
 }

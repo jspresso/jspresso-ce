@@ -24,8 +24,21 @@ import com.d2s.framework.gui.wings.components.SActionField;
 public class SReferenceFieldConnector extends SActionFieldConnector implements
     ICompositeValueConnector {
 
-  private IValueConnector               toStringPropertyConnector;
+  private final class ToStringConnectorListener implements
+      IConnectorValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(@SuppressWarnings("unused")
+    ConnectorValueChangeEvent evt) {
+      setConnecteeValue(getConnecteeValue());
+    }
+
+  }
   private IConnectorValueChangeListener toStringListener;
+
+  private IValueConnector               toStringPropertyConnector;
 
   /**
    * Constructs a new <code>SActionFieldConnector</code> instance.
@@ -66,6 +79,28 @@ public class SReferenceFieldConnector extends SActionFieldConnector implements
   /**
    * {@inheritDoc}
    */
+  @Override
+  public SReferenceFieldConnector clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public SReferenceFieldConnector clone(String newConnectorId) {
+    SReferenceFieldConnector clonedConnector = (SReferenceFieldConnector) super
+        .clone(newConnectorId);
+    if (toStringPropertyConnector != null) {
+      clonedConnector.toStringPropertyConnector = toStringPropertyConnector
+          .clone();
+    }
+    return clonedConnector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IValueConnector getChildConnector(String connectorKey) {
     if (connectorKey.equals(toStringPropertyConnector.getId())) {
       return toStringPropertyConnector;
@@ -94,28 +129,6 @@ public class SReferenceFieldConnector extends SActionFieldConnector implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public SReferenceFieldConnector clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public SReferenceFieldConnector clone(String newConnectorId) {
-    SReferenceFieldConnector clonedConnector = (SReferenceFieldConnector) super
-        .clone(newConnectorId);
-    if (toStringPropertyConnector != null) {
-      clonedConnector.toStringPropertyConnector = toStringPropertyConnector
-          .clone();
-    }
-    return clonedConnector;
-  }
-
-  /**
    * Sets the toStringPropertyConnector.
    * 
    * @param toStringPropertyConnector
@@ -132,18 +145,5 @@ public class SReferenceFieldConnector extends SActionFieldConnector implements
       this.toStringPropertyConnector
           .addConnectorValueChangeListener(toStringListener);
     }
-  }
-
-  private final class ToStringConnectorListener implements
-      IConnectorValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
-      setConnecteeValue(getConnecteeValue());
-    }
-
   }
 }

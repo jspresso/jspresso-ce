@@ -31,6 +31,26 @@ import com.d2s.framework.model.entity.IEntity;
 public class AddToModuleObjectsAction extends AbstractCollectionAction {
 
   /**
+   * Creates a new entity to add to the projected object collection.
+   * 
+   * @param actionHandler
+   *          the action handler (generally the controller).
+   * @param context
+   *          the action context.
+   * @return the created entity.
+   */
+  @SuppressWarnings("unchecked")
+  protected Object createNewModuleObject(@SuppressWarnings("unused")
+  IActionHandler actionHandler, Map<String, Object> context) {
+    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor(context))
+        .getElementDescriptor();
+
+    return getEntityFactory(context).createEntityInstance(
+        (Class<? extends IEntity>) projectedComponentDescriptor
+            .getComponentContract());
+  }
+
+  /**
    * Adds a new object in the projected collection.
    * <p>
    * {@inheritDoc}
@@ -64,25 +84,5 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
         .getIndicesOf(moduleObjectsConnector, Collections
             .singleton(newModuleObject)));
     return super.execute(actionHandler, context);
-  }
-
-  /**
-   * Creates a new entity to add to the projected object collection.
-   * 
-   * @param actionHandler
-   *          the action handler (generally the controller).
-   * @param context
-   *          the action context.
-   * @return the created entity.
-   */
-  @SuppressWarnings("unchecked")
-  protected Object createNewModuleObject(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
-    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor(context))
-        .getElementDescriptor();
-
-    return getEntityFactory(context).createEntityInstance(
-        (Class<? extends IEntity>) projectedComponentDescriptor
-            .getComponentContract());
   }
 }

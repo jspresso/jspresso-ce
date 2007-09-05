@@ -32,13 +32,12 @@ public class MapPropertyAccessor implements IAccessor {
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the property property.
+   * 
+   * @return the property.
    */
-  @SuppressWarnings("unchecked")
-  public void setValue(Object target, Object value) {
-    if (target != null && target instanceof Map) {
-      ((Map) target).put(property, value);
-    }
+  protected String getProperty() {
+    return property;
   }
 
   /**
@@ -52,20 +51,21 @@ public class MapPropertyAccessor implements IAccessor {
   }
 
   /**
-   * Gets the property property.
-   * 
-   * @return the property.
-   */
-  protected String getProperty() {
-    return property;
-  }
-
-  /**
    * Gets the writable.
    * 
    * @return the writable.
    */
   public boolean isWritable() {
     return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public void setValue(Object target, Object value) {
+    if (target != null && target instanceof Map) {
+      ((Map) target).put(property, value);
+    }
   }
 }

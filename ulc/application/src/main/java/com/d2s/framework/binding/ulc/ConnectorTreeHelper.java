@@ -23,10 +23,6 @@ import com.ulcjava.base.application.tree.TreePath;
  */
 public final class ConnectorTreeHelper {
 
-  private ConnectorTreeHelper() {
-    // Hidden class.
-  }
-
   /**
    * Retrieves a connector tree path following the parent/child relationship.
    * 
@@ -54,5 +50,9 @@ public final class ConnectorTreeHelper {
       return new TreePath(treePath.toArray());
     }
     return null;
+  }
+
+  private ConnectorTreeHelper() {
+    // Hidden class.
   }
 }

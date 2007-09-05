@@ -14,13 +14,13 @@ package com.d2s.framework.gui.ulc.components.shared;
  */
 public final class DurationDataTypeConstants {
 
-  private DurationDataTypeConstants() {
-    // Empty constructor for utility class
-  }
-
   // anything key constants
   /**
    * <code>LOCALE</code>.
    */
   public static final String LOCALE = "locale";
+
+  private DurationDataTypeConstants() {
+    // Empty constructor for utility class
+  }
 }

@@ -22,15 +22,6 @@ import com.d2s.framework.util.bean.PropertyHelper;
 public class BeanAccessorFactory implements IAccessorFactory {
 
   /**
-   * Creates a new <code>BeanPropertyAccessor</code> on the property.
-   * <p>
-   * {@inheritDoc}
-   */
-  public IAccessor createPropertyAccessor(String property, Class beanClass) {
-    return new BeanPropertyAccessor(property, beanClass);
-  }
-
-  /**
    * Creates a new <code>BeanCollectionAccessor</code> on the collection
    * property.
    * <p>
@@ -43,5 +34,14 @@ public class BeanAccessorFactory implements IAccessorFactory {
       return new BeanListAccessor(property, beanClass, elementClass);
     }
     return new BeanCollectionAccessor(property, beanClass, elementClass);
+  }
+
+  /**
+   * Creates a new <code>BeanPropertyAccessor</code> on the property.
+   * <p>
+   * {@inheritDoc}
+   */
+  public IAccessor createPropertyAccessor(String property, Class beanClass) {
+    return new BeanPropertyAccessor(property, beanClass);
   }
 }

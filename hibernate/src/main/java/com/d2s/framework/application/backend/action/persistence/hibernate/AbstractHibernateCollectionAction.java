@@ -32,6 +32,17 @@ public abstract class AbstractHibernateCollectionAction extends
   }
 
   /**
+   * Refined to return a collection descriptor.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public ICollectionDescriptorProvider getModelDescriptor(
+      Map<String, Object> context) {
+    return (ICollectionDescriptorProvider) super.getModelDescriptor(context);
+  }
+
+  /**
    * Gets the selected indices from the context. it uses the
    * <code>ActionContextConstants.SELECTED_INDICES</code> key.
    * 
@@ -41,16 +52,5 @@ public abstract class AbstractHibernateCollectionAction extends
    */
   public int[] getSelectedIndices(Map<String, Object> context) {
     return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);
-  }
-
-  /**
-   * Refined to return a collection descriptor.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public ICollectionDescriptorProvider getModelDescriptor(
-      Map<String, Object> context) {
-    return (ICollectionDescriptorProvider) super.getModelDescriptor(context);
   }
 }

@@ -47,13 +47,53 @@ import com.d2s.framework.view.IIconFactory;
  */
 public class DialogCallbackHandler implements CallbackHandler {
 
-  private Component            parentComponent;
-  private IIconFactory<Icon>   iconFactory;
   private static final int     DEFAULT_FIELD_LENGTH = 32;
   private static final Insets  DEFAULT_INSETS       = new Insets(5, 5, 5, 5);
-
+  private IIconFactory<Icon>   iconFactory;
   private Locale               locale;
+
+  private Component            parentComponent;
   private ITranslationProvider translationProvider;
+
+  private JButton createOptionButton(final JDialog callbackDialog,
+      final ConfirmationCallback cc, final int option, String text,
+      final List<ActionListener> proceedActions) {
+    JButton optionButton = new JButton(text);
+    if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
+      optionButton.setIcon(iconFactory
+          .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
+      optionButton.addActionListener(new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+          for (ActionListener proceedAction : proceedActions) {
+            proceedAction.actionPerformed(e);
+          }
+          cc.setSelectedIndex(option);
+          callbackDialog.dispose();
+        }
+      });
+    } else {
+      if (option == ConfirmationCallback.NO) {
+        optionButton.setIcon(iconFactory
+            .getNoIcon(IIconFactory.SMALL_ICON_SIZE));
+      } else if (option == ConfirmationCallback.CANCEL) {
+        optionButton.setIcon(iconFactory
+            .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
+      }
+      optionButton.addActionListener(new ActionListener() {
+
+        public void actionPerformed(@SuppressWarnings("unused")
+        ActionEvent e) {
+          cc.setSelectedIndex(option);
+          callbackDialog.dispose();
+        }
+      });
+    }
+    if (cc.getDefaultOption() == option) {
+      callbackDialog.getRootPane().setDefaultButton(optionButton);
+    }
+    return optionButton;
+  }
 
   private Icon getIcon(TextOutputCallback callback)
       throws UnsupportedCallbackException {
@@ -275,6 +315,40 @@ public class DialogCallbackHandler implements CallbackHandler {
     }
   }
 
+  private void processNameCallback(final List<ActionListener> proceedActions,
+      JPanel inputPanel, final NameCallback nc) {
+    // JLabel promptLabel = new JLabel(nc.getPrompt());
+    JLabel promptLabel = new JLabel(translationProvider.getTranslation("user",
+        locale)
+        + " :");
+    final JTextField nameTextField = new JTextField(DEFAULT_FIELD_LENGTH);
+
+    // String defaultName = nc.getDefaultName();
+    // if (defaultName != null) {
+    // nameTextField.setText(defaultName);
+    // }
+
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.insets = DEFAULT_INSETS;
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.gridy = GridBagConstraints.RELATIVE;
+    constraints.gridwidth = 1;
+    inputPanel.add(promptLabel, constraints);
+
+    constraints.weightx = 1.0d;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    inputPanel.add(nameTextField, constraints);
+
+    proceedActions.add(new ActionListener() {
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        nc.setName(nameTextField.getText());
+      }
+    });
+  }
+
   private void processPasswordCallback(
       final List<ActionListener> proceedActions, JPanel inputPanel,
       final PasswordCallback pc) {
@@ -310,40 +384,6 @@ public class DialogCallbackHandler implements CallbackHandler {
     });
   }
 
-  private void processNameCallback(final List<ActionListener> proceedActions,
-      JPanel inputPanel, final NameCallback nc) {
-    // JLabel promptLabel = new JLabel(nc.getPrompt());
-    JLabel promptLabel = new JLabel(translationProvider.getTranslation("user",
-        locale)
-        + " :");
-    final JTextField nameTextField = new JTextField(DEFAULT_FIELD_LENGTH);
-
-    // String defaultName = nc.getDefaultName();
-    // if (defaultName != null) {
-    // nameTextField.setText(defaultName);
-    // }
-
-    GridBagConstraints constraints = new GridBagConstraints();
-    constraints.insets = DEFAULT_INSETS;
-    constraints.gridx = GridBagConstraints.RELATIVE;
-    constraints.gridy = GridBagConstraints.RELATIVE;
-    constraints.gridwidth = 1;
-    inputPanel.add(promptLabel, constraints);
-
-    constraints.weightx = 1.0d;
-    constraints.fill = GridBagConstraints.HORIZONTAL;
-    constraints.gridwidth = GridBagConstraints.REMAINDER;
-    inputPanel.add(nameTextField, constraints);
-
-    proceedActions.add(new ActionListener() {
-
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
-        nc.setName(nameTextField.getText());
-      }
-    });
-  }
-
   private void processTextOutputCallback(JPanel messagePanel,
       TextOutputCallback toc) throws UnsupportedCallbackException {
     JLabel messageLabel = new JLabel(toc.getMessage(), getIcon(toc),
@@ -358,44 +398,14 @@ public class DialogCallbackHandler implements CallbackHandler {
     messagePanel.add(messageLabel, constraints);
   }
 
-  private JButton createOptionButton(final JDialog callbackDialog,
-      final ConfirmationCallback cc, final int option, String text,
-      final List<ActionListener> proceedActions) {
-    JButton optionButton = new JButton(text);
-    if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
-      optionButton.setIcon(iconFactory
-          .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
-      optionButton.addActionListener(new ActionListener() {
-
-        public void actionPerformed(ActionEvent e) {
-          for (ActionListener proceedAction : proceedActions) {
-            proceedAction.actionPerformed(e);
-          }
-          cc.setSelectedIndex(option);
-          callbackDialog.dispose();
-        }
-      });
-    } else {
-      if (option == ConfirmationCallback.NO) {
-        optionButton.setIcon(iconFactory
-            .getNoIcon(IIconFactory.SMALL_ICON_SIZE));
-      } else if (option == ConfirmationCallback.CANCEL) {
-        optionButton.setIcon(iconFactory
-            .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
-      }
-      optionButton.addActionListener(new ActionListener() {
-
-        public void actionPerformed(@SuppressWarnings("unused")
-        ActionEvent e) {
-          cc.setSelectedIndex(option);
-          callbackDialog.dispose();
-        }
-      });
-    }
-    if (cc.getDefaultOption() == option) {
-      callbackDialog.getRootPane().setDefaultButton(optionButton);
-    }
-    return optionButton;
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *          the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<Icon> iconFactory) {
+    this.iconFactory = iconFactory;
   }
 
   /**
@@ -416,16 +426,6 @@ public class DialogCallbackHandler implements CallbackHandler {
    */
   public void setParentComponent(Component parentComponent) {
     this.parentComponent = parentComponent;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<Icon> iconFactory) {
-    this.iconFactory = iconFactory;
   }
 
   /**

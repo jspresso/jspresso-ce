@@ -22,16 +22,6 @@ public class StaticOkCancelAction extends OkCancelAction {
   private String messageCode;
 
   /**
-   * Sets the messageCode.
-   * 
-   * @param messageCode
-   *          the messageCode to set.
-   */
-  public void setMessageCode(String messageCode) {
-    this.messageCode = messageCode;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -40,6 +30,16 @@ public class StaticOkCancelAction extends OkCancelAction {
     context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
         context).getTranslation(messageCode, getLocale(context)));
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Sets the messageCode.
+   * 
+   * @param messageCode
+   *          the messageCode to set.
+   */
+  public void setMessageCode(String messageCode) {
+    this.messageCode = messageCode;
   }
 
 }

@@ -21,8 +21,8 @@ import javax.swing.RootPaneContainer;
 public class WaitCursorTimer extends Thread {
 
   private int       delay;
-  private Object    source;
   private Component parent;
+  private Object    source;
 
   /**
    * Constructs a new <code>WaitCursorTimer</code> instance.
@@ -34,34 +34,6 @@ public class WaitCursorTimer extends Thread {
   public WaitCursorTimer(int delay) {
     super("WaitCursorTimer");
     this.delay = delay;
-  }
-
-  /**
-   * Starts the timer.
-   * 
-   * @param sourceComponent
-   *          the source component.
-   */
-  public synchronized void startTimer(Object sourceComponent) {
-    this.source = sourceComponent;
-    notify();
-  }
-
-  /**
-   * Stops the timer.
-   */
-  public synchronized void stopTimer() {
-    if (parent == null) {
-      interrupt();
-    } else {
-      if (parent != null && parent.isShowing()) {
-        if (parent instanceof RootPaneContainer) {
-          ((RootPaneContainer) parent).getGlassPane().setCursor(null);
-        }
-        parent.setCursor(null);
-      }
-      parent = null;
-    }
   }
 
   /**
@@ -97,6 +69,34 @@ public class WaitCursorTimer extends Thread {
       } catch (InterruptedException ie) {
         // just finish.
       }
+    }
+  }
+
+  /**
+   * Starts the timer.
+   * 
+   * @param sourceComponent
+   *          the source component.
+   */
+  public synchronized void startTimer(Object sourceComponent) {
+    this.source = sourceComponent;
+    notify();
+  }
+
+  /**
+   * Stops the timer.
+   */
+  public synchronized void stopTimer() {
+    if (parent == null) {
+      interrupt();
+    } else {
+      if (parent != null && parent.isShowing()) {
+        if (parent instanceof RootPaneContainer) {
+          ((RootPaneContainer) parent).getGlassPane().setCursor(null);
+        }
+        parent.setCursor(null);
+      }
+      parent = null;
     }
   }
 }

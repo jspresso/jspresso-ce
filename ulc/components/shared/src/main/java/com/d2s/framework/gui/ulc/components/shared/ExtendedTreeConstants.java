@@ -14,9 +14,20 @@ package com.d2s.framework.gui.ulc.components.shared;
  */
 public final class ExtendedTreeConstants {
 
-  private ExtendedTreeConstants() {
-    // Empty constructor for utility class
-  }
+  /**
+   * <code>EXTENDED_TREE_EXPANSION_EVENT</code>.
+   */
+  public static final int    EXTENDED_TREE_EXPANSION_EVENT = 10002;
+
+  /**
+   * <code>EXTENDED_TREE_WILL_COLLAPSE</code>.
+   */
+  public static final int    EXTENDED_TREE_WILL_COLLAPSE   = 2;
+
+  /**
+   * <code>EXTENDED_TREE_WILL_EXPAND</code>.
+   */
+  public static final int    EXTENDED_TREE_WILL_EXPAND     = 1;
 
   // request constants
   /**
@@ -30,18 +41,7 @@ public final class ExtendedTreeConstants {
    */
   public static final String ROW_KEY                       = "row";
 
-  /**
-   * <code>EXTENDED_TREE_EXPANSION_EVENT</code>.
-   */
-  public static final int    EXTENDED_TREE_EXPANSION_EVENT = 10002;
-
-  /**
-   * <code>EXTENDED_TREE_WILL_EXPAND</code>.
-   */
-  public static final int    EXTENDED_TREE_WILL_EXPAND     = 1;
-
-  /**
-   * <code>EXTENDED_TREE_WILL_COLLAPSE</code>.
-   */
-  public static final int    EXTENDED_TREE_WILL_COLLAPSE   = 2;
+  private ExtendedTreeConstants() {
+    // Empty constructor for utility class
+  }
 }

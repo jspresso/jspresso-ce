@@ -35,6 +35,13 @@ public interface IAction extends ISecurable {
   boolean execute(IActionHandler actionHandler, Map<String, Object> context);
 
   /**
+   * Gets the initial action context.
+   * 
+   * @return the initial action context.
+   */
+  Map<String, Object> getInitialContext();
+
+  /**
    * Tells the framework wether this action executes on the application model or
    * if it is a pure frontend action. this is aimed at distributing the action
    * execution correctly to the different controllers of the application.
@@ -60,11 +67,4 @@ public interface IAction extends ISecurable {
    *          the context value to put.
    */
   void putInitialContext(String key, Object value);
-
-  /**
-   * Gets the initial action context.
-   * 
-   * @return the initial action context.
-   */
-  Map<String, Object> getInitialContext();
 }

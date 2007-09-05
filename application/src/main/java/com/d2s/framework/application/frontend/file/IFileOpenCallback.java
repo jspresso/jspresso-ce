@@ -20,6 +20,16 @@ import com.d2s.framework.action.IActionHandler;
 public interface IFileOpenCallback {
 
   /**
+   * Called whenever the file opening is cancelled.
+   * 
+   * @param actionHandler
+   *          the action handler.
+   * @param context
+   *          the action context.
+   */
+  void cancel(IActionHandler actionHandler, Map<String, Object> context);
+
+  /**
    * Called whenever a file is opened.
    * 
    * @param in
@@ -33,14 +43,4 @@ public interface IFileOpenCallback {
    */
   void fileChosen(InputStream in, String filePath,
       IActionHandler actionHandler, Map<String, Object> context);
-
-  /**
-   * Called whenever the file opening is cancelled.
-   * 
-   * @param actionHandler
-   *          the action handler.
-   * @param context
-   *          the action context.
-   */
-  void cancel(IActionHandler actionHandler, Map<String, Object> context);
 }

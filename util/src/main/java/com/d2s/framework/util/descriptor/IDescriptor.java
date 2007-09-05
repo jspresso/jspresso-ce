@@ -19,22 +19,13 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public interface IDescriptor {
 
   /**
-   * <code>NAME</code>="name".
-   */
-  String NAME        = "name";
-  /**
    * <code>DESCRIPTION</code>="description".
    */
   String DESCRIPTION = "description";
-
   /**
-   * Gets the name of this descriptor. Depending on the implementation, this
-   * name can be technically meaningful (e.g. a method name, a property name,
-   * ...).
-   * 
-   * @return The name of this descripted object
+   * <code>NAME</code>="name".
    */
-  String getName();
+  String NAME        = "name";
 
   /**
    * Gets the end-user understandable description.
@@ -42,6 +33,20 @@ public interface IDescriptor {
    * @return The user-friendly description
    */
   String getDescription();
+
+  /**
+   * Gets the internationalized end-user understandable description.
+   * 
+   * @param translationProvider
+   *          the translation provider which can be used by the descriptor to
+   *          compute its internationalized description.
+   * @param locale
+   *          the locale in which the descriptor must compute its
+   *          internationalized description.
+   * @return The user-friendly description
+   */
+  String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale);
 
   /**
    * Gets the internationalized name of this descriptor.
@@ -57,16 +62,11 @@ public interface IDescriptor {
   String getI18nName(ITranslationProvider translationProvider, Locale locale);
 
   /**
-   * Gets the internationalized end-user understandable description.
+   * Gets the name of this descriptor. Depending on the implementation, this
+   * name can be technically meaningful (e.g. a method name, a property name,
+   * ...).
    * 
-   * @param translationProvider
-   *          the translation provider which can be used by the descriptor to
-   *          compute its internationalized description.
-   * @param locale
-   *          the locale in which the descriptor must compute its
-   *          internationalized description.
-   * @return The user-friendly description
+   * @return The name of this descripted object
    */
-  String getI18nDescription(ITranslationProvider translationProvider,
-      Locale locale);
+  String getName();
 }

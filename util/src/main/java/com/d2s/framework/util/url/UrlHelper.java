@@ -23,10 +23,6 @@ public final class UrlHelper {
   private static final String JAR_URL           = "jar:";
   private static final String JAR_URL_SEPARATOR = "!/";
 
-  private UrlHelper() {
-    // private constructor for helper class.
-  }
-
   /**
    * Creates a URL object.
    * 
@@ -74,5 +70,9 @@ public final class UrlHelper {
       }
     }
     return returnedURL;
+  }
+
+  private UrlHelper() {
+    // private constructor for helper class.
   }
 }

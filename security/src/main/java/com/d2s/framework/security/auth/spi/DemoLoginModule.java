@@ -32,29 +32,121 @@ import com.d2s.framework.util.security.LoginUtils;
  */
 public class DemoLoginModule implements LoginModule {
 
-  // initial state
-  private Subject         subject;
+  private ResourceBundle  bundle          = ResourceBundle
+                                              .getBundle("com.d2s.framework.util.security.LoginUtils.DlmBundle");
   private CallbackHandler callbackHandler;
-  @SuppressWarnings("unused")
-  private Map             sharedState;
-  private Map             options;
-
+  private boolean         commitSucceeded = false;
   // configurable option
   private boolean         debug           = false;
 
+  private Map             options;
+
+  private char[]          password;
+  @SuppressWarnings("unused")
+  private Map             sharedState;
+
+  // initial state
+  private Subject         subject;
   // the authentication status
   private boolean         succeeded       = false;
-  private boolean         commitSucceeded = false;
 
   // username and password
   private String          username;
-  private char[]          password;
 
   // testUser's UserPrincipal
   private UserPrincipal   userPrincipal;
 
-  private ResourceBundle  bundle          = ResourceBundle
-                                              .getBundle("com.d2s.framework.util.security.LoginUtils.DlmBundle");
+  /**
+   * <p>
+   * This method is called if the LoginContext's overall authentication failed.
+   * (the relevant REQUIRED, REQUISITE, SUFFICIENT and OPTIONAL LoginModules did
+   * not succeed).
+   * <p>
+   * If this LoginModule's own authentication attempt succeeded (checked by
+   * retrieving the private state saved by the <code>login</code> and
+   * <code>commit</code> methods), then this method cleans up any state that
+   * was originally saved.
+   * <p>
+   *
+   * @return false if this LoginModule's own login and/or commit attempts
+   *         failed, and true otherwise.
+   */
+  public boolean abort() {
+    if (!succeeded) {
+      Callback[] callbacks = new Callback[1];
+      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, bundle
+          .getString(LoginUtils.LOGIN_FAILED));
+      try {
+        callbackHandler.handle(callbacks);
+      } catch (IOException ex) {
+        // NO-OP.
+      } catch (UnsupportedCallbackException ex) {
+        // NO-OP.
+      }
+      return false;
+    } else if (succeeded && !commitSucceeded) {
+      // login succeeded but overall authentication failed
+      succeeded = false;
+      username = null;
+      if (password != null) {
+        for (int i = 0; i < password.length; i++) {
+          password[i] = ' ';
+        }
+        password = null;
+      }
+      userPrincipal = null;
+    } else {
+      // overall authentication succeeded and commit succeeded,
+      // but someone else's commit failed
+      logout();
+    }
+    return true;
+  }
+
+  /**
+   * <p>
+   * This method is called if the LoginContext's overall authentication
+   * succeeded (the relevant REQUIRED, REQUISITE, SUFFICIENT and OPTIONAL
+   * LoginModules succeeded).
+   * <p>
+   * If this LoginModule's own authentication attempt succeeded (checked by
+   * retrieving the private state saved by the <code>login</code> method),
+   * then this method associates a <code>DemoPrincipal</code> with the
+   * <code>Subject</code> located in the <code>LoginModule</code>. If this
+   * LoginModule's own authentication attempted failed, then this method removes
+   * any state that was originally saved.
+   * <p>
+   *
+   * @return true if this LoginModule's own login and commit attempts succeeded,
+   *         or false otherwise.
+   */
+  public boolean commit() {
+    if (!succeeded) {
+      return false;
+    }
+    // assume the user we authenticated is the DemoPrincipal
+    userPrincipal = new UserPrincipal(username);
+    userPrincipal.putCustomProperty(UserPrincipal.OWNER_PROPERTY,
+        "ou=demo,ou=customers,ou=cms,ou=applications,dc=bluevox,dc=com");
+    if (!subject.getPrincipals().contains(userPrincipal)) {
+      subject.getPrincipals().add(userPrincipal);
+    }
+
+    if (debug) {
+      System.out.println("\t\t[DemoLoginModule] "
+          + "added DemoPrincipal to Subject");
+    }
+
+    // in any case, clean out state
+    username = null;
+    for (int i = 0; i < password.length; i++) {
+      password[i] = ' ';
+    }
+    password = null;
+
+    commitSucceeded = true;
+    return true;
+  }
 
   /**
    * Initialize this <code>LoginModule</code>.
@@ -174,98 +266,6 @@ public class DemoLoginModule implements LoginModule {
       throw new FailedLoginException(bundle.getString(LoginUtils.USER_FAILED));
     }
     throw new FailedLoginException(bundle.getString(LoginUtils.PASSWORD_FAILED));
-  }
-
-  /**
-   * <p>
-   * This method is called if the LoginContext's overall authentication
-   * succeeded (the relevant REQUIRED, REQUISITE, SUFFICIENT and OPTIONAL
-   * LoginModules succeeded).
-   * <p>
-   * If this LoginModule's own authentication attempt succeeded (checked by
-   * retrieving the private state saved by the <code>login</code> method),
-   * then this method associates a <code>DemoPrincipal</code> with the
-   * <code>Subject</code> located in the <code>LoginModule</code>. If this
-   * LoginModule's own authentication attempted failed, then this method removes
-   * any state that was originally saved.
-   * <p>
-   *
-   * @return true if this LoginModule's own login and commit attempts succeeded,
-   *         or false otherwise.
-   */
-  public boolean commit() {
-    if (!succeeded) {
-      return false;
-    }
-    // assume the user we authenticated is the DemoPrincipal
-    userPrincipal = new UserPrincipal(username);
-    userPrincipal.putCustomProperty(UserPrincipal.OWNER_PROPERTY,
-        "ou=demo,ou=customers,ou=cms,ou=applications,dc=bluevox,dc=com");
-    if (!subject.getPrincipals().contains(userPrincipal)) {
-      subject.getPrincipals().add(userPrincipal);
-    }
-
-    if (debug) {
-      System.out.println("\t\t[DemoLoginModule] "
-          + "added DemoPrincipal to Subject");
-    }
-
-    // in any case, clean out state
-    username = null;
-    for (int i = 0; i < password.length; i++) {
-      password[i] = ' ';
-    }
-    password = null;
-
-    commitSucceeded = true;
-    return true;
-  }
-
-  /**
-   * <p>
-   * This method is called if the LoginContext's overall authentication failed.
-   * (the relevant REQUIRED, REQUISITE, SUFFICIENT and OPTIONAL LoginModules did
-   * not succeed).
-   * <p>
-   * If this LoginModule's own authentication attempt succeeded (checked by
-   * retrieving the private state saved by the <code>login</code> and
-   * <code>commit</code> methods), then this method cleans up any state that
-   * was originally saved.
-   * <p>
-   *
-   * @return false if this LoginModule's own login and/or commit attempts
-   *         failed, and true otherwise.
-   */
-  public boolean abort() {
-    if (!succeeded) {
-      Callback[] callbacks = new Callback[1];
-      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, bundle
-          .getString(LoginUtils.LOGIN_FAILED));
-      try {
-        callbackHandler.handle(callbacks);
-      } catch (IOException ex) {
-        // NO-OP.
-      } catch (UnsupportedCallbackException ex) {
-        // NO-OP.
-      }
-      return false;
-    } else if (succeeded && !commitSucceeded) {
-      // login succeeded but overall authentication failed
-      succeeded = false;
-      username = null;
-      if (password != null) {
-        for (int i = 0; i < password.length; i++) {
-          password[i] = ' ';
-        }
-        password = null;
-      }
-      userPrincipal = null;
-    } else {
-      // overall authentication succeeded and commit succeeded,
-      // but someone else's commit failed
-      logout();
-    }
-    return true;
   }
 
   /**

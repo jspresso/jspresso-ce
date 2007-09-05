@@ -21,28 +21,6 @@ import java.util.Map;
  */
 public class ActionMap {
 
-  private List<ActionMap>                       parentActionMaps;
-  private Map<String, List<IDisplayableAction>> actionMap;
-
-  /**
-   * Gets the map of action sets composing the parent actionmaps with the local
-   * one.
-   * 
-   * @return the actionMap.
-   */
-  public Map<String, List<IDisplayableAction>> getActionMap() {
-    Map<String, List<IDisplayableAction>> returnedActionMap = new LinkedHashMap<String, List<IDisplayableAction>>();
-    if (parentActionMaps != null) {
-      for (ActionMap parentActionMap : parentActionMaps) {
-        completeActionMap(returnedActionMap, parentActionMap.getActionMap());
-      }
-    }
-    if (actionMap != null) {
-      completeActionMap(returnedActionMap, actionMap);
-    }
-    return returnedActionMap;
-  }
-
   private static void completeActionMap(
       Map<String, List<IDisplayableAction>> globalActionMap,
       Map<String, List<IDisplayableAction>> localActionMap) {
@@ -65,6 +43,28 @@ public class ActionMap {
         }
       }
     }
+  }
+  private Map<String, List<IDisplayableAction>> actionMap;
+
+  private List<ActionMap>                       parentActionMaps;
+
+  /**
+   * Gets the map of action sets composing the parent actionmaps with the local
+   * one.
+   * 
+   * @return the actionMap.
+   */
+  public Map<String, List<IDisplayableAction>> getActionMap() {
+    Map<String, List<IDisplayableAction>> returnedActionMap = new LinkedHashMap<String, List<IDisplayableAction>>();
+    if (parentActionMaps != null) {
+      for (ActionMap parentActionMap : parentActionMaps) {
+        completeActionMap(returnedActionMap, parentActionMap.getActionMap());
+      }
+    }
+    if (actionMap != null) {
+      completeActionMap(returnedActionMap, actionMap);
+    }
+    return returnedActionMap;
   }
 
   /**

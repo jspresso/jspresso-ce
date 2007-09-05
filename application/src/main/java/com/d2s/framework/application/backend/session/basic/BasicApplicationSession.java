@@ -45,18 +45,18 @@ import com.d2s.framework.util.bean.BeanPropertyChangeRecorder;
  */
 public class BasicApplicationSession implements IApplicationSession {
 
-  private IEntityRegistry                      entityRegistry;
-  private IEntityCloneFactory                  carbonEntityCloneFactory;
-  private BeanPropertyChangeRecorder           dirtRecorder;
-  private IEntityUnitOfWork                    unitOfWork;
-  private IEntityFactory                       entityFactory;
   private IAccessorFactory                     accessorFactory;
+  private IEntityCloneFactory                  carbonEntityCloneFactory;
   private IComponentCollectionFactory<IEntity> collectionFactory;
-  private Set<IEntity>                         entitiesToMergeBack;
+  private BeanPropertyChangeRecorder           dirtRecorder;
   private Set<IEntity>                         entitiesRegisteredForDeletion;
   private List<IEntity>                        entitiesRegisteredForUpdate;
-  private Subject                              subject;
+  private Set<IEntity>                         entitiesToMergeBack;
+  private IEntityFactory                       entityFactory;
+  private IEntityRegistry                      entityRegistry;
   private Locale                               locale;
+  private Subject                              subject;
+  private IEntityUnitOfWork                    unitOfWork;
 
   /**
    * Constructs a new <code>BasicApplicationSession</code> instance.
@@ -68,52 +68,148 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public void registerEntity(IEntity entity, boolean isEntityTransient) {
-    if (!unitOfWork.isActive()) {
-      entityRegistry.register(entity);
-      Map<String, Object> initialDirtyProperties = null;
-      if (isEntityTransient) {
-        initialDirtyProperties = new HashMap<String, Object>();
-        for (Map.Entry<String, Object> property : entity
-            .straightGetProperties().entrySet()) {
-          if (property.getValue() != null
-              && !(property.getValue() instanceof Collection && ((Collection) property
-                  .getValue()).isEmpty())) {
-            initialDirtyProperties.put(property.getKey(), null);
+  public void beginUnitOfWork() {
+    if (unitOfWork.isActive()) {
+      throw new ApplicationSessionException(
+          "Cannot begin a new unit of work. Another one is already active.");
+    }
+    unitOfWork.begin();
+    entitiesToMergeBack = new LinkedHashSet<IEntity>();
+  }
+
+  private void cleanDirtyProperties(IEntity entity) {
+    dirtRecorder.resetChangedProperties(entity, null);
+  }
+
+  /**
+   * Clears the pending operations.
+   */
+  public void clearPendingOperations() {
+    entitiesRegisteredForUpdate = null;
+    entitiesRegisteredForDeletion = null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IEntity cloneInUnitOfWork(IEntity entity) {
+    return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
+  }
+
+  @SuppressWarnings("unchecked")
+  private IEntity cloneInUnitOfWork(IEntity entity,
+      Map<Class, Map<Serializable, IEntity>> alreadyCloned) {
+    Map<Serializable, IEntity> contractBuffer = alreadyCloned.get(entity
+        .getContract());
+    IEntity uowEntity = null;
+    if (contractBuffer == null) {
+      contractBuffer = new HashMap<Serializable, IEntity>();
+      alreadyCloned.put(entity.getContract(), contractBuffer);
+    } else {
+      uowEntity = contractBuffer.get(entity.getId());
+      if (uowEntity != null) {
+        return uowEntity;
+      }
+    }
+    uowEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
+    Map<String, Object> dirtyProperties = dirtRecorder
+        .getChangedProperties(entity);
+    if (dirtyProperties == null) {
+      dirtyProperties = new HashMap<String, Object>();
+    }
+    contractBuffer.put(entity.getId(), uowEntity);
+    Map<String, Object> entityProperties = entity.straightGetProperties();
+    for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+      if (property.getValue() instanceof IEntity) {
+        if (isInitialized(property.getValue())) {
+          uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
+              (IEntity) property.getValue(), alreadyCloned));
+        } else {
+          uowEntity.straightSetProperty(property.getKey(), property.getValue());
+        }
+      } else if (property.getValue() instanceof Collection) {
+        if (isInitialized(property.getValue())) {
+          Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
+              .getValue());
+          for (IEntity entityCollectionElement : (Collection<IEntity>) property
+              .getValue()) {
+            uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
+                alreadyCloned));
           }
+          Collection snapshotCollection = (Collection) dirtyProperties
+              .get(property.getKey());
+          if (snapshotCollection != null) {
+            Collection clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
+            for (Object snapshotCollectionElement : snapshotCollection) {
+              clonedSnapshotCollection.add(cloneInUnitOfWork(
+                  (IEntity) snapshotCollectionElement, alreadyCloned));
+            }
+            snapshotCollection = clonedSnapshotCollection;
+          }
+          uowEntityCollection = wrapDetachedEntityCollection(entity,
+              uowEntityCollection, snapshotCollection, property.getKey());
+          uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
+        } else {
+          uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
       }
-      dirtRecorder.register(entity, initialDirtyProperties);
     }
+    unitOfWork
+        .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
+    return uowEntity;
   }
 
   /**
    * {@inheritDoc}
    */
-  public void updateEntity(IEntity entity) {
-    if (entity.isPersistent()) {
-      if (entitiesRegisteredForUpdate == null) {
-        entitiesRegisteredForUpdate = new ArrayList<IEntity>();
+  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
+    List<IEntity> uowEntities = new ArrayList<IEntity>();
+    Map<Class, Map<Serializable, IEntity>> alreadyCloned = new HashMap<Class, Map<Serializable, IEntity>>();
+    for (IEntity entity : entities) {
+      uowEntities.add(cloneInUnitOfWork(entity, alreadyCloned));
+    }
+    return uowEntities;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void commitUnitOfWork() {
+    if (!unitOfWork.isActive()) {
+      throw new ApplicationSessionException(
+          "Cannot commit a unit of work that has not begun.");
+    }
+    try {
+      Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
+      for (IEntity entityToMergeBack : entitiesToMergeBack) {
+        merge(entityToMergeBack, MergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
       }
-      entitiesRegisteredForUpdate.add(entity);
+    } finally {
+      unitOfWork.commit();
+      entitiesToMergeBack = null;
+      clearPendingOperations();
     }
   }
 
   /**
-   * Gets the entitiesRegisteredForUpdate.
+   * Creates a transient collection instance, in respect to the type of
+   * collection passed as parameter.
    * 
-   * @return the entitiesRegisteredForUpdate.
+   * @param collection
+   *          the collection to take the type from (List, Set, ...)
+   * @return a transient collection instance with the same interface type as the
+   *         parameter.
    */
-  protected List<IEntity> getEntitiesRegisteredForUpdate() {
-    return entitiesRegisteredForUpdate;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isEntityRegisteredForUpdate(IEntity entity) {
-    return entitiesRegisteredForUpdate != null
-        && entitiesRegisteredForUpdate.contains(entity);
+  protected Collection<IEntity> createTransientEntityCollection(
+      Collection collection) {
+    Collection<IEntity> uowEntityCollection = null;
+    if (collection instanceof Set) {
+      uowEntityCollection = collectionFactory.createEntityCollection(Set.class);
+    } else if (collection instanceof List) {
+      uowEntityCollection = collectionFactory
+          .createEntityCollection(List.class);
+    }
+    return uowEntityCollection;
   }
 
   /**
@@ -129,12 +225,127 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
+   * Gets the entity dirt recorder. To be used by subclasses.
+   * 
+   * @return the entity dirt recorder.
+   */
+  protected BeanPropertyChangeRecorder getDirtRecorder() {
+    return dirtRecorder;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, Object> getDirtyProperties(IEntity entity) {
+    if (unitOfWork.isActive()) {
+      return unitOfWork.getDirtyProperties(entity);
+    }
+    return dirtRecorder.getChangedProperties(entity);
+  }
+
+  /**
    * Gets the entitiesRegisteredForDeletion.
    * 
    * @return the entitiesRegisteredForDeletion.
    */
   protected Set<IEntity> getEntitiesRegisteredForDeletion() {
     return entitiesRegisteredForDeletion;
+  }
+
+  /**
+   * Gets the entitiesRegisteredForUpdate.
+   * 
+   * @return the entitiesRegisteredForUpdate.
+   */
+  protected List<IEntity> getEntitiesRegisteredForUpdate() {
+    return entitiesRegisteredForUpdate;
+  }
+
+  /**
+   * Gets the entitiesToMergeBack.
+   * 
+   * @return the entitiesToMergeBack.
+   */
+  protected Set<IEntity> getEntitiesToMergeBack() {
+    return entitiesToMergeBack;
+  }
+
+  /**
+   * Gets the locale.
+   * 
+   * @return the locale.
+   */
+  public Locale getLocale() {
+    return locale;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public UserPrincipal getPrincipal() {
+    if (subject != null && !subject.getPrincipals().isEmpty()) {
+      return (UserPrincipal) subject.getPrincipals().iterator().next();
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IEntity getRegisteredEntity(Class entityContract, Object entityId) {
+    return entityRegistry.get(entityContract, entityId);
+  }
+
+  /**
+   * Gets the owner.
+   * 
+   * @return the owner.
+   */
+  public Subject getSubject() {
+    return subject;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public void initializePropertyIfNeeded(IEntity entity,
+      IPropertyDescriptor propertyDescriptor) {
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      String propertyName = propertyDescriptor.getName();
+      Object propertyValue = entity.straightGetProperty(propertyName);
+      sortCollectionProperty(entity, propertyName);
+      for (Iterator<IEntity> ite = ((Collection<IEntity>) propertyValue)
+          .iterator(); ite.hasNext();) {
+        IEntity collectionElement = ite.next();
+        if (isEntityRegisteredForDeletion(collectionElement)) {
+          ite.remove();
+        }
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isDirty(IEntity entity) {
+    if (unitOfWork.isActive()) {
+      return unitOfWork.isDirty(entity);
+    }
+    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
+    return (entityDirtyProperties != null && entityDirtyProperties.size() > 0);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isDirty(IEntity entity, String propertyName) {
+    if (unitOfWork.isActive()) {
+      return unitOfWork.isDirty(entity, propertyName);
+    }
+    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
+    return (entityDirtyProperties != null && entityDirtyProperties
+        .containsKey(propertyName));
   }
 
   /**
@@ -148,16 +359,24 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public void performPendingOperations() {
-    clearPendingOperations();
+  public boolean isEntityRegisteredForUpdate(IEntity entity) {
+    return entitiesRegisteredForUpdate != null
+        && entitiesRegisteredForUpdate.contains(entity);
   }
 
   /**
-   * Clears the pending operations.
+   * {@inheritDoc}
    */
-  public void clearPendingOperations() {
-    entitiesRegisteredForUpdate = null;
-    entitiesRegisteredForDeletion = null;
+  public boolean isInitialized(@SuppressWarnings("unused")
+  Object objectOrProxy) {
+    return true;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isUnitOfWorkActive() {
+    return unitOfWork.isActive();
   }
 
   /**
@@ -165,18 +384,6 @@ public class BasicApplicationSession implements IApplicationSession {
    */
   public IEntity merge(IEntity entity, MergeMode mergeMode) {
     return merge(entity, mergeMode, new HashMap<IEntity, IEntity>());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
-    Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
-    List<IEntity> mergedList = new ArrayList<IEntity>();
-    for (IEntity entity : entities) {
-      mergedList.add(merge(entity, mergeMode, alreadyMerged));
-    }
-    return mergedList;
   }
 
   @SuppressWarnings("unchecked")
@@ -288,114 +495,51 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public boolean isInitialized(@SuppressWarnings("unused")
-  Object objectOrProxy) {
-    return true;
+  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
+    Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
+    List<IEntity> mergedList = new ArrayList<IEntity>();
+    for (IEntity entity : entities) {
+      mergedList.add(merge(entity, mergeMode, alreadyMerged));
+    }
+    return mergedList;
   }
 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
-  public void initializePropertyIfNeeded(IEntity entity,
-      IPropertyDescriptor propertyDescriptor) {
-    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-      String propertyName = propertyDescriptor.getName();
-      Object propertyValue = entity.straightGetProperty(propertyName);
-      sortCollectionProperty(entity, propertyName);
-      for (Iterator<IEntity> ite = ((Collection<IEntity>) propertyValue)
-          .iterator(); ite.hasNext();) {
-        IEntity collectionElement = ite.next();
-        if (isEntityRegisteredForDeletion(collectionElement)) {
-          ite.remove();
+  public void performPendingOperations() {
+    clearPendingOperations();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void recordAsSynchronized(IEntity flushedEntity) {
+    if (unitOfWork.isActive()) {
+      unitOfWork.clearDirtyState(flushedEntity);
+      entitiesToMergeBack.add(flushedEntity);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void registerEntity(IEntity entity, boolean isEntityTransient) {
+    if (!unitOfWork.isActive()) {
+      entityRegistry.register(entity);
+      Map<String, Object> initialDirtyProperties = null;
+      if (isEntityTransient) {
+        initialDirtyProperties = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> property : entity
+            .straightGetProperties().entrySet()) {
+          if (property.getValue() != null
+              && !(property.getValue() instanceof Collection && ((Collection) property
+                  .getValue()).isEmpty())) {
+            initialDirtyProperties.put(property.getKey(), null);
+          }
         }
       }
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IEntity getRegisteredEntity(Class entityContract, Object entityId) {
-    return entityRegistry.get(entityContract, entityId);
-  }
-
-  /**
-   * Sets the entityRegistry.
-   * 
-   * @param entityRegistry
-   *          the entityRegistry to set.
-   */
-  public void setEntityRegistry(IEntityRegistry entityRegistry) {
-    this.entityRegistry = entityRegistry;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Map<String, Object> getDirtyProperties(IEntity entity) {
-    if (unitOfWork.isActive()) {
-      return unitOfWork.getDirtyProperties(entity);
-    }
-    return dirtRecorder.getChangedProperties(entity);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isDirty(IEntity entity) {
-    if (unitOfWork.isActive()) {
-      return unitOfWork.isDirty(entity);
-    }
-    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    return (entityDirtyProperties != null && entityDirtyProperties.size() > 0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isDirty(IEntity entity, String propertyName) {
-    if (unitOfWork.isActive()) {
-      return unitOfWork.isDirty(entity, propertyName);
-    }
-    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
-    return (entityDirtyProperties != null && entityDirtyProperties
-        .containsKey(propertyName));
-  }
-
-  private void cleanDirtyProperties(IEntity entity) {
-    dirtRecorder.resetChangedProperties(entity, null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void beginUnitOfWork() {
-    if (unitOfWork.isActive()) {
-      throw new ApplicationSessionException(
-          "Cannot begin a new unit of work. Another one is already active.");
-    }
-    unitOfWork.begin();
-    entitiesToMergeBack = new LinkedHashSet<IEntity>();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void commitUnitOfWork() {
-    if (!unitOfWork.isActive()) {
-      throw new ApplicationSessionException(
-          "Cannot commit a unit of work that has not begun.");
-    }
-    try {
-      Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
-      for (IEntity entityToMergeBack : entitiesToMergeBack) {
-        merge(entityToMergeBack, MergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
-      }
-    } finally {
-      unitOfWork.commit();
-      entitiesToMergeBack = null;
-      clearPendingOperations();
+      dirtRecorder.register(entity, initialDirtyProperties);
     }
   }
 
@@ -412,139 +556,85 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public void recordAsSynchronized(IEntity flushedEntity) {
-    if (unitOfWork.isActive()) {
-      unitOfWork.clearDirtyState(flushedEntity);
-      entitiesToMergeBack.add(flushedEntity);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IEntity cloneInUnitOfWork(IEntity entity) {
-    return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
-    List<IEntity> uowEntities = new ArrayList<IEntity>();
-    Map<Class, Map<Serializable, IEntity>> alreadyCloned = new HashMap<Class, Map<Serializable, IEntity>>();
-    for (IEntity entity : entities) {
-      uowEntities.add(cloneInUnitOfWork(entity, alreadyCloned));
-    }
-    return uowEntities;
-  }
-
-  @SuppressWarnings("unchecked")
-  private IEntity cloneInUnitOfWork(IEntity entity,
-      Map<Class, Map<Serializable, IEntity>> alreadyCloned) {
-    Map<Serializable, IEntity> contractBuffer = alreadyCloned.get(entity
-        .getContract());
-    IEntity uowEntity = null;
-    if (contractBuffer == null) {
-      contractBuffer = new HashMap<Serializable, IEntity>();
-      alreadyCloned.put(entity.getContract(), contractBuffer);
-    } else {
-      uowEntity = contractBuffer.get(entity.getId());
-      if (uowEntity != null) {
-        return uowEntity;
-      }
-    }
-    uowEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
-    Map<String, Object> dirtyProperties = dirtRecorder
-        .getChangedProperties(entity);
-    if (dirtyProperties == null) {
-      dirtyProperties = new HashMap<String, Object>();
-    }
-    contractBuffer.put(entity.getId(), uowEntity);
-    Map<String, Object> entityProperties = entity.straightGetProperties();
-    for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
-      if (property.getValue() instanceof IEntity) {
-        if (isInitialized(property.getValue())) {
-          uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
-              (IEntity) property.getValue(), alreadyCloned));
-        } else {
-          uowEntity.straightSetProperty(property.getKey(), property.getValue());
-        }
-      } else if (property.getValue() instanceof Collection) {
-        if (isInitialized(property.getValue())) {
-          Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
-              .getValue());
-          for (IEntity entityCollectionElement : (Collection<IEntity>) property
-              .getValue()) {
-            uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
-                alreadyCloned));
-          }
-          Collection snapshotCollection = (Collection) dirtyProperties
-              .get(property.getKey());
-          if (snapshotCollection != null) {
-            Collection clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
-            for (Object snapshotCollectionElement : snapshotCollection) {
-              clonedSnapshotCollection.add(cloneInUnitOfWork(
-                  (IEntity) snapshotCollectionElement, alreadyCloned));
-            }
-            snapshotCollection = clonedSnapshotCollection;
-          }
-          uowEntityCollection = wrapDetachedEntityCollection(entity,
-              uowEntityCollection, snapshotCollection, property.getKey());
-          uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
-        } else {
-          uowEntity.straightSetProperty(property.getKey(), property.getValue());
-        }
-      }
-    }
-    unitOfWork
-        .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
-    return uowEntity;
-  }
-
-  /**
-   * Creates a transient collection instance, in respect to the type of
-   * collection passed as parameter.
+   * Sets the accessorFactory.
    * 
-   * @param collection
-   *          the collection to take the type from (List, Set, ...)
-   * @return a transient collection instance with the same interface type as the
-   *         parameter.
+   * @param accessorFactory
+   *          the accessorFactory to set.
    */
-  protected Collection<IEntity> createTransientEntityCollection(
-      Collection collection) {
-    Collection<IEntity> uowEntityCollection = null;
-    if (collection instanceof Set) {
-      uowEntityCollection = collectionFactory.createEntityCollection(Set.class);
-    } else if (collection instanceof List) {
-      uowEntityCollection = collectionFactory
-          .createEntityCollection(List.class);
-    }
-    return uowEntityCollection;
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
   }
 
   /**
-   * Gives a chance to the session to wrap a collection before making it part of
-   * the unit of work.
+   * Sets the carbonEntityCloneFactory.
    * 
-   * @param entity
-   *          the entity the collection belongs to.
-   * @param transientCollection
-   *          the transient collection to make part of the unit of work.
-   * @param snapshotCollection
-   *          the original collection state as reported by the dirt recorder.
-   * @param role
-   *          the name of the property represented by the collection in its
-   *          owner.
-   * @return the wrapped collection if any (it may be the collection itself as
-   *         in this implementation).
+   * @param carbonEntityCloneFactory
+   *          the carbonEntityCloneFactory to set.
    */
-  @SuppressWarnings("unused")
-  protected Collection<IEntity> wrapDetachedEntityCollection(IEntity entity,
-      Collection<IEntity> transientCollection,
-      Collection<IEntity> snapshotCollection, String role) {
-    return transientCollection;
+  public void setCarbonEntityCloneFactory(
+      IEntityCloneFactory carbonEntityCloneFactory) {
+    this.carbonEntityCloneFactory = carbonEntityCloneFactory;
+  }
+
+  /**
+   * Sets the collectionFactory.
+   * 
+   * @param collectionFactory
+   *          the collectionFactory to set.
+   */
+  public void setCollectionFactory(
+      IComponentCollectionFactory<IEntity> collectionFactory) {
+    this.collectionFactory = collectionFactory;
+  }
+
+  /**
+   * Sets the entityFactory.
+   * 
+   * @param entityFactory
+   *          the entityFactory to set.
+   */
+  public void setEntityFactory(IEntityFactory entityFactory) {
+    this.entityFactory = entityFactory;
+  }
+
+  /**
+   * Sets the entityRegistry.
+   * 
+   * @param entityRegistry
+   *          the entityRegistry to set.
+   */
+  public void setEntityRegistry(IEntityRegistry entityRegistry) {
+    this.entityRegistry = entityRegistry;
+  }
+
+  /**
+   * Sets the locale.
+   * 
+   * @param locale
+   *          the locale to set.
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
+  }
+
+  /**
+   * Sets the owner.
+   * 
+   * @param subject
+   *          the owner to set.
+   */
+  public void setSubject(Subject subject) {
+    this.subject = subject;
+  }
+
+  /**
+   * Sets the unitOfWork.
+   * 
+   * @param unitOfWork
+   *          the unitOfWork to set.
+   */
+  public void setUnitOfWork(IEntityUnitOfWork unitOfWork) {
+    this.unitOfWork = unitOfWork;
   }
 
   /**
@@ -589,127 +679,37 @@ public class BasicApplicationSession implements IApplicationSession {
   }
 
   /**
-   * Sets the unitOfWork.
-   * 
-   * @param unitOfWork
-   *          the unitOfWork to set.
-   */
-  public void setUnitOfWork(IEntityUnitOfWork unitOfWork) {
-    this.unitOfWork = unitOfWork;
-  }
-
-  /**
-   * Sets the collectionFactory.
-   * 
-   * @param collectionFactory
-   *          the collectionFactory to set.
-   */
-  public void setCollectionFactory(
-      IComponentCollectionFactory<IEntity> collectionFactory) {
-    this.collectionFactory = collectionFactory;
-  }
-
-  /**
-   * Gets the entitiesToMergeBack.
-   * 
-   * @return the entitiesToMergeBack.
-   */
-  protected Set<IEntity> getEntitiesToMergeBack() {
-    return entitiesToMergeBack;
-  }
-
-  /**
    * {@inheritDoc}
    */
-  public boolean isUnitOfWorkActive() {
-    return unitOfWork.isActive();
-  }
-
-  /**
-   * Gets the entity dirt recorder. To be used by subclasses.
-   * 
-   * @return the entity dirt recorder.
-   */
-  protected BeanPropertyChangeRecorder getDirtRecorder() {
-    return dirtRecorder;
-  }
-
-  /**
-   * Gets the owner.
-   * 
-   * @return the owner.
-   */
-  public Subject getSubject() {
-    return subject;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public UserPrincipal getPrincipal() {
-    if (subject != null && !subject.getPrincipals().isEmpty()) {
-      return (UserPrincipal) subject.getPrincipals().iterator().next();
+  public void updateEntity(IEntity entity) {
+    if (entity.isPersistent()) {
+      if (entitiesRegisteredForUpdate == null) {
+        entitiesRegisteredForUpdate = new ArrayList<IEntity>();
+      }
+      entitiesRegisteredForUpdate.add(entity);
     }
-    return null;
   }
 
   /**
-   * Sets the owner.
+   * Gives a chance to the session to wrap a collection before making it part of
+   * the unit of work.
    * 
-   * @param subject
-   *          the owner to set.
+   * @param entity
+   *          the entity the collection belongs to.
+   * @param transientCollection
+   *          the transient collection to make part of the unit of work.
+   * @param snapshotCollection
+   *          the original collection state as reported by the dirt recorder.
+   * @param role
+   *          the name of the property represented by the collection in its
+   *          owner.
+   * @return the wrapped collection if any (it may be the collection itself as
+   *         in this implementation).
    */
-  public void setSubject(Subject subject) {
-    this.subject = subject;
-  }
-
-  /**
-   * Sets the entityFactory.
-   * 
-   * @param entityFactory
-   *          the entityFactory to set.
-   */
-  public void setEntityFactory(IEntityFactory entityFactory) {
-    this.entityFactory = entityFactory;
-  }
-
-  /**
-   * Gets the locale.
-   * 
-   * @return the locale.
-   */
-  public Locale getLocale() {
-    return locale;
-  }
-
-  /**
-   * Sets the locale.
-   * 
-   * @param locale
-   *          the locale to set.
-   */
-  public void setLocale(Locale locale) {
-    this.locale = locale;
-  }
-
-  /**
-   * Sets the carbonEntityCloneFactory.
-   * 
-   * @param carbonEntityCloneFactory
-   *          the carbonEntityCloneFactory to set.
-   */
-  public void setCarbonEntityCloneFactory(
-      IEntityCloneFactory carbonEntityCloneFactory) {
-    this.carbonEntityCloneFactory = carbonEntityCloneFactory;
-  }
-
-  /**
-   * Sets the accessorFactory.
-   * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
+  @SuppressWarnings("unused")
+  protected Collection<IEntity> wrapDetachedEntityCollection(IEntity entity,
+      Collection<IEntity> transientCollection,
+      Collection<IEntity> snapshotCollection, String role) {
+    return transientCollection;
   }
 }

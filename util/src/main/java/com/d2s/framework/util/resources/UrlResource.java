@@ -35,14 +35,14 @@ public class UrlResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
-  public int getLength() {
-    return -1; // unknown.
+  public InputStream getContent() throws IOException {
+    return url.openStream();
   }
 
   /**
    * {@inheritDoc}
    */
-  public InputStream getContent() throws IOException {
-    return url.openStream();
+  public int getLength() {
+    return -1; // unknown.
   }
 }

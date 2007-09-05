@@ -21,23 +21,6 @@ import com.d2s.framework.binding.IValueConnector;
  */
 public class DefaultMasterDetailBinder implements IMasterDetailBinder {
 
-  private IMvcBinder mvcBinder;
-
-  /**
-   * {@inheritDoc}
-   */
-  public void bind(IValueConnector masterConnector,
-      IValueConnector detailConnector) {
-    if (masterConnector instanceof IConnectorSelector) {
-      ((IConnectorSelector) masterConnector)
-          .addConnectorSelectionListener(new BoundConnectorSelectionListener(
-              detailConnector));
-    } else if (masterConnector instanceof ICompositeValueConnector) {
-      ((ICompositeValueConnector) masterConnector)
-          .addChildConnector(detailConnector);
-    }
-  }
-
   private final class BoundConnectorSelectionListener implements
       IConnectorSelectionListener {
 
@@ -63,6 +46,23 @@ public class DefaultMasterDetailBinder implements IMasterDetailBinder {
       } else {
         mvcBinder.bind(detailConnector, null);
       }
+    }
+  }
+
+  private IMvcBinder mvcBinder;
+
+  /**
+   * {@inheritDoc}
+   */
+  public void bind(IValueConnector masterConnector,
+      IValueConnector detailConnector) {
+    if (masterConnector instanceof IConnectorSelector) {
+      ((IConnectorSelector) masterConnector)
+          .addConnectorSelectionListener(new BoundConnectorSelectionListener(
+              detailConnector));
+    } else if (masterConnector instanceof ICompositeValueConnector) {
+      ((ICompositeValueConnector) masterConnector)
+          .addChildConnector(detailConnector);
     }
   }
 

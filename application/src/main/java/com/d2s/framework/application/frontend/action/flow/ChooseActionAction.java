@@ -39,17 +39,52 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
-  private IModelConnectorFactory   beanConnectorFactory;
+  private static final class I18nActionInvocationHandler implements
+      InvocationHandler {
+
+    private IDisplayableAction   delegate;
+    private Locale               locale;
+    private ITranslationProvider translationProvider;
+
+    private I18nActionInvocationHandler(IDisplayableAction delegate,
+        ITranslationProvider translationProvider, Locale locale) {
+      this.delegate = delegate;
+      this.translationProvider = translationProvider;
+      this.locale = locale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object invoke(@SuppressWarnings("unused")
+    Object proxy, Method method, Object[] args) throws Throwable {
+      if (method.getName().equals("getName")) {
+        return delegate.getI18nName(translationProvider, locale);
+      } else if (method.getName().equals("getDescription")) {
+        return delegate.getI18nDescription(translationProvider, locale);
+      }
+      return method.invoke(delegate, args);
+    }
+  }
   private List<IDisplayableAction> actions;
 
-  /**
-   * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(List<IDisplayableAction> actions) {
-    this.actions = actions;
+  private IModelConnectorFactory   beanConnectorFactory;
+
+  private List<IDisplayableAction> createActionProxies(
+      ITranslationProvider translationProvider, Locale locale) {
+    List<IDisplayableAction> actionProxies = new ArrayList<IDisplayableAction>(
+        actions.size());
+    for (IDisplayableAction action : actions) {
+      actionProxies.add(createActionProxy(action, translationProvider, locale));
+    }
+    return actionProxies;
+  }
+
+  private IDisplayableAction createActionProxy(IDisplayableAction delegate,
+      ITranslationProvider translationProvider, Locale locale) {
+    return (IDisplayableAction) Proxy.newProxyInstance(delegate.getClass()
+        .getClassLoader(), new Class[] {IDisplayableAction.class},
+        new I18nActionInvocationHandler(delegate, translationProvider, locale));
   }
 
   /**
@@ -71,6 +106,16 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
   }
 
   /**
+   * Sets the actions.
+   * 
+   * @param actions
+   *          the actions to set.
+   */
+  public void setActions(List<IDisplayableAction> actions) {
+    this.actions = actions;
+  }
+
+  /**
    * Sets the beanConnectorFactory.
    * 
    * @param beanConnectorFactory
@@ -79,50 +124,5 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
   public void setBeanConnectorFactory(
       IModelConnectorFactory beanConnectorFactory) {
     this.beanConnectorFactory = beanConnectorFactory;
-  }
-
-  private List<IDisplayableAction> createActionProxies(
-      ITranslationProvider translationProvider, Locale locale) {
-    List<IDisplayableAction> actionProxies = new ArrayList<IDisplayableAction>(
-        actions.size());
-    for (IDisplayableAction action : actions) {
-      actionProxies.add(createActionProxy(action, translationProvider, locale));
-    }
-    return actionProxies;
-  }
-
-  private IDisplayableAction createActionProxy(IDisplayableAction delegate,
-      ITranslationProvider translationProvider, Locale locale) {
-    return (IDisplayableAction) Proxy.newProxyInstance(delegate.getClass()
-        .getClassLoader(), new Class[] {IDisplayableAction.class},
-        new I18nActionInvocationHandler(delegate, translationProvider, locale));
-  }
-
-  private static final class I18nActionInvocationHandler implements
-      InvocationHandler {
-
-    private IDisplayableAction   delegate;
-    private ITranslationProvider translationProvider;
-    private Locale               locale;
-
-    private I18nActionInvocationHandler(IDisplayableAction delegate,
-        ITranslationProvider translationProvider, Locale locale) {
-      this.delegate = delegate;
-      this.translationProvider = translationProvider;
-      this.locale = locale;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object invoke(@SuppressWarnings("unused")
-    Object proxy, Method method, Object[] args) throws Throwable {
-      if (method.getName().equals("getName")) {
-        return delegate.getI18nName(translationProvider, locale);
-      } else if (method.getName().equals("getDescription")) {
-        return delegate.getI18nDescription(translationProvider, locale);
-      }
-      return method.invoke(delegate, args);
-    }
   }
 }

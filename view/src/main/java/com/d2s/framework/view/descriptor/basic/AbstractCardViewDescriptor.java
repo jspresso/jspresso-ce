@@ -23,6 +23,15 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
   private Map<String, IViewDescriptor> cardViewDescriptors;
 
   /**
+   * Gets the childViewDescriptors.
+   * 
+   * @return the childViewDescriptors.
+   */
+  public Map<String, IViewDescriptor> getCardViewDescriptors() {
+    return cardViewDescriptors;
+  }
+
+  /**
    * Sets the childViewDescriptors.
    * 
    * @param cardViewDescriptors
@@ -31,14 +40,5 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
   protected void setCardViewDescriptors(
       Map<String, IViewDescriptor> cardViewDescriptors) {
     this.cardViewDescriptors = cardViewDescriptors;
-  }
-
-  /**
-   * Gets the childViewDescriptors.
-   * 
-   * @return the childViewDescriptors.
-   */
-  public Map<String, IViewDescriptor> getCardViewDescriptors() {
-    return cardViewDescriptors;
   }
 }

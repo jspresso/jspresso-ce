@@ -19,8 +19,8 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public class DefaultDescriptor implements IDescriptor {
 
-  private String name;
   private String description;
+  private String name;
 
   /**
    * The description getter.
@@ -29,35 +29,6 @@ public class DefaultDescriptor implements IDescriptor {
    */
   public String getDescription() {
     return description;
-  }
-
-  /**
-   * The description setter.
-   * 
-   * @param description
-   *          the description to set.
-   */
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  /**
-   * The name getter.
-   * 
-   * @return the name.
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * The name setter.
-   * 
-   * @param name
-   *          the name to set.
-   */
-  public void setName(String name) {
-    this.name = name;
   }
 
   /**
@@ -74,5 +45,34 @@ public class DefaultDescriptor implements IDescriptor {
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     return translationProvider.getTranslation(getName(), locale);
+  }
+
+  /**
+   * The name getter.
+   * 
+   * @return the name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * The description setter.
+   * 
+   * @param description
+   *          the description to set.
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * The name setter.
+   * 
+   * @param name
+   *          the name to set.
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 }

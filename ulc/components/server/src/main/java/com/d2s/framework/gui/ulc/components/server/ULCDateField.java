@@ -34,10 +34,10 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   private static final long serialVersionUID = -2279684685951950878L;
 
-  private Date              value;
+  private boolean           editable;
   private String            formatPattern;
   private Locale            locale;
-  private boolean           editable;
+  private Date              value;
 
   /**
    * Constructs a new <code>ULCDateField</code> instance.
@@ -73,50 +73,6 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void saveState(Anything a) {
-    super.saveState(a);
-    valueToAnything(a);
-    a.put(DateFieldConstants.FORMAT_PATTERN_KEY, formatPattern);
-    a.put(DateFieldConstants.LANGUAGE_KEY, locale.getLanguage());
-    editableToAnything(a);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIDateField";
-  }
-
-  /**
-   * Gets the date field value.
-   *
-   * @return the date field value.
-   */
-  public Date getValue() {
-    return value;
-  }
-
-  /**
-   * Sets the date field value.
-   *
-   * @param value
-   *          the date field value.
-   */
-  public void setValue(Date value) {
-    if (!ObjectUtils.equals(this.value, value)) {
-      this.value = value;
-      Anything valueAnything = new Anything();
-      valueToAnything(valueAnything);
-      sendUI(DateFieldConstants.SET_VALUE_REQUEST, valueAnything);
-    }
-  }
-
-  /**
    * Adds a value change listener.
    *
    * @param listener
@@ -124,57 +80,6 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
    */
   public void addValueChangedListener(IValueChangedListener listener) {
     internalAddListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
-  }
-
-  /**
-   * Removes a value change listener.
-   *
-   * @param listener
-   *          the listener to remove.
-   */
-  public void removeValueChangedListener(IValueChangedListener listener) {
-    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void handleEvent(int listenerType, int eventId, Anything args) {
-    if (listenerType == IUlcEventConstants.VALUE_CHANGED_EVENT) {
-      distributeToListeners(new ValueChangedEvent(this));
-    } else {
-      super.handleEvent(listenerType, eventId, args);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getPropertyPrefix() {
-    return "Panel";
-  }
-
-  private void valueToAnything(Anything args) {
-    long timeMillis = -0L;
-    if (value != null) {
-      timeMillis = value.getTime();
-    }
-    args.put(DateFieldConstants.VALUE_KEY, timeMillis);
-  }
-
-  private void editableToAnything(Anything args) {
-    args.put(DateFieldConstants.EDITABLE_KEY, editable);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void copyAttributes(ICellComponent source) {
-    ULCDateField sourceDateField = (ULCDateField) source;
-    formatPattern = sourceDateField.formatPattern;
-    locale = sourceDateField.locale;
   }
 
   /**
@@ -197,6 +102,48 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
    */
   public int attributesHashCode() {
     return new HashCodeBuilder(13, 57).append(formatPattern).toHashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void copyAttributes(ICellComponent source) {
+    ULCDateField sourceDateField = (ULCDateField) source;
+    formatPattern = sourceDateField.formatPattern;
+    locale = sourceDateField.locale;
+  }
+
+  private void editableToAnything(Anything args) {
+    args.put(DateFieldConstants.EDITABLE_KEY, editable);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getPropertyPrefix() {
+    return "Panel";
+  }
+
+  /**
+   * Gets the date field value.
+   *
+   * @return the date field value.
+   */
+  public Date getValue() {
+    return value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void handleEvent(int listenerType, int eventId, Anything args) {
+    if (listenerType == IUlcEventConstants.VALUE_CHANGED_EVENT) {
+      distributeToListeners(new ValueChangedEvent(this));
+    } else {
+      super.handleEvent(listenerType, eventId, args);
+    }
   }
 
   /**
@@ -230,6 +177,28 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
   }
 
   /**
+   * Removes a value change listener.
+   *
+   * @param listener
+   *          the listener to remove.
+   */
+  public void removeValueChangedListener(IValueChangedListener listener) {
+    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void saveState(Anything a) {
+    super.saveState(a);
+    valueToAnything(a);
+    a.put(DateFieldConstants.FORMAT_PATTERN_KEY, formatPattern);
+    a.put(DateFieldConstants.LANGUAGE_KEY, locale.getLanguage());
+    editableToAnything(a);
+  }
+
+  /**
    * Sets the editable.
    *
    * @param editable
@@ -242,5 +211,36 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
       editableToAnything(editableAnything);
       sendUI(DateFieldConstants.SET_EDITABLE_REQUEST, editableAnything);
     }
+  }
+
+  /**
+   * Sets the date field value.
+   *
+   * @param value
+   *          the date field value.
+   */
+  public void setValue(Date value) {
+    if (!ObjectUtils.equals(this.value, value)) {
+      this.value = value;
+      Anything valueAnything = new Anything();
+      valueToAnything(valueAnything);
+      sendUI(DateFieldConstants.SET_VALUE_REQUEST, valueAnything);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIDateField";
+  }
+
+  private void valueToAnything(Anything args) {
+    long timeMillis = -0L;
+    if (value != null) {
+      timeMillis = value.getTime();
+    }
+    args.put(DateFieldConstants.VALUE_KEY, timeMillis);
   }
 }

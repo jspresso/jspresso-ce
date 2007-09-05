@@ -26,37 +26,6 @@ public class BasicDurationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Long getMaxMillis() {
-    if (maxMillis != null) {
-      return maxMillis;
-    }
-    if (getParentDescriptor() != null) {
-      return ((IDurationPropertyDescriptor) getParentDescriptor())
-          .getMaxMillis();
-    }
-    return maxMillis;
-  }
-
-  /**
-   * Sets the maxMillis property.
-   * 
-   * @param maxMillis
-   *          the maxMillis to set.
-   */
-  public void setMaxMillis(long maxMillis) {
-    this.maxMillis = new Long(maxMillis);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class getModelType() {
-    return Long.class;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public void checkValueIntegrity(final Object component,
       final Object propertyValue) {
@@ -85,5 +54,36 @@ public class BasicDurationPropertyDescriptor extends
       };
       throw ie;
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Long getMaxMillis() {
+    if (maxMillis != null) {
+      return maxMillis;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IDurationPropertyDescriptor) getParentDescriptor())
+          .getMaxMillis();
+    }
+    return maxMillis;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class getModelType() {
+    return Long.class;
+  }
+
+  /**
+   * Sets the maxMillis property.
+   * 
+   * @param maxMillis
+   *          the maxMillis to set.
+   */
+  public void setMaxMillis(long maxMillis) {
+    this.maxMillis = new Long(maxMillis);
   }
 }

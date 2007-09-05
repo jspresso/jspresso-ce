@@ -12,7 +12,6 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.action.CreateQueryEntityAction;
 import com.d2s.framework.application.backend.session.MergeMode;
-import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
@@ -36,13 +35,13 @@ import com.ulcjava.base.application.ULCComponent;
  */
 public class LovAction extends ModalDialogAction {
 
-  private ILovViewDescriptorFactory             lovViewDescriptorFactory;
-  private CreateQueryEntityAction               createQueryEntityAction;
-  private IDisplayableAction                    okAction;
-  private IDisplayableAction                    cancelAction;
-  private IDisplayableAction                    findAction;
-  private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
   private boolean                               autoquery;
+  private IDisplayableAction                    cancelAction;
+  private CreateQueryEntityAction               createQueryEntityAction;
+  private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
+  private IDisplayableAction                    findAction;
+  private ILovViewDescriptorFactory             lovViewDescriptorFactory;
+  private IDisplayableAction                    okAction;
 
   /**
    * Constructs a new <code>LovAction</code> instance.
@@ -100,58 +99,6 @@ public class LovAction extends ModalDialogAction {
   }
 
   /**
-   * Sets the lovViewDescriptorFactory.
-   * 
-   * @param lovViewDescriptorFactory
-   *          the lovViewDescriptorFactory to set.
-   */
-  public void setLovViewDescriptorFactory(
-      ILovViewDescriptorFactory lovViewDescriptorFactory) {
-    this.lovViewDescriptorFactory = lovViewDescriptorFactory;
-  }
-
-  /**
-   * Sets the createQueryEntityAction.
-   * 
-   * @param createQueryEntityAction
-   *          the createQueryEntityAction to set.
-   */
-  public void setCreateQueryEntityAction(
-      CreateQueryEntityAction createQueryEntityAction) {
-    this.createQueryEntityAction = createQueryEntityAction;
-  }
-
-  /**
-   * Sets the cancelAction.
-   * 
-   * @param cancelAction
-   *          the cancelAction to set.
-   */
-  public void setCancelAction(AbstractChainedAction cancelAction) {
-    this.cancelAction = cancelAction;
-  }
-
-  /**
-   * Sets the findAction.
-   * 
-   * @param findAction
-   *          the findAction to set.
-   */
-  public void setFindAction(IDisplayableAction findAction) {
-    this.findAction = findAction;
-  }
-
-  /**
-   * Sets the okAction.
-   * 
-   * @param okAction
-   *          the okAction to set.
-   */
-  public void setOkAction(AbstractChainedAction okAction) {
-    this.okAction = okAction;
-  }
-
-  /**
    * Gets the entityRefQueryDescriptor.
    * 
    * @param context
@@ -173,6 +120,37 @@ public class LovAction extends ModalDialogAction {
   }
 
   /**
+   * Sets the autoquery.
+   * 
+   * @param autoquery
+   *          the autoquery to set.
+   */
+  public void setAutoquery(boolean autoquery) {
+    this.autoquery = autoquery;
+  }
+
+  /**
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *          the cancelAction to set.
+   */
+  public void setCancelAction(IDisplayableAction cancelAction) {
+    this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Sets the createQueryEntityAction.
+   * 
+   * @param createQueryEntityAction
+   *          the createQueryEntityAction to set.
+   */
+  public void setCreateQueryEntityAction(
+      CreateQueryEntityAction createQueryEntityAction) {
+    this.createQueryEntityAction = createQueryEntityAction;
+  }
+
+  /**
    * Sets the entityRefQueryDescriptor.
    * 
    * @param entityRefQueryDescriptor
@@ -184,13 +162,34 @@ public class LovAction extends ModalDialogAction {
   }
 
   /**
-   * Sets the autoquery.
+   * Sets the findAction.
    * 
-   * @param autoquery
-   *          the autoquery to set.
+   * @param findAction
+   *          the findAction to set.
    */
-  public void setAutoquery(boolean autoquery) {
-    this.autoquery = autoquery;
+  public void setFindAction(IDisplayableAction findAction) {
+    this.findAction = findAction;
+  }
+
+  /**
+   * Sets the lovViewDescriptorFactory.
+   * 
+   * @param lovViewDescriptorFactory
+   *          the lovViewDescriptorFactory to set.
+   */
+  public void setLovViewDescriptorFactory(
+      ILovViewDescriptorFactory lovViewDescriptorFactory) {
+    this.lovViewDescriptorFactory = lovViewDescriptorFactory;
+  }
+
+  /**
+   * Sets the okAction.
+   * 
+   * @param okAction
+   *          the okAction to set.
+   */
+  public void setOkAction(IDisplayableAction okAction) {
+    this.okAction = okAction;
   }
 
 }

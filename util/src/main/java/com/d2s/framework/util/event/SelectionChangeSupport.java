@@ -19,14 +19,14 @@ import java.util.Set;
  */
 public class SelectionChangeSupport implements ISelectable {
 
-  private ISelectable                   source;
-
-  private Set<ISelectionChangeListener> listeners;
   private Set<ISelectionChangeListener> inhibitedListeners;
+
+  private int                           leadingIndex;
+  private Set<ISelectionChangeListener> listeners;
 
   private int[]                         oldSelectedIndices;
   private int[]                         selectedIndices;
-  private int                           leadingIndex;
+  private ISelectable                   source;
 
   /**
    * Constructs a new support.
@@ -44,6 +44,21 @@ public class SelectionChangeSupport implements ISelectable {
   }
 
   /**
+   * Registers a listener to be excluded (generally temporarily) from the
+   * notification process without being removed from the actual listeners
+   * collection.
+   * 
+   * @param listener
+   *          the excluded listener.
+   */
+  public void addInhibitedListener(ISelectionChangeListener listener) {
+    if (inhibitedListeners == null && listener != null) {
+      inhibitedListeners = new HashSet<ISelectionChangeListener>();
+    }
+    inhibitedListeners.add(listener);
+  }
+
+  /**
    * {@inheritDoc}
    */
   public synchronized void addSelectionChangeListener(
@@ -56,44 +71,6 @@ public class SelectionChangeSupport implements ISelectable {
         listeners.add(listener);
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public synchronized void removeSelectionChangeListener(
-      ISelectionChangeListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setSelectedIndices(int[] selectedIndices) {
-    int leadingInd = -1;
-    if (selectedIndices != null && selectedIndices.length > 0) {
-      leadingInd = selectedIndices[selectedIndices.length - 1];
-    }
-    setSelectedIndices(selectedIndices, leadingInd);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setSelectedIndices(int[] selectedInds, int leadingInd) {
-    this.oldSelectedIndices = this.selectedIndices;
-    this.selectedIndices = selectedInds;
-    this.leadingIndex = leadingInd;
-    fireSelectionChange();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int[] getSelectedIndices() {
-    return selectedIndices;
   }
 
   /**
@@ -134,18 +111,10 @@ public class SelectionChangeSupport implements ISelectable {
   }
 
   /**
-   * Registers a listener to be excluded (generally temporarily) from the
-   * notification process without being removed from the actual listeners
-   * collection.
-   * 
-   * @param listener
-   *          the excluded listener.
+   * {@inheritDoc}
    */
-  public void addInhibitedListener(ISelectionChangeListener listener) {
-    if (inhibitedListeners == null && listener != null) {
-      inhibitedListeners = new HashSet<ISelectionChangeListener>();
-    }
-    inhibitedListeners.add(listener);
+  public int[] getSelectedIndices() {
+    return selectedIndices;
   }
 
   /**
@@ -160,5 +129,36 @@ public class SelectionChangeSupport implements ISelectable {
       return;
     }
     inhibitedListeners.remove(listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public synchronized void removeSelectionChangeListener(
+      ISelectionChangeListener listener) {
+    if (listener != null && listeners != null) {
+      listeners.remove(listener);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSelectedIndices(int[] selectedIndices) {
+    int leadingInd = -1;
+    if (selectedIndices != null && selectedIndices.length > 0) {
+      leadingInd = selectedIndices[selectedIndices.length - 1];
+    }
+    setSelectedIndices(selectedIndices, leadingInd);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void setSelectedIndices(int[] selectedInds, int leadingInd) {
+    this.oldSelectedIndices = this.selectedIndices;
+    this.selectedIndices = selectedInds;
+    this.leadingIndex = leadingInd;
+    fireSelectionChange();
   }
 }

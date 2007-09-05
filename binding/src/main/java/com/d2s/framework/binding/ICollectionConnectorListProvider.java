@@ -18,11 +18,11 @@ public interface ICollectionConnectorListProvider extends
     ICompositeValueConnector {
 
   /**
-   * Gets the collection connector.
+   * Clones this connector.
    * 
-   * @return the collection connector.
+   * @return the connector's clone.
    */
-  List<ICollectionConnector> getCollectionConnectors();
+  ICollectionConnectorListProvider clone();
 
   /**
    * Clones this connector.
@@ -34,9 +34,9 @@ public interface ICollectionConnectorListProvider extends
   ICollectionConnectorListProvider clone(String newConnectorId);
 
   /**
-   * Clones this connector.
+   * Gets the collection connector.
    * 
-   * @return the connector's clone.
+   * @return the collection connector.
    */
-  ICollectionConnectorListProvider clone();
+  List<ICollectionConnector> getCollectionConnectors();
 }

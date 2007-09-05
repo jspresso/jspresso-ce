@@ -27,17 +27,6 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   private List<ISubViewDescriptor> columnViewDescriptors;
 
   /**
-   * Sets the columnViewDescriptors.
-   * 
-   * @param columnViewDescriptors
-   *          the columnViewDescriptors to set.
-   */
-  public void setColumnViewDescriptors(
-      List<ISubViewDescriptor> columnViewDescriptors) {
-    this.columnViewDescriptors = columnViewDescriptors;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public List<ISubViewDescriptor> getColumnViewDescriptors() {
@@ -63,6 +52,17 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
       return defaultColumnViewDescriptors;
     }
     return columnViewDescriptors;
+  }
+
+  /**
+   * Sets the columnViewDescriptors.
+   * 
+   * @param columnViewDescriptors
+   *          the columnViewDescriptors to set.
+   */
+  public void setColumnViewDescriptors(
+      List<ISubViewDescriptor> columnViewDescriptors) {
+    this.columnViewDescriptors = columnViewDescriptors;
   }
 
 }

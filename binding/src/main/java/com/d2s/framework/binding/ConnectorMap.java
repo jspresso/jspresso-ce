@@ -46,21 +46,17 @@ public class ConnectorMap implements IConnectorMap {
   /**
    * {@inheritDoc}
    */
-  public void removeConnector(String storageKey) {
-    IValueConnector connectorToRemove = null;
-    if (storageKey != null) {
-      connectorToRemove = getStorageMap().remove(storageKey);
-    }
-    if (connectorToRemove != null) {
-      connectorToRemove.setParentConnector(null);
-    }
+  public IValueConnector getConnector(String connectorId) {
+    return getStorageMap().get(connectorId);
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the parentConnector.
+   * 
+   * @return the parentConnector.
    */
-  public IValueConnector getConnector(String connectorId) {
-    return getStorageMap().get(connectorId);
+  protected ICompositeValueConnector getParentConnector() {
+    return parentConnector;
   }
 
   /**
@@ -88,11 +84,15 @@ public class ConnectorMap implements IConnectorMap {
   }
 
   /**
-   * Gets the parentConnector.
-   * 
-   * @return the parentConnector.
+   * {@inheritDoc}
    */
-  protected ICompositeValueConnector getParentConnector() {
-    return parentConnector;
+  public void removeConnector(String storageKey) {
+    IValueConnector connectorToRemove = null;
+    if (storageKey != null) {
+      connectorToRemove = getStorageMap().remove(storageKey);
+    }
+    if (connectorToRemove != null) {
+      connectorToRemove.setParentConnector(null);
+    }
   }
 }

@@ -92,13 +92,9 @@ import java.util.Random;
  */
 public class RandomGUID extends Object {
 
-  private String              valueBeforeMD5 = "";
-  private String              valueAfterMD5  = "";
   private static Random       myRand;
   private static SecureRandom mySecureRand;
-
   private static String       sId;
-
   /**
    * Static block to take care of one time secureRandom seed. It takes a few
    * seconds to initialize SecureRandom. You might want to consider removing
@@ -115,6 +111,25 @@ public class RandomGUID extends Object {
       e.printStackTrace();
     }
   }
+
+  /**
+   * Demonstraton and self test of class.
+   * 
+   * @param args
+   *          program arguments.
+   */
+  public static void main(String[] args) {
+    for (int i = 0; i < 10000; i++) {
+      RandomGUID myGUID = new RandomGUID();
+      System.out.println("Seeding String=" + myGUID.valueBeforeMD5);
+      System.out.println("rawGUID=" + myGUID.valueAfterMD5);
+      System.out.println("RandomGUID=" + myGUID.toString());
+    }
+  }
+
+  private String              valueAfterMD5  = "";
+
+  private String              valueBeforeMD5 = "";
 
   /**
    * Default constructor. With no specification of security option, this
@@ -213,20 +228,5 @@ public class RandomGUID extends Object {
     sb.append(raw.substring(20));
 
     return sb.toString();
-  }
-
-  /**
-   * Demonstraton and self test of class.
-   * 
-   * @param args
-   *          program arguments.
-   */
-  public static void main(String[] args) {
-    for (int i = 0; i < 10000; i++) {
-      RandomGUID myGUID = new RandomGUID();
-      System.out.println("Seeding String=" + myGUID.valueBeforeMD5);
-      System.out.println("rawGUID=" + myGUID.valueAfterMD5);
-      System.out.println("RandomGUID=" + myGUID.toString());
-    }
   }
 }

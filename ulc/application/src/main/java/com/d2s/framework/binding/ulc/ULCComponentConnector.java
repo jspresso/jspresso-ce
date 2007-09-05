@@ -44,6 +44,11 @@ public abstract class ULCComponentConnector<E extends ULCComponent> extends
   }
 
   /**
+   * Attaches the ULCComponent to the connector.
+   */
+  protected abstract void bindULCComponent();
+
+  /**
    * Gets the connectedULCComponent.
    * 
    * @return the connectedULCComponent.
@@ -78,9 +83,4 @@ public abstract class ULCComponentConnector<E extends ULCComponent> extends
           getConnectedULCComponent().getBackground());
     }
   }
-
-  /**
-   * Attaches the ULCComponent to the connector.
-   */
-  protected abstract void bindULCComponent();
 }

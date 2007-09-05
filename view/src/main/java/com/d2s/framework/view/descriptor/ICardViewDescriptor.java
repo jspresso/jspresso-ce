@@ -29,14 +29,6 @@ public interface ICardViewDescriptor extends IViewDescriptor {
   String SECURITY_CARD = "SECURITY_CARD";
 
   /**
-   * Gets the children views registered in the card view and indexed by their
-   * card names.
-   * 
-   * @return the children view descriptors.
-   */
-  Map<String, IViewDescriptor> getCardViewDescriptors();
-
-  /**
    * Gets the card name to use to present the model.
    * 
    * @param model
@@ -44,4 +36,12 @@ public interface ICardViewDescriptor extends IViewDescriptor {
    * @return the card name to look up the view.
    */
   String getCardNameForModel(Object model);
+
+  /**
+   * Gets the children views registered in the card view and indexed by their
+   * card names.
+   * 
+   * @return the children view descriptors.
+   */
+  Map<String, IViewDescriptor> getCardViewDescriptors();
 }

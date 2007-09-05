@@ -31,39 +31,14 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
  */
 public class Module extends AbstractPropertyChangeCapable implements ISecurable {
 
-  private String             name;
   private String             description;
-  private String             i18nName;
-  private String             i18nDescription;
-  private String             iconImageURL;
-  private List<SubModule>    subModules;
-
   private Collection<String> grantedRoles;
+  private String             i18nDescription;
+  private String             i18nName;
+  private String             iconImageURL;
+  private String             name;
 
-  /**
-   * Gets the subModules modules.
-   * 
-   * @return the list of subModules modules.
-   */
-  public List<SubModule> getSubModules() {
-    return subModules;
-  }
-
-  /**
-   * Sets the subModules modules. It will fire a "subModules" property change
-   * event.
-   * 
-   * @param subModules
-   *          the subModules modules to set.
-   */
-  public void setSubModules(List<SubModule> subModules) {
-    List<SubModule> oldValue = null;
-    if (getSubModules() != null) {
-      oldValue = new ArrayList<SubModule>(getSubModules());
-    }
-    this.subModules = subModules;
-    updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
-  }
+  private List<SubModule>    subModules;
 
   /**
    * Adds a child module.
@@ -107,6 +82,102 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
+   * Equality based on name.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Module)) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
+    Module rhs = (Module) obj;
+    return new EqualsBuilder().append(getName(), rhs.getName()).isEquals();
+  }
+
+  /**
+   * Gets the module's description. It may serve for the module's view.
+   * 
+   * @return the module's description.
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Gets the i18nDescription.
+   * 
+   * @return the i18nDescription.
+   */
+  public String getI18nDescription() {
+    if (i18nDescription != null) {
+      return i18nDescription;
+    }
+    return getDescription();
+  }
+
+  /**
+   * Gets the i18nName.
+   * 
+   * @return the i18nName.
+   */
+  public String getI18nName() {
+    if (i18nName != null) {
+      return i18nName;
+    }
+    return getName();
+  }
+
+  /**
+   * Gets the iconImageURL.
+   * 
+   * @return the iconImageURL.
+   */
+  public String getIconImageURL() {
+    return iconImageURL;
+  }
+
+  /**
+   * Gets the module's name. It may serve for the module's view.
+   * 
+   * @return the module's name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Gets the subModules modules.
+   * 
+   * @return the list of subModules modules.
+   */
+  public List<SubModule> getSubModules() {
+    return subModules;
+  }
+
+  /**
+   * Hash code based on name.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(23, 53).append(name).toHashCode();
+  }
+
+  /**
    * Removes a child module. It will fire a "subModules" property change event.
    * 
    * @param subModule
@@ -147,68 +218,6 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * This method will set the parent module to the new subModules modules and
-   * remove the parent of the old removed subModules modules. It will fire the
-   * "subModules" property change event.
-   * 
-   * @param oldChildren
-   *          the old subModules collection property.
-   * @param newChildren
-   *          the new subModules collection property.
-   */
-  protected void updateParentsAndFireSubModulesChanged(
-      List<SubModule> oldChildren, List<SubModule> newChildren) {
-    if (oldChildren != null) {
-      for (SubModule oldChild : oldChildren) {
-        if (newChildren == null || !newChildren.contains(oldChild)) {
-          oldChild.setParent(null);
-        }
-      }
-    }
-    if (newChildren != null) {
-      for (SubModule newChild : newChildren) {
-        if (oldChildren == null || !oldChildren.contains(newChild)) {
-          newChild.setParent(this);
-        }
-      }
-    }
-    firePropertyChange("subModules", oldChildren, newChildren);
-  }
-
-  /**
-   * Gets the module's name. It may serve for the module's view.
-   * 
-   * @return the module's name.
-   */
-  public String getName() {
-    return name;
-  }
-
-  /**
-   * Sets the module's name. It may serve for the module's view.
-   * 
-   * @param name
-   *          the module's name.
-   */
-  public void setName(String name) {
-    if (ObjectUtils.equals(this.name, name)) {
-      return;
-    }
-    String oldValue = getName();
-    this.name = name;
-    firePropertyChange("name", oldValue, getName());
-  }
-
-  /**
-   * Gets the module's description. It may serve for the module's view.
-   * 
-   * @return the module's description.
-   */
-  public String getDescription() {
-    return description;
-  }
-
-  /**
    * Sets the module's description. It may serve for the module's view.
    * 
    * @param description
@@ -224,27 +233,13 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Gets the i18nDescription.
+   * Sets the grantedRoles.
    * 
-   * @return the i18nDescription.
+   * @param grantedRoles
+   *          the grantedRoles to set.
    */
-  public String getI18nDescription() {
-    if (i18nDescription != null) {
-      return i18nDescription;
-    }
-    return getDescription();
-  }
-
-  /**
-   * Gets the i18nName.
-   * 
-   * @return the i18nName.
-   */
-  public String getI18nName() {
-    if (i18nName != null) {
-      return i18nName;
-    }
-    return getName();
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 
   /**
@@ -278,30 +273,44 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Equality based on name.
-   * <p>
-   * {@inheritDoc}
+   * Sets the iconImageURL.
+   * 
+   * @param iconImageURL
+   *          the iconImageURL to set.
    */
-  @Override
-  public boolean equals(Object obj) {
-    if (!(obj instanceof Module)) {
-      return false;
-    }
-    if (this == obj) {
-      return true;
-    }
-    Module rhs = (Module) obj;
-    return new EqualsBuilder().append(getName(), rhs.getName()).isEquals();
+  public void setIconImageURL(String iconImageURL) {
+    this.iconImageURL = iconImageURL;
   }
 
   /**
-   * Hash code based on name.
-   * <p>
-   * {@inheritDoc}
+   * Sets the module's name. It may serve for the module's view.
+   * 
+   * @param name
+   *          the module's name.
    */
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(23, 53).append(name).toHashCode();
+  public void setName(String name) {
+    if (ObjectUtils.equals(this.name, name)) {
+      return;
+    }
+    String oldValue = getName();
+    this.name = name;
+    firePropertyChange("name", oldValue, getName());
+  }
+
+  /**
+   * Sets the subModules modules. It will fire a "subModules" property change
+   * event.
+   * 
+   * @param subModules
+   *          the subModules modules to set.
+   */
+  public void setSubModules(List<SubModule> subModules) {
+    List<SubModule> oldValue = null;
+    if (getSubModules() != null) {
+      oldValue = new ArrayList<SubModule>(getSubModules());
+    }
+    this.subModules = subModules;
+    updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
   }
 
   /**
@@ -318,40 +327,31 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Gets the iconImageURL.
+   * This method will set the parent module to the new subModules modules and
+   * remove the parent of the old removed subModules modules. It will fire the
+   * "subModules" property change event.
    * 
-   * @return the iconImageURL.
+   * @param oldChildren
+   *          the old subModules collection property.
+   * @param newChildren
+   *          the new subModules collection property.
    */
-  public String getIconImageURL() {
-    return iconImageURL;
-  }
-
-  /**
-   * Sets the iconImageURL.
-   * 
-   * @param iconImageURL
-   *          the iconImageURL to set.
-   */
-  public void setIconImageURL(String iconImageURL) {
-    this.iconImageURL = iconImageURL;
-  }
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
-  }
-
-  /**
-   * Sets the grantedRoles.
-   * 
-   * @param grantedRoles
-   *          the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
+  protected void updateParentsAndFireSubModulesChanged(
+      List<SubModule> oldChildren, List<SubModule> newChildren) {
+    if (oldChildren != null) {
+      for (SubModule oldChild : oldChildren) {
+        if (newChildren == null || !newChildren.contains(oldChild)) {
+          oldChild.setParent(null);
+        }
+      }
+    }
+    if (newChildren != null) {
+      for (SubModule newChild : newChildren) {
+        if (oldChildren == null || !oldChildren.contains(newChild)) {
+          newChild.setParent(this);
+        }
+      }
+    }
+    firePropertyChange("subModules", oldChildren, newChildren);
   }
 }

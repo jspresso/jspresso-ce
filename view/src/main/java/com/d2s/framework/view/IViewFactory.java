@@ -47,17 +47,17 @@ public interface IViewFactory<E, F, G> {
       IActionHandler actionHandler, Locale locale);
 
   /**
-   * Gets the icon factory.
-   * 
-   * @return the icon factory.
-   */
-  IIconFactory<F> getIconFactory();
-
-  /**
    * Gets the action factory.
    * 
    * @return the action factory.
    */
   IActionFactory<G, E> getActionFactory();
+
+  /**
+   * Gets the icon factory.
+   * 
+   * @return the icon factory.
+   */
+  IIconFactory<F> getIconFactory();
 
 }

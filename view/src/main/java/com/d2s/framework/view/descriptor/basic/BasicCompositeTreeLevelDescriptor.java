@@ -28,6 +28,16 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
   /**
    * {@inheritDoc}
    */
+  public ITreeLevelDescriptor getChildDescriptor(String name) {
+    if (childrenDescriptors != null) {
+      return childrenDescriptors.get(name);
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public List<ITreeLevelDescriptor> getChildrenDescriptors() {
     if (childrenDescriptors != null) {
       return new ArrayList<ITreeLevelDescriptor>(childrenDescriptors.values());
@@ -53,15 +63,5 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
       // }
       this.childrenDescriptors.put(nodeGroupDescriptorName, descriptor);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public ITreeLevelDescriptor getChildDescriptor(String name) {
-    if (childrenDescriptors != null) {
-      return childrenDescriptors.get(name);
-    }
-    return null;
   }
 }

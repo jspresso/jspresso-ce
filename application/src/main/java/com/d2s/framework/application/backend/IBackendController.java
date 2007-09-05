@@ -27,25 +27,13 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
 public interface IBackendController extends IController {
 
   /**
-   * Asks this backend controller to perform any necessary action upon startup.
-   * One of this action should be to construct the root connector based on the
-   * root model descriptor.
-   * 
-   * @param locale
-   *          the locale this backend controller should start with.
-   * @return true if the controller successfully started.
-   */
-  boolean start(Locale locale);
-
-  /**
-   * Given a module identifier, this method returns the composite connector used
-   * as model connector for the associated module.
+   * Checks authorization for module access. It shoud throw a SecurityException
+   * whenever access should not be granted.
    * 
    * @param moduleId
-   *          the modulen identifier.
-   * @return the associated module connector.
+   *          the id of the module access to check.
    */
-  IValueConnector getModuleConnector(String moduleId);
+  void checkModuleAccess(String moduleId);
 
   /**
    * Creates a model connector out of a model descriptor. It should be either a
@@ -59,25 +47,11 @@ public interface IBackendController extends IController {
   IValueConnector createModelConnector(IModelDescriptor modelDescriptor);
 
   /**
-   * Gets the entityFactory for this backend controller.
-   * 
-   * @return the entityFactory for this backend controller.
-   */
-  IEntityFactory getEntityFactory();
-
-  /**
    * Gets the beanAccessorFactory for this backend controller.
    * 
    * @return the beanAccessorFactory for this backend controller.
    */
   IAccessorFactory getBeanAccessorFactory();
-
-  /**
-   * Gets the mapAccessorFactory for this backend controller.
-   * 
-   * @return the mapAccessorFactory for this backend controller.
-   */
-  IAccessorFactory getMapAccessorFactory();
 
   /**
    * Gets the beanConnectorFactory for this backend controller.
@@ -87,6 +61,20 @@ public interface IBackendController extends IController {
   IModelConnectorFactory getBeanConnectorFactory();
 
   /**
+   * Gets the entityFactory for this backend controller.
+   * 
+   * @return the entityFactory for this backend controller.
+   */
+  IEntityFactory getEntityFactory();
+
+  /**
+   * Gets the mapAccessorFactory for this backend controller.
+   * 
+   * @return the mapAccessorFactory for this backend controller.
+   */
+  IAccessorFactory getMapAccessorFactory();
+
+  /**
    * Gets the mapConnectorFactory for this backend controller.
    * 
    * @return the mapConnectorFactory for this backend controller.
@@ -94,18 +82,33 @@ public interface IBackendController extends IController {
   IModelConnectorFactory getMapConnectorFactory();
 
   /**
-   * Translate modules based on the locale set.
-   */
-  void translateModules();
-
-  /**
-   * Checks authorization for module access. It shoud throw a SecurityException
-   * whenever access should not be granted.
+   * Given a module identifier, this method returns the composite connector used
+   * as model connector for the associated module.
    * 
    * @param moduleId
-   *          the id of the module access to check.
+   *          the modulen identifier.
+   * @return the associated module connector.
    */
-  void checkModuleAccess(String moduleId);
+  IValueConnector getModuleConnector(String moduleId);
+
+  /**
+   * Acts as a clipboard for retrieving previously stored component references
+   * along with their descriptors.
+   * 
+   * @return components the component transfer structure to retrieve.
+   */
+  ComponentTransferStructure retrieveComponents();
+
+  /**
+   * Asks this backend controller to perform any necessary action upon startup.
+   * One of this action should be to construct the root connector based on the
+   * root model descriptor.
+   * 
+   * @param locale
+   *          the locale this backend controller should start with.
+   * @return true if the controller successfully started.
+   */
+  boolean start(Locale locale);
 
   /**
    * Acts as a clipboard for storing component references along with their
@@ -117,10 +120,7 @@ public interface IBackendController extends IController {
   void storeComponents(ComponentTransferStructure components);
 
   /**
-   * Acts as a clipboard for retrieving previously stored component references
-   * along with their descriptors.
-   * 
-   * @return components the component transfer structure to retrieve.
+   * Translate modules based on the locale set.
    */
-  ComponentTransferStructure retrieveComponents();
+  void translateModules();
 }

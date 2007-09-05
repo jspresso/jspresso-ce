@@ -24,8 +24,21 @@ import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 public class ULCReferenceFieldConnector extends ULCActionFieldConnector
     implements ICompositeValueConnector {
 
-  private IValueConnector               toStringPropertyConnector;
+  private final class ToStringConnectorListener implements
+      IConnectorValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(@SuppressWarnings("unused")
+    ConnectorValueChangeEvent evt) {
+      setConnecteeValue(getConnecteeValue());
+    }
+
+  }
   private IConnectorValueChangeListener toStringListener;
+
+  private IValueConnector               toStringPropertyConnector;
 
   /**
    * Constructs a new <code>ULCReferenceFieldConnector</code> instance.
@@ -66,6 +79,28 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
   /**
    * {@inheritDoc}
    */
+  @Override
+  public ULCReferenceFieldConnector clone() {
+    return clone(getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ULCReferenceFieldConnector clone(String newConnectorId) {
+    ULCReferenceFieldConnector clonedConnector = (ULCReferenceFieldConnector) super
+        .clone(newConnectorId);
+    if (toStringPropertyConnector != null) {
+      clonedConnector.toStringPropertyConnector = toStringPropertyConnector
+          .clone();
+    }
+    return clonedConnector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IValueConnector getChildConnector(String connectorKey) {
     if (connectorKey.equals(toStringPropertyConnector.getId())) {
       return toStringPropertyConnector;
@@ -94,28 +129,6 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ULCReferenceFieldConnector clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ULCReferenceFieldConnector clone(String newConnectorId) {
-    ULCReferenceFieldConnector clonedConnector = (ULCReferenceFieldConnector) super
-        .clone(newConnectorId);
-    if (toStringPropertyConnector != null) {
-      clonedConnector.toStringPropertyConnector = toStringPropertyConnector
-          .clone();
-    }
-    return clonedConnector;
-  }
-
-  /**
    * Sets the toStringPropertyConnector.
    * 
    * @param toStringPropertyConnector
@@ -132,18 +145,5 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
       this.toStringPropertyConnector
           .addConnectorValueChangeListener(toStringListener);
     }
-  }
-
-  private final class ToStringConnectorListener implements
-      IConnectorValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
-      setConnecteeValue(getConnecteeValue());
-    }
-
   }
 }

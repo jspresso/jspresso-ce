@@ -44,44 +44,6 @@ public class Coordinates {
   }
 
   /**
-   * Gets the x.
-   * 
-   * @return the x.
-   */
-  public int getX() {
-    return x;
-  }
-
-  /**
-   * Sets the x.
-   * 
-   * @param x
-   *          the x to set.
-   */
-  public void setX(int x) {
-    this.x = x;
-  }
-
-  /**
-   * Gets the y.
-   * 
-   * @return the y.
-   */
-  public int getY() {
-    return y;
-  }
-
-  /**
-   * Sets the y.
-   * 
-   * @param y
-   *          the y to set.
-   */
-  public void setY(int y) {
-    this.y = y;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -112,11 +74,49 @@ public class Coordinates {
   }
 
   /**
+   * Gets the x.
+   * 
+   * @return the x.
+   */
+  public int getX() {
+    return x;
+  }
+
+  /**
+   * Gets the y.
+   * 
+   * @return the y.
+   */
+  public int getY() {
+    return y;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
   public int hashCode() {
     return new HashCodeBuilder(23, 53).append(x).append(y).toHashCode();
+  }
+
+  /**
+   * Sets the x.
+   * 
+   * @param x
+   *          the x to set.
+   */
+  public void setX(int x) {
+    this.x = x;
+  }
+
+  /**
+   * Sets the y.
+   * 
+   * @param y
+   *          the y to set.
+   */
+  public void setY(int y) {
+    this.y = y;
   }
 
   /**

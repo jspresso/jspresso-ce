@@ -35,19 +35,6 @@ public final class SErrorDialog extends SDialog {
 
   private static final long    serialVersionUID = -3122747783739141527L;
 
-  private SLabel               messagePane;
-  private SLabel               detailsPane;
-
-  private SButton              detailsButton;
-  private SPanel               detailsPanel;
-  private SLabel               iconLabel;
-
-  private Locale               locale;
-  private ITranslationProvider translationProvider;
-
-  private int                  collapsedHeight  = 0;
-  private int                  expandedHeight   = 0;
-
   /**
    * Factory method for error dialog.
    * 
@@ -68,19 +55,22 @@ public final class SErrorDialog extends SDialog {
     errorDialog.initGui();
     return errorDialog;
   }
+  private int                  collapsedHeight  = 0;
+
+  private SButton              detailsButton;
+  private SLabel               detailsPane;
+  private SPanel               detailsPanel;
+
+  private int                  expandedHeight   = 0;
+  private SLabel               iconLabel;
+
+  private Locale               locale;
+  private SLabel               messagePane;
+
+  private ITranslationProvider translationProvider;
 
   private SErrorDialog(SFrame owner) {
     super(owner);
-  }
-
-  /**
-   * Specifies the icon to use.
-   * 
-   * @param messageIcon
-   *          the Icon to use. If null, the default error icon will be used
-   */
-  public void setMessageIcon(SIcon messageIcon) {
-    iconLabel.setIcon(messageIcon);
   }
 
   /**
@@ -283,5 +273,15 @@ public final class SErrorDialog extends SDialog {
    */
   public void setMessage(String message) {
     this.messagePane.setText(message);
+  }
+
+  /**
+   * Specifies the icon to use.
+   * 
+   * @param messageIcon
+   *          the Icon to use. If null, the default error icon will be used
+   */
+  public void setMessageIcon(SIcon messageIcon) {
+    iconLabel.setIcon(messageIcon);
   }
 }

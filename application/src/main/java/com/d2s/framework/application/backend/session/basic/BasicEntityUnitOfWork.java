@@ -32,11 +32,15 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     dirtRecorder = new BeanPropertyChangeRecorder();
   }
 
+  private void cleanup() {
+    dirtRecorder = null;
+  }
+
   /**
    * {@inheritDoc}
    */
-  public boolean isActive() {
-    return dirtRecorder != null;
+  public void clearDirtyState(IEntity flushedEntity) {
+    dirtRecorder.resetChangedProperties(flushedEntity, null);
   }
 
   /**
@@ -49,15 +53,15 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
   /**
    * {@inheritDoc}
    */
-  public void rollback() {
-    cleanup();
+  public Map<String, Object> getDirtyProperties(IEntity entity) {
+    return dirtRecorder.getChangedProperties(entity);
   }
 
   /**
    * {@inheritDoc}
    */
-  public Map<String, Object> getDirtyProperties(IEntity entity) {
-    return dirtRecorder.getChangedProperties(entity);
+  public boolean isActive() {
+    return dirtRecorder != null;
   }
 
   /**
@@ -85,14 +89,10 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     dirtRecorder.register(bean, initialChangedProperties);
   }
 
-  private void cleanup() {
-    dirtRecorder = null;
-  }
-
   /**
    * {@inheritDoc}
    */
-  public void clearDirtyState(IEntity flushedEntity) {
-    dirtRecorder.resetChangedProperties(flushedEntity, null);
+  public void rollback() {
+    cleanup();
   }
 }

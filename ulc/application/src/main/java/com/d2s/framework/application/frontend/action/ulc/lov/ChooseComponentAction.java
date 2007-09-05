@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction;
 import com.d2s.framework.binding.model.IModelValueConnector;
 import com.d2s.framework.view.IView;
@@ -29,8 +28,8 @@ import com.ulcjava.base.application.ULCComponent;
  */
 public class ChooseComponentAction extends ModalDialogAction {
 
-  private IDisplayableAction okAction;
   private IDisplayableAction cancelAction;
+  private IDisplayableAction okAction;
 
   /**
    * {@inheritDoc}
@@ -68,7 +67,7 @@ public class ChooseComponentAction extends ModalDialogAction {
    * @param cancelAction
    *          the cancelAction to set.
    */
-  public void setCancelAction(AbstractChainedAction cancelAction) {
+  public void setCancelAction(IDisplayableAction cancelAction) {
     this.cancelAction = cancelAction;
   }
 
@@ -78,7 +77,7 @@ public class ChooseComponentAction extends ModalDialogAction {
    * @param okAction
    *          the okAction to set.
    */
-  public void setOkAction(AbstractChainedAction okAction) {
+  public void setOkAction(IDisplayableAction okAction) {
     this.okAction = okAction;
   }
 }

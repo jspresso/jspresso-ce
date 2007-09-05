@@ -26,9 +26,40 @@ public class BasicCollectionPropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
     ICollectionPropertyDescriptor<E> {
 
-  private ICollectionDescriptor<E> referencedDescriptor;
   private Boolean                  manyToMany;
   private List<String>             orderingProperties;
+  private ICollectionDescriptor<E> referencedDescriptor;
+
+  /**
+   * {@inheritDoc}
+   */
+  public ICollectionDescriptor getCollectionDescriptor() {
+    return getReferencedDescriptor();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<? extends Collection> getModelType() {
+    return getReferencedDescriptor().getCollectionInterface();
+  }
+
+  /**
+   * Gets the orderingProperties.
+   * 
+   * @return the orderingProperties.
+   */
+  public List<String> getOrderingProperties() {
+    if (orderingProperties != null) {
+      return orderingProperties;
+    }
+    if (getParentDescriptor() != null) {
+      return ((ICollectionPropertyDescriptor<?>) getParentDescriptor())
+          .getOrderingProperties();
+    }
+    return getReferencedDescriptor().getElementDescriptor()
+        .getOrderingProperties();
+  }
 
   /**
    * Gets the referencedDescriptor.
@@ -45,31 +76,6 @@ public class BasicCollectionPropertyDescriptor<E> extends
           .getReferencedDescriptor();
     }
     return referencedDescriptor;
-  }
-
-  /**
-   * Sets the referencedDescriptor.
-   * 
-   * @param referencedDescriptor
-   *          the referencedDescriptor to set.
-   */
-  public void setReferencedDescriptor(
-      ICollectionDescriptor<E> referencedDescriptor) {
-    this.referencedDescriptor = referencedDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class<? extends Collection> getModelType() {
-    return getReferencedDescriptor().getCollectionInterface();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public ICollectionDescriptor getCollectionDescriptor() {
-    return getReferencedDescriptor();
   }
 
   /**
@@ -93,40 +99,34 @@ public class BasicCollectionPropertyDescriptor<E> extends
   }
 
   /**
-   * Sets the manyToMany.
-   * 
-   * @param manyToMany
-   *          the manyToMany to set.
+   * {@inheritDoc}
    */
-  public void setManyToMany(boolean manyToMany) {
-    this.manyToMany = new Boolean(manyToMany);
+  public void postprocessAdder(Object component, Collection collection,
+      Object addedValue) {
+    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+      processor.postprocessAdderIntegrity(component, collection, addedValue);
+    }
   }
 
   /**
-   * Gets the orderingProperties.
-   * 
-   * @return the orderingProperties.
+   * {@inheritDoc}
    */
-  public List<String> getOrderingProperties() {
-    if (orderingProperties != null) {
-      return orderingProperties;
+  public void postprocessRemover(Object component, Collection collection,
+      Object removedValue) {
+    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
     }
-    if (getParentDescriptor() != null) {
-      return ((ICollectionPropertyDescriptor<?>) getParentDescriptor())
-          .getOrderingProperties();
+    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+      processor
+          .postprocessRemoverIntegrity(component, collection, removedValue);
     }
-    return getReferencedDescriptor().getElementDescriptor()
-        .getOrderingProperties();
-  }
-
-  /**
-   * Sets the orderingProperties.
-   * 
-   * @param orderingProperties
-   *          the orderingProperties to set.
-   */
-  public void setOrderingProperties(List<String> orderingProperties) {
-    this.orderingProperties = orderingProperties;
   }
 
   /**
@@ -147,21 +147,6 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public void postprocessAdder(Object component, Collection collection,
-      Object addedValue) {
-    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
-    if (processors == null) {
-      return;
-    }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
-      processor.postprocessAdderIntegrity(component, collection, addedValue);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void preprocessRemover(Object component, Collection collection,
       Object removedValue) {
     List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
@@ -175,18 +160,33 @@ public class BasicCollectionPropertyDescriptor<E> extends
   }
 
   /**
-   * {@inheritDoc}
+   * Sets the manyToMany.
+   * 
+   * @param manyToMany
+   *          the manyToMany to set.
    */
-  public void postprocessRemover(Object component, Collection collection,
-      Object removedValue) {
-    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
-    if (processors == null) {
-      return;
-    }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
-      processor
-          .postprocessRemoverIntegrity(component, collection, removedValue);
-    }
+  public void setManyToMany(boolean manyToMany) {
+    this.manyToMany = new Boolean(manyToMany);
+  }
+
+  /**
+   * Sets the orderingProperties.
+   * 
+   * @param orderingProperties
+   *          the orderingProperties to set.
+   */
+  public void setOrderingProperties(List<String> orderingProperties) {
+    this.orderingProperties = orderingProperties;
+  }
+
+  /**
+   * Sets the referencedDescriptor.
+   * 
+   * @param referencedDescriptor
+   *          the referencedDescriptor to set.
+   */
+  public void setReferencedDescriptor(
+      ICollectionDescriptor<E> referencedDescriptor) {
+    this.referencedDescriptor = referencedDescriptor;
   }
 }

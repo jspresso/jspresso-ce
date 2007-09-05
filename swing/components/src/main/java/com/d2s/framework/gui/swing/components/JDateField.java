@@ -48,17 +48,6 @@ public class JDateField extends DateField {
   /**
    * Constructs a new <code>JDateField</code> instance.
    *
-   * @param locale
-   *          the user locale.
-   */
-  public JDateField(Locale locale) {
-    super();
-    initDefaultBehaviour(locale);
-  }
-
-  /**
-   * Constructs a new <code>JDateField</code> instance.
-   *
    * @param formatter
    *          formatter used for the textfield.
    * @param locale
@@ -66,6 +55,17 @@ public class JDateField extends DateField {
    */
   public JDateField(DateFormatter formatter, Locale locale) {
     super(formatter);
+    initDefaultBehaviour(locale);
+  }
+
+  /**
+   * Constructs a new <code>JDateField</code> instance.
+   *
+   * @param locale
+   *          the user locale.
+   */
+  public JDateField(Locale locale) {
+    super();
     initDefaultBehaviour(locale);
   }
 

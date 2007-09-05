@@ -35,23 +35,6 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   }
 
   /**
-   * Sets the enumerationName.
-   *
-   * @param enumerationName
-   *          the enumerationName to set.
-   */
-  public void setEnumerationName(String enumerationName) {
-    this.enumerationName = enumerationName;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class getModelType() {
-    return String.class;
-  }
-
-  /**
    * Gets the maxLength.
    *
    * @return the maxLength.
@@ -65,6 +48,23 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
           .getMaxLength();
     }
     return maxLength;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class getModelType() {
+    return String.class;
+  }
+
+  /**
+   * Sets the enumerationName.
+   *
+   * @param enumerationName
+   *          the enumerationName to set.
+   */
+  public void setEnumerationName(String enumerationName) {
+    this.enumerationName = enumerationName;
   }
 
   /**

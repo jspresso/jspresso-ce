@@ -11,10 +11,6 @@ package com.d2s.framework.util.lang;
  */
 public final class ObjectUtils {
 
-  private ObjectUtils() {
-    // Helper class constructor
-  }
-
   /**
    * Compares two objects for equality.
    * 
@@ -32,5 +28,9 @@ public final class ObjectUtils {
       return false;
     }
     return object1.equals(object2);
+  }
+
+  private ObjectUtils() {
+    // Helper class constructor
   }
 }

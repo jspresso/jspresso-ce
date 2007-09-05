@@ -23,8 +23,12 @@ public class MockMessageSource implements MessageSource {
 
   private static final Log LOG = LogFactory.getLog(MockMessageSource.class);
 
-  private String getTranslation(String key, Locale locale) {
-    return "[" + locale.getISO3Language() + ":" + key + "]";
+  /**
+   * {@inheritDoc}
+   */
+  public String getMessage(MessageSourceResolvable resolvable, Locale locale) {
+    return getMessage(resolvable.getCodes()[0], resolvable.getArguments(),
+        resolvable.getDefaultMessage(), locale);
   }
 
   /**
@@ -57,12 +61,8 @@ public class MockMessageSource implements MessageSource {
     return message.toString();
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public String getMessage(MessageSourceResolvable resolvable, Locale locale) {
-    return getMessage(resolvable.getCodes()[0], resolvable.getArguments(),
-        resolvable.getDefaultMessage(), locale);
+  private String getTranslation(String key, Locale locale) {
+    return "[" + locale.getISO3Language() + ":" + key + "]";
   }
 
 }

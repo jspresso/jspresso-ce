@@ -26,6 +26,18 @@ public abstract class AbstractCloneCollectionAction extends
     AbstractCollectionAction {
 
   /**
+   * Clones an element.
+   * 
+   * @param element
+   *          the element to clone.
+   * @param context
+   *          the action context.
+   * @return the cloned element.
+   */
+  protected abstract Object cloneElement(Object element,
+      Map<String, Object> context);
+
+  /**
    * Retrieves the managed collection from the model connector then clones the
    * selected elements.
    * <p>
@@ -50,17 +62,5 @@ public abstract class AbstractCloneCollectionAction extends
         .getIndicesOf(collectionConnector, elementClones));
     return super.execute(actionHandler, context);
   }
-
-  /**
-   * Clones an element.
-   * 
-   * @param element
-   *          the element to clone.
-   * @param context
-   *          the action context.
-   * @return the cloned element.
-   */
-  protected abstract Object cloneElement(Object element,
-      Map<String, Object> context);
 
 }

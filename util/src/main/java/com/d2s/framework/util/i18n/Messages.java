@@ -22,10 +22,6 @@ public final class Messages {
   private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
                                                           .getBundle(BUNDLE_NAME);
 
-  private Messages() {
-    // Helper constructor.
-  }
-
   /**
    * Gets an internationalized string.
    * 
@@ -39,5 +35,9 @@ public final class Messages {
     } catch (MissingResourceException e) {
       return '!' + key + '!';
     }
+  }
+
+  private Messages() {
+    // Helper constructor.
   }
 }

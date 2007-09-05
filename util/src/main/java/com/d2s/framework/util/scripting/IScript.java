@@ -15,15 +15,22 @@ package com.d2s.framework.util.scripting;
 public interface IScript {
 
   /**
+   * <code>CONTEXT</code> is the script execution context map.
+   */
+  String CONTEXT         = "CONTEXT";
+
+  /**
    * <code>SCRIPTED_OBJECT</code> is the script context key of the scripted
    * object (the object the script is working on).
    */
   String SCRIPTED_OBJECT = "SCRIPTED_OBJECT";
 
   /**
-   * <code>CONTEXT</code> is the script execution context map.
+   * Gets the scripting language used.
+   * 
+   * @return the scripting language used.
    */
-  String CONTEXT         = "CONTEXT";
+  String getLanguage();
 
   /**
    * Gets the script code.
@@ -38,11 +45,4 @@ public interface IScript {
    * @return the scripted object.
    */
   Object getScriptedObject();
-
-  /**
-   * Gets the scripting language used.
-   * 
-   * @return the scripting language used.
-   */
-  String getLanguage();
 }

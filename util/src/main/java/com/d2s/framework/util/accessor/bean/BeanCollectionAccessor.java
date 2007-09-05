@@ -25,8 +25,8 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     ICollectionAccessor {
 
   private Method adderMethod;
-  private Method removerMethod;
   private Class  elementClass;
+  private Method removerMethod;
 
   /**
    * Constructs a new default java bean collection property accessor.
@@ -58,19 +58,6 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public void removeFromValue(Object target, Object value)
-      throws IllegalAccessException, InvocationTargetException {
-    if (removerMethod == null) {
-      removerMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
-          AccessorInfo.REMOVER_PREFIX + capitalizeFirst(getProperty()),
-          new Class[] {getElementClass()});
-    }
-    removerMethod.invoke(target, new Object[] {value});
-  }
-
-  /**
    * Capitalizes the first caracter of a string.
    * 
    * @param input
@@ -79,6 +66,15 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
    */
   protected String capitalizeFirst(String input) {
     return Character.toUpperCase(input.charAt(0)) + input.substring(1);
+  }
+
+  /**
+   * Gets the elementClass.
+   * 
+   * @return the elementClass.
+   */
+  protected Class getElementClass() {
+    return elementClass;
   }
 
   /**
@@ -91,12 +87,16 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
   }
 
   /**
-   * Gets the elementClass.
-   * 
-   * @return the elementClass.
+   * {@inheritDoc}
    */
-  protected Class getElementClass() {
-    return elementClass;
+  public void removeFromValue(Object target, Object value)
+      throws IllegalAccessException, InvocationTargetException {
+    if (removerMethod == null) {
+      removerMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
+          AccessorInfo.REMOVER_PREFIX + capitalizeFirst(getProperty()),
+          new Class[] {getElementClass()});
+    }
+    removerMethod.invoke(target, new Object[] {value});
   }
 
 }

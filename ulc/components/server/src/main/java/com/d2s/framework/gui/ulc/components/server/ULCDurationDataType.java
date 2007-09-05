@@ -30,6 +30,13 @@ public class ULCDurationDataType extends ULCProxy implements IDataType {
   private Locale            locale;
 
   /**
+   * Constructs a new <code>ULCDurationDataType</code> instance.
+   */
+  public ULCDurationDataType() {
+    this(null);
+  }
+
+  /**
    * Constructs a new <code>ULCDurationDataType</code> instance. This
    * constructor has default visibility to prevent for direct instanciation.
    * 
@@ -38,30 +45,6 @@ public class ULCDurationDataType extends ULCProxy implements IDataType {
    */
   ULCDurationDataType(Locale locale) {
     this.locale = locale;
-  }
-
-  /**
-   * Constructs a new <code>ULCDurationDataType</code> instance.
-   */
-  public ULCDurationDataType() {
-    this(null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void saveState(Anything a) {
-    super.saveState(a);
-    saveState(a, DurationDataTypeConstants.LOCALE, locale.getLanguage(), null);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIDurationDataType";
   }
 
   /**
@@ -85,6 +68,23 @@ public class ULCDurationDataType extends ULCProxy implements IDataType {
   @Override
   public int hashCode() {
     return new HashCodeBuilder(7, 23).append(locale).toHashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void saveState(Anything a) {
+    super.saveState(a);
+    saveState(a, DurationDataTypeConstants.LOCALE, locale.getLanguage(), null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIDurationDataType";
   }
 
 }

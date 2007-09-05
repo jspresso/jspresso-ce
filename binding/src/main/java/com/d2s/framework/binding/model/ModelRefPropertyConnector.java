@@ -33,16 +33,16 @@ import com.d2s.framework.model.entity.IQueryEntity;
 public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     ICompositeValueConnector, IConnectorMapProvider, IModelProvider {
 
-  private IModelConnectorFactory modelConnectorFactory;
-  private ModelChangeSupport     modelChangeSupport;
-  private IConnectorMap          childConnectors;
-  private ChildConnectorSupport  childConnectorSupport;
-
   /**
    * <code>THIS_PROPERTY</code> is a fake property name returning the model
    * itself.
    */
   public static final String     THIS_PROPERTY = "&this";
+  private IConnectorMap          childConnectors;
+  private ChildConnectorSupport  childConnectorSupport;
+  private ModelChangeSupport     modelChangeSupport;
+
+  private IModelConnectorFactory modelConnectorFactory;
 
   /**
    * Constructs a new model property connector on a model reference property.
@@ -62,15 +62,11 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   }
 
   /**
-   * Returns the child connectors of this <code>ModelRefPropertyConnector</code>
-   * instance. This is the lazilly created map of
-   * <code>ModelPropertyConnector</code> s connected to the model properties
-   * of the referenced model.
-   * <p>
    * {@inheritDoc}
    */
-  public IConnectorMap getConnectorMap() {
-    return childConnectors;
+  public void addChildConnector(@SuppressWarnings("unused")
+  IValueConnector childConnector) {
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -86,53 +82,40 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   }
 
   /**
-   * Returns the referenced model.
-   * <p>
    * {@inheritDoc}
    */
-  public Object getModel() {
-    return getConnecteeValue();
+  public boolean areChildrenReadable() {
+    return isReadable();
   }
 
   /**
    * {@inheritDoc}
-   * 
-   * @see #addModelChangeListener(IModelChangeListener)
    */
-  public void removeModelChangeListener(IModelChangeListener listener) {
-    if (listener != null) {
-      modelChangeSupport.removeModelChangeListener(listener);
-    }
+  public boolean areChildrenWritable() {
+    return isWritable();
   }
 
   /**
-   * The referenced model of this <code>ModelRefPropertyConnector</code>
-   * changed. It will notify its <code>IModelChangeListener</code> s (i.e. the
-   * child property connectors) of the change.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public void propertyChange(PropertyChangeEvent evt) {
-    super.propertyChange(evt);
-    fireModelChange(evt.getOldValue(), evt.getNewValue());
+  public ModelRefPropertyConnector clone() {
+    return clone(getId());
   }
 
   /**
-   * After having performed the standard (super implementation) handling of the
-   * <code>ModelChangeEvent</code>, it will notify its child connectors of
-   * the referenced model change.
-   * <p>
    * {@inheritDoc}
    */
   @Override
-  public void modelChange(ModelChangeEvent evt) {
-    // preserve the old value before it gets changed.
-    Object oldValue = getOldConnectorValue();
-    // handle the change normally
-    super.modelChange(evt);
-    // then notify the listeners
-    fireModelChange(oldValue, getConnecteeValue());
+  public ModelRefPropertyConnector clone(String newConnectorId) {
+    ModelRefPropertyConnector clonedConnector = (ModelRefPropertyConnector) super
+        .clone(newConnectorId);
+    clonedConnector.modelChangeSupport = new ModelChangeSupport(clonedConnector);
+    clonedConnector.childConnectors = new ModelConnectorMap(clonedConnector,
+        modelConnectorFactory);
+    clonedConnector.childConnectorSupport = new ChildConnectorSupport(
+        clonedConnector);
+    return clonedConnector;
   }
 
   /**
@@ -160,44 +143,6 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
-  public Collection<String> getChildConnectorKeys() {
-    return childConnectorSupport.getChildConnectorKeys();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ModelRefPropertyConnector clone(String newConnectorId) {
-    ModelRefPropertyConnector clonedConnector = (ModelRefPropertyConnector) super
-        .clone(newConnectorId);
-    clonedConnector.modelChangeSupport = new ModelChangeSupport(clonedConnector);
-    clonedConnector.childConnectors = new ModelConnectorMap(clonedConnector,
-        modelConnectorFactory);
-    clonedConnector.childConnectorSupport = new ChildConnectorSupport(
-        clonedConnector);
-    return clonedConnector;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ModelRefPropertyConnector clone() {
-    return clone(getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void addChildConnector(@SuppressWarnings("unused")
-  IValueConnector childConnector) {
-    throw new UnsupportedOperationException();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public int getChildConnectorCount() {
     return getChildConnectorKeys().size();
   }
@@ -205,15 +150,29 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   /**
    * {@inheritDoc}
    */
-  public boolean areChildrenReadable() {
-    return isReadable();
+  public Collection<String> getChildConnectorKeys() {
+    return childConnectorSupport.getChildConnectorKeys();
   }
 
   /**
+   * Returns the child connectors of this <code>ModelRefPropertyConnector</code>
+   * instance. This is the lazilly created map of
+   * <code>ModelPropertyConnector</code> s connected to the model properties
+   * of the referenced model.
+   * <p>
    * {@inheritDoc}
    */
-  public boolean areChildrenWritable() {
-    return isWritable();
+  public IConnectorMap getConnectorMap() {
+    return childConnectors;
+  }
+
+  /**
+   * Returns the referenced model.
+   * <p>
+   * {@inheritDoc}
+   */
+  public Object getModel() {
+    return getConnecteeValue();
   }
 
   /**
@@ -234,5 +193,46 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
       }
     }
     return registeredModelDescriptor;
+  }
+
+  /**
+   * After having performed the standard (super implementation) handling of the
+   * <code>ModelChangeEvent</code>, it will notify its child connectors of
+   * the referenced model change.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void modelChange(ModelChangeEvent evt) {
+    // preserve the old value before it gets changed.
+    Object oldValue = getOldConnectorValue();
+    // handle the change normally
+    super.modelChange(evt);
+    // then notify the listeners
+    fireModelChange(oldValue, getConnecteeValue());
+  }
+
+  /**
+   * The referenced model of this <code>ModelRefPropertyConnector</code>
+   * changed. It will notify its <code>IModelChangeListener</code> s (i.e. the
+   * child property connectors) of the change.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void propertyChange(PropertyChangeEvent evt) {
+    super.propertyChange(evt);
+    fireModelChange(evt.getOldValue(), evt.getNewValue());
+  }
+
+  /**
+   * {@inheritDoc}
+   * 
+   * @see #addModelChangeListener(IModelChangeListener)
+   */
+  public void removeModelChangeListener(IModelChangeListener listener) {
+    if (listener != null) {
+      modelChangeSupport.removeModelChangeListener(listener);
+    }
   }
 }

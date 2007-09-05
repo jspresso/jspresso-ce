@@ -20,8 +20,8 @@ public class CollectionConnectorValueChangeEvent extends
     ConnectorValueChangeEvent {
 
   private static final long     serialVersionUID = 6547764843701088585L;
-  private List<IValueConnector> removedChildrenConnectors;
   private boolean               delayedEvent;
+  private List<IValueConnector> removedChildrenConnectors;
 
   /**
    * Constructs a new <code>CollectionConnectorValueChangeEvent</code>

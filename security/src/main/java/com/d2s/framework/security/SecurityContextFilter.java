@@ -37,17 +37,6 @@ public class SecurityContextFilter implements Filter {
   /**
    * {@inheritDoc}
    */
-  public void init(@SuppressWarnings("unused")
-  FilterConfig config) {
-    loginRedirectUrl = config.getInitParameter(LOGIN_PARAM_NAME);
-    if (loginRedirectUrl == null) {
-      loginRedirectUrl = LOGIN_DEFAULT;
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void destroy() {
     // NO-OP.
   }
@@ -64,6 +53,17 @@ public class SecurityContextFilter implements Filter {
       ((HttpServletResponse) response)
           .sendRedirect(((HttpServletRequest) request).getContextPath()
               + loginRedirectUrl);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void init(@SuppressWarnings("unused")
+  FilterConfig config) {
+    loginRedirectUrl = config.getInitParameter(LOGIN_PARAM_NAME);
+    if (loginRedirectUrl == null) {
+      loginRedirectUrl = LOGIN_DEFAULT;
     }
   }
 }

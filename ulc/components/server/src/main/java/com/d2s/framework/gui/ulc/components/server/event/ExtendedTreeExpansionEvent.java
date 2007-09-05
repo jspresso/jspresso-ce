@@ -39,14 +39,6 @@ public class ExtendedTreeExpansionEvent extends TreeExpansionEvent {
    * {@inheritDoc}
    */
   @Override
-  public int getCategory() {
-    return ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public void dispatch(IEventListener listener) {
     if (listener instanceof IExtendedTreeWillExpandListener) {
       IExtendedTreeWillExpandListener extendedTreeWillExpandListener = (IExtendedTreeWillExpandListener) listener;
@@ -61,6 +53,14 @@ public class ExtendedTreeExpansionEvent extends TreeExpansionEvent {
         throw new IllegalArgumentException("Illegal event id : " + getId());
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int getCategory() {
+    return ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT;
   }
 
 }

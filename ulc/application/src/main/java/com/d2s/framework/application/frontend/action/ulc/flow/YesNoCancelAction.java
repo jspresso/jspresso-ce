@@ -16,9 +16,9 @@ import com.d2s.framework.action.IAction;
  */
 public class YesNoCancelAction extends AbstractFlowAction {
 
-  private IAction yesAction;
-  private IAction noAction;
   private IAction cancelAction;
+  private IAction noAction;
+  private IAction yesAction;
 
   /**
    * Constructs a new <code>YesNoAction</code> instance.

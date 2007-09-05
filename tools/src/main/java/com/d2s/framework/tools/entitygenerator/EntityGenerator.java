@@ -50,22 +50,100 @@ import freemarker.template.TemplateException;
 public class EntityGenerator {
 
   private static final String APPLICATION_CONTEXT_KEY = "applicationContextKey";
-  private static final String TEMPLATE_RESOURCE_PATH  = "templateResourcePath";
-  private static final String TEMPLATE_NAME           = "templateName";
-  private static final String OUTPUT_DIR              = "outputDir";
   private static final String COMPONENT_NAMES         = "componentNames";
-  private static final String INCLUDE_PACKAGES        = "includePackages";
   private static final String EXCLUDE_PATTERN         = "excludePatterns";
   private static final String GENERATE_ANNOTATIONS    = "generateAnnotations";
+  private static final String INCLUDE_PACKAGES        = "includePackages";
+  private static final String OUTPUT_DIR              = "outputDir";
+  private static final String TEMPLATE_NAME           = "templateName";
+  private static final String TEMPLATE_RESOURCE_PATH  = "templateResourcePath";
 
+  /**
+   * Starts Code generation for an component.
+   *
+   * @param args
+   *          the command line arguments.
+   */
+  @SuppressWarnings("static-access")
+  public static void main(String[] args) {
+    Options options = new Options();
+    options
+        .addOption(OptionBuilder
+            .withArgName(APPLICATION_CONTEXT_KEY)
+            .isRequired()
+            .hasArg()
+            .withDescription(
+                "use given applicationContextKey as registered in the spring BeanFactoryLocator.")
+            .create(APPLICATION_CONTEXT_KEY));
+    options.addOption(OptionBuilder.withArgName(TEMPLATE_RESOURCE_PATH)
+        .isRequired().hasArg().withDescription(
+            "sets the resource path of the directory containg the templates.")
+        .create(TEMPLATE_RESOURCE_PATH));
+    options.addOption(OptionBuilder.withArgName(TEMPLATE_NAME).isRequired()
+        .hasArg().withDescription("sets the used component code template.")
+        .create(TEMPLATE_NAME));
+    options.addOption(OptionBuilder.withArgName(OUTPUT_DIR).hasArg()
+        .withDescription("sets the output directory for generated source.")
+        .create(OUTPUT_DIR));
+    options
+        .addOption(OptionBuilder
+            .withArgName(INCLUDE_PACKAGES)
+            .hasArgs()
+            .withValueSeparator(',')
+            .withDescription(
+                "generate code for the component descriptors declared in the listed packages.")
+            .create(INCLUDE_PACKAGES));
+    options.addOption(OptionBuilder.withArgName(EXCLUDE_PATTERN).hasArgs()
+        .withValueSeparator(',').withDescription(
+            "exclude classes whose names match the regular expression.")
+        .create(EXCLUDE_PATTERN));
+    options
+        .addOption(OptionBuilder
+            .withArgName(GENERATE_ANNOTATIONS)
+            .withDescription(
+                "generate java5 annotations (incompatible with XDoclet as of now).")
+            .create(GENERATE_ANNOTATIONS));
+    options
+        .addOption(OptionBuilder
+            .withArgName(COMPONENT_NAMES)
+            .hasArgs()
+            .withValueSeparator(',')
+            .withDescription(
+                "generate code for the given component descriptor names in the application context.")
+            .create(COMPONENT_NAMES));
+    CommandLineParser parser = new BasicParser();
+    CommandLine cmd = null;
+    try {
+      cmd = parser.parse(options, args);
+    } catch (ParseException ex) {
+      System.err.println(ex.getLocalizedMessage());
+      HelpFormatter formatter = new HelpFormatter();
+      formatter.printHelp(EntityGenerator.class.getSimpleName(), options);
+      return;
+    }
+
+    EntityGenerator generator = new EntityGenerator();
+    generator.setApplicationContextKey(cmd
+        .getOptionValue(APPLICATION_CONTEXT_KEY));
+    generator.setTemplateResourcePath(cmd
+        .getOptionValue(TEMPLATE_RESOURCE_PATH));
+    generator.setTemplateName(cmd.getOptionValue(TEMPLATE_NAME));
+    generator.setOutputDir(cmd.getOptionValue(OUTPUT_DIR));
+    generator.setIncludePackages(cmd.getOptionValues(INCLUDE_PACKAGES));
+    generator.setExcludePatterns(cmd.getOptionValues(EXCLUDE_PATTERN));
+    generator.setGenerateAnnotations(cmd.hasOption(GENERATE_ANNOTATIONS));
+    generator.setComponentNames(cmd.getOptionValues(COMPONENT_NAMES));
+    generator.generateComponents();
+  }
   private String              applicationContextKey;
-  private String              templateResourcePath;
-  private String              templateName;
-  private String              outputDir;
-  private String[]            includePackages;
+  private String[]            componentNames;
   private String[]            excludePatterns;
   private boolean             generateAnnotations;
-  private String[]            componentNames;
+  private String[]            includePackages;
+  private String              outputDir;
+  private String              templateName;
+
+  private String              templateResourcePath;
 
   /**
    * Generates the component java source files.
@@ -159,84 +237,6 @@ public class EntityGenerator {
   }
 
   /**
-   * Starts Code generation for an component.
-   *
-   * @param args
-   *          the command line arguments.
-   */
-  @SuppressWarnings("static-access")
-  public static void main(String[] args) {
-    Options options = new Options();
-    options
-        .addOption(OptionBuilder
-            .withArgName(APPLICATION_CONTEXT_KEY)
-            .isRequired()
-            .hasArg()
-            .withDescription(
-                "use given applicationContextKey as registered in the spring BeanFactoryLocator.")
-            .create(APPLICATION_CONTEXT_KEY));
-    options.addOption(OptionBuilder.withArgName(TEMPLATE_RESOURCE_PATH)
-        .isRequired().hasArg().withDescription(
-            "sets the resource path of the directory containg the templates.")
-        .create(TEMPLATE_RESOURCE_PATH));
-    options.addOption(OptionBuilder.withArgName(TEMPLATE_NAME).isRequired()
-        .hasArg().withDescription("sets the used component code template.")
-        .create(TEMPLATE_NAME));
-    options.addOption(OptionBuilder.withArgName(OUTPUT_DIR).hasArg()
-        .withDescription("sets the output directory for generated source.")
-        .create(OUTPUT_DIR));
-    options
-        .addOption(OptionBuilder
-            .withArgName(INCLUDE_PACKAGES)
-            .hasArgs()
-            .withValueSeparator(',')
-            .withDescription(
-                "generate code for the component descriptors declared in the listed packages.")
-            .create(INCLUDE_PACKAGES));
-    options.addOption(OptionBuilder.withArgName(EXCLUDE_PATTERN).hasArgs()
-        .withValueSeparator(',').withDescription(
-            "exclude classes whose names match the regular expression.")
-        .create(EXCLUDE_PATTERN));
-    options
-        .addOption(OptionBuilder
-            .withArgName(GENERATE_ANNOTATIONS)
-            .withDescription(
-                "generate java5 annotations (incompatible with XDoclet as of now).")
-            .create(GENERATE_ANNOTATIONS));
-    options
-        .addOption(OptionBuilder
-            .withArgName(COMPONENT_NAMES)
-            .hasArgs()
-            .withValueSeparator(',')
-            .withDescription(
-                "generate code for the given component descriptor names in the application context.")
-            .create(COMPONENT_NAMES));
-    CommandLineParser parser = new BasicParser();
-    CommandLine cmd = null;
-    try {
-      cmd = parser.parse(options, args);
-    } catch (ParseException ex) {
-      System.err.println(ex.getLocalizedMessage());
-      HelpFormatter formatter = new HelpFormatter();
-      formatter.printHelp(EntityGenerator.class.getSimpleName(), options);
-      return;
-    }
-
-    EntityGenerator generator = new EntityGenerator();
-    generator.setApplicationContextKey(cmd
-        .getOptionValue(APPLICATION_CONTEXT_KEY));
-    generator.setTemplateResourcePath(cmd
-        .getOptionValue(TEMPLATE_RESOURCE_PATH));
-    generator.setTemplateName(cmd.getOptionValue(TEMPLATE_NAME));
-    generator.setOutputDir(cmd.getOptionValue(OUTPUT_DIR));
-    generator.setIncludePackages(cmd.getOptionValues(INCLUDE_PACKAGES));
-    generator.setExcludePatterns(cmd.getOptionValues(EXCLUDE_PATTERN));
-    generator.setGenerateAnnotations(cmd.hasOption(GENERATE_ANNOTATIONS));
-    generator.setComponentNames(cmd.getOptionValues(COMPONENT_NAMES));
-    generator.generateComponents();
-  }
-
-  /**
    * Sets the applicationContextKey.
    *
    * @param applicationContextKey
@@ -257,6 +257,16 @@ public class EntityGenerator {
   }
 
   /**
+   * Sets the excludePatterns.
+   *
+   * @param excludePatterns
+   *          the excludePatterns to set.
+   */
+  public void setExcludePatterns(String[] excludePatterns) {
+    this.excludePatterns = excludePatterns;
+  }
+
+  /**
    * Sets the generateAnnotations.
    *
    * @param generateAnnotations
@@ -274,16 +284,6 @@ public class EntityGenerator {
    */
   public void setIncludePackages(String[] includePackages) {
     this.includePackages = includePackages;
-  }
-
-  /**
-   * Sets the excludePatterns.
-   *
-   * @param excludePatterns
-   *          the excludePatterns to set.
-   */
-  public void setExcludePatterns(String[] excludePatterns) {
-    this.excludePatterns = excludePatterns;
   }
 
   /**

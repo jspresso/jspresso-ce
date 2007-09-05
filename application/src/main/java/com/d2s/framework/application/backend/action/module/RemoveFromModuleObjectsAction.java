@@ -27,6 +27,19 @@ import com.d2s.framework.binding.ICompositeValueConnector;
  */
 public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
 
+  private static void removeFromSubModules(Module parentModule,
+      Object removedObject) {
+    if (parentModule.getSubModules() != null) {
+      for (SubModule subModule : new ArrayList<SubModule>(parentModule
+          .getSubModules())) {
+        if (subModule instanceof BeanModule
+            && removedObject.equals(((BeanModule) subModule).getModuleObject())) {
+          parentModule.removeSubModule(subModule);
+        }
+      }
+    }
+  }
+
   /**
    * Removes the selected objects from the projected collection.
    * <p>
@@ -63,18 +76,5 @@ public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
 
     getModelConnector(context).setConnectorValue(projectedCollection);
     return super.execute(actionHandler, context);
-  }
-
-  private static void removeFromSubModules(Module parentModule,
-      Object removedObject) {
-    if (parentModule.getSubModules() != null) {
-      for (SubModule subModule : new ArrayList<SubModule>(parentModule
-          .getSubModules())) {
-        if (subModule instanceof BeanModule
-            && removedObject.equals(((BeanModule) subModule).getModuleObject())) {
-          parentModule.removeSubModule(subModule);
-        }
-      }
-    }
   }
 }

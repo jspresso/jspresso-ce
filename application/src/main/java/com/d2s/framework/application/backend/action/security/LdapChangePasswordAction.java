@@ -35,8 +35,8 @@ import com.d2s.framework.util.ldap.LdapConstants;
  */
 public class LdapChangePasswordAction extends AbstractChangePasswordAction {
 
-  private String ldapUrl;
   private String digestAlgorithm;
+  private String ldapUrl;
 
   /**
    * {@inheritDoc}
@@ -79,16 +79,6 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
     return true;
   }
 
-  /**
-   * Sets the ldapUrl.
-   * 
-   * @param ldapUrl
-   *          the ldapUrl to set.
-   */
-  public void setLdapUrl(String ldapUrl) {
-    this.ldapUrl = ldapUrl;
-  }
-
   private String digest(char[] newPassword) throws NoSuchAlgorithmException,
       IOException {
     if (digestAlgorithm != null) {
@@ -111,5 +101,15 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
    */
   public void setDigestAlgorithm(String digestAlgorithm) {
     this.digestAlgorithm = digestAlgorithm;
+  }
+
+  /**
+   * Sets the ldapUrl.
+   * 
+   * @param ldapUrl
+   *          the ldapUrl to set.
+   */
+  public void setLdapUrl(String ldapUrl) {
+    this.ldapUrl = ldapUrl;
   }
 }

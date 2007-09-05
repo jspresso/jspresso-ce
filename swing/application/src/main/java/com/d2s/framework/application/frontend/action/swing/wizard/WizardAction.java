@@ -50,19 +50,23 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class WizardAction extends AbstractSwingAction {
 
+  private IDisplayableAction     finishAction;
   private IWizardStepDescriptor  firstWizardStep;
+
   private IModelConnectorFactory modelConnectorFactory;
 
-  private IDisplayableAction     finishAction;
-
   /**
-   * Sets the firstWizardStep.
+   * Creates (and initializes) the wizard model.
    * 
-   * @param firstWizardStep
-   *          the firstWizardStep to set.
+   * @param initialWizardModel
+   *          the initial wizard model.
+   * @param context
+   *          the action context.
    */
-  public void setFirstWizardStep(IWizardStepDescriptor firstWizardStep) {
-    this.firstWizardStep = firstWizardStep;
+  protected void completeInitialWizardModel(@SuppressWarnings("unused")
+  Map<String, Object> initialWizardModel, @SuppressWarnings("unused")
+  Map<String, Object> context) {
+    // No-op by default.
   }
 
   /**
@@ -208,6 +212,48 @@ public class WizardAction extends AbstractSwingAction {
     return super.execute(actionHandler, context);
   }
 
+  private IWizardStepDescriptor getCurrentWizardStep(Map<String, Object> context) {
+    IWizardStepDescriptor currentWizardStep = (IWizardStepDescriptor) context
+        .get(ActionContextConstants.DIALOG_VIEW);
+    return currentWizardStep;
+  }
+
+  private void setCurrentWizardStep(IWizardStepDescriptor currentWizardStep,
+      Map<String, Object> context) {
+    context.put(ActionContextConstants.DIALOG_VIEW, currentWizardStep);
+  }
+
+  /**
+   * Sets the finishAction.
+   * 
+   * @param finishAction
+   *          the finishAction to set.
+   */
+  public void setFinishAction(IDisplayableAction finishAction) {
+    this.finishAction = finishAction;
+  }
+
+  /**
+   * Sets the firstWizardStep.
+   * 
+   * @param firstWizardStep
+   *          the firstWizardStep to set.
+   */
+  public void setFirstWizardStep(IWizardStepDescriptor firstWizardStep) {
+    this.firstWizardStep = firstWizardStep;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
+
   private void show(JDialog dialog, JPanel cardPanel,
       Set<String> alreadyDisplayedSteps, IWizardStepDescriptor wizardStep,
       JButton backButton, JButton nextButton, JButton finishButton,
@@ -260,51 +306,5 @@ public class WizardAction extends AbstractSwingAction {
     dialog.setTitle(getI18nName(translationProvider, locale) + " - "
         + wizardStep.getI18nName(translationProvider, locale));
     setCurrentWizardStep(wizardStep, context);
-  }
-
-  private IWizardStepDescriptor getCurrentWizardStep(Map<String, Object> context) {
-    IWizardStepDescriptor currentWizardStep = (IWizardStepDescriptor) context
-        .get(ActionContextConstants.DIALOG_VIEW);
-    return currentWizardStep;
-  }
-
-  private void setCurrentWizardStep(IWizardStepDescriptor currentWizardStep,
-      Map<String, Object> context) {
-    context.put(ActionContextConstants.DIALOG_VIEW, currentWizardStep);
-  }
-
-  /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
-   * Sets the finishAction.
-   * 
-   * @param finishAction
-   *          the finishAction to set.
-   */
-  public void setFinishAction(IDisplayableAction finishAction) {
-    this.finishAction = finishAction;
-  }
-
-  /**
-   * Creates (and initializes) the wizard model.
-   * 
-   * @param initialWizardModel
-   *          the initial wizard model.
-   * @param context
-   *          the action context.
-   */
-  protected void completeInitialWizardModel(@SuppressWarnings("unused")
-  Map<String, Object> initialWizardModel, @SuppressWarnings("unused")
-  Map<String, Object> context) {
-    // No-op by default.
   }
 }

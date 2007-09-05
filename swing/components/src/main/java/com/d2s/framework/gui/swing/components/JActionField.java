@@ -44,11 +44,11 @@ public class JActionField extends JPanel {
 
   private static final long serialVersionUID = 5741890319182521808L;
 
-  private JTextField        textField;
-  private Object            value;
-  private boolean           showTextField;
   private List<Action>      actions;
   private JPanel            buttonPanel;
+  private boolean           showTextField;
+  private JTextField        textField;
+  private Object            value;
 
   /**
    * Constructs a new <code>JActionField</code> instance.
@@ -92,12 +92,102 @@ public class JActionField extends JPanel {
   }
 
   /**
+   * Adds a focus listener to the text field.
+   * 
+   * @param l
+   *          the listener to add.
+   */
+  public void addTextFieldFocusListener(FocusListener l) {
+    textField.addFocusListener(l);
+  }
+
+  /**
    * Gets the actions.
    * 
    * @return the actions.
    */
   public List<Action> getActions() {
     return actions;
+  }
+
+  /**
+   * Gets the action field text.
+   * 
+   * @return the action field text.
+   */
+  public String getActionText() {
+    return textField.getText();
+  }
+
+  /**
+   * Gets the value.
+   * 
+   * @return the value.
+   */
+  public Object getValue() {
+    return value;
+  }
+
+  /**
+   * Gets the showTextField.
+   * 
+   * @return the showTextField.
+   */
+  public boolean isShowingTextField() {
+    return showTextField;
+  }
+
+  /**
+   * Gets wether this action field text is synchronized with its underlying
+   * value.
+   * 
+   * @return true if this action field text is synchronized with its underlying
+   *         value.
+   */
+  public boolean isSynchronized() {
+    return ObjectUtils.equals(valueToString(), textField.getText());
+  }
+
+  /**
+   * performs the registered action programatically.
+   */
+  public void performAction() {
+    textField.getAction().actionPerformed(
+        new ActionEvent(this, 0, getActionText()));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition,
+      boolean pressed) {
+    if (super.processKeyBinding(ks, e, condition, pressed)) {
+      return true;
+    }
+    Object binding = textField.getInputMap(condition).get(ks);
+    if (binding != null && textField.getActionMap().get(binding) != null) {
+      textField.dispatchEvent(e);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Removes a focus listener from the text field.
+   * 
+   * @param l
+   *          the listener to remove.
+   */
+  public void removeTextFieldFocusListener(FocusListener l) {
+    textField.removeFocusListener(l);
+  }
+
+  /**
+   * Delegates to textField.
+   */
+  public void selectAll() {
+    textField.selectAll();
   }
 
   /**
@@ -136,81 +226,6 @@ public class JActionField extends JPanel {
   }
 
   /**
-   * Gets the value.
-   * 
-   * @return the value.
-   */
-  public Object getValue() {
-    return value;
-  }
-
-  /**
-   * Sets the value.
-   * 
-   * @param value
-   *          the value to set.
-   */
-  public void setValue(Object value) {
-    this.value = value;
-    textField.setText(valueToString());
-  }
-
-  /**
-   * Adds a focus listener to the text field.
-   * 
-   * @param l
-   *          the listener to add.
-   */
-  public void addTextFieldFocusListener(FocusListener l) {
-    textField.addFocusListener(l);
-  }
-
-  /**
-   * Removes a focus listener from the text field.
-   * 
-   * @param l
-   *          the listener to remove.
-   */
-  public void removeTextFieldFocusListener(FocusListener l) {
-    textField.removeFocusListener(l);
-  }
-
-  /**
-   * performs the registered action programatically.
-   */
-  public void performAction() {
-    textField.getAction().actionPerformed(
-        new ActionEvent(this, 0, getActionText()));
-  }
-
-  /**
-   * Gets wether this action field text is synchronized with its underlying
-   * value.
-   * 
-   * @return true if this action field text is synchronized with its underlying
-   *         value.
-   */
-  public boolean isSynchronized() {
-    return ObjectUtils.equals(valueToString(), textField.getText());
-  }
-
-  private String valueToString() {
-    if (value == null) {
-      return "";
-    }
-    return value.toString();
-  }
-
-  /**
-   * Gets the action field text.
-   * 
-   * @return the action field text.
-   */
-  public String getActionText() {
-    return textField.getText();
-  }
-
-  /**
    * Gets the action field text.
    * 
    * @param actionText
@@ -221,20 +236,18 @@ public class JActionField extends JPanel {
   }
 
   /**
-   * {@inheritDoc}
+   * Decorates the component with a marker.
+   * 
+   * @param decorated
+   *          if the component should be decorated.
    */
-  @Override
-  protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition,
-      boolean pressed) {
-    if (super.processKeyBinding(ks, e, condition, pressed)) {
-      return true;
+  public void setDecorated(boolean decorated) {
+    if (decorated) {
+      buttonPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,
+          Color.RED.brighter(), Color.RED.darker()));
+    } else {
+      buttonPanel.setBorder(null);
     }
-    Object binding = textField.getInputMap(condition).get(ks);
-    if (binding != null && textField.getActionMap().get(binding) != null) {
-      textField.dispatchEvent(e);
-      return true;
-    }
-    return false;
   }
 
   /**
@@ -265,33 +278,20 @@ public class JActionField extends JPanel {
   }
 
   /**
-   * Delegates to textField.
+   * Sets the value.
+   * 
+   * @param value
+   *          the value to set.
    */
-  public void selectAll() {
-    textField.selectAll();
+  public void setValue(Object value) {
+    this.value = value;
+    textField.setText(valueToString());
   }
 
-  /**
-   * Gets the showTextField.
-   * 
-   * @return the showTextField.
-   */
-  public boolean isShowingTextField() {
-    return showTextField;
-  }
-
-  /**
-   * Decorates the component with a marker.
-   * 
-   * @param decorated
-   *          if the component should be decorated.
-   */
-  public void setDecorated(boolean decorated) {
-    if (decorated) {
-      buttonPanel.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,
-          Color.RED.brighter(), Color.RED.darker()));
-    } else {
-      buttonPanel.setBorder(null);
+  private String valueToString() {
+    if (value == null) {
+      return "";
     }
+    return value.toString();
   }
 }

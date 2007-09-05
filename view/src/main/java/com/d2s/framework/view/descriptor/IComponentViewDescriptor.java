@@ -30,6 +30,14 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
   int ASIDE = 2;
 
   /**
+   * Gets the number of properties displayed in a row. This is actually a
+   * maximum value since a property might span multiple columns.
+   * 
+   * @return the number of properties displayed in a row of this view.
+   */
+  int getColumnCount();
+
+  /**
    * Gets the position of the labels naming the displayed properties.
    * 
    * @return the relative position of the labels (<code>ABOVE</code> or
@@ -38,12 +46,11 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
   int getLabelsPosition();
 
   /**
-   * Gets the number of properties displayed in a row. This is actually a
-   * maximum value since a property might span multiple columns.
+   * Gets the property view descriptors.
    * 
-   * @return the number of properties displayed in a row of this view.
+   * @return the property view descriptors.
    */
-  int getColumnCount();
+  List<ISubViewDescriptor> getPropertyViewDescriptors();
 
   /**
    * Gets the number of columns a property spans when displayed.
@@ -62,11 +69,4 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
    * @return The list of displayed properties in the case of a complex property.
    */
   List<String> getRenderedChildProperties(String propertyName);
-
-  /**
-   * Gets the property view descriptors.
-   * 
-   * @return the property view descriptors.
-   */
-  List<ISubViewDescriptor> getPropertyViewDescriptors();
 }

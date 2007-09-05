@@ -39,14 +39,6 @@ public class ExtendedInternalFrameEvent extends UlcEvent {
    * {@inheritDoc}
    */
   @Override
-  public int getCategory() {
-    return ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public void dispatch(IEventListener listener) {
     if (listener instanceof IExtendedInternalFrameListener) {
       IExtendedInternalFrameListener extendedInternalFrameListener = (IExtendedInternalFrameListener) listener;
@@ -70,5 +62,13 @@ public class ExtendedInternalFrameEvent extends UlcEvent {
         throw new IllegalArgumentException("Illegal event id : " + fId);
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int getCategory() {
+    return ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT;
   }
 }

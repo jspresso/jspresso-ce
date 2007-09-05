@@ -17,6 +17,17 @@ import java.util.Map;
 public interface IEntityDirtAware {
 
   /**
+   * Gets the entity dirty properties (changed properties that need to be
+   * updated to the persistent store).
+   * 
+   * @param entity
+   *          the entity to get the dirty properties of.
+   * @return null or an empty map if the entity is not dirty. The collection of
+   *         dirty properties with their original values.
+   */
+  Map<String, Object> getDirtyProperties(IEntity entity);
+
+  /**
    * Gets wether the entity is dirty (has changes that need to be updated to the
    * persistent store).
    * 
@@ -37,16 +48,5 @@ public interface IEntityDirtAware {
    * @return true if the entity is dirty.
    */
   boolean isDirty(IEntity entity, String property);
-
-  /**
-   * Gets the entity dirty properties (changed properties that need to be
-   * updated to the persistent store).
-   * 
-   * @param entity
-   *          the entity to get the dirty properties of.
-   * @return null or an empty map if the entity is not dirty. The collection of
-   *         dirty properties with their original values.
-   */
-  Map<String, Object> getDirtyProperties(IEntity entity);
 
 }

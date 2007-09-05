@@ -35,6 +35,16 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
    * 
    * @param pattern
    *          pattern.
+   */
+  public NullableSimpleDateFormat(String pattern) {
+    super(pattern);
+  }
+
+  /**
+   * Constructs a new <code>NullableSimpleDateFormat</code> instance.
+   * 
+   * @param pattern
+   *          pattern.
    * @param formatSymbols
    *          formatSymbols.
    */
@@ -53,16 +63,6 @@ public class NullableSimpleDateFormat extends SimpleDateFormat {
    */
   public NullableSimpleDateFormat(String pattern, Locale locale) {
     super(pattern, locale);
-  }
-
-  /**
-   * Constructs a new <code>NullableSimpleDateFormat</code> instance.
-   * 
-   * @param pattern
-   *          pattern.
-   */
-  public NullableSimpleDateFormat(String pattern) {
-    super(pattern);
   }
 
   /**

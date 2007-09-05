@@ -33,6 +33,57 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   private IEntityFactory    entityFactory;
 
+  private void extractState(IEntity entity, String[] propertyNames,
+      Object[] state) {
+    for (int i = 0; i < propertyNames.length; i++) {
+      String propertyName = propertyNames[i];
+      Object property = entity.straightGetProperty(propertyName);
+      if (!(property instanceof Collection<?>)) {
+        state[i] = property;
+      }
+    }
+  }
+
+  /**
+   * Gets the entityFactory.
+   *
+   * @return the entityFactory.
+   */
+  protected IEntityFactory getEntityFactory() {
+    return entityFactory;
+  }
+
+  /**
+   * Gets the lifecycle handler.
+   *
+   * @return the entity lifecycle handler.
+   */
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return null;
+  }
+
+  /**
+   * Returns the fully qualified name of the entity passed as parameter.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String getEntityName(Object object) {
+    if (object instanceof IEntity) {
+      return ((IEntity) object).getContract().getName();
+    }
+    return null;
+  }
+
+  /**
+   * Gets the principal owning the session.
+   *
+   * @return the principal owning the session.
+   */
+  protected UserPrincipal getPrincipal() {
+    return null;
+  }
+
   /**
    * Instanciates a new entity (proxy) based on the entityDescriptor returned
    * from the bean factory. The entityName which is the fully qualified name of
@@ -54,19 +105,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   }
 
   /**
-   * Returns the fully qualified name of the entity passed as parameter.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public String getEntityName(Object object) {
-    if (object instanceof IEntity) {
-      return ((IEntity) object).getContract().getName();
-    }
-    return null;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -77,24 +115,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
           getEntityLifecycleHandler());
     }
     super.onDelete(entity, id, state, propertyNames, types);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean onSave(Object entity, Serializable id, Object[] state,
-      String[] propertyNames, Type[] types) {
-    boolean stateUpdated = false;
-    if (entity instanceof IEntity) {
-      if (((IEntity) entity).onPersist(getEntityFactory(), getPrincipal(),
-          getEntityLifecycleHandler())) {
-        extractState((IEntity) entity, propertyNames, state);
-        stateUpdated = true;
-      }
-    }
-    return stateUpdated
-        || super.onSave(entity, id, state, propertyNames, types);
   }
 
   /**
@@ -117,15 +137,22 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
             propertyNames, types);
   }
 
-  private void extractState(IEntity entity, String[] propertyNames,
-      Object[] state) {
-    for (int i = 0; i < propertyNames.length; i++) {
-      String propertyName = propertyNames[i];
-      Object property = entity.straightGetProperty(propertyName);
-      if (!(property instanceof Collection<?>)) {
-        state[i] = property;
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean onSave(Object entity, Serializable id, Object[] state,
+      String[] propertyNames, Type[] types) {
+    boolean stateUpdated = false;
+    if (entity instanceof IEntity) {
+      if (((IEntity) entity).onPersist(getEntityFactory(), getPrincipal(),
+          getEntityLifecycleHandler())) {
+        extractState((IEntity) entity, propertyNames, state);
+        stateUpdated = true;
       }
     }
+    return stateUpdated
+        || super.onSave(entity, id, state, propertyNames, types);
   }
 
   /**
@@ -136,32 +163,5 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
-  }
-
-  /**
-   * Gets the entityFactory.
-   *
-   * @return the entityFactory.
-   */
-  protected IEntityFactory getEntityFactory() {
-    return entityFactory;
-  }
-
-  /**
-   * Gets the principal owning the session.
-   *
-   * @return the principal owning the session.
-   */
-  protected UserPrincipal getPrincipal() {
-    return null;
-  }
-
-  /**
-   * Gets the lifecycle handler.
-   *
-   * @return the entity lifecycle handler.
-   */
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return null;
   }
 }

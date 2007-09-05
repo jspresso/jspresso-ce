@@ -63,17 +63,6 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   /**
    * {@inheritDoc}
    */
-  @Override
-  protected Object getReferenceProperty(Object proxy,
-      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
-    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor);
-    return super.getReferenceProperty(proxy, propertyDescriptor);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @SuppressWarnings("unchecked")
   @Override
   protected Object getCollectionProperty(Object proxy,
@@ -81,6 +70,17 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
     applicationSession.initializePropertyIfNeeded((IEntity) proxy,
         propertyDescriptor);
     return super.getCollectionProperty(proxy, propertyDescriptor);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getReferenceProperty(Object proxy,
+      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+        propertyDescriptor);
+    return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 
   /**

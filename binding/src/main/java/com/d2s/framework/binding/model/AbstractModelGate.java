@@ -23,6 +23,28 @@ public abstract class AbstractModelGate extends AbstractGate implements
   private IModelProvider modelProvider;
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public AbstractModelGate clone() {
+    AbstractModelGate clonedGate = (AbstractModelGate) super.clone();
+    clonedGate.modelProvider = null;
+    return clonedGate;
+  }
+
+  /**
+   * Gets the model held by the model provider.
+   * 
+   * @return the model held by the model provider.
+   */
+  protected Object getModel() {
+    if (modelProvider != null) {
+      return modelProvider.getModel();
+    }
+    return null;
+  }
+
+  /**
    * Gets the modelProvider.
    * 
    * @return the modelProvider.
@@ -50,27 +72,5 @@ public abstract class AbstractModelGate extends AbstractGate implements
     if (getModelProvider() != null) {
       modelChange(new ModelChangeEvent(getModelProvider(), oldModel, newModel));
     }
-  }
-
-  /**
-   * Gets the model held by the model provider.
-   * 
-   * @return the model held by the model provider.
-   */
-  protected Object getModel() {
-    if (modelProvider != null) {
-      return modelProvider.getModel();
-    }
-    return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public AbstractModelGate clone() {
-    AbstractModelGate clonedGate = (AbstractModelGate) super.clone();
-    clonedGate.modelProvider = null;
-    return clonedGate;
   }
 }

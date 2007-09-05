@@ -26,8 +26,8 @@ import com.d2s.framework.application.startup.IStartup;
 public abstract class AbstractStartup implements IStartup {
 
   private BeanFactory         applicationContext;
-  private IFrontendController frontendController;
   private IBackendController  backendController;
+  private IFrontendController frontendController;
 
   /**
    * Gets the applicationContext.
@@ -44,16 +44,6 @@ public abstract class AbstractStartup implements IStartup {
   }
 
   /**
-   * Both front and back controllers are retrieved from the spring context,
-   * associated and started.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void start() {
-    getFrontendController().start(getBackendController(), getStartupLocale());
-  }
-
-  /**
    * Gets the application context key to get the application context out of the
    * singleton bean factory locator.
    * 
@@ -62,11 +52,18 @@ public abstract class AbstractStartup implements IStartup {
   protected abstract String getApplicationContextKey();
 
   /**
-   * Gets the startup locale.
+   * Gets the application backend controller.
    * 
-   * @return the startup locale.
+   * @return the application backend controller.
    */
-  protected abstract Locale getStartupLocale();
+  protected IBackendController getBackendController() {
+    if (backendController == null) {
+      backendController = (IBackendController) getApplicationContext().getBean(
+          "applicationBackController");
+    }
+    return backendController;
+
+  }
 
   /**
    * Gets the application frontend controller.
@@ -82,16 +79,19 @@ public abstract class AbstractStartup implements IStartup {
   }
 
   /**
-   * Gets the application backend controller.
+   * Gets the startup locale.
    * 
-   * @return the application backend controller.
+   * @return the startup locale.
    */
-  protected IBackendController getBackendController() {
-    if (backendController == null) {
-      backendController = (IBackendController) getApplicationContext().getBean(
-          "applicationBackController");
-    }
-    return backendController;
+  protected abstract Locale getStartupLocale();
 
+  /**
+   * Both front and back controllers are retrieved from the spring context,
+   * associated and started.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void start() {
+    getFrontendController().start(getBackendController(), getStartupLocale());
   }
 }

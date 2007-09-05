@@ -22,6 +22,15 @@ public interface IRelationshipEndPropertyDescriptor extends IPropertyDescriptor 
   IRelationshipEndPropertyDescriptor getReverseRelationEnd();
 
   /**
+   * Gets whether this collection property is a composition. If true, it means
+   * that whenever the holding bean gets deleted, the referenced beans will also
+   * be.
+   * 
+   * @return true if this is a composition relationship.
+   */
+  boolean isComposition();
+
+  /**
    * Sets the reverse relationship descriptor of the underlying relation.
    * Implementing classes are supposed to reflexively set both relation ends.
    * 
@@ -30,13 +39,4 @@ public interface IRelationshipEndPropertyDescriptor extends IPropertyDescriptor 
    */
   void setReverseRelationEnd(
       IRelationshipEndPropertyDescriptor reverseRelationEnd);
-
-  /**
-   * Gets whether this collection property is a composition. If true, it means
-   * that whenever the holding bean gets deleted, the referenced beans will also
-   * be.
-   * 
-   * @return true if this is a composition relationship.
-   */
-  boolean isComposition();
 }

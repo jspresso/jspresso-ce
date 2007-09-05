@@ -24,8 +24,8 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
 public abstract class AbstractComponentExtension<T extends IComponent>
     implements IComponentExtension<T>, IComponentFactoryAware {
 
-  private final T           extendedComponent;
   private IComponentFactory componentFactory;
+  private final T           extendedComponent;
 
   /**
    * Constructs a new <code>AbstractComponentExtension</code> instance.
@@ -42,6 +42,15 @@ public abstract class AbstractComponentExtension<T extends IComponent>
    */
   public T getComponent() {
     return extendedComponent;
+  }
+
+  /**
+   * Gets the componentFactory.
+   *
+   * @return the componentFactory.
+   */
+  protected IComponentFactory getComponentFactory() {
+    return componentFactory;
   }
 
   /**
@@ -75,15 +84,6 @@ public abstract class AbstractComponentExtension<T extends IComponent>
                 evt.getOldValue(), evt.getNewValue());
           }
         });
-  }
-
-  /**
-   * Gets the componentFactory.
-   *
-   * @return the componentFactory.
-   */
-  protected IComponentFactory getComponentFactory() {
-    return componentFactory;
   }
 
   /**

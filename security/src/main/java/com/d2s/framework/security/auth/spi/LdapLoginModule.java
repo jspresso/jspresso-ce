@@ -33,8 +33,8 @@ import com.d2s.framework.security.UserPrincipal;
 public class LdapLoginModule extends LdapExtLoginModule {
 
   private static final String CUSTOM_PROPERTY_OPT = "custom.";
-  private static final String SLICE_START         = "[";
   private static final String SLICE_END           = "]";
+  private static final String SLICE_START         = "[";
 
   /**
    * Overriden to complete the main principal with optional data from the
@@ -141,18 +141,6 @@ public class LdapLoginModule extends LdapExtLoginModule {
     return userDN;
   }
 
-  private String extractSlice(String nameAsString, NameParser nameParser,
-      int startIndex, int endIndex) throws NamingException {
-    Name name = nameParser.parse(nameAsString);
-    if (startIndex < 0) {
-      startIndex = name.size() + startIndex;
-    }
-    if (endIndex < 0) {
-      endIndex = name.size() + endIndex;
-    }
-    return name.getPrefix(endIndex).getSuffix(startIndex).toString();
-  }
-
   /**
    * Overriden to construct a user principal instead of the default
    * SimplePrincipal.
@@ -166,5 +154,17 @@ public class LdapLoginModule extends LdapExtLoginModule {
       return new UserPrincipal(username);
     }
     return super.createIdentity(username);
+  }
+
+  private String extractSlice(String nameAsString, NameParser nameParser,
+      int startIndex, int endIndex) throws NamingException {
+    Name name = nameParser.parse(nameAsString);
+    if (startIndex < 0) {
+      startIndex = name.size() + startIndex;
+    }
+    if (endIndex < 0) {
+      endIndex = name.size() + endIndex;
+    }
+    return name.getPrefix(endIndex).getSuffix(startIndex).toString();
   }
 }

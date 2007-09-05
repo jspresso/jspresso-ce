@@ -18,6 +18,14 @@ import java.util.Map;
 public interface IFileSaveCallback {
 
   /**
+   * Called whenever the file opening is cancelled.
+   * 
+   * @param context
+   *          the action context.
+   */
+  void cancel(Map<String, Object> context);
+
+  /**
    * Called whenever a file is chosen as save destination.
    * 
    * @param out
@@ -36,12 +44,4 @@ public interface IFileSaveCallback {
    *          the action context.
    */
   void fileWritten(String filePath, Map<String, Object> context);
-
-  /**
-   * Called whenever the file opening is cancelled.
-   * 
-   * @param context
-   *          the action context.
-   */
-  void cancel(Map<String, Object> context);
 }

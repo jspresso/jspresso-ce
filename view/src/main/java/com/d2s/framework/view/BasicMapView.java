@@ -35,21 +35,21 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
   /**
    * {@inheritDoc}
    */
-  public List<IView<E>> getChildren() {
-    if (children == null) {
-      return null;
-    }
-    return new ArrayList<IView<E>>(children.values());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public IView<E> getChild(String key) {
     if (children == null) {
       return null;
     }
     return children.get(key);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IView<E>> getChildren() {
+    if (children == null) {
+      return null;
+    }
+    return new ArrayList<IView<E>>(children.values());
   }
 
   /**

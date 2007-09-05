@@ -50,12 +50,70 @@ import com.d2s.framework.util.swing.SwingUtil;
  */
 public final class SplashWindow extends Window {
 
-  private static final long   serialVersionUID = 4476194702263304379L;
-
   /**
    * The current instance of the splash window. (Singleton design pattern).
    */
   private static SplashWindow instance;
+
+  private static final long   serialVersionUID = 4476194702263304379L;
+
+  /**
+   * Closes the splash window.
+   */
+  public static void disposeSplash() {
+    if (instance != null) {
+      instance.getOwner().dispose();
+      instance = null;
+    }
+  }
+
+  /**
+   * Open's a splash window using the specified image.
+   * 
+   * @param image
+   *          The splash image.
+   */
+  public static void splash(Image image) {
+    if (instance == null && image != null) {
+      Frame f = new Frame();
+
+      // Create the splash image
+      instance = new SplashWindow(f, image);
+
+      // Show the window.
+      instance.setVisible(true);
+
+      // Note: To make sure the user gets a chance to see the
+      // splash window we wait until its paint method has been
+      // called at least once by the AWT event dispatcher thread.
+      // If more than one processor is available, we don't wait,
+      // and maximize CPU throughput instead.
+      if (!EventQueue.isDispatchThread()
+          && Runtime.getRuntime().availableProcessors() == 1) {
+        synchronized (instance) {
+          while (!instance.paintCalled) {
+            try {
+              instance.wait();
+            } catch (InterruptedException e) {
+              // Just continue
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Open's a splash window using the specified image.
+   * 
+   * @param imageURL
+   *          The url of the splash image.
+   */
+  public static void splash(URL imageURL) {
+    if (imageURL != null) {
+      splash(Toolkit.getDefaultToolkit().createImage(imageURL));
+    }
+  }
 
   /**
    * The splash image which is displayed on the splash window.
@@ -129,20 +187,6 @@ public final class SplashWindow extends Window {
   }
 
   /**
-   * Updates the display area of the window.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void update(Graphics g) {
-    // Note: Since the paint method is going to draw an
-    // image that covers the complete area of the component we
-    // do not fill the component with its background color
-    // here. This avoids flickering.
-    paint(g);
-  }
-
-  /**
    * Paints the image on the window.
    * <p>
    * {@inheritDoc}
@@ -167,60 +211,16 @@ public final class SplashWindow extends Window {
   }
 
   /**
-   * Open's a splash window using the specified image.
-   * 
-   * @param image
-   *          The splash image.
+   * Updates the display area of the window.
+   * <p>
+   * {@inheritDoc}
    */
-  public static void splash(Image image) {
-    if (instance == null && image != null) {
-      Frame f = new Frame();
-
-      // Create the splash image
-      instance = new SplashWindow(f, image);
-
-      // Show the window.
-      instance.setVisible(true);
-
-      // Note: To make sure the user gets a chance to see the
-      // splash window we wait until its paint method has been
-      // called at least once by the AWT event dispatcher thread.
-      // If more than one processor is available, we don't wait,
-      // and maximize CPU throughput instead.
-      if (!EventQueue.isDispatchThread()
-          && Runtime.getRuntime().availableProcessors() == 1) {
-        synchronized (instance) {
-          while (!instance.paintCalled) {
-            try {
-              instance.wait();
-            } catch (InterruptedException e) {
-              // Just continue
-            }
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Open's a splash window using the specified image.
-   * 
-   * @param imageURL
-   *          The url of the splash image.
-   */
-  public static void splash(URL imageURL) {
-    if (imageURL != null) {
-      splash(Toolkit.getDefaultToolkit().createImage(imageURL));
-    }
-  }
-
-  /**
-   * Closes the splash window.
-   */
-  public static void disposeSplash() {
-    if (instance != null) {
-      instance.getOwner().dispose();
-      instance = null;
-    }
+  @Override
+  public void update(Graphics g) {
+    // Note: Since the paint method is going to draw an
+    // image that covers the complete area of the component we
+    // do not fill the component with its background color
+    // here. This avoids flickering.
+    paint(g);
   }
 }

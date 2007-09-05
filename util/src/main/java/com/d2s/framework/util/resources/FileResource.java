@@ -34,14 +34,14 @@ public class FileResource extends AbstractResource {
   /**
    * {@inheritDoc}
    */
-  public int getLength() {
-    return (int) resourceFile.length();
+  public InputStream getContent() throws IOException {
+    return new FileInputStream(resourceFile);
   }
 
   /**
    * {@inheritDoc}
    */
-  public InputStream getContent() throws IOException {
-    return new FileInputStream(resourceFile);
+  public int getLength() {
+    return (int) resourceFile.length();
   }
 }

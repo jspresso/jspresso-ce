@@ -37,22 +37,6 @@ public interface IActionFactory<E, F> {
    *          the action descriptor.
    * @param actionHandler
    *          the handler responsible for executing the action.
-   * @param view
-   *          the view which the action is attached to.
-   * @param locale
-   *          the locale the action has to use.
-   * @return the constructed action.
-   */
-  E createAction(IDisplayableAction action, IActionHandler actionHandler,
-      IView<F> view, Locale locale);
-
-  /**
-   * Creates an action from its descriptor.
-   * 
-   * @param action
-   *          the action descriptor.
-   * @param actionHandler
-   *          the handler responsible for executing the action.
    * @param sourceComponent
    *          the view component which the action is attached to.
    * @param modelDescriptor
@@ -66,4 +50,20 @@ public interface IActionFactory<E, F> {
   E createAction(IDisplayableAction action, IActionHandler actionHandler,
       F sourceComponent, IModelDescriptor modelDescriptor,
       IValueConnector viewConnector, Locale locale);
+
+  /**
+   * Creates an action from its descriptor.
+   * 
+   * @param action
+   *          the action descriptor.
+   * @param actionHandler
+   *          the handler responsible for executing the action.
+   * @param view
+   *          the view which the action is attached to.
+   * @param locale
+   *          the locale the action has to use.
+   * @return the constructed action.
+   */
+  E createAction(IDisplayableAction action, IActionHandler actionHandler,
+      IView<F> view, Locale locale);
 }

@@ -34,38 +34,6 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
   }
 
   /**
-   * Throws an exception since an entity is always a persistent definition.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setComputed(@SuppressWarnings("unused")
-  boolean computed) {
-    throw new UnsupportedOperationException(
-        "An entity descriptor cannot be a computed interface.");
-  }
-
-  /**
-   * Gets the purelyAbstract.
-   *
-   * @return the purelyAbstract.
-   */
-  @Override
-  public boolean isPurelyAbstract() {
-    return purelyAbstract;
-  }
-
-  /**
-   * Sets the purelyAbstract.
-   *
-   * @param purelyAbstract
-   *          the purelyAbstract to set.
-   */
-  public void setPurelyAbstract(boolean purelyAbstract) {
-    this.purelyAbstract = purelyAbstract;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -84,5 +52,37 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
   @Override
   public boolean isEntity() {
     return true;
+  }
+
+  /**
+   * Gets the purelyAbstract.
+   *
+   * @return the purelyAbstract.
+   */
+  @Override
+  public boolean isPurelyAbstract() {
+    return purelyAbstract;
+  }
+
+  /**
+   * Throws an exception since an entity is always a persistent definition.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setComputed(@SuppressWarnings("unused")
+  boolean computed) {
+    throw new UnsupportedOperationException(
+        "An entity descriptor cannot be a computed interface.");
+  }
+
+  /**
+   * Sets the purelyAbstract.
+   *
+   * @param purelyAbstract
+   *          the purelyAbstract to set.
+   */
+  public void setPurelyAbstract(boolean purelyAbstract) {
+    this.purelyAbstract = purelyAbstract;
   }
 }

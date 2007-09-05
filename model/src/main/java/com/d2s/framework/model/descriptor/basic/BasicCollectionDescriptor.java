@@ -29,8 +29,29 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
+  public ICollectionDescriptor getCollectionDescriptor() {
+    return this;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Class<? extends Collection> getCollectionInterface() {
     return collectionInterface;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor<E> getElementDescriptor() {
+    return elementDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<? extends Collection> getModelType() {
+    return getCollectionInterface();
   }
 
   /**
@@ -45,13 +66,6 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public IComponentDescriptor<E> getElementDescriptor() {
-    return elementDescriptor;
-  }
-
-  /**
    * Sets the elementDescriptor.
    * 
    * @param elementDescriptor
@@ -59,19 +73,5 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    */
   public void setElementDescriptor(IComponentDescriptor<E> elementDescriptor) {
     this.elementDescriptor = elementDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public ICollectionDescriptor getCollectionDescriptor() {
-    return this;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class<? extends Collection> getModelType() {
-    return getCollectionInterface();
   }
 }

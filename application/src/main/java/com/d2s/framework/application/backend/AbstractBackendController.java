@@ -41,15 +41,29 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
+  private IApplicationSession          applicationSession;
   private IAccessorFactory             beanAccessorFactory;
-  private IAccessorFactory             mapAccessorFactory;
-  private IEntityFactory               entityFactory;
   private IModelConnectorFactory       beanConnectorFactory;
+  private IEntityFactory               entityFactory;
+  private IAccessorFactory             mapAccessorFactory;
   private IModelConnectorFactory       mapConnectorFactory;
   private Map<String, IValueConnector> moduleConnectors;
-  private IApplicationSession          applicationSession;
 
   private ComponentTransferStructure   transferStructure;
+
+  /**
+   * {@inheritDoc}
+   */
+  public void checkModuleAccess(String moduleId) {
+    checkAccess((ISecurable) getModuleConnector(moduleId).getConnectorValue());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
+    return beanConnectorFactory.createModelConnector(modelDescriptor);
+  }
 
   /**
    * Directly delegates execution to the action after having completed its
@@ -73,30 +87,40 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public boolean start(Locale locale) {
-    applicationSession.setLocale(locale);
-    return true;
+  public IApplicationSession getApplicationSession() {
+    return applicationSession;
   }
 
   /**
-   * Translate modules based on the locale set.
+   * {@inheritDoc}
    */
-  public void translateModules() {
-    for (IValueConnector moduleConnector : moduleConnectors.values()) {
-      translateModule((Module) moduleConnector.getConnectorValue());
-    }
+  public IAccessorFactory getBeanAccessorFactory() {
+    return beanAccessorFactory;
   }
 
-  private void translateModule(Module module) {
-    module.setI18nName(getTranslationProvider().getTranslation(
-        module.getName(), getLocale()));
-    module.setI18nDescription(getTranslationProvider().getTranslation(
-        module.getDescription(), getLocale()));
-    if (module.getSubModules() != null) {
-      for (Module subModule : module.getSubModules()) {
-        translateModule(subModule);
-      }
-    }
+  /**
+   * {@inheritDoc}
+   */
+  public IModelConnectorFactory getBeanConnectorFactory() {
+    return beanConnectorFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IEntityFactory getEntityFactory() {
+    return entityFactory;
+  }
+
+  /**
+   * Contains the current application session.
+   * <p>
+   * {@inheritDoc}
+   */
+  public Map<String, Object> getInitialActionContext() {
+    Map<String, Object> initialActionContext = new HashMap<String, Object>();
+    initialActionContext.put(ActionContextConstants.BACK_CONTROLLER, this);
+    return initialActionContext;
   }
 
   /**
@@ -112,8 +136,85 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public boolean stop() {
-    return true;
+  public IAccessorFactory getMapAccessorFactory() {
+    return mapAccessorFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IModelConnectorFactory getMapConnectorFactory() {
+    return mapConnectorFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IValueConnector getModuleConnector(String moduleId) {
+    return moduleConnectors.get(moduleId);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  public void handleException(Throwable ex, Map<String, Object> context) {
+    // NO-OP
+  }
+
+  private void linkSessionArtifacts() {
+    if (getApplicationSession() != null && getEntityFactory() != null) {
+      ((ApplicationSessionAwareProxyEntityFactory) getEntityFactory())
+          .setApplicationSession(getApplicationSession());
+      ((BasicApplicationSession) getApplicationSession())
+          .setEntityFactory(getEntityFactory());
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IEntity merge(IEntity entity, MergeMode mergeMode) {
+    return getApplicationSession().merge(entity, mergeMode);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
+    return getApplicationSession().merge(entities, mergeMode);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public ComponentTransferStructure retrieveComponents() {
+    return transferStructure;
+  }
+
+  /**
+   * Sets the applicationSession.
+   * 
+   * @param applicationSession
+   *          the applicationSession to set.
+   */
+  public void setApplicationSession(IApplicationSession applicationSession) {
+    if (!(applicationSession instanceof BasicApplicationSession)) {
+      throw new IllegalArgumentException(
+          "applicationSession must be a BasicApplicationSession.");
+    }
+    this.applicationSession = applicationSession;
+    linkSessionArtifacts();
+  }
+
+  /**
+   * Sets the beanAccessorFactory.
+   * 
+   * @param beanAccessorFactory
+   *          the beanAccessorFactory to set.
+   */
+  public void setBeanAccessorFactory(IAccessorFactory beanAccessorFactory) {
+    this.beanAccessorFactory = beanAccessorFactory;
   }
 
   /**
@@ -128,6 +229,31 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
+   * Sets the entityFactory.
+   * 
+   * @param entityFactory
+   *          the entityFactory to set.
+   */
+  public void setEntityFactory(IEntityFactory entityFactory) {
+    if (!(entityFactory instanceof ApplicationSessionAwareProxyEntityFactory)) {
+      throw new IllegalArgumentException(
+          "entityFactory must be an ApplicationSessionAwareProxyEntityFactory.");
+    }
+    this.entityFactory = entityFactory;
+    linkSessionArtifacts();
+  }
+
+  /**
+   * Sets the mapAccessorFactory.
+   * 
+   * @param mapAccessorFactory
+   *          the mapAccessorFactory to set.
+   */
+  public void setMapAccessorFactory(IAccessorFactory mapAccessorFactory) {
+    this.mapAccessorFactory = mapAccessorFactory;
+  }
+
+  /**
    * Sets the mapConnectorFactory.
    * 
    * @param mapConnectorFactory
@@ -135,24 +261,6 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void setMapConnectorFactory(IModelConnectorFactory mapConnectorFactory) {
     this.mapConnectorFactory = mapConnectorFactory;
-  }
-
-  /**
-   * Contains the current application session.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Map<String, Object> getInitialActionContext() {
-    Map<String, Object> initialActionContext = new HashMap<String, Object>();
-    initialActionContext.put(ActionContextConstants.BACK_CONTROLLER, this);
-    return initialActionContext;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IValueConnector getModuleConnector(String moduleId) {
-    return moduleConnectors.get(moduleId);
   }
 
   /**
@@ -176,138 +284,16 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
-    return beanConnectorFactory.createModelConnector(modelDescriptor);
+  public boolean start(Locale locale) {
+    applicationSession.setLocale(locale);
+    return true;
   }
 
   /**
    * {@inheritDoc}
    */
-  public IApplicationSession getApplicationSession() {
-    return applicationSession;
-  }
-
-  /**
-   * Sets the applicationSession.
-   * 
-   * @param applicationSession
-   *          the applicationSession to set.
-   */
-  public void setApplicationSession(IApplicationSession applicationSession) {
-    if (!(applicationSession instanceof BasicApplicationSession)) {
-      throw new IllegalArgumentException(
-          "applicationSession must be a BasicApplicationSession.");
-    }
-    this.applicationSession = applicationSession;
-    linkSessionArtifacts();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IEntity merge(IEntity entity, MergeMode mergeMode) {
-    return getApplicationSession().merge(entity, mergeMode);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
-    return getApplicationSession().merge(entities, mergeMode);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IModelConnectorFactory getBeanConnectorFactory() {
-    return beanConnectorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IModelConnectorFactory getMapConnectorFactory() {
-    return mapConnectorFactory;
-  }
-
-  /**
-   * Sets the entityFactory.
-   * 
-   * @param entityFactory
-   *          the entityFactory to set.
-   */
-  public void setEntityFactory(IEntityFactory entityFactory) {
-    if (!(entityFactory instanceof ApplicationSessionAwareProxyEntityFactory)) {
-      throw new IllegalArgumentException(
-          "entityFactory must be an ApplicationSessionAwareProxyEntityFactory.");
-    }
-    this.entityFactory = entityFactory;
-    linkSessionArtifacts();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IEntityFactory getEntityFactory() {
-    return entityFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAccessorFactory getBeanAccessorFactory() {
-    return beanAccessorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAccessorFactory getMapAccessorFactory() {
-    return mapAccessorFactory;
-  }
-
-  /**
-   * Sets the beanAccessorFactory.
-   * 
-   * @param beanAccessorFactory
-   *          the beanAccessorFactory to set.
-   */
-  public void setBeanAccessorFactory(IAccessorFactory beanAccessorFactory) {
-    this.beanAccessorFactory = beanAccessorFactory;
-  }
-
-  /**
-   * Sets the mapAccessorFactory.
-   * 
-   * @param mapAccessorFactory
-   *          the mapAccessorFactory to set.
-   */
-  public void setMapAccessorFactory(IAccessorFactory mapAccessorFactory) {
-    this.mapAccessorFactory = mapAccessorFactory;
-  }
-
-  private void linkSessionArtifacts() {
-    if (getApplicationSession() != null && getEntityFactory() != null) {
-      ((ApplicationSessionAwareProxyEntityFactory) getEntityFactory())
-          .setApplicationSession(getApplicationSession());
-      ((BasicApplicationSession) getApplicationSession())
-          .setEntityFactory(getEntityFactory());
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unused")
-  public void handleException(Throwable ex, Map<String, Object> context) {
-    // NO-OP
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void checkModuleAccess(String moduleId) {
-    checkAccess((ISecurable) getModuleConnector(moduleId).getConnectorValue());
+  public boolean stop() {
+    return true;
   }
 
   /**
@@ -317,10 +303,24 @@ public abstract class AbstractBackendController extends AbstractController
     this.transferStructure = components;
   }
 
+  private void translateModule(Module module) {
+    module.setI18nName(getTranslationProvider().getTranslation(
+        module.getName(), getLocale()));
+    module.setI18nDescription(getTranslationProvider().getTranslation(
+        module.getDescription(), getLocale()));
+    if (module.getSubModules() != null) {
+      for (Module subModule : module.getSubModules()) {
+        translateModule(subModule);
+      }
+    }
+  }
+
   /**
-   * {@inheritDoc}
+   * Translate modules based on the locale set.
    */
-  public ComponentTransferStructure retrieveComponents() {
-    return transferStructure;
+  public void translateModules() {
+    for (IValueConnector moduleConnector : moduleConnectors.values()) {
+      translateModule((Module) moduleConnector.getConnectorValue());
+    }
   }
 }

@@ -20,9 +20,9 @@ import com.ulcjava.base.shared.FileChooserConfig;
  */
 public abstract class ChooseFileAction extends AbstractUlcAction {
 
-  private Map<String, List<String>> fileFilter;
-  private FileChooserConfig         fileChooser;
   private String                    defaultFileName;
+  private FileChooserConfig         fileChooser;
+  private Map<String, List<String>> fileFilter;
 
   /**
    * Gets the file chooser configuration used to build this file chooser.
@@ -65,6 +65,16 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
   }
 
   /**
+   * Sets the defaultFileName.
+   *
+   * @param defaultFileName
+   *          the defaultFileName to set.
+   */
+  public void setDefaultFileName(String defaultFileName) {
+    this.defaultFileName = defaultFileName;
+  }
+
+  /**
    * Sets the fileFilter. Filter file types are a map of descriptions keying
    * file extension arays.
    *
@@ -77,15 +87,5 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
     if (oldFileFilter != this.fileFilter) {
       fileChooser = null;
     }
-  }
-
-  /**
-   * Sets the defaultFileName.
-   *
-   * @param defaultFileName
-   *          the defaultFileName to set.
-   */
-  public void setDefaultFileName(String defaultFileName) {
-    this.defaultFileName = defaultFileName;
   }
 }

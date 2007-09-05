@@ -37,9 +37,10 @@ public class SaveFileAction extends ChooseFileAction {
 
         private static final long serialVersionUID = -1025629868916915262L;
 
-        public void prepareFile(OutputStream out) {
+        @SuppressWarnings("unused")
+        public void onFailure(int reason, String description) {
           if (fileSaveCallback != null) {
-            fileSaveCallback.fileChosen(out, context);
+            fileSaveCallback.cancel(context);
           }
         }
 
@@ -50,10 +51,9 @@ public class SaveFileAction extends ChooseFileAction {
           }
         }
 
-        @SuppressWarnings("unused")
-        public void onFailure(int reason, String description) {
+        public void prepareFile(OutputStream out) {
           if (fileSaveCallback != null) {
-            fileSaveCallback.cancel(context);
+            fileSaveCallback.fileChosen(out, context);
           }
         }
       }, getFileChooser(context));

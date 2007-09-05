@@ -14,13 +14,13 @@ package com.d2s.framework.gui.ulc.components.shared;
  */
 public final class TranslationDataTypeConstants {
 
-  private TranslationDataTypeConstants() {
-    // Empty constructor for utility class
-  }
-
   // anything key constants
   /**
    * <code>DICTIONARY</code>.
    */
   public static final String DICTIONARY = "dictionary";
+
+  private TranslationDataTypeConstants() {
+    // Empty constructor for utility class
+  }
 }

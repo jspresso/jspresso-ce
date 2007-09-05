@@ -47,34 +47,41 @@ public abstract class JComponentConnector<E extends JComponent> extends
   }
 
   /**
+   * Attaches the JComponent to the connector.
+   */
+  protected abstract void bindJComponent();
+
+  /**
+   * This method has been overriden to take care of long-running operations not
+   * to have the swing gui blocked. It uses the foxtrot library to achieve this.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected final void fireConnectorValueChange() {
+    // SwingUtil.performLongOperation(new Job() {
+    //
+    // /**
+    // * Decorates the super implementation with the foxtrot job.
+    // * <p>
+    // * {@inheritDoc}
+    // */
+    // @Override
+    // public Object run() {
+    // protectedFireConnectorValueChange();
+    // return null;
+    // }
+    // });
+    protectedFireConnectorValueChange();
+  }
+
+  /**
    * Gets the connectedJComponent.
    * 
    * @return the connectedJComponent.
    */
   protected E getConnectedJComponent() {
     return connectedJComponent;
-  }
-
-  /**
-   * This implementation takes care of having the peer component modifications
-   * ran on the Swing event dispatch thread. It actually delegates the connectee
-   * modification to the <code>protectedUpdateState</code> method.
-   * 
-   * @see #protectedUpdateState()
-   *      <p>
-   *      {@inheritDoc}
-   */
-  @Override
-  public final void updateState() {
-    SwingUtil.updateSwingGui(new Runnable() {
-
-      /**
-       * {@inheritDoc}
-       */
-      public void run() {
-        protectedUpdateState();
-      }
-    });
   }
 
   /**
@@ -86,6 +93,20 @@ public abstract class JComponentConnector<E extends JComponent> extends
   public boolean isWritable() {
     return (getModelConnector() != null) && super.isWritable();
   }
+
+  private void protectedFireConnectorValueChange() {
+    super.fireConnectorValueChange();
+  }
+
+  /**
+   * Implementation of connectee modifications which normally would have been
+   * coded in the <code>setConnecteeValue</code> should go here to preserve
+   * the connector modification to be handled in the event dispatch thread.
+   * 
+   * @param aValue
+   *          the connectee value to set.
+   */
+  protected abstract void protectedSetConnecteeValue(Object aValue);
 
   /**
    * Implementation of connectee state modifications which normally would have
@@ -126,45 +147,24 @@ public abstract class JComponentConnector<E extends JComponent> extends
   }
 
   /**
-   * This method has been overriden to take care of long-running operations not
-   * to have the swing gui blocked. It uses the foxtrot library to achieve this.
-   * <p>
-   * {@inheritDoc}
+   * This implementation takes care of having the peer component modifications
+   * ran on the Swing event dispatch thread. It actually delegates the connectee
+   * modification to the <code>protectedUpdateState</code> method.
+   * 
+   * @see #protectedUpdateState()
+   *      <p>
+   *      {@inheritDoc}
    */
   @Override
-  protected final void fireConnectorValueChange() {
-    // SwingUtil.performLongOperation(new Job() {
-    //
-    // /**
-    // * Decorates the super implementation with the foxtrot job.
-    // * <p>
-    // * {@inheritDoc}
-    // */
-    // @Override
-    // public Object run() {
-    // protectedFireConnectorValueChange();
-    // return null;
-    // }
-    // });
-    protectedFireConnectorValueChange();
+  public final void updateState() {
+    SwingUtil.updateSwingGui(new Runnable() {
+
+      /**
+       * {@inheritDoc}
+       */
+      public void run() {
+        protectedUpdateState();
+      }
+    });
   }
-
-  private void protectedFireConnectorValueChange() {
-    super.fireConnectorValueChange();
-  }
-
-  /**
-   * Attaches the JComponent to the connector.
-   */
-  protected abstract void bindJComponent();
-
-  /**
-   * Implementation of connectee modifications which normally would have been
-   * coded in the <code>setConnecteeValue</code> should go here to preserve
-   * the connector modification to be handled in the event dispatch thread.
-   * 
-   * @param aValue
-   *          the connectee value to set.
-   */
-  protected abstract void protectedSetConnecteeValue(Object aValue);
 }

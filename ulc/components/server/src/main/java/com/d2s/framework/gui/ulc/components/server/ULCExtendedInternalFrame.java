@@ -33,11 +33,15 @@ public class ULCExtendedInternalFrame extends
   }
 
   /**
-   * {@inheritDoc}
+   * Adds an extended listener.
+   * 
+   * @param listener
+   *          the listener.
    */
-  @Override
-  protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedInternalFrame";
+  public void addExtendedInternalFrameListener(
+      IExtendedInternalFrameListener listener) {
+    internalAddListener(
+        ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT, listener);
   }
 
   /**
@@ -53,18 +57,6 @@ public class ULCExtendedInternalFrame extends
   }
 
   /**
-   * Adds an extended listener.
-   * 
-   * @param listener
-   *          the listener.
-   */
-  public void addExtendedInternalFrameListener(
-      IExtendedInternalFrameListener listener) {
-    internalAddListener(
-        ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT, listener);
-  }
-
-  /**
    * Removes an extended listener.
    * 
    * @param listener
@@ -74,5 +66,13 @@ public class ULCExtendedInternalFrame extends
       IExtendedInternalFrameListener listener) {
     internalRemoveListener(
         ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT, listener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIExtendedInternalFrame";
   }
 }

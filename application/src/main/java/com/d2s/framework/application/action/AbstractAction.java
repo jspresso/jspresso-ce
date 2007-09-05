@@ -27,35 +27,24 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public abstract class AbstractAction implements IAction {
 
-  private boolean             longOperation;
-  private Map<String, Object> initialContext;
   private Collection<String>  grantedRoles;
+  private Map<String, Object> initialContext;
+  private boolean             longOperation;
 
   /**
-   * Retrieves the locale the action has to use to execute from its context
-   * using a well-known key.
+   * Gets the controller (frontend or backend) out of the action context.
    * 
    * @param context
    *          the action context.
-   * @return the locale the action executes in.
+   * @return the controller (frontend or backend).
    */
-  public abstract Locale getLocale(Map<String, Object> context);
+  protected abstract IController getController(Map<String, Object> context);
 
   /**
    * {@inheritDoc}
    */
-  public boolean isLongOperation() {
-    return longOperation;
-  }
-
-  /**
-   * Sets the longOperation.
-   * 
-   * @param longOperation
-   *          the longOperation to set.
-   */
-  public void setLongOperation(boolean longOperation) {
-    this.longOperation = longOperation;
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
   }
 
   /**
@@ -68,14 +57,14 @@ public abstract class AbstractAction implements IAction {
   }
 
   /**
-   * {@inheritDoc}
+   * Retrieves the locale the action has to use to execute from its context
+   * using a well-known key.
+   * 
+   * @param context
+   *          the action context.
+   * @return the locale the action executes in.
    */
-  public void putInitialContext(String key, Object value) {
-    if (initialContext == null) {
-      initialContext = new HashMap<String, Object>();
-    }
-    initialContext.put(key, value);
-  }
+  public abstract Locale getLocale(Map<String, Object> context);
 
   /**
    * Gets the parent module selected indices from the context. it uses the
@@ -92,15 +81,6 @@ public abstract class AbstractAction implements IAction {
   }
 
   /**
-   * Gets the controller (frontend or backend) out of the action context.
-   * 
-   * @param context
-   *          the action context.
-   * @return the controller (frontend or backend).
-   */
-  protected abstract IController getController(Map<String, Object> context);
-
-  /**
    * Gets a translation provider out of the action context.
    * 
    * @param context
@@ -115,8 +95,18 @@ public abstract class AbstractAction implements IAction {
   /**
    * {@inheritDoc}
    */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
+  public boolean isLongOperation() {
+    return longOperation;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void putInitialContext(String key, Object value) {
+    if (initialContext == null) {
+      initialContext = new HashMap<String, Object>();
+    }
+    initialContext.put(key, value);
   }
 
   /**
@@ -127,5 +117,15 @@ public abstract class AbstractAction implements IAction {
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
+  }
+
+  /**
+   * Sets the longOperation.
+   * 
+   * @param longOperation
+   *          the longOperation to set.
+   */
+  public void setLongOperation(boolean longOperation) {
+    this.longOperation = longOperation;
   }
 }

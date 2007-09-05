@@ -80,6 +80,14 @@ public class ULCActionFieldConnector extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object getConnecteeValue() {
+    return getConnectedULCComponent().getValue();
+  }
+
+  /**
    * Performs the action field action if the action field is not synchronized.
    */
   private void performActionIfNeeded() {
@@ -98,14 +106,6 @@ public class ULCActionFieldConnector extends
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedULCComponent().setValue(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object getConnecteeValue() {
-    return getConnectedULCComponent().getValue();
   }
 
   /**

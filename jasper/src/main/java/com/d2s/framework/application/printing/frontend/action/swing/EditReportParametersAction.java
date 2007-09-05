@@ -26,24 +26,24 @@ public class EditReportParametersAction extends EditComponentAction {
    * {@inheritDoc}
    */
   @Override
-  protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {
-    IReport report = (IReport) context.get(ActionContextConstants.ACTION_PARAM);
-    BasicComponentViewDescriptor reportContextViewDescriptor = new BasicComponentViewDescriptor();
-    reportContextViewDescriptor
-        .setModelDescriptor(report.getReportDescriptor());
-    return reportContextViewDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   protected Object getModel(Map<String, Object> context) {
     IReport report = (IReport) context.get(ActionContextConstants.ACTION_PARAM);
     if (report != null) {
       return report.getContext();
     }
     return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {
+    IReport report = (IReport) context.get(ActionContextConstants.ACTION_PARAM);
+    BasicComponentViewDescriptor reportContextViewDescriptor = new BasicComponentViewDescriptor();
+    reportContextViewDescriptor
+        .setModelDescriptor(report.getReportDescriptor());
+    return reportContextViewDescriptor;
   }
 
 }

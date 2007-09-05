@@ -15,17 +15,6 @@ package com.d2s.framework.util.accessor;
 public interface IAccessorFactory {
 
   /**
-   * Creates a new java bean property accessor .
-   * 
-   * @param property
-   *          the property to be accessed.
-   * @param beanClass
-   *          the java bean class.
-   * @return the property accessor.
-   */
-  IAccessor createPropertyAccessor(String property, Class beanClass);
-
-  /**
    * Creates a new java bean collection property accessor.
    * 
    * @param property
@@ -38,4 +27,15 @@ public interface IAccessorFactory {
    */
   ICollectionAccessor createCollectionPropertyAccessor(String property,
       Class beanClass, Class elementClass);
+
+  /**
+   * Creates a new java bean property accessor .
+   * 
+   * @param property
+   *          the property to be accessed.
+   * @param beanClass
+   *          the java bean class.
+   * @return the property accessor.
+   */
+  IAccessor createPropertyAccessor(String property, Class beanClass);
 }

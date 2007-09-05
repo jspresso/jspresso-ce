@@ -38,21 +38,6 @@ public interface IValueConnector extends IConnector,
   String WRITABLE_PROPERTY = "writable";
 
   /**
-   * Gets the value of the peer object.
-   * 
-   * @return The peer value
-   */
-  Object getConnectorValue();
-
-  /**
-   * Sets a new value on the connectee and fire value change.
-   * 
-   * @param aValue
-   *          The value to set on the peer
-   */
-  void setConnectorValue(Object aValue);
-
-  /**
    * Adds a new Connector listener to this connector.
    * 
    * @param listener
@@ -61,45 +46,22 @@ public interface IValueConnector extends IConnector,
   void addConnectorValueChangeListener(IConnectorValueChangeListener listener);
 
   /**
-   * Removes a Connector listener from this connector.
+   * Adds a readability gate. Whenever one of the gate is not open, the
+   * connector is not readable.
    * 
-   * @param listener
-   *          The removed listener
+   * @param gate
+   *          the new gate to add.
    */
-  void removeConnectorValueChangeListener(IConnectorValueChangeListener listener);
+  void addReadabilityGate(IGate gate);
 
   /**
-   * Clones this connector.
+   * Adds a writability gate. Whenever one of the gate is not open, the
+   * connector is not writable.
    * 
-   * @param newConnectorId
-   *          the identifier of the clone connector
-   * @return the connector's clone.
+   * @param gate
+   *          the new gate to add.
    */
-  IValueConnector clone(String newConnectorId);
-
-  /**
-   * Clones this connector.
-   * 
-   * @return the connector's clone.
-   */
-  IValueConnector clone();
-
-  /**
-   * Gets the connector this connector is attached to in parent / child
-   * relationship.
-   * 
-   * @return the parent connector.
-   */
-  ICompositeValueConnector getParentConnector();
-
-  /**
-   * Sets the connector this connector is attached to in parent / child
-   * relationship.
-   * 
-   * @param parent
-   *          the parent connector.
-   */
-  void setParentConnector(ICompositeValueConnector parent);
+  void addWritabilityGate(IGate gate);
 
   /**
    * Forces the different events to be fired towards the listeners passed as
@@ -122,6 +84,44 @@ public interface IValueConnector extends IConnector,
   void boundAsView();
 
   /**
+   * Clones this connector.
+   * 
+   * @return the connector's clone.
+   */
+  IValueConnector clone();
+
+  /**
+   * Clones this connector.
+   * 
+   * @param newConnectorId
+   *          the identifier of the clone connector
+   * @return the connector's clone.
+   */
+  IValueConnector clone(String newConnectorId);
+
+  /**
+   * Gets the value of the peer object.
+   * 
+   * @return The peer value
+   */
+  Object getConnectorValue();
+
+  /**
+   * Gets the connector this connector is attached to in mvc relationship.
+   * 
+   * @return the model connector.
+   */
+  IValueConnector getModelConnector();
+
+  /**
+   * Gets the connector this connector is attached to in parent / child
+   * relationship.
+   * 
+   * @return the parent connector.
+   */
+  ICompositeValueConnector getParentConnector();
+
+  /**
    * Is the connector readable ?
    * 
    * @return true if readable.
@@ -134,6 +134,46 @@ public interface IValueConnector extends IConnector,
    * @return true if writable.
    */
   boolean isWritable();
+
+  /**
+   * Removes a Connector listener from this connector.
+   * 
+   * @param listener
+   *          The removed listener
+   */
+  void removeConnectorValueChangeListener(IConnectorValueChangeListener listener);
+
+  /**
+   * Removes a readability gate.
+   * 
+   * @param gate
+   *          the new gate to remove.
+   */
+  void removeReadabilityGate(IGate gate);
+
+  /**
+   * Removes a writability gate.
+   * 
+   * @param gate
+   *          the new gate to remove.
+   */
+  void removeWritabilityGate(IGate gate);
+
+  /**
+   * Sets a new value on the connectee and fire value change.
+   * 
+   * @param aValue
+   *          The value to set on the peer
+   */
+  void setConnectorValue(Object aValue);
+
+  /**
+   * Sets the exceptionHandler.
+   * 
+   * @param exceptionHandler
+   *          the exceptionHandler to set.
+   */
+  void setExceptionHandler(IExceptionHandler exceptionHandler);
 
   /**
    * Sets the connector locally readable. Calling this method does not garantee
@@ -158,47 +198,6 @@ public interface IValueConnector extends IConnector,
   void setLocallyWritable(boolean locallyWritable);
 
   /**
-   * Adds a readability gate. Whenever one of the gate is not open, the
-   * connector is not readable.
-   * 
-   * @param gate
-   *          the new gate to add.
-   */
-  void addReadabilityGate(IGate gate);
-
-  /**
-   * Adds a writability gate. Whenever one of the gate is not open, the
-   * connector is not writable.
-   * 
-   * @param gate
-   *          the new gate to add.
-   */
-  void addWritabilityGate(IGate gate);
-
-  /**
-   * Removes a readability gate.
-   * 
-   * @param gate
-   *          the new gate to remove.
-   */
-  void removeReadabilityGate(IGate gate);
-
-  /**
-   * Removes a writability gate.
-   * 
-   * @param gate
-   *          the new gate to remove.
-   */
-  void removeWritabilityGate(IGate gate);
-
-  /**
-   * Gets the connector this connector is attached to in mvc relationship.
-   * 
-   * @return the model connector.
-   */
-  IValueConnector getModelConnector();
-
-  /**
    * Sets the connector this connector is attached to in mvc relationship.
    * 
    * @param modelConnector
@@ -207,10 +206,11 @@ public interface IValueConnector extends IConnector,
   void setModelConnector(IValueConnector modelConnector);
 
   /**
-   * Sets the exceptionHandler.
+   * Sets the connector this connector is attached to in parent / child
+   * relationship.
    * 
-   * @param exceptionHandler
-   *          the exceptionHandler to set.
+   * @param parent
+   *          the parent connector.
    */
-  void setExceptionHandler(IExceptionHandler exceptionHandler);
+  void setParentConnector(ICompositeValueConnector parent);
 }

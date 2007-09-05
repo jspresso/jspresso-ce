@@ -17,8 +17,8 @@ import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 public abstract class BasicRelationshipEndPropertyDescriptor extends
     BasicPropertyDescriptor implements IRelationshipEndPropertyDescriptor {
 
-  private IRelationshipEndPropertyDescriptor reverseRelationEnd;
   private Boolean                            composition;
+  private IRelationshipEndPropertyDescriptor reverseRelationEnd;
 
   /**
    * {@inheritDoc}
@@ -32,25 +32,6 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
           .getReverseRelationEnd();
     }
     return reverseRelationEnd;
-  }
-
-  /**
-   * Sets the reverseRelationEnd property.
-   * 
-   * @param reverseRelationEnd
-   *          the reverseRelationEnd to set.
-   */
-  public void setReverseRelationEnd(
-      IRelationshipEndPropertyDescriptor reverseRelationEnd) {
-    if (this.reverseRelationEnd != reverseRelationEnd) {
-      if (this.reverseRelationEnd != null) {
-        this.reverseRelationEnd.setReverseRelationEnd(null);
-      }
-      this.reverseRelationEnd = reverseRelationEnd;
-      if (reverseRelationEnd != null) {
-        reverseRelationEnd.setReverseRelationEnd(this);
-      }
-    }
   }
 
   /**
@@ -75,5 +56,24 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    */
   public void setComposition(boolean composition) {
     this.composition = new Boolean(composition);
+  }
+
+  /**
+   * Sets the reverseRelationEnd property.
+   * 
+   * @param reverseRelationEnd
+   *          the reverseRelationEnd to set.
+   */
+  public void setReverseRelationEnd(
+      IRelationshipEndPropertyDescriptor reverseRelationEnd) {
+    if (this.reverseRelationEnd != reverseRelationEnd) {
+      if (this.reverseRelationEnd != null) {
+        this.reverseRelationEnd.setReverseRelationEnd(null);
+      }
+      this.reverseRelationEnd = reverseRelationEnd;
+      if (reverseRelationEnd != null) {
+        reverseRelationEnd.setReverseRelationEnd(this);
+      }
+    }
   }
 }

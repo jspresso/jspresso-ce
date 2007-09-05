@@ -18,19 +18,9 @@ import java.lang.reflect.Method;
 public class AccessorInfo {
 
   /**
-   * "get" prefix.
+   * This type of method is an adder ("addToXXX").
    */
-  public static final String GETTER_PREFIX  = "get";
-
-  /**
-   * "set" prefix.
-   */
-  public static final String SETTER_PREFIX  = "set";
-
-  /**
-   * "is" prefix.
-   */
-  public static final String IS_PREFIX      = "is";
+  public static final int    ADDER          = 3;
 
   /**
    * "addTo" prefix.
@@ -38,9 +28,19 @@ public class AccessorInfo {
   public static final String ADDER_PREFIX   = "addTo";
 
   /**
-   * "removeFrom" prefix.
+   * This type of method is a getter (either "getXXX" or "isXXX").
    */
-  public static final String REMOVER_PREFIX = "removeFrom";
+  public static final int    GETTER         = 1;
+
+  /**
+   * "get" prefix.
+   */
+  public static final String GETTER_PREFIX  = "get";
+
+  /**
+   * "is" prefix.
+   */
+  public static final String IS_PREFIX      = "is";
 
   /**
    * This type of method is not an accessor.
@@ -48,9 +48,14 @@ public class AccessorInfo {
   public static final int    NONE           = 0;
 
   /**
-   * This type of method is a getter (either "getXXX" or "isXXX").
+   * This type of method is a remover ("removeFromXXX").
    */
-  public static final int    GETTER         = 1;
+  public static final int    REMOVER        = 4;
+
+  /**
+   * "removeFrom" prefix.
+   */
+  public static final String REMOVER_PREFIX = "removeFrom";
 
   /**
    * This type of method is a setter ("setXXX").
@@ -58,17 +63,57 @@ public class AccessorInfo {
   public static final int    SETTER         = 2;
 
   /**
-   * This type of method is an adder ("addToXXX").
+   * "set" prefix.
    */
-  public static final int    ADDER          = 3;
+  public static final String SETTER_PREFIX  = "set";
 
+  private static String computePropertyName(String accessorName,
+      String accessorPrefix) {
+    char firstLetter = Character.toLowerCase(accessorName.charAt(accessorPrefix
+        .length()));
+    return firstLetter + accessorName.substring(accessorPrefix.length() + 1);
+  }
   /**
-   * This type of method is a remover ("removeFromXXX").
+   * Retrieves the collection element class based on the ElementClass
+   * annotation.
+   * 
+   * @param beanClass
+   *          the bean class.
+   * @param property
+   *          the collection property.
+   * @return the collection element class.
    */
-  public static final int    REMOVER        = 4;
+  public static Class<?> getCollectionElementClass(Class beanClass,
+      String property) {
+    PropertyDescriptor propertyDescriptor = null;
+    try {
+      propertyDescriptor = PropertyHelper.getPropertyDescriptor(beanClass,
+          property);
+    } catch (MissingPropertyException ignored) {
+      // ignore until we traverse all interfaces.
+    }
+    if (propertyDescriptor != null) {
+      ElementClass ecAnn = propertyDescriptor.getReadMethod().getAnnotation(
+          ElementClass.class);
+      if (ecAnn != null) {
+        return ecAnn.value();
+      }
+    }
+    // if we reach this point, we may be on a proxy so we might try its
+    // implemented interfaces.
+    for (Class implementedInterface : beanClass.getInterfaces()) {
+      Class<?> collectionElementClass = getCollectionElementClass(
+          implementedInterface, property);
+      if (collectionElementClass != null) {
+        return collectionElementClass;
+      }
+    }
+    return null;
+  }
+
+  private String             accessedPropertyName;
 
   private int                accessorType;
-  private String             accessedPropertyName;
 
   /**
    * Constructs a new <code>AccessorInfo</code> instance. If the method passed
@@ -109,15 +154,6 @@ public class AccessorInfo {
   }
 
   /**
-   * Gets the accessorType.
-   * 
-   * @return the accessorType.
-   */
-  public int getAccessorType() {
-    return accessorType;
-  }
-
-  /**
    * Gets the accessedPropertyName.
    * 
    * @return the accessedPropertyName.
@@ -126,11 +162,13 @@ public class AccessorInfo {
     return accessedPropertyName;
   }
 
-  private static String computePropertyName(String accessorName,
-      String accessorPrefix) {
-    char firstLetter = Character.toLowerCase(accessorName.charAt(accessorPrefix
-        .length()));
-    return firstLetter + accessorName.substring(accessorPrefix.length() + 1);
+  /**
+   * Gets the accessorType.
+   * 
+   * @return the accessorType.
+   */
+  public int getAccessorType() {
+    return accessorType;
   }
 
   /**
@@ -148,43 +186,5 @@ public class AccessorInfo {
       default:
     }
     return false;
-  }
-
-  /**
-   * Retrieves the collection element class based on the ElementClass
-   * annotation.
-   * 
-   * @param beanClass
-   *          the bean class.
-   * @param property
-   *          the collection property.
-   * @return the collection element class.
-   */
-  public static Class<?> getCollectionElementClass(Class beanClass,
-      String property) {
-    PropertyDescriptor propertyDescriptor = null;
-    try {
-      propertyDescriptor = PropertyHelper.getPropertyDescriptor(beanClass,
-          property);
-    } catch (MissingPropertyException ignored) {
-      // ignore until we traverse all interfaces.
-    }
-    if (propertyDescriptor != null) {
-      ElementClass ecAnn = propertyDescriptor.getReadMethod().getAnnotation(
-          ElementClass.class);
-      if (ecAnn != null) {
-        return ecAnn.value();
-      }
-    }
-    // if we reach this point, we may be on a proxy so we might try its
-    // implemented interfaces.
-    for (Class implementedInterface : beanClass.getInterfaces()) {
-      Class<?> collectionElementClass = getCollectionElementClass(
-          implementedInterface, property);
-      if (collectionElementClass != null) {
-        return collectionElementClass;
-      }
-    }
-    return null;
   }
 }

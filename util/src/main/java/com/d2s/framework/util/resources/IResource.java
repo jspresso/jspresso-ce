@@ -18,11 +18,13 @@ import java.io.InputStream;
 public interface IResource {
 
   /**
-   * Gets the resource mime type.
+   * Gets the resource content input stream.
    * 
-   * @return the resource mime type.
+   * @return the resource content input stream.
+   * @throws IOException
+   *           whenever an IO exception occurs.
    */
-  String getMimeType();
+  InputStream getContent() throws IOException;
 
   /**
    * Gets the resource length.
@@ -34,11 +36,9 @@ public interface IResource {
   int getLength() throws IOException;
 
   /**
-   * Gets the resource content input stream.
+   * Gets the resource mime type.
    * 
-   * @return the resource content input stream.
-   * @throws IOException
-   *           whenever an IO exception occurs.
+   * @return the resource mime type.
    */
-  InputStream getContent() throws IOException;
+  String getMimeType();
 }

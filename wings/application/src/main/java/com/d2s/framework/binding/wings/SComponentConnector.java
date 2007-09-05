@@ -46,40 +46,9 @@ public abstract class SComponentConnector<E extends SComponent> extends
   }
 
   /**
-   * Gets the connectedSComponent.
-   * 
-   * @return the connectedSComponent.
+   * Attaches the SComponent to the connector.
    */
-  protected E getConnectedSComponent() {
-    return connectedSComponent;
-  }
-
-  /**
-   * Turn read-only if not bound.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isWritable() {
-    return (getModelConnector() != null) && super.isWritable();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    if (isReadable()) {
-      if (savedForeground != null) {
-        getConnectedSComponent().setForeground(savedForeground);
-      }
-      savedForeground = null;
-    } else if (savedForeground == null) {
-      savedForeground = getConnectedSComponent().getForeground();
-      getConnectedSComponent().setForeground(
-          getConnectedSComponent().getBackground());
-    }
-  }
+  protected abstract void bindSComponent();
 
   /**
    * This method has been overriden to take care of long-running operations not
@@ -105,12 +74,43 @@ public abstract class SComponentConnector<E extends SComponent> extends
     protectedFireConnectorValueChange();
   }
 
+  /**
+   * Gets the connectedSComponent.
+   * 
+   * @return the connectedSComponent.
+   */
+  protected E getConnectedSComponent() {
+    return connectedSComponent;
+  }
+
+  /**
+   * Turn read-only if not bound.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    return (getModelConnector() != null) && super.isWritable();
+  }
+
   private void protectedFireConnectorValueChange() {
     super.fireConnectorValueChange();
   }
 
   /**
-   * Attaches the SComponent to the connector.
+   * {@inheritDoc}
    */
-  protected abstract void bindSComponent();
+  @Override
+  public void updateState() {
+    if (isReadable()) {
+      if (savedForeground != null) {
+        getConnectedSComponent().setForeground(savedForeground);
+      }
+      savedForeground = null;
+    } else if (savedForeground == null) {
+      savedForeground = getConnectedSComponent().getForeground();
+      getConnectedSComponent().setForeground(
+          getConnectedSComponent().getBackground());
+    }
+  }
 }

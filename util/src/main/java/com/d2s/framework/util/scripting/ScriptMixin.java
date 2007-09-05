@@ -14,8 +14,8 @@ package com.d2s.framework.util.scripting;
  */
 public class ScriptMixin implements IScript {
 
-  private String script;
   private String language;
+  private String script;
   private Object scriptedObject;
 
   /**
@@ -47,6 +47,15 @@ public class ScriptMixin implements IScript {
   }
 
   /**
+   * Gets the scriptedObject.
+   * 
+   * @return the scriptedObject.
+   */
+  public Object getScriptedObject() {
+    return scriptedObject;
+  }
+
+  /**
    * Sets the language.
    * 
    * @param language
@@ -64,14 +73,5 @@ public class ScriptMixin implements IScript {
    */
   public void setScript(String script) {
     this.script = script;
-  }
-
-  /**
-   * Gets the scriptedObject.
-   * 
-   * @return the scriptedObject.
-   */
-  public Object getScriptedObject() {
-    return scriptedObject;
   }
 }

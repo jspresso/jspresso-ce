@@ -28,6 +28,13 @@ public class BasicConstrainedGridViewDescriptor extends
   /**
    * {@inheritDoc}
    */
+  public List<IViewDescriptor> getChildViewDescriptors() {
+    return new ArrayList<IViewDescriptor>(constrainedViews.keySet());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public ViewConstraints getViewConstraints(IViewDescriptor viewDescriptor) {
     if (constrainedViews != null) {
       return constrainedViews.get(viewDescriptor);
@@ -44,12 +51,5 @@ public class BasicConstrainedGridViewDescriptor extends
   public void setConstrainedViews(
       Map<IViewDescriptor, ViewConstraints> constrainedViews) {
     this.constrainedViews = constrainedViews;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IViewDescriptor> getChildViewDescriptors() {
-    return new ArrayList<IViewDescriptor>(constrainedViews.keySet());
   }
 }

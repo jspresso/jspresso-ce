@@ -44,6 +44,24 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BooleanPropertyModelGate clone() {
+    BooleanPropertyModelGate clonedGate = (BooleanPropertyModelGate) super
+        .clone();
+    clonedGate.open = true;
+    return clonedGate;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isOpen() {
+    return open;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public void modelChange(ModelChangeEvent evt) {
     if (evt.getOldValue() instanceof IPropertyChangeCapable) {
       ((IPropertyChangeCapable) evt.getOldValue())
@@ -75,23 +93,6 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
   }
 
   /**
-   * Sets the booleanPropertyName.
-   * 
-   * @param booleanPropertyName
-   *          the booleanPropertyName to set.
-   */
-  public void setBooleanPropertyName(String booleanPropertyName) {
-    this.booleanPropertyName = booleanPropertyName;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isOpen() {
-    return open;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void propertyChange(PropertyChangeEvent evt) {
@@ -114,6 +115,16 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
   }
 
   /**
+   * Sets the booleanPropertyName.
+   * 
+   * @param booleanPropertyName
+   *          the booleanPropertyName to set.
+   */
+  public void setBooleanPropertyName(String booleanPropertyName) {
+    this.booleanPropertyName = booleanPropertyName;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -133,16 +144,5 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    */
   public void setOpenOnTrue(boolean openOnTrue) {
     this.openOnTrue = openOnTrue;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BooleanPropertyModelGate clone() {
-    BooleanPropertyModelGate clonedGate = (BooleanPropertyModelGate) super
-        .clone();
-    clonedGate.open = true;
-    return clonedGate;
   }
 }

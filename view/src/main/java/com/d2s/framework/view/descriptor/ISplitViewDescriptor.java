@@ -35,14 +35,6 @@ public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
   IViewDescriptor getLeftTopViewDescriptor();
 
   /**
-   * Gets the right / bottom sub view descriptor of this split composite view
-   * descriptor.
-   * 
-   * @return the right / bottom sub view descriptor.
-   */
-  IViewDescriptor getRightBottomViewDescriptor();
-
-  /**
    * Gets the orientation of the split described view.
    * 
    * @return the split orientation. The admissible values are :
@@ -50,4 +42,12 @@ public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
    *         <li>HORIZONTAL
    */
   int getOrientation();
+
+  /**
+   * Gets the right / bottom sub view descriptor of this split composite view
+   * descriptor.
+   * 
+   * @return the right / bottom sub view descriptor.
+   */
+  IViewDescriptor getRightBottomViewDescriptor();
 }

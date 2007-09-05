@@ -36,6 +36,35 @@ import com.d2s.framework.model.entity.IEntity;
 public class RemoveFromModuleObjectsAction extends
     AbstractHibernateCollectionAction {
 
+  private static void removeFromSubModules(Module parentModule,
+      Object removedObject) {
+    if (parentModule.getSubModules() != null) {
+      for (SubModule subModule : new ArrayList<SubModule>(parentModule
+          .getSubModules())) {
+        if (subModule instanceof BeanModule
+            && removedObject.equals(((BeanModule) subModule).getModuleObject())) {
+          parentModule.removeSubModule(subModule);
+        }
+      }
+    }
+  }
+
+  /**
+   * Deletes the entity from the persistent store.
+   * 
+   * @param entity
+   *          the entity to remove
+   * @param session
+   *          the session to use.
+   * @param context
+   *          the action context.
+   */
+  protected void deleteEntity(IEntity entity, Session session,
+      @SuppressWarnings("unused")
+      Map<String, Object> context) {
+    session.delete(entity);
+  }
+
   /**
    * Removes the selected objects from the projected collection.
    * <p>
@@ -97,34 +126,5 @@ public class RemoveFromModuleObjectsAction extends
     collectionConnector.setConnectorValue(projectedCollection);
     context.put(ActionContextConstants.ACTION_PARAM, projectedObjectsToRemove);
     return super.execute(actionHandler, context);
-  }
-
-  private static void removeFromSubModules(Module parentModule,
-      Object removedObject) {
-    if (parentModule.getSubModules() != null) {
-      for (SubModule subModule : new ArrayList<SubModule>(parentModule
-          .getSubModules())) {
-        if (subModule instanceof BeanModule
-            && removedObject.equals(((BeanModule) subModule).getModuleObject())) {
-          parentModule.removeSubModule(subModule);
-        }
-      }
-    }
-  }
-
-  /**
-   * Deletes the entity from the persistent store.
-   * 
-   * @param entity
-   *          the entity to remove
-   * @param session
-   *          the session to use.
-   * @param context
-   *          the action context.
-   */
-  protected void deleteEntity(IEntity entity, Session session,
-      @SuppressWarnings("unused")
-      Map<String, Object> context) {
-    session.delete(entity);
   }
 }

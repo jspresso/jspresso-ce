@@ -31,18 +31,10 @@ import com.ulcjava.container.servlet.application.ServletContainerContext;
  */
 public final class ResourceManager {
 
-  private static final String          DOWNLOAD_SERVLET_URL_PATTERN = "/download";
   private static final String          APPLICATION_PREFIX           = "application/";
+  private static final String          DOWNLOAD_SERVLET_URL_PATTERN = "/download";
 
   private static final ResourceManager INSTANCE                     = new ResourceManager();
-
-  private Map<String, IResource>       resources;
-  private SecureRandom                 random;
-
-  private ResourceManager() {
-    resources = new HashMap<String, IResource>();
-    random = new SecureRandom();
-  }
 
   /**
    * Singleton pattern.
@@ -51,6 +43,55 @@ public final class ResourceManager {
    */
   public static ResourceManager getInstance() {
     return INSTANCE;
+  }
+  private SecureRandom                 random;
+
+  private Map<String, IResource>       resources;
+
+  private ResourceManager() {
+    resources = new HashMap<String, IResource>();
+    random = new SecureRandom();
+  }
+
+  private String createId() throws NoSuchAlgorithmException {
+    byte[] bytes = new byte[24];
+    random.nextBytes(bytes);
+    bytes = MessageDigest.getInstance("MD5").digest(bytes);
+
+    StringBuffer result = new StringBuffer();
+    for (int i = 0; i < bytes.length; i++) {
+      byte b1 = (byte) ((bytes[i] & 0xf0) >> 4);
+      byte b2 = (byte) (bytes[i] & 0x0f);
+
+      result.append(toHex(b1));
+      result.append(toHex(b2));
+    }
+
+    return result.toString();
+  }
+
+  private File createTemporaryFile(InputStream is, String fileExtension)
+      throws IOException {
+    File file = File.createTempFile(getClass().getName(), fileExtension);
+    file.deleteOnExit();
+
+    BufferedInputStream inputStream = new BufferedInputStream(is);
+    BufferedOutputStream outputStream = new BufferedOutputStream(
+        new FileOutputStream(file));
+
+    IoHelper.copyStream(inputStream, outputStream);
+
+    inputStream.close();
+    outputStream.close();
+
+    return file;
+  }
+
+  private String determineUrl(HttpServletRequest request, String id) {
+    String baseUrl = request.getScheme() + "://" + request.getServerName()
+        + ":" + request.getServerPort() + request.getContextPath()
+        + DOWNLOAD_SERVLET_URL_PATTERN;
+    return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
   }
 
   /**
@@ -64,16 +105,23 @@ public final class ResourceManager {
     return resources.get(id);
   }
 
-  /**
-   * Registers a resource.
-   * 
-   * @param id
-   *          the identifier under which the resource must be registered.
-   * @param resource
-   *          the resource to be registered.
-   */
-  public void register(String id, IResource resource) {
-    resources.put(id, resource);
+  private boolean inDevelopmentEnvironment() {
+    try {
+      Class.forName("com.ulcjava.base.development.DevelopmentRunner");
+      return true;
+    } catch (ClassNotFoundException cnfe) {
+      return false;
+    }
+  }
+
+  private boolean inServletContainerEnvironment() {
+    try {
+      Class
+          .forName("com.ulcjava.container.servlet.application.ServletContainerContext");
+      return true;
+    } catch (ClassNotFoundException cnfe) {
+      return false;
+    }
   }
 
   /**
@@ -95,28 +143,16 @@ public final class ResourceManager {
     }
   }
 
-  private String createId() throws NoSuchAlgorithmException {
-    byte[] bytes = new byte[24];
-    random.nextBytes(bytes);
-    bytes = MessageDigest.getInstance("MD5").digest(bytes);
-
-    StringBuffer result = new StringBuffer();
-    for (int i = 0; i < bytes.length; i++) {
-      byte b1 = (byte) ((bytes[i] & 0xf0) >> 4);
-      byte b2 = (byte) (bytes[i] & 0x0f);
-
-      result.append(toHex(b1));
-      result.append(toHex(b2));
-    }
-
-    return result.toString();
-  }
-
-  private char toHex(byte b) {
-    if (b < 10) {
-      return (char) ('0' + b);
-    }
-    return (char) ('A' + b - 10);
+  /**
+   * Registers a resource.
+   * 
+   * @param id
+   *          the identifier under which the resource must be registered.
+   * @param resource
+   *          the resource to be registered.
+   */
+  public void register(String id, IResource resource) {
+    resources.put(id, resource);
   }
 
   /**
@@ -165,46 +201,10 @@ public final class ResourceManager {
     }
   }
 
-  private String determineUrl(HttpServletRequest request, String id) {
-    String baseUrl = request.getScheme() + "://" + request.getServerName()
-        + ":" + request.getServerPort() + request.getContextPath()
-        + DOWNLOAD_SERVLET_URL_PATTERN;
-    return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
-  }
-
-  private boolean inDevelopmentEnvironment() {
-    try {
-      Class.forName("com.ulcjava.base.development.DevelopmentRunner");
-      return true;
-    } catch (ClassNotFoundException cnfe) {
-      return false;
+  private char toHex(byte b) {
+    if (b < 10) {
+      return (char) ('0' + b);
     }
-  }
-
-  private boolean inServletContainerEnvironment() {
-    try {
-      Class
-          .forName("com.ulcjava.container.servlet.application.ServletContainerContext");
-      return true;
-    } catch (ClassNotFoundException cnfe) {
-      return false;
-    }
-  }
-
-  private File createTemporaryFile(InputStream is, String fileExtension)
-      throws IOException {
-    File file = File.createTempFile(getClass().getName(), fileExtension);
-    file.deleteOnExit();
-
-    BufferedInputStream inputStream = new BufferedInputStream(is);
-    BufferedOutputStream outputStream = new BufferedOutputStream(
-        new FileOutputStream(file));
-
-    IoHelper.copyStream(inputStream, outputStream);
-
-    inputStream.close();
-    outputStream.close();
-
-    return file;
+    return (char) ('A' + b - 10);
   }
 }

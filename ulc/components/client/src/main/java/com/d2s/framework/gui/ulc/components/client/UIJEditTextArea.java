@@ -37,6 +37,41 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIJEditTextArea extends UIComponent implements IEditorComponent {
 
+  private final class JEditTextAreaTableCellEditor extends AbstractCellEditor
+      implements TableCellEditor {
+
+    private static final long serialVersionUID = 225151112200061365L;
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getCellEditorValue() {
+      return getBasicObject().getText();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unused")
+    public Component getTableCellEditorComponent(JTable table, Object value,
+        boolean isSelected, int row, int col) {
+      getBasicObject().setText((String) value);
+      return getBasicObject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCellEditable(EventObject evt) {
+      if (evt instanceof MouseEvent) {
+        MouseEvent me = (MouseEvent) evt;
+        return (me.getClickCount() >= 1);
+      }
+      return super.isCellEditable(evt);
+    }
+  }
+
   private TableCellEditor tableCellEditor;
 
   /**
@@ -73,55 +108,8 @@ public class UIJEditTextArea extends UIComponent implements IEditorComponent {
   /**
    * {@inheritDoc}
    */
-  @Override
-  public void handleRequest(String request, Anything args) {
-    if (request.equals(JEditTextAreaConstants.SET_TEXT_REQUEST)) {
-      handleSetText(args);
-    } else if (request.equals(ActionFieldConstants.SET_EDITABLE_REQUEST)) {
-      handleSetEditable(args);
-    } else {
-      super.handleRequest(request, args);
-    }
-  }
-
-  private void handleSetText(Anything args) {
-    getBasicObject().setText(args.get(JEditTextAreaConstants.TEXT_KEY, ""));
-  }
-
-  private void handleSetEditable(Anything args) {
-    getBasicObject().setEditable(
-        args.get(JEditTextAreaConstants.EDITABLE_KEY, true));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void restoreState(Anything args) {
-    super.restoreState(args);
-    handleSetText(args);
-    getBasicObject().addFocusListener(new FocusAdapter() {
-
-      @Override
-      public void focusLost(@SuppressWarnings("unused")
-      FocusEvent e) {
-        notifyULCValueChange(getBasicObject().getText());
-      }
-    });
-    getBasicObject().setEditable(
-        args.get(JEditTextAreaConstants.EDITABLE_KEY, true));
-  }
-
-  private void textToAnything(String text, Anything args) {
-    args.put(JEditTextAreaConstants.TEXT_KEY, text);
-  }
-
-  private void notifyULCValueChange(Object newValue) {
-    Anything args = new Anything();
-    textToAnything((String) newValue, args);
-    sendULC(JEditTextAreaConstants.SET_TEXT_REQUEST, args);
-    sendOptionalEventULC(IUlcEventConstants.VALUE_CHANGED_EVENT,
-        IUlcEventConstants.VALUE_CHANGED);
+  public ComboBoxEditor getComboBoxEditor() {
+    throw new UnsupportedOperationException();
   }
 
   /**
@@ -151,42 +139,54 @@ public class UIJEditTextArea extends UIComponent implements IEditorComponent {
   /**
    * {@inheritDoc}
    */
-  public ComboBoxEditor getComboBoxEditor() {
-    throw new UnsupportedOperationException();
+  @Override
+  public void handleRequest(String request, Anything args) {
+    if (request.equals(JEditTextAreaConstants.SET_TEXT_REQUEST)) {
+      handleSetText(args);
+    } else if (request.equals(ActionFieldConstants.SET_EDITABLE_REQUEST)) {
+      handleSetEditable(args);
+    } else {
+      super.handleRequest(request, args);
+    }
   }
 
-  private final class JEditTextAreaTableCellEditor extends AbstractCellEditor
-      implements TableCellEditor {
+  private void handleSetEditable(Anything args) {
+    getBasicObject().setEditable(
+        args.get(JEditTextAreaConstants.EDITABLE_KEY, true));
+  }
 
-    private static final long serialVersionUID = 225151112200061365L;
+  private void handleSetText(Anything args) {
+    getBasicObject().setText(args.get(JEditTextAreaConstants.TEXT_KEY, ""));
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unused")
-    public Component getTableCellEditorComponent(JTable table, Object value,
-        boolean isSelected, int row, int col) {
-      getBasicObject().setText((String) value);
-      return getBasicObject();
-    }
+  private void notifyULCValueChange(Object newValue) {
+    Anything args = new Anything();
+    textToAnything((String) newValue, args);
+    sendULC(JEditTextAreaConstants.SET_TEXT_REQUEST, args);
+    sendOptionalEventULC(IUlcEventConstants.VALUE_CHANGED_EVENT,
+        IUlcEventConstants.VALUE_CHANGED);
+  }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Object getCellEditorValue() {
-      return getBasicObject().getText();
-    }
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void restoreState(Anything args) {
+    super.restoreState(args);
+    handleSetText(args);
+    getBasicObject().addFocusListener(new FocusAdapter() {
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isCellEditable(EventObject evt) {
-      if (evt instanceof MouseEvent) {
-        MouseEvent me = (MouseEvent) evt;
-        return (me.getClickCount() >= 1);
+      @Override
+      public void focusLost(@SuppressWarnings("unused")
+      FocusEvent e) {
+        notifyULCValueChange(getBasicObject().getText());
       }
-      return super.isCellEditable(evt);
-    }
+    });
+    getBasicObject().setEditable(
+        args.get(JEditTextAreaConstants.EDITABLE_KEY, true));
+  }
+
+  private void textToAnything(String text, Anything args) {
+    args.put(JEditTextAreaConstants.TEXT_KEY, text);
   }
 }

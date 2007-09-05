@@ -11,7 +11,6 @@ import org.wings.SComponent;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.view.IView;
@@ -29,10 +28,10 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class EditComponentAction extends ModalDialogAction {
 
-  private IModelConnectorFactory modelConnectorFactory;
-  private IViewDescriptor        viewDescriptor;
-  private IDisplayableAction     okAction;
   private IDisplayableAction     cancelAction;
+  private IModelConnectorFactory modelConnectorFactory;
+  private IDisplayableAction     okAction;
+  private IViewDescriptor        viewDescriptor;
 
   /**
    * {@inheritDoc}
@@ -66,44 +65,14 @@ public class EditComponentAction extends ModalDialogAction {
   }
 
   /**
-   * Sets the cancelAction.
+   * Gets the model.
    * 
-   * @param cancelAction
-   *          the cancelAction to set.
+   * @param context
+   *          the action context.
+   * @return the model.
    */
-  public void setCancelAction(AbstractChainedAction cancelAction) {
-    this.cancelAction = cancelAction;
-  }
-
-  /**
-   * Sets the okAction.
-   * 
-   * @param okAction
-   *          the okAction to set.
-   */
-  public void setOkAction(AbstractChainedAction okAction) {
-    this.okAction = okAction;
-  }
-
-  /**
-   * Sets the modelConnectorFactory.
-   * 
-   * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
-   */
-  public void setModelConnectorFactory(
-      IModelConnectorFactory modelConnectorFactory) {
-    this.modelConnectorFactory = modelConnectorFactory;
-  }
-
-  /**
-   * Sets the viewDescriptor.
-   * 
-   * @param viewDescriptor
-   *          the viewDescriptor to set.
-   */
-  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
-    this.viewDescriptor = viewDescriptor;
+  protected Object getModel(Map<String, Object> context) {
+    return context.get(ActionContextConstants.ACTION_PARAM);
   }
 
   /**
@@ -119,13 +88,43 @@ public class EditComponentAction extends ModalDialogAction {
   }
 
   /**
-   * Gets the model.
+   * Sets the cancelAction.
    * 
-   * @param context
-   *          the action context.
-   * @return the model.
+   * @param cancelAction
+   *          the cancelAction to set.
    */
-  protected Object getModel(Map<String, Object> context) {
-    return context.get(ActionContextConstants.ACTION_PARAM);
+  public void setCancelAction(IDisplayableAction cancelAction) {
+    this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Sets the modelConnectorFactory.
+   * 
+   * @param modelConnectorFactory
+   *          the modelConnectorFactory to set.
+   */
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
+   * Sets the okAction.
+   * 
+   * @param okAction
+   *          the okAction to set.
+   */
+  public void setOkAction(IDisplayableAction okAction) {
+    this.okAction = okAction;
+  }
+
+  /**
+   * Sets the viewDescriptor.
+   * 
+   * @param viewDescriptor
+   *          the viewDescriptor to set.
+   */
+  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
+    this.viewDescriptor = viewDescriptor;
   }
 }

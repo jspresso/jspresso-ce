@@ -19,9 +19,9 @@ import org.apache.commons.lang.ObjectUtils;
  */
 public class ModelChangeSupport {
 
-  private IModelProvider            source;
-
   private Set<IModelChangeListener> listeners;
+
+  private IModelProvider            source;
 
   /**
    * Constructs a new Connector change support.
@@ -57,16 +57,22 @@ public class ModelChangeSupport {
   }
 
   /**
-   * Removes a <code>IModelChangeListener</code>.
+   * Propagates the <code>ModelChangeEvent</code> as is (i.e. whithout
+   * modifying its source) to the listeners.
    * 
-   * @param listener
-   *          The removed listener.
-   * @see IModelProvider#removeModelChangeListener( IModelChangeListener)
+   * @param evt
+   *          the propagated <code>ModelChangeEvent</code>
    */
-  public synchronized void removeModelChangeListener(
-      IModelChangeListener listener) {
-    if (listener != null && listeners != null) {
-      listeners.remove(listener);
+  public void fireModelChange(ModelChangeEvent evt) {
+    if (listeners != null) {
+      Object oldValue = evt.getOldValue();
+      Object newValue = evt.getNewValue();
+      if (ObjectUtils.equals(oldValue, newValue)) {
+        return;
+      }
+      for (IModelChangeListener listener : listeners) {
+        listener.modelChange(evt);
+      }
     }
   }
 
@@ -85,22 +91,16 @@ public class ModelChangeSupport {
   }
 
   /**
-   * Propagates the <code>ModelChangeEvent</code> as is (i.e. whithout
-   * modifying its source) to the listeners.
+   * Removes a <code>IModelChangeListener</code>.
    * 
-   * @param evt
-   *          the propagated <code>ModelChangeEvent</code>
+   * @param listener
+   *          The removed listener.
+   * @see IModelProvider#removeModelChangeListener( IModelChangeListener)
    */
-  public void fireModelChange(ModelChangeEvent evt) {
-    if (listeners != null) {
-      Object oldValue = evt.getOldValue();
-      Object newValue = evt.getNewValue();
-      if (ObjectUtils.equals(oldValue, newValue)) {
-        return;
-      }
-      for (IModelChangeListener listener : listeners) {
-        listener.modelChange(evt);
-      }
+  public synchronized void removeModelChangeListener(
+      IModelChangeListener listener) {
+    if (listener != null && listeners != null) {
+      listeners.remove(listener);
     }
   }
 }

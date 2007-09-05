@@ -21,8 +21,12 @@ import org.apache.commons.logging.LogFactory;
  */
 public abstract class AbstractTracingAspect {
 
-  private Map<Class, Log> loggersMap = new HashMap<Class, Log>();
   private int             callDepth  = 0;
+  private Map<Class, Log> loggersMap = new HashMap<Class, Log>();
+
+  private void decreaseCallDepth() {
+    callDepth--;
+  }
 
   private Log getLogger(Class clazz) {
     Log logger = loggersMap.get(clazz);
@@ -35,10 +39,6 @@ public abstract class AbstractTracingAspect {
 
   private void increaseCallDepth() {
     callDepth++;
-  }
-
-  private void decreaseCallDepth() {
-    callDepth--;
   }
 
   private String indent() {

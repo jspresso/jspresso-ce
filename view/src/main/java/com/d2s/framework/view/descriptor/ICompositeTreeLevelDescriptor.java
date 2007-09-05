@@ -19,13 +19,6 @@ import java.util.List;
 public interface ICompositeTreeLevelDescriptor extends ITreeLevelDescriptor {
 
   /**
-   * Gets the subtree descriptors.
-   * 
-   * @return the subtree descriptors.
-   */
-  List<ITreeLevelDescriptor> getChildrenDescriptors();
-
-  /**
    * Gets the subtree descriptor from its name.
    * 
    * @param name
@@ -33,4 +26,11 @@ public interface ICompositeTreeLevelDescriptor extends ITreeLevelDescriptor {
    * @return the subtree descriptor.
    */
   ITreeLevelDescriptor getChildDescriptor(String name);
+
+  /**
+   * Gets the subtree descriptors.
+   * 
+   * @return the subtree descriptors.
+   */
+  List<ITreeLevelDescriptor> getChildrenDescriptors();
 }

@@ -22,19 +22,16 @@ import com.d2s.framework.util.gate.IGate;
 public interface IPropertyDescriptor extends IModelDescriptor {
 
   /**
-   * Wether the underlying property is mandatory.
+   * Checks the basic compliance of a property value against the property
+   * descriptor. Whenever the value might not be compliant, an
+   * <code>IntegrityException</code> should be thrown.
    * 
-   * @return true if mandatory
+   * @param component
+   *          the component on which the proerty value is checked.
+   * @param propertyValue
+   *          the property value to check the compliance of.
    */
-  boolean isMandatory();
-
-  /**
-   * Gets the collection of <code>IIntegrityProcessor</code> s which are
-   * registered as pre-processors and post-processors.
-   * 
-   * @return the registered <code>IIntegrityProcessor</code> s
-   */
-  List<IPropertyIntegrityProcessor> getIntegrityProcessors();
+  void checkValueIntegrity(Object component, Object propertyValue);
 
   /**
    * Gets the <code>Class</code> of the delegates used to compute the values
@@ -55,39 +52,12 @@ public interface IPropertyDescriptor extends IModelDescriptor {
   String getDelegateClassName();
 
   /**
-   * Gets the scope on which the property is unique.
+   * Gets the collection of <code>IIntegrityProcessor</code> s which are
+   * registered as pre-processors and post-processors.
    * 
-   * @return the unicity scope.
+   * @return the registered <code>IIntegrityProcessor</code> s
    */
-  String getUnicityScope();
-
-  /**
-   * Wether the underlying property is computed.
-   * 
-   * @return true if computed
-   */
-  boolean isComputed();
-
-  /**
-   * Gets wether this kind of property descriptor is queryable.
-   * 
-   * @return true if this kind of property descriptor is queryable.
-   */
-  boolean isQueryable();
-
-  /**
-   * Gets wether this descriptor is an overload of a parent one.
-   * 
-   * @return true if this descriptor is an overload of a parent one.
-   */
-  boolean isOverload();
-
-  /**
-   * Wether the underlying property is read-only.
-   * 
-   * @return true if read-only
-   */
-  boolean isReadOnly();
+  List<IPropertyIntegrityProcessor> getIntegrityProcessors();
 
   /**
    * Gets the collection of gates determining the readability state of this
@@ -99,6 +69,13 @@ public interface IPropertyDescriptor extends IModelDescriptor {
   Collection<IGate> getReadabilityGates();
 
   /**
+   * Gets the scope on which the property is unique.
+   * 
+   * @return the unicity scope.
+   */
+  String getUnicityScope();
+
+  /**
    * Gets the collection of gates determining the writability state of this
    * property.
    * 
@@ -108,28 +85,39 @@ public interface IPropertyDescriptor extends IModelDescriptor {
   Collection<IGate> getWritabilityGates();
 
   /**
-   * Checks the basic compliance of a property value against the property
-   * descriptor. Whenever the value might not be compliant, an
-   * <code>IntegrityException</code> should be thrown.
+   * Wether the underlying property is computed.
    * 
-   * @param component
-   *          the component on which the proerty value is checked.
-   * @param propertyValue
-   *          the property value to check the compliance of.
+   * @return true if computed
    */
-  void checkValueIntegrity(Object component, Object propertyValue);
+  boolean isComputed();
 
   /**
-   * Triggers all setter preprocessors.
+   * Wether the underlying property is mandatory.
    * 
-   * @param component
-   *          the component targetted by the setter.
-   * @param oldValue
-   *          the property old value.
-   * @param newValue
-   *          the property new value.
+   * @return true if mandatory
    */
-  void preprocessSetter(Object component, Object oldValue, Object newValue);
+  boolean isMandatory();
+
+  /**
+   * Gets wether this descriptor is an overload of a parent one.
+   * 
+   * @return true if this descriptor is an overload of a parent one.
+   */
+  boolean isOverload();
+
+  /**
+   * Gets wether this kind of property descriptor is queryable.
+   * 
+   * @return true if this kind of property descriptor is queryable.
+   */
+  boolean isQueryable();
+
+  /**
+   * Wether the underlying property is read-only.
+   * 
+   * @return true if read-only
+   */
+  boolean isReadOnly();
 
   /**
    * Triggers all setter postprocessors.
@@ -142,4 +130,16 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    *          the property new value.
    */
   void postprocessSetter(Object component, Object oldValue, Object newValue);
+
+  /**
+   * Triggers all setter preprocessors.
+   * 
+   * @param component
+   *          the component targetted by the setter.
+   * @param oldValue
+   *          the property old value.
+   * @param newValue
+   *          the property new value.
+   */
+  void preprocessSetter(Object component, Object oldValue, Object newValue);
 }

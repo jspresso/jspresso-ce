@@ -30,30 +30,6 @@ public class UITranslationDataType extends UIDataType {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
-  @Override
-  public void restoreState(Anything args) {
-    super.restoreState(args);
-
-    dictionary = new HashMap<String, String>();
-    reverseDictionary = new HashMap<String, String>();
-
-    Vector<String> flatDictionary = new Vector<String>();
-
-    if (args.isDefined(TranslationDataTypeConstants.DICTIONARY)) {
-      flatDictionary = args.get(TranslationDataTypeConstants.DICTIONARY)
-          .toCollection();
-    }
-    for (int index = 0; index < flatDictionary.size() - 1; index += 2) {
-      dictionary.put(flatDictionary.get(index), flatDictionary.get(index + 1));
-      reverseDictionary.put(flatDictionary.get(index + 1), flatDictionary
-          .get(index));
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public Object convertToObject(String newString, @SuppressWarnings("unused")
   Object previousValue) {
@@ -85,14 +61,6 @@ public class UITranslationDataType extends UIDataType {
    * {@inheritDoc}
    */
   @Override
-  public Object getDefaultValue(String newString) {
-    return newString;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof UITranslationDataType)) {
       return false;
@@ -108,10 +76,42 @@ public class UITranslationDataType extends UIDataType {
    * {@inheritDoc}
    */
   @Override
+  public Object getDefaultValue(String newString) {
+    return newString;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public int hashCode() {
     if (dictionary == null) {
       return 0;
     }
     return dictionary.hashCode();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public void restoreState(Anything args) {
+    super.restoreState(args);
+
+    dictionary = new HashMap<String, String>();
+    reverseDictionary = new HashMap<String, String>();
+
+    Vector<String> flatDictionary = new Vector<String>();
+
+    if (args.isDefined(TranslationDataTypeConstants.DICTIONARY)) {
+      flatDictionary = args.get(TranslationDataTypeConstants.DICTIONARY)
+          .toCollection();
+    }
+    for (int index = 0; index < flatDictionary.size() - 1; index += 2) {
+      dictionary.put(flatDictionary.get(index), flatDictionary.get(index + 1));
+      reverseDictionary.put(flatDictionary.get(index + 1), flatDictionary
+          .get(index));
+    }
   }
 }

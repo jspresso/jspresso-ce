@@ -22,6 +22,22 @@ import com.d2s.framework.util.exception.IExceptionHandler;
 public interface IActionHandler extends IExceptionHandler {
 
   /**
+   * Checks authorization for secured access. It shoud throw a SecurityException
+   * whenever access should not be granted.
+   * 
+   * @param securable
+   *          the id of the secured access to check.
+   */
+  void checkAccess(ISecurable securable);
+
+  /**
+   * Creates an empty action context.
+   * 
+   * @return an empty action context.
+   */
+  Map<String, Object> createEmptyContext();
+
+  /**
    * Executes an action. Implementors should delegate the execution to the
    * action itself but are free to set the context of the execution (action
    * context, synchronous or not, transactionality, ...).
@@ -44,20 +60,4 @@ public interface IActionHandler extends IExceptionHandler {
    *         controller.
    */
   Map<String, Object> getInitialActionContext();
-
-  /**
-   * Creates an empty action context.
-   * 
-   * @return an empty action context.
-   */
-  Map<String, Object> createEmptyContext();
-
-  /**
-   * Checks authorization for secured access. It shoud throw a SecurityException
-   * whenever access should not be granted.
-   * 
-   * @param securable
-   *          the id of the secured access to check.
-   */
-  void checkAccess(ISecurable securable);
 }

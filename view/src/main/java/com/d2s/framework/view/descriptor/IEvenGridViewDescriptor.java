@@ -17,24 +17,14 @@ package com.d2s.framework.view.descriptor;
 public interface IEvenGridViewDescriptor extends IGridViewDescriptor {
 
   /**
-   * <code>ROW</code> dimension constant.
-   */
-  int ROW    = 1;
-
-  /**
    * <code>COLUMN</code> dimension constant.
    */
   int COLUMN = 2;
 
   /**
-   * Gets the number of cells contained in a line of the driving dimension. This
-   * is actually a maximum value since a sub view descriptor might span multiple
-   * cells.
-   * 
-   * @return the number of sub view descriptors displayed in a row of this view
-   *         or 0 if unlimited means that rows are driving the distribution.
+   * <code>ROW</code> dimension constant.
    */
-  int getDrivingDimensionCellCount();
+  int ROW    = 1;
 
   /**
    * Gets the dimension identifier driving the distribution of the contained
@@ -46,4 +36,14 @@ public interface IEvenGridViewDescriptor extends IGridViewDescriptor {
    * @return the driving dimension constant.
    */
   int getDrivingDimension();
+
+  /**
+   * Gets the number of cells contained in a line of the driving dimension. This
+   * is actually a maximum value since a sub view descriptor might span multiple
+   * cells.
+   * 
+   * @return the number of sub view descriptors displayed in a row of this view
+   *         or 0 if unlimited means that rows are driving the distribution.
+   */
+  int getDrivingDimensionCellCount();
 }
