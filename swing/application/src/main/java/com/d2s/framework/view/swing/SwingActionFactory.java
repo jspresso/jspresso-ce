@@ -48,6 +48,71 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class SwingActionFactory implements IActionFactory<Action, JComponent> {
 
+  private IIconFactory<Icon>   iconFactory;
+  private ITranslationProvider translationProvider;
+
+  /**
+   * {@inheritDoc}
+   */
+  public Action createAction(IDisplayableAction action,
+      IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
+    return createAction(action, actionHandler, view.getPeer(), view
+        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Action createAction(IDisplayableAction action,
+      IActionHandler actionHandler, JComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
+    Action swingAction = new ActionAdapter(action, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector, locale);
+    if (action.getActionabilityGates() != null) {
+      Collection<IGate> clonedGates = new HashSet<IGate>();
+      for (IGate gate : action.getActionabilityGates()) {
+        final IGate clonedGate = gate.clone();
+        if (modelDescriptor instanceof IComponentDescriptorProvider
+            && clonedGate instanceof IModelGate) {
+          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
+              (IComponentDescriptorProvider<?>) modelDescriptor));
+          viewConnector
+              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                      .getModelProvider()).setModel(evt.getNewValue());
+                }
+              });
+        }
+        clonedGates.add(clonedGate);
+      }
+      new GatesListener(swingAction, clonedGates);
+    }
+    return swingAction;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *            the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<Icon> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *            the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
   private final class ActionAdapter extends AbstractAction {
 
     private static final long serialVersionUID = 5819377672533326496L;
@@ -133,6 +198,7 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
       }
     }
   }
+
   private final class GatesListener implements PropertyChangeListener {
 
     private Action            action;
@@ -142,9 +208,9 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
      * Constructs a new <code>GatesListener</code> instance.
      * 
      * @param action
-     *          the action to (de)activate based on gates state.
+     *            the action to (de)activate based on gates state.
      * @param gates
-     *          the gates that determine action state.
+     *            the gates that determine action state.
      */
     public GatesListener(Action action, Collection<IGate> gates) {
       this.action = action;
@@ -161,71 +227,5 @@ public class SwingActionFactory implements IActionFactory<Action, JComponent> {
     PropertyChangeEvent evt) {
       action.setEnabled(GateHelper.areGatesOpen(gates));
     }
-  }
-
-  private IIconFactory<Icon>   iconFactory;
-
-  private ITranslationProvider translationProvider;
-
-  /**
-   * {@inheritDoc}
-   */
-  public Action createAction(IDisplayableAction action,
-      IActionHandler actionHandler, IView<JComponent> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Action createAction(IDisplayableAction action,
-      IActionHandler actionHandler, JComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
-    Action swingAction = new ActionAdapter(action, actionHandler,
-        sourceComponent, modelDescriptor, viewConnector, locale);
-    if (action.getActionabilityGates() != null) {
-      Collection<IGate> clonedGates = new HashSet<IGate>();
-      for (IGate gate : action.getActionabilityGates()) {
-        final IGate clonedGate = gate.clone();
-        if (modelDescriptor instanceof IComponentDescriptorProvider
-            && clonedGate instanceof IModelGate) {
-          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
-              (IComponentDescriptorProvider) modelDescriptor));
-          viewConnector
-              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                      .getModelProvider()).setModel(evt.getNewValue());
-                }
-              });
-        }
-        clonedGates.add(clonedGate);
-      }
-      new GatesListener(swingAction, clonedGates);
-    }
-    return swingAction;
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<Icon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 }

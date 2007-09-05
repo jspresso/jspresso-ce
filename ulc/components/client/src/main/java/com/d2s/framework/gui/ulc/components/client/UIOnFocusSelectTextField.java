@@ -26,6 +26,25 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIOnFocusSelectTextField extends UITextField {
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public TableCellEditor getTableCellEditor() {
+    TableCellEditor cellEditor = super.getTableCellEditor();
+    return new TableCellEditorWrapper(cellEditor);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object createBasicObject(Anything args) {
+    JTextField textField = (JTextField) super.createBasicObject(args);
+    SwingUtil.enableSelectionOnFocusGained(textField);
+    return textField;
+  }
+
   private class TableCellEditorWrapper implements TableCellEditor {
 
     private TableCellEditor delegate;
@@ -34,7 +53,7 @@ public class UIOnFocusSelectTextField extends UITextField {
      * Constructs a new <code>TableCellEditorWrapper</code> instance.
      * 
      * @param delegate
-     *          the editor delegate.
+     *            the editor delegate.
      */
     public TableCellEditorWrapper(TableCellEditor delegate) {
       this.delegate = delegate;
@@ -102,24 +121,5 @@ public class UIOnFocusSelectTextField extends UITextField {
       return delegate.stopCellEditing();
     }
 
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object createBasicObject(Anything args) {
-    JTextField textField = (JTextField) super.createBasicObject(args);
-    SwingUtil.enableSelectionOnFocusGained(textField);
-    return textField;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public TableCellEditor getTableCellEditor() {
-    TableCellEditor cellEditor = super.getTableCellEditor();
-    return new TableCellEditorWrapper(cellEditor);
   }
 }

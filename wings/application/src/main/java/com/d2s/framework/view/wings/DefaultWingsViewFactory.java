@@ -180,227 +180,13 @@ import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultWingsViewFactory implements
     IViewFactory<SComponent, SIcon, Action> {
 
-  private final class ColorTableCellRenderer extends SDefaultTableCellRenderer {
-
-    private static final long serialVersionUID = 2463885562098867443L;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SComponent getTableCellRendererComponent(STable table, Object value,
-        boolean isSelected, int row, int column) {
-      if (value != null) {
-        int[] rgba = ColorHelper.fromHexString((String) value);
-        setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
-      } else {
-        setBackground(null);
-      }
-      return super.getTableCellRendererComponent(table, value, isSelected,
-          row, column);
-    }
-  }
-  private final class ConnectorTreeCellRenderer extends
-      SDefaultTreeCellRenderer {
-
-    private static final long   serialVersionUID = -5153268751092971328L;
-    private Locale              locale;
-    private ITreeViewDescriptor viewDescriptor;
-
-    /**
-     * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
-     *
-     * @param viewDescriptor
-     *          the tree view descriptor used by the tree view.
-     * @param locale
-     */
-    public ConnectorTreeCellRenderer(ITreeViewDescriptor viewDescriptor,
-        Locale locale) {
-      this.viewDescriptor = viewDescriptor;
-      this.locale = locale;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SComponent getTreeCellRendererComponent(STree tree, Object value,
-        boolean sel, boolean expanded, boolean leaf, int row,
-        boolean nodeHasFocus) {
-      SComponent renderer = super.getTreeCellRendererComponent(tree, value,
-          sel, expanded, leaf, row, nodeHasFocus);
-      if (value instanceof IValueConnector) {
-        IValueConnector rootConnector = (IValueConnector) tree.getModel()
-            .getRoot();
-        SIcon nodeIcon = null;
-        nodeIcon = iconFactory.getIcon(viewDescriptor
-            .getIconImageURLForUserObject(((IValueConnector) value)
-                .getConnectorValue()), IIconFactory.SMALL_ICON_SIZE);
-        if (nodeIcon == null) {
-          if (value == rootConnector) {
-            nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-                IIconFactory.SMALL_ICON_SIZE);
-          } else {
-            TreePath path = ConnectorTreeHelper.getTreePathForConnector(
-                rootConnector, (IValueConnector) value);
-            if (path != null) {
-              nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
-                  .getSubtreeDescriptorFromPath(
-                      viewDescriptor.getRootSubtreeDescriptor(),
-                      getDescriptorPathFromConnectorTreePath(path))
-                  .getNodeGroupDescriptor().getIconImageURL(),
-                  IIconFactory.SMALL_ICON_SIZE);
-            }
-          }
-        }
-        setIcon(nodeIcon);
-        String labelText = null;
-        String toolTipText = null;
-        if (value instanceof ICollectionConnector) {
-          IListViewDescriptor nodeGroupDescriptor = TreeDescriptorHelper
-              .getSubtreeDescriptorFromPath(
-                  viewDescriptor.getRootSubtreeDescriptor(),
-                  getDescriptorPathFromConnectorTreePath(ConnectorTreeHelper
-                      .getTreePathForConnector((IValueConnector) tree
-                          .getModel().getRoot(), (IValueConnector) value)))
-              .getNodeGroupDescriptor();
-          String labelKey = nodeGroupDescriptor.getName();
-          if (labelKey == null) {
-            labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
-          }
-          labelText = nodeGroupDescriptor.getI18nName(getTranslationProvider(),
-              locale);
-          if (nodeGroupDescriptor.getDescription() != null) {
-            // SToolTipManager.sharedInstance().registerComponent(tree);
-            toolTipText = nodeGroupDescriptor.getI18nDescription(
-                getTranslationProvider(), locale)
-                + TOOLTIP_ELLIPSIS;
-          }
-          setText(labelText);
-        } else {
-          if (((IValueConnector) value).getConnectorValue() != null) {
-            labelText = ((IValueConnector) value).getConnectorValue()
-                .toString();
-          } else {
-            labelText = "";
-          }
-        }
-        setText(labelText);
-        setToolTipText(toolTipText);
-      }
-      return renderer;
-    }
-  }
-  private final class TranslatedEnumerationListCellRenderer extends
-      SDefaultListCellRenderer {
-
-    private static final long              serialVersionUID = -5694559709701757582L;
-    private Locale                         locale;
-    private IEnumerationPropertyDescriptor propertyDescriptor;
-
-    /**
-     * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
-     * instance.
-     *
-     * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
-     *          taken. The prefix used to lookup translation keys in the form
-     *          keyPrefix.value is the propertyDescriptor enumeration name.
-     * @param locale
-     *          the locale to lookup the translation.
-     */
-    public TranslatedEnumerationListCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-      this.propertyDescriptor = propertyDescriptor;
-      this.locale = locale;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SComponent getListCellRendererComponent(SComponent list,
-        Object value, boolean isSelected, int index) {
-      SLabel label = (SLabel) super.getListCellRendererComponent(list, value,
-          isSelected, index);
-      label
-          .setIcon(iconFactory.getIcon(propertyDescriptor
-              .getIconImageURL(String.valueOf(value)),
-              IIconFactory.TINY_ICON_SIZE));
-      if (value != null && propertyDescriptor.isTranslated()) {
-        setText(translationProvider.getTranslation(computeEnumerationKey(
-            propertyDescriptor.getEnumerationName(), value), locale));
-      } else {
-        setText(String.valueOf(value));
-      }
-      return label;
-    }
-  }
-  private final class TranslatedEnumerationTableCellRenderer extends
-      EvenOddTableCellRenderer {
-
-    private static final long              serialVersionUID = -4500472602998482756L;
-    private Locale                         locale;
-    private IEnumerationPropertyDescriptor propertyDescriptor;
-
-    /**
-     * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
-     * instance.
-     *
-     * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
-     *          taken. The prefix used to lookup translation keys in the form
-     *          keyPrefix.value is the propertyDescriptor enumeration name.
-     * @param locale
-     *          the locale to lookup the translation.
-     */
-    public TranslatedEnumerationTableCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-      super();
-      this.propertyDescriptor = propertyDescriptor;
-      this.locale = locale;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public SComponent getTableCellRendererComponent(STable table, Object value,
-        boolean isSelected, int row, int column) {
-      SLabel renderer = (SLabel) super.getTableCellRendererComponent(table,
-          value, isSelected, row, column);
-      renderer
-          .setIcon(iconFactory.getIcon(propertyDescriptor
-              .getIconImageURL(String.valueOf(value)),
-              IIconFactory.TINY_ICON_SIZE));
-      if (value instanceof IValueConnector) {
-        Object connectorValue = ((IValueConnector) value).getConnectorValue();
-        if (connectorValue != null && propertyDescriptor.isTranslated()) {
-          renderer.setText(translationProvider.getTranslation(
-              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
-                  connectorValue), locale));
-        } else {
-          renderer.setText(String.valueOf(connectorValue));
-        }
-      } else {
-        if (value != null && propertyDescriptor.isTranslated()) {
-          renderer.setText(translationProvider.getTranslation(
-              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
-                  value), locale));
-        } else {
-          renderer.setText(String.valueOf(value));
-        }
-      }
-      return renderer;
-    }
-  }
   private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                DEF_DISP_MAX_VALUE          = 1000;
   private static final double                DEF_DISP_TEMPLATE_PERCENT   = 99;
@@ -419,31 +205,600 @@ public class DefaultWingsViewFactory implements
   private IDisplayableAction                 binaryPropertyInfoAction;
   private IConfigurableConnectorFactory      connectorFactory;
   private IIconFactory<SIcon>                iconFactory;
-
   private IListSelectionModelBinder          listSelectionModelBinder;
   private IDisplayableAction                 lovAction;
   private IMasterDetailBinder                masterDetailBinder;
   private int                                maxCharacterLength          = 30;
+
   private int                                maxColumnCharacterLength    = 15;
   private IMvcBinder                         mvcBinder;
   private IDisplayableAction                 openFileAsBinaryPropertyAction;
-
   private IDisplayableAction                 resetPropertyAction;
-
   private IDisplayableAction                 saveBinaryPropertyAsFileAction;
+  private ITranslationProvider               translationProvider;
+  private ITreeSelectionModelBinder          treeSelectionModelBinder;
+
+  /**
+   * {@inheritDoc}
+   */
+  public IView<SComponent> createView(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<SComponent> view = null;
+    if (viewDescriptor instanceof IComponentViewDescriptor) {
+      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof INestingViewDescriptor) {
+      view = createNestingView((INestingViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IImageViewDescriptor) {
+      view = createImageView((IImageViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
+      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
+      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
+      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICardViewDescriptor) {
+      view = createCardView((ICardViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
+      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    }
+    try {
+      actionHandler.checkAccess(viewDescriptor);
+      if (viewDescriptor.getForeground() != null) {
+        view.getPeer().setForeground(viewDescriptor.getForeground());
+      }
+      if (viewDescriptor.getBackground() != null) {
+        view.getPeer().setBackground(viewDescriptor.getBackground());
+      }
+      if (viewDescriptor.getFont() != null) {
+        view.getPeer().setFont(
+            new SFont(viewDescriptor.getFont().getFontName(), viewDescriptor
+                .getFont().getStyle(), viewDescriptor.getFont().getSize()));
+      }
+      if (viewDescriptor.isReadOnly()) {
+        view.getConnector().setLocallyWritable(false);
+      }
+      if (viewDescriptor.getReadabilityGates() != null) {
+        for (IGate gate : viewDescriptor.getReadabilityGates()) {
+          view.getConnector().addReadabilityGate(gate.clone());
+        }
+      }
+      if (viewDescriptor.getWritabilityGates() != null) {
+        for (IGate gate : viewDescriptor.getWritabilityGates()) {
+          view.getConnector().addWritabilityGate(gate.clone());
+        }
+      }
+      if (viewDescriptor.getDescription() != null) {
+        view.getPeer().setToolTipText(
+            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+                + TOOLTIP_ELLIPSIS);
+      }
+      if (viewDescriptor.getActions() != null) {
+        SToolBar toolBar = createSToolBar();
+        for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
+            .getActions().entrySet().iterator(); iter.hasNext();) {
+          Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
+              .next();
+          for (IDisplayableAction action : nextActionSet.getValue()) {
+            Action swingAction = actionFactory.createAction(action,
+                actionHandler, view, locale);
+            SButton actionButton = createSButton();
+            actionButton.setShowAsFormComponent(false);
+            actionButton.setAction(swingAction);
+            if (action.getAcceleratorAsString() != null) {
+              KeyStroke ks = KeyStroke.getKeyStroke(action
+                  .getAcceleratorAsString());
+              view.getPeer().getActionMap().put(
+                  swingAction.getValue(Action.NAME), swingAction);
+              view.getPeer().getInputMap(
+                  SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
+                  .put(ks, swingAction.getValue(Action.NAME));
+              String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                  .getModifiers())
+                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+              actionButton.setToolTipText("<HTML>"
+                  + actionButton.getToolTipText()
+                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                  + "</FONT></HTML>");
+            }
+            actionButton.setText("");
+            toolBar.add(actionButton);
+          }
+          if (iter.hasNext()) {
+            toolBar.add(new SSeparator());
+          }
+        }
+        SPanel viewPanel = createSPanel();
+        viewPanel.setLayout(new SBorderLayout());
+        viewPanel.add(toolBar, SBorderLayout.NORTH);
+        viewPanel.add(view.getPeer(), SBorderLayout.CENTER);
+        view.setPeer(viewPanel);
+      }
+      decorateWithBorder(view, locale);
+    } catch (SecurityException ex) {
+      view.setPeer(createSecurityPanel());
+    }
+    return view;
+  }
+
+  /**
+   * Gets the actionFactory.
+   * 
+   * @return the actionFactory.
+   */
+  public IActionFactory<Action, SComponent> getActionFactory() {
+    return actionFactory;
+  }
 
   // ///////////////// //
   // Composite Section //
   // ///////////////// //
 
-  private ITranslationProvider               translationProvider;
+  /**
+   * Gets the iconFactory.
+   * 
+   * @return the iconFactory.
+   */
+  public IIconFactory<SIcon> getIconFactory() {
+    return iconFactory;
+  }
 
-  private ITreeSelectionModelBinder          treeSelectionModelBinder;
+  /**
+   * Sets the actionFactory.
+   * 
+   * @param actionFactory
+   *            the actionFactory to set.
+   */
+  public void setActionFactory(IActionFactory<Action, SComponent> actionFactory) {
+    this.actionFactory = actionFactory;
+  }
+
+  /**
+   * Sets the binaryPropertyInfoAction.
+   * 
+   * @param binaryPropertyInfoAction
+   *            the binaryPropertyInfoAction to set.
+   */
+  public void setBinaryPropertyInfoAction(
+      IDisplayableAction binaryPropertyInfoAction) {
+    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
+  }
+
+  /**
+   * Sets the connectorFactory.
+   * 
+   * @param connectorFactory
+   *            the connectorFactory to set.
+   */
+  public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
+    this.connectorFactory = connectorFactory;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *            the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<SIcon> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the listSelectionModelBinder.
+   * 
+   * @param listSelectionModelBinder
+   *            the listSelectionModelBinder to set.
+   */
+  public void setListSelectionModelBinder(
+      IListSelectionModelBinder listSelectionModelBinder) {
+    this.listSelectionModelBinder = listSelectionModelBinder;
+  }
+
+  /**
+   * Sets the lovAction.
+   * 
+   * @param lovAction
+   *            the lovAction to set.
+   */
+  public void setLovAction(IDisplayableAction lovAction) {
+    this.lovAction = lovAction;
+  }
+
+  /**
+   * Sets the masterDetailBinder.
+   * 
+   * @param masterDetailBinder
+   *            the masterDetailBinder to set.
+   */
+  public void setMasterDetailBinder(IMasterDetailBinder masterDetailBinder) {
+    this.masterDetailBinder = masterDetailBinder;
+  }
+
+  /**
+   * Sets the maxCharacterLength.
+   * 
+   * @param maxCharacterLength
+   *            the maxCharacterLength to set.
+   */
+  public void setMaxCharacterLength(int maxCharacterLength) {
+    this.maxCharacterLength = maxCharacterLength;
+  }
+
+  /**
+   * Sets the mvcBinder.
+   * 
+   * @param mvcBinder
+   *            the mvcBinder to set.
+   */
+  public void setMvcBinder(IMvcBinder mvcBinder) {
+    this.mvcBinder = mvcBinder;
+  }
+
+  /**
+   * Sets the openFileAsBinaryPropertyAction.
+   * 
+   * @param openFileAsBinaryPropertyAction
+   *            the openFileAsBinaryPropertyAction to set.
+   */
+  public void setOpenFileAsBinaryPropertyAction(
+      IDisplayableAction openFileAsBinaryPropertyAction) {
+    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
+  }
+
+  /**
+   * Sets the resetPropertyAction.
+   * 
+   * @param resetPropertyAction
+   *            the resetPropertyAction to set.
+   */
+  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
+    this.resetPropertyAction = resetPropertyAction;
+  }
+
+  /**
+   * Sets the saveBinaryPropertyAsFileAction.
+   * 
+   * @param saveBinaryPropertyAsFileAction
+   *            the saveBinaryPropertyAsFileAction to set.
+   */
+  public void setSaveBinaryPropertyAsFileAction(
+      IDisplayableAction saveBinaryPropertyAsFileAction) {
+    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
+  }
+
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *            the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
+  /**
+   * Sets the treeSelectionModelBinder.
+   * 
+   * @param treeSelectionModelBinder
+   *            the treeSelectionModelBinder to set.
+   */
+  public void setTreeSelectionModelBinder(
+      ITreeSelectionModelBinder treeSelectionModelBinder) {
+    this.treeSelectionModelBinder = treeSelectionModelBinder;
+  }
+
+  /**
+   * Creates a date field.
+   * 
+   * @return the created date field.
+   */
+  protected XCalendar createDateField() {
+    XCalendar dateField = new XCalendar();
+    dateField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return dateField;
+  }
+
+  // ////////////////// //
+  // Collection Section //
+  // ////////////////// //
+
+  /**
+   * Creates an action field.
+   * 
+   * @param showTextField
+   *            is the text field visible to the user.
+   * @return the created action field.
+   */
+  protected SActionField createSActionField(boolean showTextField) {
+    SActionField actionField = new SActionField(showTextField);
+    actionField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return actionField;
+  }
+
+  /**
+   * Creates a button.
+   * 
+   * @return the created button.
+   */
+  protected SButton createSButton() {
+    SButton button = new SButton();
+    return button;
+  }
+
+  /**
+   * Creates a check box.
+   * 
+   * @return the created check box.
+   */
+  protected SCheckBox createSCheckBox() {
+    SCheckBox checkBox = new SCheckBox();
+    checkBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return checkBox;
+  }
+
+  /**
+   * Creates an color picker.
+   * 
+   * @return the created color picker.
+   */
+  protected SColorPicker createSColorPicker() {
+    return new SColorPicker();
+  }
+
+  /**
+   * Creates a combo box.
+   * 
+   * @return the created combo box.
+   */
+  protected SComboBox createSComboBox() {
+    SComboBox comboBox = new SComboBox();
+    comboBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return comboBox;
+  }
+
+  /**
+   * Creates a security panel.
+   * 
+   * @return the created security panel.
+   */
+  protected SPanel createSecurityPanel() {
+    SPanel panel = createSPanel();
+    panel.setLayout(new SBorderLayout());
+    SLabel label = createSLabel();
+    label.setHorizontalAlignment(SConstants.CENTER);
+    label.setVerticalAlignment(SConstants.CENTER);
+    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
+    panel.add(label, SBorderLayout.CENTER);
+    return panel;
+  }
+
+  /**
+   * Creates a label.
+   * 
+   * @return the created label.
+   */
+  protected SLabel createSLabel() {
+    return new SLabel();
+  }
+
+  /**
+   * Creates a list.
+   * 
+   * @return the created list.
+   */
+  protected SList createSList() {
+    SList list = new SList();
+    return list;
+  }
+
+  /**
+   * Creates a menu item.
+   * 
+   * @return the created menu item.
+   */
+  protected SMenuItem createSMenuItem() {
+    return new SMenuItem();
+  }
+
+  /**
+   * Creates a panel.
+   * 
+   * @return the created panel.
+   */
+  protected SPanel createSPanel() {
+    SPanel panel = new SPanel();
+    panel.setPreferredSize(SDimension.FULLAREA);
+    return panel;
+  }
+
+  /**
+   * Creates a password field.
+   * 
+   * @return the created password field.
+   */
+  protected SPasswordField createSPasswordField() {
+    SPasswordField passwordField = new SPasswordField();
+    passwordField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return passwordField;
+  }
+
+  /**
+   * Creates a popup menu.
+   * 
+   * @return the created popup menu.
+   */
+  protected SPopupMenu createSPopupMenu() {
+    return new SPopupMenu();
+  }
+
+  /**
+   * Creates a scroll pane.
+   * 
+   * @return the created scroll pane.
+   */
+  protected SScrollPane createSScrollPane() {
+    SScrollPane scrollPane = new SScrollPane();
+    scrollPane.setMode(SScrollPane.MODE_COMPLETE);
+    scrollPane.setPreferredSize(SDimension.FULLAREA);
+    return scrollPane;
+  }
+
+  /**
+   * Creates a tabbed pane.
+   * 
+   * @return the created tabbed pane.
+   */
+  protected STabbedPane createSTabbedPane() {
+    STabbedPane tabbedPane = new STabbedPane();
+    tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
+    tabbedPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    tabbedPane.setPreferredSize(SDimension.FULLAREA);
+    return tabbedPane;
+  }
+
+  /**
+   * Creates a table.
+   * 
+   * @return the created table.
+   */
+  protected STable createSTable() {
+    STable table = new XTable() {
+
+      private static final long serialVersionUID = -8821125434835138650L;
+      private SCellRendererPane cellRendererPane = new SCellRendererPane() {
+
+                                                   private static final long serialVersionUID = 3159574506651887983L;
+
+                                                   @Override
+                                                   public void writeComponent(
+                                                       Device d, SComponent c,
+                                                       SComponent p)
+                                                       throws IOException {
+                                                     if (c != null
+                                                         && p instanceof STable) {
+                                                       STable renderedTable = (STable) p;
+                                                       if (renderedTable
+                                                           .isEditing()
+                                                           && renderedTable
+                                                               .getEditorComponent() == c) {
+                                                         addComponent(c);
+                                                         c.write(d);
+                                                       } else {
+                                                         super.writeComponent(
+                                                             d, c, p);
+                                                       }
+                                                     } else {
+                                                       super.writeComponent(d,
+                                                           c, p);
+                                                     }
+                                                   }
+                                                 };
+
+      @Override
+      public SCellRendererPane getCellRendererPane() {
+        return cellRendererPane;
+      }
+    };
+    table.setVerticalAlignment(SConstants.TOP_ALIGN);
+    table.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    table.setSelectable(true);
+    return table;
+  }
+
+  /**
+   * Creates a text area.
+   * 
+   * @return the created text area.
+   */
+  protected STextArea createSTextArea() {
+    STextArea textArea = new STextArea();
+    textArea.setPreferredSize(SDimension.FULLAREA);
+    return textArea;
+  }
+
+  /**
+   * Creates a text field.
+   * 
+   * @return the created text field.
+   */
+  protected STextField createSTextField() {
+    STextField textField = new STextField();
+    textField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return textField;
+  }
+
+  /**
+   * Creates a tool bar.
+   * 
+   * @return the created tool bar.
+   */
+  protected SToolBar createSToolBar() {
+    SToolBar toolBar = new SToolBar();
+    toolBar.setBorder(new SEmptyBorder(2, 2, 2, 2));
+    toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return toolBar;
+  }
+
+  /**
+   * Creates a tree.
+   * 
+   * @return the created tree.
+   */
+  protected STree createSTree() {
+    STree tree = new STree();
+    tree.setVerticalAlignment(SConstants.TOP_ALIGN);
+    tree.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return tree;
+  }
+
+  /**
+   * Decorates the created view with the apropriate border.
+   * 
+   * @param view
+   *            the view to descorate.
+   * @param locale
+   *            the locale to use.
+   */
+  protected void decorateWithBorder(IView<SComponent> view, Locale locale) {
+    switch (view.getDescriptor().getBorderType()) {
+      case IViewDescriptor.SIMPLE:
+        view.getPeer().setBorder(new SEtchedBorder());
+        break;
+      case IViewDescriptor.TITLED:
+        view.getPeer().setBorder(
+            new STitledBorder(new SEtchedBorder(), view.getDescriptor()
+                .getI18nName(getTranslationProvider(), locale)));
+        break;
+      default:
+        break;
+    }
+  }
+
+  /**
+   * Gets the translationProvider.
+   * 
+   * @return the translationProvider.
+   */
+  protected ITranslationProvider getTranslationProvider() {
+    return translationProvider;
+  }
 
   private void adjustSizes(SComponent component, IFormatter formatter,
       Object templateValue) {
     adjustSizes(component, formatter, templateValue, 32);
   }
+
+  // ///////////// //
+  // Image Section //
+  // ///////////// //
 
   private void adjustSizes(SComponent component, IFormatter formatter,
       Object templateValue, int extraWidth) {
@@ -454,9 +809,17 @@ public class DefaultWingsViewFactory implements
     component.setPreferredSize(size);
   }
 
+  // /////////////// //
+  // Nesting Section //
+  // /////////////// //
+
   private String computeEnumerationKey(String keyPrefix, Object value) {
     return keyPrefix + "." + value;
   }
+
+  // ///////////////// //
+  // SComponent Section //
+  // ///////////////// //
 
   private int computePixelWidth(SComponent component, int characterLength) {
     int charLength = maxCharacterLength + 2;
@@ -680,7 +1043,7 @@ public class DefaultWingsViewFactory implements
   }
 
   private IView<SComponent> createCollectionPropertyView(
-      ICollectionPropertyDescriptor propertyDescriptor,
+      ICollectionPropertyDescriptor<?> propertyDescriptor,
       List<String> renderedChildProperties, IActionHandler actionHandler,
       @SuppressWarnings("unused")
       Locale locale) {
@@ -711,13 +1074,9 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
-  // ////////////////// //
-  // Collection Section //
-  // ////////////////// //
-
   private STableCellRenderer createCollectionTableCellRenderer(
       @SuppressWarnings("unused")
-      ICollectionPropertyDescriptor propertyDescriptor,
+      ICollectionPropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused")
       Locale locale) {
     return null;
@@ -762,7 +1121,7 @@ public class DefaultWingsViewFactory implements
   }
 
   private IValueConnector createColumnConnector(String columnId,
-      IComponentDescriptor descriptor) {
+      IComponentDescriptor<?> descriptor) {
     IPropertyDescriptor propertyDescriptor = descriptor
         .getPropertyDescriptor(columnId);
     if (propertyDescriptor == null) {
@@ -771,7 +1130,7 @@ public class DefaultWingsViewFactory implements
     }
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return connectorFactory.createCompositeValueConnector(columnId,
-          ((IReferencePropertyDescriptor) propertyDescriptor)
+          ((IReferencePropertyDescriptor<?>) propertyDescriptor)
               .getReferencedDescriptor().getToStringProperty());
     }
     return connectorFactory.createValueConnector(propertyDescriptor.getName());
@@ -798,7 +1157,7 @@ public class DefaultWingsViewFactory implements
     for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
       String propertyName = propertyViewDescriptor.getName();
-      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
+      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
           .getPropertyDescriptor(propertyName);
       if (propertyDescriptor == null) {
@@ -922,7 +1281,7 @@ public class DefaultWingsViewFactory implements
   private ICollectionConnectorProvider createCompositeNodeGroupConnector(
       ITreeViewDescriptor viewDescriptor,
       ICompositeTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionDescriptorProvider nodeGroupModelDescriptor = ((ICollectionDescriptorProvider) subtreeViewDescriptor
+    ICollectionDescriptorProvider<?> nodeGroupModelDescriptor = ((ICollectionDescriptorProvider<?>) subtreeViewDescriptor
         .getNodeGroupDescriptor().getModelDescriptor());
     IConfigurableCollectionConnectorListProvider nodeGroupPrototypeConnector = connectorFactory
         .createConfigurableCollectionConnectorListProvider(
@@ -1026,17 +1385,6 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
-  /**
-   * Creates a date field.
-   *
-   * @return the created date field.
-   */
-  protected XCalendar createDateField() {
-    XCalendar dateField = new XCalendar();
-    dateField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return dateField;
-  }
-
   private DateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
@@ -1124,6 +1472,174 @@ public class DefaultWingsViewFactory implements
         propertyDescriptor, locale));
   }
 
+  // ////////////////// //
+  // Popup menu Section //
+  // ////////////////// //
+
+  // private final class PopupListener implements SMouseListener {
+  //
+  // private SComponent sourceComponent;
+  // private IView<SComponent> view;
+  // private IActionHandler actionHandler;
+  // private Locale locale;
+  //
+  // /**
+  // * Constructs a new <code>PopupListener</code> instance.
+  // *
+  // * @param sourceComponent
+  // * @param view
+  // * @param actionHandler
+  // * @param locale
+  // */
+  // public PopupListener(SComponent sourceComponent, IView<SComponent> view,
+  // IActionHandler actionHandler, Locale locale) {
+  // this.sourceComponent = sourceComponent;
+  // this.view = view;
+  // this.actionHandler = actionHandler;
+  // this.locale = locale;
+  // }
+  //
+  // /**
+  // * {@inheritDoc}
+  // */
+  // public void mouseClicked(SMouseEvent evt) {
+  // maybeShowPopup(evt);
+  // }
+  //
+  // private void maybeShowPopup(SMouseEvent evt) {
+  // // FIXME popup trigger
+  // showPopupMenu(sourceComponent, view, evt, actionHandler, locale);
+  // }
+  // }
+  //
+  // private void showPopupMenu(SComponent sourceComponent,
+  // IView<SComponent> view, SMouseEvent evt, IActionHandler actionHandler,
+  // Locale locale) {
+  // if (sourceComponent instanceof STree) {
+  // showSTreePopupMenu((STree) sourceComponent, view, evt, actionHandler,
+  // locale);
+  // } else if (sourceComponent instanceof STable) {
+  // showSTablePopupMenu((STable) sourceComponent, view, evt, actionHandler,
+  // locale);
+  // }
+  // }
+  //
+  // private void showSTreePopupMenu(STree tree, IView<SComponent> treeView,
+  // SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
+  // TreePath path = tree.getPathForRow(tree.getRowForLocation(evt.getPoint()));
+  // if (path == null) {
+  // return;
+  // }
+  //
+  // if (!tree.isPathSelected(path)) {
+  // tree.setSelectionPath(path);
+  // }
+  // if (path.getLastPathComponent() instanceof ICollectionConnector) {
+  // TreePath[] allNodePaths = new TreePath[((ICollectionConnector) path
+  // .getLastPathComponent()).getChildConnectorCount()];
+  // for (int i = 0; i < allNodePaths.length; i++) {
+  // allNodePaths[i] = path.pathByAddingChild(((ICollectionConnector) path
+  // .getLastPathComponent()).getChildConnector(i));
+  // }
+  // tree.addSelectionPaths(allNodePaths);
+  // }
+  //
+  // IValueConnector viewConnector = (IValueConnector) path
+  // .getLastPathComponent();
+  // IModelDescriptor modelDescriptor;
+  // Map<String, List<IDisplayableAction>> actionMap;
+  // IViewDescriptor viewDescriptor;
+  // if (viewConnector == tree.getModel().getRoot()) {
+  // modelDescriptor = treeView.getDescriptor().getModelDescriptor();
+  // actionMap = treeView.getDescriptor().getActions();
+  // viewDescriptor = treeView.getDescriptor();
+  // } else {
+  // viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
+  // ((ITreeViewDescriptor) treeView.getDescriptor())
+  // .getRootSubtreeDescriptor(),
+  // getDescriptorPathFromConnectorTreePath(path))
+  // .getNodeGroupDescriptor();
+  // modelDescriptor = viewDescriptor.getModelDescriptor();
+  // actionMap = viewDescriptor.getActions();
+  // if (!(viewConnector instanceof ICollectionConnector)) {
+  // viewConnector = viewConnector.getParentConnector();
+  // }
+  // }
+  //
+  // if (actionMap == null) {
+  // return;
+  // }
+  //
+  // SPopupMenu popupMenu = createSPopupMenu(tree, actionMap, modelDescriptor,
+  // viewDescriptor, viewConnector, actionHandler, locale);
+  // // FIXME popup
+  // popupMenu.setVisible(true);
+  // }
+  //
+  // private void showSTablePopupMenu(STable table, IView<SComponent> tableView,
+  // SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
+  // int row = table.rowAtPoint(evt.getPoint());
+  // if (row < 0) {
+  // return;
+  // }
+  //
+  // if (!table.isRowSelected(row)) {
+  // table.setSelectedRow(row);
+  // }
+  //
+  // IValueConnector elementConnector = tableView.getConnector();
+  // IModelDescriptor modelDescriptor = tableView.getDescriptor()
+  // .getModelDescriptor();
+  // Map<String, List<IDisplayableAction>> actionMap =
+  // ((ICollectionViewDescriptor) tableView
+  // .getDescriptor()).getActions();
+  //
+  // if (actionMap == null) {
+  // return;
+  // }
+  //
+  // SPopupMenu popupMenu = createSPopupMenu(table, actionMap, modelDescriptor,
+  // tableView.getDescriptor(), elementConnector, actionHandler, locale);
+  // // FIXME popup
+  // popupMenu.setVisible(true);
+  // }
+  //
+  // private SPopupMenu createSPopupMenu(SComponent sourceComponent,
+  // Map<String, List<IDisplayableAction>> actionMap,
+  // IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
+  // IValueConnector viewConnector, IActionHandler actionHandler, Locale locale)
+  // {
+  // SPopupMenu popupMenu = createSPopupMenu();
+  // SLabel titleLabel = createSLabel();
+  // titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
+  // locale));
+  // titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
+  // IIconFactory.TINY_ICON_SIZE));
+  // titleLabel.setHorizontalAlignment(SConstants.CENTER);
+  // titleLabel.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+  // popupMenu.add(titleLabel);
+  // popupMenu.add(new SSeparator());
+  // for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = actionMap
+  // .entrySet().iterator(); iter.hasNext();) {
+  // Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
+  // for (IDisplayableAction action : nextActionSet.getValue()) {
+  // Action swingAction = actionFactory.createAction(action, actionHandler,
+  // sourceComponent, modelDescriptor, viewConnector, locale);
+  // SMenuItem actionItem = createSMenuItem();
+  // actionItem.setAction(swingAction);
+  // popupMenu.add(actionItem);
+  // }
+  // if (iter.hasNext()) {
+  // popupMenu.add(new SSeparator());
+  // }
+  // }
+  // return popupMenu;
+  // }
+
+  // /////////////// //
+  // Helpers Section //
+  // /////////////// //
+
   private IFormatter createDurationFormatter(@SuppressWarnings("unused")
   IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
     return new DurationFormatter(locale);
@@ -1165,19 +1681,11 @@ public class DefaultWingsViewFactory implements
     return constructView(viewComponent, null, connector);
   }
 
-  // ///////////// //
-  // Image Section //
-  // ///////////// //
-
   private STableCellRenderer createEnumerationTableCellRenderer(
       IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
     return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
         locale);
   }
-
-  // /////////////// //
-  // Nesting Section //
-  // /////////////// //
 
   private ICompositeView<SComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
@@ -1214,10 +1722,6 @@ public class DefaultWingsViewFactory implements
     view.setChildren(childrenViews);
     return view;
   }
-
-  // ///////////////// //
-  // SComponent Section //
-  // ///////////////// //
 
   private IFormatter createFormatter(Format format) {
     return new FormatAdapter(format);
@@ -1343,7 +1847,7 @@ public class DefaultWingsViewFactory implements
       @SuppressWarnings("unused")
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
-    ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) viewDescriptor
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = connectorFactory
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
@@ -1560,7 +2064,7 @@ public class DefaultWingsViewFactory implements
   }
 
   private IView<SComponent> createReferencePropertyView(
-      IReferencePropertyDescriptor propertyDescriptor,
+      IReferencePropertyDescriptor<?> propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     SActionField viewComponent = createSActionField(true);
     SReferenceFieldConnector connector = new SReferenceFieldConnector(
@@ -1592,7 +2096,7 @@ public class DefaultWingsViewFactory implements
 
   private STableCellRenderer createReferenceTableCellRenderer(
       @SuppressWarnings("unused")
-      IReferencePropertyDescriptor propertyDescriptor,
+      IReferencePropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused")
       Locale locale) {
     return null;
@@ -1606,11 +2110,11 @@ public class DefaultWingsViewFactory implements
 
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       view = createReferencePropertyView(
-          (IReferencePropertyDescriptor) propertyDescriptor, actionHandler,
+          (IReferencePropertyDescriptor<?>) propertyDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       view = createCollectionPropertyView(
-          (ICollectionPropertyDescriptor) propertyDescriptor,
+          (ICollectionPropertyDescriptor<?>) propertyDescriptor,
           renderedChildProperties, actionHandler, locale);
     }
     return view;
@@ -1622,256 +2126,18 @@ public class DefaultWingsViewFactory implements
 
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       cellRenderer = createReferenceTableCellRenderer(
-          (IReferencePropertyDescriptor) propertyDescriptor, locale);
+          (IReferencePropertyDescriptor<?>) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       cellRenderer = createCollectionTableCellRenderer(
-          (ICollectionPropertyDescriptor) propertyDescriptor, locale);
+          (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }
     return cellRenderer;
-  }
-
-  /**
-   * Creates an action field.
-   *
-   * @param showTextField
-   *          is the text field visible to the user.
-   * @return the created action field.
-   */
-  protected SActionField createSActionField(boolean showTextField) {
-    SActionField actionField = new SActionField(showTextField);
-    actionField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return actionField;
-  }
-
-  /**
-   * Creates a button.
-   *
-   * @return the created button.
-   */
-  protected SButton createSButton() {
-    SButton button = new SButton();
-    return button;
-  }
-
-  // ////////////////// //
-  // Popup menu Section //
-  // ////////////////// //
-
-  // private final class PopupListener implements SMouseListener {
-  //
-  // private SComponent sourceComponent;
-  // private IView<SComponent> view;
-  // private IActionHandler actionHandler;
-  // private Locale locale;
-  //
-  // /**
-  // * Constructs a new <code>PopupListener</code> instance.
-  // *
-  // * @param sourceComponent
-  // * @param view
-  // * @param actionHandler
-  // * @param locale
-  // */
-  // public PopupListener(SComponent sourceComponent, IView<SComponent> view,
-  // IActionHandler actionHandler, Locale locale) {
-  // this.sourceComponent = sourceComponent;
-  // this.view = view;
-  // this.actionHandler = actionHandler;
-  // this.locale = locale;
-  // }
-  //
-  // /**
-  // * {@inheritDoc}
-  // */
-  // public void mouseClicked(SMouseEvent evt) {
-  // maybeShowPopup(evt);
-  // }
-  //
-  // private void maybeShowPopup(SMouseEvent evt) {
-  // // FIXME popup trigger
-  // showPopupMenu(sourceComponent, view, evt, actionHandler, locale);
-  // }
-  // }
-  //
-  // private void showPopupMenu(SComponent sourceComponent,
-  // IView<SComponent> view, SMouseEvent evt, IActionHandler actionHandler,
-  // Locale locale) {
-  // if (sourceComponent instanceof STree) {
-  // showSTreePopupMenu((STree) sourceComponent, view, evt, actionHandler,
-  // locale);
-  // } else if (sourceComponent instanceof STable) {
-  // showSTablePopupMenu((STable) sourceComponent, view, evt, actionHandler,
-  // locale);
-  // }
-  // }
-  //
-  // private void showSTreePopupMenu(STree tree, IView<SComponent> treeView,
-  // SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
-  // TreePath path = tree.getPathForRow(tree.getRowForLocation(evt.getPoint()));
-  // if (path == null) {
-  // return;
-  // }
-  //
-  // if (!tree.isPathSelected(path)) {
-  // tree.setSelectionPath(path);
-  // }
-  // if (path.getLastPathComponent() instanceof ICollectionConnector) {
-  // TreePath[] allNodePaths = new TreePath[((ICollectionConnector) path
-  // .getLastPathComponent()).getChildConnectorCount()];
-  // for (int i = 0; i < allNodePaths.length; i++) {
-  // allNodePaths[i] = path.pathByAddingChild(((ICollectionConnector) path
-  // .getLastPathComponent()).getChildConnector(i));
-  // }
-  // tree.addSelectionPaths(allNodePaths);
-  // }
-  //
-  // IValueConnector viewConnector = (IValueConnector) path
-  // .getLastPathComponent();
-  // IModelDescriptor modelDescriptor;
-  // Map<String, List<IDisplayableAction>> actionMap;
-  // IViewDescriptor viewDescriptor;
-  // if (viewConnector == tree.getModel().getRoot()) {
-  // modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-  // actionMap = treeView.getDescriptor().getActions();
-  // viewDescriptor = treeView.getDescriptor();
-  // } else {
-  // viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
-  // ((ITreeViewDescriptor) treeView.getDescriptor())
-  // .getRootSubtreeDescriptor(),
-  // getDescriptorPathFromConnectorTreePath(path))
-  // .getNodeGroupDescriptor();
-  // modelDescriptor = viewDescriptor.getModelDescriptor();
-  // actionMap = viewDescriptor.getActions();
-  // if (!(viewConnector instanceof ICollectionConnector)) {
-  // viewConnector = viewConnector.getParentConnector();
-  // }
-  // }
-  //
-  // if (actionMap == null) {
-  // return;
-  // }
-  //
-  // SPopupMenu popupMenu = createSPopupMenu(tree, actionMap, modelDescriptor,
-  // viewDescriptor, viewConnector, actionHandler, locale);
-  // // FIXME popup
-  // popupMenu.setVisible(true);
-  // }
-  //
-  // private void showSTablePopupMenu(STable table, IView<SComponent> tableView,
-  // SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
-  // int row = table.rowAtPoint(evt.getPoint());
-  // if (row < 0) {
-  // return;
-  // }
-  //
-  // if (!table.isRowSelected(row)) {
-  // table.setSelectedRow(row);
-  // }
-  //
-  // IValueConnector elementConnector = tableView.getConnector();
-  // IModelDescriptor modelDescriptor = tableView.getDescriptor()
-  // .getModelDescriptor();
-  // Map<String, List<IDisplayableAction>> actionMap =
-  // ((ICollectionViewDescriptor) tableView
-  // .getDescriptor()).getActions();
-  //
-  // if (actionMap == null) {
-  // return;
-  // }
-  //
-  // SPopupMenu popupMenu = createSPopupMenu(table, actionMap, modelDescriptor,
-  // tableView.getDescriptor(), elementConnector, actionHandler, locale);
-  // // FIXME popup
-  // popupMenu.setVisible(true);
-  // }
-  //
-  // private SPopupMenu createSPopupMenu(SComponent sourceComponent,
-  // Map<String, List<IDisplayableAction>> actionMap,
-  // IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
-  // IValueConnector viewConnector, IActionHandler actionHandler, Locale locale)
-  // {
-  // SPopupMenu popupMenu = createSPopupMenu();
-  // SLabel titleLabel = createSLabel();
-  // titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
-  // locale));
-  // titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-  // IIconFactory.TINY_ICON_SIZE));
-  // titleLabel.setHorizontalAlignment(SConstants.CENTER);
-  // titleLabel.setHorizontalAlignment(SConstants.CENTER_ALIGN);
-  // popupMenu.add(titleLabel);
-  // popupMenu.add(new SSeparator());
-  // for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = actionMap
-  // .entrySet().iterator(); iter.hasNext();) {
-  // Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
-  // for (IDisplayableAction action : nextActionSet.getValue()) {
-  // Action swingAction = actionFactory.createAction(action, actionHandler,
-  // sourceComponent, modelDescriptor, viewConnector, locale);
-  // SMenuItem actionItem = createSMenuItem();
-  // actionItem.setAction(swingAction);
-  // popupMenu.add(actionItem);
-  // }
-  // if (iter.hasNext()) {
-  // popupMenu.add(new SSeparator());
-  // }
-  // }
-  // return popupMenu;
-  // }
-
-  // /////////////// //
-  // Helpers Section //
-  // /////////////// //
-
-  /**
-   * Creates a check box.
-   *
-   * @return the created check box.
-   */
-  protected SCheckBox createSCheckBox() {
-    SCheckBox checkBox = new SCheckBox();
-    checkBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return checkBox;
-  }
-
-  /**
-   * Creates an color picker.
-   *
-   * @return the created color picker.
-   */
-  protected SColorPicker createSColorPicker() {
-    return new SColorPicker();
-  }
-
-  /**
-   * Creates a combo box.
-   *
-   * @return the created combo box.
-   */
-  protected SComboBox createSComboBox() {
-    SComboBox comboBox = new SComboBox();
-    comboBox.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return comboBox;
-  }
-
-  /**
-   * Creates a security panel.
-   *
-   * @return the created security panel.
-   */
-  protected SPanel createSecurityPanel() {
-    SPanel panel = createSPanel();
-    panel.setLayout(new SBorderLayout());
-    SLabel label = createSLabel();
-    label.setHorizontalAlignment(SConstants.CENTER);
-    label.setVerticalAlignment(SConstants.CENTER);
-    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
-    panel.add(label, SBorderLayout.CENTER);
-    return panel;
   }
 
   private ICollectionConnectorProvider createSimpleNodeGroupConnector(
       ITreeViewDescriptor viewDescriptor,
       ISimpleTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionPropertyDescriptor nodeGroupModelDescriptor = (ICollectionPropertyDescriptor) subtreeViewDescriptor
+    ICollectionPropertyDescriptor<?> nodeGroupModelDescriptor = (ICollectionPropertyDescriptor<?>) subtreeViewDescriptor
         .getNodeGroupDescriptor().getModelDescriptor();
     IConfigurableCollectionConnectorProvider nodeGroupPrototypeConnector = connectorFactory
         .createConfigurableCollectionConnectorProvider(nodeGroupModelDescriptor
@@ -1893,34 +2159,6 @@ public class DefaultWingsViewFactory implements
     return nodeGroupCollectionConnector;
   }
 
-  /**
-   * Creates a label.
-   *
-   * @return the created label.
-   */
-  protected SLabel createSLabel() {
-    return new SLabel();
-  }
-
-  /**
-   * Creates a list.
-   *
-   * @return the created list.
-   */
-  protected SList createSList() {
-    SList list = new SList();
-    return list;
-  }
-
-  /**
-   * Creates a menu item.
-   *
-   * @return the created menu item.
-   */
-  protected SMenuItem createSMenuItem() {
-    return new SMenuItem();
-  }
-
   private IView<SComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
 
@@ -1928,28 +2166,6 @@ public class DefaultWingsViewFactory implements
       Locale locale) {
 
     return createTextPropertyView(propertyDescriptor, actionHandler, locale);
-  }
-
-  /**
-   * Creates a panel.
-   *
-   * @return the created panel.
-   */
-  protected SPanel createSPanel() {
-    SPanel panel = new SPanel();
-    panel.setPreferredSize(SDimension.FULLAREA);
-    return panel;
-  }
-
-  /**
-   * Creates a password field.
-   *
-   * @return the created password field.
-   */
-  protected SPasswordField createSPasswordField() {
-    SPasswordField passwordField = new SPasswordField();
-    passwordField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return passwordField;
   }
 
   private ICompositeView<SComponent> createSplitView(
@@ -2014,135 +2230,6 @@ public class DefaultWingsViewFactory implements
     }
     view.setChildren(childrenViews);
     return view;
-  }
-
-  /**
-   * Creates a popup menu.
-   *
-   * @return the created popup menu.
-   */
-  protected SPopupMenu createSPopupMenu() {
-    return new SPopupMenu();
-  }
-
-  /**
-   * Creates a scroll pane.
-   *
-   * @return the created scroll pane.
-   */
-  protected SScrollPane createSScrollPane() {
-    SScrollPane scrollPane = new SScrollPane();
-    scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-    scrollPane.setPreferredSize(SDimension.FULLAREA);
-    return scrollPane;
-  }
-
-  /**
-   * Creates a tabbed pane.
-   *
-   * @return the created tabbed pane.
-   */
-  protected STabbedPane createSTabbedPane() {
-    STabbedPane tabbedPane = new STabbedPane();
-    tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
-    tabbedPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    tabbedPane.setPreferredSize(SDimension.FULLAREA);
-    return tabbedPane;
-  }
-
-  /**
-   * Creates a table.
-   *
-   * @return the created table.
-   */
-  protected STable createSTable() {
-    STable table = new XTable() {
-
-      private static final long serialVersionUID = -8821125434835138650L;
-      private SCellRendererPane cellRendererPane = new SCellRendererPane() {
-
-                                                   private static final long serialVersionUID = 3159574506651887983L;
-
-                                                   @Override
-                                                   public void writeComponent(
-                                                       Device d, SComponent c,
-                                                       SComponent p)
-                                                       throws IOException {
-                                                     if (c != null
-                                                         && p instanceof STable) {
-                                                       STable renderedTable = (STable) p;
-                                                       if (renderedTable
-                                                           .isEditing()
-                                                           && renderedTable
-                                                               .getEditorComponent() == c) {
-                                                         addComponent(c);
-                                                         c.write(d);
-                                                       } else {
-                                                         super.writeComponent(
-                                                             d, c, p);
-                                                       }
-                                                     } else {
-                                                       super.writeComponent(d,
-                                                           c, p);
-                                                     }
-                                                   }
-                                                 };
-
-      @Override
-      public SCellRendererPane getCellRendererPane() {
-        return cellRendererPane;
-      }
-    };
-    table.setVerticalAlignment(SConstants.TOP_ALIGN);
-    table.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    table.setSelectable(true);
-    return table;
-  }
-
-  /**
-   * Creates a text area.
-   *
-   * @return the created text area.
-   */
-  protected STextArea createSTextArea() {
-    STextArea textArea = new STextArea();
-    textArea.setPreferredSize(SDimension.FULLAREA);
-    return textArea;
-  }
-
-  /**
-   * Creates a text field.
-   *
-   * @return the created text field.
-   */
-  protected STextField createSTextField() {
-    STextField textField = new STextField();
-    textField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return textField;
-  }
-
-  /**
-   * Creates a tool bar.
-   *
-   * @return the created tool bar.
-   */
-  protected SToolBar createSToolBar() {
-    SToolBar toolBar = new SToolBar();
-    toolBar.setBorder(new SEmptyBorder(2, 2, 2, 2));
-    toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return toolBar;
-  }
-
-  /**
-   * Creates a tree.
-   *
-   * @return the created tree.
-   */
-  protected STree createSTree() {
-    STree tree = new STree();
-    tree.setVerticalAlignment(SConstants.TOP_ALIGN);
-    tree.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return tree;
   }
 
   private IView<SComponent> createStringPropertyView(
@@ -2218,7 +2305,7 @@ public class DefaultWingsViewFactory implements
   private IView<SComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) viewDescriptor
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = connectorFactory
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
@@ -2229,7 +2316,7 @@ public class DefaultWingsViewFactory implements
             rowConnectorPrototype);
     STable viewComponent = createSTable();
 
-    Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
+    Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
     List<String> columnConnectorKeys = new ArrayList<String>();
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
@@ -2479,147 +2566,9 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public IView<SComponent> createView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<SComponent> view = null;
-    if (viewDescriptor instanceof IComponentViewDescriptor) {
-      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof INestingViewDescriptor) {
-      view = createNestingView((INestingViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IImageViewDescriptor) {
-      view = createImageView((IImageViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
-      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
-      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICardViewDescriptor) {
-      view = createCardView((ICardViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
-      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    }
-    try {
-      actionHandler.checkAccess(viewDescriptor);
-      if (viewDescriptor.getForeground() != null) {
-        view.getPeer().setForeground(viewDescriptor.getForeground());
-      }
-      if (viewDescriptor.getBackground() != null) {
-        view.getPeer().setBackground(viewDescriptor.getBackground());
-      }
-      if (viewDescriptor.getFont() != null) {
-        view.getPeer().setFont(
-            new SFont(viewDescriptor.getFont().getFontName(), viewDescriptor
-                .getFont().getStyle(), viewDescriptor.getFont().getSize()));
-      }
-      if (viewDescriptor.isReadOnly()) {
-        view.getConnector().setLocallyWritable(false);
-      }
-      if (viewDescriptor.getReadabilityGates() != null) {
-        for (IGate gate : viewDescriptor.getReadabilityGates()) {
-          view.getConnector().addReadabilityGate(gate.clone());
-        }
-      }
-      if (viewDescriptor.getWritabilityGates() != null) {
-        for (IGate gate : viewDescriptor.getWritabilityGates()) {
-          view.getConnector().addWritabilityGate(gate.clone());
-        }
-      }
-      if (viewDescriptor.getDescription() != null) {
-        view.getPeer().setToolTipText(
-            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-                + TOOLTIP_ELLIPSIS);
-      }
-      if (viewDescriptor.getActions() != null) {
-        SToolBar toolBar = createSToolBar();
-        for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-            .getActions().entrySet().iterator(); iter.hasNext();) {
-          Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
-              .next();
-          for (IDisplayableAction action : nextActionSet.getValue()) {
-            Action swingAction = actionFactory.createAction(action,
-                actionHandler, view, locale);
-            SButton actionButton = createSButton();
-            actionButton.setShowAsFormComponent(false);
-            actionButton.setAction(swingAction);
-            if (action.getAcceleratorAsString() != null) {
-              KeyStroke ks = KeyStroke.getKeyStroke(action
-                  .getAcceleratorAsString());
-              view.getPeer().getActionMap().put(
-                  swingAction.getValue(Action.NAME), swingAction);
-              view.getPeer().getInputMap(
-                  SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
-                  .put(ks, swingAction.getValue(Action.NAME));
-              String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                  .getModifiers())
-                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-              actionButton.setToolTipText("<HTML>"
-                  + actionButton.getToolTipText()
-                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                  + "</FONT></HTML>");
-            }
-            actionButton.setText("");
-            toolBar.add(actionButton);
-          }
-          if (iter.hasNext()) {
-            toolBar.add(new SSeparator());
-          }
-        }
-        SPanel viewPanel = createSPanel();
-        viewPanel.setLayout(new SBorderLayout());
-        viewPanel.add(toolBar, SBorderLayout.NORTH);
-        viewPanel.add(view.getPeer(), SBorderLayout.CENTER);
-        view.setPeer(viewPanel);
-      }
-      decorateWithBorder(view, locale);
-    } catch (SecurityException ex) {
-      view.setPeer(createSecurityPanel());
-    }
-    return view;
-  }
-
-  /**
-   * Decorates the created view with the apropriate border.
-   *
-   * @param view
-   *          the view to descorate.
-   * @param locale
-   *          the locale to use.
-   */
-  protected void decorateWithBorder(IView<SComponent> view, Locale locale) {
-    switch (view.getDescriptor().getBorderType()) {
-      case IViewDescriptor.SIMPLE:
-        view.getPeer().setBorder(new SEtchedBorder());
-        break;
-      case IViewDescriptor.TITLED:
-        view.getPeer().setBorder(
-            new STitledBorder(new SEtchedBorder(), view.getDescriptor()
-                .getI18nName(getTranslationProvider(), locale)));
-        break;
-      default:
-        break;
-    }
-  }
-
-  /**
-   * Gets the actionFactory.
-   *
-   * @return the actionFactory.
-   */
-  public IActionFactory<Action, SComponent> getActionFactory() {
-    return actionFactory;
-  }
+  // ///////////////////// //
+  // Configuration Section //
+  // ///////////////////// //
 
   private String getConnectorIdForComponentView(
       IComponentViewDescriptor viewDescriptor) {
@@ -2706,15 +2655,6 @@ public class DefaultWingsViewFactory implements
     return formatLength;
   }
 
-  /**
-   * Gets the iconFactory.
-   *
-   * @return the iconFactory.
-   */
-  public IIconFactory<SIcon> getIconFactory() {
-    return iconFactory;
-  }
-
   private Object getIntegerTemplateValue(
       IIntegerPropertyDescriptor propertyDescriptor) {
     double templateValue = DEF_DISP_MAX_VALUE;
@@ -2759,10 +2699,6 @@ public class DefaultWingsViewFactory implements
     return getStringTemplateValue(propertyDescriptor.getMaxLength());
   }
 
-  // ///////////////////// //
-  // Configuration Section //
-  // ///////////////////// //
-
   private Object getTemplateValue(IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof IDatePropertyDescriptor) {
       return getDateTemplateValue((IDatePropertyDescriptor) propertyDescriptor);
@@ -2779,9 +2715,9 @@ public class DefaultWingsViewFactory implements
     } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       return getIntegerTemplateValue((IIntegerPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return getTemplateValue(((IReferencePropertyDescriptor) propertyDescriptor)
+      return getTemplateValue(((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor().getPropertyDescriptor(
-              ((IReferencePropertyDescriptor) propertyDescriptor)
+              ((IReferencePropertyDescriptor<?>) propertyDescriptor)
                   .getReferencedDescriptor().getToStringProperty()));
     }
     return null;
@@ -2792,157 +2728,221 @@ public class DefaultWingsViewFactory implements
     return TEMPLATE_TIME;
   }
 
-  /**
-   * Gets the translationProvider.
-   *
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
+  private final class ColorTableCellRenderer extends SDefaultTableCellRenderer {
+
+    private static final long serialVersionUID = 2463885562098867443L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SComponent getTableCellRendererComponent(STable table, Object value,
+        boolean isSelected, int row, int column) {
+      if (value != null) {
+        int[] rgba = ColorHelper.fromHexString((String) value);
+        setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+      } else {
+        setBackground(null);
+      }
+      return super.getTableCellRendererComponent(table, value, isSelected, row,
+          column);
+    }
   }
 
-  /**
-   * Sets the actionFactory.
-   *
-   * @param actionFactory
-   *          the actionFactory to set.
-   */
-  public void setActionFactory(IActionFactory<Action, SComponent> actionFactory) {
-    this.actionFactory = actionFactory;
+  private final class ConnectorTreeCellRenderer extends
+      SDefaultTreeCellRenderer {
+
+    private static final long   serialVersionUID = -5153268751092971328L;
+    private Locale              locale;
+    private ITreeViewDescriptor viewDescriptor;
+
+    /**
+     * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
+     * 
+     * @param viewDescriptor
+     *            the tree view descriptor used by the tree view.
+     * @param locale
+     */
+    public ConnectorTreeCellRenderer(ITreeViewDescriptor viewDescriptor,
+        Locale locale) {
+      this.viewDescriptor = viewDescriptor;
+      this.locale = locale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SComponent getTreeCellRendererComponent(STree tree, Object value,
+        boolean sel, boolean expanded, boolean leaf, int row,
+        boolean nodeHasFocus) {
+      SComponent renderer = super.getTreeCellRendererComponent(tree, value,
+          sel, expanded, leaf, row, nodeHasFocus);
+      if (value instanceof IValueConnector) {
+        IValueConnector rootConnector = (IValueConnector) tree.getModel()
+            .getRoot();
+        SIcon nodeIcon = null;
+        nodeIcon = iconFactory.getIcon(viewDescriptor
+            .getIconImageURLForUserObject(((IValueConnector) value)
+                .getConnectorValue()), IIconFactory.SMALL_ICON_SIZE);
+        if (nodeIcon == null) {
+          if (value == rootConnector) {
+            nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
+                IIconFactory.SMALL_ICON_SIZE);
+          } else {
+            TreePath path = ConnectorTreeHelper.getTreePathForConnector(
+                rootConnector, (IValueConnector) value);
+            if (path != null) {
+              nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
+                  .getSubtreeDescriptorFromPath(
+                      viewDescriptor.getRootSubtreeDescriptor(),
+                      getDescriptorPathFromConnectorTreePath(path))
+                  .getNodeGroupDescriptor().getIconImageURL(),
+                  IIconFactory.SMALL_ICON_SIZE);
+            }
+          }
+        }
+        setIcon(nodeIcon);
+        String labelText = null;
+        String toolTipText = null;
+        if (value instanceof ICollectionConnector) {
+          IListViewDescriptor nodeGroupDescriptor = TreeDescriptorHelper
+              .getSubtreeDescriptorFromPath(
+                  viewDescriptor.getRootSubtreeDescriptor(),
+                  getDescriptorPathFromConnectorTreePath(ConnectorTreeHelper
+                      .getTreePathForConnector((IValueConnector) tree
+                          .getModel().getRoot(), (IValueConnector) value)))
+              .getNodeGroupDescriptor();
+          String labelKey = nodeGroupDescriptor.getName();
+          if (labelKey == null) {
+            labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
+          }
+          labelText = nodeGroupDescriptor.getI18nName(getTranslationProvider(),
+              locale);
+          if (nodeGroupDescriptor.getDescription() != null) {
+            // SToolTipManager.sharedInstance().registerComponent(tree);
+            toolTipText = nodeGroupDescriptor.getI18nDescription(
+                getTranslationProvider(), locale)
+                + TOOLTIP_ELLIPSIS;
+          }
+          setText(labelText);
+        } else {
+          if (((IValueConnector) value).getConnectorValue() != null) {
+            labelText = ((IValueConnector) value).getConnectorValue()
+                .toString();
+          } else {
+            labelText = "";
+          }
+        }
+        setText(labelText);
+        setToolTipText(toolTipText);
+      }
+      return renderer;
+    }
   }
 
-  /**
-   * Sets the binaryPropertyInfoAction.
-   *
-   * @param binaryPropertyInfoAction
-   *          the binaryPropertyInfoAction to set.
-   */
-  public void setBinaryPropertyInfoAction(
-      IDisplayableAction binaryPropertyInfoAction) {
-    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
+  private final class TranslatedEnumerationListCellRenderer extends
+      SDefaultListCellRenderer {
+
+    private static final long              serialVersionUID = -5694559709701757582L;
+    private Locale                         locale;
+    private IEnumerationPropertyDescriptor propertyDescriptor;
+
+    /**
+     * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
+     * instance.
+     * 
+     * @param propertyDescriptor
+     *            the property descriptor from which the enumeration name is
+     *            taken. The prefix used to lookup translation keys in the form
+     *            keyPrefix.value is the propertyDescriptor enumeration name.
+     * @param locale
+     *            the locale to lookup the translation.
+     */
+    public TranslatedEnumerationListCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      this.propertyDescriptor = propertyDescriptor;
+      this.locale = locale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SComponent getListCellRendererComponent(SComponent list,
+        Object value, boolean isSelected, int index) {
+      SLabel label = (SLabel) super.getListCellRendererComponent(list, value,
+          isSelected, index);
+      label
+          .setIcon(iconFactory.getIcon(propertyDescriptor
+              .getIconImageURL(String.valueOf(value)),
+              IIconFactory.TINY_ICON_SIZE));
+      if (value != null && propertyDescriptor.isTranslated()) {
+        setText(translationProvider.getTranslation(computeEnumerationKey(
+            propertyDescriptor.getEnumerationName(), value), locale));
+      } else {
+        setText(String.valueOf(value));
+      }
+      return label;
+    }
   }
 
-  /**
-   * Sets the connectorFactory.
-   *
-   * @param connectorFactory
-   *          the connectorFactory to set.
-   */
-  public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
-    this.connectorFactory = connectorFactory;
-  }
+  private final class TranslatedEnumerationTableCellRenderer extends
+      EvenOddTableCellRenderer {
 
-  /**
-   * Sets the iconFactory.
-   *
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<SIcon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
+    private static final long              serialVersionUID = -4500472602998482756L;
+    private Locale                         locale;
+    private IEnumerationPropertyDescriptor propertyDescriptor;
 
-  /**
-   * Sets the listSelectionModelBinder.
-   *
-   * @param listSelectionModelBinder
-   *          the listSelectionModelBinder to set.
-   */
-  public void setListSelectionModelBinder(
-      IListSelectionModelBinder listSelectionModelBinder) {
-    this.listSelectionModelBinder = listSelectionModelBinder;
-  }
+    /**
+     * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
+     * instance.
+     * 
+     * @param propertyDescriptor
+     *            the property descriptor from which the enumeration name is
+     *            taken. The prefix used to lookup translation keys in the form
+     *            keyPrefix.value is the propertyDescriptor enumeration name.
+     * @param locale
+     *            the locale to lookup the translation.
+     */
+    public TranslatedEnumerationTableCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      super();
+      this.propertyDescriptor = propertyDescriptor;
+      this.locale = locale;
+    }
 
-  /**
-   * Sets the lovAction.
-   *
-   * @param lovAction
-   *          the lovAction to set.
-   */
-  public void setLovAction(IDisplayableAction lovAction) {
-    this.lovAction = lovAction;
-  }
-
-  /**
-   * Sets the masterDetailBinder.
-   *
-   * @param masterDetailBinder
-   *          the masterDetailBinder to set.
-   */
-  public void setMasterDetailBinder(IMasterDetailBinder masterDetailBinder) {
-    this.masterDetailBinder = masterDetailBinder;
-  }
-
-  /**
-   * Sets the maxCharacterLength.
-   *
-   * @param maxCharacterLength
-   *          the maxCharacterLength to set.
-   */
-  public void setMaxCharacterLength(int maxCharacterLength) {
-    this.maxCharacterLength = maxCharacterLength;
-  }
-
-  /**
-   * Sets the mvcBinder.
-   *
-   * @param mvcBinder
-   *          the mvcBinder to set.
-   */
-  public void setMvcBinder(IMvcBinder mvcBinder) {
-    this.mvcBinder = mvcBinder;
-  }
-
-  /**
-   * Sets the openFileAsBinaryPropertyAction.
-   *
-   * @param openFileAsBinaryPropertyAction
-   *          the openFileAsBinaryPropertyAction to set.
-   */
-  public void setOpenFileAsBinaryPropertyAction(
-      IDisplayableAction openFileAsBinaryPropertyAction) {
-    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
-  }
-
-  /**
-   * Sets the resetPropertyAction.
-   *
-   * @param resetPropertyAction
-   *          the resetPropertyAction to set.
-   */
-  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
-    this.resetPropertyAction = resetPropertyAction;
-  }
-
-  /**
-   * Sets the saveBinaryPropertyAsFileAction.
-   *
-   * @param saveBinaryPropertyAsFileAction
-   *          the saveBinaryPropertyAsFileAction to set.
-   */
-  public void setSaveBinaryPropertyAsFileAction(
-      IDisplayableAction saveBinaryPropertyAsFileAction) {
-    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
-  }
-
-  /**
-   * Sets the translationProvider.
-   *
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
-  }
-
-  /**
-   * Sets the treeSelectionModelBinder.
-   *
-   * @param treeSelectionModelBinder
-   *          the treeSelectionModelBinder to set.
-   */
-  public void setTreeSelectionModelBinder(
-      ITreeSelectionModelBinder treeSelectionModelBinder) {
-    this.treeSelectionModelBinder = treeSelectionModelBinder;
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public SComponent getTableCellRendererComponent(STable table, Object value,
+        boolean isSelected, int row, int column) {
+      SLabel renderer = (SLabel) super.getTableCellRendererComponent(table,
+          value, isSelected, row, column);
+      renderer
+          .setIcon(iconFactory.getIcon(propertyDescriptor
+              .getIconImageURL(String.valueOf(value)),
+              IIconFactory.TINY_ICON_SIZE));
+      if (value instanceof IValueConnector) {
+        Object connectorValue = ((IValueConnector) value).getConnectorValue();
+        if (connectorValue != null && propertyDescriptor.isTranslated()) {
+          renderer.setText(translationProvider.getTranslation(
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  connectorValue), locale));
+        } else {
+          renderer.setText(String.valueOf(connectorValue));
+        }
+      } else {
+        if (value != null && propertyDescriptor.isTranslated()) {
+          renderer.setText(translationProvider.getTranslation(
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  value), locale));
+        } else {
+          renderer.setText(String.valueOf(value));
+        }
+      }
+      return renderer;
+    }
   }
 }

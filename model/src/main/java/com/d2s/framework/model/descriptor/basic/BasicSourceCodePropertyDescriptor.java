@@ -30,7 +30,7 @@ public class BasicSourceCodePropertyDescriptor extends
    * Sets the language.
    * 
    * @param language
-   *          the language to set.
+   *            the language to set.
    */
   public void setLanguage(String language) {
     this.language = language;

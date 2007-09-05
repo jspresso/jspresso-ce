@@ -20,8 +20,8 @@ public interface IConnectorSelectionListener {
    * selected connector has changed.
    * 
    * @param event
-   *          the event containing the connector at the origin of the event and
-   *          the selected connector inside it.
+   *            the event containing the connector at the origin of the event
+   *            and the selected connector inside it.
    */
   void selectedConnectorChange(ConnectorSelectionEvent event);
 }

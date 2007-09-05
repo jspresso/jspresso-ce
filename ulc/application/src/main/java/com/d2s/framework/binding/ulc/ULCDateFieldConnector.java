@@ -24,12 +24,21 @@ public class ULCDateFieldConnector extends ULCComponentConnector<ULCDateField> {
    * Constructs a new <code>ULCDateFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param dateField
-   *          the connected ULCDateField.
+   *            the connected ULCDateField.
    */
   public ULCDateFieldConnector(String id, ULCDateField dateField) {
     super(id, dateField);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedULCComponent().setEditable(isWritable());
   }
 
   /**
@@ -67,15 +76,6 @@ public class ULCDateFieldConnector extends ULCComponentConnector<ULCDateField> {
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedULCComponent().setValue((Date) aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedULCComponent().setEditable(isWritable());
   }
 
 }

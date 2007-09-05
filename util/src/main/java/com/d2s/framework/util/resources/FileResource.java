@@ -22,9 +22,9 @@ public class FileResource extends AbstractResource {
    * Constructs a new <code>FileResource</code> instance.
    * 
    * @param mimeType
-   *          the resource mime type.
+   *            the resource mime type.
    * @param resourceFile
-   *          the resource content.
+   *            the resource content.
    */
   public FileResource(String mimeType, File resourceFile) {
     super(mimeType);

@@ -20,7 +20,7 @@ public interface IConnectorSelector {
    * Adds a connector selection listener to this connector selector.
    * 
    * @param listener
-   *          the listener to add.
+   *            the listener to add.
    */
   void addConnectorSelectionListener(IConnectorSelectionListener listener);
 
@@ -29,7 +29,7 @@ public interface IConnectorSelector {
    * made public to cope with notification of the children selection events.
    * 
    * @param evt
-   *          the event to be propagated.
+   *            the event to be propagated.
    */
   void fireSelectedConnectorChange(ConnectorSelectionEvent evt);
 
@@ -37,7 +37,7 @@ public interface IConnectorSelector {
    * Removes a connector selection listener to this connector selector.
    * 
    * @param listener
-   *          the listener to remove.
+   *            the listener to remove.
    */
   void removeConnectorSelectionListener(IConnectorSelectionListener listener);
 
@@ -47,8 +47,8 @@ public interface IConnectorSelector {
    * connector for instance).
    * 
    * @param tracksChildrenSelection
-   *          true if the connector selector should also forward its children
-   *          selections.
+   *            true if the connector selector should also forward its children
+   *            selections.
    */
   void setTracksChildrenSelection(boolean tracksChildrenSelection);
 }

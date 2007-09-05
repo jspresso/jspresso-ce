@@ -23,22 +23,22 @@ public class IntegrityException extends BusinessException {
    * Constructs a new <code>IntegrityException</code> instance.
    * 
    * @param message
-   *          the exception message.
+   *            the exception message.
+   * @param staticI18nKey
+   *            the static i18n key if any. It will be used by default to get
+   *            the internationalized message.
    */
-  protected IntegrityException(String message) {
-    super(message);
+  public IntegrityException(String message, String staticI18nKey) {
+    super(message, staticI18nKey);
   }
 
   /**
    * Constructs a new <code>IntegrityException</code> instance.
    * 
    * @param message
-   *          the exception message.
-   * @param staticI18nKey
-   *          the static i18n key if any. It will be used by default to get the
-   *          internationalized message.
+   *            the exception message.
    */
-  public IntegrityException(String message, String staticI18nKey) {
-    super(message, staticI18nKey);
+  protected IntegrityException(String message) {
+    super(message);
   }
 }

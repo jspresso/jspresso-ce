@@ -28,13 +28,13 @@ public class CollectionConnectorValueChangeEvent extends
    * instance.
    * 
    * @param source
-   *          the connector that initiated the event.
+   *            the connector that initiated the event.
    * @param oldValue
-   *          the old value of the connector.
+   *            the old value of the connector.
    * @param newValue
-   *          the new value of the connector.
+   *            the new value of the connector.
    * @param removedChildrenConnectors
-   *          the children connectors that have just been removed.
+   *            the children connectors that have just been removed.
    */
   public CollectionConnectorValueChangeEvent(IValueConnector source,
       Object oldValue, Object newValue,
@@ -66,7 +66,7 @@ public class CollectionConnectorValueChangeEvent extends
    * Sets the delayedEvent.
    * 
    * @param delayedEvent
-   *          the delayedEvent to set.
+   *            the delayedEvent to set.
    */
   public void setDelayedEvent(boolean delayedEvent) {
     this.delayedEvent = delayedEvent;

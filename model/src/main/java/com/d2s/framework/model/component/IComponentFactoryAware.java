@@ -8,7 +8,7 @@ package com.d2s.framework.model.component;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -16,9 +16,9 @@ public interface IComponentFactoryAware {
 
   /**
    * Sets the component factory.
-   *
+   * 
    * @param componentFactory
-   *          the component factory to set.
+   *            the component factory to set.
    */
   void setComponentFactory(IComponentFactory componentFactory);
 }

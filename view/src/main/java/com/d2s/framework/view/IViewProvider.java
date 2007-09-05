@@ -11,13 +11,15 @@ package com.d2s.framework.view;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *            The root class of the view peers.
  */
-public interface IViewProvider {
+public interface IViewProvider<E> {
 
   /**
    * Get the referenced view.
    * 
    * @return the referenced view.
    */
-  IView getView();
+  IView<E> getView();
 }

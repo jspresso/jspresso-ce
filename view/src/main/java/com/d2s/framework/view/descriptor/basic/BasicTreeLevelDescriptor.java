@@ -30,7 +30,7 @@ public class BasicTreeLevelDescriptor implements ITreeLevelDescriptor {
    * Sets the nodeGroupDescriptor.
    * 
    * @param nodeGroupDescriptor
-   *          the nodeGroupDescriptor to set.
+   *            the nodeGroupDescriptor to set.
    */
   public void setNodeGroupDescriptor(IListViewDescriptor nodeGroupDescriptor) {
     this.nodeGroupDescriptor = nodeGroupDescriptor;

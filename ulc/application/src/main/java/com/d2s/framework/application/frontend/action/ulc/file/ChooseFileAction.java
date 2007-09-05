@@ -14,7 +14,7 @@ import com.ulcjava.base.shared.FileChooserConfig;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,10 +25,35 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
   private Map<String, List<String>> fileFilter;
 
   /**
+   * Sets the defaultFileName.
+   * 
+   * @param defaultFileName
+   *            the defaultFileName to set.
+   */
+  public void setDefaultFileName(String defaultFileName) {
+    this.defaultFileName = defaultFileName;
+  }
+
+  /**
+   * Sets the fileFilter. Filter file types are a map of descriptions keying
+   * file extension arays.
+   * 
+   * @param fileFilter
+   *            the fileFilter to set.
+   */
+  public void setFileFilter(Map<String, List<String>> fileFilter) {
+    Map<String, List<String>> oldFileFilter = this.fileFilter;
+    this.fileFilter = fileFilter;
+    if (oldFileFilter != this.fileFilter) {
+      fileChooser = null;
+    }
+  }
+
+  /**
    * Gets the file chooser configuration used to build this file chooser.
-   *
+   * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the file chooser configuration.
    */
   protected FileChooserConfig getFileChooser(Map<String, Object> context) {
@@ -62,30 +87,5 @@ public abstract class ChooseFileAction extends AbstractUlcAction {
       }
     }
     return fileChooser;
-  }
-
-  /**
-   * Sets the defaultFileName.
-   *
-   * @param defaultFileName
-   *          the defaultFileName to set.
-   */
-  public void setDefaultFileName(String defaultFileName) {
-    this.defaultFileName = defaultFileName;
-  }
-
-  /**
-   * Sets the fileFilter. Filter file types are a map of descriptions keying
-   * file extension arays.
-   *
-   * @param fileFilter
-   *          the fileFilter to set.
-   */
-  public void setFileFilter(Map<String, List<String>> fileFilter) {
-    Map<String, List<String>> oldFileFilter = this.fileFilter;
-    this.fileFilter = fileFilter;
-    if (oldFileFilter != this.fileFilter) {
-      fileChooser = null;
-    }
   }
 }

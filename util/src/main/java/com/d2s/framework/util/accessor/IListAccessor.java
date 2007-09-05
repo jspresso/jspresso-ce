@@ -21,18 +21,18 @@ public interface IListAccessor extends ICollectionAccessor {
    * Adds the value to the bean property of this accessor.
    * 
    * @param target
-   *          the target on which to add the value.
+   *            the target on which to add the value.
    * @param index
-   *          index at which the specified element is to be inserted.
+   *            index at which the specified element is to be inserted.
    * @param value
-   *          the value to add.
+   *            the value to add.
    * @throws IllegalAccessException
-   *           if the underlying method throws an exception.
+   *             if the underlying method throws an exception.
    * @throws InvocationTargetException
-   *           if this <code>Method</code> object enforces Java language
-   *           access control and the underlying method is inaccessible.
+   *             if this <code>Method</code> object enforces Java language
+   *             access control and the underlying method is inaccessible.
    * @throws NoSuchMethodException
-   *           if a matching method is not found.
+   *             if a matching method is not found.
    */
   void addToValue(Object target, int index, Object value)
       throws IllegalAccessException, InvocationTargetException,
@@ -43,6 +43,6 @@ public interface IListAccessor extends ICollectionAccessor {
    * <p>
    * {@inheritDoc}
    */
-  List getValue(Object target) throws IllegalAccessException,
+  List<?> getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException;
 }

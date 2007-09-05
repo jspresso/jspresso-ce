@@ -23,12 +23,21 @@ public class ULCToggleButtonConnector extends
    * Constructs a new <code>ULCToggleButtonConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param toggleButton
-   *          the connected ULCToggleButton.
+   *            the connected ULCToggleButton.
    */
   public ULCToggleButtonConnector(String id, ULCToggleButton toggleButton) {
     super(id, toggleButton);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedULCComponent().setEnabled(isWritable());
   }
 
   /**
@@ -72,15 +81,6 @@ public class ULCToggleButtonConnector extends
     } else {
       getConnectedULCComponent().setSelected(((Boolean) aValue).booleanValue());
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedULCComponent().setEnabled(isWritable());
   }
 
 }

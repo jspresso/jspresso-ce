@@ -20,7 +20,7 @@ public abstract class AbstractResource implements IResource {
    * Constructs a new <code>AbstractResource</code> instance.
    * 
    * @param mimeType
-   *          the mime type of the resource.
+   *            the mime type of the resource.
    */
   public AbstractResource(String mimeType) {
     this.mimeType = mimeType;

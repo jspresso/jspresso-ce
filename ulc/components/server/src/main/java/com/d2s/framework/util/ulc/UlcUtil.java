@@ -24,19 +24,23 @@ public final class UlcUtil {
 
   private static final double DARKER_COLOR_FACTOR = 0.93;
 
+  private UlcUtil() {
+    // Helper class private constructor.
+  }
+
   /**
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
    * 
    * @param renderer
-   *          the renderer to work on.
+   *            the renderer to work on.
    * @param collectionComponent
-   *          the collection component (table, list, ...) on which this renderer
-   *          is used.
+   *            the collection component (table, list, ...) on which this
+   *            renderer is used.
    * @param isSelected
-   *          is the row selected ?
+   *            is the row selected ?
    * @param row
-   *          the row to render.
+   *            the row to render.
    */
   public static void alternateEvenOddBackground(ULCComponent renderer,
       ULCComponent collectionComponent, boolean isSelected, int row) {
@@ -54,7 +58,7 @@ public final class UlcUtil {
    * Center a window on screen.
    * 
    * @param w
-   *          the window to center on screen.
+   *            the window to center on screen.
    */
   public static void centerInParent(ULCWindow w) {
     ULCWindow parent = (ULCWindow) w.getParent();
@@ -69,7 +73,7 @@ public final class UlcUtil {
    * Center a window on screen.
    * 
    * @param w
-   *          the window to center on screen.
+   *            the window to center on screen.
    */
   public static void centerOnScreen(ULCWindow w) {
     w.setLocation((ClientContext.getScreenWidth() - w.getWidth()) / 2,
@@ -80,9 +84,9 @@ public final class UlcUtil {
    * Retrieves the first contained component of a certain type.
    * 
    * @param component
-   *          the component to start from.
+   *            the component to start from.
    * @param childComponentType
-   *          the type of the component to look for.
+   *            the type of the component to look for.
    * @return the first contained component of the looked for type or null if
    *         none.
    */
@@ -107,9 +111,9 @@ public final class UlcUtil {
    * Make a color scaled using a defined factor.
    * 
    * @param color
-   *          the color to scale.
+   *            the color to scale.
    * @param factor
-   *          the factor to use.
+   *            the factor to use.
    * @return the scaled color.
    */
   public static Color getScaledColor(Color color, double factor) {
@@ -145,7 +149,7 @@ public final class UlcUtil {
    * Gets the visible parent window.
    * 
    * @param component
-   *          the component to start from
+   *            the component to start from
    * @return the visible parent window or null.
    */
   public static ULCWindow getVisibleWindow(ULCComponent component) {
@@ -157,9 +161,5 @@ public final class UlcUtil {
       return getVisibleWindow(w.getParent());
     }
     return w;
-  }
-
-  private UlcUtil() {
-    // Helper class private constructor.
   }
 }

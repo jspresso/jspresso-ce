@@ -53,14 +53,14 @@ import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public abstract class AbstractFrontendController<E, F, G> extends
-    AbstractController implements IFrontendController {
+    AbstractController implements IFrontendController<E, F, G> {
 
   /**
    * <code>MAX_LOGIN_RETRIES</code>.
@@ -94,73 +94,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Creates a new login callback handler.
-   * 
-   * @return a new login callback handler
-   */
-  protected abstract CallbackHandler createLoginCallbackHandler();
-
-  /**
-   * Creates a root module view.
-   * 
-   * @param moduleId
-   *          the identifier of the module to create the view for.
-   * @param moduleDescriptor
-   *          the view descriptor of the module to render.
-   * @param module
-   *          the module to create the view for.
-   * @return a view rendering the module.
-   */
-  protected IView<E> createModuleView(final String moduleId,
-      IModuleDescriptor moduleDescriptor, Module module) {
-    BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
-    splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
-    splitViewDescriptor.setName(moduleDescriptor.getName());
-    splitViewDescriptor.setMasterDetail(true);
-
-    ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(
-        module);
-
-    splitViewDescriptor.setLeftTopViewDescriptor(moduleDescriptor);
-    splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
-
-    ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory.createView(
-        splitViewDescriptor, this, getLocale());
-    ((IConnectorSelector) moduleView.getConnector())
-        .addConnectorSelectionListener(new IConnectorSelectionListener() {
-
-          public void selectedConnectorChange(ConnectorSelectionEvent event) {
-            selectedModuleConnectors.put(moduleId,
-                (ICompositeValueConnector) event.getSelectedConnector());
-          }
-        });
-    for (IView<E> childView : moduleView.getChildren()) {
-      if (childView instanceof IMapView) {
-        for (IView<E> grandChildView : ((IMapView<E>) childView).getChildren()) {
-          mvcBinder.bind(grandChildView.getConnector(), getBackendController()
-              .createModelConnector(
-                  grandChildView.getDescriptor().getModelDescriptor()));
-        }
-      }
-    }
-    return moduleView;
-  }
-
-  /**
-   * Displays a module.
-   * 
-   * @param moduleId
-   *          the module identifier.
-   */
-  protected void displayModule(String moduleId) {
-    IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-    if (moduleDescriptor.getStartupAction() != null) {
-      Map<String, Object> context = createEmptyContext();
-      execute(moduleDescriptor.getStartupAction(), context);
-    }
-  }
-
-  /**
    * Executes frontend actions and delegates backend actions execution to its
    * peer backend controller.
    * <p>
@@ -183,32 +116,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
       handleException(ex, context);
       return false;
     }
-  }
-
-  /**
-   * Executes a backend action.
-   * 
-   * @param action
-   *          the backend action to execute.
-   * @param context
-   *          the action execution context.
-   * @return true if the action was succesfully executed.
-   */
-  protected boolean executeBackend(IAction action, Map<String, Object> context) {
-    return getBackendController().execute(action, context);
-  }
-
-  /**
-   * Executes a frontend action.
-   * 
-   * @param action
-   *          the frontend action to execute.
-   * @param context
-   *          the action execution context.
-   * @return true if the action was succesfully executed.
-   */
-  protected boolean executeFrontend(IAction action, Map<String, Object> context) {
-    return action.execute(this, context);
   }
 
   /**
@@ -263,15 +170,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the iconFactory.
-   * 
-   * @return the iconFactory.
-   */
-  protected IIconFactory<F> getIconFactory() {
-    return viewFactory.getIconFactory();
-  }
-
-  /**
    * {@inheritDoc}
    */
   public String getIconImageURL() {
@@ -315,6 +213,273 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Gets the mvcBinder.
+   * 
+   * @return the mvcBinder.
+   */
+  public IMvcBinder getMvcBinder() {
+    return mvcBinder;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getName() {
+    return controllerDescriptor.getName();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IAction getStartupAction() {
+    return startupAction;
+  }
+
+  /**
+   * Gets the viewFactory.
+   * 
+   * @return the viewFactory.
+   */
+  public IViewFactory<E, F, G> getViewFactory() {
+    return viewFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IEntity merge(IEntity entity, MergeMode mergeMode) {
+    return getBackendController().merge(entity, mergeMode);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
+    return getBackendController().merge(entities, mergeMode);
+  }
+
+  /**
+   * Sets the actionMap.
+   * 
+   * @param actionMap
+   *            the actionMap to set.
+   */
+  public void setActionMap(ActionMap actionMap) {
+    this.actionMap = actionMap;
+  }
+
+  /**
+   * Sets the description.
+   * 
+   * @param description
+   *            the description to set.
+   */
+  public void setDescription(String description) {
+    controllerDescriptor.setDescription(description);
+  }
+
+  /**
+   * Sets the iconImageURL.
+   * 
+   * @param iconImageURL
+   *            the iconImageURL to set.
+   */
+  public void setIconImageURL(String iconImageURL) {
+    controllerDescriptor.setIconImageURL(iconImageURL);
+  }
+
+  /**
+   * Sets the loginContextName.
+   * 
+   * @param loginContextName
+   *            the loginContextName to set.
+   */
+  public void setLoginContextName(String loginContextName) {
+    this.loginContextName = loginContextName;
+  }
+
+  /**
+   * Sets the moduleDescriptors. Module view descriptors are used by the
+   * frontend controller to give a user access on the domain window.
+   * 
+   * @param moduleDescriptors
+   *            the moduleDescriptors to set.
+   */
+  public void setModuleDescriptors(
+      Map<String, IModuleDescriptor> moduleDescriptors) {
+    this.moduleDescriptors = moduleDescriptors;
+  }
+
+  /**
+   * Sets the modulesMenuIconImageUrl.
+   * 
+   * @param modulesMenuIconImageUrl
+   *            the modulesMenuIconImageUrl to set.
+   */
+  public void setModulesMenuIconImageUrl(String modulesMenuIconImageUrl) {
+    this.modulesMenuIconImageUrl = modulesMenuIconImageUrl;
+  }
+
+  /**
+   * Sets the mvcBinder.
+   * 
+   * @param mvcBinder
+   *            the mvcBinder to set.
+   */
+  public void setMvcBinder(IMvcBinder mvcBinder) {
+    this.mvcBinder = mvcBinder;
+  }
+
+  /**
+   * Sets the name.
+   * 
+   * @param name
+   *            the name to set.
+   */
+  public void setName(String name) {
+    controllerDescriptor.setName(name);
+  }
+
+  /**
+   * Sets the startupAction.
+   * 
+   * @param startupAction
+   *            the startupAction to set.
+   */
+  public void setStartupAction(IAction startupAction) {
+    this.startupAction = startupAction;
+  }
+
+  /**
+   * Sets the viewFactory.
+   * 
+   * @param viewFactory
+   *            the viewFactory to set.
+   */
+  public void setViewFactory(IViewFactory<E, F, G> viewFactory) {
+    this.viewFactory = viewFactory;
+  }
+
+  /**
+   * Binds to the backend controller and ask it to start.
+   * <p>
+   * {@inheritDoc}
+   */
+  public boolean start(IBackendController peerController, Locale startingLocale) {
+    setBackendController(peerController);
+    return peerController.start(startingLocale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean stop() {
+    return getBackendController().stop();
+  }
+
+  /**
+   * Creates a new login callback handler.
+   * 
+   * @return a new login callback handler
+   */
+  protected abstract CallbackHandler createLoginCallbackHandler();
+
+  /**
+   * Creates a root module view.
+   * 
+   * @param moduleId
+   *            the identifier of the module to create the view for.
+   * @param moduleDescriptor
+   *            the view descriptor of the module to render.
+   * @param module
+   *            the module to create the view for.
+   * @return a view rendering the module.
+   */
+  protected IView<E> createModuleView(final String moduleId,
+      IModuleDescriptor moduleDescriptor, Module module) {
+    BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
+    splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
+    splitViewDescriptor.setName(moduleDescriptor.getName());
+    splitViewDescriptor.setMasterDetail(true);
+
+    ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(
+        module);
+
+    splitViewDescriptor.setLeftTopViewDescriptor(moduleDescriptor);
+    splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
+
+    ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory.createView(
+        splitViewDescriptor, this, getLocale());
+    ((IConnectorSelector) moduleView.getConnector())
+        .addConnectorSelectionListener(new IConnectorSelectionListener() {
+
+          public void selectedConnectorChange(ConnectorSelectionEvent event) {
+            selectedModuleConnectors.put(moduleId,
+                (ICompositeValueConnector) event.getSelectedConnector());
+          }
+        });
+    for (IView<E> childView : moduleView.getChildren()) {
+      if (childView instanceof IMapView) {
+        for (IView<E> grandChildView : ((IMapView<E>) childView).getChildren()) {
+          mvcBinder.bind(grandChildView.getConnector(), getBackendController()
+              .createModelConnector(
+                  grandChildView.getDescriptor().getModelDescriptor()));
+        }
+      }
+    }
+    return moduleView;
+  }
+
+  /**
+   * Displays a module.
+   * 
+   * @param moduleId
+   *            the module identifier.
+   */
+  protected void displayModule(String moduleId) {
+    IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+    if (moduleDescriptor.getStartupAction() != null) {
+      Map<String, Object> context = createEmptyContext();
+      execute(moduleDescriptor.getStartupAction(), context);
+    }
+  }
+
+  /**
+   * Executes a backend action.
+   * 
+   * @param action
+   *            the backend action to execute.
+   * @param context
+   *            the action execution context.
+   * @return true if the action was succesfully executed.
+   */
+  protected boolean executeBackend(IAction action, Map<String, Object> context) {
+    return getBackendController().execute(action, context);
+  }
+
+  /**
+   * Executes a frontend action.
+   * 
+   * @param action
+   *            the frontend action to execute.
+   * @param context
+   *            the action execution context.
+   * @return true if the action was succesfully executed.
+   */
+  protected boolean executeFrontend(IAction action, Map<String, Object> context) {
+    return action.execute(this, context);
+  }
+
+  /**
+   * Gets the iconFactory.
+   * 
+   * @return the iconFactory.
+   */
+  protected IIconFactory<F> getIconFactory() {
+    return viewFactory.getIconFactory();
+  }
+
+  /**
    * Gets the loginCallbackHandler.
    * 
    * @return the loginCallbackHandler.
@@ -340,7 +505,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * module view descriptor.
    * 
    * @param moduleId
-   *          the identifier of the module.
+   *            the identifier of the module.
    * @return the view descriptor of the selected module.
    */
   protected IModuleDescriptor getModuleDescriptor(String moduleId) {
@@ -367,22 +532,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the mvcBinder.
-   * 
-   * @return the mvcBinder.
-   */
-  public IMvcBinder getMvcBinder() {
-    return mvcBinder;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getName() {
-    return controllerDescriptor.getName();
-  }
-
-  /**
    * Gets the selectedModuleConnectors.
    * 
    * @return the selectedModuleConnectors.
@@ -401,26 +550,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public IAction getStartupAction() {
-    return startupAction;
-  }
-
-  /**
-   * Gets the viewFactory.
-   * 
-   * @return the viewFactory.
-   */
-  public IViewFactory<E, F, G> getViewFactory() {
-    return viewFactory;
-  }
-
-  /**
    * This method installs the security subject into the application session.
    * 
    * @param subject
-   *          the authenticated user subject.
+   *            the authenticated user subject.
    */
   protected void loginSuccess(Subject subject) {
     getBackendController().getApplicationSession().setSubject(subject);
@@ -435,155 +568,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public IEntity merge(IEntity entity, MergeMode mergeMode) {
-    return getBackendController().merge(entity, mergeMode);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
-    return getBackendController().merge(entities, mergeMode);
-  }
-
-  /**
-   * Sets the actionMap.
-   * 
-   * @param actionMap
-   *          the actionMap to set.
-   */
-  public void setActionMap(ActionMap actionMap) {
-    this.actionMap = actionMap;
-  }
-
-  /**
    * Sets the backend controller this controller is attached to.
    * 
    * @param backendController
-   *          the backend controller to set.
+   *            the backend controller to set.
    */
   protected void setBackendController(IBackendController backendController) {
     this.backendController = backendController;
   }
 
   /**
-   * Sets the description.
-   * 
-   * @param description
-   *          the description to set.
-   */
-  public void setDescription(String description) {
-    controllerDescriptor.setDescription(description);
-  }
-
-  /**
-   * Sets the iconImageURL.
-   * 
-   * @param iconImageURL
-   *          the iconImageURL to set.
-   */
-  public void setIconImageURL(String iconImageURL) {
-    controllerDescriptor.setIconImageURL(iconImageURL);
-  }
-
-  /**
-   * Sets the loginContextName.
-   * 
-   * @param loginContextName
-   *          the loginContextName to set.
-   */
-  public void setLoginContextName(String loginContextName) {
-    this.loginContextName = loginContextName;
-  }
-
-  /**
-   * Sets the moduleDescriptors. Module view descriptors are used by the
-   * frontend controller to give a user access on the domain window.
-   * 
-   * @param moduleDescriptors
-   *          the moduleDescriptors to set.
-   */
-  public void setModuleDescriptors(
-      Map<String, IModuleDescriptor> moduleDescriptors) {
-    this.moduleDescriptors = moduleDescriptors;
-  }
-
-  /**
-   * Sets the modulesMenuIconImageUrl.
-   * 
-   * @param modulesMenuIconImageUrl
-   *          the modulesMenuIconImageUrl to set.
-   */
-  public void setModulesMenuIconImageUrl(String modulesMenuIconImageUrl) {
-    this.modulesMenuIconImageUrl = modulesMenuIconImageUrl;
-  }
-
-  /**
-   * Sets the mvcBinder.
-   * 
-   * @param mvcBinder
-   *          the mvcBinder to set.
-   */
-  public void setMvcBinder(IMvcBinder mvcBinder) {
-    this.mvcBinder = mvcBinder;
-  }
-
-  /**
-   * Sets the name.
-   * 
-   * @param name
-   *          the name to set.
-   */
-  public void setName(String name) {
-    controllerDescriptor.setName(name);
-  }
-
-  /**
    * Sets the selectedModuleId.
    * 
    * @param selectedModuleId
-   *          the selectedModuleId to set.
+   *            the selectedModuleId to set.
    */
   protected void setSelectedModuleId(String selectedModuleId) {
     this.selectedModuleId = selectedModuleId;
-  }
-
-  /**
-   * Sets the startupAction.
-   * 
-   * @param startupAction
-   *          the startupAction to set.
-   */
-  public void setStartupAction(IAction startupAction) {
-    this.startupAction = startupAction;
-  }
-
-  /**
-   * Sets the viewFactory.
-   * 
-   * @param viewFactory
-   *          the viewFactory to set.
-   */
-  public void setViewFactory(IViewFactory<E, F, G> viewFactory) {
-    this.viewFactory = viewFactory;
-  }
-
-  /**
-   * Binds to the backend controller and ask it to start.
-   * <p>
-   * {@inheritDoc}
-   */
-  public boolean start(IBackendController peerController, Locale startingLocale) {
-    setBackendController(peerController);
-    return peerController.start(startingLocale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean stop() {
-    return getBackendController().stop();
   }
 }

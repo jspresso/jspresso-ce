@@ -31,7 +31,7 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
    * Sets the iconImageURL.
    * 
    * @param iconImageURL
-   *          the iconImageURL to set.
+   *            the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     this.iconImageURL = iconImageURL;

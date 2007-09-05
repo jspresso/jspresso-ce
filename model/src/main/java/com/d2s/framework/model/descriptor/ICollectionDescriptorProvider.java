@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.model.descriptor;
 
+
 /**
  * Implementing classes are able to provide a collection descriptor.
  * <p>

@@ -60,7 +60,7 @@ public class OpenFileAction extends ChooseFileAction {
    * Sets the fileOpenCallback.
    * 
    * @param fileOpenCallback
-   *          the fileOpenCallback to set.
+   *            the fileOpenCallback to set.
    */
   public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
     this.fileOpenCallback = fileOpenCallback;

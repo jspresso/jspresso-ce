@@ -41,7 +41,7 @@ public interface IValueConnector extends IConnector,
    * Adds a new Connector listener to this connector.
    * 
    * @param listener
-   *          The added listener
+   *            The added listener
    */
   void addConnectorValueChangeListener(IConnectorValueChangeListener listener);
 
@@ -50,7 +50,7 @@ public interface IValueConnector extends IConnector,
    * connector is not readable.
    * 
    * @param gate
-   *          the new gate to add.
+   *            the new gate to add.
    */
   void addReadabilityGate(IGate gate);
 
@@ -59,7 +59,7 @@ public interface IValueConnector extends IConnector,
    * connector is not writable.
    * 
    * @param gate
-   *          the new gate to add.
+   *            the new gate to add.
    */
   void addWritabilityGate(IGate gate);
 
@@ -68,11 +68,11 @@ public interface IValueConnector extends IConnector,
    * parameter.
    * 
    * @param modelConnectorListener
-   *          the connector value change listener.
+   *            the connector value change listener.
    * @param readChangeListener
-   *          the read change listener.
+   *            the read change listener.
    * @param writeChangeListener
-   *          the write change listener.
+   *            the write change listener.
    */
   void boundAsModel(IConnectorValueChangeListener modelConnectorListener,
       PropertyChangeListener readChangeListener,
@@ -94,7 +94,7 @@ public interface IValueConnector extends IConnector,
    * Clones this connector.
    * 
    * @param newConnectorId
-   *          the identifier of the clone connector
+   *            the identifier of the clone connector
    * @return the connector's clone.
    */
   IValueConnector clone(String newConnectorId);
@@ -139,7 +139,7 @@ public interface IValueConnector extends IConnector,
    * Removes a Connector listener from this connector.
    * 
    * @param listener
-   *          The removed listener
+   *            The removed listener
    */
   void removeConnectorValueChangeListener(IConnectorValueChangeListener listener);
 
@@ -147,7 +147,7 @@ public interface IValueConnector extends IConnector,
    * Removes a readability gate.
    * 
    * @param gate
-   *          the new gate to remove.
+   *            the new gate to remove.
    */
   void removeReadabilityGate(IGate gate);
 
@@ -155,7 +155,7 @@ public interface IValueConnector extends IConnector,
    * Removes a writability gate.
    * 
    * @param gate
-   *          the new gate to remove.
+   *            the new gate to remove.
    */
   void removeWritabilityGate(IGate gate);
 
@@ -163,7 +163,7 @@ public interface IValueConnector extends IConnector,
    * Sets a new value on the connectee and fire value change.
    * 
    * @param aValue
-   *          The value to set on the peer
+   *            The value to set on the peer
    */
   void setConnectorValue(Object aValue);
 
@@ -171,7 +171,7 @@ public interface IValueConnector extends IConnector,
    * Sets the exceptionHandler.
    * 
    * @param exceptionHandler
-   *          the exceptionHandler to set.
+   *            the exceptionHandler to set.
    */
   void setExceptionHandler(IExceptionHandler exceptionHandler);
 
@@ -182,7 +182,7 @@ public interface IValueConnector extends IConnector,
    * to happen.
    * 
    * @param locallyReadable
-   *          true if readable.
+   *            true if readable.
    */
   void setLocallyReadable(boolean locallyReadable);
 
@@ -193,7 +193,7 @@ public interface IValueConnector extends IConnector,
    * to happen.
    * 
    * @param locallyWritable
-   *          true if writable.
+   *            true if writable.
    */
   void setLocallyWritable(boolean locallyWritable);
 
@@ -201,7 +201,7 @@ public interface IValueConnector extends IConnector,
    * Sets the connector this connector is attached to in mvc relationship.
    * 
    * @param modelConnector
-   *          the model connector.
+   *            the model connector.
    */
   void setModelConnector(IValueConnector modelConnector);
 
@@ -210,7 +210,7 @@ public interface IValueConnector extends IConnector,
    * relationship.
    * 
    * @param parent
-   *          the parent connector.
+   *            the parent connector.
    */
   void setParentConnector(ICompositeValueConnector parent);
 }

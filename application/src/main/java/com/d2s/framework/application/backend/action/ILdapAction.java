@@ -20,7 +20,7 @@ public interface ILdapAction {
    * Sets the ldapTemplate.
    * 
    * @param ldapTemplate
-   *          the ldapTemplate to set.
+   *            the ldapTemplate to set.
    */
   void setLdapTemplate(LdapTemplate ldapTemplate);
 

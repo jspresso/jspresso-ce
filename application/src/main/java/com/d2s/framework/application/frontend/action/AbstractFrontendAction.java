@@ -31,11 +31,11 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
     implements IDisplayableAction {
@@ -92,32 +92,6 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
-   * Gets the actionFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the actionFactory.
-   */
-  protected IActionFactory<G, E> getActionFactory(Map<String, Object> context) {
-    return getViewFactory(context).getActionFactory();
-  }
-
-  /**
-   * Gets the frontend controller out of the action context.
-   * 
-   * @param context
-   *          the action context.
-   * @return the frontend controller.
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  protected IFrontendController<E, F, G> getController(
-      Map<String, Object> context) {
-    return (IFrontendController<E, F, G>) context
-        .get(ActionContextConstants.FRONT_CONTROLLER);
-  }
-
-  /**
    * {@inheritDoc}
    */
   public String getDescription() {
@@ -141,17 +115,6 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     return actionDescriptor.getI18nName(translationProvider, locale);
-  }
-
-  /**
-   * Gets the iconFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the iconFactory.
-   */
-  protected IIconFactory<F> getIconFactory(Map<String, Object> context) {
-    return getViewFactory(context).getIconFactory();
   }
 
   /**
@@ -189,7 +152,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * action has to be triggered on.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the value connector this model action was triggered on.
    */
   public ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
@@ -207,23 +170,12 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * </ul>
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the module descriptor this action was triggered on.
    */
   public IModuleDescriptor getModuleDescriptor(Map<String, Object> context) {
     return (IModuleDescriptor) context
         .get(ActionContextConstants.MODULE_DESCRIPTOR);
-  }
-
-  /**
-   * Gets the mvcBinder.
-   * 
-   * @param context
-   *          the action context.
-   * @return the mvcBinder.
-   */
-  protected IMvcBinder getMvcBinder(Map<String, Object> context) {
-    return getController(context).getMvcBinder();
   }
 
   /**
@@ -246,7 +198,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * action has to be triggered on.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the parent value connector this model action was triggered on.
    */
   public ICompositeValueConnector getParentModuleConnector(
@@ -269,7 +221,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * action has to be triggered on.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the value connector this model action was triggered on.
    */
   public IValueConnector getSourceViewConnector(Map<String, Object> context) {
@@ -290,22 +242,11 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * action has to be triggered on.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the value connector this model action was triggered on.
    */
   public IValueConnector getViewConnector(Map<String, Object> context) {
     return (IValueConnector) context.get(ActionContextConstants.VIEW_CONNECTOR);
-  }
-
-  /**
-   * Gets the viewFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the viewFactory.
-   */
-  protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
-    return getController(context).getViewFactory();
   }
 
   /**
@@ -335,7 +276,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * Sets the acceleratorAsString.
    * 
    * @param acceleratorAsString
-   *          the acceleratorAsString to set.
+   *            the acceleratorAsString to set.
    */
   public void setAcceleratorAsString(String acceleratorAsString) {
     this.acceleratorAsString = acceleratorAsString;
@@ -345,7 +286,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * Sets the actionabilityGates.
    * 
    * @param actionabilityGates
-   *          the actionabilityGates to set.
+   *            the actionabilityGates to set.
    */
   public void setActionabilityGates(Collection<IGate> actionabilityGates) {
     this.actionabilityGates = actionabilityGates;
@@ -355,7 +296,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * Sets the description.
    * 
    * @param description
-   *          the description to set.
+   *            the description to set.
    */
   public void setDescription(String description) {
     actionDescriptor.setDescription(description);
@@ -365,7 +306,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * Sets the iconImageURL.
    * 
    * @param iconImageURL
-   *          the iconImageURL to set.
+   *            the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     actionDescriptor.setIconImageURL(iconImageURL);
@@ -375,8 +316,8 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * Sets the mnemonic of the action.
    * 
    * @param mnemonicStringRep
-   *          the mnemonic to set represented as a string as KeyStroke factory
-   *          would parse it.
+   *            the mnemonic to set represented as a string as KeyStroke factory
+   *            would parse it.
    */
   public void setMnemonicAsString(String mnemonicStringRep) {
     this.mnemonicAsString = mnemonicStringRep;
@@ -386,9 +327,68 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    * Sets the name.
    * 
    * @param name
-   *          the name to set.
+   *            the name to set.
    */
   public void setName(String name) {
     actionDescriptor.setName(name);
+  }
+
+  /**
+   * Gets the actionFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the actionFactory.
+   */
+  protected IActionFactory<G, E> getActionFactory(Map<String, Object> context) {
+    return getViewFactory(context).getActionFactory();
+  }
+
+  /**
+   * Gets the frontend controller out of the action context.
+   * 
+   * @param context
+   *            the action context.
+   * @return the frontend controller.
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  protected IFrontendController<E, F, G> getController(
+      Map<String, Object> context) {
+    return (IFrontendController<E, F, G>) context
+        .get(ActionContextConstants.FRONT_CONTROLLER);
+  }
+
+  /**
+   * Gets the iconFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the iconFactory.
+   */
+  protected IIconFactory<F> getIconFactory(Map<String, Object> context) {
+    return getViewFactory(context).getIconFactory();
+  }
+
+  /**
+   * Gets the mvcBinder.
+   * 
+   * @param context
+   *            the action context.
+   * @return the mvcBinder.
+   */
+  protected IMvcBinder getMvcBinder(Map<String, Object> context) {
+    return getController(context).getMvcBinder();
+  }
+
+  /**
+   * Gets the viewFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the viewFactory.
+   */
+  protected IViewFactory<E, F, G> getViewFactory(Map<String, Object> context) {
+    return getController(context).getViewFactory();
   }
 }

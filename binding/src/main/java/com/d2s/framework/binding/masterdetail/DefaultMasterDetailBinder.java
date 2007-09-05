@@ -21,34 +21,6 @@ import com.d2s.framework.binding.IValueConnector;
  */
 public class DefaultMasterDetailBinder implements IMasterDetailBinder {
 
-  private final class BoundConnectorSelectionListener implements
-      IConnectorSelectionListener {
-
-    private IValueConnector detailConnector;
-
-    /**
-     * Constructs a new <code>BoundConnectorSelectionListener</code> instance.
-     * 
-     * @param detailConnector
-     *          The detail connector tracking master connector's selection.
-     */
-    public BoundConnectorSelectionListener(IValueConnector detailConnector) {
-      this.detailConnector = detailConnector;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void selectedConnectorChange(ConnectorSelectionEvent event) {
-      if (event.getSelectedConnector() != null) {
-        mvcBinder.bind(detailConnector, event.getSelectedConnector()
-            .getModelConnector());
-      } else {
-        mvcBinder.bind(detailConnector, null);
-      }
-    }
-  }
-
   private IMvcBinder mvcBinder;
 
   /**
@@ -70,9 +42,37 @@ public class DefaultMasterDetailBinder implements IMasterDetailBinder {
    * Sets the mvcBinder.
    * 
    * @param mvcBinder
-   *          the mvcBinder to set.
+   *            the mvcBinder to set.
    */
   public void setMvcBinder(IMvcBinder mvcBinder) {
     this.mvcBinder = mvcBinder;
+  }
+
+  private final class BoundConnectorSelectionListener implements
+      IConnectorSelectionListener {
+
+    private IValueConnector detailConnector;
+
+    /**
+     * Constructs a new <code>BoundConnectorSelectionListener</code> instance.
+     * 
+     * @param detailConnector
+     *            The detail connector tracking master connector's selection.
+     */
+    public BoundConnectorSelectionListener(IValueConnector detailConnector) {
+      this.detailConnector = detailConnector;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void selectedConnectorChange(ConnectorSelectionEvent event) {
+      if (event.getSelectedConnector() != null) {
+        mvcBinder.bind(detailConnector, event.getSelectedConnector()
+            .getModelConnector());
+      } else {
+        mvcBinder.bind(detailConnector, null);
+      }
+    }
   }
 }

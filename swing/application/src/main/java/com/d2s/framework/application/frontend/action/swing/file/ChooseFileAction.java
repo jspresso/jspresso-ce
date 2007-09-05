@@ -19,11 +19,83 @@ import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ChooseFileAction extends AbstractSwingAction {
+
+  private String                    defaultFileName;
+  private JFileChooser              fileChooser;
+  private Map<String, List<String>> fileFilter;
+
+  /**
+   * Sets the defaultFileName.
+   * 
+   * @param defaultFileName
+   *            the defaultFileName to set.
+   */
+  public void setDefaultFileName(String defaultFileName) {
+    this.defaultFileName = defaultFileName;
+  }
+
+  /**
+   * Sets the fileFilter. Filter file types are a map of descriptions keying
+   * file extension arays.
+   * 
+   * @param fileFilter
+   *            the fileFilter to set.
+   */
+  public void setFileFilter(Map<String, List<String>> fileFilter) {
+    Map<String, List<String>> oldFileFilter = this.fileFilter;
+    this.fileFilter = fileFilter;
+    if (oldFileFilter != this.fileFilter) {
+      fileChooser = null;
+    }
+  }
+
+  /**
+   * Gets the file chooser.
+   * 
+   * @param context
+   *            the action context.
+   * @return the file chooser.
+   */
+  protected JFileChooser getFileChooser(Map<String, Object> context) {
+    if (fileChooser == null) {
+      fileChooser = new JFileChooser();
+      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
+          getLocale(context)));
+      if (fileFilter != null) {
+        for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
+            .entrySet()) {
+          StringBuffer extensionsDescription = new StringBuffer(" (");
+          for (String fileExtension : fileTypeEntry.getValue()) {
+            extensionsDescription.append("*").append(fileExtension).append(" ");
+          }
+          extensionsDescription.append(")");
+          fileChooser.addChoosableFileFilter(new FileFilterAdapter(
+              fileTypeEntry.getValue(), getTranslationProvider(context)
+                  .getTranslation(fileTypeEntry.getKey(), getLocale(context))
+                  + extensionsDescription.toString()));
+        }
+      }
+      fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+      if (defaultFileName != null) {
+        fileChooser.setSelectedFile(new File(defaultFileName));
+      }
+    }
+    return fileChooser;
+  }
+
+  /**
+   * Gets the fileFilter.
+   * 
+   * @return the fileFilter.
+   */
+  protected Map<String, List<String>> getFileFilter() {
+    return fileFilter;
+  }
 
   private static class FileFilterAdapter extends FileFilter {
 
@@ -32,7 +104,7 @@ public class ChooseFileAction extends AbstractSwingAction {
 
     /**
      * Constructs a new <code>FileFilterAdapter</code> instance.
-     *
+     * 
      * @param description
      * @param allowedExtensions
      */
@@ -67,77 +139,5 @@ public class ChooseFileAction extends AbstractSwingAction {
       return description;
     }
 
-  }
-  private String                    defaultFileName;
-  private JFileChooser              fileChooser;
-
-  private Map<String, List<String>> fileFilter;
-
-  /**
-   * Gets the file chooser.
-   *
-   * @param context
-   *          the action context.
-   * @return the file chooser.
-   */
-  protected JFileChooser getFileChooser(Map<String, Object> context) {
-    if (fileChooser == null) {
-      fileChooser = new JFileChooser();
-      fileChooser.setDialogTitle(getI18nName(getTranslationProvider(context),
-          getLocale(context)));
-      if (fileFilter != null) {
-        for (Map.Entry<String, List<String>> fileTypeEntry : fileFilter
-            .entrySet()) {
-          StringBuffer extensionsDescription = new StringBuffer(" (");
-          for (String fileExtension : fileTypeEntry.getValue()) {
-            extensionsDescription.append("*").append(fileExtension).append(" ");
-          }
-          extensionsDescription.append(")");
-          fileChooser.addChoosableFileFilter(new FileFilterAdapter(
-              fileTypeEntry.getValue(), getTranslationProvider(context)
-                  .getTranslation(fileTypeEntry.getKey(), getLocale(context))
-                  + extensionsDescription.toString()));
-        }
-      }
-      fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-      if (defaultFileName != null) {
-        fileChooser.setSelectedFile(new File(defaultFileName));
-      }
-    }
-    return fileChooser;
-  }
-
-  /**
-   * Gets the fileFilter.
-   *
-   * @return the fileFilter.
-   */
-  protected Map<String, List<String>> getFileFilter() {
-    return fileFilter;
-  }
-
-  /**
-   * Sets the defaultFileName.
-   *
-   * @param defaultFileName
-   *          the defaultFileName to set.
-   */
-  public void setDefaultFileName(String defaultFileName) {
-    this.defaultFileName = defaultFileName;
-  }
-
-  /**
-   * Sets the fileFilter. Filter file types are a map of descriptions keying
-   * file extension arays.
-   *
-   * @param fileFilter
-   *          the fileFilter to set.
-   */
-  public void setFileFilter(Map<String, List<String>> fileFilter) {
-    Map<String, List<String>> oldFileFilter = this.fileFilter;
-    this.fileFilter = fileFilter;
-    if (oldFileFilter != this.fileFilter) {
-      fileChooser = null;
-    }
   }
 }

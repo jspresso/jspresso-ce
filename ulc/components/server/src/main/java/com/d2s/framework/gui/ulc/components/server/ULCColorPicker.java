@@ -25,7 +25,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -37,9 +37,9 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
 
   /**
    * Adds a value change listener.
-   *
+   * 
    * @param listener
-   *          the listener to add.
+   *            the listener to add.
    */
   public void addValueChangedListener(IValueChangedListener listener) {
     internalAddListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
@@ -77,16 +77,8 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected String getPropertyPrefix() {
-    return "Panel";
-  }
-
-  /**
    * Gets the color picker resetValue.
-   *
+   * 
    * @return the color picker value.
    */
   public Color getResetValue() {
@@ -95,11 +87,79 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
 
   /**
    * Gets the color picker value.
-   *
+   * 
    * @return the color picker value.
    */
   public Color getValue() {
     return value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void handleRequest(String request, Anything args) {
+    if (request.equals(ColorPickerConstants.SET_VALUE_REQUEST)) {
+      handleSetValue(args);
+    } else {
+      super.handleRequest(request, args);
+    }
+  }
+
+  /**
+   * Removes a value change listener.
+   * 
+   * @param listener
+   *            the listener to remove.
+   */
+  public void removeValueChangedListener(IValueChangedListener listener) {
+    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
+  }
+
+  /**
+   * Sets the color picker resetValue.
+   * 
+   * @param resetValue
+   *            the color picker resetValue.
+   */
+  public void setResetValue(Color resetValue) {
+    if (!ObjectUtils.equals(this.resetValue, resetValue)) {
+      this.resetValue = resetValue;
+      Anything resetValueAnything = new Anything();
+      resetValueToAnything(resetValueAnything);
+      sendUI(ColorPickerConstants.SET_RESETVALUE_REQUEST, resetValueAnything);
+    }
+  }
+
+  /**
+   * Sets the color picker value.
+   * 
+   * @param value
+   *            the color picker value.
+   */
+  public void setValue(Color value) {
+    if (!ObjectUtils.equals(this.value, value)) {
+      this.value = value;
+      Anything valueAnything = new Anything();
+      valueToAnything(valueAnything);
+      sendUI(ColorPickerConstants.SET_VALUE_REQUEST, valueAnything);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIColorPicker";
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected String getPropertyPrefix() {
+    return "Panel";
   }
 
   /**
@@ -118,12 +178,10 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
    * {@inheritDoc}
    */
   @Override
-  public void handleRequest(String request, Anything args) {
-    if (request.equals(ColorPickerConstants.SET_VALUE_REQUEST)) {
-      handleSetValue(args);
-    } else {
-      super.handleRequest(request, args);
-    }
+  protected void saveState(Anything a) {
+    super.saveState(a);
+    valueToAnything(a);
+    resetValueToAnything(a);
   }
 
   private void handleSetValue(Anything args) {
@@ -136,16 +194,6 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
     this.value = newValue;
   }
 
-  /**
-   * Removes a value change listener.
-   *
-   * @param listener
-   *          the listener to remove.
-   */
-  public void removeValueChangedListener(IValueChangedListener listener) {
-    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
-  }
-
   private void resetValueToAnything(Anything args) {
     String hexColor = "";
     if (resetValue != null) {
@@ -153,54 +201,6 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
           .getGreen(), resetValue.getBlue(), resetValue.getAlpha());
     }
     args.put(ColorPickerConstants.RESETVALUE_KEY, hexColor);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void saveState(Anything a) {
-    super.saveState(a);
-    valueToAnything(a);
-    resetValueToAnything(a);
-  }
-
-  /**
-   * Sets the color picker resetValue.
-   *
-   * @param resetValue
-   *          the color picker resetValue.
-   */
-  public void setResetValue(Color resetValue) {
-    if (!ObjectUtils.equals(this.resetValue, resetValue)) {
-      this.resetValue = resetValue;
-      Anything resetValueAnything = new Anything();
-      resetValueToAnything(resetValueAnything);
-      sendUI(ColorPickerConstants.SET_RESETVALUE_REQUEST, resetValueAnything);
-    }
-  }
-
-  /**
-   * Sets the color picker value.
-   *
-   * @param value
-   *          the color picker value.
-   */
-  public void setValue(Color value) {
-    if (!ObjectUtils.equals(this.value, value)) {
-      this.value = value;
-      Anything valueAnything = new Anything();
-      valueToAnything(valueAnything);
-      sendUI(ColorPickerConstants.SET_VALUE_REQUEST, valueAnything);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIColorPicker";
   }
 
   private void valueToAnything(Anything args) {

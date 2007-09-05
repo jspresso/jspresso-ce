@@ -23,12 +23,21 @@ public class SCheckBoxConnector extends SComponentConnector<SCheckBox> {
    * Constructs a new <code>SCheckBoxConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param checkBox
-   *          the connected SCheckBox.
+   *            the connected SCheckBox.
    */
   public SCheckBoxConnector(String id, SCheckBox checkBox) {
     super(id, checkBox);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedSComponent().setEnabled(isWritable());
   }
 
   /**
@@ -70,15 +79,6 @@ public class SCheckBoxConnector extends SComponentConnector<SCheckBox> {
     } else {
       getConnectedSComponent().setSelected(((Boolean) aValue).booleanValue());
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedSComponent().setEnabled(isWritable());
   }
 
 }

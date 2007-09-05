@@ -28,7 +28,7 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
    * Constructs a new instance of BasicCompositeConnector.
    * 
    * @param id
-   *          the connector identifier
+   *            the connector identifier
    */
   public BasicCompositeConnector(String id) {
     super(id);
@@ -82,18 +82,18 @@ public class BasicCompositeConnector extends AbstractCompositeValueConnector {
     return connecteeValue;
   }
 
-  private String getRankedKey(String base, int rank) {
-    return base + "#" + rank;
-  }
-
   /**
    * Sets the self-hosted value.
    * 
    * @param connecteeValue
-   *          the value to host
+   *            the value to host
    */
   @Override
   protected void setConnecteeValue(Object connecteeValue) {
     this.connecteeValue = connecteeValue;
+  }
+
+  private String getRankedKey(String base, int rank) {
+    return base + "#" + rank;
   }
 }

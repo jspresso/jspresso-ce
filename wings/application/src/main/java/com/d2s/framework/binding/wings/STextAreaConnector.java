@@ -20,9 +20,9 @@ public class STextAreaConnector extends STextComponentConnector<STextArea> {
    * Constructs a new <code>STextAreaConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textArea
-   *          the connected STextArea.
+   *            the connected STextArea.
    */
   public STextAreaConnector(String id, STextArea textArea) {
     super(id, textArea);

@@ -20,7 +20,7 @@ public interface IFormatter {
    * Formats an object to it's userfriendly string representation.
    * 
    * @param value
-   *          the object to format.
+   *            the object to format.
    * @return The formatted string representation.
    */
   String format(Object value);
@@ -29,10 +29,10 @@ public interface IFormatter {
    * Parses a string and transform it to an Object value.
    * 
    * @param source
-   *          the string representation to parse.
+   *            the string representation to parse.
    * @return the parsed object.
    * @throws ParseException
-   *           thrown whenever a parsing error ocurred.
+   *             thrown whenever a parsing error ocurred.
    */
   Object parse(String source) throws ParseException;
 }

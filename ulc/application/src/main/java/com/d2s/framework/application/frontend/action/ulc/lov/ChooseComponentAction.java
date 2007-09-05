@@ -65,7 +65,7 @@ public class ChooseComponentAction extends ModalDialogAction {
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *          the cancelAction to set.
+   *            the cancelAction to set.
    */
   public void setCancelAction(IDisplayableAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -75,7 +75,7 @@ public class ChooseComponentAction extends ModalDialogAction {
    * Sets the okAction.
    * 
    * @param okAction
-   *          the okAction to set.
+   *            the okAction to set.
    */
   public void setOkAction(IDisplayableAction okAction) {
     this.okAction = okAction;

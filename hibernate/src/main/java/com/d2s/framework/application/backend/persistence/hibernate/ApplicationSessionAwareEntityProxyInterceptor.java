@@ -107,12 +107,13 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Object getEntity(String entityName, Serializable id) {
     if (!applicationSession.isUnitOfWorkActive()) {
       try {
-        IEntity registeredEntity = applicationSession.getRegisteredEntity(Class
-            .forName(entityName), id);
+        IEntity registeredEntity = applicationSession.getRegisteredEntity(
+            (Class<? extends IEntity>) Class.forName(entityName), id);
         if (registeredEntity instanceof HibernateProxy) {
           HibernateProxy proxy = (HibernateProxy) registeredEntity;
           LazyInitializer li = proxy.getHibernateLazyInitializer();
@@ -127,24 +128,6 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
       }
     }
     return super.getEntity(entityName, id);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return applicationSession;
-  }
-
-  /**
-   * Gets the principal of the application session.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected UserPrincipal getPrincipal() {
-    return applicationSession.getPrincipal();
   }
 
   /**
@@ -168,6 +151,7 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void postFlush(Iterator entities) {
     applicationSession.performPendingOperations();
@@ -184,9 +168,27 @@ public class ApplicationSessionAwareEntityProxyInterceptor extends
    * Sets the applicationSession.
    * 
    * @param applicationSession
-   *          the applicationSession to set.
+   *            the applicationSession to set.
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
     this.applicationSession = applicationSession;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return applicationSession;
+  }
+
+  /**
+   * Gets the principal of the application session.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected UserPrincipal getPrincipal() {
+    return applicationSession.getPrincipal();
   }
 }

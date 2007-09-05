@@ -18,7 +18,7 @@ public interface ISelectable {
    * Adds a new selection listener to this selectable.
    * 
    * @param listener
-   *          the added listener.
+   *            the added listener.
    */
   void addSelectionChangeListener(ISelectionChangeListener listener);
 
@@ -33,7 +33,7 @@ public interface ISelectable {
    * Removes a selection listener from this selectable.
    * 
    * @param listener
-   *          the removed listener.
+   *            the removed listener.
    */
   void removeSelectionChangeListener(ISelectionChangeListener listener);
 
@@ -41,8 +41,8 @@ public interface ISelectable {
    * Sets the selected indices in this selectable.
    * 
    * @param selectedIndices
-   *          the indices to set selected. The leading index is defaulted to the
-   *          highest selected one.
+   *            the indices to set selected. The leading index is defaulted to
+   *            the highest selected one.
    */
   void setSelectedIndices(int[] selectedIndices);
 
@@ -50,9 +50,9 @@ public interface ISelectable {
    * Sets the selected indices in this selectable.
    * 
    * @param selectedIndices
-   *          the indices to set selected.
+   *            the indices to set selected.
    * @param leadingIndex
-   *          leading selection index.
+   *            leading selection index.
    */
   void setSelectedIndices(int[] selectedIndices, int leadingIndex);
 }

@@ -41,7 +41,7 @@ public class ScriptedBackendAction extends AbstractBackendAction {
    * Sets the scriptHandler.
    * 
    * @param scriptHandler
-   *          the scriptHandler to set.
+   *            the scriptHandler to set.
    */
   public void setScriptHandler(IScriptHandler scriptHandler) {
     this.scriptHandler = scriptHandler;

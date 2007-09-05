@@ -24,7 +24,7 @@ public class ConnectorBindingException extends NestedRuntimeException {
    * Constructs a new connector exception.
    * 
    * @param message
-   *          the exception message.
+   *            the exception message.
    */
   public ConnectorBindingException(String message) {
     super(message);
@@ -34,7 +34,7 @@ public class ConnectorBindingException extends NestedRuntimeException {
    * Constructs a new connector exception.
    * 
    * @param nestedException
-   *          the original exception.
+   *            the original exception.
    */
   public ConnectorBindingException(Throwable nestedException) {
     super(nestedException);
@@ -44,9 +44,9 @@ public class ConnectorBindingException extends NestedRuntimeException {
    * Constructs a new connector exception.
    * 
    * @param nestedException
-   *          the original exception.
+   *            the original exception.
    * @param message
-   *          a specific detail message.
+   *            a specific detail message.
    */
   public ConnectorBindingException(Throwable nestedException, String message) {
     super(nestedException, message);

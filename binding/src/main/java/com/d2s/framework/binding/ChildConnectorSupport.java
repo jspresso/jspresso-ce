@@ -24,7 +24,7 @@ public class ChildConnectorSupport {
    * Constructs a new <code>ChildConnectorSupport</code> instance.
    * 
    * @param connectorMapProvider
-   *          the provider of the connector map.
+   *            the provider of the connector map.
    */
   public ChildConnectorSupport(IConnectorMapProvider connectorMapProvider) {
     this.connectorMapProvider = connectorMapProvider;
@@ -35,7 +35,7 @@ public class ChildConnectorSupport {
    * {@link ICompositeValueConnector#getChildConnector(String)}.
    * 
    * @param connectorKey
-   *          the key indexing the connector.
+   *            the key indexing the connector.
    * @return the child connector.
    */
   public IValueConnector getChildConnector(String connectorKey) {

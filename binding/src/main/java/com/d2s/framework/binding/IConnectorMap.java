@@ -23,9 +23,9 @@ public interface IConnectorMap {
    * Adds a connector to the connector map.
    * 
    * @param storageKey
-   *          the key used to store the connector in the map.
+   *            the key used to store the connector in the map.
    * @param connector
-   *          The added connector
+   *            The added connector
    */
   void addConnector(String storageKey, IValueConnector connector);
 
@@ -33,7 +33,7 @@ public interface IConnectorMap {
    * Gets a connector based on its storage key.
    * 
    * @param storageKey
-   *          The identifier of the looked-up connector
+   *            The identifier of the looked-up connector
    * @return The retrieved connector or null if none exists
    */
   IValueConnector getConnector(String storageKey);
@@ -56,7 +56,7 @@ public interface IConnectorMap {
    * Removes a connector from the connector map.
    * 
    * @param storageKey
-   *          The removed connector storage key.
+   *            The removed connector storage key.
    */
   void removeConnector(String storageKey);
 }

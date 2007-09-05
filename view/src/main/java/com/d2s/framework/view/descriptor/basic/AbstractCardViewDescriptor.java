@@ -35,7 +35,7 @@ public abstract class AbstractCardViewDescriptor extends BasicViewDescriptor
    * Sets the childViewDescriptors.
    * 
    * @param cardViewDescriptors
-   *          the cardViewDescriptors to set.
+   *            the cardViewDescriptors to set.
    */
   protected void setCardViewDescriptors(
       Map<String, IViewDescriptor> cardViewDescriptors) {

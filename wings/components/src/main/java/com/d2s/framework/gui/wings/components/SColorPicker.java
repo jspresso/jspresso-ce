@@ -23,7 +23,7 @@ import org.wingx.XColorPicker;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -68,40 +68,18 @@ public class SColorPicker extends SPanel {
 
   /**
    * Adds a <code>ChangeListener</code> to the SColorPicker.
-   *
+   * 
    * @param l
-   *          the listener to add
+   *            the listener to add
    */
   public void addChangeListener(ChangeListener l) {
     listenerList.add(ChangeListener.class, l);
   }
 
   /**
-   * Notifies all listeners that have registered interest for notification on
-   * this event type. The event instance is created lazily.
-   *
-   * @see EventListenerList
-   */
-  protected void fireStateChanged() {
-    // Guaranteed to return a non-null array
-    Object[] listeners = listenerList.getListenerList();
-    // Process the listeners last to first, notifying
-    // those that are interested in this event
-    for (int i = listeners.length - 2; i >= 0; i -= 2) {
-      if (listeners[i] == ChangeListener.class) {
-        // Lazily create the event:
-        if (changeEvent == null) {
-          changeEvent = new ChangeEvent(this);
-        }
-        ((ChangeListener) listeners[i + 1]).stateChanged(changeEvent);
-      }
-    }
-  }
-
-  /**
    * Returns an array of all the change listeners registered on this
    * <code>SColorPicker</code>.
-   *
+   * 
    * @return all of this model's <code>ChangeListener</code>s or an empty
    *         array if no change listeners are currently registered
    * @see #addChangeListener
@@ -113,7 +91,7 @@ public class SColorPicker extends SPanel {
 
   /**
    * Gets the resetValue.
-   *
+   * 
    * @return the resetValue.
    */
   public Color getResetValue() {
@@ -122,7 +100,7 @@ public class SColorPicker extends SPanel {
 
   /**
    * Gets the value.
-   *
+   * 
    * @return the value.
    */
   public Color getValue() {
@@ -131,9 +109,9 @@ public class SColorPicker extends SPanel {
 
   /**
    * Removes a <code>ChangeListener</code> from the SColorPicker.
-   *
+   * 
    * @param l
-   *          the listener to remove
+   *            the listener to remove
    */
   public void removeChangeListener(ChangeListener l) {
     listenerList.remove(ChangeListener.class, l);
@@ -151,19 +129,19 @@ public class SColorPicker extends SPanel {
 
   /**
    * Sets the resetValue.
-   *
-   * @param resetValue the resetValue to set.
+   * 
+   * @param resetValue
+   *            the resetValue to set.
    */
   public void setResetValue(Color resetValue) {
     this.resetValue = resetValue;
   }
 
-
   /**
    * Sets the value.
-   *
+   * 
    * @param value
-   *          the value to set.
+   *            the value to set.
    */
   public void setValue(Color value) {
     this.value = value;
@@ -171,6 +149,27 @@ public class SColorPicker extends SPanel {
     fireStateChanged();
   }
 
+  /**
+   * Notifies all listeners that have registered interest for notification on
+   * this event type. The event instance is created lazily.
+   * 
+   * @see EventListenerList
+   */
+  protected void fireStateChanged() {
+    // Guaranteed to return a non-null array
+    Object[] listeners = listenerList.getListenerList();
+    // Process the listeners last to first, notifying
+    // those that are interested in this event
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+      if (listeners[i] == ChangeListener.class) {
+        // Lazily create the event:
+        if (changeEvent == null) {
+          changeEvent = new ChangeEvent(this);
+        }
+        ((ChangeListener) listeners[i + 1]).stateChanged(changeEvent);
+      }
+    }
+  }
 
   private void showColorPickerDialog() {
     final XColorPicker colorPicker = new XColorPicker();

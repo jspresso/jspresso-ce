@@ -33,68 +33,19 @@ import com.d2s.framework.util.gate.IGate;
 public abstract class AbstractValueConnector extends AbstractConnector
     implements IValueConnector {
 
-  private class ModelConnectorPropertyChangeListener implements
-      PropertyChangeListener {
-
-    private IValueConnector viewConnector;
-
-    /**
-     * Constructs a new <code>ConnectorReadabilityChangeListener</code>
-     * instance.
-     * 
-     * @param viewConnector
-     *          the view connector
-     */
-    public ModelConnectorPropertyChangeListener(IValueConnector viewConnector) {
-      this.viewConnector = viewConnector;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean equals(Object obj) {
-      if (!(obj instanceof ModelConnectorPropertyChangeListener)) {
-        return false;
-      }
-      if (this == obj) {
-        return true;
-      }
-      ModelConnectorPropertyChangeListener rhs = (ModelConnectorPropertyChangeListener) obj;
-      return new EqualsBuilder().append(viewConnector, rhs.viewConnector)
-          .isEquals();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int hashCode() {
-      return new HashCodeBuilder(17, 13).append(viewConnector).toHashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void propertyChange(@SuppressWarnings("unused")
-    PropertyChangeEvent evt) {
-      viewConnector.updateState();
-    }
-  }
   private IExceptionHandler                    exceptionHandler;
   private PropertyChangeListener               gatesListener;
-
   private boolean                              locallyReadable;
 
   private boolean                              locallyWritable;
+
   private IValueConnector                      modelConnector;
-
   private Object                               oldConnectorValue;
+
   private ICompositeValueConnector             parentConnector;
-
   private Collection<IGate>                    readabilityGates;
-  private ModelConnectorPropertyChangeListener readableListener;
 
+  private ModelConnectorPropertyChangeListener readableListener;
   private ConnectorValueChangeSupport          valueChangeSupport;
 
   private Collection<IGate>                    writabilityGates;
@@ -107,7 +58,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * connects.
    * 
    * @param id
-   *          The connector identifier.
+   *            The connector identifier.
    */
   public AbstractValueConnector(String id) {
     super(id);
@@ -234,39 +185,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * When overriden . This method is called whenever a connector needs some
-   * extra computation to save its old value. By default, the method returns the
-   * parameter itself. For instance, this method is overriden in collection
-   * connectors, where the underlying collection does not change but its content
-   * changes. Simply keeping a reference on the underlying collection would not
-   * be of any help since it never changes, preventing the notification to
-   * happen. In that case, a clone of the model collection can be built to keep
-   * track of the collection content change.
-   * 
-   * @param connectorValue
-   *          the value to take a snapshot of.
-   * @return the value to keep a reference on as the
-   *         <code>oldConnectorValue</code>.
-   */
-  protected Object computeOldConnectorValue(Object connectorValue) {
-    return connectorValue;
-  }
-
-  /**
-   * Gives a chance to the connector to react on a model connector change.
-   * 
-   * @param oldModelConnector
-   *          the old model connector.
-   * @param newModelConnector
-   *          the new model connector.
-   */
-  @SuppressWarnings("unused")
-  protected void connectorModelChange(IValueConnector oldModelConnector,
-      IValueConnector newModelConnector) {
-    updateState();
-  }
-
-  /**
    * This connector is notified of a change in a bound connector. It forwards by
    * default the change to its own connectee.
    * <p>
@@ -281,48 +199,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
       valueChangeSupport.removeInhibitedListener(evt.getSource());
     }
   }
-
-  /**
-   * Gives a chance to the connector to create a specific subclass of connector
-   * value change event.
-   * 
-   * @param oldValue
-   *          the old connector value.
-   * @param newValue
-   *          the new connector value.
-   * @return the created change event.
-   */
-  protected ConnectorValueChangeEvent createChangeEvent(Object oldValue,
-      Object newValue) {
-    return new ConnectorValueChangeEvent(this, oldValue, newValue);
-  }
-
-  /**
-   * Notifies its listeners about a change in the connector's value.
-   */
-  protected void fireConnectorValueChange() {
-    try {
-      valueChangeSupport.fireConnectorValueChange(createChangeEvent(
-          oldConnectorValue, getConnecteeValue()));
-    } catch (RuntimeException ex) {
-      setConnecteeValue(oldConnectorValue);
-      if (exceptionHandler != null) {
-        exceptionHandler.handleException(ex, null);
-      } else {
-        throw ex;
-      }
-    }
-    // the change propagated correctly. Save the value propagated as the old
-    // value of the connector.
-    oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
-  }
-
-  /**
-   * Retrieves the value from the peer connectee.
-   * 
-   * @return the connectee value.
-   */
-  protected abstract Object getConnecteeValue();
 
   /**
    * {@inheritDoc}
@@ -359,37 +235,12 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * @return Returns the oldConnectorValue.
-   */
-  protected Object getOldConnectorValue() {
-    return oldConnectorValue;
-  }
-
-  /**
    * Gets the parentConnector.
    * 
    * @return the parentConnector.
    */
   public ICompositeValueConnector getParentConnector() {
     return parentConnector;
-  }
-
-  /**
-   * Gets the readabilityGates.
-   * 
-   * @return the readabilityGates.
-   */
-  protected Collection<IGate> getReadabilityGates() {
-    return readabilityGates;
-  }
-
-  /**
-   * Gets the writabilityGates.
-   * 
-   * @return the writabilityGates.
-   */
-  protected Collection<IGate> getWritabilityGates() {
-    return writabilityGates;
   }
 
   /**
@@ -459,14 +310,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
   }
 
   /**
-   * Sets the value to the peer connectee.
-   * 
-   * @param connecteeValue
-   *          the connectee value to set
-   */
-  protected abstract void setConnecteeValue(Object connecteeValue);
-
-  /**
    * {@inheritDoc}
    */
   public void setConnectorValue(Object aValue) {
@@ -509,7 +352,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Sets the modelConnector.
    * 
    * @param modelConnector
-   *          the modelConnector to set.
+   *            the modelConnector to set.
    */
   public void setModelConnector(IValueConnector modelConnector) {
     if (getModelConnector() != null) {
@@ -551,7 +394,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Sets the parentConnector.
    * 
    * @param parentConnector
-   *          the parentConnector to set.
+   *            the parentConnector to set.
    */
   public void setParentConnector(ICompositeValueConnector parentConnector) {
     this.parentConnector = parentConnector;
@@ -568,5 +411,162 @@ public abstract class AbstractValueConnector extends AbstractConnector
     firePropertyChange(READABLE_PROPERTY, !readable, readable);
     boolean writable = isWritable();
     firePropertyChange(WRITABLE_PROPERTY, !writable, writable);
+  }
+
+  /**
+   * When overriden . This method is called whenever a connector needs some
+   * extra computation to save its old value. By default, the method returns the
+   * parameter itself. For instance, this method is overriden in collection
+   * connectors, where the underlying collection does not change but its content
+   * changes. Simply keeping a reference on the underlying collection would not
+   * be of any help since it never changes, preventing the notification to
+   * happen. In that case, a clone of the model collection can be built to keep
+   * track of the collection content change.
+   * 
+   * @param connectorValue
+   *            the value to take a snapshot of.
+   * @return the value to keep a reference on as the
+   *         <code>oldConnectorValue</code>.
+   */
+  protected Object computeOldConnectorValue(Object connectorValue) {
+    return connectorValue;
+  }
+
+  /**
+   * Gives a chance to the connector to react on a model connector change.
+   * 
+   * @param oldModelConnector
+   *            the old model connector.
+   * @param newModelConnector
+   *            the new model connector.
+   */
+  @SuppressWarnings("unused")
+  protected void connectorModelChange(IValueConnector oldModelConnector,
+      IValueConnector newModelConnector) {
+    updateState();
+  }
+
+  /**
+   * Gives a chance to the connector to create a specific subclass of connector
+   * value change event.
+   * 
+   * @param oldValue
+   *            the old connector value.
+   * @param newValue
+   *            the new connector value.
+   * @return the created change event.
+   */
+  protected ConnectorValueChangeEvent createChangeEvent(Object oldValue,
+      Object newValue) {
+    return new ConnectorValueChangeEvent(this, oldValue, newValue);
+  }
+
+  /**
+   * Notifies its listeners about a change in the connector's value.
+   */
+  protected void fireConnectorValueChange() {
+    try {
+      valueChangeSupport.fireConnectorValueChange(createChangeEvent(
+          oldConnectorValue, getConnecteeValue()));
+    } catch (RuntimeException ex) {
+      setConnecteeValue(oldConnectorValue);
+      if (exceptionHandler != null) {
+        exceptionHandler.handleException(ex, null);
+      } else {
+        throw ex;
+      }
+    }
+    // the change propagated correctly. Save the value propagated as the old
+    // value of the connector.
+    oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
+  }
+
+  /**
+   * Retrieves the value from the peer connectee.
+   * 
+   * @return the connectee value.
+   */
+  protected abstract Object getConnecteeValue();
+
+  /**
+   * @return Returns the oldConnectorValue.
+   */
+  protected Object getOldConnectorValue() {
+    return oldConnectorValue;
+  }
+
+  /**
+   * Gets the readabilityGates.
+   * 
+   * @return the readabilityGates.
+   */
+  protected Collection<IGate> getReadabilityGates() {
+    return readabilityGates;
+  }
+
+  /**
+   * Gets the writabilityGates.
+   * 
+   * @return the writabilityGates.
+   */
+  protected Collection<IGate> getWritabilityGates() {
+    return writabilityGates;
+  }
+
+  /**
+   * Sets the value to the peer connectee.
+   * 
+   * @param connecteeValue
+   *            the connectee value to set
+   */
+  protected abstract void setConnecteeValue(Object connecteeValue);
+
+  private class ModelConnectorPropertyChangeListener implements
+      PropertyChangeListener {
+
+    private IValueConnector viewConnector;
+
+    /**
+     * Constructs a new <code>ConnectorReadabilityChangeListener</code>
+     * instance.
+     * 
+     * @param viewConnector
+     *            the view connector
+     */
+    public ModelConnectorPropertyChangeListener(IValueConnector viewConnector) {
+      this.viewConnector = viewConnector;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object obj) {
+      if (!(obj instanceof ModelConnectorPropertyChangeListener)) {
+        return false;
+      }
+      if (this == obj) {
+        return true;
+      }
+      ModelConnectorPropertyChangeListener rhs = (ModelConnectorPropertyChangeListener) obj;
+      return new EqualsBuilder().append(viewConnector, rhs.viewConnector)
+          .isEquals();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode() {
+      return new HashCodeBuilder(17, 13).append(viewConnector).toHashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
+      viewConnector.updateState();
+    }
   }
 }

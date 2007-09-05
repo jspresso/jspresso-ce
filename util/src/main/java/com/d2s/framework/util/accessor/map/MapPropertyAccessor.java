@@ -25,19 +25,10 @@ public class MapPropertyAccessor implements IAccessor {
    * Constructs a map property accessor.
    * 
    * @param property
-   *          the property accessed.
+   *            the property accessed.
    */
   public MapPropertyAccessor(String property) {
     this.property = property;
-  }
-
-  /**
-   * Gets the property property.
-   * 
-   * @return the property.
-   */
-  protected String getProperty() {
-    return property;
   }
 
   /**
@@ -45,7 +36,7 @@ public class MapPropertyAccessor implements IAccessor {
    */
   public Object getValue(Object target) {
     if (target != null && target instanceof Map) {
-      return ((Map) target).get(property);
+      return ((Map<?, ?>) target).get(property);
     }
     return null;
   }
@@ -67,5 +58,14 @@ public class MapPropertyAccessor implements IAccessor {
     if (target != null && target instanceof Map) {
       ((Map) target).put(property, value);
     }
+  }
+
+  /**
+   * Gets the property property.
+   * 
+   * @return the property.
+   */
+  protected String getProperty() {
+    return property;
   }
 }

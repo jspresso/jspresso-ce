@@ -40,11 +40,11 @@ public class ModelChangeEvent extends EventObject {
    * Constructs a new <code>ModelChangeEvent</code>.
    * 
    * @param source
-   *          The model provider that initiated the event.
+   *            The model provider that initiated the event.
    * @param oldValue
-   *          The old value of the model.
+   *            The old value of the model.
    * @param newValue
-   *          The new value of the model.
+   *            The new value of the model.
    */
   public ModelChangeEvent(IModelProvider source, Object oldValue,
       Object newValue) {

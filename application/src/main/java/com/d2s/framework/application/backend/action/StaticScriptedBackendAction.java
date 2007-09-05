@@ -43,7 +43,7 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
    * Sets the script source code.
    * 
    * @param script
-   *          the script source code.
+   *            the script source code.
    */
   public void setScript(String script) {
     this.script = script;
@@ -53,7 +53,7 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
    * Sets the script language this scripted action is written in.
    * 
    * @param scriptLanguage
-   *          the scripting language.
+   *            the scripting language.
    */
   public void setScriptLanguage(String scriptLanguage) {
     this.scriptLanguage = scriptLanguage;

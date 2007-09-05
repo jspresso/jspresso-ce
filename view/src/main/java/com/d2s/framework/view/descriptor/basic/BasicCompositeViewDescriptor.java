@@ -30,7 +30,7 @@ public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
    * Sets the masterDetail.
    * 
    * @param masterDetail
-   *          true if this descriptor is a master / detail one.
+   *            true if this descriptor is a master / detail one.
    */
   public void setMasterDetail(boolean masterDetail) {
     this.masterDetail = masterDetail;

@@ -25,7 +25,7 @@ import com.d2s.framework.util.descriptor.IIconDescriptor;
  *          the concrete type of component.
  */
 public interface IComponentDescriptor<E> extends IModelDescriptor,
-    IIconDescriptor, IComponentDescriptorProvider {
+    IIconDescriptor, IComponentDescriptorProvider<E> {
 
   /**
    * Gets the interface class defining the component contract.
@@ -47,7 +47,7 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    *
    * @return the list of entity lifecycle interceptors.
    */
-  List<ILifecycleInterceptor> getLifecycleInterceptors();
+  List<ILifecycleInterceptor<?>> getLifecycleInterceptors();
 
   /**
    * Get the list of properties ordering the collections containing this
@@ -96,7 +96,7 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    *
    * @return the class establishing the entity service contract.
    */
-  Collection<Class> getServiceContracts();
+  Collection<Class<?>> getServiceContracts();
 
   /**
    * Retrieves the service delegate implemented by this component.

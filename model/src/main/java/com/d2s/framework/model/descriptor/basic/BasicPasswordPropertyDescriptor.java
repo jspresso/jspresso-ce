@@ -21,7 +21,7 @@ public class BasicPasswordPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return char[].class;
   }
 

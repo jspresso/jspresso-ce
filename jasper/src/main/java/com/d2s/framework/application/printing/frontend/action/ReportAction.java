@@ -23,11 +23,11 @@ import com.d2s.framework.binding.ICollectionConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public class ReportAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
@@ -67,7 +67,7 @@ public class ReportAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the reportFactory.
    * 
    * @param reportFactory
-   *          the reportFactory to set.
+   *            the reportFactory to set.
    */
   public void setReportFactory(IReportFactory reportFactory) {
     this.reportFactory = reportFactory;

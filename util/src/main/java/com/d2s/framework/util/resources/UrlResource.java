@@ -23,9 +23,9 @@ public class UrlResource extends AbstractResource {
    * Constructs a new <code>UrlResource</code> instance.
    * 
    * @param mimeType
-   *          the resource mime type.
+   *            the resource mime type.
    * @param urlSpec
-   *          the url spec.
+   *            the url spec.
    */
   public UrlResource(String mimeType, String urlSpec) {
     super(mimeType);

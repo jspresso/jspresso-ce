@@ -14,11 +14,15 @@ package com.d2s.framework.util.html;
  */
 public final class HtmlHelper {
 
+  private HtmlHelper() {
+    // private constructor for helper class.
+  }
+
   /**
    * Transforms a string to html and emphasis.
    * 
    * @param message
-   *          the message to transform.
+   *            the message to transform.
    * @return the html emphasised string.
    */
   public static String emphasis(String message) {
@@ -26,9 +30,5 @@ public final class HtmlHelper {
       return "<html><b>" + message + "</b></html>";
     }
     return message;
-  }
-
-  private HtmlHelper() {
-    // private constructor for helper class.
   }
 }

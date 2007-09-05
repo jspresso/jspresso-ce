@@ -14,13 +14,13 @@ import java.util.Set;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the type of collection elements.
+ *            the type of collection elements.
  */
-public class DefaultComponentCollectionFactory<E extends IComponent> implements
+public class DefaultComponentCollectionFactory<E> implements
     IComponentCollectionFactory<E> {
 
   /**
@@ -28,7 +28,8 @@ public class DefaultComponentCollectionFactory<E extends IComponent> implements
    * <p>
    * {@inheritDoc}
    */
-  public Collection<E> createEntityCollection(Class collectionInterface) {
+  public Collection<E> createEntityCollection(
+      Class<? extends Collection<?>> collectionInterface) {
     if (Set.class.isAssignableFrom(collectionInterface)) {
       return new LinkedHashSet<E>();
     } else if (List.class.isAssignableFrom(collectionInterface)) {

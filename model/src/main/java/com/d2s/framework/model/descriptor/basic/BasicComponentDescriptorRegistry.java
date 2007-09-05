@@ -6,6 +6,7 @@ package com.d2s.framework.model.descriptor.basic;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 
@@ -26,8 +27,10 @@ public class BasicComponentDescriptorRegistry implements
   /**
    * {@inheritDoc}
    */
-  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
-    return (IComponentDescriptor) componentApplicationContext
+  @SuppressWarnings("unchecked")
+  public IComponentDescriptor<?> getComponentDescriptor(
+      Class<? extends IComponent> componentContract) {
+    return (IComponentDescriptor<IComponent>) componentApplicationContext
         .getBean(componentContract.getName());
   }
 
@@ -36,8 +39,8 @@ public class BasicComponentDescriptorRegistry implements
    * definitions.
    * 
    * @param applicationContext
-   *          the application context holding the component descriptor bean
-   *          definitions.
+   *            the application context holding the component descriptor bean
+   *            definitions.
    */
   public void setApplicationContext(ApplicationContext applicationContext) {
     this.componentApplicationContext = applicationContext;

@@ -8,7 +8,7 @@ package com.d2s.framework.gui.ulc.components.shared;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -17,7 +17,7 @@ public final class ColorPickerConstants {
   /**
    * <code>RESETVALUE_KEY</code>.
    */
-  public static final String RESETVALUE_KEY              = "resetValue";
+  public static final String RESETVALUE_KEY         = "resetValue";
 
   /**
    * <code>SET_RESETVALUE_REQUEST</code>.

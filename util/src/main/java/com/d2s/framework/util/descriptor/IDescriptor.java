@@ -38,11 +38,11 @@ public interface IDescriptor {
    * Gets the internationalized end-user understandable description.
    * 
    * @param translationProvider
-   *          the translation provider which can be used by the descriptor to
-   *          compute its internationalized description.
+   *            the translation provider which can be used by the descriptor to
+   *            compute its internationalized description.
    * @param locale
-   *          the locale in which the descriptor must compute its
-   *          internationalized description.
+   *            the locale in which the descriptor must compute its
+   *            internationalized description.
    * @return The user-friendly description
    */
   String getI18nDescription(ITranslationProvider translationProvider,
@@ -52,11 +52,11 @@ public interface IDescriptor {
    * Gets the internationalized name of this descriptor.
    * 
    * @param translationProvider
-   *          the translation provider which can be used by the descriptor to
-   *          compute its internationalized name.
+   *            the translation provider which can be used by the descriptor to
+   *            compute its internationalized name.
    * @param locale
-   *          the locale in which the descriptor must compute its
-   *          internationalized name.
+   *            the locale in which the descriptor must compute its
+   *            internationalized name.
    * @return The internationalized name of this descripted object
    */
   String getI18nName(ITranslationProvider translationProvider, Locale locale);

@@ -103,7 +103,7 @@ public class BooleanTableCellRenderer extends ULCCheckBox implements
    * unselected-background color to the specified color.
    * 
    * @param c
-   *          set the background color to this value
+   *            set the background color to this value
    */
   @Override
   public void setBackground(Color c) {
@@ -116,7 +116,7 @@ public class BooleanTableCellRenderer extends ULCCheckBox implements
    * unselected-foreground color to the specified color.
    * 
    * @param c
-   *          set the foreground color to this value
+   *            set the foreground color to this value
    */
   @Override
   public void setForeground(Color c) {

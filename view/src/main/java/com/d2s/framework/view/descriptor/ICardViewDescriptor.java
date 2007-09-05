@@ -32,7 +32,7 @@ public interface ICardViewDescriptor extends IViewDescriptor {
    * Gets the card name to use to present the model.
    * 
    * @param model
-   *          the model to back the view.
+   *            the model to back the view.
    * @return the card name to look up the view.
    */
   String getCardNameForModel(Object model);

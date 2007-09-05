@@ -31,7 +31,7 @@ public class ULCDurationDataTypeFactory {
    * Gets a (cached) duration data type.
    * 
    * @param locale
-   *          the locale the duration data type uses.
+   *            the locale the duration data type uses.
    * @return the corresponding duration data type.
    */
   public ULCDurationDataType getTranslationDataType(Locale locale) {

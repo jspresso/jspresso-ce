@@ -24,7 +24,7 @@ public class BasicJavaSerializablePropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return Serializable.class;
   }
 }

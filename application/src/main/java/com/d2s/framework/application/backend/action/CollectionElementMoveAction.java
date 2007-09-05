@@ -18,7 +18,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -47,8 +47,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       return false;
     }
 
-    List originalList = (List) collectionConnector
-        .getConnectorValue();
+    List originalList = (List) collectionConnector.getConnectorValue();
     List targetList = new ArrayList<Object>(originalList);
     List<Object> elementsToMove = new ArrayList<Object>();
     for (int indexToMove : indicesToMove) {
@@ -72,7 +71,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
       originalList.clear();
       originalList.addAll(targetList);
       ((IEntity) collectionConnector.getParentConnector().getConnectorValue())
-      .straightSetProperty(collectionConnector.getId(), originalList);
+          .straightSetProperty(collectionConnector.getId(), originalList);
       context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
           .getIndicesOf(collectionConnector, elementsToMove));
     }
@@ -81,9 +80,9 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
 
   /**
    * Sets the offset.
-   *
+   * 
    * @param offset
-   *          the offset to set.
+   *            the offset to set.
    */
   public void setOffset(int offset) {
     this.offset = offset;

@@ -12,7 +12,7 @@ import java.util.Map;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -47,9 +47,9 @@ public class BasicEnumerationPropertyDescriptor extends
 
   /**
    * Sets the valuesAndIconImageUrls property.
-   *
+   * 
    * @param valuesAndIconImageUrls
-   *          the valuesAndIconImageUrls to set.
+   *            the valuesAndIconImageUrls to set.
    */
   public void setValuesAndIconImageUrls(
       Map<String, String> valuesAndIconImageUrls) {

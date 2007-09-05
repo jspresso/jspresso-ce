@@ -42,7 +42,7 @@ public class RemoveCollectionFromMasterAction extends AbstractCollectionAction {
     }
     int[] selectedIndices = getSelectedIndices(context);
     if (selectedIndices != null) {
-      Class newComponentContract = getModelDescriptor(context)
+      Class<?> newComponentContract = getModelDescriptor(context)
           .getCollectionDescriptor().getElementDescriptor()
           .getComponentContract();
       Object master = collectionConnector.getParentConnector()

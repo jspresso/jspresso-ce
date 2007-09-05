@@ -36,7 +36,7 @@ public class DisplayStaticUrlAction extends DisplayUrlAction {
    * Sets the urlKey.
    * 
    * @param urlKey
-   *          the urlKey to set.
+   *            the urlKey to set.
    */
   public void setUrlKey(String urlKey) {
     this.urlKey = urlKey;

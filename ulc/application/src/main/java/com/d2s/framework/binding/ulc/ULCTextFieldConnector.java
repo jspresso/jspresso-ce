@@ -25,9 +25,9 @@ public class ULCTextFieldConnector extends
    * Constructs a new <code>ULCTextFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected ULCTextField.
+   *            the connected ULCTextField.
    */
   public ULCTextFieldConnector(String id, ULCTextField textField) {
     super(id, textField);

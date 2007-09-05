@@ -18,11 +18,11 @@ public interface IEntityCloneFactory {
    * Clones an entity.
    * 
    * @param <E>
-   *          the entity contract (class or interface) to clone.
+   *            the entity contract (class or interface) to clone.
    * @param entityToClone
-   *          the entity to clone.
+   *            the entity to clone.
    * @param entityFactory
-   *          the entity factory to use to create the new entities.
+   *            the entity factory to use to create the new entities.
    * @return the cloned entity.
    */
   <E extends IEntity> E cloneEntity(E entityToClone,

@@ -32,7 +32,7 @@ import com.d2s.framework.util.uid.IGUIDGenerator;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -91,6 +91,140 @@ public class BasicProxyEntityFactory implements IEntityFactory {
     return createdEntity;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public <T extends IQueryEntity> T createQueryEntityInstance(
+      Class<T> entityContract) {
+    IEntity entityDelegate = createEntityInstance(entityContract, null,
+        new Class[] {IQueryEntity.class});
+    QueryEntityInvocationHandler entityHandler = new QueryEntityInvocationHandler(
+        entityDelegate);
+    return (T) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), entityDelegate.getClass().getInterfaces(),
+        entityHandler);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor<?> getComponentDescriptor(
+      Class<? extends IComponent> componentContract) {
+    return entityDescriptorRegistry.getComponentDescriptor(componentContract);
+  }
+
+  /**
+   * Sets the accessorFactory used by this entity factory.
+   * 
+   * @param accessorFactory
+   *            the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
+  }
+
+  /**
+   * Sets the entityCollectionFactory property.
+   * 
+   * @param entityCollectionFactory
+   *            the entityCollectionFactory to set.
+   */
+  public void setEntityCollectionFactory(
+      IComponentCollectionFactory<IComponent> entityCollectionFactory) {
+    this.entityCollectionFactory = entityCollectionFactory;
+  }
+
+  /**
+   * Sets the entityDescriptorRegistry.
+   * 
+   * @param entityDescriptorRegistry
+   *            the entityDescriptorRegistry to set.
+   */
+  public void setEntityDescriptorRegistry(
+      IComponentDescriptorRegistry entityDescriptorRegistry) {
+    this.entityDescriptorRegistry = entityDescriptorRegistry;
+  }
+
+  /**
+   * Sets the entityExtensionFactory property.
+   * 
+   * @param entityExtensionFactory
+   *            the entityCollectionFactory to set.
+   */
+  public void setEntityExtensionFactory(
+      IComponentExtensionFactory entityExtensionFactory) {
+    this.entityExtensionFactory = entityExtensionFactory;
+  }
+
+  /**
+   * Sets the entityGUIDGenerator.
+   * 
+   * @param entityGUIDGenerator
+   *            the entityGUIDGenerator to set.
+   */
+  public void setEntityGUIDGenerator(IGUIDGenerator entityGUIDGenerator) {
+    this.entityGUIDGenerator = entityGUIDGenerator;
+  }
+
+  /**
+   * Creates the entity proxy invocation handler.
+   * 
+   * @param entityDescriptor
+   *            the entity descriptor.
+   * @return the entity proxy invocation handler.
+   */
+  protected InvocationHandler createEntityInvocationHandler(
+      IComponentDescriptor<IComponent> entityDescriptor) {
+    return new BasicEntityInvocationHandler(entityDescriptor,
+        entityCollectionFactory, accessorFactory, entityExtensionFactory);
+  }
+
+  /**
+   * Gets the accessorFactory.
+   * 
+   * @return the accessorFactory.
+   */
+  protected IAccessorFactory getAccessorFactory() {
+    return accessorFactory;
+  }
+
+  /**
+   * Gets the entityCollectionFactory.
+   * 
+   * @return the entityCollectionFactory.
+   */
+  protected IComponentCollectionFactory<IComponent> getEntityCollectionFactory() {
+    return entityCollectionFactory;
+  }
+
+  /**
+   * Gets the entityExtensionFactory.
+   * 
+   * @return the entityExtensionFactory.
+   */
+  protected IComponentExtensionFactory getEntityExtensionFactory() {
+    return entityExtensionFactory;
+  }
+
+  /**
+   * Gets the entity lifecycle handler.
+   * 
+   * @return the entity lifecycle handler.
+   */
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return null;
+  }
+
+  /**
+   * Gets the principal using the factory.
+   * 
+   * @return the principal using the factory.
+   */
+  protected UserPrincipal getPrincipal() {
+    return null;
+  }
+
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id, Class[] extraInterfaces) {
@@ -116,138 +250,5 @@ public class BasicProxyEntityFactory implements IEntityFactory {
         .getContextClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
-  }
-
-  /**
-   * Creates the entity proxy invocation handler.
-   *
-   * @param entityDescriptor
-   *          the entity descriptor.
-   * @return the entity proxy invocation handler.
-   */
-  protected InvocationHandler createEntityInvocationHandler(
-      IComponentDescriptor<IComponent> entityDescriptor) {
-    return new BasicEntityInvocationHandler(entityDescriptor,
-        entityCollectionFactory, accessorFactory, entityExtensionFactory);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  public <T extends IQueryEntity> T createQueryEntityInstance(
-      Class<T> entityContract) {
-    IEntity entityDelegate = createEntityInstance(entityContract, null,
-        new Class[] {IQueryEntity.class});
-    QueryEntityInvocationHandler entityHandler = new QueryEntityInvocationHandler(
-        entityDelegate);
-    return (T) Proxy.newProxyInstance(Thread.currentThread()
-        .getContextClassLoader(), entityDelegate.getClass().getInterfaces(),
-        entityHandler);
-  }
-
-  /**
-   * Gets the accessorFactory.
-   *
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory() {
-    return accessorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
-    return entityDescriptorRegistry.getComponentDescriptor(componentContract);
-  }
-
-  /**
-   * Gets the entityCollectionFactory.
-   *
-   * @return the entityCollectionFactory.
-   */
-  protected IComponentCollectionFactory<IComponent> getEntityCollectionFactory() {
-    return entityCollectionFactory;
-  }
-
-  /**
-   * Gets the entityExtensionFactory.
-   *
-   * @return the entityExtensionFactory.
-   */
-  protected IComponentExtensionFactory getEntityExtensionFactory() {
-    return entityExtensionFactory;
-  }
-
-  /**
-   * Gets the entity lifecycle handler.
-   *
-   * @return the entity lifecycle handler.
-   */
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return null;
-  }
-
-  /**
-   * Gets the principal using the factory.
-   *
-   * @return the principal using the factory.
-   */
-  protected UserPrincipal getPrincipal() {
-    return null;
-  }
-
-  /**
-   * Sets the accessorFactory used by this entity factory.
-   *
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
-   * Sets the entityCollectionFactory property.
-   *
-   * @param entityCollectionFactory
-   *          the entityCollectionFactory to set.
-   */
-  public void setEntityCollectionFactory(
-      IComponentCollectionFactory<IComponent> entityCollectionFactory) {
-    this.entityCollectionFactory = entityCollectionFactory;
-  }
-
-  /**
-   * Sets the entityDescriptorRegistry.
-   *
-   * @param entityDescriptorRegistry
-   *          the entityDescriptorRegistry to set.
-   */
-  public void setEntityDescriptorRegistry(
-      IComponentDescriptorRegistry entityDescriptorRegistry) {
-    this.entityDescriptorRegistry = entityDescriptorRegistry;
-  }
-
-  /**
-   * Sets the entityExtensionFactory property.
-   *
-   * @param entityExtensionFactory
-   *          the entityCollectionFactory to set.
-   */
-  public void setEntityExtensionFactory(
-      IComponentExtensionFactory entityExtensionFactory) {
-    this.entityExtensionFactory = entityExtensionFactory;
-  }
-
-  /**
-   * Sets the entityGUIDGenerator.
-   *
-   * @param entityGUIDGenerator
-   *          the entityGUIDGenerator to set.
-   */
-  public void setEntityGUIDGenerator(IGUIDGenerator entityGUIDGenerator) {
-    this.entityGUIDGenerator = entityGUIDGenerator;
   }
 }

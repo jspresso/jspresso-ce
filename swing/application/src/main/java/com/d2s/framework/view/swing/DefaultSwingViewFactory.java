@@ -191,279 +191,13 @@ import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class DefaultSwingViewFactory implements
     IViewFactory<JComponent, Icon, Action> {
 
-  private final class ColorTableCellRenderer extends DefaultTableCellRenderer {
-
-    private static final long serialVersionUID = 6014260077437906330L;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column) {
-      if (value != null) {
-        int[] rgba = ColorHelper.fromHexString((String) value);
-        setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
-      } else {
-        setBackground(null);
-      }
-      return super.getTableCellRendererComponent(table, value, isSelected,
-          hasFocus, row, column);
-    }
-  }
-  private final class ConnectorTreeCellRenderer extends DefaultTreeCellRenderer {
-
-    private static final long   serialVersionUID = -5153268751092971328L;
-    private Locale              locale;
-    private ITreeViewDescriptor viewDescriptor;
-
-    /**
-     * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
-     *
-     * @param viewDescriptor
-     *          the tree view descriptor used by the tree view.
-     * @param locale
-     */
-    public ConnectorTreeCellRenderer(ITreeViewDescriptor viewDescriptor,
-        Locale locale) {
-      this.viewDescriptor = viewDescriptor;
-      this.locale = locale;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Component getTreeCellRendererComponent(JTree tree, Object value,
-        boolean sel, boolean expanded, boolean leaf, int row,
-        boolean nodeHasFocus) {
-      Component renderer = super.getTreeCellRendererComponent(tree, value, sel,
-          expanded, leaf, row, nodeHasFocus);
-      if (value instanceof IValueConnector) {
-        IValueConnector rootConnector = (IValueConnector) tree.getModel()
-            .getRoot();
-        Icon nodeIcon = null;
-        nodeIcon = iconFactory.getIcon(viewDescriptor
-            .getIconImageURLForUserObject(((IValueConnector) value)
-                .getConnectorValue()), IIconFactory.SMALL_ICON_SIZE);
-        if (nodeIcon == null) {
-          if (value == rootConnector) {
-            nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-                IIconFactory.SMALL_ICON_SIZE);
-          } else {
-            TreePath path = ConnectorTreeHelper.getTreePathForConnector(
-                rootConnector, (IValueConnector) value);
-            if (path != null) {
-              nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
-                  .getSubtreeDescriptorFromPath(
-                      viewDescriptor.getRootSubtreeDescriptor(),
-                      getDescriptorPathFromConnectorTreePath(path))
-                  .getNodeGroupDescriptor().getIconImageURL(),
-                  IIconFactory.SMALL_ICON_SIZE);
-            }
-          }
-        }
-        setIcon(nodeIcon);
-        String labelText = null;
-        String toolTipText = null;
-        if (value instanceof ICollectionConnector) {
-          IListViewDescriptor nodeGroupDescriptor = TreeDescriptorHelper
-              .getSubtreeDescriptorFromPath(
-                  viewDescriptor.getRootSubtreeDescriptor(),
-                  getDescriptorPathFromConnectorTreePath(ConnectorTreeHelper
-                      .getTreePathForConnector((IValueConnector) tree
-                          .getModel().getRoot(), (IValueConnector) value)))
-              .getNodeGroupDescriptor();
-          String labelKey = nodeGroupDescriptor.getName();
-          if (labelKey == null) {
-            labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
-          }
-          labelText = nodeGroupDescriptor.getI18nName(getTranslationProvider(),
-              locale);
-          if (nodeGroupDescriptor.getDescription() != null) {
-            ToolTipManager.sharedInstance().registerComponent(tree);
-            toolTipText = nodeGroupDescriptor.getI18nDescription(
-                getTranslationProvider(), locale)
-                + TOOLTIP_ELLIPSIS;
-          }
-          setText(labelText);
-        } else {
-          if (((IValueConnector) value).getConnectorValue() != null) {
-            labelText = ((IValueConnector) value).getConnectorValue()
-                .toString();
-          } else {
-            labelText = "";
-          }
-        }
-        setText(labelText);
-        setToolTipText(toolTipText);
-      }
-      return renderer;
-    }
-  }
-  private final class PopupListener extends MouseAdapter {
-
-    private IActionHandler    actionHandler;
-    private Locale            locale;
-    private JComponent        sourceComponent;
-    private IView<JComponent> view;
-
-    /**
-     * Constructs a new <code>PopupListener</code> instance.
-     *
-     * @param sourceComponent
-     * @param view
-     * @param actionHandler
-     * @param locale
-     */
-    public PopupListener(JComponent sourceComponent, IView<JComponent> view,
-        IActionHandler actionHandler, Locale locale) {
-      this.sourceComponent = sourceComponent;
-      this.view = view;
-      this.actionHandler = actionHandler;
-      this.locale = locale;
-    }
-
-    private void maybeShowPopup(MouseEvent evt) {
-      if (evt.isPopupTrigger()) {
-        showPopupMenu(sourceComponent, view, evt, actionHandler, locale);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void mousePressed(MouseEvent evt) {
-      maybeShowPopup(evt);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void mouseReleased(MouseEvent evt) {
-      maybeShowPopup(evt);
-    }
-  }
-  private final class TranslatedEnumerationListCellRenderer extends
-      DefaultListCellRenderer {
-
-    private static final long              serialVersionUID = -5694559709701757582L;
-    private Locale                         locale;
-    private IEnumerationPropertyDescriptor propertyDescriptor;
-
-    /**
-     * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
-     * instance.
-     *
-     * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
-     *          taken. The prefix used to lookup translation keys in the form
-     *          keyPrefix.value is the propertyDescriptor enumeration name.
-     * @param locale
-     *          the locale to lookup the translation.
-     */
-    public TranslatedEnumerationListCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-      this.propertyDescriptor = propertyDescriptor;
-      this.locale = locale;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Component getListCellRendererComponent(JList list, Object value,
-        int index, boolean isSelected, boolean cellHasFocus) {
-      JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
-          index, isSelected, cellHasFocus);
-      label
-          .setIcon(iconFactory.getIcon(propertyDescriptor
-              .getIconImageURL(String.valueOf(value)),
-              IIconFactory.TINY_ICON_SIZE));
-      if (value != null && propertyDescriptor.isTranslated()) {
-        label.setText(translationProvider.getTranslation(computeEnumerationKey(
-            propertyDescriptor.getEnumerationName(), value), locale));
-      } else {
-        if (value == null) {
-          label.setText("");
-        } else {
-          label.setText(String.valueOf(value));
-        }
-      }
-      return label;
-    }
-  }
-  private final class TranslatedEnumerationTableCellRenderer extends
-      EvenOddTableCellRenderer {
-
-    private static final long              serialVersionUID = -4500472602998482756L;
-    private Locale                         locale;
-    private IEnumerationPropertyDescriptor propertyDescriptor;
-
-    /**
-     * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
-     * instance.
-     *
-     * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
-     *          taken. The prefix used to lookup translation keys in the form
-     *          keyPrefix.value is the propertyDescriptor enumeration name.
-     * @param locale
-     *          the locale to lookup the translation.
-     */
-    public TranslatedEnumerationTableCellRenderer(
-        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
-      super();
-      this.propertyDescriptor = propertyDescriptor;
-      this.locale = locale;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column) {
-      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
-          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
-      return super.getTableCellRendererComponent(table, value, isSelected,
-          hasFocus, row, column);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected void setValue(Object value) {
-      if (value instanceof IValueConnector) {
-        Object connectorValue = ((IValueConnector) value).getConnectorValue();
-        if (connectorValue != null && propertyDescriptor.isTranslated()) {
-          super.setValue(translationProvider.getTranslation(
-              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
-                  connectorValue), locale));
-        } else {
-          super.setValue(String.valueOf(connectorValue));
-        }
-      } else {
-        if (value != null && propertyDescriptor.isTranslated()) {
-          super.setValue(translationProvider.getTranslation(
-              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
-                  value), locale));
-        } else {
-          super.setValue(String.valueOf(value));
-        }
-      }
-    }
-  }
   private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                DEF_DISP_MAX_VALUE          = 1000;
   private static final double                DEF_DISP_TEMPLATE_PERCENT   = 99;
@@ -483,28 +217,19 @@ public class DefaultSwingViewFactory implements
                                                                              3661 * 1000);
   private IActionFactory<Action, JComponent> actionFactory;
   private IDisplayableAction                 binaryPropertyInfoAction;
-
   private IConfigurableConnectorFactory      connectorFactory;
   private IIconFactory<Icon>                 iconFactory;
   private IListSelectionModelBinder          listSelectionModelBinder;
   private IDisplayableAction                 lovAction;
   private IMasterDetailBinder                masterDetailBinder;
+
   private int                                maxCharacterLength          = 30;
   private int                                maxColumnCharacterLength    = 15;
   private IMvcBinder                         mvcBinder;
-
   private IDisplayableAction                 openFileAsBinaryPropertyAction;
-
   private IDisplayableAction                 resetPropertyAction;
-
   private IDisplayableAction                 saveBinaryPropertyAsFileAction;
-
   private ITranslationProvider               translationProvider;
-
-  // ///////////////// //
-  // Composite Section //
-  // ///////////////// //
-
   private ITreeSelectionModelBinder          treeSelectionModelBinder;
 
   /**
@@ -516,9 +241,9 @@ public class DefaultSwingViewFactory implements
 
   /**
    * Constructs a new <code>DefaultSwingViewFactory</code> instance.
-   *
+   * 
    * @param lookAndFeel
-   *          the look and feel class name
+   *            the look and feel class name
    */
   public DefaultSwingViewFactory(String lookAndFeel) {
     if (lookAndFeel != null) {
@@ -538,10 +263,625 @@ public class DefaultSwingViewFactory implements
     SwingUtil.installDefaults();
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public IView<JComponent> createView(IViewDescriptor viewDescriptor,
+      IActionHandler actionHandler, Locale locale) {
+    IView<JComponent> view = null;
+    if (viewDescriptor instanceof IComponentViewDescriptor) {
+      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof INestingViewDescriptor) {
+      view = createNestingView((INestingViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IImageViewDescriptor) {
+      view = createImageView((IImageViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
+      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
+      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
+      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ICardViewDescriptor) {
+      view = createCardView((ICardViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
+      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
+          actionHandler, locale);
+    }
+    try {
+      actionHandler.checkAccess(viewDescriptor);
+      if (viewDescriptor.getForeground() != null) {
+        view.getPeer().setForeground(viewDescriptor.getForeground());
+      }
+      if (viewDescriptor.getBackground() != null) {
+        view.getPeer().setBackground(viewDescriptor.getBackground());
+      }
+      if (viewDescriptor.getFont() != null) {
+        view.getPeer().setFont(viewDescriptor.getFont());
+      }
+      if (viewDescriptor.isReadOnly()) {
+        view.getConnector().setLocallyWritable(false);
+      }
+      if (viewDescriptor.getReadabilityGates() != null) {
+        for (IGate gate : viewDescriptor.getReadabilityGates()) {
+          view.getConnector().addReadabilityGate(gate.clone());
+        }
+      }
+      if (viewDescriptor.getWritabilityGates() != null) {
+        for (IGate gate : viewDescriptor.getWritabilityGates()) {
+          view.getConnector().addWritabilityGate(gate.clone());
+        }
+      }
+      if (viewDescriptor.getDescription() != null) {
+        view.getPeer().setToolTipText(
+            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+                + TOOLTIP_ELLIPSIS);
+      }
+      if (viewDescriptor.getActions() != null) {
+        JToolBar toolBar = createJToolBar();
+        toolBar.setRollover(true);
+        toolBar.setFloatable(true);
+        for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
+            .getActions().entrySet().iterator(); iter.hasNext();) {
+          Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
+              .next();
+          for (IDisplayableAction action : nextActionSet.getValue()) {
+            Action swingAction = actionFactory.createAction(action,
+                actionHandler, view, locale);
+            JButton actionButton = createJButton();
+            actionButton.setAction(swingAction);
+            if (action.getAcceleratorAsString() != null) {
+              KeyStroke ks = KeyStroke.getKeyStroke(action
+                  .getAcceleratorAsString());
+              view.getPeer().getActionMap().put(
+                  swingAction.getValue(Action.NAME), swingAction);
+              view.getPeer().getInputMap(
+                  JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                  swingAction.getValue(Action.NAME));
+              String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                  .getModifiers())
+                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+              actionButton.setToolTipText("<HTML>"
+                  + actionButton.getToolTipText()
+                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
+                  + "</FONT></HTML>");
+            }
+            actionButton.setText("");
+            toolBar.add(actionButton);
+          }
+          if (iter.hasNext()) {
+            toolBar.addSeparator();
+          }
+        }
+        JPanel viewPanel = createJPanel();
+        viewPanel.setLayout(new BorderLayout());
+        viewPanel.add(toolBar, BorderLayout.NORTH);
+        viewPanel.add(view.getPeer(), BorderLayout.CENTER);
+        view.setPeer(viewPanel);
+      }
+      decorateWithBorder(view, locale);
+    } catch (SecurityException ex) {
+      view.setPeer(createSecurityPanel());
+    }
+    return view;
+  }
+
+  /**
+   * Gets the actionFactory.
+   * 
+   * @return the actionFactory.
+   */
+  public IActionFactory<Action, JComponent> getActionFactory() {
+    return actionFactory;
+  }
+
+  // ///////////////// //
+  // Composite Section //
+  // ///////////////// //
+
+  /**
+   * Gets the iconFactory.
+   * 
+   * @return the iconFactory.
+   */
+  public IIconFactory<Icon> getIconFactory() {
+    return iconFactory;
+  }
+
+  /**
+   * Sets the actionFactory.
+   * 
+   * @param actionFactory
+   *            the actionFactory to set.
+   */
+  public void setActionFactory(IActionFactory<Action, JComponent> actionFactory) {
+    this.actionFactory = actionFactory;
+  }
+
+  /**
+   * Sets the binaryPropertyInfoAction.
+   * 
+   * @param binaryPropertyInfoAction
+   *            the binaryPropertyInfoAction to set.
+   */
+  public void setBinaryPropertyInfoAction(
+      IDisplayableAction binaryPropertyInfoAction) {
+    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
+  }
+
+  /**
+   * Sets the connectorFactory.
+   * 
+   * @param connectorFactory
+   *            the connectorFactory to set.
+   */
+  public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
+    this.connectorFactory = connectorFactory;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *            the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<Icon> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the listSelectionModelBinder.
+   * 
+   * @param listSelectionModelBinder
+   *            the listSelectionModelBinder to set.
+   */
+  public void setListSelectionModelBinder(
+      IListSelectionModelBinder listSelectionModelBinder) {
+    this.listSelectionModelBinder = listSelectionModelBinder;
+  }
+
+  /**
+   * Sets the lovAction.
+   * 
+   * @param lovAction
+   *            the lovAction to set.
+   */
+  public void setLovAction(IDisplayableAction lovAction) {
+    this.lovAction = lovAction;
+  }
+
+  /**
+   * Sets the masterDetailBinder.
+   * 
+   * @param masterDetailBinder
+   *            the masterDetailBinder to set.
+   */
+  public void setMasterDetailBinder(IMasterDetailBinder masterDetailBinder) {
+    this.masterDetailBinder = masterDetailBinder;
+  }
+
+  /**
+   * Sets the maxCharacterLength.
+   * 
+   * @param maxCharacterLength
+   *            the maxCharacterLength to set.
+   */
+  public void setMaxCharacterLength(int maxCharacterLength) {
+    this.maxCharacterLength = maxCharacterLength;
+  }
+
+  /**
+   * Sets the mvcBinder.
+   * 
+   * @param mvcBinder
+   *            the mvcBinder to set.
+   */
+  public void setMvcBinder(IMvcBinder mvcBinder) {
+    this.mvcBinder = mvcBinder;
+  }
+
+  /**
+   * Sets the openFileAsBinaryPropertyAction.
+   * 
+   * @param openFileAsBinaryPropertyAction
+   *            the openFileAsBinaryPropertyAction to set.
+   */
+  public void setOpenFileAsBinaryPropertyAction(
+      IDisplayableAction openFileAsBinaryPropertyAction) {
+    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
+  }
+
+  /**
+   * Sets the resetPropertyAction.
+   * 
+   * @param resetPropertyAction
+   *            the resetPropertyAction to set.
+   */
+  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
+    this.resetPropertyAction = resetPropertyAction;
+  }
+
+  /**
+   * Sets the saveBinaryPropertyAsFileAction.
+   * 
+   * @param saveBinaryPropertyAsFileAction
+   *            the saveBinaryPropertyAsFileAction to set.
+   */
+  public void setSaveBinaryPropertyAsFileAction(
+      IDisplayableAction saveBinaryPropertyAsFileAction) {
+    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
+  }
+
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *            the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
+  /**
+   * Sets the treeSelectionModelBinder.
+   * 
+   * @param treeSelectionModelBinder
+   *            the treeSelectionModelBinder to set.
+   */
+  public void setTreeSelectionModelBinder(
+      ITreeSelectionModelBinder treeSelectionModelBinder) {
+    this.treeSelectionModelBinder = treeSelectionModelBinder;
+  }
+
+  /**
+   * Creates an action field.
+   * 
+   * @param showTextField
+   *            is the text field visible to the user.
+   * @return the created action field.
+   */
+  protected JActionField createJActionField(boolean showTextField) {
+    return new JActionField(showTextField);
+  }
+
+  // ////////////////// //
+  // Collection Section //
+  // ////////////////// //
+
+  /**
+   * Creates a button.
+   * 
+   * @return the created button.
+   */
+  protected JButton createJButton() {
+    JButton button = new JButton();
+    SwingUtil.configureButton(button);
+    return button;
+  }
+
+  /**
+   * Creates a check box.
+   * 
+   * @return the created check box.
+   */
+  protected JCheckBox createJCheckBox() {
+    return new JCheckBox();
+  }
+
+  /**
+   * Creates an color picker.
+   * 
+   * @return the created color picker.
+   */
+  protected JColorPicker createJColorPicker() {
+    return new JColorPicker();
+  }
+
+  /**
+   * Creates a combo box.
+   * 
+   * @return the created combo box.
+   */
+  protected JComboBox createJComboBox() {
+    return new JComboBox();
+  }
+
+  /**
+   * Creates a date field.
+   * 
+   * @param locale
+   *            the user locale.
+   * @return the created date field.
+   */
+  protected JDateField createJDateField(Locale locale) {
+    JDateField dateField = new JDateField(locale);
+    dateField.setRenderer(new DefaultDayRenderer());
+    dateField.setHeaderRenderer(new DefaultHeaderRenderer());
+    return dateField;
+  }
+
+  /**
+   * Creates a JEdit text area.
+   * 
+   * @param language
+   *            the language to add syntax highlighting for.
+   * @return the created text area.
+   */
+  protected JEditTextArea createJEditTextArea(String language) {
+    JEditTextArea textArea = new JEditTextArea();
+    try {
+      textArea.setTokenMarker((TokenMarker) Class.forName(
+          "org.syntax.jedit.tokenmarker." + language + "TokenMarker")
+          .newInstance());
+    } catch (InstantiationException ex) {
+      // Nothing to do. just don't colorize.
+    } catch (IllegalAccessException ex) {
+      // Nothing to do. just don't colorize.
+    } catch (ClassNotFoundException ex) {
+      // Nothing to do. just don't colorize.
+    }
+    return textArea;
+  }
+
+  /**
+   * Creates a label.
+   * 
+   * @return the created label.
+   */
+  protected JLabel createJLabel() {
+    return new JLabel();
+  }
+
+  /**
+   * Creates a list.
+   * 
+   * @return the created list.
+   */
+  protected JList createJList() {
+    JList list = new JList();
+    list.setDragEnabled(true);
+    return list;
+  }
+
+  /**
+   * Creates a menu item.
+   * 
+   * @return the created menu item.
+   */
+  protected JMenuItem createJMenuItem() {
+    return new JMenuItem();
+  }
+
+  /**
+   * Creates a panel.
+   * 
+   * @return the created panel.
+   */
+  protected JPanel createJPanel() {
+    JPanel panel = new JPanel();
+    return panel;
+  }
+
+  /**
+   * Creates a password field.
+   * 
+   * @return the created password field.
+   */
+  protected JPasswordField createJPasswordField() {
+    JPasswordField passwordField = new JPasswordField();
+    return passwordField;
+  }
+
+  /**
+   * Creates a popup menu.
+   * 
+   * @return the created popup menu.
+   */
+  protected JPopupMenu createJPopupMenu() {
+    return new JPopupMenu();
+  }
+
+  /**
+   * Creates a scroll pane.
+   * 
+   * @return the created scroll pane.
+   */
+  protected JScrollPane createJScrollPane() {
+    JScrollPane scrollPane = new JScrollPane();
+    scrollPane.setMinimumSize(MINIMUM_AREA_SIZE);
+    return scrollPane;
+  }
+
+  /**
+   * Creates a split pane.
+   * 
+   * @return the created split pane.
+   */
+  protected JSplitPane createJSplitPane() {
+    JSplitPane splitPane = new JSplitPane();
+    splitPane.setContinuousLayout(true);
+    splitPane.setOneTouchExpandable(true);
+    return splitPane;
+  }
+
+  /**
+   * Creates a tabbed pane.
+   * 
+   * @return the created tabbed pane.
+   */
+  protected JTabbedPane createJTabbedPane() {
+    return new JTabbedPane();
+  }
+
+  /**
+   * Creates a table.
+   * 
+   * @return the created table.
+   */
+  protected JTable createJTable() {
+    JTable table = new JTable() {
+
+      private static final long serialVersionUID = -2766744091893464462L;
+
+      /**
+       * Override this method to fix a bug in the JVM which causes the table to
+       * start editing when a mnuemonic key or function key is pressed.
+       */
+      @Override
+      protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,
+          int condition, boolean pressed) {
+        if (SwingUtilities.getUIInputMap(this, condition) != null
+            && SwingUtilities.getUIInputMap(this, condition).get(ks) != null) {
+          return super.processKeyBinding(ks, e, condition, pressed);
+        }
+        /**
+         * ignore all keys that have not been registered
+         */
+        if (getInputMap(condition).get(ks) != null) {
+          return false;
+        }
+        boolean foundInAncestors = false;
+        JComponent parent = null;
+        if (getParent() instanceof JComponent) {
+          parent = (JComponent) getParent();
+        }
+        while (!foundInAncestors && parent != null) {
+          if (parent.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
+              .get(ks) != null) {
+            foundInAncestors = true;
+          }
+          if (parent.getParent() instanceof JComponent) {
+            parent = (JComponent) parent.getParent();
+          } else {
+            parent = null;
+          }
+        }
+        if (!foundInAncestors) {
+          return super.processKeyBinding(ks, e, condition, pressed);
+        }
+        return false;
+      }
+    };
+    table.setSurrendersFocusOnKeystroke(true);
+    // There is a bug regarding editing table when drag is enabled.
+    // table.setDragEnabled(true);
+    return table;
+  }
+
+  /**
+   * Creates a text area.
+   * 
+   * @return the created text area.
+   */
+  protected JTextArea createJTextArea() {
+    JTextArea textArea = new JTextArea();
+    textArea.setDragEnabled(true);
+    textArea.setWrapStyleWord(true);
+    return textArea;
+  }
+
+  /**
+   * Creates a text field.
+   * 
+   * @return the created text field.
+   */
+  protected JTextField createJTextField() {
+    JTextField textField = new JTextField();
+    SwingUtil.enableSelectionOnFocusGained(textField);
+    return textField;
+  }
+
+  /**
+   * Creates a tool bar.
+   * 
+   * @return the created tool bar.
+   */
+  protected JToolBar createJToolBar() {
+    return new JToolBar();
+  }
+
+  /**
+   * Creates a tree.
+   * 
+   * @return the created tree.
+   */
+  protected JTree createJTree() {
+    JTree tree = new JTree();
+    tree.setDragEnabled(true);
+    return tree;
+  }
+
+  /**
+   * Creates a security panel.
+   * 
+   * @return the created security panel.
+   */
+  protected JPanel createSecurityPanel() {
+    JPanel panel = createJPanel();
+    panel.setLayout(new BorderLayout());
+    JLabel label = createJLabel();
+    label.setHorizontalAlignment(SwingConstants.CENTER);
+    label.setVerticalAlignment(SwingConstants.CENTER);
+    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
+    panel.add(label, BorderLayout.CENTER);
+    return panel;
+  }
+
+  /**
+   * Decorates the created view with the apropriate border.
+   * 
+   * @param view
+   *            the view to descorate.
+   * @param locale
+   *            the locale to use.
+   */
+  protected void decorateWithBorder(IView<JComponent> view, Locale locale) {
+    switch (view.getDescriptor().getBorderType()) {
+      case IViewDescriptor.SIMPLE:
+        view.getPeer().setBorder(BorderFactory.createEtchedBorder());
+        break;
+      case IViewDescriptor.TITLED:
+        view.getPeer().setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), view.getDescriptor()
+                    .getI18nName(getTranslationProvider(), locale)));
+        break;
+      default:
+        break;
+    }
+  }
+
+  // ///////////// //
+  // Image Section //
+  // ///////////// //
+
+  /**
+   * Gets the translationProvider.
+   * 
+   * @return the translationProvider.
+   */
+  protected ITranslationProvider getTranslationProvider() {
+    return translationProvider;
+  }
+
+  // /////////////// //
+  // Nesting Section //
+  // /////////////// //
+
   private void adjustSizes(Component component, IFormatter formatter,
       Object templateValue) {
     adjustSizes(component, formatter, templateValue, 32);
   }
+
+  // ///////////////// //
+  // Component Section //
+  // ///////////////// //
 
   private void adjustSizes(Component component, IFormatter formatter,
       Object templateValue, int extraWidth) {
@@ -775,12 +1115,8 @@ public class DefaultSwingViewFactory implements
     return cardViewConnector;
   }
 
-  // ////////////////// //
-  // Collection Section //
-  // ////////////////// //
-
   private IView<JComponent> createCollectionPropertyView(
-      ICollectionPropertyDescriptor propertyDescriptor,
+      ICollectionPropertyDescriptor<?> propertyDescriptor,
       List<String> renderedChildProperties, IActionHandler actionHandler,
       @SuppressWarnings("unused")
       Locale locale) {
@@ -813,7 +1149,7 @@ public class DefaultSwingViewFactory implements
 
   private TableCellRenderer createCollectionTableCellRenderer(
       @SuppressWarnings("unused")
-      ICollectionPropertyDescriptor propertyDescriptor,
+      ICollectionPropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused")
       Locale locale) {
     return null;
@@ -858,7 +1194,7 @@ public class DefaultSwingViewFactory implements
   }
 
   private IValueConnector createColumnConnector(String columnId,
-      IComponentDescriptor descriptor) {
+      IComponentDescriptor<?> descriptor) {
     IPropertyDescriptor propertyDescriptor = descriptor
         .getPropertyDescriptor(columnId);
     if (propertyDescriptor == null) {
@@ -867,7 +1203,7 @@ public class DefaultSwingViewFactory implements
     }
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       return connectorFactory.createCompositeValueConnector(columnId,
-          ((IReferencePropertyDescriptor) propertyDescriptor)
+          ((IReferencePropertyDescriptor<?>) propertyDescriptor)
               .getReferencedDescriptor().getToStringProperty());
     }
     return connectorFactory.createValueConnector(propertyDescriptor.getName());
@@ -894,7 +1230,7 @@ public class DefaultSwingViewFactory implements
     for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
         .getPropertyViewDescriptors()) {
       String propertyName = propertyViewDescriptor.getName();
-      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider) viewDescriptor
+      IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
           .getPropertyDescriptor(propertyName);
       if (propertyDescriptor == null) {
@@ -1021,7 +1357,7 @@ public class DefaultSwingViewFactory implements
   private ICollectionConnectorProvider createCompositeNodeGroupConnector(
       ITreeViewDescriptor viewDescriptor,
       ICompositeTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionDescriptorProvider nodeGroupModelDescriptor = ((ICollectionDescriptorProvider) subtreeViewDescriptor
+    ICollectionDescriptorProvider<?> nodeGroupModelDescriptor = ((ICollectionDescriptorProvider<?>) subtreeViewDescriptor
         .getNodeGroupDescriptor().getModelDescriptor());
     IConfigurableCollectionConnectorListProvider nodeGroupPrototypeConnector = connectorFactory
         .createConfigurableCollectionConnectorListProvider(
@@ -1185,6 +1521,10 @@ public class DefaultSwingViewFactory implements
     return new FormatAdapter(createDecimalFormat(propertyDescriptor, locale));
   }
 
+  // ////////////////// //
+  // Popup menu Section //
+  // ////////////////// //
+
   private IView<JComponent> createDecimalPropertyView(
       IDecimalPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1237,6 +1577,10 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor, locale));
   }
 
+  // /////////////// //
+  // Helpers Section //
+  // /////////////// //
+
   private IView<JComponent> createEnumerationPropertyView(
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -1255,19 +1599,11 @@ public class DefaultSwingViewFactory implements
     return constructView(viewComponent, null, connector);
   }
 
-  // ///////////// //
-  // Image Section //
-  // ///////////// //
-
   private TableCellRenderer createEnumerationTableCellRenderer(
       IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
     return new TranslatedEnumerationTableCellRenderer(propertyDescriptor,
         locale);
   }
-
-  // /////////////// //
-  // Nesting Section //
-  // /////////////// //
 
   private ICompositeView<JComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
@@ -1304,10 +1640,6 @@ public class DefaultSwingViewFactory implements
     view.setChildren(childrenViews);
     return view;
   }
-
-  // ///////////////// //
-  // Component Section //
-  // ///////////////// //
 
   private IFormatter createFormatter(Format format) {
     return new FormatAdapter(format);
@@ -1427,150 +1759,6 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor, locale));
   }
 
-  /**
-   * Creates an action field.
-   *
-   * @param showTextField
-   *          is the text field visible to the user.
-   * @return the created action field.
-   */
-  protected JActionField createJActionField(boolean showTextField) {
-    return new JActionField(showTextField);
-  }
-
-  /**
-   * Creates a button.
-   *
-   * @return the created button.
-   */
-  protected JButton createJButton() {
-    JButton button = new JButton();
-    SwingUtil.configureButton(button);
-    return button;
-  }
-
-  /**
-   * Creates a check box.
-   *
-   * @return the created check box.
-   */
-  protected JCheckBox createJCheckBox() {
-    return new JCheckBox();
-  }
-
-  /**
-   * Creates an color picker.
-   *
-   * @return the created color picker.
-   */
-  protected JColorPicker createJColorPicker() {
-    return new JColorPicker();
-  }
-
-  /**
-   * Creates a combo box.
-   *
-   * @return the created combo box.
-   */
-  protected JComboBox createJComboBox() {
-    return new JComboBox();
-  }
-
-  /**
-   * Creates a date field.
-   *
-   * @param locale
-   *          the user locale.
-   * @return the created date field.
-   */
-  protected JDateField createJDateField(Locale locale) {
-    JDateField dateField = new JDateField(locale);
-    dateField.setRenderer(new DefaultDayRenderer());
-    dateField.setHeaderRenderer(new DefaultHeaderRenderer());
-    return dateField;
-  }
-
-  /**
-   * Creates a JEdit text area.
-   *
-   * @param language
-   *          the language to add syntax highlighting for.
-   * @return the created text area.
-   */
-  protected JEditTextArea createJEditTextArea(String language) {
-    JEditTextArea textArea = new JEditTextArea();
-    try {
-      textArea.setTokenMarker((TokenMarker) Class.forName(
-          "org.syntax.jedit.tokenmarker." + language + "TokenMarker")
-          .newInstance());
-    } catch (InstantiationException ex) {
-      // Nothing to do. just don't colorize.
-    } catch (IllegalAccessException ex) {
-      // Nothing to do. just don't colorize.
-    } catch (ClassNotFoundException ex) {
-      // Nothing to do. just don't colorize.
-    }
-    return textArea;
-  }
-
-  /**
-   * Creates a label.
-   *
-   * @return the created label.
-   */
-  protected JLabel createJLabel() {
-    return new JLabel();
-  }
-
-  /**
-   * Creates a list.
-   *
-   * @return the created list.
-   */
-  protected JList createJList() {
-    JList list = new JList();
-    list.setDragEnabled(true);
-    return list;
-  }
-
-  /**
-   * Creates a menu item.
-   *
-   * @return the created menu item.
-   */
-  protected JMenuItem createJMenuItem() {
-    return new JMenuItem();
-  }
-
-  /**
-   * Creates a panel.
-   *
-   * @return the created panel.
-   */
-  protected JPanel createJPanel() {
-    JPanel panel = new JPanel();
-    return panel;
-  }
-
-  /**
-   * Creates a password field.
-   *
-   * @return the created password field.
-   */
-  protected JPasswordField createJPasswordField() {
-    JPasswordField passwordField = new JPasswordField();
-    return passwordField;
-  }
-
-  /**
-   * Creates a popup menu.
-   *
-   * @return the created popup menu.
-   */
-  protected JPopupMenu createJPopupMenu() {
-    return new JPopupMenu();
-  }
-
   private JPopupMenu createJPopupMenu(JComponent sourceComponent,
       Map<String, List<IDisplayableAction>> actionMap,
       IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
@@ -1602,145 +1790,11 @@ public class DefaultSwingViewFactory implements
     return popupMenu;
   }
 
-  /**
-   * Creates a scroll pane.
-   *
-   * @return the created scroll pane.
-   */
-  protected JScrollPane createJScrollPane() {
-    JScrollPane scrollPane = new JScrollPane();
-    scrollPane.setMinimumSize(MINIMUM_AREA_SIZE);
-    return scrollPane;
-  }
-
-  /**
-   * Creates a split pane.
-   *
-   * @return the created split pane.
-   */
-  protected JSplitPane createJSplitPane() {
-    JSplitPane splitPane = new JSplitPane();
-    splitPane.setContinuousLayout(true);
-    splitPane.setOneTouchExpandable(true);
-    return splitPane;
-  }
-
-  /**
-   * Creates a tabbed pane.
-   *
-   * @return the created tabbed pane.
-   */
-  protected JTabbedPane createJTabbedPane() {
-    return new JTabbedPane();
-  }
-
-  /**
-   * Creates a table.
-   *
-   * @return the created table.
-   */
-  protected JTable createJTable() {
-    JTable table = new JTable() {
-
-      private static final long serialVersionUID = -2766744091893464462L;
-
-      /**
-       * Override this method to fix a bug in the JVM which causes the table to
-       * start editing when a mnuemonic key or function key is pressed.
-       */
-      @Override
-      protected boolean processKeyBinding(KeyStroke ks, KeyEvent e,
-          int condition, boolean pressed) {
-        if (SwingUtilities.getUIInputMap(this, condition) != null
-            && SwingUtilities.getUIInputMap(this, condition).get(ks) != null) {
-          return super.processKeyBinding(ks, e, condition, pressed);
-        }
-        /**
-         * ignore all keys that have not been registered
-         */
-        if (getInputMap(condition).get(ks) != null) {
-          return false;
-        }
-        boolean foundInAncestors = false;
-        JComponent parent = null;
-        if (getParent() instanceof JComponent) {
-          parent = (JComponent) getParent();
-        }
-        while (!foundInAncestors && parent != null) {
-          if (parent.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT)
-              .get(ks) != null) {
-            foundInAncestors = true;
-          }
-          if (parent.getParent() instanceof JComponent) {
-            parent = (JComponent) parent.getParent();
-          } else {
-            parent = null;
-          }
-        }
-        if (!foundInAncestors) {
-          return super.processKeyBinding(ks, e, condition, pressed);
-        }
-        return false;
-      }
-    };
-    table.setSurrendersFocusOnKeystroke(true);
-    // There is a bug regarding editing table when drag is enabled.
-    // table.setDragEnabled(true);
-    return table;
-  }
-
-  /**
-   * Creates a text area.
-   *
-   * @return the created text area.
-   */
-  protected JTextArea createJTextArea() {
-    JTextArea textArea = new JTextArea();
-    textArea.setDragEnabled(true);
-    textArea.setWrapStyleWord(true);
-    return textArea;
-  }
-
-  // ////////////////// //
-  // Popup menu Section //
-  // ////////////////// //
-
-  /**
-   * Creates a text field.
-   *
-   * @return the created text field.
-   */
-  protected JTextField createJTextField() {
-    JTextField textField = new JTextField();
-    SwingUtil.enableSelectionOnFocusGained(textField);
-    return textField;
-  }
-
-  /**
-   * Creates a tool bar.
-   *
-   * @return the created tool bar.
-   */
-  protected JToolBar createJToolBar() {
-    return new JToolBar();
-  }
-
-  /**
-   * Creates a tree.
-   *
-   * @return the created tree.
-   */
-  protected JTree createJTree() {
-    JTree tree = new JTree();
-    tree.setDragEnabled(true);
-    return tree;
-  }
-
   private IView<JComponent> createListView(IListViewDescriptor viewDescriptor,
       @SuppressWarnings("unused")
       IActionHandler actionHandler, @SuppressWarnings("unused")
       Locale locale) {
-    ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) viewDescriptor
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = connectorFactory
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
@@ -1791,10 +1845,6 @@ public class DefaultSwingViewFactory implements
 
     return view;
   }
-
-  // /////////////// //
-  // Helpers Section //
-  // /////////////// //
 
   private ICollectionConnectorProvider createNodeGroupConnector(
       ITreeViewDescriptor viewDescriptor,
@@ -1960,7 +2010,7 @@ public class DefaultSwingViewFactory implements
   }
 
   private IView<JComponent> createReferencePropertyView(
-      IReferencePropertyDescriptor propertyDescriptor,
+      IReferencePropertyDescriptor<?> propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JActionField viewComponent = createJActionField(true);
     JReferenceFieldConnector connector = new JReferenceFieldConnector(
@@ -1992,7 +2042,7 @@ public class DefaultSwingViewFactory implements
 
   private TableCellRenderer createReferenceTableCellRenderer(
       @SuppressWarnings("unused")
-      IReferencePropertyDescriptor propertyDescriptor,
+      IReferencePropertyDescriptor<?> propertyDescriptor,
       @SuppressWarnings("unused")
       Locale locale) {
     return null;
@@ -2006,11 +2056,11 @@ public class DefaultSwingViewFactory implements
 
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       view = createReferencePropertyView(
-          (IReferencePropertyDescriptor) propertyDescriptor, actionHandler,
+          (IReferencePropertyDescriptor<?>) propertyDescriptor, actionHandler,
           locale);
     } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       view = createCollectionPropertyView(
-          (ICollectionPropertyDescriptor) propertyDescriptor,
+          (ICollectionPropertyDescriptor<?>) propertyDescriptor,
           renderedChildProperties, actionHandler, locale);
     }
     return view;
@@ -2022,34 +2072,18 @@ public class DefaultSwingViewFactory implements
 
     if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
       cellRenderer = createReferenceTableCellRenderer(
-          (IReferencePropertyDescriptor) propertyDescriptor, locale);
+          (IReferencePropertyDescriptor<?>) propertyDescriptor, locale);
     } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       cellRenderer = createCollectionTableCellRenderer(
-          (ICollectionPropertyDescriptor) propertyDescriptor, locale);
+          (ICollectionPropertyDescriptor<?>) propertyDescriptor, locale);
     }
     return cellRenderer;
-  }
-
-  /**
-   * Creates a security panel.
-   *
-   * @return the created security panel.
-   */
-  protected JPanel createSecurityPanel() {
-    JPanel panel = createJPanel();
-    panel.setLayout(new BorderLayout());
-    JLabel label = createJLabel();
-    label.setHorizontalAlignment(SwingConstants.CENTER);
-    label.setVerticalAlignment(SwingConstants.CENTER);
-    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
-    panel.add(label, BorderLayout.CENTER);
-    return panel;
   }
 
   private ICollectionConnectorProvider createSimpleNodeGroupConnector(
       ITreeViewDescriptor viewDescriptor,
       ISimpleTreeLevelDescriptor subtreeViewDescriptor, int depth) {
-    ICollectionPropertyDescriptor nodeGroupModelDescriptor = (ICollectionPropertyDescriptor) subtreeViewDescriptor
+    ICollectionPropertyDescriptor<?> nodeGroupModelDescriptor = (ICollectionPropertyDescriptor<?>) subtreeViewDescriptor
         .getNodeGroupDescriptor().getModelDescriptor();
     IConfigurableCollectionConnectorProvider nodeGroupPrototypeConnector = connectorFactory
         .createConfigurableCollectionConnectorProvider(nodeGroupModelDescriptor
@@ -2210,7 +2244,7 @@ public class DefaultSwingViewFactory implements
   private IView<JComponent> createTableView(
       ITableViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) viewDescriptor
+    ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = connectorFactory
         .createCompositeValueConnector(modelDescriptor.getName() + "Element",
@@ -2234,7 +2268,7 @@ public class DefaultSwingViewFactory implements
         connector);
     viewComponent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-    Map<String, Class> columnClassesByIds = new HashMap<String, Class>();
+    Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
     List<String> columnConnectorKeys = new ArrayList<String>();
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
@@ -2476,148 +2510,6 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public IView<JComponent> createView(IViewDescriptor viewDescriptor,
-      IActionHandler actionHandler, Locale locale) {
-    IView<JComponent> view = null;
-    if (viewDescriptor instanceof IComponentViewDescriptor) {
-      view = createComponentView((IComponentViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof INestingViewDescriptor) {
-      view = createNestingView((INestingViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IImageViewDescriptor) {
-      view = createImageView((IImageViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof IPropertyViewDescriptor) {
-      view = createPropertyView((IPropertyViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICollectionViewDescriptor) {
-      view = createCollectionView((ICollectionViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICompositeViewDescriptor) {
-      view = createCompositeView((ICompositeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ICardViewDescriptor) {
-      view = createCardView((ICardViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    } else if (viewDescriptor instanceof ITreeViewDescriptor) {
-      view = createTreeView((ITreeViewDescriptor) viewDescriptor,
-          actionHandler, locale);
-    }
-    try {
-      actionHandler.checkAccess(viewDescriptor);
-      if (viewDescriptor.getForeground() != null) {
-        view.getPeer().setForeground(viewDescriptor.getForeground());
-      }
-      if (viewDescriptor.getBackground() != null) {
-        view.getPeer().setBackground(viewDescriptor.getBackground());
-      }
-      if (viewDescriptor.getFont() != null) {
-        view.getPeer().setFont(viewDescriptor.getFont());
-      }
-      if (viewDescriptor.isReadOnly()) {
-        view.getConnector().setLocallyWritable(false);
-      }
-      if (viewDescriptor.getReadabilityGates() != null) {
-        for (IGate gate : viewDescriptor.getReadabilityGates()) {
-          view.getConnector().addReadabilityGate(gate.clone());
-        }
-      }
-      if (viewDescriptor.getWritabilityGates() != null) {
-        for (IGate gate : viewDescriptor.getWritabilityGates()) {
-          view.getConnector().addWritabilityGate(gate.clone());
-        }
-      }
-      if (viewDescriptor.getDescription() != null) {
-        view.getPeer().setToolTipText(
-            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-                + TOOLTIP_ELLIPSIS);
-      }
-      if (viewDescriptor.getActions() != null) {
-        JToolBar toolBar = createJToolBar();
-        toolBar.setRollover(true);
-        toolBar.setFloatable(true);
-        for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-            .getActions().entrySet().iterator(); iter.hasNext();) {
-          Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
-              .next();
-          for (IDisplayableAction action : nextActionSet.getValue()) {
-            Action swingAction = actionFactory.createAction(action,
-                actionHandler, view, locale);
-            JButton actionButton = createJButton();
-            actionButton.setAction(swingAction);
-            if (action.getAcceleratorAsString() != null) {
-              KeyStroke ks = KeyStroke.getKeyStroke(action
-                  .getAcceleratorAsString());
-              view.getPeer().getActionMap().put(
-                  swingAction.getValue(Action.NAME), swingAction);
-              view.getPeer().getInputMap(
-                  JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                  swingAction.getValue(Action.NAME));
-              String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                  .getModifiers())
-                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-              actionButton.setToolTipText("<HTML>"
-                  + actionButton.getToolTipText()
-                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                  + "</FONT></HTML>");
-            }
-            actionButton.setText("");
-            toolBar.add(actionButton);
-          }
-          if (iter.hasNext()) {
-            toolBar.addSeparator();
-          }
-        }
-        JPanel viewPanel = createJPanel();
-        viewPanel.setLayout(new BorderLayout());
-        viewPanel.add(toolBar, BorderLayout.NORTH);
-        viewPanel.add(view.getPeer(), BorderLayout.CENTER);
-        view.setPeer(viewPanel);
-      }
-      decorateWithBorder(view, locale);
-    } catch (SecurityException ex) {
-      view.setPeer(createSecurityPanel());
-    }
-    return view;
-  }
-
-  /**
-   * Decorates the created view with the apropriate border.
-   *
-   * @param view
-   *          the view to descorate.
-   * @param locale
-   *          the locale to use.
-   */
-  protected void decorateWithBorder(IView<JComponent> view, Locale locale) {
-    switch (view.getDescriptor().getBorderType()) {
-      case IViewDescriptor.SIMPLE:
-        view.getPeer().setBorder(BorderFactory.createEtchedBorder());
-        break;
-      case IViewDescriptor.TITLED:
-        view.getPeer().setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), view.getDescriptor()
-                    .getI18nName(getTranslationProvider(), locale)));
-        break;
-      default:
-        break;
-    }
-  }
-
-  /**
-   * Gets the actionFactory.
-   *
-   * @return the actionFactory.
-   */
-  public IActionFactory<Action, JComponent> getActionFactory() {
-    return actionFactory;
-  }
-
   private String getConnectorIdForComponentView(
       IComponentViewDescriptor viewDescriptor) {
     if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
@@ -2663,6 +2555,10 @@ public class DefaultSwingViewFactory implements
     return descriptorPath;
   }
 
+  // ///////////////////// //
+  // Configuration Section //
+  // ///////////////////// //
+
   private Object getDurationTemplateValue(@SuppressWarnings("unused")
   IDurationPropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DURATION;
@@ -2701,15 +2597,6 @@ public class DefaultSwingViewFactory implements
       }
     }
     return formatLength;
-  }
-
-  /**
-   * Gets the iconFactory.
-   *
-   * @return the iconFactory.
-   */
-  public IIconFactory<Icon> getIconFactory() {
-    return iconFactory;
   }
 
   private Object getIntegerTemplateValue(
@@ -2772,9 +2659,9 @@ public class DefaultSwingViewFactory implements
     } else if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       return getIntegerTemplateValue((IIntegerPropertyDescriptor) propertyDescriptor);
     } else if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-      return getTemplateValue(((IReferencePropertyDescriptor) propertyDescriptor)
+      return getTemplateValue(((IReferencePropertyDescriptor<?>) propertyDescriptor)
           .getReferencedDescriptor().getPropertyDescriptor(
-              ((IReferencePropertyDescriptor) propertyDescriptor)
+              ((IReferencePropertyDescriptor<?>) propertyDescriptor)
                   .getReferencedDescriptor().getToStringProperty()));
     }
     return null;
@@ -2783,164 +2670,6 @@ public class DefaultSwingViewFactory implements
   private Object getTimeTemplateValue(@SuppressWarnings("unused")
   ITimePropertyDescriptor propertyDescriptor) {
     return TEMPLATE_TIME;
-  }
-
-  /**
-   * Gets the translationProvider.
-   *
-   * @return the translationProvider.
-   */
-  protected ITranslationProvider getTranslationProvider() {
-    return translationProvider;
-  }
-
-  // ///////////////////// //
-  // Configuration Section //
-  // ///////////////////// //
-
-  /**
-   * Sets the actionFactory.
-   *
-   * @param actionFactory
-   *          the actionFactory to set.
-   */
-  public void setActionFactory(IActionFactory<Action, JComponent> actionFactory) {
-    this.actionFactory = actionFactory;
-  }
-
-  /**
-   * Sets the binaryPropertyInfoAction.
-   *
-   * @param binaryPropertyInfoAction
-   *          the binaryPropertyInfoAction to set.
-   */
-  public void setBinaryPropertyInfoAction(
-      IDisplayableAction binaryPropertyInfoAction) {
-    this.binaryPropertyInfoAction = binaryPropertyInfoAction;
-  }
-
-  /**
-   * Sets the connectorFactory.
-   *
-   * @param connectorFactory
-   *          the connectorFactory to set.
-   */
-  public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
-    this.connectorFactory = connectorFactory;
-  }
-
-  /**
-   * Sets the iconFactory.
-   *
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<Icon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the listSelectionModelBinder.
-   *
-   * @param listSelectionModelBinder
-   *          the listSelectionModelBinder to set.
-   */
-  public void setListSelectionModelBinder(
-      IListSelectionModelBinder listSelectionModelBinder) {
-    this.listSelectionModelBinder = listSelectionModelBinder;
-  }
-
-  /**
-   * Sets the lovAction.
-   *
-   * @param lovAction
-   *          the lovAction to set.
-   */
-  public void setLovAction(IDisplayableAction lovAction) {
-    this.lovAction = lovAction;
-  }
-
-  /**
-   * Sets the masterDetailBinder.
-   *
-   * @param masterDetailBinder
-   *          the masterDetailBinder to set.
-   */
-  public void setMasterDetailBinder(IMasterDetailBinder masterDetailBinder) {
-    this.masterDetailBinder = masterDetailBinder;
-  }
-
-  /**
-   * Sets the maxCharacterLength.
-   *
-   * @param maxCharacterLength
-   *          the maxCharacterLength to set.
-   */
-  public void setMaxCharacterLength(int maxCharacterLength) {
-    this.maxCharacterLength = maxCharacterLength;
-  }
-
-  /**
-   * Sets the mvcBinder.
-   *
-   * @param mvcBinder
-   *          the mvcBinder to set.
-   */
-  public void setMvcBinder(IMvcBinder mvcBinder) {
-    this.mvcBinder = mvcBinder;
-  }
-
-  /**
-   * Sets the openFileAsBinaryPropertyAction.
-   *
-   * @param openFileAsBinaryPropertyAction
-   *          the openFileAsBinaryPropertyAction to set.
-   */
-  public void setOpenFileAsBinaryPropertyAction(
-      IDisplayableAction openFileAsBinaryPropertyAction) {
-    this.openFileAsBinaryPropertyAction = openFileAsBinaryPropertyAction;
-  }
-
-  /**
-   * Sets the resetPropertyAction.
-   *
-   * @param resetPropertyAction
-   *          the resetPropertyAction to set.
-   */
-  public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
-    this.resetPropertyAction = resetPropertyAction;
-  }
-
-  /**
-   * Sets the saveBinaryPropertyAsFileAction.
-   *
-   * @param saveBinaryPropertyAsFileAction
-   *          the saveBinaryPropertyAsFileAction to set.
-   */
-  public void setSaveBinaryPropertyAsFileAction(
-      IDisplayableAction saveBinaryPropertyAsFileAction) {
-    this.saveBinaryPropertyAsFileAction = saveBinaryPropertyAsFileAction;
-  }
-
-  /**
-   * Sets the translationProvider.
-   *
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
-  }
-
-  /**
-   * Sets the treeSelectionModelBinder.
-   *
-   * @param treeSelectionModelBinder
-   *          the treeSelectionModelBinder to set.
-   */
-  public void setTreeSelectionModelBinder(
-      ITreeSelectionModelBinder treeSelectionModelBinder) {
-    this.treeSelectionModelBinder = treeSelectionModelBinder;
   }
 
   private void showJTablePopupMenu(JTable table, IView<JComponent> tableView,
@@ -3029,6 +2758,277 @@ public class DefaultSwingViewFactory implements
     } else if (sourceComponent instanceof JTable) {
       showJTablePopupMenu((JTable) sourceComponent, view, evt, actionHandler,
           locale);
+    }
+  }
+
+  private final class ColorTableCellRenderer extends DefaultTableCellRenderer {
+
+    private static final long serialVersionUID = 6014260077437906330L;
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+      if (value != null) {
+        int[] rgba = ColorHelper.fromHexString((String) value);
+        setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+      } else {
+        setBackground(null);
+      }
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row, column);
+    }
+  }
+
+  private final class ConnectorTreeCellRenderer extends DefaultTreeCellRenderer {
+
+    private static final long   serialVersionUID = -5153268751092971328L;
+    private Locale              locale;
+    private ITreeViewDescriptor viewDescriptor;
+
+    /**
+     * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
+     * 
+     * @param viewDescriptor
+     *            the tree view descriptor used by the tree view.
+     * @param locale
+     */
+    public ConnectorTreeCellRenderer(ITreeViewDescriptor viewDescriptor,
+        Locale locale) {
+      this.viewDescriptor = viewDescriptor;
+      this.locale = locale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getTreeCellRendererComponent(JTree tree, Object value,
+        boolean sel, boolean expanded, boolean leaf, int row,
+        boolean nodeHasFocus) {
+      Component renderer = super.getTreeCellRendererComponent(tree, value, sel,
+          expanded, leaf, row, nodeHasFocus);
+      if (value instanceof IValueConnector) {
+        IValueConnector rootConnector = (IValueConnector) tree.getModel()
+            .getRoot();
+        Icon nodeIcon = null;
+        nodeIcon = iconFactory.getIcon(viewDescriptor
+            .getIconImageURLForUserObject(((IValueConnector) value)
+                .getConnectorValue()), IIconFactory.SMALL_ICON_SIZE);
+        if (nodeIcon == null) {
+          if (value == rootConnector) {
+            nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
+                IIconFactory.SMALL_ICON_SIZE);
+          } else {
+            TreePath path = ConnectorTreeHelper.getTreePathForConnector(
+                rootConnector, (IValueConnector) value);
+            if (path != null) {
+              nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
+                  .getSubtreeDescriptorFromPath(
+                      viewDescriptor.getRootSubtreeDescriptor(),
+                      getDescriptorPathFromConnectorTreePath(path))
+                  .getNodeGroupDescriptor().getIconImageURL(),
+                  IIconFactory.SMALL_ICON_SIZE);
+            }
+          }
+        }
+        setIcon(nodeIcon);
+        String labelText = null;
+        String toolTipText = null;
+        if (value instanceof ICollectionConnector) {
+          IListViewDescriptor nodeGroupDescriptor = TreeDescriptorHelper
+              .getSubtreeDescriptorFromPath(
+                  viewDescriptor.getRootSubtreeDescriptor(),
+                  getDescriptorPathFromConnectorTreePath(ConnectorTreeHelper
+                      .getTreePathForConnector((IValueConnector) tree
+                          .getModel().getRoot(), (IValueConnector) value)))
+              .getNodeGroupDescriptor();
+          String labelKey = nodeGroupDescriptor.getName();
+          if (labelKey == null) {
+            labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
+          }
+          labelText = nodeGroupDescriptor.getI18nName(getTranslationProvider(),
+              locale);
+          if (nodeGroupDescriptor.getDescription() != null) {
+            ToolTipManager.sharedInstance().registerComponent(tree);
+            toolTipText = nodeGroupDescriptor.getI18nDescription(
+                getTranslationProvider(), locale)
+                + TOOLTIP_ELLIPSIS;
+          }
+          setText(labelText);
+        } else {
+          if (((IValueConnector) value).getConnectorValue() != null) {
+            labelText = ((IValueConnector) value).getConnectorValue()
+                .toString();
+          } else {
+            labelText = "";
+          }
+        }
+        setText(labelText);
+        setToolTipText(toolTipText);
+      }
+      return renderer;
+    }
+  }
+
+  private final class PopupListener extends MouseAdapter {
+
+    private IActionHandler    actionHandler;
+    private Locale            locale;
+    private JComponent        sourceComponent;
+    private IView<JComponent> view;
+
+    /**
+     * Constructs a new <code>PopupListener</code> instance.
+     * 
+     * @param sourceComponent
+     * @param view
+     * @param actionHandler
+     * @param locale
+     */
+    public PopupListener(JComponent sourceComponent, IView<JComponent> view,
+        IActionHandler actionHandler, Locale locale) {
+      this.sourceComponent = sourceComponent;
+      this.view = view;
+      this.actionHandler = actionHandler;
+      this.locale = locale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void mousePressed(MouseEvent evt) {
+      maybeShowPopup(evt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void mouseReleased(MouseEvent evt) {
+      maybeShowPopup(evt);
+    }
+
+    private void maybeShowPopup(MouseEvent evt) {
+      if (evt.isPopupTrigger()) {
+        showPopupMenu(sourceComponent, view, evt, actionHandler, locale);
+      }
+    }
+  }
+
+  private final class TranslatedEnumerationListCellRenderer extends
+      DefaultListCellRenderer {
+
+    private static final long              serialVersionUID = -5694559709701757582L;
+    private Locale                         locale;
+    private IEnumerationPropertyDescriptor propertyDescriptor;
+
+    /**
+     * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
+     * instance.
+     * 
+     * @param propertyDescriptor
+     *            the property descriptor from which the enumeration name is
+     *            taken. The prefix used to lookup translation keys in the form
+     *            keyPrefix.value is the propertyDescriptor enumeration name.
+     * @param locale
+     *            the locale to lookup the translation.
+     */
+    public TranslatedEnumerationListCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      this.propertyDescriptor = propertyDescriptor;
+      this.locale = locale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getListCellRendererComponent(JList list, Object value,
+        int index, boolean isSelected, boolean cellHasFocus) {
+      JLabel label = (JLabel) super.getListCellRendererComponent(list, value,
+          index, isSelected, cellHasFocus);
+      label
+          .setIcon(iconFactory.getIcon(propertyDescriptor
+              .getIconImageURL(String.valueOf(value)),
+              IIconFactory.TINY_ICON_SIZE));
+      if (value != null && propertyDescriptor.isTranslated()) {
+        label.setText(translationProvider.getTranslation(computeEnumerationKey(
+            propertyDescriptor.getEnumerationName(), value), locale));
+      } else {
+        if (value == null) {
+          label.setText("");
+        } else {
+          label.setText(String.valueOf(value));
+        }
+      }
+      return label;
+    }
+  }
+
+  private final class TranslatedEnumerationTableCellRenderer extends
+      EvenOddTableCellRenderer {
+
+    private static final long              serialVersionUID = -4500472602998482756L;
+    private Locale                         locale;
+    private IEnumerationPropertyDescriptor propertyDescriptor;
+
+    /**
+     * Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
+     * instance.
+     * 
+     * @param propertyDescriptor
+     *            the property descriptor from which the enumeration name is
+     *            taken. The prefix used to lookup translation keys in the form
+     *            keyPrefix.value is the propertyDescriptor enumeration name.
+     * @param locale
+     *            the locale to lookup the translation.
+     */
+    public TranslatedEnumerationTableCellRenderer(
+        IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
+      super();
+      this.propertyDescriptor = propertyDescriptor;
+      this.locale = locale;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+      setIcon(iconFactory.getIcon(propertyDescriptor.getIconImageURL(String
+          .valueOf(value)), IIconFactory.TINY_ICON_SIZE));
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row, column);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void setValue(Object value) {
+      if (value instanceof IValueConnector) {
+        Object connectorValue = ((IValueConnector) value).getConnectorValue();
+        if (connectorValue != null && propertyDescriptor.isTranslated()) {
+          super.setValue(translationProvider.getTranslation(
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  connectorValue), locale));
+        } else {
+          super.setValue(String.valueOf(connectorValue));
+        }
+      } else {
+        if (value != null && propertyDescriptor.isTranslated()) {
+          super.setValue(translationProvider.getTranslation(
+              computeEnumerationKey(propertyDescriptor.getEnumerationName(),
+                  value), locale));
+        } else {
+          super.setValue(String.valueOf(value));
+        }
+      }
     }
   }
 }

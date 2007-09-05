@@ -26,7 +26,7 @@ public interface ICollectionConnectorProvider extends ICompositeValueConnector,
    * Clones this connector.
    * 
    * @param newConnectorId
-   *          the identifier of the clone connector
+   *            the identifier of the clone connector
    * @return the connector's clone.
    */
   ICollectionConnectorProvider clone(String newConnectorId);

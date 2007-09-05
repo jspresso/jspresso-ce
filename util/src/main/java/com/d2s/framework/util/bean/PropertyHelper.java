@@ -15,24 +15,28 @@ import org.apache.commons.beanutils.PropertyUtils;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class PropertyHelper {
 
+  private PropertyHelper() {
+    // Just here to prevent direct instanciation.
+  }
+
   /**
    * Gets the property descriptor of a property on a specified class. If the
    * specified class is an interface, all its super-interfaces are also
    * processed.
-   *
+   * 
    * @param beanClass
-   *          the class to get the property descriptor of.
+   *            the class to get the property descriptor of.
    * @param property
-   *          the property to be searched for its descriptor.
+   *            the property to be searched for its descriptor.
    * @return the property descriptor found.
    */
-  public static PropertyDescriptor getPropertyDescriptor(Class beanClass,
+  public static PropertyDescriptor getPropertyDescriptor(Class<?> beanClass,
       String property) {
     PropertyDescriptor descriptorToReturn = null;
     PropertyDescriptor[] descriptors = PropertyUtils
@@ -49,7 +53,7 @@ public final class PropertyHelper {
       // If beanClass is indeed an interface, we must also deal with all its
       // super-interfaces.
       if (beanClass.isInterface()) {
-        for (Class superInterface : beanClass.getInterfaces()) {
+        for (Class<?> superInterface : beanClass.getInterfaces()) {
           PropertyDescriptor descriptor = null;
           try {
             descriptor = getPropertyDescriptor(superInterface, property);
@@ -80,12 +84,12 @@ public final class PropertyHelper {
 
   /**
    * Retrieves all property names declared by a bean class.
-   *
+   * 
    * @param beanClass
-   *          the class to introspect.
+   *            the class to introspect.
    * @return the collection of property names.
    */
-  public static Collection<String> getPropertyNames(Class beanClass) {
+  public static Collection<String> getPropertyNames(Class<?> beanClass) {
     Collection<String> propertyNames = new HashSet<String>();
     PropertyDescriptor[] descriptors = PropertyUtils
         .getPropertyDescriptors(beanClass);
@@ -93,7 +97,7 @@ public final class PropertyHelper {
       propertyNames.add(descriptor.getName());
     }
     if (beanClass.isInterface()) {
-      for (Class superInterface : beanClass.getInterfaces()) {
+      for (Class<?> superInterface : beanClass.getInterfaces()) {
         propertyNames.addAll(getPropertyNames(superInterface));
       }
     }
@@ -102,19 +106,15 @@ public final class PropertyHelper {
 
   /**
    * Retrieves the type of a bean property.
-   *
+   * 
    * @param beanClass
-   *          the bean class on which to look for the property.
+   *            the bean class on which to look for the property.
    * @param property
-   *          the property to look for.
+   *            the property to look for.
    * @return the type of the property.
    */
-  public static Class getPropertyType(Class beanClass, String property) {
+  public static Class<?> getPropertyType(Class<?> beanClass, String property) {
     return getPropertyDescriptor(beanClass, property).getPropertyType();
-  }
-
-  private PropertyHelper() {
-    // Just here to prevent direct instanciation.
   }
 
 }

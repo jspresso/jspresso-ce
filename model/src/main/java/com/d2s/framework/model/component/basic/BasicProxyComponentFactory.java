@@ -23,7 +23,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -46,10 +46,108 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return createdComponent;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  public IComponentDescriptor<?> getComponentDescriptor(
+      Class<? extends IComponent> componentContract) {
+    return componentDescriptorRegistry
+        .getComponentDescriptor(componentContract);
+  }
+
+  /**
+   * Sets the accessorFactory used by this entity factory.
+   * 
+   * @param accessorFactory
+   *            the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
+  }
+
+  /**
+   * Sets the componentCollectionFactory property.
+   * 
+   * @param componentCollectionFactory
+   *            the componentCollectionFactory to set.
+   */
+  public void setComponentCollectionFactory(
+      IComponentCollectionFactory<IComponent> componentCollectionFactory) {
+    this.componentCollectionFactory = componentCollectionFactory;
+  }
+
+  /**
+   * Sets the componentDescriptorRegistry.
+   * 
+   * @param componentDescriptorRegistry
+   *            the componentDescriptorRegistry to set.
+   */
+  public void setComponentDescriptorRegistry(
+      IComponentDescriptorRegistry componentDescriptorRegistry) {
+    this.componentDescriptorRegistry = componentDescriptorRegistry;
+  }
+
+  /**
+   * Sets the componentExtensionFactory property.
+   * 
+   * @param componentExtensionFactory
+   *            the componentCollectionFactory to set.
+   */
+  public void setComponentExtensionFactory(
+      IComponentExtensionFactory componentExtensionFactory) {
+    this.componentExtensionFactory = componentExtensionFactory;
+  }
+
+  /**
+   * Gets the accessorFactory.
+   * 
+   * @return the accessorFactory.
+   */
+  protected IAccessorFactory getAccessorFactory() {
+    return accessorFactory;
+  }
+
+  /**
+   * Gets the componentCollectionFactory.
+   * 
+   * @return the componentCollectionFactory.
+   */
+  protected IComponentCollectionFactory<IComponent> getComponentCollectionFactory() {
+    return componentCollectionFactory;
+  }
+
+  /**
+   * Gets the componentExtensionFactory.
+   * 
+   * @return the componentExtensionFactory.
+   */
+  protected IComponentExtensionFactory getComponentExtensionFactory() {
+    return componentExtensionFactory;
+  }
+
+  /**
+   * Gets the entity lifecycle handler.
+   * 
+   * @return the entity lifecycle handler.
+   */
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return null;
+  }
+
+  /**
+   * Gets the principal using the factory.
+   * 
+   * @return the principal using the factory.
+   */
+  protected UserPrincipal getPrincipal() {
+    return null;
+  }
+
   private InvocationHandler createComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
-    return new BasicComponentInvocationHandler(delegate, this, componentDescriptor,
-        componentCollectionFactory, accessorFactory, componentExtensionFactory);
+    return new BasicComponentInvocationHandler(delegate, this,
+        componentDescriptor, componentCollectionFactory, accessorFactory,
+        componentExtensionFactory);
   }
 
   @SuppressWarnings("unchecked")
@@ -73,101 +171,5 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     T component = (T) Proxy.newProxyInstance(Thread.currentThread()
         .getContextClassLoader(), implementedClasses, componentHandler);
     return component;
-  }
-
-  /**
-   * Gets the accessorFactory.
-   *
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory() {
-    return accessorFactory;
-  }
-
-  /**
-   * Gets the componentCollectionFactory.
-   *
-   * @return the componentCollectionFactory.
-   */
-  protected IComponentCollectionFactory<IComponent> getComponentCollectionFactory() {
-    return componentCollectionFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IComponentDescriptor<?> getComponentDescriptor(Class componentContract) {
-    return componentDescriptorRegistry
-        .getComponentDescriptor(componentContract);
-  }
-
-  /**
-   * Gets the componentExtensionFactory.
-   *
-   * @return the componentExtensionFactory.
-   */
-  protected IComponentExtensionFactory getComponentExtensionFactory() {
-    return componentExtensionFactory;
-  }
-
-  /**
-   * Gets the entity lifecycle handler.
-   *
-   * @return the entity lifecycle handler.
-   */
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return null;
-  }
-
-  /**
-   * Gets the principal using the factory.
-   *
-   * @return the principal using the factory.
-   */
-  protected UserPrincipal getPrincipal() {
-    return null;
-  }
-
-  /**
-   * Sets the accessorFactory used by this entity factory.
-   *
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
-  }
-
-  /**
-   * Sets the componentCollectionFactory property.
-   *
-   * @param componentCollectionFactory
-   *          the componentCollectionFactory to set.
-   */
-  public void setComponentCollectionFactory(
-      IComponentCollectionFactory<IComponent> componentCollectionFactory) {
-    this.componentCollectionFactory = componentCollectionFactory;
-  }
-
-  /**
-   * Sets the componentDescriptorRegistry.
-   *
-   * @param componentDescriptorRegistry
-   *          the componentDescriptorRegistry to set.
-   */
-  public void setComponentDescriptorRegistry(
-      IComponentDescriptorRegistry componentDescriptorRegistry) {
-    this.componentDescriptorRegistry = componentDescriptorRegistry;
-  }
-
-  /**
-   * Sets the componentExtensionFactory property.
-   *
-   * @param componentExtensionFactory
-   *          the componentCollectionFactory to set.
-   */
-  public void setComponentExtensionFactory(
-      IComponentExtensionFactory componentExtensionFactory) {
-    this.componentExtensionFactory = componentExtensionFactory;
   }
 }

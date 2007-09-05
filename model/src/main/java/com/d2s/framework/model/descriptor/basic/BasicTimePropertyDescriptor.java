@@ -22,7 +22,7 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return Date.class;
   }
 }

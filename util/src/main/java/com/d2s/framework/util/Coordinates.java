@@ -34,9 +34,9 @@ public class Coordinates {
    * Constructs a new <code>Coordinates</code> instance.
    * 
    * @param x
-   *          the x coordinate.
+   *            the x coordinate.
    * @param y
-   *          the y coordinate.
+   *            the y coordinate.
    */
   public Coordinates(int x, int y) {
     this.x = x;
@@ -103,7 +103,7 @@ public class Coordinates {
    * Sets the x.
    * 
    * @param x
-   *          the x to set.
+   *            the x to set.
    */
   public void setX(int x) {
     this.x = x;
@@ -113,7 +113,7 @@ public class Coordinates {
    * Sets the y.
    * 
    * @param y
-   *          the y to set.
+   *            the y to set.
    */
   public void setY(int y) {
     this.y = y;

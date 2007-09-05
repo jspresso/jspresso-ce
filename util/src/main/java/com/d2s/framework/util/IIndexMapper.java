@@ -19,7 +19,7 @@ public interface IIndexMapper {
    * View to model index translation.
    * 
    * @param viewIndex
-   *          the view index to translate.
+   *            the view index to translate.
    * @return the resulting model index.
    */
   int modelIndex(int viewIndex);
@@ -28,7 +28,7 @@ public interface IIndexMapper {
    * Model to view index translation.
    * 
    * @param modelIndex
-   *          the model index to translate.
+   *            the model index to translate.
    * @return the resulting view index.
    */
   int viewIndex(int modelIndex);

@@ -37,9 +37,9 @@ public abstract class AbstractHibernateCollectionAction extends
    * {@inheritDoc}
    */
   @Override
-  public ICollectionDescriptorProvider getModelDescriptor(
+  public ICollectionDescriptorProvider<?> getModelDescriptor(
       Map<String, Object> context) {
-    return (ICollectionDescriptorProvider) super.getModelDescriptor(context);
+    return (ICollectionDescriptorProvider<?>) super.getModelDescriptor(context);
   }
 
   /**
@@ -47,7 +47,7 @@ public abstract class AbstractHibernateCollectionAction extends
    * <code>ActionContextConstants.SELECTED_INDICES</code> key.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the selected indices if any.
    */
   public int[] getSelectedIndices(Map<String, Object> context) {

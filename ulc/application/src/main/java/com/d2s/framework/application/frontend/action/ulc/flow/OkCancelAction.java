@@ -27,21 +27,10 @@ public class OkCancelAction extends AbstractFlowAction {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected IAction getNextAction(String selectedOption) {
-    if (OK_OPTION.equals(selectedOption)) {
-      return okAction;
-    }
-    return cancelAction;
-  }
-
-  /**
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *          the cancelAction to set.
+   *            the cancelAction to set.
    */
   public void setCancelAction(IAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -51,10 +40,21 @@ public class OkCancelAction extends AbstractFlowAction {
    * Sets the okAction.
    * 
    * @param okAction
-   *          the okAction to set.
+   *            the okAction to set.
    */
   public void setOkAction(IAction okAction) {
     this.okAction = okAction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IAction getNextAction(String selectedOption) {
+    if (OK_OPTION.equals(selectedOption)) {
+      return okAction;
+    }
+    return cancelAction;
   }
 
 }

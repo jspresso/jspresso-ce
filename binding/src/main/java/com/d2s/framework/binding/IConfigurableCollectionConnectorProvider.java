@@ -20,7 +20,7 @@ public interface IConfigurableCollectionConnectorProvider extends
    * Sets the collectionConnector.
    * 
    * @param collectionConnectorProvider
-   *          the collectionConnectorProvider to set.
+   *            the collectionConnectorProvider to set.
    */
   void setCollectionConnectorProvider(
       ICollectionConnectorProvider collectionConnectorProvider);

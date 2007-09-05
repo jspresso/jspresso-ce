@@ -54,7 +54,7 @@ public class JActionField extends JPanel {
    * Constructs a new <code>JActionField</code> instance.
    * 
    * @param showTextField
-   *          is the text field visible to the user.
+   *            is the text field visible to the user.
    */
   public JActionField(boolean showTextField) {
     textField = new JTextField();
@@ -95,7 +95,7 @@ public class JActionField extends JPanel {
    * Adds a focus listener to the text field.
    * 
    * @param l
-   *          the listener to add.
+   *            the listener to add.
    */
   public void addTextFieldFocusListener(FocusListener l) {
     textField.addFocusListener(l);
@@ -157,27 +157,10 @@ public class JActionField extends JPanel {
   }
 
   /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition,
-      boolean pressed) {
-    if (super.processKeyBinding(ks, e, condition, pressed)) {
-      return true;
-    }
-    Object binding = textField.getInputMap(condition).get(ks);
-    if (binding != null && textField.getActionMap().get(binding) != null) {
-      textField.dispatchEvent(e);
-      return true;
-    }
-    return false;
-  }
-
-  /**
    * Removes a focus listener from the text field.
    * 
    * @param l
-   *          the listener to remove.
+   *            the listener to remove.
    */
   public void removeTextFieldFocusListener(FocusListener l) {
     textField.removeFocusListener(l);
@@ -194,7 +177,7 @@ public class JActionField extends JPanel {
    * Sets the action field action.
    * 
    * @param actions
-   *          the action field actions.
+   *            the action field actions.
    */
   public void setActions(List<Action> actions) {
     if (!ObjectUtils.equals(this.actions, actions)) {
@@ -229,7 +212,7 @@ public class JActionField extends JPanel {
    * Gets the action field text.
    * 
    * @param actionText
-   *          the action field text.
+   *            the action field text.
    */
   public void setActionText(String actionText) {
     textField.setText(actionText);
@@ -239,7 +222,7 @@ public class JActionField extends JPanel {
    * Decorates the component with a marker.
    * 
    * @param decorated
-   *          if the component should be decorated.
+   *            if the component should be decorated.
    */
   public void setDecorated(boolean decorated) {
     if (decorated) {
@@ -254,7 +237,7 @@ public class JActionField extends JPanel {
    * Turns the date field to be editable or not.
    * 
    * @param editable
-   *          true if editable.
+   *            true if editable.
    */
   public void setEditable(boolean editable) {
     if (textField.getAction() != null) {
@@ -267,7 +250,7 @@ public class JActionField extends JPanel {
    * Turns the date field to be enabled or not.
    * 
    * @param enabled
-   *          true if enabled.
+   *            true if enabled.
    */
   @Override
   public void setEnabled(boolean enabled) {
@@ -281,11 +264,28 @@ public class JActionField extends JPanel {
    * Sets the value.
    * 
    * @param value
-   *          the value to set.
+   *            the value to set.
    */
   public void setValue(Object value) {
     this.value = value;
     textField.setText(valueToString());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean processKeyBinding(KeyStroke ks, KeyEvent e, int condition,
+      boolean pressed) {
+    if (super.processKeyBinding(ks, e, condition, pressed)) {
+      return true;
+    }
+    Object binding = textField.getInputMap(condition).get(ks);
+    if (binding != null && textField.getActionMap().get(binding) != null) {
+      textField.dispatchEvent(e);
+      return true;
+    }
+    return false;
   }
 
   private String valueToString() {

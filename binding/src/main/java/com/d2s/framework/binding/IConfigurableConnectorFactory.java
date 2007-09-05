@@ -19,12 +19,12 @@ public interface IConfigurableConnectorFactory {
    * Creates a <code>ICollectionConnector</code>.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param binder
-   *          the MVC bider used by the created collection connector.
+   *            the MVC bider used by the created collection connector.
    * @param childConnectorPrototype
-   *          the element prototype connector used by the created collection
-   *          connector.
+   *            the element prototype connector used by the created collection
+   *            connector.
    * @return the created connector.
    */
   ICollectionConnector createCollectionConnector(String id, IMvcBinder binder,
@@ -34,9 +34,10 @@ public interface IConfigurableConnectorFactory {
    * Creates a <code>ICompositeValueConnector</code>.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param renderingConnectorId
-   *          the child connector used to render the composite connector value.
+   *            the child connector used to render the composite connector
+   *            value.
    * @return the created connector.
    */
   ICompositeValueConnector createCompositeValueConnector(String id,
@@ -46,9 +47,10 @@ public interface IConfigurableConnectorFactory {
    * Creates a <code>IConfigurableCollectionConnectorListProvider</code>.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param renderingConnectorId
-   *          the child connector used to render the composite connector value.
+   *            the child connector used to render the composite connector
+   *            value.
    * @return the created connector.
    */
   IConfigurableCollectionConnectorListProvider createConfigurableCollectionConnectorListProvider(
@@ -58,9 +60,10 @@ public interface IConfigurableConnectorFactory {
    * Creates a <code>IConfigurableCollectionConnectorProvider</code>.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param renderingConnectorId
-   *          the child connector used to render the composite connector value.
+   *            the child connector used to render the composite connector
+   *            value.
    * @return the created connector.
    */
   IConfigurableCollectionConnectorProvider createConfigurableCollectionConnectorProvider(
@@ -70,7 +73,7 @@ public interface IConfigurableConnectorFactory {
    * Creates a <code>IValueConnector</code>.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @return the created connector.
    */
   IValueConnector createValueConnector(String id);

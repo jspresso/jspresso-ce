@@ -25,13 +25,13 @@ import com.d2s.framework.model.entity.IEntityRegistry;
  */
 public class BasicEntityRegistry implements IEntityRegistry {
 
-  private Map<Class, Map<Object, IEntity>> backingStore;
+  private Map<Class<? extends IEntity>, Map<Object, IEntity>> backingStore;
 
   /**
    * Constructs a new <code>BasicEntityRegistry</code> instance.
    */
   public BasicEntityRegistry() {
-    backingStore = new HashMap<Class, Map<Object, IEntity>>();
+    backingStore = new HashMap<Class<? extends IEntity>, Map<Object, IEntity>>();
   }
 
   /**
@@ -49,7 +49,7 @@ public class BasicEntityRegistry implements IEntityRegistry {
     }
     if (registeredEntity == null) {
       // we may try subclasses
-      for (Map.Entry<Class, Map<Object, IEntity>> subclassContractStore : backingStore
+      for (Map.Entry<Class<? extends IEntity>, Map<Object, IEntity>> subclassContractStore : backingStore
           .entrySet()) {
         if (entityContract.isAssignableFrom(subclassContractStore.getKey())) {
           contractStore = subclassContractStore.getValue();

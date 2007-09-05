@@ -59,19 +59,6 @@ public class BooleanTableCellRenderer extends JCheckBox implements
   }
 
   /**
-   * Overridden for performance reasons.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected void firePropertyChange(@SuppressWarnings("unused")
-  String propertyName, @SuppressWarnings("unused")
-  Object oldValue, @SuppressWarnings("unused")
-  Object newValue) {
-    // NO-OP
-  }
-
-  /**
    * {@inheritDoc}
    */
   public Component getTableCellRendererComponent(JTable table, Object value,
@@ -137,11 +124,6 @@ public class BooleanTableCellRenderer extends JCheckBox implements
     // NO-OP
   }
 
-  /*
-   * The following methods are overridden for performance reasons (see
-   * DefaultTableCellRenderer comments for a reference).
-   */
-
   /**
    * Overridden for performance reasons.
    * <p>
@@ -159,6 +141,11 @@ public class BooleanTableCellRenderer extends JCheckBox implements
         && back.equals(p.getBackground()) && p.isOpaque();
     return !colorMatch && super.isOpaque();
   }
+
+  /*
+   * The following methods are overridden for performance reasons (see
+   * DefaultTableCellRenderer comments for a reference).
+   */
 
   /**
    * Overridden for performance reasons.
@@ -211,7 +198,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * unselected-background color to the specified color.
    * 
    * @param c
-   *          set the background color to this value
+   *            set the background color to this value
    */
   @Override
   public void setBackground(Color c) {
@@ -224,7 +211,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * unselected-foreground color to the specified color.
    * 
    * @param c
-   *          set the foreground color to this value
+   *            set the foreground color to this value
    */
   @Override
   public void setForeground(Color c) {
@@ -251,6 +238,19 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    */
   @Override
   public void validate() {
+    // NO-OP
+  }
+
+  /**
+   * Overridden for performance reasons.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected void firePropertyChange(@SuppressWarnings("unused")
+  String propertyName, @SuppressWarnings("unused")
+  Object oldValue, @SuppressWarnings("unused")
+  Object newValue) {
     // NO-OP
   }
 

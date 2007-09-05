@@ -81,7 +81,7 @@ public class ModalDialogAction extends AbstractWingsAction {
    * Gets the actions.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the actions.
    */
   @SuppressWarnings("unchecked")
@@ -94,7 +94,7 @@ public class ModalDialogAction extends AbstractWingsAction {
    * Gets the mainView.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the mainView.
    */
   @SuppressWarnings("unchecked")

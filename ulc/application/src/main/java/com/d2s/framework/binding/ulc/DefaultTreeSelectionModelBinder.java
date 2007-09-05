@@ -38,6 +38,38 @@ import com.ulcjava.base.application.tree.ULCTreeSelectionModel;
 public class DefaultTreeSelectionModelBinder implements
     ITreeSelectionModelBinder {
 
+  private SelectionModelListener genericSelectionModelListener;
+
+  /**
+   * Constructs a new <code>DefaultTreeSelectionModelBinder</code> instance.
+   */
+  public DefaultTreeSelectionModelBinder() {
+    genericSelectionModelListener = new SelectionModelListener();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void bindSelectionModel(IValueConnector rootConnector,
+      ULCTableTree tree) {
+    tree.getSelectionModel().addTreeSelectionListener(
+        genericSelectionModelListener);
+    TableTreeConnectorsListener connectorsListener = new TableTreeConnectorsListener(
+        rootConnector, tree.getSelectionModel());
+    tree.getModel().addTableTreeModelListener(connectorsListener);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void bindSelectionModel(IValueConnector rootConnector, ULCTree tree) {
+    tree.getSelectionModel().addTreeSelectionListener(
+        genericSelectionModelListener);
+    TreeConnectorsListener connectorsListener = new TreeConnectorsListener(
+        rootConnector, tree.getSelectionModel());
+    tree.getModel().addTreeModelListener(connectorsListener);
+  }
+
   private class CollectionConnectorsSelectionListener implements
       ISelectionChangeListener {
 
@@ -55,11 +87,6 @@ public class DefaultTreeSelectionModelBinder implements
         ULCTreeSelectionModel selectionModel) {
       this.rootConnector = rootConnector;
       this.selectionModel = selectionModel;
-    }
-
-    private TreePath getTreePathForConnector(IValueConnector connector) {
-      return ConnectorTreeHelper.getTreePathForConnector(rootConnector,
-          connector);
     }
 
     /**
@@ -87,6 +114,11 @@ public class DefaultTreeSelectionModelBinder implements
           }
         }
       }
+    }
+
+    private TreePath getTreePathForConnector(IValueConnector connector) {
+      return ConnectorTreeHelper.getTreePathForConnector(rootConnector,
+          connector);
     }
   }
 
@@ -179,24 +211,15 @@ public class DefaultTreeSelectionModelBinder implements
      * Constructs a new <code>TreeConnectorsListener</code> instance.
      * 
      * @param rootConnector
-     *          the root connector of the connector hierarchy.
+     *            the root connector of the connector hierarchy.
      * @param selectionModel
-     *          the selection model of the related tree.
+     *            the selection model of the related tree.
      */
     public TableTreeConnectorsListener(IValueConnector rootConnector,
         ULCTreeSelectionModel selectionModel) {
       connectorsSelectionListener = new CollectionConnectorsSelectionListener(
           rootConnector, selectionModel);
       checkListenerRegistrationForConnector((ICollectionConnectorListProvider) rootConnector);
-    }
-
-    private void checkListenerRegistrationForConnector(
-        ICollectionConnectorListProvider nodeConnector) {
-      for (ICollectionConnector childNodeConnector : nodeConnector
-          .getCollectionConnectors()) {
-        childNodeConnector
-            .addSelectionChangeListener(connectorsSelectionListener);
-      }
     }
 
     /**
@@ -238,6 +261,15 @@ public class DefaultTreeSelectionModelBinder implements
       checkListenerRegistrationForConnector((ICollectionConnectorListProvider) event
           .getTreePath().getLastPathComponent());
     }
+
+    private void checkListenerRegistrationForConnector(
+        ICollectionConnectorListProvider nodeConnector) {
+      for (ICollectionConnector childNodeConnector : nodeConnector
+          .getCollectionConnectors()) {
+        childNodeConnector
+            .addSelectionChangeListener(connectorsSelectionListener);
+      }
+    }
   }
 
   private class TreeConnectorsListener implements ITreeModelListener {
@@ -250,24 +282,15 @@ public class DefaultTreeSelectionModelBinder implements
      * Constructs a new <code>TreeConnectorsListener</code> instance.
      * 
      * @param rootConnector
-     *          the root connector of the connector hierarchy.
+     *            the root connector of the connector hierarchy.
      * @param selectionModel
-     *          the selection model of the related tree.
+     *            the selection model of the related tree.
      */
     public TreeConnectorsListener(IValueConnector rootConnector,
         ULCTreeSelectionModel selectionModel) {
       connectorsSelectionListener = new CollectionConnectorsSelectionListener(
           rootConnector, selectionModel);
       checkListenerRegistrationForConnector((ICollectionConnectorListProvider) rootConnector);
-    }
-
-    private void checkListenerRegistrationForConnector(
-        ICollectionConnectorListProvider nodeConnector) {
-      for (ICollectionConnector childNodeConnector : nodeConnector
-          .getCollectionConnectors()) {
-        childNodeConnector
-            .addSelectionChangeListener(connectorsSelectionListener);
-      }
     }
 
     /**
@@ -301,37 +324,14 @@ public class DefaultTreeSelectionModelBinder implements
       checkListenerRegistrationForConnector((ICollectionConnectorListProvider) event
           .getTreePath().getLastPathComponent());
     }
-  }
 
-  private SelectionModelListener genericSelectionModelListener;
-
-  /**
-   * Constructs a new <code>DefaultTreeSelectionModelBinder</code> instance.
-   */
-  public DefaultTreeSelectionModelBinder() {
-    genericSelectionModelListener = new SelectionModelListener();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void bindSelectionModel(IValueConnector rootConnector,
-      ULCTableTree tree) {
-    tree.getSelectionModel().addTreeSelectionListener(
-        genericSelectionModelListener);
-    TableTreeConnectorsListener connectorsListener = new TableTreeConnectorsListener(
-        rootConnector, tree.getSelectionModel());
-    tree.getModel().addTableTreeModelListener(connectorsListener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void bindSelectionModel(IValueConnector rootConnector, ULCTree tree) {
-    tree.getSelectionModel().addTreeSelectionListener(
-        genericSelectionModelListener);
-    TreeConnectorsListener connectorsListener = new TreeConnectorsListener(
-        rootConnector, tree.getSelectionModel());
-    tree.getModel().addTreeModelListener(connectorsListener);
+    private void checkListenerRegistrationForConnector(
+        ICollectionConnectorListProvider nodeConnector) {
+      for (ICollectionConnector childNodeConnector : nodeConnector
+          .getCollectionConnectors()) {
+        childNodeConnector
+            .addSelectionChangeListener(connectorsSelectionListener);
+      }
+    }
   }
 }

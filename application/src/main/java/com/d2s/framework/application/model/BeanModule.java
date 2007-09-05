@@ -78,7 +78,7 @@ public class BeanModule extends SubModule implements PropertyChangeListener {
    * Sets the module's projected object.
    * 
    * @param moduleObject
-   *          the projected object.
+   *            the projected object.
    */
   public void setModuleObject(Object moduleObject) {
     if (ObjectUtils.equals(this.moduleObject, moduleObject)) {

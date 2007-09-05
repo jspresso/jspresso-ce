@@ -20,7 +20,7 @@ public class BasicIntegerPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return Integer.class;
   }
 

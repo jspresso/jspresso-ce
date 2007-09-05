@@ -12,7 +12,7 @@ import com.ulcjava.base.application.ULCTextField;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -20,11 +20,11 @@ public class ULCPercentFieldConnector extends ULCTextFieldConnector {
 
   /**
    * Constructs a new <code>ULCPercentFieldConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected ULCTextField.
+   *            the connected ULCTextField.
    */
   public ULCPercentFieldConnector(String id, ULCTextField textField) {
     super(id, textField);
@@ -55,8 +55,7 @@ public class ULCPercentFieldConnector extends ULCTextFieldConnector {
   protected void setConnecteeValue(Object aValue) {
     if (aValue != null) {
       getConnectedULCComponent().setValue(
-          new Double(((Number) aValue)
-              .doubleValue() * 100.0D));
+          new Double(((Number) aValue).doubleValue() * 100.0D));
     } else {
       super.setConnecteeValue(aValue);
     }

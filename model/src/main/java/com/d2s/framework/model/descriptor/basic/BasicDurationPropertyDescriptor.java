@@ -73,7 +73,7 @@ public class BasicDurationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return Long.class;
   }
 
@@ -81,7 +81,7 @@ public class BasicDurationPropertyDescriptor extends
    * Sets the maxMillis property.
    * 
    * @param maxMillis
-   *          the maxMillis to set.
+   *            the maxMillis to set.
    */
   public void setMaxMillis(long maxMillis) {
     this.maxMillis = new Long(maxMillis);

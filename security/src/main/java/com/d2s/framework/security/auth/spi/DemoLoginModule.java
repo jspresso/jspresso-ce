@@ -26,7 +26,7 @@ import com.d2s.framework.util.security.LoginUtils;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -39,11 +39,11 @@ public class DemoLoginModule implements LoginModule {
   // configurable option
   private boolean         debug           = false;
 
-  private Map             options;
+  private Map<String, ?>  options;
 
   private char[]          password;
   @SuppressWarnings("unused")
-  private Map             sharedState;
+  private Map<String, ?>  sharedState;
 
   // initial state
   private Subject         subject;
@@ -67,7 +67,7 @@ public class DemoLoginModule implements LoginModule {
    * <code>commit</code> methods), then this method cleans up any state that
    * was originally saved.
    * <p>
-   *
+   * 
    * @return false if this LoginModule's own login and/or commit attempts
    *         failed, and true otherwise.
    */
@@ -116,7 +116,7 @@ public class DemoLoginModule implements LoginModule {
    * LoginModule's own authentication attempted failed, then this method removes
    * any state that was originally saved.
    * <p>
-   *
+   * 
    * @return true if this LoginModule's own login and commit attempts succeeded,
    *         or false otherwise.
    */
@@ -151,23 +151,23 @@ public class DemoLoginModule implements LoginModule {
   /**
    * Initialize this <code>LoginModule</code>.
    * <p>
-   *
+   * 
    * @param aSubject
-   *          the <code>Subject</code> to be authenticated.
-   *          <p>
+   *            the <code>Subject</code> to be authenticated.
+   *            <p>
    * @param aCallbackHandler
-   *          a <code>CallbackHandler</code> for communicating with the end
-   *          user (prompting for user names and passwords, for example).
-   *          <p>
+   *            a <code>CallbackHandler</code> for communicating with the end
+   *            user (prompting for user names and passwords, for example).
+   *            <p>
    * @param aSharedState
-   *          shared <code>LoginModule</code> state.
-   *          <p>
+   *            shared <code>LoginModule</code> state.
+   *            <p>
    * @param aOptions
-   *          options specified in the login <code>Configuration</code> for
-   *          this particular <code>LoginModule</code>.
+   *            options specified in the login <code>Configuration</code> for
+   *            this particular <code>LoginModule</code>.
    */
   public void initialize(Subject aSubject, CallbackHandler aCallbackHandler,
-      Map aSharedState, Map aOptions) {
+      Map<String, ?> aSharedState, Map<String, ?> aOptions) {
 
     subject = aSubject;
     callbackHandler = aCallbackHandler;
@@ -181,15 +181,15 @@ public class DemoLoginModule implements LoginModule {
   /**
    * Authenticate the user by prompting for a user name and password.
    * <p>
-   *
+   * 
    * @return true in all cases since this <code>LoginModule</code> should not
    *         be ignored.
    * @exception LoginException
-   *              if the authentication fails.
-   *              <p>
+   *                if the authentication fails.
+   *                <p>
    * @exception LoginException
-   *              if this <code>LoginModule</code> is unable to perform the
-   *              authentication.
+   *                if this <code>LoginModule</code> is unable to perform the
+   *                authentication.
    */
   public boolean login() throws LoginException {
 
@@ -274,7 +274,7 @@ public class DemoLoginModule implements LoginModule {
    * This method removes the <code>DemoPrincipal</code> that was added by the
    * <code>commit</code> method.
    * <p>
-   *
+   * 
    * @return true in all cases since this <code>LoginModule</code> should not
    *         be ignored.
    */

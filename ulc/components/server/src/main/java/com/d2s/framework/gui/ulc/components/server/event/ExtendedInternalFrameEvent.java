@@ -26,9 +26,9 @@ public class ExtendedInternalFrameEvent extends UlcEvent {
    * Constructs a new <code>ExtendedInternalFrameEvent</code> instance.
    * 
    * @param source
-   *          the event source.
+   *            the event source.
    * @param id
-   *          the event id.
+   *            the event id.
    */
   public ExtendedInternalFrameEvent(Object source, int id) {
     super(source);

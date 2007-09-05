@@ -27,8 +27,8 @@ public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
    */
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
       @SuppressWarnings("unused")
-      Class beanClass, @SuppressWarnings("unused")
-      Class elementClass) {
+      Class<?> beanClass, @SuppressWarnings("unused")
+      Class<?> elementClass) {
     return new DescriptorAwareMapCollectionAccessor(property);
   }
 
@@ -40,7 +40,7 @@ public class DescriptorAwareMapAccessorFactory implements IAccessorFactory {
    */
   public IAccessor createPropertyAccessor(String property,
       @SuppressWarnings("unused")
-      Class beanClass) {
+      Class<?> beanClass) {
     return new DescriptorAwareMapPropertyAccessor(property);
   }
 

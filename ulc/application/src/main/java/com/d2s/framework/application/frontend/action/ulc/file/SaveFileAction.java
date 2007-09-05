@@ -64,6 +64,16 @@ public class SaveFileAction extends ChooseFileAction {
   }
 
   /**
+   * Sets the fileSaveCallback.
+   * 
+   * @param fileSaveCallback
+   *            the fileSaveCallback to set.
+   */
+  public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
+    this.fileSaveCallback = fileSaveCallback;
+  }
+
+  /**
    * Completes the file chooser configuration with behaviour specific to open
    * action.
    * <p>
@@ -73,15 +83,5 @@ public class SaveFileAction extends ChooseFileAction {
   protected FileChooserConfig getFileChooser(Map<String, Object> context) {
     FileChooserConfig fileChooser = super.getFileChooser(context);
     return fileChooser;
-  }
-
-  /**
-   * Sets the fileSaveCallback.
-   * 
-   * @param fileSaveCallback
-   *          the fileSaveCallback to set.
-   */
-  public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
-    this.fileSaveCallback = fileSaveCallback;
   }
 }

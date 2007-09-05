@@ -23,11 +23,11 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public class AddCollectionToMasterAction<E, F, G> extends
     ActionWrapper<E, F, G> {
@@ -113,7 +113,7 @@ public class AddCollectionToMasterAction<E, F, G> extends
    * collection.
    * 
    * @param elementEntityDescriptor
-   *          the elementEntityDescriptor to set.
+   *            the elementEntityDescriptor to set.
    */
   public void setElementEntityDescriptor(
       IComponentDescriptor<IEntity> elementEntityDescriptor) {

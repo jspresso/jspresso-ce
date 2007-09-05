@@ -27,10 +27,33 @@ public abstract class AbstractTextConnector extends AbstractValueConnector {
    * Constructs a new <code>AbstractTextConnector</code> instance.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    */
   public AbstractTextConnector(String id) {
     super(id);
+  }
+
+  /**
+   * Sets the value to the connector text after formatting the string
+   * representation.
+   * <p>
+   * {@inheritDoc}
+   * 
+   * @see #setFormat(Format)
+   */
+  @Override
+  public void setConnecteeValue(Object aValue) {
+    setConnectorValueAsString(getFormat().format(aValue));
+  }
+
+  /**
+   * Sets the format.
+   * 
+   * @param format
+   *            the format to set.
+   */
+  public void setFormat(Format format) {
+    this.format = format;
   }
 
   /**
@@ -62,44 +85,21 @@ public abstract class AbstractTextConnector extends AbstractValueConnector {
   protected abstract String getConnectorValueAsString();
 
   /**
+   * Sets the connector value as a string. This string has been formatted from
+   * the actual connector value using the format set using .
+   * 
+   * @param connectorValueAsString
+   *            the string representation of the connector value.
+   */
+  protected abstract void setConnectorValueAsString(
+      String connectorValueAsString);
+
+  /**
    * Gets the format.
    * 
    * @return the format.
    */
   private Format getFormat() {
     return format;
-  }
-
-  /**
-   * Sets the value to the connector text after formatting the string
-   * representation.
-   * <p>
-   * {@inheritDoc}
-   * 
-   * @see #setFormat(Format)
-   */
-  @Override
-  public void setConnecteeValue(Object aValue) {
-    setConnectorValueAsString(getFormat().format(aValue));
-  }
-
-  /**
-   * Sets the connector value as a string. This string has been formatted from
-   * the actual connector value using the format set using .
-   * 
-   * @param connectorValueAsString
-   *          the string representation of the connector value.
-   */
-  protected abstract void setConnectorValueAsString(
-      String connectorValueAsString);
-
-  /**
-   * Sets the format.
-   * 
-   * @param format
-   *          the format to set.
-   */
-  public void setFormat(Format format) {
-    this.format = format;
   }
 }

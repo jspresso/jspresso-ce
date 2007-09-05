@@ -21,7 +21,7 @@ public interface IFileSaveCallback {
    * Called whenever the file opening is cancelled.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    */
   void cancel(Map<String, Object> context);
 
@@ -29,9 +29,9 @@ public interface IFileSaveCallback {
    * Called whenever a file is chosen as save destination.
    * 
    * @param out
-   *          the output stream to write to the file.
+   *            the output stream to write to the file.
    * @param context
-   *          the action context.
+   *            the action context.
    */
   void fileChosen(OutputStream out, Map<String, Object> context);
 
@@ -39,9 +39,9 @@ public interface IFileSaveCallback {
    * Called whenever a file is finished writing.
    * 
    * @param filePath
-   *          the file path.
+   *            the file path.
    * @param context
-   *          the action context.
+   *            the action context.
    */
   void fileWritten(String filePath, Map<String, Object> context);
 }

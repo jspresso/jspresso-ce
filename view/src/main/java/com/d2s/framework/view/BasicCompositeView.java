@@ -14,7 +14,7 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the type of component this view uses.
+ *            the type of component this view uses.
  */
 public class BasicCompositeView<E> extends BasicView<E> implements
     ICompositeView<E> {
@@ -25,7 +25,7 @@ public class BasicCompositeView<E> extends BasicView<E> implements
    * Constructs a new <code>BasicCompositeView</code> instance.
    * 
    * @param peer
-   *          the peer component.
+   *            the peer component.
    */
   public BasicCompositeView(E peer) {
     super(peer);
@@ -42,7 +42,7 @@ public class BasicCompositeView<E> extends BasicView<E> implements
    * Sets the children.
    * 
    * @param children
-   *          the children to set.
+   *            the children to set.
    */
   public void setChildren(List<IView<E>> children) {
     this.children = children;

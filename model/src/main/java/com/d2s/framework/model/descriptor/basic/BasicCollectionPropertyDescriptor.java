@@ -20,7 +20,7 @@ import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete collection component element type.
+ *            the concrete collection component element type.
  */
 public class BasicCollectionPropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
@@ -33,14 +33,14 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public ICollectionDescriptor getCollectionDescriptor() {
+  public ICollectionDescriptor<E> getCollectionDescriptor() {
     return getReferencedDescriptor();
   }
 
   /**
    * {@inheritDoc}
    */
-  public Class<? extends Collection> getModelType() {
+  public Class<? extends Collection<? extends E>> getModelType() {
     return getReferencedDescriptor().getCollectionInterface();
   }
 
@@ -92,7 +92,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return manyToMany.booleanValue();
     }
     if (getParentDescriptor() != null) {
-      return ((ICollectionPropertyDescriptor) getParentDescriptor())
+      return ((ICollectionPropertyDescriptor<?>) getParentDescriptor())
           .isManyToMany();
     }
     return false;
@@ -101,14 +101,16 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public void postprocessAdder(Object component, Collection collection,
+  @SuppressWarnings("unchecked")
+  public void postprocessAdder(Object component, Collection<?> collection,
       Object addedValue) {
-    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+    for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor = 
+        (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.postprocessAdderIntegrity(component, collection, addedValue);
     }
   }
@@ -116,14 +118,16 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public void postprocessRemover(Object component, Collection collection,
+  @SuppressWarnings("unchecked")
+  public void postprocessRemover(Object component, Collection<?> collection,
       Object removedValue) {
-    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+    for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor = 
+        (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor
           .postprocessRemoverIntegrity(component, collection, removedValue);
     }
@@ -132,14 +136,16 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public void preprocessAdder(Object component, Collection collection,
+  @SuppressWarnings("unchecked")
+  public void preprocessAdder(Object component, Collection<?> collection,
       Object addedValue) {
-    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+    for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor = 
+        (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessAdderIntegrity(component, collection, addedValue);
     }
   }
@@ -147,14 +153,16 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public void preprocessRemover(Object component, Collection collection,
+  @SuppressWarnings("unchecked")
+  public void preprocessRemover(Object component, Collection<?> collection,
       Object removedValue) {
-    List<IPropertyIntegrityProcessor> processors = getIntegrityProcessors();
+    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor processor = (ICollectionIntegrityProcessor) propertyIntegrityProcessor;
+    for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
+        (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessRemoverIntegrity(component, collection, removedValue);
     }
   }
@@ -163,7 +171,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * Sets the manyToMany.
    * 
    * @param manyToMany
-   *          the manyToMany to set.
+   *            the manyToMany to set.
    */
   public void setManyToMany(boolean manyToMany) {
     this.manyToMany = new Boolean(manyToMany);
@@ -173,7 +181,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * Sets the orderingProperties.
    * 
    * @param orderingProperties
-   *          the orderingProperties to set.
+   *            the orderingProperties to set.
    */
   public void setOrderingProperties(List<String> orderingProperties) {
     this.orderingProperties = orderingProperties;
@@ -183,7 +191,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
    * Sets the referencedDescriptor.
    * 
    * @param referencedDescriptor
-   *          the referencedDescriptor to set.
+   *            the referencedDescriptor to set.
    */
   public void setReferencedDescriptor(
       ICollectionDescriptor<E> referencedDescriptor) {

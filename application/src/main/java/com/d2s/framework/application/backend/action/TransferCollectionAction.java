@@ -58,7 +58,7 @@ public class TransferCollectionAction extends AbstractCollectionAction {
    * Sets the transferMode.
    * 
    * @param transferMode
-   *          the transferMode to set.
+   *            the transferMode to set.
    */
   public void setTransferMode(TransferMode transferMode) {
     this.transferMode = transferMode;

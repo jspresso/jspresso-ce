@@ -22,12 +22,28 @@ import com.d2s.framework.application.startup.IStartup;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *            the actual gui component type used.
+ * @param <F>
+ *            the actual icon type used.
+ * @param <G>
+ *            the actual action type used.
  */
-public abstract class AbstractStartup implements IStartup {
+public abstract class AbstractStartup<E, F, G> implements IStartup {
 
-  private BeanFactory         applicationContext;
-  private IBackendController  backendController;
-  private IFrontendController frontendController;
+  private BeanFactory                  applicationContext;
+  private IBackendController           backendController;
+  private IFrontendController<E, F, G> frontendController;
+
+  /**
+   * Both front and back controllers are retrieved from the spring context,
+   * associated and started.
+   * <p>
+   * {@inheritDoc}
+   */
+  public void start() {
+    getFrontendController().start(getBackendController(), getStartupLocale());
+  }
 
   /**
    * Gets the applicationContext.
@@ -70,9 +86,10 @@ public abstract class AbstractStartup implements IStartup {
    * 
    * @return the application frontend controller.
    */
-  protected IFrontendController getFrontendController() {
+  @SuppressWarnings("unchecked")
+  protected IFrontendController<E, F, G> getFrontendController() {
     if (frontendController == null) {
-      frontendController = (IFrontendController) getApplicationContext()
+      frontendController = (IFrontendController<E, F, G>) getApplicationContext()
           .getBean("applicationFrontController");
     }
     return frontendController;
@@ -84,14 +101,4 @@ public abstract class AbstractStartup implements IStartup {
    * @return the startup locale.
    */
   protected abstract Locale getStartupLocale();
-
-  /**
-   * Both front and back controllers are retrieved from the spring context,
-   * associated and started.
-   * <p>
-   * {@inheritDoc}
-   */
-  public void start() {
-    getFrontendController().start(getBackendController(), getStartupLocale());
-  }
 }

@@ -44,8 +44,8 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Adds a child module.
    * 
    * @param child
-   *          the child module to add. It will fire a "subModules" property
-   *          change event.
+   *            the child module to add. It will fire a "subModules" property
+   *            change event.
    * @return <code>true</code> if the module was succesfully added.
    */
   public boolean addSubModule(SubModule child) {
@@ -65,7 +65,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * change event.
    * 
    * @param subModulesToAdd
-   *          the subModules modules to add.
+   *            the subModules modules to add.
    * @return <code>true</code> if the subModules module collection was
    *         succesfully added.
    */
@@ -181,7 +181,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Removes a child module. It will fire a "subModules" property change event.
    * 
    * @param subModule
-   *          the child module to remove.
+   *            the child module to remove.
    * @return <code>true</code> if the module was succesfully removed.
    */
   public boolean removeSubModule(SubModule subModule) {
@@ -201,7 +201,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * property change event.
    * 
    * @param childrenToRemove
-   *          the subModules modules to remove.
+   *            the subModules modules to remove.
    * @return <code>true</code> if the subModules module collection was
    *         succesfully removed.
    */
@@ -221,7 +221,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the module's description. It may serve for the module's view.
    * 
    * @param description
-   *          the module's description.
+   *            the module's description.
    */
   public void setDescription(String description) {
     if (ObjectUtils.equals(this.description, description)) {
@@ -236,7 +236,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the grantedRoles.
    * 
    * @param grantedRoles
-   *          the grantedRoles to set.
+   *            the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
@@ -246,7 +246,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the i18nDescription.
    * 
    * @param i18nDescription
-   *          the i18nDescription to set.
+   *            the i18nDescription to set.
    */
   public void setI18nDescription(String i18nDescription) {
     if (ObjectUtils.equals(this.i18nDescription, i18nDescription)) {
@@ -261,7 +261,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the i18nName.
    * 
    * @param i18nName
-   *          the i18nName to set.
+   *            the i18nName to set.
    */
   public void setI18nName(String i18nName) {
     if (ObjectUtils.equals(this.i18nName, i18nName)) {
@@ -276,7 +276,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the iconImageURL.
    * 
    * @param iconImageURL
-   *          the iconImageURL to set.
+   *            the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     this.iconImageURL = iconImageURL;
@@ -286,7 +286,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Sets the module's name. It may serve for the module's view.
    * 
    * @param name
-   *          the module's name.
+   *            the module's name.
    */
   public void setName(String name) {
     if (ObjectUtils.equals(this.name, name)) {
@@ -302,7 +302,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * event.
    * 
    * @param subModules
-   *          the subModules modules to set.
+   *            the subModules modules to set.
    */
   public void setSubModules(List<SubModule> subModules) {
     List<SubModule> oldValue = null;
@@ -332,9 +332,9 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * "subModules" property change event.
    * 
    * @param oldChildren
-   *          the old subModules collection property.
+   *            the old subModules collection property.
    * @param newChildren
-   *          the new subModules collection property.
+   *            the new subModules collection property.
    */
   protected void updateParentsAndFireSubModulesChanged(
       List<SubModule> oldChildren, List<SubModule> newChildren) {

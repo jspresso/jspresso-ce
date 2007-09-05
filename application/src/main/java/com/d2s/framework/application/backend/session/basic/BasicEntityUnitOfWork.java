@@ -32,10 +32,6 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
     dirtRecorder = new BeanPropertyChangeRecorder();
   }
 
-  private void cleanup() {
-    dirtRecorder = null;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -94,5 +90,9 @@ public class BasicEntityUnitOfWork implements IEntityUnitOfWork {
    */
   public void rollback() {
     cleanup();
+  }
+
+  private void cleanup() {
+    dirtRecorder = null;
   }
 }

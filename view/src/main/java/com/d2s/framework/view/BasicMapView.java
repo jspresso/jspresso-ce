@@ -16,7 +16,7 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the type of component this view uses.
+ *            the type of component this view uses.
  */
 public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
 
@@ -26,7 +26,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
    * Constructs a new <code>BasicMapView</code> instance.
    * 
    * @param peer
-   *          the peer component.
+   *            the peer component.
    */
   public BasicMapView(E peer) {
     super(peer);
@@ -56,7 +56,7 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
    * Sets the children.
    * 
    * @param children
-   *          the children to set.
+   *            the children to set.
    */
   public void setChildren(Map<String, IView<E>> children) {
     this.children = children;

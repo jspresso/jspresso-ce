@@ -60,7 +60,7 @@ public class DefaultDescriptor implements IDescriptor {
    * The description setter.
    * 
    * @param description
-   *          the description to set.
+   *            the description to set.
    */
   public void setDescription(String description) {
     this.description = description;
@@ -70,7 +70,7 @@ public class DefaultDescriptor implements IDescriptor {
    * The name setter.
    * 
    * @param name
-   *          the name to set.
+   *            the name to set.
    */
   public void setName(String name) {
     this.name = name;

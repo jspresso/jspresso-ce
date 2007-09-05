@@ -23,9 +23,9 @@ public class JComboBoxConnector extends JComponentConnector<JComboBox> {
    * Constructs a new <code>JComboBoxConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param comboBox
-   *          the connected JComboBox.
+   *            the connected JComboBox.
    */
   public JComboBoxConnector(String id, JComboBox comboBox) {
     super(id, comboBox);

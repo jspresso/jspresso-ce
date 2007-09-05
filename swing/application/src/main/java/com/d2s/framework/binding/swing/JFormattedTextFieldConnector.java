@@ -29,9 +29,9 @@ public class JFormattedTextFieldConnector extends
    * Constructs a new <code>JFormattedTextFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected JTextField.
+   *            the connected JTextField.
    */
   public JFormattedTextFieldConnector(String id, JFormattedTextField textField) {
     super(id, textField);

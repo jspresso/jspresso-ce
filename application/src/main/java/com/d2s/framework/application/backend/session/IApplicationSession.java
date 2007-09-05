@@ -44,7 +44,7 @@ public interface IApplicationSession extends IEntityDirtAware,
    * part in the unit of work.
    * 
    * @param entity
-   *          the entity to make part of the unit of work.
+   *            the entity to make part of the unit of work.
    * @return the entity (clone of the original one) actually registered in the
    *         unit of work.
    */
@@ -55,7 +55,7 @@ public interface IApplicationSession extends IEntityDirtAware,
    * as taking part in the unit of work.
    * 
    * @param entities
-   *          the entities to make part of the unit of work.
+   *            the entities to make part of the unit of work.
    * @return the entity (clone of the original one) actually registered in the
    *         unit of work.
    */
@@ -86,12 +86,13 @@ public interface IApplicationSession extends IEntityDirtAware,
    * Gets a previously registered entity in this application session.
    * 
    * @param entityContract
-   *          the entity contract.
+   *            the entity contract.
    * @param entityId
-   *          the identifier of the looked-up entity.
+   *            the identifier of the looked-up entity.
    * @return the registered entity or null.
    */
-  IEntity getRegisteredEntity(Class entityContract, Object entityId);
+  IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
+      Object entityId);
 
   /**
    * Gets the session owner as a JAAS subject.
@@ -105,9 +106,9 @@ public interface IApplicationSession extends IEntityDirtAware,
    * all necessary complementary initializations..
    * 
    * @param entity
-   *          the entity holding the property.
+   *            the entity holding the property.
    * @param propertyDescriptor
-   *          the property descriptor.
+   *            the property descriptor.
    */
   void initializePropertyIfNeeded(IEntity entity,
       IPropertyDescriptor propertyDescriptor);
@@ -116,7 +117,7 @@ public interface IApplicationSession extends IEntityDirtAware,
    * Wether the object is fully initialized.
    * 
    * @param objectOrProxy
-   *          the object to test.
+   *            the object to test.
    * @return true if the object is fully initialized.
    */
   boolean isInitialized(Object objectOrProxy);
@@ -139,9 +140,9 @@ public interface IApplicationSession extends IEntityDirtAware,
    * application dirty states are updated accordingly.
    * 
    * @param entity
-   *          the entity to merge.
+   *            the entity to merge.
    * @param mergeMode
-   *          the merge mmode to be used.
+   *            the merge mmode to be used.
    * @return the entity registered in the application session.
    */
   IEntity merge(IEntity entity, MergeMode mergeMode);
@@ -155,9 +156,9 @@ public interface IApplicationSession extends IEntityDirtAware,
    * so the application dirty states are updated accordingly.
    * 
    * @param entities
-   *          the list of entities to merge.
+   *            the list of entities to merge.
    * @param mergeMode
-   *          the merge mmode to be used.
+   *            the merge mmode to be used.
    * @return the merged entity list.
    */
   List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode);
@@ -171,7 +172,7 @@ public interface IApplicationSession extends IEntityDirtAware,
    * Records an entity as having been flushed to the persistent store.
    * 
    * @param flushedEntity
-   *          the flushed entity.
+   *            the flushed entity.
    */
   void recordAsSynchronized(IEntity flushedEntity);
 
@@ -179,10 +180,10 @@ public interface IApplicationSession extends IEntityDirtAware,
    * Registers an entity in this application session.
    * 
    * @param entity
-   *          the entity to register.
+   *            the entity to register.
    * @param isEntityTransient
-   *          wether this entity has to be considered as a transient one. It is
-   *          not safe to rely on entity.isPersistent() to determine it.
+   *            wether this entity has to be considered as a transient one. It
+   *            is not safe to rely on entity.isPersistent() to determine it.
    */
   void registerEntity(IEntity entity, boolean isEntityTransient);
 
@@ -197,7 +198,7 @@ public interface IApplicationSession extends IEntityDirtAware,
    * Sets the session locale.
    * 
    * @param locale
-   *          the session locale.
+   *            the session locale.
    */
   void setLocale(Locale locale);
 
@@ -205,7 +206,7 @@ public interface IApplicationSession extends IEntityDirtAware,
    * Sets the session owner as a JAAS subject.
    * 
    * @param sessionOwner
-   *          the session owner.
+   *            the session owner.
    */
   void setSubject(Subject sessionOwner);
 }

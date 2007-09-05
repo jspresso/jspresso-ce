@@ -23,13 +23,13 @@ public interface IConnectorValueChangeListener {
    * differs from <code>newValue</code>.
    * 
    * @param evt
-   *          The event representing the change. This event will have :
-   *          <li><code>source</code> set to the connector which initiated
-   *          the event.
-   *          <li><code>oldValue</code> set to the old value of the source
-   *          connector.
-   *          <li><code>newValue</code> set to the new value of the source
-   *          connector.
+   *            The event representing the change. This event will have :
+   *            <li><code>source</code> set to the connector which initiated
+   *            the event.
+   *            <li><code>oldValue</code> set to the old value of the source
+   *            connector.
+   *            <li><code>newValue</code> set to the new value of the source
+   *            connector.
    */
   void connectorValueChange(ConnectorValueChangeEvent evt);
 

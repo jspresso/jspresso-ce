@@ -17,7 +17,7 @@ import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete component type.
+ *            the concrete component type.
  */
 public class BasicReferencePropertyDescriptor<E> extends
     BasicRelationshipEndPropertyDescriptor implements
@@ -29,7 +29,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public IComponentDescriptor getComponentDescriptor() {
+  public IComponentDescriptor<E> getComponentDescriptor() {
     return getReferencedDescriptor();
   }
 
@@ -52,7 +52,7 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return getReferencedDescriptor().getComponentContract();
   }
 
@@ -83,7 +83,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * Sets the initializationMapping.
    * 
    * @param initializationMapping
-   *          the initializationMapping to set.
+   *            the initializationMapping to set.
    */
   public void setInitializationMapping(Map<String, String> initializationMapping) {
     this.initializationMapping = initializationMapping;
@@ -93,7 +93,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    * Sets the referencedDescriptor property.
    * 
    * @param referencedDescriptor
-   *          the referencedDescriptor to set.
+   *            the referencedDescriptor to set.
    */
   public void setReferencedDescriptor(
       IComponentDescriptor<E> referencedDescriptor) {

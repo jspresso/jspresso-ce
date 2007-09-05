@@ -12,9 +12,9 @@ package com.d2s.framework.util.bean.integrity;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          The type of the target.
+ *            The type of the target.
  * @param <F>
- *          The type of the property.
+ *            The type of the property.
  */
 public abstract class EmptyPropertyIntegrityProcessor<E, F> implements
     IPropertyIntegrityProcessor<E, F> {

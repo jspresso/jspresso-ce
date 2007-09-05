@@ -24,22 +24,22 @@ import com.d2s.framework.util.bean.AccessorInfo;
 public class BeanCollectionAccessor extends BeanPropertyAccessor implements
     ICollectionAccessor {
 
-  private Method adderMethod;
-  private Class  elementClass;
-  private Method removerMethod;
+  private Method   adderMethod;
+  private Class<?> elementClass;
+  private Method   removerMethod;
 
   /**
    * Constructs a new default java bean collection property accessor.
    * 
    * @param property
-   *          the property to be accessed.
+   *            the property to be accessed.
    * @param beanClass
-   *          the java bean class.
+   *            the java bean class.
    * @param elementClass
-   *          the collection element class.
+   *            the collection element class.
    */
-  public BeanCollectionAccessor(String property, Class beanClass,
-      Class elementClass) {
+  public BeanCollectionAccessor(String property, Class<?> beanClass,
+      Class<?> elementClass) {
     super(property, beanClass);
     this.elementClass = elementClass;
   }
@@ -58,32 +58,12 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
   }
 
   /**
-   * Capitalizes the first caracter of a string.
-   * 
-   * @param input
-   *          the string to capitalize the first caracter.
-   * @return the transformed string.
-   */
-  protected String capitalizeFirst(String input) {
-    return Character.toUpperCase(input.charAt(0)) + input.substring(1);
-  }
-
-  /**
-   * Gets the elementClass.
-   * 
-   * @return the elementClass.
-   */
-  protected Class getElementClass() {
-    return elementClass;
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
-  public Collection getValue(Object target) throws IllegalAccessException,
+  public Collection<?> getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException {
-    return (Collection) super.getValue(target);
+    return (Collection<?>) super.getValue(target);
   }
 
   /**
@@ -97,6 +77,26 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
           new Class[] {getElementClass()});
     }
     removerMethod.invoke(target, new Object[] {value});
+  }
+
+  /**
+   * Capitalizes the first caracter of a string.
+   * 
+   * @param input
+   *            the string to capitalize the first caracter.
+   * @return the transformed string.
+   */
+  protected String capitalizeFirst(String input) {
+    return Character.toUpperCase(input.charAt(0)) + input.substring(1);
+  }
+
+  /**
+   * Gets the elementClass.
+   * 
+   * @return the elementClass.
+   */
+  protected Class<?> getElementClass() {
+    return elementClass;
   }
 
 }

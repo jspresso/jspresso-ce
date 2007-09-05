@@ -46,182 +46,8 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIActionField extends UIComponent implements IEditorComponent {
 
-  private final class ActionFieldTableCellEditor extends AbstractCellEditor
-      implements TableCellEditor {
-
-    private static final long  serialVersionUID = 7703653671044392483L;
-
-    private TableModelListener stopEditingListener;
-
-    /**
-     * Constructs a new <code>DateFieldTableCellEditor</code> instance.
-     */
-    public ActionFieldTableCellEditor() {
-      getBasicObject().removeTextFieldFocusListener(actionFocusListener);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object getCellEditorValue() {
-      // Don't return anything since the cell editor value is not used.
-      // The model is directly updated by the server half object.
-      return null;
-    }
-
-    private TableModelListener getStopEditingListener(final JTable table) {
-      if (stopEditingListener == null) {
-        stopEditingListener = new TableModelListener() {
-
-          public void tableChanged(TableModelEvent e) {
-            if (table.isEditing() && e.getColumn() > 0) {
-              table.editingCanceled(new ChangeEvent(getBasicObject()));
-            }
-          }
-        };
-      }
-      return stopEditingListener;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unused")
-    public Component getTableCellEditorComponent(JTable table, Object value,
-        boolean isSelected, int row, int col) {
-      getBasicObject().setValue(value);
-      getBasicObject().selectAll();
-      Anything cellEditingAnything = new Anything();
-      cellEditingAnything.put(ActionFieldConstants.EDITING_ROW_KEY, row);
-      cellEditingAnything.put(ActionFieldConstants.EDITING_COLUMN_KEY, col);
-      sendULC(ActionFieldConstants.SET_EDITING_CELL_REQUEST,
-          cellEditingAnything);
-      syncState();
-      table.getModel().removeTableModelListener(getStopEditingListener(table));
-      table.getModel().addTableModelListener(getStopEditingListener(table));
-      return getBasicObject();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isCellEditable(EventObject evt) {
-      if (evt instanceof MouseEvent) {
-        MouseEvent me = (MouseEvent) evt;
-        if (getBasicObject().isShowingTextField()) {
-          return (me.getClickCount() >= 2);
-        }
-        return (me.getClickCount() >= 1);
-      }
-      return super.isCellEditable(evt);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean stopCellEditing() {
-      if (getBasicObject().isSynchronized()) {
-        fireEditingCanceled();
-        return true;
-      }
-      sendActionText();
-      if (getBasicObject().getActionText().length() == 0) {
-        return true;
-      }
-      return false;
-    }
-  }
   private FocusListener   actionFocusListener;
-
   private TableCellEditor tableCellEditor;
-
-  private Action anythingToAction(final int index, Anything actionAnything,
-      UIIcon actionIcon) {
-    if (actionAnything == null) {
-      return null;
-    }
-    Action action = new AbstractAction() {
-
-      private static final long serialVersionUID = -1208228660452838215L;
-
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent evt) {
-        if (evt.getSource() instanceof JButton) {
-          triggerAction(index, ((JButton) evt.getSource()).getActionCommand());
-          // sendActionText(((JButton) evt.getSource()).getActionCommand());
-        } else {
-          sendActionText();
-        }
-      }
-    };
-    if (actionAnything.get(ActionFieldConstants.ACCELERATOR_KEY, -1) != -1) {
-      action.putValue(Action.ACCELERATOR_KEY, new Integer(actionAnything.get(
-          ActionFieldConstants.ACCELERATOR_KEY, -1)));
-    }
-    action.putValue(Action.ACTION_COMMAND_KEY, actionAnything.get(
-        ActionFieldConstants.ACTION_COMMAND_KEY, null));
-    action.putValue(Action.LONG_DESCRIPTION, actionAnything.get(
-        ActionFieldConstants.LONG_DESCRIPTION, null));
-    if (actionAnything.get(ActionFieldConstants.MNEMONIC_KEY, -1) != -1) {
-      action.putValue(Action.MNEMONIC_KEY, new Integer(actionAnything.get(
-          ActionFieldConstants.MNEMONIC_KEY, -1)));
-    }
-    action.putValue(Action.NAME, actionAnything.get(ActionFieldConstants.NAME,
-        null));
-    action.putValue(Action.SHORT_DESCRIPTION, actionAnything.get(
-        ActionFieldConstants.SHORT_DESCRIPTION, null));
-    if (actionIcon != null) {
-      action.putValue(Action.SMALL_ICON, new ImageIcon(actionIcon.getImage()));
-    }
-    return action;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object createBasicObject(Anything args) {
-    boolean showTextField = args.get(ActionFieldConstants.SHOW_TEXTFIELD_KEY,
-        true);
-
-    JActionField actionField = new JActionField(showTextField) {
-
-      private static final long serialVersionUID = 7747321535435615536L;
-
-      /**
-       * Prevent ULC framework for installing bogus focus listeners on the
-       * component.
-       * <p>
-       * {@inheritDoc}
-       */
-      @Override
-      public synchronized void addFocusListener(FocusListener l) {
-        if (l.getClass().getName()
-            .startsWith("com.ulcjava.base.client.UITable")) {
-          return;
-        }
-        super.addFocusListener(l);
-      }
-    };
-    actionFocusListener = new FocusAdapter() {
-
-      /**
-       * {@inheritDoc}
-       */
-      @Override
-      public void focusLost(@SuppressWarnings("unused")
-      FocusEvent e) {
-        if (!getBasicObject().isSynchronized()) {
-          sendActionText();
-        }
-      }
-
-    };
-    actionField.addTextFieldFocusListener(actionFocusListener);
-    return actionField;
-  }
 
   /**
    * {@inheritDoc}
@@ -280,6 +106,104 @@ public class UIActionField extends UIComponent implements IEditorComponent {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void restoreState(Anything args) {
+    super.restoreState(args);
+    handleSetActionText(args);
+    handleSetActions(args);
+    getBasicObject().setEditable(
+        args.get(DateFieldConstants.EDITABLE_KEY, true));
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object createBasicObject(Anything args) {
+    boolean showTextField = args.get(ActionFieldConstants.SHOW_TEXTFIELD_KEY,
+        true);
+
+    JActionField actionField = new JActionField(showTextField) {
+
+      private static final long serialVersionUID = 7747321535435615536L;
+
+      /**
+       * Prevent ULC framework for installing bogus focus listeners on the
+       * component.
+       * <p>
+       * {@inheritDoc}
+       */
+      @Override
+      public synchronized void addFocusListener(FocusListener l) {
+        if (l.getClass().getName()
+            .startsWith("com.ulcjava.base.client.UITable")) {
+          return;
+        }
+        super.addFocusListener(l);
+      }
+    };
+    actionFocusListener = new FocusAdapter() {
+
+      /**
+       * {@inheritDoc}
+       */
+      @Override
+      public void focusLost(@SuppressWarnings("unused")
+      FocusEvent e) {
+        if (!getBasicObject().isSynchronized()) {
+          sendActionText();
+        }
+      }
+
+    };
+    actionField.addTextFieldFocusListener(actionFocusListener);
+    return actionField;
+  }
+
+  private Action anythingToAction(final int index, Anything actionAnything,
+      UIIcon actionIcon) {
+    if (actionAnything == null) {
+      return null;
+    }
+    Action action = new AbstractAction() {
+
+      private static final long serialVersionUID = -1208228660452838215L;
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent evt) {
+        if (evt.getSource() instanceof JButton) {
+          triggerAction(index, ((JButton) evt.getSource()).getActionCommand());
+          // sendActionText(((JButton) evt.getSource()).getActionCommand());
+        } else {
+          sendActionText();
+        }
+      }
+    };
+    if (actionAnything.get(ActionFieldConstants.ACCELERATOR_KEY, -1) != -1) {
+      action.putValue(Action.ACCELERATOR_KEY, new Integer(actionAnything.get(
+          ActionFieldConstants.ACCELERATOR_KEY, -1)));
+    }
+    action.putValue(Action.ACTION_COMMAND_KEY, actionAnything.get(
+        ActionFieldConstants.ACTION_COMMAND_KEY, null));
+    action.putValue(Action.LONG_DESCRIPTION, actionAnything.get(
+        ActionFieldConstants.LONG_DESCRIPTION, null));
+    if (actionAnything.get(ActionFieldConstants.MNEMONIC_KEY, -1) != -1) {
+      action.putValue(Action.MNEMONIC_KEY, new Integer(actionAnything.get(
+          ActionFieldConstants.MNEMONIC_KEY, -1)));
+    }
+    action.putValue(Action.NAME, actionAnything.get(ActionFieldConstants.NAME,
+        null));
+    action.putValue(Action.SHORT_DESCRIPTION, actionAnything.get(
+        ActionFieldConstants.SHORT_DESCRIPTION, null));
+    if (actionIcon != null) {
+      action.putValue(Action.SMALL_ICON, new ImageIcon(actionIcon.getImage()));
+    }
+    return action;
+  }
+
   private void handleSetActions(Anything args) {
     List<UIIcon> icons = new ArrayList<UIIcon>();
     List<Action> actions = new ArrayList<Action>();
@@ -314,18 +238,6 @@ public class UIActionField extends UIComponent implements IEditorComponent {
         args.get(ActionFieldConstants.EDITABLE_KEY, true));
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void restoreState(Anything args) {
-    super.restoreState(args);
-    handleSetActionText(args);
-    handleSetActions(args);
-    getBasicObject().setEditable(
-        args.get(DateFieldConstants.EDITABLE_KEY, true));
-  }
-
   private void sendActionText() {
     sendActionText(getBasicObject().getActionText());
   }
@@ -348,5 +260,93 @@ public class UIActionField extends UIComponent implements IEditorComponent {
     actionTextAnything.put(ActionFieldConstants.ACTION_INDEX_KEY, index);
     actionTextAnything.put(ActionFieldConstants.ACTION_TEXT_KEY, actionText);
     sendULC(ActionFieldConstants.TRIGGER_ACTION_REQUEST, actionTextAnything);
+  }
+
+  private final class ActionFieldTableCellEditor extends AbstractCellEditor
+      implements TableCellEditor {
+
+    private static final long  serialVersionUID = 7703653671044392483L;
+
+    private TableModelListener stopEditingListener;
+
+    /**
+     * Constructs a new <code>DateFieldTableCellEditor</code> instance.
+     */
+    public ActionFieldTableCellEditor() {
+      getBasicObject().removeTextFieldFocusListener(actionFocusListener);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getCellEditorValue() {
+      // Don't return anything since the cell editor value is not used.
+      // The model is directly updated by the server half object.
+      return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unused")
+    public Component getTableCellEditorComponent(JTable table, Object value,
+        boolean isSelected, int row, int col) {
+      getBasicObject().setValue(value);
+      getBasicObject().selectAll();
+      Anything cellEditingAnything = new Anything();
+      cellEditingAnything.put(ActionFieldConstants.EDITING_ROW_KEY, row);
+      cellEditingAnything.put(ActionFieldConstants.EDITING_COLUMN_KEY, col);
+      sendULC(ActionFieldConstants.SET_EDITING_CELL_REQUEST,
+          cellEditingAnything);
+      syncState();
+      table.getModel().removeTableModelListener(getStopEditingListener(table));
+      table.getModel().addTableModelListener(getStopEditingListener(table));
+      return getBasicObject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCellEditable(EventObject evt) {
+      if (evt instanceof MouseEvent) {
+        MouseEvent me = (MouseEvent) evt;
+        if (getBasicObject().isShowingTextField()) {
+          return (me.getClickCount() >= 2);
+        }
+        return (me.getClickCount() >= 1);
+      }
+      return super.isCellEditable(evt);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean stopCellEditing() {
+      if (getBasicObject().isSynchronized()) {
+        fireEditingCanceled();
+        return true;
+      }
+      sendActionText();
+      if (getBasicObject().getActionText().length() == 0) {
+        return true;
+      }
+      return false;
+    }
+
+    private TableModelListener getStopEditingListener(final JTable table) {
+      if (stopEditingListener == null) {
+        stopEditingListener = new TableModelListener() {
+
+          public void tableChanged(TableModelEvent e) {
+            if (table.isEditing() && e.getColumn() > 0) {
+              table.editingCanceled(new ChangeEvent(getBasicObject()));
+            }
+          }
+        };
+      }
+      return stopEditingListener;
+    }
   }
 }

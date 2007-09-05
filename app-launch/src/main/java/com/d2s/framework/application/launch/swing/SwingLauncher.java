@@ -26,17 +26,15 @@ import com.d2s.framework.util.url.UrlHelper;
  */
 public final class SwingLauncher {
 
-  private static IStartup instanciateStartup(String startupClassName)
-      throws InstantiationException, IllegalAccessException,
-      ClassNotFoundException {
-    return (IStartup) Class.forName(startupClassName).newInstance();
+  private SwingLauncher() {
+    // Helper class constructor.
   }
 
   /**
    * Main method.
    * 
    * @param args
-   *          arguments.
+   *            arguments.
    */
   @SuppressWarnings("static-access")
   public static void main(String[] args) {
@@ -75,7 +73,9 @@ public final class SwingLauncher {
     }
   }
 
-  private SwingLauncher() {
-    // Helper class constructor.
+  private static IStartup instanciateStartup(String startupClassName)
+      throws InstantiationException, IllegalAccessException,
+      ClassNotFoundException {
+    return (IStartup) Class.forName(startupClassName).newInstance();
   }
 }

@@ -22,73 +22,50 @@ import com.ulcjava.base.application.AbstractListModel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class CollectionConnectorListModel extends AbstractListModel {
 
-  private final class CellConnectorListener implements
-      IConnectorValueChangeListener {
-
-    private int index;
-
-    private CellConnectorListener(int index) {
-      this.index = index;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
-      fireContentsChanged(CollectionConnectorListModel.this, index, index);
-    }
-  }
-  private class ListConnectorListener implements IConnectorValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(final ConnectorValueChangeEvent evt) {
-      Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
-      Collection<?> newCollection = (Collection<?>) evt.getNewValue();
-      int oldCollectionSize = 0;
-      int newCollectionSize = 0;
-      if (oldCollection != null) {
-        oldCollectionSize = oldCollection.size();
-      }
-      if (newCollection != null) {
-        newCollectionSize = newCollection.size();
-      }
-      if (newCollectionSize > oldCollectionSize) {
-        fireIntervalAdded(CollectionConnectorListModel.this, oldCollectionSize,
-            newCollectionSize);
-        for (int index = oldCollectionSize; index < newCollectionSize; index++) {
-          bindChildConnector(index);
-        }
-      } else if (newCollectionSize < oldCollectionSize) {
-        fireIntervalRemoved(CollectionConnectorListModel.this,
-            oldCollectionSize, newCollectionSize);
-      }
-    }
-  }
   private static final long                           serialVersionUID = -7992011455793793550L;
-
   private Map<Integer, IConnectorValueChangeListener> cachedListeners;
-
   private ICollectionConnector                        collectionConnector;
 
   /**
    * Constructs a new <code>CollectionConnectorListModel</code> instance.
-   *
+   * 
    * @param collectionConnector
-   *          the collection connector holding the values of this list model.
+   *            the collection connector holding the values of this list model.
    */
   public CollectionConnectorListModel(ICollectionConnector collectionConnector) {
     super();
     this.collectionConnector = collectionConnector;
     bindConnector();
+  }
+
+  /**
+   * Returns the connector value of the connector at <code>index</code> in the
+   * child connectors collection contained in the backed collection connector.
+   * <p>
+   * {@inheritDoc}
+   */
+  public Object getElementAt(int index) {
+    IValueConnector cellConnector = collectionConnector
+        .getChildConnector(index);
+    if (cellConnector instanceof ICompositeValueConnector) {
+      return cellConnector.toString();
+    }
+    return cellConnector.getConnectorValue();
+  }
+
+  /**
+   * Returns the backed collection connector size.
+   * <p>
+   * {@inheritDoc}
+   */
+  public int getSize() {
+    return collectionConnector.getChildConnectorCount();
   }
 
   private void bindChildConnector(int index) {
@@ -128,27 +105,50 @@ public class CollectionConnectorListModel extends AbstractListModel {
     return cachedListener;
   }
 
-  /**
-   * Returns the connector value of the connector at <code>index</code> in the
-   * child connectors collection contained in the backed collection connector.
-   * <p>
-   * {@inheritDoc}
-   */
-  public Object getElementAt(int index) {
-    IValueConnector cellConnector = collectionConnector
-        .getChildConnector(index);
-    if (cellConnector instanceof ICompositeValueConnector) {
-      return cellConnector.toString();
+  private final class CellConnectorListener implements
+      IConnectorValueChangeListener {
+
+    private int index;
+
+    private CellConnectorListener(int index) {
+      this.index = index;
     }
-    return cellConnector.getConnectorValue();
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(@SuppressWarnings("unused")
+    ConnectorValueChangeEvent evt) {
+      fireContentsChanged(CollectionConnectorListModel.this, index, index);
+    }
   }
 
-  /**
-   * Returns the backed collection connector size.
-   * <p>
-   * {@inheritDoc}
-   */
-  public int getSize() {
-    return collectionConnector.getChildConnectorCount();
+  private class ListConnectorListener implements IConnectorValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(final ConnectorValueChangeEvent evt) {
+      Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
+      Collection<?> newCollection = (Collection<?>) evt.getNewValue();
+      int oldCollectionSize = 0;
+      int newCollectionSize = 0;
+      if (oldCollection != null) {
+        oldCollectionSize = oldCollection.size();
+      }
+      if (newCollection != null) {
+        newCollectionSize = newCollection.size();
+      }
+      if (newCollectionSize > oldCollectionSize) {
+        fireIntervalAdded(CollectionConnectorListModel.this, oldCollectionSize,
+            newCollectionSize);
+        for (int index = oldCollectionSize; index < newCollectionSize; index++) {
+          bindChildConnector(index);
+        }
+      } else if (newCollectionSize < oldCollectionSize) {
+        fireIntervalRemoved(CollectionConnectorListModel.this,
+            oldCollectionSize, newCollectionSize);
+      }
+    }
   }
 }

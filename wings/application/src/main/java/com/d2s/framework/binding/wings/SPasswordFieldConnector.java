@@ -20,9 +20,9 @@ public class SPasswordFieldConnector extends STextFieldConnector {
    * Constructs a new <code>SPasswordFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param passwordField
-   *          the connected SPasswordField.
+   *            the connected SPasswordField.
    */
   public SPasswordFieldConnector(String id, SPasswordField passwordField) {
     super(id, passwordField);

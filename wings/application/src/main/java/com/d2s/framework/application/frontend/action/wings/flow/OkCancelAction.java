@@ -59,7 +59,7 @@ public class OkCancelAction extends AbstractMessageAction {
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *          the cancelAction to set.
+   *            the cancelAction to set.
    */
   public void setCancelAction(IAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -69,7 +69,7 @@ public class OkCancelAction extends AbstractMessageAction {
    * Sets the okAction.
    * 
    * @param okAction
-   *          the okAction to set.
+   *            the okAction to set.
    */
   public void setOkAction(IAction okAction) {
     this.okAction = okAction;

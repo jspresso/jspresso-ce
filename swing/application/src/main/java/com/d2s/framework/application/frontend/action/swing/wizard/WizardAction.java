@@ -56,20 +56,6 @@ public class WizardAction extends AbstractSwingAction {
   private IModelConnectorFactory modelConnectorFactory;
 
   /**
-   * Creates (and initializes) the wizard model.
-   * 
-   * @param initialWizardModel
-   *          the initial wizard model.
-   * @param context
-   *          the action context.
-   */
-  protected void completeInitialWizardModel(@SuppressWarnings("unused")
-  Map<String, Object> initialWizardModel, @SuppressWarnings("unused")
-  Map<String, Object> context) {
-    // No-op by default.
-  }
-
-  /**
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
@@ -212,22 +198,11 @@ public class WizardAction extends AbstractSwingAction {
     return super.execute(actionHandler, context);
   }
 
-  private IWizardStepDescriptor getCurrentWizardStep(Map<String, Object> context) {
-    IWizardStepDescriptor currentWizardStep = (IWizardStepDescriptor) context
-        .get(ActionContextConstants.DIALOG_VIEW);
-    return currentWizardStep;
-  }
-
-  private void setCurrentWizardStep(IWizardStepDescriptor currentWizardStep,
-      Map<String, Object> context) {
-    context.put(ActionContextConstants.DIALOG_VIEW, currentWizardStep);
-  }
-
   /**
    * Sets the finishAction.
    * 
    * @param finishAction
-   *          the finishAction to set.
+   *            the finishAction to set.
    */
   public void setFinishAction(IDisplayableAction finishAction) {
     this.finishAction = finishAction;
@@ -237,7 +212,7 @@ public class WizardAction extends AbstractSwingAction {
    * Sets the firstWizardStep.
    * 
    * @param firstWizardStep
-   *          the firstWizardStep to set.
+   *            the firstWizardStep to set.
    */
   public void setFirstWizardStep(IWizardStepDescriptor firstWizardStep) {
     this.firstWizardStep = firstWizardStep;
@@ -247,11 +222,36 @@ public class WizardAction extends AbstractSwingAction {
    * Sets the modelConnectorFactory.
    * 
    * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
+   *            the modelConnectorFactory to set.
    */
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
     this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
+   * Creates (and initializes) the wizard model.
+   * 
+   * @param initialWizardModel
+   *            the initial wizard model.
+   * @param context
+   *            the action context.
+   */
+  protected void completeInitialWizardModel(@SuppressWarnings("unused")
+  Map<String, Object> initialWizardModel, @SuppressWarnings("unused")
+  Map<String, Object> context) {
+    // No-op by default.
+  }
+
+  private IWizardStepDescriptor getCurrentWizardStep(Map<String, Object> context) {
+    IWizardStepDescriptor currentWizardStep = (IWizardStepDescriptor) context
+        .get(ActionContextConstants.DIALOG_VIEW);
+    return currentWizardStep;
+  }
+
+  private void setCurrentWizardStep(IWizardStepDescriptor currentWizardStep,
+      Map<String, Object> context) {
+    context.put(ActionContextConstants.DIALOG_VIEW, currentWizardStep);
   }
 
   private void show(JDialog dialog, JPanel cardPanel,

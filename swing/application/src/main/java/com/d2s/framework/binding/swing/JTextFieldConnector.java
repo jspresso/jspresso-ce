@@ -23,9 +23,9 @@ public class JTextFieldConnector extends JTextComponentConnector<JTextField> {
    * Constructs a new <code>JTextfieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected JTextField.
+   *            the connected JTextField.
    */
   public JTextFieldConnector(String id, JTextField textField) {
     super(id, textField);

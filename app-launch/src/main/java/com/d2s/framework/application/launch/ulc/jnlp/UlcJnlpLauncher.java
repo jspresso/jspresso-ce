@@ -49,52 +49,53 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
                                                + "\t<keepAliveInterval> the keep alive interval\n"
                                                + "\t[ <logLevel> ] the log level (optional)\n"
                                                + "\t{ -<key> <value> } the user parameters (optional, multiple allowed)\n";
-  private static int getKeepAliveInterval(String[] args) {
-    try {
-      return Integer.parseInt(args[1]);
-    } catch (NumberFormatException e) {
-      throw new IllegalArgumentException(
-          "Parameter <keepAliveInterval> must be an integer.");
-    }
-  }
-  private static String getLogLevel(String[] args) {
-    if (args.length < 3) {
-      return null;
-    }
+  private ResourceBundle        bundle;
+  private int                   keepAliveInterval;
+  private List<IMessageService> messageHandlers;
+  private String                splashUrl;
+  private URL                   url;
+  private Properties            userParameters;
 
-    String result = args[2];
-    if (result.startsWith("-")) {
-      return null;
-    }
-    return result;
-  }
-  private static String getUrlString(String[] args) {
-    return args[0];
-  }
-  private static Properties getUserParameters(String[] args) {
-    Properties result = new Properties();
-    for (Iterator i = Arrays.asList(args).iterator(); i.hasNext();) {
-      String key = (String) i.next();
-      if (key.startsWith("-")) {
-        key = key.substring(1);
-        if (!i.hasNext()) {
-          throw new IllegalArgumentException(
-              "User parameters must have format -<key> <value>.");
+  private UlcJnlpLauncher(URL url, int keepAliveInterval,
+      Properties userParameters, String splashUrl, Locale locale) {
+    this.url = url;
+    this.keepAliveInterval = keepAliveInterval;
+    this.userParameters = userParameters;
+    this.splashUrl = splashUrl;
+    bundle = ResourceBundle.getBundle(getClass().getName(), locale);
+    registerMessageHandler(new ClassInvoker());
+    registerMessageHandler(new FileExists());
+    if (splashUrl != null) {
+      registerMessageHandler(new IMessageService() {
+
+        public void handleMessage(String msg) {
+          if ("appStarted".equals(msg)) {
+            SplashWindow.disposeSplash();
+          }
         }
-
-        result.put(key, i.next());
-      }
+      });
     }
 
-    return result;
+    ClientEnvironmentAdapter.setMessageService(new IMessageService() {
+
+      public void handleMessage(String msg) {
+        if (messageHandlers != null) {
+          for (IMessageService messageHandler : messageHandlers) {
+            messageHandler.handleMessage(msg);
+          }
+        }
+      }
+    });
+    ClientEnvironmentAdapter.setFileService(new ExtendedFileService());
   }
+
   /**
    * Overriden to cope with formatted textfield font bug.
    * 
    * @param args
-   *          arguments.
+   *            arguments.
    * @throws MalformedURLException
-   *           whenever the startup url is malformed.
+   *             whenever the startup url is malformed.
    */
   public static void main(String[] args) throws MalformedURLException {
     String splashUrl = null;
@@ -133,49 +134,48 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
         getUserParameters(filteredArgs), splashUrl, Locale.getDefault());
     launcher.start();
   }
-  private ResourceBundle        bundle;
 
-  private int                   keepAliveInterval;
+  private static int getKeepAliveInterval(String[] args) {
+    try {
+      return Integer.parseInt(args[1]);
+    } catch (NumberFormatException e) {
+      throw new IllegalArgumentException(
+          "Parameter <keepAliveInterval> must be an integer.");
+    }
+  }
 
-  private List<IMessageService> messageHandlers;
-
-  private String                splashUrl;
-
-  private URL                   url;
-
-  private Properties            userParameters;
-
-  private UlcJnlpLauncher(URL url, int keepAliveInterval,
-      Properties userParameters, String splashUrl, Locale locale) {
-    this.url = url;
-    this.keepAliveInterval = keepAliveInterval;
-    this.userParameters = userParameters;
-    this.splashUrl = splashUrl;
-    bundle = ResourceBundle.getBundle(getClass().getName(), locale);
-    registerMessageHandler(new ClassInvoker());
-    registerMessageHandler(new FileExists());
-    if (splashUrl != null) {
-      registerMessageHandler(new IMessageService() {
-
-        public void handleMessage(String msg) {
-          if ("appStarted".equals(msg)) {
-            SplashWindow.disposeSplash();
-          }
-        }
-      });
+  private static String getLogLevel(String[] args) {
+    if (args.length < 3) {
+      return null;
     }
 
-    ClientEnvironmentAdapter.setMessageService(new IMessageService() {
+    String result = args[2];
+    if (result.startsWith("-")) {
+      return null;
+    }
+    return result;
+  }
 
-      public void handleMessage(String msg) {
-        if (messageHandlers != null) {
-          for (IMessageService messageHandler : messageHandlers) {
-            messageHandler.handleMessage(msg);
-          }
+  private static String getUrlString(String[] args) {
+    return args[0];
+  }
+
+  private static Properties getUserParameters(String[] args) {
+    Properties result = new Properties();
+    for (Iterator<String> i = Arrays.asList(args).iterator(); i.hasNext();) {
+      String key = i.next();
+      if (key.startsWith("-")) {
+        key = key.substring(1);
+        if (!i.hasNext()) {
+          throw new IllegalArgumentException(
+              "User parameters must have format -<key> <value>.");
         }
+
+        result.put(key, i.next());
       }
-    });
-    ClientEnvironmentAdapter.setFileService(new ExtendedFileService());
+    }
+
+    return result;
   }
 
   /**
@@ -206,7 +206,7 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
    * Registers a new message handler to which client messages will be delivered.
    * 
    * @param messageHandler
-   *          the new message handler to be delivered.
+   *            the new message handler to be delivered.
    */
   private void registerMessageHandler(IMessageService messageHandler) {
     if (messageHandlers == null) {

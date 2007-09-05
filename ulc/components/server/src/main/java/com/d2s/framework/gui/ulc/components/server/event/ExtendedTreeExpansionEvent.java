@@ -25,11 +25,11 @@ public class ExtendedTreeExpansionEvent extends TreeExpansionEvent {
    * Constructs a new <code>ExtendedTreeExpansionEvent</code> instance.
    * 
    * @param source
-   *          the event source.
+   *            the event source.
    * @param id
-   *          the event id.
+   *            the event id.
    * @param path
-   *          the tree path.
+   *            the tree path.
    */
   public ExtendedTreeExpansionEvent(Object source, int id, TreePath path) {
     super(source, id, path);

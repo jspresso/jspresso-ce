@@ -29,9 +29,9 @@ public class JDateFieldConnector extends JComponentConnector<JDateField> {
    * Constructs a new <code>JDateField</code> instance.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param dateField
-   *          the connected JDateField.
+   *            the connected JDateField.
    */
   public JDateFieldConnector(String id, JDateField dateField) {
     super(id, dateField);

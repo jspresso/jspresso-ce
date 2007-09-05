@@ -56,7 +56,7 @@ public class YesNoAction extends AbstractMessageAction {
    * Sets the noAction.
    * 
    * @param noAction
-   *          the noAction to set.
+   *            the noAction to set.
    */
   public void setNoAction(IAction noAction) {
     this.noAction = noAction;
@@ -66,7 +66,7 @@ public class YesNoAction extends AbstractMessageAction {
    * Sets the yesAction.
    * 
    * @param yesAction
-   *          the yesAction to set.
+   *            the yesAction to set.
    */
   public void setYesAction(IAction yesAction) {
     this.yesAction = yesAction;

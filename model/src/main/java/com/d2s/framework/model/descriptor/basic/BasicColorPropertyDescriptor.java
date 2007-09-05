@@ -10,17 +10,17 @@ import com.d2s.framework.model.descriptor.IColorPropertyDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicColorPropertyDescriptor extends
-    BasicScalarPropertyDescriptor implements IColorPropertyDescriptor {
+public class BasicColorPropertyDescriptor extends BasicScalarPropertyDescriptor
+    implements IColorPropertyDescriptor {
 
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return String.class;
   }
 

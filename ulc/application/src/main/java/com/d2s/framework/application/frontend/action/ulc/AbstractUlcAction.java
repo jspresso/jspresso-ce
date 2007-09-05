@@ -28,23 +28,10 @@ public abstract class AbstractUlcAction extends
     ActionWrapper<ULCComponent, ULCIcon, IAction> {
 
   /**
-   * If the ancestor of the action widget is a dialog, dispose it.
-   * 
-   * @param context
-   *          the action context.
-   */
-  protected void closeDialog(Map<String, Object> context) {
-    ULCWindow actionWindow = UlcUtil.getVisibleWindow(getActionWidget(context));
-    if (actionWindow instanceof ULCDialog) {
-      actionWindow.setVisible(false);
-    }
-  }
-
-  /**
    * Retrieves the widget which triggered the action from the action context.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the widget which triggered the action.
    */
   public ULCComponent getActionWidget(Map<String, Object> context) {
@@ -58,10 +45,23 @@ public abstract class AbstractUlcAction extends
    * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the source widget this action was triggered from.
    */
   public ULCComponent getSourceComponent(Map<String, Object> context) {
     return (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  }
+
+  /**
+   * If the ancestor of the action widget is a dialog, dispose it.
+   * 
+   * @param context
+   *            the action context.
+   */
+  protected void closeDialog(Map<String, Object> context) {
+    ULCWindow actionWindow = UlcUtil.getVisibleWindow(getActionWidget(context));
+    if (actionWindow instanceof ULCDialog) {
+      actionWindow.setVisible(false);
+    }
   }
 }

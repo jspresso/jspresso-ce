@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor;
 
+
+
 /**
  * Marks classes capable of providing a component descriptor.
  * <p>

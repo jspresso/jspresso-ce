@@ -49,7 +49,7 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
    * Sets the childrenDescriptors.
    * 
    * @param childrenDescriptors
-   *          the childrenDescriptors to set.
+   *            the childrenDescriptors to set.
    */
   public void setChildrenDescriptors(
       List<ITreeLevelDescriptor> childrenDescriptors) {

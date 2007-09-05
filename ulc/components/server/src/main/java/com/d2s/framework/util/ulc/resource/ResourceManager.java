@@ -36,6 +36,14 @@ public final class ResourceManager {
 
   private static final ResourceManager INSTANCE                     = new ResourceManager();
 
+  private SecureRandom                 random;
+  private Map<String, IResource>       resources;
+
+  private ResourceManager() {
+    resources = new HashMap<String, IResource>();
+    random = new SecureRandom();
+  }
+
   /**
    * Singleton pattern.
    * 
@@ -44,13 +52,93 @@ public final class ResourceManager {
   public static ResourceManager getInstance() {
     return INSTANCE;
   }
-  private SecureRandom                 random;
 
-  private Map<String, IResource>       resources;
+  /**
+   * Returns the registered resource or null.
+   * 
+   * @param id
+   *            the identifier under which the resource has been registered.
+   * @return the registsred resource or null.
+   */
+  public IResource getRegistered(String id) {
+    return resources.get(id);
+  }
 
-  private ResourceManager() {
-    resources = new HashMap<String, IResource>();
-    random = new SecureRandom();
+  /**
+   * Registers a resource.
+   * 
+   * @param resource
+   *            the resource to be registered.
+   * @return the generated identifier under which the resource has been
+   *         registered.
+   */
+  public String register(IResource resource) {
+    try {
+      String id = createId();
+      resources.put(id, resource);
+      return id;
+    } catch (NoSuchAlgorithmException nsae) {
+      throw new IllegalStateException("Could not generate random id: "
+          + nsae.getLocalizedMessage());
+    }
+  }
+
+  /**
+   * Registers a resource.
+   * 
+   * @param id
+   *            the identifier under which the resource must be registered.
+   * @param resource
+   *            the resource to be registered.
+   */
+  public void register(String id, IResource resource) {
+    resources.put(id, resource);
+  }
+
+  /**
+   * Shows the document for which a resource entry has been registered.
+   * 
+   * @param id
+   *            the identifier under which the resource has been registered.
+   * @throws IOException
+   *             whenever an IO exception occurs.
+   */
+  public void showDocument(String id) throws IOException {
+    showDocument(id, null);
+  }
+
+  /**
+   * Shows the document for which a resource entry has been registered.
+   * 
+   * @param id
+   *            the identifier under which the resource has been registered.
+   * @param target
+   *            the target browser id.
+   * @throws IOException
+   *             whenever an IO exception occurs.
+   */
+  public void showDocument(String id, String target) throws IOException {
+    if (inDevelopmentEnvironment()) {
+      IResource resourceProvider = ResourceManager.getInstance().getRegistered(
+          id);
+      String fileExtension = ".tmp";
+      if (resourceProvider.getMimeType() != null
+          && resourceProvider.getMimeType().startsWith(APPLICATION_PREFIX)) {
+        fileExtension = "."
+            + resourceProvider.getMimeType().substring(
+                APPLICATION_PREFIX.length());
+      }
+      String url = createTemporaryFile(resourceProvider.getContent(),
+          fileExtension).toURI().toURL().toString();
+      ClientContext.showDocument(url, target);
+    } else if (inServletContainerEnvironment()) {
+      HttpServletRequest request = ServletContainerContext.getRequest();
+      String url = determineUrl(request, id);
+      ClientContext.showDocument(url, target);
+    } else {
+      throw new IllegalStateException(
+          "Could not determine server runtime environment.");
+    }
   }
 
   private String createId() throws NoSuchAlgorithmException {
@@ -94,17 +182,6 @@ public final class ResourceManager {
     return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
   }
 
-  /**
-   * Returns the registered resource or null.
-   * 
-   * @param id
-   *          the identifier under which the resource has been registered.
-   * @return the registsred resource or null.
-   */
-  public IResource getRegistered(String id) {
-    return resources.get(id);
-  }
-
   private boolean inDevelopmentEnvironment() {
     try {
       Class.forName("com.ulcjava.base.development.DevelopmentRunner");
@@ -121,83 +198,6 @@ public final class ResourceManager {
       return true;
     } catch (ClassNotFoundException cnfe) {
       return false;
-    }
-  }
-
-  /**
-   * Registers a resource.
-   * 
-   * @param resource
-   *          the resource to be registered.
-   * @return the generated identifier under which the resource has been
-   *         registered.
-   */
-  public String register(IResource resource) {
-    try {
-      String id = createId();
-      resources.put(id, resource);
-      return id;
-    } catch (NoSuchAlgorithmException nsae) {
-      throw new IllegalStateException("Could not generate random id: "
-          + nsae.getLocalizedMessage());
-    }
-  }
-
-  /**
-   * Registers a resource.
-   * 
-   * @param id
-   *          the identifier under which the resource must be registered.
-   * @param resource
-   *          the resource to be registered.
-   */
-  public void register(String id, IResource resource) {
-    resources.put(id, resource);
-  }
-
-  /**
-   * Shows the document for which a resource entry has been registered.
-   * 
-   * @param id
-   *          the identifier under which the resource has been registered.
-   * @throws IOException
-   *           whenever an IO exception occurs.
-   */
-  public void showDocument(String id) throws IOException {
-    showDocument(id, null);
-  }
-
-  /**
-   * Shows the document for which a resource entry has been registered.
-   * 
-   * @param id
-   *          the identifier under which the resource has been registered.
-   * @param target
-   *          the target browser id.
-   * @throws IOException
-   *           whenever an IO exception occurs.
-   */
-  public void showDocument(String id, String target) throws IOException {
-    if (inDevelopmentEnvironment()) {
-      IResource resourceProvider = ResourceManager.getInstance().getRegistered(
-          id);
-      String fileExtension = ".tmp";
-      if (resourceProvider.getMimeType() != null
-          && resourceProvider.getMimeType().startsWith(APPLICATION_PREFIX)) {
-        fileExtension = "."
-            + resourceProvider.getMimeType().substring(
-                APPLICATION_PREFIX.length());
-      }
-      String url = createTemporaryFile(resourceProvider.getContent(),
-          fileExtension).toURL().toString();
-      ClientContext.showDocument(url, target);
-    } else if (inServletContainerEnvironment()) {
-      HttpServletRequest request = ServletContainerContext.getRequest();
-      String url = determineUrl(request, id);
-      ClientContext.showDocument(url, target);
-    } else {
-      throw new IllegalStateException(
-          "Could not determine server runtime environment.");
     }
   }
 

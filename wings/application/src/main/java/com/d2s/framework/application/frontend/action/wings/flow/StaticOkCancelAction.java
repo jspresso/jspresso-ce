@@ -36,7 +36,7 @@ public class StaticOkCancelAction extends OkCancelAction {
    * Sets the messageCode.
    * 
    * @param messageCode
-   *          the messageCode to set.
+   *            the messageCode to set.
    */
   public void setMessageCode(String messageCode) {
     this.messageCode = messageCode;

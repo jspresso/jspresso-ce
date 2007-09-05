@@ -31,16 +31,16 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    */
   public List<ISubViewDescriptor> getColumnViewDescriptors() {
     if (columnViewDescriptors == null) {
-      ICollectionDescriptorProvider modelDescriptor = ((ICollectionDescriptorProvider) getModelDescriptor());
+      ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor());
       IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
           .getCollectionDescriptor().getElementDescriptor();
       List<String> modelRenderedProperties = rowModelDescriptor
           .getRenderedProperties();
       if (modelDescriptor instanceof ICollectionPropertyDescriptor
-          && ((ICollectionPropertyDescriptor) modelDescriptor)
+          && ((ICollectionPropertyDescriptor<?>) modelDescriptor)
               .getReverseRelationEnd() != null) {
         modelRenderedProperties
-            .remove(((ICollectionPropertyDescriptor) modelDescriptor)
+            .remove(((ICollectionPropertyDescriptor<?>) modelDescriptor)
                 .getReverseRelationEnd().getName());
       }
       List<ISubViewDescriptor> defaultColumnViewDescriptors = new ArrayList<ISubViewDescriptor>();
@@ -58,7 +58,7 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
    * Sets the columnViewDescriptors.
    * 
    * @param columnViewDescriptors
-   *          the columnViewDescriptors to set.
+   *            the columnViewDescriptors to set.
    */
   public void setColumnViewDescriptors(
       List<ISubViewDescriptor> columnViewDescriptors) {

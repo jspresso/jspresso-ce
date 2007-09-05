@@ -23,7 +23,7 @@ public class ConnectorSelectionSupport {
    * Adds a new listener to this connector.
    * 
    * @param listener
-   *          The added listener.
+   *            The added listener.
    * @see IConnectorSelector#addConnectorSelectionListener(IConnectorSelectionListener)
    */
   public synchronized void addConnectorSelectionListener(
@@ -43,7 +43,7 @@ public class ConnectorSelectionSupport {
    * modifying its source) to the listeners.
    * 
    * @param evt
-   *          the propagated <code>ConnectorSelectionEvent</code>
+   *            the propagated <code>ConnectorSelectionEvent</code>
    */
   public void fireSelectedConnectorChange(ConnectorSelectionEvent evt) {
     if (listeners != null) {
@@ -58,7 +58,7 @@ public class ConnectorSelectionSupport {
    * Removes a new <code>IConnectorValueChangeListener</code>.
    * 
    * @param listener
-   *          The removed listener.
+   *            The removed listener.
    * @see IConnectorSelector#removeConnectorSelectionListener(IConnectorSelectionListener)
    */
   public synchronized void removeConnectorSelectionListener(

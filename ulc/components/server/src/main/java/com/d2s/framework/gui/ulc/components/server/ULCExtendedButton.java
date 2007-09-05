@@ -31,7 +31,7 @@ public class ULCExtendedButton extends ULCButton {
    * Constructs a new <code>ULCExtendedButton</code> instance.
    * 
    * @param icon
-   *          the button icon
+   *            the button icon
    */
   public ULCExtendedButton(ULCIcon icon) {
     super(icon);

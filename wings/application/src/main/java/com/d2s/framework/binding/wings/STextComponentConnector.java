@@ -20,7 +20,7 @@ import org.wings.event.SDocumentListener;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          The actual class of the subclass of <code>STextComponent</code>.
+ *            The actual class of the subclass of <code>STextComponent</code>.
  */
 public abstract class STextComponentConnector<E extends STextComponent> extends
     SComponentConnector<E> {
@@ -33,12 +33,31 @@ public abstract class STextComponentConnector<E extends STextComponent> extends
    * need to listen to other unhandled events if necessary.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param textComponent
-   *          the connected STextComponent.
+   *            the connected STextComponent.
    */
   public STextComponentConnector(String id, E textComponent) {
     super(id, textComponent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    if (isReadable()) {
+      if (savedSelectedTextColor != null) {
+        getConnectedSComponent().setForeground(savedSelectedTextColor);
+      }
+      savedSelectedTextColor = null;
+    } else if (savedSelectedTextColor == null) {
+      savedSelectedTextColor = getConnectedSComponent().getForeground();
+      getConnectedSComponent().setForeground(
+          getConnectedSComponent().getForeground());
+    }
+    getConnectedSComponent().setEditable(isWritable());
   }
 
   /**
@@ -91,24 +110,5 @@ public abstract class STextComponentConnector<E extends STextComponent> extends
     } else {
       getConnectedSComponent().setText(aValue.toString());
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    if (isReadable()) {
-      if (savedSelectedTextColor != null) {
-        getConnectedSComponent().setForeground(savedSelectedTextColor);
-      }
-      savedSelectedTextColor = null;
-    } else if (savedSelectedTextColor == null) {
-      savedSelectedTextColor = getConnectedSComponent().getForeground();
-      getConnectedSComponent().setForeground(
-          getConnectedSComponent().getForeground());
-    }
-    getConnectedSComponent().setEditable(isWritable());
   }
 }

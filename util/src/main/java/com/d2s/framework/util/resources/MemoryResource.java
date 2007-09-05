@@ -23,9 +23,9 @@ public class MemoryResource extends AbstractResource {
    * Constructs a new <code>MemoryResource</code> instance.
    * 
    * @param mimeType
-   *          the resource mime type.
+   *            the resource mime type.
    * @param resourceBytes
-   *          the resource content.
+   *            the resource content.
    */
   public MemoryResource(String mimeType, byte[] resourceBytes) {
     super(mimeType);

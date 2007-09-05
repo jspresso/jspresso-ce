@@ -41,7 +41,7 @@ public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
    * Sets the startupAction.
    * 
    * @param startupAction
-   *          the startupAction to set.
+   *            the startupAction to set.
    */
   public void setStartupAction(IAction startupAction) {
     this.startupAction = startupAction;

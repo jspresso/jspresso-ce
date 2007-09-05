@@ -48,66 +48,6 @@ public abstract class AbstractBackendAction extends AbstractAction {
   }
 
   /**
-   * Gets the accessorFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the accessorFactory.
-   */
-  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
-    return getController(context).getBeanAccessorFactory();
-  }
-
-  /**
-   * Gets the current application session.
-   * 
-   * @param context
-   *          the action context.
-   * @return the current application session.
-   */
-  protected IApplicationSession getApplicationSession(
-      Map<String, Object> context) {
-    return getController(context).getApplicationSession();
-  }
-
-  /**
-   * Gets the beanConnectorFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the beanConnectorFactory.
-   */
-  protected IModelConnectorFactory getBeanConnectorFactory(
-      Map<String, Object> context) {
-    return getController(context).getBeanConnectorFactory();
-  }
-
-  /**
-   * Gets the frontend controller out of the action context.
-   * 
-   * @param context
-   *          the action context.
-   * @return the frontend controller.
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  protected IBackendController getController(Map<String, Object> context) {
-    return (IBackendController) context
-        .get(ActionContextConstants.BACK_CONTROLLER);
-  }
-
-  /**
-   * Gets the entityFactory.
-   * 
-   * @param context
-   *          the action context.
-   * @return the entityFactory.
-   */
-  protected IEntityFactory getEntityFactory(Map<String, Object> context) {
-    return getController(context).getEntityFactory();
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
@@ -128,7 +68,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * action has to be triggered on.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the value connector this model action was triggered on.
    */
   public IValueConnector getModelConnector(Map<String, Object> context) {
@@ -145,7 +85,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * </ul>
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the model descriptor this action executes on.
    */
   public IModelDescriptor getModelDescriptor(Map<String, Object> context) {
@@ -162,21 +102,12 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * </ul>
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the module model connector this action executes on.
    */
   public ICompositeValueConnector getModuleConnector(Map<String, Object> context) {
     return (ICompositeValueConnector) ((ICompositeValueConnector) context
         .get(ActionContextConstants.MODULE_VIEW_CONNECTOR)).getModelConnector();
-  }
-
-  /**
-   * Gets the nextAction.
-   * 
-   * @return the nextAction.
-   */
-  protected AbstractBackendAction getNextAction() {
-    return nextAction;
   }
 
   /**
@@ -192,7 +123,7 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * action has to be triggered on.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the value connector this model action was triggered on.
    */
   public IValueConnector getSourceModelConnector(Map<String, Object> context) {
@@ -215,9 +146,78 @@ public abstract class AbstractBackendAction extends AbstractAction {
    * Sets the nextAction.
    * 
    * @param nextAction
-   *          the nextAction to set.
+   *            the nextAction to set.
    */
   public void setNextAction(AbstractBackendAction nextAction) {
     this.nextAction = nextAction;
+  }
+
+  /**
+   * Gets the accessorFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the accessorFactory.
+   */
+  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
+    return getController(context).getBeanAccessorFactory();
+  }
+
+  /**
+   * Gets the current application session.
+   * 
+   * @param context
+   *            the action context.
+   * @return the current application session.
+   */
+  protected IApplicationSession getApplicationSession(
+      Map<String, Object> context) {
+    return getController(context).getApplicationSession();
+  }
+
+  /**
+   * Gets the beanConnectorFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the beanConnectorFactory.
+   */
+  protected IModelConnectorFactory getBeanConnectorFactory(
+      Map<String, Object> context) {
+    return getController(context).getBeanConnectorFactory();
+  }
+
+  /**
+   * Gets the frontend controller out of the action context.
+   * 
+   * @param context
+   *            the action context.
+   * @return the frontend controller.
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  protected IBackendController getController(Map<String, Object> context) {
+    return (IBackendController) context
+        .get(ActionContextConstants.BACK_CONTROLLER);
+  }
+
+  /**
+   * Gets the entityFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the entityFactory.
+   */
+  protected IEntityFactory getEntityFactory(Map<String, Object> context) {
+    return getController(context).getEntityFactory();
+  }
+
+  /**
+   * Gets the nextAction.
+   * 
+   * @return the nextAction.
+   */
+  protected AbstractBackendAction getNextAction() {
+    return nextAction;
   }
 }

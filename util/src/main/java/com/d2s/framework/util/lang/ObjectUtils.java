@@ -11,13 +11,17 @@ package com.d2s.framework.util.lang;
  */
 public final class ObjectUtils {
 
+  private ObjectUtils() {
+    // Helper class constructor
+  }
+
   /**
    * Compares two objects for equality.
    * 
    * @param object1
-   *          the first object, may be <code>null</code>
+   *            the first object, may be <code>null</code>
    * @param object2
-   *          the second object, may be <code>null</code>
+   *            the second object, may be <code>null</code>
    * @return <code>true</code> if the values of both objects are the same
    */
   public static boolean equals(Object object1, Object object2) {
@@ -28,9 +32,5 @@ public final class ObjectUtils {
       return false;
     }
     return object1.equals(object2);
-  }
-
-  private ObjectUtils() {
-    // Helper class constructor
   }
 }

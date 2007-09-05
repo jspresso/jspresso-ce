@@ -71,6 +71,425 @@ import com.d2s.framework.util.IIndexMapper;
 
 public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
+  /**
+   * <code>ASCENDING</code>.
+   */
+  public static final int                   ASCENDING             = 1;
+
+  /**
+   * <code>COMPARABLE_COMPARATOR</code>.
+   */
+  public static final Comparator<Object>    COMPARABLE_COMPARATOR = new Comparator<Object>() {
+
+                                                                    @SuppressWarnings("unchecked")
+                                                                    public int compare(
+                                                                        Object o1,
+                                                                        Object o2) {
+                                                                      return ((Comparable<Object>) o1)
+                                                                          .compareTo(o2);
+                                                                    }
+                                                                  };
+
+  /**
+   * <code>DESCENDING</code>.
+   */
+  public static final int                   DESCENDING            = -1;
+
+  /**
+   * <code>LEXICAL_COMPARATOR</code>.
+   */
+  public static final Comparator<Object>    LEXICAL_COMPARATOR    = new Comparator<Object>() {
+
+                                                                    public int compare(
+                                                                        Object o1,
+                                                                        Object o2) {
+                                                                      return o1
+                                                                          .toString()
+                                                                          .compareTo(
+                                                                              o2
+                                                                                  .toString());
+                                                                    }
+                                                                  };
+
+  /**
+   * <code>NOT_SORTED</code>.
+   */
+  public static final int                   NOT_SORTED            = 0;
+
+  private static final Directive            NOT_SORTED_DIRECTIVE  = new Directive(
+                                                                      -1,
+                                                                      NOT_SORTED);
+
+  private static final long                 serialVersionUID      = -5437879837063286581L;
+  private Map<Class<?>, Comparator<Object>> columnComparators     = new HashMap<Class<?>, Comparator<Object>>();
+
+  private Icon                              downIcon;
+  private int[]                             modelToView;
+
+  private MouseListener                     mouseListener;
+  private List<Directive>                   sortingColumns        = new ArrayList<Directive>();
+  private JTableHeader                      tableHeader;
+  private TableModel                        tableModel;
+  private TableModelListener                tableModelListener;
+  private Icon                              upIcon;
+  private Row[]                             viewToModel;
+
+  /**
+   * Constructs a new <code>TableSorter</code> instance.
+   */
+  public TableSorter() {
+    this.mouseListener = new MouseHandler();
+    this.tableModelListener = new TableModelHandler();
+  }
+
+  /**
+   * Constructs a new <code>TableSorter</code> instance.
+   * 
+   * @param tableModel
+   *            tableModel.
+   */
+  public TableSorter(TableModel tableModel) {
+    this();
+    setTableModel(tableModel);
+  }
+
+  /**
+   * Constructs a new <code>TableSorter</code> instance.
+   * 
+   * @param tableModel
+   *            tableModel.
+   * @param tableHeader
+   *            tableHeader.
+   */
+  public TableSorter(TableModel tableModel, JTableHeader tableHeader) {
+    this();
+    setTableHeader(tableHeader);
+    setTableModel(tableModel);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Class<?> getColumnClass(int column) {
+    return tableModel.getColumnClass(column);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int getColumnCount() {
+    if (tableModel == null) {
+      return 0;
+    }
+    return tableModel.getColumnCount();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getColumnName(int column) {
+    return tableModel.getColumnName(column);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public int getRowCount() {
+    if (tableModel == null) {
+      return 0;
+    }
+    return tableModel.getRowCount();
+  }
+
+  /**
+   * Gets sorting status.
+   * 
+   * @param column
+   *            column.
+   * @return sorting status.
+   */
+  public int getSortingStatus(int column) {
+    return getDirective(column).direction;
+  }
+
+  /**
+   * Gets tableHeader.
+   * 
+   * @return tableHeader.
+   */
+  public JTableHeader getTableHeader() {
+    return tableHeader;
+  }
+
+  /**
+   * Gets tableModel.
+   * 
+   * @return tableModel.
+   */
+  public TableModel getTableModel() {
+    return tableModel;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Object getValueAt(int row, int column) {
+    return tableModel.getValueAt(modelIndex(row), column);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isCellEditable(int row, int column) {
+    return tableModel.isCellEditable(modelIndex(row), column);
+  }
+
+  /**
+   * is sorting ?
+   * 
+   * @return true if sorting
+   */
+  public boolean isSorting() {
+    return sortingColumns.size() != 0;
+  }
+
+  /**
+   * modelIndex.
+   * 
+   * @param viewIndex
+   *            viewIndex.
+   * @return modelIndex.
+   */
+  public int modelIndex(int viewIndex) {
+    return getViewToModel()[viewIndex].modelIndex;
+  }
+
+  /**
+   * Sets ColumnComparator.
+   * 
+   * @param type
+   *            type.
+   * @param comparator
+   *            comparator.
+   */
+  @SuppressWarnings("unchecked")
+  public void setColumnComparator(Class type, Comparator comparator) {
+    if (comparator == null) {
+      columnComparators.remove(type);
+    } else {
+      columnComparators.put(type, comparator);
+    }
+  }
+
+  /**
+   * Sets the downIcon.
+   * 
+   * @param downIcon
+   *            the downIcon to set.
+   */
+  public void setDownIcon(Icon downIcon) {
+    this.downIcon = downIcon;
+  }
+
+  /**
+   * Sets column sorting status.
+   * 
+   * @param column
+   *            column.
+   * @param status
+   *            status.
+   */
+  @SuppressWarnings("unchecked")
+  public void setSortingStatus(int column, int status) {
+    Directive directive = getDirective(column);
+    if (directive != NOT_SORTED_DIRECTIVE) {
+      sortingColumns.remove(directive);
+    }
+    if (status != NOT_SORTED) {
+      sortingColumns.add(new Directive(column, status));
+    }
+    sortingStatusChanged();
+  }
+
+  /**
+   * Sets tableHeader.
+   * 
+   * @param tableHeader
+   *            tableHeader.
+   */
+  public void setTableHeader(JTableHeader tableHeader) {
+    if (this.tableHeader != null) {
+      this.tableHeader.removeMouseListener(mouseListener);
+      TableCellRenderer defaultRenderer = this.tableHeader.getDefaultRenderer();
+      if (defaultRenderer instanceof SortableHeaderRenderer) {
+        this.tableHeader
+            .setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).tableCellRenderer);
+      }
+    }
+    this.tableHeader = tableHeader;
+    if (this.tableHeader != null) {
+      this.tableHeader.addMouseListener(mouseListener);
+      this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(
+          this.tableHeader.getDefaultRenderer()));
+    }
+  }
+
+  /**
+   * Sets tableModel.
+   * 
+   * @param tableModel
+   *            tableModel.
+   */
+  public void setTableModel(TableModel tableModel) {
+    if (this.tableModel != null) {
+      this.tableModel.removeTableModelListener(tableModelListener);
+    }
+
+    this.tableModel = tableModel;
+    if (this.tableModel != null) {
+      this.tableModel.addTableModelListener(tableModelListener);
+    }
+
+    clearSortingState();
+    fireTableStructureChanged();
+  }
+
+  /**
+   * Sets the upIcon.
+   * 
+   * @param upIcon
+   *            the upIcon to set.
+   */
+  public void setUpIcon(Icon upIcon) {
+    this.upIcon = upIcon;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void setValueAt(Object aValue, int row, int column) {
+    tableModel.setValueAt(aValue, modelIndex(row), column);
+  }
+
+  // TableModel interface methods
+
+  /**
+   * viewIndex.
+   * 
+   * @param modelIndex
+   *            modelIndex
+   * @return viewIndex
+   */
+  public int viewIndex(int modelIndex) {
+    return getModelToView()[modelIndex];
+  }
+
+  /**
+   * Gets Comparator.
+   * 
+   * @param column
+   *            column.
+   * @return Comparator.
+   */
+  protected Comparator<Object> getComparator(int column) {
+    Class<?> columnType = tableModel.getColumnClass(column);
+    Comparator<Object> comparator = columnComparators.get(columnType);
+    if (comparator != null) {
+      return comparator;
+    }
+    if (Comparable.class.isAssignableFrom(columnType)) {
+      return COMPARABLE_COMPARATOR;
+    }
+    return LEXICAL_COMPARATOR;
+  }
+
+  /**
+   * Gets HeaderRendererIcon.
+   * 
+   * @param column
+   *            column.
+   * @param size
+   *            size.
+   * @return HeaderRendererIcon
+   */
+  protected Icon getHeaderRendererIcon(int column, int size) {
+    Directive directive = getDirective(column);
+    if (directive == NOT_SORTED_DIRECTIVE) {
+      return null;
+    }
+    if (directive.direction == DESCENDING) {
+      if (downIcon != null) {
+        return downIcon;
+      }
+    } else {
+      if (upIcon != null) {
+        return upIcon;
+      }
+    }
+    return new Arrow(directive.direction == DESCENDING, size, sortingColumns
+        .indexOf(directive));
+  }
+
+  private void cancelSorting() {
+    sortingColumns.clear();
+    sortingStatusChanged();
+  }
+
+  private void clearSortingState() {
+    viewToModel = null;
+    modelToView = null;
+  }
+
+  private Directive getDirective(int column) {
+    for (int i = 0; i < sortingColumns.size(); i++) {
+      Directive directive = sortingColumns.get(i);
+      if (directive.column == column) {
+        return directive;
+      }
+    }
+    return NOT_SORTED_DIRECTIVE;
+  }
+
+  private int[] getModelToView() {
+    if (modelToView == null) {
+      int n = getViewToModel().length;
+      modelToView = new int[n];
+      for (int i = 0; i < n; i++) {
+        modelToView[modelIndex(i)] = i;
+      }
+    }
+    return modelToView;
+  }
+
+  // Helper classes
+
+  private Row[] getViewToModel() {
+    if (viewToModel == null) {
+      int tableModelRowCount = tableModel.getRowCount();
+      viewToModel = new Row[tableModelRowCount];
+      for (int row = 0; row < tableModelRowCount; row++) {
+        viewToModel[row] = new Row(row);
+      }
+
+      if (isSorting()) {
+        Arrays.sort(viewToModel);
+      }
+    }
+    return viewToModel;
+  }
+
+  private void sortingStatusChanged() {
+    clearSortingState();
+    fireTableDataChanged();
+    if (tableHeader != null) {
+      tableHeader.repaint();
+    }
+  }
+
   private static class Arrow implements Icon {
 
     private boolean descending;
@@ -206,7 +625,8 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
       }
     }
   }
-  private class Row implements Comparable {
+
+  private class Row implements Comparable<Object> {
 
     private int modelIndex;
 
@@ -257,6 +677,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
       return 0;
     }
   }
+
   private class SortableHeaderRenderer implements TableCellRenderer {
 
     private TableCellRenderer tableCellRenderer;
@@ -265,7 +686,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
      * Constructs a new <code>SortableHeaderRenderer</code> instance.
      * 
      * @param tableCellRenderer
-     *          the wrapped table cell renderer.
+     *            the wrapped table cell renderer.
      */
     public SortableHeaderRenderer(TableCellRenderer tableCellRenderer) {
       this.tableCellRenderer = tableCellRenderer;
@@ -348,423 +769,5 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
       fireTableDataChanged();
       return;
     }
-  }
-
-  /**
-   * <code>ASCENDING</code>.
-   */
-  public static final int        ASCENDING             = 1;
-  /**
-   * <code>COMPARABLE_COMPARATOR</code>.
-   */
-  public static final Comparator COMPARABLE_COMPARATOR = new Comparator() {
-
-                                                         @SuppressWarnings("unchecked")
-                                                         public int compare(
-                                                             Object o1,
-                                                             Object o2) {
-                                                           return ((Comparable<Object>) o1)
-                                                               .compareTo(o2);
-                                                         }
-                                                       };
-
-  /**
-   * <code>DESCENDING</code>.
-   */
-  public static final int        DESCENDING            = -1;
-  /**
-   * <code>LEXICAL_COMPARATOR</code>.
-   */
-  public static final Comparator LEXICAL_COMPARATOR    = new Comparator() {
-
-                                                         public int compare(
-                                                             Object o1,
-                                                             Object o2) {
-                                                           return o1
-                                                               .toString()
-                                                               .compareTo(
-                                                                   o2
-                                                                       .toString());
-                                                         }
-                                                       };
-
-  /**
-   * <code>NOT_SORTED</code>.
-   */
-  public static final int        NOT_SORTED            = 0;
-  private static final Directive NOT_SORTED_DIRECTIVE       = new Directive(-1,
-                                                           NOT_SORTED);
-  private static final long      serialVersionUID      = -5437879837063286581L;
-  private Map<Class, Comparator> columnComparators     = new HashMap<Class, Comparator>();
-  private Icon                   downIcon;
-  private int[]                  modelToView;
-  private MouseListener          mouseListener;
-
-  private List<Directive>        sortingColumns        = new ArrayList<Directive>();
-
-  private JTableHeader           tableHeader;
-
-  private TableModel             tableModel;
-
-  private TableModelListener     tableModelListener;
-
-  private Icon                   upIcon;
-
-  private Row[]                  viewToModel;
-
-  /**
-   * Constructs a new <code>TableSorter</code> instance.
-   */
-  public TableSorter() {
-    this.mouseListener = new MouseHandler();
-    this.tableModelListener = new TableModelHandler();
-  }
-
-  /**
-   * Constructs a new <code>TableSorter</code> instance.
-   * 
-   * @param tableModel
-   *          tableModel.
-   */
-  public TableSorter(TableModel tableModel) {
-    this();
-    setTableModel(tableModel);
-  }
-
-  /**
-   * Constructs a new <code>TableSorter</code> instance.
-   * 
-   * @param tableModel
-   *          tableModel.
-   * @param tableHeader
-   *          tableHeader.
-   */
-  public TableSorter(TableModel tableModel, JTableHeader tableHeader) {
-    this();
-    setTableHeader(tableHeader);
-    setTableModel(tableModel);
-  }
-
-  private void cancelSorting() {
-    sortingColumns.clear();
-    sortingStatusChanged();
-  }
-
-  private void clearSortingState() {
-    viewToModel = null;
-    modelToView = null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public Class<?> getColumnClass(int column) {
-    return tableModel.getColumnClass(column);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getColumnCount() {
-    if (tableModel == null) {
-      return 0;
-    }
-    return tableModel.getColumnCount();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String getColumnName(int column) {
-    return tableModel.getColumnName(column);
-  }
-
-  /**
-   * Gets Comparator.
-   * 
-   * @param column
-   *          column.
-   * @return Comparator.
-   */
-  protected Comparator getComparator(int column) {
-    Class columnType = tableModel.getColumnClass(column);
-    Comparator comparator = columnComparators.get(columnType);
-    if (comparator != null) {
-      return comparator;
-    }
-    if (Comparable.class.isAssignableFrom(columnType)) {
-      return COMPARABLE_COMPARATOR;
-    }
-    return LEXICAL_COMPARATOR;
-  }
-
-  private Directive getDirective(int column) {
-    for (int i = 0; i < sortingColumns.size(); i++) {
-      Directive directive = sortingColumns.get(i);
-      if (directive.column == column) {
-        return directive;
-      }
-    }
-    return NOT_SORTED_DIRECTIVE;
-  }
-
-  /**
-   * Gets HeaderRendererIcon.
-   * 
-   * @param column
-   *          column.
-   * @param size
-   *          size.
-   * @return HeaderRendererIcon
-   */
-  protected Icon getHeaderRendererIcon(int column, int size) {
-    Directive directive = getDirective(column);
-    if (directive == NOT_SORTED_DIRECTIVE) {
-      return null;
-    }
-    if (directive.direction == DESCENDING) {
-      if (downIcon != null) {
-        return downIcon;
-      }
-    } else {
-      if (upIcon != null) {
-        return upIcon;
-      }
-    }
-    return new Arrow(directive.direction == DESCENDING, size, sortingColumns
-        .indexOf(directive));
-  }
-
-  private int[] getModelToView() {
-    if (modelToView == null) {
-      int n = getViewToModel().length;
-      modelToView = new int[n];
-      for (int i = 0; i < n; i++) {
-        modelToView[modelIndex(i)] = i;
-      }
-    }
-    return modelToView;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public int getRowCount() {
-    if (tableModel == null) {
-      return 0;
-    }
-    return tableModel.getRowCount();
-  }
-
-  /**
-   * Gets sorting status.
-   * 
-   * @param column
-   *          column.
-   * @return sorting status.
-   */
-  public int getSortingStatus(int column) {
-    return getDirective(column).direction;
-  }
-
-  /**
-   * Gets tableHeader.
-   * 
-   * @return tableHeader.
-   */
-  public JTableHeader getTableHeader() {
-    return tableHeader;
-  }
-
-  // TableModel interface methods
-
-  /**
-   * Gets tableModel.
-   * 
-   * @return tableModel.
-   */
-  public TableModel getTableModel() {
-    return tableModel;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Object getValueAt(int row, int column) {
-    return tableModel.getValueAt(modelIndex(row), column);
-  }
-
-  private Row[] getViewToModel() {
-    if (viewToModel == null) {
-      int tableModelRowCount = tableModel.getRowCount();
-      viewToModel = new Row[tableModelRowCount];
-      for (int row = 0; row < tableModelRowCount; row++) {
-        viewToModel[row] = new Row(row);
-      }
-
-      if (isSorting()) {
-        Arrays.sort(viewToModel);
-      }
-    }
-    return viewToModel;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isCellEditable(int row, int column) {
-    return tableModel.isCellEditable(modelIndex(row), column);
-  }
-
-  /**
-   * is sorting ?
-   * 
-   * @return true if sorting
-   */
-  public boolean isSorting() {
-    return sortingColumns.size() != 0;
-  }
-
-  /**
-   * modelIndex.
-   * 
-   * @param viewIndex
-   *          viewIndex.
-   * @return modelIndex.
-   */
-  public int modelIndex(int viewIndex) {
-    return getViewToModel()[viewIndex].modelIndex;
-  }
-
-  /**
-   * Sets ColumnComparator.
-   * 
-   * @param type
-   *          type.
-   * @param comparator
-   *          comparator.
-   */
-  @SuppressWarnings("unchecked")
-  public void setColumnComparator(Class type, Comparator comparator) {
-    if (comparator == null) {
-      columnComparators.remove(type);
-    } else {
-      columnComparators.put(type, comparator);
-    }
-  }
-
-  // Helper classes
-
-  /**
-   * Sets the downIcon.
-   * 
-   * @param downIcon
-   *          the downIcon to set.
-   */
-  public void setDownIcon(Icon downIcon) {
-    this.downIcon = downIcon;
-  }
-
-  /**
-   * Sets column sorting status.
-   * 
-   * @param column
-   *          column.
-   * @param status
-   *          status.
-   */
-  @SuppressWarnings("unchecked")
-  public void setSortingStatus(int column, int status) {
-    Directive directive = getDirective(column);
-    if (directive != NOT_SORTED_DIRECTIVE) {
-      sortingColumns.remove(directive);
-    }
-    if (status != NOT_SORTED) {
-      sortingColumns.add(new Directive(column, status));
-    }
-    sortingStatusChanged();
-  }
-
-  /**
-   * Sets tableHeader.
-   * 
-   * @param tableHeader
-   *          tableHeader.
-   */
-  public void setTableHeader(JTableHeader tableHeader) {
-    if (this.tableHeader != null) {
-      this.tableHeader.removeMouseListener(mouseListener);
-      TableCellRenderer defaultRenderer = this.tableHeader.getDefaultRenderer();
-      if (defaultRenderer instanceof SortableHeaderRenderer) {
-        this.tableHeader
-            .setDefaultRenderer(((SortableHeaderRenderer) defaultRenderer).tableCellRenderer);
-      }
-    }
-    this.tableHeader = tableHeader;
-    if (this.tableHeader != null) {
-      this.tableHeader.addMouseListener(mouseListener);
-      this.tableHeader.setDefaultRenderer(new SortableHeaderRenderer(
-          this.tableHeader.getDefaultRenderer()));
-    }
-  }
-
-  /**
-   * Sets tableModel.
-   * 
-   * @param tableModel
-   *          tableModel.
-   */
-  public void setTableModel(TableModel tableModel) {
-    if (this.tableModel != null) {
-      this.tableModel.removeTableModelListener(tableModelListener);
-    }
-
-    this.tableModel = tableModel;
-    if (this.tableModel != null) {
-      this.tableModel.addTableModelListener(tableModelListener);
-    }
-
-    clearSortingState();
-    fireTableStructureChanged();
-  }
-
-  /**
-   * Sets the upIcon.
-   * 
-   * @param upIcon
-   *          the upIcon to set.
-   */
-  public void setUpIcon(Icon upIcon) {
-    this.upIcon = upIcon;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void setValueAt(Object aValue, int row, int column) {
-    tableModel.setValueAt(aValue, modelIndex(row), column);
-  }
-
-  private void sortingStatusChanged() {
-    clearSortingState();
-    fireTableDataChanged();
-    if (tableHeader != null) {
-      tableHeader.repaint();
-    }
-  }
-
-  /**
-   * viewIndex.
-   * 
-   * @param modelIndex
-   *          modelIndex
-   * @return viewIndex
-   */
-  public int viewIndex(int modelIndex) {
-    return getModelToView()[modelIndex];
   }
 }

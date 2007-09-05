@@ -26,9 +26,9 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
    * Constructs a new <code>SActionFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param actionField
-   *          the connected SActionField.
+   *            the connected SActionField.
    */
   public SActionFieldConnector(String id, SActionField actionField) {
     super(id, actionField);
@@ -45,6 +45,28 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
         }
       });
     }
+  }
+
+  /**
+   * Performs the action field action if the action field is not synchronized.
+   */
+  public void performActionIfNeeded() {
+    if (!getConnectedSComponent().isSynchronized()) {
+      if (StringUtils.isEmpty(getConnectedSComponent().getActionText())) {
+        setConnectorValue(null);
+      } else {
+        getConnectedSComponent().performAction();
+      }
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedSComponent().setEditable(isWritable());
   }
 
   /**
@@ -82,32 +104,10 @@ public class SActionFieldConnector extends SComponentConnector<SActionField> {
   }
 
   /**
-   * Performs the action field action if the action field is not synchronized.
-   */
-  public void performActionIfNeeded() {
-    if (!getConnectedSComponent().isSynchronized()) {
-      if (StringUtils.isEmpty(getConnectedSComponent().getActionText())) {
-        setConnectorValue(null);
-      } else {
-        getConnectedSComponent().performAction();
-      }
-    }
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedSComponent().setValue(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedSComponent().setEditable(isWritable());
   }
 }

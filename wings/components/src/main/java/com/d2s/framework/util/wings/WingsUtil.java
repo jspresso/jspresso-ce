@@ -30,19 +30,23 @@ public final class WingsUtil {
 
   private static final boolean DISABLE_THREADING   = false;
 
+  private WingsUtil() {
+    // Helper class private constructor.
+  }
+
   /**
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
    * 
    * @param renderer
-   *          the renderer to work on.
+   *            the renderer to work on.
    * @param collectionSComponent
-   *          the collection component (table, list, ...) on which this renderer
-   *          is used.
+   *            the collection component (table, list, ...) on which this
+   *            renderer is used.
    * @param isSelected
-   *          is the row selected ?
+   *            is the row selected ?
    * @param row
-   *          the row to render.
+   *            the row to render.
    */
   public static void alternateEvenOddBackground(SComponent renderer,
       SComponent collectionSComponent, boolean isSelected, int row) {
@@ -60,9 +64,9 @@ public final class WingsUtil {
    * Retrieves the first contained component of a certain type.
    * 
    * @param component
-   *          the component to start from.
+   *            the component to start from.
    * @param childSComponentType
-   *          the type of the component to look for.
+   *            the type of the component to look for.
    * @return the first contained component of the looked for type or null if
    *         none.
    */
@@ -87,9 +91,9 @@ public final class WingsUtil {
    * Make a color scaled using a defined factor.
    * 
    * @param color
-   *          the color to scale.
+   *            the color to scale.
    * @param factor
-   *          the factor to use.
+   *            the factor to use.
    * @return the scaled color.
    */
   public static Color getScaledColor(Color color, double factor) {
@@ -125,7 +129,7 @@ public final class WingsUtil {
    * Gets the visible parent window.
    * 
    * @param component
-   *          the component to start from
+   *            the component to start from
    * @return the visible parent window or null.
    */
   public static SContainer getVisibleWindow(SComponent component) {
@@ -136,7 +140,7 @@ public final class WingsUtil {
    * Gets the window or the internal frame holding the component.
    * 
    * @param component
-   *          the component to look the window or internal frame for.
+   *            the component to look the window or internal frame for.
    * @return the window (frame or dialog) or the internal frame in the component
    *         hierarchy.
    */
@@ -154,7 +158,7 @@ public final class WingsUtil {
    * invoke runnable and wait.
    * 
    * @param runnable
-   *          the runnable operation which updates the GUI.
+   *            the runnable operation which updates the GUI.
    */
   public static void updateSwingGui(Runnable runnable) {
     if (DISABLE_THREADING) {
@@ -173,9 +177,5 @@ public final class WingsUtil {
         // SwingUtilities.invokeLater(runnable);
       }
     }
-  }
-
-  private WingsUtil() {
-    // Helper class private constructor.
   }
 }

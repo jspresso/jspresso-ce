@@ -16,14 +16,18 @@ import java.util.List;
  */
 public final class TreeDescriptorHelper {
 
+  private TreeDescriptorHelper() {
+    // protected constructor of utility class.
+  }
+
   /**
    * From a tree path of descriptor names, it retrieves the list descriptor of
    * the node collection.
    * 
    * @param treeLevelDescriptor
-   *          the tree level descriptor to start from.
+   *            the tree level descriptor to start from.
    * @param treePath
-   *          a tree path of descriptor names.
+   *            a tree path of descriptor names.
    * @return the node group list descriptor.
    */
   public static ITreeLevelDescriptor getSubtreeDescriptorFromPath(
@@ -48,9 +52,5 @@ public final class TreeDescriptorHelper {
       }
     }
     return null;
-  }
-
-  private TreeDescriptorHelper() {
-    // protected constructor of utility class.
   }
 }

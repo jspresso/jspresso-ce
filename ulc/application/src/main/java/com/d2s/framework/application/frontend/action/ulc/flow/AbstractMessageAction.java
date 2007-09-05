@@ -25,7 +25,7 @@ public abstract class AbstractMessageAction extends AbstractUlcAction {
    * Gets the message.
    * 
    * @param context
-   *          the actionContext.
+   *            the actionContext.
    * @return the message.
    */
   protected String getMessage(Map<String, Object> context) {

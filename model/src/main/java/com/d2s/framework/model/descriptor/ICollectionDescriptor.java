@@ -17,7 +17,7 @@ import java.util.Collection;
  *          the concrete component element type.
  */
 public interface ICollectionDescriptor<E> extends IModelDescriptor,
-    ICollectionDescriptorProvider {
+    ICollectionDescriptorProvider<E> {
 
   /**
    * Gets the <code>Collection</code> sub-interface implemented by the
@@ -26,7 +26,7 @@ public interface ICollectionDescriptor<E> extends IModelDescriptor,
    * 
    * @return the collection interface.
    */
-  Class<? extends Collection> getCollectionInterface();
+  Class<? extends Collection<? extends E>> getCollectionInterface();
 
   /**
    * Gets the component descriptor of the elements contained in this collection.

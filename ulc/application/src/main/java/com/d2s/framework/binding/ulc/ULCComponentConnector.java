@@ -19,7 +19,7 @@ import com.ulcjava.base.application.util.Color;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          The actual class of the subclass of <code>ULCComponent</code>.
+ *            The actual class of the subclass of <code>ULCComponent</code>.
  */
 public abstract class ULCComponentConnector<E extends ULCComponent> extends
     AbstractValueConnector {
@@ -32,29 +32,15 @@ public abstract class ULCComponentConnector<E extends ULCComponent> extends
    * Constructs a new <code>ULCComponentConnector</code> instance.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param connectedULCComponent
-   *          the connected ULCComponent.
+   *            the connected ULCComponent.
    */
   public ULCComponentConnector(String id, E connectedULCComponent) {
     super(id);
     this.connectedULCComponent = connectedULCComponent;
     bindULCComponent();
     updateState();
-  }
-
-  /**
-   * Attaches the ULCComponent to the connector.
-   */
-  protected abstract void bindULCComponent();
-
-  /**
-   * Gets the connectedULCComponent.
-   * 
-   * @return the connectedULCComponent.
-   */
-  protected E getConnectedULCComponent() {
-    return connectedULCComponent;
   }
 
   /**
@@ -82,5 +68,19 @@ public abstract class ULCComponentConnector<E extends ULCComponent> extends
       getConnectedULCComponent().setForeground(
           getConnectedULCComponent().getBackground());
     }
+  }
+
+  /**
+   * Attaches the ULCComponent to the connector.
+   */
+  protected abstract void bindULCComponent();
+
+  /**
+   * Gets the connectedULCComponent.
+   * 
+   * @return the connectedULCComponent.
+   */
+  protected E getConnectedULCComponent() {
+    return connectedULCComponent;
   }
 }

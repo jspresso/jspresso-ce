@@ -58,64 +58,6 @@ public final class SplashWindow extends Window {
   private static final long   serialVersionUID = 4476194702263304379L;
 
   /**
-   * Closes the splash window.
-   */
-  public static void disposeSplash() {
-    if (instance != null) {
-      instance.getOwner().dispose();
-      instance = null;
-    }
-  }
-
-  /**
-   * Open's a splash window using the specified image.
-   * 
-   * @param image
-   *          The splash image.
-   */
-  public static void splash(Image image) {
-    if (instance == null && image != null) {
-      Frame f = new Frame();
-
-      // Create the splash image
-      instance = new SplashWindow(f, image);
-
-      // Show the window.
-      instance.setVisible(true);
-
-      // Note: To make sure the user gets a chance to see the
-      // splash window we wait until its paint method has been
-      // called at least once by the AWT event dispatcher thread.
-      // If more than one processor is available, we don't wait,
-      // and maximize CPU throughput instead.
-      if (!EventQueue.isDispatchThread()
-          && Runtime.getRuntime().availableProcessors() == 1) {
-        synchronized (instance) {
-          while (!instance.paintCalled) {
-            try {
-              instance.wait();
-            } catch (InterruptedException e) {
-              // Just continue
-            }
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Open's a splash window using the specified image.
-   * 
-   * @param imageURL
-   *          The url of the splash image.
-   */
-  public static void splash(URL imageURL) {
-    if (imageURL != null) {
-      splash(Toolkit.getDefaultToolkit().createImage(imageURL));
-    }
-  }
-
-  /**
    * The splash image which is displayed on the splash window.
    */
   private Image               image;
@@ -137,9 +79,9 @@ public final class SplashWindow extends Window {
    * Creates a new instance.
    * 
    * @param parent
-   *          the parent of the window.
+   *            the parent of the window.
    * @param image
-   *          the splash image.
+   *            the splash image.
    */
   private SplashWindow(Frame parent, Image image) {
     super(parent);
@@ -184,6 +126,64 @@ public final class SplashWindow extends Window {
       }
     };
     addMouseListener(disposeOnClick);
+  }
+
+  /**
+   * Closes the splash window.
+   */
+  public static void disposeSplash() {
+    if (instance != null) {
+      instance.getOwner().dispose();
+      instance = null;
+    }
+  }
+
+  /**
+   * Open's a splash window using the specified image.
+   * 
+   * @param image
+   *            The splash image.
+   */
+  public static void splash(Image image) {
+    if (instance == null && image != null) {
+      Frame f = new Frame();
+
+      // Create the splash image
+      instance = new SplashWindow(f, image);
+
+      // Show the window.
+      instance.setVisible(true);
+
+      // Note: To make sure the user gets a chance to see the
+      // splash window we wait until its paint method has been
+      // called at least once by the AWT event dispatcher thread.
+      // If more than one processor is available, we don't wait,
+      // and maximize CPU throughput instead.
+      if (!EventQueue.isDispatchThread()
+          && Runtime.getRuntime().availableProcessors() == 1) {
+        synchronized (instance) {
+          while (!instance.paintCalled) {
+            try {
+              instance.wait();
+            } catch (InterruptedException e) {
+              // Just continue
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Open's a splash window using the specified image.
+   * 
+   * @param imageURL
+   *            The url of the splash image.
+   */
+  public static void splash(URL imageURL) {
+    if (imageURL != null) {
+      splash(Toolkit.getDefaultToolkit().createImage(imageURL));
+    }
   }
 
   /**

@@ -47,7 +47,7 @@ public class EntityTracingAspect extends AbstractTracingAspect {
     String accessType = joinPoint.getSignature().getName().substring(0,
         GET_SET_LENGTH);
     MethodRtti rtti = (MethodRtti) joinPoint.getRtti();
-    Class entityClass = ((BasicEntityInvocationHandler) joinPoint.getCallee())
+    Class<? extends Object> entityClass = ((BasicEntityInvocationHandler) joinPoint.getCallee())
         .getComponentContract();
     Object[] parameterValues = rtti.getParameterValues();
     logMethodEntry(entityClass, parameterValues[0], "[" + accessType + "]"

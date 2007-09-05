@@ -26,7 +26,7 @@ public class ULCExtendedInternalFrame extends
    * Constructs a new <code>ULCExtendedInternalFrame</code> instance.
    * 
    * @param title
-   *          the frame title.
+   *            the frame title.
    */
   public ULCExtendedInternalFrame(String title) {
     super(title);
@@ -36,11 +36,23 @@ public class ULCExtendedInternalFrame extends
    * Adds an extended listener.
    * 
    * @param listener
-   *          the listener.
+   *            the listener.
    */
   public void addExtendedInternalFrameListener(
       IExtendedInternalFrameListener listener) {
     internalAddListener(
+        ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT, listener);
+  }
+
+  /**
+   * Removes an extended listener.
+   * 
+   * @param listener
+   *            the listener.
+   */
+  public void removeExtendedInternalFrameListener(
+      IExtendedInternalFrameListener listener) {
+    internalRemoveListener(
         ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT, listener);
   }
 
@@ -54,18 +66,6 @@ public class ULCExtendedInternalFrame extends
     } else {
       super.handleEvent(listenerType, eventId, args);
     }
-  }
-
-  /**
-   * Removes an extended listener.
-   * 
-   * @param listener
-   *          the listener.
-   */
-  public void removeExtendedInternalFrameListener(
-      IExtendedInternalFrameListener listener) {
-    internalRemoveListener(
-        ExtendedInternalFrameConstants.EXTENDED_INTERNAL_FRAME_EVENT, listener);
   }
 
   /**

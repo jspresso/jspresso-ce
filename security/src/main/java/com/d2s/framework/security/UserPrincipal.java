@@ -29,12 +29,12 @@ public class UserPrincipal implements Principal, Serializable {
    * <code>OWNER_PROPERTY</code>.
    */
   public static final String  OWNER_PROPERTY    = "owner";
-  private static final long   serialVersionUID  = 360589456903648696L;
-
   /**
    * <code>USER_PROPERTY</code>.
    */
   public static final String  USERDN_PROPERTY   = "userDn";
+
+  private static final long   serialVersionUID  = 360589456903648696L;
 
   private Map<String, Object> customProperties;
 
@@ -44,7 +44,7 @@ public class UserPrincipal implements Principal, Serializable {
    * Constructs a new <code>UserPrincipal</code> instance.
    * 
    * @param name
-   *          the distinguished name.
+   *            the distinguished name.
    */
   public UserPrincipal(String name) {
     this.name = name;
@@ -82,7 +82,7 @@ public class UserPrincipal implements Principal, Serializable {
    * Retrieves a custom property for this user.
    * 
    * @param propertyName
-   *          the name of the custom property.
+   *            the name of the custom property.
    * @return the value of the custom property or null if none exists.
    */
   public Object getCustomProperty(String propertyName) {
@@ -111,9 +111,9 @@ public class UserPrincipal implements Principal, Serializable {
    * Registers a custom property for this user.
    * 
    * @param propertyName
-   *          the name of the custom property.
+   *            the name of the custom property.
    * @param propertyValue
-   *          the value of the custom property.
+   *            the value of the custom property.
    */
   public void putCustomProperty(String propertyName, Object propertyValue) {
     customProperties.put(propertyName, propertyValue);

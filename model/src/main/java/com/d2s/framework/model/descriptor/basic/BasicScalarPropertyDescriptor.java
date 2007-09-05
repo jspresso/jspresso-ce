@@ -10,7 +10,7 @@ import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,13 +21,12 @@ public abstract class BasicScalarPropertyDescriptor extends
 
   /**
    * Gets the defaultValue.
-   *
+   * 
    * @return the defaultValue.
    */
   public Object getDefaultValue() {
     return defaultValue;
   }
-
 
   /**
    * {@inheritDoc}
@@ -37,11 +36,11 @@ public abstract class BasicScalarPropertyDescriptor extends
     return true;
   }
 
-
   /**
    * Sets the defaultValue.
-   *
-   * @param defaultValue the defaultValue to set.
+   * 
+   * @param defaultValue
+   *            the defaultValue to set.
    */
   public void setDefaultValue(Object defaultValue) {
     this.defaultValue = defaultValue;

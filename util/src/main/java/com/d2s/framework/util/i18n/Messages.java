@@ -22,11 +22,15 @@ public final class Messages {
   private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
                                                           .getBundle(BUNDLE_NAME);
 
+  private Messages() {
+    // Helper constructor.
+  }
+
   /**
    * Gets an internationalized string.
    * 
    * @param key
-   *          the i18n key
+   *            the i18n key
    * @return the internationalized string.
    */
   public static String getString(String key) {
@@ -35,9 +39,5 @@ public final class Messages {
     } catch (MissingResourceException e) {
       return '!' + key + '!';
     }
-  }
-
-  private Messages() {
-    // Helper constructor.
   }
 }

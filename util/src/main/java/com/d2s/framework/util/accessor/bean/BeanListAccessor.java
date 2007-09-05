@@ -30,13 +30,14 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
    * Constructs a new default java bean list property accessor.
    * 
    * @param property
-   *          the property to be accessed.
+   *            the property to be accessed.
    * @param beanClass
-   *          the java bean class.
+   *            the java bean class.
    * @param elementClass
-   *          the collection element class.
+   *            the collection element class.
    */
-  public BeanListAccessor(String property, Class beanClass, Class elementClass) {
+  public BeanListAccessor(String property, Class<?> beanClass,
+      Class<?> elementClass) {
     super(property, beanClass, elementClass);
   }
 
@@ -57,8 +58,8 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
    * {@inheritDoc}
    */
   @Override
-  public List getValue(Object target) throws IllegalAccessException,
+  public List<?> getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException {
-    return (List) super.getValue(target);
+    return (List<?>) super.getValue(target);
   }
 }

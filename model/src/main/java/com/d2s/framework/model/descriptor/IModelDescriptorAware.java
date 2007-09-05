@@ -19,7 +19,7 @@ public interface IModelDescriptorAware {
    * Sets the underlying model descriptor.
    * 
    * @param modelDescriptor
-   *          the underlying model descriptor.
+   *            the underlying model descriptor.
    */
   void setModelDescriptor(IModelDescriptor modelDescriptor);
 }

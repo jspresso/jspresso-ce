@@ -49,7 +49,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the viewDescriptors.
    * 
    * @param viewDescriptors
-   *          the viewDescriptors to set.
+   *            the viewDescriptors to set.
    */
   public void setChildViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     this.childViewDescriptors = viewDescriptors;
@@ -59,7 +59,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the drivingDimension.
    * 
    * @param drivingDimension
-   *          the drivingDimension to set.
+   *            the drivingDimension to set.
    */
   public void setDrivingDimension(int drivingDimension) {
     this.drivingDimension = drivingDimension;
@@ -69,7 +69,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the drivingDimensionCellCount.
    * 
    * @param drivingDimensionCellCount
-   *          the drivingDimensionCellCount to set.
+   *            the drivingDimensionCellCount to set.
    */
   public void setDrivingDimensionCellCount(int drivingDimensionCellCount) {
     this.drivingDimensionCellCount = drivingDimensionCellCount;

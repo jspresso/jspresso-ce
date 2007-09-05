@@ -17,11 +17,11 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public interface IViewFactory<E, F, G> {
 
@@ -34,13 +34,13 @@ public interface IViewFactory<E, F, G> {
    * Creates a new view from a view descriptor.
    * 
    * @param viewDescriptor
-   *          the view descriptor being the root of the view hierarchy to be
-   *          constructed.
+   *            the view descriptor being the root of the view hierarchy to be
+   *            constructed.
    * @param actionHandler
-   *          the object responsible for executing the view actions (generally
-   *          the frontend controller itself).
+   *            the object responsible for executing the view actions (generally
+   *            the frontend controller itself).
    * @param locale
-   *          the locale the view must use for I18N.
+   *            the locale the view must use for I18N.
    * @return the created view.
    */
   IView<E> createView(IViewDescriptor viewDescriptor,

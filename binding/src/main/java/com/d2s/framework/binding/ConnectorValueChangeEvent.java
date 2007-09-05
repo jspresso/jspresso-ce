@@ -39,11 +39,11 @@ public class ConnectorValueChangeEvent extends EventObject {
    * Constructs a new <code>ConnectorValueChangeEvent</code>.
    * 
    * @param source
-   *          the connector that initiated the event.
+   *            the connector that initiated the event.
    * @param oldValue
-   *          the old value of the connector.
+   *            the old value of the connector.
    * @param newValue
-   *          the new value of the connector.
+   *            the new value of the connector.
    */
   public ConnectorValueChangeEvent(IValueConnector source, Object oldValue,
       Object newValue) {

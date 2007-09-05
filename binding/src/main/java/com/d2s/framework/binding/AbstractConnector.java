@@ -27,7 +27,7 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
    * connects.
    * 
    * @param id
-   *          The connector identifier.
+   *            The connector identifier.
    */
   public AbstractConnector(String id) {
     this.id = id;

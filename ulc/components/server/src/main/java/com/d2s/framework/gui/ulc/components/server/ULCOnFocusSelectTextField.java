@@ -29,7 +29,7 @@ public class ULCOnFocusSelectTextField extends ULCTextField {
    * Constructs a new <code>ULCOnFocusSelectTextField</code> instance.
    * 
    * @param columns
-   *          field column.
+   *            field column.
    */
   public ULCOnFocusSelectTextField(int columns) {
     super(columns);
@@ -39,7 +39,7 @@ public class ULCOnFocusSelectTextField extends ULCTextField {
    * Constructs a new <code>ULCOnFocusSelectTextField</code> instance.
    * 
    * @param text
-   *          field text.
+   *            field text.
    */
   public ULCOnFocusSelectTextField(String text) {
     super(text);
@@ -49,9 +49,9 @@ public class ULCOnFocusSelectTextField extends ULCTextField {
    * Constructs a new <code>ULCOnFocusSelectTextField</code> instance.
    * 
    * @param text
-   *          field text.
+   *            field text.
    * @param columns
-   *          field columns.
+   *            field columns.
    */
   public ULCOnFocusSelectTextField(String text, int columns) {
     super(text, columns);

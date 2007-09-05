@@ -50,12 +50,12 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * connector. It must be setted afterwards using the apropriate setter.
    * 
    * @param modelDescriptor
-   *          the model descriptor backing this connector.
+   *            the model descriptor backing this connector.
    * @param modelConnectorFactory
-   *          the factory used to create the collection model connectors.
+   *            the factory used to create the collection model connectors.
    */
   public ModelCollectionPropertyConnector(
-      ICollectionDescriptorProvider modelDescriptor,
+      ICollectionDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
@@ -69,7 +69,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * Adds a new child connector.
    * 
    * @param connector
-   *          the connector to be added as composite.
+   *            the connector to be added as composite.
    */
   public void addChildConnector(IValueConnector connector) {
     getConnectorMap().addConnector(connector.getId(), connector);
@@ -135,28 +135,14 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     return clonedConnector;
   }
 
-  private String computeConnectorId(int i) {
-    return CollectionConnectorHelper.computeConnectorId(getId(), i);
-  }
-
-  /**
-   * Takes a snapshot of the collection (does not keep the reference itself).
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object computeOldConnectorValue(Object connectorValue) {
-    return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
-  }
-
   /**
    * This implementation returns a <code>ModelConnector</code> instance.
    * <p>
    * {@inheritDoc}
    */
   public IValueConnector createChildConnector(String connectorId) {
-    IComponentDescriptor componentDescriptor;
-    componentDescriptor = ((ICollectionDescriptorProvider) getModelDescriptor())
+    IComponentDescriptor<?> componentDescriptor;
+    componentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
         .getCollectionDescriptor().getElementDescriptor();
     IValueConnector elementConnector = modelConnectorFactory
         .createModelConnector(componentDescriptor);
@@ -261,17 +247,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
-   * Removes a child connector.
-   * 
-   * @param connector
-   *          the connector to be removed.
-   */
-  protected void removeChildConnector(IValueConnector connector) {
-    getConnectorMap().removeConnector(connector.getId());
-    connector.setParentConnector(null);
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void removeSelectionChangeListener(ISelectionChangeListener listener) {
@@ -319,10 +294,35 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
+   * Takes a snapshot of the collection (does not keep the reference itself).
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object computeOldConnectorValue(Object connectorValue) {
+    return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
+  }
+
+  /**
+   * Removes a child connector.
+   * 
+   * @param connector
+   *            the connector to be removed.
+   */
+  protected void removeChildConnector(IValueConnector connector) {
+    getConnectorMap().removeConnector(connector.getId());
+    connector.setParentConnector(null);
+  }
+
+  private String computeConnectorId(int i) {
+    return CollectionConnectorHelper.computeConnectorId(getId(), i);
+  }
+
+  /**
    * Updates the child connectors based on a new model collection.
    */
   private void updateChildConnectors() {
-    Collection modelCollection = (Collection) getConnecteeValue();
+    Collection<?> modelCollection = (Collection<?>) getConnecteeValue();
     needsChildrenUpdate = false;
     int modelCollectionSize = 0;
     if (modelCollection != null && modelCollection.size() > 0) {

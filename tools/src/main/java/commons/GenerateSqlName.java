@@ -26,6 +26,7 @@ public class GenerateSqlName implements TemplateMethodModel {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   public TemplateModel exec(List arguments) throws TemplateModelException {
     try {
       String propertyName = (String) arguments.get(0);

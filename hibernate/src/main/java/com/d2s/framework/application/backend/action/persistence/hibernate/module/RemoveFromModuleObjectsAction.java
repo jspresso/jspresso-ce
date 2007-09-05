@@ -50,22 +50,6 @@ public class RemoveFromModuleObjectsAction extends
   }
 
   /**
-   * Deletes the entity from the persistent store.
-   * 
-   * @param entity
-   *          the entity to remove
-   * @param session
-   *          the session to use.
-   * @param context
-   *          the action context.
-   */
-  protected void deleteEntity(IEntity entity, Session session,
-      @SuppressWarnings("unused")
-      Map<String, Object> context) {
-    session.delete(entity);
-  }
-
-  /**
    * Removes the selected objects from the projected collection.
    * <p>
    * {@inheritDoc}
@@ -126,5 +110,21 @@ public class RemoveFromModuleObjectsAction extends
     collectionConnector.setConnectorValue(projectedCollection);
     context.put(ActionContextConstants.ACTION_PARAM, projectedObjectsToRemove);
     return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Deletes the entity from the persistent store.
+   * 
+   * @param entity
+   *            the entity to remove
+   * @param session
+   *            the session to use.
+   * @param context
+   *            the action context.
+   */
+  protected void deleteEntity(IEntity entity, Session session,
+      @SuppressWarnings("unused")
+      Map<String, Object> context) {
+    session.delete(entity);
   }
 }

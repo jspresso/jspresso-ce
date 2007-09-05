@@ -24,14 +24,18 @@ import com.d2s.framework.binding.IValueConnector;
  */
 public final class ConnectorTreeHelper {
 
+  private ConnectorTreeHelper() {
+    // Hidden class.
+  }
+
   /**
    * Retrieves a connector tree path following the parent/child relationship.
    * 
    * @param rootConnector
-   *          the root connector of the hierarchy. The returned tree path will
-   *          start from this connector.
+   *            the root connector of the hierarchy. The returned tree path will
+   *            start from this connector.
    * @param connector
-   *          the connector to look the tree path for.
+   *            the connector to look the tree path for.
    * @return the connector's tree path.
    */
   public static TreePath getTreePathForConnector(IValueConnector rootConnector,
@@ -51,9 +55,5 @@ public final class ConnectorTreeHelper {
       return new TreePath(treePath.toArray());
     }
     return null;
-  }
-
-  private ConnectorTreeHelper() {
-    // Hidden class.
   }
 }

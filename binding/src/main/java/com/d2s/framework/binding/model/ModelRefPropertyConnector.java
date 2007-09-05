@@ -48,11 +48,11 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * Constructs a new model property connector on a model reference property.
    * 
    * @param modelDescriptor
-   *          the model descriptor backing this connector.
+   *            the model descriptor backing this connector.
    * @param modelConnectorFactory
-   *          the factory used to create the property connectors.
+   *            the factory used to create the property connectors.
    */
-  ModelRefPropertyConnector(IComponentDescriptorProvider modelDescriptor,
+  ModelRefPropertyConnector(IComponentDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory.getAccessorFactory());
     this.modelConnectorFactory = modelConnectorFactory;
@@ -119,18 +119,6 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   }
 
   /**
-   * Notifies its listeners that the connector's model changed.
-   * 
-   * @param oldModel
-   *          The old model of the connector
-   * @param newModel
-   *          The new model of the connector
-   */
-  protected void fireModelChange(Object oldModel, Object newModel) {
-    modelChangeSupport.fireModelChange(oldModel, newModel);
-  }
-
-  /**
    * {@inheritDoc}
    */
   public IValueConnector getChildConnector(String connectorKey) {
@@ -181,11 +169,12 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
    * {@inheritDoc}
    */
   @Override
-  public IComponentDescriptorProvider getModelDescriptor() {
-    IComponentDescriptorProvider registeredModelDescriptor = (IComponentDescriptorProvider) super
+  public IComponentDescriptorProvider<?> getModelDescriptor() {
+    IComponentDescriptorProvider<?> registeredModelDescriptor = (IComponentDescriptorProvider<?>) super
         .getModelDescriptor();
     if (getModel() instanceof IEntity && !(getModel() instanceof IQueryEntity)) {
-      Class entityContract = ((IEntity) getModel()).getContract();
+      Class<? extends IEntity> entityContract = ((IEntity) getModel())
+          .getContract();
       if (!entityContract.equals(registeredModelDescriptor.getModelType())) {
         // we must take care of subclasses (polymorphism)
         return modelConnectorFactory.getDescriptorRegistry()
@@ -234,5 +223,17 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
     if (listener != null) {
       modelChangeSupport.removeModelChangeListener(listener);
     }
+  }
+
+  /**
+   * Notifies its listeners that the connector's model changed.
+   * 
+   * @param oldModel
+   *            The old model of the connector
+   * @param newModel
+   *            The new model of the connector
+   */
+  protected void fireModelChange(Object oldModel, Object newModel) {
+    modelChangeSupport.fireModelChange(oldModel, newModel);
   }
 }

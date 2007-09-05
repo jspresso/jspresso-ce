@@ -27,9 +27,9 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
    * Constructs a new <code>JActionFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param actionField
-   *          the connected JActionField.
+   *            the connected JActionField.
    */
   public JActionFieldConnector(String id, JActionField actionField) {
     super(id, actionField);
@@ -45,6 +45,19 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
           }
         }
       });
+    }
+  }
+
+  /**
+   * Performs the action field action if the action field is not synchronized.
+   */
+  public void performActionIfNeeded() {
+    if (!getConnectedJComponent().isSynchronized()) {
+      if (StringUtils.isEmpty(getConnectedJComponent().getActionText())) {
+        setConnectorValue(null);
+      } else {
+        getConnectedJComponent().performAction();
+      }
     }
   }
 
@@ -74,19 +87,6 @@ public class JActionFieldConnector extends JComponentConnector<JActionField> {
   @Override
   protected Object getConnecteeValue() {
     return getConnectedJComponent().getValue();
-  }
-
-  /**
-   * Performs the action field action if the action field is not synchronized.
-   */
-  public void performActionIfNeeded() {
-    if (!getConnectedJComponent().isSynchronized()) {
-      if (StringUtils.isEmpty(getConnectedJComponent().getActionText())) {
-        setConnectorValue(null);
-      } else {
-        getConnectedJComponent().performAction();
-      }
-    }
   }
 
   /**

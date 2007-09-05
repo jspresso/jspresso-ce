@@ -37,7 +37,7 @@ public class JGoodiesSwingViewFactory extends DefaultSwingViewFactory {
    * Constructs a new <code>JGoodiesSwingViewFactory</code> instance.
    * 
    * @param lookAndFeel
-   *          the look and feel to use.
+   *            the look and feel to use.
    */
   public JGoodiesSwingViewFactory(String lookAndFeel) {
     super(lookAndFeel);

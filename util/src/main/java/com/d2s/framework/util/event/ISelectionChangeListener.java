@@ -20,11 +20,11 @@ public interface ISelectionChangeListener {
    * <code>oldValue</code> differs from <code>newValue</code>.
    * 
    * @param evt
-   *          The event representing the change. This event will have :
-   *          <li><code>source</code> set to the selectable which initiated
-   *          the event.
-   *          <li><code>oldSelection</code> set to the old selection.
-   *          <li><code>newSelection</code> set to the new selection.
+   *            The event representing the change. This event will have :
+   *            <li><code>source</code> set to the selectable which initiated
+   *            the event.
+   *            <li><code>oldSelection</code> set to the old selection.
+   *            <li><code>newSelection</code> set to the new selection.
    */
   void selectionChange(SelectionChangeEvent evt);
 }

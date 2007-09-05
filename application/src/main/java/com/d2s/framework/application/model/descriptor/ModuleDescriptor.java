@@ -4,6 +4,7 @@
 package com.d2s.framework.application.model.descriptor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.d2s.framework.application.model.Module;
@@ -47,7 +48,8 @@ public final class ModuleDescriptor extends BasicComponentDescriptor<SubModule> 
     parentDescriptor.setReferencedDescriptor(this);
 
     BasicCollectionDescriptor<SubModule> moduleListDescriptor = new BasicCollectionDescriptor<SubModule>();
-    moduleListDescriptor.setCollectionInterface(List.class);
+    moduleListDescriptor
+        .setCollectionInterface((Class<? extends Collection<? extends SubModule>>) List.class);
     moduleListDescriptor.setElementDescriptor(this);
 
     BasicCollectionPropertyDescriptor<SubModule> subModulesDescriptor = new BasicCollectionPropertyDescriptor<SubModule>();

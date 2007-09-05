@@ -16,11 +16,15 @@ import java.util.Collection;
  */
 public final class GateHelper {
 
+  private GateHelper() {
+    // Just here to prevent direct instanciation.
+  }
+
   /**
    * Returns true if and only if gates are null, empty or all open.
    * 
    * @param gates
-   *          the gates collection.
+   *            the gates collection.
    * @return gates status.
    */
   public static boolean areGatesOpen(Collection<IGate> gates) {
@@ -32,9 +36,5 @@ public final class GateHelper {
       }
     }
     return true;
-  }
-
-  private GateHelper() {
-    // Just here to prevent direct instanciation.
   }
 }

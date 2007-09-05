@@ -32,9 +32,9 @@ public class SelectionChangeSupport implements ISelectable {
    * Constructs a new support.
    * 
    * @param source
-   *          The selectable to which this support is attached. It will serve as
-   *          <code>source</code> of fired <code>SelectionChangeEvent</code>s
-   *          if no other is provided.
+   *            The selectable to which this support is attached. It will serve
+   *            as <code>source</code> of fired
+   *            <code>SelectionChangeEvent</code>s if no other is provided.
    */
   public SelectionChangeSupport(ISelectable source) {
     if (source == null) {
@@ -49,7 +49,7 @@ public class SelectionChangeSupport implements ISelectable {
    * collection.
    * 
    * @param listener
-   *          the excluded listener.
+   *            the excluded listener.
    */
   public void addInhibitedListener(ISelectionChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
@@ -88,7 +88,7 @@ public class SelectionChangeSupport implements ISelectable {
    * modifying its source) to the listeners.
    * 
    * @param evt
-   *          the propagated <code>BeanChangeEvent</code>
+   *            the propagated <code>BeanChangeEvent</code>
    */
   public void fireSelectionChange(SelectionChangeEvent evt) {
     if (listeners != null) {
@@ -122,7 +122,7 @@ public class SelectionChangeSupport implements ISelectable {
    * being re-added to the actual listeners collection.
    * 
    * @param listener
-   *          the previously excluded listener.
+   *            the previously excluded listener.
    */
   public void removeInhibitedListener(ISelectionChangeListener listener) {
     if (inhibitedListeners == null || listener == null) {

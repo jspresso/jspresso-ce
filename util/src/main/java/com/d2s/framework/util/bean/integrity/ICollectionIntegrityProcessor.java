@@ -14,9 +14,13 @@ import java.util.Collection;
  * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
+ * @param <E>
+ *          The type of the target.
+ * @param <F>
+ *          The type of the property (a subclass of collection).
  */
-public interface ICollectionIntegrityProcessor extends
-    IPropertyIntegrityProcessor {
+public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
+    extends IPropertyIntegrityProcessor<E, F> {
 
   /**
    * This method gets called whenever a value has been added to a collection
@@ -25,13 +29,13 @@ public interface ICollectionIntegrityProcessor extends
    * valid.
    * 
    * @param target
-   *          the component the processor is ran on.
+   *            the component the processor is ran on.
    * @param collection
-   *          the actual value of the collection property accessed.
+   *            the actual value of the collection property accessed.
    * @param addedValue
-   *          the value added in the collection.
+   *            the value added in the collection.
    */
-  void postprocessAdderIntegrity(Object target, Collection collection,
+  void postprocessAdderIntegrity(E target, F collection,
       Object addedValue);
 
   /**
@@ -41,13 +45,13 @@ public interface ICollectionIntegrityProcessor extends
    * valid.
    * 
    * @param target
-   *          the component the processor is ran on.
+   *            the component the processor is ran on.
    * @param collection
-   *          the actual value of the collection property accessed.
+   *            the actual value of the collection property accessed.
    * @param removedValue
-   *          the value removed from the collection.
+   *            the value removed from the collection.
    */
-  void postprocessRemoverIntegrity(Object target, Collection collection,
+  void postprocessRemoverIntegrity(E target, F collection,
       Object removedValue);
 
   /**
@@ -57,13 +61,13 @@ public interface ICollectionIntegrityProcessor extends
    * are not valid.
    * 
    * @param target
-   *          the component the processor is ran on.
+   *            the component the processor is ran on.
    * @param collection
-   *          the actual value of the collection property accessed.
+   *            the actual value of the collection property accessed.
    * @param addedValue
-   *          the value added in the collection.
+   *            the value added in the collection.
    */
-  void preprocessAdderIntegrity(Object target, Collection collection,
+  void preprocessAdderIntegrity(E target, F collection,
       Object addedValue);
 
   /**
@@ -73,12 +77,12 @@ public interface ICollectionIntegrityProcessor extends
    * are not valid.
    * 
    * @param target
-   *          the component the processor is ran on.
+   *            the component the processor is ran on.
    * @param collection
-   *          the actual value of the collection property accessed.
+   *            the actual value of the collection property accessed.
    * @param removedValue
-   *          the value removed from the collection.
+   *            the value removed from the collection.
    */
-  void preprocessRemoverIntegrity(Object target, Collection collection,
+  void preprocessRemoverIntegrity(E target, F collection,
       Object removedValue);
 }

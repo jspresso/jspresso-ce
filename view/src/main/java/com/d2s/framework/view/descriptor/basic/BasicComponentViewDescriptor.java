@@ -49,7 +49,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public String getIconImageURL() {
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null) {
-      iconImageURL = ((IComponentDescriptorProvider) getModelDescriptor())
+      iconImageURL = ((IComponentDescriptorProvider<?>) getModelDescriptor())
           .getComponentDescriptor().getIconImageURL();
     }
     return iconImageURL;
@@ -67,7 +67,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    */
   public List<ISubViewDescriptor> getPropertyViewDescriptors() {
     if (propertyViewDescriptors == null) {
-      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
           .getComponentDescriptor();
       List<String> modelRenderedProperties = componentDescriptor
           .getRenderedProperties();
@@ -104,10 +104,10 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       childProperties = renderedChildProperties.get(propertyName);
     }
     if (childProperties == null) {
-      IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider) getModelDescriptor())
+      IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
           .getComponentDescriptor().getPropertyDescriptor(propertyName);
       if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor) {
-        return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor) childPropertyDescriptor)
+        return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) childPropertyDescriptor)
             .getCollectionDescriptor()).getElementDescriptor()
             .getRenderedProperties();
       } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor) {
@@ -122,7 +122,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the columnCount.
    * 
    * @param columnCount
-   *          the columnCount to set.
+   *            the columnCount to set.
    */
   public void setColumnCount(int columnCount) {
     this.columnCount = columnCount;
@@ -132,7 +132,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the labelsPosition.
    * 
    * @param labelsPosition
-   *          the labelsPosition to set.
+   *            the labelsPosition to set.
    */
   public void setLabelsPosition(int labelsPosition) {
     this.labelsPosition = labelsPosition;
@@ -142,7 +142,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the propertyViewDescriptors.
    * 
    * @param propertyViewDescriptors
-   *          the propertyViewDescriptors to set.
+   *            the propertyViewDescriptors to set.
    */
   public void setPropertyViewDescriptors(
       List<ISubViewDescriptor> propertyViewDescriptors) {
@@ -153,7 +153,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the propertyWidths.
    * 
    * @param propertyWidths
-   *          the propertyWidths to set.
+   *            the propertyWidths to set.
    */
   public void setPropertyWidths(Map<String, Object> propertyWidths) {
     this.propertyWidths = new HashMap<String, Integer>();
@@ -172,7 +172,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the renderedChildProperties.
    * 
    * @param renderedChildProperties
-   *          the renderedChildProperties to set.
+   *            the renderedChildProperties to set.
    */
   public void setRenderedChildProperties(
       Map<String, List<String>> renderedChildProperties) {

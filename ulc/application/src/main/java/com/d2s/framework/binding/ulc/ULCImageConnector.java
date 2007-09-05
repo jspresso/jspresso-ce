@@ -24,9 +24,9 @@ public class ULCImageConnector extends ULCComponentConnector<ULCLabel> {
    * Constructs a new <code>ULCImageConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param connectedULCComponent
-   *          the connected ULCLabel.
+   *            the connected ULCLabel.
    */
   public ULCImageConnector(String id, ULCLabel connectedULCComponent) {
     super(id, connectedULCComponent);

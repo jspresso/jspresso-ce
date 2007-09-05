@@ -25,7 +25,7 @@ public abstract class BusinessException extends RuntimeException {
    * Constructs a new <code>BusinessException</code> instance.
    * 
    * @param message
-   *          the exception message.
+   *            the exception message.
    */
   public BusinessException(String message) {
     super(message);
@@ -35,10 +35,10 @@ public abstract class BusinessException extends RuntimeException {
    * Constructs a new <code>BusinessException</code> instance.
    * 
    * @param message
-   *          the exception message.
+   *            the exception message.
    * @param staticI18nKey
-   *          the static i18n key if any. It will be used by default to get the
-   *          internationalized message.
+   *            the static i18n key if any. It will be used by default to get
+   *            the internationalized message.
    */
   public BusinessException(String message, String staticI18nKey) {
     super(message);
@@ -49,9 +49,10 @@ public abstract class BusinessException extends RuntimeException {
    * Gets the exception localized message using a translation provider.
    * 
    * @param translationProvider
-   *          the translation provider used to translate the exception message.
+   *            the translation provider used to translate the exception
+   *            message.
    * @param locale
-   *          the locale to translate the exception to.
+   *            the locale to translate the exception to.
    * @return the translated message.
    */
   public String getI18nMessage(ITranslationProvider translationProvider,

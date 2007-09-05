@@ -30,11 +30,15 @@ public final class UlcDevelopmentRunner {
 
   private static List<IMessageService> messageHandlers;
 
+  private UlcDevelopmentRunner() {
+    // Helper class constructor.
+  }
+
   /**
    * Overriden to cope with formatted textfield font bug.
    * 
    * @param args
-   *          arguments.
+   *            arguments.
    */
   public static void main(String[] args) {
     ClientEnvironmentAdapter.setMessageService(new IMessageService() {
@@ -83,16 +87,12 @@ public final class UlcDevelopmentRunner {
    * Registers a new message handler to which client messages will be delivered.
    * 
    * @param messageHandler
-   *          the new message handler to be delivered.
+   *            the new message handler to be delivered.
    */
   public static void registerMessageHandler(IMessageService messageHandler) {
     if (messageHandlers == null) {
       messageHandlers = new ArrayList<IMessageService>();
     }
     messageHandlers.add(messageHandler);
-  }
-
-  private UlcDevelopmentRunner() {
-    // Helper class constructor.
   }
 }

@@ -22,7 +22,7 @@ public interface IResource {
    * 
    * @return the resource content input stream.
    * @throws IOException
-   *           whenever an IO exception occurs.
+   *             whenever an IO exception occurs.
    */
   InputStream getContent() throws IOException;
 
@@ -31,7 +31,7 @@ public interface IResource {
    * 
    * @return the resource length.
    * @throws IOException
-   *           whenever an IO exception occurs.
+   *             whenever an IO exception occurs.
    */
   int getLength() throws IOException;
 

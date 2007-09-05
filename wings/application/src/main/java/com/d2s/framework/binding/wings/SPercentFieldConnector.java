@@ -15,7 +15,7 @@ import com.d2s.framework.util.format.IFormatter;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -25,13 +25,13 @@ public class SPercentFieldConnector extends SFormattedFieldConnector {
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected STextField.
+   *            the connected STextField.
    * @param format
-   *          the j2se format to use to extract the object value.
+   *            the j2se format to use to extract the object value.
    */
   public SPercentFieldConnector(String id, STextField textField, Format format) {
     this(id, textField, new FormatAdapter(format));
@@ -39,13 +39,13 @@ public class SPercentFieldConnector extends SFormattedFieldConnector {
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected STextField.
+   *            the connected STextField.
    * @param formatter
-   *          the formatter to use to extract the object value.
+   *            the formatter to use to extract the object value.
    */
   public SPercentFieldConnector(String id, STextField textField,
       IFormatter formatter) {

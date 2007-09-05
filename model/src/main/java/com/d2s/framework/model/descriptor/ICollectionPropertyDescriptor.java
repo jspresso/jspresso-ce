@@ -18,14 +18,14 @@ import java.util.List;
  *          the concrete collection component element type.
  */
 public interface ICollectionPropertyDescriptor<E> extends
-    IRelationshipEndPropertyDescriptor, ICollectionDescriptorProvider {
+    IRelationshipEndPropertyDescriptor, ICollectionDescriptorProvider<E> {
 
   /**
    * Narrowed to a collection type.
    * 
    * @return the type of the model.
    */
-  Class<? extends Collection> getModelType();
+  Class<? extends Collection<?>> getModelType();
 
   /**
    * Get the list of properties ordering this collection.
@@ -58,7 +58,7 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @param addedValue
    *          the property added value.
    */
-  void postprocessAdder(Object component, Collection collection,
+  void postprocessAdder(Object component, Collection<?> collection,
       Object addedValue);
 
   /**
@@ -71,7 +71,7 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @param removedValue
    *          the property removed value.
    */
-  void postprocessRemover(Object component, Collection collection,
+  void postprocessRemover(Object component, Collection<?> collection,
       Object removedValue);
 
   /**
@@ -84,7 +84,7 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @param addedValue
    *          the property added value.
    */
-  void preprocessAdder(Object component, Collection collection,
+  void preprocessAdder(Object component, Collection<?> collection,
       Object addedValue);
 
   /**
@@ -97,6 +97,6 @@ public interface ICollectionPropertyDescriptor<E> extends
    * @param removedValue
    *          the property removed value.
    */
-  void preprocessRemover(Object component, Collection collection,
+  void preprocessRemover(Object component, Collection<?> collection,
       Object removedValue);
 }

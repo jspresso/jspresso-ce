@@ -50,9 +50,9 @@ public interface IController extends IActionHandler {
    * Merges an entity in the application session.
    * 
    * @param entity
-   *          the entity to merge.
+   *            the entity to merge.
    * @param mergeMode
-   *          the merge mmode to be used.
+   *            the merge mmode to be used.
    * @return the merged entity.
    */
   IEntity merge(IEntity entity, MergeMode mergeMode);
@@ -61,9 +61,9 @@ public interface IController extends IActionHandler {
    * Merges an list of entities in the application session.
    * 
    * @param entities
-   *          the list of entities to merge.
+   *            the list of entities to merge.
    * @param mergeMode
-   *          the merge mmode to be used.
+   *            the merge mmode to be used.
    * @return the merged entity list.
    */
   List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode);

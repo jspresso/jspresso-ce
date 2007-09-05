@@ -22,10 +22,10 @@ public class TracingAspect extends AbstractTracingAspect {
    * The main advice used to trace methods on POJOs.
    * 
    * @param joinPoint
-   *          The jointpoint reached by the flow.
+   *            The jointpoint reached by the flow.
    * @return The value returned by the underlying called method.
    * @throws Throwable
-   *           Any exception thrown by the underlying method.
+   *             Any exception thrown by the underlying method.
    */
   @Around("methodsToTrace")
   public Object logMethod(final JoinPoint joinPoint) throws Throwable {

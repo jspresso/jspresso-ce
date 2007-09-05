@@ -20,18 +20,18 @@ public abstract class AbstractLdapAction extends AbstractBackendAction
   private LdapTemplate ldapTemplate;
 
   /**
+   * {@inheritDoc}
+   */
+  public void setLdapTemplate(LdapTemplate ldapTemplate) {
+    this.ldapTemplate = ldapTemplate;
+  }
+
+  /**
    * Gets the ldapTemplate.
    * 
    * @return the ldapTemplate.
    */
   protected LdapTemplate getLdapTemplate() {
     return ldapTemplate;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setLdapTemplate(LdapTemplate ldapTemplate) {
-    this.ldapTemplate = ldapTemplate;
   }
 }

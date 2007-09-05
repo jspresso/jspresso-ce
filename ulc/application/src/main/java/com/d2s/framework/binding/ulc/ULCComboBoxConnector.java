@@ -22,12 +22,21 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
    * Constructs a new <code>ULCComboBoxConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param comboBox
-   *          the connected ULCExtendedComboBox.
+   *            the connected ULCExtendedComboBox.
    */
   public ULCComboBoxConnector(String id, ULCComboBox comboBox) {
     super(id, comboBox);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedULCComponent().setEnabled(isWritable());
   }
 
   /**
@@ -67,14 +76,5 @@ public class ULCComboBoxConnector extends ULCComponentConnector<ULCComboBox> {
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedULCComponent().setSelectedItem(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedULCComponent().setEnabled(isWritable());
   }
 }

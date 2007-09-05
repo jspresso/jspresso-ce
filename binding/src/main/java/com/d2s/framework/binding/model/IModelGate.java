@@ -28,7 +28,7 @@ public interface IModelGate extends IGate {
    * Sets the modelProvider driving this gate.
    * 
    * @param modelProvider
-   *          the modelProvider driving this gate.
+   *            the modelProvider driving this gate.
    */
   void setModelProvider(IModelProvider modelProvider);
 }

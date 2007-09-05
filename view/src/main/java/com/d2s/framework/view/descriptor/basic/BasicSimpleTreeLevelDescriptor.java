@@ -31,7 +31,7 @@ public class BasicSimpleTreeLevelDescriptor extends BasicTreeLevelDescriptor
    * Sets the childDescriptor.
    * 
    * @param childDescriptor
-   *          the childDescriptor to set.
+   *            the childDescriptor to set.
    */
   public void setChildDescriptor(ITreeLevelDescriptor childDescriptor) {
     this.childDescriptor = childDescriptor;

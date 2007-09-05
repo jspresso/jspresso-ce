@@ -24,6 +24,49 @@ import com.ulcjava.base.application.ULCTable;
  */
 public class UlcViewCellEditorAdapter extends DefaultCellEditor {
 
+  private static final long             serialVersionUID = -1439202520153834858L;
+
+  private IView<ULCComponent>           editorView;
+  private IConnectorValueChangeListener editorViewConnectorListener;
+
+  /**
+   * Constructs a new <code>UlcViewCellEditorAdapter</code> instance.
+   * 
+   * @param editorView
+   *            the ulc view responsible for editing the cell.
+   */
+  public UlcViewCellEditorAdapter(IView<ULCComponent> editorView) {
+    super((IEditorComponent) editorView.getPeer());
+    this.editorView = editorView;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IEditorComponent getTableCellEditorComponent(ULCTable table,
+      @SuppressWarnings("unused")
+      Object value, @SuppressWarnings("unused")
+      int row) {
+    IEditorComponent editorComponent = (IEditorComponent) editorView.getPeer();
+    if (editorView.getConnector() instanceof ULCActionFieldConnector) {
+      editorView.getConnector().addConnectorValueChangeListener(
+          getEditorViewConnectorListener(table, (ULCActionField) editorView
+              .getPeer()));
+      ((ULCActionField) editorView.getPeer()).setParent(table.getParent());
+    }
+    return editorComponent;
+  }
+
+  private IConnectorValueChangeListener getEditorViewConnectorListener(
+      ULCTable table, ULCActionField editorPeer) {
+    if (editorViewConnectorListener == null) {
+      editorViewConnectorListener = new ActionFieldConnectorListener(table,
+          editorPeer);
+    }
+    return editorViewConnectorListener;
+  }
+
   private class ActionFieldConnectorListener implements
       IConnectorValueChangeListener {
 
@@ -49,48 +92,5 @@ public class UlcViewCellEditorAdapter extends DefaultCellEditor {
       table.setValueAt(evt.getNewValue(), editorPeer.getEditingRow(),
           editorPeer.getEditingColumn());
     }
-  }
-
-  private static final long             serialVersionUID = -1439202520153834858L;
-  private IView<ULCComponent>           editorView;
-
-  private IConnectorValueChangeListener editorViewConnectorListener;
-
-  /**
-   * Constructs a new <code>UlcViewCellEditorAdapter</code> instance.
-   * 
-   * @param editorView
-   *          the ulc view responsible for editing the cell.
-   */
-  public UlcViewCellEditorAdapter(IView<ULCComponent> editorView) {
-    super((IEditorComponent) editorView.getPeer());
-    this.editorView = editorView;
-  }
-
-  private IConnectorValueChangeListener getEditorViewConnectorListener(
-      ULCTable table, ULCActionField editorPeer) {
-    if (editorViewConnectorListener == null) {
-      editorViewConnectorListener = new ActionFieldConnectorListener(table,
-          editorPeer);
-    }
-    return editorViewConnectorListener;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IEditorComponent getTableCellEditorComponent(ULCTable table,
-      @SuppressWarnings("unused")
-      Object value, @SuppressWarnings("unused")
-      int row) {
-    IEditorComponent editorComponent = (IEditorComponent) editorView.getPeer();
-    if (editorView.getConnector() instanceof ULCActionFieldConnector) {
-      editorView.getConnector().addConnectorValueChangeListener(
-          getEditorViewConnectorListener(table, (ULCActionField) editorView
-              .getPeer()));
-      ((ULCActionField) editorView.getPeer()).setParent(table.getParent());
-    }
-    return editorComponent;
   }
 }

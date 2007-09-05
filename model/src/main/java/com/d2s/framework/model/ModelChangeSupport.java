@@ -27,9 +27,9 @@ public class ModelChangeSupport {
    * Constructs a new Connector change support.
    * 
    * @param sourceModelProvider
-   *          The model provider to which this ModelChangeSupport is attached.
-   *          sourceModelProvider will serve as <code>source</code> of fired
-   *          ModelChangeEvent if no other is provided.
+   *            The model provider to which this ModelChangeSupport is attached.
+   *            sourceModelProvider will serve as <code>source</code> of fired
+   *            ModelChangeEvent if no other is provided.
    */
   public ModelChangeSupport(IModelProvider sourceModelProvider) {
     if (sourceModelProvider == null) {
@@ -42,7 +42,7 @@ public class ModelChangeSupport {
    * Adds a new <code>IModelChangeListener</code>.
    * 
    * @param listener
-   *          The added listener.
+   *            The added listener.
    * @see IModelProvider#addModelChangeListener( IModelChangeListener)
    */
   public synchronized void addModelChangeListener(IModelChangeListener listener) {
@@ -61,7 +61,7 @@ public class ModelChangeSupport {
    * modifying its source) to the listeners.
    * 
    * @param evt
-   *          the propagated <code>ModelChangeEvent</code>
+   *            the propagated <code>ModelChangeEvent</code>
    */
   public void fireModelChange(ModelChangeEvent evt) {
     if (listeners != null) {
@@ -81,9 +81,9 @@ public class ModelChangeSupport {
    * as source and parameters as old and new values.
    * 
    * @param oldValue
-   *          The old model provider's model value
+   *            The old model provider's model value
    * @param newValue
-   *          The new model provider's model value
+   *            The new model provider's model value
    */
   public void fireModelChange(Object oldValue, Object newValue) {
     ModelChangeEvent evt = new ModelChangeEvent(source, oldValue, newValue);
@@ -94,7 +94,7 @@ public class ModelChangeSupport {
    * Removes a <code>IModelChangeListener</code>.
    * 
    * @param listener
-   *          The removed listener.
+   *            The removed listener.
    * @see IModelProvider#removeModelChangeListener( IModelChangeListener)
    */
   public synchronized void removeModelChangeListener(

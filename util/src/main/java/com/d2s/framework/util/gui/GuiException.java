@@ -23,7 +23,7 @@ public class GuiException extends NestedRuntimeException {
    * Constructs a new <code>GuiException</code> instance.
    * 
    * @param message
-   *          the exception message.
+   *            the exception message.
    */
   public GuiException(String message) {
     super(message);
@@ -33,7 +33,7 @@ public class GuiException extends NestedRuntimeException {
    * Constructs a new <code>GuiException</code> instance.
    * 
    * @param nestedException
-   *          the nested exception.
+   *            the nested exception.
    */
   public GuiException(Throwable nestedException) {
     super(nestedException);
@@ -43,9 +43,9 @@ public class GuiException extends NestedRuntimeException {
    * Constructs a new <code>GuiException</code> instance.
    * 
    * @param nestedException
-   *          the nested exception.
+   *            the nested exception.
    * @param message
-   *          the exception message.
+   *            the exception message.
    */
   public GuiException(Throwable nestedException, String message) {
     super(nestedException, message);

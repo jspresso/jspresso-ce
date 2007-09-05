@@ -26,9 +26,9 @@ public class CloneMapCollectionAction extends AddMapToMasterAction {
    * Clones a map.
    * 
    * @param element
-   *          the map to clone.
+   *            the map to clone.
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the cloned map.
    */
   protected Object cloneElement(Object element, @SuppressWarnings("unused")

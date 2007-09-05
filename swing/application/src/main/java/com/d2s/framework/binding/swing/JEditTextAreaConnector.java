@@ -24,9 +24,9 @@ public class JEditTextAreaConnector extends JComponentConnector<JEditTextArea> {
    * connector will listen to <code>focusLost</code> events.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param textArea
-   *          the connected JTextComponent.
+   *            the connected JTextComponent.
    */
   public JEditTextAreaConnector(String id, JEditTextArea textArea) {
     super(id, textArea);

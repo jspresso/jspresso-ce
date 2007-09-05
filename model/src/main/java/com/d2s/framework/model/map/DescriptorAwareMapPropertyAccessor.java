@@ -28,19 +28,10 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
    * instance.
    * 
    * @param property
-   *          the property to create the accessor for.
+   *            the property to create the accessor for.
    */
   public DescriptorAwareMapPropertyAccessor(String property) {
     super(property);
-  }
-
-  /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  protected IPropertyDescriptor getModelDescriptor() {
-    return (IPropertyDescriptor) modelDescriptor;
   }
 
   /**
@@ -63,5 +54,14 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
     if (getModelDescriptor() != null) {
       getModelDescriptor().postprocessSetter(target, oldValue, value);
     }
+  }
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  protected IPropertyDescriptor getModelDescriptor() {
+    return (IPropertyDescriptor) modelDescriptor;
   }
 }

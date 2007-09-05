@@ -31,7 +31,7 @@ public class BasicNestingViewDescriptor extends BasicViewDescriptor implements
    * Sets the nestedViewDescriptor.
    * 
    * @param nestedViewDescriptor
-   *          the nestedViewDescriptor to set.
+   *            the nestedViewDescriptor to set.
    */
   public void setNestedViewDescriptor(IViewDescriptor nestedViewDescriptor) {
     this.nestedViewDescriptor = nestedViewDescriptor;

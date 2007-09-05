@@ -44,7 +44,7 @@ public class SubModule extends Module {
    * Sets the parent module. It will fire a "parent" property change event.
    * 
    * @param parent
-   *          the parent module to set or null if none.
+   *            the parent module to set or null if none.
    */
   public void setParent(Module parent) {
     if (ObjectUtils.equals(this.parent, parent)) {
@@ -65,7 +65,7 @@ public class SubModule extends Module {
    * Sets the viewDescriptor.
    * 
    * @param viewDescriptor
-   *          the viewDescriptor to set.
+   *            the viewDescriptor to set.
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;

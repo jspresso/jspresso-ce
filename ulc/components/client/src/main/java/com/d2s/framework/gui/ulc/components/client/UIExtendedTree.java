@@ -26,37 +26,6 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIExtendedTree extends UITree {
 
-  private final class PreparePopupListener extends MouseAdapter {
-
-    private void maybePreparePopup(MouseEvent evt) {
-      if (evt.getButton() != MouseEvent.BUTTON1) {
-        JTree tree = (JTree) evt.getSource();
-        int row = tree.getRowForLocation(evt.getX(), evt.getY());
-        Anything rowAnything = new Anything();
-        rowAnything.put(ExtendedTreeConstants.ROW_KEY, row);
-        sendULC(ExtendedTreeConstants.PREPARE_POPUP_REQUEST, rowAnything);
-      }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void mousePressed(MouseEvent evt) {
-      maybePreparePopup(evt);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object createBasicObject(Anything a) {
-    JTree tree = (JTree) super.createBasicObject(a);
-    tree.addMouseListener(new PreparePopupListener());
-    return tree;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -91,10 +60,41 @@ public class UIExtendedTree extends UITree {
     });
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object createBasicObject(Anything a) {
+    JTree tree = (JTree) super.createBasicObject(a);
+    tree.addMouseListener(new PreparePopupListener());
+    return tree;
+  }
+
   private Anything treePathToAnything(TreePath treePath) {
     Anything anything = new Anything();
     anything.put(ExtendedTreeConstants.ROW_KEY, getBasicTree().getRowForPath(
         treePath));
     return anything;
+  }
+
+  private final class PreparePopupListener extends MouseAdapter {
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void mousePressed(MouseEvent evt) {
+      maybePreparePopup(evt);
+    }
+
+    private void maybePreparePopup(MouseEvent evt) {
+      if (evt.getButton() != MouseEvent.BUTTON1) {
+        JTree tree = (JTree) evt.getSource();
+        int row = tree.getRowForLocation(evt.getX(), evt.getY());
+        Anything rowAnything = new Anything();
+        rowAnything.put(ExtendedTreeConstants.ROW_KEY, row);
+        sendULC(ExtendedTreeConstants.PREPARE_POPUP_REQUEST, rowAnything);
+      }
+    }
   }
 }

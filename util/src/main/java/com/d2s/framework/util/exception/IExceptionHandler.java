@@ -22,9 +22,9 @@ public interface IExceptionHandler {
    * the handler.
    * 
    * @param ex
-   *          the exception that occurs.
+   *            the exception that occurs.
    * @param context
-   *          the context where some extra information can be retrieved.
+   *            the context where some extra information can be retrieved.
    */
   void handleException(Throwable ex, Map<String, Object> context);
 }

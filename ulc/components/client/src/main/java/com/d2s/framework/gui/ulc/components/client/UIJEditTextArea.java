@@ -37,65 +37,7 @@ import com.ulcjava.base.shared.internal.Anything;
  */
 public class UIJEditTextArea extends UIComponent implements IEditorComponent {
 
-  private final class JEditTextAreaTableCellEditor extends AbstractCellEditor
-      implements TableCellEditor {
-
-    private static final long serialVersionUID = 225151112200061365L;
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object getCellEditorValue() {
-      return getBasicObject().getText();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unused")
-    public Component getTableCellEditorComponent(JTable table, Object value,
-        boolean isSelected, int row, int col) {
-      getBasicObject().setText((String) value);
-      return getBasicObject();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isCellEditable(EventObject evt) {
-      if (evt instanceof MouseEvent) {
-        MouseEvent me = (MouseEvent) evt;
-        return (me.getClickCount() >= 1);
-      }
-      return super.isCellEditable(evt);
-    }
-  }
-
   private TableCellEditor tableCellEditor;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object createBasicObject(Anything args) {
-    JEditTextArea textArea = new JEditTextArea();
-    String language = args.get(JEditTextAreaConstants.LANGUAGE_KEY, "");
-    if (language != null && language.length() > 0) {
-      try {
-        textArea.setTokenMarker((TokenMarker) Class.forName(
-            "org.syntax.jedit.tokenmarker." + language + "TokenMarker")
-            .newInstance());
-      } catch (InstantiationException ex) {
-        // Nothing to do. just don't colorize.
-      } catch (IllegalAccessException ex) {
-        // Nothing to do. just don't colorize.
-      } catch (ClassNotFoundException ex) {
-        // Nothing to do. just don't colorize.
-      }
-    }
-    return textArea;
-  }
 
   /**
    * {@inheritDoc}
@@ -150,23 +92,6 @@ public class UIJEditTextArea extends UIComponent implements IEditorComponent {
     }
   }
 
-  private void handleSetEditable(Anything args) {
-    getBasicObject().setEditable(
-        args.get(JEditTextAreaConstants.EDITABLE_KEY, true));
-  }
-
-  private void handleSetText(Anything args) {
-    getBasicObject().setText(args.get(JEditTextAreaConstants.TEXT_KEY, ""));
-  }
-
-  private void notifyULCValueChange(Object newValue) {
-    Anything args = new Anything();
-    textToAnything((String) newValue, args);
-    sendULC(JEditTextAreaConstants.SET_TEXT_REQUEST, args);
-    sendOptionalEventULC(IUlcEventConstants.VALUE_CHANGED_EVENT,
-        IUlcEventConstants.VALUE_CHANGED);
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -186,7 +111,82 @@ public class UIJEditTextArea extends UIComponent implements IEditorComponent {
         args.get(JEditTextAreaConstants.EDITABLE_KEY, true));
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object createBasicObject(Anything args) {
+    JEditTextArea textArea = new JEditTextArea();
+    String language = args.get(JEditTextAreaConstants.LANGUAGE_KEY, "");
+    if (language != null && language.length() > 0) {
+      try {
+        textArea.setTokenMarker((TokenMarker) Class.forName(
+            "org.syntax.jedit.tokenmarker." + language + "TokenMarker")
+            .newInstance());
+      } catch (InstantiationException ex) {
+        // Nothing to do. just don't colorize.
+      } catch (IllegalAccessException ex) {
+        // Nothing to do. just don't colorize.
+      } catch (ClassNotFoundException ex) {
+        // Nothing to do. just don't colorize.
+      }
+    }
+    return textArea;
+  }
+
+  private void handleSetEditable(Anything args) {
+    getBasicObject().setEditable(
+        args.get(JEditTextAreaConstants.EDITABLE_KEY, true));
+  }
+
+  private void handleSetText(Anything args) {
+    getBasicObject().setText(args.get(JEditTextAreaConstants.TEXT_KEY, ""));
+  }
+
+  private void notifyULCValueChange(Object newValue) {
+    Anything args = new Anything();
+    textToAnything((String) newValue, args);
+    sendULC(JEditTextAreaConstants.SET_TEXT_REQUEST, args);
+    sendOptionalEventULC(IUlcEventConstants.VALUE_CHANGED_EVENT,
+        IUlcEventConstants.VALUE_CHANGED);
+  }
+
   private void textToAnything(String text, Anything args) {
     args.put(JEditTextAreaConstants.TEXT_KEY, text);
+  }
+
+  private final class JEditTextAreaTableCellEditor extends AbstractCellEditor
+      implements TableCellEditor {
+
+    private static final long serialVersionUID = 225151112200061365L;
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getCellEditorValue() {
+      return getBasicObject().getText();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unused")
+    public Component getTableCellEditorComponent(JTable table, Object value,
+        boolean isSelected, int row, int col) {
+      getBasicObject().setText((String) value);
+      return getBasicObject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCellEditable(EventObject evt) {
+      if (evt instanceof MouseEvent) {
+        MouseEvent me = (MouseEvent) evt;
+        return (me.getClickCount() >= 1);
+      }
+      return super.isCellEditable(evt);
+    }
   }
 }

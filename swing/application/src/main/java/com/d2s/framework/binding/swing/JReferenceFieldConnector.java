@@ -24,29 +24,16 @@ import com.d2s.framework.gui.swing.components.JActionField;
 public class JReferenceFieldConnector extends JActionFieldConnector implements
     ICompositeValueConnector {
 
-  private final class ToStringConnectorListener implements
-      IConnectorValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
-      protectedSetConnecteeValue(getConnecteeValue());
-    }
-
-  }
   private IConnectorValueChangeListener toStringListener;
-
   private IValueConnector               toStringPropertyConnector;
 
   /**
    * Constructs a new <code>JActionFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param actionField
-   *          the connected JActionField.
+   *            the connected JActionField.
    */
   public JReferenceFieldConnector(String id, JActionField actionField) {
     super(id, actionField);
@@ -132,7 +119,7 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
    * Sets the toStringPropertyConnector.
    * 
    * @param toStringPropertyConnector
-   *          the toStringPropertyConnector to set.
+   *            the toStringPropertyConnector to set.
    */
   public void setToStringPropertyConnector(
       IValueConnector toStringPropertyConnector) {
@@ -145,5 +132,18 @@ public class JReferenceFieldConnector extends JActionFieldConnector implements
       this.toStringPropertyConnector
           .addConnectorValueChangeListener(toStringListener);
     }
+  }
+
+  private final class ToStringConnectorListener implements
+      IConnectorValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(@SuppressWarnings("unused")
+    ConnectorValueChangeEvent evt) {
+      protectedSetConnecteeValue(getConnecteeValue());
+    }
+
   }
 }

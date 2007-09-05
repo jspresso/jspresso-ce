@@ -29,7 +29,7 @@ public class EvenOddTableCellRenderer extends DefaultTableCellRenderer {
    * Constructs a new <code>EvenOddTableCellRenderer</code> instance.
    * 
    * @param column
-   *          the column this renderer is attached to.
+   *            the column this renderer is attached to.
    */
   public EvenOddTableCellRenderer(int column) {
     this.column = column;

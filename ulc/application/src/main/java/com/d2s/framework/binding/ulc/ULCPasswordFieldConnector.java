@@ -20,9 +20,9 @@ public class ULCPasswordFieldConnector extends ULCTextFieldConnector {
    * Constructs a new <code>ULCPasswordFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param passwordField
-   *          the connected ULCPasswordField.
+   *            the connected ULCPasswordField.
    */
   public ULCPasswordFieldConnector(String id, ULCPasswordField passwordField) {
     super(id, passwordField);

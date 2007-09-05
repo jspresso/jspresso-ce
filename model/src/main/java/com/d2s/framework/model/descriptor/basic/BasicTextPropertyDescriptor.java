@@ -39,7 +39,7 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    * Sets the fileFilter.
    * 
    * @param fileFilter
-   *          the fileFilter to set.
+   *            the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;

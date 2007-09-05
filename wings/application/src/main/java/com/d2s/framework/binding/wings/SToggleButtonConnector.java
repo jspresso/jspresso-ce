@@ -23,12 +23,21 @@ public class SToggleButtonConnector extends SComponentConnector<SToggleButton> {
    * Constructs a new <code>SToggleButtonConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param toggleButton
-   *          the connected SToggleButton.
+   *            the connected SToggleButton.
    */
   public SToggleButtonConnector(String id, SToggleButton toggleButton) {
     super(id, toggleButton);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedSComponent().setEnabled(isWritable());
   }
 
   /**
@@ -70,15 +79,6 @@ public class SToggleButtonConnector extends SComponentConnector<SToggleButton> {
     } else {
       getConnectedSComponent().setSelected(((Boolean) aValue).booleanValue());
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedSComponent().setEnabled(isWritable());
   }
 
 }

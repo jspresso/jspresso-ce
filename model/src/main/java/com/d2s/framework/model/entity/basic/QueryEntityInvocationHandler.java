@@ -32,7 +32,7 @@ public class QueryEntityInvocationHandler implements InvocationHandler,
    * Constructs a new <code>QueryEntityInvocationHandler</code> instance.
    * 
    * @param entityDelegate
-   *          The entity this delegate forwards the method calls to.
+   *            The entity this delegate forwards the method calls to.
    */
   QueryEntityInvocationHandler(IEntity entityDelegate) {
     this.entityDelegate = entityDelegate;

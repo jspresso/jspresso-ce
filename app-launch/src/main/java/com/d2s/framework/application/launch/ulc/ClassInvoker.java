@@ -39,11 +39,11 @@ public class ClassInvoker implements IMessageService {
    * Creates a message to be handled by the class invoker.
    * 
    * @param className
-   *          the name of the class to trigger.
+   *            the name of the class to trigger.
    * @param methodName
-   *          the name of the method to trigger.
+   *            the name of the method to trigger.
    * @param arguments
-   *          the arguments to trigger the method.
+   *            the arguments to trigger the method.
    * @return the created message.
    */
   public static String createMessage(String className, String methodName,
@@ -75,7 +75,7 @@ public class ClassInvoker implements IMessageService {
     if (msg.startsWith(MESSAGE_ROOT)) {
       String[] messageParts = msg.split(SEPARATOR);
       try {
-        Class targetClass = Class.forName(messageParts[1]);
+        Class<?> targetClass = Class.forName(messageParts[1]);
         String methodName = messageParts[2];
         String[] arguments;
         if (messageParts.length > 3) {

@@ -35,17 +35,17 @@ public class ViewConstraints {
    * Constructs a new <code>ViewConstraints</code> instance.
    * 
    * @param row
-   *          the row.
+   *            the row.
    * @param column
-   *          the column.
+   *            the column.
    * @param width
-   *          the width.
+   *            the width.
    * @param height
-   *          the height.
+   *            the height.
    * @param widthResizable
-   *          is resizable in width ?
+   *            is resizable in width ?
    * @param heightResizable
-   *          is resizable in height ?
+   *            is resizable in height ?
    */
   public ViewConstraints(int row, int column, int width, int height,
       boolean widthResizable, boolean heightResizable) {
@@ -116,7 +116,7 @@ public class ViewConstraints {
    * Sets the column.
    * 
    * @param column
-   *          the column to set.
+   *            the column to set.
    */
   public void setColumn(int column) {
     this.column = column;
@@ -126,7 +126,7 @@ public class ViewConstraints {
    * Sets the height.
    * 
    * @param height
-   *          the height to set.
+   *            the height to set.
    */
   public void setHeight(int height) {
     this.height = height;
@@ -136,7 +136,7 @@ public class ViewConstraints {
    * Sets the heightResizable.
    * 
    * @param heightResizable
-   *          the heightResizable to set.
+   *            the heightResizable to set.
    */
   public void setHeightResizable(boolean heightResizable) {
     this.heightResizable = heightResizable;
@@ -146,7 +146,7 @@ public class ViewConstraints {
    * Sets the row.
    * 
    * @param row
-   *          the row to set.
+   *            the row to set.
    */
   public void setRow(int row) {
     this.row = row;
@@ -156,7 +156,7 @@ public class ViewConstraints {
    * Sets the width.
    * 
    * @param width
-   *          the width to set.
+   *            the width to set.
    */
   public void setWidth(int width) {
     this.width = width;
@@ -166,7 +166,7 @@ public class ViewConstraints {
    * Sets the widthResizable.
    * 
    * @param widthResizable
-   *          the widthResizable to set.
+   *            the widthResizable to set.
    */
   public void setWidthResizable(boolean widthResizable) {
     this.widthResizable = widthResizable;

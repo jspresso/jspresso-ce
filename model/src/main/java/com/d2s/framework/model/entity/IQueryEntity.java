@@ -34,7 +34,7 @@ public interface IQueryEntity extends IEntity {
    * Sets the list of entities result of the query.
    * 
    * @param queriedEntities
-   *          the list of entities result of the query.
+   *            the list of entities result of the query.
    */
   void setQueriedEntities(List<IEntity> queriedEntities);
 }

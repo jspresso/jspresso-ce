@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -31,13 +32,74 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> {
+
+  private List<IDisplayableAction> actions;
+
+  private IModelConnectorFactory   beanConnectorFactory;
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    BasicCollectionDescriptor<IDescriptor> modelDescriptor = new BasicCollectionDescriptor<IDescriptor>();
+    modelDescriptor
+        .setCollectionInterface((Class<? extends Collection<? extends IDescriptor>>) List.class);
+    modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
+    IValueConnector actionsConnector = beanConnectorFactory
+        .createModelConnector(modelDescriptor);
+    actionsConnector.setConnectorValue(createActionProxies(
+        getTranslationProvider(context), getLocale(context)));
+    context.put(ActionContextConstants.ACTION_PARAM, actionsConnector);
+    return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Sets the actions.
+   * 
+   * @param actions
+   *            the actions to set.
+   */
+  public void setActions(List<IDisplayableAction> actions) {
+    this.actions = actions;
+  }
+
+  /**
+   * Sets the beanConnectorFactory.
+   * 
+   * @param beanConnectorFactory
+   *            the beanConnectorFactory to set.
+   */
+  public void setBeanConnectorFactory(
+      IModelConnectorFactory beanConnectorFactory) {
+    this.beanConnectorFactory = beanConnectorFactory;
+  }
+
+  private List<IDisplayableAction> createActionProxies(
+      ITranslationProvider translationProvider, Locale locale) {
+    List<IDisplayableAction> actionProxies = new ArrayList<IDisplayableAction>(
+        actions.size());
+    for (IDisplayableAction action : actions) {
+      actionProxies.add(createActionProxy(action, translationProvider, locale));
+    }
+    return actionProxies;
+  }
+
+  private IDisplayableAction createActionProxy(IDisplayableAction delegate,
+      ITranslationProvider translationProvider, Locale locale) {
+    return (IDisplayableAction) Proxy.newProxyInstance(delegate.getClass()
+        .getClassLoader(), new Class[] {IDisplayableAction.class},
+        new I18nActionInvocationHandler(delegate, translationProvider, locale));
+  }
 
   private static final class I18nActionInvocationHandler implements
       InvocationHandler {
@@ -65,64 +127,5 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
       }
       return method.invoke(delegate, args);
     }
-  }
-  private List<IDisplayableAction> actions;
-
-  private IModelConnectorFactory   beanConnectorFactory;
-
-  private List<IDisplayableAction> createActionProxies(
-      ITranslationProvider translationProvider, Locale locale) {
-    List<IDisplayableAction> actionProxies = new ArrayList<IDisplayableAction>(
-        actions.size());
-    for (IDisplayableAction action : actions) {
-      actionProxies.add(createActionProxy(action, translationProvider, locale));
-    }
-    return actionProxies;
-  }
-
-  private IDisplayableAction createActionProxy(IDisplayableAction delegate,
-      ITranslationProvider translationProvider, Locale locale) {
-    return (IDisplayableAction) Proxy.newProxyInstance(delegate.getClass()
-        .getClassLoader(), new Class[] {IDisplayableAction.class},
-        new I18nActionInvocationHandler(delegate, translationProvider, locale));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public boolean execute(IActionHandler actionHandler,
-      Map<String, Object> context) {
-    BasicCollectionDescriptor<IDescriptor> modelDescriptor = new BasicCollectionDescriptor<IDescriptor>();
-    modelDescriptor.setCollectionInterface(List.class);
-    modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
-    IValueConnector actionsConnector = beanConnectorFactory
-        .createModelConnector(modelDescriptor);
-    actionsConnector.setConnectorValue(createActionProxies(
-        getTranslationProvider(context), getLocale(context)));
-    context.put(ActionContextConstants.ACTION_PARAM, actionsConnector);
-    return super.execute(actionHandler, context);
-  }
-
-  /**
-   * Sets the actions.
-   * 
-   * @param actions
-   *          the actions to set.
-   */
-  public void setActions(List<IDisplayableAction> actions) {
-    this.actions = actions;
-  }
-
-  /**
-   * Sets the beanConnectorFactory.
-   * 
-   * @param beanConnectorFactory
-   *          the beanConnectorFactory to set.
-   */
-  public void setBeanConnectorFactory(
-      IModelConnectorFactory beanConnectorFactory) {
-    this.beanConnectorFactory = beanConnectorFactory;
   }
 }

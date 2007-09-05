@@ -20,9 +20,9 @@ public interface ILovViewDescriptorFactory {
    * Creates a new lov view descriptor for a component descriptor.
    * 
    * @param entityRefDescriptor
-   *          the entity reference descriptor.
+   *            the entity reference descriptor.
    * @return the created view descriptor.
    */
   IViewDescriptor createLovViewDescriptor(
-      IReferencePropertyDescriptor entityRefDescriptor);
+      IReferencePropertyDescriptor<?> entityRefDescriptor);
 }

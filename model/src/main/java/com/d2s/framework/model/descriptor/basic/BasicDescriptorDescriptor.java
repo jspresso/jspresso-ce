@@ -26,6 +26,11 @@ public final class BasicDescriptorDescriptor {
    */
   public static final IComponentDescriptor<IDescriptor> INSTANCE = createInstance();
 
+  private BasicDescriptorDescriptor() {
+    super();
+    // Helper constructor
+  }
+
   private static IComponentDescriptor<IDescriptor> createInstance() {
     BasicComponentDescriptor<IDescriptor> instance = new BasicComponentDescriptor<IDescriptor>(
         IDescriptor.class.getName());
@@ -43,10 +48,5 @@ public final class BasicDescriptorDescriptor {
     instance.setPropertyDescriptors(propertyDescriptors);
 
     return instance;
-  }
-
-  private BasicDescriptorDescriptor() {
-    super();
-    // Helper constructor
   }
 }

@@ -38,7 +38,7 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
    * Gets the new map component to add.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the map to add to the collection.
    */
   @Override

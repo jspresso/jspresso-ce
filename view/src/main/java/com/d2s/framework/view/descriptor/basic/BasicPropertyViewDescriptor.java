@@ -34,7 +34,7 @@ public class BasicPropertyViewDescriptor extends BasicViewDescriptor implements
    * Sets the renderedChildProperties.
    * 
    * @param renderedChildProperties
-   *          the renderedChildProperties to set.
+   *            the renderedChildProperties to set.
    */
   public void setRenderedChildProperties(List<String> renderedChildProperties) {
     this.renderedChildProperties = renderedChildProperties;

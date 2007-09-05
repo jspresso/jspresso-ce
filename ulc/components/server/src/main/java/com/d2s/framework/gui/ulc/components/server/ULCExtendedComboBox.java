@@ -31,7 +31,7 @@ public class ULCExtendedComboBox extends ULCComboBox {
    * Constructs a new <code>ULCExtendedComboBox</code> instance.
    * 
    * @param model
-   *          the combobox model.
+   *            the combobox model.
    */
   public ULCExtendedComboBox(IComboBoxModel model) {
     super(model);

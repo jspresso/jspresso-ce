@@ -32,7 +32,7 @@ public interface IEntityUnitOfWork extends IEntityDirtAware {
    * Clears the dirty state of the entity in this unit of work.
    * 
    * @param flushedEntity
-   *          the entity that was flushed and cleaned.
+   *            the entity that was flushed and cleaned.
    */
   void clearDirtyState(IEntity flushedEntity);
 
@@ -53,10 +53,10 @@ public interface IEntityUnitOfWork extends IEntityDirtAware {
    * Registers an entity in the unit of work.
    * 
    * @param entity
-   *          the entity to register.
+   *            the entity to register.
    * @param initialChangedProperties
-   *          the map of dirty properties the entity has before entering the
-   *          unit of work along with their original values.
+   *            the map of dirty properties the entity has before entering the
+   *            unit of work along with their original values.
    */
   void register(IEntity entity, Map<String, Object> initialChangedProperties);
 

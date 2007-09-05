@@ -23,6 +23,27 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
   private Map<String, List<String>> fileFilter;
 
   /**
+   * Sets the defaultFileName.
+   * 
+   * @param defaultFileName
+   *            the defaultFileName to set.
+   */
+  public void setDefaultFileName(String defaultFileName) {
+    this.defaultFileName = defaultFileName;
+  }
+
+  /**
+   * Sets the fileFilter. Filter file types are a map of descriptions keying
+   * file extension arays.
+   * 
+   * @param fileFilter
+   *            the fileFilter to set.
+   */
+  public void setFileFilter(Map<String, List<String>> fileFilter) {
+    this.fileFilter = fileFilter;
+  }
+
+  /**
    * Gets the defaultFileName.
    * 
    * @return the defaultFileName.
@@ -38,26 +59,5 @@ public abstract class ChooseFileAction extends AbstractWingsAction {
    */
   protected Map<String, List<String>> getFileFilter() {
     return fileFilter;
-  }
-
-  /**
-   * Sets the defaultFileName.
-   * 
-   * @param defaultFileName
-   *          the defaultFileName to set.
-   */
-  public void setDefaultFileName(String defaultFileName) {
-    this.defaultFileName = defaultFileName;
-  }
-
-  /**
-   * Sets the fileFilter. Filter file types are a map of descriptions keying
-   * file extension arays.
-   * 
-   * @param fileFilter
-   *          the fileFilter to set.
-   */
-  public void setFileFilter(Map<String, List<String>> fileFilter) {
-    this.fileFilter = fileFilter;
   }
 }

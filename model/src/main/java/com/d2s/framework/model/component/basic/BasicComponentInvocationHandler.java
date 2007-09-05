@@ -22,7 +22,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -36,21 +36,21 @@ public class BasicComponentInvocationHandler extends
 
   /**
    * Constructs a new <code>BasicComponentInvocationHandler</code> instance.
-   *
+   * 
    * @param delegate
-   *          the delegate to which getters and setters are delegated.
+   *            the delegate to which getters and setters are delegated.
    * @param componentFactory
-   *          the factory used to decorate referenced components.
+   *            the factory used to decorate referenced components.
    * @param componentDescriptor
-   *          The descriptor of the proxy component.
+   *            The descriptor of the proxy component.
    * @param collectionFactory
-   *          The factory used to create empty component collections from
-   *          collection getters.
+   *            The factory used to create empty component collections from
+   *            collection getters.
    * @param accessorFactory
-   *          The factory used to access proxy properties.
+   *            The factory used to access proxy properties.
    * @param extensionFactory
-   *          The factory used to create component extensions based on their
-   *          classes.
+   *            The factory used to create component extensions based on their
+   *            classes.
    */
   protected BasicComponentInvocationHandler(Object delegate,
       IComponentFactory componentFactory,
@@ -97,8 +97,7 @@ public class BasicComponentInvocationHandler extends
    */
   @Override
   protected IComponent decorateReferent(IComponent referent,
-      @SuppressWarnings("unused")
-      IComponentDescriptor<IComponent> referentDescriptor) {
+      IComponentDescriptor<? extends IComponent> referentDescriptor) {
     if (Proxy.isProxyClass(referent.getClass())
         && Proxy.getInvocationHandler(referent) instanceof AbstractComponentInvocationHandler) {
       return referent;

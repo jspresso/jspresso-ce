@@ -33,7 +33,7 @@ public class BasicCollectionConnectorListProvider extends
    * Constructs a new <code>BasicCollectionConnectorProvider</code> instance.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    */
   public BasicCollectionConnectorListProvider(String id) {
     super(id);

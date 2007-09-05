@@ -23,19 +23,19 @@ import com.d2s.framework.util.bean.PropertyHelper;
  */
 public class BeanPropertyAccessor implements IAccessor {
 
-  private Class   beanClass;
-  private String  property;
-  private boolean writable = true;
+  private Class<?> beanClass;
+  private String   property;
+  private boolean  writable = true;
 
   /**
    * Constructs a property accessor based on reflection.
    * 
    * @param property
-   *          the property accessed.
+   *            the property accessed.
    * @param beanClass
-   *          the class of the beans accessed using this accessor.
+   *            the class of the beans accessed using this accessor.
    */
-  public BeanPropertyAccessor(String property, Class beanClass) {
+  public BeanPropertyAccessor(String property, Class<?> beanClass) {
     this.property = property;
     this.beanClass = beanClass;
 
@@ -48,24 +48,6 @@ public class BeanPropertyAccessor implements IAccessor {
     } catch (RuntimeException e) {
       throw e;
     }
-  }
-
-  /**
-   * Gets the beanClass property.
-   * 
-   * @return the beanClass.
-   */
-  protected Class getBeanClass() {
-    return beanClass;
-  }
-
-  /**
-   * Gets the property property.
-   * 
-   * @return the property.
-   */
-  protected String getProperty() {
-    return property;
   }
 
   /**
@@ -97,5 +79,23 @@ public class BeanPropertyAccessor implements IAccessor {
     if (target != null) {
       PropertyUtils.setSimpleProperty(target, property, value);
     }
+  }
+
+  /**
+   * Gets the beanClass property.
+   * 
+   * @return the beanClass.
+   */
+  protected Class<?> getBeanClass() {
+    return beanClass;
+  }
+
+  /**
+   * Gets the property property.
+   * 
+   * @return the property.
+   */
+  protected String getProperty() {
+    return property;
   }
 }

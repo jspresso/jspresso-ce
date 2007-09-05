@@ -16,7 +16,7 @@ import com.d2s.framework.util.gui.ColorHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,11 +24,11 @@ public class JColorPickerConnector extends JComponentConnector<JColorPicker> {
 
   /**
    * Constructs a new <code>JColorPickerConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param colorPicker
-   *          the connected JColorPicker.
+   *            the connected JColorPicker.
    */
   public JColorPickerConnector(String id, JColorPicker colorPicker) {
     super(id, colorPicker);

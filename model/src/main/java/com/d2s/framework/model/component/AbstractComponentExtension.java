@@ -15,11 +15,12 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <T>
- *          the parametrized component class on which these extensions work on.
+ *            the parametrized component class on which these extensions work
+ *            on.
  */
 public abstract class AbstractComponentExtension<T extends IComponent>
     implements IComponentExtension<T>, IComponentFactoryAware {
@@ -29,9 +30,9 @@ public abstract class AbstractComponentExtension<T extends IComponent>
 
   /**
    * Constructs a new <code>AbstractComponentExtension</code> instance.
-   *
+   * 
    * @param component
-   *          The extended component instance.
+   *            The extended component instance.
    */
   public AbstractComponentExtension(T component) {
     this.extendedComponent = component;
@@ -45,17 +46,8 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   }
 
   /**
-   * Gets the componentFactory.
-   *
-   * @return the componentFactory.
-   */
-  protected IComponentFactory getComponentFactory() {
-    return componentFactory;
-  }
-
-  /**
    * Computes the entity type.
-   *
+   * 
    * @return The entity type.
    */
   public String getType() {
@@ -63,14 +55,33 @@ public abstract class AbstractComponentExtension<T extends IComponent>
   }
 
   /**
+   * Sets the componentFactory.
+   * 
+   * @param componentFactory
+   *            the componentFactory to set.
+   */
+  public void setComponentFactory(IComponentFactory componentFactory) {
+    this.componentFactory = componentFactory;
+  }
+
+  /**
+   * Gets the componentFactory.
+   * 
+   * @return the componentFactory.
+   */
+  protected IComponentFactory getComponentFactory() {
+    return componentFactory;
+  }
+
+  /**
    * Registers a property change listener to forward property changes.
-   *
+   * 
    * @param sourceBean
-   *          the source bean.
+   *            the source bean.
    * @param sourceProperty
-   *          the name of the source property.
+   *            the name of the source property.
    * @param forwardedProperty
-   *          the name of the forwarded property.
+   *            the name of the forwarded property.
    */
   protected void registerNotificationForwarding(
       IPropertyChangeCapable sourceBean, String sourceProperty,
@@ -84,15 +95,5 @@ public abstract class AbstractComponentExtension<T extends IComponent>
                 evt.getOldValue(), evt.getNewValue());
           }
         });
-  }
-
-  /**
-   * Sets the componentFactory.
-   *
-   * @param componentFactory
-   *          the componentFactory to set.
-   */
-  public void setComponentFactory(IComponentFactory componentFactory) {
-    this.componentFactory = componentFactory;
   }
 }

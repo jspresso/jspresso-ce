@@ -24,11 +24,11 @@ public interface IListSelectionModelBinder {
    * Binds a collection connector to keep track of a selection model selections.
    * 
    * @param selectable
-   *          the connector to bind.
+   *            the connector to bind.
    * @param selectionModel
-   *          the selection model to bind.
+   *            the selection model to bind.
    * @param rowMapper
-   *          a row indices transformer or null if none.
+   *            a row indices transformer or null if none.
    */
   void bindSelectionModel(ISelectable selectable,
       ListSelectionModel selectionModel, IIndexMapper rowMapper);

@@ -8,6 +8,7 @@ import java.util.Locale;
 import com.d2s.framework.application.IController;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.datatransfer.ComponentTransferStructure;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntityFactory;
@@ -31,7 +32,7 @@ public interface IBackendController extends IController {
    * whenever access should not be granted.
    * 
    * @param moduleId
-   *          the id of the module access to check.
+   *            the id of the module access to check.
    */
   void checkModuleAccess(String moduleId);
 
@@ -41,7 +42,7 @@ public interface IBackendController extends IController {
    * model descriptor.
    * 
    * @param modelDescriptor
-   *          the model descriptor to create the connector for.
+   *            the model descriptor to create the connector for.
    * @return the created model connector.
    */
   IValueConnector createModelConnector(IModelDescriptor modelDescriptor);
@@ -86,7 +87,7 @@ public interface IBackendController extends IController {
    * as model connector for the associated module.
    * 
    * @param moduleId
-   *          the modulen identifier.
+   *            the modulen identifier.
    * @return the associated module connector.
    */
   IValueConnector getModuleConnector(String moduleId);
@@ -97,7 +98,7 @@ public interface IBackendController extends IController {
    * 
    * @return components the component transfer structure to retrieve.
    */
-  ComponentTransferStructure retrieveComponents();
+  ComponentTransferStructure<? extends IComponent> retrieveComponents();
 
   /**
    * Asks this backend controller to perform any necessary action upon startup.
@@ -105,7 +106,7 @@ public interface IBackendController extends IController {
    * root model descriptor.
    * 
    * @param locale
-   *          the locale this backend controller should start with.
+   *            the locale this backend controller should start with.
    * @return true if the controller successfully started.
    */
   boolean start(Locale locale);
@@ -115,9 +116,10 @@ public interface IBackendController extends IController {
    * descriptors.
    * 
    * @param components
-   *          the component transfer structure to store.
+   *            the component transfer structure to store.
    */
-  void storeComponents(ComponentTransferStructure components);
+  void storeComponents(
+      ComponentTransferStructure<? extends IComponent> components);
 
   /**
    * Translate modules based on the locale set.

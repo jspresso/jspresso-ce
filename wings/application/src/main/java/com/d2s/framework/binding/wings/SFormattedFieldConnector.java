@@ -20,7 +20,7 @@ import com.d2s.framework.util.format.IFormatter;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -30,13 +30,13 @@ public class SFormattedFieldConnector extends STextFieldConnector {
 
   /**
    * Constructs a new <code>SFormattedFieldConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected STextField.
+   *            the connected STextField.
    * @param format
-   *          the j2se format to use to extract the object value.
+   *            the j2se format to use to extract the object value.
    */
   public SFormattedFieldConnector(String id, STextField textField, Format format) {
     this(id, textField, new FormatAdapter(format));
@@ -44,13 +44,13 @@ public class SFormattedFieldConnector extends STextFieldConnector {
 
   /**
    * Constructs a new <code>SFormattedFieldConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected STextField.
+   *            the connected STextField.
    * @param formatter
-   *          the formatter to use to extract the object value.
+   *            the formatter to use to extract the object value.
    */
   public SFormattedFieldConnector(String id, STextField textField,
       IFormatter formatter) {
@@ -71,8 +71,8 @@ public class SFormattedFieldConnector extends STextFieldConnector {
     }
     if (formatter != null) {
       try {
-        Object value = formatter.parse(getTextForParser(getConnectedSComponent()
-            .getText()));
+        Object value = formatter
+            .parse(getTextForParser(getConnectedSComponent().getText()));
         getConnectedSComponent().setText(formatter.format(value));
         return value;
       } catch (ParseException ex) {
@@ -85,9 +85,9 @@ public class SFormattedFieldConnector extends STextFieldConnector {
 
   /**
    * Allows for text reformatting when a non lenient parser is used.
-   *
+   * 
    * @param rawText
-   *          the raw text as entered in the textfield.
+   *            the raw text as entered in the textfield.
    * @return the text to give to the parser.
    */
   protected String getTextForParser(String rawText) {

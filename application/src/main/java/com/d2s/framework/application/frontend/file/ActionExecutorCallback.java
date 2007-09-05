@@ -36,7 +36,7 @@ public class ActionExecutorCallback extends FileToByteArrayCallback {
    * Sets the action.
    * 
    * @param action
-   *          the action to set.
+   *            the action to set.
    */
   public void setAction(IAction action) {
     this.action = action;

@@ -21,7 +21,7 @@ import com.d2s.framework.util.format.IFormatter;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -31,13 +31,13 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected JTextField.
+   *            the connected JTextField.
    * @param format
-   *          the j2se format to use to extract the object value.
+   *            the j2se format to use to extract the object value.
    */
   public JFormattedFieldConnector(String id, JTextField textField, Format format) {
     this(id, textField, new FormatAdapter(format));
@@ -45,13 +45,13 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
 
   /**
    * Constructs a new <code>JFormattedFieldConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected JTextField.
+   *            the connected JTextField.
    * @param formatter
-   *          the formatter to use to extract the object value.
+   *            the formatter to use to extract the object value.
    */
   public JFormattedFieldConnector(String id, JTextField textField,
       IFormatter formatter) {
@@ -72,8 +72,8 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
     }
     if (formatter != null) {
       try {
-        Object value = formatter.parse(getTextForParser(getConnectedJComponent()
-            .getText()));
+        Object value = formatter
+            .parse(getTextForParser(getConnectedJComponent().getText()));
         getConnectedJComponent().setText(formatter.format(value));
         return value;
       } catch (ParseException ex) {
@@ -86,9 +86,9 @@ public class JFormattedFieldConnector extends JTextFieldConnector {
 
   /**
    * Allows for text reformatting when a non lenient parser is used.
-   *
+   * 
    * @param rawText
-   *          the raw text as entered in the textfield.
+   *            the raw text as entered in the textfield.
    * @return the text to give to the parser.
    */
   protected String getTextForParser(String rawText) {

@@ -26,7 +26,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -49,9 +49,9 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Constructs a new <code>ULCDateField</code> instance.
-   *
+   * 
    * @param locale
-   *          the user locale.
+   *            the user locale.
    */
   public ULCDateField(Locale locale) {
     this(((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT))
@@ -60,11 +60,11 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Constructs a new <code>ULCDateField</code> instance.
-   *
+   * 
    * @param formatPattern
-   *          the date format pattern to be used in the date field.
+   *            the date format pattern to be used in the date field.
    * @param locale
-   *          the user locale.
+   *            the user locale.
    */
   public ULCDateField(String formatPattern, Locale locale) {
     this.formatPattern = formatPattern;
@@ -74,9 +74,9 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
 
   /**
    * Adds a value change listener.
-   *
+   * 
    * @param listener
-   *          the listener to add.
+   *            the listener to add.
    */
   public void addValueChangedListener(IValueChangedListener listener) {
     internalAddListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
@@ -113,8 +113,82 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
     locale = sourceDateField.locale;
   }
 
-  private void editableToAnything(Anything args) {
-    args.put(DateFieldConstants.EDITABLE_KEY, editable);
+  /**
+   * Gets the date field value.
+   * 
+   * @return the date field value.
+   */
+  public Date getValue() {
+    return value;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void handleRequest(String request, Anything args) {
+    if (request.equals(DateFieldConstants.SET_VALUE_REQUEST)) {
+      handleSetValue(args);
+    } else {
+      super.handleRequest(request, args);
+    }
+  }
+
+  /**
+   * Gets the editable.
+   * 
+   * @return the editable.
+   */
+  public boolean isEditable() {
+    return editable;
+  }
+
+  /**
+   * Removes a value change listener.
+   * 
+   * @param listener
+   *            the listener to remove.
+   */
+  public void removeValueChangedListener(IValueChangedListener listener) {
+    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
+  }
+
+  /**
+   * Sets the editable.
+   * 
+   * @param editable
+   *            the editable to set.
+   */
+  public void setEditable(boolean editable) {
+    if (this.editable != editable) {
+      this.editable = editable;
+      Anything editableAnything = new Anything();
+      editableToAnything(editableAnything);
+      sendUI(DateFieldConstants.SET_EDITABLE_REQUEST, editableAnything);
+    }
+  }
+
+  /**
+   * Sets the date field value.
+   * 
+   * @param value
+   *            the date field value.
+   */
+  public void setValue(Date value) {
+    if (!ObjectUtils.equals(this.value, value)) {
+      this.value = value;
+      Anything valueAnything = new Anything();
+      valueToAnything(valueAnything);
+      sendUI(DateFieldConstants.SET_VALUE_REQUEST, valueAnything);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String typeString() {
+    return "com.d2s.framework.gui.ulc.components.client.UIDateField";
   }
 
   /**
@@ -123,15 +197,6 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
   @Override
   protected String getPropertyPrefix() {
     return "Panel";
-  }
-
-  /**
-   * Gets the date field value.
-   *
-   * @return the date field value.
-   */
-  public Date getValue() {
-    return value;
   }
 
   /**
@@ -150,12 +215,16 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
    * {@inheritDoc}
    */
   @Override
-  public void handleRequest(String request, Anything args) {
-    if (request.equals(DateFieldConstants.SET_VALUE_REQUEST)) {
-      handleSetValue(args);
-    } else {
-      super.handleRequest(request, args);
-    }
+  protected void saveState(Anything a) {
+    super.saveState(a);
+    valueToAnything(a);
+    a.put(DateFieldConstants.FORMAT_PATTERN_KEY, formatPattern);
+    a.put(DateFieldConstants.LANGUAGE_KEY, locale.getLanguage());
+    editableToAnything(a);
+  }
+
+  private void editableToAnything(Anything args) {
+    args.put(DateFieldConstants.EDITABLE_KEY, editable);
   }
 
   private void handleSetValue(Anything args) {
@@ -165,75 +234,6 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
       newValue = new Date(timeMillis);
     }
     this.value = newValue;
-  }
-
-  /**
-   * Gets the editable.
-   *
-   * @return the editable.
-   */
-  public boolean isEditable() {
-    return editable;
-  }
-
-  /**
-   * Removes a value change listener.
-   *
-   * @param listener
-   *          the listener to remove.
-   */
-  public void removeValueChangedListener(IValueChangedListener listener) {
-    internalRemoveListener(IUlcEventConstants.VALUE_CHANGED_EVENT, listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void saveState(Anything a) {
-    super.saveState(a);
-    valueToAnything(a);
-    a.put(DateFieldConstants.FORMAT_PATTERN_KEY, formatPattern);
-    a.put(DateFieldConstants.LANGUAGE_KEY, locale.getLanguage());
-    editableToAnything(a);
-  }
-
-  /**
-   * Sets the editable.
-   *
-   * @param editable
-   *          the editable to set.
-   */
-  public void setEditable(boolean editable) {
-    if (this.editable != editable) {
-      this.editable = editable;
-      Anything editableAnything = new Anything();
-      editableToAnything(editableAnything);
-      sendUI(DateFieldConstants.SET_EDITABLE_REQUEST, editableAnything);
-    }
-  }
-
-  /**
-   * Sets the date field value.
-   *
-   * @param value
-   *          the date field value.
-   */
-  public void setValue(Date value) {
-    if (!ObjectUtils.equals(this.value, value)) {
-      this.value = value;
-      Anything valueAnything = new Anything();
-      valueToAnything(valueAnything);
-      sendUI(DateFieldConstants.SET_VALUE_REQUEST, valueAnything);
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIDateField";
   }
 
   private void valueToAnything(Anything args) {

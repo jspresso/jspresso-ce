@@ -17,11 +17,11 @@ import com.d2s.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public class ActionWrapper<E, F, G> extends AbstractChainedAction<E, F, G> {
 
@@ -43,22 +43,22 @@ public class ActionWrapper<E, F, G> extends AbstractChainedAction<E, F, G> {
   }
 
   /**
+   * Sets the wrappedAction.
+   * 
+   * @param wrappedAction
+   *            the wrappedAction to set.
+   */
+  public void setWrappedAction(IAction wrappedAction) {
+    this.wrappedAction = wrappedAction;
+  }
+
+  /**
    * Gets the wrappedAction.
    * 
    * @return the wrappedAction.
    */
   protected IAction getWrappedAction() {
     return wrappedAction;
-  }
-
-  /**
-   * Sets the wrappedAction.
-   * 
-   * @param wrappedAction
-   *          the wrappedAction to set.
-   */
-  public void setWrappedAction(IAction wrappedAction) {
-    this.wrappedAction = wrappedAction;
   }
 
 }

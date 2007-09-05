@@ -28,6 +28,36 @@ public class YesNoCancelAction extends AbstractFlowAction {
   }
 
   /**
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *            the cancelAction to set.
+   */
+  public void setCancelAction(IAction cancelAction) {
+    this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Sets the noAction.
+   * 
+   * @param noAction
+   *            the noAction to set.
+   */
+  public void setNoAction(IAction noAction) {
+    this.noAction = noAction;
+  }
+
+  /**
+   * Sets the yesAction.
+   * 
+   * @param yesAction
+   *            the yesAction to set.
+   */
+  public void setYesAction(IAction yesAction) {
+    this.yesAction = yesAction;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -38,35 +68,5 @@ public class YesNoCancelAction extends AbstractFlowAction {
       return noAction;
     }
     return cancelAction;
-  }
-
-  /**
-   * Sets the cancelAction.
-   * 
-   * @param cancelAction
-   *          the cancelAction to set.
-   */
-  public void setCancelAction(IAction cancelAction) {
-    this.cancelAction = cancelAction;
-  }
-
-  /**
-   * Sets the noAction.
-   * 
-   * @param noAction
-   *          the noAction to set.
-   */
-  public void setNoAction(IAction noAction) {
-    this.noAction = noAction;
-  }
-
-  /**
-   * Sets the yesAction.
-   * 
-   * @param yesAction
-   *          the yesAction to set.
-   */
-  public void setYesAction(IAction yesAction) {
-    this.yesAction = yesAction;
   }
 }

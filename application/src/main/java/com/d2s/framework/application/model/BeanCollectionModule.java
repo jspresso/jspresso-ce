@@ -75,7 +75,7 @@ public class BeanCollectionModule extends SubModule {
    * Sets the elementViewDescriptor.
    * 
    * @param elementViewDescriptor
-   *          the elementViewDescriptor to set.
+   *            the elementViewDescriptor to set.
    */
   public void setElementViewDescriptor(IViewDescriptor elementViewDescriptor) {
     this.elementViewDescriptor = elementViewDescriptor;
@@ -85,7 +85,7 @@ public class BeanCollectionModule extends SubModule {
    * Sets the module's projected object collection.
    * 
    * @param moduleObjects
-   *          the projected object collection.
+   *            the projected object collection.
    */
   public void setModuleObjects(Collection<?> moduleObjects) {
     if (ObjectUtils.equals(this.moduleObjects, moduleObjects)) {

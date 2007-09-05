@@ -12,7 +12,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -40,14 +40,14 @@ public interface ILifecycleCapable {
 
   /**
    * Called when an component is created (still transient).
-   *
+   * 
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *            an entity factory instance which can be used to complete the
+   *            lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *            the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *            entityLifecycleHandler.
    * @return true if the state of the component has been updated.
    */
   boolean onCreate(IEntityFactory entityFactory, UserPrincipal principal,
@@ -55,14 +55,14 @@ public interface ILifecycleCapable {
 
   /**
    * Called just before an component is deleted (delete).
-   *
+   * 
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *            an entity factory instance which can be used to complete the
+   *            lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *            the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *            entityLifecycleHandler.
    * @return true if the state of the component has been updated.
    */
   boolean onDelete(IEntityFactory entityFactory, UserPrincipal principal,
@@ -70,14 +70,14 @@ public interface ILifecycleCapable {
 
   /**
    * Called just before an component is persisted (insert).
-   *
+   * 
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *            an entity factory instance which can be used to complete the
+   *            lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *            the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *            entityLifecycleHandler.
    * @return true if the state of the component has been updated.
    */
   boolean onPersist(IEntityFactory entityFactory, UserPrincipal principal,
@@ -85,14 +85,14 @@ public interface ILifecycleCapable {
 
   /**
    * Called just before an component is updated (update).
-   *
+   * 
    * @param entityFactory
-   *          an entity factory instance which can be used to complete the
-   *          lifecycle step.
+   *            an entity factory instance which can be used to complete the
+   *            lifecycle step.
    * @param principal
-   *          the principal triggering the action.
+   *            the principal triggering the action.
    * @param entityLifecycleHandler
-   *          entityLifecycleHandler.
+   *            entityLifecycleHandler.
    * @return true if the state of the component has been updated.
    */
   boolean onUpdate(IEntityFactory entityFactory, UserPrincipal principal,

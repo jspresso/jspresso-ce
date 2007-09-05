@@ -25,7 +25,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
   public String getIconImageURL() {
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null) {
-      iconImageURL = ((ICollectionDescriptorProvider) getModelDescriptor())
+      iconImageURL = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
           .getCollectionDescriptor().getElementDescriptor().getIconImageURL();
     }
     return iconImageURL;

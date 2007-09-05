@@ -39,7 +39,7 @@ public class DisplayUrlAction extends AbstractUlcAction {
    * Sets the baseUrl.
    * 
    * @param baseUrl
-   *          the baseUrl to set.
+   *            the baseUrl to set.
    */
   public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;

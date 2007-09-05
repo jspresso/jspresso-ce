@@ -64,7 +64,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * Sets the iconImageURLProvider.
    * 
    * @param iconImageURLProvider
-   *          the iconImageURLProvider to set.
+   *            the iconImageURLProvider to set.
    */
   public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
@@ -74,7 +74,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * Sets the maxDepth.
    * 
    * @param maxDepth
-   *          the maxDepth to set.
+   *            the maxDepth to set.
    */
   public void setMaxDepth(int maxDepth) {
     this.maxDepth = maxDepth;
@@ -84,7 +84,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
    * Sets the rootSubtreeDescriptor.
    * 
    * @param rootSubtreeDescriptor
-   *          the rootSubtreeDescriptor to set.
+   *            the rootSubtreeDescriptor to set.
    */
   public void setRootSubtreeDescriptor(
       ITreeLevelDescriptor rootSubtreeDescriptor) {

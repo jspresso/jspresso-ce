@@ -19,18 +19,18 @@ import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
  */
 public class ModelCollectionConnector extends ModelCollectionPropertyConnector {
 
-  private Collection connecteeValue;
+  private Collection<?> connecteeValue;
 
   /**
    * Constructs a new <code>ModelCollectionConnector</code> instance.
    * 
    * @param modelDescriptor
-   *          the model descriptor backing this connector.
+   *            the model descriptor backing this connector.
    * @param modelConnectorFactory
-   *          the factory used to create the collection model connectors.
+   *            the factory used to create the collection model connectors.
    */
   public ModelCollectionConnector(
-      ICollectionDescriptorProvider modelDescriptor,
+      ICollectionDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory);
   }
@@ -53,8 +53,8 @@ public class ModelCollectionConnector extends ModelCollectionPropertyConnector {
   @Override
   protected void setConnecteeValue(@SuppressWarnings("unused")
   Object aValue) {
-    Collection oldValue = connecteeValue;
-    connecteeValue = (Collection) aValue;
+    Collection<?> oldValue = connecteeValue;
+    connecteeValue = (Collection<?>) aValue;
     propertyChange(new PropertyChangeEvent(this, "connecteeValue",
         computeOldConnectorValue(oldValue), connecteeValue));
   }

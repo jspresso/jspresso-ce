@@ -23,17 +23,6 @@ import com.d2s.framework.binding.IValueConnector;
  */
 public class BasicConnectorFactory implements IConfigurableConnectorFactory {
 
-  private void createAndAddRenderingChildConnector(
-      BasicCompositeConnector compositeValueConnector,
-      String renderingConnectorId) {
-    if (renderingConnectorId != null) {
-      compositeValueConnector
-          .addChildConnector(createValueConnector(renderingConnectorId));
-      compositeValueConnector
-          .setRenderingChildConnectorId(renderingConnectorId);
-    }
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -79,5 +68,16 @@ public class BasicConnectorFactory implements IConfigurableConnectorFactory {
    */
   public IValueConnector createValueConnector(String id) {
     return new BasicValueConnector(id);
+  }
+
+  private void createAndAddRenderingChildConnector(
+      BasicCompositeConnector compositeValueConnector,
+      String renderingConnectorId) {
+    if (renderingConnectorId != null) {
+      compositeValueConnector
+          .addChildConnector(createValueConnector(renderingConnectorId));
+      compositeValueConnector
+          .setRenderingChildConnectorId(renderingConnectorId);
+    }
   }
 }

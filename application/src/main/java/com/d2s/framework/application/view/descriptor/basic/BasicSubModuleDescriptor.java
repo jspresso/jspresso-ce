@@ -94,7 +94,7 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
    * Sets the description.
    * 
    * @param description
-   *          the description to set.
+   *            the description to set.
    */
   public void setDescription(String description) {
     descriptor.setDescription(description);
@@ -104,7 +104,7 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
    * Sets the iconImageURL.
    * 
    * @param iconImageURL
-   *          the iconImageURL to set.
+   *            the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     descriptor.setIconImageURL(iconImageURL);
@@ -114,7 +114,7 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
    * Sets the name.
    * 
    * @param name
-   *          the name to set.
+   *            the name to set.
    */
   public void setName(String name) {
     descriptor.setName(name);
@@ -124,7 +124,7 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
    * Sets the viewDescriptor.
    * 
    * @param viewDescriptor
-   *          the viewDescriptor to set.
+   *            the viewDescriptor to set.
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;

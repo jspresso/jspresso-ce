@@ -30,7 +30,7 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
    * Constructs a new <code>ModuleCardViewDescriptor</code> instance.
    * 
    * @param module
-   *          the module.
+   *            the module.
    */
   public ModuleCardViewDescriptor(Module module) {
     Map<String, IViewDescriptor> moduleCards = new HashMap<String, IViewDescriptor>();

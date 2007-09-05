@@ -41,7 +41,7 @@ public class ULCDurationDataType extends ULCProxy implements IDataType {
    * constructor has default visibility to prevent for direct instanciation.
    * 
    * @param locale
-   *          the locale for the translations.
+   *            the locale for the translations.
    */
   ULCDurationDataType(Locale locale) {
     this.locale = locale;

@@ -21,7 +21,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -35,19 +35,19 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   /**
    * Constructs a new
    * <code>ApplicationSessionAwareEntityInvocationHandler</code> instance.
-   *
+   * 
    * @param entityDescriptor
-   *          The descriptor of the proxy entity.
+   *            The descriptor of the proxy entity.
    * @param collectionFactory
-   *          The factory used to create empty entity collections from
-   *          collection getters.
+   *            The factory used to create empty entity collections from
+   *            collection getters.
    * @param accessorFactory
-   *          The factory used to access proxy properties.
+   *            The factory used to access proxy properties.
    * @param extensionFactory
-   *          The factory used to create entity extensions based on their
-   *          classes.
+   *            The factory used to create entity extensions based on their
+   *            classes.
    * @param applicationSession
-   *          the current application session.
+   *            the current application session.
    */
   protected ApplicationSessionAwareEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor,

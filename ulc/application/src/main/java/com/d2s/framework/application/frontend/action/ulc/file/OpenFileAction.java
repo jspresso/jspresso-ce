@@ -54,6 +54,16 @@ public class OpenFileAction extends ChooseFileAction {
   }
 
   /**
+   * Sets the fileOpenCallback.
+   * 
+   * @param fileOpenCallback
+   *            the fileOpenCallback to set.
+   */
+  public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
+    this.fileOpenCallback = fileOpenCallback;
+  }
+
+  /**
    * Completes the file chooser configuration with behaviour specific to open
    * action.
    * <p>
@@ -63,15 +73,5 @@ public class OpenFileAction extends ChooseFileAction {
   protected FileChooserConfig getFileChooser(Map<String, Object> context) {
     FileChooserConfig fileChooser = super.getFileChooser(context);
     return fileChooser;
-  }
-
-  /**
-   * Sets the fileOpenCallback.
-   * 
-   * @param fileOpenCallback
-   *          the fileOpenCallback to set.
-   */
-  public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
-    this.fileOpenCallback = fileOpenCallback;
   }
 }

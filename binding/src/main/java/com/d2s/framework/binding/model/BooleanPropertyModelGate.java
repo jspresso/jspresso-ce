@@ -108,7 +108,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * Sets the accessorFactory.
    * 
    * @param accessorFactory
-   *          the accessorFactory to set.
+   *            the accessorFactory to set.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -118,7 +118,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * Sets the booleanPropertyName.
    * 
    * @param booleanPropertyName
-   *          the booleanPropertyName to set.
+   *            the booleanPropertyName to set.
    */
   public void setBooleanPropertyName(String booleanPropertyName) {
     this.booleanPropertyName = booleanPropertyName;
@@ -140,7 +140,7 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    * Sets the openOnTrue.
    * 
    * @param openOnTrue
-   *          the openOnTrue to set.
+   *            the openOnTrue to set.
    */
   public void setOpenOnTrue(boolean openOnTrue) {
     this.openOnTrue = openOnTrue;

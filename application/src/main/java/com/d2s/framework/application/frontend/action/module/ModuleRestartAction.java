@@ -19,11 +19,11 @@ import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public class ModuleRestartAction<E, F, G> extends
     AbstractChainedAction<E, F, G> {

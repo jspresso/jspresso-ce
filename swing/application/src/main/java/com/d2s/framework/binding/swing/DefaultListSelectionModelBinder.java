@@ -27,6 +27,37 @@ import com.d2s.framework.util.swing.SwingUtil;
 public class DefaultListSelectionModelBinder implements
     IListSelectionModelBinder {
 
+  private static int[] getSelectedIndices(ListSelectionModel sm) {
+    int iMin = sm.getMinSelectionIndex();
+    int iMax = sm.getMaxSelectionIndex();
+
+    if ((iMin < 0) || (iMax < 0)) {
+      return new int[0];
+    }
+
+    int[] rvTmp = new int[1 + (iMax - iMin)];
+    int n = 0;
+    for (int i = iMin; i <= iMax; i++) {
+      if (sm.isSelectedIndex(i)) {
+        rvTmp[n++] = i;
+      }
+    }
+    int[] rv = new int[n];
+    System.arraycopy(rvTmp, 0, rv, 0, n);
+    return rv;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void bindSelectionModel(ISelectable selectable,
+      ListSelectionModel selectionModel, IIndexMapper rowMapper) {
+    selectionModel.addListSelectionListener(new SelectionModelListener(
+        selectable, rowMapper));
+    selectable.addSelectionChangeListener(new SelectionChangeListener(
+        selectionModel, rowMapper));
+  }
+
   private static final class SelectionChangeListener implements
       ISelectionChangeListener {
 
@@ -37,7 +68,7 @@ public class DefaultListSelectionModelBinder implements
      * Constructs a new <code>SelectionChangeListener</code> instance.
      * 
      * @param selectionModel
-     *          the selection model to forward the changes to.
+     *            the selection model to forward the changes to.
      * @param rowMapper
      */
     public SelectionChangeListener(ListSelectionModel selectionModel,
@@ -117,7 +148,7 @@ public class DefaultListSelectionModelBinder implements
      * Constructs a new <code>SelectionModelListener</code> instance.
      * 
      * @param viewSelectable
-     *          the selectable to forward the changes to.
+     *            the selectable to forward the changes to.
      * @param rowMapper
      */
     public SelectionModelListener(ISelectable viewSelectable,
@@ -154,36 +185,5 @@ public class DefaultListSelectionModelBinder implements
       viewSelectable.setSelectedIndices(modelIndices, sm
           .getLeadSelectionIndex());
     }
-  }
-
-  private static int[] getSelectedIndices(ListSelectionModel sm) {
-    int iMin = sm.getMinSelectionIndex();
-    int iMax = sm.getMaxSelectionIndex();
-
-    if ((iMin < 0) || (iMax < 0)) {
-      return new int[0];
-    }
-
-    int[] rvTmp = new int[1 + (iMax - iMin)];
-    int n = 0;
-    for (int i = iMin; i <= iMax; i++) {
-      if (sm.isSelectedIndex(i)) {
-        rvTmp[n++] = i;
-      }
-    }
-    int[] rv = new int[n];
-    System.arraycopy(rvTmp, 0, rv, 0, n);
-    return rv;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void bindSelectionModel(ISelectable selectable,
-      ListSelectionModel selectionModel, IIndexMapper rowMapper) {
-    selectionModel.addListSelectionListener(new SelectionModelListener(
-        selectable, rowMapper));
-    selectable.addSelectionChangeListener(new SelectionChangeListener(
-        selectionModel, rowMapper));
   }
 }

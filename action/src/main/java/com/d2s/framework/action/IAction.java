@@ -24,12 +24,12 @@ public interface IAction extends ISecurable {
    * <code>IContextAware</code> interface.
    * 
    * @param actionHandler
-   *          the action handler this action has been told to execute by. It may
-   *          be used to post another actio execution upon completion of this
-   *          one.
+   *            the action handler this action has been told to execute by. It
+   *            may be used to post another actio execution upon completion of
+   *            this one.
    * @param context
-   *          the execution context. The action should update it depending on
-   *          its result.
+   *            the execution context. The action should update it depending on
+   *            its result.
    * @return true whenever this action completes normally.
    */
   boolean execute(IActionHandler actionHandler, Map<String, Object> context);
@@ -62,9 +62,9 @@ public interface IAction extends ISecurable {
    * Puts some value in the initial action context.
    * 
    * @param key
-   *          the key the value is associated to.
+   *            the key the value is associated to.
    * @param value
-   *          the context value to put.
+   *            the context value to put.
    */
   void putInitialContext(String key, Object value);
 }

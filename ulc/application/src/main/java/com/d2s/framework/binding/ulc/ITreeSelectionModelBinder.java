@@ -23,9 +23,9 @@ public interface ITreeSelectionModelBinder {
    * Binds a collection connector to keep track of a selection model selections.
    * 
    * @param rootConnector
-   *          the root connector of the connector hierarchy.
+   *            the root connector of the connector hierarchy.
    * @param tree
-   *          the the tree to bind the selection model of.
+   *            the the tree to bind the selection model of.
    */
   void bindSelectionModel(IValueConnector rootConnector, ULCTableTree tree);
 
@@ -33,9 +33,9 @@ public interface ITreeSelectionModelBinder {
    * Binds a collection connector to keep track of a selection model selections.
    * 
    * @param rootConnector
-   *          the root connector of the connector hierarchy.
+   *            the root connector of the connector hierarchy.
    * @param tree
-   *          the the tree to bind the selection model of.
+   *            the the tree to bind the selection model of.
    */
   void bindSelectionModel(IValueConnector rootConnector, ULCTree tree);
 }

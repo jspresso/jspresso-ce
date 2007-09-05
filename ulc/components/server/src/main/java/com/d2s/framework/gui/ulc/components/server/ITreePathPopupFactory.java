@@ -21,7 +21,7 @@ public interface ITreePathPopupFactory {
    * Creates a popup menu for the treepath.
    * 
    * @param path
-   *          the treepath to create the popupo menu for.
+   *            the treepath to create the popupo menu for.
    * @return the created popup menu or null if none.
    */
   ULCPopupMenu createPopupForTreepath(TreePath path);

@@ -46,7 +46,7 @@ public class DisplayUrlAction extends AbstractSwingAction {
    * Sets the baseUrl.
    * 
    * @param baseUrl
-   *          the baseUrl to set.
+   *            the baseUrl to set.
    */
   public void setBaseUrl(String baseUrl) {
     this.baseUrl = baseUrl;

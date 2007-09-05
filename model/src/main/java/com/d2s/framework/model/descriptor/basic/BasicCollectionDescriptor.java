@@ -18,25 +18,25 @@ import com.d2s.framework.util.descriptor.DefaultDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete collection component element type.
+ *            the concrete collection component element type.
  */
 public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
     ICollectionDescriptor<E> {
 
-  private Class<? extends Collection> collectionInterface;
-  private IComponentDescriptor<E>     elementDescriptor;
+  private Class<? extends Collection<? extends E>> collectionInterface;
+  private IComponentDescriptor<E>                  elementDescriptor;
 
   /**
    * {@inheritDoc}
    */
-  public ICollectionDescriptor getCollectionDescriptor() {
+  public ICollectionDescriptor<E> getCollectionDescriptor() {
     return this;
   }
 
   /**
    * {@inheritDoc}
    */
-  public Class<? extends Collection> getCollectionInterface() {
+  public Class<? extends Collection<? extends E>> getCollectionInterface() {
     return collectionInterface;
   }
 
@@ -50,7 +50,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public Class<? extends Collection> getModelType() {
+  public Class<? extends Collection<?>> getModelType() {
     return getCollectionInterface();
   }
 
@@ -58,18 +58,18 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * Sets the collectionInterface.
    * 
    * @param collectionInterface
-   *          the collectionInterface to set.
+   *            the collectionInterface to set.
    */
-  @SuppressWarnings("cast")
-  public void setCollectionInterface(Class collectionInterface) {
-    this.collectionInterface = (Class<? extends Collection>) collectionInterface;
+  public void setCollectionInterface(
+      Class<? extends Collection<? extends E>> collectionInterface) {
+    this.collectionInterface = collectionInterface;
   }
 
   /**
    * Sets the elementDescriptor.
    * 
    * @param elementDescriptor
-   *          the elementDescriptor to set.
+   *            the elementDescriptor to set.
    */
   public void setElementDescriptor(IComponentDescriptor<E> elementDescriptor) {
     this.elementDescriptor = elementDescriptor;

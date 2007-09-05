@@ -37,7 +37,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
     IConnectorValueChangeListener {
 
   private static final long serialVersionUID = 8182961519931949735L;
-  private ChangeEvent changeEvent = null;
+  private ChangeEvent       changeEvent      = null;
   private IView<SComponent> editorView;
   private EventListenerList listenerList;
 
@@ -47,7 +47,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    * Constructs a new <code>WingsViewCellEditorAdapter</code> instance.
    * 
    * @param editorView
-   *          the swing view used as editor.
+   *            the swing view used as editor.
    */
   public WingsViewCellEditorAdapter(IView<SComponent> editorView) {
     this.listenerList = new EventListenerList();
@@ -85,59 +85,12 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   }
 
   /**
-   * Notify all listeners that have registered interest for notification on this
-   * event type. The event instance is lazily created using the parameters
-   * passed into the fire method.
-   * 
-   * @see EventListenerList
-   */
-  protected void fireEditingCanceled() {
-    Object[] listeners = listenerList.getListenerList();
-    for (int i = listeners.length - 2; i >= 0; i -= 2) {
-      if (listeners[i] == CellEditorListener.class) {
-        if (changeEvent == null) {
-          changeEvent = new ChangeEvent(this);
-        }
-        ((CellEditorListener) listeners[i + 1]).editingCanceled(changeEvent);
-      }
-    }
-  }
-
-  /**
-   * Notify all listeners that have registered interest for notification on this
-   * event type. The event instance is lazily created using the parameters
-   * passed into the fire method.
-   * 
-   * @see EventListenerList
-   */
-  protected void fireEditingStopped() {
-    Object[] listeners = listenerList.getListenerList();
-    for (int i = listeners.length - 2; i >= 0; i -= 2) {
-      if (listeners[i] == CellEditorListener.class) {
-        if (changeEvent == null) {
-          changeEvent = new ChangeEvent(this);
-        }
-        ((CellEditorListener) listeners[i + 1]).editingStopped(changeEvent);
-      }
-    }
-  }
-
-  /**
    * Returns the value of the swing view's connector.
    * <p>
    * {@inheritDoc}
    */
   public Object getCellEditorValue() {
     return editorView.getConnector().getConnectorValue();
-  }
-
-  /**
-   * Gets the editorView.
-   * 
-   * @return the editorView.
-   */
-  protected IView<SComponent> getEditorView() {
-    return editorView;
   }
 
   /**
@@ -187,7 +140,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    * Returns true.
    * 
    * @param anEvent
-   *          an event object
+   *            an event object
    * @return true
    */
   public boolean shouldSelectCell(@SuppressWarnings("unused")
@@ -203,5 +156,52 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   public boolean stopCellEditing() {
     fireEditingStopped();
     return true;
+  }
+
+  /**
+   * Notify all listeners that have registered interest for notification on this
+   * event type. The event instance is lazily created using the parameters
+   * passed into the fire method.
+   * 
+   * @see EventListenerList
+   */
+  protected void fireEditingCanceled() {
+    Object[] listeners = listenerList.getListenerList();
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+      if (listeners[i] == CellEditorListener.class) {
+        if (changeEvent == null) {
+          changeEvent = new ChangeEvent(this);
+        }
+        ((CellEditorListener) listeners[i + 1]).editingCanceled(changeEvent);
+      }
+    }
+  }
+
+  /**
+   * Notify all listeners that have registered interest for notification on this
+   * event type. The event instance is lazily created using the parameters
+   * passed into the fire method.
+   * 
+   * @see EventListenerList
+   */
+  protected void fireEditingStopped() {
+    Object[] listeners = listenerList.getListenerList();
+    for (int i = listeners.length - 2; i >= 0; i -= 2) {
+      if (listeners[i] == CellEditorListener.class) {
+        if (changeEvent == null) {
+          changeEvent = new ChangeEvent(this);
+        }
+        ((CellEditorListener) listeners[i + 1]).editingStopped(changeEvent);
+      }
+    }
+  }
+
+  /**
+   * Gets the editorView.
+   * 
+   * @return the editorView.
+   */
+  protected IView<SComponent> getEditorView() {
+    return editorView;
   }
 }

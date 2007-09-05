@@ -20,7 +20,7 @@ import com.ulcjava.base.application.util.Color;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          The actual class of the subclass of <code>ULCTextComponent</code>.
+ *            The actual class of the subclass of <code>ULCTextComponent</code>.
  */
 public abstract class ULCTextComponentConnector<E extends ULCTextComponent>
     extends ULCComponentConnector<E> {
@@ -33,12 +33,32 @@ public abstract class ULCTextComponentConnector<E extends ULCTextComponent>
    * need to listen to other unhandled events if necessary.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param textComponent
-   *          the connected ULCTextComponent.
+   *            the connected ULCTextComponent.
    */
   public ULCTextComponentConnector(String id, E textComponent) {
     super(id, textComponent);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    if (isReadable()) {
+      if (savedSelectedTextColor != null) {
+        getConnectedULCComponent().setSelectedTextColor(savedSelectedTextColor);
+      }
+      savedSelectedTextColor = null;
+    } else if (savedSelectedTextColor == null) {
+      savedSelectedTextColor = getConnectedULCComponent()
+          .getSelectedTextColor();
+      getConnectedULCComponent().setSelectedTextColor(
+          getConnectedULCComponent().getSelectionColor());
+    }
+    getConnectedULCComponent().setEditable(isWritable());
   }
 
   /**
@@ -87,25 +107,5 @@ public abstract class ULCTextComponentConnector<E extends ULCTextComponent>
     } else {
       getConnectedULCComponent().setText(aValue.toString());
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    if (isReadable()) {
-      if (savedSelectedTextColor != null) {
-        getConnectedULCComponent().setSelectedTextColor(savedSelectedTextColor);
-      }
-      savedSelectedTextColor = null;
-    } else if (savedSelectedTextColor == null) {
-      savedSelectedTextColor = getConnectedULCComponent()
-          .getSelectedTextColor();
-      getConnectedULCComponent().setSelectedTextColor(
-          getConnectedULCComponent().getSelectionColor());
-    }
-    getConnectedULCComponent().setEditable(isWritable());
   }
 }

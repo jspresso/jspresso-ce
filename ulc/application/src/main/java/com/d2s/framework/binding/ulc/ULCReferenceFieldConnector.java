@@ -24,29 +24,16 @@ import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 public class ULCReferenceFieldConnector extends ULCActionFieldConnector
     implements ICompositeValueConnector {
 
-  private final class ToStringConnectorListener implements
-      IConnectorValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(@SuppressWarnings("unused")
-    ConnectorValueChangeEvent evt) {
-      setConnecteeValue(getConnecteeValue());
-    }
-
-  }
   private IConnectorValueChangeListener toStringListener;
-
   private IValueConnector               toStringPropertyConnector;
 
   /**
    * Constructs a new <code>ULCReferenceFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param actionField
-   *          the connected ULCActionField.
+   *            the connected ULCActionField.
    */
   public ULCReferenceFieldConnector(String id, ULCActionField actionField) {
     super(id, actionField);
@@ -132,7 +119,7 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
    * Sets the toStringPropertyConnector.
    * 
    * @param toStringPropertyConnector
-   *          the toStringPropertyConnector to set.
+   *            the toStringPropertyConnector to set.
    */
   public void setToStringPropertyConnector(
       IValueConnector toStringPropertyConnector) {
@@ -145,5 +132,18 @@ public class ULCReferenceFieldConnector extends ULCActionFieldConnector
       this.toStringPropertyConnector
           .addConnectorValueChangeListener(toStringListener);
     }
+  }
+
+  private final class ToStringConnectorListener implements
+      IConnectorValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(@SuppressWarnings("unused")
+    ConnectorValueChangeEvent evt) {
+      setConnecteeValue(getConnecteeValue());
+    }
+
   }
 }

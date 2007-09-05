@@ -29,7 +29,7 @@ public class DurationFormatter implements IFormatter {
    * Constructs a new <code>DurationFormatter</code> instance.
    * 
    * @param locale
-   *          the locale the formatter must be constructed in.
+   *            the locale the formatter must be constructed in.
    */
   public DurationFormatter(Locale locale) {
     super();

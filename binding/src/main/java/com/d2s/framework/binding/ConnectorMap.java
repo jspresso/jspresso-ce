@@ -27,7 +27,7 @@ public class ConnectorMap implements IConnectorMap {
    * Constructs a new <code>ConnectorMap</code> instance.
    * 
    * @param parentConnector
-   *          the composite connector holding the connector map.
+   *            the composite connector holding the connector map.
    */
   public ConnectorMap(ICompositeValueConnector parentConnector) {
     this.parentConnector = parentConnector;
@@ -51,29 +51,10 @@ public class ConnectorMap implements IConnectorMap {
   }
 
   /**
-   * Gets the parentConnector.
-   * 
-   * @return the parentConnector.
-   */
-  protected ICompositeValueConnector getParentConnector() {
-    return parentConnector;
-  }
-
-  /**
    * {@inheritDoc}
    */
   public Collection<String> getStorageKeys() {
     return getStorageMap().keySet();
-  }
-
-  /**
-   * @return Returns the storageMap.
-   */
-  private Map<String, IValueConnector> getStorageMap() {
-    if (storageMap == null) {
-      storageMap = new LinkedHashMap<String, IValueConnector>(8);
-    }
-    return storageMap;
   }
 
   /**
@@ -94,5 +75,24 @@ public class ConnectorMap implements IConnectorMap {
     if (connectorToRemove != null) {
       connectorToRemove.setParentConnector(null);
     }
+  }
+
+  /**
+   * Gets the parentConnector.
+   * 
+   * @return the parentConnector.
+   */
+  protected ICompositeValueConnector getParentConnector() {
+    return parentConnector;
+  }
+
+  /**
+   * @return Returns the storageMap.
+   */
+  private Map<String, IValueConnector> getStorageMap() {
+    if (storageMap == null) {
+      storageMap = new LinkedHashMap<String, IValueConnector>(8);
+    }
+    return storageMap;
   }
 }

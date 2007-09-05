@@ -22,5 +22,5 @@ public interface IModelDescriptor extends IDescriptor {
    * 
    * @return the type of the model.
    */
-  Class getModelType();
+  Class<?> getModelType();
 }

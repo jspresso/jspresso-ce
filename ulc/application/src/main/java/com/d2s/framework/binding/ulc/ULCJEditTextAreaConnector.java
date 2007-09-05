@@ -24,12 +24,35 @@ public class ULCJEditTextAreaConnector extends
    * connector will listen to <code>focusLost</code> events.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param textArea
-   *          the connected JTextComponent.
+   *            the connected JTextComponent.
    */
   public ULCJEditTextAreaConnector(String id, ULCJEditTextArea textArea) {
     super(id, textArea);
+  }
+
+  /**
+   * Sets the value to the connector text.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setConnecteeValue(Object aValue) {
+    if (aValue == null) {
+      getConnectedULCComponent().setText(null);
+    } else {
+      getConnectedULCComponent().setText(aValue.toString());
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedULCComponent().setEditable(isWritable());
   }
 
   /**
@@ -60,28 +83,5 @@ public class ULCJEditTextAreaConnector extends
   @Override
   protected Object getConnecteeValue() {
     return getConnectedULCComponent().getText();
-  }
-
-  /**
-   * Sets the value to the connector text.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setConnecteeValue(Object aValue) {
-    if (aValue == null) {
-      getConnectedULCComponent().setText(null);
-    } else {
-      getConnectedULCComponent().setText(aValue.toString());
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedULCComponent().setEditable(isWritable());
   }
 }

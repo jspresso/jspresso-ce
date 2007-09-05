@@ -26,7 +26,7 @@ public interface IActionHandler extends IExceptionHandler {
    * whenever access should not be granted.
    * 
    * @param securable
-   *          the id of the secured access to check.
+   *            the id of the secured access to check.
    */
   void checkAccess(ISecurable securable);
 
@@ -43,9 +43,9 @@ public interface IActionHandler extends IExceptionHandler {
    * context, synchronous or not, transactionality, ...).
    * 
    * @param action
-   *          the action to be executed.
+   *            the action to be executed.
    * @param context
-   *          the action execution context.
+   *            the action execution context.
    * @return true whenever this action completes normally.
    * @see IAction#execute(IActionHandler, Map)
    */

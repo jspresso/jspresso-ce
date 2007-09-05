@@ -80,7 +80,7 @@ public class SaveFileAction extends ChooseFileAction {
    * Sets the fileSaveCallback.
    * 
    * @param fileSaveCallback
-   *          the fileSaveCallback to set.
+   *            the fileSaveCallback to set.
    */
   public void setFileSaveCallback(IFileSaveCallback fileSaveCallback) {
     this.fileSaveCallback = fileSaveCallback;

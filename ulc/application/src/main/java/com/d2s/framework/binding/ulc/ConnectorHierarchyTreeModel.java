@@ -28,116 +28,27 @@ import com.ulcjava.base.application.tree.TreePath;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     ITreeModelListener, ITreeExpansionListener {
 
-  private class TreeConnectorsListener implements IConnectorValueChangeListener {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void connectorValueChange(ConnectorValueChangeEvent evt) {
-      IValueConnector connector = evt.getSource();
-      if (connector == rootConnector) {
-        nodeStructureChanged(new TreePath(rootConnector));
-        return;
-      }
-      if (connector instanceof ICollectionConnector
-          && connector.getConnectorValue() != null) {
-        // don't know why but this fixes a tree repaint bug
-        // when the root connector is assigned a null value.
-        TreePath connectorPath = getTreePathForConnector(connector);
-        if (connectorPath != null) {
-          Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
-          Collection<?> newCollection = (Collection<?>) evt.getNewValue();
-          int oldCollectionSize = 0;
-          int newCollectionSize = 0;
-          if (oldCollection != null) {
-            oldCollectionSize = oldCollection.size();
-          }
-          if (newCollection != null) {
-            newCollectionSize = newCollection.size();
-          }
-          int changedSize = 0;
-          if (newCollectionSize > oldCollectionSize) {
-            int[] childIndices = new int[newCollectionSize - oldCollectionSize];
-            for (int i = oldCollectionSize; i < newCollectionSize; i++) {
-              childIndices[i - oldCollectionSize] = i;
-            }
-            if (!((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
-              nodesWereInserted(connectorPath, childIndices);
-            }
-            changedSize = oldCollectionSize;
-          } else if (newCollectionSize < oldCollectionSize) {
-            int[] childIndices = new int[oldCollectionSize - newCollectionSize];
-            for (int i = newCollectionSize; i < oldCollectionSize; i++) {
-              childIndices[i - newCollectionSize] = i;
-            }
-            List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
-                .getRemovedChildrenConnectors();
-            if (!((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
-              nodesWereRemoved(connectorPath, childIndices,
-                  removedChildrenConnectors.toArray());
-            }
-            changedSize = newCollectionSize;
-          } else {
-            changedSize = newCollectionSize;
-          }
-          for (int i = 0; i < changedSize; i++) {
-            nodeStructureChanged(connectorPath
-                .pathByAddingChild(((ICollectionConnector) connector)
-                    .getChildConnector(i)));
-          }
-        }
-        if (connector.getParentConnector() == rootConnector) {
-          // This is the only chance we have to handle listener registration on
-          // the tree 1st level.
-          for (int i = 0; i < ((ICollectionConnector) connector)
-              .getChildConnectorCount(); i++) {
-            CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-                (ICollectionConnectorListProvider) ((ICollectionConnector) connector)
-                .getChildConnector(i), false, false);
-          }
-        }
-      } else {
-        while (!(connector instanceof ICollectionConnectorListProvider)) {
-          connector = connector.getParentConnector();
-        }
-        TreePath connectorPath = getTreePathForConnector(connector);
-        if (connector == rootConnector) {
-          // TODO Check ULC bug UBA-920. Root node does not get updated on
-          // nodeChanged event.
-          // nodeChanged(connectorPath);
-          nodeStructureChanged(connectorPath);
-        } else if (connector.getConnectorValue() != null) {
-          // don't know why but this fixes a tree repaint bug
-          // when the root connector is assigned a null value.
-          if (connectorPath != null) {
-            nodeChanged(connectorPath);
-          }
-        }
-      }
-    }
-  }
   private static final long        serialVersionUID = -1578891934062045656L;
   private TreeConnectorsListener   connectorsListener;
   private ULCTree                  myTree;
-
   private ICompositeValueConnector rootConnector;
 
   /**
    * Constructs a new <code>ConnectorHierarchyTreeModel</code> instance.
-   *
+   * 
    * @param rootConnector
-   *          the connector being the root node of the tree.
+   *            the connector being the root node of the tree.
    * @param tree
-   *          the tree to which this model wiil be attached to. It will be used
-   *          for the model to bea notified of expansions so that it can
-   *          lazy-load the tree hierarchy.
+   *            the tree to which this model wiil be attached to. It will be
+   *            used for the model to bea notified of expansions so that it can
+   *            lazy-load the tree hierarchy.
    */
   public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector,
       ULCTree tree) {
@@ -151,32 +62,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       tree.addTreeExpansionListener(this);
     }
     myTree = tree;
-  }
-
-  private void checkListenerRegistrationForConnector(IValueConnector connector) {
-    if (connector instanceof ICollectionConnectorProvider) {
-      checkListenerRegistrationForConnector(connector, 3);
-    } else {
-      checkListenerRegistrationForConnector(connector, 2);
-    }
-  }
-
-  private void checkListenerRegistrationForConnector(IValueConnector connector,
-      int depth) {
-    if (connector != null && depth >= 0) {
-      depth--;
-      // we can add the listener many times since the backing store listener
-      // collection is a Set.
-      connector.addConnectorValueChangeListener(connectorsListener);
-      if (connector instanceof ICompositeValueConnector) {
-        for (String childConnectorId : ((ICompositeValueConnector) connector)
-            .getChildConnectorKeys()) {
-          checkListenerRegistrationForConnector(
-              ((ICompositeValueConnector) connector)
-                  .getChildConnector(childConnectorId), depth);
-        }
-      }
-    }
   }
 
   /**
@@ -211,7 +96,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
           || collectionConnector.getConnectorValue() == null) {
         return 0;
       }
-      return ((Collection) collectionConnector.getConnectorValue()).size();
+      return ((Collection<?>) collectionConnector.getConnectorValue()).size();
     } else if (parent instanceof ICollectionConnectorListProvider) {
       return ((ICollectionConnectorListProvider) parent)
           .getCollectionConnectors().size();
@@ -244,11 +129,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    */
   public Object getRoot() {
     return rootConnector;
-  }
-
-  private TreePath getTreePathForConnector(IValueConnector connector) {
-    return ConnectorTreeHelper
-        .getTreePathForConnector(rootConnector, connector);
   }
 
   /**
@@ -357,5 +237,126 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   TreePath path, @SuppressWarnings("unused")
   Object newValue) {
     // NO-OP. Not used (yet!)
+  }
+
+  private void checkListenerRegistrationForConnector(IValueConnector connector) {
+    if (connector instanceof ICollectionConnectorProvider) {
+      checkListenerRegistrationForConnector(connector, 3);
+    } else {
+      checkListenerRegistrationForConnector(connector, 2);
+    }
+  }
+
+  private void checkListenerRegistrationForConnector(IValueConnector connector,
+      int depth) {
+    if (connector != null && depth >= 0) {
+      depth--;
+      // we can add the listener many times since the backing store listener
+      // collection is a Set.
+      connector.addConnectorValueChangeListener(connectorsListener);
+      if (connector instanceof ICompositeValueConnector) {
+        for (String childConnectorId : ((ICompositeValueConnector) connector)
+            .getChildConnectorKeys()) {
+          checkListenerRegistrationForConnector(
+              ((ICompositeValueConnector) connector)
+                  .getChildConnector(childConnectorId), depth);
+        }
+      }
+    }
+  }
+
+  private TreePath getTreePathForConnector(IValueConnector connector) {
+    return ConnectorTreeHelper
+        .getTreePathForConnector(rootConnector, connector);
+  }
+
+  private class TreeConnectorsListener implements IConnectorValueChangeListener {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void connectorValueChange(ConnectorValueChangeEvent evt) {
+      IValueConnector connector = evt.getSource();
+      if (connector == rootConnector) {
+        nodeStructureChanged(new TreePath(rootConnector));
+        return;
+      }
+      if (connector instanceof ICollectionConnector
+          && connector.getConnectorValue() != null) {
+        // don't know why but this fixes a tree repaint bug
+        // when the root connector is assigned a null value.
+        TreePath connectorPath = getTreePathForConnector(connector);
+        if (connectorPath != null) {
+          Collection<?> oldCollection = (Collection<?>) evt.getOldValue();
+          Collection<?> newCollection = (Collection<?>) evt.getNewValue();
+          int oldCollectionSize = 0;
+          int newCollectionSize = 0;
+          if (oldCollection != null) {
+            oldCollectionSize = oldCollection.size();
+          }
+          if (newCollection != null) {
+            newCollectionSize = newCollection.size();
+          }
+          int changedSize = 0;
+          if (newCollectionSize > oldCollectionSize) {
+            int[] childIndices = new int[newCollectionSize - oldCollectionSize];
+            for (int i = oldCollectionSize; i < newCollectionSize; i++) {
+              childIndices[i - oldCollectionSize] = i;
+            }
+            if (!((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
+              nodesWereInserted(connectorPath, childIndices);
+            }
+            changedSize = oldCollectionSize;
+          } else if (newCollectionSize < oldCollectionSize) {
+            int[] childIndices = new int[oldCollectionSize - newCollectionSize];
+            for (int i = newCollectionSize; i < oldCollectionSize; i++) {
+              childIndices[i - newCollectionSize] = i;
+            }
+            List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
+                .getRemovedChildrenConnectors();
+            if (!((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
+              nodesWereRemoved(connectorPath, childIndices,
+                  removedChildrenConnectors.toArray());
+            }
+            changedSize = newCollectionSize;
+          } else {
+            changedSize = newCollectionSize;
+          }
+          for (int i = 0; i < changedSize; i++) {
+            nodeStructureChanged(connectorPath
+                .pathByAddingChild(((ICollectionConnector) connector)
+                    .getChildConnector(i)));
+          }
+        }
+        if (connector.getParentConnector() == rootConnector) {
+          // This is the only chance we have to handle listener registration on
+          // the tree 1st level.
+          for (int i = 0; i < ((ICollectionConnector) connector)
+              .getChildConnectorCount(); i++) {
+            CollectionConnectorHelper
+                .setAllowLazyChildrenLoadingForConnector(
+                    (ICollectionConnectorListProvider) ((ICollectionConnector) connector)
+                        .getChildConnector(i), false, false);
+          }
+        }
+      } else {
+        while (!(connector instanceof ICollectionConnectorListProvider)) {
+          connector = connector.getParentConnector();
+        }
+        TreePath connectorPath = getTreePathForConnector(connector);
+        if (connector == rootConnector) {
+          // TODO Check ULC bug UBA-920. Root node does not get updated on
+          // nodeChanged event.
+          // nodeChanged(connectorPath);
+          nodeStructureChanged(connectorPath);
+        } else if (connector.getConnectorValue() != null) {
+          // don't know why but this fixes a tree repaint bug
+          // when the root connector is assigned a null value.
+          if (connectorPath != null) {
+            nodeChanged(connectorPath);
+          }
+        }
+      }
+    }
   }
 }

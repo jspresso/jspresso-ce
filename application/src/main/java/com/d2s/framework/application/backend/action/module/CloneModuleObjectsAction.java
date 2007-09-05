@@ -76,7 +76,7 @@ public class CloneModuleObjectsAction extends AbstractCollectionAction {
    * Sets the entityCloneFactory.
    * 
    * @param entityCloneFactory
-   *          the entityCloneFactory to set.
+   *            the entityCloneFactory to set.
    */
   public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
     this.entityCloneFactory = entityCloneFactory;

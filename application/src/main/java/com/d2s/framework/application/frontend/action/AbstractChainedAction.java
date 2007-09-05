@@ -19,11 +19,11 @@ import com.d2s.framework.action.IActionHandler;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public abstract class AbstractChainedAction<E, F, G> extends
     AbstractFrontendAction<E, F, G> {
@@ -49,7 +49,7 @@ public abstract class AbstractChainedAction<E, F, G> extends
    * looked up into the action context.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the next action to execute.
    * @see #setNextAction(IAction)
    */
@@ -64,7 +64,7 @@ public abstract class AbstractChainedAction<E, F, G> extends
    * Sets the nextAction.
    * 
    * @param nextAction
-   *          the next action to execute.
+   *            the next action to execute.
    */
   public void setNextAction(IAction nextAction) {
     this.nextAction = nextAction;

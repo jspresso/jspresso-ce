@@ -38,11 +38,76 @@ import com.ulcjava.base.application.util.ULCIcon;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
+
+  private IIconFactory<ULCIcon> iconFactory;
+  private ITranslationProvider  translationProvider;
+
+  /**
+   * {@inheritDoc}
+   */
+  public IAction createAction(IDisplayableAction action,
+      IActionHandler actionHandler, IView<ULCComponent> view, Locale locale) {
+    return createAction(action, actionHandler, view.getPeer(), view
+        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IAction createAction(IDisplayableAction action,
+      IActionHandler actionHandler, ULCComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
+    IAction ulcAction = new ActionAdapter(action, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector, locale);
+    if (action.getActionabilityGates() != null) {
+      Collection<IGate> clonedGates = new HashSet<IGate>();
+      for (IGate gate : action.getActionabilityGates()) {
+        final IGate clonedGate = gate.clone();
+        if (modelDescriptor instanceof IComponentDescriptorProvider
+            && clonedGate instanceof IModelGate) {
+          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
+              (IComponentDescriptorProvider<?>) modelDescriptor));
+          viewConnector
+              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                      .getModelProvider()).setModel(evt.getNewValue());
+                }
+              });
+        }
+        clonedGates.add(clonedGate);
+      }
+      new GatesListener(ulcAction, clonedGates);
+    }
+    return ulcAction;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *            the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<ULCIcon> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *            the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
 
   private final class ActionAdapter extends
       com.ulcjava.base.application.AbstractAction {
@@ -57,7 +122,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
     /**
      * Constructs a new <code>ActionAdapter</code> instance.
-     *
+     * 
      * @param action
      * @param actionHandler
      * @param sourceComponent
@@ -126,6 +191,7 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
     }
 
   }
+
   private final class GatesListener implements PropertyChangeListener {
 
     private IAction           action;
@@ -133,11 +199,11 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
 
     /**
      * Constructs a new <code>GatesListener</code> instance.
-     *
+     * 
      * @param action
-     *          the action to (de)activate based on gates state.
+     *            the action to (de)activate based on gates state.
      * @param gates
-     *          the gates that determine action state.
+     *            the gates that determine action state.
      */
     public GatesListener(IAction action, Collection<IGate> gates) {
       this.action = action;
@@ -154,71 +220,5 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
     PropertyChangeEvent evt) {
       action.setEnabled(GateHelper.areGatesOpen(gates));
     }
-  }
-
-  private IIconFactory<ULCIcon> iconFactory;
-
-  private ITranslationProvider  translationProvider;
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction createAction(IDisplayableAction action,
-      IActionHandler actionHandler, IView<ULCComponent> view, Locale locale) {
-    return createAction(action, actionHandler, view.getPeer(), view
-        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IAction createAction(IDisplayableAction action,
-      IActionHandler actionHandler, ULCComponent sourceComponent,
-      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
-      Locale locale) {
-    IAction ulcAction = new ActionAdapter(action, actionHandler,
-        sourceComponent, modelDescriptor, viewConnector, locale);
-    if (action.getActionabilityGates() != null) {
-      Collection<IGate> clonedGates = new HashSet<IGate>();
-      for (IGate gate : action.getActionabilityGates()) {
-        final IGate clonedGate = gate.clone();
-        if (modelDescriptor instanceof IComponentDescriptorProvider
-            && clonedGate instanceof IModelGate) {
-          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
-              (IComponentDescriptorProvider) modelDescriptor));
-          viewConnector
-              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
-
-                public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                      .getModelProvider()).setModel(evt.getNewValue());
-                }
-              });
-        }
-        clonedGates.add(clonedGate);
-      }
-      new GatesListener(ulcAction, clonedGates);
-    }
-    return ulcAction;
-  }
-
-  /**
-   * Sets the iconFactory.
-   *
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<ULCIcon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the translationProvider.
-   *
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 }

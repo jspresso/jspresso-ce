@@ -30,76 +30,13 @@ import com.ulcjava.base.shared.internal.Anything;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class UIColorPicker extends UIComponent implements IEditorComponent {
 
-  private final class ColorPickerTableCellEditor extends AbstractCellEditor
-      implements TableCellEditor {
-
-    private static final long serialVersionUID = 1775568960846323577L;
-
-    private ChangeListener    editingStopChangeListener;
-
-    /**
-     * Constructs a new <code>ColorPickerTableCellEditor</code> instance.
-     */
-    public ColorPickerTableCellEditor() {
-      editingStopChangeListener = new ChangeListener() {
-
-        public void stateChanged(@SuppressWarnings("unused")
-        ChangeEvent e) {
-          stopCellEditing();
-        }
-      };
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public Object getCellEditorValue() {
-      return getBasicObject().getValue();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @SuppressWarnings("unused")
-    public Component getTableCellEditorComponent(JTable table, Object value,
-        boolean isSelected, int row, int col) {
-      getBasicObject().removeChangeListener(editingStopChangeListener);
-      int[] rgba = ColorHelper.fromHexString((String) value);
-      getBasicObject().setValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
-      getBasicObject().addChangeListener(editingStopChangeListener);
-      return getBasicObject();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isCellEditable(EventObject evt) {
-      if (evt instanceof MouseEvent) {
-        MouseEvent me = (MouseEvent) evt;
-        return (me.getClickCount() >= 1);
-      }
-      return super.isCellEditable(evt);
-    }
-  }
-
   private TableCellEditor tableCellEditor;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object createBasicObject(@SuppressWarnings("unused")
-  Anything args) {
-    JColorPicker colorPicker = new JColorPicker();
-    return colorPicker;
-  }
 
   /**
    * {@inheritDoc}
@@ -154,6 +91,33 @@ public class UIColorPicker extends UIComponent implements IEditorComponent {
     }
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void restoreState(Anything args) {
+    super.restoreState(args);
+    handleSetValue(args);
+    handleResetValue(args);
+    getBasicObject().addChangeListener(new ChangeListener() {
+
+      public void stateChanged(@SuppressWarnings("unused")
+      ChangeEvent e) {
+        notifyULCValueChange(getBasicObject().getValue());
+      }
+    });
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object createBasicObject(@SuppressWarnings("unused")
+  Anything args) {
+    JColorPicker colorPicker = new JColorPicker();
+    return colorPicker;
+  }
+
   private void handleResetValue(Anything args) {
     String hexColor = args.get(ColorPickerConstants.RESETVALUE_KEY, "");
     Color resetValue = null;
@@ -192,23 +156,6 @@ public class UIColorPicker extends UIComponent implements IEditorComponent {
         IUlcEventConstants.VALUE_CHANGED);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void restoreState(Anything args) {
-    super.restoreState(args);
-    handleSetValue(args);
-    handleResetValue(args);
-    getBasicObject().addChangeListener(new ChangeListener() {
-
-      public void stateChanged(@SuppressWarnings("unused")
-      ChangeEvent e) {
-        notifyULCValueChange(getBasicObject().getValue());
-      }
-    });
-  }
-
   private void valueToAnything(Color value, Anything args) {
     String hexColor = "";
     if (value != null) {
@@ -216,5 +163,58 @@ public class UIColorPicker extends UIComponent implements IEditorComponent {
           value.getBlue(), value.getAlpha());
     }
     args.put(ColorPickerConstants.VALUE_KEY, hexColor);
+  }
+
+  private final class ColorPickerTableCellEditor extends AbstractCellEditor
+      implements TableCellEditor {
+
+    private static final long serialVersionUID = 1775568960846323577L;
+
+    private ChangeListener    editingStopChangeListener;
+
+    /**
+     * Constructs a new <code>ColorPickerTableCellEditor</code> instance.
+     */
+    public ColorPickerTableCellEditor() {
+      editingStopChangeListener = new ChangeListener() {
+
+        public void stateChanged(@SuppressWarnings("unused")
+        ChangeEvent e) {
+          stopCellEditing();
+        }
+      };
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object getCellEditorValue() {
+      return getBasicObject().getValue();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @SuppressWarnings("unused")
+    public Component getTableCellEditorComponent(JTable table, Object value,
+        boolean isSelected, int row, int col) {
+      getBasicObject().removeChangeListener(editingStopChangeListener);
+      int[] rgba = ColorHelper.fromHexString((String) value);
+      getBasicObject().setValue(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+      getBasicObject().addChangeListener(editingStopChangeListener);
+      return getBasicObject();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isCellEditable(EventObject evt) {
+      if (evt instanceof MouseEvent) {
+        MouseEvent me = (MouseEvent) evt;
+        return (me.getClickCount() >= 1);
+      }
+      return super.isCellEditable(evt);
+    }
   }
 }

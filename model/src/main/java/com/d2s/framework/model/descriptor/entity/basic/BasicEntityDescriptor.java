@@ -13,7 +13,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,10 +23,10 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
 
   /**
    * Constructs a new <code>BasicEntityDescriptor</code> instance.
-   *
+   * 
    * @param name
-   *          the name of the descriptor which has to be the fully-qualified
-   *          class name of its contract.
+   *            the name of the descriptor which has to be the fully-qualified
+   *            class name of its contract.
    */
   public BasicEntityDescriptor(String name) {
     super(name);
@@ -56,7 +56,7 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
 
   /**
    * Gets the purelyAbstract.
-   *
+   * 
    * @return the purelyAbstract.
    */
   @Override
@@ -78,9 +78,9 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
 
   /**
    * Sets the purelyAbstract.
-   *
+   * 
    * @param purelyAbstract
-   *          the purelyAbstract to set.
+   *            the purelyAbstract to set.
    */
   public void setPurelyAbstract(boolean purelyAbstract) {
     this.purelyAbstract = purelyAbstract;

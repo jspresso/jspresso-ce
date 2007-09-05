@@ -35,15 +35,32 @@ public final class SErrorDialog extends SDialog {
 
   private static final long    serialVersionUID = -3122747783739141527L;
 
+  private int                  collapsedHeight  = 0;
+  private SButton              detailsButton;
+
+  private SLabel               detailsPane;
+  private SPanel               detailsPanel;
+  private int                  expandedHeight   = 0;
+
+  private SLabel               iconLabel;
+  private Locale               locale;
+
+  private SLabel               messagePane;
+  private ITranslationProvider translationProvider;
+
+  private SErrorDialog(SFrame owner) {
+    super(owner);
+  }
+
   /**
    * Factory method for error dialog.
    * 
    * @param sourceComponent
-   *          one of the components insinde the owning window.
+   *            one of the components insinde the owning window.
    * @param translationProvider
-   *          the translationProvider for labels.
+   *            the translationProvider for labels.
    * @param locale
-   *          the locale used.
+   *            the locale used.
    * @return the created error dialog instance.
    */
   public static SErrorDialog createInstance(SComponent sourceComponent,
@@ -55,22 +72,80 @@ public final class SErrorDialog extends SDialog {
     errorDialog.initGui();
     return errorDialog;
   }
-  private int                  collapsedHeight  = 0;
 
-  private SButton              detailsButton;
-  private SLabel               detailsPane;
-  private SPanel               detailsPanel;
+  /**
+   * Set the details section of the error dialog. If the details are either null
+   * or an empty string, then hide the detailsPane button and hide the detail
+   * scroll pane. Otherwise, just set the detailsPane section.
+   * 
+   * @param details
+   *            Details to be shown in the detail section of the dialog. This
+   *            can be null if you do not want to display the details section of
+   *            the dialog.
+   */
+  public void setDetails(String details) {
+    if (details == null || details.equals("")) {
+      setDetailsVisible(false);
+      detailsButton.setVisible(false);
+    } else {
+      this.detailsPane.setText(details);
+      setDetailsVisible(false);
+      detailsButton.setVisible(true);
+    }
+  }
 
-  private int                  expandedHeight   = 0;
-  private SLabel               iconLabel;
+  /**
+   * Set the details section of the error dialog. If the details are either null
+   * or an empty string, then hide the detailsPane button and hide the detail
+   * scroll pane. Otherwise, just set the detailsPane section.
+   * 
+   * @param details
+   *            Details to be shown in the detail section of the dialog. This
+   *            can be null if you do not want to display the details section of
+   *            the dialog.
+   */
+  public void setDetails(Throwable details) {
+    String exceptionAsDetails = null;
+    if (details != null) {
+      StringBuffer html = new StringBuffer("<html>");
+      html.append("<b>" + translationProvider.getTranslation("details", locale)
+          + " :</b>");
+      html.append("<pre>");
+      html.append("    " + details.getMessage());
+      html.append("</pre>");
+      html.append("<div></div>");
+      html
+          .append("<b>"
+              + translationProvider.getTranslation("stacktrace", locale)
+              + " :</b>");
+      html.append("<pre>");
+      for (StackTraceElement el : details.getStackTrace()) {
+        html.append("    " + el.toString() + "\n");
+      }
+      html.append("</pre></html>");
+      exceptionAsDetails = html.toString();
+    }
+    setDetails(exceptionAsDetails);
+  }
 
-  private Locale               locale;
-  private SLabel               messagePane;
+  /**
+   * Set the error message for the dialog box.
+   * 
+   * @param message
+   *            Message for the error dialog
+   */
+  public void setMessage(String message) {
+    this.messagePane.setText(message);
+  }
 
-  private ITranslationProvider translationProvider;
-
-  private SErrorDialog(SFrame owner) {
-    super(owner);
+  /**
+   * Specifies the icon to use.
+   * 
+   * @param messageIcon
+   *            the Icon to use. If null, the default error icon will be used
+   */
+  public void setMessageIcon(SIcon messageIcon) {
+    iconLabel.setIcon(messageIcon);
   }
 
   /**
@@ -181,66 +256,11 @@ public final class SErrorDialog extends SDialog {
   }
 
   /**
-   * Set the details section of the error dialog. If the details are either null
-   * or an empty string, then hide the detailsPane button and hide the detail
-   * scroll pane. Otherwise, just set the detailsPane section.
-   * 
-   * @param details
-   *          Details to be shown in the detail section of the dialog. This can
-   *          be null if you do not want to display the details section of the
-   *          dialog.
-   */
-  public void setDetails(String details) {
-    if (details == null || details.equals("")) {
-      setDetailsVisible(false);
-      detailsButton.setVisible(false);
-    } else {
-      this.detailsPane.setText(details);
-      setDetailsVisible(false);
-      detailsButton.setVisible(true);
-    }
-  }
-
-  /**
-   * Set the details section of the error dialog. If the details are either null
-   * or an empty string, then hide the detailsPane button and hide the detail
-   * scroll pane. Otherwise, just set the detailsPane section.
-   * 
-   * @param details
-   *          Details to be shown in the detail section of the dialog. This can
-   *          be null if you do not want to display the details section of the
-   *          dialog.
-   */
-  public void setDetails(Throwable details) {
-    String exceptionAsDetails = null;
-    if (details != null) {
-      StringBuffer html = new StringBuffer("<html>");
-      html.append("<b>" + translationProvider.getTranslation("details", locale)
-          + " :</b>");
-      html.append("<pre>");
-      html.append("    " + details.getMessage());
-      html.append("</pre>");
-      html.append("<div></div>");
-      html
-          .append("<b>"
-              + translationProvider.getTranslation("stacktrace", locale)
-              + " :</b>");
-      html.append("<pre>");
-      for (StackTraceElement el : details.getStackTrace()) {
-        html.append("    " + el.toString() + "\n");
-      }
-      html.append("</pre></html>");
-      exceptionAsDetails = html.toString();
-    }
-    setDetails(exceptionAsDetails);
-  }
-
-  /**
    * Set the detailsPane section to be either visible or invisible. Set the text
    * of the Details button accordingly.
    * 
    * @param b
-   *          if true detailsPane section will be visible
+   *            if true detailsPane section will be visible
    */
   private void setDetailsVisible(boolean b) {
     if (b) {
@@ -263,25 +283,5 @@ public final class SErrorDialog extends SDialog {
           + " >>");
       setPreferredSize(new SDimension(null, collapsedHeight + "px"));
     }
-  }
-
-  /**
-   * Set the error message for the dialog box.
-   * 
-   * @param message
-   *          Message for the error dialog
-   */
-  public void setMessage(String message) {
-    this.messagePane.setText(message);
-  }
-
-  /**
-   * Specifies the icon to use.
-   * 
-   * @param messageIcon
-   *          the Icon to use. If null, the default error icon will be used
-   */
-  public void setMessageIcon(SIcon messageIcon) {
-    iconLabel.setIcon(messageIcon);
   }
 }

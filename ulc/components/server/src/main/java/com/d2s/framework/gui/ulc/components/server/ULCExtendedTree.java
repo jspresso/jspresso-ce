@@ -42,7 +42,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * Constructs a new <code>ULCExtendedTree</code> instance.
    * 
    * @param model
-   *          the tree model.
+   *            the tree model.
    */
   public ULCExtendedTree(ITreeModel model) {
     super(model);
@@ -52,7 +52,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * Constructs a new <code>ULCExtendedTree</code> instance.
    * 
    * @param root
-   *          the root node.
+   *            the root node.
    */
   public ULCExtendedTree(ITreeNode root) {
     super(root);
@@ -62,9 +62,9 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * Constructs a new <code>ULCExtendedTree</code> instance.
    * 
    * @param children
-   *          the list of nodes.
+   *            the list of nodes.
    */
-  public ULCExtendedTree(List children) {
+  public ULCExtendedTree(List<?> children) {
     super(children);
   }
 
@@ -72,9 +72,9 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * Constructs a new <code>ULCExtendedTree</code> instance.
    * 
    * @param children
-   *          the map of children nodes.
+   *            the map of children nodes.
    */
-  public ULCExtendedTree(Map children) {
+  public ULCExtendedTree(Map<?, ?> children) {
     super(children);
   }
 
@@ -82,7 +82,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * Constructs a new <code>ULCExtendedTree</code> instance.
    * 
    * @param children
-   *          the array of children nodes.
+   *            the array of children nodes.
    */
   public ULCExtendedTree(Object[] children) {
     super(children);
@@ -92,34 +92,11 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * Adds an extended listener.
    * 
    * @param listener
-   *          the listener.
+   *            the listener.
    */
   public void addTreeWillExpandListener(IExtendedTreeWillExpandListener listener) {
     internalAddListener(ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT,
         listener);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void handleEvent(int listenerType, int eventId, Anything args) {
-    if (listenerType == ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT) {
-      TreePath treePath = getPathForRow(args.get(ExtendedTreeConstants.ROW_KEY,
-          0));
-      distributeToListeners(new ExtendedTreeExpansionEvent(this, eventId,
-          treePath));
-    } else {
-      super.handleEvent(listenerType, eventId, args);
-    }
-  }
-
-  private void handlePreparePopup(int row) {
-    if (popupFactory != null) {
-      ULCPopupMenu popupMenu = popupFactory
-          .createPopupForTreepath(getPathForRow(row));
-      setComponentPopupMenu(popupMenu);
-    }
   }
 
   /**
@@ -138,7 +115,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * Removes an extended listener.
    * 
    * @param listener
-   *          the listener.
+   *            the listener.
    */
   public void removeExtendedTreeWillExpandListener(
       IExtendedTreeWillExpandListener listener) {
@@ -150,7 +127,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * Sets the popupFactory.
    * 
    * @param popupFactory
-   *          the popupFactory to set.
+   *            the popupFactory to set.
    */
   public void setPopupFactory(ITreePathPopupFactory popupFactory) {
     this.popupFactory = popupFactory;
@@ -160,7 +137,30 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    * {@inheritDoc}
    */
   @Override
+  protected void handleEvent(int listenerType, int eventId, Anything args) {
+    if (listenerType == ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT) {
+      TreePath treePath = getPathForRow(args.get(ExtendedTreeConstants.ROW_KEY,
+          0));
+      distributeToListeners(new ExtendedTreeExpansionEvent(this, eventId,
+          treePath));
+    } else {
+      super.handleEvent(listenerType, eventId, args);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected String typeString() {
     return "com.d2s.framework.gui.ulc.components.client.UIExtendedTree";
+  }
+
+  private void handlePreparePopup(int row) {
+    if (popupFactory != null) {
+      ULCPopupMenu popupMenu = popupFactory
+          .createPopupForTreepath(getPathForRow(row));
+      setComponentPopupMenu(popupMenu);
+    }
   }
 }

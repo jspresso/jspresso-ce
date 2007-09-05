@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 /**
  * Needed at collection getter level to determine the type of the collection
- * elements at runtime..
+ * elements at runtime.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -28,5 +28,5 @@ public @interface ElementClass {
   /**
    * Gets the collection element class.
    */
-  Class value();
+  Class<?> value();
 }

@@ -5,6 +5,10 @@ package com.d2s.framework.application.frontend.startup.swing;
 
 import java.util.Locale;
 
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+
 import com.d2s.framework.application.frontend.startup.AbstractStartup;
 
 /**
@@ -16,7 +20,8 @@ import com.d2s.framework.application.frontend.startup.AbstractStartup;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public abstract class SwingStartup extends AbstractStartup {
+public abstract class SwingStartup extends
+    AbstractStartup<JComponent, Icon, Action> {
 
   /**
    * Returns the client context default locale.

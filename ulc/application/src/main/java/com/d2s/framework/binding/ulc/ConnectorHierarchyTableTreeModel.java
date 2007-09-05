@@ -19,61 +19,27 @@ import com.ulcjava.base.application.tabletree.AbstractTableTreeModel;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
 
-  private final class TreeModelListenerAdapter implements ITreeModelListener {
-
-    private static final long serialVersionUID = 5507166182742867920L;
-
-    /**
-     * {@inheritDoc}
-     */
-    public void treeNodesChanged(TreeModelEvent event) {
-      nodesChanged(event.getTreePath(), event.getChildIndices());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void treeNodesInserted(TreeModelEvent event) {
-      nodesWereInserted(event.getTreePath(), event.getChildIndices());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void treeNodesRemoved(TreeModelEvent event) {
-      nodesWereRemoved(event.getTreePath(), event.getChildIndices(), event
-          .getChildren());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void treeStructureChanged(TreeModelEvent event) {
-      nodeStructureChanged(event.getTreePath());
-    }
-  }
-
   private static final long           serialVersionUID = -345481127092324072L;
-  private Map<String, Class>          columnClassesByIds;
-  private List<String>                columnConnectorKeys;
 
+  private Map<String, Class<?>>       columnClassesByIds;
+  private List<String>                columnConnectorKeys;
   private ConnectorHierarchyTreeModel treeModelDelegate;
 
   /**
    * Constructs a new <code>ConnectorHierarchyTableTreeModel</code> instance.
-   *
+   * 
    * @param rootConnector
-   *          the connector being the root node of the tree.
+   *            the connector being the root node of the tree.
    * @param tree
-   *          the tree to which this model wiil be attached to. It will be used
-   *          for the model to bea notified of expansions so that it can
-   *          lazy-load the tree hierarchy.
+   *            the tree to which this model wiil be attached to. It will be
+   *            used for the model to bea notified of expansions so that it can
+   *            lazy-load the tree hierarchy.
    */
   public ConnectorHierarchyTableTreeModel(
       ICompositeValueConnector rootConnector, @SuppressWarnings("unused")
@@ -170,19 +136,19 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
 
   /**
    * Sets the columnClassesByIds.
-   *
+   * 
    * @param columnClassesByIds
-   *          the columnClassesByIds to set.
+   *            the columnClassesByIds to set.
    */
-  public void setColumnClassesByIds(Map<String, Class> columnClassesByIds) {
+  public void setColumnClassesByIds(Map<String, Class<?>> columnClassesByIds) {
     this.columnClassesByIds = columnClassesByIds;
   }
 
   /**
    * Sets the columnConnectorKeys.
-   *
+   * 
    * @param columnConnectorKeys
-   *          the columnConnectorKeys to set.
+   *            the columnConnectorKeys to set.
    */
   public void setColumnConnectorKeys(List<String> columnConnectorKeys) {
     this.columnConnectorKeys = columnConnectorKeys;
@@ -211,6 +177,40 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
           cellConnector.setConnectorValue(value);
         }
       }
+    }
+  }
+
+  private final class TreeModelListenerAdapter implements ITreeModelListener {
+
+    private static final long serialVersionUID = 5507166182742867920L;
+
+    /**
+     * {@inheritDoc}
+     */
+    public void treeNodesChanged(TreeModelEvent event) {
+      nodesChanged(event.getTreePath(), event.getChildIndices());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void treeNodesInserted(TreeModelEvent event) {
+      nodesWereInserted(event.getTreePath(), event.getChildIndices());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void treeNodesRemoved(TreeModelEvent event) {
+      nodesWereRemoved(event.getTreePath(), event.getChildIndices(), event
+          .getChildren());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void treeStructureChanged(TreeModelEvent event) {
+      nodeStructureChanged(event.getTreePath());
     }
   }
 }

@@ -29,9 +29,9 @@ public class ConnectorValueChangeSupport {
    * Constructs a new Connector change support.
    * 
    * @param sourceConnector
-   *          The connector to which this ConnectorValueChangeSupport is
-   *          attached. sourceConnector will serve as <code>source</code> of
-   *          fired ConnectorValueChangeEvent if no other is provided.
+   *            The connector to which this ConnectorValueChangeSupport is
+   *            attached. sourceConnector will serve as <code>source</code> of
+   *            fired ConnectorValueChangeEvent if no other is provided.
    */
   public ConnectorValueChangeSupport(IValueConnector sourceConnector) {
     if (sourceConnector == null) {
@@ -44,7 +44,7 @@ public class ConnectorValueChangeSupport {
    * Adds a new listener to this connector.
    * 
    * @param listener
-   *          The added listener.
+   *            The added listener.
    * @see IValueConnector#addConnectorValueChangeListener(IConnectorValueChangeListener)
    */
   public synchronized void addConnectorValueChangeListener(
@@ -65,7 +65,7 @@ public class ConnectorValueChangeSupport {
    * collection.
    * 
    * @param listener
-   *          the excluded listener.
+   *            the excluded listener.
    */
   public void addInhibitedListener(IConnectorValueChangeListener listener) {
     if (inhibitedListeners == null && listener != null) {
@@ -79,7 +79,7 @@ public class ConnectorValueChangeSupport {
    * whithout modifying its source) to the listeners.
    * 
    * @param evt
-   *          the propagated <code>ConnectorValueChangeEvent</code>
+   *            the propagated <code>ConnectorValueChangeEvent</code>
    */
   public void fireConnectorValueChange(ConnectorValueChangeEvent evt) {
     if (listeners != null) {
@@ -105,9 +105,9 @@ public class ConnectorValueChangeSupport {
    * <code>source</code> as source and parameters as old and new values.
    * 
    * @param oldValue
-   *          The old connector's value
+   *            The old connector's value
    * @param newValue
-   *          The new connector's value
+   *            The new connector's value
    */
   public void fireConnectorValueChange(Object oldValue, Object newValue) {
     ConnectorValueChangeEvent evt = new ConnectorValueChangeEvent(source,
@@ -128,7 +128,7 @@ public class ConnectorValueChangeSupport {
    * Removes a new <code>IConnectorValueChangeListener</code>.
    * 
    * @param listener
-   *          The removed listener.
+   *            The removed listener.
    * @see IValueConnector#removeConnectorValueChangeListener(IConnectorValueChangeListener)
    */
   public synchronized void removeConnectorValueChangeListener(
@@ -143,7 +143,7 @@ public class ConnectorValueChangeSupport {
    * being re-added to the actual listeners collection.
    * 
    * @param listener
-   *          the previously excluded listener.
+   *            the previously excluded listener.
    */
   public void removeInhibitedListener(IConnectorValueChangeListener listener) {
     if (inhibitedListeners == null || listener == null) {

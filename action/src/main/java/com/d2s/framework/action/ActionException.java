@@ -23,7 +23,7 @@ public class ActionException extends NestedRuntimeException {
    * Constructs a new <code>ActionException</code> instance.
    * 
    * @param message
-   *          the exception message.
+   *            the exception message.
    */
   public ActionException(String message) {
     super(message);
@@ -33,7 +33,7 @@ public class ActionException extends NestedRuntimeException {
    * Constructs a new <code>ActionException</code> instance.
    * 
    * @param nestedException
-   *          the nested exception.
+   *            the nested exception.
    */
   public ActionException(Throwable nestedException) {
     super(nestedException);
@@ -43,9 +43,9 @@ public class ActionException extends NestedRuntimeException {
    * Constructs a new <code>ActionException</code> instance.
    * 
    * @param nestedException
-   *          the nested exception.
+   *            the nested exception.
    * @param message
-   *          the exception message.
+   *            the exception message.
    */
   public ActionException(Throwable nestedException, String message) {
     super(nestedException, message);

@@ -24,9 +24,9 @@ public class JImageConnector extends JComponentConnector<JLabel> {
    * Constructs a new <code>JImageConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param connectedJComponent
-   *          the connected JLabel.
+   *            the connected JLabel.
    */
   public JImageConnector(String id, JLabel connectedJComponent) {
     super(id, connectedJComponent);

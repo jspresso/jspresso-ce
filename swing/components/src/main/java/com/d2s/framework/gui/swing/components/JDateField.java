@@ -24,7 +24,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -34,11 +34,11 @@ public class JDateField extends DateField {
 
   /**
    * Constructs a new <code>JDateField</code> instance.
-   *
+   * 
    * @param showWeekNumbers
-   *          true if the week numbers must be shown.
+   *            true if the week numbers must be shown.
    * @param locale
-   *          the user locale.
+   *            the user locale.
    */
   public JDateField(boolean showWeekNumbers, Locale locale) {
     super(showWeekNumbers);
@@ -47,11 +47,11 @@ public class JDateField extends DateField {
 
   /**
    * Constructs a new <code>JDateField</code> instance.
-   *
+   * 
    * @param formatter
-   *          formatter used for the textfield.
+   *            formatter used for the textfield.
    * @param locale
-   *          the user locale.
+   *            the user locale.
    */
   public JDateField(DateFormatter formatter, Locale locale) {
     super(formatter);
@@ -60,32 +60,25 @@ public class JDateField extends DateField {
 
   /**
    * Constructs a new <code>JDateField</code> instance.
-   *
+   * 
    * @param locale
-   *          the user locale.
+   *            the user locale.
    */
   public JDateField(Locale locale) {
     super();
     initDefaultBehaviour(locale);
   }
 
-  private void initDefaultBehaviour(Locale locale) {
-    new FormatSymbols((DateFormatter) getFormattedTextField().getFormatter(),
-        locale);
-    getFormattedTextField().setBorder(
-        BorderFactory.createEmptyBorder(1, 5, 1, 5));
-    SwingUtil.enableSelectionOnFocusGained(getFormattedTextField());
-    addFocusListener(new FocusAdapter() {
-
-      @Override
-      public void focusGained(FocusEvent e) {
-        if (!e.isTemporary()) {
-          JTextField tf = ((DateField) e.getSource()).getFormattedTextField();
-          tf.requestFocus();
-        }
-      }
-    });
-    setValue(null);
+  /**
+   * Turns the date field to be editable or not.
+   * 
+   * @param editable
+   *            true if editable.
+   */
+  public void setEditable(boolean editable) {
+    super.setEnabled(editable);
+    getFormattedTextField().setEnabled(true);
+    getFormattedTextField().setEditable(editable);
   }
 
   /**
@@ -106,15 +99,22 @@ public class JDateField extends DateField {
     return false;
   }
 
-  /**
-   * Turns the date field to be editable or not.
-   *
-   * @param editable
-   *          true if editable.
-   */
-  public void setEditable(boolean editable) {
-    super.setEnabled(editable);
-    getFormattedTextField().setEnabled(true);
-    getFormattedTextField().setEditable(editable);
+  private void initDefaultBehaviour(Locale locale) {
+    new FormatSymbols((DateFormatter) getFormattedTextField().getFormatter(),
+        locale);
+    getFormattedTextField().setBorder(
+        BorderFactory.createEmptyBorder(1, 5, 1, 5));
+    SwingUtil.enableSelectionOnFocusGained(getFormattedTextField());
+    addFocusListener(new FocusAdapter() {
+
+      @Override
+      public void focusGained(FocusEvent e) {
+        if (!e.isTemporary()) {
+          JTextField tf = ((DateField) e.getSource()).getFormattedTextField();
+          tf.requestFocus();
+        }
+      }
+    });
+    setValue(null);
   }
 }

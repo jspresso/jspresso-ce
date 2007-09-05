@@ -43,13 +43,13 @@ public abstract class AbstractCollectionConnector extends
    * Creates a new <code>AbstractCollectionConnector</code>.
    * 
    * @param id
-   *          the connector id.
+   *            the connector id.
    * @param binder
-   *          the <code>IMvcBinder</code> used to bind dynamicatlly created
-   *          child connectors.
+   *            the <code>IMvcBinder</code> used to bind dynamicatlly created
+   *            child connectors.
    * @param childConnectorPrototype
-   *          the connector prototype used to create new instances of child
-   *          connectors.
+   *            the connector prototype used to create new instances of child
+   *            connectors.
    */
   public AbstractCollectionConnector(String id, IMvcBinder binder,
       ICompositeValueConnector childConnectorPrototype) {
@@ -130,20 +130,6 @@ public abstract class AbstractCollectionConnector extends
     return clonedConnector;
   }
 
-  private String computeConnectorId(int i) {
-    return CollectionConnectorHelper.computeConnectorId(getId(), i);
-  }
-
-  /**
-   * Takes a snapshot of the collection (does not keep the reference itself).
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected Object computeOldConnectorValue(Object connectorValue) {
-    return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
-  }
-
   /**
    * Dynamically adapts collection of child connectors (child connectors are
    * added or removed depending on the state of the source connector of the
@@ -158,40 +144,12 @@ public abstract class AbstractCollectionConnector extends
   }
 
   /**
-   * Overrides the default to produce
-   * <code>CollectionConnectorValueChangeEvent</code>s.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected ConnectorValueChangeEvent createChangeEvent(
-      Object oldConnectorValue, Object newConnectorValue) {
-    CollectionConnectorValueChangeEvent changeEvent = new CollectionConnectorValueChangeEvent(
-        this, oldConnectorValue, newConnectorValue, removedChildrenConnectors);
-    changeEvent.setDelayedEvent(isDelayedEvent);
-    removedChildrenConnectors = null;
-    return changeEvent;
-  }
-
-  /**
    * creates a new connector cloning the connector prototype.
    * <p>
    * {@inheritDoc}
    */
   public IValueConnector createChildConnector(String newConnectorId) {
     return childConnectorPrototype.clone(newConnectorId);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void fireConnectorValueChange() {
-    needsFireConnectorValueChange = true;
-    if (!allowLazyChildrenLoading) {
-      needsFireConnectorValueChange = false;
-      super.fireConnectorValueChange();
-    }
   }
 
   /**
@@ -297,7 +255,7 @@ public abstract class AbstractCollectionConnector extends
    * Sets the allowLazyChildrenLoading.
    * 
    * @param allowLazyChildrenLoading
-   *          the allowLazyChildrenLoading to set.
+   *            the allowLazyChildrenLoading to set.
    */
   public void setAllowLazyChildrenLoading(boolean allowLazyChildrenLoading) {
     this.allowLazyChildrenLoading = allowLazyChildrenLoading;
@@ -353,6 +311,44 @@ public abstract class AbstractCollectionConnector extends
   }
 
   /**
+   * Takes a snapshot of the collection (does not keep the reference itself).
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected Object computeOldConnectorValue(Object connectorValue) {
+    return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
+  }
+
+  /**
+   * Overrides the default to produce
+   * <code>CollectionConnectorValueChangeEvent</code>s.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected ConnectorValueChangeEvent createChangeEvent(
+      Object oldConnectorValue, Object newConnectorValue) {
+    CollectionConnectorValueChangeEvent changeEvent = new CollectionConnectorValueChangeEvent(
+        this, oldConnectorValue, newConnectorValue, removedChildrenConnectors);
+    changeEvent.setDelayedEvent(isDelayedEvent);
+    removedChildrenConnectors = null;
+    return changeEvent;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void fireConnectorValueChange() {
+    needsFireConnectorValueChange = true;
+    if (!allowLazyChildrenLoading) {
+      needsFireConnectorValueChange = false;
+      super.fireConnectorValueChange();
+    }
+  }
+
+  /**
    * Updates child connectors depending on the state of the model connector.
    */
   protected void updateChildConnectors() {
@@ -385,5 +381,9 @@ public abstract class AbstractCollectionConnector extends
         removeChildConnector(connectorToRemove);
       }
     }
+  }
+
+  private String computeConnectorId(int i) {
+    return CollectionConnectorHelper.computeConnectorId(getId(), i);
   }
 }

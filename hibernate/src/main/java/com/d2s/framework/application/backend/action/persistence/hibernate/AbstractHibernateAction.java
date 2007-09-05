@@ -34,7 +34,7 @@ import com.d2s.framework.model.entity.IEntity;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -42,17 +42,17 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Performs necessary cleanings when an entity is deleted.
-   *
+   * 
    * @param entity
-   *          the deleted entity.
+   *            the deleted entity.
    * @param context
-   *          The action context.
+   *            The action context.
    * @throws IllegalAccessException
-   *           whenever this kind of exception occurs.
+   *             whenever this kind of exception occurs.
    * @throws InvocationTargetException
-   *           whenever this kind of exception occurs.
+   *             whenever this kind of exception occurs.
    * @throws NoSuchMethodException
-   *           whenever this kind of exception occurs.
+   *             whenever this kind of exception occurs.
    */
   @SuppressWarnings("unchecked")
   protected void cleanRelationshipsOnDeletion(IEntity entity,
@@ -97,9 +97,9 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Gets the hibernateTemplate.
-   *
+   * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the hibernateTemplate.
    */
   protected HibernateTemplate getHibernateTemplate(Map<String, Object> context) {
@@ -108,14 +108,93 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   /**
    * Gets the transactionTemplate.
-   *
+   * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the transactionTemplate.
    */
   protected TransactionTemplate getTransactionTemplate(
       Map<String, Object> context) {
     return getController(context).getTransactionTemplate();
+  }
+
+  /**
+   * This method must be called to (re)attach application session entities to
+   * the current hibernate session.
+   * 
+   * @param entity
+   *            the entity to merge.
+   * @param hibernateSession
+   *            the hibernate session
+   * @param context
+   *            the action context.
+   * @return the merged entity.
+   */
+  protected IEntity mergeInHibernate(IEntity entity, Session hibernateSession,
+      Map<String, Object> context) {
+    return mergeInHibernate(Collections.singletonList(entity),
+        hibernateSession, context).get(0);
+  }
+
+  /**
+   * This method must be called to (re)attach application session entities to
+   * the current hibernate session.
+   * 
+   * @param entities
+   *            the entities to merge.
+   * @param hibernateSession
+   *            the hibernate session
+   * @param context
+   *            the action context.
+   * @return the merged entity.
+   */
+  protected List<IEntity> mergeInHibernate(List<IEntity> entities,
+      Session hibernateSession, Map<String, Object> context) {
+    List<IEntity> mergedEntities = getApplicationSession(context)
+        .cloneInUnitOfWork(entities);
+    Set<IEntity> alreadyLocked = new HashSet<IEntity>();
+    for (IEntity mergedEntity : mergedEntities) {
+      lockInHibernate(mergedEntity, hibernateSession, alreadyLocked);
+    }
+    return mergedEntities;
+  }
+
+  /**
+   * Reloads an entity in hibernate.
+   * 
+   * @param entity
+   *            the entity to save.
+   * @param context
+   *            the action context.
+   */
+  protected void reloadEntity(IEntity entity, Map<String, Object> context) {
+    if (entity.isPersistent()) {
+      HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
+      getApplicationSession(context).merge(
+          (IEntity) hibernateTemplate.load(entity.getContract().getName(),
+              entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
+    }
+  }
+
+  /**
+   * Saves an entity in hibernate.
+   * 
+   * @param entity
+   *            the entity to save.
+   * @param context
+   *            the action context.
+   */
+  protected void saveEntity(final IEntity entity,
+      final Map<String, Object> context) {
+    getHibernateTemplate(context).execute(new HibernateCallback() {
+
+      public Object doInHibernate(Session session) {
+        IEntity mergedEntity = mergeInHibernate(entity, session, context);
+        session.saveOrUpdate(mergedEntity);
+        session.flush();
+        return null;
+      }
+    });
   }
 
   @SuppressWarnings("unchecked")
@@ -139,92 +218,12 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
             } else if (property.getValue() instanceof Collection) {
               for (Iterator<IEntity> ite = ((Collection<IEntity>) property
                   .getValue()).iterator(); ite.hasNext();) {
-                lockInHibernate(ite.next(), hibernateSession,
-                    alreadyLocked);
+                lockInHibernate(ite.next(), hibernateSession, alreadyLocked);
               }
             }
           }
         }
       }
     }
-  }
-
-  /**
-   * This method must be called to (re)attach application session entities to
-   * the current hibernate session.
-   *
-   * @param entity
-   *          the entity to merge.
-   * @param hibernateSession
-   *          the hibernate session
-   * @param context
-   *          the action context.
-   * @return the merged entity.
-   */
-  protected IEntity mergeInHibernate(IEntity entity, Session hibernateSession,
-      Map<String, Object> context) {
-    return mergeInHibernate(Collections.singletonList(entity),
-        hibernateSession, context).get(0);
-  }
-
-  /**
-   * This method must be called to (re)attach application session entities to
-   * the current hibernate session.
-   *
-   * @param entities
-   *          the entities to merge.
-   * @param hibernateSession
-   *          the hibernate session
-   * @param context
-   *          the action context.
-   * @return the merged entity.
-   */
-  protected List<IEntity> mergeInHibernate(List<IEntity> entities,
-      Session hibernateSession, Map<String, Object> context) {
-    List<IEntity> mergedEntities = getApplicationSession(context)
-        .cloneInUnitOfWork(entities);
-    Set<IEntity> alreadyLocked = new HashSet<IEntity>();
-    for (IEntity mergedEntity : mergedEntities) {
-      lockInHibernate(mergedEntity, hibernateSession, alreadyLocked);
-    }
-    return mergedEntities;
-  }
-
-  /**
-   * Reloads an entity in hibernate.
-   *
-   * @param entity
-   *          the entity to save.
-   * @param context
-   *          the action context.
-   */
-  protected void reloadEntity(IEntity entity, Map<String, Object> context) {
-    if (entity.isPersistent()) {
-      HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
-      getApplicationSession(context).merge(
-          (IEntity) hibernateTemplate.load(entity.getContract().getName(),
-              entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
-    }
-  }
-
-  /**
-   * Saves an entity in hibernate.
-   *
-   * @param entity
-   *          the entity to save.
-   * @param context
-   *          the action context.
-   */
-  protected void saveEntity(final IEntity entity,
-      final Map<String, Object> context) {
-    getHibernateTemplate(context).execute(new HibernateCallback() {
-
-      public Object doInHibernate(Session session) {
-        IEntity mergedEntity = mergeInHibernate(entity, session, context);
-        session.saveOrUpdate(mergedEntity);
-        session.flush();
-        return null;
-      }
-    });
   }
 }

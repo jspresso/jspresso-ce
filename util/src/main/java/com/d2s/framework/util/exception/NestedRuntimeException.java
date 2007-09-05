@@ -21,7 +21,7 @@ public class NestedRuntimeException extends RuntimeException {
    * Constructs a new NestedRuntimeException.
    * 
    * @param message
-   *          the exception message.
+   *            the exception message.
    */
   public NestedRuntimeException(String message) {
     super(message);
@@ -31,7 +31,7 @@ public class NestedRuntimeException extends RuntimeException {
    * Constructs a new NestedRuntimeException.
    * 
    * @param nestedException
-   *          the wrapped exception (checked or unchecked).
+   *            the wrapped exception (checked or unchecked).
    */
   public NestedRuntimeException(Throwable nestedException) {
     super(nestedException);
@@ -41,9 +41,9 @@ public class NestedRuntimeException extends RuntimeException {
    * Constructs a new NestedRuntimeException.
    * 
    * @param nestedException
-   *          the wrapped exception (checked or unchecked).
+   *            the wrapped exception (checked or unchecked).
    * @param message
-   *          an additional specific message.
+   *            an additional specific message.
    */
   public NestedRuntimeException(Throwable nestedException, String message) {
     super(message, nestedException);

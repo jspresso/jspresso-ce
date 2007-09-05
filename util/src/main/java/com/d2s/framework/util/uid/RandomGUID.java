@@ -95,6 +95,10 @@ public class RandomGUID extends Object {
   private static Random       myRand;
   private static SecureRandom mySecureRand;
   private static String       sId;
+  private String              valueAfterMD5  = "";
+
+  private String              valueBeforeMD5 = "";
+
   /**
    * Static block to take care of one time secureRandom seed. It takes a few
    * seconds to initialize SecureRandom. You might want to consider removing
@@ -113,25 +117,6 @@ public class RandomGUID extends Object {
   }
 
   /**
-   * Demonstraton and self test of class.
-   * 
-   * @param args
-   *          program arguments.
-   */
-  public static void main(String[] args) {
-    for (int i = 0; i < 10000; i++) {
-      RandomGUID myGUID = new RandomGUID();
-      System.out.println("Seeding String=" + myGUID.valueBeforeMD5);
-      System.out.println("rawGUID=" + myGUID.valueAfterMD5);
-      System.out.println("RandomGUID=" + myGUID.toString());
-    }
-  }
-
-  private String              valueAfterMD5  = "";
-
-  private String              valueBeforeMD5 = "";
-
-  /**
    * Default constructor. With no specification of security option, this
    * constructor defaults to lower security, high performance.
    */
@@ -143,13 +128,51 @@ public class RandomGUID extends Object {
    * Constructor with security option.
    * 
    * @param secure
-   *          Setting secure true enables each random number generated to be
-   *          cryptographically strong. Secure false defaults to the standard
-   *          Random function seeded with a single cryptographically strong
-   *          random number.
+   *            Setting secure true enables each random number generated to be
+   *            cryptographically strong. Secure false defaults to the standard
+   *            Random function seeded with a single cryptographically strong
+   *            random number.
    */
   public RandomGUID(boolean secure) {
     getRandomGUID(secure);
+  }
+
+  /**
+   * Demonstraton and self test of class.
+   * 
+   * @param args
+   *            program arguments.
+   */
+  public static void main(String[] args) {
+    for (int i = 0; i < 10000; i++) {
+      RandomGUID myGUID = new RandomGUID();
+      System.out.println("Seeding String=" + myGUID.valueBeforeMD5);
+      System.out.println("rawGUID=" + myGUID.valueAfterMD5);
+      System.out.println("RandomGUID=" + myGUID.toString());
+    }
+  }
+
+  /**
+   * Convert to the standard format for GUID (Useful for SQL Server
+   * UniqueIdentifiers, etc.). Example: C2FEEEAC-CFCD-11D1-8B05-00600806D9B6
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public String toString() {
+    String raw = valueAfterMD5.toUpperCase();
+    StringBuffer sb = new StringBuffer();
+    sb.append(raw.substring(0, 8));
+    sb.append("-");
+    sb.append(raw.substring(8, 12));
+    sb.append("-");
+    sb.append(raw.substring(12, 16));
+    sb.append("-");
+    sb.append(raw.substring(16, 20));
+    sb.append("-");
+    sb.append(raw.substring(20));
+
+    return sb.toString();
   }
 
   /**
@@ -205,28 +228,5 @@ public class RandomGUID extends Object {
     } catch (Exception e) {
       System.out.println("Error:" + e);
     }
-  }
-
-  /**
-   * Convert to the standard format for GUID (Useful for SQL Server
-   * UniqueIdentifiers, etc.). Example: C2FEEEAC-CFCD-11D1-8B05-00600806D9B6
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    String raw = valueAfterMD5.toUpperCase();
-    StringBuffer sb = new StringBuffer();
-    sb.append(raw.substring(0, 8));
-    sb.append("-");
-    sb.append(raw.substring(8, 12));
-    sb.append("-");
-    sb.append(raw.substring(12, 16));
-    sb.append("-");
-    sb.append(raw.substring(16, 20));
-    sb.append("-");
-    sb.append(raw.substring(20));
-
-    return sb.toString();
   }
 }

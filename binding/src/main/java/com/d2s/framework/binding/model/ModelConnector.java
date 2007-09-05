@@ -27,11 +27,11 @@ public class ModelConnector extends ModelRefPropertyConnector {
    * Constructs a new instance based on the model class passed as parameter.
    * 
    * @param modelDescriptor
-   *          the model descriptor backing this connector.
+   *            the model descriptor backing this connector.
    * @param modelConnectorFactory
-   *          the factory used to create the child property connectors.
+   *            the factory used to create the child property connectors.
    */
-  ModelConnector(IComponentDescriptorProvider modelDescriptor,
+  ModelConnector(IComponentDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory);
     this.modelProvider = new EmbeddedModelProvider(modelDescriptor);
@@ -52,6 +52,14 @@ public class ModelConnector extends ModelRefPropertyConnector {
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IModelProvider getModelProvider() {
+    return modelProvider;
+  }
+
+  /**
    * Returns the model itself (the java model instance).
    * <p>
    * {@inheritDoc}
@@ -59,14 +67,6 @@ public class ModelConnector extends ModelRefPropertyConnector {
   @Override
   protected Object getConnecteeValue() {
     return getModelProvider().getModel();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public IModelProvider getModelProvider() {
-    return modelProvider;
   }
 
   /**

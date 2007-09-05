@@ -8,25 +8,21 @@ package com.d2s.framework.util.gui;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ColorHelper {
 
-  private static String formatByteToPaddedHex(int i, int l) {
-    StringBuffer hex = new StringBuffer(Integer.toString(i, 16).toUpperCase());
-    while (hex.length() < l) {
-      hex.insert(0, "0");
-    }
-    return hex.toString();
+  private ColorHelper() {
+    // private constructor for helper class.
   }
 
   /**
    * Transforms a color rgba components to their hex string representation.
-   *
+   * 
    * @param hexString
-   *          the Hex string representation.
+   *            the Hex string representation.
    * @return the rgba components of the color once parsed in an array.
    */
   public static int[] fromHexString(String hexString) {
@@ -40,15 +36,15 @@ public final class ColorHelper {
 
   /**
    * Transforms a color rgba components to their hex string representation.
-   *
+   * 
    * @param r
-   *          the red component.
+   *            the red component.
    * @param g
-   *          the green component.
+   *            the green component.
    * @param b
-   *          the blue component.
+   *            the blue component.
    * @param a
-   *          the alpha (transparency) component.
+   *            the alpha (transparency) component.
    * @return the Hex string representation.
    */
   public static String toHexString(int r, int g, int b, int a) {
@@ -60,7 +56,11 @@ public final class ColorHelper {
     return hexString.toString();
   }
 
-  private ColorHelper() {
-    // private constructor for helper class.
+  private static String formatByteToPaddedHex(int i, int l) {
+    StringBuffer hex = new StringBuffer(Integer.toString(i, 16).toUpperCase());
+    while (hex.length() < l) {
+      hex.insert(0, "0");
+    }
+    return hex.toString();
   }
 }

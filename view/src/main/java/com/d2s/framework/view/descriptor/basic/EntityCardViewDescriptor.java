@@ -39,12 +39,12 @@ public class EntityCardViewDescriptor extends AbstractCardViewDescriptor {
    * Sets the viewDescriptors.
    * 
    * @param viewDescriptors
-   *          the viewDescriptors to set.
+   *            the viewDescriptors to set.
    */
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     Map<String, IViewDescriptor> classCardMapping = new LinkedHashMap<String, IViewDescriptor>();
     for (IViewDescriptor entityViewDescriptor : viewDescriptors) {
-      classCardMapping.put(((IComponentDescriptor) entityViewDescriptor
+      classCardMapping.put(((IComponentDescriptor<?>) entityViewDescriptor
           .getModelDescriptor()).getComponentContract().getName(),
           entityViewDescriptor);
     }

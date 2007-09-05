@@ -28,7 +28,7 @@ public class BeanAccessorFactory implements IAccessorFactory {
    * {@inheritDoc}
    */
   public ICollectionAccessor createCollectionPropertyAccessor(String property,
-      Class beanClass, Class elementClass) {
+      Class<?> beanClass, Class<?> elementClass) {
     if (List.class.isAssignableFrom(PropertyHelper.getPropertyType(beanClass,
         property))) {
       return new BeanListAccessor(property, beanClass, elementClass);
@@ -41,7 +41,7 @@ public class BeanAccessorFactory implements IAccessorFactory {
    * <p>
    * {@inheritDoc}
    */
-  public IAccessor createPropertyAccessor(String property, Class beanClass) {
+  public IAccessor createPropertyAccessor(String property, Class<?> beanClass) {
     return new BeanPropertyAccessor(property, beanClass);
   }
 }

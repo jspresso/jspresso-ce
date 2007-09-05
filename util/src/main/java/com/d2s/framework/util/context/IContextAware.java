@@ -28,7 +28,7 @@ public interface IContextAware {
    * Sets the current context.
    * 
    * @param context
-   *          the context to set.
+   *            the context to set.
    */
   void setContext(Map<String, Object> context);
 }

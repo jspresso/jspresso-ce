@@ -53,11 +53,11 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * Constructs a new <code>AbstractFlowAction</code> instance.
    * 
    * @param firstOption
-   *          the label for the 1st option.
+   *            the label for the 1st option.
    * @param secondOption
-   *          the label for the 2nd option.
+   *            the label for the 2nd option.
    * @param thirdOption
-   *          the label for the 3rd option.
+   *            the label for the 3rd option.
    */
   protected AbstractFlowAction(String firstOption, String secondOption,
       String thirdOption) {
@@ -120,9 +120,9 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * Calls the super-implementation to execute the next action.
    * 
    * @param actionHandler
-   *          the action handler responsible for the action execution.
+   *            the action handler responsible for the action execution.
    * @param context
-   *          the action context.
+   *            the action context.
    */
   protected void executeNextAction(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -133,7 +133,7 @@ public abstract class AbstractFlowAction extends AbstractMessageAction {
    * Gets the action to execute next based on the user selected option.
    * 
    * @param selectedOption
-   *          the user selected option.
+   *            the user selected option.
    * @return the action to execute next.
    */
   protected abstract IAction getNextAction(String selectedOption);

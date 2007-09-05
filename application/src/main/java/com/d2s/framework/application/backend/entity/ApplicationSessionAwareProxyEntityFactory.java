@@ -19,7 +19,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -39,6 +39,16 @@ public class ApplicationSessionAwareProxyEntityFactory extends
     T newEntity = super.createEntityInstance(entityContract);
     applicationSession.registerEntity(newEntity, true);
     return newEntity;
+  }
+
+  /**
+   * Sets the applicationSession.
+   * 
+   * @param applicationSession
+   *            the applicationSession to set.
+   */
+  public void setApplicationSession(IApplicationSession applicationSession) {
+    this.applicationSession = applicationSession;
   }
 
   /**
@@ -68,15 +78,5 @@ public class ApplicationSessionAwareProxyEntityFactory extends
   @Override
   protected UserPrincipal getPrincipal() {
     return applicationSession.getPrincipal();
-  }
-
-  /**
-   * Sets the applicationSession.
-   *
-   * @param applicationSession
-   *          the applicationSession to set.
-   */
-  public void setApplicationSession(IApplicationSession applicationSession) {
-    this.applicationSession = applicationSession;
   }
 }

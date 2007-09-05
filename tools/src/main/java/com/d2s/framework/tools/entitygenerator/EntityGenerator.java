@@ -43,7 +43,7 @@ import freemarker.template.TemplateException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -58,11 +58,20 @@ public class EntityGenerator {
   private static final String TEMPLATE_NAME           = "templateName";
   private static final String TEMPLATE_RESOURCE_PATH  = "templateResourcePath";
 
+  private String              applicationContextKey;
+  private String[]            componentNames;
+  private String[]            excludePatterns;
+  private boolean             generateAnnotations;
+  private String[]            includePackages;
+  private String              outputDir;
+  private String              templateName;
+  private String              templateResourcePath;
+
   /**
    * Starts Code generation for an component.
-   *
+   * 
    * @param args
-   *          the command line arguments.
+   *            the command line arguments.
    */
   @SuppressWarnings("static-access")
   public static void main(String[] args) {
@@ -135,15 +144,6 @@ public class EntityGenerator {
     generator.setComponentNames(cmd.getOptionValues(COMPONENT_NAMES));
     generator.generateComponents();
   }
-  private String              applicationContextKey;
-  private String[]            componentNames;
-  private String[]            excludePatterns;
-  private boolean             generateAnnotations;
-  private String[]            includePackages;
-  private String              outputDir;
-  private String              templateName;
-
-  private String              templateResourcePath;
 
   /**
    * Generates the component java source files.
@@ -230,17 +230,11 @@ public class EntityGenerator {
     }
   }
 
-  private ApplicationContext getApplicationContext() {
-    BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
-    BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
-    return (ApplicationContext) bf.getFactory();
-  }
-
   /**
    * Sets the applicationContextKey.
-   *
+   * 
    * @param applicationContextKey
-   *          the applicationContextKey to set.
+   *            the applicationContextKey to set.
    */
   public void setApplicationContextKey(String applicationContextKey) {
     this.applicationContextKey = applicationContextKey;
@@ -248,9 +242,9 @@ public class EntityGenerator {
 
   /**
    * Sets the componentNames.
-   *
+   * 
    * @param componentNames
-   *          the componentNames to set.
+   *            the componentNames to set.
    */
   public void setComponentNames(String[] componentNames) {
     this.componentNames = componentNames;
@@ -258,9 +252,9 @@ public class EntityGenerator {
 
   /**
    * Sets the excludePatterns.
-   *
+   * 
    * @param excludePatterns
-   *          the excludePatterns to set.
+   *            the excludePatterns to set.
    */
   public void setExcludePatterns(String[] excludePatterns) {
     this.excludePatterns = excludePatterns;
@@ -268,9 +262,9 @@ public class EntityGenerator {
 
   /**
    * Sets the generateAnnotations.
-   *
+   * 
    * @param generateAnnotations
-   *          the generateAnnotations to set.
+   *            the generateAnnotations to set.
    */
   public void setGenerateAnnotations(boolean generateAnnotations) {
     this.generateAnnotations = generateAnnotations;
@@ -278,9 +272,9 @@ public class EntityGenerator {
 
   /**
    * Sets the includePackages.
-   *
+   * 
    * @param includePackages
-   *          the includePackages to set.
+   *            the includePackages to set.
    */
   public void setIncludePackages(String[] includePackages) {
     this.includePackages = includePackages;
@@ -288,9 +282,9 @@ public class EntityGenerator {
 
   /**
    * Sets the outputDir.
-   *
+   * 
    * @param outputDir
-   *          the outputDir to set.
+   *            the outputDir to set.
    */
   public void setOutputDir(String outputDir) {
     this.outputDir = outputDir;
@@ -298,9 +292,9 @@ public class EntityGenerator {
 
   /**
    * Sets the templateName.
-   *
+   * 
    * @param templateName
-   *          the templateName to set.
+   *            the templateName to set.
    */
   public void setTemplateName(String templateName) {
     this.templateName = templateName;
@@ -308,11 +302,17 @@ public class EntityGenerator {
 
   /**
    * Sets the templateResourcePath.
-   *
+   * 
    * @param templateResourcePath
-   *          the templateResourcePath to set.
+   *            the templateResourcePath to set.
    */
   public void setTemplateResourcePath(String templateResourcePath) {
     this.templateResourcePath = templateResourcePath;
+  }
+
+  private ApplicationContext getApplicationContext() {
+    BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
+    BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
+    return (ApplicationContext) bf.getFactory();
   }
 }

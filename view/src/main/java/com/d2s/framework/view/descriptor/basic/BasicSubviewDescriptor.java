@@ -65,7 +65,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    * Sets the modelDescriptor.
    * 
    * @param modelDescriptor
-   *          the modelDescriptor to set.
+   *            the modelDescriptor to set.
    */
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
     this.modelDescriptor = modelDescriptor;
@@ -75,7 +75,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    * Sets the readabilityGates.
    * 
    * @param readabilityGates
-   *          the readabilityGates to set.
+   *            the readabilityGates to set.
    */
   public void setReadabilityGates(Collection<IGate> readabilityGates) {
     this.readabilityGates = readabilityGates;
@@ -85,7 +85,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    * Sets the readOnly.
    * 
    * @param readOnly
-   *          the readOnly to set.
+   *            the readOnly to set.
    */
   public void setReadOnly(boolean readOnly) {
     this.readOnly = readOnly;
@@ -95,7 +95,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    * Sets the writabilityGates.
    * 
    * @param writabilityGates
-   *          the writabilityGates to set.
+   *            the writabilityGates to set.
    */
   public void setWritabilityGates(Collection<IGate> writabilityGates) {
     this.writabilityGates = writabilityGates;

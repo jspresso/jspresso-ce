@@ -4,6 +4,7 @@
 package com.d2s.framework.application.printing.frontend.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -29,11 +30,11 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
@@ -41,26 +42,16 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   private List<IReportDescriptor> reportDescriptors;
   private IReportFactory          reportFactory;
 
-  private List<IReport> createReportInstances(
-      ITranslationProvider translationProvider, Locale locale) {
-    List<IReport> reports = new ArrayList<IReport>();
-    if (reportDescriptors != null) {
-      for (IReportDescriptor descriptor : reportDescriptors) {
-        reports.add(reportFactory.createReportInstance(descriptor,
-            translationProvider, locale));
-      }
-    }
-    return reports;
-  }
-
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     BasicCollectionDescriptor<IReport> modelDescriptor = new BasicCollectionDescriptor<IReport>();
-    modelDescriptor.setCollectionInterface(List.class);
+    modelDescriptor
+        .setCollectionInterface((Class<? extends Collection<? extends IReport>>) List.class);
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
     IValueConnector reportsConnector = beanConnectorFactory
         .createModelConnector(modelDescriptor);
@@ -74,7 +65,7 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the beanConnectorFactory.
    * 
    * @param beanConnectorFactory
-   *          the beanConnectorFactory to set.
+   *            the beanConnectorFactory to set.
    */
   public void setBeanConnectorFactory(
       IModelConnectorFactory beanConnectorFactory) {
@@ -85,7 +76,7 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the reportDescriptors.
    * 
    * @param reportDescriptors
-   *          the reportDescriptors to set.
+   *            the reportDescriptors to set.
    */
   public void setReportDescriptors(List<IReportDescriptor> reportDescriptors) {
     this.reportDescriptors = reportDescriptors;
@@ -95,9 +86,21 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
    * Sets the reportFactory.
    * 
    * @param reportFactory
-   *          the reportFactory to set.
+   *            the reportFactory to set.
    */
   public void setReportFactory(IReportFactory reportFactory) {
     this.reportFactory = reportFactory;
+  }
+
+  private List<IReport> createReportInstances(
+      ITranslationProvider translationProvider, Locale locale) {
+    List<IReport> reports = new ArrayList<IReport>();
+    if (reportDescriptors != null) {
+      for (IReportDescriptor descriptor : reportDescriptors) {
+        reports.add(reportFactory.createReportInstance(descriptor,
+            translationProvider, locale));
+      }
+    }
+    return reports;
   }
 }

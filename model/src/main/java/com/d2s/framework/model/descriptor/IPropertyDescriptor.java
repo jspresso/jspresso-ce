@@ -27,9 +27,9 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * <code>IntegrityException</code> should be thrown.
    * 
    * @param component
-   *          the component on which the proerty value is checked.
+   *            the component on which the proerty value is checked.
    * @param propertyValue
-   *          the property value to check the compliance of.
+   *            the property value to check the compliance of.
    */
   void checkValueIntegrity(Object component, Object propertyValue);
 
@@ -40,7 +40,7 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * 
    * @return The class of the extension delegates used to compute the property.
    */
-  Class getDelegateClass();
+  Class<?> getDelegateClass();
 
   /**
    * Gets the <code>Class</code> name of the delegates used to compute the
@@ -57,7 +57,7 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * 
    * @return the registered <code>IIntegrityProcessor</code> s
    */
-  List<IPropertyIntegrityProcessor> getIntegrityProcessors();
+  List<IPropertyIntegrityProcessor<?, ?>> getIntegrityProcessors();
 
   /**
    * Gets the collection of gates determining the readability state of this
@@ -123,11 +123,11 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * Triggers all setter postprocessors.
    * 
    * @param component
-   *          the component targetted by the setter.
+   *            the component targetted by the setter.
    * @param oldValue
-   *          the property old value.
+   *            the property old value.
    * @param newValue
-   *          the property new value.
+   *            the property new value.
    */
   void postprocessSetter(Object component, Object oldValue, Object newValue);
 
@@ -135,11 +135,11 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    * Triggers all setter preprocessors.
    * 
    * @param component
-   *          the component targetted by the setter.
+   *            the component targetted by the setter.
    * @param oldValue
-   *          the property old value.
+   *            the property old value.
    * @param newValue
-   *          the property new value.
+   *            the property new value.
    */
   void preprocessSetter(Object component, Object oldValue, Object newValue);
 }

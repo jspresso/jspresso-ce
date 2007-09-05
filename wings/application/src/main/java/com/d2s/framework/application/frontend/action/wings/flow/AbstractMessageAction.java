@@ -26,9 +26,9 @@ public abstract class AbstractMessageAction extends AbstractWingsAction {
    * Calls the super-implementation to execute the next action.
    * 
    * @param actionHandler
-   *          the action handler responsible for the action execution.
+   *            the action handler responsible for the action execution.
    * @param context
-   *          the action context.
+   *            the action context.
    */
   protected void executeNextAction(IActionHandler actionHandler,
       Map<String, Object> context) {
@@ -39,7 +39,7 @@ public abstract class AbstractMessageAction extends AbstractWingsAction {
    * Gets the message.
    * 
    * @param context
-   *          the actionContext.
+   *            the actionContext.
    * @return the message.
    */
   protected String getMessage(Map<String, Object> context) {

@@ -51,7 +51,7 @@ public abstract class AbstractController implements IController {
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *          the translationProvider to set.
+   *            the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;

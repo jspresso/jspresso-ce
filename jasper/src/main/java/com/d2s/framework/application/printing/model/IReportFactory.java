@@ -23,11 +23,11 @@ public interface IReportFactory {
    * Creates a report instance based on a report descriptor.
    * 
    * @param reportDescriptor
-   *          the report descriptor to create the report for.
+   *            the report descriptor to create the report for.
    * @param translationProvider
-   *          the translation provider to use.
+   *            the translation provider to use.
    * @param locale
-   *          the locale to create the report for.
+   *            the locale to create the report for.
    * @return the created report instance.
    */
   IReport createReportInstance(IReportDescriptor reportDescriptor,

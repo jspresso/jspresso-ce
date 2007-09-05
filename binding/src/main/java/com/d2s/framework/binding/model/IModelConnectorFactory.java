@@ -23,7 +23,7 @@ public interface IModelConnectorFactory {
    * Creates a model connector based on a model descriptor.
    * 
    * @param modelDescriptor
-   *          the model descriptor to create the connector for.
+   *            the model descriptor to create the connector for.
    * @return the created model connector.
    */
   IValueConnector createModelConnector(IModelDescriptor modelDescriptor);

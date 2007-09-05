@@ -10,15 +10,15 @@ import com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractEnumerationPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IEnumerationPropertyDescriptor {
 
-  private String              enumerationName;
-  private Integer             maxLength;
+  private String  enumerationName;
+  private Integer maxLength;
 
   /**
    * {@inheritDoc}
@@ -36,7 +36,7 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
 
   /**
    * Gets the maxLength.
-   *
+   * 
    * @return the maxLength.
    */
   public Integer getMaxLength() {
@@ -53,15 +53,15 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return String.class;
   }
 
   /**
    * Sets the enumerationName.
-   *
+   * 
    * @param enumerationName
-   *          the enumerationName to set.
+   *            the enumerationName to set.
    */
   public void setEnumerationName(String enumerationName) {
     this.enumerationName = enumerationName;
@@ -69,9 +69,9 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
 
   /**
    * Sets the maxLength.
-   *
+   * 
    * @param maxLength
-   *          the maxLength to set.
+   *            the maxLength to set.
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;

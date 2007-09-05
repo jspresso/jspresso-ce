@@ -27,9 +27,9 @@ public class SFormattedTextFieldConnector extends
    * Constructs a new <code>SFormattedTextFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected STextField.
+   *            the connected STextField.
    */
   public SFormattedTextFieldConnector(String id, SFormattedTextField textField) {
     super(id, textField);

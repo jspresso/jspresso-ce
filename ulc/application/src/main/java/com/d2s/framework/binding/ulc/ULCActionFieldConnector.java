@@ -28,9 +28,9 @@ public class ULCActionFieldConnector extends
    * Constructs a new <code>ULCActionFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param actionField
-   *          the connected ULCActionField.
+   *            the connected ULCActionField.
    */
   public ULCActionFieldConnector(String id, ULCActionField actionField) {
     super(id, actionField);
@@ -47,6 +47,15 @@ public class ULCActionFieldConnector extends
         }
       });
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedULCComponent().setEditable(isWritable());
   }
 
   /**
@@ -88,6 +97,14 @@ public class ULCActionFieldConnector extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void setConnecteeValue(Object aValue) {
+    getConnectedULCComponent().setValue(aValue);
+  }
+
+  /**
    * Performs the action field action if the action field is not synchronized.
    */
   private void performActionIfNeeded() {
@@ -98,22 +115,5 @@ public class ULCActionFieldConnector extends
         getConnectedULCComponent().performAction(0);
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setConnecteeValue(Object aValue) {
-    getConnectedULCComponent().setValue(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedULCComponent().setEditable(isWritable());
   }
 }

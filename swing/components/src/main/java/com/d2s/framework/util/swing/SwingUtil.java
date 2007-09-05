@@ -40,79 +40,33 @@ import foxtrot.Worker;
  */
 public final class SwingUtil {
 
-  private static final class FocusGainedTask implements Runnable {
-
-    private JTextField textField;
-
-    /**
-     * Constructs a new <code>FocusGainedTask</code> instance.
-     * 
-     * @param textField
-     *          the text field to run on.
-     */
-    public FocusGainedTask(JTextField textField) {
-      this.textField = textField;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void run() {
-      if (!isUsedAsEditor(textField)) {
-        textField.selectAll();
-      }
-    }
-  }
-
-  private static final class FocusLostTask implements Runnable {
-
-    private JTextField textField;
-
-    /**
-     * Constructs a new <code>FocusLostTask</code> instance.
-     * 
-     * @param textField
-     *          the text field to run on.
-     */
-    public FocusLostTask(JTextField textField) {
-      this.textField = textField;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public void run() {
-      if (!isUsedAsEditor(textField)) {
-        if (textField.getText().length() > 0) {
-          textField.getCaret().setDot(textField.getText().length());
-        }
-      }
-    }
-  }
   private static final double  DARKER_COLOR_FACTOR                         = 0.93;
+
   private static final boolean DISABLE_THREADING                           = false;
   private static final String  FORMATTED_TEXTFIELD_FONT_KEY                = "FormattedTextField.font";
   private static final String  FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY = "FormattedTextField.inactiveBackground";
-
   private static final String  PASSWORDFIELD_FONT_KEY                      = "PasswordField.font";
-
   private static final String  TEXTFIELD_FONT_KEY                          = "TextField.font";
 
   private static final String  TEXTFIELD_INACTIVE_BACKGROUND_KEY           = "TextField.inactiveBackground";
+
+  private SwingUtil() {
+    // Helper class private constructor.
+  }
 
   /**
    * Make even and odd rows background colors slightly different in collection
    * component (table, list, ...).
    * 
    * @param renderer
-   *          the renderer to work on.
+   *            the renderer to work on.
    * @param collectionComponent
-   *          the collection component (table, list, ...) on which this renderer
-   *          is used.
+   *            the collection component (table, list, ...) on which this
+   *            renderer is used.
    * @param isSelected
-   *          is the row selected ?
+   *            is the row selected ?
    * @param row
-   *          the row to render.
+   *            the row to render.
    */
   public static void alternateEvenOddBackground(Component renderer,
       Component collectionComponent, boolean isSelected, int row) {
@@ -130,7 +84,7 @@ public final class SwingUtil {
    * Center a window on screen.
    * 
    * @param w
-   *          the window to center on screen.
+   *            the window to center on screen.
    */
   public static void centerInParent(Window w) {
     Container parent = w.getParent();
@@ -145,7 +99,7 @@ public final class SwingUtil {
    * Center a window on screen.
    * 
    * @param w
-   *          the window to center on screen.
+   *            the window to center on screen.
    */
   public static void centerOnScreen(Window w) {
     Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -157,7 +111,7 @@ public final class SwingUtil {
    * Configures a jbutton with default behaviour like the multi-click treshold.
    * 
    * @param button
-   *          the button to work on.
+   *            the button to work on.
    */
   public static void configureButton(JButton button) {
     button.setMultiClickThreshhold(500);
@@ -168,7 +122,7 @@ public final class SwingUtil {
    * another mean than the mouse.
    * 
    * @param textField
-   *          the textfield to work on.
+   *            the textfield to work on.
    */
   public static void enableSelectionOnFocusGained(final JTextField textField) {
 
@@ -202,9 +156,9 @@ public final class SwingUtil {
    * Retrieves the first contained component of a certain type.
    * 
    * @param component
-   *          the component to start from.
+   *            the component to start from.
    * @param childComponentType
-   *          the type of the component to look for.
+   *            the type of the component to look for.
    * @return the first contained component of the looked for type or null if
    *         none.
    */
@@ -229,9 +183,9 @@ public final class SwingUtil {
    * Make a color scaled using a defined factor.
    * 
    * @param color
-   *          the color to scale.
+   *            the color to scale.
    * @param factor
-   *          the factor to use.
+   *            the factor to use.
    * @return the scaled color.
    */
   public static Color getScaledColor(Color color, double factor) {
@@ -267,7 +221,7 @@ public final class SwingUtil {
    * Gets the visible parent window.
    * 
    * @param component
-   *          the component to start from
+   *            the component to start from
    * @return the visible parent window or null.
    */
   public static Window getVisibleWindow(Component component) {
@@ -285,7 +239,7 @@ public final class SwingUtil {
    * Gets the window or the internal frame holding the component.
    * 
    * @param component
-   *          the component to look the window or internal frame for.
+   *            the component to look the window or internal frame for.
    * @return the window (frame or dialog) or the internal frame in the component
    *         hierarchy.
    */
@@ -324,7 +278,7 @@ public final class SwingUtil {
    * Is the component passed in parameter used as an editor ?
    * 
    * @param comp
-   *          the component to test.
+   *            the component to test.
    * @return true if the component is currently used as an editor.
    */
   public static boolean isUsedAsEditor(Component comp) {
@@ -343,7 +297,7 @@ public final class SwingUtil {
    * Executes a job avoiding the common swing UI freeze.
    * 
    * @param foxtrotJob
-   *          the potentially long running job to execute.
+   *            the potentially long running job to execute.
    * @return the job execution result.
    */
   public static Object performLongOperation(Job foxtrotJob) {
@@ -358,7 +312,7 @@ public final class SwingUtil {
    * invoke runnable and wait.
    * 
    * @param runnable
-   *          the runnable operation which updates the GUI.
+   *            the runnable operation which updates the GUI.
    */
   public static void updateSwingGui(Runnable runnable) {
     if (DISABLE_THREADING) {
@@ -379,7 +333,53 @@ public final class SwingUtil {
     }
   }
 
-  private SwingUtil() {
-    // Helper class private constructor.
+  private static final class FocusGainedTask implements Runnable {
+
+    private JTextField textField;
+
+    /**
+     * Constructs a new <code>FocusGainedTask</code> instance.
+     * 
+     * @param textField
+     *            the text field to run on.
+     */
+    public FocusGainedTask(JTextField textField) {
+      this.textField = textField;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void run() {
+      if (!isUsedAsEditor(textField)) {
+        textField.selectAll();
+      }
+    }
+  }
+
+  private static final class FocusLostTask implements Runnable {
+
+    private JTextField textField;
+
+    /**
+     * Constructs a new <code>FocusLostTask</code> instance.
+     * 
+     * @param textField
+     *            the text field to run on.
+     */
+    public FocusLostTask(JTextField textField) {
+      this.textField = textField;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void run() {
+      if (!isUsedAsEditor(textField)) {
+        if (textField.getText().length() > 0) {
+          textField.getCaret().setDot(textField.getText().length());
+        }
+      }
+    }
   }
 }

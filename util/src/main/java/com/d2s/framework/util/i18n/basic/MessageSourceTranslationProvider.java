@@ -47,7 +47,7 @@ public class MessageSourceTranslationProvider implements ITranslationProvider {
    * Sets the messageSource.
    * 
    * @param messageSource
-   *          the messageSource to set.
+   *            the messageSource to set.
    */
   public void setMessageSource(MessageSource messageSource) {
     this.messageSource = messageSource;

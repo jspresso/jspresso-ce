@@ -95,7 +95,7 @@ public class BasicStringPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return String.class;
   }
 
@@ -132,22 +132,10 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
-   * Performs the necessary transformations to build a tring out of a property
-   * value.
-   * 
-   * @param value
-   *          the raw property value.
-   * @return the resulting string.
-   */
-  protected String getValueAsString(Object value) {
-    return (String) value;
-  }
-
-  /**
    * Sets the maxLength property.
    * 
    * @param maxLength
-   *          the maxLength to set.
+   *            the maxLength to set.
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
@@ -157,7 +145,7 @@ public class BasicStringPropertyDescriptor extends
    * Sets the regexpPattern.
    * 
    * @param regexpPattern
-   *          the regexpPattern to set.
+   *            the regexpPattern to set.
    */
   public void setRegexpPattern(String regexpPattern) {
     this.regexpPattern = regexpPattern;
@@ -167,9 +155,21 @@ public class BasicStringPropertyDescriptor extends
    * Sets the regexpPatternSample.
    * 
    * @param regexpPatternSample
-   *          the regexpPatternSample to set.
+   *            the regexpPatternSample to set.
    */
   public void setRegexpPatternSample(String regexpPatternSample) {
     this.regexpPatternSample = regexpPatternSample;
+  }
+
+  /**
+   * Performs the necessary transformations to build a tring out of a property
+   * value.
+   * 
+   * @param value
+   *            the raw property value.
+   * @return the resulting string.
+   */
+  protected String getValueAsString(Object value) {
+    return (String) value;
   }
 }

@@ -14,7 +14,7 @@ import com.ulcjava.base.application.util.Color;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -23,14 +23,23 @@ public class ULCColorPickerConnector extends
 
   /**
    * Constructs a new <code>ULCColorPickerConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param colorPicker
-   *          the connected ULCColorPicker.
+   *            the connected ULCColorPicker.
    */
   public ULCColorPickerConnector(String id, ULCColorPicker colorPicker) {
     super(id, colorPicker);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedULCComponent().setEnabled(isWritable());
   }
 
   /**
@@ -77,15 +86,6 @@ public class ULCColorPickerConnector extends
     } else {
       getConnectedULCComponent().setValue(null);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedULCComponent().setEnabled(isWritable());
   }
 
 }

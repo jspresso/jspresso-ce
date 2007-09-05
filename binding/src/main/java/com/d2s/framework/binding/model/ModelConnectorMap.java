@@ -25,9 +25,9 @@ public class ModelConnectorMap extends ConnectorMap {
    * Constructs a new instance based on the model class passed as parameter.
    * 
    * @param parentConnector
-   *          the model connector holding the connector map.
+   *            the model connector holding the connector map.
    * @param modelConnectorFactory
-   *          the factory used to create the model connectors.
+   *            the factory used to create the model connectors.
    */
   ModelConnectorMap(ModelRefPropertyConnector parentConnector,
       IModelConnectorFactory modelConnectorFactory) {
@@ -63,7 +63,7 @@ public class ModelConnectorMap extends ConnectorMap {
     ModelPropertyConnector connector = (ModelPropertyConnector) super
         .getConnector(connectorId);
     if (connector == null) {
-      IComponentDescriptor componentDescriptor = getParentConnector()
+      IComponentDescriptor<?> componentDescriptor = getParentConnector()
           .getModelDescriptor().getComponentDescriptor();
       connector = (ModelPropertyConnector) modelConnectorFactory
           .createModelConnector(componentDescriptor

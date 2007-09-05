@@ -12,7 +12,7 @@ import java.util.List;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -22,30 +22,30 @@ public interface IEnumerationPropertyDescriptor extends
   /**
    * Gets the name of the enumeration (like GENDER for a MALE/FEMALE
    * enumeration).
-   *
+   * 
    * @return name of the underlying enumeration.
    */
   String getEnumerationName();
 
   /**
    * Gets the admisible values of the enumeration.
-   *
+   * 
    * @return the list of values contained in the underlying enumeration.
    */
   List<String> getEnumerationValues();
 
   /**
    * Gets the icon image url to use to render a enumeration value.
-   *
+   * 
    * @param value
-   *          the value to render.
+   *            the value to render.
    * @return the image url to use.
    */
   String getIconImageURL(String value);
 
   /**
    * Gets the maximum length of the underlying string property.
-   *
+   * 
    * @return the string property maximum length.
    */
   Integer getMaxLength();
@@ -53,7 +53,7 @@ public interface IEnumerationPropertyDescriptor extends
   /**
    * Gets wether the enumeration values should be presented translated (using
    * the i18n keys enumerationName.value) or not.
-   *
+   * 
    * @return true if the enumeration values should be presented translated.
    */
   boolean isTranslated();

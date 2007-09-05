@@ -100,7 +100,7 @@ public abstract class BasicNumberPropertyDescriptor extends
    * Sets the maxValue property.
    * 
    * @param maxValue
-   *          the maxValue to set.
+   *            the maxValue to set.
    */
   public void setMaxValue(Double maxValue) {
     this.maxValue = maxValue;
@@ -110,7 +110,7 @@ public abstract class BasicNumberPropertyDescriptor extends
    * Sets the minValue property.
    * 
    * @param minValue
-   *          the minValue to set.
+   *            the minValue to set.
    */
   public void setMinValue(Double minValue) {
     this.minValue = minValue;

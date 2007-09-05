@@ -55,69 +55,14 @@ public class DialogCallbackHandler implements CallbackHandler {
   private Component            parentComponent;
   private ITranslationProvider translationProvider;
 
-  private JButton createOptionButton(final JDialog callbackDialog,
-      final ConfirmationCallback cc, final int option, String text,
-      final List<ActionListener> proceedActions) {
-    JButton optionButton = new JButton(text);
-    if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
-      optionButton.setIcon(iconFactory
-          .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
-      optionButton.addActionListener(new ActionListener() {
-
-        public void actionPerformed(ActionEvent e) {
-          for (ActionListener proceedAction : proceedActions) {
-            proceedAction.actionPerformed(e);
-          }
-          cc.setSelectedIndex(option);
-          callbackDialog.dispose();
-        }
-      });
-    } else {
-      if (option == ConfirmationCallback.NO) {
-        optionButton.setIcon(iconFactory
-            .getNoIcon(IIconFactory.SMALL_ICON_SIZE));
-      } else if (option == ConfirmationCallback.CANCEL) {
-        optionButton.setIcon(iconFactory
-            .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
-      }
-      optionButton.addActionListener(new ActionListener() {
-
-        public void actionPerformed(@SuppressWarnings("unused")
-        ActionEvent e) {
-          cc.setSelectedIndex(option);
-          callbackDialog.dispose();
-        }
-      });
-    }
-    if (cc.getDefaultOption() == option) {
-      callbackDialog.getRootPane().setDefaultButton(optionButton);
-    }
-    return optionButton;
-  }
-
-  private Icon getIcon(TextOutputCallback callback)
-      throws UnsupportedCallbackException {
-    switch (callback.getMessageType()) {
-      case TextOutputCallback.INFORMATION:
-        return iconFactory.getInfoIcon(IIconFactory.SMALL_ICON_SIZE);
-      case TextOutputCallback.WARNING:
-        return iconFactory.getWarningIcon(IIconFactory.SMALL_ICON_SIZE);
-      case TextOutputCallback.ERROR:
-        return iconFactory.getErrorIcon(IIconFactory.SMALL_ICON_SIZE);
-      default:
-        throw new UnsupportedCallbackException(callback,
-            "Unrecognized message type");
-    }
-  }
-
   /**
    * Handles the specified set of callbacks.
    * 
    * @param callbacks
-   *          the callbacks to handle
+   *            the callbacks to handle
    * @throws UnsupportedCallbackException
-   *           if the callback is not an instance of NameCallback or
-   *           PasswordCallback
+   *             if the callback is not an instance of NameCallback or
+   *             PasswordCallback
    */
 
   public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
@@ -243,6 +188,101 @@ public class DialogCallbackHandler implements CallbackHandler {
     SwingUtil.centerOnScreen(callbackDialog);
     callbackDialog.pack();
     callbackDialog.setVisible(true);
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *            the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<Icon> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the locale.
+   * 
+   * @param locale
+   *            the locale to set.
+   */
+  public void setLocale(Locale locale) {
+    this.locale = locale;
+  }
+
+  /**
+   * Sets the parentComponent.
+   * 
+   * @param parentComponent
+   *            the parentComponent to set.
+   */
+  public void setParentComponent(Component parentComponent) {
+    this.parentComponent = parentComponent;
+  }
+
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *            the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
+  private JButton createOptionButton(final JDialog callbackDialog,
+      final ConfirmationCallback cc, final int option, String text,
+      final List<ActionListener> proceedActions) {
+    JButton optionButton = new JButton(text);
+    if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
+      optionButton.setIcon(iconFactory
+          .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
+      optionButton.addActionListener(new ActionListener() {
+
+        public void actionPerformed(ActionEvent e) {
+          for (ActionListener proceedAction : proceedActions) {
+            proceedAction.actionPerformed(e);
+          }
+          cc.setSelectedIndex(option);
+          callbackDialog.dispose();
+        }
+      });
+    } else {
+      if (option == ConfirmationCallback.NO) {
+        optionButton.setIcon(iconFactory
+            .getNoIcon(IIconFactory.SMALL_ICON_SIZE));
+      } else if (option == ConfirmationCallback.CANCEL) {
+        optionButton.setIcon(iconFactory
+            .getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
+      }
+      optionButton.addActionListener(new ActionListener() {
+
+        public void actionPerformed(@SuppressWarnings("unused")
+        ActionEvent e) {
+          cc.setSelectedIndex(option);
+          callbackDialog.dispose();
+        }
+      });
+    }
+    if (cc.getDefaultOption() == option) {
+      callbackDialog.getRootPane().setDefaultButton(optionButton);
+    }
+    return optionButton;
+  }
+
+  private Icon getIcon(TextOutputCallback callback)
+      throws UnsupportedCallbackException {
+    switch (callback.getMessageType()) {
+      case TextOutputCallback.INFORMATION:
+        return iconFactory.getInfoIcon(IIconFactory.SMALL_ICON_SIZE);
+      case TextOutputCallback.WARNING:
+        return iconFactory.getWarningIcon(IIconFactory.SMALL_ICON_SIZE);
+      case TextOutputCallback.ERROR:
+        return iconFactory.getErrorIcon(IIconFactory.SMALL_ICON_SIZE);
+      default:
+        throw new UnsupportedCallbackException(callback,
+            "Unrecognized message type");
+    }
   }
 
   private void processConfirmationCallback(final JDialog callbackDialog,
@@ -396,45 +436,5 @@ public class DialogCallbackHandler implements CallbackHandler {
     constraints.weightx = 1.0d;
     constraints.fill = GridBagConstraints.HORIZONTAL;
     messagePanel.add(messageLabel, constraints);
-  }
-
-  /**
-   * Sets the iconFactory.
-   * 
-   * @param iconFactory
-   *          the iconFactory to set.
-   */
-  public void setIconFactory(IIconFactory<Icon> iconFactory) {
-    this.iconFactory = iconFactory;
-  }
-
-  /**
-   * Sets the locale.
-   * 
-   * @param locale
-   *          the locale to set.
-   */
-  public void setLocale(Locale locale) {
-    this.locale = locale;
-  }
-
-  /**
-   * Sets the parentComponent.
-   * 
-   * @param parentComponent
-   *          the parentComponent to set.
-   */
-  public void setParentComponent(Component parentComponent) {
-    this.parentComponent = parentComponent;
-  }
-
-  /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *          the translationProvider to set.
-   */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
   }
 }

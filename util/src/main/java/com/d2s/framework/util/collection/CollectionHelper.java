@@ -23,15 +23,19 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  */
 public final class CollectionHelper {
 
+  private CollectionHelper() {
+    // private constructor for helper class
+  }
+
   /**
    * Clones a collection trying to invoke the <code>clone()</code> method
    * reflectively. If the latter is unsuccessful, returns an HashSet for a Set
    * and an ArrayList for a List.
    * 
    * @param <E>
-   *          the type the collection element
+   *            the type the collection element
    * @param collection
-   *          the original collection
+   *            the original collection
    * @return the cloned collection.
    */
   @SuppressWarnings("unchecked")
@@ -65,9 +69,5 @@ public final class CollectionHelper {
       }
     }
     return clonedCollection;
-  }
-
-  private CollectionHelper() {
-    // private constructor for helper class
   }
 }

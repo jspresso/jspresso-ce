@@ -64,33 +64,10 @@ public class EditComponentAction extends ModalDialogAction {
   }
 
   /**
-   * Gets the model.
-   * 
-   * @param context
-   *          the action context.
-   * @return the model.
-   */
-  protected Object getModel(Map<String, Object> context) {
-    return context.get(ActionContextConstants.ACTION_PARAM);
-  }
-
-  /**
-   * Gets the viewDescriptor.
-   * 
-   * @param context
-   *          the action context.
-   * @return the viewDescriptor.
-   */
-  protected IViewDescriptor getViewDescriptor(@SuppressWarnings("unused")
-  Map<String, Object> context) {
-    return viewDescriptor;
-  }
-
-  /**
    * Sets the cancelAction.
    * 
    * @param cancelAction
-   *          the cancelAction to set.
+   *            the cancelAction to set.
    */
   public void setCancelAction(IDisplayableAction cancelAction) {
     this.cancelAction = cancelAction;
@@ -100,7 +77,7 @@ public class EditComponentAction extends ModalDialogAction {
    * Sets the modelConnectorFactory.
    * 
    * @param modelConnectorFactory
-   *          the modelConnectorFactory to set.
+   *            the modelConnectorFactory to set.
    */
   public void setModelConnectorFactory(
       IModelConnectorFactory modelConnectorFactory) {
@@ -111,7 +88,7 @@ public class EditComponentAction extends ModalDialogAction {
    * Sets the okAction.
    * 
    * @param okAction
-   *          the okAction to set.
+   *            the okAction to set.
    */
   public void setOkAction(IDisplayableAction okAction) {
     this.okAction = okAction;
@@ -121,9 +98,32 @@ public class EditComponentAction extends ModalDialogAction {
    * Sets the viewDescriptor.
    * 
    * @param viewDescriptor
-   *          the viewDescriptor to set.
+   *            the viewDescriptor to set.
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;
+  }
+
+  /**
+   * Gets the model.
+   * 
+   * @param context
+   *            the action context.
+   * @return the model.
+   */
+  protected Object getModel(Map<String, Object> context) {
+    return context.get(ActionContextConstants.ACTION_PARAM);
+  }
+
+  /**
+   * Gets the viewDescriptor.
+   * 
+   * @param context
+   *            the action context.
+   * @return the viewDescriptor.
+   */
+  protected IViewDescriptor getViewDescriptor(@SuppressWarnings("unused")
+  Map<String, Object> context) {
+    return viewDescriptor;
   }
 }

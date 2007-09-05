@@ -21,7 +21,7 @@ import com.d2s.framework.util.gate.IGate;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -35,18 +35,18 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
    */
   public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
     if (modelDescriptor instanceof IComponentDescriptor) {
-      return new ModelConnector((IComponentDescriptor) modelDescriptor, this);
+      return new ModelConnector((IComponentDescriptor<?>) modelDescriptor, this);
     } else if (modelDescriptor instanceof ICollectionDescriptor) {
       return new ModelCollectionConnector(
-          (ICollectionDescriptor) modelDescriptor, this);
+          (ICollectionDescriptor<?>) modelDescriptor, this);
     } else if (modelDescriptor instanceof IPropertyDescriptor) {
       IValueConnector propertyConnector = null;
       if (modelDescriptor instanceof IReferencePropertyDescriptor) {
         propertyConnector = new ModelRefPropertyConnector(
-            (IReferencePropertyDescriptor) modelDescriptor, this);
+            (IReferencePropertyDescriptor<?>) modelDescriptor, this);
       } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
         propertyConnector = new ModelCollectionPropertyConnector(
-            (ICollectionPropertyDescriptor) modelDescriptor, this);
+            (ICollectionPropertyDescriptor<?>) modelDescriptor, this);
       } else if (modelDescriptor instanceof IScalarPropertyDescriptor) {
         if (modelDescriptor instanceof IIntegerPropertyDescriptor) {
           propertyConnector = new ModelIntegerPropertyConnector(
@@ -87,7 +87,7 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
 
   /**
    * Gets the descriptorRegistry.
-   *
+   * 
    * @return the descriptorRegistry.
    */
   public IComponentDescriptorRegistry getDescriptorRegistry() {
@@ -96,9 +96,9 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
 
   /**
    * Sets the factory for the accessors used to access the model properties.
-   *
+   * 
    * @param accessorFactory
-   *          The <code>IAccessorFactory</code> to use.
+   *            The <code>IAccessorFactory</code> to use.
    */
   public void setAccessorFactory(IAccessorFactory accessorFactory) {
     this.accessorFactory = accessorFactory;
@@ -106,9 +106,9 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
 
   /**
    * Sets the descriptorRegistry.
-   *
+   * 
    * @param descriptorRegistry
-   *          the descriptorRegistry to set.
+   *            the descriptorRegistry to set.
    */
   public void setDescriptorRegistry(
       IComponentDescriptorRegistry descriptorRegistry) {

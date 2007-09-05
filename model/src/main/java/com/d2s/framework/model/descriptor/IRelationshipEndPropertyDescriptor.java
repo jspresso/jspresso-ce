@@ -35,7 +35,7 @@ public interface IRelationshipEndPropertyDescriptor extends IPropertyDescriptor 
    * Implementing classes are supposed to reflexively set both relation ends.
    * 
    * @param reverseRelationEnd
-   *          the reverse relation end.
+   *            the reverse relation end.
    */
   void setReverseRelationEnd(
       IRelationshipEndPropertyDescriptor reverseRelationEnd);

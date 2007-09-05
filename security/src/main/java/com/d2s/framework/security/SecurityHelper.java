@@ -26,18 +26,23 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public final class SecurityHelper {
 
+  private SecurityHelper() {
+    // private constructor for helper class
+  }
+
   /**
    * Check access to a secured resource. Whenever acces might not be granted, a
    * Security exception is thrown.
    * 
    * @param subject
-   *          the subject to check access for.
+   *            the subject to check access for.
    * @param securable
-   *          the secured resource to check access to.
+   *            the secured resource to check access to.
    * @param translationProvider
-   *          the translation provider to translate the potential error message.
+   *            the translation provider to translate the potential error
+   *            message.
    * @param locale
-   *          the locale to translate the potential error message.
+   *            the locale to translate the potential error message.
    */
   public static void checkAccess(Subject subject, ISecurable securable,
       ITranslationProvider translationProvider, Locale locale) {
@@ -65,9 +70,5 @@ public final class SecurityHelper {
     }
     throw new SecurityException(translationProvider.getTranslation(
         "access.denied", locale));
-  }
-
-  private SecurityHelper() {
-    // private constructor for helper class
   }
 }

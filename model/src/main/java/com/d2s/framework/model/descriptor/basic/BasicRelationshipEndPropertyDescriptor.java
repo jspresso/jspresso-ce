@@ -52,7 +52,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * Sets the composition.
    * 
    * @param composition
-   *          the composition to set.
+   *            the composition to set.
    */
   public void setComposition(boolean composition) {
     this.composition = new Boolean(composition);
@@ -62,7 +62,7 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
    * Sets the reverseRelationEnd property.
    * 
    * @param reverseRelationEnd
-   *          the reverseRelationEnd to set.
+   *            the reverseRelationEnd to set.
    */
   public void setReverseRelationEnd(
       IRelationshipEndPropertyDescriptor reverseRelationEnd) {

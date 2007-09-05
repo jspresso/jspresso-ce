@@ -25,12 +25,12 @@ public class TypeEnumerationPropertyDescriptor extends
    * Sets the componentDescriptorList property.
    * 
    * @param componentDescriptorList
-   *          the componentDescriptorList to set.
+   *            the componentDescriptorList to set.
    */
   public void setComponentDescriptors(
-      List<IComponentDescriptor> componentDescriptorList) {
+      List<IComponentDescriptor<?>> componentDescriptorList) {
     Map<String, String> componentDescriptorImages = new LinkedHashMap<String, String>();
-    for (IComponentDescriptor componentDescriptor : componentDescriptorList) {
+    for (IComponentDescriptor<?> componentDescriptor : componentDescriptorList) {
       componentDescriptorImages.put(componentDescriptor.getName(),
           componentDescriptor.getIconImageURL());
     }

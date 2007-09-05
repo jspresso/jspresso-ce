@@ -27,6 +27,35 @@ import com.d2s.framework.application.frontend.file.IFileOpenCallback;
  */
 public class OpenFileAction extends ChooseFileAction {
 
+  private IFileOpenCallback fileOpenCallback;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean execute(final IActionHandler actionHandler,
+      final Map<String, Object> context) {
+    SFileChooser fileChooser = new SFileChooser();
+    SOptionPane
+        .showInputDialog(getSourceComponent(context), getTranslationProvider(
+            context)
+            .getTranslation("open.file.description", getLocale(context)),
+            getTranslationProvider(context).getTranslation("open.file.name",
+                getLocale(context)), fileChooser, new OpenFileActionListener(
+                fileChooser, getController(context), context));
+    return super.execute(actionHandler, context);
+  }
+
+  /**
+   * Sets the fileOpenCallback.
+   * 
+   * @param fileOpenCallback
+   *            the fileOpenCallback to set.
+   */
+  public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
+    this.fileOpenCallback = fileOpenCallback;
+  }
+
   private final class OpenFileActionListener implements ActionListener {
 
     private IActionHandler      actionHandler;
@@ -60,34 +89,5 @@ public class OpenFileAction extends ChooseFileAction {
       }
     }
 
-  }
-
-  private IFileOpenCallback fileOpenCallback;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean execute(final IActionHandler actionHandler,
-      final Map<String, Object> context) {
-    SFileChooser fileChooser = new SFileChooser();
-    SOptionPane
-        .showInputDialog(getSourceComponent(context), getTranslationProvider(
-            context)
-            .getTranslation("open.file.description", getLocale(context)),
-            getTranslationProvider(context).getTranslation("open.file.name",
-                getLocale(context)), fileChooser, new OpenFileActionListener(
-                fileChooser, getController(context), context));
-    return super.execute(actionHandler, context);
-  }
-
-  /**
-   * Sets the fileOpenCallback.
-   * 
-   * @param fileOpenCallback
-   *          the fileOpenCallback to set.
-   */
-  public void setFileOpenCallback(IFileOpenCallback fileOpenCallback) {
-    this.fileOpenCallback = fileOpenCallback;
   }
 }

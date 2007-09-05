@@ -32,7 +32,7 @@ public interface IConnector extends IPropertyChangeCapable, Cloneable {
    * Clones this connector.
    * 
    * @param newConnectorId
-   *          the identifier of the clone connector
+   *            the identifier of the clone connector
    * @return the connector's clone.
    */
   IConnector clone(String newConnectorId);
@@ -50,7 +50,7 @@ public interface IConnector extends IPropertyChangeCapable, Cloneable {
    * identifier will be the property name.
    * 
    * @param id
-   *          The connector identifier.
+   *            The connector identifier.
    */
   void setId(String id);
 

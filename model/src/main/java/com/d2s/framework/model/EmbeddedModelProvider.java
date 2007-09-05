@@ -16,17 +16,17 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
  */
 public class EmbeddedModelProvider implements IModelProvider {
 
-  private Object                       model;
-  private ModelChangeSupport           modelChangeSupport;
-  private IComponentDescriptorProvider modelDescriptor;
+  private Object                          model;
+  private ModelChangeSupport              modelChangeSupport;
+  private IComponentDescriptorProvider<?> modelDescriptor;
 
   /**
    * Constructs a new <code>EmbeddedModelProvider</code> instance.
    * 
    * @param modelDescriptor
-   *          the model descriptor of this model provider.
+   *            the model descriptor of this model provider.
    */
-  public EmbeddedModelProvider(IComponentDescriptorProvider modelDescriptor) {
+  public EmbeddedModelProvider(IComponentDescriptorProvider<?> modelDescriptor) {
     this.modelDescriptor = modelDescriptor;
   }
 
@@ -56,7 +56,7 @@ public class EmbeddedModelProvider implements IModelProvider {
    * <p>
    * {@inheritDoc}
    */
-  public IComponentDescriptorProvider getModelDescriptor() {
+  public IComponentDescriptorProvider<?> getModelDescriptor() {
     return modelDescriptor;
   }
 
@@ -75,7 +75,7 @@ public class EmbeddedModelProvider implements IModelProvider {
    * <code>ModelConnector</code>.
    * 
    * @param newModel
-   *          the new model instance.
+   *            the new model instance.
    */
   public void setModel(Object newModel) {
     Object oldModel = model;

@@ -14,10 +14,10 @@ import java.util.Map;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete component type.
+ *            the concrete component type.
  */
 public interface IReferencePropertyDescriptor<E> extends
-    IRelationshipEndPropertyDescriptor, IComponentDescriptorProvider {
+    IRelationshipEndPropertyDescriptor, IComponentDescriptorProvider<E> {
 
   /**
    * Gets the initialization map between master object attributes and query

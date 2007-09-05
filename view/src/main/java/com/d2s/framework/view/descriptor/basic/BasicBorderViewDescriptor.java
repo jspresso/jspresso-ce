@@ -63,7 +63,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the centerViewDescriptor.
    * 
    * @param centerViewDescriptor
-   *          the centerViewDescriptor to set.
+   *            the centerViewDescriptor to set.
    */
   public void setCenterViewDescriptor(IViewDescriptor centerViewDescriptor) {
     this.centerViewDescriptor = centerViewDescriptor;
@@ -73,7 +73,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the eastViewDescriptor.
    * 
    * @param eastViewDescriptor
-   *          the eastViewDescriptor to set.
+   *            the eastViewDescriptor to set.
    */
   public void setEastViewDescriptor(IViewDescriptor eastViewDescriptor) {
     this.eastViewDescriptor = eastViewDescriptor;
@@ -83,7 +83,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the northViewDescriptor.
    * 
    * @param northViewDescriptor
-   *          the northViewDescriptor to set.
+   *            the northViewDescriptor to set.
    */
   public void setNorthViewDescriptor(IViewDescriptor northViewDescriptor) {
     this.northViewDescriptor = northViewDescriptor;
@@ -93,7 +93,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the southViewDescriptor.
    * 
    * @param southViewDescriptor
-   *          the southViewDescriptor to set.
+   *            the southViewDescriptor to set.
    */
   public void setSouthViewDescriptor(IViewDescriptor southViewDescriptor) {
     this.southViewDescriptor = southViewDescriptor;
@@ -103,7 +103,7 @@ public class BasicBorderViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the westViewDescriptor.
    * 
    * @param westViewDescriptor
-   *          the westViewDescriptor to set.
+   *            the westViewDescriptor to set.
    */
   public void setWestViewDescriptor(IViewDescriptor westViewDescriptor) {
     this.westViewDescriptor = westViewDescriptor;

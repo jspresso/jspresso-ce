@@ -48,7 +48,7 @@ public class BasicReport extends DefaultDescriptor implements IReport {
    * Sets the reportDescriptor.
    * 
    * @param reportDescriptor
-   *          the reportDescriptor to set.
+   *            the reportDescriptor to set.
    */
   public void setReportDescriptor(IReportDescriptor reportDescriptor) {
     this.reportDescriptor = reportDescriptor;

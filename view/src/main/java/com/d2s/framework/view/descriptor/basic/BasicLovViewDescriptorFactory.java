@@ -4,6 +4,7 @@
 package com.d2s.framework.view.descriptor.basic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
@@ -75,12 +76,14 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     return queryComponentViewDescriptor;
   }
 
+  @SuppressWarnings("unchecked")
   private IViewDescriptor createResultViewDescriptor(
       IComponentDescriptor<Object> entityDescriptor) {
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
     BasicCollectionDescriptor<Object> queriedEntitiesListDescriptor = new BasicCollectionDescriptor<Object>();
-    queriedEntitiesListDescriptor.setCollectionInterface(List.class);
+    queriedEntitiesListDescriptor
+        .setCollectionInterface((Class<? extends Collection<?>>) List.class);
     queriedEntitiesListDescriptor.setElementDescriptor(entityDescriptor);
 
     BasicCollectionPropertyDescriptor<Object> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<Object>();

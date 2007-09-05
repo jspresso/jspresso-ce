@@ -19,7 +19,7 @@ public interface IIconImageURLProvider {
    * Gets the image url for the user object passed as parameter.
    * 
    * @param userObject
-   *          the user object to get the image url for.
+   *            the user object to get the image url for.
    * @return the looked up image url or null if none.
    */
   String getIconImageURLForObject(Object userObject);

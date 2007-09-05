@@ -32,15 +32,6 @@ public abstract class AbstractAction implements IAction {
   private boolean             longOperation;
 
   /**
-   * Gets the controller (frontend or backend) out of the action context.
-   * 
-   * @param context
-   *          the action context.
-   * @return the controller (frontend or backend).
-   */
-  protected abstract IController getController(Map<String, Object> context);
-
-  /**
    * {@inheritDoc}
    */
   public Collection<String> getGrantedRoles() {
@@ -61,7 +52,7 @@ public abstract class AbstractAction implements IAction {
    * using a well-known key.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the locale the action executes in.
    */
   public abstract Locale getLocale(Map<String, Object> context);
@@ -71,25 +62,13 @@ public abstract class AbstractAction implements IAction {
    * <code>ActionContextConstants.PARENT_MODULE_SELECTED_INDICES</code> key.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the selected indices if any.
    */
   public int[] getParentModuleSelectedIndices(Map<String, Object> context) {
     return ((ICollectionConnectorProvider) ((ICompositeValueConnector) context
         .get(ActionContextConstants.MODULE_VIEW_CONNECTOR))
         .getParentConnector()).getCollectionConnector().getSelectedIndices();
-  }
-
-  /**
-   * Gets a translation provider out of the action context.
-   * 
-   * @param context
-   *          the action context.
-   * @return the translation provider.
-   */
-  protected ITranslationProvider getTranslationProvider(
-      Map<String, Object> context) {
-    return getController(context).getTranslationProvider();
   }
 
   /**
@@ -113,7 +92,7 @@ public abstract class AbstractAction implements IAction {
    * Sets the grantedRoles.
    * 
    * @param grantedRoles
-   *          the grantedRoles to set.
+   *            the grantedRoles to set.
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;
@@ -123,9 +102,30 @@ public abstract class AbstractAction implements IAction {
    * Sets the longOperation.
    * 
    * @param longOperation
-   *          the longOperation to set.
+   *            the longOperation to set.
    */
   public void setLongOperation(boolean longOperation) {
     this.longOperation = longOperation;
+  }
+
+  /**
+   * Gets the controller (frontend or backend) out of the action context.
+   * 
+   * @param context
+   *            the action context.
+   * @return the controller (frontend or backend).
+   */
+  protected abstract IController getController(Map<String, Object> context);
+
+  /**
+   * Gets a translation provider out of the action context.
+   * 
+   * @param context
+   *            the action context.
+   * @return the translation provider.
+   */
+  protected ITranslationProvider getTranslationProvider(
+      Map<String, Object> context) {
+    return getController(context).getTranslationProvider();
   }
 }

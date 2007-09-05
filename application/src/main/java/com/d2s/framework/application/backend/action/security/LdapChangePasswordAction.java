@@ -39,6 +39,26 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
   private String ldapUrl;
 
   /**
+   * Sets the digestAlgorithm.
+   * 
+   * @param digestAlgorithm
+   *            the digestAlgorithm to set.
+   */
+  public void setDigestAlgorithm(String digestAlgorithm) {
+    this.digestAlgorithm = digestAlgorithm;
+  }
+
+  /**
+   * Sets the ldapUrl.
+   * 
+   * @param ldapUrl
+   *            the ldapUrl to set.
+   */
+  public void setLdapUrl(String ldapUrl) {
+    this.ldapUrl = ldapUrl;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -91,25 +111,5 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
       return prefix + Base64Encoder.encode(digest);
     }
     return new String(newPassword);
-  }
-
-  /**
-   * Sets the digestAlgorithm.
-   * 
-   * @param digestAlgorithm
-   *          the digestAlgorithm to set.
-   */
-  public void setDigestAlgorithm(String digestAlgorithm) {
-    this.digestAlgorithm = digestAlgorithm;
-  }
-
-  /**
-   * Sets the ldapUrl.
-   * 
-   * @param ldapUrl
-   *          the ldapUrl to set.
-   */
-  public void setLdapUrl(String ldapUrl) {
-    this.ldapUrl = ldapUrl;
   }
 }

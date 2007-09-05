@@ -23,7 +23,7 @@ public class FormatAdapter implements IFormatter {
    * Constructs a new <code>FormatAdapter</code> instance.
    * 
    * @param format
-   *          the format to adapt.
+   *            the format to adapt.
    */
   public FormatAdapter(Format format) {
     super();

@@ -46,7 +46,7 @@ public class BasicConstrainedGridViewDescriptor extends
    * Sets the constrainedViews.
    * 
    * @param constrainedViews
-   *          the constrainedViews to set.
+   *            the constrainedViews to set.
    */
   public void setConstrainedViews(
       Map<IViewDescriptor, ViewConstraints> constrainedViews) {

@@ -32,13 +32,13 @@ public class EntityProxySingleTableEntityPersister extends
    * instance.
    * 
    * @param persistentClass
-   *          the persistentClass.
+   *            the persistentClass.
    * @param cache
-   *          the cache.
+   *            the cache.
    * @param factory
-   *          the factory.
+   *            the factory.
    * @param mapping
-   *          the mapping.
+   *            the mapping.
    */
   public EntityProxySingleTableEntityPersister(PersistentClass persistentClass,
       CacheConcurrencyStrategy cache, SessionFactoryImplementor factory,

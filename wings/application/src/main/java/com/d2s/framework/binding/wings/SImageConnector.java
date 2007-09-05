@@ -24,9 +24,9 @@ public class SImageConnector extends SComponentConnector<SLabel> {
    * Constructs a new <code>JImageConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param label
-   *          the connected SLabel.
+   *            the connected SLabel.
    */
   public SImageConnector(String id, SLabel label) {
     super(id, label);

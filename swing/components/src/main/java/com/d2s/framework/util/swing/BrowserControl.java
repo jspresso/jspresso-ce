@@ -31,15 +31,19 @@ public final class BrowserControl {
   // The default system browser under windows.
   private static final String WIN_PATH  = "rundll32";
 
+  private BrowserControl() {
+    // Helper class private constructor.
+  }
+
   /**
    * Display a file in the system browser. If you want to display a file, you
    * must include the absolute path name.
    * 
    * @param url
-   *          the file's url (the url must start with either "http://" or
-   *          "file://").
+   *            the file's url (the url must start with either "http://" or
+   *            "file://").
    * @throws IOException
-   *           whenever an I/O exception occurs.
+   *             whenever an I/O exception occurs.
    */
   public static void displayURL(String url) throws IOException {
     boolean windows = isWindowsPlatform();
@@ -85,9 +89,5 @@ public final class BrowserControl {
       return true;
     }
     return false;
-  }
-
-  private BrowserControl() {
-    // Helper class private constructor.
   }
 }

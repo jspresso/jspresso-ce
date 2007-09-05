@@ -21,7 +21,7 @@ public interface IEntityDirtAware {
    * updated to the persistent store).
    * 
    * @param entity
-   *          the entity to get the dirty properties of.
+   *            the entity to get the dirty properties of.
    * @return null or an empty map if the entity is not dirty. The collection of
    *         dirty properties with their original values.
    */
@@ -32,7 +32,7 @@ public interface IEntityDirtAware {
    * persistent store).
    * 
    * @param entity
-   *          the entity to test.
+   *            the entity to test.
    * @return true if the entity is dirty.
    */
   boolean isDirty(IEntity entity);
@@ -42,9 +42,9 @@ public interface IEntityDirtAware {
    * updated to the persistent store).
    * 
    * @param entity
-   *          the entity to test.
+   *            the entity to test.
    * @param property
-   *          the entity property to test.
+   *            the entity property to test.
    * @return true if the entity is dirty.
    */
   boolean isDirty(IEntity entity, String property);

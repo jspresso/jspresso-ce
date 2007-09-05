@@ -20,9 +20,9 @@ public class JPasswordFieldConnector extends JTextFieldConnector {
    * Constructs a new <code>JPasswordFieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param passwordField
-   *          the connected JPasswordField.
+   *            the connected JPasswordField.
    */
   public JPasswordFieldConnector(String id, JPasswordField passwordField) {
     super(id, passwordField);

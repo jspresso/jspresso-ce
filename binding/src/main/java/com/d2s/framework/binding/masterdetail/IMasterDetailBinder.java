@@ -22,9 +22,9 @@ public interface IMasterDetailBinder {
    * Binds two connectors altogether.
    * 
    * @param masterConnector
-   *          The master collection connector.
+   *            The master collection connector.
    * @param detailConnector
-   *          The detail connector tracking the master selectable selection.
+   *            The detail connector tracking the master selectable selection.
    */
   void bind(IValueConnector masterConnector, IValueConnector detailConnector);
 }

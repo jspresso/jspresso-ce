@@ -16,7 +16,7 @@ import com.d2s.framework.util.gui.ColorHelper;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -24,14 +24,23 @@ public class SColorPickerConnector extends SComponentConnector<SColorPicker> {
 
   /**
    * Constructs a new <code>SColorPickerConnector</code> instance.
-   *
+   * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param colorPicker
-   *          the connected SColorPicker.
+   *            the connected SColorPicker.
    */
   public SColorPickerConnector(String id, SColorPicker colorPicker) {
     super(id, colorPicker);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedSComponent().setEnabled(isWritable());
   }
 
   /**
@@ -77,14 +86,5 @@ public class SColorPickerConnector extends SComponentConnector<SColorPicker> {
     } else {
       getConnectedSComponent().setValue(null);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedSComponent().setEnabled(isWritable());
   }
 }

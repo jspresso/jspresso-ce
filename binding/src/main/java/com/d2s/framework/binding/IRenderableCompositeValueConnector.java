@@ -27,7 +27,7 @@ public interface IRenderableCompositeValueConnector extends
    * Clones this connector.
    * 
    * @param newConnectorId
-   *          the identifier of the clone connector
+   *            the identifier of the clone connector
    * @return the connector's clone.
    */
   IRenderableCompositeValueConnector clone(String newConnectorId);

@@ -29,23 +29,10 @@ public abstract class AbstractSwingAction extends
     ActionWrapper<JComponent, Icon, Action> {
 
   /**
-   * If the ancestor of the action widget is a dialog, dispose it.
-   * 
-   * @param context
-   *          the action context.
-   */
-  protected void closeDialog(Map<String, Object> context) {
-    Window actionWindow = SwingUtil.getVisibleWindow(getActionWidget(context));
-    if (actionWindow instanceof Dialog) {
-      actionWindow.dispose();
-    }
-  }
-
-  /**
    * Retrieves the widget which triggered the action from the action context.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the widget which triggered the action.
    */
   public JComponent getActionWidget(Map<String, Object> context) {
@@ -59,10 +46,23 @@ public abstract class AbstractSwingAction extends
    * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the source widget this action was triggered from.
    */
   public JComponent getSourceComponent(Map<String, Object> context) {
     return (JComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  }
+
+  /**
+   * If the ancestor of the action widget is a dialog, dispose it.
+   * 
+   * @param context
+   *            the action context.
+   */
+  protected void closeDialog(Map<String, Object> context) {
+    Window actionWindow = SwingUtil.getVisibleWindow(getActionWidget(context));
+    if (actionWindow instanceof Dialog) {
+      actionWindow.dispose();
+    }
   }
 }

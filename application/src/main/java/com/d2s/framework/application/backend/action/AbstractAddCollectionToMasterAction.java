@@ -103,7 +103,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
    * in the context.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the entity to add to the collection.
    */
   @SuppressWarnings("unchecked")

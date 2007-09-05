@@ -21,7 +21,7 @@ import com.d2s.framework.util.IIconImageURLProvider;
  */
 public class ComponentIconImageURLProvider implements IIconImageURLProvider {
 
-  private Collection<IComponentDescriptor> componentDescriptors;
+  private Collection<IComponentDescriptor<?>> componentDescriptors;
 
   /**
    * {@inheritDoc}
@@ -31,7 +31,7 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
       return null;
     }
     Class<?> modelClass = userObject.getClass();
-    for (IComponentDescriptor componentDescriptor : componentDescriptors) {
+    for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
       if (((Class<?>) componentDescriptor.getComponentContract())
           .isAssignableFrom(modelClass)) {
         return componentDescriptor.getIconImageURL();
@@ -44,10 +44,10 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
    * Sets the componentDescriptors.
    * 
    * @param componentDescriptors
-   *          the componentDescriptors to set.
+   *            the componentDescriptors to set.
    */
   public void setComponentDescriptors(
-      Collection<IComponentDescriptor> componentDescriptors) {
+      Collection<IComponentDescriptor<?>> componentDescriptors) {
     this.componentDescriptors = componentDescriptors;
   }
 }

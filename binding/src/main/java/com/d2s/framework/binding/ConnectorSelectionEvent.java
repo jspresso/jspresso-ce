@@ -29,9 +29,9 @@ public class ConnectorSelectionEvent extends EventObject {
    * Constructs a new <code>ConnectorSelectionEvent</code>.
    * 
    * @param source
-   *          the connector that initiated the event.
+   *            the connector that initiated the event.
    * @param selectedConnector
-   *          the new connector.
+   *            the new connector.
    */
   public ConnectorSelectionEvent(IValueConnector source,
       IValueConnector selectedConnector) {

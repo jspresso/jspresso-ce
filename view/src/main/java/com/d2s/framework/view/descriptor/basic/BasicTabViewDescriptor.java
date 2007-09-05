@@ -33,7 +33,7 @@ public class BasicTabViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the viewDescriptors.
    * 
    * @param viewDescriptors
-   *          the viewDescriptors to set.
+   *            the viewDescriptors to set.
    */
   public void setViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     this.viewDescriptors = viewDescriptors;

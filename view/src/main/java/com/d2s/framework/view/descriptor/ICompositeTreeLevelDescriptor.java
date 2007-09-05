@@ -22,7 +22,7 @@ public interface ICompositeTreeLevelDescriptor extends ITreeLevelDescriptor {
    * Gets the subtree descriptor from its name.
    * 
    * @param name
-   *          the name of the child tree level descriptor.
+   *            the name of the child tree level descriptor.
    * @return the subtree descriptor.
    */
   ITreeLevelDescriptor getChildDescriptor(String name);

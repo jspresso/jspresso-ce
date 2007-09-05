@@ -21,9 +21,9 @@ public class ULCTextAreaConnector extends
    * Constructs a new <code>ULCTextAreaConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textArea
-   *          the connected ULCTextArea.
+   *            the connected ULCTextArea.
    */
   public ULCTextAreaConnector(String id, ULCTextArea textArea) {
     super(id, textArea);

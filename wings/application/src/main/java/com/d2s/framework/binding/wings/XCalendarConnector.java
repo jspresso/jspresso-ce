@@ -24,12 +24,32 @@ public class XCalendarConnector extends SComponentConnector<XCalendar> {
    * Constructs a new <code>XCalendar</code> instance.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param dateField
-   *          the connected XCalendar.
+   *            the connected XCalendar.
    */
   public XCalendarConnector(String id, XCalendar dateField) {
     super(id, dateField);
+  }
+
+  /**
+   * Sets the value to the connector text after formatting the string
+   * representation.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public void setConnecteeValue(Object aValue) {
+    getConnectedSComponent().setDate((Date) aValue);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedSComponent().setEnabled(isWritable());
   }
 
   /**
@@ -56,25 +76,5 @@ public class XCalendarConnector extends SComponentConnector<XCalendar> {
   @Override
   protected Object getConnecteeValue() {
     return getConnectedSComponent().getDate();
-  }
-
-  /**
-   * Sets the value to the connector text after formatting the string
-   * representation.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setConnecteeValue(Object aValue) {
-    getConnectedSComponent().setDate((Date) aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedSComponent().setEnabled(isWritable());
   }
 }

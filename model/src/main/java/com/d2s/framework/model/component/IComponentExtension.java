@@ -10,17 +10,17 @@ package com.d2s.framework.model.component;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <T>
- *          The class of the extended component.
+ *            The class of the extended component.
  */
 public interface IComponentExtension<T extends IComponent> {
 
   /**
    * Returns the component instance to which this extension is attached.
-   *
+   * 
    * @return The extended entity instance.
    */
   T getComponent();

@@ -21,7 +21,7 @@ import com.d2s.framework.binding.AbstractValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          The actual class of the subclass of <code>SComponent</code>.
+ *            The actual class of the subclass of <code>SComponent</code>.
  */
 public abstract class SComponentConnector<E extends SComponent> extends
     AbstractValueConnector {
@@ -34,15 +34,42 @@ public abstract class SComponentConnector<E extends SComponent> extends
    * Constructs a new <code>SComponentConnector</code> instance.
    * 
    * @param id
-   *          the connector identifier.
+   *            the connector identifier.
    * @param connectedSComponent
-   *          the connected SComponent.
+   *            the connected SComponent.
    */
   public SComponentConnector(String id, E connectedSComponent) {
     super(id);
     this.connectedSComponent = connectedSComponent;
     bindSComponent();
     updateState();
+  }
+
+  /**
+   * Turn read-only if not bound.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isWritable() {
+    return (getModelConnector() != null) && super.isWritable();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    if (isReadable()) {
+      if (savedForeground != null) {
+        getConnectedSComponent().setForeground(savedForeground);
+      }
+      savedForeground = null;
+    } else if (savedForeground == null) {
+      savedForeground = getConnectedSComponent().getForeground();
+      getConnectedSComponent().setForeground(
+          getConnectedSComponent().getBackground());
+    }
   }
 
   /**
@@ -83,34 +110,7 @@ public abstract class SComponentConnector<E extends SComponent> extends
     return connectedSComponent;
   }
 
-  /**
-   * Turn read-only if not bound.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isWritable() {
-    return (getModelConnector() != null) && super.isWritable();
-  }
-
   private void protectedFireConnectorValueChange() {
     super.fireConnectorValueChange();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    if (isReadable()) {
-      if (savedForeground != null) {
-        getConnectedSComponent().setForeground(savedForeground);
-      }
-      savedForeground = null;
-    } else if (savedForeground == null) {
-      savedForeground = getConnectedSComponent().getForeground();
-      getConnectedSComponent().setForeground(
-          getConnectedSComponent().getBackground());
-    }
   }
 }

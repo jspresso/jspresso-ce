@@ -23,12 +23,16 @@ public final class UrlHelper {
   private static final String JAR_URL           = "jar:";
   private static final String JAR_URL_SEPARATOR = "!/";
 
+  private UrlHelper() {
+    // private constructor for helper class.
+  }
+
   /**
    * Creates a URL object.
    * 
    * @param urlSpec
-   *          the string representation of the URL. In case of a classpath url
-   *          the thread context classloader will be used.
+   *            the string representation of the URL. In case of a classpath url
+   *            the thread context classloader will be used.
    * @return the constructed URL or null.
    */
   public static URL createURL(String urlSpec) {
@@ -39,10 +43,10 @@ public final class UrlHelper {
    * Creates a URL object.
    * 
    * @param urlSpec
-   *          the string representation of the URL.
+   *            the string representation of the URL.
    * @param cl
-   *          the class loader used to get the resource URL in case of a
-   *          "classpath:" URL.
+   *            the class loader used to get the resource URL in case of a
+   *            "classpath:" URL.
    * @return the constructed URL or null.
    */
   public static URL createURL(String urlSpec, ClassLoader cl) {
@@ -70,9 +74,5 @@ public final class UrlHelper {
       }
     }
     return returnedURL;
-  }
-
-  private UrlHelper() {
-    // private constructor for helper class.
   }
 }

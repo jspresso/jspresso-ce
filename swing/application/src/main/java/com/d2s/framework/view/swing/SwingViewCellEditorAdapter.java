@@ -46,7 +46,7 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    * Constructs a new <code>SwingViewCellEditorAdapter</code> instance.
    * 
    * @param editorView
-   *          the swing view used as editor.
+   *            the swing view used as editor.
    */
   public SwingViewCellEditorAdapter(IView<JComponent> editorView) {
     this.editorView = editorView;
@@ -78,15 +78,6 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
    */
   public Object getCellEditorValue() {
     return editorView.getConnector().getConnectorValue();
-  }
-
-  /**
-   * Gets the editorView.
-   * 
-   * @return the editorView.
-   */
-  protected IView<JComponent> getEditorView() {
-    return editorView;
   }
 
   /**
@@ -142,6 +133,15 @@ public class SwingViewCellEditorAdapter extends AbstractCellEditor implements
       return ((MouseEvent) anEvent).getClickCount() >= 2;
     }
     return super.isCellEditable(anEvent);
+  }
+
+  /**
+   * Gets the editorView.
+   * 
+   * @return the editorView.
+   */
+  protected IView<JComponent> getEditorView() {
+    return editorView;
   }
 
 }

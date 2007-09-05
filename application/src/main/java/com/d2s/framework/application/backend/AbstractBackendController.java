@@ -19,6 +19,7 @@ import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.datatransfer.ComponentTransferStructure;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.entity.IEntity;
@@ -41,15 +42,15 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
 public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
-  private IApplicationSession          applicationSession;
-  private IAccessorFactory             beanAccessorFactory;
-  private IModelConnectorFactory       beanConnectorFactory;
-  private IEntityFactory               entityFactory;
-  private IAccessorFactory             mapAccessorFactory;
-  private IModelConnectorFactory       mapConnectorFactory;
-  private Map<String, IValueConnector> moduleConnectors;
+  private IApplicationSession                              applicationSession;
+  private IAccessorFactory                                 beanAccessorFactory;
+  private IModelConnectorFactory                           beanConnectorFactory;
+  private IEntityFactory                                   entityFactory;
+  private IAccessorFactory                                 mapAccessorFactory;
+  private IModelConnectorFactory                           mapConnectorFactory;
+  private Map<String, IValueConnector>                     moduleConnectors;
 
-  private ComponentTransferStructure   transferStructure;
+  private ComponentTransferStructure<? extends IComponent> transferStructure;
 
   /**
    * {@inheritDoc}
@@ -162,15 +163,6 @@ public abstract class AbstractBackendController extends AbstractController
     // NO-OP
   }
 
-  private void linkSessionArtifacts() {
-    if (getApplicationSession() != null && getEntityFactory() != null) {
-      ((ApplicationSessionAwareProxyEntityFactory) getEntityFactory())
-          .setApplicationSession(getApplicationSession());
-      ((BasicApplicationSession) getApplicationSession())
-          .setEntityFactory(getEntityFactory());
-    }
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -188,7 +180,7 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public ComponentTransferStructure retrieveComponents() {
+  public ComponentTransferStructure<? extends IComponent> retrieveComponents() {
     return transferStructure;
   }
 
@@ -196,7 +188,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the applicationSession.
    * 
    * @param applicationSession
-   *          the applicationSession to set.
+   *            the applicationSession to set.
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
     if (!(applicationSession instanceof BasicApplicationSession)) {
@@ -211,7 +203,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the beanAccessorFactory.
    * 
    * @param beanAccessorFactory
-   *          the beanAccessorFactory to set.
+   *            the beanAccessorFactory to set.
    */
   public void setBeanAccessorFactory(IAccessorFactory beanAccessorFactory) {
     this.beanAccessorFactory = beanAccessorFactory;
@@ -221,7 +213,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the beanConnectorFactory.
    * 
    * @param beanConnectorFactory
-   *          the beanConnectorFactory to set.
+   *            the beanConnectorFactory to set.
    */
   public void setBeanConnectorFactory(
       IModelConnectorFactory beanConnectorFactory) {
@@ -232,7 +224,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the entityFactory.
    * 
    * @param entityFactory
-   *          the entityFactory to set.
+   *            the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     if (!(entityFactory instanceof ApplicationSessionAwareProxyEntityFactory)) {
@@ -247,7 +239,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the mapAccessorFactory.
    * 
    * @param mapAccessorFactory
-   *          the mapAccessorFactory to set.
+   *            the mapAccessorFactory to set.
    */
   public void setMapAccessorFactory(IAccessorFactory mapAccessorFactory) {
     this.mapAccessorFactory = mapAccessorFactory;
@@ -257,7 +249,7 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the mapConnectorFactory.
    * 
    * @param mapConnectorFactory
-   *          the mapConnectorFactory to set.
+   *            the mapConnectorFactory to set.
    */
   public void setMapConnectorFactory(IModelConnectorFactory mapConnectorFactory) {
     this.mapConnectorFactory = mapConnectorFactory;
@@ -268,8 +260,8 @@ public abstract class AbstractBackendController extends AbstractController
    * connectors are.
    * 
    * @param modules
-   *          A map containing the modules indexed by a well-known key used to
-   *          bind them with their views.
+   *            A map containing the modules indexed by a well-known key used to
+   *            bind them with their views.
    */
   public void setModules(Map<String, Module> modules) {
     moduleConnectors = new HashMap<String, IValueConnector>();
@@ -299,8 +291,27 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public void storeComponents(ComponentTransferStructure components) {
+  public void storeComponents(
+      ComponentTransferStructure<? extends IComponent> components) {
     this.transferStructure = components;
+  }
+
+  /**
+   * Translate modules based on the locale set.
+   */
+  public void translateModules() {
+    for (IValueConnector moduleConnector : moduleConnectors.values()) {
+      translateModule((Module) moduleConnector.getConnectorValue());
+    }
+  }
+
+  private void linkSessionArtifacts() {
+    if (getApplicationSession() != null && getEntityFactory() != null) {
+      ((ApplicationSessionAwareProxyEntityFactory) getEntityFactory())
+          .setApplicationSession(getApplicationSession());
+      ((BasicApplicationSession) getApplicationSession())
+          .setEntityFactory(getEntityFactory());
+    }
   }
 
   private void translateModule(Module module) {
@@ -312,15 +323,6 @@ public abstract class AbstractBackendController extends AbstractController
       for (Module subModule : module.getSubModules()) {
         translateModule(subModule);
       }
-    }
-  }
-
-  /**
-   * Translate modules based on the locale set.
-   */
-  public void translateModules() {
-    for (IValueConnector moduleConnector : moduleConnectors.values()) {
-      translateModule((Module) moduleConnector.getConnectorValue());
     }
   }
 }

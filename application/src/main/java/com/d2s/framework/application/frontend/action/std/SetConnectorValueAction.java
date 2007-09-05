@@ -21,11 +21,11 @@ import com.d2s.framework.binding.IValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public class SetConnectorValueAction<E, F, G> extends
     AbstractFrontendAction<E, F, G> {
@@ -51,7 +51,7 @@ public class SetConnectorValueAction<E, F, G> extends
    * Sets the connectorActionContextKey.
    * 
    * @param connectorActionContextKey
-   *          the connectorActionContextKey to set.
+   *            the connectorActionContextKey to set.
    */
   public void setConnectorActionContextKey(String connectorActionContextKey) {
     this.connectorActionContextKey = connectorActionContextKey;

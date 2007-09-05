@@ -39,13 +39,16 @@ import com.d2s.framework.util.bean.PropertyHelper;
  */
 public class HibernateAwareApplicationSession extends BasicApplicationSession {
 
+  private HibernateTemplate hibernateTemplate;
+  private boolean           traversedPendingOperations = false;
+
   /**
    * Whenever the entity has dirty persistent collection, make them clean to
    * workaround a "bug" with hibernate since hibernate cannot re-attach a
    * "dirty" detached collection.
    * 
    * @param entity
-   *          the entity to clean the collections dirty state of.
+   *            the entity to clean the collections dirty state of.
    */
   public static void cleanPersistentCollectionDirtyState(IEntity entity) {
     if (entity != null) {
@@ -62,6 +65,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
       }
     }
   }
+
   private static String getHibernateRoleName(Class<?> entityContract,
       String role) {
     PropertyDescriptor roleDescriptor = PropertyHelper.getPropertyDescriptor(
@@ -73,10 +77,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     }
     return entityDeclaringClass.getName() + "." + role;
   }
-
-  private HibernateTemplate hibernateTemplate;
-
-  private boolean           traversedPendingOperations = false;
 
   /**
    * Does the unit of work back merge in the scope of an hibernate session.
@@ -177,10 +177,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     return Hibernate.isInitialized(objectOrProxy);
   }
 
-  private void performActualUnitOfWorkCommit() {
-    super.commitUnitOfWork();
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -254,7 +250,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * Sets the hibernateTemplate.
    * 
    * @param hibernateTemplate
-   *          the hibernateTemplate to set.
+   *            the hibernateTemplate to set.
    */
   public void setHibernateTemplate(HibernateTemplate hibernateTemplate) {
     this.hibernateTemplate = hibernateTemplate;
@@ -312,6 +308,10 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
     }
     return super.wrapDetachedEntityCollection(entity, transientCollection,
         snapshotCollection, role);
+  }
+
+  private void performActualUnitOfWorkCommit() {
+    super.commitUnitOfWork();
   }
 
 }

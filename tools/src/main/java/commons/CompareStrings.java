@@ -29,7 +29,7 @@ public class CompareStrings implements TemplateMethodModelEx {
    * Constructs a new <code>CompareStrings</code> instance.
    * 
    * @param wrapper
-   *          the beans wrapper.
+   *            the beans wrapper.
    */
   public CompareStrings(BeansWrapper wrapper) {
     this.wrapper = wrapper;
@@ -40,6 +40,7 @@ public class CompareStrings implements TemplateMethodModelEx {
    * <p>
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   public TemplateModel exec(List arguments) throws TemplateModelException {
     try {
       String first = ((TemplateScalarModel) arguments.get(0)).getAsString();

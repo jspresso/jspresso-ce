@@ -31,7 +31,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return Date.class;
   }
 
@@ -52,7 +52,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    * Sets the type.
    * 
    * @param type
-   *          the type to set.
+   *            the type to set.
    */
   public void setType(String type) {
     this.type = type;

@@ -29,7 +29,7 @@ public class DescriptorAwareMapCollectionAccessor extends
    * instance.
    * 
    * @param property
-   *          the property to create the accessor for.
+   *            the property to create the accessor for.
    */
   public DescriptorAwareMapCollectionAccessor(String property) {
     super(property);
@@ -56,28 +56,18 @@ public class DescriptorAwareMapCollectionAccessor extends
   }
 
   /**
-   * Gets the modelDescriptor.
-   * 
-   * @return the modelDescriptor.
-   */
-  @Override
-  protected ICollectionPropertyDescriptor getModelDescriptor() {
-    return (ICollectionPropertyDescriptor) super.getModelDescriptor();
-  }
-
-  /**
    * {@inheritDoc}
    */
   @Override
-  public Collection getValue(Object target) {
-    return (Collection) super.getValue(target);
+  public Collection<?> getValue(Object target) {
+    return (Collection<?>) super.getValue(target);
   }
 
   /**
    * {@inheritDoc}
    */
   public void removeFromValue(Object target, Object value) {
-    Collection mapValue = getValue(target);
+    Collection<?> mapValue = getValue(target);
     if (getModelDescriptor() != null) {
       getModelDescriptor().preprocessRemover(this, mapValue, value);
     }
@@ -89,5 +79,15 @@ public class DescriptorAwareMapCollectionAccessor extends
     if (getModelDescriptor() != null) {
       getModelDescriptor().postprocessRemover(this, mapValue, value);
     }
+  }
+
+  /**
+   * Gets the modelDescriptor.
+   * 
+   * @return the modelDescriptor.
+   */
+  @Override
+  protected ICollectionPropertyDescriptor<?> getModelDescriptor() {
+    return (ICollectionPropertyDescriptor<?>) super.getModelDescriptor();
   }
 }

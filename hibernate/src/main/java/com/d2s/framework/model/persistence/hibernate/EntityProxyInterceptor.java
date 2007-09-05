@@ -23,7 +23,7 @@ import com.d2s.framework.security.UserPrincipal;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,35 +32,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
   private static final long serialVersionUID = -7357726538191018694L;
 
   private IEntityFactory    entityFactory;
-
-  private void extractState(IEntity entity, String[] propertyNames,
-      Object[] state) {
-    for (int i = 0; i < propertyNames.length; i++) {
-      String propertyName = propertyNames[i];
-      Object property = entity.straightGetProperty(propertyName);
-      if (!(property instanceof Collection<?>)) {
-        state[i] = property;
-      }
-    }
-  }
-
-  /**
-   * Gets the entityFactory.
-   *
-   * @return the entityFactory.
-   */
-  protected IEntityFactory getEntityFactory() {
-    return entityFactory;
-  }
-
-  /**
-   * Gets the lifecycle handler.
-   *
-   * @return the entity lifecycle handler.
-   */
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return null;
-  }
 
   /**
    * Returns the fully qualified name of the entity passed as parameter.
@@ -72,15 +43,6 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
     if (object instanceof IEntity) {
       return ((IEntity) object).getContract().getName();
     }
-    return null;
-  }
-
-  /**
-   * Gets the principal owning the session.
-   *
-   * @return the principal owning the session.
-   */
-  protected UserPrincipal getPrincipal() {
     return null;
   }
 
@@ -157,11 +119,49 @@ public class EntityProxyInterceptor extends EmptyInterceptor {
 
   /**
    * Sets the entityFactory.
-   *
+   * 
    * @param entityFactory
-   *          the entityFactory to set.
+   *            the entityFactory to set.
    */
   public void setEntityFactory(IEntityFactory entityFactory) {
     this.entityFactory = entityFactory;
+  }
+
+  /**
+   * Gets the entityFactory.
+   * 
+   * @return the entityFactory.
+   */
+  protected IEntityFactory getEntityFactory() {
+    return entityFactory;
+  }
+
+  /**
+   * Gets the lifecycle handler.
+   * 
+   * @return the entity lifecycle handler.
+   */
+  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
+    return null;
+  }
+
+  /**
+   * Gets the principal owning the session.
+   * 
+   * @return the principal owning the session.
+   */
+  protected UserPrincipal getPrincipal() {
+    return null;
+  }
+
+  private void extractState(IEntity entity, String[] propertyNames,
+      Object[] state) {
+    for (int i = 0; i < propertyNames.length; i++) {
+      String propertyName = propertyNames[i];
+      Object property = entity.straightGetProperty(propertyName);
+      if (!(property instanceof Collection<?>)) {
+        state[i] = property;
+      }
+    }
   }
 }

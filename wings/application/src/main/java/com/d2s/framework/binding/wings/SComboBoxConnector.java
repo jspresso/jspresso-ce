@@ -23,12 +23,21 @@ public class SComboBoxConnector extends SComponentConnector<SComboBox> {
    * Constructs a new <code>SComboBoxConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param comboBox
-   *          the connected SComboBox.
+   *            the connected SComboBox.
    */
   public SComboBoxConnector(String id, SComboBox comboBox) {
     super(id, comboBox);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void updateState() {
+    super.updateState();
+    getConnectedSComponent().setEnabled(isWritable());
   }
 
   /**
@@ -66,14 +75,5 @@ public class SComboBoxConnector extends SComponentConnector<SComboBox> {
   @Override
   protected void setConnecteeValue(Object aValue) {
     getConnectedSComponent().setSelectedItem(aValue);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void updateState() {
-    super.updateState();
-    getConnectedSComponent().setEnabled(isWritable());
   }
 }

@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor;
 
+import com.d2s.framework.model.component.IComponent;
+
 /**
  * A registry mapping the component contracts with their descriptors.
  * <p>
@@ -18,8 +20,9 @@ public interface IComponentDescriptorRegistry {
    * Retrieves an component descriptor from its contract.
    * 
    * @param componentContract
-   *          the component contract.
+   *            the component contract.
    * @return th component descriptor.
    */
-  IComponentDescriptor<?> getComponentDescriptor(Class componentContract);
+  IComponentDescriptor<?> getComponentDescriptor(
+      Class<? extends IComponent> componentContract);
 }

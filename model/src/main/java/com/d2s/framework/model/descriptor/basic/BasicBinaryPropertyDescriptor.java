@@ -53,7 +53,7 @@ public class BasicBinaryPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return byte[].class;
   }
 
@@ -69,7 +69,7 @@ public class BasicBinaryPropertyDescriptor extends
    * Sets the fileFilter.
    * 
    * @param fileFilter
-   *          the fileFilter to set.
+   *            the fileFilter to set.
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;
@@ -79,7 +79,7 @@ public class BasicBinaryPropertyDescriptor extends
    * Sets the maxLength property.
    * 
    * @param maxLength
-   *          the maxLength to set.
+   *            the maxLength to set.
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;

@@ -76,135 +76,234 @@ import foxtrot.Job;
 public class DefaultSwingController extends
     AbstractFrontendController<JComponent, Icon, Action> {
 
-  private final class ModuleInternalFrameListener extends InternalFrameAdapter {
-
-    private String moduleId;
-
-    /**
-     * Constructs a new <code>ModuleInternalFrameListener</code> instance.
-     * 
-     * @param moduleId
-     *          the root module identifier this listener is attached to.
-     */
-    public ModuleInternalFrameListener(String moduleId) {
-      this.moduleId = moduleId;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameActivated(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedModuleId(moduleId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameDeactivated(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedModuleId(null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameDeiconified(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedModuleId(moduleId);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameIconified(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedModuleId(null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void internalFrameOpened(@SuppressWarnings("unused")
-    InternalFrameEvent e) {
-      setSelectedModuleId(moduleId);
-    }
-
-  }
-  private final class ModuleSelectionAction extends AbstractAction {
-
-    private static final long serialVersionUID = 3469745193806038352L;
-    private String            moduleId;
-
-    /**
-     * Constructs a new <code>ModuleSelectionAction</code> instance.
-     * 
-     * @param moduleId
-     * @param moduleDescriptor
-     */
-    public ModuleSelectionAction(String moduleId,
-        IModuleDescriptor moduleDescriptor) {
-      this.moduleId = moduleId;
-      putValue(Action.NAME, moduleDescriptor.getI18nName(
-          getTranslationProvider(), getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, moduleDescriptor.getI18nDescription(
-          getTranslationProvider(), getLocale())
-          + IViewFactory.TOOLTIP_ELLIPSIS);
-      putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    }
-
-    /**
-     * displays the selected module.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
-      try {
-        getBackendController().checkModuleAccess(moduleId);
-        displayModule(moduleId);
-      } catch (SecurityException ex) {
-        handleException(ex, null);
-      }
-    }
-  }
-
-  private final class QuitAction extends AbstractAction {
-
-    private static final long serialVersionUID = -5797994634301619085L;
-
-    /**
-     * Constructs a new <code>ModuleSelectionAction</code> instance.
-     */
-    public QuitAction() {
-      putValue(Action.NAME, getTranslationProvider().getTranslation(
-          "quit.name", getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
-          .getTranslation("quit.description", getLocale()));
-    }
-
-    /**
-     * displays the selected module.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
-      stop();
-    }
-  }
-
   private JFrame                      controllerFrame;
-
   private Map<String, JInternalFrame> moduleInternalFrames;
 
   private WaitCursorTimer             waitTimer;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean execute(IAction action, Map<String, Object> context) {
+    if (action == null) {
+      return true;
+    }
+    JComponent sourceComponent = (JComponent) context
+        .get(ActionContextConstants.SOURCE_COMPONENT);
+    Component windowOrInternalFrame = null;
+    if (sourceComponent != null) {
+      windowOrInternalFrame = SwingUtil
+          .getWindowOrInternalFrame(sourceComponent);
+    }
+    if (windowOrInternalFrame instanceof JFrame) {
+      ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(true);
+    } else if (windowOrInternalFrame instanceof JInternalFrame) {
+      ((JInternalFrame) windowOrInternalFrame).getGlassPane().setVisible(true);
+    } else if (windowOrInternalFrame instanceof JDialog) {
+      ((JDialog) windowOrInternalFrame).getGlassPane().setVisible(true);
+    }
+    waitTimer.startTimer(sourceComponent);
+    try {
+      return super.execute(action, context);
+    } finally {
+      if (windowOrInternalFrame instanceof JFrame) {
+        ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(false);
+      } else if (windowOrInternalFrame instanceof JInternalFrame) {
+        ((JInternalFrame) windowOrInternalFrame).getGlassPane().setVisible(
+            false);
+      } else if (windowOrInternalFrame instanceof JDialog) {
+        ((JDialog) windowOrInternalFrame).getGlassPane().setVisible(false);
+      }
+      waitTimer.stopTimer();
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void handleException(Throwable ex, @SuppressWarnings("unused")
+  Map<String, Object> context) {
+    Component sourceComponent = controllerFrame;
+    if (ex instanceof SecurityException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
+          .getMessage()), getTranslationProvider().getTranslation("error",
+          getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
+          .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+    } else if (ex instanceof BusinessException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .emphasis(((BusinessException) ex).getI18nMessage(
+              getTranslationProvider(), getLocale())), getTranslationProvider()
+          .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
+          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
+    } else if (ex instanceof ConcurrencyFailureException) {
+      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .emphasis(getTranslationProvider().getTranslation(
+              "concurrency.error.description", getLocale())),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
+              IIconFactory.LARGE_ICON_SIZE));
+    } else {
+      ex.printStackTrace();
+      JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,
+          getTranslationProvider(), getLocale());
+      dialog.setMessageIcon(getIconFactory().getErrorIcon(
+          IIconFactory.MEDIUM_ICON_SIZE));
+      dialog.setTitle(getTranslationProvider().getTranslation("error",
+          getLocale()));
+      dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
+      dialog.setDetails(ex);
+      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+      dialog.setSize(8 * screenRes, 3 * screenRes);
+      dialog.pack();
+      SwingUtil.centerOnScreen(dialog);
+      dialog.setVisible(true);
+    }
+  }
+
+  /**
+   * Creates the initial view from the root view descriptor, then a JFrame
+   * containing this view and presents it to the user.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean start(IBackendController backendController, Locale locale) {
+    if (super.start(backendController, locale)) {
+      Toolkit.getDefaultToolkit().getSystemEventQueue().push(
+          new WaitCursorEventQueue(500));
+      CallbackHandler callbackHandler = getLoginCallbackHandler();
+      if (callbackHandler instanceof DialogCallbackHandler) {
+        ((DialogCallbackHandler) callbackHandler)
+            .setParentComponent(controllerFrame);
+      }
+      if (performLogin()) {
+        displayControllerFrame();
+        execute(getStartupAction(), getInitialActionContext());
+        return true;
+      }
+      stop();
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean stop() {
+    if (super.stop()) {
+      if (controllerFrame != null) {
+        controllerFrame.dispose();
+      }
+      System.exit(0);
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected CallbackHandler createLoginCallbackHandler() {
+    DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
+    callbackHandler.setLocale(getLocale());
+    callbackHandler.setTranslationProvider(getTranslationProvider());
+    callbackHandler.setIconFactory(getIconFactory());
+    return callbackHandler;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void displayModule(String moduleId) {
+    if (moduleInternalFrames == null) {
+      moduleInternalFrames = new HashMap<String, JInternalFrame>();
+    }
+    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
+    if (moduleInternalFrame == null) {
+      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      IValueConnector moduleConnector = getBackendController()
+          .getModuleConnector(moduleId);
+      IView<JComponent> moduleView = createModuleView(moduleId,
+          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
+      moduleInternalFrame = createJInternalFrame(moduleView);
+      moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
+          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+      moduleInternalFrame
+          .addInternalFrameListener(new ModuleInternalFrameListener(moduleId));
+      moduleInternalFrames.put(moduleId, moduleInternalFrame);
+      controllerFrame.getContentPane().add(moduleInternalFrame);
+      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
+      moduleInternalFrame.pack();
+      moduleInternalFrame.setSize(controllerFrame.getSize());
+    }
+    moduleInternalFrame.setVisible(true);
+    if (moduleInternalFrame.isIcon()) {
+      try {
+        moduleInternalFrame.setIcon(false);
+      } catch (PropertyVetoException ex) {
+        throw new ControllerException(ex);
+      }
+    }
+    try {
+      moduleInternalFrame.setMaximum(true);
+    } catch (PropertyVetoException ex) {
+      throw new ControllerException(ex);
+    }
+    setSelectedModuleId(moduleId);
+    moduleInternalFrame.toFront();
+    super.displayModule(moduleId);
+  }
+
+  /**
+   * This method has been overriden to take care of long-running operations not
+   * to have the swing gui blocked. It uses the foxtrot library to achieve this.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected final boolean executeBackend(final IAction action,
+      final Map<String, Object> context) {
+    if (action.isLongOperation()) {
+      Boolean success = (Boolean) SwingUtil.performLongOperation(new Job() {
+
+        /**
+         * Decorates the super implementation with the foxtrot job.
+         * <p>
+         * {@inheritDoc}
+         */
+        @Override
+        public Object run() {
+          return new Boolean(protectedExecuteBackend(action, context));
+        }
+      });
+      return success.booleanValue();
+    }
+    return protectedExecuteBackend(action, context);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  protected final boolean executeFrontend(final IAction action,
+      final Map<String, Object> context) {
+    return protectedExecuteFrontend(action, context);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void setSelectedModuleId(String moduleId) {
+    super.setSelectedModuleId(moduleId);
+    updateFrameTitle();
+  }
 
   private JMenu createActionMenu(String titleKey,
       List<IDisplayableAction> actionList) {
@@ -280,7 +379,7 @@ public class DefaultSwingController extends
    * Creates a new JInternalFrame and populates it with a view.
    * 
    * @param view
-   *          the view to be set into the internal frame.
+   *            the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
   private JInternalFrame createJInternalFrame(IView<JComponent> view) {
@@ -294,18 +393,6 @@ public class DefaultSwingController extends
     internalFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     internalFrame.setGlassPane(createHermeticGlassPane());
     return internalFrame;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected CallbackHandler createLoginCallbackHandler() {
-    DialogCallbackHandler callbackHandler = new DialogCallbackHandler();
-    callbackHandler.setLocale(getLocale());
-    callbackHandler.setTranslationProvider(getTranslationProvider());
-    callbackHandler.setIconFactory(getIconFactory());
-    return callbackHandler;
   }
 
   private JMenu createModulesMenu() {
@@ -336,168 +423,6 @@ public class DefaultSwingController extends
     SwingUtil.centerOnScreen(controllerFrame);
     updateFrameTitle();
     controllerFrame.setVisible(true);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void displayModule(String moduleId) {
-    if (moduleInternalFrames == null) {
-      moduleInternalFrames = new HashMap<String, JInternalFrame>();
-    }
-    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
-    if (moduleInternalFrame == null) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-      IValueConnector moduleConnector = getBackendController()
-          .getModuleConnector(moduleId);
-      IView<JComponent> moduleView = createModuleView(moduleId,
-          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
-      moduleInternalFrame = createJInternalFrame(moduleView);
-      moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
-      moduleInternalFrame
-          .addInternalFrameListener(new ModuleInternalFrameListener(moduleId));
-      moduleInternalFrames.put(moduleId, moduleInternalFrame);
-      controllerFrame.getContentPane().add(moduleInternalFrame);
-      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
-      moduleInternalFrame.pack();
-      moduleInternalFrame.setSize(controllerFrame.getSize());
-    }
-    moduleInternalFrame.setVisible(true);
-    if (moduleInternalFrame.isIcon()) {
-      try {
-        moduleInternalFrame.setIcon(false);
-      } catch (PropertyVetoException ex) {
-        throw new ControllerException(ex);
-      }
-    }
-    try {
-      moduleInternalFrame.setMaximum(true);
-    } catch (PropertyVetoException ex) {
-      throw new ControllerException(ex);
-    }
-    setSelectedModuleId(moduleId);
-    moduleInternalFrame.toFront();
-    super.displayModule(moduleId);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean execute(IAction action, Map<String, Object> context) {
-    if (action == null) {
-      return true;
-    }
-    JComponent sourceComponent = (JComponent) context
-        .get(ActionContextConstants.SOURCE_COMPONENT);
-    Component windowOrInternalFrame = null;
-    if (sourceComponent != null) {
-      windowOrInternalFrame = SwingUtil
-          .getWindowOrInternalFrame(sourceComponent);
-    }
-    if (windowOrInternalFrame instanceof JFrame) {
-      ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(true);
-    } else if (windowOrInternalFrame instanceof JInternalFrame) {
-      ((JInternalFrame) windowOrInternalFrame).getGlassPane().setVisible(true);
-    } else if (windowOrInternalFrame instanceof JDialog) {
-      ((JDialog) windowOrInternalFrame).getGlassPane().setVisible(true);
-    }
-    waitTimer.startTimer(sourceComponent);
-    try {
-      return super.execute(action, context);
-    } finally {
-      if (windowOrInternalFrame instanceof JFrame) {
-        ((JFrame) windowOrInternalFrame).getGlassPane().setVisible(false);
-      } else if (windowOrInternalFrame instanceof JInternalFrame) {
-        ((JInternalFrame) windowOrInternalFrame).getGlassPane().setVisible(
-            false);
-      } else if (windowOrInternalFrame instanceof JDialog) {
-        ((JDialog) windowOrInternalFrame).getGlassPane().setVisible(false);
-      }
-      waitTimer.stopTimer();
-    }
-  }
-
-  /**
-   * This method has been overriden to take care of long-running operations not
-   * to have the swing gui blocked. It uses the foxtrot library to achieve this.
-   * <p>
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected final boolean executeBackend(final IAction action,
-      final Map<String, Object> context) {
-    if (action.isLongOperation()) {
-      Boolean success = (Boolean) SwingUtil.performLongOperation(new Job() {
-
-        /**
-         * Decorates the super implementation with the foxtrot job.
-         * <p>
-         * {@inheritDoc}
-         */
-        @Override
-        public Object run() {
-          return new Boolean(protectedExecuteBackend(action, context));
-        }
-      });
-      return success.booleanValue();
-    }
-    return protectedExecuteBackend(action, context);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  protected final boolean executeFrontend(final IAction action,
-      final Map<String, Object> context) {
-    return protectedExecuteFrontend(action, context);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void handleException(Throwable ex, @SuppressWarnings("unused")
-  Map<String, Object> context) {
-    Component sourceComponent = controllerFrame;
-    if (ex instanceof SecurityException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
-          .getMessage()), getTranslationProvider().getTranslation("error",
-          getLocale()), JOptionPane.ERROR_MESSAGE, getIconFactory()
-          .getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
-    } else if (ex instanceof BusinessException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .emphasis(((BusinessException) ex).getI18nMessage(
-              getTranslationProvider(), getLocale())), getTranslationProvider()
-          .getTranslation("error", getLocale()), JOptionPane.ERROR_MESSAGE,
-          getIconFactory().getErrorIcon(IIconFactory.LARGE_ICON_SIZE));
-    } else if (ex instanceof ConcurrencyFailureException) {
-      JOptionPane.showMessageDialog(sourceComponent, HtmlHelper
-          .emphasis(getTranslationProvider().getTranslation(
-              "concurrency.error.description", getLocale())),
-          getTranslationProvider().getTranslation("error", getLocale()),
-          JOptionPane.ERROR_MESSAGE, getIconFactory().getErrorIcon(
-              IIconFactory.LARGE_ICON_SIZE));
-    } else {
-      ex.printStackTrace();
-      JErrorDialog dialog = JErrorDialog.createInstance(sourceComponent,
-          getTranslationProvider(), getLocale());
-      dialog.setMessageIcon(getIconFactory().getErrorIcon(
-          IIconFactory.MEDIUM_ICON_SIZE));
-      dialog.setTitle(getTranslationProvider().getTranslation("error",
-          getLocale()));
-      dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
-      dialog.setDetails(ex);
-      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-      dialog.setSize(8 * screenRes, 3 * screenRes);
-      dialog.pack();
-      SwingUtil.centerOnScreen(dialog);
-      dialog.setVisible(true);
-    }
   }
 
   /**
@@ -544,56 +469,6 @@ public class DefaultSwingController extends
     return super.executeFrontend(action, context);
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  protected void setSelectedModuleId(String moduleId) {
-    super.setSelectedModuleId(moduleId);
-    updateFrameTitle();
-  }
-
-  /**
-   * Creates the initial view from the root view descriptor, then a JFrame
-   * containing this view and presents it to the user.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean start(IBackendController backendController, Locale locale) {
-    if (super.start(backendController, locale)) {
-      Toolkit.getDefaultToolkit().getSystemEventQueue().push(
-          new WaitCursorEventQueue(500));
-      CallbackHandler callbackHandler = getLoginCallbackHandler();
-      if (callbackHandler instanceof DialogCallbackHandler) {
-        ((DialogCallbackHandler) callbackHandler)
-            .setParentComponent(controllerFrame);
-      }
-      if (performLogin()) {
-        displayControllerFrame();
-        execute(getStartupAction(), getInitialActionContext());
-        return true;
-      }
-      stop();
-    }
-    return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean stop() {
-    if (super.stop()) {
-      if (controllerFrame != null) {
-        controllerFrame.dispose();
-      }
-      System.exit(0);
-      return true;
-    }
-    return false;
-  }
-
   private void updateFrameTitle() {
     String moduleId = getSelectedModuleId();
     if (moduleId != null) {
@@ -603,6 +478,131 @@ public class DefaultSwingController extends
     } else {
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
           getLocale()));
+    }
+  }
+
+  private final class ModuleInternalFrameListener extends InternalFrameAdapter {
+
+    private String moduleId;
+
+    /**
+     * Constructs a new <code>ModuleInternalFrameListener</code> instance.
+     * 
+     * @param moduleId
+     *            the root module identifier this listener is attached to.
+     */
+    public ModuleInternalFrameListener(String moduleId) {
+      this.moduleId = moduleId;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameActivated(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
+      setSelectedModuleId(moduleId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameDeactivated(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
+      setSelectedModuleId(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameDeiconified(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
+      setSelectedModuleId(moduleId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameIconified(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
+      setSelectedModuleId(null);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void internalFrameOpened(@SuppressWarnings("unused")
+    InternalFrameEvent e) {
+      setSelectedModuleId(moduleId);
+    }
+
+  }
+
+  private final class ModuleSelectionAction extends AbstractAction {
+
+    private static final long serialVersionUID = 3469745193806038352L;
+    private String            moduleId;
+
+    /**
+     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     * 
+     * @param moduleId
+     * @param moduleDescriptor
+     */
+    public ModuleSelectionAction(String moduleId,
+        IModuleDescriptor moduleDescriptor) {
+      this.moduleId = moduleId;
+      putValue(Action.NAME, moduleDescriptor.getI18nName(
+          getTranslationProvider(), getLocale()));
+      putValue(Action.SHORT_DESCRIPTION, moduleDescriptor.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IViewFactory.TOOLTIP_ELLIPSIS);
+      putValue(Action.SMALL_ICON, getIconFactory().getIcon(
+          moduleDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    }
+
+    /**
+     * displays the selected module.
+     * <p>
+     * {@inheritDoc}
+     */
+    public void actionPerformed(@SuppressWarnings("unused")
+    ActionEvent e) {
+      try {
+        getBackendController().checkModuleAccess(moduleId);
+        displayModule(moduleId);
+      } catch (SecurityException ex) {
+        handleException(ex, null);
+      }
+    }
+  }
+
+  private final class QuitAction extends AbstractAction {
+
+    private static final long serialVersionUID = -5797994634301619085L;
+
+    /**
+     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     */
+    public QuitAction() {
+      putValue(Action.NAME, getTranslationProvider().getTranslation(
+          "quit.name", getLocale()));
+      putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
+          .getTranslation("quit.description", getLocale()));
+    }
+
+    /**
+     * displays the selected module.
+     * <p>
+     * {@inheritDoc}
+     */
+    public void actionPerformed(@SuppressWarnings("unused")
+    ActionEvent e) {
+      stop();
     }
   }
 }

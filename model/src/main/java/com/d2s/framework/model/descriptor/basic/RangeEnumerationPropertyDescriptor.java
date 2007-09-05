@@ -11,7 +11,7 @@ import java.util.List;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -59,7 +59,7 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Gets the maxValue.
-   *
+   * 
    * @return the maxValue.
    */
   public Integer getMaxValue() {
@@ -75,7 +75,7 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Gets the minValue.
-   *
+   * 
    * @return the minValue.
    */
   public Integer getMinValue() {
@@ -91,7 +91,7 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Gets the rangeStep.
-   *
+   * 
    * @return the rangeStep.
    */
   public Integer getRangeStep() {
@@ -114,9 +114,9 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Sets the maxValue.
-   *
+   * 
    * @param maxValue
-   *          the maxValue to set.
+   *            the maxValue to set.
    */
   public void setMaxValue(Integer maxValue) {
     this.maxValue = maxValue;
@@ -124,9 +124,9 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Sets the minValue.
-   *
+   * 
    * @param minValue
-   *          the minValue to set.
+   *            the minValue to set.
    */
   public void setMinValue(Integer minValue) {
     this.minValue = minValue;
@@ -134,9 +134,9 @@ public class RangeEnumerationPropertyDescriptor extends
 
   /**
    * Sets the rangeStep.
-   *
+   * 
    * @param rangeStep
-   *          the rangeStep to set.
+   *            the rangeStep to set.
    */
   public void setRangeStep(Integer rangeStep) {
     this.rangeStep = rangeStep;

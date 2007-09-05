@@ -31,12 +31,12 @@ public class ULCTranslationDataTypeFactory {
    * Gets a (cached) translation data type.
    * 
    * @param id
-   *          the id the translation data type is (or has been) stored with.
+   *            the id the translation data type is (or has been) stored with.
    * @param locale
-   *          the locale the translation data type uses.
+   *            the locale the translation data type uses.
    * @param translationMapping
-   *          key / value translation mapping used whenever the translation
-   *          datatype does not exist yet and must be created.
+   *            key / value translation mapping used whenever the translation
+   *            datatype does not exist yet and must be created.
    * @return the corresponding translation data type.
    */
   public ULCTranslationDataType getTranslationDataType(String id,

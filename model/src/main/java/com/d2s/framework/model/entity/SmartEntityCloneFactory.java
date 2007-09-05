@@ -118,25 +118,25 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
   }
 
   /**
+   * Sets the accessorFactory.
+   * 
+   * @param accessorFactory
+   *            the accessorFactory to set.
+   */
+  public void setAccessorFactory(IAccessorFactory accessorFactory) {
+    this.accessorFactory = accessorFactory;
+  }
+
+  /**
    * Wether the object is fully initialized.
    * 
    * @param objectOrProxy
-   *          the object to test.
+   *            the object to test.
    * @return true if the object is fully initialized.
    */
   protected boolean isInitialized(@SuppressWarnings("unused")
   Object objectOrProxy) {
     return true;
-  }
-
-  /**
-   * Sets the accessorFactory.
-   * 
-   * @param accessorFactory
-   *          the accessorFactory to set.
-   */
-  public void setAccessorFactory(IAccessorFactory accessorFactory) {
-    this.accessorFactory = accessorFactory;
   }
 
 }

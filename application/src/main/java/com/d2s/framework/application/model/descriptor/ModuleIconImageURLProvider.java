@@ -43,7 +43,7 @@ public class ModuleIconImageURLProvider implements IIconImageURLProvider {
    * Sets the delegateProvider.
    * 
    * @param delegateProvider
-   *          the delegateProvider to set.
+   *            the delegateProvider to set.
    */
   public void setDelegateProvider(IIconImageURLProvider delegateProvider) {
     this.delegateProvider = delegateProvider;

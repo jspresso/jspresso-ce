@@ -28,7 +28,7 @@ public interface ICollectionConnectorListProvider extends
    * Clones this connector.
    * 
    * @param newConnectorId
-   *          the identifier of the clone connector
+   *            the identifier of the clone connector
    * @return the connector's clone.
    */
   ICollectionConnectorListProvider clone(String newConnectorId);

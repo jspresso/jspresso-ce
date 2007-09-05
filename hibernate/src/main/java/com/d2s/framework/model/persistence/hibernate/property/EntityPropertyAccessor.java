@@ -37,6 +37,22 @@ import com.d2s.framework.util.bean.PropertyHelper;
 public class EntityPropertyAccessor implements PropertyAccessor {
 
   /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public Getter getGetter(Class theClass, String propertyName) {
+    return new EntityPropertyGetter(theClass, propertyName);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings({"unused", "unchecked" })
+  public Setter getSetter(Class theClass, String propertyName) {
+    return new EntityPropertySetter(propertyName);
+  }
+
+  /**
    * Implements the getter strategy on the entity proxy implementation to be
    * used by hibernate.
    * <p>
@@ -49,18 +65,18 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   private static final class EntityPropertyGetter implements Getter {
 
     private static final long serialVersionUID = -7896937881971754040L;
-    private Class             propertyClass;
+    private Class<?>          propertyClass;
     private String            propertyName;
 
     /**
      * Constructs a new <code>EntityPropertyGetter</code> instance.
      * 
      * @param theClass
-     *          The class of the property.
+     *            The class of the property.
      * @param propertyName
-     *          the name of the property to access.
+     *            the name of the property to access.
      */
-    public EntityPropertyGetter(Class theClass, String propertyName) {
+    public EntityPropertyGetter(Class<?> theClass, String propertyName) {
       this.propertyName = propertyName;
       this.propertyClass = PropertyHelper.getPropertyType(theClass,
           propertyName);
@@ -76,7 +92,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "unchecked" })
     public Object getForInsert(Object target, Map mergeMap,
         SessionImplementor session) {
       return get(target);
@@ -103,7 +119,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
-    public Class getReturnType() {
+    public Class<?> getReturnType() {
       return propertyClass;
     }
 
@@ -128,7 +144,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * Constructs a new <code>EntityPropertySetter</code> instance.
      * 
      * @param propertyName
-     *          the name of the property to access.
+     *            the name of the property to access.
      */
     public EntityPropertySetter(String propertyName) {
       this.propertyName = propertyName;
@@ -161,20 +177,5 @@ public class EntityPropertyAccessor implements PropertyAccessor {
       ((IEntity) target).straightSetProperty(propertyName, value);
     }
 
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Getter getGetter(Class theClass, String propertyName) {
-    return new EntityPropertyGetter(theClass, propertyName);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unused")
-  public Setter getSetter(Class theClass, String propertyName) {
-    return new EntityPropertySetter(propertyName);
   }
 }

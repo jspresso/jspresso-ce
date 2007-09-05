@@ -32,13 +32,13 @@ public class EntityProxyUnionSubclassEntityPersister extends
    * instance.
    * 
    * @param persistentClass
-   *          the persistentClass.
+   *            the persistentClass.
    * @param cache
-   *          the cache.
+   *            the cache.
    * @param factory
-   *          the factory.
+   *            the factory.
    * @param mapping
-   *          the mapping.
+   *            the mapping.
    */
   public EntityProxyUnionSubclassEntityPersister(
       PersistentClass persistentClass, CacheConcurrencyStrategy cache,

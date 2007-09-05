@@ -23,9 +23,9 @@ public class JToggleButtonConnector extends JComponentConnector<JToggleButton> {
    * Constructs a new <code>JToggleButtonConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param toggleButton
-   *          the connected JToggleButton.
+   *            the connected JToggleButton.
    */
   public JToggleButtonConnector(String id, JToggleButton toggleButton) {
     super(id, toggleButton);

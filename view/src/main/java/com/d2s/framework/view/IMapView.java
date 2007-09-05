@@ -20,7 +20,7 @@ public interface IMapView<E> extends ICompositeView<E> {
    * Gets the child view indexed by the key or null if the key does not exist.
    * 
    * @param key
-   *          the key to llok up the child view.
+   *            the key to llok up the child view.
    * @return the child view or null if none.
    */
   IView<E> getChild(String key);

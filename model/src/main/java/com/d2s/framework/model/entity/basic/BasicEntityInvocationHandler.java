@@ -25,7 +25,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -38,17 +38,17 @@ public class BasicEntityInvocationHandler extends
 
   /**
    * Constructs a new <code>BasicEntityInvocationHandler</code> instance.
-   *
+   * 
    * @param entityDescriptor
-   *          The descriptor of the proxy entity.
+   *            The descriptor of the proxy entity.
    * @param collectionFactory
-   *          The factory used to create empty entity collections from
-   *          collection getters.
+   *            The factory used to create empty entity collections from
+   *            collection getters.
    * @param accessorFactory
-   *          The factory used to access proxy properties.
+   *            The factory used to access proxy properties.
    * @param extensionFactory
-   *          The factory used to create entity extensions based on their
-   *          classes.
+   *            The factory used to create entity extensions based on their
+   *            classes.
    */
   protected BasicEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor,
@@ -58,6 +58,25 @@ public class BasicEntityInvocationHandler extends
     super(entityDescriptor, collectionFactory, accessorFactory,
         extensionFactory);
     this.properties = createPropertyMap();
+  }
+
+  /**
+   * Handles methods invocations on the entity proxy. Either :
+   * <li>delegates to one of its extension if the accessed property is
+   * registered as being part of an extension
+   * <li>handles property access internally
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  @SuppressWarnings("unchecked")
+  public synchronized Object invoke(Object proxy, Method method, Object[] args)
+      throws Throwable {
+    String methodName = method.getName();
+    if ("isPersistent".equals(methodName)) {
+      return new Boolean(((IEntity) proxy).getVersion() != null);
+    }
+    return super.invoke(proxy, method, args);
   }
 
   /**
@@ -74,7 +93,7 @@ public class BasicEntityInvocationHandler extends
     }
     if (another instanceof IEntity) {
       Object otherId;
-      Class otherContract;
+      Class<?> otherContract;
 
       if (Proxy.isProxyClass(another.getClass())
           && Proxy.getInvocationHandler(another) instanceof BasicEntityInvocationHandler) {
@@ -105,37 +124,14 @@ public class BasicEntityInvocationHandler extends
     return new HashCodeBuilder(3, 17).append(id).toHashCode();
   }
 
-  private Map<String, Object> createPropertyMap() {
-    return new HashMap<String, Object>();
-  }
-
   /**
    * {@inheritDoc}
    */
   @Override
   protected IComponent decorateReferent(IComponent referent,
       @SuppressWarnings("unused")
-      IComponentDescriptor<IComponent> referentDescriptor) {
+      IComponentDescriptor<? extends IComponent> referentDescriptor) {
     return referent;
-  }
-
-  /**
-   * Handles methods invocations on the entity proxy. Either :
-   * <li>delegates to one of its extension if the accessed property is
-   * registered as being part of an extension
-   * <li>handles property access internally
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  @SuppressWarnings("unchecked")
-  public synchronized Object invoke(Object proxy, Method method, Object[] args)
-      throws Throwable {
-    String methodName = method.getName();
-    if ("isPersistent".equals(methodName)) {
-      return new Boolean(((IEntity) proxy).getVersion() != null);
-    }
-    return super.invoke(proxy, method, args);
   }
 
   /**
@@ -152,5 +148,9 @@ public class BasicEntityInvocationHandler extends
   @Override
   protected void storeProperty(String propertyName, Object propertyValue) {
     properties.put(propertyName, propertyValue);
+  }
+
+  private Map<String, Object> createPropertyMap() {
+    return new HashMap<String, Object>();
   }
 }

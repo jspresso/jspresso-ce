@@ -29,7 +29,7 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    * Clones this connector.
    * 
    * @param newConnectorId
-   *          the identifier of the clone connector
+   *            the identifier of the clone connector
    * @return the connector's clone.
    */
   ICollectionConnector clone(String newConnectorId);
@@ -38,7 +38,7 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    * Creates a new collection element connector.
    * 
    * @param connectorId
-   *          the identifier of the new created connector.
+   *            the identifier of the new created connector.
    * @return the created connector
    */
   IValueConnector createChildConnector(String connectorId);
@@ -47,7 +47,7 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    * Returns the connector at the given index in the collection.
    * 
    * @param index
-   *          the index of the searched connector.
+   *            the index of the searched connector.
    * @return the searched connector or null if the collection is not large
    *         enough.
    */
@@ -67,7 +67,7 @@ public interface ICollectionConnector extends ICompositeValueConnector,
    * necessary events.
    * 
    * @param b
-   *          true if lazy behaviour has to be turned on. false otherwise.
+   *            true if lazy behaviour has to be turned on. false otherwise.
    */
   void setAllowLazyChildrenLoading(boolean b);
 }

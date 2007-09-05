@@ -30,24 +30,10 @@ public abstract class AbstractWingsAction extends
     ActionWrapper<SComponent, SIcon, Action> {
 
   /**
-   * If the ancestor of the action widget is a dialog, dispose it.
-   * 
-   * @param context
-   *          the action context.
-   */
-  protected void closeDialog(Map<String, Object> context) {
-    SContainer actionWindow = WingsUtil
-        .getVisibleWindow(getActionWidget(context));
-    if (actionWindow instanceof SDialog) {
-      ((SDialog) actionWindow).dispose();
-    }
-  }
-
-  /**
    * Retrieves the widget which triggered the action from the action context.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the widget which triggered the action.
    */
   public SComponent getActionWidget(Map<String, Object> context) {
@@ -61,10 +47,24 @@ public abstract class AbstractWingsAction extends
    * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the source widget this action was triggered from.
    */
   public SComponent getSourceComponent(Map<String, Object> context) {
     return (SComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+  }
+
+  /**
+   * If the ancestor of the action widget is a dialog, dispose it.
+   * 
+   * @param context
+   *            the action context.
+   */
+  protected void closeDialog(Map<String, Object> context) {
+    SContainer actionWindow = WingsUtil
+        .getVisibleWindow(getActionWidget(context));
+    if (actionWindow instanceof SDialog) {
+      ((SDialog) actionWindow).dispose();
+    }
   }
 }

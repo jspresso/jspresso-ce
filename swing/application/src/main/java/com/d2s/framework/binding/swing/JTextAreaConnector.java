@@ -20,9 +20,9 @@ public class JTextAreaConnector extends JTextComponentConnector<JTextArea> {
    * Constructs a new <code>JTextAreaConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textArea
-   *          the connected JTextArea.
+   *            the connected JTextArea.
    */
   public JTextAreaConnector(String id, JTextArea textArea) {
     super(id, textArea);

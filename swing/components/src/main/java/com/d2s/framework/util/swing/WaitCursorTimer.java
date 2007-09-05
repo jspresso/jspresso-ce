@@ -28,8 +28,8 @@ public class WaitCursorTimer extends Thread {
    * Constructs a new <code>WaitCursorTimer</code> instance.
    * 
    * @param delay
-   *          the delay in milliseconds to wait before setting the hourglass
-   *          cursor.
+   *            the delay in milliseconds to wait before setting the hourglass
+   *            cursor.
    */
   public WaitCursorTimer(int delay) {
     super("WaitCursorTimer");
@@ -76,7 +76,7 @@ public class WaitCursorTimer extends Thread {
    * Starts the timer.
    * 
    * @param sourceComponent
-   *          the source component.
+   *            the source component.
    */
   public synchronized void startTimer(Object sourceComponent) {
     this.source = sourceComponent;

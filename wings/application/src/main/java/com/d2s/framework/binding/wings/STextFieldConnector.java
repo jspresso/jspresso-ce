@@ -23,9 +23,9 @@ public class STextFieldConnector extends STextComponentConnector<STextField> {
    * Constructs a new <code>STextfieldConnector</code> instance.
    * 
    * @param id
-   *          the id of the connector.
+   *            the id of the connector.
    * @param textField
-   *          the connected STextField.
+   *            the connected STextField.
    */
   public STextFieldConnector(String id, STextField textField) {
     super(id, textField);

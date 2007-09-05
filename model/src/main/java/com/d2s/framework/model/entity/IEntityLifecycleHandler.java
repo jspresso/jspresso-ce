@@ -18,7 +18,7 @@ public interface IEntityLifecycleHandler {
    * Registers an entity for deletion.
    * 
    * @param entity
-   *          the entity to register.
+   *            the entity to register.
    */
   void deleteEntity(IEntity entity);
 
@@ -26,7 +26,7 @@ public interface IEntityLifecycleHandler {
    * Tests wether an entity has been registered for deletion.
    * 
    * @param entity
-   *          the entity to test.
+   *            the entity to test.
    * @return true if the entity has been registered for deletion.
    */
   boolean isEntityRegisteredForDeletion(IEntity entity);
@@ -35,7 +35,7 @@ public interface IEntityLifecycleHandler {
    * Tests wether an entity has been registered for update.
    * 
    * @param entity
-   *          the entity to test.
+   *            the entity to test.
    * @return true if the entity has been registered for update.
    */
   boolean isEntityRegisteredForUpdate(IEntity entity);
@@ -44,7 +44,7 @@ public interface IEntityLifecycleHandler {
    * Registers an entity for update.
    * 
    * @param entity
-   *          the entity to register.
+   *            the entity to register.
    */
   void updateEntity(IEntity entity);
 }

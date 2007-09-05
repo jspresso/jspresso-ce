@@ -42,7 +42,7 @@ public class ULCTranslationDataType extends ULCProxy implements IDataType {
    * constructor has default visibility to prevent for direct instanciation.
    * 
    * @param dictionary
-   *          the dictionary containing the translations.
+   *            the dictionary containing the translations.
    */
   ULCTranslationDataType(Map<String, String> dictionary) {
     this.dictionary = dictionary;

@@ -21,7 +21,7 @@ import com.d2s.framework.util.descriptor.IDescriptor;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -32,6 +32,20 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
    * The (meta) descriptor of the component descriptor.
    */
   public static final IComponentDescriptor<IReport> INSTANCE = createInstance();
+  private IAction                                   beforeAction;
+
+  private String                                    reportDesignUrl;
+
+  /**
+   * Constructs a new <code>BasicReportDescriptor</code> instance.
+   * 
+   * @param name
+   *            the name of the report.
+   */
+  public BasicReportDescriptor(String name) {
+    super(name);
+  }
+
   private static IComponentDescriptor<IReport> createInstance() {
     BasicComponentDescriptor<IReport> instance = new BasicComponentDescriptor<IReport>(
         IReport.class.getName());
@@ -51,23 +65,9 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
     return instance;
   }
 
-  private IAction                                   beforeAction;
-
-  private String                                    reportDesignUrl;
-
-  /**
-   * Constructs a new <code>BasicReportDescriptor</code> instance.
-   *
-   * @param name
-   *          the name of the report.
-   */
-  public BasicReportDescriptor(String name) {
-    super(name);
-  }
-
   /**
    * Gets the beforeAction.
-   *
+   * 
    * @return the beforeAction.
    */
   public IAction getBeforeAction() {
@@ -84,7 +84,7 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
 
   /**
    * Gets the reportDesignUrl.
-   *
+   * 
    * @return the reportDesignUrl.
    */
   public String getReportDesignUrl() {
@@ -93,9 +93,9 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
 
   /**
    * Sets the beforeAction.
-   *
+   * 
    * @param beforeAction
-   *          the beforeAction to set.
+   *            the beforeAction to set.
    */
   public void setBeforeAction(IAction beforeAction) {
     this.beforeAction = beforeAction;
@@ -103,9 +103,9 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
 
   /**
    * Sets the reportDesignUrl.
-   *
+   * 
    * @param reportDesignUrl
-   *          the reportDesignUrl to set.
+   *            the reportDesignUrl to set.
    */
   public void setReportDesignUrl(String reportDesignUrl) {
     this.reportDesignUrl = reportDesignUrl;

@@ -141,7 +141,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * @param description
-   *          the description to set.
+   *            the description to set.
    * @see com.d2s.framework.util.descriptor.DefaultDescriptor#setDescription(java.lang.String)
    */
   public void setDescription(String description) {
@@ -150,7 +150,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
 
   /**
    * @param name
-   *          the name to set.
+   *            the name to set.
    * @see com.d2s.framework.util.descriptor.DefaultDescriptor#setName(java.lang.String)
    */
   public void setName(String name) {
@@ -161,7 +161,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the nextLabelKey.
    * 
    * @param nextLabelKey
-   *          the nextLabelKey to set.
+   *            the nextLabelKey to set.
    */
   public void setNextLabelKey(String nextLabelKey) {
     this.nextLabelKey = nextLabelKey;
@@ -171,7 +171,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the nextStepDescriptor.
    * 
    * @param nextStepDescriptor
-   *          the nextStepDescriptor to set.
+   *            the nextStepDescriptor to set.
    */
   public void setNextStepDescriptor(IWizardStepDescriptor nextStepDescriptor) {
     this.nextStepDescriptor = nextStepDescriptor;
@@ -184,7 +184,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the onEnterAction.
    * 
    * @param onEnterAction
-   *          the onEnterAction to set.
+   *            the onEnterAction to set.
    */
   public void setOnEnterAction(IAction onEnterAction) {
     this.onEnterAction = onEnterAction;
@@ -194,7 +194,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the onLeaveAction.
    * 
    * @param onLeaveAction
-   *          the onLeaveAction to set.
+   *            the onLeaveAction to set.
    */
   public void setOnLeaveAction(IAction onLeaveAction) {
     this.onLeaveAction = onLeaveAction;
@@ -204,7 +204,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the previousLabelKey.
    * 
    * @param previousLabelKey
-   *          the previousLabelKey to set.
+   *            the previousLabelKey to set.
    */
   public void setPreviousLabelKey(String previousLabelKey) {
     this.previousLabelKey = previousLabelKey;
@@ -214,7 +214,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    * Sets the viewDescriptor.
    * 
    * @param viewDescriptor
-   *          the viewDescriptor to set.
+   *            the viewDescriptor to set.
    */
   public void setViewDescriptor(IViewDescriptor viewDescriptor) {
     this.viewDescriptor = viewDescriptor;

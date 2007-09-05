@@ -29,59 +29,23 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginServlet extends HttpServlet {
 
   /**
-   * Simple JAAS callback handler that provides username and password.
-   */
-  private static final class UserPasswordHandler implements CallbackHandler {
-
-    private char[] password;
-    private String username;
-
-    /**
-     * Constructs a callback handler.
-     */
-    private UserPasswordHandler(String username, String password) {
-      this.username = username;
-      this.password = password.toCharArray();
-    }
-
-    /**
-     * Handles the JAAS callbacks.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void handle(Callback[] callbacks)
-        throws UnsupportedCallbackException {
-      for (int i = 0; i < callbacks.length; i++) {
-        if (callbacks[i] instanceof NameCallback) {
-          ((NameCallback) callbacks[i]).setName(username);
-        } else if (callbacks[i] instanceof PasswordCallback) {
-          ((PasswordCallback) callbacks[i]).setPassword(password);
-        } else {
-          throw new UnsupportedCallbackException(callbacks[i]);
-        }
-      }
-    }
-  }
-
-  /**
    * <code>ERROR_DEFAULT</code>="login-error.html".
    */
   public static final String ERROR_DEFAULT        = "/login-error.html";
+
   /**
    * <code>ERROR_PARAM_NAME</code>"error.redirect".
    */
   public static final String ERROR_PARAM_NAME     = "error.redirect";
-
   /**
    * <code>JAAS_APPL_DEFAULT</code>="other".
    */
   public static final String JAAS_APPL_DEFAULT    = "other";
+
   /**
    * <code>JAAS_APPL_PARAM_NAME</code>="jaas-application".
    */
   public static final String JAAS_APPL_PARAM_NAME = "jaas-application";
-
-  private static final long  serialVersionUID     = 6326611145492998226L;
   /**
    * <code>SUCCESS_DEFAULT</code>="main.html".
    */
@@ -91,15 +55,16 @@ public class LoginServlet extends HttpServlet {
    * <code>SUCCESS_PARAM_NAME</code>="success.redirect".
    */
   public static final String SUCCESS_PARAM_NAME   = "success.redirect";
+  private static final long  serialVersionUID     = 6326611145492998226L;
 
   private String             errorRedirectUrl;
+
   /**
    * The name of the JAAS application, the key for finding the JAAS module
    * configuration (e.g. in an auth.conf file). In JBoss this matches the
    * security domain name in the login-config.xml file.
    */
   private String             jaasApplicationName;
-
   private String             successRedirectUrl;
 
   /**
@@ -163,6 +128,41 @@ public class LoginServlet extends HttpServlet {
     errorRedirectUrl = config.getInitParameter(ERROR_PARAM_NAME);
     if (errorRedirectUrl == null) {
       errorRedirectUrl = ERROR_DEFAULT;
+    }
+  }
+
+  /**
+   * Simple JAAS callback handler that provides username and password.
+   */
+  private static final class UserPasswordHandler implements CallbackHandler {
+
+    private char[] password;
+    private String username;
+
+    /**
+     * Constructs a callback handler.
+     */
+    private UserPasswordHandler(String username, String password) {
+      this.username = username;
+      this.password = password.toCharArray();
+    }
+
+    /**
+     * Handles the JAAS callbacks.
+     * <p>
+     * {@inheritDoc}
+     */
+    public void handle(Callback[] callbacks)
+        throws UnsupportedCallbackException {
+      for (int i = 0; i < callbacks.length; i++) {
+        if (callbacks[i] instanceof NameCallback) {
+          ((NameCallback) callbacks[i]).setName(username);
+        } else if (callbacks[i] instanceof PasswordCallback) {
+          ((PasswordCallback) callbacks[i]).setPassword(password);
+        } else {
+          throw new UnsupportedCallbackException(callbacks[i]);
+        }
+      }
     }
   }
 }

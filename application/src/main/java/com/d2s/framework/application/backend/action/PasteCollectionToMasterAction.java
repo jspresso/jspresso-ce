@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.datatransfer.ComponentTransferStructure;
 import com.d2s.framework.model.datatransfer.TransferMode;
 import com.d2s.framework.model.entity.IEntity;
@@ -30,16 +31,26 @@ public class PasteCollectionToMasterAction extends
   private IEntityCloneFactory entityCloneFactory;
 
   /**
+   * Sets the entityCloneFactory.
+   * 
+   * @param entityCloneFactory
+   *            the entityCloneFactory to set.
+   */
+  public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
+    this.entityCloneFactory = entityCloneFactory;
+  }
+
+  /**
    * Gets the buffered entities from the backend controller.
    * 
    * @param context
-   *          the action context.
+   *            the action context.
    * @return the entities to add to the collection.
    */
   @Override
   protected List<?> getAddedComponents(Map<String, Object> context) {
-    ComponentTransferStructure transferStructure = getController(context)
-        .retrieveComponents();
+    ComponentTransferStructure<? extends IComponent> transferStructure = getController(
+        context).retrieveComponents();
     if (transferStructure.getContent() != null) {
       List<Object> componentsToTransfer;
       if (((Class<?>) getModelDescriptor(context).getCollectionDescriptor()
@@ -66,15 +77,5 @@ public class PasteCollectionToMasterAction extends
       }
     }
     return null;
-  }
-
-  /**
-   * Sets the entityCloneFactory.
-   * 
-   * @param entityCloneFactory
-   *          the entityCloneFactory to set.
-   */
-  public void setEntityCloneFactory(IEntityCloneFactory entityCloneFactory) {
-    this.entityCloneFactory = entityCloneFactory;
   }
 }

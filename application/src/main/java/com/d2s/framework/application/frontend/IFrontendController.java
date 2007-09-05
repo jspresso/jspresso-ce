@@ -18,36 +18,36 @@ import com.d2s.framework.view.action.IActionable;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the actual gui component type used.
+ *            the actual gui component type used.
  * @param <F>
- *          the actual icon type used.
+ *            the actual icon type used.
  * @param <G>
- *          the actual action type used.
+ *            the actual action type used.
  */
 public interface IFrontendController<E, F, G> extends IController,
     IIconDescriptor, IActionable {
 
   /**
    * Gets the mvc binder used by this controller.
-   *
+   * 
    * @return the mvc binder used by this controller.
    */
   IMvcBinder getMvcBinder();
 
   /**
    * Gets the action which is executed when the controller is started.
-   *
+   * 
    * @return the action which is executed when the controller is started.
    */
   IAction getStartupAction();
 
   /**
    * Gets the view factory used by this controller.
-   *
+   * 
    * @return the view factory used by this controller.
    */
   IViewFactory<E, F, G> getViewFactory();
@@ -57,12 +57,12 @@ public interface IFrontendController<E, F, G> extends IController,
    * (such as binding to the backend controller) and shows the initial view to
    * the user. The initial view is generally built from the root view
    * descriptor.
-   *
+   * 
    * @param backendController
-   *          the backend controller to bind to.
+   *            the backend controller to bind to.
    * @param locale
-   *          the locale this controller should use to create the views and
-   *          execute actions.
+   *            the locale this controller should use to create the views and
+   *            execute actions.
    * @return true if the controller succesfully started.
    */
   boolean start(IBackendController backendController, Locale locale);

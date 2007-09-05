@@ -20,7 +20,7 @@ public interface ITreeViewDescriptor extends IViewDescriptor {
    * This method may return null.
    * 
    * @param userObject
-   *          the user object to render.
+   *            the user object to render.
    * @return the url of the image to use for the renderer or null.
    */
   String getIconImageURLForUserObject(Object userObject);

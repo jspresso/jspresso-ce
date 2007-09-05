@@ -31,24 +31,24 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete type of components.
+ *            the concrete type of components.
  */
 public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
     implements IComponentDescriptor<E> {
 
   private List<IComponentDescriptor<?>>    ancestorDescriptors;
-  private Class                            componentContract;
+  private Class<?>                         componentContract;
   private boolean                          computed;
-  private List<ILifecycleInterceptor>      lifecycleInterceptors;
+  private List<ILifecycleInterceptor<?>>      lifecycleInterceptors;
   private List<String>                     orderingProperties;
   private Map<String, IPropertyDescriptor> propertyDescriptors;
   private List<String>                     queryableProperties;
   private List<String>                     renderedProperties;
-  private Set<Class>                       serviceContracts;
+  private Set<Class<?>>                    serviceContracts;
   private Map<Method, IComponentService>   serviceDelegates;
   private List<IPropertyDescriptor>        tempPropertyBuffer;
   private String                           toStringProperty;
@@ -64,10 +64,10 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Constructs a new <code>BasicComponentDescriptor</code> instance.
-   *
+   * 
    * @param name
-   *          the name of the descriptor which has to be the fully-qualified
-   *          class name of its contract.
+   *            the name of the descriptor which has to be the fully-qualified
+   *            class name of its contract.
    */
   public BasicComponentDescriptor(String name) {
     setName(name);
@@ -80,7 +80,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
    * are the union of the declared property descriptors of the component and of
    * its ancestors one. A component may have multiple ancestors which means that
    * complex multi-inheritance hierarchy can be mapped.
-   *
+   * 
    * @return ancestorDescriptors The list of ancestor entity descriptors.
    */
   public List<IComponentDescriptor<?>> getAncestorDescriptors() {
@@ -90,7 +90,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("cast")
+  @SuppressWarnings({"cast", "unchecked" })
   public Class<? extends E> getComponentContract() {
     if (componentContract == null && getName() != null) {
       try {
@@ -109,14 +109,6 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
     return this;
   }
 
-  private IPropertyDescriptor getDeclaredPropertyDescriptor(String propertyName) {
-    processPropertiesBufferIfNecessary();
-    if (propertyDescriptors != null) {
-      return propertyDescriptors.get(propertyName);
-    }
-    return null;
-  }
-
   /**
    * {@inheritDoc}
    */
@@ -130,11 +122,11 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Gets the lifecycleInterceptors.
-   *
+   * 
    * @return the lifecycleInterceptors.
    */
-  public List<ILifecycleInterceptor> getLifecycleInterceptors() {
-    List<ILifecycleInterceptor> allInterceptors = new ArrayList<ILifecycleInterceptor>();
+  public List<ILifecycleInterceptor<?>> getLifecycleInterceptors() {
+    List<ILifecycleInterceptor<?>> allInterceptors = new ArrayList<ILifecycleInterceptor<?>>();
     if (getAncestorDescriptors() != null) {
       for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
         allInterceptors.addAll(ancestorDescriptor.getLifecycleInterceptors());
@@ -149,7 +141,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
-  public Class getModelType() {
+  public Class<?> getModelType() {
     return getComponentContract();
   }
 
@@ -183,7 +175,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
     if (descriptor == null && ancestorDescriptors != null) {
       for (Iterator<IComponentDescriptor<?>> ite = ancestorDescriptors
           .iterator(); descriptor == null && ite.hasNext();) {
-        IComponentDescriptor ancestorDescriptor = ite.next();
+        IComponentDescriptor<?> ancestorDescriptor = ite.next();
         descriptor = ancestorDescriptor.getPropertyDescriptor(propertyName);
       }
     }
@@ -237,9 +229,9 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
-  public Collection<Class> getServiceContracts() {
+  public Collection<Class<?>> getServiceContracts() {
     if (serviceContracts != null) {
-      return new ArrayList<Class>(serviceContracts);
+      return new ArrayList<Class<?>>(serviceContracts);
     }
     return null;
   }
@@ -255,7 +247,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
     if (service == null && ancestorDescriptors != null) {
       for (Iterator<IComponentDescriptor<?>> ite = ancestorDescriptors
           .iterator(); service == null && ite.hasNext();) {
-        IComponentDescriptor ancestorDescriptor = ite.next();
+        IComponentDescriptor<?> ancestorDescriptor = ite.next();
         service = ancestorDescriptor.getServiceDelegate(targetMethod);
       }
     }
@@ -264,7 +256,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Gets the toStringProperty.
-   *
+   * 
    * @return the toStringProperty.
    */
   public String getToStringProperty() {
@@ -309,7 +301,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Gets the entity.
-   *
+   * 
    * @return the entity.
    */
   public boolean isEntity() {
@@ -323,29 +315,6 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
     return true;
   }
 
-  private synchronized void processPropertiesBufferIfNecessary() {
-    if (tempPropertyBuffer != null) {
-      propertyDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
-      for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
-        propertyDescriptors.put(descriptor.getName(), descriptor);
-      }
-      tempPropertyBuffer = null;
-    }
-  }
-
-  private synchronized void registerService(Class serviceContract,
-      IComponentService service) {
-    if (serviceDelegates == null) {
-      serviceDelegates = new HashMap<Method, IComponentService>();
-      serviceContracts = new HashSet<Class>();
-    }
-    serviceContracts.add(serviceContract);
-    Method[] contractServices = serviceContract.getMethods();
-    for (Method serviceMethod : contractServices) {
-      serviceDelegates.put(serviceMethod, service);
-    }
-  }
-
   /**
    * Registers this descriptor with a collection of ancestors. It directly
    * translates the components inheritance hierarchy since the component
@@ -353,9 +322,9 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
    * the component and of its ancestors one. A component may have multiple
    * ancestors which means that complex multi-inheritance hierarchy can be
    * mapped.
-   *
+   * 
    * @param ancestorDescriptors
-   *          The list of ancestor component descriptors.
+   *            The list of ancestor component descriptors.
    */
   public void setAncestorDescriptors(
       List<IComponentDescriptor<?>> ancestorDescriptors) {
@@ -364,9 +333,9 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the computed.
-   *
+   * 
    * @param computed
-   *          the computed to set.
+   *            the computed to set.
    */
   public void setComputed(boolean computed) {
     this.computed = computed;
@@ -374,20 +343,20 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the lifecycleInterceptors.
-   *
+   * 
    * @param lifecycleInterceptors
-   *          the lifecycleInterceptors to set.
+   *            the lifecycleInterceptors to set.
    */
   public void setLifecycleInterceptors(
-      List<ILifecycleInterceptor> lifecycleInterceptors) {
+      List<ILifecycleInterceptor<?>> lifecycleInterceptors) {
     this.lifecycleInterceptors = lifecycleInterceptors;
   }
 
   /**
    * Sets the orderingProperties.
-   *
+   * 
    * @param orderingProperties
-   *          the orderingProperties to set.
+   *            the orderingProperties to set.
    */
   public void setOrderingProperties(List<String> orderingProperties) {
     this.orderingProperties = orderingProperties;
@@ -395,9 +364,9 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the propertyDescriptors property.
-   *
+   * 
    * @param descriptors
-   *          the propertyDescriptors to set.
+   *            the propertyDescriptors to set.
    */
   public void setPropertyDescriptors(Collection<IPropertyDescriptor> descriptors) {
     // This is important to use an intermediate structure since all descriptors
@@ -413,9 +382,9 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the queryableProperties.
-   *
+   * 
    * @param queryableProperties
-   *          the queryableProperties to set.
+   *            the queryableProperties to set.
    */
   public void setQueryableProperties(List<String> queryableProperties) {
     this.queryableProperties = queryableProperties;
@@ -423,9 +392,9 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the renderedProperties.
-   *
+   * 
    * @param renderedProperties
-   *          the renderedProperties to set.
+   *            the renderedProperties to set.
    */
   public void setRenderedProperties(List<String> renderedProperties) {
     this.renderedProperties = renderedProperties;
@@ -434,14 +403,14 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   /**
    * Registers the service delegates which help the component to implement the
    * services defined by its contract.
-   *
+   * 
    * @param servicesByServiceContracts
-   *          the component services to be registered keyed by their contract. A
-   *          service contract is an interface class defining the service
-   *          methods to be registered as implemented by the service delegate.
-   *          Map values must be instances of <code>IComponentService</code>.
+   *            the component services to be registered keyed by their contract.
+   *            A service contract is an interface class defining the service
+   *            methods to be registered as implemented by the service delegate.
+   *            Map values must be instances of <code>IComponentService</code>.
    * @throws ClassNotFoundException
-   *           if the declared service class is not found.
+   *             if the declared service class is not found.
    */
   public void setServiceDelegates(
       Map<String, IComponentService> servicesByServiceContracts)
@@ -454,22 +423,52 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
 
   /**
    * Sets the toStringProperty.
-   *
+   * 
    * @param toStringProperty
-   *          the toStringProperty to set.
+   *            the toStringProperty to set.
    */
   public void setToStringProperty(String toStringProperty) {
     this.toStringProperty = toStringProperty;
   }
 
-
   /**
    * Sets the unclonedProperties.
-   *
+   * 
    * @param unclonedProperties
-   *          the unclonedProperties to set.
+   *            the unclonedProperties to set.
    */
   public void setUnclonedProperties(Collection<String> unclonedProperties) {
     this.unclonedProperties = unclonedProperties;
+  }
+
+  private IPropertyDescriptor getDeclaredPropertyDescriptor(String propertyName) {
+    processPropertiesBufferIfNecessary();
+    if (propertyDescriptors != null) {
+      return propertyDescriptors.get(propertyName);
+    }
+    return null;
+  }
+
+  private synchronized void processPropertiesBufferIfNecessary() {
+    if (tempPropertyBuffer != null) {
+      propertyDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
+      for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
+        propertyDescriptors.put(descriptor.getName(), descriptor);
+      }
+      tempPropertyBuffer = null;
+    }
+  }
+
+  private synchronized void registerService(Class<?> serviceContract,
+      IComponentService service) {
+    if (serviceDelegates == null) {
+      serviceDelegates = new HashMap<Method, IComponentService>();
+      serviceContracts = new HashSet<Class<?>>();
+    }
+    serviceContracts.add(serviceContract);
+    Method[] contractServices = serviceContract.getMethods();
+    for (Method serviceMethod : contractServices) {
+      serviceDelegates.put(serviceMethod, service);
+    }
   }
 }

@@ -14,12 +14,11 @@ import com.d2s.framework.model.component.IComponent;
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntity extends IComponent,
-    Cloneable {
+public interface IEntity extends IComponent, Cloneable {
 
   /**
    * constant for identifier property <code>ID</code>.
@@ -34,16 +33,16 @@ public interface IEntity extends IComponent,
   /**
    * It is important to declare here so that ORM (hibernate for instance)
    * detects it has to delegate to the underlying instance when proxiing.
-   *
+   * 
    * @param o
-   *          the instance to compare to.
+   *            the instance to compare to.
    * @return true if both instances are equal.
    */
   boolean equals(Object o);
 
   /**
    * Gets the interface or class establishing the entity contract.
-   *
+   * 
    * @return the entity contract.
    */
   Class<? extends IEntity> getContract();
@@ -55,14 +54,14 @@ public interface IEntity extends IComponent,
    * <code>hashCode()</code> can safely rely on it whenever they are transient
    * or not. It also establishes the minimal contract of a versionable entity
    * which is providing version accessors to handle access concurrency.
-   *
+   * 
    * @return The id of the entity.
    */
   Serializable getId();
 
   /**
    * Gets the version of this entity.
-   *
+   * 
    * @return the entity version.
    */
   Integer getVersion();
@@ -70,14 +69,14 @@ public interface IEntity extends IComponent,
   /**
    * It is important to declare here so that ORM (hibernate for instance)
    * detects it has to delegate to the underlying instance when proxiing.
-   *
+   * 
    * @return the hashcode.
    */
   int hashCode();
 
   /**
    * Gets wether this entity has already been saved in the backing store.
-   *
+   * 
    * @return true if the entity is not transient.
    */
   boolean isPersistent();

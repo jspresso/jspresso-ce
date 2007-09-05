@@ -25,7 +25,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    */
   public String getRenderedProperty() {
     if (renderedProperty == null) {
-      return ((ICollectionDescriptorProvider) getModelDescriptor())
+      return ((ICollectionDescriptorProvider<?>) getModelDescriptor())
           .getCollectionDescriptor().getElementDescriptor()
           .getToStringProperty();
     }
@@ -36,7 +36,7 @@ public class BasicListViewDescriptor extends BasicCollectionViewDescriptor
    * Sets the renderedProperty.
    * 
    * @param renderedProperty
-   *          the renderedProperty to set.
+   *            the renderedProperty to set.
    */
   public void setRenderedProperty(String renderedProperty) {
     this.renderedProperty = renderedProperty;

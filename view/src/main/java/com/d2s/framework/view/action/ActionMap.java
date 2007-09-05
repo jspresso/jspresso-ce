@@ -21,6 +21,9 @@ import java.util.Map;
  */
 public class ActionMap {
 
+  private Map<String, List<IDisplayableAction>> actionMap;
+  private List<ActionMap>                       parentActionMaps;
+
   private static void completeActionMap(
       Map<String, List<IDisplayableAction>> globalActionMap,
       Map<String, List<IDisplayableAction>> localActionMap) {
@@ -44,9 +47,6 @@ public class ActionMap {
       }
     }
   }
-  private Map<String, List<IDisplayableAction>> actionMap;
-
-  private List<ActionMap>                       parentActionMaps;
 
   /**
    * Gets the map of action sets composing the parent actionmaps with the local
@@ -71,7 +71,7 @@ public class ActionMap {
    * Sets the actionMap.
    * 
    * @param actionMap
-   *          the actionMap to set.
+   *            the actionMap to set.
    */
   public void setActionMap(Map<String, List<IDisplayableAction>> actionMap) {
     this.actionMap = actionMap;
@@ -81,7 +81,7 @@ public class ActionMap {
    * Sets the parentActionMaps.
    * 
    * @param parentActionMaps
-   *          the parentActionMaps to set.
+   *            the parentActionMaps to set.
    */
   public void setParentActionMaps(List<ActionMap> parentActionMaps) {
     this.parentActionMaps = parentActionMaps;

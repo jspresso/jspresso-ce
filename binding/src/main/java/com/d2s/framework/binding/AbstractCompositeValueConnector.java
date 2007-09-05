@@ -30,7 +30,7 @@ public abstract class AbstractCompositeValueConnector extends
    * Constructs a new <code>AbstractCompositeValueConnector</code>.
    * 
    * @param id
-   *          the connector identifier
+   *            the connector identifier
    */
   public AbstractCompositeValueConnector(String id) {
     super(id);
@@ -44,23 +44,10 @@ public abstract class AbstractCompositeValueConnector extends
    * Adds a new child connector.
    * 
    * @param connector
-   *          the connector to be added as composite.
+   *            the connector to be added as composite.
    */
   public void addChildConnector(IValueConnector connector) {
     addChildConnector(connector.getId(), connector);
-  }
-
-  /**
-   * Adds a new child connector using a specified storage key.
-   * 
-   * @param storageKey
-   *          the key to use to store the child connector. It may be different
-   *          from its id.
-   * @param connector
-   *          the connector to be added as composite.
-   */
-  protected void addChildConnector(String storageKey, IValueConnector connector) {
-    getConnectorMap().addConnector(storageKey, connector);
   }
 
   /**
@@ -147,99 +134,10 @@ public abstract class AbstractCompositeValueConnector extends
   }
 
   /**
-   * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
-   * @param listener
-   *          the listener to add.
-   */
-  protected void implAddConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    connectorSelectionSupport.addConnectorSelectionListener(listener);
-  }
-
-  /**
-   * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
-   * @param evt
-   *          the connector selection event to propagate.
-   */
-  protected void implFireSelectedConnectorChange(ConnectorSelectionEvent evt) {
-    if (evt.getSource() == this || trackingChildrenSelection) {
-      connectorSelectionSupport.fireSelectedConnectorChange(evt);
-    }
-    IValueConnector parentConnector = getParentConnector();
-    while (parentConnector != null
-        && !(parentConnector instanceof IConnectorSelector)) {
-      parentConnector = parentConnector.getParentConnector();
-    }
-    if (parentConnector != null) {
-      ((IConnectorSelector) parentConnector).fireSelectedConnectorChange(evt);
-    }
-  }
-
-  /**
-   * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
-   * @param selectedConnector
-   *          the newly selected connector or null.
-   */
-  protected void implFireSelectedConnectorChange(
-      IValueConnector selectedConnector) {
-    implFireSelectedConnectorChange(new ConnectorSelectionEvent(this,
-        selectedConnector));
-  }
-
-  /**
-   * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
-   * @param listener
-   *          the listener to remove.
-   */
-  protected void implRemoveConnectorSelectionListener(
-      IConnectorSelectionListener listener) {
-    connectorSelectionSupport.removeConnectorSelectionListener(listener);
-  }
-
-  /**
-   * Utility implementation to factorize method support. This should only be
-   * used by subclasses which implement <code>IConnectorSelector</code>.
-   * 
-   * @param tracksChildren
-   *          the trackingChildrenSelection to set.
-   */
-  protected void implSetTracksChildrenSelection(boolean tracksChildren) {
-    this.trackingChildrenSelection = tracksChildren;
-  }
-
-  /**
-   * Gets the trackingChildrenSelection.
-   * 
-   * @return the trackingChildrenSelection.
-   */
-  protected boolean isTrackingChildrenSelection() {
-    return trackingChildrenSelection;
-  }
-
-  /**
-   * Removes a child connector.
-   * 
-   * @param connector
-   *          the connector to be removed.
-   */
-  protected void removeChildConnector(IValueConnector connector) {
-    getConnectorMap().removeConnector(connector.getId());
-    connector.setParentConnector(null);
-  }
-
-  /**
    * Sets the renderingChildConnectorId.
    * 
    * @param renderingChildConnectorId
-   *          the renderingChildConnectorId to set.
+   *            the renderingChildConnectorId to set.
    */
   public void setRenderingChildConnectorId(String renderingChildConnectorId) {
     this.renderingChildConnectorId = renderingChildConnectorId;
@@ -264,5 +162,107 @@ public abstract class AbstractCompositeValueConnector extends
       return value.toString();
     }
     return "";
+  }
+
+  /**
+   * Adds a new child connector using a specified storage key.
+   * 
+   * @param storageKey
+   *            the key to use to store the child connector. It may be different
+   *            from its id.
+   * @param connector
+   *            the connector to be added as composite.
+   */
+  protected void addChildConnector(String storageKey, IValueConnector connector) {
+    getConnectorMap().addConnector(storageKey, connector);
+  }
+
+  /**
+   * Utility implementation to factorize method support. This should only be
+   * used by subclasses which implement <code>IConnectorSelector</code>.
+   * 
+   * @param listener
+   *            the listener to add.
+   */
+  protected void implAddConnectorSelectionListener(
+      IConnectorSelectionListener listener) {
+    connectorSelectionSupport.addConnectorSelectionListener(listener);
+  }
+
+  /**
+   * Utility implementation to factorize method support. This should only be
+   * used by subclasses which implement <code>IConnectorSelector</code>.
+   * 
+   * @param evt
+   *            the connector selection event to propagate.
+   */
+  protected void implFireSelectedConnectorChange(ConnectorSelectionEvent evt) {
+    if (evt.getSource() == this || trackingChildrenSelection) {
+      connectorSelectionSupport.fireSelectedConnectorChange(evt);
+    }
+    IValueConnector parentConnector = getParentConnector();
+    while (parentConnector != null
+        && !(parentConnector instanceof IConnectorSelector)) {
+      parentConnector = parentConnector.getParentConnector();
+    }
+    if (parentConnector != null) {
+      ((IConnectorSelector) parentConnector).fireSelectedConnectorChange(evt);
+    }
+  }
+
+  /**
+   * Utility implementation to factorize method support. This should only be
+   * used by subclasses which implement <code>IConnectorSelector</code>.
+   * 
+   * @param selectedConnector
+   *            the newly selected connector or null.
+   */
+  protected void implFireSelectedConnectorChange(
+      IValueConnector selectedConnector) {
+    implFireSelectedConnectorChange(new ConnectorSelectionEvent(this,
+        selectedConnector));
+  }
+
+  /**
+   * Utility implementation to factorize method support. This should only be
+   * used by subclasses which implement <code>IConnectorSelector</code>.
+   * 
+   * @param listener
+   *            the listener to remove.
+   */
+  protected void implRemoveConnectorSelectionListener(
+      IConnectorSelectionListener listener) {
+    connectorSelectionSupport.removeConnectorSelectionListener(listener);
+  }
+
+  /**
+   * Utility implementation to factorize method support. This should only be
+   * used by subclasses which implement <code>IConnectorSelector</code>.
+   * 
+   * @param tracksChildren
+   *            the trackingChildrenSelection to set.
+   */
+  protected void implSetTracksChildrenSelection(boolean tracksChildren) {
+    this.trackingChildrenSelection = tracksChildren;
+  }
+
+  /**
+   * Gets the trackingChildrenSelection.
+   * 
+   * @return the trackingChildrenSelection.
+   */
+  protected boolean isTrackingChildrenSelection() {
+    return trackingChildrenSelection;
+  }
+
+  /**
+   * Removes a child connector.
+   * 
+   * @param connector
+   *            the connector to be removed.
+   */
+  protected void removeChildConnector(IValueConnector connector) {
+    getConnectorMap().removeConnector(connector.getId());
+    connector.setParentConnector(null);
   }
 }

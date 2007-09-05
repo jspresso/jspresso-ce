@@ -36,7 +36,7 @@ public class ThisApplicationContextFactoryBean implements
    * <p>
    * {@inheritDoc}
    */
-  public Class getObjectType() {
+  public Class<?> getObjectType() {
     return ApplicationContext.class;
   }
 
