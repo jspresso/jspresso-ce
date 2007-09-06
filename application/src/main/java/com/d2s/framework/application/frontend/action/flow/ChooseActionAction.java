@@ -7,7 +7,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,13 +46,12 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     BasicCollectionDescriptor<IDescriptor> modelDescriptor = new BasicCollectionDescriptor<IDescriptor>();
     modelDescriptor
-        .setCollectionInterface((Class<? extends Collection<? extends IDescriptor>>) List.class);
+        .setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
     IValueConnector actionsConnector = beanConnectorFactory
         .createModelConnector(modelDescriptor);

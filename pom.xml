@@ -450,7 +450,8 @@
                 <if>
                   <equals arg1="${project.packaging}" arg2="jar" />
                   <then>
-                    <proguard note="false" verbose="false" renamesourcefileattribute="SourceFile">
+                    <proguard note="false" verbose="false" renamesourcefileattribute="SourceFile"
+                      skipnonpubliclibraryclasses="false">
                       <injar file="${project.artifact.file}" />
                       <outjar
                         file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}" />
@@ -527,7 +528,7 @@
           <dependency>
             <groupId>net.sf.proguard</groupId>
             <artifactId>proguard</artifactId>
-            <version>3.5</version>
+            <version>3.9</version>
           </dependency>
           <dependency>
             <groupId>ant-contrib</groupId>

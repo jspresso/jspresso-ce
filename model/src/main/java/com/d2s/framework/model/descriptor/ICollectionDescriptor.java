@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.model.descriptor;
 
-import java.util.Collection;
 
 /**
  * This interface is implemented by descriptors of collections.
@@ -26,7 +25,7 @@ public interface ICollectionDescriptor<E> extends IModelDescriptor,
    * 
    * @return the collection interface.
    */
-  Class<? extends Collection<? extends E>> getCollectionInterface();
+  Class<?> getCollectionInterface();
 
   /**
    * Gets the component descriptor of the elements contained in this collection.

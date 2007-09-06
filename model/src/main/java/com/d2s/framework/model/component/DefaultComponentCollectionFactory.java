@@ -29,7 +29,7 @@ public class DefaultComponentCollectionFactory<E> implements
    * {@inheritDoc}
    */
   public Collection<E> createEntityCollection(
-      Class<? extends Collection<?>> collectionInterface) {
+      Class<?> collectionInterface) {
     if (Set.class.isAssignableFrom(collectionInterface)) {
       return new LinkedHashSet<E>();
     } else if (List.class.isAssignableFrom(collectionInterface)) {

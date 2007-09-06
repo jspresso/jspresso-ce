@@ -4,7 +4,6 @@
 package com.d2s.framework.application.printing.frontend.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,13 +44,12 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     BasicCollectionDescriptor<IReport> modelDescriptor = new BasicCollectionDescriptor<IReport>();
     modelDescriptor
-        .setCollectionInterface((Class<? extends Collection<? extends IReport>>) List.class);
+        .setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
     IValueConnector reportsConnector = beanConnectorFactory
         .createModelConnector(modelDescriptor);

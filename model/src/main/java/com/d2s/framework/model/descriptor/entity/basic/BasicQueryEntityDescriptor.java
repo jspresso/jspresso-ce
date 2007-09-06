@@ -220,12 +220,11 @@ public class BasicQueryEntityDescriptor implements
    * 
    * @return the queriedEntitiesPropertyDescriptor.
    */
-  @SuppressWarnings("unchecked")
   private BasicCollectionPropertyDescriptor<IEntity> getQueriedEntitiesPropertyDescriptor() {
     if (queriedEntitiesPropertyDescriptor == null) {
       BasicCollectionDescriptor<IEntity> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<IEntity>();
       queriedEntitiesCollectionDescriptor
-          .setCollectionInterface((Class<? extends Collection<? extends IEntity>>) Set.class);
+          .setCollectionInterface(Set.class);
       queriedEntitiesCollectionDescriptor
           .setElementDescriptor(entityDescriptor);
       queriedEntitiesCollectionDescriptor

@@ -434,10 +434,10 @@ public class BasicApplicationSession implements IApplicationSession {
     Collection<IEntity> uowEntityCollection = null;
     if (collection instanceof Set) {
       uowEntityCollection = collectionFactory
-          .createEntityCollection((Class<? extends Collection<?>>) Set.class);
+          .createEntityCollection(Set.class);
     } else if (collection instanceof List) {
       uowEntityCollection = collectionFactory
-          .createEntityCollection((Class<? extends Collection<?>>) List.class);
+          .createEntityCollection(List.class);
     }
     return uowEntityCollection;
   }
@@ -677,10 +677,10 @@ public class BasicApplicationSession implements IApplicationSession {
               if (isInitialized(registeredCollection)) {
                 if (property.getValue() instanceof Set) {
                   registeredCollection = collectionFactory
-                      .createEntityCollection((Class<? extends Collection<?>>) Set.class);
+                      .createEntityCollection(Set.class);
                 } else if (property.getValue() instanceof List) {
                   registeredCollection = collectionFactory
-                      .createEntityCollection((Class<? extends Collection<?>>) List.class);
+                      .createEntityCollection(List.class);
                 }
                 for (IEntity entityCollectionElement : (Collection<IEntity>) property
                     .getValue()) {

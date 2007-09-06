@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
-import java.util.Collection;
-
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.util.descriptor.DefaultDescriptor;
@@ -23,8 +21,8 @@ import com.d2s.framework.util.descriptor.DefaultDescriptor;
 public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
     ICollectionDescriptor<E> {
 
-  private Class<? extends Collection<? extends E>> collectionInterface;
-  private IComponentDescriptor<E>                  elementDescriptor;
+  private Class<?> collectionInterface;
+  private IComponentDescriptor<E>        elementDescriptor;
 
   /**
    * {@inheritDoc}
@@ -36,7 +34,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public Class<? extends Collection<? extends E>> getCollectionInterface() {
+  public Class<?> getCollectionInterface() {
     return collectionInterface;
   }
 
@@ -50,7 +48,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public Class<? extends Collection<?>> getModelType() {
+  public Class<?> getModelType() {
     return getCollectionInterface();
   }
 
@@ -61,7 +59,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    *            the collectionInterface to set.
    */
   public void setCollectionInterface(
-      Class<? extends Collection<? extends E>> collectionInterface) {
+      Class<?> collectionInterface) {
     this.collectionInterface = collectionInterface;
   }
 

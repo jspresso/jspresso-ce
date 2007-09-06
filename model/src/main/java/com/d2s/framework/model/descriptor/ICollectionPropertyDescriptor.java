@@ -21,13 +21,6 @@ public interface ICollectionPropertyDescriptor<E> extends
     IRelationshipEndPropertyDescriptor, ICollectionDescriptorProvider<E> {
 
   /**
-   * Narrowed to a collection type.
-   * 
-   * @return the type of the model.
-   */
-  Class<? extends Collection<?>> getModelType();
-
-  /**
    * Get the list of properties ordering this collection.
    * 
    * @return the list of properties ordering this collection.

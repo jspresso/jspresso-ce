@@ -40,7 +40,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  public Class<? extends Collection<? extends E>> getModelType() {
+  public Class<?> getModelType() {
     return getReferencedDescriptor().getCollectionInterface();
   }
 
