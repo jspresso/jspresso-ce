@@ -618,6 +618,8 @@ public class DefaultWingsViewFactory implements
   protected SPanel createSPanel() {
     SPanel panel = new SPanel();
     panel.setPreferredSize(SDimension.FULLAREA);
+    panel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    panel.setVerticalAlignment(SConstants.TOP_ALIGN);
     return panel;
   }
 
@@ -650,6 +652,8 @@ public class DefaultWingsViewFactory implements
     SScrollPane scrollPane = new SScrollPane();
     scrollPane.setMode(SScrollPane.MODE_COMPLETE);
     scrollPane.setPreferredSize(SDimension.FULLAREA);
+    scrollPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     return scrollPane;
   }
 
@@ -660,9 +664,9 @@ public class DefaultWingsViewFactory implements
    */
   protected STabbedPane createSTabbedPane() {
     STabbedPane tabbedPane = new STabbedPane();
+    tabbedPane.setPreferredSize(SDimension.FULLAREA);
     tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     tabbedPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    tabbedPane.setPreferredSize(SDimension.FULLAREA);
     return tabbedPane;
   }
 
@@ -2070,40 +2074,40 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
-//  private ICompositeView<SComponent> createSplitView(
-//      ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
-//      Locale locale) {
-//    SSplitPane viewComponent = createSSplitPane();
-//    BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
-//        viewDescriptor);
-//    List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
-//
-//    switch (viewDescriptor.getOrientation()) {
-//      case ISplitViewDescriptor.HORIZONTAL:
-//        viewComponent.setOrientation(SSplitPane.HORIZONTAL_SPLIT);
-//        break;
-//      case ISplitViewDescriptor.VERTICAL:
-//        viewComponent.setOrientation(SSplitPane.VERTICAL_SPLIT);
-//        break;
-//      default:
-//        break;
-//    }
-//
-//    if (viewDescriptor.getLeftTopViewDescriptor() != null) {
-//      IView<SComponent> leftTopView = createView(viewDescriptor
-//          .getLeftTopViewDescriptor(), actionHandler, locale);
-//      viewComponent.setLeftComponent(leftTopView.getPeer());
-//      childrenViews.add(leftTopView);
-//    }
-//    if (viewDescriptor.getRightBottomViewDescriptor() != null) {
-//      IView<SComponent> rightBottomView = createView(viewDescriptor
-//          .getRightBottomViewDescriptor(), actionHandler, locale);
-//      viewComponent.setRightComponent(rightBottomView.getPeer());
-//      childrenViews.add(rightBottomView);
-//    }
-//    view.setChildren(childrenViews);
-//    return view;
-//  }
+  // private ICompositeView<SComponent> createSplitView(
+  // ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
+  // Locale locale) {
+  // SSplitPane viewComponent = createSSplitPane();
+  // BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
+  // viewDescriptor);
+  // List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
+  //
+  // switch (viewDescriptor.getOrientation()) {
+  // case ISplitViewDescriptor.HORIZONTAL:
+  // viewComponent.setOrientation(SSplitPane.HORIZONTAL_SPLIT);
+  // break;
+  // case ISplitViewDescriptor.VERTICAL:
+  // viewComponent.setOrientation(SSplitPane.VERTICAL_SPLIT);
+  // break;
+  // default:
+  // break;
+  // }
+  //
+  // if (viewDescriptor.getLeftTopViewDescriptor() != null) {
+  // IView<SComponent> leftTopView = createView(viewDescriptor
+  // .getLeftTopViewDescriptor(), actionHandler, locale);
+  // viewComponent.setLeftComponent(leftTopView.getPeer());
+  // childrenViews.add(leftTopView);
+  // }
+  // if (viewDescriptor.getRightBottomViewDescriptor() != null) {
+  // IView<SComponent> rightBottomView = createView(viewDescriptor
+  // .getRightBottomViewDescriptor(), actionHandler, locale);
+  // viewComponent.setRightComponent(rightBottomView.getPeer());
+  // childrenViews.add(rightBottomView);
+  // }
+  // view.setChildren(childrenViews);
+  // return view;
+  // }
 
   private IView<SComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
@@ -2283,8 +2287,7 @@ public class DefaultWingsViewFactory implements
     scrollPane.setViewportView(viewComponent);
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    scrollPane.setPreferredSize(new SDimension("99%", SDimension.AUTO));
-    
+    scrollPane.setPreferredSize(new SDimension("100%", SDimension.AUTO));
     return view;
   }
 
@@ -2425,7 +2428,7 @@ public class DefaultWingsViewFactory implements
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setPreferredSize(new SDimension("170px", SDimension.AUTO));
+    scrollPane.setPreferredSize(new SDimension("160px", "500px"));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;

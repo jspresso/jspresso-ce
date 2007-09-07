@@ -20,6 +20,7 @@ import org.springframework.dao.ConcurrencyFailureException;
 import org.wings.SBorderLayout;
 import org.wings.SCardLayout;
 import org.wings.SComponent;
+import org.wings.SConstants;
 import org.wings.SContainer;
 import org.wings.SDimension;
 import org.wings.SForm;
@@ -158,9 +159,6 @@ public class DefaultWingsController extends
       moduleViews.add(moduleId);
       cardPanel.add(moduleInternalFrame, moduleId);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
-      if (!controllerFrame.isUpdateEnabled()) {
-        controllerFrame.setUpdateEnabled(true);
-      }
     }
     setSelectedModuleId(moduleId);
     super.displayModule(moduleId);
@@ -215,7 +213,7 @@ public class DefaultWingsController extends
   private SFrame createControllerFrame() {
     SFrame frame = new SFrame();
     cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(new SDimension("100%", "768"));
+    cardPanel.setPreferredSize(SDimension.FULLAREA);
     SPanel contentPane = new SPanel(new SBorderLayout());
     frame.setContentPane(contentPane);
     frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
@@ -245,7 +243,8 @@ public class DefaultWingsController extends
     frameForm.add(view.getPeer());
     frameForm.setPreferredSize(SDimension.FULLAREA);
     internalFrame.getContentPane().add(frameForm, SBorderLayout.CENTER);
-    internalFrame.setPreferredSize(SDimension.FULLAREA);
+    internalFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
+    internalFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return internalFrame;
   }
 
@@ -269,8 +268,6 @@ public class DefaultWingsController extends
   private void displayControllerFrame() {
     controllerFrame = createControllerFrame();
     updateFrameTitle();
-    // Ajax calendar bug fix
-    controllerFrame.setUpdateEnabled(false);
     controllerFrame.setVisible(true);
   }
 
