@@ -550,7 +550,9 @@ public class DefaultWingsViewFactory implements
    * @return the created color picker.
    */
   protected SColorPicker createSColorPicker() {
-    return new SColorPicker();
+    SColorPicker colorPicker = new SColorPicker();
+    colorPicker.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return colorPicker;
   }
 
   /**
@@ -1472,170 +1474,6 @@ public class DefaultWingsViewFactory implements
         propertyDescriptor, locale));
   }
 
-  // ////////////////// //
-  // Popup menu Section //
-  // ////////////////// //
-
-  // private final class PopupListener implements SMouseListener {
-  //
-  // private SComponent sourceComponent;
-  // private IView<SComponent> view;
-  // private IActionHandler actionHandler;
-  // private Locale locale;
-  //
-  // /**
-  // * Constructs a new <code>PopupListener</code> instance.
-  // *
-  // * @param sourceComponent
-  // * @param view
-  // * @param actionHandler
-  // * @param locale
-  // */
-  // public PopupListener(SComponent sourceComponent, IView<SComponent> view,
-  // IActionHandler actionHandler, Locale locale) {
-  // this.sourceComponent = sourceComponent;
-  // this.view = view;
-  // this.actionHandler = actionHandler;
-  // this.locale = locale;
-  // }
-  //
-  // /**
-  // * {@inheritDoc}
-  // */
-  // public void mouseClicked(SMouseEvent evt) {
-  // maybeShowPopup(evt);
-  // }
-  //
-  // private void maybeShowPopup(SMouseEvent evt) {
-  // // FIXME popup trigger
-  // showPopupMenu(sourceComponent, view, evt, actionHandler, locale);
-  // }
-  // }
-  //
-  // private void showPopupMenu(SComponent sourceComponent,
-  // IView<SComponent> view, SMouseEvent evt, IActionHandler actionHandler,
-  // Locale locale) {
-  // if (sourceComponent instanceof STree) {
-  // showSTreePopupMenu((STree) sourceComponent, view, evt, actionHandler,
-  // locale);
-  // } else if (sourceComponent instanceof STable) {
-  // showSTablePopupMenu((STable) sourceComponent, view, evt, actionHandler,
-  // locale);
-  // }
-  // }
-  //
-  // private void showSTreePopupMenu(STree tree, IView<SComponent> treeView,
-  // SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
-  // TreePath path = tree.getPathForRow(tree.getRowForLocation(evt.getPoint()));
-  // if (path == null) {
-  // return;
-  // }
-  //
-  // if (!tree.isPathSelected(path)) {
-  // tree.setSelectionPath(path);
-  // }
-  // if (path.getLastPathComponent() instanceof ICollectionConnector) {
-  // TreePath[] allNodePaths = new TreePath[((ICollectionConnector) path
-  // .getLastPathComponent()).getChildConnectorCount()];
-  // for (int i = 0; i < allNodePaths.length; i++) {
-  // allNodePaths[i] = path.pathByAddingChild(((ICollectionConnector) path
-  // .getLastPathComponent()).getChildConnector(i));
-  // }
-  // tree.addSelectionPaths(allNodePaths);
-  // }
-  //
-  // IValueConnector viewConnector = (IValueConnector) path
-  // .getLastPathComponent();
-  // IModelDescriptor modelDescriptor;
-  // Map<String, List<IDisplayableAction>> actionMap;
-  // IViewDescriptor viewDescriptor;
-  // if (viewConnector == tree.getModel().getRoot()) {
-  // modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-  // actionMap = treeView.getDescriptor().getActions();
-  // viewDescriptor = treeView.getDescriptor();
-  // } else {
-  // viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
-  // ((ITreeViewDescriptor) treeView.getDescriptor())
-  // .getRootSubtreeDescriptor(),
-  // getDescriptorPathFromConnectorTreePath(path))
-  // .getNodeGroupDescriptor();
-  // modelDescriptor = viewDescriptor.getModelDescriptor();
-  // actionMap = viewDescriptor.getActions();
-  // if (!(viewConnector instanceof ICollectionConnector)) {
-  // viewConnector = viewConnector.getParentConnector();
-  // }
-  // }
-  //
-  // if (actionMap == null) {
-  // return;
-  // }
-  //
-  // SPopupMenu popupMenu = createSPopupMenu(tree, actionMap, modelDescriptor,
-  // viewDescriptor, viewConnector, actionHandler, locale);
-  // // FIXME popup
-  // popupMenu.setVisible(true);
-  // }
-  //
-  // private void showSTablePopupMenu(STable table, IView<SComponent> tableView,
-  // SMouseEvent evt, IActionHandler actionHandler, Locale locale) {
-  // int row = table.rowAtPoint(evt.getPoint());
-  // if (row < 0) {
-  // return;
-  // }
-  //
-  // if (!table.isRowSelected(row)) {
-  // table.setSelectedRow(row);
-  // }
-  //
-  // IValueConnector elementConnector = tableView.getConnector();
-  // IModelDescriptor modelDescriptor = tableView.getDescriptor()
-  // .getModelDescriptor();
-  // Map<String, List<IDisplayableAction>> actionMap =
-  // ((ICollectionViewDescriptor) tableView
-  // .getDescriptor()).getActions();
-  //
-  // if (actionMap == null) {
-  // return;
-  // }
-  //
-  // SPopupMenu popupMenu = createSPopupMenu(table, actionMap, modelDescriptor,
-  // tableView.getDescriptor(), elementConnector, actionHandler, locale);
-  // // FIXME popup
-  // popupMenu.setVisible(true);
-  // }
-  //
-  // private SPopupMenu createSPopupMenu(SComponent sourceComponent,
-  // Map<String, List<IDisplayableAction>> actionMap,
-  // IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
-  // IValueConnector viewConnector, IActionHandler actionHandler, Locale locale)
-  // {
-  // SPopupMenu popupMenu = createSPopupMenu();
-  // SLabel titleLabel = createSLabel();
-  // titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
-  // locale));
-  // titleLabel.setIcon(iconFactory.getIcon(viewDescriptor.getIconImageURL(),
-  // IIconFactory.TINY_ICON_SIZE));
-  // titleLabel.setHorizontalAlignment(SConstants.CENTER);
-  // titleLabel.setHorizontalAlignment(SConstants.CENTER_ALIGN);
-  // popupMenu.add(titleLabel);
-  // popupMenu.add(new SSeparator());
-  // for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = actionMap
-  // .entrySet().iterator(); iter.hasNext();) {
-  // Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
-  // for (IDisplayableAction action : nextActionSet.getValue()) {
-  // Action swingAction = actionFactory.createAction(action, actionHandler,
-  // sourceComponent, modelDescriptor, viewConnector, locale);
-  // SMenuItem actionItem = createSMenuItem();
-  // actionItem.setAction(swingAction);
-  // popupMenu.add(actionItem);
-  // }
-  // if (iter.hasNext()) {
-  // popupMenu.add(new SSeparator());
-  // }
-  // }
-  // return popupMenu;
-  // }
-
   // /////////////// //
   // Helpers Section //
   // /////////////// //
@@ -2232,6 +2070,41 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
+//  private ICompositeView<SComponent> createSplitView(
+//      ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
+//      Locale locale) {
+//    SSplitPane viewComponent = createSSplitPane();
+//    BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
+//        viewDescriptor);
+//    List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
+//
+//    switch (viewDescriptor.getOrientation()) {
+//      case ISplitViewDescriptor.HORIZONTAL:
+//        viewComponent.setOrientation(SSplitPane.HORIZONTAL_SPLIT);
+//        break;
+//      case ISplitViewDescriptor.VERTICAL:
+//        viewComponent.setOrientation(SSplitPane.VERTICAL_SPLIT);
+//        break;
+//      default:
+//        break;
+//    }
+//
+//    if (viewDescriptor.getLeftTopViewDescriptor() != null) {
+//      IView<SComponent> leftTopView = createView(viewDescriptor
+//          .getLeftTopViewDescriptor(), actionHandler, locale);
+//      viewComponent.setLeftComponent(leftTopView.getPeer());
+//      childrenViews.add(leftTopView);
+//    }
+//    if (viewDescriptor.getRightBottomViewDescriptor() != null) {
+//      IView<SComponent> rightBottomView = createView(viewDescriptor
+//          .getRightBottomViewDescriptor(), actionHandler, locale);
+//      viewComponent.setRightComponent(rightBottomView.getPeer());
+//      childrenViews.add(rightBottomView);
+//    }
+//    view.setChildren(childrenViews);
+//    return view;
+//  }
+
   private IView<SComponent> createStringPropertyView(
       IStringPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
@@ -2410,11 +2283,8 @@ public class DefaultWingsViewFactory implements
     scrollPane.setViewportView(viewComponent);
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    scrollPane.setPreferredSize(new SDimension("99%", null));
-
-    // FIXME MouseListener
-    // viewComponent.addMouseListener(new PopupListener(viewComponent, view,
-    // actionHandler, locale));
+    scrollPane.setPreferredSize(new SDimension("99%", SDimension.AUTO));
+    
     return view;
   }
 
@@ -2433,7 +2303,6 @@ public class DefaultWingsViewFactory implements
       SIcon childIcon = iconFactory.getIcon(childViewDescriptor
           .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
       SComponent tabView = childView.getPeer();
-      tabView.setPreferredSize(SDimension.FULLAREA);
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, tabView,
@@ -2445,7 +2314,6 @@ public class DefaultWingsViewFactory implements
       }
       childrenViews.add(childView);
     }
-    viewComponent.setPreferredSize(SDimension.FULLAREA);
     view.setChildren(childrenViews);
     return view;
   }
@@ -2557,12 +2425,9 @@ public class DefaultWingsViewFactory implements
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setPreferredSize(new SDimension("170px", null));
+    scrollPane.setPreferredSize(new SDimension("170px", SDimension.AUTO));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    // FIXME MouseListener
-    // viewComponent.addMouseListener(new PopupListener(viewComponent, view,
-    // actionHandler, locale));
     return view;
   }
 

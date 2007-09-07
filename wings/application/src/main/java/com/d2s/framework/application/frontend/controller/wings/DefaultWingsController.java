@@ -20,6 +20,7 @@ import org.springframework.dao.ConcurrencyFailureException;
 import org.wings.SBorderLayout;
 import org.wings.SCardLayout;
 import org.wings.SComponent;
+import org.wings.SContainer;
 import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SFrame;
@@ -153,9 +154,7 @@ public class DefaultWingsController extends
           .getModuleConnector(moduleId);
       IView<SComponent> moduleView = createModuleView(moduleId,
           moduleDescriptor, (Module) moduleConnector.getConnectorValue());
-      SInternalFrame moduleInternalFrame = createInternalFrame(moduleView);
-      moduleInternalFrame.setIcon(getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+      SContainer moduleInternalFrame = createInternalFrame(moduleView);
       moduleViews.add(moduleId);
       cardPanel.add(moduleInternalFrame, moduleId);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
@@ -216,7 +215,7 @@ public class DefaultWingsController extends
   private SFrame createControllerFrame() {
     SFrame frame = new SFrame();
     cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(SDimension.FULLAREA);
+    cardPanel.setPreferredSize(new SDimension("100%", "768"));
     SPanel contentPane = new SPanel(new SBorderLayout());
     frame.setContentPane(contentPane);
     frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
@@ -231,7 +230,7 @@ public class DefaultWingsController extends
    *            the view to be set into the internal frame.
    * @return the constructed internal frame.
    */
-  private SInternalFrame createInternalFrame(IView<SComponent> view) {
+  private SContainer createInternalFrame(IView<SComponent> view) {
     SInternalFrame internalFrame = new SInternalFrame();
     internalFrame.setTitle(view.getDescriptor().getI18nName(
         getTranslationProvider(), getLocale()));
@@ -240,9 +239,13 @@ public class DefaultWingsController extends
     internalFrame.setIconifyable(false);
     internalFrame.setClosable(false);
     internalFrame.getContentPane().setLayout(new SBorderLayout());
+    internalFrame.setIcon(getIconFactory().getIcon(
+        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     SForm frameForm = new SForm();
     frameForm.add(view.getPeer());
+    frameForm.setPreferredSize(SDimension.FULLAREA);
     internalFrame.getContentPane().add(frameForm, SBorderLayout.CENTER);
+    internalFrame.setPreferredSize(SDimension.FULLAREA);
     return internalFrame;
   }
 
