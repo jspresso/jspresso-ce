@@ -48,14 +48,9 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class WizardAction extends AbstractWingsAction {
 
-  private static final SDimension DIALOG_SIZE = new SDimension((String) null,
-                                                  null);
-  private static final SDimension PANEL_SIZE  = new SDimension((String) null,
-                                                  null);
-
-  private IDisplayableAction      finishAction;
-  private IWizardStepDescriptor   firstWizardStep;
-  private IModelConnectorFactory  modelConnectorFactory;
+  private IDisplayableAction     finishAction;
+  private IWizardStepDescriptor  firstWizardStep;
+  private IModelConnectorFactory modelConnectorFactory;
 
   /**
    * {@inheritDoc}
@@ -83,7 +78,6 @@ public class WizardAction extends AbstractWingsAction {
     SFrame window = getSourceComponent(context).getParentFrame();
     dialog = new SDialog(window, getI18nName(getTranslationProvider(context),
         getLocale(context)));
-    dialog.setPreferredSize(DIALOG_SIZE);
 
     dialog.setLayout(new SBorderLayout());
     dialog.setClosable(false);
@@ -93,7 +87,6 @@ public class WizardAction extends AbstractWingsAction {
 
     final SCardLayout cardLayout = new SCardLayout();
     cardPanel.setLayout(cardLayout);
-    cardPanel.setPreferredSize(PANEL_SIZE);
 
     final SButton backButton = new SButton(getIconFactory(context)
         .getBackwardIcon(IIconFactory.SMALL_ICON_SIZE));
@@ -185,6 +178,9 @@ public class WizardAction extends AbstractWingsAction {
 
     dialog.setDefaultButton(nextButton);
 
+    cardPanel.setPreferredSize(new SDimension("500px", "250px"));
+    dialog.setPreferredSize(new SDimension("50%", "100%"));
+
     show(dialog, cardPanel, alreadyDisplayedSteps, firstWizardStep, backButton,
         nextButton, finishButton, modelConnector, actionHandler, context, true);
     return super.execute(actionHandler, context);
@@ -256,9 +252,7 @@ public class WizardAction extends AbstractWingsAction {
       alreadyDisplayedSteps.add(cardName);
       IView<SComponent> view = getViewFactory(context).createView(
           wizardStep.getViewDescriptor(), actionHandler, getLocale(context));
-      view.getPeer().setPreferredSize(PANEL_SIZE);
       cardPanel.add(view.getPeer(), cardName);
-      cardPanel.setPreferredSize(PANEL_SIZE);
       getMvcBinder(context).bind(view.getConnector(), modelConnector);
     }
     ((SCardLayout) (cardPanel.getLayout())).show(cardPanel, cardName);

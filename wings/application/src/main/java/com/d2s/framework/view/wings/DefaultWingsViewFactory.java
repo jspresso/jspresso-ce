@@ -49,6 +49,7 @@ import org.wings.SPasswordField;
 import org.wings.SPopupMenu;
 import org.wings.SScrollPane;
 import org.wings.SSeparator;
+import org.wings.SSplitPane;
 import org.wings.STabbedPane;
 import org.wings.STable;
 import org.wings.STextArea;
@@ -655,6 +656,18 @@ public class DefaultWingsViewFactory implements
     scrollPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     return scrollPane;
+  }
+
+  /**
+   * Creates a split pane.
+   * 
+   * @return the created split pane.
+   */
+  protected SSplitPane createSSplitPane() {
+    SSplitPane splitPane = new SSplitPane();
+    splitPane.setContinuousLayout(true);
+    // splitPane.setOneTouchExpandable(true);
+    return splitPane;
   }
 
   /**
@@ -1416,8 +1429,7 @@ public class DefaultWingsViewFactory implements
       Locale locale) {
     XCalendar viewComponent = createDateField();
     DateFormat format = createDateFormat(propertyDescriptor, locale);
-    viewComponent.getFormattedTextField().setFormatter(
-        new SDateFormatter(format));
+    viewComponent.setFormatter(new SDateFormatter(format));
     XCalendarConnector connector = new XCalendarConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
