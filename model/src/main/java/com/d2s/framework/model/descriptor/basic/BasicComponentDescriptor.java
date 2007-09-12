@@ -43,7 +43,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   private List<IComponentDescriptor<?>>    ancestorDescriptors;
   private Class<?>                         componentContract;
   private boolean                          computed;
-  private List<ILifecycleInterceptor<?>>      lifecycleInterceptors;
+  private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private List<String>                     orderingProperties;
   private Map<String, IPropertyDescriptor> propertyDescriptors;
   private List<String>                     queryableProperties;
@@ -186,17 +186,24 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   public Collection<IPropertyDescriptor> getPropertyDescriptors() {
-    Set<IPropertyDescriptor> allDescriptors = new LinkedHashSet<IPropertyDescriptor>();
+    // A map is used instead of a set since a set does not replace an element it
+    // already contains.
+    Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
     if (ancestorDescriptors != null) {
       for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescriptors) {
-        allDescriptors.addAll(ancestorDescriptor.getPropertyDescriptors());
+        for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor
+            .getPropertyDescriptors()) {
+          allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
+        }
       }
     }
     Collection<IPropertyDescriptor> declaredPropertyDescriptors = getDeclaredPropertyDescriptors();
     if (declaredPropertyDescriptors != null) {
-      allDescriptors.addAll(declaredPropertyDescriptors);
+      for (IPropertyDescriptor propertyDescriptor : declaredPropertyDescriptors) {
+        allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
+      }
     }
-    return allDescriptors;
+    return allDescriptors.values();
   }
 
   /**
