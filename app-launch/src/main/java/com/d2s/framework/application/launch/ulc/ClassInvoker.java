@@ -94,10 +94,11 @@ public class ClassInvoker implements IMessageService {
         throw new NestedRuntimeException(ex);
       } catch (IllegalAccessException ex) {
         throw new NestedRuntimeException(ex);
-      } catch (InvocationTargetException ex) {
-        throw new NestedRuntimeException(ex);
       } catch (NoSuchMethodException ex) {
         throw new NestedRuntimeException(ex);
+      } catch (InvocationTargetException ex) {
+        //ignored
+        ex.printStackTrace();
       }
     }
   }
