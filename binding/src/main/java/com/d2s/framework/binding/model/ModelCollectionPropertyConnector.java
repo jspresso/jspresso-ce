@@ -214,13 +214,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   }
 
   /**
-   * {@inheritDoc}
-   */
-  public boolean isAllowLazyChildrenLoading() {
-    return true;
-  }
-
-  /**
    * Before invoking the super implementation which handles the
    * <code>ModelChangeEvent</code>, this implementation reconstructs the
    * child connectors based on the retrieved collection.
@@ -274,14 +267,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
   /**
    * {@inheritDoc}
    */
-  public void setAllowLazyChildrenLoading(@SuppressWarnings("unused")
-  boolean b) {
-    // lazy behaviour can't be turned off.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public void setSelectedIndices(int[] newSelectedIndices) {
     selectionChangeSupport.setSelectedIndices(newSelectedIndices);
   }
@@ -303,6 +288,10 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     return CollectionHelper.cloneCollection((Collection<?>) connectorValue);
   }
 
+  private String computeConnectorId(int i) {
+    return CollectionConnectorHelper.computeConnectorId(getId(), i);
+  }
+
   /**
    * Removes a child connector.
    * 
@@ -314,10 +303,6 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     connector.setParentConnector(null);
     connector.cleanBindings();
     connector.setConnectorValue(null);
-  }
-
-  private String computeConnectorId(int i) {
-    return CollectionConnectorHelper.computeConnectorId(getId(), i);
   }
 
   /**

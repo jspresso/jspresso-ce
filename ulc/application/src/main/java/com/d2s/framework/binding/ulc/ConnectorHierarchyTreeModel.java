@@ -6,7 +6,6 @@ package com.d2s.framework.binding.ulc;
 import java.util.Collection;
 import java.util.List;
 
-import com.d2s.framework.binding.CollectionConnectorHelper;
 import com.d2s.framework.binding.CollectionConnectorValueChangeEvent;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -71,8 +70,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     if (parent instanceof ICollectionConnectorProvider) {
       ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) parent)
           .getCollectionConnector();
-      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-          collectionConnector, false, false);
       return collectionConnector.getChildConnector(index);
     } else if (parent instanceof ICollectionConnectorListProvider) {
       return ((ICollectionConnectorListProvider) parent)
@@ -144,11 +141,9 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   /**
    * {@inheritDoc}
    */
-  public void treeCollapsed(TreeExpansionEvent event) {
-    ICollectionConnectorListProvider collapsedConnector = (ICollectionConnectorListProvider) event
-        .getPath().getLastPathComponent();
-    CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-        collapsedConnector, true, false);
+  public void treeCollapsed(@SuppressWarnings("unused")
+  TreeExpansionEvent event) {
+    // NO-OP.
   }
 
   /**
@@ -158,21 +153,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
         .getPath().getLastPathComponent();
     checkListenerRegistrationForConnector(expandedConnector);
-    CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-        expandedConnector, false, false);
-    if (expandedConnector instanceof ICollectionConnectorProvider
-        && expandedConnector != rootConnector) {
-      // expandedConnector != rootConnector fixes a buggy behaviour in ULC
-      // because ulc thinks the root node gets expanded whenever a child node
-      // is.
-      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) expandedConnector)
-          .getCollectionConnector();
-      for (int i = 0; i < collectionConnector.getChildConnectorCount(); i++) {
-        CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-            (ICollectionConnectorListProvider) collectionConnector
-                .getChildConnector(i), false, false);
-      }
-    }
   }
 
   /**
@@ -188,12 +168,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    */
   public void treeNodesInserted(TreeModelEvent event) {
     for (Object insertedConnector : event.getChildren()) {
-      if ((event.getTreePath().getLastPathComponent() == rootConnector && getChildCount(insertedConnector) == 0)
-          || myTree.isVisible(event.getTreePath().pathByAddingChild(
-              insertedConnector))) {
-        CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-            (ICollectionConnectorListProvider) insertedConnector, false, false);
-      }
       checkListenerRegistrationForConnector((IValueConnector) insertedConnector);
     }
   }
@@ -213,20 +187,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     ICollectionConnectorListProvider changedConnector = (ICollectionConnectorListProvider) event
         .getTreePath().getLastPathComponent();
     checkListenerRegistrationForConnector(changedConnector);
-    if (changedConnector == rootConnector) {
-      for (ICollectionConnector collectionConnector : ((ICollectionConnectorListProvider) rootConnector)
-          .getCollectionConnectors()) {
-        CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-            collectionConnector, true, true);
-      }
-      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-          changedConnector, false, false);
-    } else if (event.getTreePath().getParentPath() != null
-        && event.getTreePath().getParentPath().getLastPathComponent() == rootConnector
-        && getChildCount(changedConnector) == 0) {
-      CollectionConnectorHelper.setAllowLazyChildrenLoadingForConnector(
-          changedConnector, false, false);
-    }
   }
 
   /**
@@ -303,9 +263,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             for (int i = oldCollectionSize; i < newCollectionSize; i++) {
               childIndices[i - oldCollectionSize] = i;
             }
-            if (!((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
-              nodesWereInserted(connectorPath, childIndices);
-            }
+            nodesWereInserted(connectorPath, childIndices);
             changedSize = oldCollectionSize;
           } else if (newCollectionSize < oldCollectionSize) {
             int[] childIndices = new int[oldCollectionSize - newCollectionSize];
@@ -314,10 +272,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             }
             List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
                 .getRemovedChildrenConnectors();
-            if (!((CollectionConnectorValueChangeEvent) evt).isDelayedEvent()) {
-              nodesWereRemoved(connectorPath, childIndices,
-                  removedChildrenConnectors.toArray());
-            }
+            nodesWereRemoved(connectorPath, childIndices,
+                removedChildrenConnectors.toArray());
             changedSize = newCollectionSize;
           } else {
             changedSize = newCollectionSize;
@@ -326,17 +282,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             nodeStructureChanged(connectorPath
                 .pathByAddingChild(((ICollectionConnector) connector)
                     .getChildConnector(i)));
-          }
-        }
-        if (connector.getParentConnector() == rootConnector) {
-          // This is the only chance we have to handle listener registration on
-          // the tree 1st level.
-          for (int i = 0; i < ((ICollectionConnector) connector)
-              .getChildConnectorCount(); i++) {
-            CollectionConnectorHelper
-                .setAllowLazyChildrenLoadingForConnector(
-                    (ICollectionConnectorListProvider) ((ICollectionConnector) connector)
-                        .getChildConnector(i), false, false);
           }
         }
       } else {

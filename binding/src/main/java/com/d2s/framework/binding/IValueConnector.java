@@ -84,6 +84,11 @@ public interface IValueConnector extends IConnector,
   void boundAsView();
 
   /**
+   * Cleans all bindings with view connectors.
+   */
+  void cleanBindings();
+
+  /**
    * Clones this connector.
    * 
    * @return the connector's clone.
@@ -213,9 +218,4 @@ public interface IValueConnector extends IConnector,
    *            the parent connector.
    */
   void setParentConnector(ICompositeValueConnector parent);
-
-  /**
-   * Cleans all bindings with view connectors.
-   */
-  void cleanBindings();
 }

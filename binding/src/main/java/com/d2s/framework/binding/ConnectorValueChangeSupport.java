@@ -116,6 +116,15 @@ public class ConnectorValueChangeSupport {
   }
 
   /**
+   * Gets the listeners.
+   * 
+   * @return the listeners.
+   */
+  public Set<IConnectorValueChangeListener> getListeners() {
+    return new HashSet<IConnectorValueChangeListener>(listeners);
+  }
+
+  /**
    * Gets wether the listener collection is empty.
    * 
    * @return true if the listener collection is empty.
@@ -138,6 +147,7 @@ public class ConnectorValueChangeSupport {
     }
   }
 
+  
   /**
    * Registers a listener to be re-included to the notification process without
    * being re-added to the actual listeners collection.
@@ -150,15 +160,5 @@ public class ConnectorValueChangeSupport {
       return;
     }
     inhibitedListeners.remove(listener);
-  }
-
-  
-  /**
-   * Gets the listeners.
-   * 
-   * @return the listeners.
-   */
-  public Set<IConnectorValueChangeListener> getListeners() {
-    return new HashSet<IConnectorValueChangeListener>(listeners);
   }
 }

@@ -23,8 +23,6 @@ import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorSelectionListener;
 import com.d2s.framework.binding.IConnectorSelector;
@@ -189,13 +187,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (selectedModuleViewConnector != null) {
       initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
           selectedModuleViewConnector);
-      if (selectedModuleViewConnector instanceof ICollectionConnectorProvider) {
-        ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) selectedModuleViewConnector)
-            .getCollectionConnector();
-        if (collectionConnector != null) {
-          collectionConnector.setAllowLazyChildrenLoading(false);
-        }
-      }
     }
     initialActionContext.put(ActionContextConstants.MODULE_DESCRIPTOR,
         getModuleDescriptor(getSelectedModuleId()));

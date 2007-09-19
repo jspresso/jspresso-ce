@@ -126,6 +126,16 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  public void cleanBindings() {
+    for (IConnectorValueChangeListener listener : valueChangeSupport
+        .getListeners()) {
+      removeConnectorValueChangeListener(listener);
+    }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public AbstractValueConnector clone() {
     return clone(getId());
@@ -567,16 +577,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
     public void propertyChange(@SuppressWarnings("unused")
     PropertyChangeEvent evt) {
       viewConnector.updateState();
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void cleanBindings() {
-    for (IConnectorValueChangeListener listener : valueChangeSupport
-        .getListeners()) {
-      removeConnectorValueChangeListener(listener);
     }
   }
 }
