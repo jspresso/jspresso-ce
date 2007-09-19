@@ -6,13 +6,9 @@ package com.d2s.framework.binding.wings;
 import java.util.Collection;
 import java.util.List;
 
-import javax.swing.event.TreeExpansionEvent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
-import javax.swing.event.TreeWillExpandListener;
 import javax.swing.tree.TreePath;
-
-import org.wings.STree;
 
 import com.d2s.framework.binding.CollectionConnectorValueChangeEvent;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
@@ -33,7 +29,7 @@ import com.d2s.framework.binding.IValueConnector;
  * @author Vincent Vandenschrick
  */
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
-    TreeWillExpandListener, TreeModelListener {
+    TreeModelListener {
 
   private TreeConnectorsListener   connectorsListener;
   private ICompositeValueConnector rootConnector;
@@ -43,18 +39,12 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * 
    * @param rootConnector
    *            the connector being the root node of the tree.
-   * @param tree
-   *            the tree to which this model wiil be attached to. It will be
-   *            used for the model to bea notified of expansions so that it can
-   *            lazy-load the tree hierarchy.
    */
-  public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector,
-      STree tree) {
+  public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector) {
     this.rootConnector = rootConnector;
     connectorsListener = new TreeConnectorsListener();
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
-    tree.addTreeWillExpandListener(this);
   }
 
   /**
@@ -164,23 +154,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
     ICollectionConnectorListProvider changedConnector = (ICollectionConnectorListProvider) event
         .getTreePath().getLastPathComponent();
     checkListenerRegistrationForConnector(changedConnector);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void treeWillCollapse(@SuppressWarnings("unused")
-  TreeExpansionEvent event) {
-    // NO-OP.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void treeWillExpand(TreeExpansionEvent event) {
-    ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
-        .getPath().getLastPathComponent();
-    checkListenerRegistrationForConnector(expandedConnector);
   }
 
   /**

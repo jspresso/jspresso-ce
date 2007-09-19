@@ -2428,7 +2428,7 @@ public class DefaultWingsViewFactory implements
 
     STree viewComponent = createSTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
-        connector, viewComponent);
+        connector);
     viewComponent.getSelectionModel().setSelectionMode(
         TreeSelectionModel.SINGLE_TREE_SELECTION);
     viewComponent.setModel(treeModel);

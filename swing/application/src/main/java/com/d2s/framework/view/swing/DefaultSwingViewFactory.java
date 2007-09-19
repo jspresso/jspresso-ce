@@ -2492,7 +2492,7 @@ public class DefaultSwingViewFactory implements
 
     JTree viewComponent = createJTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
-        connector, viewComponent);
+        connector);
     viewComponent.getSelectionModel().setSelectionMode(
         TreeSelectionModel.SINGLE_TREE_SELECTION);
     viewComponent.setModel(treeModel);

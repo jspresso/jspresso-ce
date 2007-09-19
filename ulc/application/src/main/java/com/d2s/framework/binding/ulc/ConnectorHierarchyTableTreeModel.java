@@ -44,9 +44,7 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
   public ConnectorHierarchyTableTreeModel(
       ICompositeValueConnector rootConnector, @SuppressWarnings("unused")
       ULCTableTree tree) {
-    treeModelDelegate = new ConnectorHierarchyTreeModel(rootConnector, null);
-    // FIXME on extende tabletree
-    // tree.addTreeExpansionListener(treeModelDelegate);
+    treeModelDelegate = new ConnectorHierarchyTreeModel(rootConnector);
     treeModelDelegate.addTreeModelListener(new TreeModelListenerAdapter());
   }
 

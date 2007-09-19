@@ -2496,7 +2496,7 @@ public class DefaultUlcViewFactory implements
 
     ULCExtendedTree viewComponent = createULCTree();
     ConnectorHierarchyTreeModel treeModel = new ConnectorHierarchyTreeModel(
-        connector, viewComponent);
+        connector);
 
     // TODO tabletree mgt
     // ULCTableTree viewComponent = createULCTableTree();

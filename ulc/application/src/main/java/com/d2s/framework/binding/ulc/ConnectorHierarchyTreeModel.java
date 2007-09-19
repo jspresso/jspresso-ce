@@ -14,10 +14,7 @@ import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
-import com.ulcjava.base.application.ULCTree;
-import com.ulcjava.base.application.event.TreeExpansionEvent;
 import com.ulcjava.base.application.event.TreeModelEvent;
-import com.ulcjava.base.application.event.serializable.ITreeExpansionListener;
 import com.ulcjava.base.application.event.serializable.ITreeModelListener;
 import com.ulcjava.base.application.tree.AbstractTreeModel;
 import com.ulcjava.base.application.tree.TreePath;
@@ -32,11 +29,10 @@ import com.ulcjava.base.application.tree.TreePath;
  * @author Vincent Vandenschrick
  */
 public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
-    ITreeModelListener, ITreeExpansionListener {
+    ITreeModelListener {
 
   private static final long        serialVersionUID = -1578891934062045656L;
   private TreeConnectorsListener   connectorsListener;
-  private ULCTree                  myTree;
   private ICompositeValueConnector rootConnector;
 
   /**
@@ -44,23 +40,12 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
    * 
    * @param rootConnector
    *            the connector being the root node of the tree.
-   * @param tree
-   *            the tree to which this model wiil be attached to. It will be
-   *            used for the model to bea notified of expansions so that it can
-   *            lazy-load the tree hierarchy.
    */
-  public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector,
-      ULCTree tree) {
+  public ConnectorHierarchyTreeModel(ICompositeValueConnector rootConnector) {
     this.rootConnector = rootConnector;
     connectorsListener = new TreeConnectorsListener();
     checkListenerRegistrationForConnector(rootConnector);
     addTreeModelListener(this);
-    if (tree != null) {
-      // tree mignt be null if this tree model is used as delegate for a
-      // treetable.
-      tree.addTreeExpansionListener(this);
-    }
-    myTree = tree;
   }
 
   /**
@@ -136,23 +121,6 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       return false;
     }
     return getChildCount(node) == 0;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void treeCollapsed(@SuppressWarnings("unused")
-  TreeExpansionEvent event) {
-    // NO-OP.
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void treeExpanded(TreeExpansionEvent event) {
-    ICollectionConnectorListProvider expandedConnector = (ICollectionConnectorListProvider) event
-        .getPath().getLastPathComponent();
-    checkListenerRegistrationForConnector(expandedConnector);
   }
 
   /**
