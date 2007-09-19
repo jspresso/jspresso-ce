@@ -39,6 +39,7 @@ import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
 import com.d2s.framework.util.bean.AccessorInfo;
+import com.d2s.framework.util.bean.SinglePropertyChangeSupport;
 import com.d2s.framework.util.collection.CollectionHelper;
 
 /**
@@ -463,7 +464,7 @@ public abstract class AbstractComponentInvocationHandler implements
       return;
     }
     if (changeSupport == null) {
-      changeSupport = new PropertyChangeSupport(proxy);
+      changeSupport = new SinglePropertyChangeSupport(proxy);
     }
     changeSupport.addPropertyChangeListener(listener);
   }
@@ -474,7 +475,7 @@ public abstract class AbstractComponentInvocationHandler implements
       return;
     }
     if (changeSupport == null) {
-      changeSupport = new PropertyChangeSupport(proxy);
+      changeSupport = new SinglePropertyChangeSupport(proxy);
     }
     changeSupport.addPropertyChangeListener(propertyName, listener);
   }

@@ -27,7 +27,7 @@ public abstract class AbstractPropertyChangeCapable implements
    * Constructs a new <code>AbstractPropertyChangeCapable</code> instance.
    */
   public AbstractPropertyChangeCapable() {
-    this.propertyChangeSupport = new PropertyChangeSupport(this);
+    this.propertyChangeSupport = new SinglePropertyChangeSupport(this);
   }
 
   /**
@@ -53,7 +53,7 @@ public abstract class AbstractPropertyChangeCapable implements
     try {
       AbstractPropertyChangeCapable clonedBean = (AbstractPropertyChangeCapable) super
           .clone();
-      clonedBean.propertyChangeSupport = new PropertyChangeSupport(clonedBean);
+      clonedBean.propertyChangeSupport = new SinglePropertyChangeSupport(clonedBean);
       return clonedBean;
     } catch (CloneNotSupportedException ex) {
       throw new NestedRuntimeException(ex);

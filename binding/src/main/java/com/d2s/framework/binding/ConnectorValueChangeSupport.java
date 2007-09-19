@@ -151,4 +151,14 @@ public class ConnectorValueChangeSupport {
     }
     inhibitedListeners.remove(listener);
   }
+
+  
+  /**
+   * Gets the listeners.
+   * 
+   * @return the listeners.
+   */
+  public Set<IConnectorValueChangeListener> getListeners() {
+    return new HashSet<IConnectorValueChangeListener>(listeners);
+  }
 }

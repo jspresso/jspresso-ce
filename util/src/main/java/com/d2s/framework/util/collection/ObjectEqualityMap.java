@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
+import com.d2s.framework.util.bean.SinglePropertyChangeSupport;
 
 /**
  * a map which equality is based on object identity.
@@ -39,7 +40,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    */
   public ObjectEqualityMap() {
     super();
-    propertyChangeSupport = new PropertyChangeSupport(this);
+    propertyChangeSupport = new SinglePropertyChangeSupport(this);
   }
 
   /**
@@ -50,7 +51,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    */
   public ObjectEqualityMap(int initialCapacity) {
     super(initialCapacity);
-    propertyChangeSupport = new PropertyChangeSupport(this);
+    propertyChangeSupport = new SinglePropertyChangeSupport(this);
   }
 
   /**
@@ -63,7 +64,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    */
   public ObjectEqualityMap(int initialCapacity, float loadFactor) {
     super(initialCapacity, loadFactor);
-    propertyChangeSupport = new PropertyChangeSupport(this);
+    propertyChangeSupport = new SinglePropertyChangeSupport(this);
   }
 
   /**
@@ -74,7 +75,7 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    */
   public ObjectEqualityMap(Map<? extends K, ? extends V> m) {
     super(m);
-    propertyChangeSupport = new PropertyChangeSupport(this);
+    propertyChangeSupport = new SinglePropertyChangeSupport(this);
   }
 
   /**
@@ -161,6 +162,6 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
   private void readObject(ObjectInputStream in) throws IOException,
       ClassNotFoundException {
     in.defaultReadObject();
-    propertyChangeSupport = new PropertyChangeSupport(this);
+    propertyChangeSupport = new SinglePropertyChangeSupport(this);
   }
 }

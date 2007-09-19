@@ -213,4 +213,9 @@ public interface IValueConnector extends IConnector,
    *            the parent connector.
    */
   void setParentConnector(ICompositeValueConnector parent);
+
+  /**
+   * Cleans all bindings with view connectors.
+   */
+  void cleanBindings();
 }

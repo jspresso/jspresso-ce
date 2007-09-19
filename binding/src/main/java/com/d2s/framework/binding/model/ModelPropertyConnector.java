@@ -293,14 +293,17 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
       getModelProvider().addModelChangeListener(this);
       newModel = getModelProvider().getModel();
     }
-    if (oldModel != null && oldModel instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) oldModel).removePropertyChangeListener(getId(),
-          this);
-    }
-    if (newModel != null && newModel instanceof IPropertyChangeCapable) {
-      ((IPropertyChangeCapable) newModel).addPropertyChangeListener(getId(),
-          this);
-    }
+    // The following lines are in fact handled by the modelChange call at the
+    // end of the method. If we called it twice, it would generate GC problems
+    // since the listener would also be added twice.
+    // if (oldModel != null && oldModel instanceof IPropertyChangeCapable) {
+    // ((IPropertyChangeCapable) oldModel).removePropertyChangeListener(getId(),
+    // this);
+    // }
+    // if (newModel != null && newModel instanceof IPropertyChangeCapable) {
+    // ((IPropertyChangeCapable) newModel).addPropertyChangeListener(getId(),
+    // this);
+    // }
 
     if (getReadabilityGates() != null) {
       for (IGate gate : getReadabilityGates()) {

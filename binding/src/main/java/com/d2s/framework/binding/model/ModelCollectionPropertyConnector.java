@@ -309,9 +309,11 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
    * @param connector
    *            the connector to be removed.
    */
-  protected void removeChildConnector(IValueConnector connector) {
+  private void removeChildConnector(IValueConnector connector) {
     getConnectorMap().removeConnector(connector.getId());
     connector.setParentConnector(null);
+    connector.cleanBindings();
+    connector.setConnectorValue(null);
   }
 
   private String computeConnectorId(int i) {

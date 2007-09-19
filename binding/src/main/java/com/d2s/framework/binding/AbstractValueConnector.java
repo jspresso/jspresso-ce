@@ -569,4 +569,14 @@ public abstract class AbstractValueConnector extends AbstractConnector
       viewConnector.updateState();
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void cleanBindings() {
+    for (IConnectorValueChangeListener listener : valueChangeSupport
+        .getListeners()) {
+      removeConnectorValueChangeListener(listener);
+    }
+  }
 }

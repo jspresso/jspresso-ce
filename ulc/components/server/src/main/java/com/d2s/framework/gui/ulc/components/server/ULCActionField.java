@@ -12,6 +12,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.gui.ulc.components.shared.ActionFieldConstants;
+import com.d2s.framework.util.bean.SinglePropertyChangeSupport;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.IEditorComponent;
 import com.ulcjava.base.application.ULCComponent;
@@ -62,7 +63,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    *            is the text field visible to the user.
    */
   public ULCActionField(boolean showTextField) {
-    propertyChangeSupport = new PropertyChangeSupport(this);
+    propertyChangeSupport = new SinglePropertyChangeSupport(this);
     editable = true;
     this.showTextField = showTextField;
   }
