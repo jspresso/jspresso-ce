@@ -72,7 +72,7 @@ public final class DocumentHelper {
       ClientContext.showDocument(url, target);
     } else if (inServletContainerEnvironment()) {
       HttpServletRequest request = ServletContainerContext.getRequest();
-      String url = determineUrl(request, id);
+      String url = ResourceProviderServlet.computeUrl(request, id);
       ClientContext.showDocument(url, target);
     } else {
       throw new IllegalStateException(
@@ -96,13 +96,6 @@ public final class DocumentHelper {
     outputStream.close();
 
     return file;
-  }
-
-  private static String determineUrl(HttpServletRequest request, String id) {
-    String baseUrl = request.getScheme() + "://" + request.getServerName()
-        + ":" + request.getServerPort() + request.getContextPath()
-        + ResourceProviderServlet.DOWNLOAD_SERVLET_URL_PATTERN;
-    return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
   }
 
   private static boolean inDevelopmentEnvironment() {

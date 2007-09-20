@@ -32,8 +32,10 @@ public class DisplayUrlAction extends AbstractWingsAction {
   @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    String urlSpec = baseUrl
-        + (String) context.get(ActionContextConstants.ACTION_PARAM);
+    String urlSpec = (String) context.get(ActionContextConstants.ACTION_PARAM);
+    if (baseUrl != null) {
+      urlSpec = baseUrl + urlSpec;
+    }
     SAnchor downloadLink = new SAnchor(urlSpec, "downloadWindow");
     downloadLink.add(new SLabel(getTranslationProvider(context).getTranslation(
         "click.me", getLocale(context))));
