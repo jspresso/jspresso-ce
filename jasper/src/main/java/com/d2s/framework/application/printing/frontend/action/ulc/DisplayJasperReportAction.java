@@ -17,7 +17,8 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
 import com.d2s.framework.util.resources.IResource;
 import com.d2s.framework.util.resources.MemoryResource;
-import com.d2s.framework.util.ulc.resource.ResourceManager;
+import com.d2s.framework.util.resources.server.ResourceManager;
+import com.d2s.framework.util.ulc.resource.DocumentHelper;
 
 /**
  * A simple action to display a Jasper report.
@@ -46,7 +47,7 @@ public class DisplayJasperReportAction extends AbstractUlcAction {
       IResource resource = new MemoryResource("application/pdf", baos
           .toByteArray());
       String resourceId = ResourceManager.getInstance().register(resource);
-      ResourceManager.getInstance().showDocument(resourceId);
+      DocumentHelper.showDocument(resourceId);
     } catch (IOException ex) {
       throw new ActionException(ex);
     } catch (JRException ex) {

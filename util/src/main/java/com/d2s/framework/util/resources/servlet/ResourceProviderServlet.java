@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.util.ulc.resource;
+package com.d2s.framework.util.resources.server;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -21,11 +21,16 @@ import com.d2s.framework.util.resources.IResource;
 public class ResourceProviderServlet extends HttpServlet {
 
   /**
+   * the url pattern to activate a resource download.
+   */
+  public static final String DOWNLOAD_SERVLET_URL_PATTERN = "/download";
+
+  /**
    * id.
    */
-  public static final String ID_PARAMETER     = "id";
+  public static final String ID_PARAMETER                 = "id";
 
-  private static final long  serialVersionUID = 5253634459280974738L;
+  private static final long  serialVersionUID             = 5253634459280974738L;
 
   /**
    * {@inheritDoc}
