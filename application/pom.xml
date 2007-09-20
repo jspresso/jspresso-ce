@@ -19,5 +19,9 @@
       <groupId>org.springframework</groupId>
       <artifactId>spring-ldap</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.sun</groupId>
+      <artifactId>ldapbp</artifactId>
+    </dependency>
   </dependencies>
 </project>

@@ -718,6 +718,9 @@ public class DefaultUlcViewFactory implements
   protected ULCExtendedTable createULCTable() {
     ULCExtendedTable table = new com.d2s.framework.gui.ulc.components.server.ULCExtendedTable();
     table.setDragEnabled(true);
+    ClientContext.setEventDeliveryMode(table.getSelectionModel(),
+        IUlcEventConstants.LIST_SELECTION_EVENT,
+        IUlcEventConstants.ASYNCHRONOUS_MODE);
     return table;
   }
 
@@ -729,6 +732,11 @@ public class DefaultUlcViewFactory implements
   protected ULCTableTree createULCTableTree() {
     ULCTableTree tableTree = new ULCTableTree();
     tableTree.setDragEnabled(true);
+    ClientContext.setEventDeliveryMode(tableTree.getSelectionModel(),
+        IUlcEventConstants.LIST_SELECTION_EVENT,
+        IUlcEventConstants.ASYNCHRONOUS_MODE);
+    ClientContext.setModelUpdateMode(tableTree.getModel(),
+        IUlcEventConstants.ASYNCHRONOUS_MODE);
     return tableTree;
   }
 
@@ -743,6 +751,9 @@ public class DefaultUlcViewFactory implements
     textArea.setWrapStyleWord(true);
     ClientContext.setEventDeliveryMode(textArea,
         IUlcEventConstants.FOCUS_EVENT, IUlcEventConstants.ASYNCHRONOUS_MODE);
+    ClientContext.setEventDeliveryMode(textArea,
+        IUlcEventConstants.VALUE_CHANGED_EVENT,
+        IUlcEventConstants.ASYNCHRONOUS_MODE);
     return textArea;
   }
 
@@ -2283,6 +2294,8 @@ public class DefaultUlcViewFactory implements
         "classpath:images/1downarrow-48x48.png", iconSize));
     sorterDecorator.setColumnComparator(String.class,
         String.CASE_INSENSITIVE_ORDER);
+    ClientContext.setModelUpdateMode(sorterDecorator,
+        IUlcEventConstants.ASYNCHRONOUS_MODE);
     viewComponent.setModel(sorterDecorator);
     listSelectionModelBinder.bindSelectionModel(connector, viewComponent
         .getSelectionModel(), sorterDecorator);
