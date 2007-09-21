@@ -18,6 +18,24 @@ import com.d2s.framework.util.resources.IResource;
  * This servlet class returns the web resource which matches the specified id
  * request parameter requesting it to the resource manager.
  */
+/**
+ * TODO Comment needed.
+ * <p>
+ * Copyright 2005 Design2See. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+/**
+ * TODO Comment needed.
+ * <p>
+ * Copyright 2005 Design2See. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
 public class ResourceProviderServlet extends HttpServlet {
 
   /**
@@ -78,4 +96,19 @@ public class ResourceProviderServlet extends HttpServlet {
       throws IOException {
     doGet(request, response);
   }
+
+  /**
+   * Computes the url where the resource is available for download. .
+   * 
+   * @param request the incomming HTTP request.
+   * @param id the resource id.
+   * @return the rsource url.
+   */
+  public static String computeUrl(HttpServletRequest request, String id) {
+    String baseUrl = request.getScheme() + "://" + request.getServerName()
+        + ":" + request.getServerPort() + request.getContextPath()
+        + DOWNLOAD_SERVLET_URL_PATTERN;
+    return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
+  }
+
 }
