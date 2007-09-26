@@ -166,17 +166,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   }
 
   private void checkListenerRegistrationForConnector(IValueConnector connector) {
-    if (connector instanceof ICollectionConnectorProvider) {
-      checkListenerRegistrationForConnector(connector, 3);
-    } else {
-      checkListenerRegistrationForConnector(connector, 2);
-    }
-  }
-
-  private void checkListenerRegistrationForConnector(IValueConnector connector,
-      int depth) {
-    if (connector != null && depth >= 0) {
-      depth--;
+    if (connector != null) {
       // we can add the listener many times since the backing store listener
       // collection is a Set.
       connector.addConnectorValueChangeListener(connectorsListener);
@@ -185,7 +175,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             .getChildConnectorKeys()) {
           checkListenerRegistrationForConnector(
               ((ICompositeValueConnector) connector)
-                  .getChildConnector(childConnectorId), depth);
+                  .getChildConnector(childConnectorId));
         }
       }
     }
