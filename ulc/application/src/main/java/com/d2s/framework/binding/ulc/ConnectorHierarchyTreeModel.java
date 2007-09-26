@@ -168,17 +168,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
   }
 
   private void checkListenerRegistrationForConnector(IValueConnector connector) {
-    if (connector instanceof ICollectionConnectorProvider) {
-      checkListenerRegistrationForConnector(connector, 3);
-    } else {
-      checkListenerRegistrationForConnector(connector, 2);
-    }
-  }
-
-  private void checkListenerRegistrationForConnector(IValueConnector connector,
-      int depth) {
-    if (connector != null && depth >= 0) {
-      depth--;
+    if (connector != null) {
       // we can add the listener many times since the backing store listener
       // collection is a Set.
       connector.addConnectorValueChangeListener(connectorsListener);
@@ -187,7 +177,7 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             .getChildConnectorKeys()) {
           checkListenerRegistrationForConnector(
               ((ICompositeValueConnector) connector)
-                  .getChildConnector(childConnectorId), depth);
+                  .getChildConnector(childConnectorId));
         }
       }
     }
@@ -225,12 +215,14 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
           if (newCollection != null) {
             newCollectionSize = newCollection.size();
           }
+          int changedSize = 0;
           if (newCollectionSize > oldCollectionSize) {
             int[] childIndices = new int[newCollectionSize - oldCollectionSize];
             for (int i = oldCollectionSize; i < newCollectionSize; i++) {
               childIndices[i - oldCollectionSize] = i;
             }
             nodesWereInserted(connectorPath, childIndices);
+            changedSize = oldCollectionSize;
           } else if (newCollectionSize < oldCollectionSize) {
             int[] childIndices = new int[oldCollectionSize - newCollectionSize];
             for (int i = newCollectionSize; i < oldCollectionSize; i++) {
@@ -240,6 +232,14 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                 .getRemovedChildrenConnectors();
             nodesWereRemoved(connectorPath, childIndices,
                 removedChildrenConnectors.toArray());
+            changedSize = newCollectionSize;
+          } else {
+            changedSize = newCollectionSize;
+          }
+          for (int i = 0; i < changedSize; i++) {
+            nodeStructureChanged(connectorPath
+                .pathByAddingChild(((ICollectionConnector) connector)
+                    .getChildConnector(i)));
           }
         }
       } else {
