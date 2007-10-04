@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true">
+
+  <!--
+    Sample application backend context.
+  -->
+
+  <!--
+    Domain description.
+  -->
+  <bean id="com.d2s.framework.sample.backend.domain.Traceable"
+    class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Traceable" />
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor">
+          <property name="name" value="createTimestamp" />
+          <property name="type" ref="DATE_TIME" />
+        </bean>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor">
+          <property name="name" value="lastUpdateTimestamp" />
+          <property name="type" ref="DATE_TIME" />
+        </bean>
+      </list>
+    </property>
+    <property name="unclonedProperties">
+      <list>
+        <value>createTimestamp</value>
+        <value>lastUpdateTimestamp</value>
+      </list>
+    </property>
+  </bean>
+  <bean id="com.d2s.framework.sample.backend.domain.Nameable"
+    class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Nameable" />
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="name" />
+          <property name="maxLength" value="15" />
+          <property name="mandatory" value="true" />
+        </bean>
+      </list>
+    </property>
+    <property name="serviceDelegates">
+      <map>
+        <entry key="com.d2s.framework.sample.backend.domain.NameableService">
+          <bean class="com.d2s.framework.sample.backend.domain.NameableServiceImpl" />
+        </entry>
+      </map>
+    </property>
+  </bean>
+  <bean id="com.d2s.framework.sample.backend.domain.Describeable"
+    class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Describeable" />
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicTextPropertyDescriptor">
+          <property name="name" value="description" />
+          <property name="maxLength" value="256" />
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="com.d2s.framework.sample.backend.domain.City"
+    class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.City" />
+    <property name="ancestorDescriptors">
+      <list>
+        <ref local="com.d2s.framework.sample.backend.domain.Nameable" />
+        <ref bean="com.d2s.framework.model.entity.IEntity" />
+        <ref local="com.d2s.framework.sample.backend.domain.Traceable" />
+      </list>
+    </property>
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="zip" />
+          <property name="maxLength" value="5" />
+        </bean>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
+          <property name="name" value="country" />
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="Person-marriedTo-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
+    <property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.Person" />
+    <property name="name" value="marriedTo" />
+    <property name="reverseRelationEnd" ref="Person-marriedTo-descriptor" />
+  </bean>
+
+  <bean id="Gender-enumeration-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor">
+    <property name="enumerationName" value="GENDER" />
+    <property name="maxLength" value="1" />
+    <property name="mandatory" value="true" />
+    <property name="valuesAndIconImageUrls">
+      <map>
+        <entry key="M" value="classpath:images/male-48x48.png" />
+        <entry key="F" value="classpath:images/female-48x48.png" />
+      </map>
+    </property>
+  </bean>
+
+  <bean id="com.d2s.framework.sample.backend.domain.Person"
+    class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Person" />
+    <property name="ancestorDescriptors">
+      <list>
+        <ref local="com.d2s.framework.sample.backend.domain.Nameable" />
+        <ref bean="com.d2s.framework.model.entity.IEntity" />
+        <ref local="com.d2s.framework.sample.backend.domain.Traceable" />
+      </list>
+    </property>
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor">
+          <property name="name" value="birthDate" />
+        </bean>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
+          <property name="name" value="age" />
+          <property name="minValue" value="0" />
+          <property name="maxValue" value="150" />
+          <property name="delegateClassName" value="com.d2s.framework.sample.backend.domain.PersonExtension" />
+        </bean>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
+          <property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.City" />
+          <property name="name" value="birthCity" />
+        </bean>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
+          <property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.City" />
+          <property name="name" value="addressCity" />
+        </bean>
+        <ref local="Person-marriedTo-descriptor" />
+        <bean parent="Gender-enumeration-descriptor">
+          <property name="name" value="gender" />
+        </bean>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicBooleanPropertyDescriptor">
+          <property name="name" value="vegetarian" />
+        </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="Employee-manager-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
+    <property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.Employee" />
+    <property name="name" value="manager" />
+  </bean>
+
+  <bean id="Employees-set-descriptor" class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor">
+    <property name="name" value="employees" />
+    <property name="collectionInterface" value="java.util.Set" />
+    <property name="elementDescriptor" ref="com.d2s.framework.sample.backend.domain.Employee" />
+  </bean>
+
+  <bean id="Employee-managedEmployees-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
+    <property name="name" value="managedEmployees" />
+    <property name="reverseRelationEnd" ref="Employee-manager-descriptor" />
+    <property name="referencedDescriptor" ref="Employees-set-descriptor" />
+  </bean>
+
+  <bean id="Employee-department-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
+    <property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
+    <property name="name" value="department" />
+  </bean>
+
+  <bean id="Department-departmentEmployees-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
+    <property name="name" value="departmentEmployees" />
+    <property name="reverseRelationEnd" ref="Employee-department-descriptor" />
+    <property name="referencedDescriptor" ref="Employees-set-descriptor" />
+  </bean>
+
+  <bean id="com.d2s.framework.sample.backend.domain.Employee"
+    class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Employee" />
+    <property name="iconImageURL" value="classpath:images/icon3-48x48.png" />
+    <property name="ancestorDescriptors">
+      <list>
+        <ref local="com.d2s.framework.sample.backend.domain.Person" />
+      </list>
+    </property>
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor">
+          <property name="name" value="hireDate" />
+        </bean>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
+          <property name="name" value="annualSalary" />
+          <property name="minValue" value="0" />
+          <property name="maxValue" value="1000000" />
+        </bean>
+        <ref local="Employee-manager-descriptor" />
+        <ref local="Employee-managedEmployees-descriptor" />
+        <ref local="Employee-department-descriptor" />
+        <ref local="Employee-projects-descriptor" />
+      </list>
+    </property>
+    <property name="unclonedProperties">
+      <list>
+        <value>employeeProjects</value>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="Department-projects-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
+    <property name="name" value="departmentProjects" />
+    <property name="referencedDescriptor" ref="Projects-set-descriptor" />
+  </bean>
+
+  <bean id="Project-department-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
+    <property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.Department" />
+    <property name="name" value="department" />
+    <property name="reverseRelationEnd" ref="Department-projects-descriptor" />
+  </bean>
+
+  <bean id="com.d2s.framework.sample.backend.domain.Department"
+    class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Department" />
+    <property name="iconImageURL" value="classpath:images/icon1-48x48.png" />
+    <property name="ancestorDescriptors">
+      <list>
+        <ref local="com.d2s.framework.sample.backend.domain.Nameable" />
+        <ref local="com.d2s.framework.sample.backend.domain.Describeable" />
+        <ref bean="com.d2s.framework.model.entity.IEntity" />
+        <ref local="com.d2s.framework.sample.backend.domain.Traceable" />
+      </list>
+    </property>
+    <property name="propertyDescriptors">
+      <list>
+        <bean class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor">
+          <property name="referencedDescriptor" ref="com.d2s.framework.sample.backend.domain.Employee" />
+          <property name="name" value="manager" />
+        </bean>
+        <ref local="Department-departmentEmployees-descriptor" />
+        <ref local="Department-projects-descriptor" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="Project-projectMembers-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
+    <property name="name" value="projectMembers" />
+    <property name="referencedDescriptor" ref="Employees-set-descriptor" />
+  </bean>
+
+  <bean id="Projects-set-descriptor" class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor">
+    <property name="name" value="projects" />
+    <property name="collectionInterface" value="java.util.Set" />
+    <property name="elementDescriptor" ref="com.d2s.framework.sample.backend.domain.Project" />
+  </bean>
+
+  <bean id="Employee-projects-descriptor"
+    class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor">
+    <property name="name" value="employeeProjects" />
+    <property name="reverseRelationEnd" ref="Project-projectMembers-descriptor" />
+    <property name="referencedDescriptor" ref="Projects-set-descriptor" />
+  </bean>
+
+  <bean id="com.d2s.framework.sample.backend.domain.Project"
+    class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.sample.backend.domain.Project" />
+    <property name="iconImageURL" value="classpath:images/icon4-48x48.png" />
+    <property name="ancestorDescriptors">
+      <list>
+        <ref local="com.d2s.framework.sample.backend.domain.Nameable" />
+        <ref bean="com.d2s.framework.model.entity.IEntity" />
+        <ref local="com.d2s.framework.sample.backend.domain.Traceable" />
+      </list>
+    </property>
+    <property name="propertyDescriptors">
+      <list>
+        <ref local="Project-department-descriptor" />
+        <ref local="Project-projectMembers-descriptor" />
+      </list>
+    </property>
+  </bean>
+
+  <bean id="domainImageUrlProvider" class="com.d2s.framework.model.descriptor.ComponentIconImageURLProvider">
+    <property name="componentDescriptors">
+      <list>
+        <ref local="com.d2s.framework.sample.backend.domain.Department" />
+        <ref local="com.d2s.framework.sample.backend.domain.City" />
+        <ref local="com.d2s.framework.sample.backend.domain.Project" />
+        <ref local="com.d2s.framework.sample.backend.domain.Employee" />
+        <ref local="com.d2s.framework.sample.backend.domain.Person" />
+      </list>
+    </property>
+  </bean>
+</beans>

@@ -1,0 +1,17 @@
+<!DOCTYPE aspectwerkz PUBLIC
+    "-//AspectWerkz//DTD//EN"
+    "http://aspectwerkz.codehaus.org/dtd/aspectwerkz2.dtd">
+<aspectwerkz>
+  <system id="design2see-framework">
+    <!--<include package="com.d2s.framework"/>-->
+    <exclude package="org" />
+    <exclude package="junit" />
+    <exclude package="com.d2s.framework.aop.logging" />
+    <aspect class="com.d2s.framework.aop.logging.TracingAspect">
+      <pointcut name="methodsToTrace" expression="execution(* com.d2s.framework.model.entity.IEntity+.*(..))" />
+    </aspect>
+    <aspect class="com.d2s.framework.aop.logging.EntityTracingAspect" />
+  </system>
+</aspectwerkz>
+
+

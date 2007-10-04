@@ -1,0 +1,16 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+  "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+  "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<!-- name="D2S" -->
+		<property name="show_sql">true</property>
+		<mapping resource="com/d2s/framework/test/model/domain/Entity.hbm.xml" />
+		<mapping resource="com/d2s/framework/test/model/domain/Nameable.hbm.xml" />
+		<mapping resource="com/d2s/framework/test/model/domain/City.hbm.xml" />
+		<mapping resource="com/d2s/framework/test/model/domain/Person.hbm.xml" />
+		<mapping resource="com/d2s/framework/test/model/domain/Department.hbm.xml" />
+		<mapping resource="com/d2s/framework/test/model/domain/Employee.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>
