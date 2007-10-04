@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.design2see</groupId>
+    <artifactId>d2s-framework</artifactId>
+    <version>2.0</version>
+  </parent>
+  <artifactId>d2s-app-template</artifactId>
+  <packaging>jar</packaging>
+  <name>Design2See Application Framework - App-template</name>
+  <dependencies>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-application</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-util</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-app-launch</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>bsf</groupId>
+      <artifactId>bsf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-swing-components</artifactId>
+      <scope>runtime</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>ulc</groupId>
+      <artifactId>ulc-base-server</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.wings</groupId>
+      <artifactId>wings</artifactId>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
+</project>

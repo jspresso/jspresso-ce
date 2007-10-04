@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true">
+
+  <!--
+    Hibernate root application context for the D2S framework.
+  -->
+
+  <bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+
+  <bean id="transactionTemplate" class="org.springframework.transaction.support.TransactionTemplate"
+    scope="prototype">
+    <property name="transactionManager">
+      <bean class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+        <property name="sessionFactory" ref="hibernateSessionFactory" />
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate" scope="prototype">
+    <property name="sessionFactory" ref="hibernateSessionFactory" />
+  </bean>
+
+  <!--
+    Hibernate root action beans.
+  -->
+  <bean abstract="true" id="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.AbstractHibernateAction" />
+
+  <bean id="queryEntitiesBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.QueryEntitiesAction" />
+
+  <bean id="removeCollectionFromMasterBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.RemoveCollectionFromMasterAction" />
+
+  <bean id="removeFromModuleObjectsAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.module.RemoveFromModuleObjectsAction" />
+
+  <bean id="saveBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveAction" />
+
+  <bean id="saveProjectedBackAction" parent="saveBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveProjectedAction" />
+
+  <bean id="reloadBackAction" parent="abstractHibernateBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadAction" />
+
+  <bean id="reloadProjectedBackAction" parent="reloadBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadProjectedAction" />
+
+  <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
+    class="com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController">
+    <property name="applicationSession">
+      <bean parent="abstractApplicationSession"
+        class="com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession"
+        scope="prototype" />
+    </property>
+    <property name="hibernateTemplate" ref="hibernateTemplate" />
+    <property name="transactionTemplate" ref="transactionTemplate" />
+  </bean>
+
+  <bean id="smartEntityCloneFactory"
+    class="com.d2s.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory">
+    <property name="accessorFactory" ref="beanAccessorFactory" />
+  </bean>
+</beans>
+
