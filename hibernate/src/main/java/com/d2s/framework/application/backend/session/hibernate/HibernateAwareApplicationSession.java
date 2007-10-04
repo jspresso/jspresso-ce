@@ -67,15 +67,32 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   }
 
   private static String getHibernateRoleName(Class<?> entityContract,
-      String role) {
+      String property) {
+    // have to find the highest entity class declaring the collection role.
     PropertyDescriptor roleDescriptor = PropertyHelper.getPropertyDescriptor(
-        entityContract, role);
-    Class<?> entityDeclaringClass = roleDescriptor.getReadMethod()
+        entityContract, property);
+    Class<?> propertyDeclaringClass = roleDescriptor.getReadMethod()
         .getDeclaringClass();
-    if (!IEntity.class.isAssignableFrom(entityDeclaringClass)) {
-      entityDeclaringClass = entityContract;
+    Class<?> roleClass;
+    if (IEntity.class.isAssignableFrom(propertyDeclaringClass)) {
+      roleClass = propertyDeclaringClass;
+    } else {
+      roleClass = getHighestEntityClassInRole(entityContract,
+          propertyDeclaringClass);
     }
-    return entityDeclaringClass.getName() + "." + role;
+    return roleClass.getName() + "." + property;
+  }
+
+  private static Class<?> getHighestEntityClassInRole(Class<?> entityContract,
+      Class<?> propertyDeclaringClass) {
+    for (Class<?> superInterface : entityContract.getInterfaces()) {
+      if (IEntity.class.isAssignableFrom(superInterface)
+          && propertyDeclaringClass.isAssignableFrom(superInterface)) {
+        return getHighestEntityClassInRole(superInterface,
+            propertyDeclaringClass);
+      }
+    }
+    return entityContract;
   }
 
   /**

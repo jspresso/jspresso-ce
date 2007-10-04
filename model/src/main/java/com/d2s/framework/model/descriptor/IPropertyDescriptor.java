@@ -85,11 +85,15 @@ public interface IPropertyDescriptor extends IModelDescriptor {
   Collection<IGate> getWritabilityGates();
 
   /**
-   * Wether the underlying property is computed.
+   * Wether the underlying property has a modifier. This is only usefull
+   * whenever the property is computed by delegation. In this case the delegate
+   * should be analyzed to check whether it has a modifier on the property.
    * 
-   * @return true if computed
+   * @return true if the property has a modifier.
+   * @throws ClassNotFoundException
+   *             whenever the delegate class does not exist.
    */
-  boolean isComputed();
+  boolean isModifiable() throws ClassNotFoundException;
 
   /**
    * Wether the underlying property is mandatory.

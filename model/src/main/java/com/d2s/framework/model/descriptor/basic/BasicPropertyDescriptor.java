@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.util.bean.PropertyHelper;
 import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
 import com.d2s.framework.util.bean.integrity.IntegrityException;
 import com.d2s.framework.util.descriptor.DefaultDescriptor;
@@ -200,9 +201,15 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * {@inheritDoc}
+   * 
+   * @throws ClassNotFoundException
    */
-  public boolean isComputed() {
-    return getDelegateClassName() != null;
+  public boolean isModifiable() throws ClassNotFoundException {
+    if (getDelegateClassName() == null) {
+      return true;
+    }
+    return PropertyHelper.getPropertyDescriptor(
+        Class.forName(getDelegateClassName()), getName()).getWriteMethod() != null;
   }
 
   /**

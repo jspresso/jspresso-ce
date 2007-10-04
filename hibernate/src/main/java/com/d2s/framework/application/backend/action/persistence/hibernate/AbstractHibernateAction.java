@@ -205,6 +205,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         try {
           hibernateSession.lock(entity, LockMode.NONE);
         } catch (Exception ex) {
+          ex.printStackTrace();
           hibernateSession.evict(hibernateSession.get(entity.getContract(),
               entity.getId()));
           hibernateSession.lock(entity, LockMode.NONE);

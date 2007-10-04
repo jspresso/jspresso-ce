@@ -97,7 +97,8 @@ public class BooleanPropertyModelGate extends AbstractModelGate implements
    */
   public void propertyChange(PropertyChangeEvent evt) {
     boolean oldOpen = isOpen();
-    this.open = ((Boolean) evt.getNewValue()).booleanValue();
+    this.open = evt.getNewValue() != null
+        && ((Boolean) evt.getNewValue()).booleanValue();
     if (!openOnTrue) {
       this.open = !this.open;
     }

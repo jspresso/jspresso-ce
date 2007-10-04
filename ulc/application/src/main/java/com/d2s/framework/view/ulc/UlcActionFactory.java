@@ -13,13 +13,18 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
+import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelGate;
+import com.d2s.framework.binding.model.IModelValueConnector;
 import com.d2s.framework.model.EmbeddedModelProvider;
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
 import com.d2s.framework.util.gate.GateHelper;
 import com.d2s.framework.util.gate.IGate;
 import com.d2s.framework.util.i18n.ITranslationProvider;
@@ -69,18 +74,52 @@ public class UlcActionFactory implements IActionFactory<IAction, ULCComponent> {
       Collection<IGate> clonedGates = new HashSet<IGate>();
       for (IGate gate : action.getActionabilityGates()) {
         final IGate clonedGate = gate.clone();
-        if (modelDescriptor instanceof IComponentDescriptorProvider
-            && clonedGate instanceof IModelGate) {
-          ((IModelGate) clonedGate).setModelProvider(new EmbeddedModelProvider(
-              (IComponentDescriptorProvider<?>) modelDescriptor));
-          viewConnector
-              .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+        if (clonedGate instanceof IModelGate) {
+          if (modelDescriptor instanceof IComponentDescriptorProvider) {
+            ((IModelGate) clonedGate)
+                .setModelProvider(new EmbeddedModelProvider(
+                    (IComponentDescriptorProvider<?>) modelDescriptor));
+            viewConnector
+                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
 
-                public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                  ((EmbeddedModelProvider) ((IModelGate) clonedGate)
-                      .getModelProvider()).setModel(evt.getNewValue());
-                }
-              });
+                  public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                    ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                        .getModelProvider()).setModel(evt.getNewValue());
+                  }
+                });
+          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
+            IRelationshipEndPropertyDescriptor reverseDescriptor = ((ICollectionPropertyDescriptor<?>) modelDescriptor)
+                .getReverseRelationEnd();
+            if (reverseDescriptor instanceof IComponentDescriptorProvider) {
+              ((IModelGate) clonedGate)
+                  .setModelProvider(new EmbeddedModelProvider(
+                      (IComponentDescriptorProvider<?>) reverseDescriptor));
+            } else if (reverseDescriptor instanceof ICollectionDescriptorProvider) {
+              ((IModelGate) clonedGate)
+                  .setModelProvider(new EmbeddedModelProvider(
+                      ((ICollectionDescriptorProvider<?>) reverseDescriptor)
+                          .getCollectionDescriptor().getElementDescriptor()));
+            }
+            final ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) viewConnector)
+                .getCollectionConnector();
+            collectionConnector
+                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                  public void connectorValueChange(@SuppressWarnings("unused")
+                  ConnectorValueChangeEvent evt) {
+                    if (collectionConnector.getModelConnector() != null) {
+                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                          .getModelProvider())
+                          .setModel(((IModelValueConnector) collectionConnector
+                              .getModelConnector()).getModelProvider()
+                              .getModel());
+                    } else {
+                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                          .getModelProvider()).setModel(null);
+                    }
+                  }
+                });
+          }
         }
         clonedGates.add(clonedGate);
       }
