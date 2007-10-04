@@ -121,7 +121,10 @@ public class ConnectorValueChangeSupport {
    * @return the listeners.
    */
   public Set<IConnectorValueChangeListener> getListeners() {
-    return new HashSet<IConnectorValueChangeListener>(listeners);
+    if (listeners != null) {
+      return new HashSet<IConnectorValueChangeListener>(listeners);
+    }
+    return new HashSet<IConnectorValueChangeListener>();
   }
 
   /**
@@ -147,7 +150,6 @@ public class ConnectorValueChangeSupport {
     }
   }
 
-  
   /**
    * Registers a listener to be re-included to the notification process without
    * being re-added to the actual listeners collection.
