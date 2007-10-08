@@ -17,32 +17,37 @@ public final class LdapConstants {
   /**
    * <code>DESCRIPTION_ATTRIBUTE</code>.
    */
-  public static final String DESCRIPTION_ATTRIBUTE   = "description";
+  public static final String DESCRIPTION_ATTRIBUTE           = "description";
 
   /**
    * <code>DISPLAY_NAME_ATTRIBUTE</code>.
    */
-  public static final String DISPLAY_NAME_ATTRIBUTE  = "displayName";
+  public static final String DISPLAY_NAME_ATTRIBUTE          = "displayName";
 
   /**
    * <code>MAIL_ATTRIBUTE</code>.
    */
-  public static final String MAIL_ATTRIBUTE          = "mail";
+  public static final String MAIL_ATTRIBUTE                  = "mail";
 
   /**
    * <code>PASSWORD_ATTIBUTE</code>.
    */
-  public static final String PASSWORD_ATTIBUTE       = "userPassword";
+  public static final String PASSWORD_ATTIBUTE               = "userPassword";
 
   /**
    * <code>SERIAL_NUMBER_ATTRIBUTE</code>.
    */
-  public static final String SERIAL_NUMBER_ATTRIBUTE = "serialNumber";
+  public static final String SERIAL_NUMBER_ATTRIBUTE         = "serialNumber";
 
   /**
    * <code>TOP_OBJECTCLASS</code>.
    */
-  public static final String TOP_OBJECTCLASS         = "top";
+  public static final String TOP_OBJECTCLASS                 = "top";
+
+  /**
+   * <code>ORGANISATIONAL_UNIT_OBJECTCLASS</code>.
+   */
+  public static final String ORGANISATIONAL_UNIT_OBJECTCLASS = "organizationalUnit";
 
   private LdapConstants() {
     // Empty constructor for utility class
