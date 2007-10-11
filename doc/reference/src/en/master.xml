@@ -90,24 +90,24 @@
     <para>This is with these ideas in mind that the <trademark>D2S</trademark>
     application framework was developed. To get an idea of what a software
     framework is and what it is not, please, refer to the following <ulink
-    url="http://en.wikipedia.org/wiki/Software_framework">link</ulink></para>
+    url="http://en.wikipedia.org/wiki/Software_framework">link</ulink>.</para>
   </preface>
 
-  <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter2.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter3.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter3.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 </book>
