@@ -72,7 +72,8 @@
 
     <itemizedlist>
       <listitem>
-        <para>High license fees for development and often for runtime</para>
+        <para>High license fees for development and generally for
+        runtime</para>
       </listitem>
 
       <listitem>
@@ -87,10 +88,53 @@
       </listitem>
     </itemizedlist>
 
-    <para>This is with these ideas in mind that the <trademark>D2S</trademark>
-    application framework was developed. To get an idea of what a software
-    framework is and what it is not, please, refer to the following <ulink
-    url="http://en.wikipedia.org/wiki/Software_framework">link</ulink>.</para>
+    <para>With these ideas in mind, the <trademark>D2S</trademark> application
+    framework was developed. To get an idea of what a software framework is
+    and what it is not, please, refer to the following <ulink
+    url="http://en.wikipedia.org/wiki/Software_framework">link</ulink>. The
+    <trademark>D2S</trademark> framework differs from most of the other
+    frameworks since it addresses the complete software architecture including
+    all the key success factors formerly described; but instead of
+    "reinventing the wheel", <trademark>D2S</trademark> strongly relies on
+    production-proof open source libraries and components. To get a complete
+    list of the used libraries, please refer to the Appendices.</para>
+
+    <para>Each of these libraries is distributed using a business-friendly
+    licence (<ulink
+    url="http://www.opensource.org/licenses/lgpl-license.php">LGPL</ulink>,
+    <ulink
+    url="http://www.opensource.org/licenses/bsd-license.php">BSD</ulink>,
+    <ulink
+    url="http://www.opensource.org/licenses/apachepl.php">Apache</ulink>, ...)
+    that enables its inclusion in closed-source software under copyright
+    notice conditions. <trademark>D2S</trademark> put them all together, in a
+    loosely coupled architecture so that the resulting software is not locked
+    in any of them. As an example, you don't have to choose whether you want
+    to distribute your application as a Java swing application through Java
+    Web Start or as an Ajax application without any plug in or both !
+    <trademark>D2S</trademark> will take care of it at runtime.</para>
+
+    <para>The whole objective of <trademark>D2S</trademark> is to shorten the
+    gap (and thus avoid the "tunnel" effect) between the business requirement
+    analysis, the detailed specifications, the design and the software
+    available and running. The development process becomes extremely agile
+    since the prototype progressively becomes the final application through
+    very short iterations.</para>
+
+    <para>To achieve this goal, the main paradigm of
+    <trademark>D2S</trademark> is "whenever describing is enough, do not
+    code". Take a simple frontend example : you want to provide the end user
+    with a table listing a set of articles. Of course, this table view has to
+    be editable, sortable and present the different columns based on their
+    types (an image, the remaining stock quantity, the date when this article
+    was made available in the system, and so on). Everyone is able to describe
+    this view precisely and everyone is able to understand what has been
+    described. There should not be a need for coding a single line of code
+    (swing, html, jsp, javascript, ...) whenever this description has been
+    captured by the framework. That is exactly what <trademark>D2S</trademark>
+    does by taking care of the implementation once you have expressed the
+    requirements. And there is no complex code generation. Everything is just
+    handled at runtime.</para>
   </preface>
 
   <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
@@ -109,5 +153,8 @@
               xpointer="element(/1)" />
 
   <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter7.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 </book>
