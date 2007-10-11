@@ -29,22 +29,68 @@
     <itemizedlist>
       <listitem>
         <para>Database design and performance (schema design, data access
-        optimisation, ...)</para>
+        optimisation, data integrity, ...)</para>
       </listitem>
 
       <listitem>
-        <para>System architecture (fail over, load-balancing, ...)</para>
+        <para>Gui design and binding on domain model (views, flow, actions,
+        ...)</para>
+      </listitem>
+
+      <listitem>
+        <para>N-tier architecture design for distributed applications
+        (frontend deployment, bandwidth consumption, network round trips,
+        ...)</para>
+      </listitem>
+
+      <listitem>
+        <para>System scalability and robustness (fail over, load-balancing,
+        ...)</para>
       </listitem>
 
       <listitem>
         <para>Software architecture and best practices (design patterns,
-        security, manageability, logging, low coupling, ...)</para>
+        security, manageability, logging, low coupling, separation of
+        concerns, ...)</para>
       </listitem>
 
       <listitem>
-        <para>Up-to-date technology building blocks (standards, )</para>
+        <para>Up-to-date technology building blocks (stay with standards,
+        leverage on existing components, easy switch between equivalent
+        components, ...)</para>
       </listitem>
     </itemizedlist>
+
+    <para>Whenever one of these skills is not efficiently addressed, the
+    software may simply never become available or may not meet the promised
+    quality or exploitability required standards. It surely leads to huge
+    delays on the schedule and bad ROI.</para>
+
+    <para>Big software vendors have tried to address this situation more or
+    less succesfully by providing end to end CASE tools, but there are
+    well-known drawbacks to this approach. Some of them are :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>High license fees for development and often for runtime</para>
+      </listitem>
+
+      <listitem>
+        <para>End-to-end proprietary solutions locking the software and thus
+        the customer into the chosen technology and tools</para>
+      </listitem>
+
+      <listitem>
+        <para>The resulting software is often completely opaque and rarely
+        intergrates seamlessly in the overall information
+        infrastructure</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This is with these ideas in mind that the <trademark>D2S</trademark>
+    application framework was developed. To get an idea of what a software
+    framework is and what it is not, please, refer to the following <ulink
+    url="http://en.wikipedia.org/wiki/Software_framework">link</ulink></para>
   </preface>
 
   <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
