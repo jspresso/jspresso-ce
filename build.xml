@@ -66,8 +66,8 @@
 
 	<target name="xinclude">
 		<replace dir="${doc.reference.src.dir}"
-		         token="www.w3.org/2001/XInclude"
-		         value="www.w3.org/2003/XInclude">
+		         token="www.w3.org/2003/XInclude"
+		         value="www.w3.org/2001/XInclude">
 			<include name="**/*.xml" />
 		</replace>
 		<xclude destdir="${xml.reference.target.dir}" encoding="UTF-8" indent="yes">
