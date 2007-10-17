@@ -4,9 +4,35 @@
 <chapter>
   <title>The whole picture</title>
 
-  <section>
-    <title></title>
+  <para>This chapter will help you to understand the basics of the
+  <trademark>D2S</trademark> application framework and how to work with
+  it.</para>
 
-    <para></para>
+  <section>
+    <title>The human resources (HR) sample application</title>
+
+    <para>The human resources application is a simple yet comprehensive
+    business application targetted at managing a company organisation and the
+    employees who work in it. It will demonstrate how
+    <trademark>D2S</trademark> can handle a domain model with its
+    relationships and its constraints, present it to the end user for
+    manipulation through various built-in views and actions, handle security
+    through profile management, distribute the frontend across the network,
+    ...</para>
+
+    <section>
+      <title>The domain model</title>
+
+      <para>To quickly introduce the HR domain model, let's dive into the
+      following UML class diagrams.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="../images/organisation-cd.svg" />
+        </imageobject>
+      </mediaobject>
+
+      <para></para>
+    </section>
   </section>
 </chapter>

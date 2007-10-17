@@ -135,26 +135,37 @@
     does by taking care of the implementation once you have expressed the
     requirements. And there is no complex code generation. Everything is just
     handled at runtime.</para>
+
+    <para>This manual is organized around developing a sample application
+    which is targeted at human resources management. We will cover the
+    complete development process while presenting as much as possible of the
+    <trademark>D2S</trademark> framework. We believe that this approach will
+    be more efficient than a raw description of the framework features since
+    it will show you not only what to use but also how to use it efficiently.
+    And of course, whenever a new feature is introduced we will suggest a link
+    to its full reference.</para>
+
+    <para>So let's begin. </para>
   </preface>
 
-  <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter2.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter3.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter3.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter7.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+  <xi:include href="chapter7.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
 </book>

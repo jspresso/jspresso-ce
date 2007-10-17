@@ -5,13 +5,18 @@
 	<property file="build.properties" />
 
 	<property name="doc.reference.dir" value="doc${file.separator}reference" />
+	<property name="doc.reference.css.dir"
+	          value="${doc.reference.dir}${file.separator}css" />
 	<property name="doc.reference.src.dir"
 	          value="${doc.reference.dir}${file.separator}src" />
+	<property name="doc.reference.images.dir"
+	          value="${doc.reference.src.dir}${file.separator}images" />
 	<property name="doc.reference.target.dir"
 	          value="${doc.reference.dir}${file.separator}target" />
-	<property name="html.stylesheet"
+	<property name="html.xsl"
 	          value="${docbook.xsl.home}${file.separator}html${file.separator}chunk.xsl" />
-	<property name="fo.stylesheet" value="${docbook.xsl.home}${file.separator}fo${file.separator}docbook.xsl" />
+	<property name="fo.xsl"
+	          value="${docbook.xsl.home}${file.separator}fo${file.separator}docbook.xsl" />
 	<property name="xml.reference.target.dir"
 	          value="${doc.reference.target.dir}${file.separator}xml" />
 	<property name="html.reference.target.dir"
@@ -66,8 +71,8 @@
 
 	<target name="xinclude">
 		<replace dir="${doc.reference.src.dir}"
-		         token="www.w3.org/2003/XInclude"
-		         value="www.w3.org/2001/XInclude">
+		         token="www.w3.org/2001/XInclude"
+		         value="www.w3.org/2003/XInclude">
 			<include name="**/*.xml" />
 		</replace>
 		<xclude destdir="${xml.reference.target.dir}" encoding="UTF-8" indent="yes">
@@ -75,16 +80,26 @@
 				<include name="**/reference-guide.xml" />
 			</fileset>
 		</xclude>
+		<copy todir="${xml.reference.target.dir}/images">
+			<fileset dir="${doc.reference.images.dir}" includes="**/*.svg" />
+		</copy>
 	</target>
 
 	<target name="build-html"
 	        depends="mktarget, xinclude"
 	        description="Generates HTML files from DocBook XML">
-		<xslt style="${html.stylesheet}"
+		<copy todir="${html.reference.target.dir}/css">
+			<fileset dir="${doc.reference.css.dir}" includes="**/*.css" />
+		</copy>
+		<copy todir="${html.reference.target.dir}/images">
+			<fileset dir="${doc.reference.images.dir}" includes="**/*.svg" />
+		</copy>
+		<xslt style="${html.xsl}"
 		      extension=".html"
 		      basedir="${xml.reference.target.dir}"
 		      destdir="${html.reference.target.dir}">
 			<classpath refid="xalan.classpath" />
+			<param name="html.stylesheet" expression="../css/docbook.css" />
 			<include name="**/reference-guide.xml" />
 		</xslt>
 	</target>
@@ -92,15 +107,18 @@
 	<target name="build-fo"
 	        depends="mktarget, xinclude"
 	        description="Generates FO files from DocBook XML">
-		<xslt style="${fo.stylesheet}"
+		<xslt style="${fo.xsl}"
 		      extension=".fo"
 		      basedir="${xml.reference.target.dir}"
 		      destdir="${fo.reference.target.dir}">
 			<classpath refid="xalan.classpath" />
-			<param name="paper.type" expression="A4"/>
-			<param name="fop1.extensions" expression="1"/>
+			<param name="paper.type" expression="A4" />
+			<param name="fop1.extensions" expression="1" />
 			<include name="**/reference-guide.xml" />
 		</xslt>
+		<copy todir="${fo.reference.target.dir}/images">
+			<fileset dir="${doc.reference.images.dir}" includes="**/*.svg" />
+		</copy>
 	</target>
 
 	<target name="build-pdf"
