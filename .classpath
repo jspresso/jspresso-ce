@@ -101,7 +101,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" sourcepath="/ENVDEV/jboss-4.0.4.GA/src/security/src/main"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/cglib/cglib/2.1_3/cglib-2.1_3.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jgoodies/looks/1.3.2/looks-1.3.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils-core/1.7.0/commons-beanutils-core-1.7.0.jar" sourcepath="/ENVDEV/commons-beanutils-1.7.0/commons-beanutils-1.7.0-src/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils-core/1.7.0/commons-beanutils-core-1.7.0.jar" sourcepath="/ENVDEV/commons-beanutils-1.7.0/src/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz/2.0/aspectwerkz-2.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/foxtrot/foxtrot/2.0/foxtrot-2.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/freemarker/freemarker/2.3.3/freemarker-2.3.3.jar" sourcepath="/ENVDEV/freemarker-2.3.4/src"/>

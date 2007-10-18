@@ -56,7 +56,7 @@ public class BeanPropertyAccessor implements IAccessor {
   public Object getValue(Object target) throws IllegalAccessException,
       InvocationTargetException, NoSuchMethodException {
     if (target != null) {
-      return PropertyUtils.getSimpleProperty(target, property);
+      return PropertyUtils.getProperty(target, property);
     }
     return null;
   }
@@ -77,7 +77,7 @@ public class BeanPropertyAccessor implements IAccessor {
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
     if (target != null) {
-      PropertyUtils.setSimpleProperty(target, property, value);
+      PropertyUtils.setProperty(target, property, value);
     }
   }
 

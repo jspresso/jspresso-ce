@@ -39,11 +39,19 @@ public final class PropertyHelper {
   public static PropertyDescriptor getPropertyDescriptor(Class<?> beanClass,
       String property) {
     PropertyDescriptor descriptorToReturn = null;
-    PropertyDescriptor[] descriptors = PropertyUtils
-        .getPropertyDescriptors(beanClass);
-    for (PropertyDescriptor descriptor : descriptors) {
-      if (property.equals(descriptor.getName())) {
-        descriptorToReturn = descriptor;
+    int nestedDotIndex = property.indexOf('.');
+    if (nestedDotIndex > 0) {
+      PropertyDescriptor rootDescriptor = getPropertyDescriptor(beanClass,
+          property.substring(0, nestedDotIndex));
+      descriptorToReturn = getPropertyDescriptor(rootDescriptor
+          .getPropertyType(), property.substring(nestedDotIndex + 1));
+    } else {
+      PropertyDescriptor[] descriptors = PropertyUtils
+          .getPropertyDescriptors(beanClass);
+      for (PropertyDescriptor descriptor : descriptors) {
+        if (property.equals(descriptor.getName())) {
+          descriptorToReturn = descriptor;
+        }
       }
     }
     if (descriptorToReturn == null

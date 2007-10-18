@@ -48,6 +48,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private List<String>                     orderingProperties;
   private Map<String, IPropertyDescriptor> propertyDescriptors;
+  private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
   private List<String>                     queryableProperties;
   private List<String>                     renderedProperties;
   private Set<Class<?>>                    serviceContracts;
@@ -177,12 +178,19 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
     IPropertyDescriptor descriptor = null;
     int nestedDotIndex = propertyName.indexOf('.');
     if (nestedDotIndex > 0) {
-      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getPropertyDescriptor(propertyName
-          .substring(0, nestedDotIndex))).getComponentDescriptor();
-      descriptor = componentDescriptor.getPropertyDescriptor(
-          propertyName.substring(nestedDotIndex + 1)).clone();
-      if (descriptor instanceof BasicPropertyDescriptor) {
-        ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+      if (nestedPropertyDescriptors == null) {
+        nestedPropertyDescriptors = new HashMap<String, IPropertyDescriptor>();
+      }
+      descriptor = nestedPropertyDescriptors.get(propertyName);
+      if (descriptor == null) {
+        IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getPropertyDescriptor(propertyName
+            .substring(0, nestedDotIndex))).getComponentDescriptor();
+        descriptor = componentDescriptor.getPropertyDescriptor(
+            propertyName.substring(nestedDotIndex + 1)).clone();
+        if (descriptor instanceof BasicPropertyDescriptor) {
+          ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+        }
+        nestedPropertyDescriptors.put(propertyName, descriptor);
       }
     } else {
       descriptor = getDeclaredPropertyDescriptor(propertyName);
