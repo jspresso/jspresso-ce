@@ -12,7 +12,6 @@ import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
-import com.d2s.framework.model.entity.IEntityLifecycleHandler;
 import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
@@ -38,11 +37,11 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    * {@inheritDoc}
    */
   public <T extends IComponent> T createComponentInstance(
-      Class<T> entityContract, Object delegate) {
-    final T createdComponent = createEntityInstance(entityContract, delegate,
+      Class<T> componentContract, Object delegate) {
+    final T createdComponent = createDelegatingComponentInstance(componentContract, delegate,
         null);
     createdComponent
-        .onCreate(null, getPrincipal(), getEntityLifecycleHandler());
+        .onCreate(null, getPrincipal(), null);
     return createdComponent;
   }
 
@@ -126,15 +125,6 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   }
 
   /**
-   * Gets the entity lifecycle handler.
-   * 
-   * @return the entity lifecycle handler.
-   */
-  protected IEntityLifecycleHandler getEntityLifecycleHandler() {
-    return null;
-  }
-
-  /**
    * Gets the principal using the factory.
    * 
    * @return the principal using the factory.
@@ -143,19 +133,19 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return null;
   }
 
-  private InvocationHandler createComponentInvocationHandler(
+  private InvocationHandler createDelegatingComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
-    return new BasicComponentInvocationHandler(delegate, this,
+    return new BasicDelegatingComponentInvocationHandler(delegate, this,
         componentDescriptor, componentCollectionFactory, accessorFactory,
         componentExtensionFactory);
   }
 
   @SuppressWarnings("unchecked")
-  private <T extends IComponent> T createEntityInstance(
+  private <T extends IComponent> T createDelegatingComponentInstance(
       Class<T> componentContract, Object delegate, Class[] extraInterfaces) {
     IComponentDescriptor componentDescriptor = componentDescriptorRegistry
         .getComponentDescriptor(componentContract);
-    InvocationHandler componentHandler = createComponentInvocationHandler(
+    InvocationHandler componentHandler = createDelegatingComponentInvocationHandler(
         componentDescriptor, delegate);
     Class[] implementedClasses;
     if (extraInterfaces != null) {

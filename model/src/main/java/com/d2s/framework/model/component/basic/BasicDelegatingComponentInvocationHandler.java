@@ -26,7 +26,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicComponentInvocationHandler extends
+public class BasicDelegatingComponentInvocationHandler extends
     AbstractComponentInvocationHandler {
 
   private static final long serialVersionUID = 4064763209800159366L;
@@ -52,7 +52,7 @@ public class BasicComponentInvocationHandler extends
    *            The factory used to create component extensions based on their
    *            classes.
    */
-  protected BasicComponentInvocationHandler(Object delegate,
+  protected BasicDelegatingComponentInvocationHandler(Object delegate,
       IComponentFactory componentFactory,
       IComponentDescriptor<IComponent> componentDescriptor,
       IComponentCollectionFactory<IComponent> collectionFactory,
@@ -75,7 +75,7 @@ public class BasicComponentInvocationHandler extends
     if (another instanceof IComponent) {
       if (Proxy.isProxyClass(another.getClass())
           && Proxy.getInvocationHandler(another) instanceof BasicEntityInvocationHandler) {
-        BasicComponentInvocationHandler otherInvocationHandler = (BasicComponentInvocationHandler) Proxy
+        BasicDelegatingComponentInvocationHandler otherInvocationHandler = (BasicDelegatingComponentInvocationHandler) Proxy
             .getInvocationHandler(another);
         return delegate.equals(otherInvocationHandler.delegate);
       }
