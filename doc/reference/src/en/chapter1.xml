@@ -12,10 +12,10 @@
     <title>The human resources (HR) sample application</title>
 
     <para>The human resources application is a simple yet comprehensive
-    business application targetted at managing a company organisation and the
+    business application targetted at managing a company organization and the
     employees who work in it. It will demonstrate how
     <trademark>D2S</trademark> can handle a domain model with its
-    relationships and its constraints, present it to the end user for
+    relationships and its constraints, present it to the end-user for
     manipulation through various built-in views and actions, handle security
     through profile management, distribute the frontend across the network,
     ...</para>
@@ -24,15 +24,224 @@
       <title>The domain model</title>
 
       <para>To quickly introduce the HR domain model, let's dive into the
-      following UML class diagrams.</para>
+      following UML class diagrams. As a general rule to make the diagrams
+      more readable attributes must in fact be considered as getter / setter
+      pairs.</para>
 
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="../images/organisation-cd.svg" />
-        </imageobject>
-      </mediaobject>
+      <para>The <link linkend="commons-cd">commons class diagram</link>
+      describes commonly used interfaces and classes.</para>
 
-      <para></para>
+      <para>A few hints :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The traceable interface is implemented by entities for which
+          we need to record when it was saved for the first time and when it
+          was last updated. Of course, these tracing elements must be made
+          read-only to the end-user since they are automatically managed by
+          the application.</para>
+        </listitem>
+
+        <listitem>
+          <para>The nameable is implemented by entities having a name.</para>
+        </listitem>
+
+        <listitem>
+          <para>The localizable interface is implemented by entities that have
+          contact details (address, phone, email, ...). A localizable points
+          to one and only one city. A city is nameable and has a zip
+          code.</para>
+        </listitem>
+
+        <listitem>
+          <para>An event is a piece of text which is traceable</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure id="commons-cd">
+        <title>Commons class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../images/commons-cd.png" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The <link linkend="employee-cd">employees class diagram</link>
+      describes what an employee is.</para>
+
+      <para>A few hints :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>An employee is nameable, traceable and localizable. An employe
+          has :</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>a first name (his last name is inherited by the nameable
+              interface)</para>
+            </listitem>
+
+            <listitem>
+              <para>a social security number which is composed by exacltly 10
+              digits</para>
+            </listitem>
+
+            <listitem>
+              <para>a gender (male or female)</para>
+            </listitem>
+
+            <listitem>
+              <para>a birth date</para>
+            </listitem>
+
+            <listitem>
+              <para>a hire date in the company</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <itemizedlist>
+        <listitem>
+          <para>An employee must provide a method to compute his age based on
+          his birth date.</para>
+        </listitem>
+
+        <listitem>
+          <para>An employee has an ordered list of events.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure id="employee-cd">
+        <title>Employees class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../images/employees-cd.png" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The <link linkend="organization-cd">organization class
+      diagram</link> describes how the company is structured in departments
+      and teams.</para>
+
+      <para>A few hints :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A company is structured in organizational units. An
+          organizational unit may be a department or a team. An organizational
+          unit has an identifier (<emphasis>ouId</emphasis>) which is formed
+          by a 2 letter code followed by a dash followed by a 3 digit number
+          (<emphasis>IS-001</emphasis> for instance). Each organizational unit
+          has a manager who is an employee of the company it belongs to. An
+          employee can at most manage one organizational unit. An
+          organizational unit is nameable, traceable and localizable as well
+          as a company.</para>
+        </listitem>
+
+        <listitem>
+          <para>The company may have one or more departments and a department
+          belongs to one and only one company.</para>
+        </listitem>
+
+        <listitem>
+          <para>A departement may have one or more teams and a team belongs to
+          one and only one department. Each team is composed by one or more
+          employees.</para>
+        </listitem>
+
+        <listitem>
+          <para>An employee belongs to one and only one company. An employee
+          may belong to zero or more teams.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure id="organization-cd">
+        <title>Organization class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../images/organization-cd.png" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>The application modules</title>
+
+      <para>The HR application is divided in 3 modules.</para>
+
+      <section>
+        <title>The organization management module</title>
+
+        <para>This module manages a company structure in terms of
+        organizational units. The end-user may create/delete/update a company,
+        create/delete/update its organizational units and structure them in
+        the organization. The end-user may compose the employee teams, assign
+        an organisational unit manager but won't be able to
+        create/update/delete an employee. The organization must be displayed
+        in a hierarchical (tree) view.</para>
+      </section>
+
+      <section>
+        <title>The employees management module</title>
+
+        <para>This module manages a company staff. The end-user can retrieve
+        the company employees and create/update/delete an employee. The
+        end-user will be able to create/update/delete events for an employee
+        and may re-order them in an unspecified manner as needed.</para>
+      </section>
+
+      <section>
+        <title>The master data management module</title>
+
+        <para>This module manages the application master data. As of now, the
+        master data are only made of the cities available to compose the
+        addresses.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>The profiles</title>
+
+      <para>The HR application offers 3 profiles.</para>
+
+      <section>
+        <title>The organization manager profile</title>
+
+        <para>A logged-in user having the organization manager profile will be
+        granted access to the organization management module as well as the
+        master data management module but he won't be able to create a new
+        company.</para>
+      </section>
+
+      <section>
+        <title>The staff manager profile</title>
+
+        <para>A logged-in user having the staff manager profile will be
+        granted access to the employee management module as well as the master
+        data management module but he won't be able to re-order the events
+        assigned to an employee.</para>
+      </section>
+
+      <section>
+        <title>The administrator profile</title>
+
+        <para>The administrator profile has no restriction in the
+        application.</para>
+      </section>
     </section>
   </section>
 </chapter>

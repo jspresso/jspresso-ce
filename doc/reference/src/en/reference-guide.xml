@@ -145,7 +145,7 @@
     And of course, whenever a new feature is introduced we will suggest a link
     to its full reference.</para>
 
-    <para>So let's begin. </para>
+    <para>So let's begin.</para>
   </preface>
 
   <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
@@ -168,4 +168,6 @@
 
   <xi:include href="chapter7.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
+
+  <index></index>
 </book>

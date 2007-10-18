@@ -4,27 +4,23 @@
 
 	<property file="build.properties" />
 
-	<property name="doc.reference.dir" value="doc${file.separator}reference" />
-	<property name="doc.reference.css.dir"
-	          value="${doc.reference.dir}${file.separator}css" />
-	<property name="doc.reference.src.dir"
-	          value="${doc.reference.dir}${file.separator}src" />
+	<property name="doc.reference.dir" value="doc/reference" />
+	<property name="doc.reference.css.dir" value="${doc.reference.dir}/css" />
+	<property name="doc.reference.src.dir" value="${doc.reference.dir}/src" />
 	<property name="doc.reference.images.dir"
-	          value="${doc.reference.src.dir}${file.separator}images" />
+	          value="${doc.reference.src.dir}/images" />
 	<property name="doc.reference.target.dir"
-	          value="${doc.reference.dir}${file.separator}target" />
-	<property name="html.xsl"
-	          value="${docbook.xsl.home}${file.separator}html${file.separator}chunk.xsl" />
-	<property name="fo.xsl"
-	          value="${docbook.xsl.home}${file.separator}fo${file.separator}docbook.xsl" />
+	          value="${doc.reference.dir}/target" />
+	<property name="html.xsl" value="${docbook.xsl.home}/html/chunk.xsl" />
+	<property name="fo.xsl" value="${docbook.xsl.home}/fo/docbook.xsl" />
 	<property name="xml.reference.target.dir"
-	          value="${doc.reference.target.dir}${file.separator}xml" />
+	          value="${doc.reference.target.dir}/xml" />
 	<property name="html.reference.target.dir"
-	          value="${doc.reference.target.dir}${file.separator}html" />
+	          value="${doc.reference.target.dir}/html" />
 	<property name="fo.reference.target.dir"
-	          value="${doc.reference.target.dir}${file.separator}fo" />
+	          value="${doc.reference.target.dir}/fo" />
 	<property name="pdf.reference.target.dir"
-	          value="${doc.reference.target.dir}${file.separator}pdf" />
+	          value="${doc.reference.target.dir}/pdf" />
 
 	<path id="xcluder.classpath">
 		<fileset dir="${xcluder.home}">
@@ -39,6 +35,9 @@
 		<fileset dir="${xalan.home}">
 			<include name="xalan.jar" />
 			<include name="xercesImpl.jar" />
+		</fileset>
+		<fileset dir="${docbook.xsl.home}/extensions">
+			<include name="xalan*.jar" />
 		</fileset>
 	</path>
 
@@ -81,7 +80,7 @@
 			</fileset>
 		</xclude>
 		<copy todir="${xml.reference.target.dir}/images">
-			<fileset dir="${doc.reference.images.dir}" includes="**/*.svg" />
+			<fileset dir="${doc.reference.images.dir}" includes="**/*.*" />
 		</copy>
 	</target>
 
@@ -92,7 +91,7 @@
 			<fileset dir="${doc.reference.css.dir}" includes="**/*.css" />
 		</copy>
 		<copy todir="${html.reference.target.dir}/images">
-			<fileset dir="${doc.reference.images.dir}" includes="**/*.svg" />
+			<fileset dir="${doc.reference.images.dir}" includes="**/*.*" />
 		</copy>
 		<xslt style="${html.xsl}"
 		      extension=".html"
@@ -100,6 +99,11 @@
 		      destdir="${html.reference.target.dir}">
 			<classpath refid="xalan.classpath" />
 			<param name="html.stylesheet" expression="../css/docbook.css" />
+			<param name="graphicsize.extension" expression="1" />
+			<param name="use.extensions" expression="1" />
+			<param name="ignore.image.scaling" expression="1" />
+			<param name="formal.title.placement" expression="figure after" />
+			<param name="generate.index" expression="1" />
 			<include name="**/reference-guide.xml" />
 		</xslt>
 	</target>
@@ -114,10 +118,21 @@
 			<classpath refid="xalan.classpath" />
 			<param name="paper.type" expression="A4" />
 			<param name="fop1.extensions" expression="1" />
+			<param name="graphicsize.extension" expression="1" />
+			<param name="use.extensions" expression="1" />
+			<param name="formal.title.placement" expression="figure after" />
+			<param name="generate.index" expression="1" />
+			<param name="ulink.show" expression="0" />
 			<include name="**/reference-guide.xml" />
 		</xslt>
+		<replaceregexp match="\.\.\/images\/(\S*)\.png"
+		               replace="\.\.\/images\/\1.svg"
+		               flags="g"
+		               byline="true">
+			<fileset dir="${fo.reference.target.dir}" includes="**/*.fo" />
+		</replaceregexp>
 		<copy todir="${fo.reference.target.dir}/images">
-			<fileset dir="${doc.reference.images.dir}" includes="**/*.svg" />
+			<fileset dir="${doc.reference.images.dir}" includes="**/*.*" />
 		</copy>
 	</target>
 
@@ -125,9 +140,11 @@
 	        depends="mktarget"
 	        description="Generates PDF files from FO files">
 		<copy todir="${pdf.reference.target.dir}">
-			<fileset dir="${fo.reference.target.dir}" excludes="**/*.*" />
+			<fileset dir="${fo.reference.target.dir}" excludes="**/images **/*.*" />
 		</copy>
-		<fop format="application/pdf" outdir="${pdf.reference.target.dir}">
+		<fop format="application/pdf"
+		     outdir="${pdf.reference.target.dir}"
+		     relativebase="true">
 			<fileset dir="${fo.reference.target.dir}">
 				<include name="**/*.fo" />
 			</fileset>
@@ -135,4 +152,7 @@
 	</target>
 
 	<target name="doc" depends="clean,build-html,build-fo,build-pdf" />
+
+	<target name="test">
+	</target>
 </project>
