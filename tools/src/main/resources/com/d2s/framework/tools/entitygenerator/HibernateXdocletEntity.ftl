@@ -341,10 +341,11 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   void set${propertyName?cap_first}(${propertyType} ${propertyName});
 </#macro>
 
-<#macro generateEntityRefGetter componentDescriptor propertyDescriptor>
+<#macro generateComponentRefGetter componentDescriptor propertyDescriptor>
   <#local propertyName=propertyDescriptor.name/>
   <#local propertyType=propertyDescriptor.referencedDescriptor.name/>
   <#local isEntity=propertyDescriptor.referencedDescriptor.entity/>
+  <#local isPurelyAbstract=propertyDescriptor.referencedDescriptor.purelyAbstract/>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#local bidirectional=true/>
     <#if instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.IReferencePropertyDescriptor")>
@@ -405,6 +406,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *           unique-key = "${generateSQLName(propertyDescriptor.unicityScope)}_UNQ"
         </#if>
       </#if>
+    <#elseif !isPurelyAbstract>
+   * @hibernate.component
+   *           prefix = "${generateSQLName(propertyName)}_"
     <#else>
    * @hibernate.any
    *           id-type = "string"
@@ -442,7 +446,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 </#macro>
 
 <#macro generateReferencePropertyAccessors componentDescriptor propertyDescriptor>
-  <@generateEntityRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
+  <@generateComponentRefGetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
 
   <#if propertyDescriptor.modifiable>
     <@generateEntityRefSetter componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>

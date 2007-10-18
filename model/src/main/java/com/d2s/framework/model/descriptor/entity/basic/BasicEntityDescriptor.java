@@ -19,8 +19,6 @@ import com.d2s.framework.model.entity.IEntity;
  */
 public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
 
-  private boolean purelyAbstract;
-
   /**
    * Constructs a new <code>BasicEntityDescriptor</code> instance.
    * 
@@ -30,7 +28,7 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
    */
   public BasicEntityDescriptor(String name) {
     super(name);
-    this.purelyAbstract = false;
+    setPurelyAbstract(false);
   }
 
   /**
@@ -55,16 +53,6 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
   }
 
   /**
-   * Gets the purelyAbstract.
-   * 
-   * @return the purelyAbstract.
-   */
-  @Override
-  public boolean isPurelyAbstract() {
-    return purelyAbstract;
-  }
-
-  /**
    * Throws an exception since an entity is always a persistent definition.
    * <p>
    * {@inheritDoc}
@@ -74,15 +62,5 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
   boolean computed) {
     throw new UnsupportedOperationException(
         "An entity descriptor cannot be a computed interface.");
-  }
-
-  /**
-   * Sets the purelyAbstract.
-   * 
-   * @param purelyAbstract
-   *            the purelyAbstract to set.
-   */
-  public void setPurelyAbstract(boolean purelyAbstract) {
-    this.purelyAbstract = purelyAbstract;
   }
 }

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="398" height="222" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<line stroke="black" stroke-opacity="1" x1="156" y1="155" x2="150" y2="149" />
+	<line stroke="black" stroke-opacity="1" x1="156" y1="155" x2="150" y2="161" />
+	<line stroke="black" stroke-opacity="1" x1="95" y1="155" x2="156" y2="155" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="317" y1="125" x2="317" y2="99" />
+	<line stroke="black" stroke-opacity="1" x1="317" y1="93" x2="311" y2="99" />
+	<line stroke="black" stroke-opacity="1" x1="317" y1="93" x2="323" y2="99" />
+	<line stroke="black" stroke-opacity="1" x1="311" y1="99" x2="323" y2="99" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="179" y1="128" x2="179" y2="81" />
+	<line stroke="black" stroke-opacity="1" x1="179" y1="75" x2="173" y2="81" />
+	<line stroke="black" stroke-opacity="1" x1="179" y1="75" x2="185" y2="81" />
+	<line stroke="black" stroke-opacity="1" x1="173" y1="81" x2="185" y2="81" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="382" y="7" width="3" height="85" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="252" y="89" width="133" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="248" y="3" width="134" height="86" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="315" y="18">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="315" y="38">Traceable</text>
+	<line stroke="black" stroke-opacity="1" x1="248" y1="43" x2="382" y2="43" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="252" y="58">createTimestamp</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="252" y="76">lastUpdateTimestamp</text>
+	<line stroke="black" stroke-opacity="1" x1="248" y1="81" x2="382" y2="81" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="91" y="106" width="3" height="103" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="7" y="206" width="87" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="3" y="102" width="88" height="104" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="47" y="117">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="47" y="137">Localizable</text>
+	<line stroke="black" stroke-opacity="1" x1="3" y1="142" x2="91" y2="142" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="7" y="157">address</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="7" y="175">phone</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="7" y="193">email</text>
+	<line stroke="black" stroke-opacity="1" x1="3" y1="198" x2="91" y2="198" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="221" y="7" width="3" height="67" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="137" y="71" width="87" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="133" y="3" width="88" height="68" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="177" y="18">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="177" y="38">Nameable</text>
+	<line stroke="black" stroke-opacity="1" x1="133" y1="43" x2="221" y2="43" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="137" y="58">name</text>
+	<line stroke="black" stroke-opacity="1" x1="133" y1="63" x2="221" y2="63" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="197" y="133" width="3" height="47" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="161" y="177" width="39" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="157" y="129" width="40" height="48" />
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="177" y="144">City</text>
+	<line stroke="black" stroke-opacity="1" x1="157" y1="149" x2="197" y2="149" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="161" y="164">zip</text>
+	<line stroke="black" stroke-opacity="1" x1="157" y1="169" x2="197" y2="169" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="336" y="130" width="3" height="47" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="298" y="174" width="41" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="294" y="126" width="42" height="48" />
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="315" y="141">Event</text>
+	<line stroke="black" stroke-opacity="1" x1="294" y1="146" x2="336" y2="146" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="298" y="161">text</text>
+	<line stroke="black" stroke-opacity="1" x1="294" y1="166" x2="336" y2="166" />
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="125" y="147">city</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="139" y="176">1</text>
+</g>
+</svg>

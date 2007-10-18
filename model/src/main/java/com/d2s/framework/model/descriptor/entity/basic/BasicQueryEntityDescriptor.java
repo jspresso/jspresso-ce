@@ -223,8 +223,7 @@ public class BasicQueryEntityDescriptor implements
   private BasicCollectionPropertyDescriptor<IEntity> getQueriedEntitiesPropertyDescriptor() {
     if (queriedEntitiesPropertyDescriptor == null) {
       BasicCollectionDescriptor<IEntity> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<IEntity>();
-      queriedEntitiesCollectionDescriptor
-          .setCollectionInterface(Set.class);
+      queriedEntitiesCollectionDescriptor.setCollectionInterface(Set.class);
       queriedEntitiesCollectionDescriptor
           .setElementDescriptor(entityDescriptor);
       queriedEntitiesCollectionDescriptor
@@ -238,5 +237,4 @@ public class BasicQueryEntityDescriptor implements
     }
     return queriedEntitiesPropertyDescriptor;
   }
-
 }

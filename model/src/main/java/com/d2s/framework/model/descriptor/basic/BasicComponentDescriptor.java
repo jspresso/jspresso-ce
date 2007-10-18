@@ -43,6 +43,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   private List<IComponentDescriptor<?>>    ancestorDescriptors;
   private Class<?>                         componentContract;
   private boolean                          computed;
+  private boolean                          purelyAbstract;
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private List<String>                     orderingProperties;
   private Map<String, IPropertyDescriptor> propertyDescriptors;
@@ -72,6 +73,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   public BasicComponentDescriptor(String name) {
     setName(name);
     this.computed = false;
+    this.purelyAbstract = true;
   }
 
   /**
@@ -319,7 +321,17 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   public boolean isPurelyAbstract() {
-    return true;
+    return purelyAbstract;
+  }
+
+  /**
+   * Sets the purelyAbstract.
+   * 
+   * @param purelyAbstract
+   *            the purelyAbstract to set.
+   */
+  public void setPurelyAbstract(boolean purelyAbstract) {
+    this.purelyAbstract = purelyAbstract;
   }
 
   /**

@@ -33,7 +33,7 @@ import com.d2s.framework.util.security.LoginUtils;
 public class DemoLoginModule implements LoginModule {
 
   private ResourceBundle  bundle          = ResourceBundle
-                                              .getBundle("com.d2s.framework.util.security.LoginUtils.DlmBundle");
+                                              .getBundle("com.d2s.framework.util.security.LoginUtils$DlmBundle");
   private CallbackHandler callbackHandler;
   private boolean         commitSucceeded = false;
   // configurable option
