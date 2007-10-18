@@ -172,4 +172,15 @@ public class BasicStringPropertyDescriptor extends
   protected String getValueAsString(Object value) {
     return (String) value;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicStringPropertyDescriptor clone() {
+    BasicStringPropertyDescriptor clonedDescriptor = (BasicStringPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

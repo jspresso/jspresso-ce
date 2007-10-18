@@ -374,4 +374,19 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   protected IPropertyDescriptor getParentDescriptor() {
     return parentDescriptor;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicPropertyDescriptor clone() {
+    try {
+      BasicPropertyDescriptor clonedDescriptor = (BasicPropertyDescriptor) super
+          .clone();
+
+      return clonedDescriptor;
+    } catch (CloneNotSupportedException ex) {
+      throw new NestedRuntimeException(ex);
+    }
+  }
 }

@@ -19,7 +19,7 @@ import com.d2s.framework.util.gate.IGate;
  * @author Vincent Vandenschrick
  * @see com.d2s.framework.model.descriptor.IComponentDescriptor
  */
-public interface IPropertyDescriptor extends IModelDescriptor {
+public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
 
   /**
    * Checks the basic compliance of a property value against the property
@@ -146,4 +146,11 @@ public interface IPropertyDescriptor extends IModelDescriptor {
    *            the property new value.
    */
   void preprocessSetter(Object component, Object oldValue, Object newValue);
+  
+  /**
+   * Clones this descriptor.
+   * 
+   * @return the descriptor's clone.
+   */
+  IPropertyDescriptor clone();
 }

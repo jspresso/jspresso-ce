@@ -115,4 +115,15 @@ public abstract class BasicNumberPropertyDescriptor extends
   public void setMinValue(Double minValue) {
     this.minValue = minValue;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicNumberPropertyDescriptor clone() {
+    BasicNumberPropertyDescriptor clonedDescriptor = (BasicNumberPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

@@ -197,4 +197,16 @@ public class BasicCollectionPropertyDescriptor<E> extends
       ICollectionDescriptor<E> referencedDescriptor) {
     this.referencedDescriptor = referencedDescriptor;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public BasicCollectionPropertyDescriptor<E> clone() {
+    BasicCollectionPropertyDescriptor<E> clonedDescriptor = (BasicCollectionPropertyDescriptor<E>) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

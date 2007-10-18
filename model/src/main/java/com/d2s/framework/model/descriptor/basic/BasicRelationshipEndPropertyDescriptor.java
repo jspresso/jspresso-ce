@@ -76,4 +76,15 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
       }
     }
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicRelationshipEndPropertyDescriptor clone() {
+    BasicRelationshipEndPropertyDescriptor clonedDescriptor = (BasicRelationshipEndPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

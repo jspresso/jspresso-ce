@@ -20,6 +20,7 @@ import com.d2s.framework.model.component.service.IComponentService;
 import com.d2s.framework.model.component.service.ILifecycleInterceptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
@@ -92,7 +93,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({"cast", "unchecked" })
+  @SuppressWarnings( {"cast", "unchecked"})
   public Class<? extends E> getComponentContract() {
     if (componentContract == null && getName() != null) {
       try {
@@ -173,12 +174,24 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
    * {@inheritDoc}
    */
   public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
-    IPropertyDescriptor descriptor = getDeclaredPropertyDescriptor(propertyName);
-    if (descriptor == null && ancestorDescriptors != null) {
-      for (Iterator<IComponentDescriptor<?>> ite = ancestorDescriptors
-          .iterator(); descriptor == null && ite.hasNext();) {
-        IComponentDescriptor<?> ancestorDescriptor = ite.next();
-        descriptor = ancestorDescriptor.getPropertyDescriptor(propertyName);
+    IPropertyDescriptor descriptor = null;
+    int nestedDotIndex = propertyName.indexOf('.');
+    if (nestedDotIndex > 0) {
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getPropertyDescriptor(propertyName
+          .substring(0, nestedDotIndex))).getComponentDescriptor();
+      descriptor = componentDescriptor.getPropertyDescriptor(
+          propertyName.substring(nestedDotIndex + 1)).clone();
+      if (descriptor instanceof BasicPropertyDescriptor) {
+        ((BasicPropertyDescriptor) descriptor).setName(propertyName);
+      }
+    } else {
+      descriptor = getDeclaredPropertyDescriptor(propertyName);
+      if (descriptor == null && ancestorDescriptors != null) {
+        for (Iterator<IComponentDescriptor<?>> ite = ancestorDescriptors
+            .iterator(); descriptor == null && ite.hasNext();) {
+          IComponentDescriptor<?> ancestorDescriptor = ite.next();
+          descriptor = ancestorDescriptor.getPropertyDescriptor(propertyName);
+        }
       }
     }
     return descriptor;

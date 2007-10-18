@@ -84,4 +84,15 @@ public class BasicBinaryPropertyDescriptor extends
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicBinaryPropertyDescriptor clone() {
+    BasicBinaryPropertyDescriptor clonedDescriptor = (BasicBinaryPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

@@ -55,4 +55,15 @@ public class BasicEnumerationPropertyDescriptor extends
       Map<String, String> valuesAndIconImageUrls) {
     this.valuesAndIconImageUrls = valuesAndIconImageUrls;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicEnumerationPropertyDescriptor clone() {
+    BasicEnumerationPropertyDescriptor clonedDescriptor = (BasicEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

@@ -25,4 +25,15 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
   public Class<?> getModelType() {
     return Date.class;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicTimePropertyDescriptor clone() {
+    BasicTimePropertyDescriptor clonedDescriptor = (BasicTimePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

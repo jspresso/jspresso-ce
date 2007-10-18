@@ -27,4 +27,15 @@ public class BasicJavaSerializablePropertyDescriptor extends
   public Class<?> getModelType() {
     return Serializable.class;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicJavaSerializablePropertyDescriptor clone() {
+    BasicJavaSerializablePropertyDescriptor clonedDescriptor = (BasicJavaSerializablePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

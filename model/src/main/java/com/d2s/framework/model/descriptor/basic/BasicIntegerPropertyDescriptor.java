@@ -24,4 +24,14 @@ public class BasicIntegerPropertyDescriptor extends
     return Integer.class;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicIntegerPropertyDescriptor clone() {
+    BasicIntegerPropertyDescriptor clonedDescriptor = (BasicIntegerPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

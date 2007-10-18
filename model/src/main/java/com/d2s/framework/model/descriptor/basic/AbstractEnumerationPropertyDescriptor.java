@@ -76,4 +76,15 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public AbstractEnumerationPropertyDescriptor clone() {
+    AbstractEnumerationPropertyDescriptor clonedDescriptor = (AbstractEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

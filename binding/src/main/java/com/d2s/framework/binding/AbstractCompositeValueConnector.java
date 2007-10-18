@@ -83,12 +83,10 @@ public abstract class AbstractCompositeValueConnector extends
     clonedConnector.childConnectorSupport = new ChildConnectorSupport(
         clonedConnector);
     clonedConnector.connectorSelectionSupport = new ConnectorSelectionSupport();
-    clonedConnector.trackingChildrenSelection = trackingChildrenSelection;
     for (String connectorKey : getChildConnectorKeys()) {
       clonedConnector
           .addChildConnector(getChildConnector(connectorKey).clone());
     }
-    clonedConnector.renderingChildConnectorId = renderingChildConnectorId;
     return clonedConnector;
   }
 

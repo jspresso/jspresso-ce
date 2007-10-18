@@ -36,4 +36,15 @@ public class TypeEnumerationPropertyDescriptor extends
     }
     setValuesAndIconImageUrls(componentDescriptorImages);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public TypeEnumerationPropertyDescriptor clone() {
+    TypeEnumerationPropertyDescriptor clonedDescriptor = (TypeEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

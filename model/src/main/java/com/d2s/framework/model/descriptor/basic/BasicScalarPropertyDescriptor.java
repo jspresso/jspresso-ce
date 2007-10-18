@@ -46,4 +46,14 @@ public abstract class BasicScalarPropertyDescriptor extends
     this.defaultValue = defaultValue;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicScalarPropertyDescriptor clone() {
+    BasicScalarPropertyDescriptor clonedDescriptor = (BasicScalarPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

@@ -165,8 +165,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
         clonedConnector.addWritabilityGate(gate.clone());
       }
     }
-    clonedConnector.locallyReadable = locallyReadable;
-    clonedConnector.locallyWritable = locallyWritable;
     return clonedConnector;
   }
 

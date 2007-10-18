@@ -58,4 +58,14 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
     this.type = type;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicDatePropertyDescriptor clone() {
+    BasicDatePropertyDescriptor clonedDescriptor = (BasicDatePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

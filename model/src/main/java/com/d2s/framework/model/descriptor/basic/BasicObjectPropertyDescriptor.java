@@ -33,4 +33,15 @@ public class BasicObjectPropertyDescriptor extends
   public boolean isQueryable() {
     return false;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicObjectPropertyDescriptor clone() {
+    BasicObjectPropertyDescriptor clonedDescriptor = (BasicObjectPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

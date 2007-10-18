@@ -24,4 +24,14 @@ public class BasicColorPropertyDescriptor extends BasicScalarPropertyDescriptor
     return String.class;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicColorPropertyDescriptor clone() {
+    BasicColorPropertyDescriptor clonedDescriptor = (BasicColorPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

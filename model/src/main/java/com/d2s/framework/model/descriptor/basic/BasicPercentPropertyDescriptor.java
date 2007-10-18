@@ -16,5 +16,15 @@ import com.d2s.framework.model.descriptor.IPercentPropertyDescriptor;
  */
 public class BasicPercentPropertyDescriptor extends
     BasicDecimalPropertyDescriptor implements IPercentPropertyDescriptor {
-  // Empty implementation.
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicPercentPropertyDescriptor clone() {
+    BasicPercentPropertyDescriptor clonedDescriptor = (BasicPercentPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

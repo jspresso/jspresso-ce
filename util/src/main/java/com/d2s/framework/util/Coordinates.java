@@ -50,8 +50,6 @@ public class Coordinates {
   public Object clone() {
     try {
       Coordinates clone = (Coordinates) super.clone();
-      clone.x = x;
-      clone.y = y;
       return clone;
     } catch (CloneNotSupportedException ex) {
       throw new NestedRuntimeException(ex);

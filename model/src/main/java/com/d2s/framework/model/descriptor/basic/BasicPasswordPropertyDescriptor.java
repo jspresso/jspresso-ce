@@ -35,4 +35,15 @@ public class BasicPasswordPropertyDescriptor extends
     }
     return null;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicPasswordPropertyDescriptor clone() {
+    BasicPasswordPropertyDescriptor clonedDescriptor = (BasicPasswordPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

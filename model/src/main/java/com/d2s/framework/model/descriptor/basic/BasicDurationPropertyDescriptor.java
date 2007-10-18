@@ -86,4 +86,15 @@ public class BasicDurationPropertyDescriptor extends
   public void setMaxMillis(long maxMillis) {
     this.maxMillis = new Long(maxMillis);
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicDurationPropertyDescriptor clone() {
+    BasicDurationPropertyDescriptor clonedDescriptor = (BasicDurationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

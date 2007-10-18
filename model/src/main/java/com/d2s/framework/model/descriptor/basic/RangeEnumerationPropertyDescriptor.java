@@ -141,4 +141,15 @@ public class RangeEnumerationPropertyDescriptor extends
   public void setRangeStep(Integer rangeStep) {
     this.rangeStep = rangeStep;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public RangeEnumerationPropertyDescriptor clone() {
+    RangeEnumerationPropertyDescriptor clonedDescriptor = (RangeEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

@@ -49,4 +49,15 @@ public class BasicDecimalPropertyDescriptor extends
   public void setMaxFractionDigit(Integer maxFractionDigit) {
     this.maxFractionDigit = maxFractionDigit;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicDecimalPropertyDescriptor clone() {
+    BasicDecimalPropertyDescriptor clonedDescriptor = (BasicDecimalPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

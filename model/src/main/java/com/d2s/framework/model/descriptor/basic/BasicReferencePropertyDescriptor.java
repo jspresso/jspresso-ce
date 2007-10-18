@@ -99,4 +99,16 @@ public class BasicReferencePropertyDescriptor<E> extends
       IComponentDescriptor<E> referencedDescriptor) {
     this.referencedDescriptor = referencedDescriptor;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  @Override
+  public BasicReferencePropertyDescriptor<E> clone() {
+    BasicReferencePropertyDescriptor<E> clonedDescriptor = (BasicReferencePropertyDescriptor<E>) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }

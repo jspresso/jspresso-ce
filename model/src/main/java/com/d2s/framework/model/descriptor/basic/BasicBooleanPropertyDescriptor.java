@@ -24,4 +24,14 @@ public class BasicBooleanPropertyDescriptor extends
     return Boolean.TYPE;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicBooleanPropertyDescriptor clone() {
+    BasicBooleanPropertyDescriptor clonedDescriptor = (BasicBooleanPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
 }
