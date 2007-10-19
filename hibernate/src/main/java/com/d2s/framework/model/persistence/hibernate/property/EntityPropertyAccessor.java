@@ -12,7 +12,7 @@ import org.hibernate.property.Getter;
 import org.hibernate.property.PropertyAccessor;
 import org.hibernate.property.Setter;
 
-import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
@@ -86,7 +86,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
      * {@inheritDoc}
      */
     public Object get(Object target) {
-      return ((IEntity) target).straightGetProperty(propertyName);
+      return ((IComponent) target).straightGetProperty(propertyName);
     }
 
     /**
@@ -174,7 +174,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     @SuppressWarnings("unused")
     public void set(Object target, Object value,
         SessionFactoryImplementor factory) {
-      ((IEntity) target).straightSetProperty(propertyName, value);
+      ((IComponent) target).straightSetProperty(propertyName, value);
     }
 
   }

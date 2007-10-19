@@ -118,6 +118,7 @@
   -->
   <bean id="basicEntityFactory" class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
     <property name="accessorFactory" ref="beanAccessorFactory" />
+    <property name="inlineComponentFactory" ref="basicComponentFactory" />
     <property name="entityCollectionFactory" ref="componentCollectionFactory" />
     <property name="entityExtensionFactory" ref="componentExtensionFactory" />
     <property name="entityGUIDGenerator" ref="entityGUIDGenerator" />
@@ -218,6 +219,14 @@
         </bean>
       </list>
     </property>
+  </bean>
+
+  <!--
+    The Root descriptor of all components.
+  -->
+  <bean id="com.d2s.framework.model.component.IComponent"
+    class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor">
+    <constructor-arg index="0" value="com.d2s.framework.model.component.IComponent" />
   </bean>
 
   <!--

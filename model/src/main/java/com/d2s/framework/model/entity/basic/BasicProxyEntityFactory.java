@@ -12,6 +12,7 @@ import java.lang.reflect.Proxy;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
@@ -41,6 +42,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   private IAccessorFactory                        accessorFactory;
   private IComponentCollectionFactory<IComponent> entityCollectionFactory;
   private IComponentDescriptorRegistry            entityDescriptorRegistry;
+  private IComponentFactory                       inlineComponentFactory;
   private IComponentExtensionFactory              entityExtensionFactory;
   private IGUIDGenerator                          entityGUIDGenerator;
 
@@ -177,7 +179,8 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   protected InvocationHandler createEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor) {
     return new BasicEntityInvocationHandler(entityDescriptor,
-        entityCollectionFactory, accessorFactory, entityExtensionFactory);
+        inlineComponentFactory, entityCollectionFactory, accessorFactory,
+        entityExtensionFactory);
   }
 
   /**
@@ -250,5 +253,41 @@ public class BasicProxyEntityFactory implements IEntityFactory {
         .getContextClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
+  }
+
+  /**
+   * Sets the inlineComponentFactory.
+   * 
+   * @param inlineComponentFactory
+   *            the inlineComponentFactory to set.
+   */
+  public void setInlineComponentFactory(IComponentFactory inlineComponentFactory) {
+    this.inlineComponentFactory = inlineComponentFactory;
+  }
+
+  /**
+   * Gets the inlineComponentFactory.
+   * 
+   * @return the inlineComponentFactory.
+   */
+  protected IComponentFactory getInlineComponentFactory() {
+    return inlineComponentFactory;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract, Object delegate) {
+    return inlineComponentFactory.createComponentInstance(componentContract,
+        delegate);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract) {
+    return inlineComponentFactory.createComponentInstance(componentContract);
   }
 }

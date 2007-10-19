@@ -14,6 +14,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.component.basic.AbstractComponentInvocationHandler;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
@@ -41,6 +42,8 @@ public class BasicEntityInvocationHandler extends
    * 
    * @param entityDescriptor
    *            The descriptor of the proxy entity.
+   * @param inlineComponentFactory
+   *            the factory used to create inline components.
    * @param collectionFactory
    *            The factory used to create empty entity collections from
    *            collection getters.
@@ -52,10 +55,11 @@ public class BasicEntityInvocationHandler extends
    */
   protected BasicEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor,
+      IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
-    super(entityDescriptor, collectionFactory, accessorFactory,
+    super(entityDescriptor, inlineComponentFactory, collectionFactory, accessorFactory,
         extensionFactory);
     this.properties = createPropertyMap();
   }

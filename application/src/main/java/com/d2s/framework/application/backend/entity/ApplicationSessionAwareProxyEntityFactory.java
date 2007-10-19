@@ -58,8 +58,8 @@ public class ApplicationSessionAwareProxyEntityFactory extends
   protected InvocationHandler createEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor) {
     return new ApplicationSessionAwareEntityInvocationHandler(entityDescriptor,
-        getEntityCollectionFactory(), getAccessorFactory(),
-        getEntityExtensionFactory(), applicationSession);
+        getInlineComponentFactory(), getEntityCollectionFactory(),
+        getAccessorFactory(), getEntityExtensionFactory(), applicationSession);
   }
 
   /**

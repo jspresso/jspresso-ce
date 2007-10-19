@@ -5,6 +5,7 @@ package com.d2s.framework.model.entity;
 
 import java.io.Serializable;
 
+import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 
 /**
@@ -16,7 +17,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntityFactory extends IComponentDescriptorRegistry {
+public interface IEntityFactory extends IComponentFactory, IComponentDescriptorRegistry {
 
   /**
    * Creates a new entity instance based on the entity descriptor. The entity

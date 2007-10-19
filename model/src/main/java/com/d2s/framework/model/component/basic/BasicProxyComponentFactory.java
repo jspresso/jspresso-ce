@@ -38,11 +38,18 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    */
   public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate) {
-    final T createdComponent = createDelegatingComponentInstance(componentContract, delegate,
+    T createdComponent = createComponentInstance(componentContract, delegate,
         null);
-    createdComponent
-        .onCreate(null, getPrincipal(), null);
+    createdComponent.onCreate(null, getPrincipal(), null);
     return createdComponent;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract) {
+    return createComponentInstance(componentContract, null);
   }
 
   /**
@@ -140,13 +147,24 @@ public class BasicProxyComponentFactory implements IComponentFactory {
         componentExtensionFactory);
   }
 
+  private InvocationHandler createComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor) {
+    return new BasicComponentInvocationHandler(componentDescriptor, this,
+        componentCollectionFactory, accessorFactory, componentExtensionFactory);
+  }
+
   @SuppressWarnings("unchecked")
-  private <T extends IComponent> T createDelegatingComponentInstance(
+  private <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate, Class[] extraInterfaces) {
     IComponentDescriptor componentDescriptor = componentDescriptorRegistry
         .getComponentDescriptor(componentContract);
-    InvocationHandler componentHandler = createDelegatingComponentInvocationHandler(
-        componentDescriptor, delegate);
+    InvocationHandler componentHandler;
+    if (delegate != null) {
+      componentHandler = createDelegatingComponentInvocationHandler(
+          componentDescriptor, delegate);
+    } else {
+      componentHandler = createComponentInvocationHandler(componentDescriptor);
+    }
     Class[] implementedClasses;
     if (extraInterfaces != null) {
       implementedClasses = new Class[extraInterfaces.length + 1];

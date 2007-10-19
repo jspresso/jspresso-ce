@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.model.component.basic;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.Serializable;
@@ -25,6 +26,7 @@ import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtension;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.component.ILifecycleCapable;
 import com.d2s.framework.model.component.service.IComponentService;
 import com.d2s.framework.model.component.service.ILifecycleInterceptor;
@@ -35,6 +37,7 @@ import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
@@ -60,6 +63,7 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private IAccessorFactory                                                             accessorFactory;
   private PropertyChangeSupport                                                        changeSupport;
+  private IComponentFactory                                                            inlineComponentFactory;
   private IComponentCollectionFactory<IComponent>                                      collectionFactory;
   private IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;
@@ -72,6 +76,8 @@ public abstract class AbstractComponentInvocationHandler implements
    * 
    * @param componentDescriptor
    *            The descriptor of the proxy component.
+   * @param inlineComponentFactory
+   *            the factory used to create inline components.
    * @param collectionFactory
    *            The factory used to create empty component collections from
    *            collection getters.
@@ -83,10 +89,12 @@ public abstract class AbstractComponentInvocationHandler implements
    */
   protected AbstractComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor,
+      IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
     this.componentDescriptor = componentDescriptor;
+    this.inlineComponentFactory = inlineComponentFactory;
     this.collectionFactory = collectionFactory;
     this.accessorFactory = accessorFactory;
     this.extensionFactory = extensionFactory;
@@ -349,6 +357,20 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
+   * Gets wether this reference descriptor points to an inline component.
+   * 
+   * @param propertyDescriptor
+   *            the reference descriptor to test.
+   * @return true if this reference descriptor points to an inline component.
+   */
+  protected boolean isInlineComponentReference(
+      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+    return !IEntity.class.isAssignableFrom(propertyDescriptor
+        .getReferencedDescriptor().getComponentContract())
+        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract();
+  }
+
+  /**
    * Gets a reference property value.
    * 
    * @param proxy
@@ -358,9 +380,24 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return the property value.
    */
   protected Object getReferenceProperty(@SuppressWarnings("unused")
-  Object proxy, IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+  Object proxy,
+      final IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     IComponent property = (IComponent) straightGetProperty(propertyDescriptor
         .getName());
+    if (property == null && isInlineComponentReference(propertyDescriptor)) {
+      property = inlineComponentFactory
+          .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
+              .getComponentContract());
+
+      property.addPropertyChangeListener(new PropertyChangeListener() {
+
+        public void propertyChange(PropertyChangeEvent evt) {
+          firePropertyChange(propertyDescriptor.getName(), null, evt
+              .getSource());
+        }
+      });
+      storeProperty(propertyDescriptor.getName(), property);
+    }
     return decorateReferent(property, propertyDescriptor
         .getReferencedDescriptor());
   }

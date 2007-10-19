@@ -17,16 +17,28 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 public interface IComponentFactory extends IComponentDescriptorRegistry {
 
   /**
-   * Creates a new component instance based on the component descriptor.
+   * Creates a new component instance based on the component descriptor. All
+   * method calls are handled by the component delegate.
    * 
    * @param <T>
    *            the concrete class of the created component.
-   * @param entityContract
+   * @param componentContract
    *            the class of the component to create.
    * @param delegate
    *            the component delegate instance.
    * @return the component instance.
    */
-  <T extends IComponent> T createComponentInstance(Class<T> entityContract,
+  <T extends IComponent> T createComponentInstance(Class<T> componentContract,
       Object delegate);
+
+  /**
+   * Creates a new component instance based on the component descriptor.
+   * 
+   * @param <T>
+   *            the concrete class of the created component.
+   * @param componentContract
+   *            the class of the component to create.
+   * @return the component instance.
+   */
+  <T extends IComponent> T createComponentInstance(Class<T> componentContract);
 }

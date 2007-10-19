@@ -7,6 +7,7 @@ import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -38,6 +39,8 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    * 
    * @param entityDescriptor
    *            The descriptor of the proxy entity.
+   * @param inlineComponentFactory
+   *            the factory used to create inline components.
    * @param collectionFactory
    *            The factory used to create empty entity collections from
    *            collection getters.
@@ -51,12 +54,13 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    */
   protected ApplicationSessionAwareEntityInvocationHandler(
       IComponentDescriptor<IComponent> entityDescriptor,
+      IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory,
       IApplicationSession applicationSession) {
-    super(entityDescriptor, collectionFactory, accessorFactory,
-        extensionFactory);
+    super(entityDescriptor, inlineComponentFactory, collectionFactory,
+        accessorFactory, extensionFactory);
     this.applicationSession = applicationSession;
   }
 
@@ -78,8 +82,11 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
-    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
-        propertyDescriptor);
+
+    if (!isInlineComponentReference(propertyDescriptor)) {
+      applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+          propertyDescriptor);
+    }
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }
 

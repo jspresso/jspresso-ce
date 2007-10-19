@@ -18,7 +18,7 @@ import com.d2s.framework.model.component.IComponent;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IEntity extends IComponent, Cloneable {
+public interface IEntity extends IComponent {
 
   /**
    * constant for identifier property <code>ID</code>.
