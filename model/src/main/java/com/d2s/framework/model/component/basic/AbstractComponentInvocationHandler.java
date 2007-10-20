@@ -394,6 +394,8 @@ public abstract class AbstractComponentInvocationHandler implements
         public void propertyChange(PropertyChangeEvent evt) {
           firePropertyChange(propertyDescriptor.getName(), null, evt
               .getSource());
+          firePropertyChange(propertyDescriptor.getName() + "."
+              + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
         }
       });
       storeProperty(propertyDescriptor.getName(), property);

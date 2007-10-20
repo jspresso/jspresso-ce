@@ -7,6 +7,17 @@
     Hibernate root application context for the D2S framework.
   -->
 
+  <bean id="componentTuplizerInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="targetClass"
+      value="com.d2s.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer" />
+    <property name="targetMethod" value="setInlineComponentFactory" />
+    <property name="arguments">
+      <list>
+        <ref bean="basicComponentFactory" />
+      </list>
+    </property>
+  </bean>
+
   <bean id="abstractHibernateSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
     <property name="dataSource" ref="dataSource" />
   </bean>
@@ -63,7 +74,8 @@
   </bean>
 
   <bean id="smartEntityCloneFactory"
-    class="com.d2s.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory">
+    class="com.d2s.framework.model.persistence.hibernate.entity.HibernateAwareSmartEntityCloneFactory"
+    depends-on="componentTuplizerInit">
     <property name="accessorFactory" ref="beanAccessorFactory" />
   </bean>
 </beans>

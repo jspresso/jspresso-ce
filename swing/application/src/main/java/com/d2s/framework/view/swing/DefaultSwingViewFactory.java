@@ -3016,7 +3016,11 @@ public class DefaultSwingViewFactory implements
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   connectorValue), locale));
         } else {
-          super.setValue(String.valueOf(connectorValue));
+          if (connectorValue == null) {
+            super.setValue("");
+          } else {
+            super.setValue(String.valueOf(connectorValue));
+          }
         }
       } else {
         if (value != null && propertyDescriptor.isTranslated()) {
@@ -3024,7 +3028,11 @@ public class DefaultSwingViewFactory implements
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {
-          super.setValue(String.valueOf(value));
+          if (value == null) {
+            super.setValue("");
+          } else {
+            super.setValue(String.valueOf(value));
+          }
         }
       }
     }

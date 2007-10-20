@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.entity;
 
+import com.d2s.framework.model.component.IComponent;
+
 /**
  * A factory to clone entities.
  * <p>
@@ -26,5 +28,19 @@ public interface IEntityCloneFactory {
    * @return the cloned entity.
    */
   <E extends IEntity> E cloneEntity(E entityToClone,
+      IEntityFactory entityFactory);
+
+  /**
+   * Clones a component.
+   * 
+   * @param <E>
+   *            the component contract (class or interface) to clone.
+   * @param componentToClone
+   *            the component to clone.
+   * @param entityFactory
+   *            the entity factory to use to create new entities.
+   * @return the cloned component.
+   */
+  <E extends IComponent> E cloneComponent(IComponent componentToClone,
       IEntityFactory entityFactory);
 }

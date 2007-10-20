@@ -111,4 +111,18 @@ public class BasicReferencePropertyDescriptor<E> extends
 
     return clonedDescriptor;
   }
+
+  /**
+   * return true for a 1-1 relationship and false for a 1-N relationship.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultComposition() {
+    if (getReverseRelationEnd() == null
+        || getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>) {
+      return true;
+    }
+    return false;
+  }
 }

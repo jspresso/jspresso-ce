@@ -6,14 +6,15 @@ package com.d2s.framework.model.persistence.hibernate.entity.tuplizer;
 import java.io.Serializable;
 
 import org.hibernate.AssertionFailure;
-import org.hibernate.bytecode.BasicProxyFactory;
-import org.hibernate.cfg.Environment;
 import org.hibernate.mapping.Component;
 import org.hibernate.tuple.Instantiator;
 import org.hibernate.tuple.component.PojoComponentTuplizer;
 
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.component.IComponentFactory;
+
 /**
- * TODO Comment needed.
+ * A specialized hibernate tuplizer to handle proxy components.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -22,47 +23,58 @@ import org.hibernate.tuple.component.PojoComponentTuplizer;
  * @author Vincent Vandenschrick
  */
 public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
+  
+  private static IComponentFactory inlineComponentFactory;
 
   /**
    * Constructs a new <code>ProxyPojoComponentTuplizer</code> instance.
    * 
    * @param component
+   *            the component to build the proxy for.
    */
   public ProxyPojoComponentTuplizer(Component component) {
     super(component);
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   protected Instantiator buildInstantiator(Component component) {
     return new ProxyInstantiator(component);
   }
 
   private static class ProxyInstantiator implements Instantiator {
 
-    private final Class             proxiedClass;
-    private final BasicProxyFactory factory;
+    private final Class<? extends IComponent>          componentContract;
 
     public ProxyInstantiator(Component component) {
-      proxiedClass = component.getComponentClass();
-      if (proxiedClass.isInterface()) {
-        factory = Environment.getBytecodeProvider().getProxyFactoryFactory()
-            .buildBasicProxyFactory(null, new Class[] {proxiedClass});
-      } else {
-        factory = Environment.getBytecodeProvider().getProxyFactoryFactory()
-            .buildBasicProxyFactory(proxiedClass, null);
-      }
+      componentContract = component.getComponentClass();
     }
 
-    public Object instantiate(Serializable id) {
+    public Object instantiate(@SuppressWarnings("unused")
+    Serializable id) {
       throw new AssertionFailure(
-          "ProxiedInstantiator can only be used to instantiate component");
+          "ProxyInstantiator can only be used to instantiate component");
     }
 
     public Object instantiate() {
-      return factory.getProxy();
+      return inlineComponentFactory.createComponentInstance(componentContract);
     }
 
     public boolean isInstance(Object object) {
-      return proxiedClass.isInstance(object);
+      return componentContract.isInstance(object);
     }
+  }
+
+  
+  /**
+   * Sets the inlineComponentFactory.
+   * 
+   * @param inlineComponentFactory the inlineComponentFactory to set.
+   */
+  public static void setInlineComponentFactory(
+      IComponentFactory inlineComponentFactory) {
+    ProxyPojoComponentTuplizer.inlineComponentFactory = inlineComponentFactory;
   }
 }

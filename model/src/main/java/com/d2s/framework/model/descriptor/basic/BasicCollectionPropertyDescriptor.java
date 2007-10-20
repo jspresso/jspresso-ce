@@ -161,7 +161,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor = 
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessRemoverIntegrity(component, collection, removedValue);
     }
@@ -208,5 +208,19 @@ public class BasicCollectionPropertyDescriptor<E> extends
         .clone();
 
     return clonedDescriptor;
+  }
+
+  /**
+   * return true for a 1-N relationship and false for a N-N relationship.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected boolean getDefaultComposition() {
+    if (getReverseRelationEnd() == null
+        || getReverseRelationEnd() instanceof ICollectionPropertyDescriptor<?>) {
+      return false;
+    }
+    return true;
   }
 }

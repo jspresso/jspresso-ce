@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptorAware;
@@ -27,13 +28,14 @@ import com.d2s.framework.util.accessor.ICollectionAccessor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SmartEntityCloneFactory implements IEntityCloneFactory {
+public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
 
   private IAccessorFactory accessorFactory;
 
   /**
    * {@inheritDoc}
    */
+  @Override
   @SuppressWarnings("unchecked")
   public <E extends IEntity> E cloneEntity(E entityToClone,
       IEntityFactory entityFactory) {
@@ -53,26 +55,33 @@ public class SmartEntityCloneFactory implements IEntityCloneFactory {
         IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(propertyEntry.getKey());
         if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-          IRelationshipEndPropertyDescriptor reverseDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
-              .getReverseRelationEnd();
-          if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-            if (!(reverseDescriptor instanceof IReferencePropertyDescriptor)) {
-              clonedEntity.straightSetProperty(propertyEntry.getKey(),
-                  propertyEntry.getValue());
-              if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-                if (isInitialized(propertyEntry.getValue())) {
-                  collRelToUpdate.put(propertyEntry.getValue(),
-                      (ICollectionPropertyDescriptor) reverseDescriptor);
+          if (propertyEntry.getValue() instanceof IComponent
+              && !(propertyEntry.getValue() instanceof IEntity)) {
+            clonedEntity.straightSetProperty(propertyEntry.getKey(),
+                cloneComponent((IComponent) propertyEntry.getValue(),
+                    entityFactory));
+          } else {
+            IRelationshipEndPropertyDescriptor reverseDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
+                .getReverseRelationEnd();
+            if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
+              if (!(reverseDescriptor instanceof IReferencePropertyDescriptor)) {
+                clonedEntity.straightSetProperty(propertyEntry.getKey(),
+                    propertyEntry.getValue());
+                if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
+                  if (isInitialized(propertyEntry.getValue())) {
+                    collRelToUpdate.put(propertyEntry.getValue(),
+                        (ICollectionPropertyDescriptor) reverseDescriptor);
+                  }
                 }
               }
-            }
-          } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
-            if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
-              for (Object reverseCollectionElement : (Collection) propertyEntry
-                  .getValue()) {
-                if (isInitialized(reverseCollectionElement)) {
-                  collRelToUpdate.put(reverseCollectionElement,
-                      (ICollectionPropertyDescriptor) reverseDescriptor);
+            } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+              if (reverseDescriptor instanceof ICollectionPropertyDescriptor) {
+                for (Object reverseCollectionElement : (Collection) propertyEntry
+                    .getValue()) {
+                  if (isInitialized(reverseCollectionElement)) {
+                    collRelToUpdate.put(reverseCollectionElement,
+                        (ICollectionPropertyDescriptor) reverseDescriptor);
+                  }
                 }
               }
             }

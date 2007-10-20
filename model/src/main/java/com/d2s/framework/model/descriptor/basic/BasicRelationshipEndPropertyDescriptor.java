@@ -45,8 +45,15 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
       return ((IRelationshipEndPropertyDescriptor) getParentDescriptor())
           .isComposition();
     }
-    return true;
+    return getDefaultComposition();
   }
+  
+  /**
+   * Gets the default composition of a relationship end.
+   * 
+   * @return the default composition of a relationship end.
+   */
+  protected abstract boolean getDefaultComposition();
 
   /**
    * Sets the composition.

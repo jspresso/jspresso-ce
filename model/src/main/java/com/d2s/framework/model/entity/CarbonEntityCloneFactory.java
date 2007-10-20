@@ -62,9 +62,12 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
     }
   }
 
-  private IComponent cloneComponent(IComponent componentToClone,
+  /**
+   * {@inheritDoc}
+   */
+  public <E extends IComponent> E cloneComponent(IComponent componentToClone,
       IEntityFactory entityFactory) {
-    IComponent clonedComponent = entityFactory
+    E clonedComponent = (E) entityFactory
         .createComponentInstance(componentToClone.getContract());
     carbonCopyComponent(componentToClone, clonedComponent, entityFactory);
     return clonedComponent;

@@ -21,6 +21,7 @@ import com.d2s.framework.application.backend.session.ApplicationSessionException
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.IEntityUnitOfWork;
 import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
@@ -168,7 +169,8 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
-  public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract, Object entityId) {
+  public IEntity getRegisteredEntity(Class<? extends IEntity> entityContract,
+      Object entityId) {
     return entityRegistry.get(entityContract, entityId);
   }
 
@@ -433,8 +435,7 @@ public class BasicApplicationSession implements IApplicationSession {
       Collection<?> collection) {
     Collection<IEntity> uowEntityCollection = null;
     if (collection instanceof Set) {
-      uowEntityCollection = collectionFactory
-          .createEntityCollection(Set.class);
+      uowEntityCollection = collectionFactory.createEntityCollection(Set.class);
     } else if (collection instanceof List) {
       uowEntityCollection = collectionFactory
           .createEntityCollection(List.class);
@@ -703,6 +704,12 @@ public class BasicApplicationSession implements IApplicationSession {
                 }
               }
             }
+          } else if (property.getValue() instanceof IComponent) {
+            IComponent registeredComponent = (IComponent) registeredEntityProperties
+                .get(property.getKey());
+            mergedProperties.put(property.getKey(), mergeComponent(
+                (IComponent) property.getValue(), registeredComponent,
+                mergeMode, alreadyMerged));
           } else {
             mergedProperties.put(property.getKey(), property.getValue());
           }
@@ -710,6 +717,64 @@ public class BasicApplicationSession implements IApplicationSession {
         registeredEntity.straightSetProperties(mergedProperties);
       }
       return registeredEntity;
+    } finally {
+      dirtRecorder.setEnabled(dirtRecorderWasEnabled);
+    }
+  }
+
+  private IComponent mergeComponent(IComponent componentToMerge,
+      IComponent registeredComponent, MergeMode mergeMode,
+      Map<IEntity, IEntity> alreadyMerged) {
+    if (componentToMerge == null) {
+      return null;
+    }
+    boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
+    boolean newlyRegistered = false;
+    try {
+      dirtRecorder.setEnabled(false);
+      if (registeredComponent == null) {
+        registeredComponent = carbonEntityCloneFactory.cloneComponent(
+            componentToMerge, entityFactory);
+        dirtRecorder.register(registeredComponent, null);
+        newlyRegistered = true;
+      } else if (mergeMode == MergeMode.MERGE_KEEP) {
+        return registeredComponent;
+      }
+      if (mergeMode != MergeMode.MERGE_CLEAN_LAZY || newlyRegistered) {
+        Map<String, Object> componentPropertiesToMerge = componentToMerge
+            .straightGetProperties();
+        Map<String, Object> registeredComponentProperties = registeredComponent
+            .straightGetProperties();
+        Map<String, Object> mergedProperties = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> property : componentPropertiesToMerge
+            .entrySet()) {
+          if (property.getValue() instanceof IEntity) {
+            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
+                && !isInitialized(property.getValue())) {
+              if (registeredComponentProperties.get(property.getKey()) == null) {
+                mergedProperties.put(property.getKey(), property.getValue());
+              }
+            } else {
+              Object registeredProperty = registeredComponentProperties
+                  .get(property.getKey());
+              if (isInitialized(registeredProperty)) {
+                mergedProperties.put(property.getKey(), merge(
+                    (IEntity) property.getValue(), mergeMode, alreadyMerged));
+              }
+            }
+          } else if (property.getValue() instanceof IComponent) {
+            IComponent registeredSubComponent = (IComponent) registeredComponentProperties
+                .get(property.getKey());
+            mergedProperties.put(property.getKey(), mergeComponent(
+                (IComponent) property.getValue(), registeredSubComponent,
+                mergeMode, alreadyMerged));
+          } else {
+            mergedProperties.put(property.getKey(), property.getValue());
+          }
+        }
+        registeredComponent.straightSetProperties(mergedProperties);
+      }
+      return registeredComponent;
     } finally {
       dirtRecorder.setEnabled(dirtRecorderWasEnabled);
     }

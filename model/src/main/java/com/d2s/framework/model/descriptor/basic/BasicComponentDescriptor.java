@@ -22,8 +22,10 @@ import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
+import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.exception.NestedRuntimeException;
 
@@ -94,7 +96,7 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings( {"cast", "unchecked"})
+  @SuppressWarnings({ "cast", "unchecked" })
   public Class<? extends E> getComponentContract() {
     if (componentContract == null && getName() != null) {
       try {
@@ -246,7 +248,15 @@ public class BasicComponentDescriptor<E> extends DefaultIconDescriptor
     if (renderedProperties == null) {
       List<String> allProperties = new ArrayList<String>();
       for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
-        if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor)
+        if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
+            .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+                .getReferencedDescriptor().getComponentContract()))) {
+          for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+              .getReferencedDescriptor().getRenderedProperties()) {
+            allProperties.add(propertyDescriptor.getName() + "."
+                + nestedRenderedProperty);
+          }
+        } else if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor)
             && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
           allProperties.add(propertyDescriptor.getName());
         }
