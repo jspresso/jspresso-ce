@@ -116,9 +116,9 @@ public class BeanPropertyChangeRecorder implements PropertyChangeListener {
         .get(bean);
     if (recordedChangedProperties != null) {
       recordedChangedProperties.clear();
-    }
-    if (changedProperties != null) {
-      recordedChangedProperties.putAll(changedProperties);
+      if (changedProperties != null) {
+        recordedChangedProperties.putAll(changedProperties);
+      }
     }
   }
 

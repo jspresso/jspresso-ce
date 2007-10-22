@@ -261,69 +261,71 @@ public class DefaultUlcViewFactory implements
       view = createTreeView((ITreeViewDescriptor) viewDescriptor,
           actionHandler, locale);
     }
-    if (viewDescriptor.getDescription() != null) {
-      view.getPeer().setToolTipText(
-          viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-              + TOOLTIP_ELLIPSIS);
-    }
-    try {
-      actionHandler.checkAccess(viewDescriptor);
-      if (viewDescriptor.getForeground() != null) {
-        view.getPeer().setForeground(
-            createUlcColor(viewDescriptor.getForeground()));
+    if (view != null) {
+      if (viewDescriptor.getDescription() != null) {
+        view.getPeer().setToolTipText(
+            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
+                + TOOLTIP_ELLIPSIS);
       }
-      if (viewDescriptor.getBackground() != null) {
-        view.getPeer().setBackground(
-            createUlcColor(viewDescriptor.getBackground()));
-      }
-      if (viewDescriptor.getFont() != null) {
-        view.getPeer().setFont(createUlcFont(viewDescriptor.getFont()));
-      }
-      if (viewDescriptor.isReadOnly()) {
-        view.getConnector().setLocallyWritable(false);
-      }
-      if (viewDescriptor.getActions() != null) {
-        ULCToolBar toolBar = createULCToolBar();
-        for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-            .getActions().entrySet().iterator(); iter.hasNext();) {
-          Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
-              .next();
-          for (IDisplayableAction action : nextActionSet.getValue()) {
-            IAction ulcAction = actionFactory.createAction(action,
-                actionHandler, view, locale);
-            ULCButton actionButton = createULCButton();
-            actionButton.setAction(ulcAction);
-
-            if (action.getAcceleratorAsString() != null) {
-              KeyStroke ks = KeyStroke.getKeyStroke(action
-                  .getAcceleratorAsString());
-              view.getPeer().registerKeyboardAction(ulcAction, ks,
-                  ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
-              String acceleratorString = java.awt.event.KeyEvent
-                  .getKeyModifiersText(ks.getModifiers())
-                  + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
-              actionButton.setToolTipText("<HTML>"
-                  + actionButton.getToolTipText()
-                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                  + "</FONT></HTML>");
-            }
-
-            actionButton.setText("");
-            toolBar.add(actionButton);
-          }
-          if (iter.hasNext()) {
-            toolBar.addSeparator();
-          }
+      try {
+        actionHandler.checkAccess(viewDescriptor);
+        if (viewDescriptor.getForeground() != null) {
+          view.getPeer().setForeground(
+              createUlcColor(viewDescriptor.getForeground()));
         }
+        if (viewDescriptor.getBackground() != null) {
+          view.getPeer().setBackground(
+              createUlcColor(viewDescriptor.getBackground()));
+        }
+        if (viewDescriptor.getFont() != null) {
+          view.getPeer().setFont(createUlcFont(viewDescriptor.getFont()));
+        }
+        if (viewDescriptor.isReadOnly()) {
+          view.getConnector().setLocallyWritable(false);
+        }
+        if (viewDescriptor.getActions() != null) {
+          ULCToolBar toolBar = createULCToolBar();
+          for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
+              .getActions().entrySet().iterator(); iter.hasNext();) {
+            Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
+                .next();
+            for (IDisplayableAction action : nextActionSet.getValue()) {
+              IAction ulcAction = actionFactory.createAction(action,
+                  actionHandler, view, locale);
+              ULCButton actionButton = createULCButton();
+              actionButton.setAction(ulcAction);
 
-        ULCBorderLayoutPane viewPanel = createBorderLayoutPane();
-        viewPanel.add(toolBar, ULCBorderLayoutPane.NORTH);
-        viewPanel.add(view.getPeer(), ULCBorderLayoutPane.CENTER);
-        view.setPeer(viewPanel);
+              if (action.getAcceleratorAsString() != null) {
+                KeyStroke ks = KeyStroke.getKeyStroke(action
+                    .getAcceleratorAsString());
+                view.getPeer().registerKeyboardAction(ulcAction, ks,
+                    ULCComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+                String acceleratorString = java.awt.event.KeyEvent
+                    .getKeyModifiersText(ks.getModifiers())
+                    + "-" + java.awt.event.KeyEvent.getKeyText(ks.getKeyCode());
+                actionButton.setToolTipText("<HTML>"
+                    + actionButton.getToolTipText()
+                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                    + acceleratorString + "</FONT></HTML>");
+              }
+
+              actionButton.setText("");
+              toolBar.add(actionButton);
+            }
+            if (iter.hasNext()) {
+              toolBar.addSeparator();
+            }
+          }
+
+          ULCBorderLayoutPane viewPanel = createBorderLayoutPane();
+          viewPanel.add(toolBar, ULCBorderLayoutPane.NORTH);
+          viewPanel.add(view.getPeer(), ULCBorderLayoutPane.CENTER);
+          view.setPeer(viewPanel);
+        }
+        decorateWithBorder(view, locale);
+      } catch (SecurityException ex) {
+        view.setPeer(createSecurityPanel());
       }
-      decorateWithBorder(view, locale);
-    } catch (SecurityException ex) {
-      view.setPeer(createSecurityPanel());
     }
     return view;
   }
@@ -1366,36 +1368,38 @@ public class DefaultUlcViewFactory implements
       view = createTabView((ITabViewDescriptor) viewDescriptor, actionHandler,
           locale);
     }
-    if (viewDescriptor.isMasterDetail()) {
-      IView<ULCComponent> masterView = view.getChildren().get(0);
-      view.setConnector(masterView.getConnector());
-      for (int i = 1; i < view.getChildren().size(); i++) {
-        IView<ULCComponent> detailView = view.getChildren().get(i);
-        detailView.setParent(view);
-        IValueConnector detailConnector = null;
-        if (detailView.getConnector() instanceof ICollectionConnector) {
-          IConfigurableCollectionConnectorProvider wrapper = connectorFactory
-              .createConfigurableCollectionConnectorProvider(
-                  ModelRefPropertyConnector.THIS_PROPERTY, null);
-          wrapper.addChildConnector(detailView.getConnector());
-          wrapper
-              .setCollectionConnectorProvider((ICollectionConnector) detailView
-                  .getConnector());
-          detailConnector = wrapper;
-        } else {
-          detailConnector = detailView.getConnector();
+    if (view != null) {
+      if (viewDescriptor.isMasterDetail()) {
+        IView<ULCComponent> masterView = view.getChildren().get(0);
+        view.setConnector(masterView.getConnector());
+        for (int i = 1; i < view.getChildren().size(); i++) {
+          IView<ULCComponent> detailView = view.getChildren().get(i);
+          detailView.setParent(view);
+          IValueConnector detailConnector = null;
+          if (detailView.getConnector() instanceof ICollectionConnector) {
+            IConfigurableCollectionConnectorProvider wrapper = connectorFactory
+                .createConfigurableCollectionConnectorProvider(
+                    ModelRefPropertyConnector.THIS_PROPERTY, null);
+            wrapper.addChildConnector(detailView.getConnector());
+            wrapper
+                .setCollectionConnectorProvider((ICollectionConnector) detailView
+                    .getConnector());
+            detailConnector = wrapper;
+          } else {
+            detailConnector = detailView.getConnector();
+          }
+          masterDetailBinder.bind(masterView.getConnector(), detailConnector);
+          masterView = detailView;
         }
-        masterDetailBinder.bind(masterView.getConnector(), detailConnector);
-        masterView = detailView;
-      }
-    } else {
-      ICompositeValueConnector connector = connectorFactory
-          .createCompositeValueConnector(
-              ModelRefPropertyConnector.THIS_PROPERTY, null);
-      view.setConnector(connector);
-      for (IView<ULCComponent> childView : view.getChildren()) {
-        childView.setParent(view);
-        connector.addChildConnector(childView.getConnector());
+      } else {
+        ICompositeValueConnector connector = connectorFactory
+            .createCompositeValueConnector(
+                ModelRefPropertyConnector.THIS_PROPERTY, null);
+        view.setConnector(connector);
+        for (IView<ULCComponent> childView : view.getChildren()) {
+          childView.setParent(view);
+          connector.addChildConnector(childView.getConnector());
+        }
       }
     }
     return view;
@@ -1993,7 +1997,7 @@ public class DefaultUlcViewFactory implements
       view = createColorPropertyView(
           (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
-    if (propertyDescriptor.getDescription() != null) {
+    if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
           propertyDescriptor.getI18nDescription(getTranslationProvider(),
               locale)

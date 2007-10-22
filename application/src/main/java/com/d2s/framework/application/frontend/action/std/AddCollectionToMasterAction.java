@@ -59,12 +59,13 @@ public class AddCollectionToMasterAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    if (context == null) {
-      context = new HashMap<String, Object>();
+    Map<String, Object> varContext = context;
+    if (varContext == null) {
+      varContext = new HashMap<String, Object>();
     }
-    context.put(ActionContextConstants.ELEMENT_DESCRIPTOR,
+    varContext.put(ActionContextConstants.ELEMENT_DESCRIPTOR,
         elementEntityDescriptor);
-    return super.execute(actionHandler, context);
+    return super.execute(actionHandler, varContext);
   }
 
   /**

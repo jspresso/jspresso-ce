@@ -282,6 +282,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   protected Collection<IEntity> wrapDetachedEntityCollection(IEntity entity,
       Collection<IEntity> transientCollection,
       Collection<IEntity> snapshotCollection, String role) {
+    Collection<IEntity> varSnapshotCollection = snapshotCollection;
     if (!(transientCollection instanceof PersistentCollection)) {
       if (entity.isPersistent()) {
         if (transientCollection instanceof Set) {
@@ -289,11 +290,11 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
               (Set<?>) transientCollection);
           persistentSet.setOwner(entity);
           HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
-          if (snapshotCollection == null) {
+          if (varSnapshotCollection == null) {
             persistentSet.clearDirty();
-            snapshotCollection = transientCollection;
+            varSnapshotCollection = transientCollection;
           }
-          for (Object snapshotCollectionElement : snapshotCollection) {
+          for (Object snapshotCollectionElement : varSnapshotCollection) {
             snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
           }
           persistentSet.setSnapshot(entity.getId(), getHibernateRoleName(entity
@@ -304,11 +305,11 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
               (List<?>) transientCollection);
           persistentList.setOwner(entity);
           ArrayList<Object> snapshot = new ArrayList<Object>();
-          if (snapshotCollection == null) {
+          if (varSnapshotCollection == null) {
             persistentList.clearDirty();
-            snapshotCollection = transientCollection;
+            varSnapshotCollection = transientCollection;
           }
-          for (Object snapshotCollectionElement : snapshotCollection) {
+          for (Object snapshotCollectionElement : varSnapshotCollection) {
             snapshot.add(snapshotCollectionElement);
           }
           persistentList.setSnapshot(entity.getId(), getHibernateRoleName(
@@ -317,14 +318,14 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
         }
       }
     } else {
-      if (snapshotCollection == null) {
+      if (varSnapshotCollection == null) {
         ((PersistentCollection) transientCollection).clearDirty();
       } else {
         ((PersistentCollection) transientCollection).dirty();
       }
     }
     return super.wrapDetachedEntityCollection(entity, transientCollection,
-        snapshotCollection, role);
+        varSnapshotCollection, role);
   }
 
   private void performActualUnitOfWorkCommit() {

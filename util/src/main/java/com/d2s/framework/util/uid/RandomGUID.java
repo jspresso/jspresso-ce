@@ -179,16 +179,9 @@ public class RandomGUID extends Object {
    * Method to generate the random GUID.
    */
   private void getRandomGUID(boolean secure) {
-    MessageDigest md5 = null;
-    StringBuffer sbValueBeforeMD5 = new StringBuffer();
-
     try {
-      md5 = MessageDigest.getInstance("MD5");
-    } catch (NoSuchAlgorithmException e) {
-      System.out.println("Error: " + e);
-    }
-
-    try {
+      StringBuffer sbValueBeforeMD5 = new StringBuffer();
+      MessageDigest md5 = MessageDigest.getInstance("MD5");
       long time = System.currentTimeMillis();
       long rand = 0;
 
@@ -225,8 +218,8 @@ public class RandomGUID extends Object {
 
       valueAfterMD5 = sb.toString();
 
-    } catch (Exception e) {
-      System.out.println("Error:" + e);
+    } catch (NoSuchAlgorithmException e) {
+      System.out.println("Error: " + e);
     }
   }
 }

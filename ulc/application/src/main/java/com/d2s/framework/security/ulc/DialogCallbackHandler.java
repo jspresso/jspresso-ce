@@ -64,10 +64,10 @@ public class DialogCallbackHandler implements CallbackHandler {
    */
 
   public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
-
+    Callback[] varCallbacks = callbacks;
     boolean tocFound = false;
     boolean pcFound = false;
-    for (Callback callback : callbacks) {
+    for (Callback callback : varCallbacks) {
       if (callback instanceof TextOutputCallback) {
         tocFound = true;
       } else if (callback instanceof PasswordCallback) {
@@ -80,10 +80,10 @@ public class DialogCallbackHandler implements CallbackHandler {
           TextOutputCallback.INFORMATION, translationProvider.getTranslation(
               "credentialMessage", locale));
       List<Callback> completedCallBacks = new ArrayList<Callback>(Arrays
-          .asList(callbacks));
+          .asList(varCallbacks));
       completedCallBacks.add(defaultToc);
-      callbacks = completedCallBacks
-          .toArray(new Callback[callbacks.length + 1]);
+      varCallbacks = completedCallBacks
+          .toArray(new Callback[varCallbacks.length + 1]);
     }
 
     String dialogTitle = null;
@@ -109,7 +109,7 @@ public class DialogCallbackHandler implements CallbackHandler {
     ULCGridBagLayoutPane inputPanel = null;
     ULCGridBagLayoutPane optionPanel = null;
 
-    for (Callback callback : callbacks) {
+    for (Callback callback : varCallbacks) {
       if (callback instanceof TextOutputCallback) {
         if (messagePanel == null) {
           messagePanel = new ULCGridBagLayoutPane();
@@ -177,7 +177,7 @@ public class DialogCallbackHandler implements CallbackHandler {
     callbackDialog.getContentPane().add(dialogPanel);
     int screenRes = ClientContext.getScreenResolution();
     callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
-        * (callbacks.length + 1) / 2));
+        * (varCallbacks.length + 1) / 2));
     UlcUtil.centerOnScreen(callbackDialog);
     callbackDialog.pack();
     callbackDialog.setVisible(true);

@@ -294,80 +294,83 @@ public class DefaultSwingViewFactory implements
       view = createTreeView((ITreeViewDescriptor) viewDescriptor,
           actionHandler, locale);
     }
-    try {
-      actionHandler.checkAccess(viewDescriptor);
-      if (viewDescriptor.getForeground() != null) {
-        view.getPeer().setForeground(viewDescriptor.getForeground());
-      }
-      if (viewDescriptor.getBackground() != null) {
-        view.getPeer().setBackground(viewDescriptor.getBackground());
-      }
-      if (viewDescriptor.getFont() != null) {
-        view.getPeer().setFont(viewDescriptor.getFont());
-      }
-      if (viewDescriptor.isReadOnly()) {
-        view.getConnector().setLocallyWritable(false);
-      }
-      if (viewDescriptor.getReadabilityGates() != null) {
-        for (IGate gate : viewDescriptor.getReadabilityGates()) {
-          view.getConnector().addReadabilityGate(gate.clone());
+    if (view != null) {
+      try {
+        actionHandler.checkAccess(viewDescriptor);
+        if (viewDescriptor.getForeground() != null) {
+          view.getPeer().setForeground(viewDescriptor.getForeground());
         }
-      }
-      if (viewDescriptor.getWritabilityGates() != null) {
-        for (IGate gate : viewDescriptor.getWritabilityGates()) {
-          view.getConnector().addWritabilityGate(gate.clone());
+        if (viewDescriptor.getBackground() != null) {
+          view.getPeer().setBackground(viewDescriptor.getBackground());
         }
-      }
-      if (viewDescriptor.getDescription() != null) {
-        view.getPeer().setToolTipText(
-            viewDescriptor.getI18nDescription(getTranslationProvider(), locale)
-                + TOOLTIP_ELLIPSIS);
-      }
-      if (viewDescriptor.getActions() != null) {
-        JToolBar toolBar = createJToolBar();
-        toolBar.setRollover(true);
-        toolBar.setFloatable(true);
-        for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-            .getActions().entrySet().iterator(); iter.hasNext();) {
-          Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
-              .next();
-          for (IDisplayableAction action : nextActionSet.getValue()) {
-            Action swingAction = actionFactory.createAction(action,
-                actionHandler, view, locale);
-            JButton actionButton = createJButton();
-            actionButton.setAction(swingAction);
-            if (action.getAcceleratorAsString() != null) {
-              KeyStroke ks = KeyStroke.getKeyStroke(action
-                  .getAcceleratorAsString());
-              view.getPeer().getActionMap().put(
-                  swingAction.getValue(Action.NAME), swingAction);
-              view.getPeer().getInputMap(
-                  JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
-                  swingAction.getValue(Action.NAME));
-              String acceleratorString = KeyEvent.getKeyModifiersText(ks
-                  .getModifiers())
-                  + "-" + KeyEvent.getKeyText(ks.getKeyCode());
-              actionButton.setToolTipText("<HTML>"
-                  + actionButton.getToolTipText()
-                  + " <FONT SIZE=\"-2\" COLOR=\"#993366\">" + acceleratorString
-                  + "</FONT></HTML>");
+        if (viewDescriptor.getFont() != null) {
+          view.getPeer().setFont(viewDescriptor.getFont());
+        }
+        if (viewDescriptor.isReadOnly()) {
+          view.getConnector().setLocallyWritable(false);
+        }
+        if (viewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : viewDescriptor.getReadabilityGates()) {
+            view.getConnector().addReadabilityGate(gate.clone());
+          }
+        }
+        if (viewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : viewDescriptor.getWritabilityGates()) {
+            view.getConnector().addWritabilityGate(gate.clone());
+          }
+        }
+        if (viewDescriptor.getDescription() != null) {
+          view.getPeer().setToolTipText(
+              viewDescriptor.getI18nDescription(getTranslationProvider(),
+                  locale)
+                  + TOOLTIP_ELLIPSIS);
+        }
+        if (viewDescriptor.getActions() != null) {
+          JToolBar toolBar = createJToolBar();
+          toolBar.setRollover(true);
+          toolBar.setFloatable(true);
+          for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
+              .getActions().entrySet().iterator(); iter.hasNext();) {
+            Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
+                .next();
+            for (IDisplayableAction action : nextActionSet.getValue()) {
+              Action swingAction = actionFactory.createAction(action,
+                  actionHandler, view, locale);
+              JButton actionButton = createJButton();
+              actionButton.setAction(swingAction);
+              if (action.getAcceleratorAsString() != null) {
+                KeyStroke ks = KeyStroke.getKeyStroke(action
+                    .getAcceleratorAsString());
+                view.getPeer().getActionMap().put(
+                    swingAction.getValue(Action.NAME), swingAction);
+                view.getPeer().getInputMap(
+                    JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ks,
+                    swingAction.getValue(Action.NAME));
+                String acceleratorString = KeyEvent.getKeyModifiersText(ks
+                    .getModifiers())
+                    + "-" + KeyEvent.getKeyText(ks.getKeyCode());
+                actionButton.setToolTipText("<HTML>"
+                    + actionButton.getToolTipText()
+                    + " <FONT SIZE=\"-2\" COLOR=\"#993366\">"
+                    + acceleratorString + "</FONT></HTML>");
+              }
+              actionButton.setText("");
+              toolBar.add(actionButton);
             }
-            actionButton.setText("");
-            toolBar.add(actionButton);
+            if (iter.hasNext()) {
+              toolBar.addSeparator();
+            }
           }
-          if (iter.hasNext()) {
-            toolBar.addSeparator();
-          }
+          JPanel viewPanel = createJPanel();
+          viewPanel.setLayout(new BorderLayout());
+          viewPanel.add(toolBar, BorderLayout.NORTH);
+          viewPanel.add(view.getPeer(), BorderLayout.CENTER);
+          view.setPeer(viewPanel);
         }
-        JPanel viewPanel = createJPanel();
-        viewPanel.setLayout(new BorderLayout());
-        viewPanel.add(toolBar, BorderLayout.NORTH);
-        viewPanel.add(view.getPeer(), BorderLayout.CENTER);
-        view.setPeer(viewPanel);
+        decorateWithBorder(view, locale);
+      } catch (SecurityException ex) {
+        view.setPeer(createSecurityPanel());
       }
-      decorateWithBorder(view, locale);
-    } catch (SecurityException ex) {
-      view.setPeer(createSecurityPanel());
     }
     return view;
   }
@@ -1400,37 +1403,39 @@ public class DefaultSwingViewFactory implements
       view = createTabView((ITabViewDescriptor) viewDescriptor, actionHandler,
           locale);
     }
-    if (viewDescriptor.isMasterDetail()) {
-      IView<JComponent> masterView = view.getChildren().get(0);
-      view.setConnector(masterView.getConnector());
-      for (int i = 1; i < view.getChildren().size(); i++) {
-        IView<JComponent> detailView = view.getChildren().get(i);
-        detailView.setParent(view);
+    if (view != null) {
+      if (viewDescriptor.isMasterDetail()) {
+        IView<JComponent> masterView = view.getChildren().get(0);
+        view.setConnector(masterView.getConnector());
+        for (int i = 1; i < view.getChildren().size(); i++) {
+          IView<JComponent> detailView = view.getChildren().get(i);
+          detailView.setParent(view);
 
-        IValueConnector detailConnector = null;
-        if (detailView.getConnector() instanceof ICollectionConnector) {
-          IConfigurableCollectionConnectorProvider wrapper = connectorFactory
-              .createConfigurableCollectionConnectorProvider(
-                  ModelRefPropertyConnector.THIS_PROPERTY, null);
-          wrapper.addChildConnector(detailView.getConnector());
-          wrapper
-              .setCollectionConnectorProvider((ICollectionConnector) detailView
-                  .getConnector());
-          detailConnector = wrapper;
-        } else {
-          detailConnector = detailView.getConnector();
+          IValueConnector detailConnector = null;
+          if (detailView.getConnector() instanceof ICollectionConnector) {
+            IConfigurableCollectionConnectorProvider wrapper = connectorFactory
+                .createConfigurableCollectionConnectorProvider(
+                    ModelRefPropertyConnector.THIS_PROPERTY, null);
+            wrapper.addChildConnector(detailView.getConnector());
+            wrapper
+                .setCollectionConnectorProvider((ICollectionConnector) detailView
+                    .getConnector());
+            detailConnector = wrapper;
+          } else {
+            detailConnector = detailView.getConnector();
+          }
+          masterDetailBinder.bind(masterView.getConnector(), detailConnector);
+          masterView = detailView;
         }
-        masterDetailBinder.bind(masterView.getConnector(), detailConnector);
-        masterView = detailView;
-      }
-    } else {
-      ICompositeValueConnector connector = connectorFactory
-          .createCompositeValueConnector(
-              ModelRefPropertyConnector.THIS_PROPERTY, null);
-      view.setConnector(connector);
-      for (IView<JComponent> childView : view.getChildren()) {
-        childView.setParent(view);
-        connector.addChildConnector(childView.getConnector());
+      } else {
+        ICompositeValueConnector connector = connectorFactory
+            .createCompositeValueConnector(
+                ModelRefPropertyConnector.THIS_PROPERTY, null);
+        view.setConnector(connector);
+        for (IView<JComponent> childView : view.getChildren()) {
+          childView.setParent(view);
+          connector.addChildConnector(childView.getConnector());
+        }
       }
     }
     return view;
@@ -1990,7 +1995,7 @@ public class DefaultSwingViewFactory implements
       view = createColorPropertyView(
           (IColorPropertyDescriptor) propertyDescriptor, actionHandler, locale);
     }
-    if (propertyDescriptor.getDescription() != null) {
+    if (view != null && propertyDescriptor.getDescription() != null) {
       view.getPeer().setToolTipText(
           propertyDescriptor.getI18nDescription(getTranslationProvider(),
               locale)

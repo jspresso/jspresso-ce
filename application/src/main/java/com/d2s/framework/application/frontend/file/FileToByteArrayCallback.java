@@ -53,12 +53,10 @@ public class FileToByteArrayCallback implements IFileOpenCallback {
     } catch (IOException ex) {
       throw new ActionException(ex);
     } finally {
-      if (baos != null) {
-        try {
-          baos.close();
-        } catch (IOException ex) {
-          // NO-OP.
-        }
+      try {
+        baos.close();
+      } catch (IOException ex) {
+        // NO-OP.
       }
     }
   }

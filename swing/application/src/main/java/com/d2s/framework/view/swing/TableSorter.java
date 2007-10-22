@@ -527,6 +527,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
      * {@inheritDoc}
      */
     public void paintIcon(Component c, Graphics g, int x, int y) {
+      int varY = y;
       Color color;
       if (c == null) {
         color = Color.GRAY;
@@ -543,9 +544,9 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
         dy = -dx;
       }
       // Align icon (roughly) with font baseline.
-      y = y + 5 * size / 6;
+      varY = varY + 5 * size / 6;
       if (descending) {
-        y += -dy;
+        varY += -dy;
       }
       int shift;
       if (descending) {
@@ -553,7 +554,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
       } else {
         shift = -1;
       }
-      g.translate(x, y);
+      g.translate(x, varY);
 
       // Right diagonal.
       g.setColor(color.darker());
@@ -574,7 +575,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
       g.drawLine(dx, 0, 0, 0);
 
       g.setColor(color);
-      g.translate(-x, -y);
+      g.translate(-x, -varY);
     }
   }
 

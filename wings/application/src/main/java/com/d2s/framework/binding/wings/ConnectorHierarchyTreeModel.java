@@ -173,9 +173,8 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
       if (connector instanceof ICompositeValueConnector) {
         for (String childConnectorId : ((ICompositeValueConnector) connector)
             .getChildConnectorKeys()) {
-          checkListenerRegistrationForConnector(
-              ((ICompositeValueConnector) connector)
-                  .getChildConnector(childConnectorId));
+          checkListenerRegistrationForConnector(((ICompositeValueConnector) connector)
+              .getChildConnector(childConnectorId));
         }
       }
     }
@@ -230,13 +229,11 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
             for (int i = newCollectionSize; i < oldCollectionSize; i++) {
               childIndices[i - newCollectionSize] = i;
             }
-            if (connectorPath != null) {
-              List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
-                  .getRemovedChildrenConnectors();
-              fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
-                  connectorPath.getPath(), childIndices,
-                  removedChildrenConnectors.toArray());
-            }
+            List<IValueConnector> removedChildrenConnectors = ((CollectionConnectorValueChangeEvent) evt)
+                .getRemovedChildrenConnectors();
+            fireTreeNodesRemoved(ConnectorHierarchyTreeModel.this,
+                connectorPath.getPath(), childIndices,
+                removedChildrenConnectors.toArray());
           }
         }
       } else {

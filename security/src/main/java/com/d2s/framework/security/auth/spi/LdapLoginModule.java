@@ -158,13 +158,15 @@ public class LdapLoginModule extends LdapExtLoginModule {
 
   private String extractSlice(String nameAsString, NameParser nameParser,
       int startIndex, int endIndex) throws NamingException {
+    int startI = startIndex;
+    int endI = endIndex;
     Name name = nameParser.parse(nameAsString);
-    if (startIndex < 0) {
-      startIndex = name.size() + startIndex;
+    if (startI < 0) {
+      startI = name.size() + startI;
     }
-    if (endIndex < 0) {
-      endIndex = name.size() + endIndex;
+    if (endI < 0) {
+      endI = name.size() + endI;
     }
-    return name.getPrefix(endIndex).getSuffix(startIndex).toString();
+    return name.getPrefix(endI).getSuffix(startI).toString();
   }
 }

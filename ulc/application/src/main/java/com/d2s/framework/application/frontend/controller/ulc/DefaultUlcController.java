@@ -407,14 +407,16 @@ public class DefaultUlcController extends
         } catch (SecurityException se) {
           System.err.println("Cannot create LoginContext. " + se.getMessage());
         }
-        try {
-          lc.login();
-          loginSuccess(lc.getSubject());
-          loginSuccessful = true;
-        } catch (LoginException le) {
-          loginRetries++;
-          System.err.println("Authentication failed:");
-          System.err.println("  " + le.getMessage());
+        if (lc != null) {
+          try {
+            lc.login();
+            loginSuccess(lc.getSubject());
+            loginSuccessful = true;
+          } catch (LoginException le) {
+            loginRetries++;
+            System.err.println("Authentication failed:");
+            System.err.println("  " + le.getMessage());
+          }
         }
       }
       loginComplete = true;

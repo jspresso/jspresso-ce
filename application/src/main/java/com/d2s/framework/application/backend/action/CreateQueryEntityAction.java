@@ -48,9 +48,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
     IModelDescriptor modelDescriptor = (IModelDescriptor) context
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
     if (erqDescriptor == null) {
-      if (modelDescriptor instanceof IReferencePropertyDescriptor) {
-        erqDescriptor = (IReferencePropertyDescriptor) modelDescriptor;
-      }
+      erqDescriptor = (IReferencePropertyDescriptor) modelDescriptor;
     }
     IQueryEntity queryEntity = getEntityFactory(context)
         .createQueryEntityInstance(

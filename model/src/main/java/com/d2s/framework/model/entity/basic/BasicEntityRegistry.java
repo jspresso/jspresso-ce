@@ -55,11 +55,11 @@ public class BasicEntityRegistry implements IEntityRegistry {
           contractStore = subclassContractStore.getValue();
           if (contractStore != null) {
             registeredEntity = contractStore.get(id);
-          }
-          if (registeredEntity == null) {
-            contractStore.remove(id);
-          } else {
-            break;
+            if (registeredEntity == null) {
+              contractStore.remove(id);
+            } else {
+              break;
+            }
           }
         }
       }

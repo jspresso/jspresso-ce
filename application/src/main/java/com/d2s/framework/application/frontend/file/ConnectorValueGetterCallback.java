@@ -53,12 +53,10 @@ public class ConnectorValueGetterCallback implements IFileSaveCallback {
     } catch (IOException ex) {
       throw new ActionException(ex);
     } finally {
-      if (os != null) {
-        try {
-          os.close();
-        } catch (IOException ex) {
-          // NO-OP.
-        }
+      try {
+        os.close();
+      } catch (IOException ex) {
+        // NO-OP.
       }
     }
   }

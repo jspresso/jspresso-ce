@@ -725,6 +725,7 @@ public class BasicApplicationSession implements IApplicationSession {
   private IComponent mergeComponent(IComponent componentToMerge,
       IComponent registeredComponent, MergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
+    IComponent varRegisteredComponent = registeredComponent;
     if (componentToMerge == null) {
       return null;
     }
@@ -732,18 +733,18 @@ public class BasicApplicationSession implements IApplicationSession {
     boolean newlyRegistered = false;
     try {
       dirtRecorder.setEnabled(false);
-      if (registeredComponent == null) {
-        registeredComponent = carbonEntityCloneFactory.cloneComponent(
+      if (varRegisteredComponent == null) {
+        varRegisteredComponent = carbonEntityCloneFactory.cloneComponent(
             componentToMerge, entityFactory);
-        dirtRecorder.register(registeredComponent, null);
+        dirtRecorder.register(varRegisteredComponent, null);
         newlyRegistered = true;
       } else if (mergeMode == MergeMode.MERGE_KEEP) {
-        return registeredComponent;
+        return varRegisteredComponent;
       }
       if (mergeMode != MergeMode.MERGE_CLEAN_LAZY || newlyRegistered) {
         Map<String, Object> componentPropertiesToMerge = componentToMerge
             .straightGetProperties();
-        Map<String, Object> registeredComponentProperties = registeredComponent
+        Map<String, Object> registeredComponentProperties = varRegisteredComponent
             .straightGetProperties();
         Map<String, Object> mergedProperties = new HashMap<String, Object>();
         for (Map.Entry<String, Object> property : componentPropertiesToMerge
@@ -772,9 +773,9 @@ public class BasicApplicationSession implements IApplicationSession {
             mergedProperties.put(property.getKey(), property.getValue());
           }
         }
-        registeredComponent.straightSetProperties(mergedProperties);
+        varRegisteredComponent.straightSetProperties(mergedProperties);
       }
-      return registeredComponent;
+      return varRegisteredComponent;
     } finally {
       dirtRecorder.setEnabled(dirtRecorderWasEnabled);
     }
