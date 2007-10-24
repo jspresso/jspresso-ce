@@ -637,6 +637,7 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
+  @SuppressWarnings("unchecked")
   private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object[] args) {
     if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
@@ -670,6 +671,28 @@ public abstract class AbstractComponentInvocationHandler implements
         throw new ComponentException(ex.getCause());
       } catch (NoSuchMethodException ex) {
         throw new ComponentException(ex);
+      }
+    }
+    // invoke lifecycle method on inlined components
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+        .getPropertyDescriptors()) {
+      if (propertyDescriptor instanceof IReferencePropertyDescriptor<?>
+          && isInlineComponentReference((IReferencePropertyDescriptor<IComponent>) propertyDescriptor)) {
+        Object inlineComponent = getProperty(proxy, propertyDescriptor);
+        if (inlineComponent != null) {
+          try {
+            interceptorResults = interceptorResults
+                || ((Boolean) MethodUtils.invokeMethod(inlineComponent,
+                    lifecycleMethod.getName(), args, lifecycleMethod
+                        .getParameterTypes())).booleanValue();
+          } catch (NoSuchMethodException ex) {
+            throw new ComponentException(ex);
+          } catch (IllegalAccessException ex) {
+            throw new ComponentException(ex);
+          } catch (InvocationTargetException ex) {
+            throw new ComponentException(ex);
+          }
+        }
       }
     }
     return interceptorResults;
