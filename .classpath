@@ -107,11 +107,9 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/freemarker/freemarker/2.3.3/freemarker-2.3.3.jar" sourcepath="/ENVDEV/freemarker-2.3.4/src"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/nachocalendar/nachocalendar/0.22/nachocalendar-0.22.jar" sourcepath="/ENVDEV/nachocalendar-0.22/src"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-base-development/6.0.5/ulc-base-development-6.0.5.jar" sourcepath="/ENVDEV/ulc-6.0.5/base/src/ulc-base-development-src.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.0/wings-3.0.jar" sourcepath="/ENVDEV/WingS/wings/src/java"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.0/wingx-3.0.jar" sourcepath="/ENVDEV/WingS/wingx/src/java"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/kdeclassic-lfgr/3.0/kdeclassic-lfgr-3.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/cxx/3.0/cxx-3.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/css/3.0/css-3.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.1/wings-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wings/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.1/wingx-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wingx/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.1/wings-experimental-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wings-experimental/src/java"/>
 	<classpathentry kind="var" path="M2_REPO/net/sf/ehcache/ehcache/1.2.4/ehcache-1.2.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate/3.2.5.ga/hibernate-3.2.5.ga.jar" sourcepath="/ENVDEV/hibernate-3.2/src">
 		<attributes>

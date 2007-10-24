@@ -80,7 +80,7 @@ public class WizardAction extends AbstractWingsAction {
         getLocale(context)));
 
     dialog.setLayout(new SBorderLayout());
-    dialog.setClosable(false);
+    //dialog.setClosable(false);
 
     final SPanel cardPanel = new SPanel();
     cardPanel.setBorder(new SEmptyBorder(new Insets(5, 10, 5, 10)));

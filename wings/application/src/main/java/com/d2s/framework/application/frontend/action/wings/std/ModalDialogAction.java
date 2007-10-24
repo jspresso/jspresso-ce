@@ -69,7 +69,7 @@ public class ModalDialogAction extends AbstractWingsAction {
     mainPanel.add(mainView.getPeer(), SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
     dialog.add(mainPanel);
-    dialog.setClosable(false);
+    //dialog.setClosable(false);
     if (defaultButton != null) {
       dialog.setDefaultButton(defaultButton);
     }

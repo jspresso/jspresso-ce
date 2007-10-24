@@ -221,7 +221,7 @@ public class SColorPicker extends SPanel {
     mainPanel.add(colorPicker, SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
 
-    colorPickerDialog.setClosable(false);
+    //colorPickerDialog.setClosable(false);
     colorPickerDialog.setDefaultButton(okButton);
     colorPickerDialog.add(mainPanel);
 
