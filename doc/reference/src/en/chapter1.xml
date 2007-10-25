@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<chapter>
+<chapter version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:db="http://docbook.org/ns/docbook">
   <title>Getting started</title>
 
   <para>This chapter will help you to understand the basics of the
@@ -421,6 +425,38 @@
 
   <section>
     <title>Describing the domain model</title>
+
+    <para>Let's go back to the HR sample application. As for every layer
+    introduced above, describing the domain model will consist in assembling
+    <trademark>D2S</trademark> description java beans using the <ulink
+    url="http://www.springframework.org/">Spring framework Dependency
+    Injection Container</ulink>. To achieve this, you will have to write an
+    XML file that conforms to the <ulink
+    url="http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">spring
+    beans schema</ulink>. Of course, you can use any text editor but we will
+    encourage you to use at least a schema-aware XML editor like <ulink
+    url="http://www.jedit.org/">jEdit</ulink> or even better, use <ulink
+    url="http://www.eclipse.org/">Eclipse</ulink> and <ulink
+    url="http://springide.org/project/wiki/SpringideInstall">Spring
+    IDE</ulink>. The latest will offer a lot of productivity enhancement with
+    code completion for the xml elements and attributes as well as for the
+    description bean class names and properties of
+    <trademark>D2S</trademark>.</para>
+
+    <para>We will use the root package <code>com.d2s.framework.hrsample</code>
+    for our framework application. The domain model description will logically
+    go to the <code>com.d2s.framework.hrsample.model</code> package. In this
+    package, we will create a <filename>hrsample-model.xml</filename> file as
+    described below :</para>
+
+    <programlisting format="linespecific" language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true"&gt;
+
+&lt;/beans&gt;</programlisting>
 
     <para></para>
   </section>

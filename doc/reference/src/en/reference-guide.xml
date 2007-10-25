@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
-"http://www.oasis-open.org/docbook/xml/4.3b2/docbookx.dtd">
-<book lang="en" revision="1.0">
+<book version="5.0" lang="en" revision="1.0" xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:svg="http://www.w3.org/2000/svg"
+      xmlns:mml="http://www.w3.org/1998/Math/MathML"
+      xmlns:html="http://www.w3.org/1999/xhtml"
+      xmlns:db="http://docbook.org/ns/docbook">
   <bookinfo>
     <title>D2S : The <trademark>Design2See</trademark> Framework</title>
 
@@ -93,11 +97,12 @@
     and what it is not, please, refer to the following <ulink
     url="http://en.wikipedia.org/wiki/Software_framework">link</ulink>. The
     <trademark>D2S</trademark> framework differs from most of the other
-    frameworks since it addresses the complete software architecture including
-    all the key success factors formerly described; but instead of
-    "reinventing the wheel", <trademark>D2S</trademark> strongly relies on
-    production-proof open source libraries and components. To get a complete
-    list of the used libraries, please refer to the Appendices.</para>
+    frameworks since it addresses the complete software architecture (see the
+    <link linkend="D2S-modules">D2S modules diagram</link>) including all the
+    key success factors formerly described; but instead of "reinventing the
+    wheel", <trademark>D2S</trademark> strongly relies on production-proof
+    open source libraries and components. To get a complete list of the used
+    libraries, please refer to the Appendices.</para>
 
     <para>Each of these libraries is distributed using a business-friendly
     licence (<ulink
@@ -112,7 +117,17 @@
     in any of them. As an example, you don't have to choose whether you want
     to distribute your application as a Java swing application through Java
     Web Start or as an Ajax application without any plug in or both !
-    <trademark>D2S</trademark> will take care of it at runtime.</para>
+    <trademark>D2S</trademark> will take care of it at runtime.<figure
+        id="D2S-modules">
+        <title>D2S Modules</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata contentdepth="40%" fileref="../images/D2S-modules.jpg"
+                       scalefit="1" width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure></para>
 
     <para>The whole objective of <trademark>D2S</trademark> is to shorten the
     gap (and thus avoid the "tunnel" effect) between the business requirement
