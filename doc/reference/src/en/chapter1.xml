@@ -287,7 +287,7 @@
     first design activity.</para>
 
     <para>The <link linkend="general-cod">general architecture diagram</link>
-    introduces this layering strategy. </para>
+    introduces this layering strategy.</para>
 
     <figure id="general-cod">
       <title>General architecture diagram</title>
@@ -445,11 +445,12 @@
     package, we will create a <filename>hrsample-model.xml</filename> file as
     described below :</para>
 
-    <programlisting format="linespecific" language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
   default-lazy-init="true"&gt;
 
 &lt;/beans&gt;</programlisting>

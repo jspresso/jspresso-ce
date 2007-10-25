@@ -104,6 +104,11 @@
 			<param name="ignore.image.scaling" expression="1" />
 			<param name="formal.title.placement" expression="figure after" />
 			<param name="generate.index" expression="1" />
+			<param name="generate.index" expression="1" />
+			<param name="ulink.show" expression="0" />
+			<param name="shade.verbatim" expression="1" />
+			<param name="highlight.source" expression="1" />
+			<param name="body.start.indent" expression="0" />
 			<include name="**/reference-guide.xml" />
 		</xslt>
 	</target>
@@ -123,6 +128,8 @@
 			<param name="formal.title.placement" expression="figure after" />
 			<param name="generate.index" expression="1" />
 			<param name="ulink.show" expression="0" />
+			<param name="shade.verbatim" expression="1" />
+			<param name="highlight.source" expression="1" />
 			<include name="**/reference-guide.xml" />
 		</xslt>
 		<replaceregexp match="\.\.\/images\/(\S*)\.png"

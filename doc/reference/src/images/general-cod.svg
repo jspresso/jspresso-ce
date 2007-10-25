@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Bouml (http://bouml.free.fr/) -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="874" height="704" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<svg width="760" height="416" version="1.1" xmlns="http://www.w3.org/2000/svg">
 <g>
 	<rect fill="none" stroke="black" stroke-width="1" stroke-opacity="1" x="2" y="2" width="246" height="401" />
 	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="31" y="20">Frontend</text>
