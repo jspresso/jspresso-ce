@@ -2,7 +2,7 @@
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <chapter>
-  <title>The whole picture</title>
+  <title>Getting started</title>
 
   <para>This chapter will help you to understand the basics of the
   <trademark>D2S</trademark> application framework and how to work with
@@ -12,7 +12,7 @@
     <title>The human resources (HR) sample application</title>
 
     <para>The human resources application is a simple yet comprehensive
-    business application targetted at managing a company organization and the
+    business application targeted at managing a company organization and the
     employees who work in it. It will demonstrate how
     <trademark>D2S</trademark> can handle a domain model with its
     relationships and its constraints, present it to the end-user for
@@ -47,10 +47,10 @@
         </listitem>
 
         <listitem>
-          <para>The localizable interface is implemented by entities that have
-          contact details (address, phone, email, ...). A localizable points
-          to one and only one city. A city is nameable and has a zip
-          code.</para>
+          <para>The contact information component is used by entities that
+          have contact details (address, phone, email, ...). A contact
+          information points to one and only one city. A city is nameable and
+          has a zip code.</para>
         </listitem>
 
         <listitem>
@@ -77,8 +77,8 @@
 
       <itemizedlist>
         <listitem>
-          <para>An employee is nameable, traceable and localizable. An employe
-          has :</para>
+          <para>An employee is nameable and traceable. An employee has
+          :</para>
 
           <itemizedlist>
             <listitem>
@@ -87,7 +87,7 @@
             </listitem>
 
             <listitem>
-              <para>a social security number which is composed by exacltly 10
+              <para>a social security number which is composed by exactly 10
               digits</para>
             </listitem>
 
@@ -101,6 +101,10 @@
 
             <listitem>
               <para>a hire date in the company</para>
+            </listitem>
+
+            <listitem>
+              <para>a contact information</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -144,8 +148,8 @@
           (<emphasis>IS-001</emphasis> for instance). Each organizational unit
           has a manager who is an employee of the company it belongs to. An
           employee can at most manage one organizational unit. An
-          organizational unit is nameable, traceable and localizable as well
-          as a company.</para>
+          organizational unit is nameable, traceable and has contact
+          information as well as a company has.</para>
         </listitem>
 
         <listitem>
@@ -154,7 +158,7 @@
         </listitem>
 
         <listitem>
-          <para>A departement may have one or more teams and a team belongs to
+          <para>A department may have one or more teams and a team belongs to
           one and only one department. Each team is composed by one or more
           employees.</para>
         </listitem>
@@ -243,5 +247,181 @@
         application.</para>
       </section>
     </section>
+  </section>
+
+  <section>
+    <title>Layering the application</title>
+
+    <para>Now that we have collected the detailed specifications, it's time to
+    feed the framework with them. As we saw before, most of the job will
+    consist of describing the different layers in a structured way. But before
+    going further, let's define the best practices regarding the logical
+    layering of a typical <trademark>D2S</trademark> application (although
+    these practices may generally apply to any well designed application). We
+    will define 3 logical layers from the bottom to the top :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The domain model</para>
+      </listitem>
+
+      <listitem>
+        <para>The backend</para>
+      </listitem>
+
+      <listitem>
+        <para>The frontend</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This organisation will help to prevent cyclic dependencies between
+    layers since each layer will be allowed to use lower ones but not higher
+    ones (e.g. the backend may use the domain model but not the
+    frontend).</para>
+
+    <para>Of course, this is a minimal logical layering. Each of this layer
+    may be further divided in subparts depending on the software complexity.
+    For instance the domain model might be divided in master and movement data
+    and the backend and frontend may be divided in modules. It's entirely up
+    to the application designer to tailor these rules. But it surely is the
+    first design activity.</para>
+
+    <para>The <link linkend="general-cod">general architecture diagram</link>
+    introduces this layering strategy. </para>
+
+    <figure id="general-cod">
+      <title>General architecture diagram</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata contentdepth="60%" fileref="../images/general-cod.png"
+                     scalefit="1" width="100%" />
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Let's define now what precisely go in these layers.</para>
+
+    <section>
+      <title>The domain model</title>
+
+      <para>The domain model includes :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The entities. An entity will be described by :</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>properties along with their constraints and their
+              interceptors</para>
+            </listitem>
+
+            <listitem>
+              <para>behaviour (business methods, life cycle
+              interceptors)</para>
+            </listitem>
+
+            <listitem>
+              <para>integrity enforcements</para>
+            </listitem>
+
+            <listitem>
+              <para>default presentation elements (name, icon, rendered
+              properties, ordering properties)</para>
+            </listitem>
+
+            <listitem>
+              <para>relationships to other entities (cardinality,
+              reversibility)</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>The components. A component has all the characteristics of an
+          entity except that it is not autonomous since It is designed as a
+          structure to be inlined in an entity (e.g. an address
+          structure).</para>
+        </listitem>
+
+        <listitem>
+          <para>Other structural elements like common business
+          interfaces.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We will see later that there virtually any domain model can be
+      extensively described using <trademark>D2S</trademark>. This includes
+      for instance polymorphic entities or associations, multiple inheritance,
+      ...</para>
+    </section>
+
+    <section>
+      <title>The backend</title>
+
+      <para>The backend includes all the application parts that do not depend
+      on the client :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The actions server parts (which interact with the domain model
+          for instance)</para>
+        </listitem>
+
+        <listitem>
+          <para>The application modules along with their hierarchies of
+          sub-modules. A module is a top application entry point which is
+          directly accessible by the end user.</para>
+        </listitem>
+
+        <listitem>
+          <para>The application sub-modules. They form a hierarchy since
+          sub-modules may contain other sub-modules. Each sub-module is an
+          independent application part targeted at accessing the backend data
+          (domain model manipulation, reporting, ...).</para>
+        </listitem>
+
+        <listitem>
+          <para>The backend controller which holds the user backend
+          application state and its configuration (application modules
+          registration)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>The frontend</title>
+
+      <para>The frontend includes all the application parts that interact
+      directly with the end-user :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The views</para>
+        </listitem>
+
+        <listitem>
+          <para>The action client parts (which handle user interaction and
+          trigger action server parts)</para>
+        </listitem>
+
+        <listitem>
+          <para>The client application module parts</para>
+        </listitem>
+
+        <listitem>
+          <para>The frontend controller which holds the user frontend
+          application state and its configuration (client application modules
+          registration)</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Describing the domain model</title>
+
+    <para></para>
   </section>
 </chapter>

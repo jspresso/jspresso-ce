@@ -1,0 +1,112 @@
+format 45
+"D2S-architecture"
+  revision 4
+  modified_by 7 "Vincent"
+
+
+  
+  // class settings
+  default_attribute_visibility protected default_relation_visibility protected default_operation_visibility public
+  //class diagram settings
+  draw_all_relations yes hide_attributes no hide_operations no show_members_full_definition no show_members_visibility no show_members_stereotype no show_parameter_dir yes show_parameter_name yes package_name_in_tab no class_drawing_mode natural drawing_language uml show_context_mode no auto_label_position yes show_infonote no shadow yes
+  //use case diagram settings
+  package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes
+  //sequence diagram settings
+  show_full_operations_definition no write_horizontally yes class_drawing_mode natural drawing_language uml draw_all_relations yes shadow yes
+  //collaboration diagram settings
+  show_full_operations_definition no show_hierarchical_rank no write_horizontally yes drawing_language uml package_name_in_tab no show_context no draw_all_relations yes shadow yes
+  //object diagram settings
+   write_horizontally yes package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes
+  //component diagram settings
+  package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes
+  draw_component_as_icon no show_component_req_prov no show_component_rea no
+  //deployment diagram settings
+  package_name_in_tab no show_context no write_horizontally yes auto_label_position yes draw_all_relations yes shadow yes
+  draw_component_as_icon no show_component_req_prov no show_component_rea no
+  //state diagram settings
+  package_name_in_tab no show_context no auto_label_position yes write_trans_label_horizontally yes show_trans_definition no draw_all_relations yes shadow yes
+  show_activities yes region_horizontally yes drawing_language uml
+  //activity diagram settings
+  package_name_in_tab no show_context no show_opaque_action_definition no auto_label_position yes write_flow_label_horizontally no draw_all_relations yes shadow yes
+  show_infonote yes drawing_language uml
+  
+  class_color yellow duration_color transparent continuation_color gray note_color blue fragment_color transparent subject_color transparent usecase_color yellow package_color transparent component_color green artifact_color green deploymentnode_color gray state_color yellow stateaction_color transparent activity_color transparent activityregion_color transparent activityaction_color transparent parameterpin_color white 
+  font_size 10
+  diagram_format A4
+
+  mark_for_import
+  
+  componentview 128135 "General design"
+    //component diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    componentdiagram 128135 "General design"
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations no shadow default
+      draw_component_as_icon default show_component_req_prov default show_component_rea default
+      size A4
+    end
+
+    component 129159 "Frontend Controller"
+      simplerelation 129927
+	-_->
+	  on component_ref 129287 // Backend Controller
+      end
+
+      simplerelation 130055
+	-_->
+	  on component_ref 130183 // Frontend module
+      end
+    end
+
+    component 129287 "Backend Controller"
+      simplerelation 130567
+	-_->
+	  on component_ref 130311 // Backend Module
+      end
+    end
+
+    component 129415 "Domain Model"
+    end
+
+    component 129799 "View"
+      simplerelation 129415
+	-_->
+	  on component_ref 129927 // Frontend Action
+      end
+
+      simplerelation 130695
+	-_->
+	  on component_ref 129415 // Domain Model
+      end
+    end
+
+    component 129927 "Frontend Action"
+      simplerelation 130311
+	-_->
+	  on component_ref 130055 // Backend Action
+      end
+    end
+
+    component 130055 "Backend Action"
+      simplerelation 130823
+	-_->
+	  on component_ref 129415 // Domain Model
+      end
+    end
+
+    component 130183 "Frontend module"
+      simplerelation 130183
+	-_->
+	  on component_ref 129799 // View
+      end
+
+      simplerelation 130439
+	-_->
+	  on component_ref 130311 // Backend Module
+      end
+    end
+
+    component 130311 "Backend Module"
+    end
+  end
+end

@@ -3,6 +3,15 @@
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg width="648" height="563" version="1.1" xmlns="http://www.w3.org/2000/svg">
 <g>
+	<text font-family="Helvetica" font-size="12" fill="black" font-style="italic" x="40" y="526">companyDepartments</text>
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="45" y1="341" x2="126" y2="155" />
+	<line stroke="black" stroke-opacity="1" x1="129" y1="150" x2="121" y2="153" />
+	<line stroke="black" stroke-opacity="1" x1="129" y1="150" x2="132" y2="157" />
+	<line stroke="black" stroke-opacity="1" x1="121" y1="153" x2="132" y2="157" />
+</g>
+<g>
 	<line stroke="black" stroke-opacity="1" x1="291" y1="509" x2="291" y2="339" />
 	<line stroke="black" stroke-opacity="1" x1="291" y1="333" x2="285" y2="339" />
 	<line stroke="black" stroke-opacity="1" x1="291" y1="333" x2="297" y2="339" />
@@ -31,29 +40,13 @@
 	<polygon fill="white" stroke="black" stroke-opacity="1" points="38,382 44,388 38,394 32,388" />
 </g>
 <g>
-	<text font-family="Helvetica" font-size="12" fill="black" font-style="italic" x="46" y="526">companyDepartments</text>
-</g>
-<g>
 	<line stroke="black" stroke-opacity="1" x1="38" y1="530" x2="247" y2="530" />
-</g>
-<g>
-	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="306" y1="280" x2="385" y2="155" />
-	<line stroke="black" stroke-opacity="1" x1="389" y1="150" x2="380" y2="151" />
-	<line stroke="black" stroke-opacity="1" x1="389" y1="150" x2="390" y2="158" />
-	<line stroke="black" stroke-opacity="1" x1="380" y1="151" x2="390" y2="158" />
 </g>
 <g>
 	<text font-family="Helvetica" font-size="12" fill="black" font-style="italic" x="416" y="526">departmentTeams</text>
 </g>
 <g>
-	<line stroke="black" stroke-opacity="1" x1="334" y1="530" x2="546" y2="530" />
-	<polygon fill="white" stroke="black" stroke-opacity="1" points="334,530 340,524 346,530 340,536" />
-</g>
-<g>
-	<line stroke="black" stroke-opacity="1" x1="546" y1="530" x2="546" y2="514" />
-</g>
-<g>
-	<line stroke="black" stroke-opacity="1" x1="356" y1="307" x2="508" y2="307" />
+	<line stroke="black" stroke-opacity="1" x1="545" y1="20" x2="545" y2="238" />
 </g>
 <g>
 	<line stroke="black" stroke-opacity="1" x1="546" y1="375" x2="546" y2="473" />
@@ -66,13 +59,14 @@
 	<line stroke="black" stroke-opacity="1" x1="37" y1="20" x2="545" y2="20" />
 </g>
 <g>
-	<line stroke="black" stroke-opacity="1" x1="545" y1="20" x2="545" y2="238" />
+	<line stroke="black" stroke-opacity="1" x1="334" y1="530" x2="546" y2="530" />
+	<polygon fill="white" stroke="black" stroke-opacity="1" points="334,530 340,524 346,530 340,536" />
 </g>
 <g>
-	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="45" y1="341" x2="126" y2="155" />
-	<line stroke="black" stroke-opacity="1" x1="129" y1="150" x2="121" y2="153" />
-	<line stroke="black" stroke-opacity="1" x1="129" y1="150" x2="132" y2="157" />
-	<line stroke="black" stroke-opacity="1" x1="121" y1="153" x2="132" y2="157" />
+	<line stroke="black" stroke-opacity="1" x1="546" y1="530" x2="546" y2="514" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="356" y1="307" x2="508" y2="307" />
 </g>
 <g>
 	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="57" y1="341" x2="245" y2="154" />
@@ -81,18 +75,16 @@
 	<line stroke="black" stroke-opacity="1" x1="241" y1="149" x2="249" y2="158" />
 </g>
 <g>
-	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="65" y1="341" x2="374" y2="129" />
-	<line stroke="black" stroke-opacity="1" x1="379" y1="126" x2="370" y2="124" />
-	<line stroke="black" stroke-opacity="1" x1="379" y1="126" x2="377" y2="134" />
-	<line stroke="black" stroke-opacity="1" x1="370" y1="124" x2="377" y2="134" />
+	<line stroke="black" stroke-opacity="1" x1="220" y1="394" x2="228" y2="393" />
+	<line stroke="black" stroke-opacity="1" x1="220" y1="394" x2="219" y2="385" />
+	<line stroke="black" stroke-opacity="1" x1="269" y1="333" x2="220" y2="394" />
+	<polygon fill="black" stroke="black" stroke-opacity="1" points="269,333 269,341 261,342 260,333" />
 </g>
 <g>
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="70" y="346" width="3" height="35" />
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="6" y="378" width="67" height="3" />
-	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="2" y="342" width="68" height="36" />
-	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="36" y="357">Company</text>
-	<line stroke="black" stroke-opacity="1" x1="2" y1="362" x2="70" y2="362" />
-	<line stroke="black" stroke-opacity="1" x1="2" y1="370" x2="70" y2="370" />
+	<line stroke="black" stroke-opacity="1" x1="124" y1="414" x2="122" y2="405" />
+	<line stroke="black" stroke-opacity="1" x1="124" y1="414" x2="115" y2="415" />
+	<line stroke="black" stroke-opacity="1" x1="72" y1="382" x2="124" y2="414" />
+	<polygon fill="black" stroke="black" stroke-opacity="1" points="72,382 80,380 82,388 73,390" />
 </g>
 <g>
 	<rect fill="#808080" stroke="none" stroke-opacity="1" x="333" y="82" width="3" height="67" />
@@ -141,16 +133,24 @@
 	<line stroke="black" stroke-opacity="1" x1="226" y1="321" x2="352" y2="321" />
 </g>
 <g>
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="468" y="46" width="3" height="103" />
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="384" y="146" width="87" height="3" />
-	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="380" y="42" width="88" height="104" />
-	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="424" y="57">&lt;&lt;interface&gt;&gt;</text>
-	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="424" y="77">Localizable</text>
-	<line stroke="black" stroke-opacity="1" x1="380" y1="82" x2="468" y2="82" />
-	<text font-family="Helvetica" font-size="12" fill="black" x="384" y="97">address</text>
-	<text font-family="Helvetica" font-size="12" fill="black" x="384" y="115">phone</text>
-	<text font-family="Helvetica" font-size="12" fill="black" x="384" y="133">email</text>
-	<line stroke="black" stroke-opacity="1" x1="380" y1="138" x2="468" y2="138" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="229" y="399" width="3" height="103" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="129" y="499" width="103" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="125" y="395" width="104" height="104" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="177" y="410">&lt;&lt;component&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="177" y="430">ContactInfo</text>
+	<line stroke="black" stroke-opacity="1" x1="125" y1="435" x2="229" y2="435" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="129" y="450">address</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="129" y="468">phone</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="129" y="486">email</text>
+	<line stroke="black" stroke-opacity="1" x1="125" y1="491" x2="229" y2="491" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="70" y="346" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="6" y="378" width="67" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="2" y="342" width="68" height="36" />
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="36" y="357">Company</text>
+	<line stroke="black" stroke-opacity="1" x1="2" y1="362" x2="70" y2="362" />
+	<line stroke="black" stroke-opacity="1" x1="2" y1="370" x2="70" y2="370" />
 </g>
 <g>
 	<rect fill="#808080" stroke="none" stroke-opacity="1" x="579" y="243" width="3" height="131" />
@@ -167,16 +167,31 @@
 	<text font-family="Helvetica" font-size="12" fill="black" x="513" y="366">getAge()</text>
 </g>
 <g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="13" y="412">company</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="176" y="527">departments</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="533" y="543">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="344" y="522">department</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="551" y="528">teams</text>
+</g>
+<g>
 	<text font-family="Helvetica" font-size="12" fill="black" x="125" y="544">&lt;&lt;set&gt;&gt;</text>
 </g>
 <g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="165" y="522">departments</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="48" y="403">company</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="209" y="386">1</text>
 </g>
 <g>
 	<text font-family="Helvetica" font-size="12" fill="black" x="232" y="551">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="236" y="386">contact</text>
 </g>
 <g>
 	<text font-family="Helvetica" font-size="12" fill="black" x="21" y="403">1</text>
@@ -185,22 +200,22 @@
 	<text font-family="Helvetica" font-size="12" fill="black" x="447" y="542">&lt;&lt;set&gt;&gt;</text>
 </g>
 <g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="551" y="528">teams</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="555" y="230">employees</text>
 </g>
 <g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="344" y="522">department</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="5" y="316">company</text>
 </g>
 <g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="533" y="543">*</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="515" y="230">1..*</text>
 </g>
 <g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="344" y="551">1</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="448" y="299">manager</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="20" y="333">1</text>
 </g>
 <g>
 	<text font-family="Helvetica" font-size="12" fill="black" x="491" y="328">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="366" y="328">0..1</text>
 </g>
 <g>
 	<text font-family="Helvetica" font-size="12" fill="black" x="521" y="434">&lt;&lt;set&gt;&gt;</text>
@@ -221,21 +236,18 @@
 	<text font-family="Helvetica" font-size="12" fill="black" x="386" y="-12">&lt;&lt;set&gt;&gt;</text>
 </g>
 <g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="555" y="230">employees</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="47" y="333">company</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="515" y="230">1..*</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="20" y="333">1</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="black" x="366" y="328">0..1</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="448" y="299">manager</text>
 </g>
 <g>
 	<text font-family="Helvetica" font-size="12" fill="black" x="366" y="299">managedOU</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="344" y="551">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="107" y="441">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="black" x="71" y="412">contact</text>
 </g>
 </svg>
