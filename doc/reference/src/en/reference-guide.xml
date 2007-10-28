@@ -17,6 +17,14 @@
     </abstract>
   </bookinfo>
 
+  <article>
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="../images/d2S_logo.jpg" />
+      </imageobject>
+    </mediaobject>
+  </article>
+
   <toc></toc>
 
   <preface id="preface">
