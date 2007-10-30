@@ -22,6 +22,7 @@ import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * An action to hibernate query entities by example.
@@ -51,8 +52,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       TransactionStatus status) {
         DetachedCriteria criteria = DetachedCriteria.forEntityName(queryEntity
             .getContract().getName());
-        criteria.add(Example.create(queryEntity).ignoreCase().enableLike(
-            MatchMode.START));
+        Example example = Example.create(queryEntity).ignoreCase().enableLike(
+            MatchMode.START);
         boolean abort = false;
         for (Map.Entry<String, Object> property : queryEntity
             .straightGetProperties().entrySet()) {
@@ -63,8 +64,14 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               criteria.add(Restrictions.eq(property.getKey(), property
                   .getValue()));
             }
+          } else if (Boolean.TYPE.isAssignableFrom(PropertyHelper
+              .getPropertyType(queryEntity.getContract(), property.getKey()))
+              && (property.getValue() == null || !((Boolean) property
+                  .getValue()).booleanValue())) {
+            example.excludeProperty(property.getKey());
           }
         }
+        criteria.add(example);
         List entities;
         if (abort) {
           entities = new ArrayList<IEntity>();
@@ -85,5 +92,4 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         MergeMode.MERGE_KEEP));
     return super.execute(actionHandler, context);
   }
-
 }
