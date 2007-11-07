@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.util.bean;
 
-import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 
 /**
@@ -106,44 +105,6 @@ public class AccessorInfo {
         accessorType = ADDER;
       }
     }
-  }
-
-  /**
-   * Retrieves the collection element class based on the ElementClass
-   * annotation.
-   * 
-   * @param beanClass
-   *            the bean class.
-   * @param property
-   *            the collection property.
-   * @return the collection element class.
-   */
-  public static Class<?> getCollectionElementClass(Class<?> beanClass,
-      String property) {
-    PropertyDescriptor propertyDescriptor = null;
-    try {
-      propertyDescriptor = PropertyHelper.getPropertyDescriptor(beanClass,
-          property);
-    } catch (MissingPropertyException ignored) {
-      // ignore until we traverse all interfaces.
-    }
-    if (propertyDescriptor != null) {
-      ElementClass ecAnn = propertyDescriptor.getReadMethod().getAnnotation(
-          ElementClass.class);
-      if (ecAnn != null) {
-        return ecAnn.value();
-      }
-    }
-    // if we reach this point, we may be on a proxy so we might try its
-    // implemented interfaces.
-    for (Class<?> implementedInterface : beanClass.getInterfaces()) {
-      Class<?> collectionElementClass = getCollectionElementClass(
-          implementedInterface, property);
-      if (collectionElementClass != null) {
-        return collectionElementClass;
-      }
-    }
-    return null;
   }
 
   private static String computePropertyName(String accessorName,

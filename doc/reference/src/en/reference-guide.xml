@@ -9,6 +9,13 @@
 
     <releaseinfo>1.0</releaseinfo>
 
+    <mediaobject>
+      <imageobject>
+        <imagedata align="center" contentdepth="60%"
+                   fileref="../images/d2S_logo.jpg" scalefit="1" width="100%" />
+      </imageobject>
+    </mediaobject>
+
     <abstract>
       <para>This document is a reference manual for the
       <trademark>Design2See</trademark> (<trademark>D2S</trademark>)
@@ -16,14 +23,6 @@
       <trademark>D2S</trademark> application.</para>
     </abstract>
   </bookinfo>
-
-  <article>
-    <mediaobject>
-      <imageobject>
-        <imagedata fileref="../images/d2S_logo.jpg" />
-      </imageobject>
-    </mediaobject>
-  </article>
 
   <toc></toc>
 
@@ -127,8 +126,9 @@
 
         <mediaobject>
           <imageobject>
-            <imagedata contentdepth="40%" fileref="../images/D2S-modules.jpg"
-                       scalefit="1" width="100%" />
+            <imagedata align="center" contentdepth="40%"
+                       fileref="../images/D2S-modules.jpg" scalefit="1"
+                       width="100%" />
           </imageobject>
         </mediaobject>
       </figure></para>
@@ -187,6 +187,4 @@
 
   <xi:include href="chapter7.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
               xpointer="element(/1)" />
-
-  <index></index>
 </book>

@@ -4,23 +4,25 @@
 
 	<property file="build.properties" />
 
+	<property name="titlepage.xsl" value="${docbook.xsl.home}/template/titlepage.xsl" />
 	<property name="doc.reference.dir" value="doc/reference" />
 	<property name="doc.reference.css.dir" value="${doc.reference.dir}/css" />
+	<property name="doc.reference.xsl.dir" value="${doc.reference.dir}/xsl" />
 	<property name="doc.reference.src.dir" value="${doc.reference.dir}/src" />
 	<property name="doc.reference.images.dir"
 	          value="${doc.reference.src.dir}/images" />
 	<property name="doc.reference.target.dir"
 	          value="${doc.reference.dir}/target" />
-	<property name="html.xsl" value="${docbook.xsl.home}/html/chunk.xsl" />
-	<property name="fo.xsl" value="${docbook.xsl.home}/fo/docbook.xsl" />
-	<property name="xml.reference.target.dir"
-	          value="${doc.reference.target.dir}/xml" />
+	<property name="preprocessed.reference.target.dir"
+	          value="${doc.reference.target.dir}/preprocessed" />
 	<property name="html.reference.target.dir"
 	          value="${doc.reference.target.dir}/html" />
 	<property name="fo.reference.target.dir"
 	          value="${doc.reference.target.dir}/fo" />
 	<property name="pdf.reference.target.dir"
 	          value="${doc.reference.target.dir}/pdf" />
+	<property name="html.xsl" value="${preprocessed.reference.target.dir}/xsl/html.xsl" />
+	<property name="fo.xsl" value="${preprocessed.reference.target.dir}/xsl/fo.xsl" />
 
 	<path id="xcluder.classpath">
 		<fileset dir="${xcluder.home}">
@@ -62,73 +64,86 @@
 	</target>
 
 	<target name="mktarget">
-		<mkdir dir="${xml.reference.target.dir}" />
+		<mkdir dir="${preprocessed.reference.target.dir}" />
 		<mkdir dir="${html.reference.target.dir}" />
 		<mkdir dir="${fo.reference.target.dir}" />
 		<mkdir dir="${pdf.reference.target.dir}" />
 	</target>
 
-	<target name="xinclude">
+	<target name="preprocess">
+		<xslt style="${titlepage.xsl}"
+		      extension=".xsl"
+		      basedir="${doc.reference.xsl.dir}"
+		      destdir="${preprocessed.reference.target.dir}/xsl">
+			<classpath refid="xalan.classpath" />
+			<include name="**/fo-titlepages.xml" />
+		</xslt>
+		<xslt style="${titlepage.xsl}"
+		      extension=".xsl"
+		      basedir="${doc.reference.xsl.dir}"
+		      destdir="${preprocessed.reference.target.dir}/xsl">
+			<classpath refid="xalan.classpath" />
+			<include name="**/html-titlepages.xml" />
+		</xslt>
 		<replace dir="${doc.reference.src.dir}"
 		         token="www.w3.org/2001/XInclude"
 		         value="www.w3.org/2003/XInclude">
 			<include name="**/*.xml" />
 		</replace>
-		<xclude destdir="${xml.reference.target.dir}" encoding="UTF-8" indent="yes">
+		<xclude destdir="${preprocessed.reference.target.dir}" encoding="UTF-8" indent="yes">
 			<fileset dir="${doc.reference.src.dir}">
 				<include name="**/reference-guide.xml" />
 			</fileset>
 		</xclude>
-		<copy todir="${xml.reference.target.dir}/images">
+		<copy todir="${preprocessed.reference.target.dir}/images">
 			<fileset dir="${doc.reference.images.dir}" includes="**/*.*" />
+		</copy>
+		<copy todir="${preprocessed.reference.target.dir}/images">
+			<fileset dir="${docbook.xsl.home}/images" includes="**/*.*" />
+		</copy>
+		<copy todir="${preprocessed.reference.target.dir}/css">
+			<fileset dir="${doc.reference.css.dir}" includes="**/*.css" />
+		</copy>
+		<copy todir="${preprocessed.reference.target.dir}/xsl">
+			<fileset dir="${doc.reference.xsl.dir}" includes="**/*.xsl" />
+			<filterset>
+				<filter token="DOCBOOK_XSL_HOME" value="${docbook.xsl.home}"/>
+		  </filterset>
 		</copy>
 	</target>
 
 	<target name="build-html"
-	        depends="mktarget, xinclude"
+	        depends="mktarget, preprocess"
 	        description="Generates HTML files from DocBook XML">
 		<copy todir="${html.reference.target.dir}/css">
-			<fileset dir="${doc.reference.css.dir}" includes="**/*.css" />
+			<fileset dir="${preprocessed.reference.target.dir}/css" includes="**/*.css" />
 		</copy>
 		<copy todir="${html.reference.target.dir}/images">
-			<fileset dir="${doc.reference.images.dir}" includes="**/*.*" />
+			<fileset dir="${preprocessed.reference.target.dir}/images" includes="**/*.*" />
 		</copy>
 		<xslt style="${html.xsl}"
 		      extension=".html"
-		      basedir="${xml.reference.target.dir}"
+		      basedir="${preprocessed.reference.target.dir}"
 		      destdir="${html.reference.target.dir}">
 			<classpath refid="xalan.classpath" />
-			<param name="html.stylesheet" expression="../css/docbook.css" />
-			<param name="graphicsize.extension" expression="1" />
-			<param name="use.extensions" expression="1" />
-			<param name="ignore.image.scaling" expression="1" />
-			<param name="formal.title.placement" expression="figure after" />
-			<param name="generate.index" expression="1" />
-			<param name="generate.index" expression="1" />
-			<param name="ulink.show" expression="0" />
-			<param name="highlight.source" expression="1" />
 			<include name="**/reference-guide.xml" />
 		</xslt>
+		<replaceregexp match="src=&quot;images\/"
+		               replace="src=&quot;\.\.\/images\/"
+		               flags="g"
+		               byline="true">
+			<fileset dir="${html.reference.target.dir}" includes="**/*.html" />
+		</replaceregexp>
 	</target>
 
 	<target name="build-fo"
-	        depends="mktarget, xinclude"
+	        depends="mktarget, preprocess"
 	        description="Generates FO files from DocBook XML">
 		<xslt style="${fo.xsl}"
 		      extension=".fo"
-		      basedir="${xml.reference.target.dir}"
+		      basedir="${preprocessed.reference.target.dir}"
 		      destdir="${fo.reference.target.dir}">
 			<classpath refid="xalan.classpath" />
-			<param name="paper.type" expression="A4" />
-			<param name="fop1.extensions" expression="1" />
-			<param name="graphicsize.extension" expression="1" />
-			<param name="use.extensions" expression="1" />
-			<param name="formal.title.placement" expression="figure after" />
-			<param name="generate.index" expression="1" />
-			<param name="ulink.show" expression="0" />
-			<param name="shade.verbatim" expression="1" />
-			<param name="highlight.source" expression="1" />
-			<param name="body.start.indent" expression="0pt" />
 			<include name="**/reference-guide.xml" />
 		</xslt>
 		<replaceregexp match="\.\.\/images\/(\S*)\.png"
@@ -137,8 +152,14 @@
 		               byline="true">
 			<fileset dir="${fo.reference.target.dir}" includes="**/*.fo" />
 		</replaceregexp>
+		<replaceregexp match="url\(images\/"
+		               replace="url\(\.\.\/images\/"
+		               flags="g"
+		               byline="true">
+			<fileset dir="${fo.reference.target.dir}" includes="**/*.fo" />
+		</replaceregexp>
 		<copy todir="${fo.reference.target.dir}/images">
-			<fileset dir="${doc.reference.images.dir}" includes="**/*.*" />
+			<fileset dir="${preprocessed.reference.target.dir}/images" includes="**/*.*" />
 		</copy>
 	</target>
 
@@ -146,7 +167,8 @@
 	        depends="mktarget"
 	        description="Generates PDF files from FO files">
 		<copy todir="${pdf.reference.target.dir}">
-			<fileset dir="${fo.reference.target.dir}" excludes="**/images **/*.*" />
+			<fileset dir="${fo.reference.target.dir}"
+			         excludes="**/images/** **/*.*" />
 		</copy>
 		<fop format="application/pdf"
 		     outdir="${pdf.reference.target.dir}"
@@ -160,5 +182,11 @@
 	<target name="doc" depends="clean,build-html,build-fo,build-pdf" />
 
 	<target name="test">
+		<delete>
+			<fileset dir="${preprocessed.reference.target.dir}/xsl" includes="**/*.xsl" />
+		</delete>
+		<copy todir="${preprocessed.reference.target.dir}/xsl" filtering="true">
+			<fileset dir="${doc.reference.xsl.dir}" includes="**/*.xsl" />
+		</copy>
 	</target>
 </project>
