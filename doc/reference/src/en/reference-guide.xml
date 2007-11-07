@@ -167,24 +167,24 @@
     <para>So let's begin.</para>
   </preface>
 
-  <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
+  <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter2.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
+  <xi:include href="chapter2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter3.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
+  <xi:include href="chapter3.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
+  <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
+  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
+  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
               xpointer="element(/1)" />
 
-  <xi:include href="chapter7.xml" xmlns:xi="http://www.w3.org/2003/XInclude"
+  <xi:include href="chapter7.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
               xpointer="element(/1)" />
 </book>
