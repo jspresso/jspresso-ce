@@ -157,20 +157,22 @@ public class EntityGenerator {
       if (includePackages != null) {
         for (Map.Entry<String, IComponentDescriptor<?>> componentEntry : allComponents
             .entrySet()) {
-          for (String pkg : includePackages) {
-            if (componentEntry.getValue().getName().startsWith(pkg)) {
-              boolean include = true;
-              if (excludePatterns != null) {
-                for (String excludePattern : excludePatterns) {
-                  if (include
-                      && Pattern.matches(excludePattern, componentEntry
-                          .getValue().getName())) {
-                    include = false;
+          if (componentEntry.getValue().getName() != null) {
+            for (String pkg : includePackages) {
+              if (componentEntry.getValue().getName().startsWith(pkg)) {
+                boolean include = true;
+                if (excludePatterns != null) {
+                  for (String excludePattern : excludePatterns) {
+                    if (include
+                        && Pattern.matches(excludePattern, componentEntry
+                            .getValue().getName())) {
+                      include = false;
+                    }
                   }
                 }
-              }
-              if (include) {
-                componentDescriptors.add(componentEntry.getValue());
+                if (include) {
+                  componentDescriptors.add(componentEntry.getValue());
+                }
               }
             }
           }

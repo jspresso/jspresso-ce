@@ -51,7 +51,7 @@
           <para>The contact information component is used by entities that
           have contact details (address, phone, email, ...). A contact
           information points to one and only one city. A city is nameable and
-          has a zip code.</para>
+          has a zip code of maximum length 10 characters.</para>
         </listitem>
 
         <listitem>
@@ -277,7 +277,7 @@
 
     <para>This organisation will help to prevent cyclic dependencies between
     layers since each layer will be allowed to use lower ones but not higher
-    ones (e.g. the backend may use the domain model but not the
+    ones (e.g. : the backend may use the domain model but not the
     frontend).</para>
 
     <para>Of course, this is a minimal logical layering. Each of this layer
@@ -342,7 +342,7 @@
         <listitem>
           <para>The components. A component has all the characteristics of an
           entity except that it is not autonomous since It is designed as a
-          structure to be inlined in an entity (e.g. an address
+          structure to be inlined in an entity (e.g. : an address
           structure).</para>
         </listitem>
 
@@ -425,7 +425,7 @@
 
     <para>In this chapter, you will learn how to feed the
     <trademark>D2S</trademark> framework with the hr sample domain model
-    descriprion.</para>
+    description.</para>
 
     <section>
       <title>Using the Spring dependency injection container</title>
@@ -466,8 +466,6 @@
   default-lazy-init="true"&gt;
 
 &lt;/beans&gt;</programlisting>
-
-      <para></para>
     </section>
 
     <section>
@@ -794,13 +792,13 @@ public interface Nameable {
       <para>You may also notice that the generator took care of annotating the
       classes with <ulink url="http://www.hibernate.org/">hibernate</ulink>
       <ulink
-      url="http://xdoclet.sourceforge.net/xdoclet/index.html">xdoclet</ulink>
+      url="http://xdoclet.sourceforge.net/xdoclet/index.html">xDoclet</ulink>
       attributes. They will be used later to generate the necessary
       persistence meta-data.</para>
     </section>
 
     <section>
-      <title>Adding lifecycle behaviour</title>
+      <title>Adding life-cycle behaviour</title>
 
       <para>What about the handling of the <code>Traceable</code> properties ?
       We want them to follow the life-cycle of any traceable entity, i.e.
@@ -874,7 +872,7 @@ public class TraceableLifecycleInterceptor extends
 
       <calloutlist>
         <callout arearefs="lcInterceptor">
-          <para>We inherit from th support class
+          <para>The class inherits from the support class
           <code>com.d2s.framework.model.component.service.EmptyLifecycleInterceptor</code>
           which empty implements the required life-cycle interceptor interface
           <code>com.d2s.framework.model.component.service.EmptyLifecycleInterceptor</code>
@@ -919,8 +917,133 @@ public class TraceableLifecycleInterceptor extends
             to the component.</para>
           </callout>
         </calloutlist></para>
+    </section>
 
-      <para></para>
+    <section>
+      <title>Describing the first entities</title>
+
+      <para>As of now, we have only dealt with components which are not
+      entities by themselves. Describing an entity follows the exact same
+      process except that we make its descriptor an entity descriptor and that
+      we add the <code>com.d2s.framework.model.entity.IEntity</code> standard
+      descriptor as one of its ancestors; the latest brings <code>id</code>
+      (the entity identifier) and <code>version</code> (used for optimistic
+      locking on concurrent access) standard properties.</para>
+
+      <para>So let's describe the <code>City</code> entity as below :</para>
+
+      <programlisting language="xml">&lt;bean
+  id="City"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt; <co
+          id="BasicEntityDescriptor" />
+  &lt;constructor-arg value="com.d2s.framework.hrsample.model.City" /&gt;
+  &lt;property name="ancestorDescriptors"&gt; <co id="ancestorDescriptors" />
+    &lt;list&gt;
+      &lt;ref local="Nameable" /&gt;
+      &lt;ref bean="com.d2s.framework.model.entity.IEntity" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="zip" /&gt;
+        &lt;property
+          name="maxLength"
+          value="10" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting>
+
+      <calloutlist>
+        <callout arearefs="BasicEntityDescriptor">
+          <para>Since City is an entity, we use a
+          <code>BasicEntityDescriptor</code> which is a special kind of
+          component descriptor.</para>
+        </callout>
+
+        <callout arearefs="ancestorDescriptors">
+          <para>This descriptor inherits from our <code>Nameable</code>
+          interface as well as the standard
+          <code>com.d2s.framework.model.entity.IEntity</code> descriptor
+          bean.</para>
+        </callout>
+      </calloutlist>
+
+      <para>Relaunching the <trademark>D2S</trademark> generator will produce
+      the following class (<filename>City.java</filename>) :</para>
+
+      <programlisting>/*
+ * Generated by Design2see. All rights reserved.
+ */
+package com.d2s.framework.hrsample.model;
+
+/**
+ * City entity.
+ * &lt;p&gt;
+ * Generated by Design2see. All rights reserved.
+ * &lt;p&gt;
+ *
+ * @hibernate.mapping
+ *           default-access = "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
+ * @hibernate.class
+ *   table = "CITY"
+ *   dynamic-insert = "true"
+ *   dynamic-update = "true"
+ *   persister = "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
+ * @author Generated by Design2see
+ * @version $LastChangedRevision$
+ */
+public interface City extends
+  com.d2s.framework.hrsample.model.Nameable,
+  com.d2s.framework.model.entity.IEntity {
+
+  /**
+   * @hibernate.id generator-class = "assigned" column = "ID" type = "string"
+   *               length = "36"
+   * &lt;p&gt;
+   * {@inheritDoc}
+   */
+  java.io.Serializable getId();
+
+  /**
+   * @hibernate.version column = "VERSION" unsaved-value = "null"
+   * &lt;p&gt;
+   * {@inheritDoc}
+   */
+  Integer getVersion();
+
+  /**
+   * Gets the zip.
+   *
+   * @hibernate.property
+   * @hibernate.column
+   *           name = "ZIP"
+   *           length = "10"
+   * @return the zip.
+   */
+  java.lang.String getZip();
+
+  /**
+   * Sets the zip.
+   *
+   * @param zip
+   *          the zip to set.
+   */
+  void setZip(java.lang.String zip);
+
+}</programlisting>
+
+      <para>You might notice that there are slightly more hibernate xDoclet
+      tags (class level tags, id and version) to handle the entity persistence
+      specifics. More important is that as for <code>Nameable</code> and
+      <code>Traceable</code>, the <code>City</code> entity is not more than an
+      interface. This brings to it a fundamental property which is
+      multiple-inheritance; and this characteristic is also available among
+      entities.</para>
     </section>
   </section>
 </chapter>

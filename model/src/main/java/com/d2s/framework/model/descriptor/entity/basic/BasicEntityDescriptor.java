@@ -5,7 +5,7 @@ package com.d2s.framework.model.descriptor.entity.basic;
 
 import java.util.List;
 
-import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
+import com.d2s.framework.model.descriptor.basic.AbstractComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -17,7 +17,9 @@ import com.d2s.framework.model.entity.IEntity;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
+public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> {
+
+  private boolean purelyAbstract;
 
   /**
    * Constructs a new <code>BasicEntityDescriptor</code> instance.
@@ -28,7 +30,7 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
    */
   public BasicEntityDescriptor(String name) {
     super(name);
-    setPurelyAbstract(false);
+    this.purelyAbstract = false;
   }
 
   /**
@@ -47,20 +49,33 @@ public class BasicEntityDescriptor extends BasicComponentDescriptor<IEntity> {
   /**
    * {@inheritDoc}
    */
-  @Override
   public boolean isEntity() {
     return true;
   }
 
   /**
-   * Throws an exception since an entity is always a persistent definition.
-   * <p>
+   * Gets the purelyAbstract.
+   * 
+   * @return the purelyAbstract.
+   */
+  public boolean isPurelyAbstract() {
+    return purelyAbstract;
+  }
+
+  /**
+   * Sets the purelyAbstract.
+   * 
+   * @param purelyAbstract
+   *            the purelyAbstract to set.
+   */
+  public void setPurelyAbstract(boolean purelyAbstract) {
+    this.purelyAbstract = purelyAbstract;
+  }
+
+  /**
    * {@inheritDoc}
    */
-  @Override
-  public void setComputed(@SuppressWarnings("unused")
-  boolean computed) {
-    throw new UnsupportedOperationException(
-        "An entity descriptor cannot be a computed interface.");
+  public boolean isComputed() {
+    return false;
   }
 }

@@ -3,9 +3,8 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
-
 /**
- * Default implementation of an inlined component descriptor.
+ * Default implementation of an interface component descriptor.
  * <p>
  * Copyright 2005 Design2See. All rights reserved.
  * <p>
@@ -15,31 +14,20 @@ package com.d2s.framework.model.descriptor.basic;
  * @param <E>
  *            the concrete type of components.
  */
-public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> {
+public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> {
+
+  private boolean computed;
 
   /**
-   * Constructs a new <code>BasicComponentDescriptor</code> instance.
-   */
-  public BasicComponentDescriptor() {
-    this(null);
-  }
-
-  /**
-   * Constructs a new <code>BasicComponentDescriptor</code> instance.
+   * Constructs a new <code>BasicInterfaceDescriptor</code> instance.
    * 
    * @param name
    *            the name of the descriptor which has to be the fully-qualified
    *            class name of its contract.
    */
-  public BasicComponentDescriptor(String name) {
+  public BasicInterfaceDescriptor(String name) {
     super(name);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isComputed() {
-    return false;
+    this.computed = false;
   }
 
   /**
@@ -55,6 +43,24 @@ public class BasicComponentDescriptor<E> extends AbstractComponentDescriptor<E> 
    * {@inheritDoc}
    */
   public boolean isPurelyAbstract() {
-    return false;
+    return true;
+  }
+
+  
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isComputed() {
+    return computed;
+  }
+
+  
+  /**
+   * Sets the computed.
+   * 
+   * @param computed the computed to set.
+   */
+  public void setComputed(boolean computed) {
+    this.computed = computed;
   }
 }
