@@ -319,7 +319,7 @@
             </listitem>
 
             <listitem>
-              <para>behaviour (business methods, life cycle
+              <para>behaviour (business methods, life-cycle
               interceptors)</para>
             </listitem>
 
@@ -423,33 +423,41 @@
   <section>
     <title>Describing the domain model</title>
 
-    <para>Let's go back to the HR sample application. As for every layer
-    introduced above, describing the domain model will consist in assembling
-    <trademark>D2S</trademark> description java beans using the <ulink
-    url="http://www.springframework.org/">Spring framework Dependency
-    Injection Container</ulink>. To achieve this, you will have to write an
-    XML file that conforms to the <ulink
-    url="http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">spring
-    beans schema</ulink>. Of course, you can use any text editor but we will
-    encourage you to use at least a schema-aware XML editor like <ulink
-    url="http://www.jedit.org/">jEdit</ulink> or even better, use <ulink
-    url="http://www.eclipse.org/">Eclipse</ulink> and <ulink
-    url="http://springide.org/project/wiki/SpringideInstall">Spring
-    IDE</ulink>. The latest will offer a lot of productivity enhancement with
-    code completion for the XML elements and attributes as well as for the
-    description bean class names and properties of
-    <trademark>D2S</trademark>.</para>
+    <para>In this chapter, you will learn how to feed the
+    <trademark>D2S</trademark> framework with the hr sample domain model
+    descriprion.</para>
 
-    <para id="chapter1">The various description java beans that are provided
-    by <trademark>D2S</trademark> are detailed in the next chapter.</para>
+    <section>
+      <title>Using the Spring dependency injection container</title>
 
-    <para>We will use the root package <code>com.d2s.framework.hrsample</code>
-    for our application. The domain model description will logically go to the
-    <code>com.d2s.framework.hrsample.model</code> package. In this package, we
-    will create a <filename>hrsample-model.xml</filename> file as described
-    below :</para>
+      <para>Let's go back to the HR sample application. As for every layer
+      introduced above, describing the domain model will consist in assembling
+      <trademark>D2S</trademark> description java beans using the <ulink
+      url="http://www.springframework.org/">Spring framework Dependency
+      Injection Container</ulink>. To achieve this, you will have to write an
+      XML file that conforms to the <ulink
+      url="http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">spring
+      beans schema</ulink>. Of course, you can use any text editor but we will
+      encourage you to use at least a schema-aware XML editor like <ulink
+      url="http://www.jedit.org/">jEdit</ulink> or even better, use <ulink
+      url="http://www.eclipse.org/">Eclipse</ulink> and <ulink
+      url="http://springide.org/project/wiki/SpringideInstall">Spring
+      IDE</ulink>. The latest will offer a lot of productivity enhancement
+      with code completion for the XML elements and attributes as well as for
+      the description bean class names and properties of
+      <trademark>D2S</trademark>.</para>
 
-    <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+      <para id="chapter1">The various description java beans that are provided
+      by <trademark>D2S</trademark> are detailed in the next chapter.</para>
+
+      <para>We will use the root package
+      <code>com.d2s.framework.hrsample</code> for our application. The domain
+      model description will logically go to the
+      <code>com.d2s.framework.hrsample.model</code> package. In this package,
+      we will create a <filename>hrsample-model.xml</filename> file as
+      described below :</para>
+
+      <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -459,24 +467,30 @@
 
 &lt;/beans&gt;</programlisting>
 
-    <para>As a starting point, we will describe the <link
-    linkend="commons-cd">commons</link> model part.</para>
+      <para></para>
+    </section>
 
-    <para>The <code>Nameable</code> interface may be described as follow
-    :</para>
+    <section>
+      <title>Describing the first components</title>
 
-    <programlisting language="xml">&lt;bean <co id="n-bean" />
+      <para>As a starting point, we will describe the <link
+      linkend="commons-cd">commons</link> model part.</para>
+
+      <para>The <code>Nameable</code> interface may be described as follow
+      :</para>
+
+      <programlisting language="xml">&lt;bean <co id="n-bean" />
   id="Nameable" <co id="n-id" />
   class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt; <co
-        id="n-class" />
+          id="n-class" />
   &lt;constructor-arg
     value="com.d2s.framework.hrsample.model.Nameable" /&gt; <co
-        id="n-classname" />
+          id="n-classname" />
   &lt;property name="propertyDescriptors"&gt; <co id="n-props" />
     &lt;list&gt;
       &lt;bean
         class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;<co
-        id="n-stringprop" />
+          id="n-stringprop" />
         &lt;property
           name="name" <co id="n-name" />
           value="name" /&gt;
@@ -491,64 +505,64 @@
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting>
 
-    <calloutlist>
-      <callout arearefs="n-bean">
-        <para>This is a standard spring bean definition. We are creating a
-        descriptor bean.</para>
-      </callout>
+      <calloutlist>
+        <callout arearefs="n-bean">
+          <para>This is a standard spring bean definition. We are creating a
+          descriptor bean.</para>
+        </callout>
 
-      <callout arearefs="n-id">
-        <para>The identifier of this descriptor bean instance for later
-        reference.</para>
-      </callout>
+        <callout arearefs="n-id">
+          <para>The identifier of this descriptor bean instance for later
+          reference.</para>
+        </callout>
 
-      <callout arearefs="n-class">
-        <para>Since we are describing a generic interface (which may or may
-        not turn to be an entity) we will use a
-        <code>BasicComponentDescriptor</code> as opposed to a
-        <code>BasicEntityDescriptor</code>.</para>
-      </callout>
+        <callout arearefs="n-class">
+          <para>Since we are describing a generic interface (which may or may
+          not turn to be an entity) we will use a
+          <code>BasicComponentDescriptor</code> as opposed to a
+          <code>BasicEntityDescriptor</code>.</para>
+        </callout>
 
-      <callout arearefs="n-classname">
-        <para>The (fully-qualified) name of this interface.</para>
-      </callout>
+        <callout arearefs="n-classname">
+          <para>The (fully-qualified) name of this interface.</para>
+        </callout>
 
-      <callout arearefs="n-props">
-        <para>The property descriptors of this component descriptor.</para>
-      </callout>
+        <callout arearefs="n-props">
+          <para>The property descriptors of this component descriptor.</para>
+        </callout>
 
-      <callout arearefs="n-stringprop">
-        <para>The string property descriptor to hold the <code>name</code>
-        property description.</para>
-      </callout>
+        <callout arearefs="n-stringprop">
+          <para>The string property descriptor to hold the <code>name</code>
+          property description.</para>
+        </callout>
 
-      <callout arearefs="n-name">
-        <para>The name of the <code>name</code> property which is
-        "name".</para>
-      </callout>
+        <callout arearefs="n-name">
+          <para>The name of the <code>name</code> property which is
+          "name".</para>
+        </callout>
 
-      <callout arearefs="n-maxl">
-        <para>The maximum length of the name property which is 64
-        characters.</para>
-      </callout>
+        <callout arearefs="n-maxl">
+          <para>The maximum length of the name property which is 64
+          characters.</para>
+        </callout>
 
-      <callout arearefs="n-mand">
-        <para>The fact that the <code>name</code> property is mandatory on a
-        <code>Nameable</code>.</para>
-      </callout>
-    </calloutlist>
+        <callout arearefs="n-mand">
+          <para>The fact that the <code>name</code> property is mandatory on a
+          <code>Nameable</code>.</para>
+        </callout>
+      </calloutlist>
 
-    <para>As you can see above, we create a component descriptor
-    (<code>com.d2s.framework.sample.backend.domain.Nameable</code>) with one
-    property (<code>name</code>) along with its constraints
-    (<code>maxLength</code> and <code>mandatory</code>). This is a fairly
-    simple component since it has no intrinsic behaviour nor relationships
-    with others.</para>
+      <para>As you can see above, we create a component descriptor
+      (<code>com.d2s.framework.sample.backend.domain.Nameable</code>) with one
+      property (<code>name</code>) along with its constraints
+      (<code>maxLength</code> and <code>mandatory</code>). This is a fairly
+      simple component since it has no intrinsic behaviour nor relationships
+      with others.</para>
 
-    <para>So now, lets describe the <code>Traceable</code> interface as follow
-    :</para>
+      <para>So now, lets describe the <code>Traceable</code> interface as
+      follow :</para>
 
-    <programlisting language="xml">&lt;bean
+      <programlisting language="xml">&lt;bean
   id="Traceable"
   class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.framework.hrsample.model.Traceable" /&gt;
@@ -556,7 +570,7 @@
     &lt;list&gt;
       &lt;bean
         class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt; <co
-        id="t-createTimestamp" />
+          id="t-createTimestamp" />
         &lt;property
           name="name"
           value="createTimestamp" /&gt;
@@ -581,62 +595,235 @@
       &lt;value&gt;lastUpdateTimestamp&lt;/value&gt;
     &lt;/list&gt;
   &lt;/property&gt;
-  &lt;property name="lifecycleInterceptors"&gt; <co id="t-lifecycle" />
-    &lt;list&gt;
-      &lt;bean
-        class="com.d2s.framework.hrsample.model.service.TraceableLifecycleInterceptor" /&gt;
-    &lt;/list&gt;
-  &lt;/property&gt;
 &lt;/bean&gt;</programlisting>
 
-    <calloutlist>
-      <callout arearefs="t-createTimestamp">
-        <para>The date property descriptor to hold the
-        <code>createTimestamp</code> property. Same applies for the
-        <code>lastUpdateTimestamp</code> property.</para>
-      </callout>
+      <calloutlist>
+        <callout arearefs="t-createTimestamp">
+          <para>The date property descriptor to hold the
+          <code>createTimestamp</code> property. Same applies for the
+          <code>lastUpdateTimestamp</code> property.</para>
+        </callout>
 
-      <callout arearefs="t-DATE_TIME">
-        <para>We want to preserve date and time information in this property
-        as opposed to only date information.</para>
-      </callout>
+        <callout arearefs="t-DATE_TIME">
+          <para>We want to preserve date and time information in this property
+          as opposed to only date information.</para>
+        </callout>
 
-      <callout arearefs="t-uncloned">
-        <para>Whenever a <code>Traceable</code> component is duplicated, we
-        want exclude the tracing values from the cloning process.</para>
-      </callout>
+        <callout arearefs="t-uncloned">
+          <para>Whenever a <code>Traceable</code> component is duplicated, we
+          want exclude the tracing values from the cloning process.</para>
+        </callout>
+      </calloutlist>
 
-      <callout arearefs="t-lifecycle">
-        <para>The tracing values must be handled automatically during the
-        lifecycle of a <code>Traceable</code> component.</para>
-      </callout>
-    </calloutlist>
+      <para>The <code>Traceable</code> component description is slightly more
+      complicated than the <code>Nameable</code> component since not all
+      properties are eligible to cloning
+      (<code>unclonedProperties</code>).</para>
+    </section>
 
-    <para>The <code>Traceable</code> component description is slightly more
-    complicated than the <code>Nameable</code> component. Besides the
-    properties description, we add some behaviour :</para>
+    <section>
+      <title>Generating the component classes</title>
 
-    <itemizedlist>
-      <listitem>
-        <para>Not all properties are elligible to cloning
-        (<code>unclonedProperties</code>).</para>
-      </listitem>
+      <para>It is time now to get our components generated before going
+      further. Let's use the <trademark>D2S</trademark> generation tool to
+      make it happen. <trademark>D2S</trademark> provides a <ulink
+      url="http://freemarker.org/">freemarker</ulink> template to generate the
+      components that may be easily triggered using a simple ant task. Since
+      this generator explores the spring beans definitions, we first need to
+      declare our <code>hrsample-model.xml</code> as being part of our
+      application. To achieve that, let's create a configuration file named
+      <code>beanRefFactory.xml</code> in the root source folder (without any
+      package) as follow :</para>
 
-      <listitem>
-        <para>There is a dynamic behaviour attached to the component lifecycle
-        and this is the first lines of Java we are going to write.</para>
-      </listitem>
-    </itemizedlist>
+      <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true"&gt;
 
-    <para>As defined in the <code>Traceable</code> descriptor, let's create a
-    lifecycle interceptor to handle the createTimestamp and the
-    lastUpdateTimestamp properties.</para>
+  &lt;bean
+    id="hrsample-model-context"
+    class="org.springframework.context.support.ClassPathXmlApplicationContext"
+    lazy-init="true"&gt;
+    &lt;constructor-arg&gt;
+      &lt;list&gt;
+        &lt;value&gt;com/d2s/framework/application/commons.xml&lt;/value&gt; <co
+            id="brf-commons" />
+        &lt;value&gt;com/d2s/framework/tools/entitygenerator/mock.xml&lt;/value&gt; <co
+            id="brf-mock" />
+        &lt;value&gt;com/d2s/framework/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
+            id="brf-model" />
+      &lt;/list&gt;
+    &lt;/constructor-arg&gt;
+  &lt;/bean&gt;
+&lt;/beans&gt;</programlisting><calloutlist>
+          <callout arearefs="brf-commons">
+            <para>The commons bean definitions of the
+            <trademark>D2S</trademark> framework.</para>
+          </callout>
 
-    <para>So create a
-    <code>com.d2s.framework.hrsample.model.service.TraceableLifecycleInterceptor</code>
-    java class as follow :</para>
+          <callout arearefs="brf-mock">
+            <para>A configuration file to mock undefined (for the moment) bean
+            references; this file is only used for the component generation
+            phase.</para>
+          </callout>
 
-    <programlisting language="java">/*
+          <callout arearefs="brf-model">
+            <para>Our application model description file.</para>
+          </callout>
+        </calloutlist>This configuration file assembles the necessary spring
+      configuration files for the generator to operate. So we are ready to
+      operate the generator using the following build.xml ant file :</para>
+
+      <programlisting>&lt;?xml version="1.0"?&gt;
+
+&lt;project default="all"&gt;
+
+  &lt;property file="build.properties" /&gt;
+  &lt;property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" /&gt;
+  &lt;property name="xdoclet.plugins.dir" value="${xdoclet.home}/plugins" /&gt;
+
+  &lt;property name="src.dir" value="${basedir}/src/main" /&gt;
+  &lt;property name="java.src.dir" value="${src.dir}/java" /&gt;
+  &lt;property name="resources.src.dir" value="${src.dir}/resources" /&gt;
+  &lt;property name="ddl.dir" value="${src.dir}/ddl" /&gt;
+
+  &lt;path id="entity.generator.classpath"&gt;
+    &lt;dirset dir="${basedir}"&gt;
+      &lt;include name="**/target/classes" /&gt;
+    &lt;/dirset&gt;
+    &lt;fileset dir="${m2.repo}"&gt;
+      &lt;include name="**/design2see/**/2.0/*.jar" /&gt;
+      &lt;include name="**/commons-cli-1.0.jar" /&gt;
+      &lt;include name="**/freemarker-2.3.3.jar" /&gt;
+      &lt;include name="**/spring-2.0.6.jar" /&gt;
+      &lt;include name="**/commons-logging-1.1.jar" /&gt;
+      &lt;include name="**/xml-apis-2.0.2.jar" /&gt;
+      &lt;include name="**/xerces-2.0.2.jar" /&gt;
+      &lt;include name="**/bsf-2.3.0.jar" /&gt;
+      &lt;include name="**/commons-beanutils-1.7.0.jar" /&gt;
+    &lt;/fileset&gt;
+  &lt;/path&gt;
+
+  &lt;target name="generate-entities"&gt;
+    &lt;java classname="com.d2s.framework.tools.entitygenerator.EntityGenerator"
+          classpathref="entity.generator.classpath"&gt;
+      &lt;arg value="-applicationContextKey" /&gt;
+      &lt;arg value="hrsample-model-context" /&gt;
+      &lt;arg value="-templateResourcePath" /&gt;
+      &lt;arg value="/com/d2s/framework/tools/entitygenerator" /&gt;
+      &lt;arg value="-templateName" /&gt;
+      &lt;arg value="HibernateXdocletEntity.ftl" /&gt;
+      &lt;arg value="-outputDir" /&gt;
+      &lt;arg value="${java.src.dir}" /&gt;
+      &lt;arg value="-includePackages" /&gt;
+      &lt;arg value="com.d2s.framework.hrsample.model" /&gt;
+    &lt;/java&gt;
+  &lt;/target&gt;
+
+  &lt;target name="all" depends="generate-entities" /&gt;
+
+&lt;/project&gt;</programlisting>
+
+      <para>You may now have a look into the
+      <code>com.d2s.framework.hrsample.model</code> package source directory.
+      You may find the 2 generated classes :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><filename>Nameable.java</filename> for the Nameable component
+          (see the <link linkend="Nameable">source code below</link>).</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>Traceable.java</filename> for the Traceable
+          component.</para>
+        </listitem>
+      </itemizedlist>
+
+      <programlisting id="Nameable" language="java">/*
+ * Generated by Design2see. All rights reserved.
+ */
+package com.d2s.framework.hrsample.model;
+
+/**
+ * Nameable component.
+ * &lt;p&gt;
+ * Generated by Design2see. All rights reserved.
+ * &lt;p&gt;
+ *
+ * @author Generated by Design2see
+ * @version $LastChangedRevision$
+ */
+public interface Nameable {
+
+  /**
+   * Gets the name.
+   *
+   * @hibernate.property
+   * @hibernate.column
+   *           name = "NAME"
+   *           length = "64"
+   *           not-null = "true"
+   * @return the name.
+   */
+  java.lang.String getName();
+
+  /**
+   * Sets the name.
+   *
+   * @param name
+   *          the name to set.
+   */
+  void setName(java.lang.String name);
+
+}</programlisting>
+
+      <para>These 2 java classes are in fact interfaces with getters and
+      setters for the declared properties. In fact, you will never need any
+      implementation for them since <trademark>D2S</trademark> will
+      automatically handle their implementation for you at runtime using
+      proxies. So you might wonder why we still need those interfaces instead
+      of completely relying on the descriptors ? This is to benefit from the
+      strong compilation enforcements, code completion in IDE, ... Anything
+      you will need for quality, robustness and productivity when you are
+      manipulating your components.</para>
+
+      <para>You may also notice that the generator took care of annotating the
+      classes with <ulink url="http://www.hibernate.org/">hibernate</ulink>
+      <ulink
+      url="http://xdoclet.sourceforge.net/xdoclet/index.html">xdoclet</ulink>
+      attributes. They will be used later to generate the necessary
+      persistence meta-data.</para>
+    </section>
+
+    <section>
+      <title>Adding lifecycle behaviour</title>
+
+      <para>What about the handling of the <code>Traceable</code> properties ?
+      We want them to follow the life-cycle of any traceable entity, i.e.
+      :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Set the <code>createTimestamp</code> when the entity is
+          persisted for the first time.</para>
+        </listitem>
+
+        <listitem>
+          <para>Set the <code>lastUpdateTimestamp</code> when the entity is
+          updated in the persistent store.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>It is time to write our first lines of java to achieve that. So
+      let's create the life-cycle interceptor
+      <code>com.d2s.framework.hrsample.model.service.TraceableLifecycleInterceptor</code>
+      java class as follow :</para>
+
+      <programlisting language="java">/*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
 package com.d2s.framework.hrsample.model.service;
@@ -668,7 +855,7 @@ public class TraceableLifecycleInterceptor extends
   public boolean onPersist(Traceable traceable, IEntityFactory entityFactory,
       UserPrincipal principal, IEntityLifecycleHandler entityLifecycleHandler) {
     traceable.setCreateTimestamp(new Date()); <co id="onPersist" />
-    return true;
+    return true; <co id="onPersistReturn" />
   }
 
   /**
@@ -685,83 +872,55 @@ public class TraceableLifecycleInterceptor extends
   }
 }</programlisting>
 
-    <calloutlist>
-      <callout arearefs="lcInterceptor">
-        <para>We inherit from th support class
-        <code>com.d2s.framework.model.component.service.EmptyLifecycleInterceptor</code>
-        which empty implements the required lifecycle intercepror interface
-        <code>com.d2s.framework.model.component.service.EmptyLifecycleInterceptor</code>
-        as well as the marker interface
-        <code>com.d2s.framework.model.component.service.IComponentService</code>.</para>
-      </callout>
-
-      <callout arearefs="onPersist">
-        <para>Whenever a <code>Traceable</code> component is persisted (saved
-        for the first time), set its <code>createTimestamp</code>.</para>
-      </callout>
-
-      <callout arearefs="onUpdate">
-        <para>Whenever a <code>Traceable</code> component is updated
-        (subsequent saves), update its
-        <code>lastUpdatedTimestamp</code>.</para>
-      </callout>
-    </calloutlist>
-
-    <para>You might have noticed that we reference the <code>Traceable</code>
-    interface in the <code>TraceableLifecycleInterceptor</code>. Of course, we
-    don't have it yet so it won't compile. Let's use the
-    <trademark>D2S</trademark> generation tool to make it happen.
-    <trademark>D2S</trademark> provides a <ulink
-    url="http://freemarker.org/">freemarker</ulink> template to generate the
-    components; this template may be easily triggered using a simple ant task.
-    Since this generator explores the spring beans definitions, we first need
-    to declare our <code>hrsample-model.xml</code> as being part of our
-    application. To achieve that, let's create a configuration file named
-    <code>beanRefFactory.xml</code> in the root source folder (without any
-    package) as follow :</para>
-
-    <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;beans
-  xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
-  default-lazy-init="true"&gt;
-
-  &lt;bean
-    id="hrsample-model-context"
-    class="org.springframework.context.support.ClassPathXmlApplicationContext"
-    lazy-init="true"&gt;
-    &lt;constructor-arg&gt;
-      &lt;list&gt;
-        &lt;value&gt;com/d2s/framework/application/commons.xml&lt;/value&gt; <co
-          id="brf-commons" />
-        &lt;value&gt;com/d2s/framework/tools/entitygenerator/mock.xml&lt;/value&gt; <co
-          id="brf-mock" />
-        &lt;value&gt;com/d2s/framework/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
-          id="brf-model" />
-      &lt;/list&gt;
-    &lt;/constructor-arg&gt;
-  &lt;/bean&gt;
-&lt;/beans&gt;</programlisting><calloutlist>
-        <callout arearefs="brf-commons">
-          <para>The commons bean definitions of the <trademark>D2S</trademark>
-          framework.</para>
+      <calloutlist>
+        <callout arearefs="lcInterceptor">
+          <para>We inherit from th support class
+          <code>com.d2s.framework.model.component.service.EmptyLifecycleInterceptor</code>
+          which empty implements the required life-cycle interceptor interface
+          <code>com.d2s.framework.model.component.service.EmptyLifecycleInterceptor</code>
+          as well as the marker interface
+          <code>com.d2s.framework.model.component.service.IComponentService</code>.</para>
         </callout>
 
-        <callout arearefs="brf-mock">
-          <para>A configuration file to mock undefined (for the moment) bean
-          references; this file is only used for the component generation
-          phase.</para>
+        <callout arearefs="onPersist">
+          <para>Whenever a <code>Traceable</code> component is persisted
+          (saved for the first time), set its
+          <code>createTimestamp</code>.</para>
         </callout>
 
-        <callout arearefs="brf-model">
-          <para>Our application model description file.</para>
+        <callout arearefs="onPersistReturn">
+          <para>Return true to notify the framework that the state of the
+          component has been updated.</para>
         </callout>
-      </calloutlist>This configuration file assembles the necessary spring
-    configuration files for the generator to operate. So we are ready to
-    operate the generator using the following build.xml ant file :</para>
 
-    <programlisting></programlisting>
+        <callout arearefs="onUpdate">
+          <para>Whenever a <code>Traceable</code> component is updated
+          (subsequent saves), update its
+          <code>lastUpdateTimestamp</code>.</para>
+        </callout>
+      </calloutlist>
+
+      <para>We can now link the life-cycle interceptor to our
+      <code>Traceable</code> component bean descriptor as below :</para>
+
+      <para><programlisting>&lt;bean
+  id="Traceable"
+  class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
+  ...
+  &lt;property name="lifecycleInterceptors"&gt; <co id="lcInterceptors" />
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.framework.hrsample.model.service.TraceableLifecycleInterceptor" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="lcInterceptors">
+            <para>Defines an ordered list of life-cycle interceptors attached
+            to the component.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para></para>
+    </section>
   </section>
 </chapter>

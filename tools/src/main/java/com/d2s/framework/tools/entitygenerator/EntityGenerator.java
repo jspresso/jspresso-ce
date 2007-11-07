@@ -8,11 +8,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.cli.BasicParser;
@@ -50,7 +49,7 @@ import freemarker.template.TemplateException;
 public class EntityGenerator {
 
   private static final String APPLICATION_CONTEXT_KEY = "applicationContextKey";
-  private static final String COMPONENT_NAMES         = "componentNames";
+  private static final String COMPONENT_IDS           = "componentIds";
   private static final String EXCLUDE_PATTERN         = "excludePatterns";
   private static final String GENERATE_ANNOTATIONS    = "generateAnnotations";
   private static final String INCLUDE_PACKAGES        = "includePackages";
@@ -59,7 +58,7 @@ public class EntityGenerator {
   private static final String TEMPLATE_RESOURCE_PATH  = "templateResourcePath";
 
   private String              applicationContextKey;
-  private String[]            componentNames;
+  private String[]            componentIds;
   private String[]            excludePatterns;
   private boolean             generateAnnotations;
   private String[]            includePackages;
@@ -114,12 +113,12 @@ public class EntityGenerator {
             .create(GENERATE_ANNOTATIONS));
     options
         .addOption(OptionBuilder
-            .withArgName(COMPONENT_NAMES)
+            .withArgName(COMPONENT_IDS)
             .hasArgs()
             .withValueSeparator(',')
             .withDescription(
-                "generate code for the given component descriptor names in the application context.")
-            .create(COMPONENT_NAMES));
+                "generate code for the given component descriptor identifiers in the application context.")
+            .create(COMPONENT_IDS));
     CommandLineParser parser = new BasicParser();
     CommandLine cmd = null;
     try {
@@ -141,40 +140,47 @@ public class EntityGenerator {
     generator.setIncludePackages(cmd.getOptionValues(INCLUDE_PACKAGES));
     generator.setExcludePatterns(cmd.getOptionValues(EXCLUDE_PATTERN));
     generator.setGenerateAnnotations(cmd.hasOption(GENERATE_ANNOTATIONS));
-    generator.setComponentNames(cmd.getOptionValues(COMPONENT_NAMES));
+    generator.setComponentIds(cmd.getOptionValues(COMPONENT_IDS));
     generator.generateComponents();
   }
 
   /**
    * Generates the component java source files.
    */
+  @SuppressWarnings("unchecked")
   public void generateComponents() {
     ApplicationContext appContext = getApplicationContext();
-    if (componentNames == null) {
-      String[] allComponentNames = appContext
-          .getBeanNamesForType(IComponentDescriptor.class);
-      Set<String> filteredComponentNames = new LinkedHashSet<String>();
+    Collection<IComponentDescriptor<?>> componentDescriptors = new LinkedHashSet<IComponentDescriptor<?>>();
+    if (componentIds == null) {
+      Map<String, IComponentDescriptor<?>> allComponents = appContext
+          .getBeansOfType(IComponentDescriptor.class);
       if (includePackages != null) {
-        for (String componentName : allComponentNames) {
+        for (Map.Entry<String, IComponentDescriptor<?>> componentEntry : allComponents
+            .entrySet()) {
           for (String pkg : includePackages) {
-            if (componentName.startsWith(pkg)) {
+            if (componentEntry.getValue().getName().startsWith(pkg)) {
               boolean include = true;
               if (excludePatterns != null) {
                 for (String excludePattern : excludePatterns) {
-                  if (include && Pattern.matches(excludePattern, componentName)) {
+                  if (include
+                      && Pattern.matches(excludePattern, componentEntry
+                          .getValue().getName())) {
                     include = false;
                   }
                 }
               }
               if (include) {
-                filteredComponentNames.add(componentName);
+                componentDescriptors.add(componentEntry.getValue());
               }
             }
           }
         }
+      } else {
+        for (String componentId : componentIds) {
+          componentDescriptors.add((IComponentDescriptor<?>) appContext
+              .getBean(componentId));
+        }
       }
-      componentNames = new ArrayList<String>(filteredComponentNames)
-          .toArray(new String[0]);
     }
     Configuration cfg = new Configuration();
     cfg.setClassForTemplateLoading(getClass(), templateResourcePath);
@@ -193,12 +199,12 @@ public class EntityGenerator {
     rootContext.put("instanceof", new InstanceOf(wrapper));
     rootContext.put("compareStrings", new CompareStrings(wrapper));
     rootContext.put("generateAnnotations", new Boolean(generateAnnotations));
-    for (String componentName : componentNames) {
+    for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
       OutputStream out;
       if (outputDir != null) {
         try {
           File outFile = new File(outputDir + "/"
-              + componentName.replace('.', '/') + ".java");
+              + componentDescriptor.getName().replace('.', '/') + ".java");
           if (!outFile.exists()) {
             if (!outFile.getParentFile().exists()) {
               outFile.getParentFile().mkdirs();
@@ -213,7 +219,7 @@ public class EntityGenerator {
       } else {
         out = System.out;
       }
-      rootContext.put("componentDescriptor", appContext.getBean(componentName));
+      rootContext.put("componentDescriptor", componentDescriptor);
       try {
         template.process(rootContext, new OutputStreamWriter(out));
         out.flush();
@@ -241,13 +247,13 @@ public class EntityGenerator {
   }
 
   /**
-   * Sets the componentNames.
+   * Sets the componentIds.
    * 
-   * @param componentNames
-   *            the componentNames to set.
+   * @param componentIds
+   *            the componentIds to set.
    */
-  public void setComponentNames(String[] componentNames) {
-    this.componentNames = componentNames;
+  public void setComponentIds(String[] componentIds) {
+    this.componentIds = componentIds;
   }
 
   /**
