@@ -479,7 +479,7 @@
 
       <programlisting language="xml">&lt;bean <co id="n-bean" />
   id="Nameable" <co id="n-id" />
-  class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt; <co
+  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt; <co
           id="n-class" />
   &lt;constructor-arg
     value="com.d2s.framework.hrsample.model.Nameable" /&gt; <co
@@ -517,7 +517,7 @@
         <callout arearefs="n-class">
           <para>Since we are describing a generic interface (which may or may
           not turn to be an entity) we will use a
-          <code>BasicComponentDescriptor</code> as opposed to a
+          <code>BasicInterfaceDescriptor</code> as opposed to a
           <code>BasicEntityDescriptor</code>.</para>
         </callout>
 
@@ -526,7 +526,7 @@
         </callout>
 
         <callout arearefs="n-props">
-          <para>The property descriptors of this component descriptor.</para>
+          <para>The property descriptors of this interface descriptor.</para>
         </callout>
 
         <callout arearefs="n-stringprop">
@@ -550,19 +550,19 @@
         </callout>
       </calloutlist>
 
-      <para>As you can see above, we create a component descriptor
+      <para>As you can see above, we create an interface descriptor
       (<code>com.d2s.framework.sample.backend.domain.Nameable</code>) with one
       property (<code>name</code>) along with its constraints
       (<code>maxLength</code> and <code>mandatory</code>). This is a fairly
-      simple component since it has no intrinsic behaviour nor relationships
-      with others.</para>
+      simple interface since it has no intrinsic behaviour nor relationships
+      with other components.</para>
 
       <para>So now, lets describe the <code>Traceable</code> interface as
       follow :</para>
 
       <programlisting language="xml">&lt;bean
   id="Traceable"
-  class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
+  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.framework.hrsample.model.Traceable" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -613,8 +613,8 @@
         </callout>
       </calloutlist>
 
-      <para>The <code>Traceable</code> component description is slightly more
-      complicated than the <code>Nameable</code> component since not all
+      <para>The <code>Traceable</code> interface description is slightly more
+      complicated than the <code>Nameable</code> interface since not all
       properties are eligible to cloning
       (<code>unclonedProperties</code>).</para>
     </section>
@@ -622,7 +622,7 @@
     <section>
       <title>Generating the component classes</title>
 
-      <para>It is time now to get our components generated before going
+      <para>It is time now to get our interfaces generated before going
       further. Let's use the <trademark>D2S</trademark> generation tool to
       make it happen. <trademark>D2S</trademark> provides a <ulink
       url="http://freemarker.org/">freemarker</ulink> template to generate the
@@ -731,13 +731,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><filename>Nameable.java</filename> for the Nameable component
+          <para><filename>Nameable.java</filename> for the Nameable interface
           (see the <link linkend="Nameable">source code below</link>).</para>
         </listitem>
 
         <listitem>
           <para><filename>Traceable.java</filename> for the Traceable
-          component.</para>
+          interface.</para>
         </listitem>
       </itemizedlist>
 
@@ -899,11 +899,11 @@ public class TraceableLifecycleInterceptor extends
       </calloutlist>
 
       <para>We can now link the life-cycle interceptor to our
-      <code>Traceable</code> component bean descriptor as below :</para>
+      <code>Traceable</code> interface bean descriptor as below :</para>
 
       <para><programlisting>&lt;bean
   id="Traceable"
-  class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
+  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
   ...
   &lt;property name="lifecycleInterceptors"&gt; <co id="lcInterceptors" />
     &lt;list&gt;
@@ -922,7 +922,7 @@ public class TraceableLifecycleInterceptor extends
     <section>
       <title>Describing the first entities</title>
 
-      <para>As of now, we have only dealt with components which are not
+      <para>As of now, we have only dealt with interfaces which are not
       entities by themselves. Describing an entity follows the exact same
       process except that we make its descriptor an entity descriptor and that
       we add the <code>com.d2s.framework.model.entity.IEntity</code> standard
