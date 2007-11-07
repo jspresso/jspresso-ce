@@ -1,0 +1,1620 @@
+format 45
+"basic" // com::d2s::framework::model::component::basic
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/model/component/basic"
+  java_package "com.d2s.framework.model.component.basic"
+  classview 129799 "basic"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 132231 "AbstractComponentInvocationHandler"
+      abstract visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is the core implementation of all components in the application.
+Instances of this class serve as handlers for proxies representing the
+components.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 871 $
+@author Vincent Vandenschrick
+"
+      classrelation 131207 // <realization>
+	relation 131207 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 131207 // <realization>
+	  b parent class_ref 132359 // InvocationHandler
+      end
+
+      classrelation 131335 // <realization>
+	relation 131335 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 131335 // <realization>
+	  b parent class_ref 132487 // Serializable
+      end
+
+      attribute 130439 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -8332414648339056836L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 130567 "accessorFactory"
+	private explicit_type "IAccessorFactory"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 130695 "changeSupport"
+	private explicit_type "PropertyChangeSupport"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 131463 // inlineComponentFactory (<unidirectional association>)
+	relation 131463 --->
+	  a role_name "inlineComponentFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 131463 // inlineComponentFactory (<unidirectional association>)
+	  b parent class_ref 130567 // IComponentFactory
+      end
+
+      classrelation 131591 // collectionFactory (<unidirectional association>)
+	relation 131591 --->
+	  a role_name "collectionFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<IComponent> ${name}${value};
+"
+	    classrelation_ref 131591 // collectionFactory (<unidirectional association>)
+	  b parent class_ref 131079 // IComponentCollectionFactory
+      end
+
+      classrelation 131719 // componentDescriptor (<unidirectional association>)
+	relation 131719 --->
+	  a role_name "componentDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<? extends IComponent> ${name}${value};
+"
+	    classrelation_ref 131719 // componentDescriptor (<unidirectional association>)
+	  b parent class_ref 132103 // IComponentDescriptor
+      end
+
+      classrelation 131847 // componentExtensions (<unidirectional association>)
+	relation 131847 --->
+	  stereotype "Map"
+	  a role_name "componentExtensions" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<Class<IComponentExtension<IComponent>>, ${type}<IComponent>> ${name}${value};
+"
+	    classrelation_ref 131847 // componentExtensions (<unidirectional association>)
+	  b parent class_ref 130311 // IComponentExtension
+      end
+
+      classrelation 131975 // extensionFactory (<unidirectional association>)
+	relation 131975 --->
+	  a role_name "extensionFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 131975 // extensionFactory (<unidirectional association>)
+	  b parent class_ref 131335 // IComponentExtensionFactory
+      end
+
+      attribute 130823 "modifierMonitors"
+	private explicit_type "String"
+	stereotype "Set"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 135303 "AbstractComponentInvocationHandler"
+	protected explicit_return_type ""
+	nparams 5
+	  param inout name "componentDescriptor" type class_ref 132103 // IComponentDescriptor
+	  param inout name "inlineComponentFactory" type class_ref 130567 // IComponentFactory
+	  param inout name "collectionFactory" type class_ref 131079 // IComponentCollectionFactory
+	  param inout name "accessorFactory" explicit_type "IAccessorFactory"
+	  param inout name "extensionFactory" type class_ref 131335 // IComponentExtensionFactory
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0}<IComponent> ${p0}, ${t1} ${p1}, ${t2}<IComponent> ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicComponentInvocationHandler</code> instance.
+
+@param componentDescriptor
+           The descriptor of the proxy component.
+@param inlineComponentFactory
+           the factory used to create inline components.
+@param collectionFactory
+           The factory used to create empty component collections from
+           collection getters.
+@param accessorFactory
+           The factory used to access proxy properties.
+@param extensionFactory
+           The factory used to create component extensions based on their
+           classes.
+"
+      end
+
+      operation 135431 "getComponentContract"
+	public explicit_return_type "Class<? extends Object>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the interface class being the contract of this component.
+
+@return the component interface contract.
+"
+      end
+
+      operation 135559 "invoke"
+	public explicit_return_type "Object"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "method" explicit_type "Method"
+	  param inout name "args" explicit_type "Object"
+	nexceptions 1
+	  explicit_exception "Throwable"
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Handles methods invocations on the component proxy. Either :
+<li>delegates to one of its extension if the accessed property is
+registered as being part of an extension
+<li>handles property access internally
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 135687 "setCollectionFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "collectionFactory" type class_ref 131079 // IComponentCollectionFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the collectionFactory.
+
+@param collectionFactory
+           the collectionFactory to set.
+"
+      end
+
+      operation 135815 "computeEquals"
+	abstract protected explicit_return_type "boolean"
+	nparams 2
+	  param inout name "proxy" type class_ref 130183 // IComponent
+	  param inout name "another" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Delegate method to compute object equality.
+
+@param proxy
+           the target component to compute equality of.
+@param another
+           the object to compute equality against.
+@return the computed equality.
+"
+      end
+
+      operation 135943 "computeHashCode"
+	abstract protected explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Delegate method to compute hashcode.
+
+@return the computed hashcode.
+"
+      end
+
+      operation 136071 "decorateReferent"
+	abstract protected return_type class_ref 130183 // IComponent
+	nparams 2
+	  param inout name "referent" type class_ref 130183 // IComponent
+	  param inout name "referentDescriptor" type class_ref 132103 // IComponentDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}<? extends IComponent> ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gives a chance to the implementor to decorate a component reference before
+returning it when fetching association ends.
+
+@param referent
+           the component reference to decorate.
+@param referentDescriptor
+           the component descriptor of the referent.
+@return the decorated component.
+"
+      end
+
+      operation 136199 "getAccessorFactory"
+	protected explicit_return_type "IAccessorFactory"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the accessorFactory.
+
+@return the accessorFactory.
+"
+      end
+
+      operation 136327 "getCollectionProperty"
+	protected explicit_return_type "Object"
+	nparams 2
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "propertyDescriptor" type class_ref 132615 // ICollectionPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1}<? extends IComponent> ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets a collection property value.
+
+@param proxy
+           the proxy to get the property of.
+@param propertyDescriptor
+           the property descriptor to get the value for.
+@return the property value.
+"
+      end
+
+      operation 136455 "getProperty"
+	protected explicit_return_type "Object"
+	nparams 2
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "propertyDescriptor" type class_ref 132743 // IPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets a property value.
+
+@param proxy
+           the proxy to get the property of.
+@param propertyDescriptor
+           the property descriptor to get the value for.
+@return the property value.
+"
+      end
+
+      operation 136583 "isInlineComponentReference"
+	protected explicit_return_type "boolean"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 132871 // IReferencePropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets wether this reference descriptor points to an inline component.
+
+@param propertyDescriptor
+           the reference descriptor to test.
+@return true if this reference descriptor points to an inline component.
+"
+      end
+
+      operation 136711 "getReferenceProperty"
+	protected explicit_return_type "Object"
+	nparams 2
+	  param inout name "proxy" explicit_type "Object"
+	  param in name "propertyDescriptor" type class_ref 132871 // IReferencePropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, final ${t1}<IComponent> ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets a reference property value.
+
+@param proxy
+           the proxy to get the property of.
+@param propertyDescriptor
+           the property descriptor to get the value for.
+@return the property value.
+"
+      end
+
+      operation 136839 "invokeServiceMethod"
+	protected explicit_return_type "Object"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "method" explicit_type "Method"
+	  param inout name "args" explicit_type "Object"
+	nexceptions 1
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Invokes a service method on the component.
+
+@param proxy
+           the component to invoke the service on.
+@param method
+           the method implemented by the component.
+@param args
+           the arguments of the method implemented by the component.
+@return the value returned by the method execution if any.
+@throws NoSuchMethodException
+            if no mean could be found to service the method.
+"
+      end
+
+      operation 136967 "isInitialized"
+	protected explicit_return_type "boolean"
+	nparams 1
+	  param inout name "objectOrProxy" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Wether the object is fully initialized.
+
+@param objectOrProxy
+           the object to test.
+@return true if the object is fully initialized.
+"
+      end
+
+      operation 137095 "retrievePropertyValue"
+	abstract protected explicit_return_type "Object"
+	nparams 1
+	  param in name "propertyName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Direct read access to the properties map without any other operation. Use
+with caution only in subclasses.
+
+@param propertyName
+           the property name.
+@return the property value.
+"
+      end
+
+      operation 137223 "storeProperty"
+	abstract protected explicit_return_type "void"
+	nparams 2
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "propertyValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Direct write access to the properties map without any other operation. Use
+with caution only in subclasses.
+
+@param propertyName
+           the property name.
+@param propertyValue
+           the property value.
+"
+      end
+
+      operation 137351 "straightGetProperty"
+	protected explicit_return_type "Object"
+	nparams 1
+	  param in name "propertyName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Directly get a property value out of the property store without any other
+operation.
+
+@param propertyName
+           the name of the property.
+@return the property value or null.
+"
+      end
+
+      operation 137479 "addPropertyChangeListener"
+	private explicit_return_type "void"
+	nparams 2
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "listener" explicit_type "PropertyChangeListener"
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 137607 "addPropertyChangeListener"
+	private explicit_return_type "void"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "listener" explicit_type "PropertyChangeListener"
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 137735 "addToProperty"
+	private explicit_return_type "void"
+	nparams 4
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "propertyDescriptor" type class_ref 132615 // ICollectionPropertyDescriptor
+	  param in name "index" explicit_type "int"
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+      end
+
+      operation 137863 "addToProperty"
+	private explicit_return_type "void"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "propertyDescriptor" type class_ref 132615 // ICollectionPropertyDescriptor
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+      end
+
+      operation 137991 "checkIntegrity"
+	private explicit_return_type "void"
+	nparams 1
+	  param inout name "proxy" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 138119 "firePropertyChange"
+	private explicit_return_type "void"
+	nparams 3
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "oldValue" explicit_type "Object"
+	  param inout name "newValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 138247 "getExtensionInstance"
+	private return_type class_ref 130311 // IComponentExtension
+	nparams 2
+	  param inout name "extensionClass" explicit_type "Class<IComponentExtension<IComponent>>"
+	  param inout name "proxy" type class_ref 130183 // IComponent
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<? extends IComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 138375 "invokeExtensionMethod"
+	private explicit_return_type "Object"
+	nparams 3
+	  param inout name "componentExtension" type class_ref 130311 // IComponentExtension
+	  param inout name "method" explicit_type "Method"
+	  param inout name "args" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<? extends IComponent> ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 138503 "invokeLifecycleInterceptors"
+	private explicit_return_type "boolean"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "lifecycleMethod" explicit_type "Method"
+	  param inout name "args" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+      end
+
+      operation 138631 "removeFromProperty"
+	private explicit_return_type "void"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "propertyDescriptor" type class_ref 132615 // ICollectionPropertyDescriptor
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}<?> ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 138759 "removePropertyChangeListener"
+	private explicit_return_type "void"
+	nparams 1
+	  param inout name "listener" explicit_type "PropertyChangeListener"
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 138887 "removePropertyChangeListener"
+	private explicit_return_type "void"
+	nparams 2
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "listener" explicit_type "PropertyChangeListener"
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 139015 "setProperty"
+	private explicit_return_type "void"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "propertyDescriptor" type class_ref 132743 // IPropertyDescriptor
+	  param inout name "newProperty" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+      end
+
+      operation 139143 "straightGetProperties"
+	private explicit_return_type "Map<String, Object>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 139271 "straightSetProperties"
+	private explicit_return_type "void"
+	nparams 1
+	  param inout name "backendProperties" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 139399 "straightSetProperty"
+	private explicit_return_type "void"
+	nparams 2
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "newPropertyValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+      end
+
+      operation 139527 "toString"
+	private explicit_return_type "String"
+	nparams 1
+	  param inout name "proxy" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      class 132999 "NeverEqualsInvocationHandler"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	classrelation 132103 // <realization>
+	  relation 132103 -_-|>
+	    a public
+	      java "${type}"
+	      classrelation_ref 132103 // <realization>
+	    b parent class_ref 132359 // InvocationHandler
+	end
+
+	attribute 130951 "delegate"
+	  private explicit_type "Object"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 139655 "NeverEqualsInvocationHandler"
+	  private explicit_return_type ""
+	  nparams 1
+	    param inout name "delegate" explicit_type "Object"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	end
+
+	operation 139783 "invoke"
+	  public explicit_return_type "Object"
+	  nparams 3
+	    param inout name "proxy" explicit_type "Object"
+	    param inout name "method" explicit_type "Method"
+	    param inout name "args" explicit_type "Object"
+	  nexceptions 1
+	    explicit_exception "Throwable"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Just 'overrides' the equals method to always return false.
+<p>
+{@inheritDoc}
+"
+	end
+      end
+    end
+
+    class 133127 "BasicComponentInvocationHandler"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is the core implementation of all inlined components in the application.
+Instances of this class serve as handlers for proxies representing the
+inlined components.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 865 $
+@author Vincent Vandenschrick
+"
+      classrelation 132231 // <generalisation>
+	relation 132231 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 132231 // <generalisation>
+	  b parent class_ref 132231 // AbstractComponentInvocationHandler
+      end
+
+      attribute 131079 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -3178070064423598514L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 131207 "properties"
+	private explicit_type "String, Object"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 139911 "BasicComponentInvocationHandler"
+	protected explicit_return_type ""
+	nparams 5
+	  param inout name "componentDescriptor" type class_ref 132103 // IComponentDescriptor
+	  param inout name "inlineComponentFactory" type class_ref 130567 // IComponentFactory
+	  param inout name "collectionFactory" type class_ref 131079 // IComponentCollectionFactory
+	  param inout name "accessorFactory" explicit_type "IAccessorFactory"
+	  param inout name "extensionFactory" type class_ref 131335 // IComponentExtensionFactory
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0}<IComponent> ${p0}, ${t1} ${p1}, ${t2}<IComponent> ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasiccomponentInvocationHandler</code> instance.
+
+@param componentDescriptor
+           The descriptor of the proxy component.
+@param inlineComponentFactory
+           the factory used to create inline components.
+@param collectionFactory
+           The factory used to create empty component collections from
+           collection getters.
+@param accessorFactory
+           The factory used to access proxy properties.
+@param extensionFactory
+           The factory used to create component extensions based on their
+           classes.
+"
+      end
+
+      operation 140039 "computeEquals"
+	protected explicit_return_type "boolean"
+	nparams 2
+	  param inout name "proxy" type class_ref 130183 // IComponent
+	  param inout name "another" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 140167 "computeHashCode"
+	protected explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 140295 "decorateReferent"
+	protected return_type class_ref 130183 // IComponent
+	nparams 2
+	  param inout name "referent" type class_ref 130183 // IComponent
+	  param inout name "referentDescriptor" type class_ref 132103 // IComponentDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1}<? extends IComponent> ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 140423 "retrievePropertyValue"
+	protected explicit_return_type "Object"
+	nparams 1
+	  param in name "propertyName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 140551 "storeProperty"
+	protected explicit_return_type "void"
+	nparams 2
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "propertyValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 140679 "createPropertyMap"
+	private explicit_return_type "Map<String, Object>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+    end
+
+    class 133255 "BasicDelegatingComponentInvocationHandler"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is the core implementation of all entities in the application. Instances
+of this class serve as handlers for proxies representing the entities.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 865 $
+@author Vincent Vandenschrick
+"
+      classrelation 132359 // <generalisation>
+	relation 132359 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 132359 // <generalisation>
+	  b parent class_ref 132231 // AbstractComponentInvocationHandler
+      end
+
+      attribute 131335 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  4064763209800159366L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 132487 // componentFactory (<unidirectional association>)
+	relation 132487 --->
+	  a role_name "componentFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 132487 // componentFactory (<unidirectional association>)
+	  b parent class_ref 130567 // IComponentFactory
+      end
+
+      attribute 131463 "delegate"
+	private explicit_type "Object"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 140807 "BasicDelegatingComponentInvocationHandler"
+	protected explicit_return_type ""
+	nparams 6
+	  param inout name "delegate" explicit_type "Object"
+	  param inout name "componentFactory" type class_ref 130567 // IComponentFactory
+	  param inout name "componentDescriptor" type class_ref 132103 // IComponentDescriptor
+	  param inout name "collectionFactory" type class_ref 131079 // IComponentCollectionFactory
+	  param inout name "accessorFactory" explicit_type "IAccessorFactory"
+	  param inout name "extensionFactory" type class_ref 131335 // IComponentExtensionFactory
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}<IComponent> ${p2}, ${t3}<IComponent> ${p3}, ${t4} ${p4}, ${t5} ${p5}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicComponentInvocationHandler</code> instance.
+
+@param delegate
+           the delegate to which getters and setters are delegated.
+@param componentFactory
+           the factory used to decorate referenced components.
+@param componentDescriptor
+           The descriptor of the proxy component.
+@param collectionFactory
+           The factory used to create empty component collections from
+           collection getters.
+@param accessorFactory
+           The factory used to access proxy properties.
+@param extensionFactory
+           The factory used to create component extensions based on their
+           classes.
+"
+      end
+
+      operation 140935 "computeEquals"
+	protected explicit_return_type "boolean"
+	nparams 2
+	  param inout name "proxy" type class_ref 130183 // IComponent
+	  param inout name "another" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 141063 "computeHashCode"
+	protected explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 141191 "decorateReferent"
+	protected return_type class_ref 130183 // IComponent
+	nparams 2
+	  param inout name "referent" type class_ref 130183 // IComponent
+	  param inout name "referentDescriptor" type class_ref 132103 // IComponentDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}<? extends IComponent> ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 141319 "invokeServiceMethod"
+	protected explicit_return_type "Object"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "method" explicit_type "Method"
+	  param inout name "args" explicit_type "Object"
+	nexceptions 1
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Gives a chance to the delegate to service the method.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 141447 "retrievePropertyValue"
+	protected explicit_return_type "Object"
+	nparams 1
+	  param in name "propertyName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 141575 "storeProperty"
+	protected explicit_return_type "void"
+	nparams 2
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "propertyValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 133383 "BasicProxyComponentFactory"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Default implementation of <code>IComponentFactory</code>. It creates
+standard java proxies which delegate to
+<code>BasicComponentInvocationHandler</code>s.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 865 $
+@author Vincent Vandenschrick
+"
+      classrelation 132615 // <realization>
+	relation 132615 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 132615 // <realization>
+	  b parent class_ref 130567 // IComponentFactory
+      end
+
+      attribute 131591 "accessorFactory"
+	private explicit_type "IAccessorFactory"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 132743 // componentCollectionFactory (<unidirectional association>)
+	relation 132743 --->
+	  a role_name "componentCollectionFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<IComponent> ${name}${value};
+"
+	    classrelation_ref 132743 // componentCollectionFactory (<unidirectional association>)
+	  b parent class_ref 131079 // IComponentCollectionFactory
+      end
+
+      classrelation 132871 // componentDescriptorRegistry (<unidirectional association>)
+	relation 132871 --->
+	  a role_name "componentDescriptorRegistry" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 132871 // componentDescriptorRegistry (<unidirectional association>)
+	  b parent class_ref 131975 // IComponentDescriptorRegistry
+      end
+
+      classrelation 132999 // componentExtensionFactory (<unidirectional association>)
+	relation 132999 --->
+	  a role_name "componentExtensionFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 132999 // componentExtensionFactory (<unidirectional association>)
+	  b parent class_ref 131335 // IComponentExtensionFactory
+      end
+
+      operation 141703 "createComponentInstance"
+	public explicit_return_type "T"
+	nparams 2
+	  param inout name "componentContract" explicit_type "Class<T>"
+	  param inout name "delegate" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IComponent> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 141831 "createComponentInstance"
+	public explicit_return_type "T"
+	nparams 1
+	  param inout name "componentContract" explicit_type "Class<T>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IComponent> ${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 141959 "getComponentDescriptor"
+	public return_type class_ref 132103 // IComponentDescriptor
+	nparams 1
+	  param inout name "componentContract" explicit_type "Class<? extends IComponent>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<?> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 142087 "setAccessorFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "accessorFactory" explicit_type "IAccessorFactory"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the accessorFactory used by this entity factory.
+
+@param accessorFactory
+           the accessorFactory to set.
+"
+      end
+
+      operation 142215 "setComponentCollectionFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "componentCollectionFactory" type class_ref 131079 // IComponentCollectionFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the componentCollectionFactory property.
+
+@param componentCollectionFactory
+           the componentCollectionFactory to set.
+"
+      end
+
+      operation 142343 "setComponentDescriptorRegistry"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "componentDescriptorRegistry" type class_ref 131975 // IComponentDescriptorRegistry
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the componentDescriptorRegistry.
+
+@param componentDescriptorRegistry
+           the componentDescriptorRegistry to set.
+"
+      end
+
+      operation 142471 "setComponentExtensionFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "componentExtensionFactory" type class_ref 131335 // IComponentExtensionFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the componentExtensionFactory property.
+
+@param componentExtensionFactory
+           the componentCollectionFactory to set.
+"
+      end
+
+      operation 142599 "getAccessorFactory"
+	protected explicit_return_type "IAccessorFactory"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the accessorFactory.
+
+@return the accessorFactory.
+"
+      end
+
+      operation 142727 "getComponentCollectionFactory"
+	protected return_type class_ref 131079 // IComponentCollectionFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<IComponent> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the componentCollectionFactory.
+
+@return the componentCollectionFactory.
+"
+      end
+
+      operation 142855 "getComponentExtensionFactory"
+	protected return_type class_ref 131335 // IComponentExtensionFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the componentExtensionFactory.
+
+@return the componentExtensionFactory.
+"
+      end
+
+      operation 142983 "getPrincipal"
+	protected explicit_return_type "UserPrincipal"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the principal using the factory.
+
+@return the principal using the factory.
+"
+      end
+
+      operation 143111 "createDelegatingComponentInvocationHandler"
+	private explicit_return_type "InvocationHandler"
+	nparams 2
+	  param inout name "componentDescriptor" type class_ref 132103 // IComponentDescriptor
+	  param inout name "delegate" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IComponent> ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 143239 "createComponentInvocationHandler"
+	private explicit_return_type "InvocationHandler"
+	nparams 1
+	  param inout name "componentDescriptor" type class_ref 132103 // IComponentDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 143367 "createComponentInstance"
+	private explicit_return_type "T"
+	nparams 3
+	  param inout name "componentContract" explicit_type "Class<T>"
+	  param inout name "delegate" explicit_type "Object"
+	  param inout name "extraInterfaces" explicit_type "Class"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IComponent> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+      end
+    end
+  end
+
+  deploymentview 129543 "basic"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 131335 "AbstractComponentInvocationHandler"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.model.component.ComponentException;
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtension;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.component.ILifecycleCapable;
+import com.d2s.framework.model.component.service.IComponentService;
+import com.d2s.framework.model.component.service.ILifecycleInterceptor;
+import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.util.accessor.IAccessor;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.accessor.ICollectionAccessor;
+import com.d2s.framework.util.bean.AccessorInfo;
+import com.d2s.framework.util.bean.SinglePropertyChangeSupport;
+import com.d2s.framework.util.collection.CollectionHelper;
+${definition}"
+      associated_classes
+	class_ref 132231 // AbstractComponentInvocationHandler
+      end
+    end
+
+    artifact 131463 "BasicComponentInvocationHandler"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.HashMap;
+import java.util.Map;
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+${definition}"
+      associated_classes
+	class_ref 133127 // BasicComponentInvocationHandler
+      end
+    end
+
+    artifact 131591 "BasicDelegatingComponentInvocationHandler"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import com.d2s.framework.model.component.ComponentException;
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+${definition}"
+      associated_classes
+	class_ref 133255 // BasicDelegatingComponentInvocationHandler
+      end
+    end
+
+    artifact 131719 "BasicProxyComponentFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
+import com.d2s.framework.security.UserPrincipal;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+${definition}"
+      associated_classes
+	class_ref 133383 // BasicProxyComponentFactory
+      end
+    end
+  end
+end

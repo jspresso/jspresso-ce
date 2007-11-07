@@ -1,0 +1,1225 @@
+format 45
+"entity" // com::d2s::framework::model::entity
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/model/entity"
+  java_package "com.d2s.framework.model.entity"
+  classview 129671 "entity"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 131591 "IEntityFactory"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface defines the contract of an entities factory.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 865 $
+@author Vincent Vandenschrick
+"
+      classrelation 147719 // <generalisation>
+	relation 147719 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 147719 // <generalisation>
+	  b parent class_ref 130567 // IComponentFactory
+      end
+
+      classrelation 147847 // <generalisation>
+	relation 147847 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 147847 // <generalisation>
+	  b parent class_ref 131975 // IComponentDescriptorRegistry
+      end
+
+      operation 183815 "createEntityInstance"
+	package explicit_return_type "T"
+	nparams 1
+	  param inout name "entityContract" explicit_type "Class<T>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IEntity> ${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new entity instance based on the entity descriptor. The entity
+will be initialized with any necessary starting state.
+
+@param <T>
+           the concrete class of the created entity.
+@param entityContract
+           the class of the entity to create.
+@return the entity instance.
+"
+      end
+
+      operation 183943 "createEntityInstance"
+	package explicit_return_type "T"
+	nparams 2
+	  param inout name "entityContract" explicit_type "Class<T>"
+	  param inout name "id" explicit_type "Serializable"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IEntity> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new entity instance based on the entity descriptor.
+
+@param <T>
+           the concrete class of the created entity.
+@param entityContract
+           the class of the entity to create.
+@param id
+           the identifier to set on the entity.
+@return the entity instance.
+"
+      end
+
+      operation 184071 "createQueryEntityInstance"
+	package explicit_return_type "T"
+	nparams 1
+	  param inout name "entityContract" explicit_type "Class<T>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IQueryEntity> ${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new query entity instance based on the entity descriptor.
+
+@param <T>
+           the concrete class of the created query entity.
+@param entityContract
+           the class of the entity to create.
+@return the query entity instance.
+"
+      end
+    end
+
+    class 131719 "IEntityLifecycleHandler"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Defaines the contract of any component able to handle entities lifecycle.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      operation 184199 "deleteEntity"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Registers an entity for deletion.
+
+@param entity
+           the entity to register.
+"
+      end
+
+      operation 184327 "isEntityRegisteredForDeletion"
+	package explicit_return_type "boolean"
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Tests wether an entity has been registered for deletion.
+
+@param entity
+           the entity to test.
+@return true if the entity has been registered for deletion.
+"
+      end
+
+      operation 184455 "isEntityRegisteredForUpdate"
+	package explicit_return_type "boolean"
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Tests wether an entity has been registered for update.
+
+@param entity
+           the entity to test.
+@return true if the entity has been registered for update.
+"
+      end
+
+      operation 184583 "updateEntity"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Registers an entity for update.
+
+@param entity
+           the entity to register.
+"
+      end
+    end
+
+    class 142087 "IEntity"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface must be implemented by all persistent entities in the
+application domain. It establishes the minimal contract of an entity which is
+providing id accessors.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 865 $
+@author Vincent Vandenschrick
+"
+      classrelation 147591 // <generalisation>
+	relation 147591 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 147591 // <generalisation>
+	  b parent class_ref 130183 // IComponent
+      end
+
+      attribute 138887 "ID"
+	package explicit_type "String"
+	init_value "=  \"id\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+constant for identifier property <code>ID</code>.
+
+"
+      end
+
+      attribute 139015 "VERSION"
+	package explicit_type "String"
+	init_value "=  \"version\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+constant for version property <code>VERSION</code>.
+
+"
+      end
+
+      operation 182663 "equals"
+	package explicit_return_type "boolean"
+	nparams 1
+	  param inout name "o" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+It is important to declare here so that ORM (hibernate for instance)
+detects it has to delegate to the underlying instance when proxiing.
+
+@param o
+           the instance to compare to.
+@return true if both instances are equal.
+"
+      end
+
+      operation 182791 "getContract"
+	package explicit_return_type "Class<? extends IEntity>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the interface or class establishing the entity contract.
+
+@return the entity contract.
+"
+      end
+
+      operation 182919 "getId"
+	package explicit_return_type "Serializable"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the id used to uniquely identify an entity (surrogate key). The id is
+assigned to the entity instance as soon as the entity is created in memory
+an is afterwards made immutable so that <code>equals()</code> and
+<code>hashCode()</code> can safely rely on it whenever they are transient
+or not. It also establishes the minimal contract of a versionable entity
+which is providing version accessors to handle access concurrency.
+
+@return The id of the entity.
+"
+      end
+
+      operation 183047 "getVersion"
+	package explicit_return_type "Integer"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the version of this entity.
+
+@return the entity version.
+"
+      end
+
+      operation 183175 "hashCode"
+	package explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+It is important to declare here so that ORM (hibernate for instance)
+detects it has to delegate to the underlying instance when proxiing.
+
+@return the hashcode.
+"
+      end
+
+      operation 183303 "isPersistent"
+	package explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets wether this entity has already been saved in the backing store.
+
+@return true if the entity is not transient.
+"
+      end
+    end
+
+    class 142343 "CarbonEntityCloneFactory"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Does a \"carbon\" copy of the entity including its id and version. This factory
+is used only for technical purposes.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 869 $
+@author Vincent Vandenschrick
+"
+      classrelation 147207 // <realization>
+	relation 147207 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 147207 // <realization>
+	  b parent class_ref 142471 // IEntityCloneFactory
+      end
+
+      operation 181511 "cloneEntity"
+	public explicit_return_type "E"
+	nparams 2
+	  param inout name "entityToClone" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<E extends IEntity> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 181639 "carbonCopyComponent"
+	private explicit_return_type "void"
+	nparams 3
+	  param inout name "componentToClone" type class_ref 130183 // IComponent
+	  param inout name "clonedComponent" type class_ref 130183 // IComponent
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 181767 "cloneComponent"
+	public explicit_return_type "E"
+	nparams 2
+	  param inout name "componentToClone" type class_ref 130183 // IComponent
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<E extends IComponent> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 142471 "IEntityCloneFactory"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A factory to clone entities.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 868 $
+@author Vincent Vandenschrick
+"
+      operation 181255 "cloneEntity"
+	package explicit_return_type "E"
+	nparams 2
+	  param inout name "entityToClone" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<E extends IEntity> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Clones an entity.
+
+@param <E>
+           the entity contract (class or interface) to clone.
+@param entityToClone
+           the entity to clone.
+@param entityFactory
+           the entity factory to use to create the new entities.
+@return the cloned entity.
+"
+      end
+
+      operation 181383 "cloneComponent"
+	package explicit_return_type "E"
+	nparams 2
+	  param inout name "componentToClone" type class_ref 130183 // IComponent
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<E extends IComponent> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Clones a component.
+
+@param <E>
+           the component contract (class or interface) to clone.
+@param componentToClone
+           the component to clone.
+@param entityFactory
+           the entity factory to use to create new entities.
+@return the cloned component.
+"
+      end
+    end
+
+    class 142599 "EntityException"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This exception is thrown whenever an unexpected exception occurs on an
+entity.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 147335 // <generalisation>
+	relation 147335 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 147335 // <generalisation>
+	  b parent class_ref 130695 // ComponentException
+      end
+
+      attribute 138631 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -3659844614276359719L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 181895 "EntityException"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityException</code> instance.
+
+@param message
+           the exception message.
+"
+      end
+
+      operation 182023 "EntityException"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "nestedException" explicit_type "Throwable"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityException</code> instance.
+
+@param nestedException
+           the nested exception.
+"
+      end
+
+      operation 182151 "EntityException"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "nestedException" explicit_type "Throwable"
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityException</code> instance.
+
+@param nestedException
+           the nested exception.
+@param message
+           the exception message.
+"
+      end
+    end
+
+    class 142727 "EntityRegistryException"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This exception is thrown whenever an unexpected exception occurs on an entity
+registry.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 147463 // <generalisation>
+	relation 147463 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 147463 // <generalisation>
+	  b parent class_ref 130823 // NestedRuntimeException
+      end
+
+      attribute 138759 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -2305354369001291978L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 182279 "EntityRegistryException"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityRegistryException</code> instance.
+
+@param message
+           the exception message.
+"
+      end
+
+      operation 182407 "EntityRegistryException"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "nestedException" explicit_type "Throwable"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityRegistryException</code> instance.
+
+@param nestedException
+           the nested exception.
+"
+      end
+
+      operation 182535 "EntityRegistryException"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "nestedException" explicit_type "Throwable"
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityRegistryException</code> instance.
+
+@param nestedException
+           the nested exception.
+@param message
+           the exception message.
+"
+      end
+    end
+
+    class 142855 "IEntityDirtAware"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface is implemented by classes awre of entities states dirtyness.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      operation 183431 "getDirtyProperties"
+	package explicit_return_type "Map<String, Object>"
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the entity dirty properties (changed properties that need to be
+updated to the persistent store).
+
+@param entity
+           the entity to get the dirty properties of.
+@return null or an empty map if the entity is not dirty. The collection of
+        dirty properties with their original values.
+"
+      end
+
+      operation 183559 "isDirty"
+	package explicit_return_type "boolean"
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets wether the entity is dirty (has changes that need to be updated to the
+persistent store).
+
+@param entity
+           the entity to test.
+@return true if the entity is dirty.
+"
+      end
+
+      operation 183687 "isDirty"
+	package explicit_return_type "boolean"
+	nparams 2
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param in name "property" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets wether the entity property is dirty (has changes that need to be
+updated to the persistent store).
+
+@param entity
+           the entity to test.
+@param property
+           the entity property to test.
+@return true if the entity is dirty.
+"
+      end
+    end
+
+    class 142983 "IEntityRegistry"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface defines the contract of an application session entity
+registry. An entity registry is used at the application session level to help
+in keeping object identity across the whole JVM. Entity registries must be
+memory friendly. This means that the registry must not prevent an object from
+being garbage collected. Given this point implementations should leverage on
+weak references.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      operation 184711 "get"
+	package return_type class_ref 142087 // IEntity
+	nparams 2
+	  param inout name "entityContract" explicit_type "Class<? extends IEntity>"
+	  param inout name "id" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Get an entity from the registry.
+
+@param entityContract
+           the entity contract.
+@param id
+           the entity identifier.
+@return the registered entity or <tt>null</tt>
+"
+      end
+
+      operation 184839 "register"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Registers an entity in the registry.
+
+@param entity
+           the entity to register.
+"
+      end
+    end
+
+    class 143111 "IQueryEntity"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple adapter to wrap an entity used as selection criteria and a list of
+entities. It only serve as a placeholder for the result of the query.
+instances of this calss do not perform queries by themselves.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 147975 // <generalisation>
+	relation 147975 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 147975 // <generalisation>
+	  b parent class_ref 142087 // IEntity
+      end
+
+      attribute 139143 "QUERIED_ENTITIES"
+	package explicit_type "String"
+	init_value "=  \"queriedEntities\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+\"queriedEntities\" string constant.
+
+"
+      end
+
+      operation 184967 "getQueriedEntities"
+	package return_type class_ref 142087 // IEntity
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the list of entities result of the query.
+
+@return the list of entities result of the query.
+"
+      end
+
+      operation 185095 "setQueriedEntities"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "queriedEntities" explicit_type "List<IEntity>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the list of entities result of the query.
+
+@param queriedEntities
+           the list of entities result of the query.
+"
+      end
+    end
+
+    class 143239 "SmartEntityCloneFactory"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Performs a copy of the entity. It may be used in application actions to
+smartly duplicate an entity.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 868 $
+@author Vincent Vandenschrick
+"
+      classrelation 148103 // <generalisation>
+	relation 148103 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 148103 // <generalisation>
+	  b parent class_ref 142343 // CarbonEntityCloneFactory
+      end
+
+      attribute 139271 "accessorFactory"
+	private explicit_type "IAccessorFactory"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 185223 "cloneEntity"
+	public explicit_return_type "E"
+	nparams 2
+	  param inout name "entityToClone" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<E extends IEntity> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+  @SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 185351 "setAccessorFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "accessorFactory" explicit_type "IAccessorFactory"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the accessorFactory.
+
+@param accessorFactory
+           the accessorFactory to set.
+"
+      end
+
+      operation 185479 "isInitialized"
+	protected explicit_return_type "boolean"
+	nparams 1
+	  param inout name "objectOrProxy" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Wether the object is fully initialized.
+
+@param objectOrProxy
+           the object to test.
+@return true if the object is fully initialized.
+"
+      end
+    end
+  end
+
+  deploymentview 130183 "entity"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 140295 "IEntityCloneFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.component.IComponent;
+${definition}"
+      associated_classes
+	class_ref 142471 // IEntityCloneFactory
+      end
+    end
+
+    artifact 140423 "CarbonEntityCloneFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.Serializable;
+import java.util.Map;
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+${definition}"
+      associated_classes
+	class_ref 142343 // CarbonEntityCloneFactory
+      end
+    end
+
+    artifact 140551 "EntityException"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.component.ComponentException;
+${definition}"
+      associated_classes
+	class_ref 142599 // EntityException
+      end
+    end
+
+    artifact 140679 "EntityRegistryException"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.exception.NestedRuntimeException;
+${definition}"
+      associated_classes
+	class_ref 142727 // EntityRegistryException
+      end
+    end
+
+    artifact 140807 "IEntity"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.Serializable;
+import com.d2s.framework.model.component.IComponent;
+${definition}"
+      associated_classes
+	class_ref 142087 // IEntity
+      end
+    end
+
+    artifact 140935 "IEntityDirtAware"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+${definition}"
+      associated_classes
+	class_ref 142855 // IEntityDirtAware
+      end
+    end
+
+    artifact 141063 "IEntityFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.Serializable;
+import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
+${definition}"
+      associated_classes
+	class_ref 131591 // IEntityFactory
+      end
+    end
+
+    artifact 141191 "IEntityLifecycleHandler"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 131719 // IEntityLifecycleHandler
+      end
+    end
+
+    artifact 141319 "IEntityRegistry"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 142983 // IEntityRegistry
+      end
+    end
+
+    artifact 141447 "IQueryEntity"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.List;
+${definition}"
+      associated_classes
+	class_ref 143111 // IQueryEntity
+      end
+    end
+
+    artifact 141575 "SmartEntityCloneFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.accessor.ICollectionAccessor;
+${definition}"
+      associated_classes
+	class_ref 143239 // SmartEntityCloneFactory
+      end
+    end
+  end
+
+  package_ref 130951 // basic
+end

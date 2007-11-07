@@ -1,0 +1,193 @@
+class BasicPropertyDescriptor
+!!!153607.java!!!	checkValueIntegrity(in component : Object, in propertyValue : Object) : void
+
+    if (isMandatory() && propertyValue == null) {
+      IntegrityException ie = new IntegrityException("Mandatory property ["
+          + getName() + "] on component [" + component + "].") {
+
+        private static final long serialVersionUID = 5518554460713051123L;
+
+        @Override
+        public String getI18nMessage(ITranslationProvider translationProvider,
+            Locale locale) {
+          return translationProvider.getTranslation(
+              "integrity.property.mandatory", new Object[] {
+                  getI18nName(translationProvider, locale), component}, locale);
+        }
+
+      };
+      throw ie;
+    }
+!!!153735.java!!!	equals(inout obj : Object) : boolean
+
+    if (obj instanceof IPropertyDescriptor) {
+      return getName().equals(((IPropertyDescriptor) obj).getName());
+    }
+    return false;
+!!!153863.java!!!	getDelegateClass() : Class<?>
+
+    if (delegateClass == null) {
+      String className = getDelegateClassName();
+      if (className != null) {
+        try {
+          delegateClass = Class.forName(className);
+        } catch (ClassNotFoundException ex) {
+          throw new NestedRuntimeException(ex);
+        }
+      }
+    }
+    return delegateClass;
+!!!153991.java!!!	getDelegateClassName() : String
+
+    if (delegateClassName != null) {
+      return delegateClassName;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getDelegateClassName();
+    }
+    return delegateClassName;
+!!!154119.java!!!	getDescription() : String
+
+    if (super.getDescription() != null) {
+      return super.getDescription();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getDescription();
+    }
+    return super.getDescription();
+!!!154247.java!!!	getIntegrityProcessors() : List<IPropertyIntegrityProcessor<?, ?>>
+
+    if (integrityProcessors != null) {
+      return integrityProcessors;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getIntegrityProcessors();
+    }
+    return integrityProcessors;
+!!!154375.java!!!	getName() : String
+
+    if (super.getName() != null) {
+      return super.getName();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getName();
+    }
+    return super.getName();
+!!!154503.java!!!	getReadabilityGates() : Collection<IGate>
+
+    if (readabilityGates != null) {
+      return readabilityGates;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getReadabilityGates();
+    }
+    return readabilityGates;
+!!!154631.java!!!	getUnicityScope() : String
+
+    if (unicityScope != null) {
+      return unicityScope;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getUnicityScope();
+    }
+    return unicityScope;
+!!!154759.java!!!	getWritabilityGates() : Collection<IGate>
+
+    if (writabilityGates != null) {
+      return writabilityGates;
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().getWritabilityGates();
+    }
+    return writabilityGates;
+!!!154887.java!!!	hashCode() : int
+
+    return getName().hashCode();
+!!!155015.java!!!	isModifiable() : boolean
+
+    if (getDelegateClassName() == null) {
+      return true;
+    }
+    return PropertyHelper.getPropertyDescriptor(
+        Class.forName(getDelegateClassName()), getName()).getWriteMethod() != null;
+!!!155143.java!!!	isMandatory() : boolean
+
+    if (mandatory != null) {
+      return mandatory.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().isMandatory();
+    }
+    return false;
+!!!155271.java!!!	isOverload() : boolean
+
+    return parentDescriptor != null;
+!!!155399.java!!!	isQueryable() : boolean
+
+    return false;
+!!!155527.java!!!	isReadOnly() : boolean
+
+    if (readOnly != null) {
+      return readOnly.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().isReadOnly();
+    }
+    return false;
+!!!155655.java!!!	postprocessSetter(inout component : Object, inout oldValue : Object, inout newValue : Object) : void
+
+    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor<?, ?> processor : processors) {
+      ((IPropertyIntegrityProcessor<Object, Object>) processor)
+          .postprocessSetterIntegrity(component, oldValue, newValue);
+    }
+!!!155783.java!!!	preprocessSetter(inout component : Object, inout oldValue : Object, inout newValue : Object) : void
+
+    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return;
+    }
+    for (IPropertyIntegrityProcessor<?, ?> processor : processors) {
+      ((IPropertyIntegrityProcessor<Object, Object>) processor)
+          .preprocessSetterIntegrity(component, oldValue, newValue);
+    }
+!!!155911.java!!!	setDelegateClassName(in delegateClassName : String) : void
+
+    this.delegateClassName = delegateClassName;
+!!!156039.java!!!	setIntegrityProcessors(inout integrityProcessors : List<IPropertyIntegrityProcessor<?, ?>>) : void
+
+    this.integrityProcessors = integrityProcessors;
+!!!156167.java!!!	setMandatory(inout mandatory : boolean) : void
+
+    this.mandatory = new Boolean(mandatory);
+!!!156295.java!!!	setParentDescriptor(inout parentDescriptor : IPropertyDescriptor) : void
+
+    this.parentDescriptor = parentDescriptor;
+!!!156423.java!!!	setReadabilityGates(inout readabilityGates : Collection<IGate>) : void
+
+    this.readabilityGates = readabilityGates;
+!!!156551.java!!!	setReadOnly(inout readOnly : boolean) : void
+
+    this.readOnly = new Boolean(readOnly);
+!!!156679.java!!!	setUnicityScope(in unicityScope : String) : void
+
+    this.unicityScope = unicityScope;
+!!!156807.java!!!	setWritabilityGates(inout writabilityGates : Collection<IGate>) : void
+
+    this.writabilityGates = writabilityGates;
+!!!156935.java!!!	getParentDescriptor() : IPropertyDescriptor
+
+    return parentDescriptor;
+!!!157063.java!!!	clone() : BasicPropertyDescriptor
+
+    try {
+      BasicPropertyDescriptor clonedDescriptor = (BasicPropertyDescriptor) super
+          .clone();
+
+      return clonedDescriptor;
+    } catch (CloneNotSupportedException ex) {
+      throw new NestedRuntimeException(ex);
+    }

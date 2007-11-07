@@ -1,0 +1,680 @@
+format 45
+"model" // com::d2s::framework::model
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/model"
+  java_package "com.d2s.framework.model"
+  classview 129159 "model"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 129159 "EmbeddedModelProvider"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple standalone model provider.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 129159 // <realization>
+	relation 129159 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 129159 // <realization>
+	  b parent class_ref 129287 // IModelProvider
+      end
+
+      attribute 129159 "model"
+	private explicit_type "Object"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 129287 // modelChangeSupport (<unidirectional association>)
+	relation 129287 --->
+	  a role_name "modelChangeSupport" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129287 // modelChangeSupport (<unidirectional association>)
+	  b parent class_ref 129671 // ModelChangeSupport
+      end
+
+      classrelation 129415 // modelDescriptor (<unidirectional association>)
+	relation 129415 --->
+	  a role_name "modelDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<?> ${name}${value};
+"
+	    classrelation_ref 129415 // modelDescriptor (<unidirectional association>)
+	  b parent class_ref 129543 // IComponentDescriptorProvider
+      end
+
+      operation 129671 "EmbeddedModelProvider"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "modelDescriptor" type class_ref 129543 // IComponentDescriptorProvider
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0}<?> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EmbeddedModelProvider</code> instance.
+
+@param modelDescriptor
+           the model descriptor of this model provider.
+"
+      end
+
+      operation 129799 "addModelChangeListener"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "listener" type class_ref 129415 // IModelChangeListener
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 129927 "getModel"
+	public explicit_return_type "Object"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the model instance held internally.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 130055 "getModelDescriptor"
+	public return_type class_ref 129543 // IComponentDescriptorProvider
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<?> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the model descriptor held internally.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 130183 "removeModelChangeListener"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "listener" type class_ref 129415 // IModelChangeListener
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 130311 "setModel"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "newModel" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets a new internally held model instance and forwards the change to all
+<code>IModelChangeListener</code>s. In this case this is the enclosing
+<code>ModelConnector</code>.
+
+@param newModel
+           the new model instance.
+"
+      end
+    end
+
+    class 129287 "IModelProvider"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This public interface should be implemented by any class being able to
+provide a model instance. It allows for registration of
+<code>IModelChangeListener</code> which can keep track of model object
+changes.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      operation 129159 "addModelChangeListener"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "listener" type class_ref 129415 // IModelChangeListener
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Adds a new bean listener to this model provider.
+
+@param listener
+           The added listener
+"
+      end
+
+      operation 129287 "getModel"
+	package explicit_return_type "Object"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the bean object of this provider.
+
+@return The bean object
+"
+      end
+
+      operation 129415 "getModelDescriptor"
+	package return_type class_ref 129543 // IComponentDescriptorProvider
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<?> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the bean object of this provider.
+
+@return The bean object
+"
+      end
+
+      operation 129543 "removeModelChangeListener"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "listener" type class_ref 129415 // IModelChangeListener
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Removes a bean listener from this model provider.
+
+@param listener
+           The added listener
+"
+      end
+    end
+
+    class 129415 "IModelChangeListener"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This public interface must be implemented by classes willing to keep track of
+<code>IModelProvider</code> model changes.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      operation 130439 "modelChange"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "evt" type class_ref 129799 // ModelChangeEvent
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This method is triggered when the listener detects that a
+<code>IModelProvider</code> model changed. Idealy this method will only
+fire when <code>oldValue</code> differs from <code>newValue</code>.
+
+@param evt
+           The event representing the change. This event will have :
+           <li><code>source</code> set to the bean provider which first
+           initiated the event.
+           <li><code>oldValue</code> set to the new source's model.
+           <li><code>newValue</code> set to the old source's model.
+"
+      end
+    end
+
+    class 129671 "ModelChangeSupport"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Helper class to ease the IModelChangeListener management.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 129671 // listeners (<unidirectional association>)
+	relation 129671 --->
+	  stereotype "Set"
+	  a role_name "listeners" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 129671 // listeners (<unidirectional association>)
+	  b parent class_ref 129415 // IModelChangeListener
+      end
+
+      classrelation 129799 // source (<unidirectional association>)
+	relation 129799 --->
+	  a role_name "source" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 129799 // source (<unidirectional association>)
+	  b parent class_ref 129287 // IModelProvider
+      end
+
+      operation 130951 "ModelChangeSupport"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "sourceModelProvider" type class_ref 129287 // IModelProvider
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new Connector change support.
+
+@param sourceModelProvider
+           The model provider to which this ModelChangeSupport is attached.
+           sourceModelProvider will serve as <code>source</code> of fired
+           ModelChangeEvent if no other is provided.
+"
+      end
+
+      operation 131079 "addModelChangeListener"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "listener" type class_ref 129415 // IModelChangeListener
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Adds a new <code>IModelChangeListener</code>.
+
+@param listener
+           The added listener.
+@see IModelProvider#addModelChangeListener( IModelChangeListener)
+"
+      end
+
+      operation 131207 "fireModelChange"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "evt" type class_ref 129799 // ModelChangeEvent
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Propagates the <code>ModelChangeEvent</code> as is (i.e. whithout
+modifying its source) to the listeners.
+
+@param evt
+           the propagated <code>ModelChangeEvent</code>
+"
+      end
+
+      operation 131335 "fireModelChange"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "oldValue" explicit_type "Object"
+	  param inout name "newValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Fires a new <code>ModelChangeEvent</code> built with <code>source</code>
+as source and parameters as old and new values.
+
+@param oldValue
+           The old model provider's model value
+@param newValue
+           The new model provider's model value
+"
+      end
+
+      operation 131463 "removeModelChangeListener"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "listener" type class_ref 129415 // IModelChangeListener
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Removes a <code>IModelChangeListener</code>.
+
+@param listener
+           The removed listener.
+@see IModelProvider#removeModelChangeListener( IModelChangeListener)
+"
+      end
+    end
+
+    class 129799 "ModelChangeEvent"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A \"ModelChangeEvent\" event gets delivered whenever a
+<code>IModelProvider</code> detects a change of its model. A
+ModelChangeEvent object is sent as an argument to the
+<code>IModelChangeListener</code> methods. Normally
+ConnectorValueChangeEvent are accompanied by the old and new value of the
+changed value. If the new value is a primitive type (such as int or boolean)
+it must be wrapped as the corresponding java.lang.* Object type (such as
+Integer or Boolean). Null values may be provided for the old and the new
+values if their true values are not known.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 129543 // <generalisation>
+	relation 129543 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 129543 // <generalisation>
+	  b parent class_ref 129927 // EventObject
+      end
+
+      attribute 129287 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  3740337339792161447L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 129415 "newValue"
+	private explicit_type "Object"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+New model.
+
+"
+      end
+
+      attribute 129543 "oldValue"
+	private explicit_type "Object"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+Previous model.
+
+"
+      end
+
+      operation 130567 "ModelChangeEvent"
+	public explicit_return_type ""
+	nparams 3
+	  param inout name "source" type class_ref 129287 // IModelProvider
+	  param inout name "oldValue" explicit_type "Object"
+	  param inout name "newValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ModelChangeEvent</code>.
+
+@param source
+           The model provider that initiated the event.
+@param oldValue
+           The old value of the model.
+@param newValue
+           The new value of the model.
+"
+      end
+
+      operation 130695 "getNewValue"
+	public explicit_return_type "Object"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the new model.
+
+@return The new model, expressed as an <code>IPropertyChangeCapable</code>.
+"
+      end
+
+      operation 130823 "getOldValue"
+	public explicit_return_type "Object"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the old model.
+
+@return The old model, expressed as an <code>IPropertyChangeCapable</code>.
+"
+      end
+    end
+  end
+
+  package_ref 129671 // descriptor
+
+  deploymentview 129159 "model"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 129159 "IModelProvider"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
+${definition}"
+      associated_classes
+	class_ref 129287 // IModelProvider
+      end
+    end
+
+    artifact 129287 "EmbeddedModelProvider"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
+${definition}"
+      associated_classes
+	class_ref 129159 // EmbeddedModelProvider
+      end
+    end
+
+    artifact 129415 "IModelChangeListener"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 129415 // IModelChangeListener
+      end
+    end
+
+    artifact 129543 "ModelChangeEvent"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.EventObject;
+${definition}"
+      associated_classes
+	class_ref 129799 // ModelChangeEvent
+      end
+    end
+
+    artifact 129671 "ModelChangeSupport"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.LinkedHashSet;
+import java.util.Set;
+import org.apache.commons.lang.ObjectUtils;
+${definition}"
+      associated_classes
+	class_ref 129671 // ModelChangeSupport
+      end
+    end
+  end
+
+  package_ref 129927 // component
+
+  package_ref 130055 // entity
+
+  package_ref 130439 // datatransfer
+
+  package_ref 131079 // map
+end

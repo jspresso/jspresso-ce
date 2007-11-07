@@ -1,0 +1,25 @@
+class BasicDatePropertyDescriptor
+!!!167815.java!!!	BasicDatePropertyDescriptor()
+
+    type = DATE_TYPE;
+!!!167943.java!!!	getModelType() : Class<?>
+
+    return Date.class;
+!!!168071.java!!!	getType() : String
+
+    if (type != null) {
+      return type;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IDatePropertyDescriptor) getParentDescriptor()).getType();
+    }
+    return type;
+!!!168199.java!!!	setType(in type : String) : void
+
+    this.type = type;
+!!!168327.java!!!	clone() : BasicDatePropertyDescriptor
+
+    BasicDatePropertyDescriptor clonedDescriptor = (BasicDatePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

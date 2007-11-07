@@ -1,0 +1,34 @@
+class DescriptorAwareMapCollectionAccessor
+!!!190599.java!!!	DescriptorAwareMapCollectionAccessor(in property : String)
+    super(property);
+!!!190727.java!!!	addToValue(inout target : Object, inout value : Object) : void
+    Collection mapValue = getValue(target);
+    if (mapValue == null) {
+      mapValue = new ArrayList<Object>();
+    }
+    if (getModelDescriptor() != null) {
+      getModelDescriptor().preprocessAdder(this, mapValue, value);
+    }
+    mapValue.add(value);
+    // to trigger a propertyChange.
+    setValue(target, mapValue);
+    if (getModelDescriptor() != null) {
+      getModelDescriptor().postprocessAdder(this, mapValue, value);
+    }
+!!!190855.java!!!	getValue(inout target : Object) : Collection<?>
+    return (Collection<?>) super.getValue(target);
+!!!190983.java!!!	removeFromValue(inout target : Object, inout value : Object) : void
+    Collection<?> mapValue = getValue(target);
+    if (getModelDescriptor() != null) {
+      getModelDescriptor().preprocessRemover(this, mapValue, value);
+    }
+    if (mapValue != null) {
+      mapValue.remove(value);
+      // to trigger a propertyChange.
+      setValue(target, mapValue);
+    }
+    if (getModelDescriptor() != null) {
+      getModelDescriptor().postprocessRemover(this, mapValue, value);
+    }
+!!!191111.java!!!	getModelDescriptor() : ICollectionPropertyDescriptor
+    return (ICollectionPropertyDescriptor<?>) super.getModelDescriptor();

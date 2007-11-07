@@ -1,0 +1,13 @@
+class EmptyLifecycleInterceptor
+!!!144007.java!!!	onCreate(inout component : E, inout entityFactory : IEntityFactory, inout principal : UserPrincipal, inout entityLifecycleHandler : IEntityLifecycleHandler) : boolean
+
+    return false;
+!!!144135.java!!!	onDelete(inout component : E, inout entityFactory : IEntityFactory, inout principal : UserPrincipal, inout entityLifecycleHandler : IEntityLifecycleHandler) : boolean
+
+    return false;
+!!!144263.java!!!	onPersist(inout component : E, inout entityFactory : IEntityFactory, inout principal : UserPrincipal, inout entityLifecycleHandler : IEntityLifecycleHandler) : boolean
+
+    return false;
+!!!144391.java!!!	onUpdate(inout component : E, inout entityFactory : IEntityFactory, inout principal : UserPrincipal, inout entityLifecycleHandler : IEntityLifecycleHandler) : boolean
+
+    return false;

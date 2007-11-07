@@ -1,0 +1,13 @@
+class BasicObjectPropertyDescriptor
+!!!171783.java!!!	getModelType() : Class<?>
+
+    return Object.class;
+!!!171911.java!!!	isQueryable() : boolean
+
+    return false;
+!!!172039.java!!!	clone() : BasicObjectPropertyDescriptor
+
+    BasicObjectPropertyDescriptor clonedDescriptor = (BasicObjectPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

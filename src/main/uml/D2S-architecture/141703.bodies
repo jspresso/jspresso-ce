@@ -1,0 +1,73 @@
+class RangeEnumerationPropertyDescriptor
+!!!176135.java!!!	getEnumerationValues() : List<String>
+
+    if (enumerationValues == null) {
+      int min = 0;
+      int max = 10;
+      int step = 1;
+      if (minValue != null) {
+        min = minValue.intValue();
+      }
+      if (maxValue != null) {
+        max = maxValue.intValue();
+      }
+      if (rangeStep != null) {
+        step = rangeStep.intValue();
+      }
+      enumerationValues = new ArrayList<String>();
+      for (int i = min; i <= max; i += step) {
+        enumerationValues.add(Integer.toString(i));
+      }
+    }
+    return enumerationValues;
+!!!176263.java!!!	getIconImageURL(in value : String) : String
+
+    return null;
+!!!176391.java!!!	getMaxValue() : Integer
+
+    if (maxValue != null) {
+      return maxValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((RangeEnumerationPropertyDescriptor) getParentDescriptor())
+          .getMaxValue();
+    }
+    return maxValue;
+!!!176519.java!!!	getMinValue() : Integer
+
+    if (minValue != null) {
+      return minValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((RangeEnumerationPropertyDescriptor) getParentDescriptor())
+          .getMinValue();
+    }
+    return minValue;
+!!!176647.java!!!	getRangeStep() : Integer
+
+    if (rangeStep != null) {
+      return rangeStep;
+    }
+    if (getParentDescriptor() != null) {
+      return ((RangeEnumerationPropertyDescriptor) getParentDescriptor())
+          .getRangeStep();
+    }
+    return rangeStep;
+!!!176775.java!!!	isTranslated() : boolean
+
+    return false;
+!!!176903.java!!!	setMaxValue(inout maxValue : Integer) : void
+
+    this.maxValue = maxValue;
+!!!177031.java!!!	setMinValue(inout minValue : Integer) : void
+
+    this.minValue = minValue;
+!!!177159.java!!!	setRangeStep(inout rangeStep : Integer) : void
+
+    this.rangeStep = rangeStep;
+!!!177287.java!!!	clone() : RangeEnumerationPropertyDescriptor
+
+    RangeEnumerationPropertyDescriptor clonedDescriptor = (RangeEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

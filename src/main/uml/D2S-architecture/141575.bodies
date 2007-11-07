@@ -1,0 +1,10 @@
+class BasicTimePropertyDescriptor
+!!!175879.java!!!	getModelType() : Class<?>
+
+    return Date.class;
+!!!176007.java!!!	clone() : BasicTimePropertyDescriptor
+
+    BasicTimePropertyDescriptor clonedDescriptor = (BasicTimePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

@@ -1,0 +1,380 @@
+format 45
+"service" // com::d2s::framework::model::component::service
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/model/component/service"
+  java_package "com.d2s.framework.model.component.service"
+  classview 129927 "service"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 133511 "EmptyLifecycleInterceptor"
+      abstract visibility public 
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 133639 // ILifecycleInterceptor
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Empty interceptor for component lifecycle. It is designed to be subclassed
+and used as an component service.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the class of the intercepted entity.
+"
+      classrelation 133127 // <realization>
+	relation 133127 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 133127 // <realization>
+	  b parent class_ref 133639 // ILifecycleInterceptor
+      end
+
+      classrelation 133255 // <realization>
+	relation 133255 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 133255 // <realization>
+	  b parent class_ref 133767 // IComponentService
+      end
+
+      operation 144007 "onCreate"
+	public explicit_return_type "boolean"
+	nparams 4
+	  param inout name "component" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unused\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 144135 "onDelete"
+	public explicit_return_type "boolean"
+	nparams 4
+	  param inout name "component" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unused\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 144263 "onPersist"
+	public explicit_return_type "boolean"
+	nparams 4
+	  param inout name "component" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unused\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 144391 "onUpdate"
+	public explicit_return_type "boolean"
+	nparams 4
+	  param inout name "component" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unused\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 133639 "ILifecycleInterceptor"
+      visibility public stereotype "interface"
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Defines all the components lifecycle hooks.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the class of the intercepted entity.
+"
+      operation 143495 "onCreate"
+	package explicit_return_type "boolean"
+	nparams 4
+	  param inout name "component" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever an entity is created in memory.
+
+@param component
+           the created entity.
+@param entityFactory
+           an entity factory instance which can be used to complete the
+           lifecycle step.
+@param principal
+           the principal triggering the action.
+@param entityLifecycleHandler
+           entityLifecycleHandler.
+@return true if the state of the entity has been updated.
+"
+      end
+
+      operation 143623 "onDelete"
+	package explicit_return_type "boolean"
+	nparams 4
+	  param inout name "component" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever an persistent entity is deleted.
+
+@param component
+           the deleted entity.
+@param entityFactory
+           an entity factory instance which can be used to complete the
+           lifecycle step.
+@param principal
+           the principal triggering the action.
+@param entityLifecycleHandler
+           entityLifecycleHandler.
+@return true if the state of the entity has been updated.
+"
+      end
+
+      operation 143751 "onPersist"
+	package explicit_return_type "boolean"
+	nparams 4
+	  param inout name "component" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever an entity is made persistent for the first time.
+
+@param component
+           the persisted entity.
+@param entityFactory
+           an entity factory instance which can be used to complete the
+           lifecycle step.
+@param principal
+           the principal triggering the action.
+@param entityLifecycleHandler
+           entityLifecycleHandler.
+@return true if the state of the entity has been updated.
+"
+      end
+
+      operation 143879 "onUpdate"
+	package explicit_return_type "boolean"
+	nparams 4
+	  param inout name "component" explicit_type "E"
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever an persistent entity is updated.
+
+@param component
+           the updated entity.
+@param entityFactory
+           an entity factory instance which can be used to complete the
+           lifecycle step.
+@param principal
+           the principal triggering the action.
+@param entityLifecycleHandler
+           entityLifecycleHandler.
+@return true if the state of the entity has been updated.
+"
+      end
+    end
+
+    class 133767 "IComponentService"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is an interface used to identify classes responsible for providing
+entity services.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+    end
+  end
+
+  deploymentview 129671 "service"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 131847 "ILifecycleInterceptor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
+import com.d2s.framework.security.UserPrincipal;
+${definition}"
+      associated_classes
+	class_ref 133639 // ILifecycleInterceptor
+      end
+    end
+
+    artifact 131975 "IComponentService"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 133767 // IComponentService
+      end
+    end
+
+    artifact 132103 "EmptyLifecycleInterceptor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
+import com.d2s.framework.security.UserPrincipal;
+${definition}"
+      associated_classes
+	class_ref 133511 // EmptyLifecycleInterceptor
+      end
+    end
+  end
+end

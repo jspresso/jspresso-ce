@@ -1,0 +1,17 @@
+class ComponentIconImageURLProvider
+!!!145031.java!!!	getIconImageURLForObject(inout userObject : Object) : String
+
+    if (userObject == null) {
+      return null;
+    }
+    Class<?> modelClass = userObject.getClass();
+    for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
+      if (((Class<?>) componentDescriptor.getComponentContract())
+          .isAssignableFrom(modelClass)) {
+        return componentDescriptor.getIconImageURL();
+      }
+    }
+    return null;
+!!!145159.java!!!	setComponentDescriptors(inout componentDescriptors : Collection<IComponentDescriptor<?>>) : void
+
+    this.componentDescriptors = componentDescriptors;

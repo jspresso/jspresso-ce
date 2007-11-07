@@ -1,0 +1,10 @@
+class BasicJavaSerializablePropertyDescriptor
+!!!171527.java!!!	getModelType() : Class<?>
+
+    return Serializable.class;
+!!!171655.java!!!	clone() : BasicJavaSerializablePropertyDescriptor
+
+    BasicJavaSerializablePropertyDescriptor clonedDescriptor = (BasicJavaSerializablePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

@@ -1,0 +1,148 @@
+format 45
+
+classcanvas 128263 class_ref 134535 // IScalarPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 249 0 2000
+  end
+classcanvas 128391 class_ref 134407 // IBinaryPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 226 239 2004
+  end
+classcanvas 128647 class_ref 135175 // IBooleanPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 614 64 2004
+  end
+classcanvas 128903 class_ref 135687 // IColorPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 614 239 2009
+  end
+classcanvas 129159 class_ref 135943 // IDatePropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 614 132 2004
+  end
+classcanvas 129415 class_ref 136071 // IDecimalPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 0 486 2000
+  end
+classcanvas 129543 class_ref 136199 // INumberPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 0 366 2004
+  end
+classcanvas 129927 class_ref 136327 // IDurationPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 0 63 2009
+  end
+classcanvas 130183 class_ref 136455 // IEnumerationPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 614 366 2004
+  end
+classcanvas 130439 class_ref 136583 // IIntegerPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 224 486 2004
+  end
+classcanvas 130695 class_ref 136711 // IJavaSerializablePropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 193 366 2004
+  end
+classcanvas 130951 class_ref 136967 // IObjectPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 0 239 2014
+  end
+classcanvas 131207 class_ref 137095 // IPasswordPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 313 582 2005
+  end
+classcanvas 131335 class_ref 137223 // IStringPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 439 366 2010
+  end
+classcanvas 131719 class_ref 137351 // IPercentPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 0 584 2004
+  end
+classcanvas 131975 class_ref 137479 // ISourceCodePropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 497 667 2000
+  end
+classcanvas 132103 class_ref 137607 // ITextPropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 522 582 2005
+  end
+classcanvas 132487 class_ref 137735 // ITimePropertyDescriptor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 614 303 2004
+  end
+relationcanvas 128519 relation_ref 134407 // <generalisation>
+  from ref 128391 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 128775 relation_ref 134663 // <generalisation>
+  from ref 128647 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 129031 relation_ref 135559 // <generalisation>
+  from ref 128903 z 1999 to point 540 214
+  line 133255 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 129287 relation_ref 136199 // <generalisation>
+  from ref 129159 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 129671 relation_ref 136327 // <generalisation>
+  from ref 129543 z 1999 to point 167 328
+  line 133383 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 129799 relation_ref 136455 // <generalisation>
+  from ref 129415 z 1999 to ref 129543
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 130055 relation_ref 136583 // <generalisation>
+  from ref 129927 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 130311 relation_ref 136711 // <generalisation>
+  from ref 130183 z 1999 to point 542 316
+  line 132743 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 130567 relation_ref 136839 // <generalisation>
+  from ref 130439 z 1999 to ref 129543
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 130823 relation_ref 136967 // <generalisation>
+  from ref 130695 z 1999 to ref 128391
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 131079 relation_ref 137095 // <generalisation>
+  from ref 130951 z 1999 to point 207 217
+  line 133511 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 131463 relation_ref 137223 // <generalisation>
+  from ref 131335 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 131591 relation_ref 137351 // <generalisation>
+  from ref 131207 z 1999 to ref 131335
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 131847 relation_ref 137479 // <generalisation>
+  from ref 131719 z 1999 to ref 129415
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 132231 relation_ref 137863 // <generalisation>
+  from ref 132103 z 1999 to ref 131335
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 132359 relation_ref 138119 // <generalisation>
+  from ref 131975 z 1999 to ref 132103
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 132615 relation_ref 138247 // <generalisation>
+  from ref 132487 z 1999 to point 542 276
+  line 132871 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
