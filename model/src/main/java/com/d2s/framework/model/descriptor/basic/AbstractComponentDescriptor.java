@@ -148,8 +148,8 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     if (orderingProperties != null) {
       properties.addAll(orderingProperties);
     }
-    if (ancestorDescriptors != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescriptors) {
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
         if (ancestorDescriptor.getOrderingProperties() != null) {
           properties.addAll(ancestorDescriptor.getOrderingProperties());
         }
@@ -184,8 +184,8 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
       }
     } else {
       descriptor = getDeclaredPropertyDescriptor(propertyName);
-      if (descriptor == null && ancestorDescriptors != null) {
-        for (Iterator<IComponentDescriptor<?>> ite = ancestorDescriptors
+      if (descriptor == null && getAncestorDescriptors() != null) {
+        for (Iterator<IComponentDescriptor<?>> ite = getAncestorDescriptors()
             .iterator(); descriptor == null && ite.hasNext();) {
           IComponentDescriptor<?> ancestorDescriptor = ite.next();
           descriptor = ancestorDescriptor.getPropertyDescriptor(propertyName);
@@ -202,8 +202,8 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     // A map is used instead of a set since a set does not replace an element it
     // already contains.
     Map<String, IPropertyDescriptor> allDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
-    if (ancestorDescriptors != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescriptors) {
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
         for (IPropertyDescriptor propertyDescriptor : ancestorDescriptor
             .getPropertyDescriptors()) {
           allDescriptors.put(propertyDescriptor.getName(), propertyDescriptor);
@@ -272,8 +272,8 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     if (serviceDelegates != null) {
       service = serviceDelegates.get(targetMethod);
     }
-    if (service == null && ancestorDescriptors != null) {
-      for (Iterator<IComponentDescriptor<?>> ite = ancestorDescriptors
+    if (service == null && getAncestorDescriptors() != null) {
+      for (Iterator<IComponentDescriptor<?>> ite = getAncestorDescriptors()
           .iterator(); service == null && ite.hasNext();) {
         IComponentDescriptor<?> ancestorDescriptor = ite.next();
         service = ancestorDescriptor.getServiceDelegate(targetMethod);
@@ -312,8 +312,8 @@ public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescript
     if (unclonedProperties != null) {
       properties.addAll(unclonedProperties);
     }
-    if (ancestorDescriptors != null) {
-      for (IComponentDescriptor<?> ancestorDescriptor : ancestorDescriptors) {
+    if (getAncestorDescriptors() != null) {
+      for (IComponentDescriptor<?> ancestorDescriptor : getAncestorDescriptors()) {
         properties.addAll(ancestorDescriptor.getUnclonedProperties());
       }
     }

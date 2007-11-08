@@ -202,34 +202,6 @@
   </bean>
 
   <!--
-    The Root descriptor of all entities.
-  -->
-  <bean id="com.d2s.framework.model.entity.IEntity"
-    class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor">
-    <constructor-arg index="0" value="com.d2s.framework.model.entity.IEntity" />
-    <property name="propertyDescriptors">
-      <list>
-        <bean class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor">
-          <property name="name" value="id" />
-          <property name="readOnly" value="true" />
-        </bean>
-        <bean class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor">
-          <property name="name" value="version" />
-          <property name="readOnly" value="true" />
-        </bean>
-      </list>
-    </property>
-  </bean>
-
-  <!--
-    The Root descriptor of all components.
-  -->
-  <bean id="com.d2s.framework.model.component.IComponent"
-    class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor">
-    <constructor-arg index="0" value="com.d2s.framework.model.component.IComponent" />
-  </bean>
-
-  <!--
     Utility beans for model.
   -->
   <bean id="DATE" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">

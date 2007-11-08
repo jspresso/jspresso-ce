@@ -3,9 +3,15 @@
  */
 package com.d2s.framework.model.descriptor.entity.basic;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.AbstractComponentDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -19,7 +25,9 @@ import com.d2s.framework.model.entity.IEntity;
  */
 public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> {
 
-  private boolean purelyAbstract;
+  private static final IComponentDescriptor<IEntity> ENTITY_DESCRIPTOR = createEntityDescriptor();
+
+  private boolean                                    purelyAbstract;
 
   /**
    * Constructs a new <code>BasicEntityDescriptor</code> instance.
@@ -31,6 +39,44 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
   public BasicEntityDescriptor(String name) {
     super(name);
     this.purelyAbstract = false;
+  }
+
+  private static IComponentDescriptor<IEntity> createEntityDescriptor() {
+    BasicInterfaceDescriptor<IEntity> entityDescriptor = new BasicInterfaceDescriptor<IEntity>(
+        IEntity.class.getName());
+
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
+        2);
+
+    BasicStringPropertyDescriptor idPropertyDescriptor = new BasicStringPropertyDescriptor();
+    idPropertyDescriptor.setName(IEntity.ID);
+    idPropertyDescriptor.setReadOnly(true);
+    propertyDescriptors.add(idPropertyDescriptor);
+
+    BasicIntegerPropertyDescriptor versionPropertyDescriptor = new BasicIntegerPropertyDescriptor();
+    versionPropertyDescriptor.setName(IEntity.VERSION);
+    versionPropertyDescriptor.setReadOnly(true);
+    propertyDescriptors.add(versionPropertyDescriptor);
+
+    entityDescriptor.setPropertyDescriptors(propertyDescriptors);
+
+    return entityDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public List<IComponentDescriptor<?>> getAncestorDescriptors() {
+    List<IComponentDescriptor<?>> ancestorDescriptors = super
+        .getAncestorDescriptors();
+    if (ancestorDescriptors == null) {
+      ancestorDescriptors = new ArrayList<IComponentDescriptor<?>>(1);
+    }
+    if (!ancestorDescriptors.contains(ENTITY_DESCRIPTOR)) {
+      ancestorDescriptors.add(ENTITY_DESCRIPTOR);
+    }
+    return ancestorDescriptors;
   }
 
   /**
