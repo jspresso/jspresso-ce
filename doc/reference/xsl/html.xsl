@@ -15,19 +15,7 @@
   <xsl:param name="ignore.image.scaling">1</xsl:param>
   <xsl:param name="formal.title.placement">figure after</xsl:param>
   <xsl:param name="generate.index">1</xsl:param>
-  <xsl:param name="generate.index">1</xsl:param>
   <xsl:param name="ulink.show">0</xsl:param>
   <xsl:param name="highlight.source">1</xsl:param>
-
-  <xsl:attribute-set
-    name="formal.title.properties"
-    use-attribute-sets="normal.para.spacing">
-    <xsl:attribute name="font-weight">bold</xsl:attribute>
-    <xsl:attribute name="hyphenate">false</xsl:attribute>
-    <xsl:attribute name="space-after.minimum">0.4em</xsl:attribute>
-    <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
-    <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
-    <xsl:attribute name="text-align">center</xsl:attribute>
-  </xsl:attribute-set>
 
 </xsl:stylesheet>

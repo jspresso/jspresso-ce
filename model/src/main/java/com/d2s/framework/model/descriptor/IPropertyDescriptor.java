@@ -90,10 +90,8 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
    * should be analyzed to check whether it has a modifier on the property.
    * 
    * @return true if the property has a modifier.
-   * @throws ClassNotFoundException
-   *             whenever the delegate class does not exist.
    */
-  boolean isModifiable() throws ClassNotFoundException;
+  boolean isModifiable();
 
   /**
    * Wether the underlying property is mandatory.

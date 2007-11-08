@@ -20,11 +20,12 @@
   <xsl:param name="highlight.source">1</xsl:param>
   <xsl:param name="body.start.indent">0pt</xsl:param>
   <xsl:param name="alignment">left</xsl:param>
+  <xsl:param name="body.font.master">9</xsl:param>
 
   <xsl:attribute-set
     name="monospace.verbatim.properties"
     use-attribute-sets="verbatim.properties monospace.properties">
-    <xsl:attribute name="font-size">8pt</xsl:attribute>
+    <xsl:attribute name="font-size">6</xsl:attribute>
   </xsl:attribute-set>
   
   <xsl:attribute-set

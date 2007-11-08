@@ -204,12 +204,16 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * 
    * @throws ClassNotFoundException
    */
-  public boolean isModifiable() throws ClassNotFoundException {
+  public boolean isModifiable() {
     if (getDelegateClassName() == null) {
       return true;
     }
-    return PropertyHelper.getPropertyDescriptor(
-        Class.forName(getDelegateClassName()), getName()).getWriteMethod() != null;
+    try {
+      return PropertyHelper.getPropertyDescriptor(
+          Class.forName(getDelegateClassName()), getName()).getWriteMethod() != null;
+    } catch (ClassNotFoundException ex) {
+      throw new NestedRuntimeException(ex);
+    }
   }
 
   /**

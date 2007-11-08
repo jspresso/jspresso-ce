@@ -77,7 +77,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
                 (Collection<IEntity>) property.getValue())) {
               cleanRelationshipsOnDeletion(composedEntity, context);
             }
-          } else {
+          } else if (propertyDescriptor.isModifiable()) {
             getAccessorFactory(context).createPropertyAccessor(
                 property.getKey(), entity.getContract()).setValue(entity, null);
           }
