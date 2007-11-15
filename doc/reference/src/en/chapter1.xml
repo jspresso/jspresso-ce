@@ -44,7 +44,9 @@
 
         <listitem>
           <para>The nameable is implemented by entities having a name. A name
-          has a max length of 64 characters and is mandatory.</para>
+          has a max length of 64 characters and is mandatory. Nameable
+          implements a service which formats its name (a really simple service
+          only for demonstration purpose).</para>
         </listitem>
 
         <listitem>
@@ -89,7 +91,7 @@
 
             <listitem>
               <para>a social security number which is composed by exactly 10
-              digits</para>
+              digits and which is unique among all employees</para>
             </listitem>
 
             <listitem>
@@ -255,7 +257,7 @@
 
     <para>Now that we have collected the detailed specifications, it's time to
     feed the framework with them. As we saw before, most of the job will
-    consist of describing the different layers in a structured way. But before
+    consist in describing the different layers in a structured way. But before
     going further, let's define the best practices regarding the logical
     layering of a typical <trademark>D2S</trademark> application (although
     these practices may generally apply to any well designed application). We
@@ -424,7 +426,7 @@
     <title>Describing the domain model</title>
 
     <para>In this chapter, you will learn how to feed the
-    <trademark>D2S</trademark> framework with the hr sample domain model
+    <trademark>D2S</trademark> framework with the sample domain model
     description.</para>
 
     <section>
@@ -605,7 +607,9 @@
 
         <callout arearefs="t-DATE_TIME">
           <para>We want to preserve date and time information in this property
-          as opposed to only date information.</para>
+          (<code>DATE_TIME</code> constant). The alternative would have been
+          to round the property and loose the time precision; in that case, we
+          would have used the <code>DATE</code> constant.</para>
         </callout>
 
         <callout arearefs="t-uncloned">
@@ -664,9 +668,9 @@
           </callout>
 
           <callout arearefs="brf-mock">
-            <para>A configuration file to mock undefined (for the moment) bean
-            references; this file is only used for the component generation
-            phase.</para>
+            <para>A configuration file that contain necessary but yet
+            undefined (for the moment) application bean references; this file
+            is only used for the component generation phase.</para>
           </callout>
 
           <callout arearefs="brf-model">
@@ -676,7 +680,7 @@
       configuration files for the generator to operate. So we are ready to
       operate the generator using the following build.xml ant file :</para>
 
-      <programlisting>&lt;?xml version="1.0"?&gt;
+      <programlisting language="xml">&lt;?xml version="1.0"?&gt;
 
 &lt;project default="all"&gt;
 
@@ -783,12 +787,10 @@ public interface Nameable {
       <para>These 2 java classes are in fact interfaces with getters and
       setters for the declared properties. In fact, you will never need any
       implementation for them since <trademark>D2S</trademark> will
-      automatically handle their implementation for you at runtime using
-      proxies. So you might wonder why we still need those interfaces instead
-      of completely relying on the descriptors ? This is to benefit from the
-      strong compilation enforcements, code completion in IDE, ... Anything
-      you will need for quality, robustness and productivity when you are
-      manipulating your components.</para>
+      automatically handle their implementation for you at runtime using J2SE
+      proxies. This approach relieves the developer from writing the
+      implementation classes and thus, improves quality, robustness and
+      productivity.</para>
 
       <para>You may also notice that the generator took care of annotating the
       classes with <ulink url="http://www.hibernate.org/">hibernate</ulink>
@@ -902,7 +904,7 @@ public class TraceableLifecycleInterceptor extends
       <para>We can now link the life-cycle interceptor to our
       <code>Traceable</code> interface bean descriptor as below :</para>
 
-      <para><programlisting>&lt;bean
+      <para><programlisting language="xml">&lt;bean
   id="Traceable"
   class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
   ...
@@ -925,10 +927,7 @@ public class TraceableLifecycleInterceptor extends
 
       <para>As of now, we have only dealt with interfaces which are not
       entities by themselves. Describing an entity follows the exact same
-      process except that we make its descriptor an entity descriptor which
-      brings <code>id</code> (the entity identifier) and <code>version</code>
-      (used for optimistic locking on concurrent access) standard
-      properties.</para>
+      process except that we make its descriptor an entity descriptor.</para>
 
       <para>So let's describe the <code>City</code> entity as below :</para>
 
@@ -975,7 +974,7 @@ public class TraceableLifecycleInterceptor extends
       <para>Relaunching the <trademark>D2S</trademark> generator will produce
       the following class (<filename>City.java</filename>) :</para>
 
-      <programlisting>/*
+      <programlisting language="java">/*
  * Generated by Design2see. All rights reserved.
  */
 package com.d2s.framework.hrsample.model;
@@ -1056,11 +1055,11 @@ public interface City extends
     <section>
       <title>Components</title>
 
-      <para>A component is a data structure which is intended for being
-      inlined in other components or entities. Like entities and interfaces,
-      you can define properties and behaviour in a component. A component
-      cannot live by itself. It is an elegant mean to factor common data and
-      behaviour into higher level model parts.</para>
+      <para>A component is a data structure which is intended to be inlined in
+      other components or entities. Like entities and interfaces, you can
+      define properties and behaviour in a component. A component cannot live
+      by itself. It is an elegant mean to factor common data and behaviour
+      into higher level model parts.</para>
 
       <para>So let's describe the <code>ContactInfo</code> component as below
       :</para>
@@ -1223,12 +1222,12 @@ public interface ContactInfo extends
     </section>
 
     <section>
-      <title>Relationships</title>
+      <title>Unidirectional relationships</title>
 
-      <para>It's time to link together our first components together.</para>
+      <para>It's time to link our first components together.</para>
 
       <section>
-        <title>N-1 unidirectional</title>
+        <title>Unidirectional N-1 relationships</title>
 
         <para>Let's first deal with the simple unidirectional association
         <code>ContactInfo</code> → <code>City</code>. We are going to define a
@@ -1237,7 +1236,7 @@ public interface ContactInfo extends
 
         <para>The following XML fragment will do the trick :</para>
 
-        <programlisting>&lt;bean
+        <programlisting language="xml">&lt;bean
   id="ContactInfo"
   class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.framework.hrsample.model.ContactInfo" /&gt;
@@ -1274,12 +1273,12 @@ public interface ContactInfo extends
             </callout>
           </calloutlist>Relaunching the <trademark>D2S</trademark> generator
         will update the <filename>ContactInfo.java</filename> source file we
-        generated above, but since this is a unidirectional relationship, will
-        remain the <filename>City.java</filename> file untouched. The
+        generated above, but since this is a unidirectional relationship, the
+        <filename>City.java</filename> file will remain untouched. The
         following lines are added in the <filename>ContactInfo.java</filename>
         source file :</para>
 
-        <para><programlisting>  /**
+        <para><programlisting language="java">  /**
    * Gets the city.
    *
    * @hibernate.many-to-one
@@ -1303,7 +1302,7 @@ public interface ContactInfo extends
         <para>To end with the commons model part, let's define the Event
         entity :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Event"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.framework.hrsample.model.Event" /&gt;
@@ -1360,7 +1359,7 @@ public interface ContactInfo extends
 
         <para>Let's look at the XML fragment below :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Employee"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.framework.hrsample.model.Employee" /&gt;
@@ -1395,6 +1394,9 @@ public interface ContactInfo extends
         &lt;property
           name="regexpPatternSample"
           value="0123456789" /&gt;
+        &lt;property
+          name="unicityScope"
+          value="empSsn" /&gt; <co id="unicityScope" />
       &lt;/bean&gt;
       &lt;bean
         class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
@@ -1490,16 +1492,16 @@ public interface ContactInfo extends
       </section>
 
       <section>
-        <title>1-N unidirectional</title>
+        <title>Unidirectional 1-N relationships</title>
 
-        <para>You surely have noticed that we did not describe the 1-N
+        <para>You have surely noticed that we did not describe the 1-N
         composition between <code>Employee</code> and <code>Event</code>. This
         will be our first collection property and since this description will
         be re-used in views (to view and edit the events of an employee), we
         will put it in its own &lt;bean&gt; section so that we can assign it a
         spring id and reference it later :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Employee-events"
   class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
               id="BasicCollectionPropertyDescriptor" />
@@ -1526,6 +1528,12 @@ public interface ContactInfo extends
               <para>We are describing a collection relationship property. This
               is done using a
               <code>com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor</code>.</para>
+            </callout>
+
+            <callout arearefs="unicityScope">
+              <para>We define a unicity domain for the <code>ssn</code>
+              property. This will translate in a unique key definition in the
+              persistent store.</para>
             </callout>
 
             <callout arearefs="composition">
@@ -1556,7 +1564,7 @@ public interface ContactInfo extends
         <code>Employee-events</code> collection property descriptor in the
         Employee entity. This is done in a single line as shown below :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Employee"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.framework.hrsample.model.Employee" /&gt;
@@ -1586,7 +1594,7 @@ public interface ContactInfo extends
         <para>Launching the <trademark>D2S</trademark> generator will generate
         the <filename>Employee.java</filename> source file :</para>
 
-        <para><programlisting>/*
+        <para><programlisting language="java">/*
  * Generated by Design2see. All rights reserved.
  */
 package com.d2s.framework.hrsample.model;
@@ -1646,7 +1654,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
    * Gets the ssn.
    * 
    * @hibernate.property
-   * @hibernate.column name = "SSN" length = "10"
+   * @hibernate.column name = "SSN" length = "10" unique-key = "EMP_SSN_UNQ"
    * @return the ssn.
    */
   java.lang.String getSsn();
@@ -1794,7 +1802,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
       of relationships (1-1, bi-directional). So let's begin with the entity
       inheritance graph and we will deal with their relationships next.</para>
 
-      <para><programlisting>&lt;bean
+      <para><programlisting language="xml">&lt;bean
   id="Company"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.framework.hrsample.model.Company" /&gt;
@@ -1903,12 +1911,848 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
       a perfect candidate for factoring. So we can make the contact property
       descriptor a top level bean and reference it in the 3 entities above.
       The result will be :</para>
+
+      <para><programlisting language="xml">&lt;bean id="contact"
+  class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
+            id="contact" />
+  &lt;property
+    name="name"
+    value="contact" /&gt;
+  &lt;property
+    name="referencedDescriptor"
+    ref="ContactInfo" /&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Employee"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref bean="contact" /&gt; <co id="contactrefEmployee" />
+      ...
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Company"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      &lt;ref bean="contact" /&gt; <co id="contactrefCompany" />
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="OrganizationalUnit"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref bean="contact" /&gt; <co id="contactrefOU" />
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="contact">
+            <para>We factor the contact property in a top level referenceable
+            bean.</para>
+          </callout>
+
+          <callout arearefs="contactrefEmployee">
+            <para>We reference the contact bean as a property of the
+            <code>Employee</code> entity.</para>
+          </callout>
+
+          <callout arearefs="contactrefCompany">
+            <para>We reference the contact bean as a property of the
+            <code>Company</code> entity.</para>
+          </callout>
+
+          <callout arearefs="contactrefOU">
+            <para>We reference the contact bean as a property of the
+            <code>OrganizationalUnit</code> entity.</para>
+          </callout>
+        </calloutlist>Now that we have described our organization entities,
+      let's link them together using relationships.</para>
     </section>
 
     <section>
-      <title>Bi-directional 1-N relationships</title>
+      <title>Bi-directional relationships</title>
 
-      <para></para>
+      <para>It is time see how the <trademark>D2S</trademark> framework
+      handles relationships which are navigable at both ends.</para>
+
+      <section>
+        <title>Bi-directional 1-N relationships</title>
+
+        <para>We are going to describe the <code>Company</code> ↔
+        <code>Department</code> bi-directional 1-N relationship. To achieve
+        that, we will first describe the N side of this composition, making it
+        a top-level, referenceable bean and then make this N side the reverse
+        end of the 1 side of the composition. This is achieved using the
+        following XML fragment :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Company-departments"
+  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
+              id="Company-departments" />
+  &lt;property
+    name="name"
+    value="departments" /&gt;
+  &lt;property
+    name="composition"
+    value="true" /&gt;
+  &lt;property name="referencedDescriptor"&gt;
+    &lt;bean
+      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      &lt;property
+        name="collectionInterface"
+        value="java.util.Set" /&gt;
+      &lt;property
+        name="elementDescriptor"
+        ref="Department" /&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Company"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref bean="Company-departments"/&gt; <co id="Company-departments-ref" />
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Department"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
+              id="company-ref" />
+        &lt;property
+          name="name"
+          value="company" /&gt;
+        &lt;property
+          name="referencedDescriptor"
+          ref="Company" /&gt;
+        &lt;property
+          name="reverseRelationEnd"
+          ref="Company-departments" /&gt; <co id="reverseRelationEnd" />
+        &lt;property
+          name="mandatory"
+          value="true" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting></para>
+
+        <para><calloutlist>
+            <callout arearefs="Company-departments">
+              <para>Like we did before for the employee events, we describe
+              collection property descriptor for the company
+              departments.</para>
+            </callout>
+
+            <callout arearefs="Company-departments-ref">
+              <para>We reference the collection property descriptor in the
+              <code>Company</code> entity.</para>
+            </callout>
+
+            <callout arearefs="company-ref">
+              <para>We define a reference descriptor to the Company entity in
+              the Department entity.</para>
+            </callout>
+
+            <callout arearefs="reverseRelationEnd">
+              <para>We link both side of the <code>Company</code> ↔
+              <code>Department</code> relationship.</para>
+            </callout>
+          </calloutlist>So making a relationship bi-directional is quite
+        straightforward. We just have to reference one end of the relationship
+        in the other end as being the reverse end. Although the generated java
+        code will not be directly impacted by making a relationship
+        bi-directional, hibernate xDoclet tags will be. More important is the
+        impact on how the framework will handle the relationship updates
+        behind the scene for you.</para>
+
+        <para>Making the <code>Company</code> ↔ <code>Department</code>
+        relationship bi-directional implies the following on the
+        <code>Company</code> side:</para>
+
+        <para><orderedlist>
+            <listitem>
+              <para>Whenever a department is added to a company through the
+              <code>addToDepartments(Department)</code> adder, the passed-in
+              department will have its company property updated accordingly.
+              In the (unexpected) case that the department was part of another
+              company, it will be removed from its previous company
+              departments before being added to the new one.</para>
+            </listitem>
+
+            <listitem>
+              <para>Whenever a set of departments set as the company
+              departments through the
+              <code>setDepartments(Set&lt;Department&gt;)</code> setter, all
+              the passed-in departments will have their company property
+              updated accordingly. In the (unexpected) case that the
+              departments were part of other companies, they will be removed
+              from their previous respective company departments before being
+              added to the new one. Moreover, all existing departments in the
+              company before the update will have their company property
+              reset.</para>
+            </listitem>
+
+            <listitem>
+              <para>Whenever a department is removed from a company through
+              the <code>removeFromDepartments(Department)</code> remover, the
+              passed-in department will have its company property reset to
+              <code>null</code>. In the (unexpected) case that the department
+              was part of another company, it will be removed from its
+              previous company departments.</para>
+            </listitem>
+          </orderedlist>And on the <code>Department</code> side :</para>
+
+        <orderedlist>
+          <listitem>
+            <para>Whenever a company is set in a department through the
+            <code>setCompany(Company)</code>, the company departments is
+            updated accordingly. In the case that the passed-in company is
+            <code>null</code>, the department will just be removed from its
+            previous company if any.</para>
+          </listitem>
+        </orderedlist>
+
+        <para>As you can see above, you can expect the
+        <trademark>D2S</trademark> framework to extensively and transparently
+        manage any bi-directional relationship for you. Just call whatever
+        accessor you want and the domain model will be updated
+        consistently.</para>
+
+        <para>We describe the <code>Department</code> ↔ <code>Team</code>
+        relationship the same way :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Department-teams"
+  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
+  &lt;property
+    name="name"
+    value="teams" /&gt;
+  &lt;property
+    name="composition"
+    value="true" /&gt;
+  &lt;property name="referencedDescriptor"&gt;
+    &lt;bean
+      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      &lt;property
+        name="collectionInterface"
+        value="java.util.Set" /&gt;
+      &lt;property
+        name="elementDescriptor"
+        ref="Team" /&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean
+  id="Department"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Department" /&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref bean="Department-teams" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean
+  id="Team"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="department" /&gt;
+        &lt;property
+          name="referencedDescriptor"
+          ref="Department" /&gt;
+        &lt;property
+          name="reverseRelationEnd"
+          ref="Department-teams" /&gt;
+        &lt;property
+          name="mandatory"
+          value="true" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting>And, to be complete, the <code>Company</code> ↔
+        <code>Employees</code> relationship :<programlisting language="xml">&lt;bean
+  id="Company-employees"
+  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
+  &lt;property
+    name="name"
+    value="employees" /&gt;
+  &lt;property
+    name="composition"
+    value="true" /&gt;
+  &lt;property name="referencedDescriptor"&gt;
+    &lt;bean
+      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      &lt;property
+        name="collectionInterface"
+        value="java.util.Set" /&gt;
+      &lt;property
+        name="elementDescriptor"
+        ref="Employee" /&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Employee"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="company" /&gt;
+        &lt;property
+          name="referencedDescriptor"
+          ref="Company" /&gt;
+        &lt;property
+          name="reverseRelationEnd"
+          ref="Company-employees" /&gt;
+        &lt;property
+          name="mandatory"
+          value="true" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Company"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref bean="Company-employees" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting></para>
+      </section>
+
+      <section>
+        <title>Bi-directional 1-1 relationships</title>
+
+        <para>The last type of relationship we will handle in the HR
+        application is the 1-1 <code>OrganizationalUnit</code> ↔
+        <code>Employee</code> manager association. And you have certainly
+        already guessed that it is the exact same way to describe
+        bi-directional 1-1 relationships than 1-N relationships except that
+        both ends are reference property descriptors :<programlisting
+        language="xml">&lt;bean
+  id="OrganizationalUnit-manager"
+  class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+  &lt;property
+    name="name"
+    value="manager" /&gt;
+  &lt;property name="referencedDescriptor" ref="Employee"/&gt;
+  &lt;property name="mandatory" value="true" /&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Employee"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="managedOu" /&gt;
+        &lt;property
+          name="referencedDescriptor"
+          ref="OrganizationalUnit" /&gt;
+        &lt;property
+          name="reverseRelationEnd"
+          ref="OrganizationalUnit-manager" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="OrganizationalUnit"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref bean="OrganizationalUnit-manager"/&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting></para>
+
+        <para>Of course, setting one end of the 1-1 relationship will also
+        update the other end accordingly without having to take care of
+        it.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Computed properties</title>
+
+      <para>Not all properties have a representation in the persistent store.
+      Some of them may be computed using other parts of the domain model. For
+      instance, in the <code>Employee</code> entity, the age property is one
+      of them. It is fairly easy to compute the age of an employee from his
+      birth date. Of course computed properties are not limited to entities.
+      They can be declared on any <trademark>D2S</trademark> managed component
+      (inlined components, interfaces and entities). And they are not limited
+      to scalar properties. Even a collection property or a reference property
+      may be computed this way.</para>
+
+      <para>Let's see how we can link it using <trademark>D2S</trademark>
+      :</para>
+
+      <para><programlisting language="xml">&lt;bean
+  id="Employee"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="age" /&gt;
+        &lt;property
+          name="minValue"
+          value="0" /&gt;
+        &lt;property
+          name="maxValue"
+          value="150" /&gt;
+        &lt;property
+          name="delegateClassName"
+          value="com.d2s.framework.hrsample.model.extension.EmployeeExtension" /&gt; <co
+            id="delegateClassName" />
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="delegateClassName">
+            <para>We link the age property to a java class used to compute its
+            value.</para>
+          </callout>
+        </calloutlist>As you can see in the above XML fragment, the age
+      property is almost described like any other standard entity property.
+      What differs is the reference to the
+      <code>com.d2s.framework.hrsample.model.extension.EmployeeExtension</code>
+      java class that will be used to compute it. So let's code it. As
+      declared in the descriptor, we will put it in the
+      <code>com.d2s.framework.hrsample.model.extension</code> package :</para>
+
+      <para><programlisting language="java">/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.hrsample.model.extension;
+
+import java.util.Date;
+
+import com.d2s.framework.hrsample.model.Employee;
+import com.d2s.framework.model.component.AbstractComponentExtension;
+
+/**
+ * Helper class computing extended properties for Employee entity.
+ * &lt;p&gt;
+ * Copyright 2005 Design2See. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class EmployeeExtension extends
+    AbstractComponentExtension&lt;Employee&gt; <co
+            id="AbstractComponentExtension" /> {
+
+  /**
+   * Constructs a new &lt;code&gt;EmployeeExtension&lt;/code&gt; instance.
+   * 
+   * @param extendedEmployee
+   *            The extended employee instance.
+   */
+  public EmployeeExtensionSimple(Employee extendedEmployee) {
+    super(extendedEmployee);
+  }
+
+  /**
+   * Computes the employee age.
+   * 
+   * @return The employee age.
+   */
+  public Integer getAge() { <co id="getAge" />
+    if (getComponent()<co id="getComponent" />.getBirthDate() != null) {
+      return new Integer((int) ((new Date().getTime() - getComponent()
+          .getBirthDate().getTime()) / (1000L * 60 * 60 * 24 * 365)));
+    }
+    return null;
+  }
+}</programlisting><calloutlist>
+          <callout arearefs="AbstractComponentExtension">
+            <para>The employee extension class inherit from the
+            <code>AbstractComponentExtension</code> framework base
+            class.</para>
+          </callout>
+
+          <callout arearefs="getAge">
+            <para>We implement the <code>getAge()</code> method which is
+            triggered by the framework whenever the age property is accessed
+            on an employee.</para>
+          </callout>
+
+          <callout arearefs="getComponent">
+            <para>Note the use of the <code>getComponent()</code> method to
+            retrieve the instance of employee this extension is attached to.
+            This will be the starting point for exploring the domain model and
+            computing arbitrary complex attributes.</para>
+          </callout>
+        </calloutlist>Implementing the employee extension class as above is
+      plainly licit but might lead to performance issues for more complex
+      computations. In fact, each time the age property is requested, the
+      <code>getAge()</code> method is triggered. This is not painful for the
+      simple age implementation but imagine that you had to do a CPU or
+      network consuming computation to return the computed property ! Pushing
+      the analysis further shows that the age of an employee does not change
+      until his birth date changes (which is very unlikely). So a more
+      efficient implementation for the employee extension class consist in
+      keeping the computed age value for later use and listening to changes of
+      the birth date property. Hopefully, the implementation is almost
+      straightforward since every <trademark>D2S</trademark> managed component
+      can be listened to for property changes.</para>
+
+      <para>Moreover, whenever the birth date no one is notified that the age
+      changes since we did not implement anywhere the dependency "birth date ⇒
+      age".</para>
+
+      <para>The following update of the <filename>Employee.java</filename>
+      source file fixes the 2 caveats above :</para>
+
+      <para><programlisting language="java">/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.hrsample.model.extension;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Date;
+
+import com.d2s.framework.hrsample.model.Employee;
+import com.d2s.framework.model.component.AbstractComponentExtension;
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
+
+/**
+ * Helper class computing extended properties for Employee entity.
+ * &lt;p&gt;
+ * Copyright 2005 Design2See. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt; {
+
+  private Integer age = null; <co id="age" />
+
+  /**
+   * Constructs a new &lt;code&gt;EmployeeExtension&lt;/code&gt; instance.
+   * 
+   * @param extendedEmployee
+   *            The extended Employee instance.
+   */
+  public EmployeeExtension(Employee extendedEmployee) {
+    super(extendedEmployee);
+    extendedEmployee.addPropertyChangeListener("birthDate", <co
+            id="addPropertyChangeListener" />
+        new PropertyChangeListener() {
+
+          public void propertyChange(@SuppressWarnings("unused")
+          PropertyChangeEvent evt) {
+            Integer oldAge = age;
+            age = null; <co id="ageReset" />
+            getComponent().firePropertyChange("age", oldAge,
+                IPropertyChangeCapable.UNKNOWN); <co id="firePropertyChange" />
+          }
+        });
+  }
+
+  /**
+   * Computes the employee age.
+   * 
+   * @return The employee age.
+   */
+  public Integer getAge() {
+    if (age != null) {
+      return age; <co id="returnAge" />
+    }
+    if (getComponent().getBirthDate() != null) {
+      age = new Integer((int) ((new Date().getTime() - getComponent()
+          .getBirthDate().getTime()) / (1000L * 60 * 60 * 24 * 365)));
+    }
+    return age;
+  }
+}</programlisting></para>
+
+      <para><calloutlist>
+          <callout arearefs="age">
+            <para>The age cache attribute.</para>
+          </callout>
+
+          <callout arearefs="addPropertyChangeListener">
+            <para>We attach to the birth date property to be notified of a
+            change.</para>
+          </callout>
+
+          <callout arearefs="ageReset">
+            <para>Whenever the birth date changes, we invalidate the age
+            cache.</para>
+          </callout>
+
+          <callout arearefs="firePropertyChange">
+            <para>And we notify listeners, if any, of the age property change.
+            Note the use of the <code>UNKNOWN</code> constant. This is to
+            avoid useless computations if there is no listener attached to the
+            age property; the computation will only be triggered when the age
+            property is actually requested.</para>
+          </callout>
+
+          <callout arearefs="returnAge">
+            <para>Whenever the age cache is valid, return it. If it has not
+            been computed yet or if the cache has just been invalidated,
+            perform the computation.</para>
+          </callout>
+        </calloutlist>When re-generating the
+      <filename>Employee.java</filename> source file, you will notice that the
+      <code>getAge()</code> method will be added but without any hibernate
+      xDoclet annotation since the age property is not related to the
+      <code>Employee</code> persistence. Once again, the framework will
+      completely take care of calling the delegate class whenever the age
+      property is requested.</para>
+
+      <para>The key advantages of this type of modularization are :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Easy switching between implementations. You might have a mock
+          implementation for the early stage of the development and when the
+          job is done, switch with the real one. You could also switch the
+          implementations depending on the environment you deploy to.</para>
+        </listitem>
+
+        <listitem>
+          <para>Clear separation of concerns allowing an efficient
+          distribution of work between developers.</para>
+        </listitem>
+
+        <listitem>
+          <para>Facilitating monitoring and testing. The code responsible of
+          the implementation can be easily instrumented.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Component services</title>
+
+      <para>As of now, we have only dealt with <trademark>D2S</trademark>
+      component properties (standard and computed). There might be situations
+      where you want (or you need) your domain model components to implement
+      arbitrary interfaces (maybe legacy interfaces) and provide an arbitrary
+      implementation for them. The <trademark>D2S</trademark> framework
+      supports it at any level of the domain model. As an example, let's
+      consider the <code>NameableService</code> interface that we want all of
+      our nameable components to implement. This service provides one method
+      to format the name of a <code>Nameable</code>. As an implementation of
+      formatting, we will capitalize the first letter and make the rest lower
+      case.</para>
+
+      <para>Let's see how we can attach this service :</para>
+
+      <para><programlisting language="xml">&lt;bean
+  id="Nameable"
+  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
+  ...
+  &lt;property name="serviceDelegates"&gt; <co id="serviceDelegates" />
+    &lt;map&gt;
+      &lt;entry key="com.d2s.framework.hrsample.model.service.NameableService"&gt; <co
+            id="NameableService" />
+        &lt;bean
+          class="com.d2s.framework.hrsample.model.service.NameableServiceDelegate" /&gt; <co
+            id="NameableServiceImpl" />
+      &lt;/entry&gt;
+    &lt;/map&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="serviceDelegates">
+            <para>We declare the services and their implementations attached
+            to the <code>Nameable</code> interface.</para>
+          </callout>
+
+          <callout arearefs="NameableService">
+            <para>The <code>NameableService</code> interface.</para>
+          </callout>
+
+          <callout arearefs="NameableServiceImpl">
+            <para>And its implementation
+            (<code>NameableService</code>Delegate).</para>
+          </callout>
+        </calloutlist>Of course, we have to code both
+      <code>NameableService</code> (the service definition) and
+      <code>NameableServiceDelegate</code> (the service delegate
+      implementation) in the
+      <code>com.d2s.framework.hrsample.model.service</code> package as
+      described in the previous XML fragment.</para>
+
+      <para>Here is the <filename>NameableService.java</filename> source file
+      :</para>
+
+      <para><programlisting>/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.hrsample.model.service;
+
+/**
+ * Services offered by the Nameable components.
+ * &lt;p&gt;
+ * Copyright 2005 Design2See. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public interface NameableService {
+
+  /**
+   * Formats name.
+   */
+  void fomatName();
+}</programlisting>And the <filename>NameableServiceDelegate.java</filename>
+      source file :</para>
+
+      <para><programlisting>/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.hrsample.model.service;
+
+import com.d2s.framework.hrsample.model.Nameable;
+import com.d2s.framework.model.component.service.IComponentService;
+
+/**
+ * A very usefull ;) service to capitalize the first letter of a Nameable name
+ * and lower case the remaining letters.
+ * &lt;p&gt;
+ * Copyright 2005 Design2See. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class NameableServiceDelegate implements IComponentService { <co
+            id="IComponentService" />
+
+  /**
+   * Formats the name of a nameable.
+   * 
+   * @param nameable
+   *            The nameable to format the name.
+   */
+  public void fomatName(Nameable nameable) { <co id="fomatName" />
+    if (nameable.getName() != null &amp;&amp; nameable.getName().length() &gt; 0) {
+      StringBuffer formattedName = new StringBuffer();
+      formattedName.append(nameable.getName().substring(0, 1).toUpperCase());
+      formattedName.append(nameable.getName().substring(1).toLowerCase());
+      nameable.setName(formattedName.toString()); <co id="setName" />
+    }
+  }
+}</programlisting><calloutlist>
+          <callout arearefs="IComponentService">
+            <para>We mark the delegate as implementing
+            <code>IComponentService</code>.</para>
+          </callout>
+
+          <callout arearefs="fomatName">
+            <para>We declare the method with the same name than the service
+            method. The parameter list is the same than the service method
+            with the target component instance to trigger the service on
+            inserted at the beginning of the list.</para>
+          </callout>
+
+          <callout arearefs="setName">
+            <para>The target component is updated.</para>
+          </callout>
+        </calloutlist>You will notice that
+      <code>NameableServiceDelegate</code> does not itself implements
+      <code>NameableService</code>. This is simply because although the names
+      of the implemented methods must match, their signature is augmented by
+      the component instance to work on. This allows the
+      <trademark>D2S</trademark> framework to share services delegates across
+      multiple component instances.</para>
+
+      <para>A re-generation of the <filename>Nameable.java</filename> source
+      updates the <code>Nameable</code> definition so that it now implements
+      the <code>NameableService</code> interface :</para>
+
+      <para><programlisting>/**
+ * Nameable component.
+ * &lt;p&gt;
+ * Generated by Design2see. All rights reserved.
+ * &lt;p&gt;
+ *
+ * @author Generated by Design2see
+ * @version $LastChangedRevision$
+ */
+public interface Nameable extends
+  com.d2s.framework.hrsample.model.service.NameableService {
+...
+}</programlisting>Again, <trademark>D2S</trademark> will seamlessly take care
+      of triggering the delegates' methods, passing the right parameters,
+      whenever the service is requested on the target component.</para>
+
+      <para>Although useful for the demonstration, this kind of formatting
+      service would have better been implemented on each name modification in
+      the form of a property interceptor. We will see how to achieve that in
+      the next chapter.</para>
+    </section>
+
+    <section>
+      <title>Property interceptors</title>
+
+      <para>It is often useful, for instance to preserve a component
+      integrity, to trigger </para>
     </section>
   </section>
 </chapter>

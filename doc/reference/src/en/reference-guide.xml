@@ -155,6 +155,15 @@
     requirements. And there is no complex code generation. Everything is just
     handled at runtime.</para>
 
+    <para>Here are some of the key features of the <trademark>D2S</trademark>
+    framework :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>TO BE COMPLETED</emphasis></para>
+      </listitem>
+    </itemizedlist>
+
     <para>This manual is organized around developing a sample application
     which is targeted at human resources management. We will cover the
     complete development process while presenting as much as possible of the
