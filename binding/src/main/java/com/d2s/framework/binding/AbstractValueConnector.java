@@ -14,6 +14,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import com.d2s.framework.util.exception.IExceptionHandler;
 import com.d2s.framework.util.gate.GateHelper;
 import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.lang.ObjectUtils;
 
 /**
  * This abstract class holds some default implementation for a value connector.
@@ -203,6 +204,13 @@ public abstract class AbstractValueConnector extends AbstractConnector
     valueChangeSupport.addInhibitedListener(evt.getSource());
     try {
       setConnectorValue(evt.getNewValue());
+      Object potentiallyChangedValue = getConnectorValue();
+      if (!ObjectUtils.equals(potentiallyChangedValue, evt.getNewValue())) {
+        // the source connector must be notified because settting this connector
+        // value resulted in a value changed (a string to uppercase for
+        // instance).
+        evt.getSource().setConnectorValue(potentiallyChangedValue);
+      }
     } finally {
       valueChangeSupport.removeInhibitedListener(evt.getSource());
     }

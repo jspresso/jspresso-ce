@@ -37,6 +37,7 @@ import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
@@ -777,6 +778,13 @@ public abstract class AbstractComponentInvocationHandler implements
       IPropertyDescriptor propertyDescriptor, Object newProperty) {
     String propertyName = propertyDescriptor.getName();
 
+    Object actualNewProperty = newProperty;
+    if (newProperty != null
+        && propertyDescriptor instanceof IStringPropertyDescriptor
+        && ((IStringPropertyDescriptor) propertyDescriptor).isUpperCase()) {
+      actualNewProperty = ((String) newProperty).toUpperCase();
+    }
+
     Object oldProperty = null;
     try {
       oldProperty = accessorFactory.createPropertyAccessor(propertyName,
@@ -788,10 +796,10 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
-    if (ObjectUtils.equals(oldProperty, newProperty)) {
+    if (ObjectUtils.equals(oldProperty, actualNewProperty)) {
       return;
     }
-    propertyDescriptor.preprocessSetter(proxy, oldProperty, newProperty);
+    propertyDescriptor.preprocessSetter(proxy, oldProperty, actualNewProperty);
     if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       // It's a relation end
       IRelationshipEndPropertyDescriptor reversePropertyDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)
@@ -799,7 +807,7 @@ public abstract class AbstractComponentInvocationHandler implements
       try {
         if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
           // It's a 'one' relation end
-          storeProperty(propertyName, newProperty);
+          storeProperty(propertyName, actualNewProperty);
           if (reversePropertyDescriptor != null) {
             // It is bidirectionnal, so we are going to update the other end.
             if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
@@ -811,8 +819,8 @@ public abstract class AbstractComponentInvocationHandler implements
               if (oldProperty != null) {
                 reversePropertyAccessor.setValue(oldProperty, null);
               }
-              if (newProperty != null) {
-                reversePropertyAccessor.setValue(newProperty, proxy);
+              if (actualNewProperty != null) {
+                reversePropertyAccessor.setValue(actualNewProperty, proxy);
               }
             } else if (reversePropertyDescriptor instanceof ICollectionPropertyDescriptor) {
               // It's a one-to-many relationship
@@ -831,8 +839,8 @@ public abstract class AbstractComponentInvocationHandler implements
               if (oldProperty != null) {
                 reversePropertyAccessor.removeFromValue(oldProperty, proxy);
               }
-              if (newProperty != null) {
-                reversePropertyAccessor.addToValue(newProperty, proxy);
+              if (actualNewProperty != null) {
+                reversePropertyAccessor.addToValue(actualNewProperty, proxy);
               }
             }
           }
@@ -846,8 +854,8 @@ public abstract class AbstractComponentInvocationHandler implements
             oldPropertyElementsToRemove.addAll((Collection<?>) oldProperty);
             propertyElementsToKeep.addAll((Collection<?>) oldProperty);
           }
-          if (newProperty != null) {
-            newPropertyElementsToAdd.addAll((Collection<?>) newProperty);
+          if (actualNewProperty != null) {
+            newPropertyElementsToAdd.addAll((Collection<?>) actualNewProperty);
           }
           propertyElementsToKeep.retainAll(newPropertyElementsToAdd);
           oldPropertyElementsToRemove.removeAll(propertyElementsToKeep);
@@ -866,14 +874,14 @@ public abstract class AbstractComponentInvocationHandler implements
           }
           // if the property is a list we may restore the element order and be
           // careful not to miss one...
-          if (newProperty instanceof List) {
+          if (actualNewProperty instanceof List) {
             Collection currentProperty = propertyAccessor.getValue(proxy);
             if (currentProperty instanceof List) {
               // Just check the only order differs
               Set<Object> temp = new HashSet<Object>(currentProperty);
-              temp.removeAll((List<?>) newProperty);
+              temp.removeAll((List<?>) actualNewProperty);
               currentProperty.clear();
-              currentProperty.addAll((List<?>) newProperty);
+              currentProperty.addAll((List<?>) actualNewProperty);
               currentProperty.addAll(temp);
             }
           }
@@ -886,10 +894,10 @@ public abstract class AbstractComponentInvocationHandler implements
         throw new ComponentException(ex);
       }
     } else {
-      storeProperty(propertyName, newProperty);
+      storeProperty(propertyName, actualNewProperty);
     }
-    firePropertyChange(propertyName, oldProperty, newProperty);
-    propertyDescriptor.postprocessSetter(proxy, oldProperty, newProperty);
+    firePropertyChange(propertyName, oldProperty, actualNewProperty);
+    propertyDescriptor.postprocessSetter(proxy, oldProperty, actualNewProperty);
   }
 
   private Map<String, Object> straightGetProperties() {

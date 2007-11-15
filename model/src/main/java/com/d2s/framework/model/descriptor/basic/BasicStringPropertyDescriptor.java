@@ -22,10 +22,12 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public class BasicStringPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IStringPropertyDescriptor {
 
+  private Boolean upperCase;
   private Integer maxLength;
   private String  regexpPattern;
   private String  regexpPatternSample;
 
+  
   /**
    * {@inheritDoc}
    */
@@ -77,6 +79,29 @@ public class BasicStringPropertyDescriptor extends
       };
       throw ie;
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isUpperCase() {
+    if (upperCase != null) {
+      return upperCase.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return ((IStringPropertyDescriptor) getParentDescriptor()).isUpperCase();
+    }
+    return false;
+  }
+
+  
+  /**
+   * Sets the upperCase.
+   * 
+   * @param upperCase the upperCase to set.
+   */
+  public void setUpperCase(boolean upperCase) {
+    this.upperCase = new Boolean(upperCase);
   }
 
   /**
