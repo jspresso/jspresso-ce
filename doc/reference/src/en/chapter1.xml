@@ -2324,17 +2324,178 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
     </section>
 
     <section>
+      <title>Component services</title>
+
+      <para>As of now, we have only dealt with <trademark>D2S</trademark>
+      component properties. There might be situations where you want (or you
+      need) your domain model components to implement arbitrary interfaces
+      (maybe legacy interfaces) and provide an arbitrary implementation for
+      them. The <trademark>D2S</trademark> framework supports it at any level
+      of the domain model. As an example, let's consider the
+      <code>EmployeeService</code> interface that we want all of our employee
+      components to implement. This service provides one method to compute age
+      based on a birth date passed as parameter. Whenever the passed-in date
+      is null, the returned age will also be.</para>
+
+      <para>Let's see how we can attach this service :</para>
+
+      <para><programlisting language="xml">&lt;bean
+  id="Employee"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="serviceDelegates"&gt; <co id="serviceDelegates" />
+    &lt;map&gt;
+      &lt;entry key="com.d2s.framework.hrsample.model.service.EmployeeService"&gt; <co
+            id="NameableService" />
+        &lt;bean
+          class="com.d2s.framework.hrsample.model.service.EmployeeServiceDelegate" /&gt; <co
+            id="NameableServiceImpl" />
+      &lt;/entry&gt;
+    &lt;/map&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="serviceDelegates">
+            <para>We declare the services and their implementations attached
+            to the <code>Employee</code> interface.</para>
+          </callout>
+
+          <callout arearefs="NameableService">
+            <para>The <code>EmployeeService</code> interface.</para>
+          </callout>
+
+          <callout arearefs="NameableServiceImpl">
+            <para>And its implementation delegate
+            (<code>EmployeeService</code>Delegate).</para>
+          </callout>
+        </calloutlist>Of course, we have to code both
+      <code>EmployeeService</code> (the service definition) and
+      <code>EmployeeServiceDelegate</code> (the service delegate
+      implementation) in the
+      <code>com.d2s.framework.hrsample.model.service</code> package as
+      described in the previous XML fragment.</para>
+
+      <para>Here is the <filename>EmployeeService.java</filename> source file
+      :</para>
+
+      <para><programlisting>/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.hrsample.model.service;
+
+import java.util.Date;
+
+/**
+ * Services offered by the Employee entity.
+ * &lt;p&gt;
+ * Copyright 2005 Design2See. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public interface EmployeeService {
+
+  /**
+   * Computes the employee age.
+   * 
+   * @param birthDate
+   *            the employee birth date.
+   * @return the computed age based on the birth date or null if the birt date
+   *         is not available.
+   */
+  Integer computeAge(Date birthDate);
+}</programlisting>And the <filename>EmployeeServiceDelegate.java</filename>
+      source file :</para>
+
+      <para><programlisting>/*
+ * Copyright (c) 2005 Design2see. All rights reserved.
+ */
+package com.d2s.framework.hrsample.model.service;
+
+import java.util.Date;
+
+import com.d2s.framework.hrsample.model.Employee;
+import com.d2s.framework.model.component.service.IComponentService;
+
+/**
+ * The services delegate of the Employee entity
+ * &lt;p&gt;
+ * Copyright 2005 Design2See. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class EmployeeServiceDelegate implements IComponentService { <co
+            id="IComponentService" />
+
+  /**
+   * Computes the employee age.
+   * 
+   * @param employee
+   *            the employee this service execution has been triggered on.
+   * @param birthDate
+   *            a birth date (might be different than the actual employee birth
+   *            date).
+   * @return the age computed from the birth date passed as parameter.
+   */
+  public Integer computeAge(Employee employee, Date birthDate) { <co
+            id="fomatName" />
+    if (birthDate != null) {
+      return new Integer(
+          (int) ((new Date().getTime() - birthDate.getTime()) / (1000L * 60 * 60 * 24 * 365)));
+    }
+    return null;
+  }
+}</programlisting><calloutlist>
+          <callout arearefs="IComponentService">
+            <para>We mark the delegate as implementing
+            <code>IComponentService</code>.</para>
+          </callout>
+
+          <callout arearefs="fomatName">
+            <para>We declare the method with the same name than the service
+            method. The parameter list is the same than the service method
+            with the target component instance to trigger the service on
+            inserted at the beginning of the list.</para>
+          </callout>
+        </calloutlist>You will notice that
+      <code>EmployeeServiceDelegate</code> does not itself implements
+      <code>EmployeeService</code>. This is simply because although the names
+      of the implemented methods must match, their signature is augmented by
+      the component instance to work on. This allows the
+      <trademark>D2S</trademark> framework to share services delegates across
+      multiple component instances.</para>
+
+      <para>A re-generation of the <filename>Employee.java</filename> source
+      updates the <code>Employee</code> definition so that it now implements
+      the <code>EmployeeService</code> interface :</para>
+
+      <para><programlisting>...
+public interface Employee extends
+  com.d2s.framework.hrsample.model.Nameable,
+  com.d2s.framework.hrsample.model.Traceable,
+  com.d2s.framework.model.entity.IEntity,
+  com.d2s.framework.hrsample.model.service.EmployeeService {
+...
+}</programlisting>Again, <trademark>D2S</trademark> will seamlessly take care
+      of triggering the delegates' methods, passing the right parameters,
+      whenever the service is requested on the target component.</para>
+    </section>
+
+    <section>
       <title>Computed properties</title>
 
       <para>Not all properties have a representation in the persistent store.
       Some of them may be computed using other parts of the domain model. For
       instance, in the <code>Employee</code> entity, the age property is one
       of them. It is fairly easy to compute the age of an employee from his
-      birth date. Of course computed properties are not limited to entities.
-      They can be declared on any <trademark>D2S</trademark> managed component
-      (inlined components, interfaces and entities). And they are not limited
-      to scalar properties. Even a collection property or a reference property
-      may be computed this way.</para>
+      birth date and this is the service we have just implemented above. Of
+      course computed properties are not limited to entities. They can be
+      declared on any <trademark>D2S</trademark> managed component (inlined
+      components, interfaces and entities). And they are not limited to scalar
+      properties. Even a collection property or a reference property may be
+      computed this way.</para>
 
       <para>Let's see how we can link it using <trademark>D2S</trademark>
       :</para>
@@ -2416,11 +2577,8 @@ public class EmployeeExtension extends
    * @return The employee age.
    */
   public Integer getAge() { <co id="getAge" />
-    if (getComponent()<co id="getComponent" />.getBirthDate() != null) {
-      return new Integer((int) ((new Date().getTime() - getComponent()
-          .getBirthDate().getTime()) / (1000L * 60 * 60 * 24 * 365)));
-    }
-    return null;
+    return getComponent()<co id="getComponent" />.computeAge<co
+            id="computeAge" />(getComponent().getBirthDate());
   }
 }</programlisting><calloutlist>
           <callout arearefs="AbstractComponentExtension">
@@ -2441,26 +2599,33 @@ public class EmployeeExtension extends
             This will be the starting point for exploring the domain model and
             computing arbitrary complex attributes.</para>
           </callout>
+
+          <callout arearefs="computeAge">
+            <para>We call the service method we have implemented in the
+            previous chapter.</para>
+          </callout>
         </calloutlist>Implementing the employee extension class as above is
       plainly licit but might lead to performance issues for more complex
       computations. In fact, each time the age property is requested, the
       <code>getAge()</code> method is triggered. This is not painful for the
       simple age implementation but imagine that you had to do a CPU or
-      network consuming computation to return the computed property ! Pushing
-      the analysis further shows that the age of an employee does not change
-      until his birth date changes (which is very unlikely). So a more
-      efficient implementation for the employee extension class consist in
-      keeping the computed age value for later use and listening to changes of
-      the birth date property. Hopefully, the implementation is almost
-      straightforward since every <trademark>D2S</trademark> managed component
-      can be listened to for property changes.</para>
+      network consuming computation to return the computed property !</para>
 
-      <para>Moreover, whenever the birth date no one is notified that the age
-      changes since we did not implement anywhere the dependency "birth date ⇒
-      age".</para>
+      <para>Moreover, whenever the birth date is modified, no one is notified
+      that the age changes since we did not implement anywhere the dependency
+      "birth date ⇒ age".</para>
+
+      <para>Pushing the analysis further shows that the age of an employee
+      does not change until his birth date changes (which is very unlikely).
+      So a more efficient implementation for the employee extension class
+      consist in keeping the computed age value for later use and listening to
+      changes of the birth date property to invalidate the age cached value.
+      Hopefully, the implementation is almost straightforward since every
+      <trademark>D2S</trademark> managed component can be listened to for
+      property changes.</para>
 
       <para>The following update of the <filename>Employee.java</filename>
-      source file fixes the 2 caveats above :</para>
+      source file fixes the 2 caveats described above :</para>
 
       <para><programlisting language="java">/*
  * Copyright (c) 2005 Design2see. All rights reserved.
@@ -2519,10 +2684,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
     if (age != null) {
       return age; <co id="returnAge" />
     }
-    if (getComponent().getBirthDate() != null) {
-      age = new Integer((int) ((new Date().getTime() - getComponent()
-          .getBirthDate().getTime()) / (1000L * 60 * 60 * 24 * 365)));
-    }
+    age = getComponent().computeAge(getComponent().getBirthDate());
     return age;
   }
 }</programlisting></para>
@@ -2579,74 +2741,169 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
         </listitem>
 
         <listitem>
-          <para>Facilitating monitoring and testing. The code responsible of
-          the implementation can be easily instrumented.</para>
+          <para>Ease of monitoring and testing. The code responsible of the
+          implementation can be easily instrumented.</para>
         </listitem>
       </itemizedlist>
     </section>
 
     <section>
-      <title>Component services</title>
+      <title>Integrity processors</title>
 
-      <para>As of now, we have only dealt with <trademark>D2S</trademark>
-      component properties (standard and computed). There might be situations
-      where you want (or you need) your domain model components to implement
-      arbitrary interfaces (maybe legacy interfaces) and provide an arbitrary
-      implementation for them. The <trademark>D2S</trademark> framework
-      supports it at any level of the domain model. As an example, let's
-      consider the <code>NameableService</code> interface that we want all of
-      our nameable components to implement. This service provides one method
-      to format the name of a <code>Nameable</code>. As an implementation of
-      formatting, we will capitalize the first letter and make the rest lower
-      case.</para>
+      <para>A clean and efficient domain model design assigns to the business
+      objects the responsibility of maintaining their integrity.</para>
 
-      <para>Let's see how we can attach this service :</para>
+      <para>This implies :</para>
 
-      <para><programlisting language="xml">&lt;bean
-  id="Nameable"
-  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
+      <orderedlist>
+        <listitem>
+          <para>Checking a property before it gets actually modified. Trying
+          to set a value that would compromise the business object integrity
+          must be prevented and should raise a clear notification.</para>
+        </listitem>
+
+        <listitem>
+          <para>Triggering some extra computation when a property value gets
+          actually updated.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>The first point is partially covered by some of the constraints
+      that can be assigned on the property descriptors; assigning a maximum
+      value to an integer property descriptor or a regular expression to a
+      string property descriptor are such controls. Unfortunately, there are
+      situations when these type of controls are not enough because, for
+      instance, the integrity of the component is checked against its global
+      state (a property value is constrained by the values of other properties
+      of the business object or even of other business objects of the
+      model).</para>
+
+      <para>As far as the second point is concerned, we have seen nothing yet
+      that would help to cover it.</para>
+
+      <para>Fortunately, the <trademark>D2S</trademark> framework allows you
+      to implement integrity processors that can be registered with any
+      property you define on a <trademark>D2S</trademark> managed component.
+      This includes :</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Pre-update integrity processors to cover pre-update controls
+          on setters for scalar, reference and collection properties and
+          adders and removers for collection properties.</para>
+        </listitem>
+
+        <listitem>
+          <para>Post-update integrity processors to trigger prost-update
+          computations for scalar, reference and collection properties and
+          adders and removers for collection properties.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>Let's define some simple integrity constraints on our domain model
+      :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>An employee first name should be automatically formatted like
+          this : first letter capitalized and the remaining letters in lower
+          case; this is a post-update integrity processor on the employee
+          first name property. We could have implemented this constraint using
+          a regular expression check, but this would have forced the end user
+          to type-in a compliant first name instead of automatically making it
+          compliant through computation.</para>
+        </listitem>
+
+        <listitem>
+          <para>An employee can not be hired if he is not at least 18 years
+          old; this is a pre-update integrity processor on the employee birth
+          date property.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The following XML fragment declares these processors :</para>
+
+      <para><programlisting>&lt;bean
+  id="Employee"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
-  &lt;property name="serviceDelegates"&gt; <co id="serviceDelegates" />
-    &lt;map&gt;
-      &lt;entry key="com.d2s.framework.hrsample.model.service.NameableService"&gt; <co
-            id="NameableService" />
-        &lt;bean
-          class="com.d2s.framework.hrsample.model.service.NameableServiceDelegate" /&gt; <co
-            id="NameableServiceImpl" />
-      &lt;/entry&gt;
-    &lt;/map&gt;
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="firstName" /&gt;
+        ...
+        &lt;property name="integrityProcessors"&gt; <co
+            id="integrityProcessors" />
+          &lt;list&gt;
+            &lt;bean <co id="FirstNameIntegrityProcessor" />
+              class="com.d2s.framework.hrsample.model.processor.EmployeeIntegrityProcessors$FirstNameIntegrityProcessor" /&gt;
+          &lt;/list&gt;
+        &lt;/property&gt;
+      &lt;/bean&gt;
+      ...
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="birthDate" /&gt;
+        ...
+        &lt;property name="integrityProcessors"&gt;
+          &lt;list&gt;
+            &lt;bean <co id="BirthDateIntegrityProcessor" />
+              class="com.d2s.framework.hrsample.model.processor.EmployeeIntegrityProcessors$BirthDateIntegrityProcessor" /&gt;
+          &lt;/list&gt;
+        &lt;/property&gt;
+      &lt;/bean&gt;
+      ...
+    &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="serviceDelegates">
-            <para>We declare the services and their implementations attached
-            to the <code>Nameable</code> interface.</para>
+          <callout arearefs="integrityProcessors">
+            <para>The property is completed by a list of integrity processors.
+            Each processor of this chain will be triggered
+            sequentially.</para>
           </callout>
 
-          <callout arearefs="NameableService">
-            <para>The <code>NameableService</code> interface.</para>
+          <callout arearefs="FirstNameIntegrityProcessor">
+            <para>We register the processor on the first name property.</para>
           </callout>
 
-          <callout arearefs="NameableServiceImpl">
-            <para>And its implementation
-            (<code>NameableService</code>Delegate).</para>
+          <callout arearefs="BirthDateIntegrityProcessor">
+            <para>We register the processor on the birth date property.</para>
           </callout>
-        </calloutlist>Of course, we have to code both
-      <code>NameableService</code> (the service definition) and
-      <code>NameableServiceDelegate</code> (the service delegate
-      implementation) in the
-      <code>com.d2s.framework.hrsample.model.service</code> package as
-      described in the previous XML fragment.</para>
+        </calloutlist></para>
 
-      <para>Here is the <filename>NameableService.java</filename> source file
+      <para>As decribed in the XML fragment, we are going to create an
+      <code>EmployeeIntegrityProcessors</code> class in the new package
+      <code>com.d2s.framework.hrsample.model.processor</code>. As a best
+      practice, it is recommended (but not imposed) to create a containing
+      class that holds all the processors for a component; then each processor
+      will be a named static internal class of this container class and
+      referenced as such (using the $ sign) in the spring configuration file.
+      This pattern limits the number of processors source files in the project
+      while grouping all the processors related to a component
+      together.</para>
+
+      <para>Let's see what those processors look like by looking at the
+      <filename>EmployeeIntegrityProcessors.java</filename> source file
       :</para>
 
       <para><programlisting>/*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package com.d2s.framework.hrsample.model.service;
+package com.d2s.framework.hrsample.model.processor;
+
+import java.util.Date;
+
+import com.d2s.framework.hrsample.model.Employee;
+import com.d2s.framework.util.bean.integrity.EmptyPropertyIntegrityProcessor;
+import com.d2s.framework.util.bean.integrity.IntegrityException;
 
 /**
- * Services offered by the Nameable components.
+ * Employee integrity processors.
  * &lt;p&gt;
  * Copyright 2005 Design2See. All rights reserved.
  * &lt;p&gt;
@@ -2654,105 +2911,121 @@ package com.d2s.framework.hrsample.model.service;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface NameableService {
+public class EmployeeIntegrityProcessors {
 
   /**
-   * Formats name.
-   */
-  void fomatName();
-}</programlisting>And the <filename>NameableServiceDelegate.java</filename>
-      source file :</para>
-
-      <para><programlisting>/*
- * Copyright (c) 2005 Design2see. All rights reserved.
- */
-package com.d2s.framework.hrsample.model.service;
-
-import com.d2s.framework.hrsample.model.Nameable;
-import com.d2s.framework.model.component.service.IComponentService;
-
-/**
- * A very usefull ;) service to capitalize the first letter of a Nameable name
- * and lower case the remaining letters.
- * &lt;p&gt;
- * Copyright 2005 Design2See. All rights reserved.
- * &lt;p&gt;
- * 
- * @version $LastChangedRevision$
- * @author Vincent Vandenschrick
- */
-public class NameableServiceDelegate implements IComponentService { <co
-            id="IComponentService" />
-
-  /**
-   * Formats the name of a nameable.
+   * Birth date integrity processor.
+   * &lt;p&gt;
+   * Copyright 2005 Design2See. All rights reserved.
+   * &lt;p&gt;
    * 
-   * @param nameable
-   *            The nameable to format the name.
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
    */
-  public void fomatName(Nameable nameable) { <co id="fomatName" />
-    if (nameable.getName() != null &amp;&amp; nameable.getName().length() &gt; 0) {
-      StringBuffer formattedName = new StringBuffer();
-      formattedName.append(nameable.getName().substring(0, 1).toUpperCase());
-      formattedName.append(nameable.getName().substring(1).toLowerCase());
-      nameable.setName(formattedName.toString()); <co id="setName" />
+  public static class BirthDateIntegrityProcessor extends <co
+            id="BirthDateIntegrityProcessorImpl" />
+      EmptyPropertyIntegrityProcessor&lt;Employee, Date&gt; {
+
+    /**
+     * Checks that the employee age is at least 18.
+     * &lt;p&gt;
+     * {@inheritDoc}
+     */
+    @Override
+    public void preprocessSetterIntegrity(Employee employee, <co
+            id="preprocessSetterIntegrity" />
+        @SuppressWarnings("unused")
+        Date oldBirthDate, Date newBirthDate) {
+      if (newBirthDate == null
+          || employee.computeAge(newBirthDate).intValue() &lt; 18) {
+        throw new IntegrityException("Age is below 18", "age.below.18"); <co
+            id="IntegrityException" />
+      }
+    }
+  }
+
+  /**
+   * First name integrity processor.
+   * &lt;p&gt;
+   * Copyright 2005 Design2See. All rights reserved.
+   * &lt;p&gt;
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   */
+  public static class FirstNameIntegrityProcessor extends <co
+            id="FirstNameIntegrityProcessorImpl" />
+      EmptyPropertyIntegrityProcessor&lt;Employee, String&gt; {
+
+    /**
+     * Formats the new first name. The formatting is :
+     * &lt;li&gt;Capitalize the 1st letter
+     * &lt;li&gt;Lower case all the other letters
+     * &lt;p&gt;
+     * {@inheritDoc}
+     */
+    @Override
+    public void postprocessSetterIntegrity(Employee employee, <co
+            id="postprocessSetterIntegrity" />
+        @SuppressWarnings("unused")
+        String oldFirstName, String newFirstName) {
+      if (newFirstName != null &amp;&amp; newFirstName.length() &gt; 0) {
+        StringBuffer formattedName = new StringBuffer();
+        formattedName.append(newFirstName.substring(0, 1).toUpperCase());
+        formattedName.append(newFirstName.substring(1).toLowerCase());
+        employee.setFirstName(formattedName.toString()); <co
+            id="formattedName" />
+      }
     }
   }
 }</programlisting><calloutlist>
-          <callout arearefs="IComponentService">
-            <para>We mark the delegate as implementing
-            <code>IComponentService</code>.</para>
+          <callout arearefs="BirthDateIntegrityProcessorImpl">
+            <para>We declare an internal class as being a processor for the
+            birth date property and inherit from the
+            <code>EmptyPropertyIntegrityProcessor</code> empty adaptor
+            class.</para>
           </callout>
 
-          <callout arearefs="fomatName">
-            <para>We declare the method with the same name than the service
-            method. The parameter list is the same than the service method
-            with the target component instance to trigger the service on
-            inserted at the beginning of the list.</para>
+          <callout arearefs="preprocessSetterIntegrity">
+            <para>We override the preprocessSetterIntegrity to implement the
+            age over 18 constraint.</para>
           </callout>
 
-          <callout arearefs="setName">
-            <para>The target component is updated.</para>
+          <callout arearefs="IntegrityException">
+            <para>Whenever the condition is not met, we throw an
+            <code>IntegrityException</code> to stop the chain and notify the
+            outside that the property update could not be performed. The
+            second parameter in the exception is a bundle key used for
+            internationalization; this is not covered by this section.</para>
           </callout>
-        </calloutlist>You will notice that
-      <code>NameableServiceDelegate</code> does not itself implements
-      <code>NameableService</code>. This is simply because although the names
-      of the implemented methods must match, their signature is augmented by
-      the component instance to work on. This allows the
-      <trademark>D2S</trademark> framework to share services delegates across
-      multiple component instances.</para>
 
-      <para>A re-generation of the <filename>Nameable.java</filename> source
-      updates the <code>Nameable</code> definition so that it now implements
-      the <code>NameableService</code> interface :</para>
+          <callout arearefs="FirstNameIntegrityProcessorImpl">
+            <para>We declare an internal class as being a processor for the
+            first name property and inherit from the
+            <code>EmptyPropertyIntegrityProcessor</code> empty adaptor
+            class.</para>
+          </callout>
 
-      <para><programlisting>/**
- * Nameable component.
- * &lt;p&gt;
- * Generated by Design2see. All rights reserved.
- * &lt;p&gt;
- *
- * @author Generated by Design2see
- * @version $LastChangedRevision$
- */
-public interface Nameable extends
-  com.d2s.framework.hrsample.model.service.NameableService {
-...
-}</programlisting>Again, <trademark>D2S</trademark> will seamlessly take care
-      of triggering the delegates' methods, passing the right parameters,
-      whenever the service is requested on the target component.</para>
+          <callout arearefs="postprocessSetterIntegrity">
+            <para>We override the postprocessSetterIntegrity to implement the
+            first name formatting.</para>
+          </callout>
 
-      <para>Although useful for the demonstration, this kind of formatting
-      service would have better been implemented on each name modification in
-      the form of a property interceptor. We will see how to achieve that in
-      the next chapter.</para>
-    </section>
-
-    <section>
-      <title>Property interceptors</title>
-
-      <para>It is often useful, for instance to preserve a component
-      integrity, to trigger </para>
+          <callout arearefs="formattedName">
+            <para>We replace the first name in the employee by the new
+            computed value.</para>
+          </callout>
+        </calloutlist>Each processor declared on a property is potentially a
+      pre and post processor. To make a property processor a pre-only
+      processor, just leave the <code>postprocessSetterIntegrity</code> method
+      implementation empty. Same applies to make property processor a
+      post-only processor by leaving the
+      <code>preprocessSetterIntegrity</code> method implementation empty. We
+      encourage you, as shown in the example above, to make all your
+      processors inherit from the <code>EmptyPropertyIntegrityProcessor</code>
+      adapter class which provide empty implementations for both methods and
+      then to override the method you want to provide an implementation
+      for.</para>
     </section>
   </section>
 </chapter>
