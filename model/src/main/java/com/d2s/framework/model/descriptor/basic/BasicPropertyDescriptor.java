@@ -201,8 +201,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
 
   /**
    * {@inheritDoc}
-   * 
-   * @throws ClassNotFoundException
    */
   public boolean isModifiable() {
     if (getDelegateClassName() == null) {
