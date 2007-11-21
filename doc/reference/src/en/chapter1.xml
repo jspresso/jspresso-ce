@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
-<chapter>
+<chapter id="chapter1">
   <title>Getting started</title>
 
   <para>This chapter will help you to understand the basics of the
@@ -449,8 +449,8 @@
       the description bean class names and properties of
       <trademark>D2S</trademark>.</para>
 
-      <para id="chapter1">The various description java beans that are provided
-      by <trademark>D2S</trademark> are detailed in the next chapter.</para>
+      <para>The various description java beans that are provided by
+      <trademark>D2S</trademark> are detailed in the next chapter.</para>
 
       <para>We will use the root package
       <code>com.d2s.framework.hrsample</code> for our application. The domain
@@ -1436,10 +1436,10 @@ public interface ContactInfo extends
           &lt;map&gt;
             &lt;entry
               key="M"
-              value="classpath:images/male-48x48.png" /&gt;
+              value="classpath:com/d2s/framework/hrsample/images/male-48x48.png" /&gt;
             &lt;entry
               key="F"
-              value="classpath:images/female-48x48.png" /&gt;
+              value="classpath:com/d2s/framework/hrsample/images/female-48x48.png" /&gt;
           &lt;/map&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -3027,5 +3027,11 @@ public class EmployeeIntegrityProcessors {
       then to override the method you want to provide an implementation
       for.</para>
     </section>
+  </section>
+
+  <section>
+    <title>Describing the views</title>
+
+    <para></para>
   </section>
 </chapter>
