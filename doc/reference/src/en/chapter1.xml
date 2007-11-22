@@ -3204,15 +3204,21 @@ public class EmployeeIntegrityProcessors {
     <section>
       <title>Component views</title>
 
-      <para> One of the most heavilly used type of view is the form-like
-      component view. Let's describe our first component view on the company
-      entity in the <filename>hrsample-frontend.xml</filename> file:</para>
+      <para>One of the most heavilly used type of view is the form-like
+      component view. We will see in this section how to describe, translate
+      and further customize a component view.</para>
 
-      <para><programlisting>&lt;bean
+      <section>
+        <title>The first shot</title>
+
+        <para>Let's describe our first component view on the company entity in
+        the <filename>hrsample-frontend.xml</filename> file:</para>
+
+        <para><programlisting>&lt;bean
   id="Company.pane"
   parent="decoratedView" <co id="decoratedView" />
   class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
-            id="BasicComponentViewDescriptor" />
+              id="BasicComponentViewDescriptor" />
   &lt;property
     name="labelsPosition"
     ref="ABOVE" /&gt; <co id="labelsPosition" />
@@ -3223,130 +3229,137 @@ public class EmployeeIntegrityProcessors {
     name="modelDescriptor"
     ref="Company" /&gt; <co id="modelDescriptor" />
 &lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="decoratedView">
-            <para>We inherit from a D2S standard bean which surrounds the wiew
-            with a title.</para>
-          </callout>
+            <callout arearefs="decoratedView">
+              <para>We inherit from a D2S standard bean which surrounds the
+              wiew with a title.</para>
+            </callout>
 
-          <callout arearefs="BasicComponentViewDescriptor">
-            <para>We want a form-like component view.</para>
-          </callout>
+            <callout arearefs="BasicComponentViewDescriptor">
+              <para>We want a form-like component view.</para>
+            </callout>
 
-          <callout arearefs="labelsPosition">
-            <para>We want each property label to be positionned above the
-            property field. We could have used the <code>ASIDE</code> constant
-            to indicate that we wanted the labels aside the fields.</para>
-          </callout>
+            <callout arearefs="labelsPosition">
+              <para>We want each property label to be positionned above the
+              property field. We could have used the <code>ASIDE</code>
+              constant to indicate that we wanted the labels aside the
+              fields.</para>
+            </callout>
 
-          <callout arearefs="columnCount">
-            <para>We want the component view to be organized in 3
-            columns.</para>
-          </callout>
+            <callout arearefs="columnCount">
+              <para>We want the component view to be organized in 3
+              columns.</para>
+            </callout>
 
-          <callout arearefs="modelDescriptor">
-            <para>We refer to the company descriptor we described in the
-            previous section.</para>
-          </callout>
-        </calloutlist>Although there are plenty of configurations that can be
-      applied to view descriptions (font, color, properties subset, ...), the
-      previous XML fragment is fully enough to get our first view up and
-      runing using the view tester. Note that unlike for the model components,
-      there is no java generation nor compilation step involved; the view
-      descriptors are just handled at runtime by <trademark>D2S</trademark>.
-      Launching the tester with the <code>Company.pane</code> view descriptor
-      id will produce the following result :</para>
+            <callout arearefs="modelDescriptor">
+              <para>We refer to the company descriptor we described in the
+              previous section.</para>
+            </callout>
+          </calloutlist>Although there are plenty of configurations that can
+        be applied to view descriptions (font, color, properties subset, ...),
+        the previous XML fragment is fully enough to get our first view up and
+        runing using the view tester. Note that unlike for the model
+        components, there is no java generation nor compilation step involved;
+        the view descriptors are just handled at runtime by
+        <trademark>D2S</trademark>. Launching the tester with the
+        <code>Company.pane</code> view descriptor id will produce the
+        following result :</para>
 
-      <para><figure>
-          <title>The first component view</title>
+        <para><figure>
+            <title>The first component view</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata align="center" fileref="../images/Company.pane.jpg" />
-            </imageobject>
-          </mediaobject>
-        </figure>You will notice several things on the screenshot above
-      :</para>
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" fileref="../images/Company.pane.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure>You will notice several things on the screenshot above
+        :</para>
 
-      <itemizedlist>
-        <listitem>
-          <para>The <code>name</code> label has been colored in red and has a
-          star marker. It is to indicate that the name property is mandatory
-          as declared during the <link linkend="n-mand">domain model
-          design</link>.</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>The <code>name</code> label has been colored in red and has
+            a star marker. It is to indicate that the name property is
+            mandatory as declared during the <link linkend="n-mand">domain
+            model design</link>.</para>
+          </listitem>
 
-        <listitem>
-          <para>The <code>createTimestamp</code> and
-          <code>lastUpdateTimestamp</code> property fields have been made
-          non-editable as <link linkend="readOnly">we declared
-          them</link>.</para>
-        </listitem>
+          <listitem>
+            <para>The <code>createTimestamp</code> and
+            <code>lastUpdateTimestamp</code> property fields have been made
+            non-editable as <link linkend="readOnly">we declared
+            them</link>.</para>
+          </listitem>
 
-        <listitem>
-          <para>The <code>contact</code> inlined component has been splitted
-          into its 4 properties (<code>address</code>, <code>city</code>,
-          <code>phone</code> and <code>email</code>). The component properties
-          are referred to using a nested property notation like
-          <emphasis>component.property</emphasis>.</para>
-        </listitem>
+          <listitem>
+            <para>The <code>contact</code> inlined component has been splitted
+            into its 4 properties (<code>address</code>, <code>city</code>,
+            <code>phone</code> and <code>email</code>). The component
+            properties are referred to using a nested property notation like
+            <emphasis>component.property</emphasis>.</para>
+          </listitem>
 
-        <listitem>
-          <para>The <code>city</code> property field has been added a list of
-          value (LOV) button. Although you cannot experiment it in the testing
-          tool, this button would bring a dialog box allowing the user to
-          look-up available cities and select one. Of course, leaving the
-          field with an incomplete value would auto-complete the value if the
-          typed-in string is sufficient to determine one and only one city or
-          bring up the LOV dialog without for the user to push the LOV button.
-          This reference field behaviour is only the consequence of having
-          declared the <code>ContactInfo</code> → <code>City</code> <link
-          linkend="BasicReferencePropertyDescriptor">relationship</link>.</para>
-        </listitem>
+          <listitem>
+            <para>The <code>city</code> property field has been added a list
+            of value (LOV) button. Although you cannot experiment it in the
+            testing tool, this button would bring a dialog box allowing the
+            user to look-up available cities and select one. Of course,
+            leaving the field with an incomplete value would auto-complete the
+            value if the typed-in string is sufficient to determine one and
+            only one city or bring up the LOV dialog without for the user to
+            push the LOV button. This reference field behaviour is only the
+            consequence of having declared the <code>ContactInfo</code> →
+            <code>City</code> <link
+            linkend="BasicReferencePropertyDescriptor">relationship</link>.</para>
+          </listitem>
 
-        <listitem>
-          <para>Whenever you try to type-in "aze" in the email property field,
-          you will obtain the following error message :</para>
+          <listitem>
+            <para>Whenever you try to type-in "aze" in the email property
+            field, you will obtain the following error message :</para>
 
-          <para><screenshot>
-              <screeninfo>Regular expression error message</screeninfo>
+            <para><screenshot>
+                <screeninfo>Regular expression error message</screeninfo>
 
-              <mediaobject>
-                <imageobject>
-                  <imagedata align="center"
-                             fileref="../images/regexp_error.jpg" />
-                </imageobject>
-              </mediaobject>
-            </screenshot>This is due to the <link
-          linkend="regexpPattern">constraint we applied on the email
-          property</link> in the <code>ContactInfo</code> inlined
-          component.</para>
-        </listitem>
+                <mediaobject>
+                  <imageobject>
+                    <imagedata align="center"
+                               fileref="../images/regexp_error.jpg" />
+                  </imageobject>
+                </mediaobject>
+              </screenshot>This is due to the <link
+            linkend="regexpPattern">constraint we applied on the email
+            property</link> in the <code>ContactInfo</code> inlined
+            component.</para>
+          </listitem>
 
-        <listitem>
-          <para>Finally, there are terms that are missing translations in
-          english. Whenever <trademark>D2S</trademark> detects such a
-          situation, it will "translate" the term using the following pattern
-          <emphasis>[language:translation key]</emphasis>. This strategy
-          allows for easy and fast identification of missing translations. You
-          will also notice that the name label has been correctly translated.
-          This is because "name" is part of the <link
-          linkend="commonsMessageSource">default translations</link>. Of
-          course, you may override this translation if wou wish in the
-          application I18N property files.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>Finally, there are terms that are missing translations in
+            english. Whenever <trademark>D2S</trademark> detects such a
+            situation, it will "translate" the term using the following
+            pattern <emphasis>[language:translation key]</emphasis>. This
+            strategy allows for easy and fast identification of missing
+            translations. You will also notice that the name label has been
+            correctly translated. This is because "name" is part of the <link
+            linkend="commonsMessageSource">default translations</link>. Of
+            course, you may override this translation if wou wish in the
+            application I18N property files.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
 
-      <para>To complete the view design, we are going to translate the missing
-      terms in the I18N property files we've opened previously. To ease the
-      editing of the I18N property files, we recommend the use of a very good
-      Eclipse plugin : the <ulink
-      url="http://www.resourcebundleeditor.com">Resource Bundle
-      Editor</ulink>.</para>
+      <section>
+        <title>Internationalization</title>
 
-      <para>For instance, <filename>Messages_en.properties</filename> could be
-      :</para>
+        <para>To complete the view design, we are going to translate the
+        missing terms in the I18N property files we've opened previously. To
+        ease the editing of the I18N property files, we recommend the use of a
+        very good Eclipse plugin : the <ulink
+        url="http://www.resourcebundleeditor.com">Resource Bundle
+        Editor</ulink>.</para>
 
-      <para><programlisting>age.below.18 = Employee is not 18 years old.
+        <para>For instance, <filename>Messages_en.properties</filename> could
+        be :</para>
+
+        <para><programlisting>age.below.18 = Employee is not 18 years old.
 
 com.d2s.framework.hrsample.model.Company = Company
 
@@ -3359,10 +3372,10 @@ createTimestamp = Created
 
 hrsample.name = Human Resources management
 
-lastUpdateTimestamp = Updated
-</programlisting>And Messages_fr.properties :</para>
+lastUpdateTimestamp = Updated</programlisting>And Messages_fr.properties
+        :</para>
 
-      <para><programlisting>age.below.18 = L'employ\u00E9 n'a pas 18 ans.
+        <para><programlisting>age.below.18 = L'employ\u00E9 n'a pas 18 ans.
 
 com.d2s.framework.hrsample.model.Company = Soci\u00E9t\u00E9
 
@@ -3376,27 +3389,176 @@ createTimestamp = Cr\u00E9\u00E9 le
 hrsample.name = Gestion des ressources humaines
 
 lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
-      test with the english locale will produce :<figure>
-          <title>Company view with english translation</title>
+        test with the english locale will produce :<figure>
+            <title>Company view with english translation</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata align="center"
-                         fileref="../images/Company.pane_en.jpg" />
-            </imageobject>
-          </mediaobject>
-        </figure></para>
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="../images/Company.pane_en.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
 
-      <para>And with the french locale :<figure>
-          <title>Company view with french translation</title>
+        <para>And with the french locale :<figure>
+            <title>Company view with french translation</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata align="center"
-                         fileref="../images/Company.pane_fr.jpg" />
-            </imageobject>
-          </mediaobject>
-        </figure></para>
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="../images/Company.pane_fr.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
+
+      <section>
+        <title>Customization</title>
+
+        <para>We certainly need to further customize the company view. This
+        includes :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Selecting the properties we want to display.</para>
+          </listitem>
+
+          <listitem>
+            <para>Ordering the displayed properties.</para>
+          </listitem>
+
+          <listitem>
+            <para>Spanning properties across multiple columns.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Assume that we would like to hide the tracing properties since,
+        after all, they are technical data. Then, we want to organize the
+        fields in 2 columns instead of 3 having the company name to span over
+        the 2 columns. Then we keep the order name, address, city, phone and
+        email.</para>
+
+        <para>The following modification to the view descriptor achieves that
+        :</para>
+
+        <para><programlisting>&lt;bean
+  id="Company.pane"
+  parent="decoratedView"
+  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  ...
+  &lt;property
+    name="columnCount"
+    value="2" /&gt; <co id="columnCount_2" />
+  ...
+  &lt;property name="propertyViewDescriptors"&gt; <co
+              id="propertyViewDescriptors" />
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="name" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="contact.address" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="contact.city" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="contact.phone" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="contact.email" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+  &lt;property name="propertyWidths"&gt; <co id="propertyWidths" />
+    &lt;map&gt;
+      &lt;entry
+        key="name"
+        value="2" /&gt;
+    &lt;/map&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting></para>
+
+        <para><calloutlist>
+            <callout arearefs="columnCount_2">
+              <para>We reduce the number of columns to 2.</para>
+            </callout>
+
+            <callout arearefs="propertyViewDescriptors">
+              <para>We declare an ordered list of sub-view descriptors that
+              contains the properties we want to display.</para>
+            </callout>
+
+            <callout arearefs="propertyWidths">
+              <para>We assign width (columns span) to properties we don't want
+              to have the default value of 1.</para>
+            </callout>
+          </calloutlist>Relaunching the view tester will produce the following
+        output :</para>
+
+        <para><figure>
+            <title>The customized company view</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="../images/Company.pane_reworked.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+
+        <para>You will notice that the name field is now alone on its line,
+        spanning over the 2 columns of the view. Of course, the tracing
+        properties have disapeared from the view.</para>
+
+        <para>There would have been another way to customize subset of
+        displayed properties for the company entity. We could have set on the
+        <code>Company</code> entity descriptor the
+        <code>renderedProperties</code> attribute that allows to set an
+        ordered list of properties to be displayed by default when an company
+        instance is displayed in any view. This modification would have
+        impacted all the application company views (including tables for
+        instance) except the ones declare their own property list.</para>
+
+        <para>To sumarize, a component view will display (higher in the list
+        has the highest priority) :</para>
+
+        <orderedlist>
+          <listitem>
+            <para>If set on the view, the
+            <code>propertyViewDescriptors</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para>If set on the model, the
+            <code>renderedProperties</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para>All the properties, in their declaration order except the
+            collection properties. In that case, the inlined components are
+            splitted as we saw it for the first shot.</para>
+          </listitem>
+        </orderedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Composite views</title>
 
       <para></para>
     </section>
