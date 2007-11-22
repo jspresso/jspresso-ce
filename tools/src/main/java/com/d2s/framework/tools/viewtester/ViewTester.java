@@ -10,6 +10,7 @@ import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -27,6 +28,7 @@ import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.util.collection.ObjectEqualityMap;
+import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
@@ -111,24 +113,29 @@ public class ViewTester {
         .getBean(viewId);
     IViewFactory<JComponent, Icon, Action> viewFactory = (IViewFactory<JComponent, Icon, Action>) appContext
         .getBean("viewFactory");
-    
+
     IView<JComponent> view = viewFactory.createView(viewDescriptor, null,
-        locale); 
-    
-    IModelConnectorFactory mapConnectorFactory = (IModelConnectorFactory) appContext.getBean("mapConnectorFactory");
-    IValueConnector modelConnector = mapConnectorFactory.createModelConnector(viewDescriptor.getModelDescriptor());
+        locale);
+
+    IModelConnectorFactory mapConnectorFactory = (IModelConnectorFactory) appContext
+        .getBean("mapConnectorFactory");
+    IValueConnector modelConnector = mapConnectorFactory
+        .createModelConnector(viewDescriptor.getModelDescriptor());
     modelConnector.setConnectorValue(new ObjectEqualityMap<String, Object>());
-    
+
     IMvcBinder mvcBinder = (IMvcBinder) appContext.getBean("mvcBinder");
     mvcBinder.bind(view.getConnector(), modelConnector);
-    
+
     JFrame testFrame = new JFrame("View tester");
     testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     testFrame.getContentPane().setLayout(new BorderLayout());
-    testFrame.getContentPane().add(
-        view.getPeer(), BorderLayout.CENTER);
+    testFrame.getContentPane().add(view.getPeer(), BorderLayout.CENTER);
 
     testFrame.pack();
+    testFrame.setSize(450, 300);
+    System.setProperty("sun.awt.exception.handler",
+        TesterExceptionHandler.class.getName());
+    SwingUtil.centerOnScreen(testFrame);
     testFrame.setVisible(true);
   }
 
@@ -166,5 +173,28 @@ public class ViewTester {
     BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
     BeanFactoryReference bf = bfl.useBeanFactory(applicationContextKey);
     return (ApplicationContext) bf.getFactory();
+  }
+
+  /**
+   * Specialized exception handler for the tester event dispatch thread.
+   * <p>
+   * Copyright 2005 Design2See. All rights reserved.
+   * <p>
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   */
+  public static class TesterExceptionHandler {
+
+    /**
+     * Handles a uncaught exception.
+     * 
+     * @param t
+     *            the uncaught exception.
+     */
+    public void handle(Throwable t) {
+      JOptionPane.showMessageDialog(null, t.getMessage(), "Error",
+          JOptionPane.ERROR_MESSAGE);
+    }
   }
 }

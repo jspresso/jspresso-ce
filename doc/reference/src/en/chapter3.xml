@@ -5,8 +5,20 @@
   <title>Views</title>
 
   <section>
-    <title></title>
+    <title>The view descriptors</title>
 
     <para></para>
+
+    <figure>
+      <title>View descriptors diagram</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="60%"
+                     fileref="../images/views-cd.png" scalefit="1"
+                     width="100%" />
+        </imageobject>
+      </mediaobject>
+    </figure>
   </section>
 </chapter>

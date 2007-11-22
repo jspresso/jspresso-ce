@@ -1,0 +1,7 @@
+class BasicPropertyViewDescriptor
+!!!217991.java!!!	getRenderedChildProperties() : List<String>
+
+    return renderedChildProperties;
+!!!218119.java!!!	setRenderedChildProperties(inout renderedChildProperties : List<String>) : void
+
+    this.renderedChildProperties = renderedChildProperties;

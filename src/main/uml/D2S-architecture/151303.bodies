@@ -1,0 +1,31 @@
+class BasicBorderViewDescriptor
+!!!212487.java!!!	getCenterViewDescriptor() : IViewDescriptor
+
+    return centerViewDescriptor;
+!!!212615.java!!!	getEastViewDescriptor() : IViewDescriptor
+
+    return eastViewDescriptor;
+!!!212743.java!!!	getNorthViewDescriptor() : IViewDescriptor
+
+    return northViewDescriptor;
+!!!212871.java!!!	getSouthViewDescriptor() : IViewDescriptor
+
+    return southViewDescriptor;
+!!!212999.java!!!	getWestViewDescriptor() : IViewDescriptor
+
+    return westViewDescriptor;
+!!!213127.java!!!	setCenterViewDescriptor(inout centerViewDescriptor : IViewDescriptor) : void
+
+    this.centerViewDescriptor = centerViewDescriptor;
+!!!213255.java!!!	setEastViewDescriptor(inout eastViewDescriptor : IViewDescriptor) : void
+
+    this.eastViewDescriptor = eastViewDescriptor;
+!!!213383.java!!!	setNorthViewDescriptor(inout northViewDescriptor : IViewDescriptor) : void
+
+    this.northViewDescriptor = northViewDescriptor;
+!!!213511.java!!!	setSouthViewDescriptor(inout southViewDescriptor : IViewDescriptor) : void
+
+    this.southViewDescriptor = southViewDescriptor;
+!!!213639.java!!!	setWestViewDescriptor(inout westViewDescriptor : IViewDescriptor) : void
+
+    this.westViewDescriptor = westViewDescriptor;

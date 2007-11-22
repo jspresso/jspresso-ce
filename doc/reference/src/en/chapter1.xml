@@ -2834,7 +2834,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
 
       <para>The following XML fragment declares these processors :</para>
 
-      <para><programlisting>&lt;bean
+      <para><programlisting language="xml">&lt;bean
   id="Employee"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
@@ -2902,7 +2902,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
       <filename>EmployeeIntegrityProcessors.java</filename> source file
       :</para>
 
-      <para><programlisting>/*
+      <para><programlisting language="java">/*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
 package com.d2s.framework.hrsample.model.processor;
@@ -3043,6 +3043,362 @@ public class EmployeeIntegrityProcessors {
   <section>
     <title>Describing the views</title>
 
-    <para></para>
+    <para>Now that we designed the complete domain model, it is time to make
+    it available to the end-user. So we need to design the views that will be
+    part of our application. As promised, we won't need a single line of gui
+    code to achieve that. As for the domain model description, the goal will
+    be :</para>
+
+    <orderedlist>
+      <listitem>
+        <para>To define precisely what we want.</para>
+      </listitem>
+
+      <listitem>
+        <para>To assemble descriptor beans in order to translate what has been
+        specified into <trademark>D2S</trademark> view descriptors.</para>
+      </listitem>
+    </orderedlist>
+
+    <para>As far as we begin to deal with GUI, internationalization (I18N)
+    comes into the game. <trademark>D2S</trademark> is definitely targeted at
+    multi-lingual applications and as such, fully supports internationalized
+    GUIs.</para>
+
+    <para>Before going further, let's create the frontend application
+    descriptor. The frontend description will logically go to the
+    <code>com.d2s.framework.hrsample.frontend</code> package. In this package,
+    we will create a <filename>hrsample-frontend.xml</filename> file as
+    described below :</para>
+
+    <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true"&gt;
+
+  &lt;!--
+   The application I18N resources. 
+  --&gt;
+  &lt;bean
+    id="applicationMessageSource"
+    class="org.springframework.context.support.ResourceBundleMessageSource"&gt;
+    &lt;property
+      name="parentMessageSource"
+      ref="commonsMessageSource" /&gt; <co id="commonsMessageSource" />
+    &lt;property name="basenames"&gt;
+      &lt;list&gt;
+        &lt;value&gt;com.d2s.framework.hrsample.i18n.Messages&lt;/value&gt; <co
+          id="basenames" />
+      &lt;/list&gt;
+    &lt;/property&gt;
+  &lt;/bean&gt;
+&lt;/beans&gt;</programlisting><calloutlist>
+        <callout arearefs="commonsMessageSource">
+          <para>We inherit the default <trademark>D2S</trademark> I18N
+          resource bundles that contain translated entries for generic
+          terms.</para>
+        </callout>
+
+        <callout arearefs="basenames">
+          <para>We declare the list of I18N resource bundles we are going to
+          use to store the translations.</para>
+        </callout>
+      </calloutlist><trademark>D2S</trademark> relies on the well-known java
+    I18N mechanism through the use of resource bundle property files.
+    Translating the application is then a matter of translating the entries
+    contained in these property files. Since <trademark>D2S</trademark> never
+    use absolute positinning but instead heavily relies on layouts, the
+    translator won't have to care about translations length.</para>
+
+    <para>As declared in the XML fragment above, we will create a
+    <code>com.d2s.framework.hrsample.i18n</code> package that will contain the
+    resource bundle property files. We will translate the application in
+    english and french; so let's create the two files
+    <filename>Messages_en.properties</filename> and
+    <filename>Messages_fr.properties</filename> that will respectively contain
+    the english and french translations. Adding a language will be just a
+    mater of creating, in the same package, a new property file with the 2
+    letter ISO code of the language. Those 2 files are empty as of now but
+    don't care about that; <trademark>D2S</trademark> will graphically notify
+    you that a translation is missing for a given language.</para>
+
+    <para>In order to ease the work of the GUI designer,
+    <trademark>D2S</trademark> provides a view tester tool that enables an
+    immediate java swing preview of each described view fragment. In order to
+    have this tool up and running, we need to create a new entry in the
+    <filename>beanRefFactory.xml</filename> file we created when designing the
+    domain model as below :</para>
+
+    <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+                      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true"&gt;
+  ...
+  &lt;bean
+    id="hrsample-viewtester-context"
+    class="org.springframework.context.support.ClassPathXmlApplicationContext"
+    lazy-init="true"&gt;
+    &lt;constructor-arg&gt;
+      &lt;list&gt;
+        &lt;value&gt;com/d2s/framework/application/commons.xml&lt;/value&gt;
+        &lt;value&gt;com/d2s/framework/tools/mock.xml&lt;/value&gt;
+        &lt;value&gt;com/d2s/framework/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
+          id="hrsample-model.xml" />
+        &lt;value&gt;com/d2s/framework/application/frontend/commons-frontend.xml&lt;/value&gt; <co
+          id="commons-frontend.xml" />
+        &lt;value&gt;com/d2s/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt; <co
+          id="commons-swing.xml" />
+        &lt;value&gt;com/d2s/framework/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt; <co
+          id="hrsample-frontend.xml" />
+      &lt;/list&gt;
+    &lt;/constructor-arg&gt;
+  &lt;/bean&gt;
+&lt;/beans&gt;</programlisting><calloutlist>
+        <callout arch="" arearefs="hrsample-model.xml">
+          <para>Our sample application domain model description.</para>
+        </callout>
+
+        <callout arearefs="commons-frontend.xml">
+          <para>The commons frontend bean definitions of the
+          <trademark>D2S</trademark> framework.</para>
+        </callout>
+
+        <callout arearefs="commons-swing.xml">
+          <para>The commons swing bean definitions of the
+          <trademark>D2S</trademark> framework.</para>
+        </callout>
+
+        <callout arearefs="hrsample-frontend.xml">
+          <para>Our sample application frontend description.</para>
+        </callout>
+      </calloutlist>In order to start the <trademark>D2S</trademark> view
+    tester tool, we will launch the
+    <code>com.d2s.framework.tools.viewtester.ViewTester</code> java class with
+    the following arguments : <code>-applicationContextKey
+    hrsample-viewtester-context -viewId &lt;view descriptor id&gt; -language
+    en</code>.</para>
+
+    <para>The application context key used above is the one we have just added
+    in the <filename>beanRefFactory.xml</filename> configuration file. Note
+    that you are able to choose the language to use for displaying the tested
+    view through the use of the <code>-language</code> option. Whenever this
+    option is omitted, the view tester will fall back to the platform default
+    locale. Changing the language when testing a view will allow for early
+    missing translations identification.</para>
+
+    <para>Finally, note that the view tester tool will not display fully
+    functional views. For instance, list of values won't be available (the
+    button will be displayed but won't trigger anything) since the view is not
+    instanciated in the scope of a complete <trademark>D2S</trademark>
+    application - no database, no controller, ... Its goal is only targeted at
+    quickly previewing the GUI layout to promote agile development.</para>
+
+    <para>We can now begin to describe our first views.</para>
+
+    <section>
+      <title>Component views</title>
+
+      <para> One of the most heavilly used type of view is the form-like
+      component view. Let's describe our first component view on the company
+      entity in the <filename>hrsample-frontend.xml</filename> file:</para>
+
+      <para><programlisting>&lt;bean
+  id="Company.pane"
+  parent="decoratedView" <co id="decoratedView" />
+  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
+            id="BasicComponentViewDescriptor" />
+  &lt;property
+    name="labelsPosition"
+    ref="ABOVE" /&gt; <co id="labelsPosition" />
+  &lt;property
+    name="columnCount"
+    value="3" /&gt; <co id="columnCount" />
+  &lt;property
+    name="modelDescriptor"
+    ref="Company" /&gt; <co id="modelDescriptor" />
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="decoratedView">
+            <para>We inherit from a D2S standard bean which surrounds the wiew
+            with a title.</para>
+          </callout>
+
+          <callout arearefs="BasicComponentViewDescriptor">
+            <para>We want a form-like component view.</para>
+          </callout>
+
+          <callout arearefs="labelsPosition">
+            <para>We want each property label to be positionned above the
+            property field. We could have used the <code>ASIDE</code> constant
+            to indicate that we wanted the labels aside the fields.</para>
+          </callout>
+
+          <callout arearefs="columnCount">
+            <para>We want the component view to be organized in 3
+            columns.</para>
+          </callout>
+
+          <callout arearefs="modelDescriptor">
+            <para>We refer to the company descriptor we described in the
+            previous section.</para>
+          </callout>
+        </calloutlist>Although there are plenty of configurations that can be
+      applied to view descriptions (font, color, properties subset, ...), the
+      previous XML fragment is fully enough to get our first view up and
+      runing using the view tester. Note that unlike for the model components,
+      there is no java generation nor compilation step involved; the view
+      descriptors are just handled at runtime by <trademark>D2S</trademark>.
+      Launching the tester with the <code>Company.pane</code> view descriptor
+      id will produce the following result :</para>
+
+      <para><figure>
+          <title>The first component view</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center" fileref="../images/Company.pane.jpg" />
+            </imageobject>
+          </mediaobject>
+        </figure>You will notice several things on the screenshot above
+      :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The <code>name</code> label has been colored in red and has a
+          star marker. It is to indicate that the name property is mandatory
+          as declared during the <link linkend="n-mand">domain model
+          design</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <code>createTimestamp</code> and
+          <code>lastUpdateTimestamp</code> property fields have been made
+          non-editable as <link linkend="readOnly">we declared
+          them</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <code>contact</code> inlined component has been splitted
+          into its 4 properties (<code>address</code>, <code>city</code>,
+          <code>phone</code> and <code>email</code>). The component properties
+          are referred to using a nested property notation like
+          <emphasis>component.property</emphasis>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <code>city</code> property field has been added a list of
+          value (LOV) button. Although you cannot experiment it in the testing
+          tool, this button would bring a dialog box allowing the user to
+          look-up available cities and select one. Of course, leaving the
+          field with an incomplete value would auto-complete the value if the
+          typed-in string is sufficient to determine one and only one city or
+          bring up the LOV dialog without for the user to push the LOV button.
+          This reference field behaviour is only the consequence of having
+          declared the <code>ContactInfo</code> → <code>City</code> <link
+          linkend="BasicReferencePropertyDescriptor">relationship</link>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Whenever you try to type-in "aze" in the email property field,
+          you will obtain the following error message :</para>
+
+          <para><screenshot>
+              <screeninfo>Regular expression error message</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata align="center"
+                             fileref="../images/regexp_error.jpg" />
+                </imageobject>
+              </mediaobject>
+            </screenshot>This is due to the <link
+          linkend="regexpPattern">constraint we applied on the email
+          property</link> in the <code>ContactInfo</code> inlined
+          component.</para>
+        </listitem>
+
+        <listitem>
+          <para>Finally, there are terms that are missing translations in
+          english. Whenever <trademark>D2S</trademark> detects such a
+          situation, it will "translate" the term using the following pattern
+          <emphasis>[language:translation key]</emphasis>. This strategy
+          allows for easy and fast identification of missing translations. You
+          will also notice that the name label has been correctly translated.
+          This is because "name" is part of the <link
+          linkend="commonsMessageSource">default translations</link>. Of
+          course, you may override this translation if wou wish in the
+          application I18N property files.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>To complete the view design, we are going to translate the missing
+      terms in the I18N property files we've opened previously. To ease the
+      editing of the I18N property files, we recommend the use of a very good
+      Eclipse plugin : the <ulink
+      url="http://www.resourcebundleeditor.com">Resource Bundle
+      Editor</ulink>.</para>
+
+      <para>For instance, <filename>Messages_en.properties</filename> could be
+      :</para>
+
+      <para><programlisting>age.below.18 = Employee is not 18 years old.
+
+com.d2s.framework.hrsample.model.Company = Company
+
+contact.address = Address
+contact.city    = City
+contact.email   = Email
+contact.phone   = Phone
+
+createTimestamp = Created
+
+hrsample.name = Human Resources management
+
+lastUpdateTimestamp = Updated
+</programlisting>And Messages_fr.properties :</para>
+
+      <para><programlisting>age.below.18 = L'employ\u00E9 n'a pas 18 ans.
+
+com.d2s.framework.hrsample.model.Company = Soci\u00E9t\u00E9
+
+contact.address = Adresse
+contact.city    = Ville
+contact.email   = Email
+contact.phone   = T\u00E9l\u00E9phone
+
+createTimestamp = Cr\u00E9\u00E9 le
+
+hrsample.name = Gestion des ressources humaines
+
+lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
+      test with the english locale will produce :<figure>
+          <title>Company view with english translation</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         fileref="../images/Company.pane_en.jpg" />
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <para>And with the french locale :<figure>
+          <title>Company view with french translation</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         fileref="../images/Company.pane_fr.jpg" />
+            </imageobject>
+          </mediaobject>
+        </figure></para>
+
+      <para></para>
+    </section>
   </section>
 </chapter>

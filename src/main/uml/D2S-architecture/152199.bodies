@@ -1,0 +1,19 @@
+class BasicEvenGridViewDescriptor
+!!!216327.java!!!	getChildViewDescriptors() : IViewDescriptor
+
+    return childViewDescriptors;
+!!!216455.java!!!	getDrivingDimension() : int
+
+    return drivingDimension;
+!!!216583.java!!!	getDrivingDimensionCellCount() : int
+
+    return drivingDimensionCellCount;
+!!!216711.java!!!	setChildViewDescriptors(inout viewDescriptors : List<IViewDescriptor>) : void
+
+    this.childViewDescriptors = viewDescriptors;
+!!!216839.java!!!	setDrivingDimension(in drivingDimension : int) : void
+
+    this.drivingDimension = drivingDimension;
+!!!216967.java!!!	setDrivingDimensionCellCount(in drivingDimensionCellCount : int) : void
+
+    this.drivingDimensionCellCount = drivingDimensionCellCount;

@@ -62,7 +62,7 @@ public class MockMessageSource implements MessageSource {
   }
 
   private String getTranslation(String key, Locale locale) {
-    return "[" + locale.getISO3Language() + ":" + key + "]";
+    return "[" + locale.getLanguage() + ":" + key + "]";
   }
 
 }

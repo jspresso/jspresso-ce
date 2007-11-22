@@ -63,7 +63,7 @@ public class BasicStringPropertyDescriptor extends
         && !Pattern.matches(getRegexpPattern(), propertyValueAsString)) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value (" + propertyValueAsString + ") does not match pattern ["
-          + getRegexpPattern() + "] on [" + component + "].") {
+          + getRegexpPatternSample() + "] on [" + component + "].") {
 
         private static final long serialVersionUID = 7459823123892198831L;
 
