@@ -12,10 +12,10 @@
 	<packaging>jar</packaging>
 	<name>Design2See Application Framework - Tools</name>
 	<dependencies>
-		<dependency>
-			<groupId>com.design2see</groupId>
-			<artifactId>d2s-model</artifactId>
-		</dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-application</artifactId>
+    </dependency>
 		<dependency>
 			<groupId>freemarker</groupId>
 			<artifactId>freemarker</artifactId>

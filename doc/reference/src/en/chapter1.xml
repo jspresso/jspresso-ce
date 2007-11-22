@@ -578,6 +578,9 @@
         &lt;property
           name="type"
           ref="DATE_TIME" /&gt; <co id="t-DATE_TIME" />
+        &lt;property
+          name="readOnly"
+          value="true" /&gt; <co id="readOnly" />
       &lt;/bean&gt;
       &lt;bean
         class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
@@ -587,6 +590,9 @@
         &lt;property
           name="type"
           ref="DATE_TIME" /&gt;
+        &lt;property
+          name="readOnly"
+          value="true" /&gt;
       &lt;/bean&gt;
     &lt;/list&gt;
   &lt;/property&gt;
@@ -610,6 +616,11 @@
           (<code>DATE_TIME</code> constant). The alternative would have been
           to round the property and loose the time precision; in that case, we
           would have used the <code>DATE</code> constant.</para>
+        </callout>
+
+        <callout arearefs="readOnly">
+          <para>We don't want this property to be updatable by the end user so
+          we make it read-only.</para>
         </callout>
 
         <callout arearefs="t-uncloned">
@@ -654,7 +665,7 @@
       &lt;list&gt;
         &lt;value&gt;com/d2s/framework/application/commons.xml&lt;/value&gt; <co
             id="brf-commons" />
-        &lt;value&gt;com/d2s/framework/tools/entitygenerator/mock.xml&lt;/value&gt; <co
+        &lt;value&gt;com/d2s/framework/tools/mock.xml&lt;/value&gt; <co
             id="brf-mock" />
         &lt;value&gt;com/d2s/framework/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
             id="brf-model" />

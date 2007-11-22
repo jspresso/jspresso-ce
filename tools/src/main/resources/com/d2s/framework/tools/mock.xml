@@ -4,7 +4,9 @@
   default-lazy-init="true">
 
   <!--
-    Mock definitions for the entity generator.
+    Mock definitions for the tools.
   -->
   <bean id="applicationSession" class="com.d2s.framework.application.backend.session.basic.BasicApplicationSession" />
+
+  <bean id="queryEntitiesBackAction" class="com.d2s.framework.application.backend.action.MockBackendAction"/>
 </beans>

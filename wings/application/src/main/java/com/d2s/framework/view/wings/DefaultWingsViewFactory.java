@@ -67,8 +67,6 @@ import org.wings.table.STableColumn;
 import org.wings.text.SDateFormatter;
 import org.wings.tree.SDefaultTreeCellRenderer;
 import org.wingx.XCalendar;
-import org.wingx.XTable;
-import org.wingx.table.XTableColumn;
 
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.model.BeanCollectionModule;
@@ -252,7 +250,9 @@ public class DefaultWingsViewFactory implements
     }
     if (view != null) {
       try {
-        actionHandler.checkAccess(viewDescriptor);
+        if (actionHandler != null) {
+          actionHandler.checkAccess(viewDescriptor);
+        }
         if (viewDescriptor.getForeground() != null) {
           view.getPeer().setForeground(viewDescriptor.getForeground());
         }
@@ -692,7 +692,7 @@ public class DefaultWingsViewFactory implements
    * @return the created table.
    */
   protected STable createSTable() {
-    STable table = new XTable() {
+    STable table = new STable() {
 
       private static final long serialVersionUID = -8821125434835138650L;
       private SCellRendererPane cellRendererPane = new SCellRendererPane() {
@@ -1001,7 +1001,7 @@ public class DefaultWingsViewFactory implements
           public void connectorValueChange(ConnectorValueChangeEvent evt) {
             Object cardModel = evt.getNewValue();
             boolean accessGranted = true;
-            if (cardModel instanceof ISecurable) {
+            if (cardModel instanceof ISecurable && actionHandler != null) {
               try {
                 actionHandler.checkAccess((ISecurable) cardModel);
               } catch (SecurityException se) {
@@ -2243,9 +2243,6 @@ public class DefaultWingsViewFactory implements
         maxColumnCharacterLength);
     for (int i = 0; i < viewDescriptor.getColumnViewDescriptors().size(); i++) {
       STableColumn column = viewComponent.getColumnModel().getColumn(i);
-      if (column instanceof XTableColumn) {
-        ((XTableColumn) column).setSortable(true);
-      }
       String propertyName = viewDescriptor.getColumnViewDescriptors().get(i)
           .getName();
       column.setIdentifier(propertyName);

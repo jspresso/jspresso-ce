@@ -296,7 +296,9 @@ public class DefaultSwingViewFactory implements
     }
     if (view != null) {
       try {
-        actionHandler.checkAccess(viewDescriptor);
+        if (actionHandler != null) {
+          actionHandler.checkAccess(viewDescriptor);
+        }
         if (viewDescriptor.getForeground() != null) {
           view.getPeer().setForeground(viewDescriptor.getForeground());
         }
@@ -1055,7 +1057,7 @@ public class DefaultSwingViewFactory implements
           public void connectorValueChange(ConnectorValueChangeEvent evt) {
             Object cardModel = evt.getNewValue();
             boolean accessGranted = true;
-            if (cardModel instanceof ISecurable) {
+            if (cardModel instanceof ISecurable && actionHandler != null) {
               try {
                 actionHandler.checkAccess((ISecurable) cardModel);
               } catch (SecurityException se) {
