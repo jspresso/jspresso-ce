@@ -19,14 +19,14 @@
 
   <bean
     id="removeCollectionFromMasterBackAction"
-    class="com.d2s.framework.application.backend.action.MockBackendAction" />
+    class="com.d2s.framework.application.backend.action.RemoveCollectionFromMasterAction" />
 
   <bean
     id="smartEntityCloneFactory"
     class="com.d2s.framework.model.entity.SmartEntityCloneFactory">
     <property
       name="accessorFactory"
-      ref="mapAccessorFactory" />
+      ref="beanAccessorFactory" />
   </bean>
 
   <bean

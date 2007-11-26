@@ -26,13 +26,11 @@ import org.springframework.context.ApplicationContext;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.IFrontendController;
-import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.model.IModelConnectorFactory;
-import com.d2s.framework.util.collection.ObjectEqualityMap;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.view.IView;
-import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -113,8 +111,6 @@ public class ViewTester {
     ApplicationContext appContext = getApplicationContext();
     IViewDescriptor viewDescriptor = (IViewDescriptor) appContext
         .getBean(viewId);
-    IViewFactory<JComponent, Icon, Action> viewFactory = (IViewFactory<JComponent, Icon, Action>) appContext
-        .getBean("viewFactory");
 
     IFrontendController<JComponent, Icon, Action> mockFrontController = (IFrontendController<JComponent, Icon, Action>) appContext
         .getBean("applicationFrontController");
@@ -123,17 +119,21 @@ public class ViewTester {
 
     mockFrontController.start(mockBackController, locale);
 
-    IView<JComponent> view = viewFactory.createView(viewDescriptor,
-        mockFrontController, locale);
+    IView<JComponent> view = mockFrontController.getViewFactory().createView(
+        viewDescriptor, mockFrontController, locale);
 
-    IModelConnectorFactory mapConnectorFactory = (IModelConnectorFactory) appContext
-        .getBean("mapConnectorFactory");
-    IValueConnector modelConnector = mapConnectorFactory
-        .createModelConnector(viewDescriptor.getModelDescriptor());
-    modelConnector.setConnectorValue(new ObjectEqualityMap<String, Object>());
+    IValueConnector modelConnector = mockBackController
+        .getBeanConnectorFactory().createModelConnector(
+            viewDescriptor.getModelDescriptor());
 
-    IMvcBinder mvcBinder = (IMvcBinder) appContext.getBean("mvcBinder");
-    mvcBinder.bind(view.getConnector(), modelConnector);
+    IEntityFactory entityFactory = mockBackController.getEntityFactory();
+
+    modelConnector.setConnectorValue(entityFactory
+        .createEntityInstance(((IComponentDescriptor) viewDescriptor
+            .getModelDescriptor()).getComponentContract()));
+
+    mockFrontController.getMvcBinder()
+        .bind(view.getConnector(), modelConnector);
 
     JFrame testFrame = new JFrame("View tester");
     testFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

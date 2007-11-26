@@ -3196,8 +3196,8 @@ public class EmployeeIntegrityProcessors {
     functional views. For instance, list of values won't be available (the
     button will be displayed but won't trigger anything) since the view is not
     instanciated in the scope of a complete <trademark>D2S</trademark>
-    application - no database, no controller, ... Its goal is only targeted at
-    quickly previewing the GUI layout to promote agile development.</para>
+    application - no database, ... Its goal is only targeted at quickly
+    previewing the GUI layout to promote agile development.</para>
 
     <para>We can now begin to describe our first views.</para>
 
@@ -3300,16 +3300,28 @@ public class EmployeeIntegrityProcessors {
 
           <listitem>
             <para>The <code>city</code> property field has been added a list
-            of value (LOV) button. Although you cannot experiment it in the
-            testing tool, this button would bring a dialog box allowing the
-            user to look-up available cities and select one. Of course,
-            leaving the field with an incomplete value would auto-complete the
-            value if the typed-in string is sufficient to determine one and
-            only one city or bring up the LOV dialog without for the user to
-            push the LOV button. This reference field behaviour is only the
-            consequence of having declared the <code>ContactInfo</code> →
-            <code>City</code> <link
-            linkend="BasicReferencePropertyDescriptor">relationship</link>.</para>
+            of value (LOV) button. This button will bring a dialog box
+            allowing the user to look-up available cities and select
+            one.</para>
+
+            <para><screenshot>
+                <screeninfo>City LOV</screeninfo>
+
+                <mediaobject>
+                  <imageobject>
+                    <imagedata align="center" fileref="../images/Lov.jpg" />
+                  </imageobject>
+                </mediaobject>
+              </screenshot>Of course, leaving the field with an incomplete
+            value would auto-complete the value if the typed-in string is
+            sufficient to determine one and only one city or bring up the LOV
+            dialog without for the user to push the LOV button. This reference
+            field behaviour is only the consequence of having declared the
+            <code>ContactInfo</code> → <code>City</code> <link
+            linkend="BasicReferencePropertyDescriptor">relationship</link>. In
+            the view tester tool, the search button and the auto-completion
+            are not functional since we don't have any backend to rely
+            on.</para>
           </listitem>
 
           <listitem>
@@ -3516,7 +3528,8 @@ lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="../images/Company.pane_reworked.jpg" />
+                <imagedata align="center"
+                           fileref="../images/Company.pane_reworked.jpg" />
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3569,7 +3582,7 @@ lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
       available in a secondary tab.</para>
 
       <section>
-        <title>The first composite view : a tab view</title>
+        <title>The first composite view</title>
 
         <para>Such a tab panel is called a composite view; its objective is to
         assemble sub-views into a more user-friendly graphical structure. In
@@ -3868,6 +3881,98 @@ lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
             but also the most powerful one.</para>
           </listitem>
         </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Collection views</title>
+
+      <para>The next step in our frontend development is to display (and edit)
+      collection relationships between components. We will achieve this using
+      collection views; these type of views include multi-column table views
+      and list views. In this section, you will learn how to build a
+      multi-level master-detail view on the company structure.</para>
+
+      <section>
+        <title>The first collection view</title>
+
+        <para>We need to give access to the end-user a mean to edit the
+        departments contained in a company. As we defined it in the domain
+        model, there is a 1-N relationship between the two so we will design a
+        table view that displays 1 department per row and link this view to
+        the company one.</para>
+
+        <para>Let's consider the following XML fragment :</para>
+
+        <para><programlisting>&lt;bean
+  id="Company-departments.table"
+  parent="decoratedView"
+  class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt; <co
+              id="BasicTableViewDescriptor" />
+  &lt;property
+    name="modelDescriptor"
+    ref="Company-departments" /&gt; <co id="Company-departments-model" />
+&lt;/bean&gt;
+
+&lt;bean
+  id="Company.organization.view"
+  class="com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
+              id="BasicSplitViewDescriptor" />
+  &lt;property
+    name="modelDescriptor"
+    ref="Company" /&gt; <co id="Company-model" />
+  &lt;property
+    name="leftTopViewDescriptor"
+    ref="Company.tab.pane" /&gt; <co id="leftTopViewDescriptor" />
+  &lt;property
+    name="rightBottomViewDescriptor"
+    ref="Company-departments.table" /&gt; <co id="rightBottomViewDescriptor" />
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="BasicTableViewDescriptor">
+              <para>We describe a table view.</para>
+            </callout>
+
+            <callout arearefs="Company-departments-model">
+              <para>Unlike component views, collection views are backed by the
+              N end of a 1-N relationship. Here, we reference the
+              <code>Company</code> → <code>Department</code> relationhip we've
+              previously declared in the domain model.</para>
+            </callout>
+
+            <callout arearefs="BasicSplitViewDescriptor">
+              <para>We organize the departments table view and the company
+              view in a new type of composite view : a split view.</para>
+            </callout>
+
+            <callout arearefs="Company-model">
+              <para>This composite view is still a view backed by a
+              company.</para>
+            </callout>
+
+            <callout arearefs="leftTopViewDescriptor">
+              <para>The top part of the split view is the company component
+              view.</para>
+            </callout>
+
+            <callout arearefs="rightBottomViewDescriptor">
+              <para>The bottom part of the split view is the departments table
+              view.</para>
+            </callout>
+          </calloutlist></para>
+
+        <para>After adding the necessary translations as usual, and linking a
+        new icon to describe the department entities, re-launching the view
+        tester produces the following window :</para>
+
+        <para><screenshot>
+            <screeninfo></screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="???" />
+              </imageobject>
+            </mediaobject>
+          </screenshot></para>
       </section>
     </section>
   </section>
