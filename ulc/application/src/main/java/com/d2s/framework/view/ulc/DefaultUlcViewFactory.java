@@ -2395,7 +2395,8 @@ public class DefaultUlcViewFactory implements
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, childView.getPeer(),
             childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                locale));
+                locale)
+                + TOOLTIP_ELLIPSIS);
       } else {
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, childView.getPeer());

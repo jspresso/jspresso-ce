@@ -3535,7 +3535,7 @@ lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
         instance) except the ones declare their own property list.</para>
 
         <para>To sumarize, a component view will display (higher in the list
-        has the highest priority) :</para>
+        has higher priority) :</para>
 
         <orderedlist>
           <listitem>
@@ -3560,7 +3560,315 @@ lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
     <section>
       <title>Composite views</title>
 
-      <para></para>
+      <para>Now that we have seen how to provide the end-user with basic
+      component editing, we need to compose these views into more complex
+      ones. As an example, let's say that you would like to have the tracing
+      properties back in the company view, but in a separated panel so that
+      the main screen is not overloaded by fields that are not useful at first
+      sight. A classic way go is to introduce tabs with the tracing properties
+      available in a secondary tab.</para>
+
+      <section>
+        <title>The first composite view : a tab view</title>
+
+        <para>Such a tab panel is called a composite view; its objective is to
+        assemble sub-views into a more user-friendly graphical structure. In
+        the following XML fragment, we will describe the component view to
+        display the tracing properties and assemble the company view and the
+        tracing view into a tab composite view :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Traceable.pane"
+  parent="decoratedView"
+  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
+              id="Traceable.pane" />
+  &lt;property
+    name="labelsPosition"
+    ref="ABOVE" /&gt;
+  &lt;property
+    name="columnCount"
+    value="2" /&gt;
+  &lt;property
+    name="modelDescriptor"
+    ref="Traceable" /&gt; <co id="modelDescriptor-traceable" />
+  &lt;property name="propertyViewDescriptors"&gt;
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="createTimestamp" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="lastUpdateTimestamp" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Company.tab.pane"
+  class="com.d2s.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt; <co
+              id="BasicTabViewDescriptor" />
+  &lt;property
+    name="modelDescriptor"
+    ref="Company" /&gt;
+  &lt;property name="viewDescriptors"&gt; <co id="viewDescriptors-tab" />
+    &lt;list&gt;
+      &lt;ref local="Company.pane" /&gt;
+      &lt;ref local="Traceable.pane" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="Traceable.pane">
+              <para>We describe a new component view descriptor for the
+              tracing properties.</para>
+            </callout>
+
+            <callout arearefs="modelDescriptor-traceable">
+              <para>You may notice that the model descriptor declared for this
+              new component view descriptor is <code>Traceable</code> and not
+              <code>Company</code>. The consequence is that this tracing view
+              will be usable for all traceable components and not only
+              companies; we leverage the polymorphic nature of the domain
+              components.</para>
+            </callout>
+
+            <callout arearefs="BasicTabViewDescriptor">
+              <para>We want a tab composite view.</para>
+            </callout>
+
+            <callout arearefs="viewDescriptors-tab">
+              <para>We give an ordered list of views to be displayed in the
+              tabs. Of course, these sub-views may be any type of view,
+              including other composite views.</para>
+            </callout>
+          </calloutlist>After having completed the I18N property files with
+        the <code>com.d2s.framework.hrsample.model.Traceable</code> entry, we
+        can launch the view tester on the <code>Company.tab.pane</code> view
+        :</para>
+
+        <para><figure>
+            <title>The tabbed company view</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="../images/Company.tab.pane.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
+
+      <section>
+        <title>Improving the view aspect</title>
+
+        <para>We can make the view a little more attractive by adding icons
+        and tooltips. Using <trademark>D2S</trademark>, it is quite
+        straightforward by completing the descriptors :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>For the icons, we want to assign an image to the model
+            components themselves so that whenever one of them is used as
+            model, the framework may decide to use the image to improve the
+            view appearance.</para>
+          </listitem>
+
+          <listitem>
+            <para>For the tooltips, it is more link to the user interface
+            itself, so we will declare it on the view; but in fact, we will
+            not declare a tooltip as such but rather bring a description
+            information to the view so that the framework may, at runtime,
+            transform this description as a tooltip.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The following XML fragment assigns an icon image to the
+        <code>Company</code> and the <code>Traceable</code> components
+        :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Traceable"
+  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
+  ...
+  &lt;property
+    name="iconImageURL"
+    value="classpath:com/d2s/framework/hrsample/images/traceable-48x48.png" /&gt; <co
+              id="iconImageURL" />
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Company"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property
+    name="iconImageURL"
+    value="classpath:com/d2s/framework/hrsample/images/company-48x48.png" /&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="iconImageURL">
+              <para>We declare the URL used to reference the image to be used
+              to represent a traceable component. Same applies for the
+              company.</para>
+            </callout>
+          </calloutlist>And we assign a more friendly description to both
+        component views. As for every potentially displayed string, these
+        decriptions are entries in the I18N property files that we will
+        translate. The following XML fragments achieves that :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Traceable.pane"
+  parent="decoratedView"
+  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  ...
+  &lt;property
+    name="description"
+    value="traceable.editing"&gt; <co id="traceable.editing" />
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Company.pane"
+  parent="decoratedView"
+  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  ...
+  &lt;property
+    name="description"
+    value="company.editing"&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="traceable.editing">
+              <para>We declare an I18N entry to describe the traceable
+              component view. Same applies for the company component
+              view.</para>
+            </callout>
+          </calloutlist>Re-launching the view tester displays the following
+        window :</para>
+
+        <para><figure>
+            <title>The improved tab company view</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="../images/Company.tab.pane_reworked.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+
+        <para>There are several remarks regarding what we have just done
+        :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Name, description and icons can be used in different layers
+            of the application. <trademark>D2S</trademark> will then take
+            advantage of these attributes to generate tooltips, to place
+            icons, to fill-in labels in the following order (higher in the
+            list has higher priority) :</para>
+
+            <orderedlist>
+              <listitem>
+                <para>Name, description and iconImageURL (each attribute can
+                be independently overridden) set on the view
+                descriptor.</para>
+              </listitem>
+
+              <listitem>
+                <para>Name, description and iconImageURL set the model
+                descriptor on which the view descriptor relies.</para>
+              </listitem>
+            </orderedlist>
+          </listitem>
+
+          <listitem>
+            <para>To reference an image to be used as icon, you may use any
+            kind of URL (HTTP, file) but <trademark>D2S</trademark> provides a
+            very useful, specialized URL which is the <code>classpath:</code>
+            URL. Such a URL may be used to reference any resource present in
+            the application classpath. As an example, we have used the
+            <code>classpath:com/d2s/framework/hrsample/images/company-48x48.png</code>
+            URL to load an image from the
+            <code>com.d2s.framework.hrsample.images</code> package. This
+            prevents the developer from hard-coding references to application
+            external resources and promotes portability across deployment
+            environments.</para>
+          </listitem>
+
+          <listitem>
+            <para>Whenever you want to link an icon image to a component or a
+            view, you don't have to care about the actual size of the image.
+            The framework will dynamically resize it for you at runtime,
+            depending of what it wants to use it for. As a general rule, you
+            might consider using little over sized images (48x48 is a good
+            compromise) since image reduction won't degrade quality whereas
+            image expansion will.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Other composite views</title>
+
+        <para><trademark>D2S</trademark> offers a rich set of composite view
+        descriptors. Although we won't detail them in this section, the
+        following enumeration lists them :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>BasicTabViewDescriptor</code> (we've just used it) to
+            organize sub-views in tabs.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>BasicBorderViewDescriptor</code> to layout up to 5
+            sub-views at north, south, east, west and center.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>BasicSplitViewDescriptor</code> to layout 2 sub-view
+            within a separator splitted panel. The orientation of the split
+            may be vertical or horizontal.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>BasicEvenGridViewDescriptor</code> to layout an
+            arbitrary number of sub-views into a grid with equally sized
+            cells. As for component views, you only set up the driving
+            dimension (horizontal or vertical), the maximum number of cells in
+            the driving dimension and an ordered list of the sub-views to be
+            contained in the cells. Whenever the line (or column) reaches the
+            maximum number of cells allowed, a new line (or column) is
+            created.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>BasicConstrainedGridViewDescriptor</code> lets you
+            organize sub-views in a grid where each cell behaviour is
+            determined by the following attributes :</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>position (row, column)</para>
+              </listitem>
+
+              <listitem>
+                <para>height (row span) and width (column span)</para>
+              </listitem>
+
+              <listitem>
+                <para>width resizability and height resizability</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>This is certainly the most complex composite view descriptor
+            but also the most powerful one.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
     </section>
   </section>
 </chapter>

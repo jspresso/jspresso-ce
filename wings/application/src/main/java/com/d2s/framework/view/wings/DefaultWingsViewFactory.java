@@ -2322,7 +2322,8 @@ public class DefaultWingsViewFactory implements
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, tabView,
             childViewDescriptor.getI18nDescription(getTranslationProvider(),
-                locale));
+                locale)
+                + TOOLTIP_ELLIPSIS);
       } else {
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, tabView);
