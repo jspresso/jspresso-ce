@@ -54,12 +54,12 @@ public abstract class AbstractAddCollectionToMasterAction extends
           .getComponentContract();
       Object master = collectionConnector.getParentConnector()
           .getConnectorValue();
-      ICollectionAccessor collectionAccessor = getAccessorFactory(context)
-          .createCollectionPropertyAccessor(
-              collectionConnector.getId(),
-              ((IModelValueConnector) collectionConnector).getModelProvider()
-                  .getModelDescriptor().getComponentDescriptor()
-                  .getComponentContract(), newComponentContract);
+      ICollectionAccessor collectionAccessor = getAccessorFactory(master,
+          context).createCollectionPropertyAccessor(
+          collectionConnector.getId(),
+          ((IModelValueConnector) collectionConnector).getModelProvider()
+              .getModelDescriptor().getComponentDescriptor()
+              .getComponentContract(), newComponentContract);
       if (collectionAccessor instanceof IModelDescriptorAware) {
         ((IModelDescriptorAware) collectionAccessor)
             .setModelDescriptor(getModelDescriptor(context));

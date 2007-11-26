@@ -24,6 +24,8 @@ import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 import org.springframework.context.ApplicationContext;
 
+import com.d2s.framework.application.backend.IBackendController;
+import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
@@ -114,8 +116,15 @@ public class ViewTester {
     IViewFactory<JComponent, Icon, Action> viewFactory = (IViewFactory<JComponent, Icon, Action>) appContext
         .getBean("viewFactory");
 
-    IView<JComponent> view = viewFactory.createView(viewDescriptor, null,
-        locale);
+    IFrontendController<JComponent, Icon, Action> mockFrontController = (IFrontendController<JComponent, Icon, Action>) appContext
+        .getBean("applicationFrontController");
+    IBackendController mockBackController = (IBackendController) appContext
+        .getBean("applicationBackController");
+
+    mockFrontController.start(mockBackController, locale);
+
+    IView<JComponent> view = viewFactory.createView(viewDescriptor,
+        mockFrontController, locale);
 
     IModelConnectorFactory mapConnectorFactory = (IModelConnectorFactory) appContext
         .getBean("mapConnectorFactory");
@@ -193,6 +202,7 @@ public class ViewTester {
      *            the uncaught exception.
      */
     public void handle(Throwable t) {
+      t.printStackTrace();
       JOptionPane.showMessageDialog(null, t.getMessage(), "Error",
           JOptionPane.ERROR_MESSAGE);
     }

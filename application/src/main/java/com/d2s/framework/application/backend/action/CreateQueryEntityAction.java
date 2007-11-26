@@ -75,7 +75,8 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
             .getChildConnector(collectionIndex).getConnectorValue();
       }
       if (masterEntity != null) {
-        IAccessorFactory accessorFactory = getAccessorFactory(context);
+        IAccessorFactory accessorFactory = getAccessorFactory(masterEntity,
+            context);
         for (Map.Entry<String, String> initializedAttribute : initializationMapping
             .entrySet()) {
           try {

@@ -64,8 +64,8 @@ public final class UlcUtil {
     ULCWindow parent = (ULCWindow) w.getParent();
     if (parent != null) {
       Dimension parentSize = parent.getSize();
-      w.setLocation((parentSize.getWidth() - w.getWidth()) / 2, (parentSize
-          .getHeight() - w.getHeight()) / 2);
+      w.setLocation(parent.getX() + (parentSize.getWidth() - w.getWidth()) / 2,
+          parent.getY() + (parentSize.getHeight() - w.getHeight()) / 2);
     }
   }
 

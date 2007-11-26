@@ -30,7 +30,7 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
    * {@inheritDoc}
    */
   @Override
-  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
+  protected IAccessorFactory getBeanAccessorFactory(Map<String, Object> context) {
     return getController(context).getMapAccessorFactory();
   }
 

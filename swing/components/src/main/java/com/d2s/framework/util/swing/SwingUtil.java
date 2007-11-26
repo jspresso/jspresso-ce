@@ -89,8 +89,8 @@ public final class SwingUtil {
     Container parent = w.getParent();
     if (parent != null) {
       Dimension parentSize = parent.getSize();
-      w.setLocation((parentSize.width - w.getWidth()) / 2,
-          (parentSize.height - w.getHeight()) / 2);
+      w.setLocation(parent.getX() + (parentSize.width - w.getWidth()) / 2,
+          parent.getY() + (parentSize.height - w.getHeight()) / 2);
     }
   }
 

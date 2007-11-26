@@ -3,6 +3,9 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -22,7 +25,8 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 public class BasicComponentDescriptorRegistry implements
     IComponentDescriptorRegistry, ApplicationContextAware {
 
-  private ApplicationContext componentApplicationContext;
+  private ApplicationContext  componentApplicationContext;
+  private Map<String, String> contractNameIdMap;
 
   /**
    * {@inheritDoc}
@@ -30,8 +34,11 @@ public class BasicComponentDescriptorRegistry implements
   @SuppressWarnings("unchecked")
   public IComponentDescriptor<?> getComponentDescriptor(
       Class<? extends IComponent> componentContract) {
+    if (contractNameIdMap == null) {
+      buildContractNameIdMap();
+    }
     return (IComponentDescriptor<IComponent>) componentApplicationContext
-        .getBean(componentContract.getName());
+        .getBean(contractNameIdMap.get(componentContract.getName()));
   }
 
   /**
@@ -44,5 +51,17 @@ public class BasicComponentDescriptorRegistry implements
    */
   public void setApplicationContext(ApplicationContext applicationContext) {
     this.componentApplicationContext = applicationContext;
+  }
+
+  @SuppressWarnings("unchecked")
+  private void buildContractNameIdMap() {
+    contractNameIdMap = new HashMap<String, String>();
+    Map<String, IComponentDescriptor<?>> idToComponentDescriptors = componentApplicationContext
+        .getBeansOfType(IComponentDescriptor.class);
+    for (Map.Entry<String, IComponentDescriptor<?>> descriptorEntry : idToComponentDescriptors
+        .entrySet()) {
+      contractNameIdMap.put(descriptorEntry.getValue().getComponentContract()
+          .getName(), descriptorEntry.getKey());
+    }
   }
 }

@@ -153,14 +153,42 @@ public abstract class AbstractBackendAction extends AbstractAction {
   }
 
   /**
-   * Gets the accessorFactory.
+   * Gets the beanAccessorFactory.
    * 
    * @param context
    *            the action context.
-   * @return the accessorFactory.
+   * @return the beanAccessorFactory.
    */
-  protected IAccessorFactory getAccessorFactory(Map<String, Object> context) {
+  protected IAccessorFactory getBeanAccessorFactory(Map<String, Object> context) {
     return getController(context).getBeanAccessorFactory();
+  }
+
+  /**
+   * Gets the mapAccessorFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the mapAccessorFactory.
+   */
+  protected IAccessorFactory getMapAccessorFactory(Map<String, Object> context) {
+    return getController(context).getMapAccessorFactory();
+  }
+
+  /**
+   * Gets the correct accessor factory to access a target object properties.
+   * 
+   * @param target
+   *            the target to access.
+   * @param context
+   *            the action context.
+   * @return either the map or bean accessor factory.
+   */
+  protected IAccessorFactory getAccessorFactory(Object target,
+      Map<String, Object> context) {
+    if (target instanceof Map) {
+      return getMapAccessorFactory(context);
+    }
+    return getBeanAccessorFactory(context);
   }
 
   /**
