@@ -3384,8 +3384,9 @@ createTimestamp = Created
 
 hrsample.name = Human Resources management
 
-lastUpdateTimestamp = Updated</programlisting>And Messages_fr.properties
-        :</para>
+lastUpdateTimestamp = Updated
+
+zip = Code postal</programlisting>And Messages_fr.properties :</para>
 
         <para><programlisting>age.below.18 = L'employ\u00E9 n'a pas 18 ans.
 
@@ -3400,8 +3401,10 @@ createTimestamp = Cr\u00E9\u00E9 le
 
 hrsample.name = Gestion des ressources humaines
 
-lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
-        test with the english locale will produce :<figure>
+lastUpdateTimestamp = Mis \u00E0 jour le
+
+zip = Zip code</programlisting>Relaunching the view test with the english
+        locale will produce :<figure>
             <title>Company view with english translation</title>
 
             <mediaobject>
@@ -3965,14 +3968,25 @@ lastUpdateTimestamp = Mis \u00E0 jour le</programlisting>Relaunching the view
         tester produces the following window :</para>
 
         <para><screenshot>
-            <screeninfo></screeninfo>
+            <screeninfo>Company and departments view</screeninfo>
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="???" />
+                <imagedata align="center"
+                           fileref="../images/Company.organization.view.jpg" />
               </imageobject>
             </mediaobject>
           </screenshot></para>
+
+        <para>Of course, this is not enough to be able to manage the
+        departments of a company. We are missing a way to add ad remove
+        departments.</para>
+      </section>
+
+      <section>
+        <title>Assigning an action map to a view</title>
+
+        <para></para>
       </section>
     </section>
   </section>
