@@ -60,8 +60,10 @@ public class BasicComponentDescriptorRegistry implements
         .getBeansOfType(IComponentDescriptor.class);
     for (Map.Entry<String, IComponentDescriptor<?>> descriptorEntry : idToComponentDescriptors
         .entrySet()) {
-      contractNameIdMap.put(descriptorEntry.getValue().getComponentContract()
-          .getName(), descriptorEntry.getKey());
+      if (descriptorEntry.getValue().getComponentContract() != null) {
+        contractNameIdMap.put(descriptorEntry.getValue().getComponentContract()
+            .getName(), descriptorEntry.getKey());
+      }
     }
   }
 }

@@ -3967,18 +3967,15 @@ zip = Zip code</programlisting>Relaunching the view test with the english
         new icon to describe the department entities, re-launching the view
         tester produces the following window :</para>
 
-        <para><screenshot>
-            <screeninfo>Company and departments view</screeninfo>
+        <para><figure>
+            <title>The company and departments view</title>
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.organization.view.jpg" />
+                <imagedata fileref="../images/Company.organization.view.jpg" />
               </imageobject>
             </mediaobject>
-          </screenshot></para>
-
-        <para>Of course, this is not enough to be able to manage the
+          </figure>Of course, this is not enough to be able to manage the
         departments of a company. We are missing a way to add ad remove
         departments.</para>
       </section>
@@ -3986,7 +3983,48 @@ zip = Zip code</programlisting>Relaunching the view test with the english
       <section>
         <title>Assigning an action map to a view</title>
 
-        <para></para>
+        <para>Each view can be assigned an action map. An action map is a set
+        of actions grouped by category. Consider an application menu bar. In
+        this menu bar, you will find menus -action categories- like "File",
+        "Edit", "Help" and in each menu, a list of individual actions. This is
+        the exact same principle of an action map, but instead of being a
+        rendered as a menu bar, the <trademark>D2S</trademark> framework will
+        make a toolbar out of it, and in certain situations a context menu,
+        that will make the actions available to the end user.</para>
+
+        <para>In this section, we won't go describe in detail how to make and
+        declare an action. Actually, <trademark>D2S</trademark> comes with a
+        large set of pre-defined, ready-to-use general purpose actions (and
+        even action maps) that are sufficient for most classic operations.
+        Look at the following XML fragment :</para>
+
+        <para><programlisting>  &lt;bean
+    id="Company-departments.table"
+    parent="decoratedView"
+    class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
+    ...
+    &lt;property
+      name="actionMap"
+      ref="masterDetailActionMap" /&gt; <co id="masterDetailActionMap" />
+  &lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="masterDetailActionMap">
+              <para>We assign the pre-definned master-detail action map to the
+              departments table view.</para>
+            </callout>
+          </calloutlist>These 3 new XML lines bring us what we need to be able
+        to operate efficiently the company departments relationship.
+        Re-launching the view tester modifies the previous view :</para>
+
+        <para><figure>
+            <title>The improved company and departments view</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="../images/Company.organization.view_reworked.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
       </section>
     </section>
   </section>
