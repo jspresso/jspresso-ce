@@ -3,6 +3,9 @@
  */
 package com.d2s.framework.view.descriptor.basic;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import com.d2s.framework.util.IIconImageURLProvider;
 import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
@@ -22,6 +25,9 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   private IIconImageURLProvider iconImageURLProvider;
   private int                   maxDepth = 10;
   private ITreeLevelDescriptor  rootSubtreeDescriptor;
+
+  private String                renderedProperty;
+  private ITreeLevelDescriptor  childDescriptor;
 
   /**
    * {@inheritDoc}
@@ -56,7 +62,23 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
   public ITreeLevelDescriptor getRootSubtreeDescriptor() {
+    if (rootSubtreeDescriptor == null) {
+      BasicCollectionDescriptor<Object> fakeCollDescriptor = new BasicCollectionDescriptor<Object>();
+      fakeCollDescriptor
+          .setElementDescriptor((IComponentDescriptor<Object>) getModelDescriptor());
+      BasicCollectionPropertyDescriptor<Object> fakeCollPropDescriptor = new BasicCollectionPropertyDescriptor<Object>();
+      fakeCollPropDescriptor.setReferencedDescriptor(fakeCollDescriptor);
+      BasicListViewDescriptor fakeListViewDescriptor = new BasicListViewDescriptor();
+      fakeListViewDescriptor.setRenderedProperty(renderedProperty);
+      fakeListViewDescriptor.setModelDescriptor(fakeCollPropDescriptor);
+      rootSubtreeDescriptor = new BasicSimpleTreeLevelDescriptor();
+      ((BasicSimpleTreeLevelDescriptor) rootSubtreeDescriptor)
+          .setNodeGroupDescriptor(fakeListViewDescriptor);
+      ((BasicSimpleTreeLevelDescriptor) rootSubtreeDescriptor)
+          .setChildDescriptor(childDescriptor);
+    }
     return rootSubtreeDescriptor;
   }
 
@@ -89,5 +111,25 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   public void setRootSubtreeDescriptor(
       ITreeLevelDescriptor rootSubtreeDescriptor) {
     this.rootSubtreeDescriptor = rootSubtreeDescriptor;
+  }
+
+  /**
+   * Sets the childDescriptor.
+   * 
+   * @param childDescriptor
+   *            the childDescriptor to set.
+   */
+  public void setChildDescriptor(ITreeLevelDescriptor childDescriptor) {
+    this.childDescriptor = childDescriptor;
+  }
+
+  /**
+   * Sets the renderedProperty.
+   * 
+   * @param renderedProperty
+   *            the renderedProperty to set.
+   */
+  public void setRenderedProperty(String renderedProperty) {
+    this.renderedProperty = renderedProperty;
   }
 }

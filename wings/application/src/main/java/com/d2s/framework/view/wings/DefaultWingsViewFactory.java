@@ -2708,12 +2708,14 @@ public class DefaultWingsViewFactory implements
           }
           setText(labelText);
         } else {
-          if (((IValueConnector) value).getConnectorValue() != null) {
-            labelText = ((IValueConnector) value).getConnectorValue()
-                .toString();
-          } else {
-            labelText = "";
-          }
+          // if (((IValueConnector) value).getConnectorValue() != null) {
+          // labelText = ((IValueConnector) value).getConnectorValue()
+          // .toString();
+          // } else {
+          // labelText = "";
+          // }
+          // the previous code shortcuts the rendering connector.
+          labelText = value.toString();
         }
         setText(labelText);
         setToolTipText(toolTipText);

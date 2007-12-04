@@ -1853,7 +1853,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicTextPropertyDescriptor"&gt;
+        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="ouId" /&gt;
@@ -1866,6 +1866,9 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
         &lt;property
           name="maxLength"
           value="6" /&gt;
+        &lt;property
+          name="mandatory"
+          value="true" /&gt;
       &lt;/bean&gt;
       &lt;bean
         class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
@@ -3907,7 +3910,7 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
         <para>Let's consider the following XML fragment :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Company-departments.table"
   parent="decoratedView"
   class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt; <co
@@ -3992,13 +3995,13 @@ zip = Zip code</programlisting>Relaunching the view test with the english
         make a toolbar out of it, and in certain situations a context menu,
         that will make the actions available to the end user.</para>
 
-        <para>In this section, we won't go describe in detail how to make and
-        declare an action. Actually, <trademark>D2S</trademark> comes with a
-        large set of pre-defined, ready-to-use general purpose actions (and
+        <para>In this section, we won't go describe in detail how to develop
+        and declare an action. Actually, <trademark>D2S</trademark> comes with
+        a large set of pre-defined, ready-to-use general purpose actions (and
         even action maps) that are sufficient for most classic operations.
         Look at the following XML fragment :</para>
 
-        <para><programlisting>  &lt;bean
+        <para><programlisting language="xml">  &lt;bean
     id="Company-departments.table"
     parent="decoratedView"
     class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
@@ -4025,7 +4028,463 @@ zip = Zip code</programlisting>Relaunching the view test with the english
               </imageobject>
             </mediaobject>
           </figure></para>
+
+        <para>Using this improved master detail view, we are now able to
+        completely manage the departments of a company :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>We can add, remove and duplicate a department.</para>
+          </listitem>
+
+          <listitem>
+            <para>We copy, cut and paste a department.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Of course, we might need to refine and re-order the department
+        properties displayed in the table view. Do you remember what we did
+        previously for the company component view ? We will do the same for
+        the departments table collection view, but instead of working directly
+        on the view, we will rework the department entity itself globally set
+        its rendered properties; whenever we need a department based view to
+        be customized differently, we still have the option to override this
+        global setting on the view descriptor itself. So let's go back to the
+        department entity descriptor :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Department"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="renderedProperties"&gt; <co id="renderedProperties" />
+    &lt;list&gt;
+      &lt;value&gt;ouId&lt;/value&gt;
+      &lt;value&gt;name&lt;/value&gt;
+      &lt;value&gt;manager&lt;/value&gt;
+      &lt;value&gt;contact.address&lt;/value&gt;
+      &lt;value&gt;contact.city&lt;/value&gt;
+      &lt;value&gt;contact.phone&lt;/value&gt;
+      &lt;value&gt;contact.email&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting></para>
+
+        <para><calloutlist>
+            <callout arearefs="renderedProperties">
+              <para>We set the ordered list of department default rendered
+              properties.</para>
+            </callout>
+          </calloutlist>And when we re-launch the view tester :</para>
+
+        <para><figure>
+            <title>The improved company and departments view with refined
+            department columns</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="../images/Company.organization.view_reworked_2.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure>There are several things to notice on the screenshot above
+        and that you can experiment in the view tester :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>The columns have been refined to match the list of
+            department's rendered properties.</para>
+          </listitem>
+
+          <listitem>
+            <para>Mandatory colums have been marked with an asterisk.</para>
+          </listitem>
+
+          <listitem>
+            <para>You can reorder and resize the columns as you wish.</para>
+          </listitem>
+
+          <listitem>
+            <para>Some actions (duplicate, remove, cut and copy) may be
+            applied on 1 selected item but also on a set of selected items; in
+            that case, multiple selection is performed by maintaining the
+            <keycode>CTRL</keycode> (increase selection with an individual
+            item) or the <keycode>SHIFT</keycode> (range selection) and even
+            both (increase selection with a range) key pressed when selecting
+            the table rows.</para>
+          </listitem>
+
+          <listitem>
+            <para>You can sort the lines of a table view on 1 column by
+            clicking the column header and even on multiple columns (look at
+            the address and city columns) by keeping the
+            <keycode>CTRL</keycode> key pressed when clicking multiple column
+            headers.</para>
+          </listitem>
+
+          <listitem>
+            <para>The editable columns have been assigned an editor that
+            matches their model; this includes associations LOV (see the
+            editing manager cell above) and field controls and
+            auto-completion.</para>
+          </listitem>
+
+          <listitem>
+            <para>You might right-click on a selected line to open a context
+            menu (not shown here) that will give you access to the same
+            actions that are present in the toolbar.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To complete the organization view, we now need to manage the
+        teams of a department.</para>
       </section>
+
+      <section>
+        <title>Nested master-detail views</title>
+
+        <para>To handle the <code>Department</code> → <code>Team</code>
+        relationship, we need to add another collection view backed by the 1-N
+        association. The idea is to append this table view at the bottom of
+        the previous one, using a new split view. Based on what we've already
+        achieved, this is quite straight forward except for a slight but
+        tricky difference : the teams to be displayed by the new table view
+        are not directly related to the company but to the
+        <emphasis>selected</emphasis> department in the intermediate
+        department table view. So we need to instruct
+        <trademark>D2S</trademark> that we want this nested master-detail
+        behaviour.</para>
+
+        <para>Let's first describe the teams collection view; for the sake of
+        the tutorial, we will refine the teams displayed columns on the view
+        itself instead of globally configuring the rendered properties of the
+        team entity :<programlisting language="xml">&lt;bean
+  id="Department-teams.table"
+  parent="decoratedView"
+  class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
+  &lt;property
+    name="modelDescriptor"
+    ref="Department-teams" /&gt;
+  &lt;property
+    name="actionMap"
+    ref="masterDetailActionMap" /&gt;
+  &lt;property name="columnViewDescriptors"&gt; <co id="columnViewDescriptors" />
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="ouId" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="name" /&gt;
+      &lt;/bean&gt;
+      &lt;bean
+        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        &lt;property
+          name="name"
+          value="manager" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting></para>
+
+        <para><calloutlist>
+            <callout arearefs="columnViewDescriptors">
+              <para>We setup the ordered list of columns we want to display on
+              the teams table.</para>
+            </callout>
+          </calloutlist>This table view definition is strictly identical to
+        the previous department view. We now need to assemble the
+        <code>Company-departments.table</code> and the new
+        <code>Department-teams.table</code> into a split view and tell
+        <trademark>D2S</trademark> to drive the teams table content with the
+        departments table selection :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Departments.and.teams.view"
+  class="com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
+              id="Departments.and.teams.view" />
+  &lt;property
+    name="modelDescriptor"
+    ref="Company" /&gt;
+  &lt;property
+    name="leftTopViewDescriptor"
+    ref="Company-departments.table" /&gt; <co id="Company-departments.table" />
+  &lt;property
+    name="rightBottomViewDescriptor"
+    ref="Department-teams.table" /&gt; <co id="Department-teams.table" />
+  &lt;property
+    name="masterDetail"
+    value="true" /&gt; <co id="masterDetail" />
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="Departments.and.teams.view">
+              <para>We declare a new split view.</para>
+            </callout>
+
+            <callout arearefs="Company-departments.table">
+              <para>We make the departments table view the top part of the
+              view.</para>
+            </callout>
+
+            <callout arearefs="Department-teams.table">
+              <para>We make the teams table view the top part of the
+              view.</para>
+            </callout>
+
+            <callout arearefs="masterDetail">
+              <para>We declare this composite view a master-detail view for
+              <trademark>D2S</trademark> to track the departments
+              selection.</para>
+            </callout>
+          </calloutlist>The crucial part of the previous definition is the use
+        of the <code>masterDetail</code> attribute. It tells the framework
+        that the sub-views we are composing are not straightly backed by
+        properties of the master model, but each one will be driven by some
+        kind of selection in the previous one. Note that this attribute is
+        available on all composite views. Although some types of composite
+        views are more adapted to master-detail relationships (the split view
+        for example), you might very well decide to present arbitary deep
+        nested master-detail views in any kind of composite view (a tab view
+        for example; in this case, each tab will be a detail of the previous
+        one).</para>
+
+        <para>Then, we need to refactor the
+        <code>Company.organization.view</code> to substitute the current
+        departments table view by our new
+        <code>Departments.and.teams.view</code> :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Company.organization.view"
+  class="com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt;
+  &lt;property
+    name="modelDescriptor"
+    ref="Company" /&gt;
+  &lt;property
+    name="leftTopViewDescriptor"
+    ref="Company.tab.pane" /&gt;
+  &lt;property
+    name="rightBottomViewDescriptor"
+    ref="Departments.and.teams.view" /&gt; <co id="Bottom.reworked" />
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="Bottom.reworked">
+              <para>We assign the departments and teams master-detail view as
+              being now the bottom part of the company organization
+              view.</para>
+            </callout>
+          </calloutlist>After adding some new translations and icons for the
+        team entity, we can relaunch the view tester and obtain the following
+        screen where you can fully manage the departments of a company and the
+        teams of a department :</para>
+
+        <para><figure>
+            <title>The company, departments and teams view</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center"
+                           fileref="../images/Company.organization.view_reworked_3.jpg" />
+              </imageobject>
+            </mediaobject>
+          </figure>Although we have already designed a fairly usable GUI, you
+        might want to go one step further by presenting to the end-user a
+        hierarchical tree view of the organization. This is what we are going
+        to achieve in the next section.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Tree views</title>
+
+      <para>Tree views are certainly the most complicated but also the most
+      intuitive type of view to display and manage a structured model. Anyone
+      who ever tried to build a truly MVC aware GUI using trees knows that
+      there are many caveats to avoid. <trademark>D2S</trademark> drastically
+      simplifies getting a tree view up and running while keeping its original
+      description centric philosophy.</para>
+
+      <para>Let's consider our next objective as inserting a new tab in the
+      previous company view that shows the company structure in a tree view.
+      Describing a tree view is a matter of describing each tree level and
+      assembling them. To describe the company organization tree, we are going
+      to declare :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>1 tree view : <code>Company.tree</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>1 tree level for the <code>Company</code> →
+          <code>Department</code> 1-N relationship :
+          <code>Company-departments.subtree</code> that will be the first
+          child tree level in the company tree.</para>
+        </listitem>
+
+        <listitem>
+          <para>1 tree level for the <code>Department</code> →
+          <code>Team</code> 1-N relationship :
+          <code>Department-teams.subtree</code> that will be the child tree
+          level of the previous one.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Look at the following XML fragment :</para>
+
+      <para><programlisting language="xml">&lt;bean
+  id="Department-teams.subtree"
+  class="com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt; <co
+            id="BasicSimpleTreeLevelDescriptor" />
+  &lt;property name="nodeGroupDescriptor"&gt;
+    &lt;bean
+      class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor"&gt; <co
+            id="nodeGroupDescriptor" />
+      &lt;property
+        name="modelDescriptor"
+        ref="Department-teams" /&gt; <co id="Department-teams" />
+      &lt;property
+        name="actionMap"
+        ref="masterDetailActionMap" /&gt; <co id="actionMap" />
+      &lt;property
+        name="renderedProperty"
+        value="ouId" /&gt; <co id="renderedProperty" />
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean
+  id="Company-departments.subtree"
+  class="com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt;
+  &lt;property name="nodeGroupDescriptor"&gt;
+    &lt;bean
+      class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor"&gt;
+      &lt;property
+        name="modelDescriptor"
+        ref="Company-departments" /&gt;
+      &lt;property
+        name="actionMap"
+        ref="masterDetailActionMap" /&gt;
+      &lt;property
+        name="renderedProperty"
+        value="ouId" /&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+  &lt;property name="childDescriptor"&gt;
+    &lt;ref local="Department-teams.subtree" /&gt; <co id="childDescriptor" />
+  &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean
+  id="Company.tree"
+  class="com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor"&gt; <co
+            id="BasicTreeViewDescriptor" />
+  &lt;property
+    name="modelDescriptor"
+    ref="Company" /&gt;
+  &lt;property
+    name="renderedProperty"
+    value="name" /&gt;
+  &lt;property
+    name="childDescriptor"
+    ref="Company-departments.subtree" /&gt; <co id="childDescriptor2" />
+  &lt;property
+    name="iconImageURL"
+    value="classpath:com/d2s/framework/hrsample/images/structure-48x48.png" /&gt; <co
+            id="Company.tree.icon" />
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="BasicSimpleTreeLevelDescriptor">
+            <para>We declare a simple tree level that may hold only one child
+            tree level; this one is a terminal level, so it doesn't hold
+            any.</para>
+          </callout>
+
+          <callout arearefs="nodeGroupDescriptor">
+            <para>Each simple tree level references a list view descriptor
+            (the same type of descriptor we may use for list views) that is
+            backed by the collection end of a relationship through the use of
+            its <code>nodeGroupDescriptor</code> property.</para>
+          </callout>
+
+          <callout arearefs="Department-teams">
+            <para>This simple tree level is backed by the
+            <code>Department</code> → <code>Team</code> relationship since it
+            will display the teams of a department node.</para>
+          </callout>
+
+          <callout arearefs="actionMap">
+            <para>As for plain views, we can assign an action map to a simple
+            tree level through the action map of its referenced list view
+            descriptor. The registered action map will be accessible from a
+            contextual menu. Here, we assign the same master-detail action map
+            as we used for the table views.</para>
+          </callout>
+
+          <callout arearefs="renderedProperty">
+            <para>Each node of a simple tree level - here it's a team - must
+            be rendered by one of its property. When not set, the rendering
+            property is chosen by the backing component descriptor itself. We
+            want the <code>ouId</code> of a team to be displayed.</para>
+          </callout>
+
+          <callout arearefs="childDescriptor">
+            <para>This tree level descriptor, while still a simple tree level
+            descriptor, differs from the previous one by the fact that is is
+            not a terminal level; so we assign its child descriptor as being
+            the <code>Department-teams.subtree</code> descriptor.</para>
+          </callout>
+
+          <callout arearefs="BasicTreeViewDescriptor">
+            <para>The tree view descriptor itself. It may be composed anywhere
+            in the GUI.</para>
+          </callout>
+
+          <callout arearefs="childDescriptor2">
+            <para>We set the Company-departments.subtree as being the first
+            child tree level of the tree.</para>
+          </callout>
+
+          <callout arearefs="Company.tree.icon">
+            <para>The default icon used to display this view would be the icon
+            declared in the company entity. Let's change it so that we have a
+            different icon once we install the view in the tab.</para>
+          </callout>
+        </calloutlist>The final step to reach the objective is to install the
+      company tree view in a new tab of the company tab view. We do this by
+      modifying the <code>Company.tab.pane</code> view as below :</para>
+
+      <para><programlisting language="xml">&lt;bean
+  id="Company.tab.pane"
+  class="com.d2s.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt;
+  ...
+  &lt;property name="viewDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref local="Company.tree" /&gt; <co id="Company.tree" />
+      ...
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="Company.tree">
+            <para>We declare another tab in the tab view.</para>
+          </callout>
+        </calloutlist>We can now test the result.</para>
+
+      <para><figure>
+          <title>The company structure as a tree view</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         fileref="../images/Company.organization.view_tree.jpg" />
+            </imageobject>
+          </mediaobject>
+        </figure>Play around with the tree and with the tables. You will see
+      that everything is always kept synchronized; we have a true MVC
+      architecture.</para>
+
+      <para></para>
     </section>
   </section>
 </chapter>
