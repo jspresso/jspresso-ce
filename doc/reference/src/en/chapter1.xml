@@ -2004,7 +2004,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
       <section>
         <title>Bi-directional 1-N relationships</title>
 
-        <para>We are going to describe the <code>Company</code> ↔
+        <para>We are going to describe the <code>Company</code> &lt;-&gt;
         <code>Department</code> bi-directional 1-N relationship. To achieve
         that, we will first describe the N side of this composition, making it
         a top-level, referenceable bean and then make this N side the reverse
@@ -2090,7 +2090,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
             </callout>
 
             <callout arearefs="reverseRelationEnd">
-              <para>We link both side of the <code>Company</code> ↔
+              <para>We link both side of the <code>Company</code> &lt;-&gt;
               <code>Department</code> relationship.</para>
             </callout>
           </calloutlist>So making a relationship bi-directional is quite
@@ -2101,9 +2101,9 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
         impact on how the framework will handle the relationship updates
         behind the scene for you.</para>
 
-        <para>Making the <code>Company</code> ↔ <code>Department</code>
-        relationship bi-directional implies the following on the
-        <code>Company</code> side:</para>
+        <para>Making the <code>Company</code> &lt;-&gt;
+        <code>Department</code> relationship bi-directional implies the
+        following on the <code>Company</code> side:</para>
 
         <para><orderedlist>
             <listitem>
@@ -2154,8 +2154,8 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
         accessor you want and the domain model will be updated
         consistently.</para>
 
-        <para>We describe the <code>Department</code> ↔ <code>Team</code>
-        relationship the same way :</para>
+        <para>We describe the <code>Department</code> &lt;-&gt;
+        <code>Team</code> relationship the same way :</para>
 
         <para><programlisting language="xml">&lt;bean
   id="Department-teams"
@@ -2215,8 +2215,9 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
       &lt;/bean&gt;
     &lt;/list&gt;
   &lt;/property&gt;
-&lt;/bean&gt;</programlisting>And, to be complete, the <code>Company</code> ↔
-        <code>Employees</code> relationship :<programlisting language="xml">&lt;bean
+&lt;/bean&gt;</programlisting>And, to be complete, the <code>Company</code>
+        &lt;-&gt; <code>Employees</code> relationship :<programlisting
+        language="xml">&lt;bean
   id="Company-employees"
   class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
   &lt;property
@@ -2281,7 +2282,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
         <title>Bi-directional 1-1 relationships</title>
 
         <para>The last type of relationship we will handle in the HR
-        application is the 1-1 <code>OrganizationalUnit</code> ↔
+        application is the 1-1 <code>OrganizationalUnit</code> &lt;-&gt;
         <code>Employee</code> manager association. And you have certainly
         already guessed that it is the exact same way to describe
         bi-directional 1-1 relationships than 1-N relationships except that
@@ -3272,7 +3273,9 @@ public class EmployeeIntegrityProcessors {
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center" fileref="../images/Company.pane.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.pane.jpg" scalefit="1"
+                           width="100%" />
               </imageobject>
             </mediaobject>
           </figure>You will notice several things on the screenshot above
@@ -3312,7 +3315,9 @@ public class EmployeeIntegrityProcessors {
 
                 <mediaobject>
                   <imageobject>
-                    <imagedata align="center" fileref="../images/Lov.jpg" />
+                    <imagedata align="center" contentdepth="60%"
+                               fileref="../images/Lov.jpg" scalefit="1"
+                               width="100%" />
                   </imageobject>
                 </mediaobject>
               </screenshot>Of course, leaving the field with an incomplete
@@ -3320,7 +3325,7 @@ public class EmployeeIntegrityProcessors {
             sufficient to determine one and only one city or bring up the LOV
             dialog without for the user to push the LOV button. This reference
             field behaviour is only the consequence of having declared the
-            <code>ContactInfo</code> → <code>City</code> <link
+            <code>ContactInfo</code> -&gt; <code>City</code> <link
             linkend="BasicReferencePropertyDescriptor">relationship</link>. In
             the view tester tool, the search button and the auto-completion
             are not functional since we don't have any backend to rely
@@ -3336,8 +3341,9 @@ public class EmployeeIntegrityProcessors {
 
                 <mediaobject>
                   <imageobject>
-                    <imagedata align="center"
-                               fileref="../images/regexp_error.jpg" />
+                    <imagedata align="center" contentdepth="60%"
+                               fileref="../images/regexp_error.jpg"
+                               scalefit="1" width="100%" />
                   </imageobject>
                 </mediaobject>
               </screenshot>This is due to the <link
@@ -3412,8 +3418,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.pane_en.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.pane_en.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3423,8 +3430,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.pane_fr.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.pane_fr.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3534,8 +3542,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.pane_reworked.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.pane_reworked.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3675,8 +3684,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.tab.pane.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.tab.pane.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3772,8 +3782,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.tab.pane_reworked.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.tab.pane_reworked.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -3941,8 +3952,8 @@ zip = Zip code</programlisting>Relaunching the view test with the english
             <callout arearefs="Company-departments-model">
               <para>Unlike component views, collection views are backed by the
               N end of a 1-N relationship. Here, we reference the
-              <code>Company</code> → <code>Department</code> relationhip we've
-              previously declared in the domain model.</para>
+              <code>Company</code> -&gt; <code>Department</code> relationhip
+              we've previously declared in the domain model.</para>
             </callout>
 
             <callout arearefs="BasicSplitViewDescriptor">
@@ -3975,7 +3986,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata fileref="../images/Company.organization.view.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.organization.view.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure>Of course, this is not enough to be able to manage the
@@ -4023,8 +4036,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.organization.view_reworked.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.organization.view_reworked.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure></para>
@@ -4082,8 +4096,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.organization.view_reworked_2.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.organization.view_reworked_2.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure>There are several things to notice on the screenshot above
@@ -4142,7 +4157,7 @@ zip = Zip code</programlisting>Relaunching the view test with the english
       <section>
         <title>Nested master-detail views</title>
 
-        <para>To handle the <code>Department</code> → <code>Team</code>
+        <para>To handle the <code>Department</code> -&gt; <code>Team</code>
         relationship, we need to add another collection view backed by the 1-N
         association. The idea is to append this table view at the bottom of
         the previous one, using a new split view. Based on what we've already
@@ -4284,8 +4299,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 
             <mediaobject>
               <imageobject>
-                <imagedata align="center"
-                           fileref="../images/Company.organization.view_reworked_3.jpg" />
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.organization.view_reworked_3.jpg"
+                           scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
           </figure>Although we have already designed a fairly usable GUI, you
@@ -4305,42 +4321,45 @@ zip = Zip code</programlisting>Relaunching the view test with the english
       simplifies getting a tree view up and running while keeping its original
       description centric philosophy.</para>
 
-      <para>Let's consider our next objective as inserting a new tab in the
-      previous company view that shows the company structure in a tree view.
-      Describing a tree view is a matter of describing each tree level and
-      assembling them. To describe the company organization tree, we are going
-      to declare :</para>
+      <section>
+        <title>Simple tree levels</title>
 
-      <itemizedlist>
-        <listitem>
-          <para>1 tree view : <code>Company.tree</code>.</para>
-        </listitem>
+        <para>Let's consider our next objective as inserting a new tab in the
+        previous company view that shows the company structure in a tree view.
+        Describing a tree view is a matter of describing each tree level and
+        assembling them. To describe the company organization tree, we are
+        going to declare :</para>
 
-        <listitem>
-          <para>1 tree level for the <code>Company</code> →
-          <code>Department</code> 1-N relationship :
-          <code>Company-departments.subtree</code> that will be the first
-          child tree level in the company tree.</para>
-        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>1 tree view : <code>Company.tree</code>.</para>
+          </listitem>
 
-        <listitem>
-          <para>1 tree level for the <code>Department</code> →
-          <code>Team</code> 1-N relationship :
-          <code>Department-teams.subtree</code> that will be the child tree
-          level of the previous one.</para>
-        </listitem>
-      </itemizedlist>
+          <listitem>
+            <para>1 tree level for the <code>Company</code> -&gt;
+            <code>Department</code> 1-N relationship :
+            <code>Company-departments.subtree</code> that will be the first
+            child tree level in the company tree.</para>
+          </listitem>
 
-      <para>Look at the following XML fragment :</para>
+          <listitem>
+            <para>1 tree level for the <code>Department</code> -&gt;
+            <code>Team</code> 1-N relationship :
+            <code>Department-teams.subtree</code> that will be the child tree
+            level of the previous one.</para>
+          </listitem>
+        </itemizedlist>
 
-      <para><programlisting language="xml">&lt;bean
+        <para>Look at the following XML fragment :</para>
+
+        <para><programlisting language="xml">&lt;bean
   id="Department-teams.subtree"
   class="com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt; <co
-            id="BasicSimpleTreeLevelDescriptor" />
+              id="BasicSimpleTreeLevelDescriptor" />
   &lt;property name="nodeGroupDescriptor"&gt;
     &lt;bean
       class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor"&gt; <co
-            id="nodeGroupDescriptor" />
+              id="nodeGroupDescriptor" />
       &lt;property
         name="modelDescriptor"
         ref="Department-teams" /&gt; <co id="Department-teams" />
@@ -4379,7 +4398,7 @@ zip = Zip code</programlisting>Relaunching the view test with the english
 &lt;bean
   id="Company.tree"
   class="com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor"&gt; <co
-            id="BasicTreeViewDescriptor" />
+              id="BasicTreeViewDescriptor" />
   &lt;property
     name="modelDescriptor"
     ref="Company" /&gt;
@@ -4392,69 +4411,71 @@ zip = Zip code</programlisting>Relaunching the view test with the english
   &lt;property
     name="iconImageURL"
     value="classpath:com/d2s/framework/hrsample/images/structure-48x48.png" /&gt; <co
-            id="Company.tree.icon" />
+              id="Company.tree.icon" />
 &lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="BasicSimpleTreeLevelDescriptor">
-            <para>We declare a simple tree level that may hold only one child
-            tree level; this one is a terminal level, so it doesn't hold
-            any.</para>
-          </callout>
+            <callout arearefs="BasicSimpleTreeLevelDescriptor">
+              <para>We declare a simple tree level that may hold only one
+              child tree level; this one is a terminal level, so it doesn't
+              hold any.</para>
+            </callout>
 
-          <callout arearefs="nodeGroupDescriptor">
-            <para>Each simple tree level references a list view descriptor
-            (the same type of descriptor we may use for list views) that is
-            backed by the collection end of a relationship through the use of
-            its <code>nodeGroupDescriptor</code> property.</para>
-          </callout>
+            <callout arearefs="nodeGroupDescriptor">
+              <para>Each simple tree level references a list view descriptor
+              (the same type of descriptor we may use for list views) that is
+              backed by the collection end of a relationship through the use
+              of its <code>nodeGroupDescriptor</code> property.</para>
+            </callout>
 
-          <callout arearefs="Department-teams">
-            <para>This simple tree level is backed by the
-            <code>Department</code> → <code>Team</code> relationship since it
-            will display the teams of a department node.</para>
-          </callout>
+            <callout arearefs="Department-teams">
+              <para>This simple tree level is backed by the
+              <code>Department</code> -&gt; <code>Team</code> relationship
+              since it will display the teams of a department node.</para>
+            </callout>
 
-          <callout arearefs="actionMap">
-            <para>As for plain views, we can assign an action map to a simple
-            tree level through the action map of its referenced list view
-            descriptor. The registered action map will be accessible from a
-            contextual menu. Here, we assign the same master-detail action map
-            as we used for the table views.</para>
-          </callout>
+            <callout arearefs="actionMap">
+              <para>As for plain views, we can assign an action map to a
+              simple tree level through the action map of its referenced list
+              view descriptor. The registered action map will be accessible
+              from a contextual menu. Here, we assign the same master-detail
+              action map as we used for the table views.</para>
+            </callout>
 
-          <callout arearefs="renderedProperty">
-            <para>Each node of a simple tree level - here it's a team - must
-            be rendered by one of its property. When not set, the rendering
-            property is chosen by the backing component descriptor itself. We
-            want the <code>ouId</code> of a team to be displayed.</para>
-          </callout>
+            <callout arearefs="renderedProperty">
+              <para>Each node of a simple tree level - here it's a team - must
+              be rendered by one of its property. When not set, the rendering
+              property is chosen by the backing component descriptor itself.
+              We want the <code>ouId</code> of a team to be displayed.</para>
+            </callout>
 
-          <callout arearefs="childDescriptor">
-            <para>This tree level descriptor, while still a simple tree level
-            descriptor, differs from the previous one by the fact that is is
-            not a terminal level; so we assign its child descriptor as being
-            the <code>Department-teams.subtree</code> descriptor.</para>
-          </callout>
+            <callout arearefs="childDescriptor">
+              <para>This tree level descriptor, while still a simple tree
+              level descriptor, differs from the previous one by the fact that
+              is is not a terminal level; so we assign its child descriptor as
+              being the <code>Department-teams.subtree</code>
+              descriptor.</para>
+            </callout>
 
-          <callout arearefs="BasicTreeViewDescriptor">
-            <para>The tree view descriptor itself. It may be composed anywhere
-            in the GUI.</para>
-          </callout>
+            <callout arearefs="BasicTreeViewDescriptor">
+              <para>The tree view descriptor itself. It may be composed
+              anywhere in the GUI.</para>
+            </callout>
 
-          <callout arearefs="childDescriptor2">
-            <para>We set the Company-departments.subtree as being the first
-            child tree level of the tree.</para>
-          </callout>
+            <callout arearefs="childDescriptor2">
+              <para>We set the Company-departments.subtree as being the first
+              child tree level of the tree.</para>
+            </callout>
 
-          <callout arearefs="Company.tree.icon">
-            <para>The default icon used to display this view would be the icon
-            declared in the company entity. Let's change it so that we have a
-            different icon once we install the view in the tab.</para>
-          </callout>
-        </calloutlist>The final step to reach the objective is to install the
-      company tree view in a new tab of the company tab view. We do this by
-      modifying the <code>Company.tab.pane</code> view as below :</para>
+            <callout arearefs="Company.tree.icon">
+              <para>The default icon used to display this view would be the
+              icon declared in the company entity. Let's change it so that we
+              have a different icon once we install the view in the
+              tab.</para>
+            </callout>
+          </calloutlist>The final step to reach the objective is to install
+        the company tree view in a new tab of the company tab view. We do this
+        by modifying the <code>Company.tab.pane</code> view as below :</para>
 
-      <para><programlisting language="xml">&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Company.tab.pane"
   class="com.d2s.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt;
   ...
@@ -4466,25 +4487,41 @@ zip = Zip code</programlisting>Relaunching the view test with the english
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="Company.tree">
-            <para>We declare another tab in the tab view.</para>
-          </callout>
-        </calloutlist>We can now test the result.</para>
+            <callout arearefs="Company.tree">
+              <para>We declare another tab in the tab view.</para>
+            </callout>
+          </calloutlist>We can now test the result.</para>
 
-      <para><figure>
-          <title>The company structure as a tree view</title>
+        <para><figure>
+            <title>The company structure as a tree view</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata align="center"
-                         fileref="../images/Company.organization.view_tree.jpg" />
-            </imageobject>
-          </mediaobject>
-        </figure>Play around with the tree and with the tables. You will see
-      that everything is always kept synchronized; we have a true MVC
-      architecture.</para>
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Company.organization.view_tree.jpg"
+                           scalefit="1" width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure>Play around with the tree and with the tables. You will see
+        that everything is always kept synchronized; we have a true MVC
+        architecture.</para>
+      </section>
 
-      <para></para>
+      <section>
+        <title>Composite tree levels</title>
+
+        <para>There are situations where simple tree levels are just not
+        enough to define complex tree structures. Imagine that you want to
+        display, under each team, a subtree for the projects managed by a team
+        and a subtree for the team members.</para>
+
+        <para><trademark>D2S</trademark> You would aggregate the 2 simple tree
+        levels (projects and team members) into a composite tree level and
+        make this composite tree level the child level of the team tree
+        level.</para>
+
+        <para></para>
+      </section>
     </section>
   </section>
 </chapter>
