@@ -36,5 +36,9 @@
 			<artifactId>joda-time</artifactId>
 			<optional>true</optional>
 		</dependency>
+    <dependency>
+      <groupId>freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+    </dependency>
 	</dependencies>
 </project>

@@ -43,7 +43,7 @@ public class SColorPicker extends SPanel {
    * Constructs a new <code>SColorPicker</code> instance.
    */
   public SColorPicker() {
-    setLayout(new SBoxLayout(this, SBoxLayout.X_AXIS));
+    setLayout(new SBoxLayout(/*this, */SBoxLayout.X_AXIS));
     chooseButton = new SButton(" ");
     chooseButton.addActionListener(new ActionListener() {
 
@@ -212,7 +212,7 @@ public class SColorPicker extends SPanel {
     });
 
     SPanel actionPanel = new SPanel();
-    actionPanel.setLayout(new SBoxLayout(actionPanel, SBoxLayout.X_AXIS));
+    actionPanel.setLayout(new SBoxLayout(/*actionPanel, */SBoxLayout.X_AXIS));
     actionPanel.add(okButton);
     actionPanel.add(cancelButton);
     actionPanel.add(restoreButton);

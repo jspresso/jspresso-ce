@@ -62,7 +62,7 @@ public class SActionField extends SPanel {
     }
     this.showTextField = showTextField;
     buttonPanel = new SPanel();
-    buttonPanel.setLayout(new SBoxLayout(buttonPanel, SBoxLayout.X_AXIS));
+    buttonPanel.setLayout(new SBoxLayout(/*buttonPanel, */SBoxLayout.X_AXIS));
 
     int buttonPosition;
     if (showTextField) {

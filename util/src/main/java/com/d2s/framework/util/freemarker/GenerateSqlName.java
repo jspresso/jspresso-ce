@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005 Design2see. All rights reserved.
  */
-package commons;
+package com.d2s.framework.util.freemarker;
 
 import java.util.List;
 

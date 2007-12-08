@@ -157,7 +157,7 @@ public class WizardAction extends AbstractWingsAction {
     });
 
     SPanel buttonPanel = new SPanel();
-    SPanel buttonBox = new SPanel(new SBoxLayout(buttonPanel, SBoxLayout.X_AXIS));
+    SPanel buttonBox = new SPanel(new SBoxLayout(/*buttonPanel,*/ SBoxLayout.X_AXIS));
 
     buttonPanel.setLayout(new SBorderLayout());
     buttonPanel.add(new SSeparator(), SBorderLayout.NORTH);

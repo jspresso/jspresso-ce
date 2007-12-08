@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.design2see</groupId>
@@ -13,7 +15,9 @@
   </organization>
   <inceptionYear>2005</inceptionYear>
   <scm>
-    <connection>scm:svn:http://saturne/svnrep:design2see/framework/trunk</connection>
+    <connection>
+      scm:svn:http://saturne/svnrep:design2see/framework/trunk
+    </connection>
   </scm>
   <mailingLists>
     <mailingList>
@@ -450,21 +454,6 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <linksource>false</linksource>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>javadoc</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
           <execution>
@@ -475,9 +464,14 @@
                 <taskdef resource="proguard/ant/task.properties" />
                 <taskdef resource="net/sf/antcontrib/antlib.xml" />
                 <if>
-                  <equals arg1="${project.packaging}" arg2="jar" />
+                  <equals
+                    arg1="${project.packaging}"
+                    arg2="jar" />
                   <then>
-                    <proguard note="false" verbose="false" renamesourcefileattribute="SourceFile"
+                    <proguard
+                      note="false"
+                      verbose="false"
+                      renamesourcefileattribute="SourceFile"
                       skipnonpubliclibraryclasses="false">
                       <injar file="${project.artifact.file}" />
                       <outjar
@@ -506,8 +500,14 @@
                       <!-- Preserve all .class method names. -->
 
                       <keepclassmembernames access="public">
-                        <method type="java.lang.Class" name="class$" parameters="java.lang.String" />
-                        <method type="java.lang.Class" name="class$" parameters="java.lang.String,boolean" />
+                        <method
+                          type="java.lang.Class"
+                          name="class$"
+                          parameters="java.lang.String" />
+                        <method
+                          type="java.lang.Class"
+                          name="class$"
+                          parameters="java.lang.String,boolean" />
                       </keepclassmembernames>
 
                       <!-- Preserve all native method names and the names of their classes. -->
@@ -519,7 +519,11 @@
                       <!-- Preserve a method that is required in all enumeration classes. -->
 
                       <keepclassmembers extends="java.lang.Enum">
-                        <method access="public" type="**[]" name="values" parameters="" />
+                        <method
+                          access="public"
+                          type="**[]"
+                          name="values"
+                          parameters="" />
                       </keepclassmembers>
 
                       <!-- Explicitly preserve all serialization members. The Serializable
@@ -529,11 +533,28 @@
                         compatible, please refer to the manual. -->
 
                       <keepclassmembers implements="java.io.Serializable">
-                        <field access="static final" type="long" name="serialVersionUID" />
-                        <method access="private" type="void" name="writeObject" parameters="java.io.ObjectOutputStream" />
-                        <method access="private" type="void" name="readObject" parameters="java.io.ObjectInputStream" />
-                        <method type="java.lang.Object" name="writeReplace" parameters="" />
-                        <method type="java.lang.Object" name="readResolve" parameters="" />
+                        <field
+                          access="static final"
+                          type="long"
+                          name="serialVersionUID" />
+                        <method
+                          access="private"
+                          type="void"
+                          name="writeObject"
+                          parameters="java.io.ObjectOutputStream" />
+                        <method
+                          access="private"
+                          type="void"
+                          name="readObject"
+                          parameters="java.io.ObjectInputStream" />
+                        <method
+                          type="java.lang.Object"
+                          name="writeReplace"
+                          parameters="" />
+                        <method
+                          type="java.lang.Object"
+                          name="readResolve"
+                          parameters="" />
                       </keepclassmembers>
 
                       <!-- Your application may contain more items that need to be preserved;
@@ -564,13 +585,25 @@
           </dependency>
         </dependencies>
       </plugin>
-    </plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+      </plugin>
+     </plugins>
   </build>
   <reporting>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <configuration>
+          <linksource>false</linksource>
+          <aggregate>true</aggregate>
+        </configuration>
       </plugin>
     </plugins>
   </reporting>

@@ -58,7 +58,6 @@ import org.wings.SToolBar;
 import org.wings.STree;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
-import org.wings.border.STitledBorder;
 import org.wings.io.Device;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellEditor;
@@ -795,9 +794,11 @@ public class DefaultWingsViewFactory implements
         view.getPeer().setBorder(new SEtchedBorder());
         break;
       case IViewDescriptor.TITLED:
-        view.getPeer().setBorder(
-            new STitledBorder(new SEtchedBorder(), view.getDescriptor()
-                .getI18nName(getTranslationProvider(), locale)));
+        //FIXME until titled border is re-integrated into wings.
+        view.getPeer().setBorder(new SEtchedBorder());
+        // view.getPeer().setBorder(
+        // new STitledBorder(new SEtchedBorder(), view.getDescriptor()
+        // .getI18nName(getTranslationProvider(), locale)));
         break;
       default:
         break;

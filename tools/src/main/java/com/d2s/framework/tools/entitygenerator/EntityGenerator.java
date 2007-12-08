@@ -27,9 +27,9 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 import org.springframework.context.ApplicationContext;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import commons.CompareStrings;
-import commons.GenerateSqlName;
-import commons.InstanceOf;
+import com.d2s.framework.util.freemarker.CompareStrings;
+import com.d2s.framework.util.freemarker.GenerateSqlName;
+import com.d2s.framework.util.freemarker.InstanceOf;
 
 import freemarker.ext.beans.BeansWrapper;
 import freemarker.template.Configuration;
