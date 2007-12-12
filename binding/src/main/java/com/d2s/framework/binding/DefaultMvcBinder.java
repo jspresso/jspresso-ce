@@ -6,7 +6,7 @@ package com.d2s.framework.binding;
 /**
  * This class is a helper for connector bindings for an MVC relationship.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

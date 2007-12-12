@@ -10,7 +10,7 @@ import com.ulcjava.base.application.event.UlcEvent;
 /**
  * Event for ExtendedInternalFrame.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -16,7 +16,7 @@ import com.d2s.framework.util.collection.ObjectEqualityMap;
  * An action used in master/detail views where models are backed by maps to
  * create and add a new detail to a master domain object.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -10,7 +10,7 @@ import java.util.Collection;
  * This interface is implemented by any bean value accessor on a collection
  * property.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

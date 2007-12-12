@@ -16,7 +16,7 @@ import com.d2s.framework.model.datatransfer.TransferMode;
  * An action used register a collection of domain objects into the controller's
  * clipboard.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

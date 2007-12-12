@@ -12,7 +12,7 @@ import com.d2s.framework.util.event.ISelectable;
  * Helper class used to bind collection view connectors to list selection models
  * (used in <code>SList</code> and <code>STable</code>).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

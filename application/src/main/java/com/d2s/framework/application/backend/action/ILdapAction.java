@@ -8,7 +8,7 @@ import org.springframework.ldap.LdapTemplate;
 /**
  * Configuration contract for an ldap action.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -11,7 +11,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * This interface must be implemented by all model components in the application
  * domain. It establishes the minimal contract of a model component.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

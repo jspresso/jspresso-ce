@@ -7,7 +7,7 @@ package com.d2s.framework.model.component.service;
  * This is an interface used to identify classes responsible for providing
  * entity services.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

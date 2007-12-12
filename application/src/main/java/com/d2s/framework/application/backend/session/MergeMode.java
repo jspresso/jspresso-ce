@@ -6,7 +6,7 @@ package com.d2s.framework.application.backend.session;
 /**
  * This enumeration defines all the supported merge modes of a session.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

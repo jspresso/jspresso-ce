@@ -12,7 +12,7 @@ import com.ulcjava.base.application.event.serializable.IActionListener;
  * <code>IDataType</code>. If not set, the string representation contained in
  * the text component will be used "as is" as the connector value.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

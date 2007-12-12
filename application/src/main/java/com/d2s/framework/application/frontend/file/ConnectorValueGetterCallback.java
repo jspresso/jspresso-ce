@@ -16,7 +16,7 @@ import com.d2s.framework.binding.IValueConnector;
  * Default handler implementation to deal with getting binary properties storing
  * them in files.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

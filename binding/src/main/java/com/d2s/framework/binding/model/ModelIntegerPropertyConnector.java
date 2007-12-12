@@ -11,7 +11,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * setting java.lang.Long and java.lang.Integer values based on the connector
  * value and the property type.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

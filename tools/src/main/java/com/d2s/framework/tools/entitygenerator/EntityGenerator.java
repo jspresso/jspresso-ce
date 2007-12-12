@@ -40,7 +40,7 @@ import freemarker.template.TemplateException;
 /**
  * Generates D2S powered component java code based on its descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -12,7 +12,7 @@ import org.apache.commons.beanutils.ConstructorUtils;
  * This implementation relies on Jakarta's <code>ConstructorUtils</code> to
  * build extension instances calling their constructors using reflection.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  *
  * @version $LastChangedRevision$

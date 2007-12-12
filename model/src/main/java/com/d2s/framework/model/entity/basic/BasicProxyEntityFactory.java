@@ -31,7 +31,7 @@ import com.d2s.framework.util.uid.IGUIDGenerator;
  * Default implementation of <code>IEntityFactory</code>. It creates standard
  * java proxies which delegate to <code>BasicEntityInvocationHandler</code>s.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

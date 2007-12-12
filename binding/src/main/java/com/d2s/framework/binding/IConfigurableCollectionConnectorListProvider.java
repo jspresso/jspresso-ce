@@ -9,7 +9,7 @@ import java.util.List;
  * Interface of a configurable collection connector list provider. Should be
  * used by view factories.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

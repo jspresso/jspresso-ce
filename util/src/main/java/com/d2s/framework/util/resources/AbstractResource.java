@@ -6,7 +6,7 @@ package com.d2s.framework.util.resources;
 /**
  * Base implementation class for web resources.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

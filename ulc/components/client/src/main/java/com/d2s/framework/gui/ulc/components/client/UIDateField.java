@@ -42,7 +42,7 @@ import com.ulcjava.base.shared.internal.Anything;
 /**
  * ULC UI class responsible for handling date field client half object.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

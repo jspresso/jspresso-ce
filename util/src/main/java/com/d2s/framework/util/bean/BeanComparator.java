@@ -13,7 +13,7 @@ import com.d2s.framework.util.accessor.IAccessor;
  * A bean comparator which compare beans based on a list of properties using
  * their natural order.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

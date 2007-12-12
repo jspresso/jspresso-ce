@@ -16,7 +16,7 @@ import com.d2s.framework.model.component.IComponentFactory;
 /**
  * A specialized hibernate tuplizer to handle proxy components.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

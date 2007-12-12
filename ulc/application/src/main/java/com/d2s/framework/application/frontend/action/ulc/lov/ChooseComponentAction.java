@@ -20,7 +20,7 @@ import com.ulcjava.base.application.ULCComponent;
  * A standard List of value action for reference property views. This action
  * should be used in view factories.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

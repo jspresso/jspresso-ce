@@ -10,7 +10,7 @@ import java.util.List;
  * entities. It only serve as a placeholder for the result of the query.
  * instances of this calss do not perform queries by themselves.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

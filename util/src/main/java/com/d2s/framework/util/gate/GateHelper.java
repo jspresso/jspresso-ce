@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * This helper class contains utility methods to work with gates.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

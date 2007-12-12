@@ -11,7 +11,7 @@ import java.util.Collection;
  * belonging to the same system (a form view for instance providing a connector
  * for each control). This mecanism prevents wiring one by one connectors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

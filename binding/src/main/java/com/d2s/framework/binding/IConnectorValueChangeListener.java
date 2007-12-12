@@ -9,7 +9,7 @@ package com.d2s.framework.binding;
  * connectors together (in a MVC relationship for instance) where the 2
  * connectors will listen for eachother value.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

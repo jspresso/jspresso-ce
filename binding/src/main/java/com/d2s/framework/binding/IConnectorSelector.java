@@ -8,7 +8,7 @@ package com.d2s.framework.binding;
  * connector (a view collection connector is such a structure since it keeps
  * track of its children selection).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

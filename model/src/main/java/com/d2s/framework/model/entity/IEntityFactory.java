@@ -11,7 +11,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 /**
  * This interface defines the contract of an entities factory.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

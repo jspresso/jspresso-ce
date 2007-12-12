@@ -12,7 +12,7 @@ import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 /**
  * Base class for backend actions acting on collections.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

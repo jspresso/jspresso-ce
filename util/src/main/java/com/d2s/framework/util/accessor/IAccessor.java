@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * This interface is implemented by any bean value accessor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -11,7 +11,7 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
 /**
  * This is a simple helper class to be able to cope with "classpath:" urls.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

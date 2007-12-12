@@ -8,7 +8,7 @@ package com.d2s.framework.view.descriptor;
  * cells. This kind of described container view might typically be implemented
  * by a swing JPanel with a GridLayout.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

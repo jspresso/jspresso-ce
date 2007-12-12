@@ -15,7 +15,7 @@ import com.d2s.framework.util.bean.AccessorInfo;
  * Instances of this class serve as handlers for proxies representing the query
  * entities.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

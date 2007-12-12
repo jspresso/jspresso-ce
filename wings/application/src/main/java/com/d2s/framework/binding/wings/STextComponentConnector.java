@@ -14,7 +14,7 @@ import org.wings.event.SDocumentListener;
  * This abstract class serves as the base class for all STextComponent
  * connectors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

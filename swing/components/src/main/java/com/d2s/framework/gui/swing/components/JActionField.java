@@ -34,7 +34,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * component is represented by a text field and a button. Actionning the button
  * or the text field triggers the action.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

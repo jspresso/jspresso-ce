@@ -28,7 +28,7 @@ import com.d2s.framework.util.bean.PropertyHelper;
  * strategy which update the property values without firing anything but a
  * <code>PropertyChangeEvent</code> in case the actual property value changed.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$
@@ -56,7 +56,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * Implements the getter strategy on the entity proxy implementation to be
    * used by hibernate.
    * <p>
-   * Copyright 2005 Design2See. All rights reserved.
+   * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
    * <p>
    * 
    * @version $LastChangedRevision$
@@ -129,7 +129,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
    * Implements the setter strategy on the entity proxy implementation to be
    * used by hibernate.
    * <p>
-   * Copyright 2005 Design2See. All rights reserved.
+   * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
    * <p>
    * 
    * @version $LastChangedRevision$

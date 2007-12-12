@@ -27,7 +27,7 @@ import com.d2s.framework.util.gate.IGate;
 /**
  * This connector is a model property connector.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

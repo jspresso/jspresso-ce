@@ -14,7 +14,7 @@ import com.ulcjava.base.application.util.Color;
  * This abstract class serves as the base class for all ULCTextComponent
  * connectors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

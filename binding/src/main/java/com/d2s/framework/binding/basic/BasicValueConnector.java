@@ -11,7 +11,7 @@ import com.d2s.framework.binding.AbstractValueConnector;
  * TableModel where each cell model would be an instance of
  * <code>BasicValueConnector</code>).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

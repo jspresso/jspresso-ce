@@ -7,7 +7,7 @@ package com.d2s.framework.util.exception;
  * This class is for throwing any throwable (checked and unchecked) over
  * non-checked methods.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -12,7 +12,7 @@ import com.d2s.framework.util.gate.IGate;
 /**
  * This interface is the super-interface of all properties descriptors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

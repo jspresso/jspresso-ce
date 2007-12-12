@@ -17,7 +17,7 @@ import com.ulcjava.base.shared.internal.Anything;
  * An ULC datatype to provide duration renderers on ULCExtendedTable, ULCList,
  * ... They are used in conjunction with ULCLabels.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

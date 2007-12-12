@@ -24,7 +24,7 @@ import com.d2s.framework.util.lang.ObjectUtils;
  * any peer connectee since the way the value is retrieved by from the connectee
  * is left to the implementor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

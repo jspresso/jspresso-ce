@@ -30,7 +30,7 @@ import com.d2s.framework.view.IView;
  * This class is an adapter around a SwingView to be able to use it as a cell
  * editor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

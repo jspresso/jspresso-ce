@@ -20,7 +20,7 @@ import com.ulcjava.base.application.event.serializable.IWindowListener;
 /**
  * Base class for ulc actions asking the user to make a decision.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -19,7 +19,7 @@ import com.d2s.framework.model.entity.IEntity;
  * Sets the selected entity as the value of the source view connector (which
  * will propagate to the backend).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

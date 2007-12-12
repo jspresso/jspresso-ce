@@ -8,7 +8,7 @@ package com.d2s.framework.view.descriptor;
  * organizes 2 view descriptors in a splitted manner. The described view can
  * typically be implemented using a swing JSplitPane.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

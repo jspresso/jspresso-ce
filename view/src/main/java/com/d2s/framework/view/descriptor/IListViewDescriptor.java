@@ -8,7 +8,7 @@ package com.d2s.framework.view.descriptor;
  * view will typically be implemented by a swing JList representing a collection
  * of java beans described by one of their property.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

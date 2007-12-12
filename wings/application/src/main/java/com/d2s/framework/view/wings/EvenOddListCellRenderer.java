@@ -12,7 +12,7 @@ import com.d2s.framework.util.wings.WingsUtil;
  * A default list cell renderer rendering even and odd rows background slightly
  * differently.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

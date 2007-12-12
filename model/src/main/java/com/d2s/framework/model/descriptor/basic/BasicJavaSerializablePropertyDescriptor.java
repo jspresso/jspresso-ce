@@ -10,7 +10,7 @@ import com.d2s.framework.model.descriptor.IJavaSerializablePropertyDescriptor;
 /**
  * Default implementation of a java serialized property descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

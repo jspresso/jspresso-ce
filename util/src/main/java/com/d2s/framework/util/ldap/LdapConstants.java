@@ -6,7 +6,7 @@ package com.d2s.framework.util.ldap;
 /**
  * Constants for Design2See LDAP attributes naming.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -10,7 +10,7 @@ import org.wings.SLabel;
  * A connector on a label whose role is to render an image based on its binary
  * representation taken out of the connector value.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

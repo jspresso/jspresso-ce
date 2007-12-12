@@ -10,7 +10,7 @@ import java.io.OutputStream;
 /**
  * This is a simple helper class for IO operations.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

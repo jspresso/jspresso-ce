@@ -6,7 +6,7 @@ package com.d2s.framework.view.descriptor;
 /**
  * This public interface is implemented by any tree view descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

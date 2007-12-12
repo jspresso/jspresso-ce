@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 /**
  * This class wraps a method object and helps analyzing it as an accessor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

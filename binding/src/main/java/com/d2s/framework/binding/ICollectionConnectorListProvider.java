@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Marks objects being able to provide a list of collection connectors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

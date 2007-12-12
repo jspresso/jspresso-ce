@@ -8,7 +8,7 @@ import com.ulcjava.base.application.event.IEventListener;
 /**
  * The extended tree listener.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

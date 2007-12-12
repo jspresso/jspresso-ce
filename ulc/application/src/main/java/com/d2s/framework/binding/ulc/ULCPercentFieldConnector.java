@@ -10,7 +10,7 @@ import com.ulcjava.base.application.ULCTextField;
  * since ULCPercentDatatype returns the percent value as the field value instead
  * of dividing it per 100.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

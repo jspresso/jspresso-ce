@@ -8,7 +8,7 @@ import org.hibernate.dialect.MySQL5Dialect;
 /**
  * Mysql5 InnoDB dialect.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

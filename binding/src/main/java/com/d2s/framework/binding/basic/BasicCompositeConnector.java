@@ -14,7 +14,7 @@ import com.d2s.framework.binding.IValueConnector;
  * technical view models (e.g. TableModel where each row model would be an
  * instance of <code>BasicCompositeConnector</code>).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

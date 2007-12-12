@@ -16,7 +16,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * <code>getConnectedJComponent()</code> which returns the parametrized type
  * of the class.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

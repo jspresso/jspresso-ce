@@ -16,7 +16,7 @@ import com.ulcjava.base.trusted.AllPermissionsFileService;
  * A file service that handles automatic extension mgt and overriding
  * confirmation.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -9,7 +9,7 @@ import java.text.ParseException;
 /**
  * An adapter for the <code>Format</code> jdk objects.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

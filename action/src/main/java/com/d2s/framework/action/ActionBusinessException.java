@@ -8,7 +8,7 @@ import com.d2s.framework.util.exception.BusinessException;
 /**
  * This exception is thrown whenever a business exception occurs on an action.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -8,7 +8,7 @@ import com.d2s.framework.action.IAction;
 /**
  * Action to ask a binary question to the user with a cancel option.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -8,7 +8,7 @@ package com.d2s.framework.model.descriptor;
  * stored as hex string in the form "0xFFFFFF" if alpha (transparency) is not
  * used and "0xFFFFFFFF" if alpha is used.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

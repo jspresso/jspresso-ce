@@ -9,7 +9,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
  * A simple container for transfering component(s). Its usage is targetting at
  * copy/cut/paste operations.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

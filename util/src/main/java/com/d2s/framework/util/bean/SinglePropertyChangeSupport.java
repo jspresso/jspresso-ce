@@ -10,7 +10,7 @@ import java.beans.PropertyChangeSupport;
  * This property change support prevents from adding twice the same property
  * change listener.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

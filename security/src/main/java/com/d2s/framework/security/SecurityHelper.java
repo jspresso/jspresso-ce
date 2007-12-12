@@ -18,7 +18,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 /**
  * Helper class for security management.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

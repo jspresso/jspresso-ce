@@ -20,7 +20,7 @@ import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 /**
  * The model descriptor of module objects.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

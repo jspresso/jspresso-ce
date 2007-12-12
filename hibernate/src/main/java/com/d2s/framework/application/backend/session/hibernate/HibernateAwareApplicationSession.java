@@ -31,7 +31,7 @@ import com.d2s.framework.util.bean.PropertyHelper;
  * Basic implementation of an application session aware of hibernate when
  * merging back entities from the unit of work.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

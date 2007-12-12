@@ -28,7 +28,7 @@ import com.d2s.framework.util.event.SelectionChangeSupport;
 /**
  * This class is a model property connector which manages a collection property.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

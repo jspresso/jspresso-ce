@@ -18,7 +18,7 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * This gate opens and closes based on the value of a boolean property of its
  * model.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

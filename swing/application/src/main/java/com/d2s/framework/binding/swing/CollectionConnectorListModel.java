@@ -21,7 +21,7 @@ import com.d2s.framework.util.swing.SwingUtil;
  * expected, this list model will fire necessary events depending on connectors
  * received events.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

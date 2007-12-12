@@ -19,7 +19,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * controllers are controllers which act on the application domain model (as
  * oposed to frontend controllers which act on the application view).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

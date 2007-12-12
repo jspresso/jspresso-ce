@@ -10,7 +10,7 @@ import org.codehaus.aspectwerkz.joinpoint.JoinPoint;
  * A general purpose tracing aspect. Used to debug every "standard" POJO in the
  * framework.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * Revision $LastChangedRevision$.
  * 

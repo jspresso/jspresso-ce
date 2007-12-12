@@ -6,7 +6,7 @@ package com.d2s.framework.view;
 /**
  * A simple interface to implement an indirection on a view.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

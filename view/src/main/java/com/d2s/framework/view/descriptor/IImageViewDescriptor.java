@@ -7,7 +7,7 @@ package com.d2s.framework.view.descriptor;
  * This public interface is implemented by view descriptors which are just
  * presenting an image based on its binary representation.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

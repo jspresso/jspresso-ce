@@ -12,7 +12,7 @@ import com.d2s.framework.application.frontend.action.wings.flow.InfoAction;
 /**
  * A frontend action to display all useful informations about a binary property.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

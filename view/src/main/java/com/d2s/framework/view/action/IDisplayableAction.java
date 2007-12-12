@@ -13,7 +13,7 @@ import com.d2s.framework.util.gate.IGate;
  * This interface must be implemented by any displayable action of the
  * application.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

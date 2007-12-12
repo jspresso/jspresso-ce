@@ -20,7 +20,7 @@ import com.d2s.framework.model.entity.IEntityCloneFactory;
 /**
  * This action clones the selected objects in the projected collection.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

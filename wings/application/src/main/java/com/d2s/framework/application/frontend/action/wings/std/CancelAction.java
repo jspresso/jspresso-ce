@@ -12,7 +12,7 @@ import com.d2s.framework.application.frontend.action.wings.AbstractWingsAction;
  * A standard cancel action. Since it is a chained action, it can be chained
  * with another action.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

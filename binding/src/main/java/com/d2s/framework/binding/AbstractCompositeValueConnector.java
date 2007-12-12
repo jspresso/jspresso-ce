@@ -9,7 +9,7 @@ import java.util.Collection;
  * This is a simple connector implementation whic allows the management of child
  * connectors. It can be used for straight view connector implementation.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

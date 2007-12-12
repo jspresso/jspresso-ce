@@ -8,7 +8,7 @@ import com.d2s.framework.model.descriptor.IPasswordPropertyDescriptor;
 /**
  * Default implementation of a password descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

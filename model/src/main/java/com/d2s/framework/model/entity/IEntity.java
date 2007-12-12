@@ -12,7 +12,7 @@ import com.d2s.framework.model.component.IComponent;
  * application domain. It establishes the minimal contract of an entity which is
  * providing id accessors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

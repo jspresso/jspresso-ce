@@ -11,7 +11,7 @@ import com.ulcjava.base.application.ULCTree;
  * Helper class used to bind collection view connectors to tree selection models
  * (used in <code>ULCTree</code>).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -9,7 +9,7 @@ import com.d2s.framework.util.descriptor.IDescriptor;
  * This is just a marker interface for model descriptors (ususally bean
  * descriptors and sub descriptors).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

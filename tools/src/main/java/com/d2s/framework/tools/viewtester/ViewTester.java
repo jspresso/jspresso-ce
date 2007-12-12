@@ -36,7 +36,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 /**
  * Generates D2S powered component java code based on its descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$
@@ -187,7 +187,7 @@ public class ViewTester {
   /**
    * Specialized exception handler for the tester event dispatch thread.
    * <p>
-   * Copyright 2005 Design2See. All rights reserved.
+   * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
    * <p>
    * 
    * @version $LastChangedRevision$

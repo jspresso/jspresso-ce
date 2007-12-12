@@ -15,7 +15,7 @@ import com.d2s.framework.binding.IValueConnector;
 /**
  * This connector factory implementation creates basic connectors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -19,7 +19,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 /**
  * Default implementation of a property descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

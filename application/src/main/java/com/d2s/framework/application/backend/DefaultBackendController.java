@@ -7,7 +7,7 @@ package com.d2s.framework.application.backend;
  * Default implementation of an application backend controller. this
  * implementation is usable "as-is".
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

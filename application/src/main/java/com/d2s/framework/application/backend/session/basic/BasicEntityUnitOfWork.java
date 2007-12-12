@@ -15,7 +15,7 @@ import com.d2s.framework.util.bean.BeanPropertyChangeRecorder;
  * ensuring uniqueness in the UOW scope as well as state propagation in case of
  * a successful commit.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

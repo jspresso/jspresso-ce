@@ -17,7 +17,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 /**
  * Creates and adds an entity to the selected master detail collection.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

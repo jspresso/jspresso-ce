@@ -13,7 +13,7 @@ import com.d2s.framework.binding.IMvcBinder;
  * building complex technical view models (e.g. TableModel where the underlying
  * structure would be a <code>BasicCollectionConnector</code>).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

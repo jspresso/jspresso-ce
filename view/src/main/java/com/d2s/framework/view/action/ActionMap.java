@@ -13,7 +13,7 @@ import java.util.Map;
  * action map is a map of action sets keyed by their grouping goal (like 'EDIT',
  * 'VIEW', ...).
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

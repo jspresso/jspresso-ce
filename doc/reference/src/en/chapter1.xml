@@ -851,7 +851,7 @@ import com.d2s.framework.security.UserPrincipal;
 /**
  * Default lifecycle service for tracing.
  * &lt;p&gt;
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Design2See. All rights reserved.
  * &lt;p&gt;
  */
 public class TraceableLifecycleInterceptor extends

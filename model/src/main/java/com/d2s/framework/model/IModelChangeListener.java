@@ -7,7 +7,7 @@ package com.d2s.framework.model;
  * This public interface must be implemented by classes willing to keep track of
  * <code>IModelProvider</code> model changes.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

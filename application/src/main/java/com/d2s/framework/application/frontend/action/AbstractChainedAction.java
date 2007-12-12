@@ -13,7 +13,7 @@ import com.d2s.framework.action.IActionHandler;
  * An simple frontend swing action which holds a reference on a chained next
  * action.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -9,7 +9,7 @@ import com.d2s.framework.util.event.ISelectionChangeListener;
 /**
  * This is the interface implemented by connectors on collections.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

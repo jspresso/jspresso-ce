@@ -8,7 +8,7 @@ import com.d2s.framework.view.descriptor.ICompositeViewDescriptor;
 /**
  * Default implementation of a composite view descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

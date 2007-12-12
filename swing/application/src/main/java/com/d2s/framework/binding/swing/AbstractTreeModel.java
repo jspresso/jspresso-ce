@@ -14,7 +14,7 @@ import javax.swing.tree.TreePath;
 /**
  * Abstract class for tree models. It mainly manages listeners on the model.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

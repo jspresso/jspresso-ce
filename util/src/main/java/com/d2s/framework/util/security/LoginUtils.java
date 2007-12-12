@@ -8,7 +8,7 @@ import java.util.ListResourceBundle;
 /**
  * Some i18n utils for login.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$
@@ -48,7 +48,7 @@ public final class LoginUtils {
   /**
    * English RB.
    * <p>
-   * Copyright 2005 Design2See. All rights reserved.
+   * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
    * <p>
    * 
    * @version $LastChangedRevision$
@@ -78,7 +78,7 @@ public final class LoginUtils {
   /**
    * French RB.
    * <p>
-   * Copyright 2005 Design2See. All rights reserved.
+   * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
    * <p>
    * 
    * @version $LastChangedRevision$

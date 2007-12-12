@@ -67,7 +67,7 @@ import foxtrot.Job;
  * Default implementation of a swing frontend controller. This implementation is
  * usable "as-is".
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

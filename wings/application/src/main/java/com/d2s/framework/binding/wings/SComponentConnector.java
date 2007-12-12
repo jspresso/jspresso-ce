@@ -15,7 +15,7 @@ import com.d2s.framework.binding.AbstractValueConnector;
  * <code>getConnectedSComponent()</code> which returns the parametrized type
  * of the class.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

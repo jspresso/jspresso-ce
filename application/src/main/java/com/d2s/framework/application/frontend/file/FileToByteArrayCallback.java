@@ -17,7 +17,7 @@ import com.d2s.framework.action.IActionHandler;
  * Default handler implementation to fully read the file inputstream into a byte
  * array and setting it in the context.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

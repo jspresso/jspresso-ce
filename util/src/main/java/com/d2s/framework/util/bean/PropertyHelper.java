@@ -13,7 +13,7 @@ import org.apache.commons.beanutils.PropertyUtils;
 /**
  * This helper class contains utility methods to work with bean properties.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

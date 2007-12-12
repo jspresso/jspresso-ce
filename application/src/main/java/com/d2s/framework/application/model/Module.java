@@ -23,7 +23,7 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
  * (optionally) provide a projected object serving as model root for trigerring
  * grouped processes.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

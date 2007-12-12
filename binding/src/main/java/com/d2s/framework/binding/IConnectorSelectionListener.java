@@ -7,7 +7,7 @@ package com.d2s.framework.binding;
  * This interface is implemented by listeners willing to be notified of a
  * connector selection change on a connector selector.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

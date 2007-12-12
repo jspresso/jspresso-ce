@@ -17,7 +17,7 @@ import com.d2s.framework.binding.IConnectorSelector;
  * A composite connector holding a reference on a collection connector to easyly
  * play a role in a master/detail relationship.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

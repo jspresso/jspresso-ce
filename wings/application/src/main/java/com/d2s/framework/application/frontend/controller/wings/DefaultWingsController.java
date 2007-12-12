@@ -52,7 +52,7 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * Default implementation of a wings frontend controller. This implementation is
  * usable "as-is".
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

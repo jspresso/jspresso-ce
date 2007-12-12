@@ -15,7 +15,7 @@ import com.d2s.framework.util.swing.BrowserControl;
 /**
  * A simple action to display an static Url content.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

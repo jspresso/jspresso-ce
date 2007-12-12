@@ -13,7 +13,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * server. Another kind of connector might be a view connector connected to a
  * model connector with both connectors' states kept synchronized.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

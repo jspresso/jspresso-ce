@@ -13,7 +13,7 @@ import java.util.Locale;
  * A simple date format that returns null whenever a null or empty string is
  * parsed instead of throwing a ParseException.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

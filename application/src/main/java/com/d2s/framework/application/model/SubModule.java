@@ -11,7 +11,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * A child module is a non-root module (it has a parent). A child module uses a
  * view to render its projected artifact.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

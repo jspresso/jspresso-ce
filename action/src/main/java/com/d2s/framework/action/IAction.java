@@ -10,7 +10,7 @@ import com.d2s.framework.security.ISecurable;
 /**
  * This interface establishes the contract of any action in the application.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -12,7 +12,7 @@ import com.ulcjava.base.shared.FileChooserConfig;
 /**
  * Initiates a file choosing action.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

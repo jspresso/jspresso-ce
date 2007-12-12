@@ -12,7 +12,7 @@ import com.d2s.framework.util.IIconImageURLProvider;
  * This image url provider uses a delegate provider to look up the rendering
  * image of a bean module based on its projected object.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

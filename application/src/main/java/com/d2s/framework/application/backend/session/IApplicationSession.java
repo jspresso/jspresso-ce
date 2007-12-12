@@ -18,7 +18,7 @@ import com.d2s.framework.security.UserPrincipal;
  * This interface establishes the contract of an application session. This
  * application session represents the backend application state.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

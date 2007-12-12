@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
  * This abstract class serves as the base class for all JTextComponent
  * connectors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

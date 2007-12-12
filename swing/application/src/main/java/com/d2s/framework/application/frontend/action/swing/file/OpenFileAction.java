@@ -17,7 +17,7 @@ import com.d2s.framework.util.swing.SwingUtil;
 /**
  * Initiates a file open action.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -12,7 +12,7 @@ import com.d2s.framework.model.entity.IEntityCloneFactory;
  * An action used duplicate a collection of domain objects. Cloning an entity
  * should result in adding it to the collection the action was triggered on.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -10,7 +10,7 @@ import java.util.List;
  * connectors. It keeps track of the children connectors that were potentially
  * removed during the notification process.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

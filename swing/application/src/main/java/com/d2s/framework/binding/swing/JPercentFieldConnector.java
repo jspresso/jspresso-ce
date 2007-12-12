@@ -13,7 +13,7 @@ import com.d2s.framework.util.format.IFormatter;
 /**
  * Automatically adds a '%' character at the end of the pased string if needed.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

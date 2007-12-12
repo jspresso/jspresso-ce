@@ -11,7 +11,7 @@ package com.d2s.framework.model.entity;
  * being garbage collected. Given this point implementations should leverage on
  * weak references.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

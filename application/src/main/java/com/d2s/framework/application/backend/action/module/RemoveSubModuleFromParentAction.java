@@ -21,7 +21,7 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 /**
  * This action removes the selected modules from their parent.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -7,7 +7,7 @@ package com.d2s.framework.util.bean.integrity;
  * This is an interface used to identify classes responsible for providing
  * component property integrity processors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

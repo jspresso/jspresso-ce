@@ -7,7 +7,7 @@ package com.d2s.framework.binding;
  * This exception is thrown whenever a binding requires a connector that does
  * not exist.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

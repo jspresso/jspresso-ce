@@ -13,7 +13,7 @@ import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
  * A simple action which restarts the current module executing the module
  * startup action.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -13,7 +13,7 @@ import java.text.ParseException;
  * not set, the string representation will be used "as is" as the connector
  * value.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

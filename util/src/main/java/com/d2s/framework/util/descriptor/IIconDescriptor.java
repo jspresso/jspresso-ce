@@ -7,7 +7,7 @@ package com.d2s.framework.util.descriptor;
  * This interface is implemented by anything which is graphically identifiable
  * by an icon.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -14,7 +14,7 @@ import com.d2s.framework.util.collection.ObjectEqualityMap;
  * An action used duplicate a collection of map domain objects. Cloning a map
  * should result in adding it to the collection the action was triggered on.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

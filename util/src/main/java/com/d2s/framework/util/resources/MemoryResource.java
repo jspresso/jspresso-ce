@@ -9,7 +9,7 @@ import java.io.InputStream;
 /**
  * a byte array resource.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

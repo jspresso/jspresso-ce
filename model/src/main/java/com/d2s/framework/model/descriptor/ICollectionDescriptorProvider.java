@@ -7,7 +7,7 @@ package com.d2s.framework.model.descriptor;
 /**
  * Implementing classes are able to provide a collection descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

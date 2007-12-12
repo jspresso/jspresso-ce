@@ -17,7 +17,7 @@ import com.d2s.framework.model.entity.IEntityRegistry;
  * Basic implementation of an entity registry backed by an HashMap of weak
  * reference values.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

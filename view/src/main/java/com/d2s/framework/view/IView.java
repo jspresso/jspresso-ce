@@ -10,7 +10,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * This interface establishes the general contract of a view. Its main role is
  * to provide a pair of (visible peer , connector) used by the framework.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

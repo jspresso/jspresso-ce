@@ -13,7 +13,7 @@ import com.d2s.framework.util.bean.PropertyHelper;
 /**
  * This is the default implementation of the accessor factory.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

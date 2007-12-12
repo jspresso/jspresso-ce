@@ -13,7 +13,7 @@ import java.util.WeakHashMap;
  * A simple class used to record bean property changes. Original values of
  * changed properties are also kept.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

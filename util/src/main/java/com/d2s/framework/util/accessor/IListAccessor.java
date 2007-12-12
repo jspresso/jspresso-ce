@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * This interface is implemented by any bean value accessor on a list property.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -10,7 +10,7 @@ import java.util.List;
  * type of properties is constrained by a fixed value enumeration like
  * MALE/FEMALE or MONDAY/TUESDAY/WEDNESDAY/...
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

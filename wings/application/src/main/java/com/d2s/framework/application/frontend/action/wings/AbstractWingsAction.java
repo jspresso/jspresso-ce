@@ -20,7 +20,7 @@ import com.d2s.framework.util.wings.WingsUtil;
  * This class serves as base class for wings actions. It provides accessors on
  * commonly used artifacts.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

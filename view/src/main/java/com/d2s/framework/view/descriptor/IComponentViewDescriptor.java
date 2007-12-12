@@ -11,7 +11,7 @@ import java.util.List;
  * subset of a bean simple properties. For instance, this might be implemented
  * by a swing JPanel containing a set of arranged label/widget pairs.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

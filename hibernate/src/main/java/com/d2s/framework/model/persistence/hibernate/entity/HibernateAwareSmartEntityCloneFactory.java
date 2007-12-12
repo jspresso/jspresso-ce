@@ -11,7 +11,7 @@ import com.d2s.framework.model.entity.SmartEntityCloneFactory;
  * A smart entity clone factory that uses hibernate to determine if an antity or
  * collection is initialized.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

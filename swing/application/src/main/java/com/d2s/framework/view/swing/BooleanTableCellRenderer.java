@@ -21,7 +21,7 @@ import com.d2s.framework.util.swing.SwingUtil;
 /**
  * Renders a table cell using a checkbox.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

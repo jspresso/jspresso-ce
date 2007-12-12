@@ -18,7 +18,7 @@ import com.d2s.framework.model.entity.IEntity;
  * a problem with determination of the subclass entity name when using dynamic
  * proxies.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

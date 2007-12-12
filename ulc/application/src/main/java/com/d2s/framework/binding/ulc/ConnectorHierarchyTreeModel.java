@@ -22,7 +22,7 @@ import com.ulcjava.base.application.tree.TreePath;
 /**
  * This tree model maps a connector hierarchy.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -17,7 +17,7 @@ import com.d2s.framework.binding.ICollectionConnector;
  * Frontend action to generate a report selected among the model collection
  * connector holding a list of report descriptors.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

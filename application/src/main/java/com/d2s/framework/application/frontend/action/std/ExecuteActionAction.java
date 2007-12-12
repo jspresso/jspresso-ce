@@ -13,7 +13,7 @@ import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 /**
  * Executes the action set in the context using the key ACTION_PARAM.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

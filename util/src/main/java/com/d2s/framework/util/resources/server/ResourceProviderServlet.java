@@ -18,7 +18,7 @@ import com.d2s.framework.util.resources.IResource;
  * This servlet class returns the web resource which matches the specified id
  * request parameter requesting it to the resource manager.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

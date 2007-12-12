@@ -33,7 +33,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * with commonly used accessors as well as a reference to the root model
  * descriptor.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

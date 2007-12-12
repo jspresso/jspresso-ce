@@ -32,7 +32,7 @@ import com.d2s.framework.model.entity.IEntity;
 /**
  * This the root abstract class of all hibernate related persistence actions.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

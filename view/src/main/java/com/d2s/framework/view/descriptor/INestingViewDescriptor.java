@@ -8,7 +8,7 @@ package com.d2s.framework.view.descriptor;
  * just nesting a child view. This type of view is useful to build nested
  * property views.
  * <p>
- * Copyright 2005 Design2See. All rights reserved.
+ * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$
