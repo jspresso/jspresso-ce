@@ -287,8 +287,8 @@ public class DefaultUlcController extends
   private ULCMenu createModulesMenu() {
     ULCMenu modulesMenu = new ULCMenu(getTranslationProvider().getTranslation(
         "modules", getLocale()));
-    // modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
-    // IIconFactory.SMALL_ICON_SIZE));
+    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+        IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       ULCMenuItem moduleMenuItem = new ULCMenuItem(new ModuleSelectionAction(

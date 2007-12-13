@@ -39,6 +39,18 @@
       <organization>Design 2 See</organization>
     </developer>
   </developers>
+  <repositories>
+    <repository>
+      <id>jboss</id>
+      <url>http://repository.jboss.com/maven2</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>snapshots</id>
+      <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+    </pluginRepository>
+  </pluginRepositories>
   <modules>
     <module>aop</module>
     <module>application</module>
@@ -335,7 +347,7 @@
       <dependency>
         <groupId>jboss</groupId>
         <artifactId>jboss-common</artifactId>
-        <version>4.0.2</version>
+        <version>4.0.4</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
@@ -458,7 +470,7 @@
         <executions>
           <execution>
             <id>obfuscate</id>
-            <phase>package</phase>
+            <phase>verify</phase>
             <configuration>
               <tasks>
                 <taskdef resource="proguard/ant/task.properties" />
@@ -588,8 +600,13 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/dist-bin.xml</descriptor>
+          </descriptors>
+        </configuration>
       </plugin>
-     </plugins>
+    </plugins>
   </build>
   <reporting>
     <plugins>

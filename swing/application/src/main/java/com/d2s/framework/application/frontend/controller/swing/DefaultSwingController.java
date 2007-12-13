@@ -398,8 +398,8 @@ public class DefaultSwingController extends
   private JMenu createModulesMenu() {
     JMenu modulesMenu = new JMenu(getTranslationProvider().getTranslation(
         "modules", getLocale()));
-    // modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
-    // IIconFactory.SMALL_ICON_SIZE));
+    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+        IIconFactory.SMALL_ICON_SIZE));
     for (String moduleId : getModuleIds()) {
       IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
       JMenuItem moduleMenuItem = new JMenuItem(new ModuleSelectionAction(
