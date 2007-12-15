@@ -1,0 +1,13 @@
+window_sizes 1280 1003 219 1055 868 58
+diagrams
+  active  classdiagram_ref 130567 // View descriptors
+    1055 868 100 4 0 0
+end
+show_stereotypes
+selected class_ref 150663 // ITreeViewDescriptor
+open
+  classview_ref 130695 // Model descriptors
+  classview_ref 132359 // View descriptors
+  classview_ref 131975 // descriptor
+end
+end
