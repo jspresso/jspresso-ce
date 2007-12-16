@@ -856,6 +856,14 @@ public class DefaultSwingViewFactory implements
             BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), view.getDescriptor()
                     .getI18nName(getTranslationProvider(), locale)));
+        // JInternalFrame iFrame = new JInternalFrame(view.getDescriptor()
+        // .getI18nName(getTranslationProvider(), locale), false, false,
+        // false, false);
+        // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
+        // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+        // iFrame.getContentPane().add(view.getPeer());
+        // iFrame.pack();
+        // view.setPeer(iFrame);
         break;
       default:
         break;

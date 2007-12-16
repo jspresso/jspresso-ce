@@ -41,6 +41,7 @@ import org.wings.SFont;
 import org.wings.SGridBagLayout;
 import org.wings.SGridLayout;
 import org.wings.SIcon;
+import org.wings.SInternalFrame;
 import org.wings.SLabel;
 import org.wings.SList;
 import org.wings.SMenuItem;
@@ -795,10 +796,20 @@ public class DefaultWingsViewFactory implements
         break;
       case IViewDescriptor.TITLED:
         //FIXME until titled border is re-integrated into wings.
-        view.getPeer().setBorder(new SEtchedBorder());
+        //view.getPeer().setBorder(new SEtchedBorder());
         // view.getPeer().setBorder(
         // new STitledBorder(new SEtchedBorder(), view.getDescriptor()
         // .getI18nName(getTranslationProvider(), locale)));
+        SInternalFrame iFrame = new SInternalFrame();
+        iFrame.setTitle(view.getDescriptor()
+            .getI18nName(getTranslationProvider(), locale));
+        iFrame.setMaximizable(false);
+        iFrame.setClosable(false);
+        iFrame.setIconifyable(false);
+        iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
+            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+        iFrame.getContentPane().add(view.getPeer());
+        view.setPeer(iFrame);
         break;
       default:
         break;

@@ -6,7 +6,6 @@ import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.callback.NameCallback;
 import javax.security.auth.callback.PasswordCallback;
-import javax.security.auth.callback.UnsupportedCallbackException;
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.servlet.ServletConfig;
@@ -152,15 +151,14 @@ public class LoginServlet extends HttpServlet {
      * <p>
      * {@inheritDoc}
      */
-    public void handle(Callback[] callbacks)
-        throws UnsupportedCallbackException {
+    public void handle(Callback[] callbacks) {
       for (int i = 0; i < callbacks.length; i++) {
         if (callbacks[i] instanceof NameCallback) {
           ((NameCallback) callbacks[i]).setName(username);
         } else if (callbacks[i] instanceof PasswordCallback) {
           ((PasswordCallback) callbacks[i]).setPassword(password);
-        } else {
-          throw new UnsupportedCallbackException(callbacks[i]);
+//        } else {
+//          throw new UnsupportedCallbackException(callbacks[i]);
         }
       }
     }

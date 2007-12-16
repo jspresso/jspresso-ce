@@ -554,8 +554,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     if (userPreferredLanguageCode != null) {
       getBackendController().getApplicationSession().setLocale(
           new Locale(userPreferredLanguageCode));
-      getBackendController().translateModules();
     }
+    getBackendController().translateModules();
   }
 
   /**

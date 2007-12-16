@@ -825,6 +825,15 @@ public class DefaultUlcViewFactory implements
             BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), view.getDescriptor()
                     .getI18nName(getTranslationProvider(), locale)));
+        // ULCInternalFrame iFrame = new ULCInternalFrame(view.getDescriptor()
+        // .getI18nName(getTranslationProvider(), locale), true, true,
+        // true, true);
+        // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
+        // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+        // iFrame.add(view.getPeer());
+        // iFrame.pack();
+        // iFrame.setPreferredSize(new Dimension(100,100));
+        // view.setPeer(iFrame);
         break;
       default:
         break;
