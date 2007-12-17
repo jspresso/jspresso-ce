@@ -136,6 +136,7 @@ import com.d2s.framework.util.format.NullableSimpleDateFormat;
 import com.d2s.framework.util.gate.IGate;
 import com.d2s.framework.util.gui.ColorHelper;
 import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.util.wings.WingsUtil;
 import com.d2s.framework.view.BasicCompositeView;
 import com.d2s.framework.view.BasicMapView;
 import com.d2s.framework.view.BasicView;
@@ -621,10 +622,23 @@ public class DefaultWingsViewFactory implements
    */
   protected SPanel createSPanel() {
     SPanel panel = new SPanel();
-    panel.setPreferredSize(SDimension.FULLAREA);
-    panel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    panel.setPreferredSize(WingsUtil.FULLAREA);
+    panel.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     panel.setVerticalAlignment(SConstants.TOP_ALIGN);
     return panel;
+  }
+
+  /**
+   * Creates an internal frame.
+   * 
+   * @return the created panel.
+   */
+  protected SInternalFrame createSInternalFrame() {
+    SInternalFrame iFrame = new SInternalFrame();
+    iFrame.setPreferredSize(WingsUtil.FULLAREA);
+    iFrame.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+    iFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
+    return iFrame;
   }
 
   /**
@@ -655,8 +669,8 @@ public class DefaultWingsViewFactory implements
   protected SScrollPane createSScrollPane() {
     SScrollPane scrollPane = new SScrollPane();
     scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-    scrollPane.setPreferredSize(SDimension.FULLAREA);
-    scrollPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    scrollPane.setPreferredSize(WingsUtil.FULLAREA);
+    scrollPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     return scrollPane;
   }
@@ -680,9 +694,9 @@ public class DefaultWingsViewFactory implements
    */
   protected STabbedPane createSTabbedPane() {
     STabbedPane tabbedPane = new STabbedPane();
-    tabbedPane.setPreferredSize(SDimension.FULLAREA);
+    tabbedPane.setPreferredSize(WingsUtil.FULLAREA);
     tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
-    tabbedPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    tabbedPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     return tabbedPane;
   }
 
@@ -742,7 +756,7 @@ public class DefaultWingsViewFactory implements
    */
   protected STextArea createSTextArea() {
     STextArea textArea = new STextArea();
-    textArea.setPreferredSize(SDimension.FULLAREA);
+    textArea.setPreferredSize(WingsUtil.FULLAREA);
     return textArea;
   }
 
@@ -795,14 +809,14 @@ public class DefaultWingsViewFactory implements
         view.getPeer().setBorder(new SEtchedBorder());
         break;
       case IViewDescriptor.TITLED:
-        //FIXME until titled border is re-integrated into wings.
-        //view.getPeer().setBorder(new SEtchedBorder());
+        // FIXME until titled border is re-integrated into wings.
+        // view.getPeer().setBorder(new SEtchedBorder());
         // view.getPeer().setBorder(
         // new STitledBorder(new SEtchedBorder(), view.getDescriptor()
         // .getI18nName(getTranslationProvider(), locale)));
-        SInternalFrame iFrame = new SInternalFrame();
-        iFrame.setTitle(view.getDescriptor()
-            .getI18nName(getTranslationProvider(), locale));
+        SInternalFrame iFrame = createSInternalFrame();
+        iFrame.setTitle(view.getDescriptor().getI18nName(
+            getTranslationProvider(), locale));
         iFrame.setMaximizable(false);
         iFrame.setClosable(false);
         iFrame.setIconifyable(false);
@@ -997,7 +1011,7 @@ public class DefaultWingsViewFactory implements
       viewComponent.add(childView.getPeer(), childViewDescriptor.getKey());
       childrenViews.put(childViewDescriptor.getKey(), childView);
     }
-    viewComponent.setPreferredSize(SDimension.FULLAREA);
+    viewComponent.setPreferredSize(WingsUtil.FULLAREA);
     view.setChildren(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
@@ -2219,7 +2233,9 @@ public class DefaultWingsViewFactory implements
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
             rowConnectorPrototype);
     STable viewComponent = createSTable();
-
+    if (viewDescriptor.isReadOnly()) {
+      viewComponent.setEditable(false);
+    }
     Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
     List<String> columnConnectorKeys = new ArrayList<String>();
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
@@ -2268,17 +2284,19 @@ public class DefaultWingsViewFactory implements
       }
       column.setHeaderValue(columnName.toString());
 
-      IView<SComponent> editorView = createPropertyView(propertyDescriptor,
-          null, actionHandler, locale);
-      if (editorView.getPeer() instanceof SActionField) {
-        SActionField actionField = (SActionField) editorView.getPeer();
-        actionField.setActions(Collections.singletonList(actionField
-            .getActions().get(0)));
+      if (!viewDescriptor.isReadOnly()) {
+        IView<SComponent> editorView = createPropertyView(propertyDescriptor,
+            null, actionHandler, locale);
+        if (editorView.getPeer() instanceof SActionField) {
+          SActionField actionField = (SActionField) editorView.getPeer();
+          actionField.setActions(Collections.singletonList(actionField
+              .getActions().get(0)));
+        }
+        if (editorView.getConnector().getParentConnector() == null) {
+          editorView.getConnector().setParentConnector(connector);
+        }
+        column.setCellEditor(createTableCellEditor(editorView));
       }
-      if (editorView.getConnector().getParentConnector() == null) {
-        editorView.getConnector().setParentConnector(connector);
-      }
-      column.setCellEditor(createTableCellEditor(editorView));
       STableCellRenderer cellRenderer = createTableCellRenderer(
           propertyDescriptor, locale);
       if (cellRenderer != null) {
@@ -2311,7 +2329,7 @@ public class DefaultWingsViewFactory implements
     scrollPane.setViewportView(viewComponent);
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    scrollPane.setPreferredSize(new SDimension("100%", SDimension.AUTO));
+    scrollPane.setPreferredSize(new SDimension("99%", SDimension.AUTO));
     return view;
   }
 
@@ -2330,6 +2348,7 @@ public class DefaultWingsViewFactory implements
       SIcon childIcon = iconFactory.getIcon(childViewDescriptor
           .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
       SComponent tabView = childView.getPeer();
+      tabView.setPreferredSize(new SDimension("99%", "99%"));
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, tabView,
@@ -2343,6 +2362,7 @@ public class DefaultWingsViewFactory implements
       childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
+    viewComponent.setPreferredSize(new SDimension("99%", "800px"));
     return view;
   }
 
@@ -2453,7 +2473,7 @@ public class DefaultWingsViewFactory implements
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setPreferredSize(new SDimension("160px", "500px"));
+    scrollPane.setPreferredSize(new SDimension("200px", "500px"));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;
@@ -2834,7 +2854,11 @@ public class DefaultWingsViewFactory implements
               computeEnumerationKey(propertyDescriptor.getEnumerationName(),
                   value), locale));
         } else {
-          renderer.setText(String.valueOf(value));
+          if (value == null) {
+            renderer.setText("");
+          } else {
+            renderer.setText(String.valueOf(value));
+          }
         }
       }
       return renderer;

@@ -13,7 +13,6 @@ import javax.swing.Action;
 
 import org.wings.SBoxLayout;
 import org.wings.SButton;
-import org.wings.SDimension;
 import org.wings.SGridBagLayout;
 import org.wings.SPanel;
 import org.wings.STextField;
@@ -21,6 +20,7 @@ import org.wings.border.SBevelBorder;
 import org.wings.event.SDocumentListener;
 
 import com.d2s.framework.util.lang.ObjectUtils;
+import com.d2s.framework.util.wings.WingsUtil;
 
 /**
  * A wings component to represent an actionable field. It should behave like a
@@ -58,7 +58,7 @@ public class SActionField extends SPanel {
       add(textField, new GridBagConstraints(0, 0, 1, 1, 1, 0,
           GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
               0, 0, 0, 0), 0, 0));
-      textField.setPreferredSize(SDimension.FULLWIDTH);
+      textField.setPreferredSize(WingsUtil.FULLWIDTH);
     }
     this.showTextField = showTextField;
     buttonPanel = new SPanel();

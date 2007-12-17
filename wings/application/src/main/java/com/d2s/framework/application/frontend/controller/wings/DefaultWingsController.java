@@ -22,7 +22,6 @@ import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
-import org.wings.SDimension;
 import org.wings.SForm;
 import org.wings.SFrame;
 import org.wings.SIcon;
@@ -43,6 +42,7 @@ import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.wings.components.SErrorDialog;
 import com.d2s.framework.util.exception.BusinessException;
 import com.d2s.framework.util.html.HtmlHelper;
+import com.d2s.framework.util.wings.WingsUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
@@ -213,7 +213,7 @@ public class DefaultWingsController extends
   private SFrame createControllerFrame() {
     SFrame frame = new SFrame();
     cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(SDimension.FULLAREA);
+    cardPanel.setPreferredSize(WingsUtil.FULLAREA);
     SPanel contentPane = new SPanel(new SBorderLayout());
     frame.setContentPane(contentPane);
     frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
@@ -241,7 +241,7 @@ public class DefaultWingsController extends
         view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     SForm frameForm = new SForm();
     frameForm.add(view.getPeer());
-    frameForm.setPreferredSize(SDimension.FULLAREA);
+    frameForm.setPreferredSize(WingsUtil.FULLAREA);
     internalFrame.getContentPane().add(frameForm, SBorderLayout.CENTER);
     internalFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
     internalFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
