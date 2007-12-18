@@ -98,6 +98,8 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
    *             whenever the startup url is malformed.
    */
   public static void main(String[] args) throws MalformedURLException {
+    SwingUtil.installDefaults();
+
     String splashUrl = null;
     List<String> filteredArgsBuffer = new ArrayList<String>();
     for (int i = 0; i < args.length; i++) {
@@ -119,7 +121,6 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
     Properties props = ClientEnvironmentAdapter.getClientInfo()
         .getSystemProperties();
     props.setProperty("java.io.tmpdir", System.getProperty("java.io.tmpdir"));
-    SwingUtil.installDefaults();
 
     String logLevel = getLogLevel(filteredArgs);
     if (logLevel != null) {

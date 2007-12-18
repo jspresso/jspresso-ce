@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -256,11 +257,6 @@ public final class SwingUtil {
    * Workaround for Bug#5063999.
    */
   public static void installDefaults() {
-    UIManager.put(FORMATTED_TEXTFIELD_FONT_KEY, UIManager
-        .get(TEXTFIELD_FONT_KEY));
-    UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY, UIManager
-        .get(TEXTFIELD_INACTIVE_BACKGROUND_KEY));
-    UIManager.put(PASSWORDFIELD_FONT_KEY, UIManager.get(TEXTFIELD_FONT_KEY));
     String defaultlaf = System.getProperty("swing.defaultlaf");
     if (defaultlaf == null || defaultlaf.length() == 0) {
       try {
@@ -275,6 +271,12 @@ public final class SwingUtil {
         // NO-OP
       }
     }
+    JFrame.setDefaultLookAndFeelDecorated(true);
+    UIManager.put(FORMATTED_TEXTFIELD_FONT_KEY, UIManager
+        .get(TEXTFIELD_FONT_KEY));
+    UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY, UIManager
+        .get(TEXTFIELD_INACTIVE_BACKGROUND_KEY));
+    UIManager.put(PASSWORDFIELD_FONT_KEY, UIManager.get(TEXTFIELD_FONT_KEY));
   }
 
   /**

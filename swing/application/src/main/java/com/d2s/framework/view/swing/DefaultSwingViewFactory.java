@@ -38,7 +38,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -58,8 +57,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -231,37 +228,6 @@ public class DefaultSwingViewFactory implements
   private IDisplayableAction                 saveBinaryPropertyAsFileAction;
   private ITranslationProvider               translationProvider;
   private ITreeSelectionModelBinder          treeSelectionModelBinder;
-
-  /**
-   * Constructs a new <code>DefaultSwingViewFactory</code> instance.
-   */
-  public DefaultSwingViewFactory() {
-    this(null);
-  }
-
-  /**
-   * Constructs a new <code>DefaultSwingViewFactory</code> instance.
-   * 
-   * @param lookAndFeel
-   *            the look and feel class name
-   */
-  public DefaultSwingViewFactory(String lookAndFeel) {
-    if (lookAndFeel != null) {
-      try {
-        UIManager.setLookAndFeel(lookAndFeel);
-      } catch (ClassNotFoundException ex) {
-        throw new ViewException(ex);
-      } catch (InstantiationException ex) {
-        throw new ViewException(ex);
-      } catch (IllegalAccessException ex) {
-        throw new ViewException(ex);
-      } catch (UnsupportedLookAndFeelException ex) {
-        throw new ViewException(ex);
-      }
-    }
-    JFrame.setDefaultLookAndFeelDecorated(true);
-    SwingUtil.installDefaults();
-  }
 
   /**
    * {@inheritDoc}

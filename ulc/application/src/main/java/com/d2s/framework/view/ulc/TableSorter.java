@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.SwingConstants;
+import java.util.Set;
 
 import com.d2s.framework.util.IIndexMapper;
 import com.ulcjava.base.application.IRendererComponent;
@@ -24,6 +24,7 @@ import com.ulcjava.base.application.table.ITableModel;
 import com.ulcjava.base.application.table.ULCTableColumn;
 import com.ulcjava.base.application.table.ULCTableHeader;
 import com.ulcjava.base.application.util.ULCIcon;
+import com.ulcjava.base.shared.IDefaults;
 
 /**
  * TableSorter is a decorator for TableModels; adding sorting functionality to a
@@ -131,12 +132,15 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   private ULCIcon                           upIcon;
   private Row[]                             viewToModel;
 
+  private Set<ULCTableColumn>               sortedColumnsBuffer;
+
   /**
    * Constructs a new <code>TableSorter</code> instance.
    */
   public TableSorter() {
     this.headerActionListener = new HeaderActionHandler();
     this.tableModelListener = new TableModelHandler();
+    this.sortedColumnsBuffer = new HashSet<ULCTableColumn>();
   }
 
   /**
@@ -420,6 +424,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   }
 
   private void cancelSorting() {
+    resetHeaderRenderers();
     sortingColumns.clear();
     sortingStatusChanged();
   }
@@ -427,6 +432,14 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   private void clearSortingState() {
     viewToModel = null;
     modelToView = null;
+  }
+
+  private void resetHeaderRenderers() {
+    for (ULCTableColumn col : sortedColumnsBuffer) {
+      col.setHeaderRenderer(null);
+    }
+    sortedColumnsBuffer.clear();
+    tableHeader.repaint();
   }
 
   private Directive getDirective(int column) {
@@ -521,13 +534,20 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
 
         status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
         setSortingStatus(viewColumn.getModelIndex(), status);
-        ITableCellRenderer headerRenderer = viewColumn.getHeaderRenderer();
-        if (!(headerRenderer instanceof SortableHeaderRenderer)) {
-          headerRenderer = new SortableHeaderRenderer(viewColumn
-              .getModelIndex());
+        if (status != 0) {
+          ITableCellRenderer headerRenderer = viewColumn.getHeaderRenderer();
+          if (!(headerRenderer instanceof SortableHeaderRenderer)) {
+            headerRenderer = new SortableHeaderRenderer(viewColumn
+                .getModelIndex());
+          }
+          // used to refresh the client side :(
+          viewColumn.setHeaderRenderer(headerRenderer);
+          sortedColumnsBuffer.add(viewColumn);
+        } else {
+          viewColumn.setHeaderRenderer(null);
+          sortedColumnsBuffer.remove(viewColumn);
         }
-        // used to refresh the client side :(
-        viewColumn.setHeaderRenderer(headerRenderer);
+        tableHeader.repaint();
       }
     }
   }
@@ -605,7 +625,8 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
     @Override
     public IRendererComponent getTableCellRendererComponent(ULCTable table,
         Object value, boolean isSelected, boolean hasFocus, int row) {
-      setHorizontalTextPosition(SwingConstants.LEFT);
+      setHorizontalTextPosition(IDefaults.LEFT);
+      setHorizontalAlignment(IDefaults.LEFT);
       int modelColumn = table.convertColumnIndexToModel(column);
       setIcon(getHeaderRendererIcon(modelColumn, getFont().getSize()));
       return super.getTableCellRendererComponent(table, value, isSelected,

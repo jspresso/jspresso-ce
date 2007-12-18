@@ -13,12 +13,12 @@ import javax.security.auth.callback.PasswordCallback;
 import javax.security.auth.callback.TextOutputCallback;
 import javax.security.auth.callback.UnsupportedCallbackException;
 
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedButton;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.GridBagConstraints;
-import com.ulcjava.base.application.ULCButton;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.ULCDialog;
 import com.ulcjava.base.application.ULCGridBagLayoutPane;
@@ -234,10 +234,11 @@ public class DialogCallbackHandler implements CallbackHandler {
     this.translationProvider = translationProvider;
   }
 
-  private ULCButton createOptionButton(final ULCDialog callbackDialog,
+  private ULCExtendedButton createOptionButton(final ULCDialog callbackDialog,
       final ConfirmationCallback cc, final int option, String text,
       final List<IActionListener> proceedActions) {
-    ULCButton optionButton = new ULCButton(text);
+    ULCExtendedButton optionButton = new ULCExtendedButton();
+    optionButton.setText(text);
     if (option == ConfirmationCallback.YES || option == ConfirmationCallback.OK) {
       optionButton.setIcon(iconFactory
           .getOkYesIcon(IIconFactory.SMALL_ICON_SIZE));
@@ -317,7 +318,8 @@ public class DialogCallbackHandler implements CallbackHandler {
       for (int i = 0; i < cc.getOptions().length; i++) {
         final int optionIndex = i;
 
-        ULCButton optionButton = new ULCButton(cc.getOptions()[i]);
+        ULCExtendedButton optionButton = new ULCExtendedButton();
+        optionButton.setText(cc.getOptions()[i]);
         optionButton.addActionListener(new IActionListener() {
 
           private static final long serialVersionUID = -5727287836828197725L;

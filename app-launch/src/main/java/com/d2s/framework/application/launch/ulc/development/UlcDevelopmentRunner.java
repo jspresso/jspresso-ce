@@ -41,6 +41,7 @@ public final class UlcDevelopmentRunner {
    *            arguments.
    */
   public static void main(String[] args) {
+    SwingUtil.installDefaults();
     ClientEnvironmentAdapter.setMessageService(new IMessageService() {
 
       public void handleMessage(String msg) {
@@ -76,7 +77,6 @@ public final class UlcDevelopmentRunner {
         }
       });
     }
-    SwingUtil.installDefaults();
     Properties props = ClientEnvironmentAdapter.getClientInfo()
         .getSystemProperties();
     props.setProperty("java.io.tmpdir", System.getProperty("java.io.tmpdir"));

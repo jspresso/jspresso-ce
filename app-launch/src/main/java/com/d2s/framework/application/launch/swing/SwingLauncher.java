@@ -12,6 +12,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import com.d2s.framework.application.startup.IStartup;
+import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.splash.SplashWindow;
 import com.d2s.framework.util.url.UrlHelper;
 
@@ -38,6 +39,7 @@ public final class SwingLauncher {
    */
   @SuppressWarnings("static-access")
   public static void main(String[] args) {
+    SwingUtil.installDefaults();
     Options options = new Options();
     options.addOption(OptionBuilder.withArgName("splash").hasArg()
         .withDescription(

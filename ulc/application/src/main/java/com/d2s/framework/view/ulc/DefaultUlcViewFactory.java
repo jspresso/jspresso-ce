@@ -166,7 +166,6 @@ import com.ulcjava.base.application.datatype.ULCDateDataType;
 import com.ulcjava.base.application.datatype.ULCNumberDataType;
 import com.ulcjava.base.application.datatype.ULCPercentDataType;
 import com.ulcjava.base.application.table.DefaultTableCellRenderer;
-import com.ulcjava.base.application.table.DefaultTableHeaderCellRenderer;
 import com.ulcjava.base.application.table.ITableCellRenderer;
 import com.ulcjava.base.application.table.ULCTableColumn;
 import com.ulcjava.base.application.tree.DefaultTreeCellRenderer;
@@ -2320,7 +2319,7 @@ public class DefaultUlcViewFactory implements
 
     for (int i = 0; i < viewDescriptor.getColumnViewDescriptors().size(); i++) {
       ULCTableColumn column = viewComponent.getColumnModel().getColumn(i);
-      column.setHeaderRenderer(new DefaultTableHeaderCellRenderer());
+      column.setHeaderRenderer(null);
       String propertyName = viewDescriptor.getColumnViewDescriptors().get(i)
           .getName();
       column.setIdentifier(propertyName);
@@ -2901,6 +2900,8 @@ public class DefaultUlcViewFactory implements
           }
         }
         ((ULCLabel) renderer).setIcon(nodeIcon);
+        ((ULCLabel) renderer).setOpaque(false);
+        ((ULCLabel) renderer).setBackground(null);
 
         // The following is useless in ULC since the renderer value is not
         // forwarded to the client.

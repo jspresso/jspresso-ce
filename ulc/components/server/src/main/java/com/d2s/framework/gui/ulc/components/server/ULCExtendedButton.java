@@ -25,6 +25,7 @@ public class ULCExtendedButton extends ULCButton {
    */
   public ULCExtendedButton() {
     super();
+    setBorder(null);
   }
 
   /**
@@ -35,6 +36,7 @@ public class ULCExtendedButton extends ULCButton {
    */
   public ULCExtendedButton(ULCIcon icon) {
     super(icon);
+    setBorder(null);
   }
 
   /**
