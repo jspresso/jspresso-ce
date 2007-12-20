@@ -3,11 +3,8 @@
  */
 package com.d2s.framework.application.view.descriptor.basic;
 
-import java.util.Locale;
-
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
 
 /**
@@ -48,17 +45,5 @@ public class BasicModuleDescriptor extends BasicTreeViewDescriptor implements
    */
   public void setStartupAction(IAction startupAction) {
     this.startupAction = startupAction;
-  }
-  
-  /**
-   * TODO Comment needed.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public String getI18nName(ITranslationProvider translationProvider,
-      Locale locale) {
-    // TODO Auto-generated method stub
-    return super.getI18nName(translationProvider, locale);
   }
 }

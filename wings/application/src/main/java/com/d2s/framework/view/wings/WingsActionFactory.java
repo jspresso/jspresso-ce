@@ -214,7 +214,9 @@ public class WingsActionFactory implements IActionFactory<Action, SComponent> {
      * {@inheritDoc}
      */
     public void actionPerformed(ActionEvent e) {
-      if (actionHandler != null) {
+      // "".equals(e.getActionCommand()) prevents the form
+      // action to be handled.
+      if (actionHandler != null && !"".equals(e.getActionCommand())) {
         Map<String, Object> actionContext = actionHandler.createEmptyContext();
         actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
             modelDescriptor);

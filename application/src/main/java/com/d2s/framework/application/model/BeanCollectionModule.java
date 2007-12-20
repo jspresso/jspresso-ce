@@ -6,7 +6,6 @@ package com.d2s.framework.application.model;
 import java.util.Collection;
 
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.view.descriptor.IViewDescriptor;
@@ -39,8 +38,10 @@ public class BeanCollectionModule extends SubModule {
       return true;
     }
     BeanCollectionModule rhs = (BeanCollectionModule) obj;
-    return new EqualsBuilder().append(getModuleObjects(),
-        rhs.getModuleObjects()).isEquals();
+    // do not rely on object equality (null lists would make it equal)
+    // return new EqualsBuilder().append(getModuleObjects(),
+    // rhs.getModuleObjects()).isEquals();
+    return ObjectUtils.equals(getName(), rhs.getName());
   }
 
   /**
@@ -68,7 +69,7 @@ public class BeanCollectionModule extends SubModule {
    */
   @Override
   public int hashCode() {
-    return new HashCodeBuilder(23, 53).append(getModuleObjects()).toHashCode();
+    return new HashCodeBuilder(23, 53).append(getName()).toHashCode();
   }
 
   /**

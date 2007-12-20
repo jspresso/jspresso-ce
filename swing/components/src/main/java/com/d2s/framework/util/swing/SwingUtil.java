@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -272,6 +273,7 @@ public final class SwingUtil {
       }
     }
     JFrame.setDefaultLookAndFeelDecorated(true);
+    JDialog.setDefaultLookAndFeelDecorated(true);
     UIManager.put(FORMATTED_TEXTFIELD_FONT_KEY, UIManager
         .get(TEXTFIELD_FONT_KEY));
     UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY, UIManager

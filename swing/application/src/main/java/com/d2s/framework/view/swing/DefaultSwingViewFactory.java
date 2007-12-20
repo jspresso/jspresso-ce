@@ -1572,7 +1572,7 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor, locale));
     adjustSizes(viewComponent, null, getEnumerationTemplateValue(
         propertyDescriptor, locale), Toolkit.getDefaultToolkit()
-        .getScreenResolution() / 3);
+        .getScreenResolution() * 2 / 6);
     JComboBoxConnector connector = new JComboBoxConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);

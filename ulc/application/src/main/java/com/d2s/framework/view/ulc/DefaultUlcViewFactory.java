@@ -1605,7 +1605,8 @@ public class DefaultUlcViewFactory implements
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
         propertyDescriptor, locale));
     adjustSizes(viewComponent, null, getEnumerationTemplateValue(
-        propertyDescriptor, locale), ClientContext.getScreenResolution() / 3);
+        propertyDescriptor, locale),
+        ClientContext.getScreenResolution() * 2 / 6);
     ULCComboBoxConnector connector = new ULCComboBoxConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);

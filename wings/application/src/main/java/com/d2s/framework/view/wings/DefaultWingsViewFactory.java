@@ -819,7 +819,7 @@ public class DefaultWingsViewFactory implements
             getTranslationProvider(), locale));
         iFrame.setMaximizable(false);
         iFrame.setClosable(false);
-        iFrame.setIconifyable(false);
+        iFrame.setIconifyable(true);
         iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
             .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
         iFrame.getContentPane().add(view.getPeer());
@@ -1558,7 +1558,7 @@ public class DefaultWingsViewFactory implements
     viewComponent.setRenderer(new TranslatedEnumerationListCellRenderer(
         propertyDescriptor, locale));
     adjustSizes(viewComponent, null, getEnumerationTemplateValue(
-        propertyDescriptor, locale), 24);
+        propertyDescriptor, locale), 48);
     SComboBoxConnector connector = new SComboBoxConnector(propertyDescriptor
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
