@@ -66,9 +66,9 @@ public final class ActionContextConstants {
   public static final String MODEL_DESCRIPTOR        = "MODEL_DESCRIPTOR";
 
   /**
-   * The module descriptor the action was triggered on.
+   * The module the action was triggered on.
    */
-  public static final String MODULE_DESCRIPTOR       = "MODULE_DESCRIPTOR";
+  public static final String MODULE                  = "MODULE";
 
   /**
    * The module view connector the action was triggered on.

@@ -13,6 +13,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import com.d2s.framework.application.launch.ulc.ClassInvoker;
 import com.d2s.framework.application.launch.ulc.ExtendedFileService;
 import com.d2s.framework.application.launch.ulc.FileExists;
@@ -99,7 +101,6 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
    */
   public static void main(String[] args) throws MalformedURLException {
     SwingUtil.installDefaults();
-
     String splashUrl = null;
     List<String> filteredArgsBuffer = new ArrayList<String>();
     for (int i = 0; i < args.length; i++) {
@@ -192,10 +193,16 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
       @Override
       public void sessionError(UISession session, Throwable reason) {
         if (reason instanceof ConnectorException) {
-          showMessageDialog(bundle.getString("error"), bundle
-              .getString("error.connection"), bundle
-              .getString("error.connection.description"));
-          start();
+          int answer = JOptionPane.showConfirmDialog(null, bundle
+              .getString("error.connection.description"), bundle
+              .getString("error.connection"), JOptionPane.OK_CANCEL_OPTION,
+              JOptionPane.WARNING_MESSAGE);
+          if (answer == JOptionPane.OK_OPTION) {
+            start();
+          }
+          // showMessageDialog(bundle.getString("error"), bundle
+          // .getString("error.connection"), bundle
+          // .getString("error.connection.description"));
         } else {
           super.sessionError(session, reason);
         }

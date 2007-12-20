@@ -6,14 +6,11 @@ package com.d2s.framework.view.descriptor.basic;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.action.ActionMap;
-import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -41,11 +38,8 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * 
    * @return the actionMap.
    */
-  public Map<String, List<IDisplayableAction>> getActions() {
-    if (actionMap != null) {
-      return actionMap.getActionMap();
-    }
-    return null;
+  public ActionMap getActions() {
+    return actionMap;
   }
 
   /**

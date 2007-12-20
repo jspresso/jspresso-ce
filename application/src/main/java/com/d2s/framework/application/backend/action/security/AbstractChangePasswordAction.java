@@ -38,16 +38,16 @@ public abstract class AbstractChangePasswordAction extends
   /**
    * <code>PASSWD_CURRENT</code>.
    */
-  public static final String                                    PASSWD_CURRENT           = "password.current";
+  public static final String                                    PASSWD_CURRENT           = "password_current";
   /**
    * <code>PASSWD_RETYPED</code>.
    */
-  public static final String                                    PASSWD_RETYPED           = "password.retyped";
+  public static final String                                    PASSWD_RETYPED           = "password_retyped";
 
   /**
    * <code>PASSWD_TYPED</code>.
    */
-  public static final String                                    PASSWD_TYPED             = "password.typed";
+  public static final String                                    PASSWD_TYPED             = "password_typed";
 
   private static IComponentDescriptor<Map<String, String>> createPasswordChangeModel() {
     BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();

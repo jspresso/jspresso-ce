@@ -10,7 +10,7 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.action.AbstractAction;
 import com.d2s.framework.application.frontend.IFrontendController;
-import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
@@ -161,21 +161,21 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   }
 
   /**
-   * This is a utility method which is able to retrieve the module descriptor
-   * his action has been executed on from its context. It uses well-known
+   * This is a utility method which is able to retrieve the module 
+   * this action has been executed on from its context. It uses well-known
    * context keys of the action context which are:
    * <ul>
-   * <li> <code>ActionContextConstants.MODULE_DESCRIPTOR</code> to get the the
-   * module descriptor the action executes on.
+   * <li> <code>ActionContextConstants.MODULE</code> to get the the
+   * module the action executes on.
    * </ul>
    * 
    * @param context
    *            the action context.
-   * @return the module descriptor this action was triggered on.
+   * @return the module this action was triggered on.
    */
-  public IModuleDescriptor getModuleDescriptor(Map<String, Object> context) {
-    return (IModuleDescriptor) context
-        .get(ActionContextConstants.MODULE_DESCRIPTOR);
+  public Module getModule(Map<String, Object> context) {
+    return (Module) context
+        .get(ActionContextConstants.MODULE);
   }
 
   /**

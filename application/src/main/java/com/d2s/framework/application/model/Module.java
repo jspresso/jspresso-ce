@@ -11,8 +11,12 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.application.view.descriptor.basic.BasicModuleDescriptor;
 import com.d2s.framework.security.ISecurable;
+import com.d2s.framework.util.IIconImageURLProvider;
 import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
  * A module is a central element in the application architecture. It serves as
@@ -31,14 +35,66 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
  */
 public class Module extends AbstractPropertyChangeCapable implements ISecurable {
 
-  private String             description;
-  private Collection<String> grantedRoles;
-  private String             i18nDescription;
-  private String             i18nName;
-  private String             iconImageURL;
-  private String             name;
+  private String                description;
+  private Collection<String>    grantedRoles;
+  private String                i18nDescription;
+  private String                i18nName;
+  private String                iconImageURL;
+  private String                name;
+  private IAction               startupAction;
+  private IIconImageURLProvider iconImageURLProvider;
 
-  private List<SubModule>    subModules;
+  private IViewDescriptor       viewDescriptor;
+
+  private List<SubModule>       subModules;
+
+  /**
+   * Sets the iconImageURLProvider.
+   * 
+   * @param iconImageURLProvider
+   *            the iconImageURLProvider to set.
+   */
+  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
+    this.iconImageURLProvider = iconImageURLProvider;
+  }
+
+  /**
+   * Gets the startupAction.
+   * 
+   * @return the startupAction.
+   */
+  public IAction getStartupAction() {
+    return startupAction;
+  }
+
+  /**
+   * Sets the startupAction.
+   * 
+   * @param startupAction
+   *            the startupAction to set.
+   */
+  public void setStartupAction(IAction startupAction) {
+    this.startupAction = startupAction;
+  }
+
+  /**
+   * Gets the module view descriptor. Whenever the view descriptor has not been
+   * set, a default one is generated.
+   * 
+   * @return the viewDescriptor.
+   */
+  public IViewDescriptor getViewDescriptor() {
+    if (viewDescriptor == null) {
+      viewDescriptor = new BasicModuleDescriptor();
+      ((BasicModuleDescriptor) viewDescriptor).setName(getName());
+      ((BasicModuleDescriptor) viewDescriptor).setDescription(getDescription());
+      ((BasicModuleDescriptor) viewDescriptor)
+          .setIconImageURL(getIconImageURL());
+      ((BasicModuleDescriptor) viewDescriptor)
+          .setIconImageURLProvider(iconImageURLProvider);
+    }
+    return viewDescriptor;
+  }
 
   /**
    * Adds a child module.

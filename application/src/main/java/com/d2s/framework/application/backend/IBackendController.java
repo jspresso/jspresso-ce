@@ -4,8 +4,10 @@
 package com.d2s.framework.application.backend;
 
 import java.util.Locale;
+import java.util.Map;
 
 import com.d2s.framework.application.IController;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.component.IComponent;
@@ -31,10 +33,10 @@ public interface IBackendController extends IController {
    * Checks authorization for module access. It shoud throw a SecurityException
    * whenever access should not be granted.
    * 
-   * @param moduleId
+   * @param moduleName
    *            the id of the module access to check.
    */
-  void checkModuleAccess(String moduleId);
+  void checkModuleAccess(String moduleName);
 
   /**
    * Creates a model connector out of a model descriptor. It should be either a
@@ -86,11 +88,11 @@ public interface IBackendController extends IController {
    * Given a module identifier, this method returns the composite connector used
    * as model connector for the associated module.
    * 
-   * @param moduleId
+   * @param moduleName
    *            the modulen identifier.
    * @return the associated module connector.
    */
-  IValueConnector getModuleConnector(String moduleId);
+  IValueConnector getModuleConnector(String moduleName);
 
   /**
    * Acts as a clipboard for retrieving previously stored component references
@@ -122,7 +124,10 @@ public interface IBackendController extends IController {
       ComponentTransferStructure<? extends IComponent> components);
 
   /**
-   * Translate modules based on the locale set.
+   * Installs the passed in modules into the backend controller.
+   * 
+   * @param modules
+   *            the modules to install.
    */
-  void translateModules();
+  void installModules(Map<String, Module> modules);
 }

@@ -23,6 +23,7 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Box;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
@@ -47,7 +48,6 @@ import com.d2s.framework.application.ControllerException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.swing.components.JErrorDialog;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
@@ -59,7 +59,9 @@ import com.d2s.framework.util.swing.WaitCursorTimer;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionMap;
 import com.d2s.framework.view.action.IDisplayableAction;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 import foxtrot.Job;
 
@@ -218,23 +220,26 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayModule(String moduleId) {
+  protected void displayModule(String moduleName) {
     if (moduleInternalFrames == null) {
       moduleInternalFrames = new HashMap<String, JInternalFrame>();
     }
-    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleId);
+    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleName);
     if (moduleInternalFrame == null) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+          .getViewDescriptor();
       IValueConnector moduleConnector = getBackendController()
-          .getModuleConnector(moduleId);
-      IView<JComponent> moduleView = createModuleView(moduleId,
-          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
+          .getModuleConnector(moduleName);
+      IView<JComponent> moduleView = createModuleView(moduleName,
+          moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
       moduleInternalFrame = createJInternalFrame(moduleView);
-      moduleInternalFrame.setFrameIcon(getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
       moduleInternalFrame
-          .addInternalFrameListener(new ModuleInternalFrameListener(moduleId));
-      moduleInternalFrames.put(moduleId, moduleInternalFrame);
+          .setFrameIcon(getIconFactory().getIcon(
+              moduleViewDescriptor.getIconImageURL(),
+              IIconFactory.SMALL_ICON_SIZE));
+      moduleInternalFrame
+          .addInternalFrameListener(new ModuleInternalFrameListener(moduleName));
+      moduleInternalFrames.put(moduleName, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
       moduleInternalFrame.pack();
@@ -253,9 +258,9 @@ public class DefaultSwingController extends
     } catch (PropertyVetoException ex) {
       throw new ControllerException(ex);
     }
-    setSelectedModuleId(moduleId);
+    setSelectedModuleName(moduleName);
     moduleInternalFrame.toFront();
-    super.displayModule(moduleId);
+    super.displayModule(moduleName);
   }
 
   /**
@@ -300,8 +305,8 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected void setSelectedModuleId(String moduleId) {
-    super.setSelectedModuleId(moduleId);
+  protected void setSelectedModuleName(String moduleName) {
+    super.setSelectedModuleName(moduleName);
     updateFrameTitle();
   }
 
@@ -317,16 +322,26 @@ public class DefaultSwingController extends
   }
 
   private List<JMenu> createActionMenus() {
-    Map<String, List<IDisplayableAction>> actions = getActions();
-    List<JMenu> actionMenus = new ArrayList<JMenu>();
-    if (actions != null) {
-      for (Map.Entry<String, List<IDisplayableAction>> actionList : actions
-          .entrySet()) {
-        actionMenus.add(createActionMenu(actionList.getKey(), actionList
-            .getValue()));
+    return createMenus(getActions());
+  }
+
+  private List<JMenu> createHelpActionMenus() {
+    return createMenus(getHelpActions());
+  }
+
+  private List<JMenu> createMenus(ActionMap actionMap) {
+    List<JMenu> menus = new ArrayList<JMenu>();
+    if (actionMap != null) {
+      for (Map.Entry<String, List<IDisplayableAction>> actionList : actionMap
+          .getActionMap().entrySet()) {
+        JMenu menu = createActionMenu(actionList.getKey(), actionList.getValue());
+        menu.setIcon(getIconFactory().getIcon(
+            actionMap.getIconImageURL(actionList.getKey()),
+            IIconFactory.SMALL_ICON_SIZE));
+        menus.add(menu);
       }
     }
-    return actionMenus;
+    return menus;
   }
 
   private JMenuBar createApplicationMenuBar() {
@@ -336,6 +351,13 @@ public class DefaultSwingController extends
     if (actionMenus != null) {
       for (JMenu actionMenu : actionMenus) {
         applicationMenuBar.add(actionMenu);
+      }
+    }
+    applicationMenuBar.add(Box.createHorizontalGlue());
+    List<JMenu> helpActionMenus = createHelpActionMenus();
+    if (helpActionMenus != null) {
+      for (JMenu helpActionMenu : helpActionMenus) {
+        applicationMenuBar.add(helpActionMenu);
       }
     }
     return applicationMenuBar;
@@ -400,10 +422,11 @@ public class DefaultSwingController extends
         "modules", getLocale()));
     modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
-    for (String moduleId : getModuleIds()) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+    for (String moduleName : getModuleNames()) {
+      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+          .getViewDescriptor();
       JMenuItem moduleMenuItem = new JMenuItem(new ModuleSelectionAction(
-          moduleId, moduleDescriptor));
+          moduleName, moduleViewDescriptor));
       modulesMenu.add(moduleMenuItem);
     }
     modulesMenu.addSeparator();
@@ -470,10 +493,11 @@ public class DefaultSwingController extends
   }
 
   private void updateFrameTitle() {
-    String moduleId = getSelectedModuleId();
-    if (moduleId != null) {
-      controllerFrame.setTitle(getModuleDescriptor(getSelectedModuleId())
-          .getI18nDescription(getTranslationProvider(), getLocale())
+    String moduleName = getSelectedModuleName();
+    if (moduleName != null) {
+      controllerFrame.setTitle(getModule(getSelectedModuleName())
+          .getViewDescriptor().getI18nDescription(getTranslationProvider(),
+              getLocale())
           + " - " + getI18nName(getTranslationProvider(), getLocale()));
     } else {
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
@@ -483,16 +507,16 @@ public class DefaultSwingController extends
 
   private final class ModuleInternalFrameListener extends InternalFrameAdapter {
 
-    private String moduleId;
+    private String moduleName;
 
     /**
      * Constructs a new <code>ModuleInternalFrameListener</code> instance.
      * 
-     * @param moduleId
+     * @param moduleName
      *            the root module identifier this listener is attached to.
      */
-    public ModuleInternalFrameListener(String moduleId) {
-      this.moduleId = moduleId;
+    public ModuleInternalFrameListener(String moduleName) {
+      this.moduleName = moduleName;
     }
 
     /**
@@ -501,7 +525,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameActivated(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleId(moduleId);
+      setSelectedModuleName(moduleName);
     }
 
     /**
@@ -510,7 +534,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameDeactivated(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleId(null);
+      setSelectedModuleName(null);
     }
 
     /**
@@ -519,7 +543,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameDeiconified(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleId(moduleId);
+      setSelectedModuleName(moduleName);
     }
 
     /**
@@ -528,7 +552,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameIconified(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleId(null);
+      setSelectedModuleName(null);
     }
 
     /**
@@ -537,7 +561,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameOpened(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleId(moduleId);
+      setSelectedModuleName(moduleName);
     }
 
   }
@@ -545,24 +569,24 @@ public class DefaultSwingController extends
   private final class ModuleSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
-    private String            moduleId;
+    private String            moduleName;
 
     /**
      * Constructs a new <code>ModuleSelectionAction</code> instance.
      * 
-     * @param moduleId
-     * @param moduleDescriptor
+     * @param moduleName
+     * @param moduleViewDescriptor
      */
-    public ModuleSelectionAction(String moduleId,
-        IModuleDescriptor moduleDescriptor) {
-      this.moduleId = moduleId;
-      putValue(Action.NAME, moduleDescriptor.getI18nName(
+    public ModuleSelectionAction(String moduleName,
+        IViewDescriptor moduleViewDescriptor) {
+      this.moduleName = moduleName;
+      putValue(Action.NAME, moduleViewDescriptor.getI18nName(
           getTranslationProvider(), getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, moduleDescriptor.getI18nDescription(
-          getTranslationProvider(), getLocale())
+      putValue(Action.SHORT_DESCRIPTION, moduleViewDescriptor
+          .getI18nDescription(getTranslationProvider(), getLocale())
           + IViewFactory.TOOLTIP_ELLIPSIS);
       putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+          moduleViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     }
 
     /**
@@ -573,8 +597,8 @@ public class DefaultSwingController extends
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
-        getBackendController().checkModuleAccess(moduleId);
-        displayModule(moduleId);
+        getBackendController().checkModuleAccess(moduleName);
+        displayModule(moduleName);
       } catch (SecurityException ex) {
         handleException(ex, null);
       }

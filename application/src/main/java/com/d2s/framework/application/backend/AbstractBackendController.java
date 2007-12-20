@@ -55,8 +55,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public void checkModuleAccess(String moduleId) {
-    checkAccess((ISecurable) getModuleConnector(moduleId).getConnectorValue());
+  public void checkModuleAccess(String moduleName) {
+    checkAccess((ISecurable) getModuleConnector(moduleName).getConnectorValue());
   }
 
   /**
@@ -151,8 +151,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IValueConnector getModuleConnector(String moduleId) {
-    return moduleConnectors.get(moduleId);
+  public IValueConnector getModuleConnector(String moduleName) {
+    return moduleConnectors.get(moduleName);
   }
 
   /**
@@ -263,7 +263,7 @@ public abstract class AbstractBackendController extends AbstractController
    *            A map containing the modules indexed by a well-known key used to
    *            bind them with their views.
    */
-  public void setModules(Map<String, Module> modules) {
+  public void installModules(Map<String, Module> modules) {
     moduleConnectors = new HashMap<String, IValueConnector>();
     for (Map.Entry<String, Module> moduleEntry : modules.entrySet()) {
       IValueConnector nextModuleConnector = beanConnectorFactory
@@ -296,33 +296,12 @@ public abstract class AbstractBackendController extends AbstractController
     this.transferStructure = components;
   }
 
-  /**
-   * Translate modules based on the locale set.
-   */
-  public void translateModules() {
-    for (IValueConnector moduleConnector : moduleConnectors.values()) {
-      translateModule((Module) moduleConnector.getConnectorValue());
-    }
-  }
-
   private void linkSessionArtifacts() {
     if (getApplicationSession() != null && getEntityFactory() != null) {
       ((ApplicationSessionAwareProxyEntityFactory) getEntityFactory())
           .setApplicationSession(getApplicationSession());
       ((BasicApplicationSession) getApplicationSession())
           .setEntityFactory(getEntityFactory());
-    }
-  }
-
-  private void translateModule(Module module) {
-    module.setI18nName(getTranslationProvider().getTranslation(
-        module.getName(), getLocale()));
-    module.setI18nDescription(getTranslationProvider().getTranslation(
-        module.getDescription(), getLocale()));
-    if (module.getSubModules() != null) {
-      for (Module subModule : module.getSubModules()) {
-        translateModule(subModule);
-      }
     }
   }
 }

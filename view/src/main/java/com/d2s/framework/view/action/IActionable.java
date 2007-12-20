@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.view.action;
 
-import java.util.List;
-import java.util.Map;
 
 /**
  * An actionable object.
@@ -26,6 +24,6 @@ public interface IActionable {
    * 
    * @return the map of action lists handled by this view.
    */
-  Map<String, List<IDisplayableAction>> getActions();
+  ActionMap getActions();
 
 }

@@ -11,6 +11,7 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionMap;
 import com.d2s.framework.view.action.IActionable;
 
 /**
@@ -51,6 +52,12 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return the view factory used by this controller.
    */
   IViewFactory<E, F, G> getViewFactory();
+
+  /**
+   * Retrieves a map of help action lists to be presented on this view. 
+   * @return the map of action lists handled by this view.
+   */
+  ActionMap getHelpActions();
 
   /**
    * Starts the controller. This method performs any necessary initializations

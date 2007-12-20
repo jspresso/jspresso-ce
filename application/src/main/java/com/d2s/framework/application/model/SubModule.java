@@ -20,7 +20,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public class SubModule extends Module {
 
   private Module          parent;
-  private IViewDescriptor viewDescriptor;
+  private IViewDescriptor projectedViewDescriptor;
 
   /**
    * Gets the module's parent module.
@@ -32,12 +32,12 @@ public class SubModule extends Module {
   }
 
   /**
-   * Gets the viewDescriptor.
+   * Gets the projectedViewDescriptor.
    * 
-   * @return the viewDescriptor.
+   * @return the projectedViewDescriptor.
    */
-  public IViewDescriptor getViewDescriptor() {
-    return viewDescriptor;
+  public IViewDescriptor getProjectedViewDescriptor() {
+    return projectedViewDescriptor;
   }
 
   /**
@@ -62,12 +62,12 @@ public class SubModule extends Module {
   }
 
   /**
-   * Sets the viewDescriptor.
+   * Sets the projectedViewDescriptor.
    * 
-   * @param viewDescriptor
-   *            the viewDescriptor to set.
+   * @param projectedViewDescriptor
+   *            the projectedViewDescriptor to set.
    */
-  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
-    this.viewDescriptor = viewDescriptor;
+  public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
+    this.projectedViewDescriptor = projectedViewDescriptor;
   }
 }

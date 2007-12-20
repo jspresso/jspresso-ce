@@ -287,7 +287,8 @@ public class DefaultWingsViewFactory implements
         if (viewDescriptor.getActions() != null) {
           SToolBar toolBar = createSToolBar();
           for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-              .getActions().entrySet().iterator(); iter.hasNext();) {
+              .getActions().getActionMap().entrySet().iterator(); iter
+              .hasNext();) {
             Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
                 .next();
             for (IDisplayableAction action : nextActionSet.getValue()) {

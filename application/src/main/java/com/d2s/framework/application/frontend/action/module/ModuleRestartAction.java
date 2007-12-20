@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
-import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.application.model.Module;
 
 /**
  * A simple action which restarts the current module executing the module
@@ -34,10 +34,10 @@ public class ModuleRestartAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    IModuleDescriptor moduleDescriptor = getModuleDescriptor(context);
-    if (moduleDescriptor.getStartupAction() != null) {
+    Module module = getModule(context);
+    if (module.getStartupAction() != null) {
       return actionHandler
-          .execute(moduleDescriptor.getStartupAction(), context);
+          .execute(module.getStartupAction(), context);
     }
     return true;
   }

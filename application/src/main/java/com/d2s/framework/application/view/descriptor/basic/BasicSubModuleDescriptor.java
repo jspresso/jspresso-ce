@@ -6,8 +6,8 @@ package com.d2s.framework.application.view.descriptor.basic;
 import java.util.Locale;
 
 import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
-import com.d2s.framework.application.view.descriptor.ISubModuleDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
+import com.d2s.framework.util.descriptor.IIconDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
@@ -23,10 +23,10 @@ import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
  * @author Vincent Vandenschrick
  */
 public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
-    implements ISubModuleDescriptor {
+    implements IIconDescriptor {
 
   private DefaultIconDescriptor descriptor;
-  private IViewDescriptor       viewDescriptor;
+  private IViewDescriptor       projectedViewDescriptor;
 
   /**
    * Constructs a new <code>BasicSubModuleDescriptor</code> instance.
@@ -82,12 +82,12 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
   }
 
   /**
-   * Gets the viewDescriptor.
+   * Gets the projectedViewDescriptor.
    * 
-   * @return the viewDescriptor.
+   * @return the projectedViewDescriptor.
    */
-  public IViewDescriptor getViewDescriptor() {
-    return viewDescriptor;
+  public IViewDescriptor getProjectedViewDescriptor() {
+    return projectedViewDescriptor;
   }
 
   /**
@@ -121,12 +121,12 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
   }
 
   /**
-   * Sets the viewDescriptor.
+   * Sets the projectedViewDescriptor.
    * 
-   * @param viewDescriptor
-   *            the viewDescriptor to set.
+   * @param projectedViewDescriptor
+   *            the projectedViewDescriptor to set.
    */
-  public void setViewDescriptor(IViewDescriptor viewDescriptor) {
-    this.viewDescriptor = viewDescriptor;
+  public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
+    this.projectedViewDescriptor = projectedViewDescriptor;
   }
 }

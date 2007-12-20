@@ -4,6 +4,7 @@
 package com.d2s.framework.view.action;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,7 @@ public class ActionMap {
 
   private Map<String, List<IDisplayableAction>> actionMap;
   private List<ActionMap>                       parentActionMaps;
+  private Map<String, String>                   iconImageURLs;
 
   private static void completeActionMap(
       Map<String, List<IDisplayableAction>> globalActionMap,
@@ -85,6 +87,37 @@ public class ActionMap {
    */
   public void setParentActionMaps(List<ActionMap> parentActionMaps) {
     this.parentActionMaps = parentActionMaps;
+  }
+
+  /**
+   * Gets the iconImageURL for a given group of actions.
+   * 
+   * @param groupKey
+   *            the group of actions.
+   * @return the iconImageURL for a given group of actions.
+   */
+  public String getIconImageURL(String groupKey) {
+    String iconImageUrl = null;
+    if (iconImageURLs != null) {
+      iconImageUrl = iconImageURLs.get(groupKey);
+    }
+    if (iconImageUrl == null && parentActionMaps != null) {
+      for (Iterator<ActionMap> ite = parentActionMaps.iterator(); ite.hasNext()
+          && iconImageUrl == null;) {
+        iconImageUrl = ite.next().getIconImageURL(groupKey);
+      }
+    }
+    return iconImageUrl;
+  }
+
+  /**
+   * Sets the iconImageURLs.
+   * 
+   * @param iconImageURLs
+   *            the iconImageURLs to set.
+   */
+  public void setIconImageURLs(Map<String, String> iconImageURLs) {
+    this.iconImageURLs = iconImageURLs;
   }
 
 }

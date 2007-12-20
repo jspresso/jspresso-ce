@@ -287,7 +287,8 @@ public class DefaultUlcViewFactory implements
         if (viewDescriptor.getActions() != null) {
           ULCToolBar toolBar = createULCToolBar();
           for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-              .getActions().entrySet().iterator(); iter.hasNext();) {
+              .getActions().getActionMap().entrySet().iterator(); iter
+              .hasNext();) {
             Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
                 .next();
             for (IDisplayableAction action : nextActionSet.getValue()) {
@@ -2601,7 +2602,7 @@ public class DefaultUlcViewFactory implements
     IModelDescriptor modelDescriptor = tableView.getDescriptor()
         .getModelDescriptor();
     Map<String, List<IDisplayableAction>> actionMap = ((ICollectionViewDescriptor) tableView
-        .getDescriptor()).getActions();
+        .getDescriptor()).getActions().getActionMap();
 
     if (actionMap == null) {
       return null;
@@ -2639,7 +2640,7 @@ public class DefaultUlcViewFactory implements
     IViewDescriptor viewDescriptor;
     if (viewConnector == tree.getModel().getRoot()) {
       modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-      actionMap = treeView.getDescriptor().getActions();
+      actionMap = treeView.getDescriptor().getActions().getActionMap();
       viewDescriptor = treeView.getDescriptor();
     } else {
       viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
@@ -2648,7 +2649,7 @@ public class DefaultUlcViewFactory implements
           getDescriptorPathFromConnectorTreePath(path))
           .getNodeGroupDescriptor();
       modelDescriptor = viewDescriptor.getModelDescriptor();
-      actionMap = viewDescriptor.getActions();
+      actionMap = viewDescriptor.getActions().getActionMap();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }

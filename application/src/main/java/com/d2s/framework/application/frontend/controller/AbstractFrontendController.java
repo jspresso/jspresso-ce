@@ -5,6 +5,7 @@ package com.d2s.framework.application.frontend.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,7 +21,6 @@ import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
 import com.d2s.framework.binding.ICompositeValueConnector;
@@ -38,8 +38,8 @@ import com.d2s.framework.view.IMapView;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.action.ActionMap;
-import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor;
 
 /**
@@ -66,18 +66,20 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected static final int                    MAX_LOGIN_RETRIES = 3;
 
   private ActionMap                             actionMap;
+  private ActionMap                             helpActionMap;
 
   private IBackendController                    backendController;
   private DefaultIconDescriptor                 controllerDescriptor;
   private CallbackHandler                       loginCallbackHandler;
   private String                                loginContextName;
-  private Map<String, IModuleDescriptor>        moduleDescriptors;
+  private Map<String, Module>                   modules;
 
   private String                                modulesMenuIconImageUrl;
+
   private IMvcBinder                            mvcBinder;
 
   private Map<String, ICompositeValueConnector> selectedModuleConnectors;
-  private String                                selectedModuleId;
+  private String                                selectedModuleName;
 
   private IAction                               startupAction;
 
@@ -117,15 +119,21 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the actionMap.
+   * Gets the actions.
    * 
-   * @return the actionMap.
+   * @return the actions.
    */
-  public Map<String, List<IDisplayableAction>> getActions() {
-    if (actionMap != null) {
-      return actionMap.getActionMap();
-    }
-    return null;
+  public ActionMap getActions() {
+    return actionMap;
+  }
+
+  /**
+   * Gets the help actions.
+   * 
+   * @return the help actions.
+   */
+  public ActionMap getHelpActions() {
+    return helpActionMap;
   }
 
   /**
@@ -183,13 +191,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
     ICompositeValueConnector selectedModuleViewConnector = selectedModuleConnectors
-        .get(getSelectedModuleId());
+        .get(getSelectedModuleName());
     if (selectedModuleViewConnector != null) {
       initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
           selectedModuleViewConnector);
     }
-    initialActionContext.put(ActionContextConstants.MODULE_DESCRIPTOR,
-        getModuleDescriptor(getSelectedModuleId()));
+    initialActionContext.put(ActionContextConstants.MODULE,
+        getModule(getSelectedModuleName()));
 
     return initialActionContext;
   }
@@ -260,6 +268,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Sets the helpActionMap.
+   * 
+   * @param helpActionMap
+   *            the helpActionMap to set.
+   */
+  public void setHelpActionMap(ActionMap helpActionMap) {
+    this.helpActionMap = helpActionMap;
+  }
+
+  /**
    * Sets the description.
    * 
    * @param description
@@ -290,15 +308,17 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the moduleDescriptors. Module view descriptors are used by the
-   * frontend controller to give a user access on the domain window.
+   * Sets the modules. Modules are used by the frontend controller to give a
+   * user access on the domain window.
    * 
-   * @param moduleDescriptors
-   *            the moduleDescriptors to set.
+   * @param modules
+   *            the modules to set.
    */
-  public void setModuleDescriptors(
-      Map<String, IModuleDescriptor> moduleDescriptors) {
-    this.moduleDescriptors = moduleDescriptors;
+  public void setModules(List<Module> modules) {
+    this.modules = new LinkedHashMap<String, Module>();
+    for (Module module : modules) {
+      this.modules.put(module.getName(), module);
+    }
   }
 
   /**
@@ -378,25 +398,25 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Creates a root module view.
    * 
-   * @param moduleId
+   * @param moduleName
    *            the identifier of the module to create the view for.
-   * @param moduleDescriptor
+   * @param moduleViewDescriptor
    *            the view descriptor of the module to render.
    * @param module
    *            the module to create the view for.
    * @return a view rendering the module.
    */
-  protected IView<E> createModuleView(final String moduleId,
-      IModuleDescriptor moduleDescriptor, Module module) {
+  protected IView<E> createModuleView(final String moduleName,
+      IViewDescriptor moduleViewDescriptor, Module module) {
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
-    splitViewDescriptor.setName(moduleDescriptor.getName());
+    splitViewDescriptor.setName(moduleViewDescriptor.getName());
     splitViewDescriptor.setMasterDetail(true);
 
     ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(
         module);
 
-    splitViewDescriptor.setLeftTopViewDescriptor(moduleDescriptor);
+    splitViewDescriptor.setLeftTopViewDescriptor(moduleViewDescriptor);
     splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
 
     ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory.createView(
@@ -405,7 +425,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
         .addConnectorSelectionListener(new IConnectorSelectionListener() {
 
           public void selectedConnectorChange(ConnectorSelectionEvent event) {
-            selectedModuleConnectors.put(moduleId,
+            selectedModuleConnectors.put(moduleName,
                 (ICompositeValueConnector) event.getSelectedConnector());
           }
         });
@@ -424,14 +444,14 @@ public abstract class AbstractFrontendController<E, F, G> extends
   /**
    * Displays a module.
    * 
-   * @param moduleId
+   * @param moduleName
    *            the module identifier.
    */
-  protected void displayModule(String moduleId) {
-    IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
-    if (moduleDescriptor.getStartupAction() != null) {
+  protected void displayModule(String moduleName) {
+    Module module = getModule(moduleName);
+    if (module.getStartupAction() != null) {
       Map<String, Object> context = createEmptyContext();
-      execute(moduleDescriptor.getStartupAction(), context);
+      execute(module.getStartupAction(), context);
     }
   }
 
@@ -492,25 +512,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Given a well-kown module identifier, this method returns the associated
-   * module view descriptor.
+   * Given a module name, this method returns the associated module.
    * 
-   * @param moduleId
-   *            the identifier of the module.
-   * @return the view descriptor of the selected module.
+   * @param moduleName
+   *            the name of the module.
+   * @return the selected module.
    */
-  protected IModuleDescriptor getModuleDescriptor(String moduleId) {
-    return moduleDescriptors.get(moduleId);
+  protected Module getModule(String moduleName) {
+    return modules.get(moduleName);
   }
 
   /**
-   * Returns the list of module identifiers. This list defines the set of
-   * modules the user have access to.
+   * Returns the list of module names. This list defines the set of modules the
+   * user have access to.
    * 
-   * @return the list of module identifiers.
+   * @return the list of module names.
    */
-  protected List<String> getModuleIds() {
-    return new ArrayList<String>(moduleDescriptors.keySet());
+  protected List<String> getModuleNames() {
+    return new ArrayList<String>(modules.keySet());
   }
 
   /**
@@ -532,12 +551,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the selectedModuleId.
+   * Gets the selectedModuleName.
    * 
-   * @return the selectedModuleId.
+   * @return the selectedModuleName.
    */
-  protected String getSelectedModuleId() {
-    return selectedModuleId;
+  protected String getSelectedModuleName() {
+    return selectedModuleName;
   }
 
   /**
@@ -555,7 +574,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
       getBackendController().getApplicationSession().setLocale(
           new Locale(userPreferredLanguageCode));
     }
-    getBackendController().translateModules();
+    for (Module module : modules.values()) {
+      translateModule(module);
+    }
+    getBackendController().installModules(modules);
   }
 
   /**
@@ -569,12 +591,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the selectedModuleId.
+   * Sets the selectedModuleName.
    * 
-   * @param selectedModuleId
-   *            the selectedModuleId to set.
+   * @param selectedModuleName
+   *            the selectedModuleName to set.
    */
-  protected void setSelectedModuleId(String selectedModuleId) {
-    this.selectedModuleId = selectedModuleId;
+  protected void setSelectedModuleName(String selectedModuleName) {
+    this.selectedModuleName = selectedModuleName;
+  }
+
+  private void translateModule(Module module) {
+    module.setI18nName(getTranslationProvider().getTranslation(
+        module.getName(), getLocale()));
+    module.setI18nDescription(getTranslationProvider().getTranslation(
+        module.getDescription(), getLocale()));
+    if (module.getSubModules() != null) {
+      for (Module subModule : module.getSubModules()) {
+        translateModule(subModule);
+      }
+    }
   }
 }

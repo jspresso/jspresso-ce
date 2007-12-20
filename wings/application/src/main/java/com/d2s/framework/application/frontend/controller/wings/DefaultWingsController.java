@@ -37,7 +37,6 @@ import org.wings.session.SessionManager;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.wings.components.SErrorDialog;
 import com.d2s.framework.util.exception.BusinessException;
@@ -46,7 +45,9 @@ import com.d2s.framework.util.wings.WingsUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionMap;
 import com.d2s.framework.view.action.IDisplayableAction;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
  * Default implementation of a wings frontend controller. This implementation is
@@ -145,32 +146,33 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayModule(String moduleId) {
+  protected void displayModule(String moduleName) {
     if (moduleViews == null) {
       moduleViews = new HashSet<String>();
     }
-    if (!moduleViews.contains(moduleId)) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+    if (!moduleViews.contains(moduleName)) {
+      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+          .getViewDescriptor();
       IValueConnector moduleConnector = getBackendController()
-          .getModuleConnector(moduleId);
-      IView<SComponent> moduleView = createModuleView(moduleId,
-          moduleDescriptor, (Module) moduleConnector.getConnectorValue());
+          .getModuleConnector(moduleName);
+      IView<SComponent> moduleView = createModuleView(moduleName,
+          moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
       SContainer moduleInternalFrame = createInternalFrame(moduleView);
-      moduleViews.add(moduleId);
-      cardPanel.add(moduleInternalFrame, moduleId);
+      moduleViews.add(moduleName);
+      cardPanel.add(moduleInternalFrame, moduleName);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
     }
-    setSelectedModuleId(moduleId);
-    super.displayModule(moduleId);
+    setSelectedModuleName(moduleName);
+    super.displayModule(moduleName);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected void setSelectedModuleId(String moduleId) {
-    super.setSelectedModuleId(moduleId);
-    ((SCardLayout) cardPanel.getLayout()).show(moduleId);
+  protected void setSelectedModuleName(String moduleName) {
+    super.setSelectedModuleName(moduleName);
+    ((SCardLayout) cardPanel.getLayout()).show(moduleName);
     updateFrameTitle();
   }
 
@@ -186,16 +188,27 @@ public class DefaultWingsController extends
   }
 
   private List<SMenu> createActionMenus() {
-    Map<String, List<IDisplayableAction>> actions = getActions();
-    List<SMenu> actionMenus = new ArrayList<SMenu>();
-    if (actions != null) {
-      for (Map.Entry<String, List<IDisplayableAction>> actionList : actions
-          .entrySet()) {
-        actionMenus.add(createActionMenu(actionList.getKey(), actionList
-            .getValue()));
+    return createMenus(getActions());
+  }
+
+  private List<SMenu> createHelpActionMenus() {
+    return createMenus(getHelpActions());
+  }
+
+  private List<SMenu> createMenus(ActionMap actionMap) {
+    List<SMenu> menus = new ArrayList<SMenu>();
+    if (actionMap != null) {
+      for (Map.Entry<String, List<IDisplayableAction>> actionList : actionMap
+          .getActionMap().entrySet()) {
+        SMenu menu = createActionMenu(actionList.getKey(), actionList
+            .getValue());
+        menu.setIcon(getIconFactory().getIcon(
+            actionMap.getIconImageURL(actionList.getKey()),
+            IIconFactory.SMALL_ICON_SIZE));
+        menus.add(menu);
       }
     }
-    return actionMenus;
+    return menus;
   }
 
   private SMenuBar createApplicationMenuBar() {
@@ -205,6 +218,13 @@ public class DefaultWingsController extends
     if (actionMenus != null) {
       for (SMenu actionMenu : actionMenus) {
         applicationMenuBar.add(actionMenu);
+      }
+    }
+    List<SMenu> helpActionMenus = createHelpActionMenus();
+    if (helpActionMenus != null) {
+      for (SMenu helpActionMenu : helpActionMenus) {
+        // helpActionMenu.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
+        applicationMenuBar.add(helpActionMenu);
       }
     }
     return applicationMenuBar;
@@ -251,10 +271,13 @@ public class DefaultWingsController extends
   private SMenu createModulesMenu() {
     SMenu modulesMenu = new SMenu(getTranslationProvider().getTranslation(
         "modules", getLocale()));
-    for (String moduleId : getModuleIds()) {
-      IModuleDescriptor moduleDescriptor = getModuleDescriptor(moduleId);
+    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+        IIconFactory.SMALL_ICON_SIZE));
+    for (String moduleName : getModuleNames()) {
+      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+          .getViewDescriptor();
       SMenuItem moduleMenuItem = new SMenuItem(new ModuleSelectionAction(
-          moduleId, moduleDescriptor));
+          moduleName, moduleViewDescriptor));
       modulesMenu.add(moduleMenuItem);
     }
     SMenuItem separator = new SMenuItem("---------");
@@ -272,10 +295,11 @@ public class DefaultWingsController extends
   }
 
   private void updateFrameTitle() {
-    String moduleId = getSelectedModuleId();
-    if (moduleId != null) {
-      controllerFrame.setTitle(getModuleDescriptor(getSelectedModuleId())
-          .getI18nDescription(getTranslationProvider(), getLocale())
+    String moduleName = getSelectedModuleName();
+    if (moduleName != null) {
+      controllerFrame.setTitle(getModule(getSelectedModuleName())
+          .getViewDescriptor().getI18nDescription(getTranslationProvider(),
+              getLocale())
           + " - " + getI18nName(getTranslationProvider(), getLocale()));
     } else {
       controllerFrame.setTitle(getI18nName(getTranslationProvider(),
@@ -286,24 +310,24 @@ public class DefaultWingsController extends
   private final class ModuleSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
-    private String            moduleId;
+    private String            moduleName;
 
     /**
      * Constructs a new <code>ModuleSelectionAction</code> instance.
      * 
-     * @param moduleId
-     * @param moduleDescriptor
+     * @param moduleName
+     * @param moduleViewDescriptor
      */
-    public ModuleSelectionAction(String moduleId,
-        IModuleDescriptor moduleDescriptor) {
-      this.moduleId = moduleId;
-      putValue(Action.NAME, moduleDescriptor.getI18nName(
+    public ModuleSelectionAction(String moduleName,
+        IViewDescriptor moduleViewDescriptor) {
+      this.moduleName = moduleName;
+      putValue(Action.NAME, moduleViewDescriptor.getI18nName(
           getTranslationProvider(), getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, moduleDescriptor.getI18nDescription(
-          getTranslationProvider(), getLocale())
+      putValue(Action.SHORT_DESCRIPTION, moduleViewDescriptor
+          .getI18nDescription(getTranslationProvider(), getLocale())
           + IViewFactory.TOOLTIP_ELLIPSIS);
       putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          moduleDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+          moduleViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     }
 
     /**
@@ -314,8 +338,8 @@ public class DefaultWingsController extends
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
-        getBackendController().checkModuleAccess(moduleId);
-        displayModule(moduleId);
+        getBackendController().checkModuleAccess(moduleName);
+        displayModule(moduleName);
       } catch (SecurityException ex) {
         handleException(ex, null);
       }

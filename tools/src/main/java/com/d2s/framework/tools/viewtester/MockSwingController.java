@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import org.springframework.dao.ConcurrencyFailureException;
 
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
-import com.d2s.framework.application.view.descriptor.IModuleDescriptor;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.util.exception.BusinessException;
 import com.d2s.framework.util.html.HtmlHelper;
 import com.d2s.framework.view.IIconFactory;
@@ -74,8 +74,8 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected IModuleDescriptor getModuleDescriptor(@SuppressWarnings("unused")
-  String moduleId) {
+  protected Module getModule(@SuppressWarnings("unused")
+  String moduleName) {
     return null;
   }
 }

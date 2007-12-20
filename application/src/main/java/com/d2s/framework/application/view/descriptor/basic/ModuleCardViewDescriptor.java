@@ -55,8 +55,8 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
       List<SubModule> modules) {
     if (modules != null) {
       for (SubModule module : modules) {
-        if (module.getViewDescriptor() != null) {
-          moduleCards.put(module.getName(), module.getViewDescriptor());
+        if (module.getProjectedViewDescriptor() != null) {
+          moduleCards.put(module.getName(), module.getProjectedViewDescriptor());
           if (module instanceof BeanCollectionModule
               && ((BeanCollectionModule) module).getElementViewDescriptor() != null) {
             moduleCards.put(module.getName() + ".element",
