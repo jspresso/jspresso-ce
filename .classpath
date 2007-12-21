@@ -115,5 +115,6 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/com/sun/ldapbp/1.0/ldapbp-1.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6"/>
+	<classpathentry kind="var" path="M2_REPO/org/jvnet/substance/4.1/substance-4.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

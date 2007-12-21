@@ -19,12 +19,18 @@ import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jvnet.lafwidget.LafWidget;
+import org.jvnet.lafwidget.preview.DefaultPreviewPainter;
+import org.jvnet.lafwidget.tabbed.DefaultTabPreviewPainter;
+import org.jvnet.lafwidget.utils.LafConstants.TabOverviewKind;
 
 import com.d2s.framework.util.exception.NestedRuntimeException;
 
@@ -279,6 +285,26 @@ public final class SwingUtil {
     UIManager.put(FORMATTED_TEXTFIELD_INACTIVE_BACKGROUND_KEY, UIManager
         .get(TEXTFIELD_INACTIVE_BACKGROUND_KEY));
     UIManager.put(PASSWORDFIELD_FONT_KEY, UIManager.get(TEXTFIELD_FONT_KEY));
+    try {
+      UIManager.put(LafWidget.TABBED_PANE_PREVIEW_PAINTER,
+          new DefaultTabPreviewPainter() {
+
+            /**
+             * {@inheritDoc}
+             */
+            @Override
+            public TabOverviewKind getOverviewKind(@SuppressWarnings("unused")
+            JTabbedPane tabPane) {
+              return TabOverviewKind.ROUND_CAROUSEL;
+              //return TabOverviewKind.MENU_CAROUSEL;
+            }
+          });
+      UIManager.put(LafWidget.COMPONENT_PREVIEW_PAINTER, new DefaultPreviewPainter());
+      UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU, Boolean.TRUE);
+      UIManager.put(LafWidget.COMBO_BOX_NO_AUTOCOMPLETION, Boolean.TRUE);
+    } catch (Throwable ignored) {
+      // substance may not be available.
+    }
   }
 
   /**

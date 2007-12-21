@@ -18,6 +18,7 @@
     <dependency>
       <groupId>com.design2see</groupId>
       <artifactId>d2s-swing-application</artifactId>
+      <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>com.design2see</groupId>
