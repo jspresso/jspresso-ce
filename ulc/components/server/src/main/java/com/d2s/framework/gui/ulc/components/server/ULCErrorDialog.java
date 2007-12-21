@@ -199,7 +199,8 @@ public final class ULCErrorDialog extends ULCDialog {
 
     detailsPane = new ULCHtmlPane();
     // detailsPane.setTransferHandler(new DetailsTransferHandler());
-    ULCScrollPane detailsScrollPane = new ULCScrollPane(detailsPane);
+    ULCScrollPane detailsScrollPane = new ULCExtendedScrollPane();
+    detailsScrollPane.setViewPortView(detailsPane);
     detailsScrollPane.setPreferredSize(new Dimension(10, 250));
     detailsPanel = new ULCGridBagLayoutPane();
     detailsPanel.add(detailsScrollPane, new GridBagConstraints(0, 0, 1, 1, 1.0,

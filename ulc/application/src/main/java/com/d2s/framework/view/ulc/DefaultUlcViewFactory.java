@@ -60,6 +60,7 @@ import com.d2s.framework.gui.ulc.components.server.ULCDateField;
 import com.d2s.framework.gui.ulc.components.server.ULCDurationDataType;
 import com.d2s.framework.gui.ulc.components.server.ULCDurationDataTypeFactory;
 import com.d2s.framework.gui.ulc.components.server.ULCExtendedButton;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedScrollPane;
 import com.d2s.framework.gui.ulc.components.server.ULCExtendedTable;
 import com.d2s.framework.gui.ulc.components.server.ULCExtendedTree;
 import com.d2s.framework.gui.ulc.components.server.ULCJEditTextArea;
@@ -690,7 +691,7 @@ public class DefaultUlcViewFactory implements
    * @return the created scroll pane.
    */
   protected ULCScrollPane createULCScrollPane() {
-    ULCScrollPane scrollPane = new ULCScrollPane();
+    ULCScrollPane scrollPane = new ULCExtendedScrollPane();
     scrollPane.setMinimumSize(MINIMUM_AREA_SIZE);
     return scrollPane;
   }
