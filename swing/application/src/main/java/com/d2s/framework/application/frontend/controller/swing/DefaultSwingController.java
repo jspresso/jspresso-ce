@@ -56,9 +56,11 @@ import com.d2s.framework.util.html.HtmlHelper;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.WaitCursorEventQueue;
 import com.d2s.framework.util.swing.WaitCursorTimer;
+import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionList;
 import com.d2s.framework.view.action.ActionMap;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
@@ -310,11 +312,17 @@ public class DefaultSwingController extends
     updateFrameTitle();
   }
 
-  private JMenu createActionMenu(String titleKey,
-      List<IDisplayableAction> actionList) {
-    JMenu menu = new JMenu(getTranslationProvider().getTranslation(titleKey,
+  private JMenu createActionMenu(ActionList actionList) {
+    JMenu menu = new JMenu(actionList.getI18nName(getTranslationProvider(),
         getLocale()));
-    for (IDisplayableAction action : actionList) {
+    if (actionList.getDescription() != null) {
+      menu.setToolTipText(actionList.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IActionFactory.TOOLTIP_ELLIPSIS);
+    }
+    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
+    for (IDisplayableAction action : actionList.getActions()) {
       menu.add(new JMenuItem(getViewFactory().getActionFactory().createAction(
           action, this, menu, null, null, getLocale())));
     }
@@ -332,12 +340,8 @@ public class DefaultSwingController extends
   private List<JMenu> createMenus(ActionMap actionMap) {
     List<JMenu> menus = new ArrayList<JMenu>();
     if (actionMap != null) {
-      for (Map.Entry<String, List<IDisplayableAction>> actionList : actionMap
-          .getActionMap().entrySet()) {
-        JMenu menu = createActionMenu(actionList.getKey(), actionList.getValue());
-        menu.setIcon(getIconFactory().getIcon(
-            actionMap.getIconImageURL(actionList.getKey()),
-            IIconFactory.SMALL_ICON_SIZE));
+      for (ActionList actionList : actionMap.getActionLists()) {
+        JMenu menu = createActionMenu(actionList);
         menus.add(menu);
       }
     }

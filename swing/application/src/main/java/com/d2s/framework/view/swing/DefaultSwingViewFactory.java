@@ -155,6 +155,8 @@ import com.d2s.framework.view.IMapView;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.ViewException;
+import com.d2s.framework.view.action.ActionList;
+import com.d2s.framework.view.action.ActionMap;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IBorderViewDescriptor;
 import com.d2s.framework.view.descriptor.ICardViewDescriptor;
@@ -297,11 +299,10 @@ public class DefaultSwingViewFactory implements
           JToolBar toolBar = createJToolBar();
           toolBar.setRollover(true);
           toolBar.setFloatable(true);
-          for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-              .getActions().getActionMap().entrySet().iterator(); iter.hasNext();) {
-            Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
-                .next();
-            for (IDisplayableAction action : nextActionSet.getValue()) {
+          for (Iterator<ActionList> iter = viewDescriptor.getActions()
+              .getActionLists().iterator(); iter.hasNext();) {
+            ActionList nextActionList = iter.next();
+            for (IDisplayableAction action : nextActionList.getActions()) {
               Action swingAction = actionFactory.createAction(action,
                   actionHandler, view, locale);
               JButton actionButton = createJButton();
@@ -1740,9 +1741,9 @@ public class DefaultSwingViewFactory implements
   }
 
   private JPopupMenu createJPopupMenu(JComponent sourceComponent,
-      Map<String, List<IDisplayableAction>> actionMap,
-      IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
-      IValueConnector viewConnector, IActionHandler actionHandler, Locale locale) {
+      ActionMap actionMap, IModelDescriptor modelDescriptor,
+      IViewDescriptor viewDescriptor, IValueConnector viewConnector,
+      IActionHandler actionHandler, Locale locale) {
     JPopupMenu popupMenu = createJPopupMenu();
     JLabel titleLabel = createJLabel();
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
@@ -1753,10 +1754,10 @@ public class DefaultSwingViewFactory implements
     titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
     popupMenu.add(titleLabel);
     popupMenu.addSeparator();
-    for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = actionMap
-        .entrySet().iterator(); iter.hasNext();) {
-      Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
-      for (IDisplayableAction action : nextActionSet.getValue()) {
+    for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
+        .hasNext();) {
+      ActionList nextActionSet = iter.next();
+      for (IDisplayableAction action : nextActionSet.getActions()) {
         Action swingAction = actionFactory.createAction(action, actionHandler,
             sourceComponent, modelDescriptor, viewConnector, locale);
         JMenuItem actionItem = createJMenuItem();
@@ -2666,8 +2667,8 @@ public class DefaultSwingViewFactory implements
     IValueConnector elementConnector = tableView.getConnector();
     IModelDescriptor modelDescriptor = tableView.getDescriptor()
         .getModelDescriptor();
-    Map<String, List<IDisplayableAction>> actionMap = ((ICollectionViewDescriptor) tableView
-        .getDescriptor()).getActions().getActionMap();
+    ActionMap actionMap = ((ICollectionViewDescriptor) tableView
+        .getDescriptor()).getActions();
 
     if (actionMap == null) {
       return;
@@ -2701,11 +2702,11 @@ public class DefaultSwingViewFactory implements
     IValueConnector viewConnector = (IValueConnector) path
         .getLastPathComponent();
     IModelDescriptor modelDescriptor;
-    Map<String, List<IDisplayableAction>> actionMap;
+    ActionMap actionMap;
     IViewDescriptor viewDescriptor;
     if (viewConnector == tree.getModel().getRoot()) {
       modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-      actionMap = treeView.getDescriptor().getActions().getActionMap();
+      actionMap = treeView.getDescriptor().getActions();
       viewDescriptor = treeView.getDescriptor();
     } else {
       viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
@@ -2714,7 +2715,7 @@ public class DefaultSwingViewFactory implements
           getDescriptorPathFromConnectorTreePath(path))
           .getNodeGroupDescriptor();
       modelDescriptor = viewDescriptor.getModelDescriptor();
-      actionMap = viewDescriptor.getActions().getActionMap();
+      actionMap = viewDescriptor.getActions();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }

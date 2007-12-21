@@ -382,13 +382,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   @Override
   public BasicPropertyDescriptor clone() {
-    try {
-      BasicPropertyDescriptor clonedDescriptor = (BasicPropertyDescriptor) super
-          .clone();
-
-      return clonedDescriptor;
-    } catch (CloneNotSupportedException ex) {
-      throw new NestedRuntimeException(ex);
-    }
+    return (BasicPropertyDescriptor) super.clone();
   }
 }

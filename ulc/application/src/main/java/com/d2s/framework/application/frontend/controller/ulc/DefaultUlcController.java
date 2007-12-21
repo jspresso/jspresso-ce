@@ -31,9 +31,11 @@ import com.d2s.framework.security.ulc.ICallbackHandlerListener;
 import com.d2s.framework.util.exception.BusinessException;
 import com.d2s.framework.util.html.HtmlHelper;
 import com.d2s.framework.util.ulc.UlcUtil;
+import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionList;
 import com.d2s.framework.view.action.ActionMap;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
@@ -232,11 +234,18 @@ public class DefaultUlcController extends
     updateFrameTitle();
   }
 
-  private ULCMenu createActionMenu(String titleKey,
-      List<IDisplayableAction> actionList, ULCComponent sourceComponent) {
-    ULCMenu menu = new ULCMenu(getTranslationProvider().getTranslation(
-        titleKey, getLocale()));
-    for (IDisplayableAction action : actionList) {
+  private ULCMenu createActionMenu(ActionList actionList,
+      ULCComponent sourceComponent) {
+    ULCMenu menu = new ULCMenu(actionList.getI18nName(getTranslationProvider(),
+        getLocale()));
+    if (actionList.getDescription() != null) {
+      menu.setToolTipText(actionList.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IActionFactory.TOOLTIP_ELLIPSIS);
+    }
+    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
+    for (IDisplayableAction action : actionList.getActions()) {
       menu
           .add(new ULCMenuItem(getViewFactory().getActionFactory()
               .createAction(action, this, sourceComponent, null, null,
@@ -257,13 +266,8 @@ public class DefaultUlcController extends
       ActionMap actionMap) {
     List<ULCMenu> menus = new ArrayList<ULCMenu>();
     if (actionMap != null) {
-      for (Map.Entry<String, List<IDisplayableAction>> actionList : actionMap
-          .getActionMap().entrySet()) {
-        ULCMenu menu = createActionMenu(actionList.getKey(), actionList
-            .getValue(), sourceComponent);
-        menu.setIcon(getIconFactory().getIcon(
-              actionMap.getIconImageURL(actionList.getKey()),
-              IIconFactory.SMALL_ICON_SIZE));
+      for (ActionList actionList : actionMap.getActionLists()) {
+        ULCMenu menu = createActionMenu(actionList, sourceComponent);
         menus.add(menu);
       }
     }

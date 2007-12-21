@@ -106,6 +106,8 @@ import com.d2s.framework.view.IMapView;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.ViewException;
+import com.d2s.framework.view.action.ActionList;
+import com.d2s.framework.view.action.ActionMap;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IBorderViewDescriptor;
 import com.d2s.framework.view.descriptor.ICardViewDescriptor;
@@ -286,12 +288,12 @@ public class DefaultUlcViewFactory implements
         }
         if (viewDescriptor.getActions() != null) {
           ULCToolBar toolBar = createULCToolBar();
-          for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-              .getActions().getActionMap().entrySet().iterator(); iter
+          for (Iterator<ActionList> iter = viewDescriptor
+              .getActions().getActionLists().iterator(); iter
               .hasNext();) {
-            Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
+            ActionList nextActionList = iter
                 .next();
-            for (IDisplayableAction action : nextActionSet.getValue()) {
+            for (IDisplayableAction action : nextActionList.getActions()) {
               IAction ulcAction = actionFactory.createAction(action,
                   actionHandler, view, locale);
               ULCButton actionButton = createULCButton();
@@ -2566,9 +2568,9 @@ public class DefaultUlcViewFactory implements
   }
 
   private ULCPopupMenu createULCPopupMenu(ULCComponent sourceComponent,
-      Map<String, List<IDisplayableAction>> actionMap,
-      IModelDescriptor modelDescriptor, IViewDescriptor viewDescriptor,
-      IValueConnector viewConnector, IActionHandler actionHandler, Locale locale) {
+      ActionMap actionMap, IModelDescriptor modelDescriptor,
+      IViewDescriptor viewDescriptor, IValueConnector viewConnector,
+      IActionHandler actionHandler, Locale locale) {
     ULCPopupMenu popupMenu = createULCPopupMenu();
     ULCLabel titleLabel = createULCLabel();
     titleLabel.setText(viewDescriptor.getI18nName(getTranslationProvider(),
@@ -2578,10 +2580,10 @@ public class DefaultUlcViewFactory implements
     titleLabel.setHorizontalAlignment(IDefaults.CENTER);
     popupMenu.add(titleLabel);
     popupMenu.addSeparator();
-    for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = actionMap
-        .entrySet().iterator(); iter.hasNext();) {
-      Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter.next();
-      for (IDisplayableAction action : nextActionSet.getValue()) {
+    for (Iterator<ActionList> iter = actionMap.getActionLists().iterator(); iter
+        .hasNext();) {
+      ActionList nextActionList = iter.next();
+      for (IDisplayableAction action : nextActionList.getActions()) {
         IAction ulcAction = actionFactory.createAction(action, actionHandler,
             sourceComponent, modelDescriptor, viewConnector, locale);
         ULCMenuItem actionItem = createULCMenuItem();
@@ -2601,8 +2603,8 @@ public class DefaultUlcViewFactory implements
     IValueConnector elementConnector = tableView.getConnector();
     IModelDescriptor modelDescriptor = tableView.getDescriptor()
         .getModelDescriptor();
-    Map<String, List<IDisplayableAction>> actionMap = ((ICollectionViewDescriptor) tableView
-        .getDescriptor()).getActions().getActionMap();
+    ActionMap actionMap = ((ICollectionViewDescriptor) tableView
+        .getDescriptor()).getActions();
 
     if (actionMap == null) {
       return null;
@@ -2636,11 +2638,11 @@ public class DefaultUlcViewFactory implements
     IValueConnector viewConnector = (IValueConnector) path
         .getLastPathComponent();
     IModelDescriptor modelDescriptor;
-    Map<String, List<IDisplayableAction>> actionMap;
+    ActionMap actionMap;
     IViewDescriptor viewDescriptor;
     if (viewConnector == tree.getModel().getRoot()) {
       modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-      actionMap = treeView.getDescriptor().getActions().getActionMap();
+      actionMap = treeView.getDescriptor().getActions();
       viewDescriptor = treeView.getDescriptor();
     } else {
       viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
@@ -2649,7 +2651,7 @@ public class DefaultUlcViewFactory implements
           getDescriptorPathFromConnectorTreePath(path))
           .getNodeGroupDescriptor();
       modelDescriptor = viewDescriptor.getModelDescriptor();
-      actionMap = viewDescriptor.getActions().getActionMap();
+      actionMap = viewDescriptor.getActions();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }

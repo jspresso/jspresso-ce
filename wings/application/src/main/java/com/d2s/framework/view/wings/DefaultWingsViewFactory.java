@@ -147,6 +147,7 @@ import com.d2s.framework.view.IMapView;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.IViewFactory;
 import com.d2s.framework.view.ViewException;
+import com.d2s.framework.view.action.ActionList;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.IBorderViewDescriptor;
 import com.d2s.framework.view.descriptor.ICardViewDescriptor;
@@ -286,12 +287,12 @@ public class DefaultWingsViewFactory implements
         }
         if (viewDescriptor.getActions() != null) {
           SToolBar toolBar = createSToolBar();
-          for (Iterator<Map.Entry<String, List<IDisplayableAction>>> iter = viewDescriptor
-              .getActions().getActionMap().entrySet().iterator(); iter
+          for (Iterator<ActionList> iter = viewDescriptor
+              .getActions().getActionLists().iterator(); iter
               .hasNext();) {
-            Map.Entry<String, List<IDisplayableAction>> nextActionSet = iter
+            ActionList nextActionList = iter
                 .next();
-            for (IDisplayableAction action : nextActionSet.getValue()) {
+            for (IDisplayableAction action : nextActionList.getActions()) {
               Action swingAction = actionFactory.createAction(action,
                   actionHandler, view, locale);
               SButton actionButton = createSButton();

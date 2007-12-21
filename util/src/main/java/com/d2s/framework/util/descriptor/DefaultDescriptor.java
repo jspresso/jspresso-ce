@@ -17,7 +17,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultDescriptor implements IDescriptor {
+public class DefaultDescriptor implements IDescriptor, Cloneable {
 
   private String description;
   private String name;
@@ -74,5 +74,18 @@ public class DefaultDescriptor implements IDescriptor {
    */
   public void setName(String name) {
     this.name = name;
+  }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public DefaultDescriptor clone() {
+    try {
+      return (DefaultDescriptor) super.clone();
+    } catch (CloneNotSupportedException ex) {
+      // Cannot happen.
+      return null;
+    }
   }
 }

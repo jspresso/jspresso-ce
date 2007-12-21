@@ -4,7 +4,6 @@
 package com.d2s.framework.view.action;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,28 +21,29 @@ import java.util.Map;
  */
 public class ActionMap {
 
-  private Map<String, List<IDisplayableAction>> actionMap;
-  private List<ActionMap>                       parentActionMaps;
-  private Map<String, String>                   iconImageURLs;
+  private Map<String, ActionList> mapOfActionLists;
+  private List<ActionMap>         parentActionMaps;
 
   private static void completeActionMap(
-      Map<String, List<IDisplayableAction>> globalActionMap,
-      Map<String, List<IDisplayableAction>> localActionMap) {
-    if (localActionMap != null) {
-      for (Map.Entry<String, List<IDisplayableAction>> actionListEntry : localActionMap
-          .entrySet()) {
-        List<IDisplayableAction> globalActionList = globalActionMap
-            .get(actionListEntry.getKey());
-        if (globalActionList == null) {
-          globalActionList = new ArrayList<IDisplayableAction>();
-          globalActionMap.put(actionListEntry.getKey(), globalActionList);
-        }
-        for (IDisplayableAction localAction : actionListEntry.getValue()) {
-          int existingIndex = globalActionList.indexOf(localAction);
-          if (existingIndex >= 0) {
-            globalActionList.set(existingIndex, localAction);
-          } else {
-            globalActionList.add(localAction);
+      Map<String, ActionList> bufferActionMap, ActionMap actionMap) {
+    if (actionMap != null) {
+      for (Map.Entry<String, ActionList> actionListEntry : actionMap
+          .getMapOfActionLists().entrySet()) {
+        ActionList bufferActionList = bufferActionMap.get(actionListEntry
+            .getKey());
+        if (bufferActionList == null) {
+          bufferActionList = actionListEntry.getValue().clone();
+          bufferActionMap.put(actionListEntry.getKey(), bufferActionList);
+        } else {
+          for (IDisplayableAction localAction : actionListEntry.getValue()
+              .getActions()) {
+            int existingIndex = bufferActionList.getActions().indexOf(
+                localAction);
+            if (existingIndex >= 0) {
+              bufferActionList.getActions().set(existingIndex, localAction);
+            } else {
+              bufferActionList.getActions().add(localAction);
+            }
           }
         }
       }
@@ -51,32 +51,41 @@ public class ActionMap {
   }
 
   /**
-   * Gets the map of action sets composing the parent actionmaps with the local
-   * one.
+   * Gets the list of action sets composing the parent action maps with the
+   * local one.
    * 
-   * @return the actionMap.
+   * @return the actions list.
    */
-  public Map<String, List<IDisplayableAction>> getActionMap() {
-    Map<String, List<IDisplayableAction>> returnedActionMap = new LinkedHashMap<String, List<IDisplayableAction>>();
+  public List<ActionList> getActionLists() {
+    Map<String, ActionList> buffer = new LinkedHashMap<String, ActionList>();
     if (parentActionMaps != null) {
       for (ActionMap parentActionMap : parentActionMaps) {
-        completeActionMap(returnedActionMap, parentActionMap.getActionMap());
+        completeActionMap(buffer, parentActionMap);
       }
     }
-    if (actionMap != null) {
-      completeActionMap(returnedActionMap, actionMap);
+    if (mapOfActionLists != null) {
+      completeActionMap(buffer, this);
     }
-    return returnedActionMap;
+    return new ArrayList<ActionList>(buffer.values());
   }
 
   /**
-   * Sets the actionMap.
+   * Sets the action lists list.
    * 
-   * @param actionMap
-   *            the actionMap to set.
+   * @param actionLists
+   *            the action lists list to set.
    */
-  public void setActionMap(Map<String, List<IDisplayableAction>> actionMap) {
-    this.actionMap = actionMap;
+  public void setActionLists(List<ActionList> actionLists) {
+    mapOfActionLists = new LinkedHashMap<String, ActionList>();
+    if (actionLists != null) {
+      for (ActionList actionList : actionLists) {
+        mapOfActionLists.put(actionList.getName(), actionList);
+      }
+    }
+  }
+
+  private Map<String, ActionList> getMapOfActionLists() {
+    return mapOfActionLists;
   }
 
   /**
@@ -88,36 +97,4 @@ public class ActionMap {
   public void setParentActionMaps(List<ActionMap> parentActionMaps) {
     this.parentActionMaps = parentActionMaps;
   }
-
-  /**
-   * Gets the iconImageURL for a given group of actions.
-   * 
-   * @param groupKey
-   *            the group of actions.
-   * @return the iconImageURL for a given group of actions.
-   */
-  public String getIconImageURL(String groupKey) {
-    String iconImageUrl = null;
-    if (iconImageURLs != null) {
-      iconImageUrl = iconImageURLs.get(groupKey);
-    }
-    if (iconImageUrl == null && parentActionMaps != null) {
-      for (Iterator<ActionMap> ite = parentActionMaps.iterator(); ite.hasNext()
-          && iconImageUrl == null;) {
-        iconImageUrl = ite.next().getIconImageURL(groupKey);
-      }
-    }
-    return iconImageUrl;
-  }
-
-  /**
-   * Sets the iconImageURLs.
-   * 
-   * @param iconImageURLs
-   *            the iconImageURLs to set.
-   */
-  public void setIconImageURLs(Map<String, String> iconImageURLs) {
-    this.iconImageURLs = iconImageURLs;
-  }
-
 }

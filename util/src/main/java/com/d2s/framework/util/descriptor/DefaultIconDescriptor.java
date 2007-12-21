@@ -37,4 +37,11 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
     this.iconImageURL = iconImageURL;
   }
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public DefaultIconDescriptor clone() {
+    return (DefaultIconDescriptor) super.clone();
+  }
 }
