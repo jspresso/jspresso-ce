@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.application.frontend.action.wings.lov;
 
@@ -15,7 +15,7 @@ import com.d2s.framework.binding.ICollectionConnectorProvider;
  * Sets the selected component as the value of the source view connector (which
  * will propagate to the backend).
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

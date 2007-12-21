@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.view.descriptor;
 
@@ -12,7 +12,7 @@ import com.d2s.framework.util.gate.IGate;
 /**
  * The sub views contract.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

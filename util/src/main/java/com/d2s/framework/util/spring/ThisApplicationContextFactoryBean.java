@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.util.spring;
 
@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContextAware;
  * This is a simple utility bean to get a reference on the bean factory which
  * loaded it.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

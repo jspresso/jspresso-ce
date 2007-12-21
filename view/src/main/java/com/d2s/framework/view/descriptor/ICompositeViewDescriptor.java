@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.view.descriptor;
 
@@ -7,7 +7,7 @@ package com.d2s.framework.view.descriptor;
  * This public interface is the super-interface of all view descriptors used as
  * containers for others.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

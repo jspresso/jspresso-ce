@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.model;
 
@@ -16,7 +16,7 @@ import java.util.EventObject;
  * Integer or Boolean). Null values may be provided for the old and the new
  * values if their true values are not known.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

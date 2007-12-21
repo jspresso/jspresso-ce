@@ -9,7 +9,7 @@ import com.d2s.framework.util.url.UrlHelper;
 /**
  * An URL resource.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

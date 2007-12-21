@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.binding.masterdetail;
 
@@ -10,7 +10,7 @@ import com.d2s.framework.binding.IValueConnector;
  * connectors in a master / detail relationship where the master connector is
  * determined by the selection in a <code>ISelectableConnector</code>.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

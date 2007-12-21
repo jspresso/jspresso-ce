@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.binding.wings;
 
@@ -12,7 +12,7 @@ import com.d2s.framework.util.event.ISelectable;
  * Helper class used to bind collection view connectors to list selection models
  * (used in <code>SList</code> and <code>STable</code>).
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.application.view.descriptor.basic;
 
@@ -18,7 +18,7 @@ import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
  * This is a card view descriptor which stacks the projected view descriptors of
  * the module module structure.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

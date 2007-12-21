@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.binding.basic;
 
@@ -13,7 +13,7 @@ import com.d2s.framework.binding.IMvcBinder;
  * building complex technical view models (e.g. TableModel where the underlying
  * structure would be a <code>BasicCollectionConnector</code>).
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.model.component.basic;
 
@@ -20,7 +20,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * standard java proxies which delegate to
  * <code>BasicComponentInvocationHandler</code>s.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

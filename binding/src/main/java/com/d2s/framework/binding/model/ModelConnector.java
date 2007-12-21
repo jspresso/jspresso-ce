@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.binding.model;
 
@@ -13,7 +13,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
  * instance itself. This implies that the <code>getConnectorValue</code>
  * method returns the model instance itself.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

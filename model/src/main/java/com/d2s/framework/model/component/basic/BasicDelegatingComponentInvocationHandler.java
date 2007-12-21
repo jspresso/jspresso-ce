@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.model.component.basic;
 
@@ -20,7 +20,7 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * This is the core implementation of all entities in the application. Instances
  * of this class serve as handlers for proxies representing the entities.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

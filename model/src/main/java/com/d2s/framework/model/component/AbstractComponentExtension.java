@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.model.component;
 
@@ -13,7 +13,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * Developpers should inherit from it and use the <code>getComponent()</code>
  * to access the extended component instance.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

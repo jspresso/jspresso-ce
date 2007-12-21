@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * A simple filter to ensure that the session is authenticated and contains a
  * Subject.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

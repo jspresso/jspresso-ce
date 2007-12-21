@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.model.datatransfer;
 
@@ -9,7 +9,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
  * A simple container for transfering component(s). Its usage is targetting at
  * copy/cut/paste operations.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

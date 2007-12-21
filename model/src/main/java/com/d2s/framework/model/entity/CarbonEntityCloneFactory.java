@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.model.entity;
 
@@ -15,7 +15,7 @@ import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
  * Does a "carbon" copy of the entity including its id and version. This factory
  * is used only for technical purposes.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.application.printing.model.descriptor;
 
@@ -11,7 +11,7 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
  * The descriptor of a report. It points to the report design resource as well a
  * the definition of the contextual report parameters.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

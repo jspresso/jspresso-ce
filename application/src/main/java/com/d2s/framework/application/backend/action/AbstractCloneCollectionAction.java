@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.application.backend.action;
 
@@ -16,7 +16,7 @@ import com.d2s.framework.binding.ICollectionConnector;
  * An action used duplicate a collection of domain objects. Cloning an entity
  * should result in adding it to the collection the action was triggered on.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$

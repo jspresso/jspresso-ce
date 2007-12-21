@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2005 Design2see. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package com.d2s.framework.security.auth.spi;
 
@@ -24,7 +24,7 @@ import com.d2s.framework.security.UserPrincipal;
  * Extends the JBoss LdapExtLoginModule to keep track of the authenticated
  * ditinguished name.
  * <p>
- * Copyright 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
  * @version $LastChangedRevision$
