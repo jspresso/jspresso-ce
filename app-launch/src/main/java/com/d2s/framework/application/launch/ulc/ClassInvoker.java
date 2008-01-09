@@ -21,65 +21,17 @@ import com.ulcjava.base.client.IMessageService;
 public class ClassInvoker implements IMessageService {
 
   /**
-   * <code>ARGS_SEPARATOR</code>.
-   */
-  private static final String ARGS_SEPARATOR = "§";
-
-  /**
-   * <code>MESSAGE_ROOT</code>.
-   */
-  private static final String MESSAGE_ROOT   = "invokeClass";
-
-  /**
-   * <code>SEPARATOR</code>.
-   */
-  private static final String SEPARATOR      = "::";
-
-  /**
-   * Creates a message to be handled by the class invoker.
-   * 
-   * @param className
-   *            the name of the class to trigger.
-   * @param methodName
-   *            the name of the method to trigger.
-   * @param arguments
-   *            the arguments to trigger the method.
-   * @return the created message.
-   */
-  public static String createMessage(String className, String methodName,
-      String[] arguments) {
-    StringBuffer msg = new StringBuffer();
-    msg.append(MESSAGE_ROOT);
-    msg.append(SEPARATOR);
-    msg.append(className);
-    msg.append(SEPARATOR);
-    msg.append(methodName);
-    if (arguments != null && arguments.length > 0) {
-      msg.append(SEPARATOR);
-      int i = 0;
-      for (String argument : arguments) {
-        msg.append(argument);
-        if (i < arguments.length - 1) {
-          msg.append(ARGS_SEPARATOR);
-        }
-        i++;
-      }
-    }
-    return msg.toString();
-  }
-
-  /**
    * {@inheritDoc}
    */
   public void handleMessage(String msg) {
-    if (msg.startsWith(MESSAGE_ROOT)) {
-      String[] messageParts = msg.split(SEPARATOR);
+    if (msg.startsWith(ClassInvokerUtil.MESSAGE_ROOT)) {
+      String[] messageParts = msg.split(ClassInvokerUtil.SEPARATOR);
       try {
         Class<?> targetClass = Class.forName(messageParts[1]);
         String methodName = messageParts[2];
         String[] arguments;
         if (messageParts.length > 3) {
-          arguments = messageParts[3].split(ARGS_SEPARATOR);
+          arguments = messageParts[3].split(ClassInvokerUtil.ARGS_SEPARATOR);
         } else {
           arguments = new String[0];
         }
@@ -97,7 +49,7 @@ public class ClassInvoker implements IMessageService {
       } catch (NoSuchMethodException ex) {
         throw new NestedRuntimeException(ex);
       } catch (InvocationTargetException ex) {
-        //ignored
+        // ignored
         ex.printStackTrace();
       }
     }

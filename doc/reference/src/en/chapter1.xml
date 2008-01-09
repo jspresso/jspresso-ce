@@ -4515,9 +4515,9 @@ zip = Zip code</programlisting>Relaunching the view test with the english
         display, under each team, a subtree for the projects managed by a team
         and a subtree for the team members.</para>
 
-        <para><trademark>D2S</trademark> You would aggregate the 2 simple tree
-        levels (projects and team members) into a composite tree level and
-        make this composite tree level the child level of the team tree
+        <para><trademark>D2S</trademark> allows you aggregate the 2 simple
+        tree levels (projects and team members) into a composite tree level
+        and make this composite tree level the child level of the team tree
         level.</para>
 
         <para></para>

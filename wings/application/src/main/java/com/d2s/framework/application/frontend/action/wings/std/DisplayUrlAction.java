@@ -32,14 +32,18 @@ public class DisplayUrlAction extends AbstractWingsAction {
   @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    String urlSpec = (String) context.get(ActionContextConstants.ACTION_PARAM);
+    StringBuffer urlSpec = new StringBuffer();
     if (baseUrl != null) {
-      urlSpec = baseUrl + urlSpec;
+      urlSpec.append(urlSpec);
     }
-    SAnchor downloadLink = new SAnchor(urlSpec, "downloadWindow");
-    downloadLink.add(new SLabel(getTranslationProvider(context).getTranslation(
-        "click.me", getLocale(context))));
-    SOptionPane.showMessageDialog(getSourceComponent(context), downloadLink);
+    urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
+
+    if (urlSpec.length() > 0) {
+      SAnchor downloadLink = new SAnchor(urlSpec.toString(), "downloadWindow");
+      downloadLink.add(new SLabel(getTranslationProvider(context)
+          .getTranslation("click.me", getLocale(context))));
+      SOptionPane.showMessageDialog(getSourceComponent(context), downloadLink);
+    }
     return true;
   }
 

@@ -29,9 +29,15 @@ public class DisplayUrlAction extends AbstractUlcAction {
   @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    String urlSpec = baseUrl
-        + (String) context.get(ActionContextConstants.ACTION_PARAM);
-    ClientContext.showDocument(urlSpec);
+    StringBuffer urlSpec = new StringBuffer();
+    if (baseUrl != null) {
+      urlSpec.append(urlSpec);
+    }
+    urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
+
+    if (urlSpec.length() > 0) {
+      ClientContext.showDocument(urlSpec.toString());
+    }
     return true;
   }
 

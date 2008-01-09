@@ -31,6 +31,10 @@ public final class ObjectUtils {
     if ((object1 == null) || (object2 == null)) {
       return false;
     }
+    if (object1 instanceof Number && object2 instanceof Number) {
+      return ((Number) object1).doubleValue() == ((Number) object2)
+          .doubleValue();
+    }
     return object1.equals(object2);
   }
 }

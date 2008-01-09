@@ -31,13 +31,18 @@ public class DisplayUrlAction extends AbstractSwingAction {
   @Override
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    String urlSpec = baseUrl
-        + (String) context.get(ActionContextConstants.ACTION_PARAM);
+    StringBuffer urlSpec = new StringBuffer();
+    if (baseUrl != null) {
+      urlSpec.append(urlSpec);
+    }
+    urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
 
-    try {
-      BrowserControl.displayURL(urlSpec);
-    } catch (IOException ex) {
-      throw new ActionException(ex);
+    if (urlSpec.length() > 0) {
+      try {
+        BrowserControl.displayURL(urlSpec.toString());
+      } catch (IOException ex) {
+        throw new ActionException(ex);
+      }
     }
     return true;
   }

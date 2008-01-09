@@ -78,5 +78,9 @@
     depends-on="componentTuplizerInit">
     <property name="accessorFactory" ref="beanAccessorFactory" />
   </bean>
-</beans>
 
+  <bean
+    id="applicationBackController"
+    parent="abstractHibernateBackController"
+    scope="prototype" />
+</beans>
