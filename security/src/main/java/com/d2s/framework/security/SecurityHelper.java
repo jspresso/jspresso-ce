@@ -71,4 +71,18 @@ public final class SecurityHelper {
     throw new SecurityException(translationProvider.getTranslation(
         "access.denied", locale));
   }
+
+  /**
+   * Creates an anonymous subject.
+   * 
+   * @return a new anonymous subject.
+   */
+  public static Subject createAnonymousSubject() {
+    Subject anonymousSubject = new Subject();
+    UserPrincipal userPrincipal = new UserPrincipal("anonymous");
+    if (!anonymousSubject.getPrincipals().contains(userPrincipal)) {
+      anonymousSubject.getPrincipals().add(userPrincipal);
+    }
+    return anonymousSubject;
+  }
 }

@@ -178,8 +178,8 @@ public class DialogCallbackHandler implements CallbackHandler {
     int screenRes = ClientContext.getScreenResolution();
     callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
         * (varCallbacks.length + 1) / 2));
-    UlcUtil.centerOnScreen(callbackDialog);
     callbackDialog.pack();
+    UlcUtil.centerOnScreen(callbackDialog);
     callbackDialog.setVisible(true);
   }
 

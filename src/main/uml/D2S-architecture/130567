@@ -1,6 +1,6 @@
-format 45
+format 48
 "basic" // com::d2s::framework::model::descriptor::basic
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -324,14 +324,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 862 $
 @author Vincent Vandenschrick
 "
-      classrelation 138375 // <generalisation>
-	relation 138375 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 138375 // <generalisation>
-	  b parent class_ref 138247 // DefaultDescriptor
-      end
-
       classrelation 138503 // <realization>
 	relation 138503 -_-|>
 	  a public
@@ -1145,14 +1137,6 @@ Copyright 2005 Design2See. All rights reserved.
 @param <E>
            the concrete collection component element type.
 "
-      classrelation 139783 // <generalisation>
-	relation 139783 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 139783 // <generalisation>
-	  b parent class_ref 138247 // DefaultDescriptor
-      end
-
       classrelation 139911 // <realization>
 	relation 139911 -_-|>
 	  stereotype "bind"
@@ -1833,14 +1817,6 @@ Copyright 2005 Design2See. All rights reserved.
 @param <E>
            the concrete type of components.
 "
-      classrelation 141191 // <generalisation>
-	relation 141191 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 141191 // <generalisation>
-	  b parent class_ref 139271 // DefaultIconDescriptor
-      end
-
       classrelation 141319 // <realization>
 	relation 141319 -_-|>
 	  stereotype "bind"
@@ -2573,14 +2549,6 @@ Copyright 2005 Design2See. All rights reserved.
 	    java "${type}"
 	    classrelation_ref 142215 // <realization>
 	  b parent class_ref 131975 // IComponentDescriptorRegistry
-      end
-
-      classrelation 142343 // <realization>
-	relation 142343 -_-|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 142343 // <realization>
-	  b parent class_ref 139527 // ApplicationContextAware
       end
 
       attribute 136327 "componentApplicationContext"

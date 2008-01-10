@@ -1,6 +1,6 @@
-format 45
+format 48
 "descriptor" // com::d2s::framework::model::descriptor
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -167,14 +167,6 @@ Copyright 2005 Design2See. All rights reserved.
 	    java "${type}"
 	    classrelation_ref 135687 // <generalisation>
 	  b parent class_ref 134663 // IModelDescriptor
-      end
-
-      classrelation 135815 // <generalisation>
-	relation 135815 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 135815 // <generalisation>
-	  b parent class_ref 135815 // IIconDescriptor
       end
 
       classrelation 136071 // <realization>
@@ -663,14 +655,6 @@ Copyright 2005 Design2See. All rights reserved.
 	  b parent class_ref 134663 // IModelDescriptor
       end
 
-      classrelation 134151 // <generalisation>
-	relation 134151 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 134151 // <generalisation>
-	  b parent class_ref 134919 // Cloneable
-      end
-
       operation 145415 "checkValueIntegrity"
 	package explicit_return_type "void"
 	nparams 2
@@ -1052,14 +1036,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 133639 // <realization>
-	relation 133639 -_-|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 133639 // <realization>
-	  b parent class_ref 134279 // IIconImageURLProvider
-      end
-
       classrelation 133767 // componentDescriptors (<unidirectional association>)
 	relation 133767 --->
 	  stereotype "Collection"
@@ -1221,14 +1197,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 133895 // <generalisation>
-	relation 133895 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 133895 // <generalisation>
-	  b parent class_ref 134791 // IDescriptor
-      end
-
       operation 145287 "getModelType"
 	package explicit_return_type "Class<?>"
 	nparams 0

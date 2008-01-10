@@ -1,6 +1,6 @@
-format 45
+format 48
 "model" // com::d2s::framework::model
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -500,14 +500,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 129543 // <generalisation>
-	relation 129543 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 129543 // <generalisation>
-	  b parent class_ref 129927 // EventObject
-      end
-
       attribute 129287 "serialVersionUID"
 	class_attribute const_attribute private explicit_type "long"
 	init_value "=  3740337339792161447L"

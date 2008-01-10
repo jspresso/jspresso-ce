@@ -1,6 +1,6 @@
 format 48
 "framework" // com::d2s::framework
-  revision 2
+  revision 4
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -28,8 +28,11 @@ format 48
   
   java_dir "com/d2s/framework"
   java_package "com.d2s.framework"
+  package_ref 133895 // application
+
   package_ref 129543 // model
 
   package_ref 132359 // view
 
+  package_ref 144391 // util
 end

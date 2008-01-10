@@ -75,35 +75,44 @@ public class LoginServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
-    // retrieve form parameter values from request
-    String username = request.getParameter("username");
-    String password = request.getParameter("password");
+    if (jaasApplicationName != null) {
+      // retrieve form parameter values from request
+      String username = request.getParameter("username");
+      String password = request.getParameter("password");
 
-    // just for demo purposes: do never login if no username is set
-    if (username.trim().equals("")) {
-      // redirect to the error page
-      response.sendRedirect(request.getContextPath() + errorRedirectUrl);
-      return;
-    }
+      // just for demo purposes: do never login if no username is set
+      if (username.trim().equals("")) {
+        // redirect to the error page
+        response.sendRedirect(request.getContextPath() + errorRedirectUrl);
+        return;
+      }
 
-    // create a JAAS callback handler and hand it over username and password
-    CallbackHandler callbackHandler = new UserPasswordHandler(username,
-        password);
+      // create a JAAS callback handler and hand it over username and password
+      CallbackHandler callbackHandler = new UserPasswordHandler(username,
+          password);
 
-    // perform the JAAS login; it will callback on the callbackHandler to obtain
-    // username and password
-    try {
-      LoginContext loginContext = new LoginContext(jaasApplicationName,
-          callbackHandler);
-      loginContext.login();
+      // perform the JAAS login; it will callback on the callbackHandler to
+      // obtain
+      // username and password
+      try {
+        LoginContext loginContext = new LoginContext(jaasApplicationName,
+            callbackHandler);
+        loginContext.login();
 
-      request.getSession().setAttribute("SUBJECT", loginContext.getSubject());
+        request.getSession().setAttribute("SUBJECT", loginContext.getSubject());
+
+        // redirect to the main menu page
+        response.sendRedirect(request.getContextPath() + successRedirectUrl);
+      } catch (LoginException le) {
+        // redirect to the error page
+        response.sendRedirect(request.getContextPath() + errorRedirectUrl);
+      }
+    } else {
+      request.getSession().setAttribute("SUBJECT",
+          SecurityHelper.createAnonymousSubject());
 
       // redirect to the main menu page
       response.sendRedirect(request.getContextPath() + successRedirectUrl);
-    } catch (LoginException le) {
-      // redirect to the error page
-      response.sendRedirect(request.getContextPath() + errorRedirectUrl);
     }
   }
 
@@ -157,8 +166,8 @@ public class LoginServlet extends HttpServlet {
           ((NameCallback) callbacks[i]).setName(username);
         } else if (callbacks[i] instanceof PasswordCallback) {
           ((PasswordCallback) callbacks[i]).setPassword(password);
-//        } else {
-//          throw new UnsupportedCallbackException(callbacks[i]);
+          // } else {
+          // throw new UnsupportedCallbackException(callbacks[i]);
         }
       }
     }

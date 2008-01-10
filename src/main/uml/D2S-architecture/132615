@@ -1,6 +1,6 @@
 format 48
 "action" // com::d2s::framework::view::action
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -64,22 +64,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 153351 // <generalisation>
-	relation 153351 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 153351 // <generalisation>
-	  b parent class_ref 147719 // IAction
-      end
-
-      classrelation 153479 // <generalisation>
-	relation 153479 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 153479 // <generalisation>
-	  b parent class_ref 135815 // IIconDescriptor
-      end
-
       operation 201351 "getAcceleratorAsString"
 	package explicit_return_type "String"
 	nparams 0

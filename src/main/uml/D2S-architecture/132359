@@ -1,6 +1,6 @@
 format 48
 "view" // com::d2s::framework::view
-  revision 1
+  revision 3
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -1818,14 +1818,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 153095 // <generalisation>
-	relation 153095 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 153095 // <generalisation>
-	  b parent class_ref 130823 // NestedRuntimeException
-      end
-
       attribute 143495 "serialVersionUID"
 	class_attribute const_attribute private explicit_type "long"
 	init_value "=  5403717126687643426L"
@@ -2057,4 +2049,6 @@ ${definition}"
   package_ref 132487 // descriptor
 
   package_ref 132615 // action
+
+  package_ref 138247 // ulc
 end

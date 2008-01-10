@@ -1,6 +1,6 @@
-format 45
+format 48
 "component" // com::d2s::framework::model::component
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -242,14 +242,6 @@ Copyright 2005 Design2See. All rights reserved.
 	    java "${type}"
 	    classrelation_ref 130823 // <generalisation>
 	  b parent class_ref 131463 // ILifecycleCapable
-      end
-
-      classrelation 130951 // <generalisation>
-	relation 130951 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 130951 // <generalisation>
-	  b parent class_ref 131847 // IPropertyChangeCapable
       end
 
       operation 134151 "firePropertyChange"
@@ -547,14 +539,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 130311 // <generalisation>
-	relation 130311 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 130311 // <generalisation>
-	  b parent class_ref 130823 // NestedRuntimeException
-      end
-
       attribute 129799 "serialVersionUID"
 	class_attribute const_attribute private explicit_type "long"
 	init_value "=  -3659844614276359719L"

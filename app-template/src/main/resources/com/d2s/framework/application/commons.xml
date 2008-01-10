@@ -188,7 +188,7 @@
   </bean>
 
   <bean abstract="true" id="abstractBackController"
-    class="com.d2s.framework.application.backend.DefaultBackendController">
+    class="com.d2s.framework.application.backend.AbstractBackendController">
     <property name="entityFactory">
       <bean parent="basicEntityFactory"
         class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory"

@@ -427,27 +427,33 @@ public class DefaultUlcController extends
      */
     @Override
     public void run() {
-      while (!loginSuccessful && loginRetries < MAX_LOGIN_RETRIES) {
-        LoginContext lc = null;
-        try {
-          lc = new LoginContext(getLoginContextName(),
-              new ThreadBlockingCallbackHandler());
-        } catch (LoginException le) {
-          System.err.println("Cannot create LoginContext. " + le.getMessage());
-        } catch (SecurityException se) {
-          System.err.println("Cannot create LoginContext. " + se.getMessage());
-        }
-        if (lc != null) {
+      if (getLoginContextName() != null) {
+        while (!loginSuccessful && loginRetries < MAX_LOGIN_RETRIES) {
+          LoginContext lc = null;
           try {
-            lc.login();
-            loginSuccess(lc.getSubject());
-            loginSuccessful = true;
+            lc = new LoginContext(getLoginContextName(),
+                new ThreadBlockingCallbackHandler());
           } catch (LoginException le) {
-            loginRetries++;
-            System.err.println("Authentication failed:");
-            System.err.println("  " + le.getMessage());
+            System.err
+                .println("Cannot create LoginContext. " + le.getMessage());
+          } catch (SecurityException se) {
+            System.err
+                .println("Cannot create LoginContext. " + se.getMessage());
+          }
+          if (lc != null) {
+            try {
+              lc.login();
+              loginSuccess(lc.getSubject());
+              loginSuccessful = true;
+            } catch (LoginException le) {
+              loginRetries++;
+              System.err.println("Authentication failed:");
+              System.err.println("  " + le.getMessage());
+            }
           }
         }
+      } else {
+        loginSuccess(getAnonymousSubject());
       }
       loginComplete = true;
     }

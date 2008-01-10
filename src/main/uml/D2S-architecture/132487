@@ -1,6 +1,6 @@
 format 48
 "descriptor" // com::d2s::framework::view::descriptor
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -77,14 +77,6 @@ Copyright 2005 Design2See. All rights reserved.
 	    java "${type}"
 	    classrelation_ref 153863 // <generalisation>
 	  b parent class_ref 147591 // IActionable
-      end
-
-      classrelation 153991 // <generalisation>
-	relation 153991 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 153991 // <generalisation>
-	  b parent class_ref 148231 // ISecurable
       end
 
       attribute 143751 "NONE"
@@ -375,14 +367,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 153607 // <generalisation>
-	relation 153607 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 153607 // <generalisation>
-	  b parent class_ref 135815 // IIconDescriptor
-      end
-
       operation 201735 "getModelDescriptor"
 	package return_type class_ref 134663 // IModelDescriptor
 	nparams 0

@@ -1,6 +1,6 @@
-format 45
+format 48
 "basic" // com::d2s::framework::model::entity::basic
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -775,22 +775,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 149127 // <realization>
-	relation 149127 -_-|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 149127 // <realization>
-	  b parent class_ref 132359 // InvocationHandler
-      end
-
-      classrelation 149255 // <realization>
-	relation 149255 -_-|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 149255 // <realization>
-	  b parent class_ref 132487 // Serializable
-      end
-
       attribute 140039 "serialVersionUID"
 	class_attribute const_attribute private explicit_type "long"
 	init_value "=  6078989823404409653L"

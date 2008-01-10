@@ -185,8 +185,8 @@ public class DialogCallbackHandler implements CallbackHandler {
     int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
     callbackDialog.setSize(new Dimension(4 * screenRes, screenRes
         * (varCallbacks.length + 1) / 2));
-    SwingUtil.centerOnScreen(callbackDialog);
     callbackDialog.pack();
+    SwingUtil.centerOnScreen(callbackDialog);
     callbackDialog.setVisible(true);
   }
 

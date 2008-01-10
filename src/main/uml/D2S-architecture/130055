@@ -1,6 +1,6 @@
-format 45
+format 48
 "entity" // com::d2s::framework::model::entity
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -668,14 +668,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 147463 // <generalisation>
-	relation 147463 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 147463 // <generalisation>
-	  b parent class_ref 130823 // NestedRuntimeException
-      end
-
       attribute 138759 "serialVersionUID"
 	class_attribute const_attribute private explicit_type "long"
 	init_value "=  -2305354369001291978L"

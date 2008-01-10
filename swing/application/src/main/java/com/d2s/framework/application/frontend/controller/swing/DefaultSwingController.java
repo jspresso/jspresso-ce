@@ -458,30 +458,36 @@ public class DefaultSwingController extends
    * @return true if login is successful.
    */
   private boolean performLogin() {
-    int i;
-    for (i = 0; i < MAX_LOGIN_RETRIES; i++) {
-      try {
-        LoginContext lc = null;
+    if (getLoginContextName() != null) {
+      int i;
+      for (i = 0; i < MAX_LOGIN_RETRIES; i++) {
         try {
-          lc = new LoginContext(getLoginContextName(),
-              getLoginCallbackHandler());
+          LoginContext lc = null;
+          try {
+            lc = new LoginContext(getLoginContextName(),
+                getLoginCallbackHandler());
+          } catch (LoginException le) {
+            System.err
+                .println("Cannot create LoginContext. " + le.getMessage());
+            return false;
+          } catch (SecurityException se) {
+            System.err
+                .println("Cannot create LoginContext. " + se.getMessage());
+            return false;
+          }
+          lc.login();
+          loginSuccess(lc.getSubject());
+          break;
         } catch (LoginException le) {
-          System.err.println("Cannot create LoginContext. " + le.getMessage());
-          return false;
-        } catch (SecurityException se) {
-          System.err.println("Cannot create LoginContext. " + se.getMessage());
-          return false;
+          System.err.println("Authentication failed:");
+          System.err.println("  " + le.getMessage());
         }
-        lc.login();
-        loginSuccess(lc.getSubject());
-        break;
-      } catch (LoginException le) {
-        System.err.println("Authentication failed:");
-        System.err.println("  " + le.getMessage());
       }
-    }
-    if (i == 3) {
-      return false;
+      if (i == 3) {
+        return false;
+      }
+    } else {
+      loginSuccess(getAnonymousSubject());
     }
     return true;
   }

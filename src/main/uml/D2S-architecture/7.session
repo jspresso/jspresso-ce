@@ -1,13 +1,15 @@
-window_sizes 1280 1003 219 1055 868 58
+window_sizes 1140 930 347 787 888 38
 diagrams
-  active  classdiagram_ref 130567 // View descriptors
-    1055 868 100 4 0 0
+  active  classdiagram_ref 131719 // Controllers
+    787 815 100 4 0 0
 end
 show_stereotypes
-selected class_ref 150663 // ITreeViewDescriptor
+selected classdiagram_ref 131719 // Controllers
 open
   classview_ref 130695 // Model descriptors
   classview_ref 132359 // View descriptors
-  classview_ref 131975 // descriptor
+  classview_ref 133511 // Controllers
+  classview_ref 146823 // Startup
+  classview_ref 142471 // startup
 end
 end

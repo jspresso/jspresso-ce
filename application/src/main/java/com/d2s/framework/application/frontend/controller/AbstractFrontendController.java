@@ -4,6 +4,7 @@
 package com.d2s.framework.application.frontend.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -512,6 +513,15 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
+   * Whenever the loginContextName is not configured, creates a default subject.
+   * 
+   * @return the default Subject in case the login configuration is not set.
+   */
+  protected Subject getAnonymousSubject() {
+    return SecurityHelper.createAnonymousSubject();
+  }
+
+  /**
    * Given a module name, this method returns the associated module.
    * 
    * @param moduleName
@@ -519,7 +529,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the selected module.
    */
   protected Module getModule(String moduleName) {
-    return modules.get(moduleName);
+    if (modules != null) {
+      return modules.get(moduleName);
+    }
+    return null;
   }
 
   /**
@@ -529,7 +542,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @return the list of module names.
    */
   protected List<String> getModuleNames() {
-    return new ArrayList<String>(modules.keySet());
+    if (modules != null) {
+      return new ArrayList<String>(modules.keySet());
+    }
+    return Collections.<String> emptyList();
   }
 
   /**
@@ -574,10 +590,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
       getBackendController().getApplicationSession().setLocale(
           new Locale(userPreferredLanguageCode));
     }
-    for (Module module : modules.values()) {
-      translateModule(module);
+    if (modules != null) {
+      for (Module module : modules.values()) {
+        translateModule(module);
+      }
+      getBackendController().installModules(modules);
     }
-    getBackendController().installModules(modules);
   }
 
   /**

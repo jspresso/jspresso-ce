@@ -1,6 +1,6 @@
-format 45
+format 48
 "map" // com::d2s::framework::model::map
-  revision 1
+  revision 2
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -64,14 +64,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 149511 // <realization>
-	relation 149511 -_-|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 149511 // <realization>
-	  b parent class_ref 144007 // IAccessorFactory
-      end
-
       operation 189831 "createCollectionPropertyAccessor"
 	public explicit_return_type "ICollectionAccessor"
 	nparams 3
@@ -138,14 +130,6 @@ Copyright 2005 Design2See. All rights reserved.
 	    java "${type}"
 	    classrelation_ref 150023 // <generalisation>
 	  b parent class_ref 144263 // DescriptorAwareMapPropertyAccessor
-      end
-
-      classrelation 150151 // <realization>
-	relation 150151 -_-|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 150151 // <realization>
-	  b parent class_ref 144519 // ICollectionAccessor
       end
 
       classrelation 150279 // <realization>
@@ -265,14 +249,6 @@ Copyright 2005 Design2See. All rights reserved.
 @version $LastChangedRevision: 843 $
 @author Vincent Vandenschrick
 "
-      classrelation 149639 // <generalisation>
-	relation 149639 ---|>
-	  a public
-	    java "${type}"
-	    classrelation_ref 149639 // <generalisation>
-	  b parent class_ref 144391 // MapPropertyAccessor
-      end
-
       classrelation 149767 // <realization>
 	relation 149767 -_-|>
 	  a public
