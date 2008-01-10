@@ -1,0 +1,4 @@
+class MissingPropertyException
+!!!394759.java!!!	MissingPropertyException(in message : String)
+
+    super(message);

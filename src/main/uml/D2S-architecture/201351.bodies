@@ -1,0 +1,25 @@
+class SelectionChangeEvent
+!!!402311.java!!!	SelectionChangeEvent(inout source : ISelectable, in oldSelection : int, in newSelection : int, in leadingIndex : int)
+
+    super(source);
+    this.newSelection = newSelection;
+    this.oldSelection = oldSelection;
+    if (this.newSelection != null) {
+      Arrays.sort(this.newSelection);
+    }
+    if (this.oldSelection != null) {
+      Arrays.sort(this.oldSelection);
+    }
+    this.leadingIndex = leadingIndex;
+!!!402439.java!!!	getLeadingIndex() : int
+
+    return leadingIndex;
+!!!402567.java!!!	getNewSelection() : int
+
+    return newSelection;
+!!!402695.java!!!	getOldSelection() : int
+
+    return oldSelection;
+!!!402823.java!!!	getSource() : ISelectable
+
+    return (ISelectable) source;

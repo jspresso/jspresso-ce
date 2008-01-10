@@ -1,0 +1,63 @@
+class BooleanTableCellRenderer
+!!!314631.java!!!	BooleanTableCellRenderer()
+
+    super();
+    setHorizontalAlignment(IDefaults.CENTER);
+    setBorderPainted(true);
+!!!314759.java!!!	getTableCellRendererComponent(inout table : ULCTable, inout value : Object, inout isSelected : boolean, inout hasFocus : boolean, in row : int) : IRendererComponent
+
+    if (isSelected) {
+      super.setForeground(table.getSelectionForeground());
+      super.setBackground(table.getSelectionBackground());
+    } else {
+      if (unselectedForeground != null) {
+        super.setForeground(unselectedForeground);
+      } else {
+        super.setForeground(table.getForeground());
+      }
+      if (unselectedBackground != null) {
+        super.setBackground(unselectedBackground);
+      } else {
+        super.setBackground(table.getBackground());
+      }
+    }
+    if (value instanceof IValueConnector) {
+      Object connectorValue = ((IValueConnector) value).getConnectorValue();
+      setSelected((connectorValue != null && ((Boolean) connectorValue)
+          .booleanValue()));
+    } else {
+      setSelected((value != null && ((Boolean) value).booleanValue()));
+    }
+    if (hasFocus) {
+      ULCAbstractBorder border = null;
+      if (isSelected) {
+        border = ClientContext
+            .getBorder("Table.focusSelectedCellHighlightBorder");
+      }
+      if (border == null) {
+        border = ClientContext.getBorder("Table.focusCellHighlightBorder");
+      }
+      setBorder(border);
+      if (!isSelected) {
+        Color col;
+        col = ClientContext.getColor("Table.focusCellForeground");
+        if (col != null) {
+          super.setForeground(col);
+        }
+        col = ClientContext.getColor("Table.focusCellBackground");
+        if (col != null) {
+          super.setBackground(col);
+        }
+      }
+    } else {
+      setBorder(NO_FOCUS_BORDER);
+    }
+    return this;
+!!!314887.java!!!	setBackground(inout c : Color) : void
+
+    super.setBackground(c);
+    unselectedBackground = c;
+!!!315015.java!!!	setForeground(inout c : Color) : void
+
+    super.setForeground(c);
+    unselectedForeground = c;

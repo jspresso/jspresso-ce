@@ -1,0 +1,14 @@
+class AbstractController
+!!!222727.java!!!	checkAccess(inout securable : ISecurable) : void
+
+    SecurityHelper.checkAccess(getApplicationSession().getSubject(), securable,
+        getTranslationProvider(), getLocale());
+!!!222855.java!!!	createEmptyContext() : Map<String, Object>
+
+    return new HashMap<String, Object>();
+!!!222983.java!!!	getTranslationProvider() : ITranslationProvider
+
+    return translationProvider;
+!!!223111.java!!!	setTranslationProvider(inout translationProvider : ITranslationProvider) : void
+
+    this.translationProvider = translationProvider;

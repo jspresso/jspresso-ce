@@ -1,0 +1,509 @@
+format 48
+"std" // com::d2s::framework::application::frontend::action::std
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action/std"
+  java_package "com.d2s.framework.application.frontend.action.std"
+  classview 135431 "std"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 161799 "AddCollectionToMasterAction"
+      visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 3
+      actual class class_ref 160903 // ActionWrapper
+        rank 0 explicit_value "E"
+      actual class class_ref 160903 // ActionWrapper
+        rank 1 explicit_value "F"
+      actual class class_ref 160903 // ActionWrapper
+        rank 2 explicit_value "G"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Creates and adds an entity to the selected master detail collection.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 175111 // <realization>
+	relation 175111 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 175111 // <realization>
+	  b parent class_ref 160903 // ActionWrapper
+      end
+
+      classrelation 175239 // elementEntityDescriptor (<unidirectional association>)
+	relation 175239 --->
+	  a role_name "elementEntityDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<IEntity> ${name}${value};
+"
+	    classrelation_ref 175239 // elementEntityDescriptor (<unidirectional association>)
+	  b parent class_ref 132103 // IComponentDescriptor
+      end
+
+      operation 256903 "equals"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "obj" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 257031 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Completes the action context with the element entity descriptor
+parametrized.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 257159 "getI18nDescription"
+	public explicit_return_type "String"
+	nparams 2
+	  param inout name "translationProvider" explicit_type "ITranslationProvider"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 257287 "getI18nName"
+	public explicit_return_type "String"
+	nparams 2
+	  param inout name "translationProvider" explicit_type "ITranslationProvider"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 257415 "hashCode"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 257543 "setElementEntityDescriptor"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "elementEntityDescriptor" type class_ref 132103 // IComponentDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IEntity> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the elementEntityDescriptor. Entities of this type (which must be a
+subclass of the collection element) are created and added to the detail
+collection.
+
+@param elementEntityDescriptor
+           the elementEntityDescriptor to set.
+"
+      end
+    end
+
+    class 161927 "ExecuteActionAction"
+      visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 3
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 0 explicit_value "E"
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 1 explicit_value "F"
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 2 explicit_value "G"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Executes the action set in the context using the key ACTION_PARAM.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 175367 // <realization>
+	relation 175367 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 175367 // <realization>
+	  b parent class_ref 160647 // AbstractChainedAction
+      end
+
+      operation 257671 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 162055 "FindAction"
+      visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 3
+      actual class class_ref 160903 // ActionWrapper
+        rank 0 explicit_value "E"
+      actual class class_ref 160903 // ActionWrapper
+        rank 1 explicit_value "F"
+      actual class class_ref 160903 // ActionWrapper
+        rank 2 explicit_value "G"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A standard find action. Since it is a chained action, it can be chained with
+another action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 175495 // <realization>
+	relation 175495 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 175495 // <realization>
+	  b parent class_ref 160903 // ActionWrapper
+      end
+
+      operation 257799 "FindAction"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>FindAction</code> instance.
+"
+      end
+    end
+
+    class 162183 "SetConnectorValueAction"
+      visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 3
+      actual class class_ref 160775 // AbstractFrontendAction
+        rank 0 explicit_value "E"
+      actual class class_ref 160775 // AbstractFrontendAction
+        rank 1 explicit_value "F"
+      actual class class_ref 160775 // AbstractFrontendAction
+        rank 2 explicit_value "G"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Sets the object registered as ACTION_RESULT in the action context as the
+connector value. The connector used is also retrieved from the action context
+using the key parametrized.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 175623 // <realization>
+	relation 175623 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 175623 // <realization>
+	  b parent class_ref 160775 // AbstractFrontendAction
+      end
+
+      attribute 154759 "connectorActionContextKey"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 257927 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 258055 "setConnectorActionContextKey"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "connectorActionContextKey" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the connectorActionContextKey.
+
+@param connectorActionContextKey
+           the connectorActionContextKey to set.
+"
+      end
+    end
+  end
+
+  deploymentview 134791 "std"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 159111 "AddCollectionToMasterAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.ActionWrapper;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.util.i18n.ITranslationProvider;
+${definition}"
+      associated_classes
+	class_ref 161799 // AddCollectionToMasterAction
+      end
+    end
+
+    artifact 159239 "ExecuteActionAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.AbstractChainedAction;
+${definition}"
+      associated_classes
+	class_ref 161927 // ExecuteActionAction
+      end
+    end
+
+    artifact 159367 "FindAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.application.frontend.action.ActionWrapper;
+${definition}"
+      associated_classes
+	class_ref 162055 // FindAction
+      end
+    end
+
+    artifact 159495 "SetConnectorValueAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.AbstractFrontendAction;
+import com.d2s.framework.binding.IValueConnector;
+${definition}"
+      associated_classes
+	class_ref 162183 // SetConnectorValueAction
+      end
+    end
+  end
+end

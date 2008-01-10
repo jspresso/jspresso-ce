@@ -1,0 +1,5 @@
+class AbstractGate
+!!!407303.java!!!	clone() : AbstractGate
+
+    AbstractGate clonedGate = (AbstractGate) super.clone();
+    return clonedGate;

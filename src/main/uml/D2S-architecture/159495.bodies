@@ -1,0 +1,38 @@
+class AbstractChangePasswordAction
+!!!237575.java!!!	createPasswordChangeModel() : IComponentDescriptor
+    BasicComponentDescriptor<Map<String, String>> passwordChangeModel = new BasicComponentDescriptor<Map<String, String>>();
+    BasicPasswordPropertyDescriptor currentPassword = new BasicPasswordPropertyDescriptor();
+    currentPassword.setName(PASSWD_CURRENT);
+    BasicPasswordPropertyDescriptor typedPassword = new BasicPasswordPropertyDescriptor();
+    typedPassword.setName(PASSWD_TYPED);
+    typedPassword.setMaxLength(new Integer(15));
+    BasicPasswordPropertyDescriptor retypedPassword = new BasicPasswordPropertyDescriptor();
+    retypedPassword.setName(PASSWD_RETYPED);
+    retypedPassword.setMaxLength(new Integer(15));
+
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    propertyDescriptors.add(currentPassword);
+    propertyDescriptors.add(typedPassword);
+    propertyDescriptors.add(retypedPassword);
+    passwordChangeModel.setPropertyDescriptors(propertyDescriptors);
+
+    return passwordChangeModel;
+!!!237703.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+    Map<String, Object> actionParam = (Map<String, Object>) context
+        .get(ActionContextConstants.ACTION_PARAM);
+    char[] typedPasswd = (char[]) actionParam.get(PASSWD_TYPED);
+    char[] retypedPasswd = (char[]) actionParam.get(PASSWD_RETYPED);
+    if (!Arrays.equals(typedPasswd, retypedPasswd)) {
+      throw new ActionBusinessException(
+          "Typed and retyped passwords are different.",
+          "password.typed.retyped.different");
+    }
+    UserPrincipal principal = getApplicationSession(context).getPrincipal();
+    if (changePassword(principal, (char[]) actionParam.get(PASSWD_CURRENT),
+        typedPasswd)) {
+      context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
+          context)
+          .getTranslation("password.change.success", getLocale(context)));
+      return super.execute(actionHandler, context);
+    }
+    return false;

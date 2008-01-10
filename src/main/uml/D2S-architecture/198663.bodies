@@ -1,0 +1,10 @@
+class NestedRuntimeException
+!!!394375.java!!!	NestedRuntimeException(in message : String)
+
+    super(message);
+!!!394503.java!!!	NestedRuntimeException(inout nestedException : Throwable)
+
+    super(nestedException);
+!!!394631.java!!!	NestedRuntimeException(inout nestedException : Throwable, in message : String)
+
+    super(message, nestedException);

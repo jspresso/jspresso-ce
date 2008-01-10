@@ -1,0 +1,180 @@
+format 48
+"ulc" // com::d2s::framework::application::frontend::action::ulc
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action/ulc"
+  java_package "com.d2s.framework.application.frontend.action.ulc"
+  classview 136199 "ulc"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 164743 "AbstractUlcAction"
+      abstract visibility public 
+      nactuals 3
+      actual class class_ref 160903 // ActionWrapper
+        rank 0 explicit_value "ULCComponent"
+      actual class class_ref 160903 // ActionWrapper
+        rank 1 explicit_value "ULCIcon"
+      actual class class_ref 160903 // ActionWrapper
+        rank 2 explicit_value "IAction"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This class serves as base class for swing actions. It provides accessors on
+commonly used artifacts.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 180231 // <realization>
+	relation 180231 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 180231 // <realization>
+	  b parent class_ref 160903 // ActionWrapper
+      end
+
+      operation 277255 "getActionWidget"
+	public explicit_return_type "ULCComponent"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Retrieves the widget which triggered the action from the action context.
+
+@param context
+           the action context.
+@return the widget which triggered the action.
+"
+      end
+
+      operation 277383 "getSourceComponent"
+	public explicit_return_type "ULCComponent"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Retrieves the widget this action was triggered from. It may serve to
+determine the root window or dialog for instance. It uses a well-known
+action context key which is :
+<li> <code>ActionContextConstants.SOURCE_COMPONENT</code>.
+
+@param context
+           the action context.
+@return the source widget this action was triggered from.
+"
+      end
+
+      operation 277511 "closeDialog"
+	protected explicit_return_type "void"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+If the ancestor of the action widget is a dialog, dispose it.
+
+@param context
+           the action context.
+"
+      end
+    end
+  end
+
+  deploymentview 135687 "ulc"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 161927 "AbstractUlcAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.application.frontend.action.ActionWrapper;
+import com.d2s.framework.util.ulc.UlcUtil;
+import com.ulcjava.base.application.IAction;
+import com.ulcjava.base.application.ULCComponent;
+import com.ulcjava.base.application.ULCDialog;
+import com.ulcjava.base.application.ULCWindow;
+import com.ulcjava.base.application.util.ULCIcon;
+${definition}"
+      associated_classes
+	class_ref 164743 // AbstractUlcAction
+      end
+    end
+  end
+
+  package_ref 136839 // file
+
+  package_ref 136967 // flow
+
+  package_ref 137095 // lov
+
+  package_ref 137223 // std
+
+  package_ref 137351 // security
+
+  package_ref 137479 // wizard
+end

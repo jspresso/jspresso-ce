@@ -1,0 +1,10 @@
+class ScriptException
+!!!416135.java!!!	ScriptException(in message : String)
+
+    super(message);
+!!!416263.java!!!	ScriptException(inout nestedException : Throwable)
+
+    super(nestedException);
+!!!416391.java!!!	ScriptException(inout nestedException : Throwable, in message : String)
+
+    super(nestedException, message);

@@ -1,0 +1,16 @@
+class OkCancelAction
+!!!280455.java!!!	OkCancelAction()
+
+    super(OK_OPTION, CANCEL_OPTION, null);
+!!!280583.java!!!	setCancelAction(inout cancelAction : IAction) : void
+
+    this.cancelAction = cancelAction;
+!!!280711.java!!!	setOkAction(inout okAction : IAction) : void
+
+    this.okAction = okAction;
+!!!280839.java!!!	getNextAction(in selectedOption : String) : IAction
+
+    if (OK_OPTION.equals(selectedOption)) {
+      return okAction;
+    }
+    return cancelAction;

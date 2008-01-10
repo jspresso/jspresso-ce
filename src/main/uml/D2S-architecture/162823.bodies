@@ -1,0 +1,25 @@
+class FileToByteArrayCallback
+!!!268295.java!!!	cancel(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : void
+
+    context.remove(ActionContextConstants.ACTION_PARAM);
+!!!268423.java!!!	fileChosen(inout in : InputStream, in filePath : String, inout actionHandler : IActionHandler, inout context : Map<String, Object>) : void
+
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    try {
+      InputStream is = new BufferedInputStream(in);
+      int b;
+      while ((b = is.read()) != -1) {
+        baos.write(b);
+      }
+      baos.flush();
+      byte[] fileContent = baos.toByteArray();
+      context.put(ActionContextConstants.ACTION_PARAM, fileContent);
+    } catch (IOException ex) {
+      throw new ActionException(ex);
+    } finally {
+      try {
+        baos.close();
+      } catch (IOException ex) {
+        // NO-OP.
+      }
+    }

@@ -1,0 +1,27 @@
+class AbstractStartup
+!!!419847.java!!!	start() : void
+
+    getFrontendController().start(getBackendController(), getStartupLocale());
+!!!419975.java!!!	getApplicationContext() : BeanFactory
+
+    if (applicationContext == null) {
+      BeanFactoryLocator bfl = SingletonBeanFactoryLocator.getInstance();
+      BeanFactoryReference bf = bfl.useBeanFactory(getApplicationContextKey());
+      applicationContext = bf.getFactory();
+    }
+    return applicationContext;
+!!!420231.java!!!	getBackendController() : IBackendController
+
+    if (backendController == null) {
+      backendController = (IBackendController) getApplicationContext().getBean(
+          "applicationBackController");
+    }
+    return backendController;
+
+!!!420359.java!!!	getFrontendController() : IFrontendController<E, F, G>
+
+    if (frontendController == null) {
+      frontendController = (IFrontendController<E, F, G>) getApplicationContext()
+          .getBean("applicationFrontController");
+    }
+    return frontendController;

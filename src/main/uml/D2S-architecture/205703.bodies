@@ -1,0 +1,46 @@
+class ResourceManager
+!!!413831.java!!!	ResourceManager()
+
+    resources = new HashMap<String, IResource>();
+    random = new SecureRandom();
+!!!413959.java!!!	getInstance() : ResourceManager
+
+    return INSTANCE;
+!!!414087.java!!!	getRegistered(in id : String) : IResource
+
+    return resources.get(id);
+!!!414215.java!!!	register(inout resource : IResource) : String
+
+    try {
+      String id = createId();
+      resources.put(id, resource);
+      return id;
+    } catch (NoSuchAlgorithmException nsae) {
+      throw new IllegalStateException("Could not generate random id: "
+          + nsae.getLocalizedMessage());
+    }
+!!!414343.java!!!	register(in id : String, inout resource : IResource) : void
+
+    resources.put(id, resource);
+!!!414471.java!!!	createId() : String
+
+    byte[] bytes = new byte[24];
+    random.nextBytes(bytes);
+    bytes = MessageDigest.getInstance("MD5").digest(bytes);
+
+    StringBuffer result = new StringBuffer();
+    for (int i = 0; i < bytes.length; i++) {
+      byte b1 = (byte) ((bytes[i] & 0xf0) >> 4);
+      byte b2 = (byte) (bytes[i] & 0x0f);
+
+      result.append(toHex(b1));
+      result.append(toHex(b2));
+    }
+
+    return result.toString();
+!!!414599.java!!!	toHex(in b : byte) : char
+
+    if (b < 10) {
+      return (char) ('0' + b);
+    }
+    return (char) ('A' + b - 10);

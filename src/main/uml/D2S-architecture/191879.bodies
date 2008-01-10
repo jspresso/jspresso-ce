@@ -1,0 +1,95 @@
+class ApplicationSessionAwareEntityProxyInterceptor
+!!!374279.java!!!	afterTransactionBegin(inout tx : Transaction) : void
+
+    applicationSession.beginUnitOfWork();
+    super.afterTransactionBegin(tx);
+!!!374407.java!!!	afterTransactionCompletion(inout tx : Transaction) : void
+
+    if (tx.wasCommitted()) {
+      applicationSession.commitUnitOfWork();
+    } else {
+      applicationSession.rollbackUnitOfWork();
+    }
+    super.afterTransactionCompletion(tx);
+!!!374535.java!!!	findDirty(inout entity : Object, inout id : Serializable, inout currentState : Object, inout previousState : Object, in propertyNames : String, inout types : Type) : int
+
+    if (entity instanceof IEntity) {
+      Map<String, Object> dirtyProperties = applicationSession
+          .getDirtyProperties((IEntity) entity);
+      if (dirtyProperties != null) {
+        dirtyProperties.remove(IEntity.VERSION);
+      }
+      if (dirtyProperties == null) {
+        return null;
+      } else if (dirtyProperties.isEmpty()) {
+        return new int[0];
+      }
+      // the entity is dirty and is going to be flushed.
+      // To workaround a bug, the update lifecycle hook is handeled here.
+      if (((IEntity) entity).isPersistent()
+          && /* ((IEntity) entity).onUpdate(getEntityFactory()) */onFlushDirty(
+              entity, id, currentState, previousState, propertyNames, types)) {
+        dirtyProperties = applicationSession
+            .getDirtyProperties((IEntity) entity);
+      }
+      int[] indices = new int[dirtyProperties.size()];
+      int n = 0;
+      for (int i = 0; i < propertyNames.length; i++) {
+        if (dirtyProperties.containsKey(propertyNames[i])) {
+          indices[n] = i;
+          n++;
+        }
+      }
+      return indices;
+    }
+    return super.findDirty(entity, id, currentState, previousState,
+        propertyNames, types);
+!!!374663.java!!!	getEntity(in entityName : String, inout id : Serializable) : Object
+
+    if (!applicationSession.isUnitOfWorkActive()) {
+      try {
+        IEntity registeredEntity = applicationSession.getRegisteredEntity(
+            (Class<? extends IEntity>) Class.forName(entityName), id);
+        if (registeredEntity instanceof HibernateProxy) {
+          HibernateProxy proxy = (HibernateProxy) registeredEntity;
+          LazyInitializer li = proxy.getHibernateLazyInitializer();
+          registeredEntity = (IEntity) li.getImplementation();
+        }
+
+        HibernateAwareApplicationSession
+            .cleanPersistentCollectionDirtyState(registeredEntity);
+        return registeredEntity;
+      } catch (ClassNotFoundException ex) {
+        ex.printStackTrace();
+      }
+    }
+    return super.getEntity(entityName, id);
+!!!374791.java!!!	onLoad(inout entity : Object, inout id : Serializable, inout state : Object, in propertyNames : String, inout types : Type) : boolean
+
+    if (!applicationSession.isUnitOfWorkActive()) {
+      if (entity instanceof IEntity
+          && applicationSession.getRegisteredEntity(((IEntity) entity)
+              .getContract(), id) == null) {
+        applicationSession.registerEntity((IEntity) entity, false);
+      }
+    }
+    return super.onLoad(entity, id, state, propertyNames, types);
+!!!374919.java!!!	postFlush(inout entities : Iterator) : void
+
+    applicationSession.performPendingOperations();
+    while (entities.hasNext()) {
+      Object entity = entities.next();
+      if (entity instanceof IEntity) {
+        applicationSession.recordAsSynchronized((IEntity) entity);
+      }
+    }
+    super.postFlush(entities);
+!!!375047.java!!!	setApplicationSession(inout applicationSession : IApplicationSession) : void
+
+    this.applicationSession = applicationSession;
+!!!375175.java!!!	getEntityLifecycleHandler() : IEntityLifecycleHandler
+
+    return applicationSession;
+!!!375303.java!!!	getPrincipal() : UserPrincipal
+
+    return applicationSession.getPrincipal();

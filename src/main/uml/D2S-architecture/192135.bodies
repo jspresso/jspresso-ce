@@ -1,0 +1,232 @@
+class HibernateAwareApplicationSession
+!!!376327.java!!!	cleanPersistentCollectionDirtyState(inout entity : IEntity) : void
+
+    if (entity != null) {
+      // Whenever the entity has dirty persistent collection, make them
+      // clean to workaround a "bug" with hibernate since hibernate cannot
+      // re-attach a "dirty" detached collection.
+      for (Map.Entry<String, Object> registeredPropertyEntry : entity
+          .straightGetProperties().entrySet()) {
+        if (registeredPropertyEntry.getValue() instanceof PersistentCollection
+            && Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
+          ((PersistentCollection) registeredPropertyEntry.getValue())
+              .clearDirty();
+        }
+      }
+    }
+!!!376455.java!!!	getHibernateRoleName(inout entityContract : Class<?>, in property : String) : String
+
+    // have to find the highest entity class declaring the collection role.
+    PropertyDescriptor roleDescriptor = PropertyHelper.getPropertyDescriptor(
+        entityContract, property);
+    Class<?> propertyDeclaringClass = roleDescriptor.getReadMethod()
+        .getDeclaringClass();
+    Class<?> roleClass;
+    if (IEntity.class.isAssignableFrom(propertyDeclaringClass)) {
+      roleClass = propertyDeclaringClass;
+    } else {
+      roleClass = getHighestEntityClassInRole(entityContract,
+          propertyDeclaringClass);
+    }
+    return roleClass.getName() + "." + property;
+!!!376583.java!!!	getHighestEntityClassInRole(inout entityContract : Class<?>, inout propertyDeclaringClass : Class<?>) : Class<?>
+
+    for (Class<?> superInterface : entityContract.getInterfaces()) {
+      if (IEntity.class.isAssignableFrom(superInterface)
+          && propertyDeclaringClass.isAssignableFrom(superInterface)) {
+        return getHighestEntityClassInRole(superInterface,
+            propertyDeclaringClass);
+      }
+    }
+    return entityContract;
+!!!376711.java!!!	commitUnitOfWork() : void
+
+    try {
+      hibernateTemplate.execute(new HibernateCallback() {
+
+        /**
+         * {@inheritDoc}
+         */
+        public Object doInHibernate(Session session) {
+          for (IEntity entityToMergeBack : getEntitiesToMergeBack()) {
+            if (entityToMergeBack.isPersistent()) {
+              try {
+                session.lock(entityToMergeBack, LockMode.NONE);
+              } catch (Exception ex) {
+                session.evict(session.get(entityToMergeBack.getContract(),
+                    entityToMergeBack.getId()));
+                session.lock(entityToMergeBack, LockMode.NONE);
+              }
+            }
+          }
+          performActualUnitOfWorkCommit();
+          return null;
+        }
+      });
+    } finally {
+      traversedPendingOperations = false;
+    }
+!!!376839.java!!!	initializePropertyIfNeeded(in entity : IEntity, inout propertyDescriptor : IPropertyDescriptor) : void
+
+    final String propertyName = propertyDescriptor.getName();
+    if (Hibernate.isInitialized(entity.straightGetProperty(propertyName))) {
+      return;
+    }
+    boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
+    try {
+      getDirtRecorder().setEnabled(false);
+
+      hibernateTemplate.setFlushMode(HibernateAccessor.FLUSH_NEVER);
+      Object propertyValue = hibernateTemplate.execute(new HibernateCallback() {
+
+        /**
+         * {@inheritDoc}
+         */
+        public Object doInHibernate(Session session) {
+          HibernateAwareApplicationSession
+              .cleanPersistentCollectionDirtyState(entity);
+          Object initializedProperty = entity.straightGetProperty(propertyName);
+          if (entity.isPersistent()) {
+            try {
+              session.lock(entity, LockMode.NONE);
+            } catch (Exception ex) {
+              session.evict(session.get(entity.getContract(), entity.getId()));
+              session.lock(entity, LockMode.NONE);
+            }
+          } else if (initializedProperty instanceof IEntity) {
+            try {
+              session.lock(initializedProperty, LockMode.NONE);
+            } catch (Exception ex) {
+              session.evict(session.get(((IEntity) initializedProperty)
+                  .getContract(), ((IEntity) initializedProperty).getId()));
+              session.lock(initializedProperty, LockMode.NONE);
+            }
+          }
+
+          Hibernate.initialize(initializedProperty);
+          return initializedProperty;
+        }
+      });
+      super.initializePropertyIfNeeded(entity, propertyDescriptor);
+      if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+        if (propertyValue instanceof PersistentCollection) {
+          ((PersistentCollection) propertyValue).clearDirty();
+        }
+      }
+    } finally {
+      getDirtRecorder().setEnabled(dirtRecorderWasEnabled);
+    }
+!!!376967.java!!!	isInitialized(inout objectOrProxy : Object) : boolean
+
+    return Hibernate.isInitialized(objectOrProxy);
+!!!377095.java!!!	performPendingOperations() : void
+
+    if (!traversedPendingOperations) {
+      traversedPendingOperations = true;
+      hibernateTemplate.execute(new HibernateCallback() {
+
+        /**
+         * {@inheritDoc}
+         */
+        public Object doInHibernate(Session session) {
+          boolean flushIsNecessary = false;
+          List<IEntity> entitiesToUpdate = getEntitiesRegisteredForUpdate();
+          if (entitiesToUpdate != null) {
+            for (IEntity entityToUpdate : entitiesToUpdate) {
+              IEntity sessionEntity;
+              try {
+                session.lock(entityToUpdate, LockMode.NONE);
+                cloneInUnitOfWork(entityToUpdate);
+                sessionEntity = entityToUpdate;
+              } catch (Exception ex) {
+                sessionEntity = (IEntity) session.get(entityToUpdate
+                    .getContract(), entityToUpdate.getId());
+              }
+              session.saveOrUpdate(sessionEntity);
+              flushIsNecessary = true;
+            }
+          }
+          if (flushIsNecessary) {
+            session.flush();
+          }
+          Set<IEntity> entitiesToDelete = getEntitiesRegisteredForDeletion();
+          if (entitiesToDelete != null) {
+            for (IEntity entityToDelete : entitiesToDelete) {
+              IEntity sessionEntity;
+              try {
+                session.lock(entityToDelete, LockMode.NONE);
+                sessionEntity = entityToDelete;
+              } catch (Exception ex) {
+                sessionEntity = (IEntity) session.get(entityToDelete
+                    .getContract(), entityToDelete.getId());
+              }
+              session.delete(sessionEntity);
+              flushIsNecessary = true;
+            }
+          }
+          if (flushIsNecessary) {
+            session.flush();
+          }
+          return null;
+        }
+      });
+    }
+!!!377223.java!!!	rollbackUnitOfWork() : void
+
+    try {
+      super.rollbackUnitOfWork();
+    } finally {
+      traversedPendingOperations = false;
+    }
+!!!377351.java!!!	setHibernateTemplate(inout hibernateTemplate : HibernateTemplate) : void
+
+    this.hibernateTemplate = hibernateTemplate;
+!!!377479.java!!!	wrapDetachedEntityCollection(inout entity : IEntity, inout transientCollection : Collection<IEntity>, inout snapshotCollection : Collection<IEntity>, in role : String) : IEntity
+
+    Collection<IEntity> varSnapshotCollection = snapshotCollection;
+    if (!(transientCollection instanceof PersistentCollection)) {
+      if (entity.isPersistent()) {
+        if (transientCollection instanceof Set) {
+          PersistentSet persistentSet = new PersistentSet(null,
+              (Set<?>) transientCollection);
+          persistentSet.setOwner(entity);
+          HashMap<Object, Object> snapshot = new HashMap<Object, Object>();
+          if (varSnapshotCollection == null) {
+            persistentSet.clearDirty();
+            varSnapshotCollection = transientCollection;
+          }
+          for (Object snapshotCollectionElement : varSnapshotCollection) {
+            snapshot.put(snapshotCollectionElement, snapshotCollectionElement);
+          }
+          persistentSet.setSnapshot(entity.getId(), getHibernateRoleName(entity
+              .getContract(), role), snapshot);
+          return persistentSet;
+        } else if (transientCollection instanceof List) {
+          PersistentList persistentList = new PersistentList(null,
+              (List<?>) transientCollection);
+          persistentList.setOwner(entity);
+          ArrayList<Object> snapshot = new ArrayList<Object>();
+          if (varSnapshotCollection == null) {
+            persistentList.clearDirty();
+            varSnapshotCollection = transientCollection;
+          }
+          for (Object snapshotCollectionElement : varSnapshotCollection) {
+            snapshot.add(snapshotCollectionElement);
+          }
+          persistentList.setSnapshot(entity.getId(), getHibernateRoleName(
+              entity.getContract(), role), snapshot);
+          return persistentList;
+        }
+      }
+    } else {
+      if (varSnapshotCollection == null) {
+        ((PersistentCollection) transientCollection).clearDirty();
+      } else {
+        ((PersistentCollection) transientCollection).dirty();
+      }
+    }
+    return super.wrapDetachedEntityCollection(entity, transientCollection,
+        varSnapshotCollection, role);
+!!!377607.java!!!	performActualUnitOfWorkCommit() : void
+
+    super.commitUnitOfWork();

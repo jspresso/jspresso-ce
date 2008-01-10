@@ -1,0 +1,30 @@
+class AbstractAction
+!!!223623.java!!!	getGrantedRoles() : Collection<String>
+
+    return grantedRoles;
+!!!223751.java!!!	getInitialContext() : Map<String, Object>
+
+    return initialContext;
+!!!224007.java!!!	getParentModuleSelectedIndices(inout context : Map<String, Object>) : int
+
+    return ((ICollectionConnectorProvider) ((ICompositeValueConnector) context
+        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR))
+        .getParentConnector()).getCollectionConnector().getSelectedIndices();
+!!!224135.java!!!	isLongOperation() : boolean
+
+    return longOperation;
+!!!224263.java!!!	putInitialContext(in key : String, inout value : Object) : void
+
+    if (initialContext == null) {
+      initialContext = new HashMap<String, Object>();
+    }
+    initialContext.put(key, value);
+!!!224391.java!!!	setGrantedRoles(inout grantedRoles : Collection<String>) : void
+
+    this.grantedRoles = grantedRoles;
+!!!224519.java!!!	setLongOperation(inout longOperation : boolean) : void
+
+    this.longOperation = longOperation;
+!!!224775.java!!!	getTranslationProvider(inout context : Map<String, Object>) : ITranslationProvider
+
+    return getController(context).getTranslationProvider();

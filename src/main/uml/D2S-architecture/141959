@@ -1,0 +1,864 @@
+format 48
+"hibernate" // com::d2s::framework::application::backend::action::persistence::hibernate
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/backend/action/persistence/hibernate"
+  java_package "com.d2s.framework.application.backend.action.persistence.hibernate"
+  classview 140807 "hibernate"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 190599 "AbstractHibernateAction"
+      abstract visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This the root abstract class of all hibernate related persistence actions.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 211207 // <generalisation>
+	relation 211207 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 211207 // <generalisation>
+	  b parent class_ref 156423 // AbstractBackendAction
+      end
+
+      operation 371335 "cleanRelationshipsOnDeletion"
+	protected explicit_return_type "void"
+	nparams 2
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param inout name "context" explicit_type "Map<String, Object>"
+	nexceptions 3
+	  explicit_exception "IllegalAccessException"
+	  explicit_exception "InvocationTargetException"
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Performs necessary cleanings when an entity is deleted.
+
+@param entity
+           the deleted entity.
+@param context
+           The action context.
+@throws IllegalAccessException
+            whenever this kind of exception occurs.
+@throws InvocationTargetException
+            whenever this kind of exception occurs.
+@throws NoSuchMethodException
+            whenever this kind of exception occurs.
+"
+      end
+
+      operation 371463 "getController"
+	protected explicit_return_type "HibernateBackendController"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 371591 "getHibernateTemplate"
+	protected explicit_return_type "HibernateTemplate"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the hibernateTemplate.
+
+@param context
+           the action context.
+@return the hibernateTemplate.
+"
+      end
+
+      operation 371719 "getTransactionTemplate"
+	protected explicit_return_type "TransactionTemplate"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the transactionTemplate.
+
+@param context
+           the action context.
+@return the transactionTemplate.
+"
+      end
+
+      operation 371847 "mergeInHibernate"
+	protected return_type class_ref 142087 // IEntity
+	nparams 3
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param inout name "hibernateSession" explicit_type "Session"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This method must be called to (re)attach application session entities to
+the current hibernate session.
+
+@param entity
+           the entity to merge.
+@param hibernateSession
+           the hibernate session
+@param context
+           the action context.
+@return the merged entity.
+"
+      end
+
+      operation 371975 "mergeInHibernate"
+	protected return_type class_ref 142087 // IEntity
+	nparams 3
+	  param inout name "entities" explicit_type "List<IEntity>"
+	  param inout name "hibernateSession" explicit_type "Session"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This method must be called to (re)attach application session entities to
+the current hibernate session.
+
+@param entities
+           the entities to merge.
+@param hibernateSession
+           the hibernate session
+@param context
+           the action context.
+@return the merged entity.
+"
+      end
+
+      operation 372103 "reloadEntity"
+	protected explicit_return_type "void"
+	nparams 2
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Reloads an entity in hibernate.
+
+@param entity
+           the entity to save.
+@param context
+           the action context.
+"
+      end
+
+      operation 372231 "saveEntity"
+	protected explicit_return_type "void"
+	nparams 2
+	  param in name "entity" type class_ref 142087 // IEntity
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Saves an entity in hibernate.
+
+@param entity
+           the entity to save.
+@param context
+           the action context.
+"
+      end
+
+      operation 372359 "lockInHibernate"
+	private explicit_return_type "void"
+	nparams 3
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param inout name "hibernateSession" explicit_type "Session"
+	  param inout name "alreadyLocked" explicit_type "Set<IEntity>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+      end
+    end
+
+    class 190855 "AbstractHibernateCollectionAction"
+      abstract visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Base class for backend actions acting on collections.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 211335 // <generalisation>
+	relation 211335 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 211335 // <generalisation>
+	  b parent class_ref 190599 // AbstractHibernateAction
+      end
+
+      operation 372487 "getModelConnector"
+	public explicit_return_type "ICollectionConnector"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+refined to return a collection connector.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 372615 "getModelDescriptor"
+	public return_type class_ref 135431 // ICollectionDescriptorProvider
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<?> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Refined to return a collection descriptor.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 372743 "getSelectedIndices"
+	public explicit_return_type "int"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}[] ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the selected indices from the context. it uses the
+<code>ActionContextConstants.SELECTED_INDICES</code> key.
+
+@param context
+           the action context.
+@return the selected indices if any.
+"
+      end
+    end
+
+    class 190983 "QueryEntitiesAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+An action to hibernate query entities by example.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 211463 // <generalisation>
+	relation 211463 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 211463 // <generalisation>
+	  b parent class_ref 190599 // AbstractHibernateAction
+      end
+
+      operation 372871 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+  @SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 191111 "ReloadAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Reloads the object(s) provided by the action context.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 211591 // <generalisation>
+	relation 211591 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 211591 // <generalisation>
+	  b parent class_ref 190599 // AbstractHibernateAction
+      end
+
+      operation 372999 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Reloads the object(s) provided by the action context in a transaction.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 373127 "getEntitiesToReload"
+	protected return_type class_ref 142087 // IEntity
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets the list of entities to reload.
+
+@param context
+           the action context.
+@return the list of entities to save.
+"
+      end
+    end
+
+    class 191239 "ReloadProjectedAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Reloads the projected object(s) in a transaction.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 211719 // <generalisation>
+	relation 211719 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 211719 // <generalisation>
+	  b parent class_ref 191111 // ReloadAction
+      end
+
+      operation 373255 "getEntitiesToReload"
+	protected return_type class_ref 142087 // IEntity
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Saves the projected object(s) in a transaction.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+
+    class 191367 "RemoveCollectionFromMasterAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+An action used in master/detail views to remove selected details from a
+master domain object.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 211847 // <generalisation>
+	relation 211847 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 211847 // <generalisation>
+	  b parent class_ref 190855 // AbstractHibernateCollectionAction
+      end
+
+      operation 373383 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Retrieves the master and its managed collection from the model connector
+then removes selected details from the managed collection.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+
+    class 191495 "SaveAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Saves the object(s) provided by the action context.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 211975 // <generalisation>
+	relation 211975 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 211975 // <generalisation>
+	  b parent class_ref 190599 // AbstractHibernateAction
+      end
+
+      operation 373511 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Saves the object(s) provided by the action context in a transaction.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 373639 "getEntitiesToSave"
+	protected return_type class_ref 142087 // IEntity
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets the list of entities to save.
+
+@param context
+           the action context.
+@return the list of entities to save.
+"
+      end
+    end
+
+    class 191623 "SaveProjectedAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Saves the projected object(s) in a transaction.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 212103 // <generalisation>
+	relation 212103 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 212103 // <generalisation>
+	  b parent class_ref 191495 // SaveAction
+      end
+
+      operation 373767 "getEntitiesToSave"
+	protected return_type class_ref 142087 // IEntity
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Saves the projected object(s) in a transaction.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+  end
+
+  deploymentview 140167 "hibernate"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 178567 "AbstractHibernateAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
+import org.hibernate.Session;
+import org.springframework.orm.hibernate3.HibernateCallback;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.transaction.support.TransactionTemplate;
+import com.d2s.framework.application.backend.action.AbstractBackendAction;
+import com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController;
+import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.entity.IEntity;
+${definition}"
+      associated_classes
+	class_ref 190599 // AbstractHibernateAction
+      end
+    end
+
+    artifact 178695 "AbstractHibernateCollectionAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+${definition}"
+      associated_classes
+	class_ref 190855 // AbstractHibernateCollectionAction
+      end
+    end
+
+    artifact 178823 "QueryEntitiesAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.backend.session.IApplicationSession;
+import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.util.bean.PropertyHelper;
+${definition}"
+      associated_classes
+	class_ref 190983 // QueryEntitiesAction
+      end
+    end
+
+    artifact 178951 "ReloadAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.List;
+import java.util.Map;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.model.entity.IEntity;
+${definition}"
+      associated_classes
+	class_ref 191111 // ReloadAction
+      end
+    end
+
+    artifact 179079 "ReloadProjectedAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import com.d2s.framework.application.model.BeanCollectionModule;
+import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.SubModule;
+import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.model.entity.IEntity;
+${definition}"
+      associated_classes
+	class_ref 191239 // ReloadProjectedAction
+      end
+    end
+
+    artifact 179207 "RemoveCollectionFromMasterAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
+import com.d2s.framework.action.ActionException;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.model.entity.IEntity;
+${definition}"
+      associated_classes
+	class_ref 191367 // RemoveCollectionFromMasterAction
+      end
+    end
+
+    artifact 179335 "SaveAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.List;
+import java.util.Map;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.model.entity.IEntity;
+${definition}"
+      associated_classes
+	class_ref 191495 // SaveAction
+      end
+    end
+
+    artifact 179463 "SaveProjectedAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import com.d2s.framework.application.model.BeanCollectionModule;
+import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.SubModule;
+import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.model.entity.IEntity;
+${definition}"
+      associated_classes
+	class_ref 191623 // SaveProjectedAction
+      end
+    end
+  end
+
+  package_ref 142343 // module
+end

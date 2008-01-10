@@ -1,0 +1,4 @@
+class SwingStartup
+!!!420615.java!!!	getStartupLocale() : Locale
+
+    return Locale.getDefault();

@@ -1,0 +1,7 @@
+class InfoAction
+!!!278279.java!!!	InfoAction()
+
+    super(OK_OPTION, null, null);
+!!!278407.java!!!	getNextAction(in selectedOption : String) : IAction
+
+    return null;

@@ -1,0 +1,8 @@
+class BusinessException
+!!!396935.java!!!	BusinessException(in message : String)
+    super(message);
+!!!397063.java!!!	BusinessException(in message : String, in staticI18nKey : String)
+    super(message);
+    this.staticI18nKey = staticI18nKey;
+!!!397191.java!!!	getI18nMessage(inout translationProvider : ITranslationProvider, inout locale : Locale) : String
+    return translationProvider.getTranslation(staticI18nKey, locale);

@@ -1,0 +1,5 @@
+class AbstractLdapAction
+!!!233351.java!!!	setLdapTemplate(inout ldapTemplate : LdapTemplate) : void
+    this.ldapTemplate = ldapTemplate;
+!!!233479.java!!!	getLdapTemplate() : LdapTemplate
+    return ldapTemplate;

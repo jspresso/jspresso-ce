@@ -1,0 +1,26 @@
+class YesNoCancelAction
+!!!347143.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
+        .getWindowOrInternalFrame(getSourceComponent(context)),
+        getMessage(context), getI18nName(getTranslationProvider(context),
+            getLocale(context)), JOptionPane.YES_NO_CANCEL_OPTION,
+        JOptionPane.QUESTION_MESSAGE, getIconFactory(context).getIcon(
+            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+    if (selectedOption == JOptionPane.CANCEL_OPTION) {
+      context.put(ActionContextConstants.NEXT_ACTION, cancelAction);
+    } else if (selectedOption == JOptionPane.YES_OPTION) {
+      context.put(ActionContextConstants.NEXT_ACTION, yesAction);
+    } else {
+      context.put(ActionContextConstants.NEXT_ACTION, noAction);
+    }
+    return super.execute(actionHandler, context);
+!!!347271.java!!!	setCancelAction(inout cancelAction : IAction) : void
+
+    this.cancelAction = cancelAction;
+!!!347399.java!!!	setNoAction(inout noAction : IAction) : void
+
+    this.noAction = noAction;
+!!!347527.java!!!	setYesAction(inout yesAction : IAction) : void
+
+    this.yesAction = yesAction;

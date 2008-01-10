@@ -1,0 +1,11 @@
+class FileResource
+!!!412679.java!!!	FileResource(in mimeType : String, inout resourceFile : File)
+
+    super(mimeType);
+    this.resourceFile = resourceFile;
+!!!412807.java!!!	getContent() : InputStream
+
+    return new FileInputStream(resourceFile);
+!!!412935.java!!!	getLength() : int
+
+    return (int) resourceFile.length();

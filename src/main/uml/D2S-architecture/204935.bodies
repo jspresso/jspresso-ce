@@ -1,0 +1,39 @@
+class LdapUtils
+!!!411143.java!!!	LdapUtils()
+
+    // private constructor for helper class.
+!!!411271.java!!!	formatBoolean(inout value : boolean) : String
+
+    return new Boolean(value).toString().toUpperCase();
+!!!411399.java!!!	formatInteger(inout value : Integer) : String
+
+    if (value != null) {
+      return value.toString();
+    }
+    return null;
+!!!411527.java!!!	parseBoolean(in booleanAsString : String) : boolean
+
+    if (booleanAsString != null) {
+      return Boolean.parseBoolean(booleanAsString);
+    }
+    return false;
+!!!411655.java!!!	parseGeneralizedTimeAsDate(in generalizedTime : String) : Date
+
+    if (generalizedTime != null) {
+      return new SimpleDateFormat("yyyyMMdd").parse(generalizedTime.substring(
+          0, 8));
+    }
+    return null;
+!!!411783.java!!!	parseGeneralizedTimeAsDateTime(in generalizedTime : String) : Date
+
+    if (generalizedTime != null) {
+      return new SimpleDateFormat("yyyyMMddHHmmss").parse(generalizedTime
+          .substring(0, 12));
+    }
+    return null;
+!!!411911.java!!!	parseInteger(in integerAsString : String) : Integer
+
+    if (integerAsString != null) {
+      return new Integer(integerAsString);
+    }
+    return null;

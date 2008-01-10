@@ -1,0 +1,199 @@
+class WizardAction
+!!!287495.java!!!	execute(in actionHandler : IActionHandler, in context : Map<String, Object>) : boolean
+    final ULCDialog dialog;
+    final Set<String> alreadyDisplayedSteps = new HashSet<String>();
+    final IValueConnector modelConnector = modelConnectorFactory
+        .createModelConnector(firstWizardStep.getViewDescriptor()
+            .getModelDescriptor());
+
+    Map<String, Object> wizardModelInit = (Map<String, Object>) context
+        .get(ActionContextConstants.ACTION_PARAM);
+    Map<String, Object> wizardModel = new ObjectEqualityMap<String, Object>();
+    if (wizardModelInit != null) {
+      wizardModel.putAll(wizardModelInit);
+    }
+    completeInitialWizardModel(wizardModel, context);
+    modelConnector.setConnectorValue(wizardModel);
+    context.put(ActionContextConstants.ACTION_PARAM, wizardModel);
+
+    ULCWindow window = UlcUtil.getVisibleWindow(getSourceComponent(context));
+    dialog = new ULCDialog(window, getI18nName(getTranslationProvider(context),
+        getLocale(context)), true);
+
+    ULCBorderLayoutPane contentPane = new ULCBorderLayoutPane();
+    contentPane.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
+    dialog.getContentPane().add(contentPane);
+    dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+
+    ULCSeparator separator = new ULCSeparator();
+
+    final ULCCardPane cardPanel = new ULCCardPane();
+
+    final ULCExtendedButton backButton = new ULCExtendedButton(getIconFactory(
+        context).getBackwardIcon(IIconFactory.SMALL_ICON_SIZE));
+    final ULCExtendedButton nextButton = new ULCExtendedButton(getIconFactory(
+        context).getForwardIcon(IIconFactory.SMALL_ICON_SIZE));
+    final ULCExtendedButton finishButton = new ULCExtendedButton(
+        getIconFactory(context).getIcon(finishAction.getIconImageURL(),
+            IIconFactory.SMALL_ICON_SIZE));
+    finishButton.setText(finishAction.getI18nName(
+        getTranslationProvider(context), getLocale(context)));
+    ULCExtendedButton cancelButton = new ULCExtendedButton(getIconFactory(
+        context).getCancelIcon(IIconFactory.SMALL_ICON_SIZE));
+    cancelButton.setText(getTranslationProvider(context).getTranslation(
+        "cancel", getLocale(context)));
+
+    backButton.addActionListener(new IActionListener() {
+
+      private static final long serialVersionUID = 1694147075934780963L;
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        IWizardStepDescriptor currentWizardStep = getCurrentWizardStep(context);
+        IWizardStepDescriptor backWizardStep = currentWizardStep
+            .getPreviousStepDescriptor(context);
+        show(dialog, cardPanel, alreadyDisplayedSteps, backWizardStep,
+            backButton, nextButton, finishButton, modelConnector,
+            actionHandler, context);
+      }
+    });
+
+    nextButton.addActionListener(new IActionListener() {
+
+      private static final long serialVersionUID = -3606110326421944011L;
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        IWizardStepDescriptor currentWizardStep = getCurrentWizardStep(context);
+        if (currentWizardStep.getOnLeaveAction() == null
+            || actionHandler.execute(currentWizardStep.getOnLeaveAction(),
+                context)) {
+          IWizardStepDescriptor nextWizardStep = currentWizardStep
+              .getNextStepDescriptor(context);
+          show(dialog, cardPanel, alreadyDisplayedSteps, nextWizardStep,
+              backButton, nextButton, finishButton, modelConnector,
+              actionHandler, context);
+          if (nextWizardStep.getOnEnterAction() != null) {
+            actionHandler.execute(nextWizardStep.getOnEnterAction(), context);
+          }
+        }
+      }
+    });
+
+    finishButton.addActionListener(new IActionListener() {
+
+      private static final long serialVersionUID = -8118428872923819202L;
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        IWizardStepDescriptor currentWizardStep = getCurrentWizardStep(context);
+        if (currentWizardStep.getOnLeaveAction() == null
+            || actionHandler.execute(currentWizardStep.getOnLeaveAction(),
+                context)) {
+          dialog.setVisible(false);
+          actionHandler.execute(finishAction, context);
+        }
+      }
+    });
+
+    cancelButton.addActionListener(new IActionListener() {
+
+      private static final long serialVersionUID = -203799299156645547L;
+
+      public void actionPerformed(@SuppressWarnings("unused")
+      ActionEvent e) {
+        dialog.setVisible(false);
+      }
+    });
+
+    ULCBorderLayoutPane buttonPanel = new ULCBorderLayoutPane();
+    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
+        ULCBoxLayoutPane.LINE_AXIS);
+
+    buttonPanel.add(separator, ULCBorderLayoutPane.NORTH);
+
+    buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
+    buttonBox.add(backButton);
+    buttonBox.add(ULCFiller.createHorizontalStrut(10));
+    buttonBox.add(nextButton);
+    buttonBox.add(ULCFiller.createHorizontalStrut(10));
+    buttonBox.add(finishButton);
+    buttonBox.add(ULCFiller.createHorizontalStrut(30));
+    buttonBox.add(cancelButton);
+
+    buttonPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
+
+    contentPane.add(buttonPanel, ULCBorderLayoutPane.SOUTH);
+    contentPane.add(cardPanel, ULCBorderLayoutPane.CENTER);
+
+    dialog.getRootPane().setDefaultButton(nextButton);
+
+    show(dialog, cardPanel, alreadyDisplayedSteps, firstWizardStep, backButton,
+        nextButton, finishButton, modelConnector, actionHandler, context);
+
+    dialog.pack();
+
+    dialog.setVisible(true);
+    return super.execute(actionHandler, context);
+!!!287623.java!!!	setFinishAction(inout finishAction : IDisplayableAction) : void
+    this.finishAction = finishAction;
+!!!287751.java!!!	setFirstWizardStep(inout firstWizardStep : IWizardStepDescriptor) : void
+    this.firstWizardStep = firstWizardStep;
+!!!287879.java!!!	setModelConnectorFactory(inout modelConnectorFactory : IModelConnectorFactory) : void
+    this.modelConnectorFactory = modelConnectorFactory;
+!!!288007.java!!!	completeInitialWizardModel(inout initialWizardModel : Map<String, Object>, inout context : Map<String, Object>) : void
+    // No-op by default.
+!!!288135.java!!!	getCurrentWizardStep(inout context : Map<String, Object>) : IWizardStepDescriptor
+    IWizardStepDescriptor currentWizardStep = (IWizardStepDescriptor) context
+        .get(ActionContextConstants.DIALOG_VIEW);
+    return currentWizardStep;
+!!!288263.java!!!	setCurrentWizardStep(inout currentWizardStep : IWizardStepDescriptor, inout context : Map<String, Object>) : void
+    context.put(ActionContextConstants.DIALOG_VIEW, currentWizardStep);
+!!!288391.java!!!	show(inout dialog : ULCDialog, inout cardPanel : ULCCardPane, inout alreadyDisplayedSteps : Set<String>, inout wizardStep : IWizardStepDescriptor, inout backButton : ULCExtendedButton, inout nextButton : ULCExtendedButton, inout finishButton : ULCExtendedButton, inout modelConnector : IValueConnector, inout actionHandler : IActionHandler, inout context : Map<String, Object>) : void
+    String cardName = wizardStep.getName();
+    if (!alreadyDisplayedSteps.contains(cardName)) {
+      alreadyDisplayedSteps.add(cardName);
+      IView<ULCComponent> view = getViewFactory(context).createView(
+          wizardStep.getViewDescriptor(), actionHandler, getLocale(context));
+      cardPanel.addCard(cardName, view.getPeer());
+      getMvcBinder(context).bind(view.getConnector(), modelConnector);
+    }
+    cardPanel.setSelectedName(cardName);
+
+    ITranslationProvider translationProvider = getTranslationProvider(context);
+    Locale locale = getLocale(context);
+
+    if (wizardStep.getPreviousStepDescriptor(context) != null) {
+      backButton.setEnabled(true);
+    } else {
+      backButton.setEnabled(false);
+    }
+    if (wizardStep.getPreviousLabelKey() != null) {
+      backButton.setText(translationProvider.getTranslation(wizardStep
+          .getPreviousLabelKey(), locale));
+    } else {
+      backButton.setText(translationProvider.getTranslation(
+          IWizardStepDescriptor.DEFAULT_PREVIOUS_KEY, locale));
+    }
+
+    if (wizardStep.getNextStepDescriptor(context) != null) {
+      nextButton.setEnabled(true);
+    } else {
+      nextButton.setEnabled(false);
+    }
+    if (wizardStep.getNextLabelKey() != null) {
+      nextButton.setText(translationProvider.getTranslation(wizardStep
+          .getNextLabelKey(), locale));
+    } else {
+      nextButton.setText(translationProvider.getTranslation(
+          IWizardStepDescriptor.DEFAULT_NEXT_KEY, locale));
+    }
+
+    if (wizardStep.canFinish(context)) {
+      finishButton.setEnabled(true);
+    } else {
+      finishButton.setEnabled(false);
+    }
+    dialog.setTitle(getI18nName(translationProvider, locale) + " - "
+        + wizardStep.getI18nName(translationProvider, locale));
+    setCurrentWizardStep(wizardStep, context);

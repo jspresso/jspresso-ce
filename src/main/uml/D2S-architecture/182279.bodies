@@ -1,0 +1,21 @@
+class OkCancelAction
+!!!345351.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    int selectedOption = JOptionPane.showConfirmDialog(SwingUtil
+        .getWindowOrInternalFrame(getSourceComponent(context)),
+        getMessage(context), getI18nName(getTranslationProvider(context),
+            getLocale(context)), JOptionPane.OK_CANCEL_OPTION,
+        JOptionPane.WARNING_MESSAGE, getIconFactory(context).getIcon(
+            getIconImageURL(), IIconFactory.LARGE_ICON_SIZE));
+    if (selectedOption == JOptionPane.OK_OPTION) {
+      context.put(ActionContextConstants.NEXT_ACTION, okAction);
+    } else {
+      context.put(ActionContextConstants.NEXT_ACTION, cancelAction);
+    }
+    return super.execute(actionHandler, context);
+!!!345479.java!!!	setCancelAction(inout cancelAction : IAction) : void
+
+    this.cancelAction = cancelAction;
+!!!345607.java!!!	setOkAction(inout okAction : IAction) : void
+
+    this.okAction = okAction;

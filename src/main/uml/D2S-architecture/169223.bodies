@@ -1,0 +1,21 @@
+class ModuleSelectionAction
+!!!292103.java!!!	ModuleSelectionAction(in moduleName : String, inout moduleViewDescriptor : IViewDescriptor)
+
+      this.moduleName = moduleName;
+      putValue(com.ulcjava.base.application.IAction.NAME, moduleViewDescriptor
+          .getI18nName(getTranslationProvider(), getLocale()));
+      putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
+          moduleViewDescriptor.getI18nDescription(getTranslationProvider(),
+              getLocale())
+              + IViewFactory.TOOLTIP_ELLIPSIS);
+      putValue(com.ulcjava.base.application.IAction.SMALL_ICON,
+          getIconFactory().getIcon(moduleViewDescriptor.getIconImageURL(),
+              IIconFactory.TINY_ICON_SIZE));
+!!!292231.java!!!	actionPerformed(inout e : ActionEvent) : void
+
+      try {
+        getBackendController().checkModuleAccess(moduleName);
+        displayModule(moduleName);
+      } catch (SecurityException ex) {
+        handleException(ex, null);
+      }

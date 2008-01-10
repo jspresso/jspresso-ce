@@ -1,0 +1,44 @@
+class EditComponentAction
+!!!367495.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    List<IDisplayableAction> actions = new ArrayList<IDisplayableAction>();
+
+    Object component = context.get(ActionContextConstants.ACTION_PARAM);
+
+    okAction.putInitialContext(ActionContextConstants.SOURCE_VIEW_CONNECTOR,
+        getViewConnector(context));
+    okAction.putInitialContext(ActionContextConstants.ACTION_PARAM, component);
+    actions.add(okAction);
+    actions.add(cancelAction);
+    context.put(ActionContextConstants.DIALOG_ACTIONS, actions);
+
+    IView<SComponent> componentView = getViewFactory(context).createView(
+        getViewDescriptor(context), actionHandler, getLocale(context));
+    context.put(ActionContextConstants.DIALOG_VIEW, componentView);
+
+    IValueConnector componentConnector = modelConnectorFactory
+        .createModelConnector(getViewDescriptor(context).getModelDescriptor());
+    componentConnector.setConnectorValue(getModel(context));
+
+    getMvcBinder(context)
+        .bind(componentView.getConnector(), componentConnector);
+
+    return super.execute(actionHandler, context);
+!!!367623.java!!!	setCancelAction(inout cancelAction : IDisplayableAction) : void
+
+    this.cancelAction = cancelAction;
+!!!367751.java!!!	setModelConnectorFactory(inout modelConnectorFactory : IModelConnectorFactory) : void
+
+    this.modelConnectorFactory = modelConnectorFactory;
+!!!367879.java!!!	setOkAction(inout okAction : IDisplayableAction) : void
+
+    this.okAction = okAction;
+!!!368007.java!!!	setViewDescriptor(inout viewDescriptor : IViewDescriptor) : void
+
+    this.viewDescriptor = viewDescriptor;
+!!!368135.java!!!	getModel(inout context : Map<String, Object>) : Object
+
+    return context.get(ActionContextConstants.ACTION_PARAM);
+!!!368263.java!!!	getViewDescriptor(inout context : Map<String, Object>) : IViewDescriptor
+
+    return viewDescriptor;

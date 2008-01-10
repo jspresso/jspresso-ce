@@ -1,0 +1,13 @@
+class AbstractSwingAction
+!!!342535.java!!!	getActionWidget(inout context : Map<String, Object>) : JComponent
+
+    return (JComponent) context.get(ActionContextConstants.ACTION_WIDGET);
+!!!342663.java!!!	getSourceComponent(inout context : Map<String, Object>) : JComponent
+
+    return (JComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+!!!342791.java!!!	closeDialog(inout context : Map<String, Object>) : void
+
+    Window actionWindow = SwingUtil.getVisibleWindow(getActionWidget(context));
+    if (actionWindow instanceof Dialog) {
+      actionWindow.dispose();
+    }

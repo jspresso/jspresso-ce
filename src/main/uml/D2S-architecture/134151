@@ -1,0 +1,810 @@
+format 48
+"session" // com::d2s::framework::application::backend::session
+  revision 3
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/backend/session"
+  java_package "com.d2s.framework.application.backend.session"
+  classview 133767 "session"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 155143 "IApplicationSession"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface establishes the contract of an application session. This
+application session represents the backend application state.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 171527 // <generalisation>
+	relation 171527 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 171527 // <generalisation>
+	  b parent class_ref 142855 // IEntityDirtAware
+      end
+
+      classrelation 171655 // <generalisation>
+	relation 171655 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 171655 // <generalisation>
+	  b parent class_ref 131719 // IEntityLifecycleHandler
+      end
+
+      operation 240007 "beginUnitOfWork"
+	package explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Begins the current unit of work.
+
+@see IEntityUnitOfWork#begin()
+"
+      end
+
+      operation 240135 "clearPendingOperations"
+	package explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Clears the pending operations.
+"
+      end
+
+      operation 240263 "cloneInUnitOfWork"
+	package return_type class_ref 142087 // IEntity
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Registers an entity (actually a clone of it) and all its graph as taking
+part in the unit of work.
+
+@param entity
+           the entity to make part of the unit of work.
+@return the entity (clone of the original one) actually registered in the
+        unit of work.
+"
+      end
+
+      operation 240391 "cloneInUnitOfWork"
+	package return_type class_ref 142087 // IEntity
+	nparams 1
+	  param inout name "entities" explicit_type "List<IEntity>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Registers an list of entities (actually a clone of it) and all their graphs
+as taking part in the unit of work.
+
+@param entities
+           the entities to make part of the unit of work.
+@return the entity (clone of the original one) actually registered in the
+        unit of work.
+"
+      end
+
+      operation 240519 "commitUnitOfWork"
+	package explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Commits the current unit of work.
+
+@see IEntityUnitOfWork#commit()
+"
+      end
+
+      operation 240647 "getLocale"
+	package explicit_return_type "Locale"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the session locale.
+
+@return the session locale.
+"
+      end
+
+      operation 240775 "getPrincipal"
+	package explicit_return_type "UserPrincipal"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the session principal as a JAAS principal.
+
+@return the session owner.
+"
+      end
+
+      operation 240903 "getRegisteredEntity"
+	package return_type class_ref 142087 // IEntity
+	nparams 2
+	  param inout name "entityContract" explicit_type "Class<? extends IEntity>"
+	  param inout name "entityId" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets a previously registered entity in this application session.
+
+@param entityContract
+           the entity contract.
+@param entityId
+           the identifier of the looked-up entity.
+@return the registered entity or null.
+"
+      end
+
+      operation 241031 "getSubject"
+	package explicit_return_type "Subject"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the session owner as a JAAS subject.
+
+@return the session owner.
+"
+      end
+
+      operation 241159 "initializePropertyIfNeeded"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param inout name "propertyDescriptor" type class_ref 132743 // IPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Whenever a property might not be fully initialized, this method performs
+all necessary complementary initializations..
+
+@param entity
+           the entity holding the property.
+@param propertyDescriptor
+           the property descriptor.
+"
+      end
+
+      operation 241287 "isInitialized"
+	package explicit_return_type "boolean"
+	nparams 1
+	  param inout name "objectOrProxy" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Wether the object is fully initialized.
+
+@param objectOrProxy
+           the object to test.
+@return true if the object is fully initialized.
+"
+      end
+
+      operation 241415 "isUnitOfWorkActive"
+	package explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets wether a transactional unit of work has been started in the
+application session.
+
+@return true if a transactional unit of work has been started in the
+        application session.
+"
+      end
+
+      operation 241543 "merge"
+	package return_type class_ref 142087 // IEntity
+	nparams 2
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param inout name "mergeMode" type class_ref 155271 // MergeMode
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Merges an entity in this application session. If the application session
+already contains an entity with this id, the state of the entity passed as
+parameter is merged into the registered entity depending on the merge mode
+used. If not, a copy of the entity is registered into the application
+session. The entity passed as parameter is considered not dirty so the
+application dirty states are updated accordingly.
+
+@param entity
+           the entity to merge.
+@param mergeMode
+           the merge mmode to be used.
+@return the entity registered in the application session.
+"
+      end
+
+      operation 241671 "merge"
+	package return_type class_ref 142087 // IEntity
+	nparams 2
+	  param inout name "entities" explicit_type "List<IEntity>"
+	  param inout name "mergeMode" type class_ref 155271 // MergeMode
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Merges a list of entities in this application session. If the application
+session already contains an entity with this id, the state of the entity
+passed as parameter is merged into the registered entity depending on the
+merge mode used. If not, a copy of the entity is registered into the
+application session. The entity passed as parameter is considered not dirty
+so the application dirty states are updated accordingly.
+
+@param entities
+           the list of entities to merge.
+@param mergeMode
+           the merge mmode to be used.
+@return the merged entity list.
+"
+      end
+
+      operation 241799 "performPendingOperations"
+	package explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gives a chance to the session to perform any pending operation.
+"
+      end
+
+      operation 241927 "recordAsSynchronized"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "flushedEntity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Records an entity as having been flushed to the persistent store.
+
+@param flushedEntity
+           the flushed entity.
+"
+      end
+
+      operation 242055 "registerEntity"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param inout name "isEntityTransient" explicit_type "boolean"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Registers an entity in this application session.
+
+@param entity
+           the entity to register.
+@param isEntityTransient
+           wether this entity has to be considered as a transient one. It
+           is not safe to rely on entity.isPersistent() to determine it.
+"
+      end
+
+      operation 242183 "rollbackUnitOfWork"
+	package explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Rollbacks the current unit of work.
+
+@see IEntityUnitOfWork#rollback()
+"
+      end
+
+      operation 242311 "setLocale"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the session locale.
+
+@param locale
+           the session locale.
+"
+      end
+
+      operation 242439 "setSubject"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "sessionOwner" explicit_type "Subject"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the session owner as a JAAS subject.
+
+@param sessionOwner
+           the session owner.
+"
+      end
+    end
+
+    class 155271 "MergeMode"
+      visibility public stereotype "enum"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This enumeration defines all the supported merge modes of a session.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 152583 "MERGE_CLEAN_EAGER"
+	public type class_ref 155271 // MergeMode
+	cpp_decl ""
+	java_decl "  ${@}${name}${value},${comment}"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>MERGE_CLEAN_EAGER</code> means that the whole object graph will be
+traversed independently of the state of the walked entities. This is
+generally used for \"reload\" behaviour whenever an entity deep in the graph
+might have been updated in memory.
+
+"
+      end
+
+      attribute 152711 "MERGE_CLEAN_LAZY"
+	public type class_ref 155271 // MergeMode
+	cpp_decl ""
+	java_decl "  ${@}${name}${value},${comment}"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>MERGE_CLEAN_LAZY</code> means that a clean registered instance will
+be returned immediately if it is in the same version than the entity to
+merge. If this merge mode is used, the whole object graph might not be
+traversed.
+
+"
+      end
+
+      attribute 152839 "MERGE_KEEP"
+	public type class_ref 155271 // MergeMode
+	cpp_decl ""
+	java_decl "  ${@}${name}${value},${comment}"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>MERGE_KEEP</code> means that the registered instance will be kept
+whatever its state is.
+"
+      end
+    end
+
+    class 160007 "ApplicationSessionException"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This exception is thrown whenever an unexpected exception occurs on an
+application session.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 152455 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -809573572653239047L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 239623 "ApplicationSessionException"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ApplicationSessionException</code> instance.
+
+@param message
+           the exception message.
+"
+      end
+
+      operation 239751 "ApplicationSessionException"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "nestedException" explicit_type "Throwable"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ApplicationSessionException</code> instance.
+
+@param nestedException
+           the nested exception.
+"
+      end
+
+      operation 239879 "ApplicationSessionException"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "nestedException" explicit_type "Throwable"
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ApplicationSessionException</code> instance.
+
+@param nestedException
+           the nested exception.
+@param message
+           the exception message.
+"
+      end
+    end
+
+    class 160135 "IEntityUnitOfWork"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface is implemented by unit of works on entities. A uneit of work
+is a structure which will generally synchronize with a transaction to keep
+track of entity creations, updates, deletions and which is able to either
+commit the changes or rollback them upon work completion. A unit of work is
+reusable.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 171783 // <generalisation>
+	relation 171783 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 171783 // <generalisation>
+	  b parent class_ref 142855 // IEntityDirtAware
+      end
+
+      operation 242567 "begin"
+	package explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Begins a new unit of work.
+"
+      end
+
+      operation 242695 "clearDirtyState"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "flushedEntity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Clears the dirty state of the entity in this unit of work.
+
+@param flushedEntity
+           the entity that was flushed and cleaned.
+"
+      end
+
+      operation 242823 "commit"
+	package explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Commits the unit of work. It should clear it state and be ready for another
+work.
+"
+      end
+
+      operation 242951 "isActive"
+	package explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Tests wether this unit of work is currently in use.
+
+@return true if the unit of work is active.
+"
+      end
+
+      operation 243079 "register"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "entity" type class_ref 142087 // IEntity
+	  param inout name "initialChangedProperties" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Registers an entity in the unit of work.
+
+@param entity
+           the entity to register.
+@param initialChangedProperties
+           the map of dirty properties the entity has before entering the
+           unit of work along with their original values.
+"
+      end
+
+      operation 243207 "rollback"
+	package explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Rollbacks the unit of work. It should clear it state, restore the entity
+states to the one before the unit of work begining and be ready for another
+work.
+"
+      end
+    end
+  end
+
+  deploymentview 134023 "session"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 157191 "ApplicationSessionException"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.exception.NestedRuntimeException;
+${definition}"
+      associated_classes
+	class_ref 160007 // ApplicationSessionException
+      end
+    end
+
+    artifact 157319 "IApplicationSession"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.List;
+import java.util.Locale;
+import javax.security.auth.Subject;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityDirtAware;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
+import com.d2s.framework.security.UserPrincipal;
+${definition}"
+      associated_classes
+	class_ref 155143 // IApplicationSession
+      end
+    end
+
+    artifact 157447 "IEntityUnitOfWork"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityDirtAware;
+${definition}"
+      associated_classes
+	class_ref 160135 // IEntityUnitOfWork
+      end
+    end
+
+    artifact 157575 "MergeMode"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 155271 // MergeMode
+      end
+    end
+  end
+
+  package_ref 135047 // basic
+
+  package_ref 142471 // hibernate
+end

@@ -1,0 +1,24 @@
+class ClassInvokerUtil
+!!!381191.java!!!	ClassInvokerUtil()
+
+    // Helper class constructor.
+!!!381319.java!!!	createMessage(in className : String, in methodName : String, in arguments : String) : String
+
+    StringBuffer msg = new StringBuffer();
+    msg.append(MESSAGE_ROOT);
+    msg.append(SEPARATOR);
+    msg.append(className);
+    msg.append(SEPARATOR);
+    msg.append(methodName);
+    if (arguments != null && arguments.length > 0) {
+      msg.append(SEPARATOR);
+      int i = 0;
+      for (String argument : arguments) {
+        msg.append(argument);
+        if (i < arguments.length - 1) {
+          msg.append(ARGS_SEPARATOR);
+        }
+        i++;
+      }
+    }
+    return msg.toString();

@@ -1,0 +1,25 @@
+class OkCancelAction
+!!!362631.java!!!	execute(in actionHandler : IActionHandler, in context : Map<String, Object>) : boolean
+
+    SOptionPane.showConfirmDialog(getSourceComponent(context),
+        getMessage(context), getI18nName(getTranslationProvider(context),
+            getLocale(context)), JOptionPane.WARNING_MESSAGE,
+        new ActionListener() {
+
+          public void actionPerformed(ActionEvent e) {
+            if (SOptionPane.OK_ACTION.equals(e.getActionCommand())) {
+              context.put(ActionContextConstants.NEXT_ACTION, okAction);
+            } else if (SOptionPane.CANCEL_ACTION.equals(e.getActionCommand())) {
+              context.put(ActionContextConstants.NEXT_ACTION, cancelAction);
+            }
+            executeNextAction(actionHandler, context);
+          }
+
+        });
+    return true;
+!!!362759.java!!!	setCancelAction(inout cancelAction : IAction) : void
+
+    this.cancelAction = cancelAction;
+!!!362887.java!!!	setOkAction(inout okAction : IAction) : void
+
+    this.okAction = okAction;

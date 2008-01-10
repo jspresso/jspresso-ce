@@ -1,0 +1,290 @@
+format 48
+"wizard" // com::d2s::framework::application::frontend::action::wings::wizard
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action/wings/wizard"
+  java_package "com.d2s.framework.application.frontend.action.wings.wizard"
+  classview 139655 "wizard"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 189447 "WizardAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A Wizard wings action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 209799 // <generalisation>
+	relation 209799 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 209799 // <generalisation>
+	  b parent class_ref 185735 // AbstractWingsAction
+      end
+
+      classrelation 209927 // finishAction (<unidirectional association>)
+	relation 209927 --->
+	  a role_name "finishAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 209927 // finishAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      classrelation 210055 // firstWizardStep (<unidirectional association>)
+	relation 210055 --->
+	  a role_name "firstWizardStep" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 210055 // firstWizardStep (<unidirectional association>)
+	  b parent class_ref 162311 // IWizardStepDescriptor
+      end
+
+      attribute 184071 "modelConnectorFactory"
+	private explicit_type "IModelConnectorFactory"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 369287 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param in name "actionHandler" explicit_type "IActionHandler"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+  @Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 369415 "setFinishAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "finishAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the finishAction.
+
+@param finishAction
+           the finishAction to set.
+"
+      end
+
+      operation 369543 "setFirstWizardStep"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "firstWizardStep" type class_ref 162311 // IWizardStepDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the firstWizardStep.
+
+@param firstWizardStep
+           the firstWizardStep to set.
+"
+      end
+
+      operation 369671 "setModelConnectorFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "modelConnectorFactory" explicit_type "IModelConnectorFactory"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the modelConnectorFactory.
+
+@param modelConnectorFactory
+           the modelConnectorFactory to set.
+"
+      end
+
+      operation 369799 "completeInitialWizardModel"
+	protected explicit_return_type "void"
+	nparams 2
+	  param inout name "initialWizardModel" explicit_type "Map<String, Object>"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates (and initializes) the wizard model.
+
+@param initialWizardModel
+           the initial wizard model.
+@param context
+           the action context.
+"
+      end
+
+      operation 369927 "getCurrentWizardStep"
+	private return_type class_ref 162311 // IWizardStepDescriptor
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 370055 "setCurrentWizardStep"
+	private explicit_return_type "void"
+	nparams 2
+	  param inout name "currentWizardStep" type class_ref 162311 // IWizardStepDescriptor
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 370183 "show"
+	private explicit_return_type "void"
+	nparams 11
+	  param inout name "dialog" explicit_type "SDialog"
+	  param inout name "cardPanel" explicit_type "SPanel"
+	  param inout name "alreadyDisplayedSteps" explicit_type "Set<String>"
+	  param inout name "wizardStep" type class_ref 162311 // IWizardStepDescriptor
+	  param inout name "backButton" explicit_type "SButton"
+	  param inout name "nextButton" explicit_type "SButton"
+	  param inout name "finishButton" explicit_type "SButton"
+	  param inout name "modelConnector" explicit_type "IValueConnector"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	  param inout name "firstShow" explicit_type "boolean"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}, ${t6} ${p6}, ${t7} ${p7}, ${t8} ${p8}, ${t9} ${p9}, ${t10} ${p10}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+    end
+  end
+
+  deploymentview 139015 "wizard"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 177415 "WizardAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
+import org.wings.SButton;
+import org.wings.SCardLayout;
+import org.wings.SComponent;
+import org.wings.SDialog;
+import org.wings.SDimension;
+import org.wings.SFrame;
+import org.wings.SPanel;
+import org.wings.SSeparator;
+import org.wings.SSpacer;
+import org.wings.border.SEmptyBorder;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.wings.AbstractWingsAction;
+import com.d2s.framework.application.frontend.action.wizard.IWizardStepDescriptor;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.model.IModelConnectorFactory;
+import com.d2s.framework.util.collection.ObjectEqualityMap;
+import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.util.wings.WingsUtil;
+import com.d2s.framework.view.IIconFactory;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IDisplayableAction;
+${definition}"
+      associated_classes
+	class_ref 189447 // WizardAction
+      end
+    end
+  end
+end

@@ -1,0 +1,8 @@
+class EvenOddListCellRenderer
+!!!335495.java!!!	getListCellRendererComponent(inout list : ULCList, inout value : Object, inout isSelected : boolean, inout hasFocus : boolean, in row : int) : IRendererComponent
+
+    IRendererComponent renderer = super.getListCellRendererComponent(list,
+        value, isSelected, hasFocus, row);
+    UlcUtil.alternateEvenOddBackground((ULCComponent) renderer, list,
+        isSelected, row);
+    return renderer;

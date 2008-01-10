@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="828" height="1051" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="318" y1="200" x2="318" y2="170" />
+	<line stroke="black" stroke-opacity="1" x1="318" y1="164" x2="312" y2="170" />
+	<line stroke="black" stroke-opacity="1" x1="318" y1="164" x2="324" y2="170" />
+	<line stroke="black" stroke-opacity="1" x1="312" y1="170" x2="324" y2="170" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="99" y1="336" x2="99" y2="323" />
+	<line stroke="black" stroke-opacity="1" x1="99" y1="317" x2="93" y2="323" />
+	<line stroke="black" stroke-opacity="1" x1="99" y1="317" x2="105" y2="323" />
+	<line stroke="black" stroke-opacity="1" x1="93" y1="323" x2="105" y2="323" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="466" y1="113" x2="397" y2="99" />
+	<line stroke="black" stroke-opacity="1" x1="392" y1="98" x2="396" y2="105" />
+	<line stroke="black" stroke-opacity="1" x1="392" y1="98" x2="399" y2="93" />
+	<line stroke="black" stroke-opacity="1" x1="396" y1="105" x2="399" y2="93" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="437" y1="425" x2="358" y2="311" />
+	<line stroke="black" stroke-opacity="1" x1="355" y1="307" x2="353" y2="315" />
+	<line stroke="black" stroke-opacity="1" x1="355" y1="307" x2="363" y2="308" />
+	<line stroke="black" stroke-opacity="1" x1="353" y1="315" x2="363" y2="308" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="535" y1="259" x2="535" y2="213" />
+	<line stroke="black" stroke-opacity="1" x1="535" y1="207" x2="529" y2="213" />
+	<line stroke="black" stroke-opacity="1" x1="535" y1="207" x2="541" y2="213" />
+	<line stroke="black" stroke-opacity="1" x1="529" y1="213" x2="541" y2="213" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="709" y1="932" x2="634" y2="777" />
+	<line stroke="black" stroke-opacity="1" x1="632" y1="772" x2="629" y2="780" />
+	<line stroke="black" stroke-opacity="1" x1="632" y1="772" x2="640" y2="774" />
+	<line stroke="black" stroke-opacity="1" x1="629" y1="780" x2="640" y2="774" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="184" y1="141" x2="237" y2="116" />
+	<line stroke="black" stroke-opacity="1" x1="243" y1="114" x2="235" y2="111" />
+	<line stroke="black" stroke-opacity="1" x1="243" y1="114" x2="240" y2="121" />
+	<line stroke="black" stroke-opacity="1" x1="235" y1="111" x2="240" y2="121" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="188" y1="447" x2="277" y2="311" />
+	<line stroke="black" stroke-opacity="1" x1="281" y1="307" x2="272" y2="308" />
+	<line stroke="black" stroke-opacity="1" x1="281" y1="307" x2="282" y2="315" />
+	<line stroke="black" stroke-opacity="1" x1="272" y1="308" x2="282" y2="315" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="812" y="937" width="3" height="101" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="660" y="1035" width="155" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="656" y="933" width="156" height="102" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="734" y="948">DefaultSwingController</text>
+	<line stroke="black" stroke-opacity="1" x1="656" y1="961" x2="812" y2="961" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="660" y="976">execute()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="660" y="994">handleException()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="660" y="1012">start()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="660" y="1030">stop()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="388" y="6" width="3" height="157" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="248" y="160" width="143" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="244" y="2" width="144" height="158" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="316" y="17">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="316" y="37">IController</text>
+	<line stroke="black" stroke-opacity="1" x1="244" y1="50" x2="388" y2="50" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="248" y="65">getApplicationSession()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="248" y="83">getLocale()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="248" y="101">getTranslationProvider()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="248" y="119">merge()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="248" y="137">merge()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="248" y="155">stop()</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="99" y1="864" x2="99" y2="845" />
+	<line stroke="black" stroke-opacity="1" x1="99" y1="839" x2="93" y2="845" />
+	<line stroke="black" stroke-opacity="1" x1="99" y1="839" x2="105" y2="845" />
+	<line stroke="black" stroke-opacity="1" x1="93" y1="845" x2="105" y2="845" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="365" y1="932" x2="434" y2="777" />
+	<line stroke="black" stroke-opacity="1" x1="437" y1="772" x2="429" y2="775" />
+	<line stroke="black" stroke-opacity="1" x1="437" y1="772" x2="440" y2="779" />
+	<line stroke="black" stroke-opacity="1" x1="429" y1="775" x2="440" y2="779" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="535" y1="932" x2="535" y2="874" />
+	<line stroke="black" stroke-opacity="1" x1="535" y1="868" x2="529" y2="874" />
+	<line stroke="black" stroke-opacity="1" x1="535" y1="868" x2="541" y2="874" />
+	<line stroke="black" stroke-opacity="1" x1="529" y1="874" x2="541" y2="874" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="184" y="341" width="3" height="497" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="14" y="835" width="173" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="10" y="337" width="174" height="498" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="97" y="352">AbstractBackendController</text>
+	<line stroke="black" stroke-opacity="1" x1="10" y1="365" x2="184" y2="365" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="380">checkModuleAccess()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="398">createModelConnector()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="416">execute()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="434">getApplicationSession()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="452">getBeanAccessorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="470">getBeanConnectorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="488">getEntityFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="506">getInitialActionContext()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="524">getLocale()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="542">getMapAccessorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="560">getMapConnectorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="578">getModuleConnector()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="596">handleException()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="614">merge()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="632">merge()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="650">retrieveComponents()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="668">setApplicationSession()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="686">setBeanAccessorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="704">setBeanConnectorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="722">setEntityFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="740">setMapAccessorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="758">setMapConnectorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="776">installModules()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="794">start()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="812">stop()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="14" y="830">storeComponents()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="387" y="205" width="3" height="101" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="249" y="303" width="141" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="245" y="201" width="142" height="102" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="316" y="216">AbstractController</text>
+	<line stroke="black" stroke-opacity="1" x1="245" y1="229" x2="387" y2="229" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="249" y="244">checkAccess()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="249" y="262">createEmptyContext()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="249" y="280">getTranslationProvider()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="249" y="298">setTranslationProvider()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="599" y="51" width="3" height="155" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="471" y="203" width="131" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="467" y="47" width="132" height="156" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="533" y="78">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="533" y="98">IFrontendController</text>
+	<line stroke="black" stroke-opacity="1" x1="467" y1="111" x2="599" y2="111" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="471" y="126">getMvcBinder()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="471" y="144">getStartupAction()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="471" y="162">getViewFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="471" y="180">getHelpActions()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="471" y="198">start()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="628" y="264" width="3" height="603" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="442" y="864" width="189" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="438" y="260" width="190" height="604" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="533" y="291">AbstractFrontendController</text>
+	<line stroke="black" stroke-opacity="1" x1="438" y1="304" x2="628" y2="304" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="319">AbstractFrontendController()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="337">execute()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="355">getActions()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="373">getHelpActions()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="391">getApplicationSession()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="409">getBackendController()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="427">getDescription()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="445">getI18nDescription()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="463">getI18nName()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="481">getIconImageURL()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="499">getInitialActionContext()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="517">getLocale()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="535">getMvcBinder()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="553">getName()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="571">getStartupAction()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="589">getViewFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="607">merge()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="625">merge()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="643">setActionMap()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="661">setHelpActionMap()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="679">setDescription()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="697">setIconImageURL()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="715">setLoginContextName()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="733">setModules()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="751">setModulesMenuIconImageUrl()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="769">setMvcBinder()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="787">setName()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="805">setStartupAction()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="823">setViewFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="841">start()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="442" y="859">stop()</text>
+</g>
+<g>
+	<rect fill="white" stroke-dasharray="4,4" stroke="black" stroke-width="1" stroke-opacity="1" x="567" y="248" width="96" height="23" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="615" y="266">E, F, G</text>
+</g>
+<g>
+	<rect fill="white" stroke-dasharray="4,4" stroke="black" stroke-width="1" stroke-opacity="1" x="558" y="35" width="67" height="23" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="592" y="53">E, F, G</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="180" y="51" width="3" height="265" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="18" y="313" width="165" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="14" y="47" width="166" height="266" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="97" y="62">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="97" y="82">IBackendController</text>
+	<line stroke="black" stroke-opacity="1" x1="14" y1="95" x2="180" y2="95" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="110">checkModuleAccess()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="128">createModelConnector()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="146">getBeanAccessorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="164">getBeanConnectorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="182">getEntityFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="200">getMapAccessorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="218">getMapConnectorFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="236">getModuleConnector()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="254">retrieveComponents()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="272">start()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="290">storeComponents()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="18" y="308">installModules()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="423" y="937" width="3" height="101" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="259" y="1035" width="167" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="255" y="933" width="168" height="102" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="339" y="948">DefaultUlcController</text>
+	<line stroke="black" stroke-opacity="1" x1="255" y1="961" x2="423" y2="961" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="259" y="976">callbackHandlingComplete()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="259" y="994">handleException()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="259" y="1012">start()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="259" y="1030">stop()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="610" y="937" width="3" height="83" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="460" y="1017" width="153" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="456" y="933" width="154" height="84" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="533" y="948">DefaultWingsController</text>
+	<line stroke="black" stroke-opacity="1" x1="456" y1="961" x2="610" y2="961" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="460" y="976">handleException()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="460" y="994">start()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="460" y="1012">stop()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="191" y="869" width="3" height="155" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="7" y="1021" width="187" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="3" y="865" width="188" height="156" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="97" y="880">HibernateBackendController</text>
+	<line stroke="black" stroke-opacity="1" x1="3" y1="893" x2="191" y2="893" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="7" y="908">getHibernateTemplate()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="7" y="926">getTransactionTemplate()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="7" y="944">setApplicationSession()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="7" y="962">setEntityFactory()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="7" y="980">setHibernateTemplate()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="7" y="998">setTransactionTemplate()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="7" y="1016">linkHibernateArtifacts()</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="506" y="245">&lt;&lt;bind&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="698" y="911">&lt;&lt;bind&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="415" y="912">&lt;E-&gt;SComponent, F-&gt;SIcon, G-&gt;Action&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="556" y="894">&lt;E-&gt;JComponent, F-&gt;Icon, G-&gt;Action&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="507" y="927">&lt;&lt;bind&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="244" y="895">&lt;E-&gt;ULCComponent, F-&gt;ULCIcon, G-&gt;IAction&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="319" y="912">&lt;&lt;bind&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="474" y="229">&lt;E-&gt;E, F-&gt;F, G-&gt;G&gt;</text>
+</g>
+</svg>

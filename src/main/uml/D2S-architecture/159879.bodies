@@ -1,0 +1,20 @@
+class ApplicationSessionAwareProxyEntityFactory
+!!!238983.java!!!	createEntityInstance(inout entityContract : Class<T>) : T
+
+    T newEntity = super.createEntityInstance(entityContract);
+    applicationSession.registerEntity(newEntity, true);
+    return newEntity;
+!!!239111.java!!!	setApplicationSession(inout applicationSession : IApplicationSession) : void
+
+    this.applicationSession = applicationSession;
+!!!239239.java!!!	createEntityInvocationHandler(inout entityDescriptor : IComponentDescriptor) : InvocationHandler
+
+    return new ApplicationSessionAwareEntityInvocationHandler(entityDescriptor,
+        getInlineComponentFactory(), getEntityCollectionFactory(),
+        getAccessorFactory(), getEntityExtensionFactory(), applicationSession);
+!!!239367.java!!!	getEntityLifecycleHandler() : IEntityLifecycleHandler
+
+    return applicationSession;
+!!!239495.java!!!	getPrincipal() : UserPrincipal
+
+    return applicationSession.getPrincipal();

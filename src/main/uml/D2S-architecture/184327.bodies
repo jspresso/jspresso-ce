@@ -1,0 +1,9 @@
+class DisplayStaticUrlAction
+!!!351751.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
+        context).getTranslation(urlKey, getLocale(context)));
+    return super.execute(actionHandler, context);
+!!!351879.java!!!	setUrlKey(in urlKey : String) : void
+
+    this.urlKey = urlKey;

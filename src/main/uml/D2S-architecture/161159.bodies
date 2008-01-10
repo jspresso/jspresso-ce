@@ -1,0 +1,32 @@
+class ChooseActionAction
+!!!255623.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    BasicCollectionDescriptor<IDescriptor> modelDescriptor = new BasicCollectionDescriptor<IDescriptor>();
+    modelDescriptor
+        .setCollectionInterface(List.class);
+    modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
+    IValueConnector actionsConnector = beanConnectorFactory
+        .createModelConnector(modelDescriptor);
+    actionsConnector.setConnectorValue(createActionProxies(
+        getTranslationProvider(context), getLocale(context)));
+    context.put(ActionContextConstants.ACTION_PARAM, actionsConnector);
+    return super.execute(actionHandler, context);
+!!!255751.java!!!	setActions(inout actions : List<IDisplayableAction>) : void
+
+    this.actions = actions;
+!!!255879.java!!!	setBeanConnectorFactory(inout beanConnectorFactory : IModelConnectorFactory) : void
+
+    this.beanConnectorFactory = beanConnectorFactory;
+!!!256007.java!!!	createActionProxies(inout translationProvider : ITranslationProvider, inout locale : Locale) : IDisplayableAction
+
+    List<IDisplayableAction> actionProxies = new ArrayList<IDisplayableAction>(
+        actions.size());
+    for (IDisplayableAction action : actions) {
+      actionProxies.add(createActionProxy(action, translationProvider, locale));
+    }
+    return actionProxies;
+!!!256135.java!!!	createActionProxy(inout delegate : IDisplayableAction, inout translationProvider : ITranslationProvider, inout locale : Locale) : IDisplayableAction
+
+    return (IDisplayableAction) Proxy.newProxyInstance(delegate.getClass()
+        .getClassLoader(), new Class[] {IDisplayableAction.class},
+        new I18nActionInvocationHandler(delegate, translationProvider, locale));

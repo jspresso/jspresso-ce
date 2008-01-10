@@ -1,0 +1,264 @@
+format 48
+"gate" // com::d2s::framework::util::gate
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/util/gate"
+  java_package "com.d2s.framework.util.gate"
+  classview 144775 "gate"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 203143 "AbstractGate"
+      abstract visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Base implementation of a gate.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 221191 // <generalisation>
+	relation 221191 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 221191 // <generalisation>
+	  b parent class_ref 197639 // AbstractPropertyChangeCapable
+      end
+
+      classrelation 221575 // <realization>
+	relation 221575 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 221575 // <realization>
+	  b parent class_ref 203271 // IGate
+      end
+
+      operation 407303 "clone"
+	public return_type class_ref 203143 // AbstractGate
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 203271 "IGate"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple open / close, true / false interface.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 221319 // <generalisation>
+	relation 221319 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 221319 // <generalisation>
+	  b parent class_ref 197767 // IPropertyChangeCapable
+      end
+
+      attribute 196359 "OPEN_PROPERTY"
+	package explicit_type "String"
+	init_value "=  \"open\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>OPEN_PROPERTY</code>.
+
+"
+      end
+
+      operation 407047 "clone"
+	package return_type class_ref 203271 // IGate
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Clones the gate.
+
+@return the cloned gate.
+"
+      end
+
+      operation 407175 "isOpen"
+	package explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Is the gate open ?
+
+@return true if open.
+"
+      end
+    end
+
+    class 203399 "GateHelper"
+      visibility public 
+      cpp_decl ""
+      final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This helper class contains utility methods to work with gates.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      operation 407431 "GateHelper"
+	private explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 407559 "areGatesOpen"
+	class_operation public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "gates" explicit_type "Collection<IGate>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Returns true if and only if gates are null, empty or all open.
+
+@param gates
+           the gates collection.
+@return gates status.
+"
+      end
+    end
+  end
+
+  deploymentview 144007 "gate"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 188295 "IGate"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
+${definition}"
+      associated_classes
+	class_ref 203271 // IGate
+      end
+    end
+
+    artifact 188423 "AbstractGate"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
+${definition}"
+      associated_classes
+	class_ref 203143 // AbstractGate
+      end
+    end
+
+    artifact 188551 "GateHelper"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Collection;
+${definition}"
+      associated_classes
+	class_ref 203399 // GateHelper
+      end
+    end
+  end
+end

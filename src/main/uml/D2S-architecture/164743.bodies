@@ -1,0 +1,13 @@
+class AbstractUlcAction
+!!!277255.java!!!	getActionWidget(inout context : Map<String, Object>) : ULCComponent
+
+    return (ULCComponent) context.get(ActionContextConstants.ACTION_WIDGET);
+!!!277383.java!!!	getSourceComponent(inout context : Map<String, Object>) : ULCComponent
+
+    return (ULCComponent) context.get(ActionContextConstants.SOURCE_COMPONENT);
+!!!277511.java!!!	closeDialog(inout context : Map<String, Object>) : void
+
+    ULCWindow actionWindow = UlcUtil.getVisibleWindow(getActionWidget(context));
+    if (actionWindow instanceof ULCDialog) {
+      actionWindow.setVisible(false);
+    }

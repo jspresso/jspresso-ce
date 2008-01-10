@@ -1,0 +1,182 @@
+class TableSorter
+!!!335879.java!!!	TableSorter()
+
+    this.headerActionListener = new HeaderActionHandler();
+    this.tableModelListener = new TableModelHandler();
+    this.sortedColumnsBuffer = new HashSet<ULCTableColumn>();
+!!!336007.java!!!	TableSorter(inout tableModel : ITableModel)
+
+    this();
+    setTableModel(tableModel);
+!!!336135.java!!!	TableSorter(inout tableModel : ITableModel, inout tableHeader : ULCTableHeader)
+
+    this();
+    setTableHeader(tableHeader);
+    setTableModel(tableModel);
+!!!336263.java!!!	getColumnClass(in column : int) : Class<?>
+
+    return tableModel.getColumnClass(column);
+!!!336391.java!!!	getColumnCount() : int
+
+    if (tableModel == null) {
+      return 0;
+    }
+    return tableModel.getColumnCount();
+!!!336519.java!!!	getColumnName(in column : int) : String
+
+    return tableModel.getColumnName(column);
+!!!336647.java!!!	getRowCount() : int
+
+    if (tableModel == null) {
+      return 0;
+    }
+    return tableModel.getRowCount();
+!!!336775.java!!!	getSortingStatus(in column : int) : int
+
+    return getDirective(column).direction;
+!!!336903.java!!!	getTableHeader() : ULCTableHeader
+
+    return tableHeader;
+!!!337031.java!!!	getTableModel() : ITableModel
+
+    return tableModel;
+!!!337159.java!!!	getValueAt(in row : int, in column : int) : Object
+
+    return tableModel.getValueAt(modelIndex(row), column);
+!!!337287.java!!!	isCellEditable(in row : int, in column : int) : boolean
+
+    return tableModel.isCellEditable(modelIndex(row), column);
+!!!337415.java!!!	isSorting() : boolean
+
+    return sortingColumns.size() != 0;
+!!!337543.java!!!	modelIndex(in viewIndex : int) : int
+
+    return getViewToModel()[viewIndex].modelIndex;
+!!!337671.java!!!	setColumnComparator(inout type : Class, inout comparator : Comparator) : void
+
+    if (comparator == null) {
+      columnComparators.remove(type);
+    } else {
+      columnComparators.put(type, comparator);
+    }
+!!!337799.java!!!	setDownIcon(inout downIcon : ULCIcon) : void
+
+    this.downIcon = downIcon;
+!!!337927.java!!!	setSortingStatus(in column : int, in status : int) : void
+
+    Directive directive = getDirective(column);
+    if (directive != NOT_SORTED_DIRECTIVE) {
+      sortingColumns.remove(directive);
+    }
+    if (status != NOT_SORTED) {
+      sortingColumns.add(new Directive(column, status));
+    }
+    sortingStatusChanged();
+!!!338055.java!!!	setTableHeader(inout tableHeader : ULCTableHeader) : void
+
+    if (this.tableHeader != null) {
+      this.tableHeader.removeActionListener(headerActionListener);
+    }
+    this.tableHeader = tableHeader;
+    if (this.tableHeader != null) {
+      this.tableHeader.addActionListener(headerActionListener);
+    }
+!!!338183.java!!!	setTableModel(inout tableModel : ITableModel) : void
+
+    if (this.tableModel != null) {
+      this.tableModel.removeTableModelListener(tableModelListener);
+    }
+
+    this.tableModel = tableModel;
+    if (this.tableModel != null) {
+      this.tableModel.addTableModelListener(tableModelListener);
+    }
+
+    clearSortingState();
+    fireTableStructureChanged();
+!!!338311.java!!!	setUpIcon(inout upIcon : ULCIcon) : void
+
+    this.upIcon = upIcon;
+!!!338439.java!!!	setValueAt(inout aValue : Object, in row : int, in column : int) : void
+
+    tableModel.setValueAt(aValue, modelIndex(row), column);
+!!!338567.java!!!	viewIndex(in modelIndex : int) : int
+
+    return getModelToView()[modelIndex];
+!!!338695.java!!!	getComparator(in column : int) : Comparator<Object>
+
+    Class<?> columnType = tableModel.getColumnClass(column);
+    Comparator<Object> comparator = columnComparators.get(columnType);
+    if (comparator != null) {
+      return comparator;
+    }
+    if (Comparable.class.isAssignableFrom(columnType)) {
+      return COMPARABLE_COMPARATOR;
+    }
+    return LEXICAL_COMPARATOR;
+!!!338823.java!!!	getHeaderRendererIcon(in column : int, in size : int) : ULCIcon
+
+    Directive directive = getDirective(column);
+    if (directive == NOT_SORTED_DIRECTIVE) {
+      return null;
+    }
+    if (directive.direction == DESCENDING) {
+      return downIcon;
+    }
+    return upIcon;
+!!!338951.java!!!	cancelSorting() : void
+
+    resetHeaderRenderers();
+    sortingColumns.clear();
+    sortingStatusChanged();
+!!!339079.java!!!	clearSortingState() : void
+
+    viewToModel = null;
+    modelToView = null;
+!!!339207.java!!!	resetHeaderRenderers() : void
+
+    for (ULCTableColumn col : sortedColumnsBuffer) {
+      col.setHeaderRenderer(null);
+    }
+    sortedColumnsBuffer.clear();
+    tableHeader.repaint();
+!!!339335.java!!!	getDirective(in column : int) : Directive
+
+    for (int i = 0; i < sortingColumns.size(); i++) {
+      Directive directive = sortingColumns.get(i);
+      if (directive.column == column) {
+        return directive;
+      }
+    }
+    return NOT_SORTED_DIRECTIVE;
+!!!339463.java!!!	getModelToView() : int
+
+    if (modelToView == null) {
+      int n = getViewToModel().length;
+      modelToView = new int[n];
+      for (int i = 0; i < n; i++) {
+        modelToView[modelIndex(i)] = i;
+      }
+    }
+    return modelToView;
+!!!339591.java!!!	getViewToModel() : Row
+
+    if (viewToModel == null) {
+      int tableModelRowCount = tableModel.getRowCount();
+      viewToModel = new Row[tableModelRowCount];
+      for (int row = 0; row < tableModelRowCount; row++) {
+        viewToModel[row] = new Row(row);
+      }
+
+      if (isSorting()) {
+        Arrays.sort(viewToModel);
+      }
+    }
+    return viewToModel;
+!!!339719.java!!!	sortingStatusChanged() : void
+
+    clearSortingState();
+    fireTableDataChanged();
+    // if (tableHeader != null) {
+    // tableHeader.repaint();
+    // }

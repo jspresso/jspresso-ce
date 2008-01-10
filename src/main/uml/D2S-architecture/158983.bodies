@@ -1,0 +1,38 @@
+class CloneModuleObjectsAction
+!!!236935.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    int[] selectedIndices = getSelectedIndices(context);
+    ICollectionConnector collectionConnector = getModelConnector(context);
+
+    if (selectedIndices == null || selectedIndices.length == 0
+        || collectionConnector == null) {
+      return false;
+    }
+
+    ICompositeValueConnector moduleConnector = getModuleConnector(context);
+    BeanCollectionModule module = (BeanCollectionModule) moduleConnector
+        .getConnectorValue();
+
+    Collection<Object> projectedCollection;
+    if (module.getModuleObjects() == null) {
+      projectedCollection = new ArrayList<Object>();
+    } else {
+      projectedCollection = new ArrayList<Object>(module.getModuleObjects());
+    }
+    Collection<IEntity> entityClones = new ArrayList<IEntity>();
+    for (int i = 0; i < selectedIndices.length; i++) {
+      entityClones.add(entityCloneFactory.cloneEntity(
+          ((IEntity) collectionConnector.getChildConnector(selectedIndices[i])
+              .getConnectorValue()), getEntityFactory(context)));
+    }
+    projectedCollection.addAll(entityClones);
+    module.setModuleObjects(projectedCollection);
+
+    getModelConnector(context).setConnectorValue(projectedCollection);
+
+    context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
+        .getIndicesOf(collectionConnector, entityClones));
+    return super.execute(actionHandler, context);
+!!!237063.java!!!	setEntityCloneFactory(inout entityCloneFactory : IEntityCloneFactory) : void
+
+    this.entityCloneFactory = entityCloneFactory;

@@ -1,0 +1,17 @@
+class FormatAdapter
+!!!404999.java!!!	FormatAdapter(inout format : Format)
+
+    super();
+    this.format = format;
+!!!405127.java!!!	format(inout value : Object) : String
+
+    if (value != null) {
+      return format.format(value);
+    }
+    return null;
+!!!405255.java!!!	getFormat() : Format
+
+    return format;
+!!!405383.java!!!	parse(in source : String) : Object
+
+    return format.parseObject(source);

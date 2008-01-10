@@ -1,0 +1,7 @@
+class IntegrityException
+!!!397319.java!!!	IntegrityException(in message : String, in staticI18nKey : String)
+
+    super(message, staticI18nKey);
+!!!397447.java!!!	IntegrityException(in message : String)
+
+    super(message);

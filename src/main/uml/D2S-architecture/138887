@@ -1,0 +1,707 @@
+format 48
+"file" // com::d2s::framework::application::frontend::action::swing::file
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action/swing/file"
+  java_package "com.d2s.framework.application.frontend.action.swing.file"
+  classview 137863 "file"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 180999 "BinaryPropertyInfoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A frontend action to display all usefull informations about a binary
+property.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 198407 // <generalisation>
+	relation 198407 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 198407 // <generalisation>
+	  b parent class_ref 181127 // InfoAction
+      end
+
+      operation 343175 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Displays the size of the binary property.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 343303 "getBinaryContent"
+	protected explicit_return_type "byte"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}[] ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Retrieve the binary content to display the infos on.
+
+@param context
+           the action context.
+@return The binary content to display the infos on or null.
+"
+      end
+    end
+
+    class 181383 "ChooseFileAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Initiates a file choosing action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 198535 // <generalisation>
+	relation 198535 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 198535 // <generalisation>
+	  b parent class_ref 180871 // AbstractSwingAction
+      end
+
+      attribute 177159 "defaultFileName"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 177287 "fileChooser"
+	private explicit_type "JFileChooser"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 177415 "fileFilter"
+	private explicit_type "String, List<String>"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 343431 "setDefaultFileName"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "defaultFileName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the defaultFileName.
+
+@param defaultFileName
+           the defaultFileName to set.
+"
+      end
+
+      operation 343559 "setFileFilter"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "fileFilter" explicit_type "Map<String, List<String>>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the fileFilter. Filter file types are a map of descriptions keying
+file extension arays.
+
+@param fileFilter
+           the fileFilter to set.
+"
+      end
+
+      operation 343687 "getFileChooser"
+	protected explicit_return_type "JFileChooser"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the file chooser.
+
+@param context
+           the action context.
+@return the file chooser.
+"
+      end
+
+      operation 343815 "getFileFilter"
+	protected explicit_return_type "Map<String, List<String>>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the fileFilter.
+
+@return the fileFilter.
+"
+      end
+
+      class 181511 "FileFilterAdapter"
+	visibility private 
+	cpp_decl ""
+	java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 177543 "allowedExtensions"
+	  private explicit_type "String"
+	  stereotype "Collection"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 177671 "description"
+	  private explicit_type "String"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 343943 "FileFilterAdapter"
+	  public explicit_return_type ""
+	  nparams 2
+	    param inout name "allowedExtensions" explicit_type "Collection<String>"
+	    param in name "description" explicit_type "String"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>FileFilterAdapter</code> instance.
+
+@param description
+@param allowedExtensions
+"
+	end
+
+	operation 344071 "accept"
+	  public explicit_return_type "boolean"
+	  nparams 1
+	    param inout name "f" explicit_type "File"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+
+	operation 344199 "getDescription"
+	  public explicit_return_type "String"
+	  nparams 0
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+    end
+
+    class 181767 "OpenFileAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Initiates a file open action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 198791 // <generalisation>
+	relation 198791 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 198791 // <generalisation>
+	  b parent class_ref 181383 // ChooseFileAction
+      end
+
+      classrelation 198919 // fileOpenCallback (<unidirectional association>)
+	relation 198919 --->
+	  a role_name "fileOpenCallback" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 198919 // fileOpenCallback (<unidirectional association>)
+	  b parent class_ref 162951 // IFileOpenCallback
+      end
+
+      operation 344327 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 344455 "setFileOpenCallback"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "fileOpenCallback" type class_ref 162951 // IFileOpenCallback
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the fileOpenCallback.
+
+@param fileOpenCallback
+           the fileOpenCallback to set.
+"
+      end
+    end
+
+    class 181895 "OpenFileAsBinaryPropertyAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Lets the user browse the local file system and choose a file to update the
+content of a binary property. Files are filtered based on the file filter
+defined in the binary property descriptor.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 199047 // <generalisation>
+	relation 199047 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 199047 // <generalisation>
+	  b parent class_ref 181767 // OpenFileAction
+      end
+
+      operation 344583 "OpenFileAsBinaryPropertyAction"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>OpenFileAsBinaryPropertyAction</code> instance.
+"
+      end
+
+      operation 344711 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 182023 "SaveBinaryPropertyAsFileAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Lets the user browse the local file system and choose a file to store the
+content of a binary property. Files are filtered based on the file filter
+defined in the binary property descriptor.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 199431 // <generalisation>
+	relation 199431 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 199431 // <generalisation>
+	  b parent class_ref 182151 // SaveFileAction
+      end
+
+      operation 345095 "SaveBinaryPropertyAsFileAction"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>OpenFileAsBinaryPropertyAction</code> instance.
+"
+      end
+
+      operation 345223 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 182151 "SaveFileAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Initiates a file save action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 199175 // <generalisation>
+	relation 199175 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 199175 // <generalisation>
+	  b parent class_ref 181383 // ChooseFileAction
+      end
+
+      classrelation 199303 // fileSaveCallback (<unidirectional association>)
+	relation 199303 --->
+	  a role_name "fileSaveCallback" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 199303 // fileSaveCallback (<unidirectional association>)
+	  b parent class_ref 163207 // IFileSaveCallback
+      end
+
+      operation 344839 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 344967 "setFileSaveCallback"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "fileSaveCallback" type class_ref 163207 // IFileSaveCallback
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the fileSaveCallback.
+
+@param fileSaveCallback
+           the fileSaveCallback to set.
+"
+      end
+    end
+  end
+
+  deploymentview 137351 "file"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 170503 "BinaryPropertyInfoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.swing.flow.InfoAction;
+${definition}"
+      associated_classes
+	class_ref 180999 // BinaryPropertyInfoAction
+      end
+    end
+
+    artifact 170631 "ChooseFileAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.File;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
+${definition}"
+      associated_classes
+	class_ref 181383 // ChooseFileAction
+      end
+    end
+
+    artifact 170759 "OpenFileAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.Map;
+import javax.swing.JFileChooser;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.file.IFileOpenCallback;
+import com.d2s.framework.util.swing.SwingUtil;
+${definition}"
+      associated_classes
+	class_ref 181767 // OpenFileAction
+      end
+    end
+
+    artifact 170887 "OpenFileAsBinaryPropertyAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.file.ConnectorValueSetterCallback;
+import com.d2s.framework.model.descriptor.IFileFilterable;
+${definition}"
+      associated_classes
+	class_ref 181895 // OpenFileAsBinaryPropertyAction
+      end
+    end
+
+    artifact 171015 "SaveFileAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.file.IFileSaveCallback;
+import com.d2s.framework.util.i18n.Messages;
+import com.d2s.framework.util.swing.SwingUtil;
+${definition}"
+      associated_classes
+	class_ref 182151 // SaveFileAction
+      end
+    end
+
+    artifact 171143 "SaveBinaryPropertyAsFileAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.file.ConnectorValueGetterCallback;
+import com.d2s.framework.model.descriptor.IFileFilterable;
+${definition}"
+      associated_classes
+	class_ref 182023 // SaveBinaryPropertyAsFileAction
+      end
+    end
+  end
+end

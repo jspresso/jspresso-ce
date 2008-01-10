@@ -1,0 +1,14 @@
+class ParentModuleConnectorSelectionAction
+!!!256775.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    ICompositeValueConnector parentModuleConnector = getParentModuleConnector(context);
+    ICompositeValueConnector grandParentModuleConnector = parentModuleConnector
+        .getParentConnector();
+    if (grandParentModuleConnector instanceof ICollectionConnectorProvider) {
+      ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) grandParentModuleConnector)
+          .getCollectionConnector();
+      collectionConnector.setSelectedIndices(ConnectorHelper.getIndicesOf(
+          collectionConnector, Collections.singleton(parentModuleConnector
+              .getConnectorValue())));
+    }
+    return super.execute(actionHandler, context);

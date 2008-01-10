@@ -1,0 +1,19 @@
+class ModuleSelectionAction
+!!!359303.java!!!	ModuleSelectionAction(in moduleName : String, inout moduleViewDescriptor : IViewDescriptor)
+
+      this.moduleName = moduleName;
+      putValue(Action.NAME, moduleViewDescriptor.getI18nName(
+          getTranslationProvider(), getLocale()));
+      putValue(Action.SHORT_DESCRIPTION, moduleViewDescriptor
+          .getI18nDescription(getTranslationProvider(), getLocale())
+          + IViewFactory.TOOLTIP_ELLIPSIS);
+      putValue(Action.SMALL_ICON, getIconFactory().getIcon(
+          moduleViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+!!!359431.java!!!	actionPerformed(inout e : ActionEvent) : void
+
+      try {
+        getBackendController().checkModuleAccess(moduleName);
+        displayModule(moduleName);
+      } catch (SecurityException ex) {
+        handleException(ex, null);
+      }

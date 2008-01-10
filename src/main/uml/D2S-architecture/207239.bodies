@@ -1,0 +1,13 @@
+class ThisApplicationContextFactoryBean
+!!!417671.java!!!	getObject() : Object
+
+    return applicationContext;
+!!!417799.java!!!	getObjectType() : Class<?>
+
+    return ApplicationContext.class;
+!!!417927.java!!!	isSingleton() : boolean
+
+    return true;
+!!!418055.java!!!	setApplicationContext(inout applicationContext : ApplicationContext) : void
+
+    this.applicationContext = applicationContext;

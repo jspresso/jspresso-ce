@@ -1,0 +1,64 @@
+class AbstractBackendAction
+!!!230151.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    if (getNextAction() != null) {
+      return actionHandler.execute(getNextAction(), context);
+    }
+    return true;
+!!!230279.java!!!	getLocale(inout context : Map<String, Object>) : Locale
+
+    return getController(context).getLocale();
+!!!230407.java!!!	getModelConnector(inout context : Map<String, Object>) : IValueConnector
+
+    return ((IValueConnector) context
+        .get(ActionContextConstants.VIEW_CONNECTOR)).getModelConnector();
+!!!230535.java!!!	getModelDescriptor(inout context : Map<String, Object>) : IModelDescriptor
+
+    return (IModelDescriptor) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+!!!230663.java!!!	getModuleConnector(inout context : Map<String, Object>) : ICompositeValueConnector
+
+    return (ICompositeValueConnector) ((ICompositeValueConnector) context
+        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR)).getModelConnector();
+!!!230791.java!!!	getSourceModelConnector(inout context : Map<String, Object>) : IValueConnector
+
+    if (context.get(ActionContextConstants.SOURCE_VIEW_CONNECTOR) != null) {
+      return ((IValueConnector) context
+          .get(ActionContextConstants.SOURCE_VIEW_CONNECTOR))
+          .getModelConnector();
+    }
+    return null;
+!!!230919.java!!!	isBackend() : boolean
+
+    return true;
+!!!231047.java!!!	setNextAction(inout nextAction : AbstractBackendAction) : void
+
+    this.nextAction = nextAction;
+!!!231175.java!!!	getBeanAccessorFactory(inout context : Map<String, Object>) : IAccessorFactory
+
+    return getController(context).getBeanAccessorFactory();
+!!!231303.java!!!	getMapAccessorFactory(inout context : Map<String, Object>) : IAccessorFactory
+
+    return getController(context).getMapAccessorFactory();
+!!!231431.java!!!	getAccessorFactory(inout target : Object, inout context : Map<String, Object>) : IAccessorFactory
+
+    if (target instanceof Map) {
+      return getMapAccessorFactory(context);
+    }
+    return getBeanAccessorFactory(context);
+!!!231559.java!!!	getApplicationSession(inout context : Map<String, Object>) : IApplicationSession
+
+    return getController(context).getApplicationSession();
+!!!231687.java!!!	getBeanConnectorFactory(inout context : Map<String, Object>) : IModelConnectorFactory
+
+    return getController(context).getBeanConnectorFactory();
+!!!231815.java!!!	getController(inout context : Map<String, Object>) : IBackendController
+
+    return (IBackendController) context
+        .get(ActionContextConstants.BACK_CONTROLLER);
+!!!231943.java!!!	getEntityFactory(inout context : Map<String, Object>) : IEntityFactory
+
+    return getController(context).getEntityFactory();
+!!!232071.java!!!	getNextAction() : AbstractBackendAction
+
+    return nextAction;

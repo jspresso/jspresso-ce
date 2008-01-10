@@ -1,0 +1,50 @@
+class LdapChangePasswordAction
+!!!237959.java!!!	setDigestAlgorithm(in digestAlgorithm : String) : void
+    this.digestAlgorithm = digestAlgorithm;
+!!!238087.java!!!	setLdapUrl(in ldapUrl : String) : void
+    this.ldapUrl = ldapUrl;
+!!!238215.java!!!	changePassword(inout userPrincipal : UserPrincipal, in currentPassword : char, in newPassword : char) : boolean
+
+    String userDn = (String) userPrincipal
+        .getCustomProperty(UserPrincipal.USERDN_PROPERTY);
+
+    DirContextSource contextSource = new DirContextSource();
+    contextSource.setUrl(ldapUrl);
+    contextSource.setUserName(userDn);
+    contextSource.setPassword(new String(currentPassword));
+    LdapTemplate ldapTemplate = new LdapTemplate(contextSource);
+    try {
+      contextSource.afterPropertiesSet();
+      ldapTemplate.afterPropertiesSet();
+    } catch (Exception ex) {
+      throw new ActionException(ex);
+    }
+    List<ModificationItem> mods = new ArrayList<ModificationItem>();
+    try {
+      mods.add(new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
+          new BasicAttribute(LdapConstants.PASSWORD_ATTIBUTE,
+              digest(newPassword))));
+      ldapTemplate.modifyAttributes(userDn, mods
+          .toArray(new ModificationItem[0]));
+    } catch (NoSuchAlgorithmException ex) {
+      throw new ActionException(ex);
+    } catch (UnsupportedEncodingException ex) {
+      throw new ActionException(ex);
+    } catch (IOException ex) {
+      throw new ActionException(ex);
+    } catch (DataAccessException ex) {
+      throw new ActionBusinessException("Current password is not valid.",
+          "password.current.invalid");
+    }
+    return true;
+!!!238343.java!!!	digest(in newPassword : char) : String
+    if (digestAlgorithm != null) {
+      String prefix = "{" + digestAlgorithm + "}";
+      MessageDigest md = MessageDigest.getInstance(digestAlgorithm);
+      md.reset();
+      md.update(new String(newPassword).getBytes("UTF-8"));
+
+      byte[] digest = md.digest();
+      return prefix + Base64Encoder.encode(digest);
+    }
+    return new String(newPassword);

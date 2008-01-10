@@ -1,0 +1,9 @@
+class OkAction
+!!!349703.java!!!	OkAction()
+
+    setName("ok");
+    setIconImageURL("classpath:images/ok-48x48.png");
+!!!349831.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    closeDialog(context);
+    return super.execute(actionHandler, context);

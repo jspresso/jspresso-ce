@@ -1,0 +1,26 @@
+class LoginThread
+!!!291207.java!!!	run() : void
+
+      while (!loginSuccessful && loginRetries < MAX_LOGIN_RETRIES) {
+        LoginContext lc = null;
+        try {
+          lc = new LoginContext(getLoginContextName(),
+              new ThreadBlockingCallbackHandler());
+        } catch (LoginException le) {
+          System.err.println("Cannot create LoginContext. " + le.getMessage());
+        } catch (SecurityException se) {
+          System.err.println("Cannot create LoginContext. " + se.getMessage());
+        }
+        if (lc != null) {
+          try {
+            lc.login();
+            loginSuccess(lc.getSubject());
+            loginSuccessful = true;
+          } catch (LoginException le) {
+            loginRetries++;
+            System.err.println("Authentication failed:");
+            System.err.println("  " + le.getMessage());
+          }
+        }
+      }
+      loginComplete = true;

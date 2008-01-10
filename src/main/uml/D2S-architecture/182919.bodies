@@ -1,0 +1,7 @@
+class StaticYesNoCancelAction
+!!!346887.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
+        context).getTranslation(messageCode, getLocale(context)));
+    return super.execute(actionHandler, context);
+!!!347015.java!!!	setMessageCode(in messageCode : String) : void
+    this.messageCode = messageCode;

@@ -1,0 +1,44 @@
+class Coordinates
+!!!383367.java!!!	Coordinates()
+
+    super();
+!!!383495.java!!!	Coordinates(in x : int, in y : int)
+
+    this.x = x;
+    this.y = y;
+!!!383623.java!!!	clone() : Object
+
+    try {
+      Coordinates clone = (Coordinates) super.clone();
+      return clone;
+    } catch (CloneNotSupportedException ex) {
+      throw new NestedRuntimeException(ex);
+    }
+!!!383751.java!!!	equals(inout obj : Object) : boolean
+
+    if (!(obj instanceof Coordinates)) {
+      return false;
+    }
+    if (this == obj) {
+      return true;
+    }
+    Coordinates rhs = (Coordinates) obj;
+    return new EqualsBuilder().append(x, rhs.x).append(y, rhs.y).isEquals();
+!!!383879.java!!!	getX() : int
+
+    return x;
+!!!384007.java!!!	getY() : int
+
+    return y;
+!!!384135.java!!!	hashCode() : int
+
+    return new HashCodeBuilder(23, 53).append(x).append(y).toHashCode();
+!!!384263.java!!!	setX(in x : int) : void
+
+    this.x = x;
+!!!384391.java!!!	setY(in y : int) : void
+
+    this.y = y;
+!!!384519.java!!!	toString() : String
+
+    return new ToStringBuilder(this).append("x", x).append("y", y).toString();

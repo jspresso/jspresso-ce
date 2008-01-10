@@ -1,0 +1,560 @@
+format 48
+"file" // com::d2s::framework::application::frontend::file
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/file"
+  java_package "com.d2s.framework.application.frontend.file"
+  classview 135815 "file"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 162695 "ActionExecutorCallback"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A callback handler which triggers an arbitrary action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 177415 // <generalisation>
+	relation 177415 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 177415 // <generalisation>
+	  b parent class_ref 162823 // FileToByteArrayCallback
+      end
+
+      attribute 156935 "action"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 268551 "fileChosen"
+	public explicit_return_type "void"
+	nparams 4
+	  param inout name "in" explicit_type "InputStream"
+	  param in name "filePath" explicit_type "String"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 268679 "setAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "action" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the action.
+
+@param action
+           the action to set.
+"
+      end
+    end
+
+    class 162823 "FileToByteArrayCallback"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Default handler implementation to fully read the file inputstream into a byte
+array and setting it in the context.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 177287 // <realization>
+	relation 177287 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 177287 // <realization>
+	  b parent class_ref 162951 // IFileOpenCallback
+      end
+
+      operation 268295 "cancel"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 268423 "fileChosen"
+	public explicit_return_type "void"
+	nparams 4
+	  param inout name "in" explicit_type "InputStream"
+	  param in name "filePath" explicit_type "String"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 162951 "IFileOpenCallback"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface is used react to file open.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      operation 268039 "cancel"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever the file opening is cancelled.
+
+@param actionHandler
+           the action handler.
+@param context
+           the action context.
+"
+      end
+
+      operation 268167 "fileChosen"
+	package explicit_return_type "void"
+	nparams 4
+	  param inout name "in" explicit_type "InputStream"
+	  param in name "filePath" explicit_type "String"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever a file is opened.
+
+@param in
+           the input stream to read the file bytes.
+@param filePath
+           the file path.
+@param actionHandler
+           the action handler.
+@param context
+           the action context.
+"
+      end
+    end
+
+    class 163079 "ConnectorValueGetterCallback"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Default handler implementation to deal with getting binary properties storing
+them in files.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 177543 // <realization>
+	relation 177543 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 177543 // <realization>
+	  b parent class_ref 163207 // IFileSaveCallback
+      end
+
+      operation 269191 "cancel"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 269319 "fileChosen"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "out" explicit_type "OutputStream"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 269447 "fileWritten"
+	public explicit_return_type "void"
+	nparams 2
+	  param in name "filePath" explicit_type "String"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 163207 "IFileSaveCallback"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface is used react to file save.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      operation 268807 "cancel"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever the file opening is cancelled.
+
+@param context
+           the action context.
+"
+      end
+
+      operation 268935 "fileChosen"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "out" explicit_type "OutputStream"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever a file is chosen as save destination.
+
+@param out
+           the output stream to write to the file.
+@param context
+           the action context.
+"
+      end
+
+      operation 269063 "fileWritten"
+	package explicit_return_type "void"
+	nparams 2
+	  param in name "filePath" explicit_type "String"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called whenever a file is finished writing.
+
+@param filePath
+           the file path.
+@param context
+           the action context.
+"
+      end
+    end
+
+    class 163335 "ConnectorValueSetterCallback"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Default handler implementation to deal with setting binary properties using
+files.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 177671 // <generalisation>
+	relation 177671 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 177671 // <generalisation>
+	  b parent class_ref 162823 // FileToByteArrayCallback
+      end
+
+      operation 269575 "fileChosen"
+	public explicit_return_type "void"
+	nparams 4
+	  param inout name "in" explicit_type "InputStream"
+	  param in name "filePath" explicit_type "String"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+  end
+
+  deploymentview 135175 "file"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 160007 "IFileOpenCallback"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.InputStream;
+import java.util.Map;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 162951 // IFileOpenCallback
+      end
+    end
+
+    artifact 160135 "FileToByteArrayCallback"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.ActionException;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 162823 // FileToByteArrayCallback
+      end
+    end
+
+    artifact 160263 "ActionExecutorCallback"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.InputStream;
+import java.util.Map;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 162695 // ActionExecutorCallback
+      end
+    end
+
+    artifact 160391 "IFileSaveCallback"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.OutputStream;
+import java.util.Map;
+${definition}"
+      associated_classes
+	class_ref 163207 // IFileSaveCallback
+      end
+    end
+
+    artifact 160519 "ConnectorValueGetterCallback"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.ActionException;
+import com.d2s.framework.binding.IValueConnector;
+${definition}"
+      associated_classes
+	class_ref 163079 // ConnectorValueGetterCallback
+      end
+    end
+
+    artifact 160647 "ConnectorValueSetterCallback"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.InputStream;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
+${definition}"
+      associated_classes
+	class_ref 163335 // ConnectorValueSetterCallback
+      end
+    end
+  end
+end

@@ -1,0 +1,717 @@
+format 48
+"std" // com::d2s::framework::application::frontend::action::swing::std
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action/swing/std"
+  java_package "com.d2s.framework.application.frontend.action.swing.std"
+  classview 138247 "std"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 183303 "ModalDialogAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Base class dialog swing actions.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 200455 // <generalisation>
+	relation 200455 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 200455 // <generalisation>
+	  b parent class_ref 180871 // AbstractSwingAction
+      end
+
+      operation 347655 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Shows a modal dialog containig a main view and a button panel with the list
+of registered actions.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 347783 "getActions"
+	public return_type class_ref 147079 // IDisplayableAction
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets the actions.
+
+@param context
+           the action context.
+@return the actions.
+"
+      end
+
+      operation 347911 "getMainView"
+	public return_type class_ref 146183 // IView
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<JComponent> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets the mainView.
+
+@param context
+           the action context.
+@return the mainView.
+"
+      end
+    end
+
+    class 183687 "OkAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A standard ok action. Since it is a chained action, it can be chained with
+another action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 201863 // <generalisation>
+	relation 201863 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 201863 // <generalisation>
+	  b parent class_ref 180871 // AbstractSwingAction
+      end
+
+      operation 349703 "OkAction"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>OkAction</code> instance.
+"
+      end
+
+      operation 349831 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 184071 "EditComponentAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple action to edit a component in a form view.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 202247 // <generalisation>
+	relation 202247 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 202247 // <generalisation>
+	  b parent class_ref 183303 // ModalDialogAction
+      end
+
+      classrelation 202375 // cancelAction (<unidirectional association>)
+	relation 202375 --->
+	  a role_name "cancelAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 202375 // cancelAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      attribute 179335 "modelConnectorFactory"
+	private explicit_type "IModelConnectorFactory"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 202503 // okAction (<unidirectional association>)
+	relation 202503 --->
+	  a role_name "okAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 202503 // okAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      classrelation 202631 // viewDescriptor (<unidirectional association>)
+	relation 202631 --->
+	  a role_name "viewDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 202631 // viewDescriptor (<unidirectional association>)
+	  b parent class_ref 146439 // IViewDescriptor
+      end
+
+      operation 350215 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 350343 "setCancelAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "cancelAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the cancelAction.
+
+@param cancelAction
+           the cancelAction to set.
+"
+      end
+
+      operation 350471 "setModelConnectorFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "modelConnectorFactory" explicit_type "IModelConnectorFactory"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the modelConnectorFactory.
+
+@param modelConnectorFactory
+           the modelConnectorFactory to set.
+"
+      end
+
+      operation 350599 "setOkAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "okAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the okAction.
+
+@param okAction
+           the okAction to set.
+"
+      end
+
+      operation 350727 "setViewDescriptor"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "viewDescriptor" type class_ref 146439 // IViewDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the viewDescriptor.
+
+@param viewDescriptor
+           the viewDescriptor to set.
+"
+      end
+
+      operation 350855 "getModel"
+	protected explicit_return_type "Object"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the model.
+
+@param context
+           the action context.
+@return the model.
+"
+      end
+
+      operation 350983 "getViewDescriptor"
+	protected return_type class_ref 146439 // IViewDescriptor
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the viewDescriptor.
+
+@param context
+           the action context.
+@return the viewDescriptor.
+"
+      end
+    end
+
+    class 184199 "CancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A standard cancel action. Since it is a chained action, it can be chained
+with another action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 202887 // <generalisation>
+	relation 202887 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 202887 // <generalisation>
+	  b parent class_ref 180871 // AbstractSwingAction
+      end
+
+      operation 351239 "CancelAction"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>CancelAction</code> instance.
+"
+      end
+
+      operation 351367 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 184327 "DisplayStaticUrlAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple action to display an static Url content.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 203143 // <generalisation>
+	relation 203143 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 203143 // <generalisation>
+	  b parent class_ref 184455 // DisplayUrlAction
+      end
+
+      attribute 179591 "urlKey"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 351751 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 351879 "setUrlKey"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "urlKey" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the urlKey.
+
+@param urlKey
+           the urlKey to set.
+"
+      end
+    end
+
+    class 184455 "DisplayUrlAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple action to display an static Url content.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 969 $
+@author Vincent Vandenschrick
+"
+      classrelation 203015 // <generalisation>
+	relation 203015 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 203015 // <generalisation>
+	  b parent class_ref 180871 // AbstractSwingAction
+      end
+
+      attribute 179463 "baseUrl"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 351495 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 351623 "setBaseUrl"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "baseUrl" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the baseUrl.
+
+@param baseUrl
+           the baseUrl to set.
+"
+      end
+    end
+  end
+
+  deploymentview 137479 "std"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 172167 "ModalDialogAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Frame;
+import java.awt.Insets;
+import java.awt.Window;
+import java.util.List;
+import java.util.Map;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+import javax.swing.border.EmptyBorder;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
+import com.d2s.framework.util.swing.SwingUtil;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IDisplayableAction;
+${definition}"
+      associated_classes
+	class_ref 183303 // ModalDialogAction
+      end
+    end
+
+    artifact 172551 "OkAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
+${definition}"
+      associated_classes
+	class_ref 183687 // OkAction
+      end
+    end
+
+    artifact 172935 "EditComponentAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JComponent;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.model.IModelConnectorFactory;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IDisplayableAction;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 184071 // EditComponentAction
+      end
+    end
+
+    artifact 173191 "CancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
+${definition}"
+      associated_classes
+	class_ref 184199 // CancelAction
+      end
+    end
+
+    artifact 173319 "DisplayUrlAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.IOException;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.ActionException;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
+import com.d2s.framework.util.swing.BrowserControl;
+${definition}"
+      associated_classes
+	class_ref 184455 // DisplayUrlAction
+      end
+    end
+
+    artifact 173447 "DisplayStaticUrlAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 184327 // DisplayStaticUrlAction
+      end
+    end
+  end
+end

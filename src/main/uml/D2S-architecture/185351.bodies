@@ -1,0 +1,192 @@
+class DefaultWingsController
+!!!357255.java!!!	handleException(inout ex : Throwable, inout context : Map<String, Object>) : void
+
+    SComponent sourceComponent = controllerFrame;
+    if (ex instanceof SecurityException) {
+      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
+          .getMessage()), getTranslationProvider().getTranslation("error",
+          getLocale()), SOptionPane.ERROR_MESSAGE);
+    } else if (ex instanceof BusinessException) {
+      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .emphasis(((BusinessException) ex).getI18nMessage(
+              getTranslationProvider(), getLocale())), getTranslationProvider()
+          .getTranslation("error", getLocale()), SOptionPane.ERROR_MESSAGE);
+    } else if (ex instanceof ConcurrencyFailureException) {
+      SOptionPane.showMessageDialog(sourceComponent, HtmlHelper
+          .emphasis(getTranslationProvider().getTranslation(
+              "concurrency.error.description", getLocale())),
+          getTranslationProvider().getTranslation("error", getLocale()),
+          SOptionPane.ERROR_MESSAGE);
+    } else {
+      ex.printStackTrace();
+      SOptionPane.showMessageDialog(sourceComponent, String.valueOf(ex
+          .getMessage()), getTranslationProvider().getTranslation("error",
+          getLocale()), SOptionPane.ERROR_MESSAGE);
+      SErrorDialog dialog = SErrorDialog.createInstance(sourceComponent,
+          getTranslationProvider(), getLocale());
+      dialog.setMessageIcon(getIconFactory().getErrorIcon(
+          IIconFactory.MEDIUM_ICON_SIZE));
+      dialog.setTitle(getTranslationProvider().getTranslation("error",
+          getLocale()));
+      dialog.setMessage(HtmlHelper.emphasis(ex.getLocalizedMessage()));
+      dialog.setDetails(ex);
+      dialog.setVisible(true);
+    }
+!!!357383.java!!!	start(inout backendController : IBackendController, inout locale : Locale) : boolean
+
+    if (super.start(backendController, locale)) {
+      loginSuccess((Subject) SessionManager.getSession().getServletRequest()
+          .getSession().getAttribute("SUBJECT"));
+      displayControllerFrame();
+      return true;
+    }
+    return false;
+!!!357511.java!!!	stop() : boolean
+
+    if (super.stop()) {
+      controllerFrame.getSession().exit();
+      return true;
+    }
+    return false;
+!!!357639.java!!!	createLoginCallbackHandler() : CallbackHandler
+
+    return null;
+!!!357767.java!!!	displayModule(in moduleName : String) : void
+
+    if (moduleViews == null) {
+      moduleViews = new HashSet<String>();
+    }
+    if (!moduleViews.contains(moduleName)) {
+      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+          .getViewDescriptor();
+      IValueConnector moduleConnector = getBackendController()
+          .getModuleConnector(moduleName);
+      IView<SComponent> moduleView = createModuleView(moduleName,
+          moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
+      SContainer moduleInternalFrame = createInternalFrame(moduleView);
+      moduleViews.add(moduleName);
+      cardPanel.add(moduleInternalFrame, moduleName);
+      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
+    }
+    setSelectedModuleName(moduleName);
+    super.displayModule(moduleName);
+!!!357895.java!!!	setSelectedModuleName(in moduleName : String) : void
+
+    super.setSelectedModuleName(moduleName);
+    ((SCardLayout) cardPanel.getLayout()).show(moduleName);
+    updateFrameTitle();
+!!!358023.java!!!	createActionMenu(inout actionList : ActionList) : SMenu
+
+    SMenu menu = new SMenu(actionList.getI18nName(getTranslationProvider(),
+        getLocale()));
+    if (actionList.getDescription() != null) {
+      menu.setToolTipText(actionList.getI18nDescription(
+          getTranslationProvider(), getLocale())
+          + IActionFactory.TOOLTIP_ELLIPSIS);
+    }
+    menu.setIcon(getIconFactory().getIcon(actionList.getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
+    for (IDisplayableAction action : actionList.getActions()) {
+      menu.add(new SMenuItem(getViewFactory().getActionFactory().createAction(
+          action, this, menu, null, null, getLocale())));
+    }
+    return menu;
+!!!358151.java!!!	createActionMenus() : List<SMenu>
+
+    return createMenus(getActions());
+!!!358279.java!!!	createHelpActionMenus() : List<SMenu>
+
+    return createMenus(getHelpActions());
+!!!358407.java!!!	createMenus(inout actionMap : ActionMap) : List<SMenu>
+
+    List<SMenu> menus = new ArrayList<SMenu>();
+    if (actionMap != null) {
+      for (ActionList actionList : actionMap.getActionLists()) {
+        SMenu menu = createActionMenu(actionList);
+        menus.add(menu);
+      }
+    }
+    return menus;
+!!!358535.java!!!	createApplicationMenuBar() : SMenuBar
+
+    SMenuBar applicationMenuBar = new SMenuBar();
+    applicationMenuBar.add(createModulesMenu());
+    List<SMenu> actionMenus = createActionMenus();
+    if (actionMenus != null) {
+      for (SMenu actionMenu : actionMenus) {
+        applicationMenuBar.add(actionMenu);
+      }
+    }
+    List<SMenu> helpActionMenus = createHelpActionMenus();
+    if (helpActionMenus != null) {
+      for (SMenu helpActionMenu : helpActionMenus) {
+        // helpActionMenu.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
+        applicationMenuBar.add(helpActionMenu);
+      }
+    }
+    return applicationMenuBar;
+!!!358663.java!!!	createControllerFrame() : SFrame
+
+    SFrame frame = new SFrame();
+    cardPanel = new SPanel(new SCardLayout());
+    cardPanel.setPreferredSize(WingsUtil.FULLAREA);
+    SPanel contentPane = new SPanel(new SBorderLayout());
+    frame.setContentPane(contentPane);
+    frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
+    frame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
+    return frame;
+!!!358791.java!!!	createInternalFrame(inout view : IView) : SContainer
+
+    SInternalFrame internalFrame = new SInternalFrame();
+    internalFrame.setTitle(view.getDescriptor().getI18nName(
+        getTranslationProvider(), getLocale()));
+    internalFrame.setClosable(false);
+    internalFrame.setMaximizable(false);
+    internalFrame.setIconifyable(false);
+    internalFrame.setClosable(false);
+    internalFrame.getContentPane().setLayout(new SBorderLayout());
+    internalFrame.setIcon(getIconFactory().getIcon(
+        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+    SForm frameForm = new SForm();
+    frameForm.add(view.getPeer());
+    frameForm.setPreferredSize(WingsUtil.FULLAREA);
+    internalFrame.getContentPane().add(frameForm, SBorderLayout.CENTER);
+    internalFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
+    internalFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    return internalFrame;
+!!!358919.java!!!	createModulesMenu() : SMenu
+
+    SMenu modulesMenu = new SMenu(getTranslationProvider().getTranslation(
+        "modules", getLocale()));
+    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+        IIconFactory.SMALL_ICON_SIZE));
+    for (String moduleName : getModuleNames()) {
+      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+          .getViewDescriptor();
+      SMenuItem moduleMenuItem = new SMenuItem(new ModuleSelectionAction(
+          moduleName, moduleViewDescriptor));
+      modulesMenu.add(moduleMenuItem);
+    }
+    SMenuItem separator = new SMenuItem("---------");
+    separator.setBorder(new SLineBorder(1));
+    modulesMenu.add(separator);
+
+    modulesMenu.add(new SMenuItem(new QuitAction()));
+    return modulesMenu;
+!!!359047.java!!!	displayControllerFrame() : void
+
+    controllerFrame = createControllerFrame();
+    updateFrameTitle();
+    controllerFrame.setVisible(true);
+!!!359175.java!!!	updateFrameTitle() : void
+
+    String moduleName = getSelectedModuleName();
+    if (moduleName != null) {
+      controllerFrame.setTitle(getModule(getSelectedModuleName())
+          .getViewDescriptor().getI18nDescription(getTranslationProvider(),
+              getLocale())
+          + " - " + getI18nName(getTranslationProvider(), getLocale()));
+    } else {
+      controllerFrame.setTitle(getI18nName(getTranslationProvider(),
+          getLocale()));
+    }

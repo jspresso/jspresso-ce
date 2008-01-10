@@ -1,0 +1,4 @@
+class LdapConstants
+!!!411015.java!!!	LdapConstants()
+
+    // Empty constructor for utility class

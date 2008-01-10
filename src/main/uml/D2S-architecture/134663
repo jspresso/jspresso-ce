@@ -1,0 +1,1097 @@
+format 48
+"model" // com::d2s::framework::application::model
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/model"
+  java_package "com.d2s.framework.application.model"
+  classview 134407 "model"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 159239 "Module"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A module is a central element in the application architecture. It serves as
+an entry point on the domain model. Modules are organized as a tree structure
+since they can (optionally) provide modules. A module can be seen as a window
+on the business grouping processes forming a business activity (like master
+data management, customer contract handling, ...). Each module can
+(optionally) provide a projected object serving as model root for trigerring
+grouped processes.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 157063 "description"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 157191 "grantedRoles"
+	private explicit_type "String"
+	stereotype "Collection"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 157319 "i18nDescription"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 157447 "i18nName"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 157575 "iconImageURL"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 157703 "name"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 157831 "startupAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 157959 "iconImageURLProvider"
+	private explicit_type "IIconImageURLProvider"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 178055 // viewDescriptor (<unidirectional association>)
+	relation 178055 --->
+	  a role_name "viewDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 178055 // viewDescriptor (<unidirectional association>)
+	  b parent class_ref 146439 // IViewDescriptor
+      end
+
+      classrelation 178183 // subModules (<unidirectional association>)
+	relation 178183 --->
+	  stereotype "List"
+	  a role_name "subModules" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 178183 // subModules (<unidirectional association>)
+	  b parent class_ref 163591 // SubModule
+      end
+
+      operation 269703 "setIconImageURLProvider"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "iconImageURLProvider" explicit_type "IIconImageURLProvider"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the iconImageURLProvider.
+
+@param iconImageURLProvider
+           the iconImageURLProvider to set.
+"
+      end
+
+      operation 269831 "getStartupAction"
+	public explicit_return_type "IAction"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the startupAction.
+
+@return the startupAction.
+"
+      end
+
+      operation 269959 "setStartupAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "startupAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the startupAction.
+
+@param startupAction
+           the startupAction to set.
+"
+      end
+
+      operation 270087 "getViewDescriptor"
+	public return_type class_ref 146439 // IViewDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the module view descriptor. Whenever the view descriptor has not been
+set, a default one is generated.
+
+@return the viewDescriptor.
+"
+      end
+
+      operation 270215 "addSubModule"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "child" type class_ref 163591 // SubModule
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Adds a child module.
+
+@param child
+           the child module to add. It will fire a \"subModules\" property
+           change event.
+@return <code>true</code> if the module was succesfully added.
+"
+      end
+
+      operation 270343 "addSubModules"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "subModulesToAdd" explicit_type "Collection<? extends SubModule>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Adds a subModules module collection. It will fire a \"subModules\" property
+change event.
+
+@param subModulesToAdd
+           the subModules modules to add.
+@return <code>true</code> if the subModules module collection was
+        succesfully added.
+"
+      end
+
+      operation 270471 "equals"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "obj" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Equality based on name.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 270599 "getDescription"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the module's description. It may serve for the module's view.
+
+@return the module's description.
+"
+      end
+
+      operation 270727 "getGrantedRoles"
+	public explicit_return_type "Collection<String>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the grantedRoles.
+
+@return the grantedRoles.
+"
+      end
+
+      operation 270855 "getI18nDescription"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the i18nDescription.
+
+@return the i18nDescription.
+"
+      end
+
+      operation 270983 "getI18nName"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the i18nName.
+
+@return the i18nName.
+"
+      end
+
+      operation 271111 "getIconImageURL"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the iconImageURL.
+
+@return the iconImageURL.
+"
+      end
+
+      operation 271239 "getName"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the module's name. It may serve for the module's view.
+
+@return the module's name.
+"
+      end
+
+      operation 271367 "getSubModules"
+	public return_type class_ref 163591 // SubModule
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the subModules modules.
+
+@return the list of subModules modules.
+"
+      end
+
+      operation 271495 "hashCode"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Hash code based on name.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 271623 "removeSubModule"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "subModule" type class_ref 163591 // SubModule
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Removes a child module. It will fire a \"subModules\" property change event.
+
+@param subModule
+           the child module to remove.
+@return <code>true</code> if the module was succesfully removed.
+"
+      end
+
+      operation 271751 "removeSubModules"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "childrenToRemove" explicit_type "Collection<SubModule>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Removes a subModules module collection. It will fire a \"subModules\"
+property change event.
+
+@param childrenToRemove
+           the subModules modules to remove.
+@return <code>true</code> if the subModules module collection was
+        succesfully removed.
+"
+      end
+
+      operation 271879 "setDescription"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "description" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the module's description. It may serve for the module's view.
+
+@param description
+           the module's description.
+"
+      end
+
+      operation 272007 "setGrantedRoles"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "grantedRoles" explicit_type "Collection<String>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the grantedRoles.
+
+@param grantedRoles
+           the grantedRoles to set.
+"
+      end
+
+      operation 272135 "setI18nDescription"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "i18nDescription" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the i18nDescription.
+
+@param i18nDescription
+           the i18nDescription to set.
+"
+      end
+
+      operation 272263 "setI18nName"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "i18nName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the i18nName.
+
+@param i18nName
+           the i18nName to set.
+"
+      end
+
+      operation 272391 "setIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "iconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the iconImageURL.
+
+@param iconImageURL
+           the iconImageURL to set.
+"
+      end
+
+      operation 272519 "setName"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "name" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the module's name. It may serve for the module's view.
+
+@param name
+           the module's name.
+"
+      end
+
+      operation 272647 "setSubModules"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "subModules" explicit_type "List<SubModule>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the subModules modules. It will fire a \"subModules\" property change
+event.
+
+@param subModules
+           the subModules modules to set.
+"
+      end
+
+      operation 272775 "toString"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+based on name.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 272903 "updateParentsAndFireSubModulesChanged"
+	protected explicit_return_type "void"
+	nparams 2
+	  param inout name "oldChildren" explicit_type "List<SubModule>"
+	  param inout name "newChildren" explicit_type "List<SubModule>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This method will set the parent module to the new subModules modules and
+remove the parent of the old removed subModules modules. It will fire the
+\"subModules\" property change event.
+
+@param oldChildren
+           the old subModules collection property.
+@param newChildren
+           the new subModules collection property.
+"
+      end
+    end
+
+    class 163463 "BeanCollectionModule"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A bean collection module is a module dealing with a collection of beans.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 178695 // <generalisation>
+	relation 178695 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 178695 // <generalisation>
+	  b parent class_ref 163591 // SubModule
+      end
+
+      classrelation 178823 // elementViewDescriptor (<unidirectional association>)
+	relation 178823 --->
+	  a role_name "elementViewDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 178823 // elementViewDescriptor (<unidirectional association>)
+	  b parent class_ref 146439 // IViewDescriptor
+      end
+
+      attribute 158087 "moduleObjects"
+	private explicit_type "?"
+	stereotype "Collection"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 273543 "equals"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "obj" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Equality based on projected object.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 273671 "getElementViewDescriptor"
+	public return_type class_ref 146439 // IViewDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the elementViewDescriptor.
+
+@return the elementViewDescriptor.
+"
+      end
+
+      operation 273799 "getModuleObjects"
+	public explicit_return_type "Collection<?>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the module's projected objects.
+
+@return the projected objects.
+"
+      end
+
+      operation 273927 "hashCode"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Hash code based on projected object.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 274055 "setElementViewDescriptor"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "elementViewDescriptor" type class_ref 146439 // IViewDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the elementViewDescriptor.
+
+@param elementViewDescriptor
+           the elementViewDescriptor to set.
+"
+      end
+
+      operation 274183 "setModuleObjects"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "moduleObjects" explicit_type "Collection<?>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the module's projected object collection.
+
+@param moduleObjects
+           the projected object collection.
+"
+      end
+    end
+
+    class 163591 "SubModule"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A child module is a non-root module (it has a parent). A child module uses a
+view to render its projected artifact.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 178311 // <generalisation>
+	relation 178311 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 178311 // <generalisation>
+	  b parent class_ref 159239 // Module
+      end
+
+      classrelation 178439 // parent (<unidirectional association>)
+	relation 178439 --->
+	  a role_name "parent" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 178439 // parent (<unidirectional association>)
+	  b parent class_ref 159239 // Module
+      end
+
+      classrelation 178567 // projectedViewDescriptor (<unidirectional association>)
+	relation 178567 --->
+	  a role_name "projectedViewDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 178567 // projectedViewDescriptor (<unidirectional association>)
+	  b parent class_ref 146439 // IViewDescriptor
+      end
+
+      operation 273031 "getParent"
+	public return_type class_ref 159239 // Module
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the module's parent module.
+
+@return the parent module or null if none.
+"
+      end
+
+      operation 273159 "getProjectedViewDescriptor"
+	public return_type class_ref 146439 // IViewDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the projectedViewDescriptor.
+
+@return the projectedViewDescriptor.
+"
+      end
+
+      operation 273287 "setParent"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "parent" type class_ref 159239 // Module
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the parent module. It will fire a \"parent\" property change event.
+
+@param parent
+           the parent module to set or null if none.
+"
+      end
+
+      operation 273415 "setProjectedViewDescriptor"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "projectedViewDescriptor" type class_ref 146439 // IViewDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the projectedViewDescriptor.
+
+@param projectedViewDescriptor
+           the projectedViewDescriptor to set.
+"
+      end
+    end
+
+    class 163847 "BeanModule"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A bean module is the base class of bean related modules.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 178951 // <generalisation>
+	relation 178951 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 178951 // <generalisation>
+	  b parent class_ref 163591 // SubModule
+      end
+
+      attribute 158215 "moduleObject"
+	private explicit_type "Object"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 274311 "equals"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "obj" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Equality based on projected object.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 274439 "getModuleObject"
+	public explicit_return_type "Object"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the module's projected object.
+
+@return the projected object.
+"
+      end
+
+      operation 274567 "hashCode"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Hash code based on projected object.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 274695 "propertyChange"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "evt" explicit_type "PropertyChangeEvent"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 274823 "setModuleObject"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "moduleObject" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the module's projected object.
+
+@param moduleObject
+           the projected object.
+"
+      end
+    end
+  end
+
+  deploymentview 135303 "model"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 160775 "Module"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.application.view.descriptor.basic.BasicModuleDescriptor;
+import com.d2s.framework.security.ISecurable;
+import com.d2s.framework.util.IIconImageURLProvider;
+import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 159239 // Module
+      end
+    end
+
+    artifact 160903 "SubModule"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 163591 // SubModule
+      end
+    end
+
+    artifact 161031 "BeanCollectionModule"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Collection;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 163463 // BeanCollectionModule
+      end
+    end
+
+    artifact 161159 "BeanModule"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
+${definition}"
+      associated_classes
+	class_ref 163847 // BeanModule
+      end
+    end
+  end
+
+  package_ref 136199 // descriptor
+end

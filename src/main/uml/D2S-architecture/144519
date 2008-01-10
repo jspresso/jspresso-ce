@@ -1,0 +1,468 @@
+format 48
+"accessor" // com::d2s::framework::util::accessor
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/util/accessor"
+  java_package "com.d2s.framework.util.accessor"
+  classview 143111 "accessor"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 196231 "IAccessor"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface is implemented by any bean value accessor.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      operation 385031 "getValue"
+	package explicit_return_type "Object"
+	nparams 1
+	  param inout name "target" explicit_type "Object"
+	nexceptions 3
+	  explicit_exception "IllegalAccessException"
+	  explicit_exception "InvocationTargetException"
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the value from the target of this accessor.
+
+@param target
+           the target from which to get the value.
+@return the value obtained.
+@throws NoSuchMethodException
+            if a matching method is not found.
+@throws InvocationTargetException
+            if the underlying method throws an exception.
+@throws IllegalAccessException
+            if this <code>Method</code> object enforces Java language
+            access control and the underlying method is inaccessible.
+"
+      end
+
+      operation 385159 "isWritable"
+	package explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the writability of this accessor .
+
+@return true if this accessor has a mutator.
+"
+      end
+
+      operation 385287 "setValue"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "target" explicit_type "Object"
+	  param inout name "value" explicit_type "Object"
+	nexceptions 3
+	  explicit_exception "IllegalAccessException"
+	  explicit_exception "InvocationTargetException"
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the value on the target of this accessor.
+
+@param target
+           the target on which to set the value.
+@param value
+           the value to set.
+@throws InvocationTargetException
+            if the underlying method throws an exception.
+@throws IllegalAccessException
+            if this <code>Method</code> object enforces Java language
+            access control and the underlying method is inaccessible.
+@throws NoSuchMethodException
+            if a matching method is not found.
+"
+      end
+    end
+
+    class 196359 "IAccessorFactory"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface specify the contract of property accessor factories.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      operation 385415 "createCollectionPropertyAccessor"
+	package return_type class_ref 196487 // ICollectionAccessor
+	nparams 3
+	  param in name "property" explicit_type "String"
+	  param inout name "beanClass" explicit_type "Class<?>"
+	  param inout name "elementClass" explicit_type "Class<?>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new java bean collection property accessor.
+
+@param property
+           the property to be accessed.
+@param beanClass
+           the java bean class.
+@param elementClass
+           the collection element class.
+@return the collection property accessor.
+"
+      end
+
+      operation 385543 "createPropertyAccessor"
+	package return_type class_ref 196231 // IAccessor
+	nparams 2
+	  param in name "property" explicit_type "String"
+	  param inout name "beanClass" explicit_type "Class<?>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new java bean property accessor .
+
+@param property
+           the property to be accessed.
+@param beanClass
+           the java bean class.
+@return the property accessor.
+"
+      end
+    end
+
+    class 196487 "ICollectionAccessor"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface is implemented by any bean value accessor on a collection
+property.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 215559 // <generalisation>
+	relation 215559 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 215559 // <generalisation>
+	  b parent class_ref 196231 // IAccessor
+      end
+
+      operation 385671 "addToValue"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "target" explicit_type "Object"
+	  param inout name "value" explicit_type "Object"
+	nexceptions 3
+	  explicit_exception "IllegalAccessException"
+	  explicit_exception "InvocationTargetException"
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Adds the value to the bean property of this accessor.
+
+@param target
+           the target on which to add the value.
+@param value
+           the value to add.
+@throws IllegalAccessException
+            if the underlying method throws an exception.
+@throws InvocationTargetException
+            if this <code>Method</code> object enforces Java language
+            access control and the underlying method is inaccessible.
+@throws NoSuchMethodException
+            if a matching method is not found.
+"
+      end
+
+      operation 385799 "getValue"
+	package explicit_return_type "Collection<?>"
+	nparams 1
+	  param inout name "target" explicit_type "Object"
+	nexceptions 3
+	  explicit_exception "IllegalAccessException"
+	  explicit_exception "InvocationTargetException"
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Return type refined.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 385927 "removeFromValue"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "target" explicit_type "Object"
+	  param inout name "value" explicit_type "Object"
+	nexceptions 3
+	  explicit_exception "IllegalAccessException"
+	  explicit_exception "InvocationTargetException"
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Removes the value from the bean property of this accessor.
+
+@param target
+           the target on which to remove the value.
+@param value
+           the value to remove.
+@throws IllegalAccessException
+            if the underlying method throws an exception.
+@throws InvocationTargetException
+            if this <code>Method</code> object enforces Java language
+            access control and the underlying method is inaccessible.
+@throws NoSuchMethodException
+            if a matching method is not found.
+"
+      end
+    end
+
+    class 196615 "IListAccessor"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface is implemented by any bean value accessor on a list property.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 215687 // <generalisation>
+	relation 215687 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 215687 // <generalisation>
+	  b parent class_ref 196487 // ICollectionAccessor
+      end
+
+      operation 386055 "addToValue"
+	package explicit_return_type "void"
+	nparams 3
+	  param inout name "target" explicit_type "Object"
+	  param in name "index" explicit_type "int"
+	  param inout name "value" explicit_type "Object"
+	nexceptions 3
+	  explicit_exception "IllegalAccessException"
+	  explicit_exception "InvocationTargetException"
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Adds the value to the bean property of this accessor.
+
+@param target
+           the target on which to add the value.
+@param index
+           index at which the specified element is to be inserted.
+@param value
+           the value to add.
+@throws IllegalAccessException
+            if the underlying method throws an exception.
+@throws InvocationTargetException
+            if this <code>Method</code> object enforces Java language
+            access control and the underlying method is inaccessible.
+@throws NoSuchMethodException
+            if a matching method is not found.
+"
+      end
+
+      operation 386183 "getValue"
+	package explicit_return_type "List<?>"
+	nparams 1
+	  param inout name "target" explicit_type "Object"
+	nexceptions 3
+	  explicit_exception "IllegalAccessException"
+	  explicit_exception "InvocationTargetException"
+	  explicit_exception "NoSuchMethodException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Return type refined.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+  end
+
+  deploymentview 142471 "accessor"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 182535 "IAccessor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationTargetException;
+${definition}"
+      associated_classes
+	class_ref 196231 // IAccessor
+      end
+    end
+
+    artifact 182663 "IAccessorFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 196359 // IAccessorFactory
+      end
+    end
+
+    artifact 182791 "ICollectionAccessor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+${definition}"
+      associated_classes
+	class_ref 196487 // ICollectionAccessor
+      end
+    end
+
+    artifact 182919 "IListAccessor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+${definition}"
+      associated_classes
+	class_ref 196615 // IListAccessor
+      end
+    end
+  end
+
+  package_ref 144647 // bean
+
+  package_ref 144775 // map
+end

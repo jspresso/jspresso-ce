@@ -1,0 +1,39 @@
+class HeaderActionHandler
+!!!339975.java!!!	actionPerformed(inout e : ActionEvent) : void
+
+      ULCTableColumn viewColumn = (ULCTableColumn) e.getSource();
+      if (viewColumn != null) {
+        int status = getSortingStatus(viewColumn.getModelIndex());
+
+        if ((e.getModifiers() & ActionEvent.CTRL_MASK) == 0) {
+          cancelSorting();
+        }
+
+        // Cycle the sorting states through {NOT_SORTED, ASCENDING, DESCENDING}
+        // or
+        // {NOT_SORTED, DESCENDING, ASCENDING} depending on whether shift is
+        // pressed.
+
+        if (((e.getModifiers() & ActionEvent.SHIFT_MASK) != 0)) {
+          status -= 1;
+        } else {
+          status += 1;
+        }
+
+        status = (status + 4) % 3 - 1; // signed mod, returning {-1, 0, 1}
+        setSortingStatus(viewColumn.getModelIndex(), status);
+        if (status != 0) {
+          ITableCellRenderer headerRenderer = viewColumn.getHeaderRenderer();
+          if (!(headerRenderer instanceof SortableHeaderRenderer)) {
+            headerRenderer = new SortableHeaderRenderer(viewColumn
+                .getModelIndex());
+          }
+          // used to refresh the client side :(
+          viewColumn.setHeaderRenderer(headerRenderer);
+          sortedColumnsBuffer.add(viewColumn);
+        } else {
+          viewColumn.setHeaderRenderer(null);
+          sortedColumnsBuffer.remove(viewColumn);
+        }
+        tableHeader.repaint();
+      }

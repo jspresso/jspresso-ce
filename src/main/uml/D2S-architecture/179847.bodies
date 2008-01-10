@@ -1,0 +1,71 @@
+class UlcActionFactory
+!!!340743.java!!!	createAction(inout action : IDisplayableAction, inout actionHandler : IActionHandler, inout view : IView, inout locale : Locale) : IAction
+
+    return createAction(action, actionHandler, view.getPeer(), view
+        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
+!!!340871.java!!!	createAction(inout action : IDisplayableAction, inout actionHandler : IActionHandler, inout sourceComponent : ULCComponent, inout modelDescriptor : IModelDescriptor, inout viewConnector : IValueConnector, inout locale : Locale) : IAction
+
+    IAction ulcAction = new ActionAdapter(action, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector, locale);
+    if (action.getActionabilityGates() != null) {
+      Collection<IGate> clonedGates = new HashSet<IGate>();
+      for (IGate gate : action.getActionabilityGates()) {
+        final IGate clonedGate = gate.clone();
+        if (clonedGate instanceof IModelGate) {
+          if (modelDescriptor instanceof IComponentDescriptorProvider) {
+            ((IModelGate) clonedGate)
+                .setModelProvider(new EmbeddedModelProvider(
+                    (IComponentDescriptorProvider<?>) modelDescriptor));
+            viewConnector
+                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                  public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                    ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                        .getModelProvider()).setModel(evt.getNewValue());
+                  }
+                });
+          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
+            IRelationshipEndPropertyDescriptor reverseDescriptor = ((ICollectionPropertyDescriptor<?>) modelDescriptor)
+                .getReverseRelationEnd();
+            if (reverseDescriptor instanceof IComponentDescriptorProvider) {
+              ((IModelGate) clonedGate)
+                  .setModelProvider(new EmbeddedModelProvider(
+                      (IComponentDescriptorProvider<?>) reverseDescriptor));
+            } else if (reverseDescriptor instanceof ICollectionDescriptorProvider) {
+              ((IModelGate) clonedGate)
+                  .setModelProvider(new EmbeddedModelProvider(
+                      ((ICollectionDescriptorProvider<?>) reverseDescriptor)
+                          .getCollectionDescriptor().getElementDescriptor()));
+            }
+            final ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) viewConnector)
+                .getCollectionConnector();
+            collectionConnector
+                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                  public void connectorValueChange(@SuppressWarnings("unused")
+                  ConnectorValueChangeEvent evt) {
+                    if (collectionConnector.getModelConnector() != null) {
+                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                          .getModelProvider())
+                          .setModel(((IModelValueConnector) collectionConnector
+                              .getModelConnector()).getModelProvider()
+                              .getModel());
+                    } else {
+                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                          .getModelProvider()).setModel(null);
+                    }
+                  }
+                });
+          }
+        }
+        clonedGates.add(clonedGate);
+      }
+      new GatesListener(ulcAction, clonedGates);
+    }
+    return ulcAction;
+!!!340999.java!!!	setIconFactory(inout iconFactory : IIconFactory) : void
+
+    this.iconFactory = iconFactory;
+!!!341127.java!!!	setTranslationProvider(inout translationProvider : ITranslationProvider) : void
+
+    this.translationProvider = translationProvider;

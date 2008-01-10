@@ -1,0 +1,21 @@
+class AddMapToMasterAction
+!!!233735.java!!!	getBeanAccessorFactory(inout context : Map<String, Object>) : IAccessorFactory
+
+    return getController(context).getMapAccessorFactory();
+!!!233863.java!!!	getAddedComponents(inout context : Map<String, Object>) : List<?>
+
+    IComponentDescriptor componentDescriptor = getModelDescriptor(context)
+        .getCollectionDescriptor().getElementDescriptor();
+    Map<String, Object> newMap = new ObjectEqualityMap<String, Object>();
+    if (componentDescriptor.getLifecycleInterceptors() != null) {
+      List<ILifecycleInterceptor> interceptors = componentDescriptor
+          .getLifecycleInterceptors();
+      if (interceptors != null) {
+        for (ILifecycleInterceptor<Map<String, Object>> interceptor : interceptors) {
+          interceptor.onCreate(newMap, getEntityFactory(context),
+              getApplicationSession(context).getPrincipal(),
+              getApplicationSession(context));
+        }
+      }
+    }
+    return Collections.singletonList(newMap);
