@@ -16,8 +16,8 @@ import javax.naming.directory.ModificationItem;
 
 import org.jboss.security.Base64Encoder;
 import org.springframework.dao.DataAccessException;
-import org.springframework.ldap.LdapTemplate;
-import org.springframework.ldap.support.DirContextSource;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.core.support.DirContextSource;
 
 import com.d2s.framework.action.ActionBusinessException;
 import com.d2s.framework.action.ActionException;
@@ -70,7 +70,7 @@ public class LdapChangePasswordAction extends AbstractChangePasswordAction {
 
     DirContextSource contextSource = new DirContextSource();
     contextSource.setUrl(ldapUrl);
-    contextSource.setUserName(userDn);
+    contextSource.setUserDn(userDn);
     contextSource.setPassword(new String(currentPassword));
     LdapTemplate ldapTemplate = new LdapTemplate(contextSource);
     try {

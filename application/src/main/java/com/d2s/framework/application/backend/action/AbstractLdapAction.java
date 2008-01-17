@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.application.backend.action;
 
-import org.springframework.ldap.LdapTemplate;
+import org.springframework.ldap.core.LdapTemplate;
 
 /**
  * Root class of ldap actions.

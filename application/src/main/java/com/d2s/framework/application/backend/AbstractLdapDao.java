@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.application.backend;
 
-import org.springframework.ldap.LdapTemplate;
+import org.springframework.ldap.core.LdapTemplate;
 
 /**
  * A dao used to access ldap to retreive objects.

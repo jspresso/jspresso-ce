@@ -83,7 +83,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jcommon/1.0.0/jcommon-1.0.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jfreechart/1.0.1/jfreechart-1.0.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jedit/jedit-syntax/1.0/jedit-syntax-1.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring-ldap/1.1.2/spring-ldap-1.1.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/ldap/spring-ldap/1.2.1/spring-ldap-1.2.1.jar" sourcepath="/ENVDEV/spring-ldap-1.2.1/dist/spring-ldap-src-1.2.1.zip"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-client/6.0.5/ulc-servlet-client-6.0.5.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jrexx/jrexx/1.1.1/jrexx-1.1.1.jar"/>
@@ -92,7 +92,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-core/2.0/aspectwerkz-core-2.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ulc/ulc-jnlp-client/6.0.5/ulc-jnlp-client-6.0.5.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring/2.0.6/spring-2.0.6.jar" sourcepath="/ENVDEV/spring-framework-2.0.6/src"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring/2.5.1/spring-2.5.1.jar" sourcepath="/ENVDEV/spring-framework-2.5.1/src"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/opensymphony/oscache/2.1/oscache-2.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-jdk5/2.0/aspectwerkz-jdk5-2.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" sourcepath="/ENVDEV/jboss-4.0.4.GA/src/security/src/main"/>

@@ -50,6 +50,10 @@
       <id>snapshots</id>
       <url>http://people.apache.org/repo/m2-snapshot-repository</url>
     </pluginRepository>
+    <pluginRepository>
+      <id>codehaus</id>
+      <url>http://snapshots.repository.codehaus.org/org/codehaus/mojo</url>
+    </pluginRepository>
   </pluginRepositories>
   <modules>
     <module>aop</module>
@@ -247,12 +251,22 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring</artifactId>
-        <version>2.0.6</version>
+        <version>2.5.1</version>
       </dependency>
       <dependency>
-        <groupId>org.springframework</groupId>
+        <groupId>org.springframework.ldap</groupId>
         <artifactId>spring-ldap</artifactId>
-        <version>1.1.2</version>
+        <version>1.2.1</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>com.sun</groupId>
@@ -617,23 +631,72 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-<!--
-        <executions>
+        <!--
+          <executions>
           <execution>
-            <phase>install</phase>
-            <goals>
-              <goal>assembly</goal>
-            </goals>
+          <phase>install</phase>
+          <goals>
+          <goal>assembly</goal>
+          </goals>
           </execution>
-        </executions>
- -->
+          </executions>
+        -->
         <configuration>
           <descriptors>
             <descriptor>src/main/assembly/dist-bin.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>
-     </plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>maven-springbeandoc-plugin</artifactId>
+        <version>1.0.8-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>springbeandoc</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <!-- Any number of directories with Spring context files -->
+          <!-- 
+          <sourceDirectories>
+            <sourceDirectory></sourceDirectory>
+          </sourceDirectories>
+          -->
+           <!-- Include patterns -->
+          <!--
+          <includes>
+            <include>**/*-context.xml</include>
+            <include>**/*-spring.xml</include>
+          </includes>
+           -->
+           <!-- xml file or directory containing xml files -->
+          <resources>
+            <resource>classpath:/com/d2s/framework/application/**/*.xml</resource>
+          </resources>
+          <!-- html title (optional) -->
+          <title>${project.name} ${project.version} Bean docs</title>
+          <!-- optional stylesheet to use -->
+          <!-- <cssUrl>stylesheet.css</cssUrl> -->
+          <!-- location of api docs (optional) -->
+          <javadocLocations>
+            <javadocLocation>
+              <packagename>org.codehaus.mojo.springbeans</packagename>
+              <location>${project.build.directory}/site/apidocs</location>
+            </javadocLocation>
+          </javadocLocations>
+          <!-- location of exe for image generation (alias graphViz) -->
+          <executable>C:/envdev/Graphviz/bin/dot.exe</executable>
+          <!-- Graph output types. Default is png. Use png, jpg, gif, svg. -->
+          <graphsOutputType>png</graphsOutputType>
+          <!-- you can have the XML parser not bother to validate the input files against the DTD if you so wish. True by default. -->
+          <validate>false</validate>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
   <reporting>
     <plugins>
