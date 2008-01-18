@@ -9,7 +9,7 @@
   </parent>
   <artifactId>d2s-aop</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - AOP</name>
+  <name>AOP</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>

@@ -10,7 +10,7 @@
   </parent>
   <artifactId>d2s-wings</artifactId>
   <packaging>pom</packaging>
-  <name>Design2See Application Framework - Wings</name>
+  <name>Wings</name>
   <modules>
     <module>application</module>
     <module>components</module>

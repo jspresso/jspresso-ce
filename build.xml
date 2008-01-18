@@ -23,6 +23,9 @@
 	          value="${doc.reference.target.dir}/pdf" />
 	<property name="html.xsl" value="${preprocessed.reference.target.dir}/xsl/html.xsl" />
 	<property name="fo.xsl" value="${preprocessed.reference.target.dir}/xsl/fo.xsl" />
+  
+  <property name="beandoc.lib" value="${beandoc.home}/lib" />
+  <property name="beandoc.output.dir" value="${basedir}/target/site/beandoc" />
 
 	<path id="xcluder.classpath">
 		<fileset dir="${xcluder.home}">
@@ -43,7 +46,13 @@
 		</fileset>
 	</path>
 
-	<taskdef name="xclude" classname="gr.abiss.xcluder.XercesXcluder">
+  <path id="beandoc-classpath">
+    <fileset dir="${beandoc.lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <taskdef name="xclude" classname="gr.abiss.xcluder.XercesXcluder">
 		<classpath refid="xcluder.classpath" />
 	</taskdef>
 
@@ -59,7 +68,12 @@
 		</classpath>
 	</taskdef>
 
-	<target name="clean" description="Cleans up generated files.">
+  <taskdef 
+      name="beandoc"
+      classname="org.springframework.beandoc.client.AntTask"
+      classpathref="beandoc-classpath"/>
+
+  <target name="clean" description="Cleans up generated files.">
 		<delete dir="${doc.reference.target.dir}" />
 	</target>
 
@@ -181,7 +195,29 @@
 
 	<target name="doc" depends="clean,build-html,build-fo,build-pdf" />
 
-	<target name="test">
+  <target name="beandoc">
+    <delete dir="${beandoc.output.dir}"/>
+    <mkdir dir="${beandoc.output.dir}"/>
+    <mkdir dir="${beandoc.output.dir}/tmp"/>
+    <copy todir="${beandoc.output.dir}/tmp" flatten="true">
+      <fileset dir="${basedir}/app-template/src/main/resources">
+        <include name="**/commons.xml"/>
+        <include name="**/commons-hibernate.xml"/>
+        <include name="**/commons-frontend.xml"/>
+        <include name="**/commons-swing.xml"/>
+      </fileset>
+    </copy>
+    <beandoc  
+      outputDir="${beandoc.output.dir}"
+      beandocProps="${basedir}/d2s-beandoc.properties">
+      <fileset dir="${beandoc.output.dir}/tmp">
+        <include name="**/*.xml"/>
+      </fileset>
+    </beandoc>
+    <delete dir="${beandoc.output.dir}/tmp"/>
+  </target>
+
+  <target name="test">
 		<delete>
 			<fileset dir="${preprocessed.reference.target.dir}/xsl" includes="**/*.xsl" />
 		</delete>

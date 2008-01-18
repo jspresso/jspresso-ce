@@ -9,7 +9,7 @@
   </parent>
   <artifactId>d2s-app-launch</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - App-launch</name>
+  <name>App-launch</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>

@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>d2s-swing-application</artifactId>
 	<packaging>jar</packaging>
-	<name>Design2See Application Framework - Swing - Application</name>
+	<name>Swing - Application</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.design2see</groupId>

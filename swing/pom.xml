@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>d2s-swing</artifactId>
 	<packaging>pom</packaging>
-	<name>Design2See Application Framework - Swing</name>
+	<name>Swing</name>
 	<modules>
 		<module>application</module>
 		<module>components</module>

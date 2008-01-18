@@ -9,7 +9,7 @@
   </parent>
   <artifactId>d2s-jasper</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - JasperReports</name>
+  <name>JasperReports</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>

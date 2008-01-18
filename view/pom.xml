@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>d2s-view</artifactId>
 	<packaging>jar</packaging>
-	<name>Design2See Application Framework - View</name>
+	<name>View</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.design2see</groupId>

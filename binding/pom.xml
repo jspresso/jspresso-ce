@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>d2s-binding</artifactId>
 	<packaging>jar</packaging>
-	<name>Design2See Application Framework - Binding</name>
+	<name>Binding</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.design2see</groupId>

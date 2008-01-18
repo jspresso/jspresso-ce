@@ -25,6 +25,7 @@
       <outputDirectory>doc</outputDirectory>
       <includes>
         <include>apidocs/**</include>
+        <include>beandocs/**</include>
       </includes>
     </fileSet>
     <fileSet>

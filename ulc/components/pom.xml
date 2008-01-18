@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>d2s-ulc-components</artifactId>
 	<packaging>pom</packaging>
-	<name>Design2See Application Framework - ULC - Components</name>
+	<name>ULC - Components</name>
 	<modules>
 		<module>client</module>
 		<module>server</module>

@@ -11,7 +11,7 @@
   </parent>
   <artifactId>d2s-swing-components</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - Swing - Components</name>
+  <name>Swing - Components</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>

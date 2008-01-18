@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>d2s-ulc-application</artifactId>
 	<packaging>jar</packaging>
-	<name>Design2See Application Framework - ULC - Application</name>
+	<name>ULC - Application</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.design2see</groupId>

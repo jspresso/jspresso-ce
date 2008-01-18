@@ -10,7 +10,7 @@
   </parent>
   <artifactId>d2s-wings-application</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - Wings - Application</name>
+  <name>Wings - Application</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>

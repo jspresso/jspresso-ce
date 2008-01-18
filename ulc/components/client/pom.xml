@@ -9,7 +9,7 @@
   </parent>
   <artifactId>d2s-ulc-components-client</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - ULC - Components - Client</name>
+  <name>ULC - Components - Client</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>

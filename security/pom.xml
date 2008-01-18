@@ -9,7 +9,7 @@
   </parent>
   <artifactId>d2s-security</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - Security</name>
+  <name>Security</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>

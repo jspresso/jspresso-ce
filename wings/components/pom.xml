@@ -9,7 +9,7 @@
   </parent>
   <artifactId>d2s-wings-components</artifactId>
   <packaging>jar</packaging>
-  <name>Design2See Application Framework - Wings - Components</name>
+  <name>Wings - Components</name>
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>

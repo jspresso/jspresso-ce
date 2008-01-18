@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>d2s-util</artifactId>
 	<packaging>jar</packaging>
-	<name>Design2See Application Framework - Util</name>
+	<name>Util</name>
 	<dependencies>
 		<dependency>
 			<groupId>commons-lang</groupId>

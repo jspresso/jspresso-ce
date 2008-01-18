@@ -10,7 +10,7 @@
 	</parent>
 	<artifactId>d2s-model</artifactId>
 	<packaging>jar</packaging>
-	<name>Design2See Application Framework - Model</name>
+	<name>Model</name>
 	<dependencies>
 		<dependency>
 			<groupId>com.design2see</groupId>
