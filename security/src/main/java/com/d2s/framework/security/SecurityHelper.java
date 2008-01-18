@@ -26,6 +26,16 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public final class SecurityHelper {
 
+  /**
+   * <code>ROLES_GROUP_NAME</code>.
+   */
+  public static final String ROLES_GROUP_NAME = "Roles";
+
+  /**
+   * <code>ANONYMOUS_USER_NAME</code>.
+   */
+  public static final String ANONYMOUS_USER_NAME = "anonymous";
+
   private SecurityHelper() {
     // private constructor for helper class
   }
@@ -52,7 +62,7 @@ public final class SecurityHelper {
     }
     Group subjectRoles = null;
     for (Principal p : subject.getPrincipals()) {
-      if (p instanceof Group && "Roles".equalsIgnoreCase(p.getName())) {
+      if (p instanceof Group && ROLES_GROUP_NAME.equalsIgnoreCase(p.getName())) {
         subjectRoles = (Group) p;
       }
     }
@@ -79,7 +89,7 @@ public final class SecurityHelper {
    */
   public static Subject createAnonymousSubject() {
     Subject anonymousSubject = new Subject();
-    UserPrincipal userPrincipal = new UserPrincipal("anonymous");
+    UserPrincipal userPrincipal = new UserPrincipal(ANONYMOUS_USER_NAME);
     if (!anonymousSubject.getPrincipals().contains(userPrincipal)) {
       anonymousSubject.getPrincipals().add(userPrincipal);
     }

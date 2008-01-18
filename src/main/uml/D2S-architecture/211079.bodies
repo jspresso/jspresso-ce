@@ -1,0 +1,14 @@
+class UserPasswordHandler
+!!!423047.java!!!	UserPasswordHandler(in username : String, in password : String)
+      this.username = username;
+      this.password = password.toCharArray();
+!!!423175.java!!!	handle(inout callbacks : Callback) : void
+      for (int i = 0; i < callbacks.length; i++) {
+        if (callbacks[i] instanceof NameCallback) {
+          ((NameCallback) callbacks[i]).setName(username);
+        } else if (callbacks[i] instanceof PasswordCallback) {
+          ((PasswordCallback) callbacks[i]).setPassword(password);
+          // } else {
+          // throw new UnsupportedCallbackException(callbacks[i]);
+        }
+      }

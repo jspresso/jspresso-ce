@@ -1,15 +1,14 @@
-window_sizes 1140 930 347 787 888 38
+window_sizes 1140 930 494 640 888 38
 diagrams
-  active  classdiagram_ref 131719 // Controllers
-    787 815 100 4 0 0
+  active  classdiagram_ref 134023 // Security
+    640 815 100 4 0 0
 end
 show_stereotypes
-selected classdiagram_ref 131719 // Controllers
+selected classview_ref 129415 // unknown
 open
-  classview_ref 130695 // Model descriptors
-  classview_ref 132359 // View descriptors
-  classview_ref 133511 // Controllers
   classview_ref 146823 // Startup
-  classview_ref 142471 // startup
+  classview_ref 149767 // Security
+  
+  package_ref 129799 // unknown
 end
 end

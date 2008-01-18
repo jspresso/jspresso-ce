@@ -4,6 +4,7 @@
 package com.d2s.framework.security.auth.spi;
 
 import java.io.IOException;
+import java.security.acl.Group;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -18,11 +19,16 @@ import javax.security.auth.login.FailedLoginException;
 import javax.security.auth.login.LoginException;
 import javax.security.auth.spi.LoginModule;
 
+import org.jboss.security.SimpleGroup;
+import org.jboss.security.SimplePrincipal;
+
+import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.security.LoginUtils;
 
 /**
- * login : demo. password : demo.
+ * A development login module with configuration parametrized user, password,
+ * roles and custom properties.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -30,31 +36,23 @@ import com.d2s.framework.util.security.LoginUtils;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DemoLoginModule implements LoginModule {
+public class DevelopmentLoginModule implements LoginModule {
 
-  private ResourceBundle  bundle          = ResourceBundle
-                                              .getBundle("com.d2s.framework.util.security.LoginUtils$DlmBundle");
-  private CallbackHandler callbackHandler;
-  private boolean         commitSucceeded = false;
-  // configurable option
-  private boolean         debug           = false;
+  private static final String USER_OPT            = "user";
+  private static final String PASSWORD_OPT        = "password";
+  private static final String ROLES_OPT           = "roles";
+  private static final String CUSTOM_PROPERTY_OPT = "custom.";
 
-  private Map<String, ?>  options;
-
-  private char[]          password;
-  @SuppressWarnings("unused")
-  private Map<String, ?>  sharedState;
-
-  // initial state
-  private Subject         subject;
-  // the authentication status
-  private boolean         succeeded       = false;
-
-  // username and password
-  private String          username;
-
-  // testUser's UserPrincipal
-  private UserPrincipal   userPrincipal;
+  private ResourceBundle      bundle              = ResourceBundle
+                                                      .getBundle("com.d2s.framework.util.security.LoginUtils$DlmBundle");
+  private CallbackHandler     callbackHandler;
+  private boolean             commitSucceeded     = false;
+  private Map<String, ?>      options;
+  private char[]              password;
+  private Subject             subject;
+  private boolean             succeeded           = false;
+  private String              username;
+  private UserPrincipal       userPrincipal;
 
   /**
    * <p>
@@ -111,7 +109,7 @@ public class DemoLoginModule implements LoginModule {
    * <p>
    * If this LoginModule's own authentication attempt succeeded (checked by
    * retrieving the private state saved by the <code>login</code> method),
-   * then this method associates a <code>DemoPrincipal</code> with the
+   * then this method associates a <code>UserPrincipal</code> with the
    * <code>Subject</code> located in the <code>LoginModule</code>. If this
    * LoginModule's own authentication attempted failed, then this method removes
    * any state that was originally saved.
@@ -126,14 +124,24 @@ public class DemoLoginModule implements LoginModule {
     }
     // assume the user we authenticated is the DemoPrincipal
     userPrincipal = new UserPrincipal(username);
-    userPrincipal.putCustomProperty(UserPrincipal.OWNER_PROPERTY, "demo");
+    for (Map.Entry<String, ?> option : options.entrySet()) {
+      if (option.getKey().startsWith(CUSTOM_PROPERTY_OPT)) {
+        userPrincipal.putCustomProperty(option.getKey().substring(
+            CUSTOM_PROPERTY_OPT.length()), option.getValue());
+      }
+    }
     if (!subject.getPrincipals().contains(userPrincipal)) {
       subject.getPrincipals().add(userPrincipal);
     }
 
-    if (debug) {
-      System.out.println("\t\t[DemoLoginModule] "
-          + "added DemoPrincipal to Subject");
+    String roles = (String) options.get(ROLES_OPT);
+    if (roles != null) {
+      Group rolesGroup = new SimpleGroup(SecurityHelper.ROLES_GROUP_NAME);
+      String[] rolesArray = roles.split(",");
+      for (String role : rolesArray) {
+        rolesGroup.addMember(new SimplePrincipal(role));
+      }
+      subject.getPrincipals().add(rolesGroup);
     }
 
     // in any case, clean out state
@@ -170,11 +178,7 @@ public class DemoLoginModule implements LoginModule {
 
     subject = aSubject;
     callbackHandler = aCallbackHandler;
-    sharedState = aSharedState;
     options = aOptions;
-
-    // initialize any configured options
-    debug = "true".equalsIgnoreCase((String) options.get("debug"));
   }
 
   /**
@@ -225,35 +229,27 @@ public class DemoLoginModule implements LoginModule {
           + "from the user");
     }
 
-    // print debugging information
-    if (debug) {
-      System.out.println("\t\t[DemoLoginModule] " + "user entered user name: "
-          + username);
-      System.out.print("\t\t[DemoLoginModule] " + "user entered password: ");
-      for (int i = 0; i < password.length; i++) {
-        System.out.print(password[i]);
-      }
-      System.out.println();
-    }
-
     // verify the username/password
     boolean usernameCorrect = false;
-    if ("demo".equals(username)) {
+    String moduleUserName = (String) options.get(USER_OPT);
+    if (moduleUserName == null || moduleUserName.equals(username)) {
       usernameCorrect = true;
     }
-    if (usernameCorrect && password.length == 4 && password[0] == 'd'
-        && password[1] == 'e' && password[2] == 'm' && password[3] == 'o') {
-
-      if (debug) {
-        System.out.println("\t\t[DemoLoginModule] "
-            + "authentication succeeded");
+    String modulePassword = (String) options.get(PASSWORD_OPT);
+    if (usernameCorrect) {
+      if (modulePassword == null) {
+        succeeded = true;
+      } else {
+        if (modulePassword.length() == password.length) {
+          succeeded = true;
+          for (int i = 0; succeeded && i < modulePassword.length(); i++) {
+            if (modulePassword.charAt(i) != password[i]) {
+              succeeded = false;
+            }
+          }
+        }
       }
-      succeeded = true;
       return true;
-    }
-    // authentication failed -- clean out state
-    if (debug) {
-      System.out.println("\t\t[DemoLoginModule] " + "authentication failed");
     }
     succeeded = false;
     username = null;

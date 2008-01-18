@@ -1,0 +1,40 @@
+format 48
+
+classcanvas 128007 class_ref 213383 // DevelopmentLoginModule
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  hidden_attributes
+    attribute_ref 206983 // USER_OPT
+    attribute_ref 207111 // PASSWORD_OPT
+    attribute_ref 207239 // ROLES_OPT
+    attribute_ref 207367 // CUSTOM_PROPERTY_OPT
+    attribute_ref 207495 // bundle
+    attribute_ref 207623 // callbackHandler
+    attribute_ref 207751 // commitSucceeded
+    attribute_ref 207879 // options
+    attribute_ref 208007 // password
+    attribute_ref 208135 // subject
+    attribute_ref 208263 // succeeded
+    attribute_ref 208391 // username
+  xyz 28 206 2000
+  end
+classcanvas 128135 class_ref 213639 // LdapLoginModule
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  hidden_attributes
+    attribute_ref 208519 // CUSTOM_PROPERTY_OPT
+    attribute_ref 208647 // SLICE_END
+    attribute_ref 208775 // SLICE_START
+  xyz 280 206 2000
+  end
+classcanvas 128263 class_ref 213511 // LoginModule
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 190 55 2004
+  end
+relationcanvas 128391 relation_ref 227591 // <realization>
+  from ref 128007 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 128519 relation_ref 227975 // <realization>
+  from ref 128135 z 1999 to ref 128263
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end

@@ -4630,7 +4630,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <filename>config.xml</filename> file for our development environment
       like the following :</para>
 
-      <para><programlisting>&lt;bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"&gt; <co
+      <para><programlisting language="xml">&lt;bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"&gt; <co
             id="dataSource" />
   &lt;property name="driverClassName" value="org.hsqldb.jdbcDriver" /&gt; <co
             id="dataSource-params" />
@@ -4718,7 +4718,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
       <para>So lets add our front controller definition :</para>
 
-      <para><programlisting>&lt;bean
+      <para><programlisting language="xml">&lt;bean
   id="applicationFrontController"
   parent="frontController"
   scope="prototype"&gt; <co id="applicationFrontController" />
@@ -4780,7 +4780,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       create it in a new <code>com.d2s.framework.hrsample.startup</code> java
       package :</para>
 
-      <para><programlisting>package com.d2s.framework.hrsample.startup;
+      <para><programlisting language="xml">package com.d2s.framework.hrsample.startup;
 
 import com.d2s.framework.application.frontend.startup.swing.SwingStartup;
 
@@ -4822,8 +4822,9 @@ public class SwingHrSampleStartup extends SwingStartup { <co
       com.d2s.framework.hrsample.startup.SwingHrSampleStartup -splash
       classpath:com/d2s/framework/hrsample/images/logo-small.png</code></para>
 
-      <para>You should have a splash screen poping up and soon after the
-      following MDI frame (here with a substance look and feel) :</para>
+      <para>You should have a splash screen popping up and soon after the
+      following MDI frame (here with a substance look and feel and a French
+      locale) :</para>
 
       <para><figure>
           <title>The first application run</title>
@@ -4836,6 +4837,193 @@ public class SwingHrSampleStartup extends SwingStartup { <co
             </imageobject>
           </mediaobject>
         </figure></para>
+
+      <para>Of course, this is a very basic launch for a pretty useless
+      application... To improve it, we will first secure it with a login
+      module and then create some application modules.</para>
     </section>
+
+    <section>
+      <title>Securing the application access</title>
+
+      <para>Securing an application is a matter of handling :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Authentication (is the user the one he pretends to be
+          ?).</para>
+        </listitem>
+
+        <listitem>
+          <para>Authorization (is the user granted access to what he's trying
+          to achieve ?).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Both of these topics are extensively covered by the
+      <trademark>D2S</trademark> framework. This chapter covers the
+      authentication part.</para>
+
+      <para>Authentication in a <trademark>D2S</trademark> application relies
+      on JAAS (Java Authentication and Authorization Service). We will not go
+      into details about JAAS since there are excellent tutorials on the web
+      (<ulink
+      url="http://java.sun.com/j2se/1.5.0/docs/guide/security/jaas/tutorials/index.html">this
+      one</ulink> for instance). <trademark>D2S</trademark> provides all the
+      necessary plumbing to seamlessly integrate any JAAS login module and as
+      of this writing, there are 2 login modules that come with the framework
+      :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The development login module which does not require any
+          backend and is perfectly suited for development.</para>
+        </listitem>
+
+        <listitem>
+          <para>The ldap login module which authenticates the user against an
+          LDAP directory.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>You may find many other, freely available, JAAS login modules to
+      meet your needs (JDBC, ascii encrypted file, ...). In this section, we
+      will secure our application with the development login module but the
+      exact same principles (except for the module configuration itself) can
+      be applied for others.</para>
+
+      <section>
+        <title>Configuring the development login module</title>
+
+        <para>As for any JAAS based login module, we will create a
+        configuration file (here <filename>jaas.config</filename> that we will
+        place in the root of our project) that we will later reference as a
+        java system property (<code>java.security.auth.login.config</code>)
+        when launching the application.</para>
+
+        <para>Here is the <filename>jaas.config</filename> file explained
+        :</para>
+
+        <para><programlisting>/** Login Configuration for the HR sample application **/
+
+hrsample-app { <co id="hrsample-app" />
+   com.d2s.framework.security.auth.spi.DevelopmentLoginModule required <co
+              id="DevelopmentLoginModule" />
+       user=demo <co id="user" />
+       password=demo <co id="password" />
+       roles=admin <co id="roles" />
+       custom.language=en; <co id="language" />
+};</programlisting><calloutlist>
+            <callout arearefs="hrsample-app">
+              <para>The name of the login context that we use for the
+              application.</para>
+            </callout>
+
+            <callout arearefs="DevelopmentLoginModule">
+              <para>We reference the development login module class.</para>
+            </callout>
+
+            <callout arearefs="user">
+              <para>The user name the development will check (here
+              "demo").</para>
+            </callout>
+
+            <callout arearefs="password">
+              <para>The user password the development will check (here
+              "demo").</para>
+            </callout>
+
+            <callout arearefs="roles">
+              <para>The comma-separated list of roles (profiles) the logged-in
+              user will be assigned (here "admin"). These roles will be
+              checked against when dealing with authorizations.</para>
+            </callout>
+
+            <callout arearefs="language">
+              <para>Any custom property we want to store in the user
+              principal; these properties are kept in a map. Here, we store
+              the custom <code>language</code> property as being English. the
+              <code>language</code> property is a well-known property that
+              will be used by the front-end and back-end controllers to apply
+              the correct locale for GUI and messages.</para>
+            </callout>
+          </calloutlist>As you can see, this login module is absolutely not
+        suited for production purpose but it is perfect for development since
+        you will be able to assign different locales to the logged-in user
+        (and thus test for the I18N of the application), or vary the granted
+        roles (and thus test for the authorization policies you have set up).
+        Moreover, you can feed the user principal with an arbitrary list of
+        custom properties your application may need to refer to.</para>
+
+        <para>Of course, other login modules will fetch everything from a
+        persistent store and configuring them will be a matter of customizing
+        how the user password will be checked and how the user data will be
+        retrieved. But the key point is that changing the authorization method
+        will just be a matter of changing the <filename>jaas.config</filename>
+        file; all the other steps we will go through know will remain
+        unchanged.</para>
+      </section>
+
+      <section>
+        <title>Declaring the login context</title>
+
+        <para>The next and final step to activate the login module in our
+        application is to declare the login context created above in the
+        front-end controller :</para>
+
+        <para><programlisting language="xml">  &lt;bean
+    id="applicationFrontController"
+    parent="frontController"
+    scope="prototype"&gt;
+    ...
+    &lt;property
+      name="loginContextName"
+      value="hrsample-app" /&gt; <co id="loginContextName" />
+   &lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="loginContextName">
+              <para>We configure the controller to use the
+              <code>hrsample-app</code> login context.</para>
+            </callout>
+          </calloutlist>When relaunching the application with the java system
+        property
+        <code>-Djava.security.auth.login.config=/path/to/jaas.config</code>, a
+        login dialog appears and once the user has logged-in, the entire
+        application is translated in its locale; notice that until the user
+        has actually logged in, the client machine default locale
+        applies.</para>
+
+        <para><figure>
+            <title>The login dialog on a French client machine</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/LoginDialog.jpg" scalefit="1"
+                           width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure><figure>
+            <title>The application main window with an English logged-in
+            user</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/AppLaunch_en.jpg" scalefit="1"
+                           width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure>We will see further how to take care of the profiles
+        (roles) authorizations and how the framework will handle it for you
+        with very little configuration. But before getting there, we need to
+        install some application modules.</para>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Creating and registering application modules</title>
+
+    <para></para>
   </section>
 </chapter>

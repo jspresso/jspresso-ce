@@ -1,6 +1,6 @@
 format 48
-"framework" // com::d2s::framework
-  revision 7
+"auth" // com::d2s::framework::security::auth
+  revision 1
   modified_by 7 "Vincent"
   // class settings
   //class diagram settings
@@ -26,15 +26,7 @@ format 48
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default
   
-  java_dir "com/d2s/framework"
-  java_package "com.d2s.framework"
-  package_ref 133895 // application
-
-  package_ref 129543 // model
-
-  package_ref 150791 // security
-
-  package_ref 144391 // util
-
-  package_ref 132359 // view
+  java_dir "com/d2s/framework/security/auth"
+  java_package "com.d2s.framework.security.auth"
+  package_ref 151047 // spi
 end

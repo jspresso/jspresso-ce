@@ -1,0 +1,529 @@
+format 48
+"spi" // com::d2s::framework::security::auth::spi
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/security/auth/spi"
+  java_package "com.d2s.framework.security.auth.spi"
+  classview 151047 "spi"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 213383 "DevelopmentLoginModule"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A development login module with configuration parametrized user, password,
+roles and custom properties.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 969 $
+@author Vincent Vandenschrick
+"
+      classrelation 227591 // <realization>
+	relation 227591 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 227591 // <realization>
+	  b parent class_ref 213511 // LoginModule
+      end
+
+      attribute 206983 "USER_OPT"
+	class_attribute const_attribute private explicit_type "String"
+	init_value "=  \"user\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 207111 "PASSWORD_OPT"
+	class_attribute const_attribute private explicit_type "String"
+	init_value "=  \"password\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 207239 "ROLES_OPT"
+	class_attribute const_attribute private explicit_type "String"
+	init_value "=  \"roles\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 207367 "CUSTOM_PROPERTY_OPT"
+	class_attribute const_attribute private explicit_type "String"
+	init_value "=  \"custom.\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 207495 "bundle"
+	private explicit_type "ResourceBundle"
+	init_value "=  ResourceBundle
+                                                      .getBundle(\"com.d2s.framework.util.security.LoginUtils$DlmBundle\")"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 207623 "callbackHandler"
+	private explicit_type "CallbackHandler"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 207751 "commitSucceeded"
+	private explicit_type "boolean"
+	init_value "=  false"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 207879 "options"
+	private explicit_type "String, ?"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 208007 "password"
+	private explicit_type "char"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 208135 "subject"
+	private explicit_type "Subject"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 208263 "succeeded"
+	private explicit_type "boolean"
+	init_value "=  false"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 208391 "username"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 227719 // userPrincipal (<unidirectional association>)
+	relation 227719 --->
+	  a role_name "userPrincipal" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 227719 // userPrincipal (<unidirectional association>)
+	  b parent class_ref 213127 // UserPrincipal
+      end
+
+      operation 425095 "abort"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+<p>
+This method is called if the LoginContext's overall authentication failed.
+(the relevant REQUIRED, REQUISITE, SUFFICIENT and OPTIONAL LoginModules did
+not succeed).
+<p>
+If this LoginModule's own authentication attempt succeeded (checked by
+retrieving the private state saved by the <code>login</code> and
+<code>commit</code> methods), then this method cleans up any state that
+was originally saved.
+<p>
+
+@return false if this LoginModule's own login and/or commit attempts
+        failed, and true otherwise.
+"
+      end
+
+      operation 425223 "commit"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+<p>
+This method is called if the LoginContext's overall authentication
+succeeded (the relevant REQUIRED, REQUISITE, SUFFICIENT and OPTIONAL
+LoginModules succeeded).
+<p>
+If this LoginModule's own authentication attempt succeeded (checked by
+retrieving the private state saved by the <code>login</code> method),
+then this method associates a <code>UserPrincipal</code> with the
+<code>Subject</code> located in the <code>LoginModule</code>. If this
+LoginModule's own authentication attempted failed, then this method removes
+any state that was originally saved.
+<p>
+
+@return true if this LoginModule's own login and commit attempts succeeded,
+        or false otherwise.
+"
+      end
+
+      operation 425351 "initialize"
+	public explicit_return_type "void"
+	nparams 4
+	  param inout name "aSubject" explicit_type "Subject"
+	  param inout name "aCallbackHandler" explicit_type "CallbackHandler"
+	  param inout name "aSharedState" explicit_type "Map<String, ?>"
+	  param inout name "aOptions" explicit_type "Map<String, ?>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Initialize this <code>LoginModule</code>.
+<p>
+
+@param aSubject
+           the <code>Subject</code> to be authenticated.
+           <p>
+@param aCallbackHandler
+           a <code>CallbackHandler</code> for communicating with the end
+           user (prompting for user names and passwords, for example).
+           <p>
+@param aSharedState
+           shared <code>LoginModule</code> state.
+           <p>
+@param aOptions
+           options specified in the login <code>Configuration</code> for
+           this particular <code>LoginModule</code>.
+"
+      end
+
+      operation 425479 "login"
+	public explicit_return_type "boolean"
+	nparams 0
+	nexceptions 1
+	  explicit_exception "LoginException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Authenticate the user by prompting for a user name and password.
+<p>
+
+@return true in all cases since this <code>LoginModule</code> should not
+        be ignored.
+@exception LoginException
+               if the authentication fails.
+               <p>
+@exception LoginException
+               if this <code>LoginModule</code> is unable to perform the
+               authentication.
+"
+      end
+
+      operation 425607 "logout"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Logout the user.
+<p>
+This method removes the <code>DemoPrincipal</code> that was added by the
+<code>commit</code> method.
+<p>
+
+@return true in all cases since this <code>LoginModule</code> should not
+        be ignored.
+"
+      end
+    end
+
+    class 213639 "LdapLoginModule"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Extends the JBoss LdapExtLoginModule to keep track of the authenticated
+ditinguished name.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 227847 // <generalisation>
+	relation 227847 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 227847 // <generalisation>
+	  b parent class_ref 213767 // LdapExtLoginModule
+      end
+
+      attribute 208519 "CUSTOM_PROPERTY_OPT"
+	class_attribute const_attribute private explicit_type "String"
+	init_value "=  \"custom.\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 208647 "SLICE_END"
+	class_attribute const_attribute private explicit_type "String"
+	init_value "=  \"]\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 208775 "SLICE_START"
+	class_attribute const_attribute private explicit_type "String"
+	init_value "=  \"[\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 425735 "bindDNAuthentication"
+	protected explicit_return_type "String"
+	nparams 5
+	  param inout name "ctx" explicit_type "InitialLdapContext"
+	  param in name "user" explicit_type "String"
+	  param inout name "credential" explicit_type "Object"
+	  param in name "searchBaseDN" explicit_type "String"
+	  param in name "filter" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "NamingException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+  @Override
+"
+	
+	
+	comment "
+Overriden to complete the main principal with optional data from the
+backing store.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 425863 "createIdentity"
+	protected explicit_return_type "Principal"
+	nparams 1
+	  param in name "username" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "Exception"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Overriden to construct a user principal instead of the default
+SimplePrincipal.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 425991 "extractSlice"
+	private explicit_return_type "String"
+	nparams 4
+	  param in name "nameAsString" explicit_type "String"
+	  param inout name "nameParser" explicit_type "NameParser"
+	  param in name "startIndex" explicit_type "int"
+	  param in name "endIndex" explicit_type "int"
+	nexceptions 1
+	  explicit_exception "NamingException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      classrelation 227975 // <realization>
+	relation 227975 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 227975 // <realization>
+	  b parent class_ref 213511 // LoginModule
+      end
+    end
+  end
+
+  deploymentview 148871 "spi"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 195719 "DevelopmentLoginModule"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.IOException;
+import java.security.acl.Group;
+import java.util.Map;
+import java.util.ResourceBundle;
+import javax.security.auth.Subject;
+import javax.security.auth.callback.Callback;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.callback.NameCallback;
+import javax.security.auth.callback.PasswordCallback;
+import javax.security.auth.callback.TextOutputCallback;
+import javax.security.auth.callback.UnsupportedCallbackException;
+import javax.security.auth.login.FailedLoginException;
+import javax.security.auth.login.LoginException;
+import javax.security.auth.spi.LoginModule;
+import org.jboss.security.SimpleGroup;
+import org.jboss.security.SimplePrincipal;
+import com.d2s.framework.security.SecurityHelper;
+import com.d2s.framework.security.UserPrincipal;
+import com.d2s.framework.util.security.LoginUtils;
+${definition}"
+      associated_classes
+	class_ref 213383 // DevelopmentLoginModule
+      end
+    end
+
+    artifact 195847 "LdapLoginModule"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.naming.Name;
+import javax.naming.NameParser;
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
+import javax.naming.ldap.InitialLdapContext;
+import org.jboss.security.auth.spi.LdapExtLoginModule;
+import com.d2s.framework.security.UserPrincipal;
+${definition}"
+      associated_classes
+	class_ref 213639 // LdapLoginModule
+      end
+    end
+  end
+end
