@@ -696,8 +696,6 @@
 &lt;project default="all"&gt;
 
   &lt;property file="build.properties" /&gt;
-  &lt;property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" /&gt;
-  &lt;property name="xdoclet.plugins.dir" value="${xdoclet.home}/plugins" /&gt;
 
   &lt;property name="src.dir" value="${basedir}/src/main" /&gt;
   &lt;property name="java.src.dir" value="${src.dir}/java" /&gt;
@@ -712,7 +710,7 @@
       &lt;include name="**/design2see/**/2.0/*.jar" /&gt;
       &lt;include name="**/commons-cli-1.0.jar" /&gt;
       &lt;include name="**/freemarker-2.3.3.jar" /&gt;
-      &lt;include name="**/spring-2.0.6.jar" /&gt;
+      &lt;include name="**/spring-2.5.1.jar" /&gt;
       &lt;include name="**/commons-logging-1.1.jar" /&gt;
       &lt;include name="**/xml-apis-2.0.2.jar" /&gt;
       &lt;include name="**/xerces-2.0.2.jar" /&gt;
@@ -4657,6 +4655,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             id="hbm2ddl" />
     &lt;/props&gt;
   &lt;/property&gt;
+  &lt;property name="mappingLocations"&gt;
+    &lt;list&gt;
+      &lt;value&gt;classpath*:com/d2s/framework/hrsample/**/*.hbm.xml&lt;/value&gt; <co
+            id="mappingLocations" />
+    &lt;/list&gt;
+  &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
           <callout arearefs="dataSource">
             <para>We configure the data source that will be used in this
@@ -4690,10 +4694,116 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             DB schema when starting so that our in memory HSQL DB gets
             populated with a fresh, empty, domain-synchronized schema.</para>
           </callout>
-        </calloutlist>With this little configuration steps, we now have a
-      fully functional hibernate aware backend relying on our domain model.
-      The next phase consist in setting up the configuration for the
-      frontend.</para>
+
+          <callout arearefs="mappingLocations">
+            <para>We instruct hibernate to load the mapping files from
+            resources located in any <code>com.d2s.framework.hrsample</code>
+            subpackage.</para>
+          </callout>
+        </calloutlist></para>
+
+      <para>But you surely noticed that we are missing the hibernate mapping
+      files. Hopefully, all the generated entities are marked with xDoclet
+      tags to ease this step. So let's update our
+      <filename>build.xml</filename> as below :</para>
+
+      <para><programlisting language="xml">...
+&lt;property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" /&gt;
+&lt;property name="xdoclet.plugins.dir" value="${xdoclet.home}/plugins" /&gt;
+&lt;property name="model.src.dir" value="${java.src.dir}/com/d2s/framework/hrsample/model" /&gt;
+...
+&lt;target name="clean-hibernate"&gt;
+  &lt;delete&gt;
+    &lt;fileset dir="${resources.src.dir}" includes="**/*.hbm.xml" /&gt;
+  &lt;/delete&gt;
+&lt;/target&gt;
+
+&lt;target name="xdoclet-hibernate" depends="clean-hibernate"&gt;
+  &lt;mkdir dir="${resources.src.dir}" /&gt;
+  &lt;path id="xdoclet.task.classpath"&gt;
+    &lt;pathelement location="${xdoclet.plugins.dir}/xdoclet-plugin-hibernate-1.0.2.jar" /&gt;
+    &lt;fileset dir="${xdoclet.lib.dir}"&gt;
+      &lt;include name="**/*.jar" /&gt;
+    &lt;/fileset&gt;
+  &lt;/path&gt;
+  &lt;taskdef name="xdoclet" classname="org.xdoclet.ant.XDocletTask" classpathref="xdoclet.task.classpath" /&gt;
+
+  &lt;xdoclet&gt;
+    &lt;fileset dir="${model.src.dir}"&gt;
+      &lt;include name="*.java"/&gt;
+    &lt;/fileset&gt;
+    &lt;component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${resources.src.dir}" version="3.0" /&gt;
+  &lt;/xdoclet&gt;
+  &lt;replaceregexp byline="true"&gt; <co id="replaceregexp" />
+    &lt;regexp pattern="&amp;lt;component name=&amp;quot;(.*)&amp;quot;&amp;gt;" /&gt;
+    &lt;substitution expression="&amp;lt;component name=&amp;quot;\1&amp;quot;&amp;gt;&amp;lt;tuplizer entity-mode=&amp;quot;pojo&amp;quot; class=&amp;quot;com.d2s.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&amp;quot; /&amp;gt;" /&gt;
+    &lt;fileset dir="${resources.src.dir}"&gt;
+      &lt;include name="**/*.hbm.xml" /&gt;
+    &lt;/fileset&gt;
+  &lt;/replaceregexp&gt;
+&lt;/target&gt;
+
+&lt;target name="all" depends="generate-entities, xdoclet-hibernate" /&gt;</programlisting><calloutlist>
+          <callout arearefs="replaceregexp">
+            <para>The "replaceregexp" section is important for the inlined
+            components mapping to support <trademark>D2S</trademark> ones; as
+            of this writing, xDoclet does not support for changing the
+            tuplizer of an entity or component, which is required.</para>
+          </callout>
+        </calloutlist>Running ant produces the following mapping file in the
+      <code>com.d2s.framework.hrsample.model</code> package :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><filename>City.hbm.xml</filename></para>
+        </listitem>
+
+        <listitem>
+          <para><filename>Company.hbm.xml</filename></para>
+        </listitem>
+
+        <listitem>
+          <para><filename>Employee.hbm.xml</filename></para>
+        </listitem>
+
+        <listitem>
+          <para><filename>Event.hbm.xml</filename></para>
+        </listitem>
+
+        <listitem>
+          <para><filename>OrganizationalUnit.hbm.xml</filename></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>As an example, here is the <filename>City.hbm.xml</filename>
+      generated mapping file :</para>
+
+      <para><programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+                                   "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;
+
+&lt;hibernate-mapping default-access="com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"&gt;
+  &lt;class dynamic-update="true"
+         table="CITY"
+         persister="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
+         name="com.d2s.framework.hrsample.model.City"
+         dynamic-insert="true"&gt;
+    &lt;id type="string" column="ID" length="36" name="id"&gt;
+      &lt;generator class="assigned"/&gt;
+    &lt;/id&gt;
+    &lt;version column="VERSION" unsaved-value="null" name="version"/&gt;
+    &lt;property name="zip"&gt;
+      &lt;column name="ZIP" length="10"/&gt;
+    &lt;/property&gt;
+    &lt;property name="name"&gt;
+      &lt;column name="NAME" not-null="true" length="64"/&gt;
+    &lt;/property&gt;
+  &lt;/class&gt;
+&lt;/hibernate-mapping&gt;</programlisting></para>
+
+      <para>With this little configuration steps, we now have a fully
+      functional hibernate aware backend relying on our domain model. The next
+      phase consist in setting up the configuration for the frontend.</para>
     </section>
 
     <section>
@@ -4839,8 +4949,51 @@ public class SwingHrSampleStartup extends SwingStartup { <co
         </figure></para>
 
       <para>Of course, this is a very basic launch for a pretty useless
-      application... To improve it, we will first secure it with a login
-      module and then create some application modules.</para>
+      application... But to make sure that our entities are actually
+      registered in hibernate, let's activate the debug mode for the hbm2dll
+      tool (remember that we are in the development phase and that we told
+      hibernate to regenerate the database schema in HSQL DB at startup);
+      create a log4j.properties file at the root of the classpath
+      :<programlisting>log4j.rootLogger=INFO, CONSOLE
+
+# CONSOLE is set to be a ConsoleAppender which outputs to System.out.
+log4j.appender.CONSOLE=org.apache.log4j.ConsoleAppender
+
+# CONSOLE uses PatternLayout.
+log4j.appender.CONSOLE.layout=org.apache.log4j.PatternLayout
+
+# The conversion pattern uses format specifiers. You might want to
+# change the pattern an watch the output format change.
+log4j.appender.CONSOLE.layout.ConversionPattern=%-5p &lt;%d{ISO8601}&gt; %c : %m%n
+
+#####################
+# Hibernate Section #
+#####################
+
+### log schema export/update ###
+log4j.logger.org.hibernate.tool.hbm2ddl=DEBUG</programlisting></para>
+
+      <para>You should obtain the following traces in the console :</para>
+
+      <para><programlisting>INFO  &lt;2008-01-23 13:36:29,015&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : Running hbm2ddl schema update
+INFO  &lt;2008-01-23 13:36:29,015&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : fetching database metadata
+INFO  &lt;2008-01-23 13:36:29,046&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : updating schema
+INFO  &lt;2008-01-23 13:36:29,093&gt; org.hibernate.tool.hbm2ddl.DatabaseMetadata : table not found: CITY
+...
+DEBUG &lt;2008-01-23 13:36:29,125&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : create table CITY (ID varchar(36) not null,
+                                          VERSION integer not null,
+                                          ZIP varchar(10),
+                                          NAME varchar(64) not null,
+                                          primary key (ID))
+...
+DEBUG &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : alter table COMPANY
+                                          add constraint FK6372C85DBA3A8814
+                                          foreign key (CONTACT_CITY_ID)
+                                          references CITY
+...
+INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : schema update complete</programlisting>To
+      improve the application, we will first secure it with a login module and
+      then create some application modules.</para>
     </section>
 
     <section>
@@ -5024,6 +5177,7 @@ hrsample-app { <co id="hrsample-app" />
   <section>
     <title>Creating and registering application modules</title>
 
-    <para></para>
+    <para>Before getting further in this section, let's first define what an
+    <trademark>D2S</trademark> application module is. </para>
   </section>
 </chapter>

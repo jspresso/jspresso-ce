@@ -17,5 +17,8 @@
   <xsl:param name="generate.index">1</xsl:param>
   <xsl:param name="ulink.show">0</xsl:param>
   <xsl:param name="highlight.source">1</xsl:param>
+  <xsl:param name="chapter.autolabel">I</xsl:param>
+  <xsl:param name="section.autolabel">1</xsl:param>
+  <xsl:param name="section.label.includes.component.label">1</xsl:param>
 
 </xsl:stylesheet>

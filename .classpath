@@ -43,12 +43,8 @@
 	<classpathentry kind="src" output="jasper/target/classes" path="jasper/src/main/java"/>
 	<classpathentry kind="src" output="jasper/target/classes" path="jasper/src/main/resources"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jgroups/jgroups-all/2.2.7/jgroups-all-2.2.7.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-common/4.0.2/jboss-common-4.0.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-cache/1.2.2/jboss-cache-1.2.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/javax/security/jacc/1.0/jacc-1.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-minimal/4.0.2/jboss-minimal-4.0.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-j2se/200504122039/jboss-j2se-200504122039.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/logkit/logkit/1.0.1/logkit-1.0.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/bsf/bsf/2.3.0/bsf-2.3.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-collections/commons-collections/3.1/commons-collections-3.1.jar"/>
@@ -56,7 +52,6 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/xml-apis/xml-apis/2.0.2/xml-apis-2.0.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/c3p0/c3p0/0.9.0/c3p0-0.9.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/qdox/qdox/1.4/qdox-1.4.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-system/4.0.2/jboss-system-4.0.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-pool/commons-pool/1.2/commons-pool-1.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/xerces/xerces/2.0.2/xerces-2.0.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4.jar"/>
@@ -92,10 +87,9 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-core/2.0/aspectwerkz-core-2.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/ulc/ulc-jnlp-client/6.0.5/ulc-jnlp-client-6.0.5.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring/2.5.1/spring-2.5.1.jar" sourcepath="/ENVDEV/spring-framework-2.5.1/src"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring/2.5.1/spring-2.5.1.jar" sourcepath="/ENVDEV/spring-framework-2.5.1/dist/spring-sources.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/opensymphony/oscache/2.1/oscache-2.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-jdk5/2.0/aspectwerkz-jdk5-2.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" sourcepath="/ENVDEV/jboss-4.2.2.GA/src/security/src/main"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jgoodies/looks/1.3.2/looks-1.3.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils-core/1.7.0/commons-beanutils-core-1.7.0.jar" sourcepath="/ENVDEV/commons-beanutils-1.7.0/src/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz/2.0/aspectwerkz-2.0.jar"/>
@@ -116,5 +110,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6"/>
 	<classpathentry kind="var" path="M2_REPO/org/jvnet/substance/4.1/substance-4.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.2.1.GA/jbosssx-4.2.1.GA.jar" sourcepath="/ENVDEV/jboss-4.2.2.GA/src/security/src/main"/>
+	<classpathentry kind="var" path="M2_REPO/jboss/jboss-common/4.0.4/jboss-common-4.0.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

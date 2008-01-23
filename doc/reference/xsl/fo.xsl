@@ -21,7 +21,10 @@
   <xsl:param name="body.start.indent">0pt</xsl:param>
   <xsl:param name="alignment">left</xsl:param>
   <xsl:param name="body.font.master">9</xsl:param>
-
+  <xsl:param name="chapter.autolabel">I</xsl:param>
+  <xsl:param name="section.autolabel">1</xsl:param>
+  <xsl:param name="section.label.includes.component.label">1</xsl:param>
+  
   <xsl:attribute-set
     name="monospace.verbatim.properties"
     use-attribute-sets="verbatim.properties monospace.properties">
