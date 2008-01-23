@@ -1,0 +1,10 @@
+class BasicCompositeView
+!!!198663.java!!!	BasicCompositeView(inout peer : E)
+
+    super(peer);
+!!!198791.java!!!	getChildren() : IView
+
+    return children;
+!!!198919.java!!!	setChildren(inout children : List<IView<E>>) : void
+
+    this.children = children;

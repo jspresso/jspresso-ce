@@ -1,0 +1,5 @@
+class AbstractMessageAction
+!!!342919.java!!!	getMessage(inout context : Map<String, Object>) : String
+
+    return HtmlHelper.emphasis((String) context
+        .get(ActionContextConstants.ACTION_PARAM));

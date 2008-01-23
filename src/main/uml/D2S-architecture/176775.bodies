@@ -1,0 +1,11 @@
+class ColorTableCellRenderer
+!!!334087.java!!!	getTableCellRendererComponent(inout table : com.ulcjava.base.application.ULCTable, inout value : Object, inout isSelected : boolean, inout hasFocus : boolean, in row : int) : IRendererComponent
+
+      if (value != null) {
+        int[] rgba = ColorHelper.fromHexString((String) value);
+        setBackground(new Color(rgba[0], rgba[1], rgba[2], rgba[3]));
+      } else {
+        setBackground(null);
+      }
+      return super.getTableCellRendererComponent(table, value, isSelected,
+          hasFocus, row);

@@ -1,0 +1,49 @@
+class BasicReferencePropertyDescriptor
+!!!173959.java!!!	getComponentDescriptor() : IComponentDescriptor
+
+    return getReferencedDescriptor();
+!!!174087.java!!!	getInitializationMapping() : Map<String, String>
+
+    if (initializationMapping != null) {
+      return initializationMapping;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IReferencePropertyDescriptor<?>) getParentDescriptor())
+          .getInitializationMapping();
+    }
+    return initializationMapping;
+!!!174215.java!!!	getModelType() : Class<?>
+
+    return getReferencedDescriptor().getComponentContract();
+!!!174343.java!!!	getReferencedDescriptor() : IComponentDescriptor
+
+    if (referencedDescriptor != null) {
+      return referencedDescriptor;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IReferencePropertyDescriptor<E>) getParentDescriptor())
+          .getReferencedDescriptor();
+    }
+    return referencedDescriptor;
+!!!174471.java!!!	isQueryable() : boolean
+
+    return true;
+!!!174599.java!!!	setInitializationMapping(inout initializationMapping : Map<String, String>) : void
+
+    this.initializationMapping = initializationMapping;
+!!!174727.java!!!	setReferencedDescriptor(inout referencedDescriptor : IComponentDescriptor) : void
+
+    this.referencedDescriptor = referencedDescriptor;
+!!!174855.java!!!	clone() : BasicReferencePropertyDescriptor
+
+    BasicReferencePropertyDescriptor<E> clonedDescriptor = (BasicReferencePropertyDescriptor<E>) super
+        .clone();
+
+    return clonedDescriptor;
+!!!174983.java!!!	getDefaultComposition() : boolean
+
+    if (getReverseRelationEnd() == null
+        || getReverseRelationEnd() instanceof IReferencePropertyDescriptor<?>) {
+      return true;
+    }
+    return false;

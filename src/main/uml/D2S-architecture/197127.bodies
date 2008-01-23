@@ -1,0 +1,15 @@
+class BeanListAccessor
+!!!388103.java!!!	BeanListAccessor(in property : String, inout beanClass : Class<?>, inout elementClass : Class<?>)
+
+    super(property, beanClass, elementClass);
+!!!388231.java!!!	addToValue(inout target : Object, in index : int, inout value : Object) : void
+
+    if (adderAtMethod == null) {
+      adderAtMethod = MethodUtils.getMatchingAccessibleMethod(getBeanClass(),
+          AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
+          new Class[] {Integer.TYPE, getElementClass()});
+    }
+    adderAtMethod.invoke(target, new Object[] {new Integer(index), value});
+!!!388359.java!!!	getValue(inout target : Object) : List<?>
+
+    return (List<?>) super.getValue(target);

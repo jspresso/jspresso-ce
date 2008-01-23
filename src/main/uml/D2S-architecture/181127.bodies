@@ -1,0 +1,10 @@
+class InfoAction
+!!!343047.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    JOptionPane.showMessageDialog(SwingUtil
+        .getWindowOrInternalFrame(getSourceComponent(context)),
+        getMessage(context), getI18nName(getTranslationProvider(context),
+            getLocale(context)), JOptionPane.INFORMATION_MESSAGE,
+        getIconFactory(context).getIcon(getIconImageURL(),
+            IIconFactory.LARGE_ICON_SIZE));
+    return super.execute(actionHandler, context);

@@ -1,0 +1,71 @@
+class CreateQueryEntityAction
+!!!234759.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    IReferencePropertyDescriptor erqDescriptor = (IReferencePropertyDescriptor) context
+        .get(ActionContextConstants.ENTITY_REF_DESCRIPTOR);
+    IModelDescriptor modelDescriptor = (IModelDescriptor) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    if (erqDescriptor == null) {
+      erqDescriptor = (IReferencePropertyDescriptor) modelDescriptor;
+    }
+    IQueryEntity queryEntity = getEntityFactory(context)
+        .createQueryEntityInstance(
+            (Class<? extends IQueryEntity>) erqDescriptor
+                .getReferencedDescriptor().getComponentContract());
+
+    Map<String, String> initializationMapping = erqDescriptor
+        .getInitializationMapping();
+    if (initializationMapping != null) {
+      IEntity masterEntity = null;
+      // The following relies on a workaround used to determine the bean
+      // model whenever the lov component is used inside a jtable.
+      IConnector parentModelConnector = ((IValueConnector) context
+          .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector()
+          .getModelConnector();
+      if (parentModelConnector instanceof IModelProvider) {
+        masterEntity = (IEntity) ((IModelProvider) parentModelConnector)
+            .getModel();
+      } else if (parentModelConnector instanceof ICollectionConnector) {
+        int collectionIndex = ((ICollectionConnector) ((IValueConnector) context
+            .get(ActionContextConstants.VIEW_CONNECTOR)).getParentConnector())
+            .getSelectedIndices()[0];
+        masterEntity = (IEntity) ((ICollectionConnector) parentModelConnector)
+            .getChildConnector(collectionIndex).getConnectorValue();
+      }
+      if (masterEntity != null) {
+        IAccessorFactory accessorFactory = getAccessorFactory(masterEntity,
+            context);
+        for (Map.Entry<String, String> initializedAttribute : initializationMapping
+            .entrySet()) {
+          try {
+            accessorFactory.createPropertyAccessor(
+                initializedAttribute.getKey(), queryEntity.getContract())
+                .setValue(
+                    queryEntity,
+                    accessorFactory.createPropertyAccessor(
+                        initializedAttribute.getValue(),
+                        masterEntity.getContract()).getValue(masterEntity));
+          } catch (IllegalAccessException ex) {
+            throw new ActionException(ex);
+          } catch (InvocationTargetException ex) {
+            throw new ActionException(ex);
+          } catch (NoSuchMethodException ex) {
+            throw new ActionException(ex);
+          }
+        }
+      }
+    }
+    ModelConnector modelConnector = (ModelConnector) getBeanConnectorFactory(
+        context).createModelConnector(
+        new BasicQueryEntityDescriptor(erqDescriptor.getReferencedDescriptor(),
+            queryEntity.getClass()));
+    modelConnector.setConnectorValue(queryEntity);
+    Object queryPropertyValue = context
+        .get(ActionContextConstants.ACTION_COMMAND);
+    if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {
+      modelConnector.getChildConnector(
+          erqDescriptor.getComponentDescriptor().getToStringProperty())
+          .setConnectorValue(queryPropertyValue);
+    }
+    context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
+    return super.execute(actionHandler, context);

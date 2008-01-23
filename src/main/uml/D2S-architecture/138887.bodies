@@ -1,0 +1,41 @@
+class BasicRelationshipEndPropertyDescriptor
+!!!160391.java!!!	getReverseRelationEnd() : IRelationshipEndPropertyDescriptor
+
+    if (reverseRelationEnd != null) {
+      return reverseRelationEnd;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IRelationshipEndPropertyDescriptor) getParentDescriptor())
+          .getReverseRelationEnd();
+    }
+    return reverseRelationEnd;
+!!!160519.java!!!	isComposition() : boolean
+
+    if (composition != null) {
+      return composition.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return ((IRelationshipEndPropertyDescriptor) getParentDescriptor())
+          .isComposition();
+    }
+    return getDefaultComposition();
+!!!160775.java!!!	setComposition(inout composition : boolean) : void
+
+    this.composition = new Boolean(composition);
+!!!160903.java!!!	setReverseRelationEnd(inout reverseRelationEnd : IRelationshipEndPropertyDescriptor) : void
+
+    if (this.reverseRelationEnd != reverseRelationEnd) {
+      if (this.reverseRelationEnd != null) {
+        this.reverseRelationEnd.setReverseRelationEnd(null);
+      }
+      this.reverseRelationEnd = reverseRelationEnd;
+      if (reverseRelationEnd != null) {
+        reverseRelationEnd.setReverseRelationEnd(this);
+      }
+    }
+!!!161031.java!!!	clone() : BasicRelationshipEndPropertyDescriptor
+
+    BasicRelationshipEndPropertyDescriptor clonedDescriptor = (BasicRelationshipEndPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

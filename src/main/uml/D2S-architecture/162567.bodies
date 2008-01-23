@@ -1,0 +1,229 @@
+class AbstractFrontendController
+!!!261895.java!!!	AbstractFrontendController()
+
+    controllerDescriptor = new DefaultIconDescriptor();
+    selectedModuleConnectors = new HashMap<String, ICompositeValueConnector>();
+!!!262023.java!!!	execute(inout action : IAction, inout context : Map<String, Object>) : boolean
+
+    if (action == null) {
+      return true;
+    }
+    Map<String, Object> actionContext = getInitialActionContext();
+    context.putAll(actionContext);
+    try {
+      SecurityHelper.checkAccess(getBackendController().getApplicationSession()
+          .getSubject(), action, getTranslationProvider(), getLocale());
+      if (action.isBackend()) {
+        return executeBackend(action, context);
+      }
+      return executeFrontend(action, context);
+    } catch (Throwable ex) {
+      handleException(ex, context);
+      return false;
+    }
+!!!262151.java!!!	getActions() : ActionMap
+
+    return actionMap;
+!!!262279.java!!!	getHelpActions() : ActionMap
+
+    return helpActionMap;
+!!!262407.java!!!	getApplicationSession() : IApplicationSession
+
+    return getBackendController().getApplicationSession();
+!!!262535.java!!!	getBackendController() : IBackendController
+
+    return backendController;
+!!!262663.java!!!	getDescription() : String
+
+    return controllerDescriptor.getDescription();
+!!!262791.java!!!	getI18nDescription(inout translationProvider : ITranslationProvider, inout locale : Locale) : String
+
+    return controllerDescriptor.getI18nDescription(translationProvider, locale);
+!!!262919.java!!!	getI18nName(inout translationProvider : ITranslationProvider, inout locale : Locale) : String
+
+    return controllerDescriptor.getI18nName(translationProvider, locale);
+!!!263047.java!!!	getIconImageURL() : String
+
+    return controllerDescriptor.getIconImageURL();
+!!!263175.java!!!	getInitialActionContext() : Map<String, Object>
+
+    Map<String, Object> initialActionContext = new HashMap<String, Object>();
+    initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
+    ICompositeValueConnector selectedModuleViewConnector = selectedModuleConnectors
+        .get(getSelectedModuleName());
+    if (selectedModuleViewConnector != null) {
+      initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
+          selectedModuleViewConnector);
+    }
+    initialActionContext.put(ActionContextConstants.MODULE,
+        getModule(getSelectedModuleName()));
+
+    return initialActionContext;
+!!!263303.java!!!	getLocale() : Locale
+
+    return getBackendController().getApplicationSession().getLocale();
+!!!263431.java!!!	getMvcBinder() : IMvcBinder
+
+    return mvcBinder;
+!!!263559.java!!!	getName() : String
+
+    return controllerDescriptor.getName();
+!!!263687.java!!!	getStartupAction() : IAction
+
+    return startupAction;
+!!!263815.java!!!	getViewFactory() : IViewFactory
+
+    return viewFactory;
+!!!263943.java!!!	merge(inout entity : IEntity, inout mergeMode : MergeMode) : IEntity
+
+    return getBackendController().merge(entity, mergeMode);
+!!!264071.java!!!	merge(inout entities : List<IEntity>, inout mergeMode : MergeMode) : IEntity
+
+    return getBackendController().merge(entities, mergeMode);
+!!!264199.java!!!	setActionMap(inout actionMap : ActionMap) : void
+
+    this.actionMap = actionMap;
+!!!264327.java!!!	setHelpActionMap(inout helpActionMap : ActionMap) : void
+
+    this.helpActionMap = helpActionMap;
+!!!264455.java!!!	setDescription(in description : String) : void
+
+    controllerDescriptor.setDescription(description);
+!!!264583.java!!!	setIconImageURL(in iconImageURL : String) : void
+
+    controllerDescriptor.setIconImageURL(iconImageURL);
+!!!264711.java!!!	setLoginContextName(in loginContextName : String) : void
+
+    this.loginContextName = loginContextName;
+!!!264839.java!!!	setModules(inout modules : List<Module>) : void
+
+    this.modules = new LinkedHashMap<String, Module>();
+    for (Module module : modules) {
+      this.modules.put(module.getName(), module);
+    }
+!!!264967.java!!!	setModulesMenuIconImageUrl(in modulesMenuIconImageUrl : String) : void
+
+    this.modulesMenuIconImageUrl = modulesMenuIconImageUrl;
+!!!265095.java!!!	setMvcBinder(inout mvcBinder : IMvcBinder) : void
+
+    this.mvcBinder = mvcBinder;
+!!!265223.java!!!	setName(in name : String) : void
+
+    controllerDescriptor.setName(name);
+!!!265351.java!!!	setStartupAction(inout startupAction : IAction) : void
+
+    this.startupAction = startupAction;
+!!!265479.java!!!	setViewFactory(inout viewFactory : IViewFactory) : void
+
+    this.viewFactory = viewFactory;
+!!!265607.java!!!	start(inout peerController : IBackendController, inout startingLocale : Locale) : boolean
+
+    setBackendController(peerController);
+    return peerController.start(startingLocale);
+!!!265735.java!!!	stop() : boolean
+
+    return getBackendController().stop();
+!!!265991.java!!!	createModuleView(in moduleName : String, inout moduleViewDescriptor : IViewDescriptor, inout module : Module) : IView
+
+    BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
+    splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
+    splitViewDescriptor.setName(moduleViewDescriptor.getName());
+    splitViewDescriptor.setMasterDetail(true);
+
+    ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(
+        module);
+
+    splitViewDescriptor.setLeftTopViewDescriptor(moduleViewDescriptor);
+    splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
+
+    ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory.createView(
+        splitViewDescriptor, this, getLocale());
+    ((IConnectorSelector) moduleView.getConnector())
+        .addConnectorSelectionListener(new IConnectorSelectionListener() {
+
+          public void selectedConnectorChange(ConnectorSelectionEvent event) {
+            selectedModuleConnectors.put(moduleName,
+                (ICompositeValueConnector) event.getSelectedConnector());
+          }
+        });
+    for (IView<E> childView : moduleView.getChildren()) {
+      if (childView instanceof IMapView) {
+        for (IView<E> grandChildView : ((IMapView<E>) childView).getChildren()) {
+          mvcBinder.bind(grandChildView.getConnector(), getBackendController()
+              .createModelConnector(
+                  grandChildView.getDescriptor().getModelDescriptor()));
+        }
+      }
+    }
+    return moduleView;
+!!!266119.java!!!	displayModule(in moduleName : String) : void
+
+    Module module = getModule(moduleName);
+    if (module.getStartupAction() != null) {
+      Map<String, Object> context = createEmptyContext();
+      execute(module.getStartupAction(), context);
+    }
+!!!266247.java!!!	executeBackend(inout action : IAction, inout context : Map<String, Object>) : boolean
+
+    return getBackendController().execute(action, context);
+!!!266375.java!!!	executeFrontend(inout action : IAction, inout context : Map<String, Object>) : boolean
+
+    return action.execute(this, context);
+!!!266503.java!!!	getIconFactory() : IIconFactory
+
+    return viewFactory.getIconFactory();
+!!!266631.java!!!	getLoginCallbackHandler() : CallbackHandler
+
+    if (loginCallbackHandler == null) {
+      loginCallbackHandler = createLoginCallbackHandler();
+    }
+    return loginCallbackHandler;
+!!!266759.java!!!	getLoginContextName() : String
+
+    return loginContextName;
+!!!266887.java!!!	getModule(in moduleName : String) : Module
+
+    return modules.get(moduleName);
+!!!267015.java!!!	getModuleNames() : List<String>
+
+    return new ArrayList<String>(modules.keySet());
+!!!267143.java!!!	getModulesMenuIconImageUrl() : String
+
+    return modulesMenuIconImageUrl;
+!!!267271.java!!!	getSelectedModuleConnectors() : Map<String, ICompositeValueConnector>
+
+    return selectedModuleConnectors;
+!!!267399.java!!!	getSelectedModuleName() : String
+
+    return selectedModuleName;
+!!!267527.java!!!	loginSuccess(inout subject : Subject) : void
+
+    getBackendController().getApplicationSession().setSubject(subject);
+    String userPreferredLanguageCode = (String) getBackendController()
+        .getApplicationSession().getPrincipal().getCustomProperty(
+            UserPrincipal.LANGUAGE_PROPERTY);
+    if (userPreferredLanguageCode != null) {
+      getBackendController().getApplicationSession().setLocale(
+          new Locale(userPreferredLanguageCode));
+    }
+    for (Module module : modules.values()) {
+      translateModule(module);
+    }
+    getBackendController().installModules(modules);
+!!!267655.java!!!	setBackendController(inout backendController : IBackendController) : void
+
+    this.backendController = backendController;
+!!!267783.java!!!	setSelectedModuleName(in selectedModuleName : String) : void
+
+    this.selectedModuleName = selectedModuleName;
+!!!267911.java!!!	translateModule(inout module : Module) : void
+
+    module.setI18nName(getTranslationProvider().getTranslation(
+        module.getName(), getLocale()));
+    module.setI18nDescription(getTranslationProvider().getTranslation(
+        module.getDescription(), getLocale()));
+    if (module.getSubModules() != null) {
+      for (Module subModule : module.getSubModules()) {
+        translateModule(subModule);
+      }
+    }

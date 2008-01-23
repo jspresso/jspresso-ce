@@ -1,0 +1,21 @@
+class YesNoCancelAction
+!!!282503.java!!!	YesNoCancelAction()
+
+    super(YES_OPTION, NO_OPTION, CANCEL_OPTION);
+!!!282631.java!!!	setCancelAction(inout cancelAction : IAction) : void
+
+    this.cancelAction = cancelAction;
+!!!282759.java!!!	setNoAction(inout noAction : IAction) : void
+
+    this.noAction = noAction;
+!!!282887.java!!!	setYesAction(inout yesAction : IAction) : void
+
+    this.yesAction = yesAction;
+!!!283015.java!!!	getNextAction(in selectedOption : String) : IAction
+
+    if (YES_OPTION.equals(selectedOption)) {
+      return yesAction;
+    } else if (NO_OPTION.equals(selectedOption)) {
+      return noAction;
+    }
+    return cancelAction;

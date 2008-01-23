@@ -1,0 +1,71 @@
+class BasicNumberPropertyDescriptor
+!!!168455.java!!!	checkValueIntegrity(in component : Object, in propertyValue : Object) : void
+
+    super.checkValueIntegrity(component, propertyValue);
+    if (propertyValue != null) {
+      if ((getMinValue() != null && ((Number) propertyValue).doubleValue() < getMinValue()
+          .doubleValue())
+          || (getMaxValue() != null && ((Number) propertyValue).doubleValue() > getMaxValue()
+              .doubleValue())) {
+        IntegrityException ie = new IntegrityException("[" + getName()
+            + "] value is out of bounds on [" + component + "].") {
+
+          private static final long serialVersionUID = 7459823123892198831L;
+
+          @Override
+          public String getI18nMessage(
+              ITranslationProvider translationProvider, Locale locale) {
+            StringBuffer boundsSpec = new StringBuffer();
+            if (getMinValue() != null) {
+              boundsSpec.append(getMinValue()).append(" &lt= ");
+            }
+            boundsSpec.append("x");
+            if (getMaxValue() != null) {
+              boundsSpec.append(" &lt= ").append(getMaxValue());
+            }
+            String messageKey = null;
+            if ((getMinValue() != null && ((Number) propertyValue)
+                .doubleValue() < getMinValue().doubleValue())) {
+              messageKey = "integrity.property.toosmall";
+            } else {
+              messageKey = "integrity.property.toobig";
+            }
+            return translationProvider.getTranslation(messageKey,
+                new Object[] {getI18nName(translationProvider, locale),
+                    boundsSpec, component}, locale);
+          }
+
+        };
+        throw ie;
+      }
+    }
+!!!168583.java!!!	getMaxValue() : Double
+
+    if (maxValue != null) {
+      return maxValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((INumberPropertyDescriptor) getParentDescriptor()).getMaxValue();
+    }
+    return maxValue;
+!!!168711.java!!!	getMinValue() : Double
+
+    if (minValue != null) {
+      return minValue;
+    }
+    if (getParentDescriptor() != null) {
+      return ((INumberPropertyDescriptor) getParentDescriptor()).getMinValue();
+    }
+    return minValue;
+!!!168839.java!!!	setMaxValue(inout maxValue : Double) : void
+
+    this.maxValue = maxValue;
+!!!168967.java!!!	setMinValue(inout minValue : Double) : void
+
+    this.minValue = minValue;
+!!!169095.java!!!	clone() : BasicNumberPropertyDescriptor
+
+    BasicNumberPropertyDescriptor clonedDescriptor = (BasicNumberPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

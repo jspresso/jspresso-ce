@@ -1,0 +1,599 @@
+format 48
+"scripting" // com::d2s::framework::util::scripting
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/util/scripting"
+  java_package "com.d2s.framework.util.scripting"
+  classview 146055 "scripting"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 206087 "DefaultScriptHandler"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is the default implementation of the script handler interface. It relies
+on Jakarta's \"Bean Scripting Framework\".
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 223111 // <realization>
+	relation 223111 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 223111 // <realization>
+	  b parent class_ref 206215 // IScriptHandler
+      end
+
+      operation 415367 "DefaultScriptHandler"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>DefaultScriptHandler</code> instance.
+"
+      end
+
+      operation 415495 "evaluate"
+	public explicit_return_type "Object"
+	nparams 2
+	  param inout name "scriptable" type class_ref 206343 // IScript
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 415623 "execute"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "scriptable" type class_ref 206343 // IScript
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 206215 "IScriptHandler"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+The interface implemented by script executors.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      operation 415111 "evaluate"
+	package explicit_return_type "Object"
+	nparams 2
+	  param inout name "script" type class_ref 206343 // IScript
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Evaluates a scripted expression.
+
+@param script
+           the script to evaluate.
+@param context
+           the action context.
+@return the evaluation result.
+"
+      end
+
+      operation 415239 "execute"
+	package explicit_return_type "void"
+	nparams 2
+	  param inout name "script" type class_ref 206343 // IScript
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Executes a script.
+
+@param script
+           the script to execute.
+@param context
+           the action context.
+"
+      end
+    end
+
+    class 206343 "IScript"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Interface implemented by ny scriptable object.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 199047 "CONTEXT"
+	package explicit_type "String"
+	init_value "=  \"CONTEXT\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>CONTEXT</code> is the script execution context map.
+
+"
+      end
+
+      attribute 199175 "SCRIPTED_OBJECT"
+	package explicit_type "String"
+	init_value "=  \"SCRIPTED_OBJECT\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>SCRIPTED_OBJECT</code> is the script context key of the scripted
+object (the object the script is working on).
+
+"
+      end
+
+      operation 415751 "getLanguage"
+	package explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the scripting language used.
+
+@return the scripting language used.
+"
+      end
+
+      operation 415879 "getScript"
+	package explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the script code.
+
+@return the script code.
+"
+      end
+
+      operation 416007 "getScriptedObject"
+	package explicit_return_type "Object"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the scripted object.
+
+@return the scripted object.
+"
+      end
+    end
+
+    class 206471 "ScriptException"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This exception is thrown whenever an unexpected exception occurs on a view.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 223239 // <generalisation>
+	relation 223239 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 223239 // <generalisation>
+	  b parent class_ref 198663 // NestedRuntimeException
+      end
+
+      attribute 199303 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  5403717126687643426L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 416135 "ScriptException"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ScriptException</code> instance.
+
+@param message
+           the exception message.
+"
+      end
+
+      operation 416263 "ScriptException"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "nestedException" explicit_type "Throwable"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ScriptException</code> instance.
+
+@param nestedException
+           the nested exception.
+"
+      end
+
+      operation 416391 "ScriptException"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "nestedException" explicit_type "Throwable"
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ScriptException</code> instance.
+
+@param nestedException
+           the nested exception.
+@param message
+           the exception message.
+"
+      end
+    end
+
+    class 206599 "ScriptMixin"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Utility class helping to bring scripting capability in an object.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 223367 // <realization>
+	relation 223367 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 223367 // <realization>
+	  b parent class_ref 206343 // IScript
+      end
+
+      attribute 199431 "language"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 199559 "script"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 199687 "scriptedObject"
+	private explicit_type "Object"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 416519 "ScriptMixin"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "scriptedObject" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ScriptMixin</code> instance.
+
+@param scriptedObject
+           the object this mixin is introduced in.
+"
+      end
+
+      operation 416647 "getLanguage"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the language.
+
+@return the language.
+"
+      end
+
+      operation 416775 "getScript"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the script.
+
+@return the script.
+"
+      end
+
+      operation 416903 "getScriptedObject"
+	public explicit_return_type "Object"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the scriptedObject.
+
+@return the scriptedObject.
+"
+      end
+
+      operation 417031 "setLanguage"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "language" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the language.
+
+@param language
+           the language to set.
+"
+      end
+
+      operation 417159 "setScript"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "script" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the script.
+
+@param script
+           the script to set.
+"
+      end
+    end
+  end
+
+  deploymentview 145415 "scripting"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 191111 "IScriptHandler"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+${definition}"
+      associated_classes
+	class_ref 206215 // IScriptHandler
+      end
+    end
+
+    artifact 191239 "DefaultScriptHandler"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import org.apache.bsf.BSFException;
+import org.apache.bsf.BSFManager;
+${definition}"
+      associated_classes
+	class_ref 206087 // DefaultScriptHandler
+      end
+    end
+
+    artifact 191367 "IScript"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 206343 // IScript
+      end
+    end
+
+    artifact 191495 "ScriptException"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.exception.NestedRuntimeException;
+${definition}"
+      associated_classes
+	class_ref 206471 // ScriptException
+      end
+    end
+
+    artifact 191623 "ScriptMixin"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 206599 // ScriptMixin
+      end
+    end
+  end
+end

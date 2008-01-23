@@ -1,0 +1,5 @@
+class DescriptorAwareMapAccessorFactory
+!!!189831.java!!!	createCollectionPropertyAccessor(in property : String, inout beanClass : Class<?>, inout elementClass : Class<?>) : ICollectionAccessor
+    return new DescriptorAwareMapCollectionAccessor(property);
+!!!189959.java!!!	createPropertyAccessor(in property : String, inout beanClass : Class<?>) : IAccessor
+    return new DescriptorAwareMapPropertyAccessor(property);

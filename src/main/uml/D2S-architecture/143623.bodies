@@ -1,0 +1,123 @@
+class BasicProxyEntityFactory
+!!!187015.java!!!	createEntityInstance(inout entityContract : Class<T>) : T
+
+    T createdEntity = createEntityInstance(entityContract, entityGUIDGenerator
+        .generateGUID());
+    for (IPropertyDescriptor propertyDescriptor : entityDescriptorRegistry
+        .getComponentDescriptor(entityContract).getPropertyDescriptors()) {
+      if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+        createdEntity
+            .straightSetProperty(
+                propertyDescriptor.getName(),
+                entityCollectionFactory
+                    .createEntityCollection(((ICollectionPropertyDescriptor<?>) propertyDescriptor)
+                        .getModelType()));
+      } else if (propertyDescriptor instanceof IScalarPropertyDescriptor
+          && ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue() != null) {
+        createdEntity.straightSetProperty(propertyDescriptor.getName(),
+            ((IScalarPropertyDescriptor) propertyDescriptor).getDefaultValue());
+      }
+    }
+    createdEntity.onCreate(this, getPrincipal(), getEntityLifecycleHandler());
+    return createdEntity;
+!!!187143.java!!!	createEntityInstance(inout entityContract : Class<T>, inout id : Serializable) : T
+
+    final T createdEntity = createEntityInstance(entityContract, id, null);
+    createdEntity.addPropertyChangeListener(IEntity.VERSION,
+        new PropertyChangeListener() {
+
+          public void propertyChange(PropertyChangeEvent evt) {
+            if (evt.getOldValue() == null && evt.getNewValue() != null) {
+              createdEntity.firePropertyChange("persistent",
+                  new Boolean(false), new Boolean(true));
+            } else if (evt.getOldValue() != null && evt.getNewValue() == null) {
+              createdEntity.firePropertyChange("persistent", new Boolean(true),
+                  new Boolean(false));
+            }
+          }
+        });
+    return createdEntity;
+!!!187271.java!!!	createQueryEntityInstance(inout entityContract : Class<T>) : T
+
+    IEntity entityDelegate = createEntityInstance(entityContract, null,
+        new Class[] {IQueryEntity.class});
+    QueryEntityInvocationHandler entityHandler = new QueryEntityInvocationHandler(
+        entityDelegate);
+    return (T) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), entityDelegate.getClass().getInterfaces(),
+        entityHandler);
+!!!187399.java!!!	getComponentDescriptor(inout componentContract : Class<? extends IComponent>) : IComponentDescriptor
+
+    return entityDescriptorRegistry.getComponentDescriptor(componentContract);
+!!!187527.java!!!	setAccessorFactory(inout accessorFactory : IAccessorFactory) : void
+
+    this.accessorFactory = accessorFactory;
+!!!187655.java!!!	setEntityCollectionFactory(inout entityCollectionFactory : IComponentCollectionFactory) : void
+
+    this.entityCollectionFactory = entityCollectionFactory;
+!!!187783.java!!!	setEntityDescriptorRegistry(inout entityDescriptorRegistry : IComponentDescriptorRegistry) : void
+
+    this.entityDescriptorRegistry = entityDescriptorRegistry;
+!!!187911.java!!!	setEntityExtensionFactory(inout entityExtensionFactory : IComponentExtensionFactory) : void
+
+    this.entityExtensionFactory = entityExtensionFactory;
+!!!188039.java!!!	setEntityGUIDGenerator(inout entityGUIDGenerator : IGUIDGenerator) : void
+
+    this.entityGUIDGenerator = entityGUIDGenerator;
+!!!188167.java!!!	createEntityInvocationHandler(inout entityDescriptor : IComponentDescriptor) : InvocationHandler
+
+    return new BasicEntityInvocationHandler(entityDescriptor,
+        inlineComponentFactory, entityCollectionFactory, accessorFactory,
+        entityExtensionFactory);
+!!!188295.java!!!	getAccessorFactory() : IAccessorFactory
+
+    return accessorFactory;
+!!!188423.java!!!	getEntityCollectionFactory() : IComponentCollectionFactory
+
+    return entityCollectionFactory;
+!!!188551.java!!!	getEntityExtensionFactory() : IComponentExtensionFactory
+
+    return entityExtensionFactory;
+!!!188679.java!!!	getEntityLifecycleHandler() : IEntityLifecycleHandler
+
+    return null;
+!!!188807.java!!!	getPrincipal() : UserPrincipal
+
+    return null;
+!!!188935.java!!!	createEntityInstance(inout entityContract : Class<T>, inout id : Serializable, inout extraInterfaces : Class) : T
+
+    IComponentDescriptor entityDescriptor = entityDescriptorRegistry
+        .getComponentDescriptor(entityContract);
+    if (entityDescriptor.isPurelyAbstract()) {
+      throw new EntityException(entityDescriptor.getName()
+          + " is purely abstract. It cannot be instanciated.");
+    }
+    InvocationHandler entityHandler = createEntityInvocationHandler(entityDescriptor);
+    Class[] implementedClasses;
+    if (extraInterfaces != null) {
+      implementedClasses = new Class[extraInterfaces.length + 1];
+      implementedClasses[0] = entityDescriptor.getComponentContract();
+      for (int i = 0; i < extraInterfaces.length; i++) {
+        implementedClasses[i + 1] = extraInterfaces[i];
+      }
+    } else {
+      implementedClasses = new Class[1];
+      implementedClasses[0] = entityDescriptor.getComponentContract();
+    }
+    T entity = (T) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), implementedClasses, entityHandler);
+    entity.straightSetProperty(IEntity.ID, id);
+    return entity;
+!!!189063.java!!!	setInlineComponentFactory(inout inlineComponentFactory : IComponentFactory) : void
+
+    this.inlineComponentFactory = inlineComponentFactory;
+!!!189191.java!!!	getInlineComponentFactory() : IComponentFactory
+
+    return inlineComponentFactory;
+!!!189319.java!!!	createComponentInstance(inout componentContract : Class<T>, inout delegate : Object) : T
+
+    return inlineComponentFactory.createComponentInstance(componentContract,
+        delegate);
+!!!189447.java!!!	createComponentInstance(inout componentContract : Class<T>) : T
+
+    return inlineComponentFactory.createComponentInstance(componentContract);

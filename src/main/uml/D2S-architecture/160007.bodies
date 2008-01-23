@@ -1,0 +1,10 @@
+class ApplicationSessionException
+!!!239623.java!!!	ApplicationSessionException(in message : String)
+
+    super(message);
+!!!239751.java!!!	ApplicationSessionException(inout nestedException : Throwable)
+
+    super(nestedException);
+!!!239879.java!!!	ApplicationSessionException(inout nestedException : Throwable, in message : String)
+
+    super(nestedException, message);

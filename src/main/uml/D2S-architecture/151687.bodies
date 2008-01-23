@@ -1,0 +1,83 @@
+class BasicComponentViewDescriptor
+!!!213895.java!!!	getColumnCount() : int
+
+    return columnCount;
+!!!214023.java!!!	getIconImageURL() : String
+
+    String iconImageURL = super.getIconImageURL();
+    if (iconImageURL == null) {
+      iconImageURL = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor().getIconImageURL();
+    }
+    return iconImageURL;
+!!!214151.java!!!	getLabelsPosition() : int
+
+    return labelsPosition;
+!!!214279.java!!!	getPropertyViewDescriptors() : ISubViewDescriptor
+
+    if (propertyViewDescriptors == null) {
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor();
+      List<String> modelRenderedProperties = componentDescriptor
+          .getRenderedProperties();
+      List<ISubViewDescriptor> defaultPropertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
+      for (String renderedProperty : modelRenderedProperties) {
+        BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
+        propertyDescriptor.setName(renderedProperty);
+        defaultPropertyViewDescriptors.add(propertyDescriptor);
+      }
+      return defaultPropertyViewDescriptors;
+    }
+    return propertyViewDescriptors;
+!!!214407.java!!!	getPropertyWidth(in propertyName : String) : int
+
+    if (propertyWidths != null) {
+      Integer width = propertyWidths.get(propertyName);
+      if (width != null) {
+        return width.intValue();
+      }
+    }
+    return 1;
+!!!214535.java!!!	getRenderedChildProperties(in propertyName : String) : List<String>
+
+    List<String> childProperties = null;
+    if (renderedChildProperties != null) {
+      childProperties = renderedChildProperties.get(propertyName);
+    }
+    if (childProperties == null) {
+      IPropertyDescriptor childPropertyDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor().getPropertyDescriptor(propertyName);
+      if (childPropertyDescriptor instanceof ICollectionPropertyDescriptor) {
+        return ((ICollectionDescriptor<?>) ((ICollectionPropertyDescriptor<?>) childPropertyDescriptor)
+            .getCollectionDescriptor()).getElementDescriptor()
+            .getRenderedProperties();
+      } else if (childPropertyDescriptor instanceof IReferencePropertyDescriptor) {
+        return ((IReferencePropertyDescriptor<?>) childPropertyDescriptor)
+            .getReferencedDescriptor().getRenderedProperties();
+      }
+    }
+    return childProperties;
+!!!214663.java!!!	setColumnCount(in columnCount : int) : void
+
+    this.columnCount = columnCount;
+!!!214791.java!!!	setLabelsPosition(in labelsPosition : int) : void
+
+    this.labelsPosition = labelsPosition;
+!!!214919.java!!!	setPropertyViewDescriptors(inout propertyViewDescriptors : List<ISubViewDescriptor>) : void
+
+    this.propertyViewDescriptors = propertyViewDescriptors;
+!!!215047.java!!!	setPropertyWidths(inout propertyWidths : Map<String, Object>) : void
+
+    this.propertyWidths = new HashMap<String, Integer>();
+    for (Map.Entry<String, Object> propertyWidth : propertyWidths.entrySet()) {
+      if (propertyWidth.getValue() instanceof String) {
+        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
+            (String) propertyWidth.getValue()));
+      } else {
+        this.propertyWidths.put(propertyWidth.getKey(), new Integer(
+            ((Number) propertyWidth.getValue()).intValue()));
+      }
+    }
+!!!215175.java!!!	setRenderedChildProperties(inout renderedChildProperties : Map<String, List<String>>) : void
+
+    this.renderedChildProperties = renderedChildProperties;

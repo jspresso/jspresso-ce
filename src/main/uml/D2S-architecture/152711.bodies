@@ -1,0 +1,7 @@
+class BasicNestingViewDescriptor
+!!!217735.java!!!	getNestedViewDescriptor() : IViewDescriptor
+
+    return nestedViewDescriptor;
+!!!217863.java!!!	setNestedViewDescriptor(inout nestedViewDescriptor : IViewDescriptor) : void
+
+    this.nestedViewDescriptor = nestedViewDescriptor;

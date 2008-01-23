@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  default-lazy-init="true">
+
+  <!--
+    Mock definitions for the tools.
+  -->
+  <bean
+    id="applicationSession"
+    parent="abstractApplicationSession"
+    class="com.d2s.framework.application.backend.session.basic.BasicApplicationSession" />
+
+  <bean
+    id="queryEntitiesBackAction"
+    class="com.d2s.framework.application.backend.action.MockBackendAction" />
+
+  <bean
+    id="removeCollectionFromMasterBackAction"
+    class="com.d2s.framework.application.backend.action.RemoveCollectionFromMasterAction" />
+
+  <bean
+    id="smartEntityCloneFactory"
+    class="com.d2s.framework.model.entity.SmartEntityCloneFactory">
+    <property
+      name="accessorFactory"
+      ref="beanAccessorFactory" />
+  </bean>
+
+  <bean
+    id="applicationFrontController"
+    parent="abstractFrontController"
+    class="com.d2s.framework.tools.viewtester.MockSwingController"
+    scope="prototype">
+    <property
+      name="viewFactory"
+      ref="viewFactory" />
+  </bean>
+
+  <bean
+    id="applicationBackController"
+    parent="abstractBackController"
+    scope="prototype">
+    <property
+      name="applicationSession"
+      ref="applicationSession" />
+  </bean>
+
+</beans>

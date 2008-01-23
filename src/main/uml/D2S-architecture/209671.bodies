@@ -1,0 +1,7 @@
+class WingsStartup
+!!!421383.java!!!	WingsStartup()
+
+    start();
+!!!421511.java!!!	getStartupLocale() : Locale
+
+    return SessionManager.getSession().getLocale();

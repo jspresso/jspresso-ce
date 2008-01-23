@@ -1,0 +1,218 @@
+format 48
+"frontend" // com::d2s::framework::application::frontend
+  revision 3
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend"
+  java_package "com.d2s.framework.application.frontend"
+  package_ref 149255 // startup
+
+  classview 134919 "frontend"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 160519 "IFrontendController"
+      visibility public stereotype "interface"
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+General contract of frontend (view) application controllers.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 173191 // <generalisation>
+	relation 173191 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 173191 // <generalisation>
+	  b parent class_ref 154887 // IController
+      end
+
+      classrelation 173447 // <generalisation>
+	relation 173447 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 173447 // <generalisation>
+	  b parent class_ref 147591 // IActionable
+      end
+
+      operation 250375 "getMvcBinder"
+	package explicit_return_type "IMvcBinder"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the mvc binder used by this controller.
+
+@return the mvc binder used by this controller.
+"
+      end
+
+      operation 250503 "getStartupAction"
+	package explicit_return_type "IAction"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the action which is executed when the controller is started.
+
+@return the action which is executed when the controller is started.
+"
+      end
+
+      operation 250631 "getViewFactory"
+	package return_type class_ref 147207 // IViewFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E, F, G> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the view factory used by this controller.
+
+@return the view factory used by this controller.
+"
+      end
+
+      operation 250759 "getHelpActions"
+	package return_type class_ref 147463 // ActionMap
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Retrieves a map of help action lists to be presented on this view. 
+@return the map of action lists handled by this view.
+"
+      end
+
+      operation 250887 "start"
+	package explicit_return_type "boolean"
+	nparams 2
+	  param inout name "backendController" type class_ref 155783 // IBackendController
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Starts the controller. This method performs any necessary initializations
+(such as binding to the backend controller) and shows the initial view to
+the user. The initial view is generally built from the root view
+descriptor.
+
+@param backendController
+           the backend controller to bind to.
+@param locale
+           the locale this controller should use to create the views and
+           execute actions.
+@return true if the controller succesfully started.
+"
+      end
+    end
+  end
+
+  deploymentview 134279 "frontend"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 157959 "IFrontendController"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Locale;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.application.IController;
+import com.d2s.framework.application.backend.IBackendController;
+import com.d2s.framework.binding.IMvcBinder;
+import com.d2s.framework.util.descriptor.IIconDescriptor;
+import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionMap;
+import com.d2s.framework.view.action.IActionable;
+${definition}"
+      associated_classes
+	class_ref 160519 // IFrontendController
+      end
+    end
+  end
+
+  package_ref 135303 // action
+
+  package_ref 135943 // controller
+
+  package_ref 136071 // file
+end

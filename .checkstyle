@@ -3,4 +3,7 @@
     <fileset name="tous" enabled="true" check-config-name="D2S Checks" local="false">
         <file-match-pattern match-pattern="." include-pattern="true"/>
     </fileset>
+    <filter name="FilesFromPackage" enabled="true">
+        <filter-data value="util/src/main/java/com/d2s/framework/util/security"/>
+    </filter>
 </fileset-config>

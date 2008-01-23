@@ -1,0 +1,46 @@
+class ModalDialogAction
+!!!283143.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    final ULCDialog dialog;
+    IView<ULCComponent> mainView = getMainView(context);
+    ULCWindow window = UlcUtil.getVisibleWindow((getSourceComponent(context)));
+    dialog = new ULCDialog(window, getI18nName(getTranslationProvider(context),
+        getLocale(context)), true);
+
+    ULCBoxLayoutPane buttonBox = new ULCBoxLayoutPane(
+        ULCBoxLayoutPane.LINE_AXIS);
+    buttonBox.setBorder(new ULCEmptyBorder(new Insets(5, 10, 5, 10)));
+
+    ULCExtendedButton defaultButton = null;
+    for (IDisplayableAction action : getActions(context)) {
+      ULCExtendedButton actionButton = new ULCExtendedButton();
+      actionButton.setAction(getActionFactory(context).createAction(action,
+          actionHandler, mainView, getLocale(context)));
+      buttonBox.add(actionButton);
+      buttonBox.add(ULCFiller.createHorizontalStrut(10));
+      if (defaultButton == null) {
+        defaultButton = actionButton;
+      }
+    }
+    ULCBorderLayoutPane actionPanel = new ULCBorderLayoutPane();
+    actionPanel.add(buttonBox, ULCBorderLayoutPane.EAST);
+
+    ULCBorderLayoutPane mainPanel = new ULCBorderLayoutPane();
+    mainPanel.add(mainView.getPeer(), ULCBorderLayoutPane.CENTER);
+    mainPanel.add(actionPanel, ULCBorderLayoutPane.SOUTH);
+    dialog.getContentPane().add(mainPanel);
+    dialog.setDefaultCloseOperation(IWindowConstants.DO_NOTHING_ON_CLOSE);
+    if (defaultButton != null) {
+      dialog.getRootPane().setDefaultButton(defaultButton);
+    }
+    dialog.pack();
+    dialog.setVisible(true);
+    return super.execute(actionHandler, context);
+!!!283271.java!!!	getActions(inout context : Map<String, Object>) : IDisplayableAction
+
+    return (List<IDisplayableAction>) context
+        .get(ActionContextConstants.DIALOG_ACTIONS);
+!!!283399.java!!!	getMainView(inout context : Map<String, Object>) : IView
+
+    return (IView<ULCComponent>) context
+        .get(ActionContextConstants.DIALOG_VIEW);

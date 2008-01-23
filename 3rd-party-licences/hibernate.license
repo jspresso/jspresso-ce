@@ -1,0 +1,9 @@
+Hibernate is Free Software.
+
+Hibernate is licensed under the LGPL v2.1. The LGPL is sufficiently flexible to allow the use of Hibernate in both open source and commercial projects. The LGPL guarantees that Hibernate and any modifications made to Hibernate will stay open source, protecting our and your work. Anyone who wanted to release Hibernate under a different license would have to obtain permission from hundreds of people who have contributed code to Hibernate, which would be impractical. Hibernate is and will be open source distributed under the LGPL.
+
+Using Hibernate (by importing Hibernate's public interfaces in your Java code), and extending Hibernate (by subclassing or implementation of an extension interface) is considered by the authors of Hibernate to be dynamic linking. Hence our interpretation of the LGPL is that the use of the unmodified Hibernate source does not affect the license of your application code.
+
+The use of the unmodified Hibernate binary of course never affects the license of your application or distribution. The LGPL also forbids distribution for profit, so you will never have to pay money to any commercial entity for using or integrating Hibernate.
+
+If you modify Hibernate and redistribute your modifications, the LGPL applies. Please submit any modifications to our JIRA issue tracking system.

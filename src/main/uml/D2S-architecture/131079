@@ -1,0 +1,388 @@
+format 48
+"map" // com::d2s::framework::model::map
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/model/map"
+  java_package "com.d2s.framework.model.map"
+  classview 130567 "map"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 143879 "DescriptorAwareMapAccessorFactory"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A map accessor factory that create descriptor aware accessors. They are able
+to handle the underlying model integrity.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      operation 189831 "createCollectionPropertyAccessor"
+	public explicit_return_type "ICollectionAccessor"
+	nparams 3
+	  param in name "property" explicit_type "String"
+	  param inout name "beanClass" explicit_type "Class<?>"
+	  param inout name "elementClass" explicit_type "Class<?>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new <code>DescriptorAwareMapCollectionAccessor</code> on the
+collection property.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 189959 "createPropertyAccessor"
+	public explicit_return_type "IAccessor"
+	nparams 2
+	  param in name "property" explicit_type "String"
+	  param inout name "beanClass" explicit_type "Class<?>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new <code>DescriptorAwareMapPropertyAccessor</code> on the
+property.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+
+    class 144135 "DescriptorAwareMapCollectionAccessor"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A map collection property accessor that receives a model descriptor to handle
+the model integrity.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 150023 // <generalisation>
+	relation 150023 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 150023 // <generalisation>
+	  b parent class_ref 144263 // DescriptorAwareMapPropertyAccessor
+      end
+
+      classrelation 150279 // <realization>
+	relation 150279 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 150279 // <realization>
+	  b parent class_ref 136839 // IModelDescriptorAware
+      end
+
+      operation 190599 "DescriptorAwareMapCollectionAccessor"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "property" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>DescriptorAwareMapCollectionAccessor</code>
+instance.
+
+@param property
+           the property to create the accessor for.
+"
+      end
+
+      operation 190727 "addToValue"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "target" explicit_type "Object"
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 190855 "getValue"
+	public explicit_return_type "Collection<?>"
+	nparams 1
+	  param inout name "target" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 190983 "removeFromValue"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "target" explicit_type "Object"
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 191111 "getModelDescriptor"
+	protected return_type class_ref 132615 // ICollectionPropertyDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<?> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Gets the modelDescriptor.
+
+@return the modelDescriptor.
+"
+      end
+    end
+
+    class 144263 "DescriptorAwareMapPropertyAccessor"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A map property accessor that receives a model descriptor to handle the model
+integrity.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 149767 // <realization>
+	relation 149767 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 149767 // <realization>
+	  b parent class_ref 136839 // IModelDescriptorAware
+      end
+
+      classrelation 149895 // modelDescriptor (<unidirectional association>)
+	relation 149895 --->
+	  a role_name "modelDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 149895 // modelDescriptor (<unidirectional association>)
+	  b parent class_ref 134663 // IModelDescriptor
+      end
+
+      operation 190087 "DescriptorAwareMapPropertyAccessor"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "property" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>DescriptorAwareMapPropertyAccessor</code>
+instance.
+
+@param property
+           the property to create the accessor for.
+"
+      end
+
+      operation 190215 "setModelDescriptor"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "modelDescriptor" type class_ref 134663 // IModelDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 190343 "setValue"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "target" explicit_type "Object"
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 190471 "getModelDescriptor"
+	protected return_type class_ref 132743 // IPropertyDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the modelDescriptor.
+
+@return the modelDescriptor.
+"
+      end
+    end
+  end
+
+  deploymentview 130439 "map"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 142215 "DescriptorAwareMapAccessorFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.accessor.IAccessor;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.accessor.ICollectionAccessor;
+${definition}"
+      associated_classes
+	class_ref 143879 // DescriptorAwareMapAccessorFactory
+      end
+    end
+
+    artifact 142343 "DescriptorAwareMapPropertyAccessor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.util.accessor.map.MapPropertyAccessor;
+${definition}"
+      associated_classes
+	class_ref 144263 // DescriptorAwareMapPropertyAccessor
+      end
+    end
+
+    artifact 142471 "DescriptorAwareMapCollectionAccessor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.Collection;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IModelDescriptorAware;
+import com.d2s.framework.util.accessor.ICollectionAccessor;
+${definition}"
+      associated_classes
+	class_ref 144135 // DescriptorAwareMapCollectionAccessor
+      end
+    end
+  end
+end

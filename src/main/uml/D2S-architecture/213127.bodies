@@ -1,0 +1,39 @@
+class UserPrincipal
+!!!424071.java!!!	UserPrincipal(in name : String)
+
+    this.name = name;
+    customProperties = new HashMap<String, Object>();
+!!!424199.java!!!	equals(inout another : Object) : boolean
+
+    if (!(another instanceof UserPrincipal)) {
+      return false;
+    }
+    String anotherDn = ((UserPrincipal) another).getName();
+    boolean equals = false;
+    if (name == null) {
+      equals = anotherDn == null;
+    } else {
+      equals = name.equals(anotherDn);
+    }
+    return equals;
+!!!424327.java!!!	getCustomProperties() : Map<String, Object>
+
+    return customProperties;
+!!!424455.java!!!	getCustomProperty(in propertyName : String) : Object
+
+    return customProperties.get(propertyName);
+!!!424583.java!!!	getName() : String
+
+    return name;
+!!!424711.java!!!	hashCode() : int
+
+    if (name == null) {
+      return 0;
+    }
+    return name.hashCode();
+!!!424839.java!!!	putCustomProperty(in propertyName : String, inout propertyValue : Object) : void
+
+    customProperties.put(propertyName, propertyValue);
+!!!424967.java!!!	toString() : String
+
+    return name;

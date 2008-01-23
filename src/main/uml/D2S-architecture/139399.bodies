@@ -1,0 +1,8 @@
+class BasicComponentDescriptorRegistry
+!!!167559.java!!!	getComponentDescriptor(inout componentContract : Class<? extends IComponent>) : IComponentDescriptor
+
+    return (IComponentDescriptor<IComponent>) componentApplicationContext
+        .getBean(componentContract.getName());
+!!!167687.java!!!	setApplicationContext(inout applicationContext : ApplicationContext) : void
+
+    this.componentApplicationContext = applicationContext;

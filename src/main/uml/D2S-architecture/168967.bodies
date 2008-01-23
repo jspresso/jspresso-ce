@@ -1,0 +1,19 @@
+class ModuleInternalFrameListener
+!!!291335.java!!!	ModuleInternalFrameListener(in moduleName : String)
+
+      this.moduleName = moduleName;
+!!!291463.java!!!	internalFrameActivated(inout e : ExtendedInternalFrameEvent) : void
+
+      setSelectedModuleName(moduleName);
+!!!291591.java!!!	internalFrameDeactivated(inout e : ExtendedInternalFrameEvent) : void
+
+      setSelectedModuleName(null);
+!!!291719.java!!!	internalFrameDeiconified(inout event : ExtendedInternalFrameEvent) : void
+
+      setSelectedModuleName(moduleName);
+!!!291847.java!!!	internalFrameIconified(inout event : ExtendedInternalFrameEvent) : void
+
+      setSelectedModuleName(null);
+!!!291975.java!!!	internalFrameOpened(inout event : ExtendedInternalFrameEvent) : void
+
+      setSelectedModuleName(moduleName);

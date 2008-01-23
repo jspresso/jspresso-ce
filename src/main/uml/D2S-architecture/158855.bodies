@@ -1,0 +1,37 @@
+class AddToModuleObjectsAction
+!!!236679.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    ICompositeValueConnector moduleConnector = getModuleConnector(context);
+    BeanCollectionModule module = (BeanCollectionModule) moduleConnector
+        .getConnectorValue();
+
+    Collection<Object> projectedCollection;
+    if (module.getModuleObjects() == null) {
+      projectedCollection = new ArrayList<Object>();
+    } else {
+      projectedCollection = new ArrayList<Object>(module.getModuleObjects());
+    }
+
+    Object newModuleObject = createNewModuleObject(actionHandler, context);
+    projectedCollection.add(newModuleObject);
+    module.setModuleObjects(projectedCollection);
+
+    ICollectionConnector moduleObjectsConnector = getSourceModelConnector(context);
+    if (moduleObjectsConnector == null) {
+      moduleObjectsConnector = getModelConnector(context);
+    }
+
+    moduleObjectsConnector.setConnectorValue(projectedCollection);
+
+    context.put(ActionContextConstants.SELECTED_INDICES, ConnectorHelper
+        .getIndicesOf(moduleObjectsConnector, Collections
+            .singleton(newModuleObject)));
+    return super.execute(actionHandler, context);
+!!!236807.java!!!	createNewModuleObject(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : Object
+
+    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor(context))
+        .getElementDescriptor();
+
+    return getEntityFactory(context).createEntityInstance(
+        (Class<? extends IEntity>) projectedComponentDescriptor
+            .getComponentContract());

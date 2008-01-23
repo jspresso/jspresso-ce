@@ -1,0 +1,13 @@
+class BasicPasswordPropertyDescriptor
+!!!173447.java!!!	getModelType() : Class<?>
+    return char[].class;
+!!!173575.java!!!	getValueAsString(inout value : Object) : String
+    if (value != null) {
+      return new String((char[]) value);
+    }
+    return null;
+!!!173703.java!!!	clone() : BasicPasswordPropertyDescriptor
+    BasicPasswordPropertyDescriptor clonedDescriptor = (BasicPasswordPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

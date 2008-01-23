@@ -1,0 +1,10 @@
+class BasicIntegerPropertyDescriptor
+!!!171271.java!!!	getModelType() : Class<?>
+
+    return Integer.class;
+!!!171399.java!!!	clone() : BasicIntegerPropertyDescriptor
+
+    BasicIntegerPropertyDescriptor clonedDescriptor = (BasicIntegerPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

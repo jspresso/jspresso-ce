@@ -1,0 +1,20 @@
+class SelectEntityPropertyAction
+!!!235655.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+    IEntity model = (IEntity) getModelConnector(context).getConnectorValue();
+    if (model != null) {
+      try {
+        Object propertyValue = getAccessorFactory(model, context)
+            .createPropertyAccessor(property, model.getContract()).getValue(
+                model);
+        context.put(ActionContextConstants.ACTION_PARAM, propertyValue);
+      } catch (IllegalAccessException ex) {
+        throw new ActionException(ex);
+      } catch (InvocationTargetException ex) {
+        throw new ActionException(ex);
+      } catch (NoSuchMethodException ex) {
+        throw new ActionException(ex);
+      }
+    }
+    return true;
+!!!235783.java!!!	setProperty(in property : String) : void
+    this.property = property;

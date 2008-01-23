@@ -1,0 +1,10 @@
+class FormattedTableCellRenderer
+!!!335623.java!!!	FormattedTableCellRenderer(in column : int, inout dataType : IDataType)
+
+    super(column);
+    this.dataType = dataType;
+!!!335751.java!!!	getTableCellRendererComponent(inout table : ULCTable, inout value : Object, inout isSelected : boolean, inout hasFocus : boolean, in row : int) : IRendererComponent
+
+    setDataType(dataType);
+    return super.getTableCellRendererComponent(table, value, isSelected,
+        hasFocus, row);

@@ -1,0 +1,25 @@
+class BasicCompositeTreeLevelDescriptor
+!!!215559.java!!!	getChildDescriptor(in name : String) : ITreeLevelDescriptor
+
+    if (childrenDescriptors != null) {
+      return childrenDescriptors.get(name);
+    }
+    return null;
+!!!215687.java!!!	getChildrenDescriptors() : ITreeLevelDescriptor
+
+    if (childrenDescriptors != null) {
+      return new ArrayList<ITreeLevelDescriptor>(childrenDescriptors.values());
+    }
+    return null;
+!!!215815.java!!!	setChildrenDescriptors(inout childrenDescriptors : List<ITreeLevelDescriptor>) : void
+
+    this.childrenDescriptors = new LinkedHashMap<String, ITreeLevelDescriptor>();
+    for (ITreeLevelDescriptor descriptor : childrenDescriptors) {
+      // String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
+      // .getName();
+      // if (nodeGroupDescriptorName == null) {
+      String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
+          .getModelDescriptor().getName();
+      // }
+      this.childrenDescriptors.put(nodeGroupDescriptorName, descriptor);
+    }

@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="656" height="563" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<line stroke="black" stroke-opacity="1" x1="38" y1="530" x2="247" y2="530" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="220" y1="394" x2="228" y2="393" />
+	<line stroke="black" stroke-opacity="1" x1="220" y1="394" x2="219" y2="385" />
+	<line stroke="black" stroke-opacity="1" x1="269" y1="333" x2="220" y2="394" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="269,333 269,341 261,342 260,333" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="50" y1="341" x2="180" y2="154" />
+	<line stroke="black" stroke-opacity="1" x1="184" y1="150" x2="175" y2="151" />
+	<line stroke="black" stroke-opacity="1" x1="184" y1="150" x2="185" y2="158" />
+	<line stroke="black" stroke-opacity="1" x1="175" y1="151" x2="185" y2="158" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="124" y1="414" x2="122" y2="405" />
+	<line stroke="black" stroke-opacity="1" x1="124" y1="414" x2="115" y2="415" />
+	<line stroke="black" stroke-opacity="1" x1="72" y1="382" x2="124" y2="414" />
+	<polygon fill="#000000" stroke="black" stroke-opacity="1" points="72,382 80,380 82,388 73,390" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="63" y1="341" x2="307" y2="151" />
+	<line stroke="black" stroke-opacity="1" x1="312" y1="148" x2="303" y2="146" />
+	<line stroke="black" stroke-opacity="1" x1="312" y1="148" x2="310" y2="156" />
+	<line stroke="black" stroke-opacity="1" x1="303" y1="146" x2="310" y2="156" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="508" y1="286" x2="294" y2="151" />
+	<line stroke="black" stroke-opacity="1" x1="289" y1="148" x2="290" y2="156" />
+	<line stroke="black" stroke-opacity="1" x1="289" y1="148" x2="297" y2="146" />
+	<line stroke="black" stroke-opacity="1" x1="290" y1="156" x2="297" y2="146" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="508" y1="267" x2="398" y2="154" />
+	<line stroke="black" stroke-opacity="1" x1="394" y1="150" x2="393" y2="158" />
+	<line stroke="black" stroke-opacity="1" x1="394" y1="150" x2="402" y2="150" />
+	<line stroke="black" stroke-opacity="1" x1="393" y1="158" x2="402" y2="150" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="291" y1="509" x2="291" y2="339" />
+	<line stroke="black" stroke-opacity="1" x1="291" y1="333" x2="285" y2="339" />
+	<line stroke="black" stroke-opacity="1" x1="291" y1="333" x2="297" y2="339" />
+	<line stroke="black" stroke-opacity="1" x1="285" y1="339" x2="297" y2="339" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="281" y1="280" x2="237" y2="155" />
+	<line stroke="black" stroke-opacity="1" x1="235" y1="150" x2="231" y2="157" />
+	<line stroke="black" stroke-opacity="1" x1="235" y1="150" x2="242" y2="153" />
+	<line stroke="black" stroke-opacity="1" x1="231" y1="157" x2="242" y2="153" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="529" y1="476" x2="332" y2="336" />
+	<line stroke="black" stroke-opacity="1" x1="328" y1="333" x2="329" y2="341" />
+	<line stroke="black" stroke-opacity="1" x1="328" y1="333" x2="336" y2="331" />
+	<line stroke="black" stroke-opacity="1" x1="329" y1="341" x2="336" y2="331" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="299" y1="280" x2="342" y2="155" />
+	<line stroke="black" stroke-opacity="1" x1="344" y1="150" x2="336" y2="153" />
+	<line stroke="black" stroke-opacity="1" x1="344" y1="150" x2="347" y2="157" />
+	<line stroke="black" stroke-opacity="1" x1="336" y1="153" x2="347" y2="157" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="38" y1="382" x2="38" y2="530" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="38,382 44,388 38,394 32,388" />
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-style="italic" x="40" y="526">companyDepartments</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-style="italic" x="420" y="526">departmentTeams</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="334" y1="530" x2="554" y2="530" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="334,530 340,524 346,530 340,536" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="554" y1="530" x2="554" y2="514" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="356" y1="308" x2="508" y2="314" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="554" y1="393" x2="554" y2="473" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="37" y1="341" x2="37" y2="20" />
+	<polygon fill="#ffffff" stroke="black" stroke-opacity="1" points="37,341 31,335 37,329 43,335" />
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-style="italic" x="236" y="17">companyEmployees</text>
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="37" y1="20" x2="554" y2="20" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="554" y1="20" x2="554" y2="238" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="70" y="346" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="6" y="378" width="67" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="2" y="342" width="68" height="36" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="36" y="357">Company</text>
+	<line stroke="black" stroke-opacity="1" x1="2" y1="362" x2="70" y2="362" />
+	<line stroke="black" stroke-opacity="1" x1="2" y1="370" x2="70" y2="370" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="401" y="82" width="3" height="67" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="317" y="146" width="87" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="313" y="78" width="88" height="68" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="357" y="93">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="357" y="113">Nameable</text>
+	<line stroke="black" stroke-opacity="1" x1="313" y1="118" x2="401" y2="118" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="317" y="133">name</text>
+	<line stroke="black" stroke-opacity="1" x1="313" y1="138" x2="401" y2="138" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="330" y="514" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="252" y="546" width="81" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="248" y="510" width="82" height="36" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="289" y="525">Department</text>
+	<line stroke="black" stroke-opacity="1" x1="248" y1="530" x2="330" y2="530" />
+	<line stroke="black" stroke-opacity="1" x1="248" y1="538" x2="330" y2="538" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="574" y="478" width="3" height="35" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="534" y="510" width="43" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="530" y="474" width="44" height="36" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="552" y="489">Team</text>
+	<line stroke="black" stroke-opacity="1" x1="530" y1="494" x2="574" y2="494" />
+	<line stroke="black" stroke-opacity="1" x1="530" y1="502" x2="574" y2="502" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="285" y="64" width="3" height="85" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="155" y="146" width="133" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="151" y="60" width="134" height="86" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="218" y="75">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="218" y="95">Traceable</text>
+	<line stroke="black" stroke-opacity="1" x1="151" y1="100" x2="285" y2="100" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="155" y="115">createTimestamp</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="155" y="133">lastUpdateTimestamp</text>
+	<line stroke="black" stroke-opacity="1" x1="151" y1="138" x2="285" y2="138" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="352" y="285" width="3" height="47" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="230" y="329" width="125" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="226" y="281" width="126" height="48" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="289" y="296">OrganizationalUnit</text>
+	<line stroke="black" stroke-opacity="1" x1="226" y1="301" x2="352" y2="301" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="230" y="316">ouId</text>
+	<line stroke="black" stroke-opacity="1" x1="226" y1="321" x2="352" y2="321" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="229" y="399" width="3" height="103" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="129" y="499" width="103" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="125" y="395" width="104" height="104" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="177" y="410">&lt;&lt;component&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="177" y="430">ContactInfo</text>
+	<line stroke="black" stroke-opacity="1" x1="125" y1="435" x2="229" y2="435" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="129" y="450">address</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="129" y="468">phone</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="129" y="486">email</text>
+	<line stroke="black" stroke-opacity="1" x1="125" y1="491" x2="229" y2="491" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="597" y="243" width="3" height="149" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="513" y="389" width="87" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="509" y="239" width="88" height="150" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="553" y="254">Employee</text>
+	<line stroke="black" stroke-opacity="1" x1="509" y1="259" x2="597" y2="259" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="513" y="274">firstName</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="513" y="292">ssn</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="513" y="310">birthDate</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="513" y="328">hireDate</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="513" y="346">gender</text>
+	<line stroke="black" stroke-opacity="1" x1="509" y1="351" x2="597" y2="351" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="513" y="366">getAge()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="513" y="384">computeAge()</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="236" y="386">contact</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="209" y="386">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="71" y="412">contact</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="107" y="441">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="125" y="544">&lt;&lt;set&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="176" y="527">departments</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="13" y="412">company</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="232" y="551">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="21" y="403">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="451" y="542">&lt;&lt;set&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="564" y="535">teams</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="344" y="522">department</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="539" y="535">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="344" y="551">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="448" y="306">manager</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="366" y="300">managedOu</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="491" y="335">1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="366" y="329">0..1</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="529" y="443">&lt;&lt;set&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="564" y="465">teams</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="564" y="414">teamMembers</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="539" y="465">*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="524" y="414">1..*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="270" y="33">&lt;&lt;set&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="564" y="230">employees</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="5" y="316">company</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="524" y="230">1..*</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="20" y="333">1</text>
+</g>
+</svg>

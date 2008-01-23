@@ -1,0 +1,1063 @@
+format 48
+"action" // com::d2s::framework::application::frontend::action
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action"
+  java_package "com.d2s.framework.application.frontend.action"
+  classview 135047 "action"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 160647 "AbstractChainedAction"
+      abstract visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 3
+      actual class class_ref 160775 // AbstractFrontendAction
+        rank 0 explicit_value "E"
+      actual class class_ref 160775 // AbstractFrontendAction
+        rank 1 explicit_value "F"
+      actual class class_ref 160775 // AbstractFrontendAction
+        rank 2 explicit_value "G"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+An simple frontend action which holds a reference on a chained next
+action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 969 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 173831 // <realization>
+	relation 173831 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 173831 // <realization>
+	  b parent class_ref 160775 // AbstractFrontendAction
+      end
+
+      attribute 154119 "nextAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 254727 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Executes the next action.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 254855 "getNextAction"
+	public explicit_return_type "IAction"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the next action reference. If the next action has been configured
+strongly through the setter method, it is directly returned. If not, it is
+looked up into the action context.
+
+@param context
+           the action context.
+@return the next action to execute.
+@see #setNextAction(IAction)
+"
+      end
+
+      operation 254983 "setNextAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "nextAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the nextAction.
+
+@param nextAction
+           the next action to execute.
+"
+      end
+    end
+
+    class 160775 "AbstractFrontendAction"
+      abstract visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Base class for frontend actions.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 173575 // <generalisation>
+	relation 173575 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 173575 // <generalisation>
+	  b parent class_ref 155527 // AbstractAction
+      end
+
+      classrelation 173703 // <realization>
+	relation 173703 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 173703 // <realization>
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      attribute 153607 "acceleratorAsString"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 153735 "actionabilityGates"
+	private explicit_type "IGate"
+	stereotype "Collection"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 153863 "actionDescriptor"
+	private explicit_type "DefaultIconDescriptor"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 153991 "mnemonicAsString"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 251015 "AbstractFrontendAction"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>AbstractFrontendAction</code> instance.
+"
+      end
+
+      operation 251143 "equals"
+	public explicit_return_type "boolean"
+	nparams 1
+	  param inout name "obj" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 251271 "getAcceleratorAsString"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 251399 "getActionabilityGates"
+	public explicit_return_type "Collection<IGate>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the actionabilityGates.
+
+@return the actionabilityGates.
+"
+      end
+
+      operation 251527 "getDescription"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 251655 "getI18nDescription"
+	public explicit_return_type "String"
+	nparams 2
+	  param inout name "translationProvider" explicit_type "ITranslationProvider"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 251783 "getI18nName"
+	public explicit_return_type "String"
+	nparams 2
+	  param inout name "translationProvider" explicit_type "ITranslationProvider"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 251911 "getIconImageURL"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 252039 "getLocale"
+	public explicit_return_type "Locale"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 252167 "getMnemonicAsString"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 252295 "getModuleConnector"
+	public explicit_return_type "ICompositeValueConnector"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This is a utility method which is able to retrieve the module view
+connector this action has been executed on from its context. It uses
+well-known context keys of the action context which are:
+<ul>
+<li> <code>ActionContextConstants.MODULE_VIEW_CONNECTOR</code> to get the
+the module view connector the action executes on.
+</ul>
+<p>
+The returned connector mainly serves for acting on the view component the
+action has to be triggered on.
+
+@param context
+           the action context.
+@return the value connector this model action was triggered on.
+"
+      end
+
+      operation 252423 "getModule"
+	public return_type class_ref 159239 // Module
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This is a utility method which is able to retrieve the module 
+this action has been executed on from its context. It uses well-known
+context keys of the action context which are:
+<ul>
+<li> <code>ActionContextConstants.MODULE</code> to get the the
+module the action executes on.
+</ul>
+
+@param context
+           the action context.
+@return the module this action was triggered on.
+"
+      end
+
+      operation 252551 "getName"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 252679 "getParentModuleConnector"
+	public explicit_return_type "ICompositeValueConnector"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This is a utility method which is able to retrieve the parent module view
+connector this action has been executed on from its context. It uses
+well-known context keys of the action context which are:
+<ul>
+<li> <code>ActionContextConstants.PARENT_MODULE_VIEW_CONNECTOR</code> to
+get the the parent module view connector the action executes on.
+</ul>
+<p>
+The returned connector mainly serves for acting on the view component the
+action has to be triggered on.
+
+@param context
+           the action context.
+@return the parent value connector this model action was triggered on.
+"
+      end
+
+      operation 252807 "getSourceViewConnector"
+	public explicit_return_type "IValueConnector"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This is a utility method which is able to retrieve the view connector this
+action has been executed on from its context. It uses well-known context
+keys of the action context which are:
+<ul>
+<li> <code>ActionContextConstants.SOURCE_VIEW_CONNECTOR</code> to get the
+the view value connector the action executes on.
+</ul>
+<p>
+The returned connector mainly serves for acting on the view component the
+action has to be triggered on.
+
+@param context
+           the action context.
+@return the value connector this model action was triggered on.
+"
+      end
+
+      operation 252935 "getViewConnector"
+	public explicit_return_type "IValueConnector"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This is a utility method which is able to retrieve the view connector this
+action has been executed on from its context. It uses well-known context
+keys of the action context which are:
+<ul>
+<li> <code>ActionContextConstants.VIEW_CONNECTOR</code> to get the the
+view value connector the action executes on.
+</ul>
+<p>
+The returned connector mainly serves for acting on the view component the
+action has to be triggered on.
+
+@param context
+           the action context.
+@return the value connector this model action was triggered on.
+"
+      end
+
+      operation 253063 "hashCode"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 253191 "isBackend"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Returns false.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 253319 "setAcceleratorAsString"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "acceleratorAsString" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the acceleratorAsString.
+
+@param acceleratorAsString
+           the acceleratorAsString to set.
+"
+      end
+
+      operation 253447 "setActionabilityGates"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "actionabilityGates" explicit_type "Collection<IGate>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the actionabilityGates.
+
+@param actionabilityGates
+           the actionabilityGates to set.
+"
+      end
+
+      operation 253575 "setDescription"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "description" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the description.
+
+@param description
+           the description to set.
+"
+      end
+
+      operation 253703 "setIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "iconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the iconImageURL.
+
+@param iconImageURL
+           the iconImageURL to set.
+"
+      end
+
+      operation 253831 "setMnemonicAsString"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "mnemonicStringRep" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the mnemonic of the action.
+
+@param mnemonicStringRep
+           the mnemonic to set represented as a string as KeyStroke factory
+           would parse it.
+"
+      end
+
+      operation 253959 "setName"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "name" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the name.
+
+@param name
+           the name to set.
+"
+      end
+
+      operation 254087 "getActionFactory"
+	protected return_type class_ref 146951 // IActionFactory
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<G, E> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the actionFactory.
+
+@param context
+           the action context.
+@return the actionFactory.
+"
+      end
+
+      operation 254215 "getController"
+	protected return_type class_ref 160519 // IFrontendController
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E, F, G> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+  @SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets the frontend controller out of the action context.
+
+@param context
+           the action context.
+@return the frontend controller.
+"
+      end
+
+      operation 254343 "getIconFactory"
+	protected return_type class_ref 145799 // IIconFactory
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<F> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the iconFactory.
+
+@param context
+           the action context.
+@return the iconFactory.
+"
+      end
+
+      operation 254471 "getMvcBinder"
+	protected explicit_return_type "IMvcBinder"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the mvcBinder.
+
+@param context
+           the action context.
+@return the mvcBinder.
+"
+      end
+
+      operation 254599 "getViewFactory"
+	protected return_type class_ref 147207 // IViewFactory
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E, F, G> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the viewFactory.
+
+@param context
+           the action context.
+@return the viewFactory.
+"
+      end
+    end
+
+    class 160903 "ActionWrapper"
+      visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 3
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 0 explicit_value "E"
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 1 explicit_value "F"
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 2 explicit_value "G"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple frontend action to wrap a backend action.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 173959 // <realization>
+	relation 173959 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 173959 // <realization>
+	  b parent class_ref 160647 // AbstractChainedAction
+      end
+
+      attribute 154247 "wrappedAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 255111 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 255239 "setWrappedAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "wrappedAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the wrappedAction.
+
+@param wrappedAction
+           the wrappedAction to set.
+"
+      end
+
+      operation 255367 "getWrappedAction"
+	protected explicit_return_type "IAction"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the wrappedAction.
+
+@return the wrappedAction.
+"
+      end
+    end
+
+    class 161031 "ConnectorSelectionAction"
+      visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 3
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 0 explicit_value "E"
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 1 explicit_value "F"
+      actual class class_ref 160647 // AbstractChainedAction
+        rank 2 explicit_value "G"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple action which selects indices on ath view connector.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 174087 // <realization>
+	relation 174087 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 174087 // <realization>
+	  b parent class_ref 160647 // AbstractChainedAction
+      end
+
+      operation 255495 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Selects indices on the view collection connector based on the
+<code>ActionContextConstants.SELECTED_INDICES</code> context value.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+  end
+
+  deploymentview 134407 "action"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 158087 "AbstractFrontendAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.application.action.AbstractAction;
+import com.d2s.framework.application.frontend.IFrontendController;
+import com.d2s.framework.application.model.Module;
+import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.binding.IMvcBinder;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
+import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.view.IActionFactory;
+import com.d2s.framework.view.IIconFactory;
+import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.IDisplayableAction;
+${definition}"
+      associated_classes
+	class_ref 160775 // AbstractFrontendAction
+      end
+    end
+
+    artifact 158215 "AbstractChainedAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 160647 // AbstractChainedAction
+      end
+    end
+
+    artifact 158343 "ActionWrapper"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 160903 // ActionWrapper
+      end
+    end
+
+    artifact 158471 "ConnectorSelectionAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.ICollectionConnector;
+${definition}"
+      associated_classes
+	class_ref 161031 // ConnectorSelectionAction
+      end
+    end
+  end
+
+  package_ref 135431 // flow
+
+  package_ref 135559 // module
+
+  package_ref 135687 // std
+
+  package_ref 135815 // wizard
+
+  package_ref 136711 // ulc
+
+  package_ref 138759 // swing
+
+  package_ref 139911 // wings
+end

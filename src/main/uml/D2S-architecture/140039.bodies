@@ -1,0 +1,23 @@
+class BasicDescriptorDescriptor
+!!!169735.java!!!	BasicDescriptorDescriptor()
+
+    super();
+    // Helper constructor
+!!!169863.java!!!	createInstance() : IComponentDescriptor
+
+    BasicComponentDescriptor<IDescriptor> instance = new BasicComponentDescriptor<IDescriptor>(
+        IDescriptor.class.getName());
+
+    List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+
+    BasicPropertyDescriptor nameDescriptor = new BasicStringPropertyDescriptor();
+    nameDescriptor.setName(IDescriptor.NAME);
+    BasicPropertyDescriptor descriptionDescriptor = new BasicStringPropertyDescriptor();
+    descriptionDescriptor.setName(IDescriptor.DESCRIPTION);
+
+    propertyDescriptors.add(nameDescriptor);
+    propertyDescriptors.add(descriptionDescriptor);
+
+    instance.setPropertyDescriptors(propertyDescriptors);
+
+    return instance;

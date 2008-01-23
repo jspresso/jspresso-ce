@@ -1,0 +1,24 @@
+class QueryEntityInvocationHandler
+!!!189575.java!!!	QueryEntityInvocationHandler(inout entityDelegate : IEntity)
+
+    this.entityDelegate = entityDelegate;
+!!!189703.java!!!	invoke(inout proxy : Object, inout method : Method, inout args : Object) : Object
+
+    if ("getContract".equals(method.getName())) {
+      return entityDelegate.getContract();
+    }
+    AccessorInfo accessorInfo = new AccessorInfo(method);
+    int accessorType = accessorInfo.getAccessorType();
+    if (accessorType == AccessorInfo.SETTER) {
+      String accessedPropertyName = accessorInfo.getAccessedPropertyName();
+      if (accessedPropertyName != null) {
+        entityDelegate.straightSetProperty(accessedPropertyName, args[0]);
+        return null;
+      }
+    } else if (accessorType == AccessorInfo.GETTER) {
+      String accessedPropertyName = accessorInfo.getAccessedPropertyName();
+      if (accessedPropertyName != null) {
+        return entityDelegate.straightGetProperty(accessedPropertyName);
+      }
+    }
+    return method.invoke(entityDelegate, args);

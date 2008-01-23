@@ -1,0 +1,10 @@
+class OpenFileAsBinaryPropertyAction
+!!!344583.java!!!	OpenFileAsBinaryPropertyAction()
+
+    setFileOpenCallback(new ConnectorValueSetterCallback());
+!!!344711.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    IFileFilterable modelDescriptor = (IFileFilterable) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    setFileFilter(modelDescriptor.getFileFilter());
+    return super.execute(actionHandler, context);

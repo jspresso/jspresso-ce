@@ -1,0 +1,273 @@
+/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package com.d2s.framework.view.wings;
+
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
+
+import org.wings.SComponent;
+import org.wings.SIcon;
+
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.ConnectorValueChangeEvent;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.ICollectionConnectorProvider;
+import com.d2s.framework.binding.IConnectorValueChangeListener;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.model.IModelGate;
+import com.d2s.framework.binding.model.IModelValueConnector;
+import com.d2s.framework.model.EmbeddedModelProvider;
+import com.d2s.framework.model.descriptor.ICollectionDescriptor;
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.util.gate.GateHelper;
+import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.view.IActionFactory;
+import com.d2s.framework.view.IIconFactory;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IDisplayableAction;
+
+/**
+ * A swing action factory.
+ * <p>
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class WingsActionFactory implements IActionFactory<Action, SComponent> {
+
+  private IIconFactory<SIcon>  iconFactory;
+  private ITranslationProvider translationProvider;
+
+  /**
+   * {@inheritDoc}
+   */
+  public Action createAction(IDisplayableAction action,
+      IActionHandler actionHandler, IView<SComponent> view, Locale locale) {
+    return createAction(action, actionHandler, view.getPeer(), view
+        .getDescriptor().getModelDescriptor(), view.getConnector(), locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Action createAction(IDisplayableAction action,
+      IActionHandler actionHandler, SComponent sourceComponent,
+      IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+      Locale locale) {
+    Action wingsAction = new ActionAdapter(action, actionHandler,
+        sourceComponent, modelDescriptor, viewConnector, locale);
+    if (action.getActionabilityGates() != null) {
+      Collection<IGate> clonedGates = new HashSet<IGate>();
+      for (IGate gate : action.getActionabilityGates()) {
+        final IGate clonedGate = gate.clone();
+        if (clonedGate instanceof IModelGate) {
+          if (modelDescriptor instanceof IComponentDescriptorProvider) {
+            ((IModelGate) clonedGate)
+                .setModelProvider(new EmbeddedModelProvider(
+                    (IComponentDescriptorProvider<?>) modelDescriptor));
+            viewConnector
+                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                  public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                    ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                        .getModelProvider()).setModel(evt.getNewValue());
+                  }
+                });
+          } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
+            IRelationshipEndPropertyDescriptor reverseDescriptor = ((ICollectionPropertyDescriptor<?>) modelDescriptor)
+                .getReverseRelationEnd();
+            if (reverseDescriptor instanceof IComponentDescriptorProvider) {
+              ((IModelGate) clonedGate)
+                  .setModelProvider(new EmbeddedModelProvider(
+                      (IComponentDescriptorProvider<?>) reverseDescriptor));
+            } else if (reverseDescriptor instanceof ICollectionDescriptorProvider) {
+              ((IModelGate) clonedGate)
+                  .setModelProvider(new EmbeddedModelProvider(
+                      ((ICollectionDescriptorProvider<?>) reverseDescriptor)
+                          .getCollectionDescriptor().getElementDescriptor()));
+            }
+            final ICollectionConnector collectionConnector = ((ICollectionConnectorProvider) viewConnector)
+                .getCollectionConnector();
+            collectionConnector
+                .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+
+                  public void connectorValueChange(@SuppressWarnings("unused")
+                  ConnectorValueChangeEvent evt) {
+                    if (collectionConnector.getModelConnector() != null) {
+                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                          .getModelProvider())
+                          .setModel(((IModelValueConnector) collectionConnector
+                              .getModelConnector()).getModelProvider()
+                              .getModel());
+                    } else {
+                      ((EmbeddedModelProvider) ((IModelGate) clonedGate)
+                          .getModelProvider()).setModel(null);
+                    }
+                  }
+                });
+          }
+        }
+        clonedGates.add(clonedGate);
+      }
+      new GatesListener(wingsAction, clonedGates);
+    }
+    return wingsAction;
+  }
+
+  /**
+   * Sets the iconFactory.
+   * 
+   * @param iconFactory
+   *            the iconFactory to set.
+   */
+  public void setIconFactory(IIconFactory<SIcon> iconFactory) {
+    this.iconFactory = iconFactory;
+  }
+
+  /**
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *            the translationProvider to set.
+   */
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
+  }
+
+  private final class ActionAdapter extends AbstractAction {
+
+    private static final long serialVersionUID = 5819377672533326496L;
+
+    private IAction           action;
+    private IActionHandler    actionHandler;
+    private IModelDescriptor  modelDescriptor;
+    private SComponent        sourceComponent;
+    private IValueConnector   viewConnector;
+
+    /**
+     * Constructs a new <code>ActionAdapter</code> instance.
+     * 
+     * @param action
+     * @param actionHandler
+     * @param sourceComponent
+     * @param modelDescriptor
+     * @param viewConnector
+     * @param locale
+     */
+    public ActionAdapter(IDisplayableAction action,
+        IActionHandler actionHandler, SComponent sourceComponent,
+        IModelDescriptor modelDescriptor, IValueConnector viewConnector,
+        Locale locale) {
+      this.action = action;
+      this.actionHandler = actionHandler;
+      this.sourceComponent = sourceComponent;
+      this.modelDescriptor = modelDescriptor;
+      if (modelDescriptor instanceof ICollectionDescriptor) {
+        this.viewConnector = ((ICollectionConnectorProvider) viewConnector)
+            .getCollectionConnector();
+      } else {
+        this.viewConnector = viewConnector;
+      }
+      putValue(Action.NAME, action.getI18nName(translationProvider, locale));
+      String i18nDescription = action.getI18nDescription(translationProvider,
+          locale);
+      if (i18nDescription != null) {
+        putValue(Action.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
+      }
+      putValue(Action.SMALL_ICON, iconFactory.getIcon(action.getIconImageURL(),
+          IIconFactory.TINY_ICON_SIZE));
+      if (action.getMnemonicAsString() != null) {
+        putValue(Action.MNEMONIC_KEY, new Integer(KeyStroke.getKeyStroke(
+            action.getMnemonicAsString()).getKeyCode()));
+      }
+    }
+
+    /**
+     * Triggers the action execution on the action handler. The following
+     * initial action context is filled in :
+     * <li> <code>ActionContextConstants.SOURCE_COMPONENT</code>
+     * <li> <code>ActionContextConstants.VIEW_CONNECTOR</code>
+     * <li> <code>ActionContextConstants.MODEL_CONNECTOR</code>
+     * <li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code>
+     * <li> <code>ActionContextConstants.SELECTED_INDICES</code>
+     * <li> <code>ActionContextConstants.LOCALE</code>
+     * <p>
+     * {@inheritDoc}
+     */
+    public void actionPerformed(ActionEvent e) {
+      // "".equals(e.getActionCommand()) prevents the form
+      // action to be handled.
+      if (actionHandler != null && !"".equals(e.getActionCommand())) {
+        Map<String, Object> actionContext = actionHandler.createEmptyContext();
+        actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
+            modelDescriptor);
+        actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
+            sourceComponent);
+        actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
+        if (viewConnector instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) viewConnector)
+                .getCollectionConnector() != null) {
+          actionContext.put(ActionContextConstants.SELECTED_INDICES,
+              ((ICollectionConnectorProvider) viewConnector)
+                  .getCollectionConnector().getSelectedIndices());
+        }
+        actionContext.put(ActionContextConstants.ACTION_COMMAND, e
+            .getActionCommand());
+        actionContext.put(ActionContextConstants.ACTION_WIDGET, e.getSource());
+        if (action.getInitialContext() != null) {
+          actionContext.putAll(action.getInitialContext());
+        }
+        actionHandler.execute(action, actionContext);
+      }
+    }
+  }
+
+  private final class GatesListener implements PropertyChangeListener {
+
+    private Action            action;
+    private Collection<IGate> gates;
+
+    /**
+     * Constructs a new <code>GatesListener</code> instance.
+     * 
+     * @param action
+     *            the action to (de)activate based on gates state.
+     * @param gates
+     *            the gates that determine action state.
+     */
+    public GatesListener(Action action, Collection<IGate> gates) {
+      this.action = action;
+      this.gates = gates;
+      for (IGate gate : gates) {
+        gate.addPropertyChangeListener(IGate.OPEN_PROPERTY, this);
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(@SuppressWarnings("unused")
+    PropertyChangeEvent evt) {
+      action.setEnabled(GateHelper.areGatesOpen(gates));
+    }
+  }
+}

@@ -1,0 +1,48 @@
+class SaveFileAction
+!!!344839.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+
+    JFileChooser currentFileChooser = getFileChooser(context);
+
+    int returnVal = currentFileChooser.showSaveDialog(SwingUtil
+        .getVisibleWindow(getSourceComponent(context)));
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      File file = currentFileChooser.getSelectedFile();
+      if (file != null) {
+        if (file.getName() != null && file.getName().indexOf(".") == -1) { //$NON-NLS-1$
+          Map<String, List<String>> fileFilter = getFileFilter();
+          if (fileFilter != null && !fileFilter.isEmpty()) {
+            List<String> extensions = fileFilter.values().iterator().next();
+            if (extensions != null && !extensions.isEmpty()) {
+              file = new File(file.getAbsolutePath() + extensions.get(0));
+            }
+          }
+        }
+        if (file.exists()) {
+          if (JOptionPane.showConfirmDialog(null, Messages
+              .getString("confirm.override.description"), //$NON-NLS-1$
+              Messages.getString("confirm.override.name"), //$NON-NLS-1$
+              JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
+            file = null;
+          }
+        }
+        if (file != null) {
+          try {
+            fileSaveCallback.fileChosen(new FileOutputStream(file), context);
+            fileSaveCallback.fileWritten(file.getAbsolutePath(), context);
+          } catch (FileNotFoundException ex) {
+            fileSaveCallback.cancel(context);
+          }
+        } else {
+          fileSaveCallback.cancel(context);
+        }
+      } else {
+        fileSaveCallback.cancel(context);
+      }
+    } else {
+      fileSaveCallback.cancel(context);
+    }
+    return super.execute(actionHandler, context);
+!!!344967.java!!!	setFileSaveCallback(inout fileSaveCallback : IFileSaveCallback) : void
+
+    this.fileSaveCallback = fileSaveCallback;

@@ -1,0 +1,8 @@
+class ChangePasswordAction
+!!!351111.java!!!	ChangePasswordAction()
+    putInitialContext(ActionContextConstants.ACTION_PARAM,
+        new HashMap<String, Object>());
+    BasicComponentViewDescriptor viewDescriptor = new BasicComponentViewDescriptor();
+    viewDescriptor
+        .setModelDescriptor(AbstractChangePasswordAction.PASSWD_CHANGE_DESCRIPTOR);
+    setViewDescriptor(viewDescriptor);

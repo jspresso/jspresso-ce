@@ -1,0 +1,5168 @@
+format 48
+"ulc" // com::d2s::framework::view::ulc
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/view/ulc"
+  java_package "com.d2s.framework.view.ulc"
+  classview 137479 "ulc"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 176263 "BooleanTableCellRenderer"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Renders a table cell using a checkbox.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 168327 "NO_FOCUS_BORDER"
+	class_attribute const_attribute private explicit_type "ULCAbstractBorder"
+	init_value "=  new ULCEmptyBorder(
+                                                              1, 1, 1, 1)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 168455 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  5944792695339009139L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 168583 "unselectedBackground"
+	private explicit_type "Color"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 168711 "unselectedForeground"
+	private explicit_type "Color"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 314631 "BooleanTableCellRenderer"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BooleanTableCellRenderer</code> instance.
+"
+      end
+
+      operation 314759 "getTableCellRendererComponent"
+	public explicit_return_type "IRendererComponent"
+	nparams 5
+	  param inout name "table" explicit_type "ULCTable"
+	  param inout name "value" explicit_type "Object"
+	  param inout name "isSelected" explicit_type "boolean"
+	  param inout name "hasFocus" explicit_type "boolean"
+	  param in name "row" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, @SuppressWarnings(\"unused\") ${t3} ${p3}, @SuppressWarnings(\"unused\") ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 314887 "setBackground"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "c" explicit_type "Color"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Overrides <code>ULCComponent.setBackground</code> to assign the
+unselected-background color to the specified color.
+
+@param c
+           set the background color to this value
+"
+      end
+
+      operation 315015 "setForeground"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "c" explicit_type "Color"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Overrides <code>ULCComponent.setForeground</code> to assign the
+unselected-foreground color to the specified color.
+
+@param c
+           set the foreground color to this value
+"
+      end
+    end
+
+    class 176647 "DefaultUlcViewFactory"
+      visibility public 
+      nactuals 3
+      actual class class_ref 147207 // IViewFactory
+        rank 0 explicit_value "ULCComponent"
+      actual class class_ref 147207 // IViewFactory
+        rank 1 explicit_value "ULCIcon"
+      actual class class_ref 147207 // IViewFactory
+        rank 2 explicit_value "IAction"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Factory for ULC views.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 964 $
+@author Vincent Vandenschrick
+"
+      classrelation 192903 // <realization>
+	relation 192903 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 192903 // <realization>
+	  b parent class_ref 147207 // IViewFactory
+      end
+
+      attribute 168839 "DEF_DISP_MAX_FRACTION_DIGIT"
+	class_attribute const_attribute private explicit_type "int"
+	init_value "=  2"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 168967 "DEF_DISP_MAX_VALUE"
+	class_attribute const_attribute private explicit_type "double"
+	init_value "=  1000"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 169095 "DEF_DISP_TEMPLATE_PERCENT"
+	class_attribute const_attribute private explicit_type "double"
+	init_value "=  99"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 169223 "MINIMUM_AREA_SIZE"
+	class_attribute const_attribute private explicit_type "Dimension"
+	init_value "=  new Dimension(
+                                                                                100,
+                                                                                100)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 169351 "TEMPLATE_CHAR"
+	class_attribute const_attribute private explicit_type "char"
+	init_value "=  'O'"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 169479 "TEMPLATE_DATE"
+	class_attribute const_attribute private explicit_type "Date"
+	init_value "=  new Date(
+                                                                                3661 * 1000)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 169607 "TEMPLATE_DURATION"
+	class_attribute const_attribute private explicit_type "Long"
+	init_value "=  new Long(
+                                                                                IDurationPropertyDescriptor.ONE_SECOND
+                                                                                    + IDurationPropertyDescriptor.ONE_MINUTE
+                                                                                    + IDurationPropertyDescriptor.ONE_HOUR
+                                                                                    + IDurationPropertyDescriptor.ONE_DAY
+                                                                                    + IDurationPropertyDescriptor.ONE_WEEK)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 169735 "TEMPLATE_TIME"
+	class_attribute const_attribute private explicit_type "Date"
+	init_value "=  new Date(
+                                                                                3661 * 1000)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 193031 // actionFactory (<unidirectional association>)
+	relation 193031 --->
+	  a role_name "actionFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<IAction, ULCComponent> ${name}${value};
+"
+	    classrelation_ref 193031 // actionFactory (<unidirectional association>)
+	  b parent class_ref 146951 // IActionFactory
+      end
+
+      classrelation 193159 // binaryPropertyInfoAction (<unidirectional association>)
+	relation 193159 --->
+	  a role_name "binaryPropertyInfoAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 193159 // binaryPropertyInfoAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      attribute 169863 "connectorFactory"
+	private explicit_type "IConfigurableConnectorFactory"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 169991 "durationDataTypeFactory"
+	private explicit_type "ULCDurationDataTypeFactory"
+	init_value "=  new ULCDurationDataTypeFactory()"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 193287 // iconFactory (<unidirectional association>)
+	relation 193287 --->
+	  a role_name "iconFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<ULCIcon> ${name}${value};
+"
+	    classrelation_ref 193287 // iconFactory (<unidirectional association>)
+	  b parent class_ref 145799 // IIconFactory
+      end
+
+      classrelation 193543 // lovAction (<unidirectional association>)
+	relation 193543 --->
+	  a role_name "lovAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 193543 // lovAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      attribute 170119 "masterDetailBinder"
+	private explicit_type "IMasterDetailBinder"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 170247 "maxCharacterLength"
+	private explicit_type "int"
+	init_value "=  30"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 170375 "maxColumnCharacterLength"
+	private explicit_type "int"
+	init_value "=  15"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 170503 "mvcBinder"
+	private explicit_type "IMvcBinder"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 193671 // openFileAsBinaryPropertyAction (<unidirectional association>)
+	relation 193671 --->
+	  a role_name "openFileAsBinaryPropertyAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 193671 // openFileAsBinaryPropertyAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      classrelation 193799 // resetPropertyAction (<unidirectional association>)
+	relation 193799 --->
+	  a role_name "resetPropertyAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 193799 // resetPropertyAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      classrelation 193927 // saveBinaryPropertyAsFileAction (<unidirectional association>)
+	relation 193927 --->
+	  a role_name "saveBinaryPropertyAsFileAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 193927 // saveBinaryPropertyAsFileAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      attribute 170631 "translationDataTypeFactory"
+	private explicit_type "ULCTranslationDataTypeFactory"
+	init_value "=  new ULCTranslationDataTypeFactory()"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 170759 "translationProvider"
+	private explicit_type "ITranslationProvider"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 315143 "createView"
+	public return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 146439 // IViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 315271 "getActionFactory"
+	public return_type class_ref 146951 // IActionFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<IAction, ULCComponent> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the actionFactory.
+
+@return the actionFactory.
+"
+      end
+
+      operation 315399 "getIconFactory"
+	public return_type class_ref 145799 // IIconFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCIcon> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 315527 "setActionFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "actionFactory" type class_ref 146951 // IActionFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IAction, ULCComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the actionFactory.
+
+@param actionFactory
+           the actionFactory to set.
+"
+      end
+
+      operation 315655 "setBinaryPropertyInfoAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "binaryPropertyInfoAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " ///////////////// //
+ Composite Section //
+ ///////////////// //
+
+Sets the binaryPropertyInfoAction.
+
+@param binaryPropertyInfoAction
+           the binaryPropertyInfoAction to set.
+"
+      end
+
+      operation 315783 "setConnectorFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "connectorFactory" explicit_type "IConfigurableConnectorFactory"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the connectorFactory.
+
+@param connectorFactory
+           the connectorFactory to set.
+"
+      end
+
+      operation 315911 "setIconFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "iconFactory" type class_ref 145799 // IIconFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<ULCIcon> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the iconFactory.
+
+@param iconFactory
+           the iconFactory to set.
+"
+      end
+
+      operation 316039 "setListSelectionModelBinder"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "listSelectionModelBinder" explicit_type "IListSelectionModelBinder"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the listSelectionModelBinder.
+
+@param listSelectionModelBinder
+           the listSelectionModelBinder to set.
+"
+      end
+
+      operation 316167 "setLovAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "lovAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the lovAction.
+
+@param lovAction
+           the lovAction to set.
+"
+      end
+
+      operation 316295 "setMasterDetailBinder"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "masterDetailBinder" explicit_type "IMasterDetailBinder"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the masterDetailBinder.
+
+@param masterDetailBinder
+           the masterDetailBinder to set.
+"
+      end
+
+      operation 316423 "setMaxCharacterLength"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "maxCharacterLength" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the maxCharacterLength.
+
+@param maxCharacterLength
+           the maxCharacterLength to set.
+"
+      end
+
+      operation 316551 "setMvcBinder"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "mvcBinder" explicit_type "IMvcBinder"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the mvcBinder.
+
+@param mvcBinder
+           the mvcBinder to set.
+"
+      end
+
+      operation 316679 "setOpenFileAsBinaryPropertyAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "openFileAsBinaryPropertyAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the openFileAsBinaryPropertyAction.
+
+@param openFileAsBinaryPropertyAction
+           the openFileAsBinaryPropertyAction to set.
+"
+      end
+
+      operation 316807 "setResetPropertyAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "resetPropertyAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the resetPropertyAction.
+
+@param resetPropertyAction
+           the resetPropertyAction to set.
+"
+      end
+
+      operation 316935 "setSaveBinaryPropertyAsFileAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "saveBinaryPropertyAsFileAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the saveBinaryPropertyAsFileAction.
+
+@param saveBinaryPropertyAsFileAction
+           the saveBinaryPropertyAsFileAction to set.
+"
+      end
+
+      operation 317063 "setTranslationProvider"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "translationProvider" explicit_type "ITranslationProvider"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the translationProvider.
+
+@param translationProvider
+           the translationProvider to set.
+"
+      end
+
+      operation 317191 "setTreeSelectionModelBinder"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "treeSelectionModelBinder" explicit_type "ITreeSelectionModelBinder"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the treeSelectionModelBinder.
+
+@param treeSelectionModelBinder
+           the treeSelectionModelBinder to set.
+"
+      end
+
+      operation 317319 "createBorderLayoutPane"
+	protected explicit_return_type "ULCBorderLayoutPane"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a borderlayout pane.
+
+@return the created borderlayout pane.
+"
+      end
+
+      operation 317447 "createCardPane"
+	protected explicit_return_type "ULCCardPane"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a cardlayout pane.
+
+@return the created cardlayout pane.
+"
+      end
+
+      operation 317575 "createGridBagLayoutPane"
+	protected explicit_return_type "ULCGridBagLayoutPane"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a gridbaglayout pane.
+
+@return the created gridbaglayout pane.
+"
+      end
+
+      operation 317703 "createGridLayoutPane"
+	protected explicit_return_type "ULCGridLayoutPane"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " ////////////////// //
+ Collection Section //
+ ////////////////// //
+
+Creates a gridlayout pane.
+
+@return the created gridlayout pane.
+"
+      end
+
+      operation 317831 "createSecurityPanel"
+	protected explicit_return_type "ULCBorderLayoutPane"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a security pane.
+
+@return the created security pane.
+"
+      end
+
+      operation 317959 "createULCActionField"
+	protected explicit_return_type "ULCActionField"
+	nparams 1
+	  param inout name "showTextField" explicit_type "boolean"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates an action field.
+
+@param showTextField
+           is the text field visible to the user.
+@return the created action field.
+"
+      end
+
+      operation 318087 "createULCButton"
+	protected explicit_return_type "ULCButton"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a button.
+
+@return the created button.
+"
+      end
+
+      operation 318215 "createULCCheckBox"
+	protected explicit_return_type "ULCCheckBox"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a check box.
+
+@return the created check box.
+"
+      end
+
+      operation 318343 "createULCColorPicker"
+	protected explicit_return_type "ULCColorPicker"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a color picker.
+
+@return the created color picker.
+"
+      end
+
+      operation 318471 "createULCComboBox"
+	protected explicit_return_type "ULCComboBox"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a combo box.
+
+@return the created combo box.
+"
+      end
+
+      operation 318599 "createULCDateField"
+	protected explicit_return_type "ULCDateField"
+	nparams 2
+	  param in name "formatPattern" explicit_type "String"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a date field.
+
+@param formatPattern
+           the (simple date format) pattern this date field uses.
+@param locale
+           the user locale.
+@return the created date field.
+"
+      end
+
+      operation 318727 "createULCJEditTextArea"
+	protected explicit_return_type "ULCJEditTextArea"
+	nparams 1
+	  param in name "language" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a ULC JEdit text area.
+
+@param language
+           the language to add syntax highlighting for.
+@return the created text area.
+"
+      end
+
+      operation 318855 "createULCLabel"
+	protected explicit_return_type "ULCLabel"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a label.
+
+@return the created label.
+"
+      end
+
+      operation 318983 "createULCList"
+	protected explicit_return_type "ULCList"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a list.
+
+@return the created list.
+"
+      end
+
+      operation 319111 "createULCMenuItem"
+	protected explicit_return_type "ULCMenuItem"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a menu item.
+
+@return the created menu item.
+"
+      end
+
+      operation 319239 "createULCPasswordField"
+	protected explicit_return_type "ULCPasswordField"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a password field.
+
+@return the created password field.
+"
+      end
+
+      operation 319367 "createULCPopupMenu"
+	protected explicit_return_type "ULCPopupMenu"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a popup menu.
+
+@return the created popup menu.
+"
+      end
+
+      operation 319495 "createULCScrollPane"
+	protected explicit_return_type "ULCScrollPane"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a scroll pane.
+
+@return the created scroll pane.
+"
+      end
+
+      operation 319623 "createULCSplitPane"
+	protected explicit_return_type "ULCSplitPane"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a split pane.
+
+@return the created split pane.
+"
+      end
+
+      operation 319751 "createULCTabbedPane"
+	protected explicit_return_type "ULCTabbedPane"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a tabbed pane.
+
+@return the created tabbed pane.
+"
+      end
+
+      operation 319879 "createULCTable"
+	protected explicit_return_type "ULCExtendedTable"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a table.
+
+@return the created table.
+"
+      end
+
+      operation 320007 "createULCTableTree"
+	protected explicit_return_type "ULCTableTree"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a table tree.
+
+@return the created table tree.
+"
+      end
+
+      operation 320135 "createULCTextArea"
+	protected explicit_return_type "ULCTextArea"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a text field.
+
+@return the created text field.
+"
+      end
+
+      operation 320263 "createULCTextField"
+	protected explicit_return_type "ULCTextField"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a text field.
+
+@return the created text field.
+"
+      end
+
+      operation 320391 "createULCToolBar"
+	protected explicit_return_type "ULCToolBar"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a tool bar.
+
+@return the created tool bar.
+"
+      end
+
+      operation 320519 "createULCTree"
+	protected explicit_return_type "ULCExtendedTree"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " ///////////// //
+ Image Section //
+ ///////////// //
+
+Creates a tree.
+
+@return the created tree.
+"
+      end
+
+      operation 320647 "decorateWithBorder"
+	protected explicit_return_type "void"
+	nparams 2
+	  param inout name "view" type class_ref 146183 // IView
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<ULCComponent> ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " /////////////// //
+ Nesting Section //
+ /////////////// //
+
+Decorates the created view with the apropriate border.
+
+@param view
+           the view to descorate.
+@param locale
+           the locale to use.
+"
+      end
+
+      operation 320775 "getTranslationProvider"
+	protected explicit_return_type "ITranslationProvider"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " ///////////////// //
+ Component Section //
+ ///////////////// //
+
+Gets the translationProvider.
+
+@return the translationProvider.
+"
+      end
+
+      operation 320903 "adjustSizes"
+	private explicit_return_type "void"
+	nparams 3
+	  param inout name "component" explicit_type "ULCComponent"
+	  param inout name "formatter" explicit_type "IFormatter"
+	  param inout name "templateValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 321031 "adjustSizes"
+	private explicit_return_type "void"
+	nparams 4
+	  param inout name "component" explicit_type "ULCComponent"
+	  param inout name "formatter" explicit_type "IFormatter"
+	  param inout name "templateValue" explicit_type "Object"
+	  param in name "extraWidth" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 321159 "computeEnumerationKey"
+	private explicit_return_type "String"
+	nparams 2
+	  param in name "keyPrefix" explicit_type "String"
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 321287 "computePixelWidth"
+	private explicit_return_type "int"
+	nparams 2
+	  param inout name "component" explicit_type "ULCComponent"
+	  param in name "characterLength" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 321415 "computeTranslationMapping"
+	private explicit_return_type "Map<String, String>"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 136455 // IEnumerationPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 321543 "constructCompositeView"
+	private return_type class_ref 145927 // BasicCompositeView
+	nparams 2
+	  param inout name "viewComponent" explicit_type "ULCComponent"
+	  param inout name "descriptor" type class_ref 146439 // IViewDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 321671 "constructMapView"
+	private return_type class_ref 146695 // BasicMapView
+	nparams 2
+	  param inout name "viewComponent" explicit_type "ULCComponent"
+	  param inout name "descriptor" type class_ref 146439 // IViewDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 321799 "constructView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewComponent" explicit_type "ULCComponent"
+	  param inout name "descriptor" type class_ref 146439 // IViewDescriptor
+	  param inout name "connector" explicit_type "IValueConnector"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 321927 "createBinaryPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 134407 // IBinaryPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 322055 "createBooleanPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 135175 // IBooleanPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 322183 "createBooleanTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 135175 // IBooleanPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 322311 "createBorderView"
+	private return_type class_ref 146567 // ICompositeView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 147847 // IBorderViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 322439 "createCardView"
+	private return_type class_ref 146823 // IMapView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 148359 // ICardViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 322567 "createCardViewConnector"
+	private explicit_return_type "IValueConnector"
+	nparams 2
+	  param in name "cardView" type class_ref 146823 // IMapView
+	  param in name "actionHandler" explicit_type "IActionHandler"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0}<ULCComponent> ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 322695 "createCollectionPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 4
+	  param inout name "propertyDescriptor" type class_ref 132615 // ICollectionPropertyDescriptor
+	  param inout name "renderedChildProperties" explicit_type "List<String>"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0}<?> ${p0}, ${t1} ${p1}, ${t2} ${p2}, @SuppressWarnings(\"unused\") ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 322823 "createCollectionTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 132615 // ICollectionPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0}<?> ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 322951 "createCollectionView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 148487 // ICollectionViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 323079 "createColorPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 135687 // IColorPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 323207 "createColorTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 135687 // IColorPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 323335 "createColumnConnector"
+	private explicit_return_type "IValueConnector"
+	nparams 2
+	  param in name "columnId" explicit_type "String"
+	  param inout name "descriptor" type class_ref 132103 // IComponentDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}<?> ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 323463 "createComponentView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 148615 // IComponentViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 323591 "createCompositeNodeGroupConnector"
+	private explicit_return_type "ICollectionConnectorProvider"
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 150663 // ITreeViewDescriptor
+	  param inout name "subtreeViewDescriptor" type class_ref 148743 // ICompositeTreeLevelDescriptor
+	  param in name "depth" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 323719 "createCompositeView"
+	private return_type class_ref 146567 // ICompositeView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 147975 // ICompositeViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 323847 "createConstrainedGridView"
+	private return_type class_ref 146567 // ICompositeView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 149127 // IConstrainedGridViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 323975 "createDateDataType"
+	private explicit_return_type "ULCDateDataType"
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 135943 // IDatePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	  param inout name "format" explicit_type "SimpleDateFormat"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 324103 "createDateFormat"
+	private explicit_return_type "SimpleDateFormat"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 135943 // IDatePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 324231 "createDateFormatter"
+	private explicit_return_type "IFormatter"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 135943 // IDatePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 324359 "createDatePropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 135943 // IDatePropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 324487 "createDateTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 135943 // IDatePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 324615 "createDecimalDataType"
+	private explicit_return_type "ULCNumberDataType"
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 136071 // IDecimalPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	  param inout name "format" explicit_type "NumberFormat"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 324743 "createDecimalFormat"
+	private explicit_return_type "NumberFormat"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 136071 // IDecimalPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 324871 "createDecimalFormatter"
+	private explicit_return_type "IFormatter"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 136071 // IDecimalPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 324999 "createDecimalPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 136071 // IDecimalPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 325127 "createDecimalTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 136071 // IDecimalPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " ////////////////// //
+ Popup menu Section //
+ ////////////////// //"
+      end
+
+      operation 325255 "createDurationDataType"
+	private explicit_return_type "ULCDurationDataType"
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 136327 // IDurationPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	  param inout name "formatter" explicit_type "DurationFormatter"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 325383 "createDurationFormatter"
+	private explicit_return_type "DurationFormatter"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 136327 // IDurationPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 325511 "createDurationPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 136327 // IDurationPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 325639 "createDurationTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 136327 // IDurationPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 325767 "createEnumerationPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 136455 // IEnumerationPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " /////////////// //
+ Helpers Section //
+ /////////////// //"
+      end
+
+      operation 325895 "createEnumerationTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 136455 // IEnumerationPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 326023 "createEvenGridView"
+	private return_type class_ref 146567 // ICompositeView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 149511 // IEvenGridViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 326151 "createFormatter"
+	private explicit_return_type "IFormatter"
+	nparams 1
+	  param inout name "format" explicit_type "Format"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 326279 "createFormatter"
+	private explicit_return_type "IFormatter"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 132743 // IPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 326407 "createGridBagConstraints"
+	private explicit_return_type "GridBagConstraints"
+	nparams 1
+	  param inout name "viewConstraints" type class_ref 149383 // ViewConstraints
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 326535 "createGridView"
+	private return_type class_ref 146567 // ICompositeView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 149255 // IGridViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 326663 "createImageView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 149639 // IImageViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 326791 "createIntegerDataType"
+	private explicit_return_type "ULCNumberDataType"
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 136583 // IIntegerPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	  param inout name "format" explicit_type "NumberFormat"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 326919 "createIntegerFormat"
+	private explicit_return_type "NumberFormat"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 136583 // IIntegerPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 327047 "createIntegerFormatter"
+	private explicit_return_type "IFormatter"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 136583 // IIntegerPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 327175 "createIntegerPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 136583 // IIntegerPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 327303 "createIntegerTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 136583 // IIntegerPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 327431 "createListView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 148999 // IListViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 327559 "createNestingView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 149895 // INestingViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 327687 "createNodeGroupConnector"
+	private explicit_return_type "ICollectionConnectorProvider"
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 150663 // ITreeViewDescriptor
+	  param inout name "subtreeViewDescriptor" type class_ref 148871 // ITreeLevelDescriptor
+	  param in name "depth" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 327815 "createNumberPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 136199 // INumberPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 327943 "createNumberTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 136199 // INumberPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 328071 "createPasswordPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 137095 // IPasswordPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 328199 "createPercentDataType"
+	private explicit_return_type "ULCPercentDataType"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 137351 // IPercentPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 328327 "createPercentFormat"
+	private explicit_return_type "NumberFormat"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 137351 // IPercentPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 328455 "createPercentFormatter"
+	private explicit_return_type "IFormatter"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 137351 // IPercentPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 328583 "createPercentPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 137351 // IPercentPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 328711 "createPercentTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 137351 // IPercentPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 328839 "createPopupMenu"
+	private explicit_return_type "ULCPopupMenu"
+	nparams 4
+	  param inout name "sourceComponent" explicit_type "ULCComponent"
+	  param inout name "view" type class_ref 146183 // IView
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}<ULCComponent> ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 328967 "createPropertyLabel"
+	private explicit_return_type "ULCLabel"
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 132743 // IPropertyDescriptor
+	  param inout name "propertyComponent" explicit_type "ULCComponent"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 329095 "createPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 4
+	  param inout name "propertyDescriptor" type class_ref 132743 // IPropertyDescriptor
+	  param inout name "renderedChildProperties" explicit_type "List<String>"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 329223 "createPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 150023 // IPropertyViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 329351 "createReferencePropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 132871 // IReferencePropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0}<?> ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 329479 "createReferenceTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 132871 // IReferencePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0}<?> ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 329607 "createRelationshipEndPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 4
+	  param inout name "propertyDescriptor" type class_ref 135559 // IRelationshipEndPropertyDescriptor
+	  param inout name "renderedChildProperties" explicit_type "List<String>"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 329735 "createRelationshipEndTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 135559 // IRelationshipEndPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 329863 "createSimpleNodeGroupConnector"
+	private explicit_return_type "ICollectionConnectorProvider"
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 150663 // ITreeViewDescriptor
+	  param inout name "subtreeViewDescriptor" type class_ref 150151 // ISimpleTreeLevelDescriptor
+	  param in name "depth" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 329991 "createSourceCodePropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 137479 // ISourceCodePropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 330119 "createSplitView"
+	private return_type class_ref 146567 // ICompositeView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 150279 // ISplitViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 330247 "createStringPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 137223 // IStringPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 330375 "createStringTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 137223 // IStringPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 330503 "createTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 132743 // IPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 330631 "createTableView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 150407 // ITableViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 330759 "createTabView"
+	private return_type class_ref 146567 // ICompositeView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 150535 // ITabViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 330887 "createTextPropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 137607 // ITextPropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 331015 "createTimeDataType"
+	private explicit_return_type "ULCDateDataType"
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 137735 // ITimePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	  param inout name "format" explicit_type "SimpleDateFormat"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 331143 "createTimeFormat"
+	private explicit_return_type "SimpleDateFormat"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 137735 // ITimePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 331271 "createTimeFormatter"
+	private explicit_return_type "IFormatter"
+	nparams 2
+	  param inout name "propertyDescriptor" type class_ref 137735 // ITimePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 331399 "createTimePropertyView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "propertyDescriptor" type class_ref 137735 // ITimePropertyDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 331527 "createTimeTableCellRenderer"
+	private explicit_return_type "ITableCellRenderer"
+	nparams 3
+	  param in name "column" explicit_type "int"
+	  param inout name "propertyDescriptor" type class_ref 137735 // ITimePropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 331655 "createTreeView"
+	private return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 150663 // ITreeViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<ULCComponent> ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " //////////// //
+ Tree Section //
+ //////////// //"
+      end
+
+      operation 331783 "createUlcColor"
+	private explicit_return_type "Color"
+	nparams 1
+	  param inout name "color" explicit_type "java.awt.Color"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 331911 "createUlcFont"
+	private explicit_return_type "Font"
+	nparams 1
+	  param inout name "font" explicit_type "java.awt.Font"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 332039 "createULCPopupMenu"
+	private explicit_return_type "ULCPopupMenu"
+	nparams 7
+	  param inout name "sourceComponent" explicit_type "ULCComponent"
+	  param inout name "actionMap" type class_ref 147463 // ActionMap
+	  param inout name "modelDescriptor" type class_ref 134663 // IModelDescriptor
+	  param inout name "viewDescriptor" type class_ref 146439 // IViewDescriptor
+	  param inout name "viewConnector" explicit_type "IValueConnector"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}, ${t6} ${p6}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 332167 "createULCTablePopupMenu"
+	private explicit_return_type "ULCPopupMenu"
+	nparams 4
+	  param inout name "table" explicit_type "ULCExtendedTable"
+	  param inout name "tableView" type class_ref 146183 // IView
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}<ULCComponent> ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 332295 "createULCTreePopupMenu"
+	private explicit_return_type "ULCPopupMenu"
+	nparams 5
+	  param inout name "tree" explicit_type "ULCTree"
+	  param inout name "treeView" type class_ref 146183 // IView
+	  param inout name "path" explicit_type "TreePath"
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}<ULCComponent> ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 332423 "getConnectorIdForComponentView"
+	private explicit_return_type "String"
+	nparams 1
+	  param inout name "viewDescriptor" type class_ref 148615 // IComponentViewDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 332551 "getDateTemplateValue"
+	private explicit_return_type "Object"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 135943 // IDatePropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " ///////////////////// //
+ Configuration Section //
+ ///////////////////// //"
+      end
+
+      operation 332679 "getDecimalTemplateValue"
+	private explicit_return_type "Object"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 136071 // IDecimalPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 332807 "getDescriptorPathFromConnectorTreePath"
+	private explicit_return_type "List<String>"
+	nparams 1
+	  param inout name "connectorTreePath" explicit_type "TreePath"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 332935 "getDurationTemplateValue"
+	private explicit_return_type "Object"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 136327 // IDurationPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 333063 "getEnumerationTemplateValue"
+	private explicit_return_type "String"
+	nparams 2
+	  param inout name "descriptor" type class_ref 136455 // IEnumerationPropertyDescriptor
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 333191 "getFormatLength"
+	private explicit_return_type "int"
+	nparams 2
+	  param inout name "formatter" explicit_type "IFormatter"
+	  param inout name "templateValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 333319 "getIntegerTemplateValue"
+	private explicit_return_type "Object"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 136583 // IIntegerPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 333447 "getPercentTemplateValue"
+	private explicit_return_type "Object"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 137351 // IPercentPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 333575 "getStringTemplateValue"
+	private explicit_return_type "String"
+	nparams 1
+	  param inout name "maxLength" explicit_type "Integer"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 333703 "getStringTemplateValue"
+	private explicit_return_type "String"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 137223 // IStringPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 333831 "getTemplateValue"
+	private explicit_return_type "Object"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 132743 // IPropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 333959 "getTimeTemplateValue"
+	private explicit_return_type "Object"
+	nparams 1
+	  param inout name "propertyDescriptor" type class_ref 137735 // ITimePropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      class 176775 "ColorTableCellRenderer"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 170887 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  -8013724509060227795L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 334087 "getTableCellRendererComponent"
+	  public explicit_return_type "IRendererComponent"
+	  nparams 5
+	    param inout name "table" explicit_type "com.ulcjava.base.application.ULCTable"
+	    param inout name "value" explicit_type "Object"
+	    param inout name "isSelected" explicit_type "boolean"
+	    param inout name "hasFocus" explicit_type "boolean"
+	    param in name "row" explicit_type "int"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+
+      class 177031 "ConnectorTreeCellRenderer"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 171015 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  -5153268751092971328L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 171143 "locale"
+	  private explicit_type "Locale"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  java_annotation "@SuppressWarnings(\"unused\")
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	classrelation 194439 // viewDescriptor (<unidirectional association>)
+	  relation 194439 --->
+	    a role_name "viewDescriptor" private
+	      java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	      classrelation_ref 194439 // viewDescriptor (<unidirectional association>)
+	    b parent class_ref 150663 // ITreeViewDescriptor
+	end
+
+	operation 334215 "ConnectorTreeCellRenderer"
+	  public explicit_return_type ""
+	  nparams 2
+	    param inout name "viewDescriptor" type class_ref 150663 // ITreeViewDescriptor
+	    param inout name "locale" explicit_type "Locale"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
+
+@param viewDescriptor
+           the tree view descriptor used by the tree view.
+@param locale
+"
+	end
+
+	operation 334343 "getTreeCellRendererComponent"
+	  public explicit_return_type "IRendererComponent"
+	  nparams 6
+	    param inout name "tree" explicit_type "com.ulcjava.base.application.ULCTree"
+	    param inout name "value" explicit_type "Object"
+	    param inout name "sel" explicit_type "boolean"
+	    param inout name "expanded" explicit_type "boolean"
+	    param inout name "leaf" explicit_type "boolean"
+	    param inout name "nodeHasFocus" explicit_type "boolean"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+
+      class 177287 "TranslatedEnumerationListCellRenderer"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 171271 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  -5694559709701757582L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 171399 "locale"
+	  private explicit_type "Locale"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	classrelation 194695 // propertyDescriptor (<unidirectional association>)
+	  relation 194695 --->
+	    a role_name "propertyDescriptor" private
+	      java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	      classrelation_ref 194695 // propertyDescriptor (<unidirectional association>)
+	    b parent class_ref 136455 // IEnumerationPropertyDescriptor
+	end
+
+	operation 334471 "TranslatedEnumerationListCellRenderer"
+	  public explicit_return_type ""
+	  nparams 2
+	    param inout name "propertyDescriptor" type class_ref 136455 // IEnumerationPropertyDescriptor
+	    param inout name "locale" explicit_type "Locale"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>TranslatedEnumerationCellRenderer</code>
+instance.
+
+@param propertyDescriptor
+           the property descriptor from which the enumeration name is
+           taken. The prefix used to lookup translation keys in the form
+           keyPrefix.value is the propertyDescriptor enumeration name.
+@param locale
+           the locale to lookup the translation.
+"
+	end
+
+	operation 334599 "getComboBoxCellRendererComponent"
+	  public explicit_return_type "IRendererComponent"
+	  nparams 4
+	    param inout name "comboBox" explicit_type "ULCComboBox"
+	    param inout name "value" explicit_type "Object"
+	    param inout name "isSelected" explicit_type "boolean"
+	    param in name "index" explicit_type "int"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+
+      class 177543 "TranslatedEnumerationTableCellRenderer"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	classrelation 194951 // <generalisation>
+	  relation 194951 ---|>
+	    a public
+	      java "${type}"
+	      classrelation_ref 194951 // <generalisation>
+	    b parent class_ref 177671 // EvenOddTableCellRenderer
+	end
+
+	attribute 171783 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  -4500472602998482756L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 171911 "locale"
+	  private explicit_type "Locale"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	classrelation 195079 // propertyDescriptor (<unidirectional association>)
+	  relation 195079 --->
+	    a role_name "propertyDescriptor" private
+	      java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	      classrelation_ref 195079 // propertyDescriptor (<unidirectional association>)
+	    b parent class_ref 136455 // IEnumerationPropertyDescriptor
+	end
+
+	operation 334983 "TranslatedEnumerationTableCellRenderer"
+	  public explicit_return_type ""
+	  nparams 3
+	    param in name "column" explicit_type "int"
+	    param inout name "propertyDescriptor" type class_ref 136455 // IEnumerationPropertyDescriptor
+	    param inout name "locale" explicit_type "Locale"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>TranslatedEnumerationTableCellRenderer</code>
+instance.
+
+@param column
+           the column this renderer is attached to.
+@param propertyDescriptor
+           the property descriptor from which the enumeration name is
+           taken. The prefix used to lookup translation keys in the form
+           keyPrefix.value is the propertyDescriptor enumeration name.
+@param locale
+           the locale to lookup the translation.
+"
+	end
+
+	operation 335111 "getTableCellRendererComponent"
+	  public explicit_return_type "IRendererComponent"
+	  nparams 5
+	    param inout name "table" explicit_type "com.ulcjava.base.application.ULCTable"
+	    param inout name "value" explicit_type "Object"
+	    param inout name "isSelected" explicit_type "boolean"
+	    param inout name "hasFocus" explicit_type "boolean"
+	    param in name "row" explicit_type "int"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+
+      class 177799 "TreeNodePopupFactory"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 172039 "actionHandler"
+	  private explicit_type "IActionHandler"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 172167 "locale"
+	  private explicit_type "Locale"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 172295 "tree"
+	  private explicit_type "ULCTree"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	classrelation 195335 // view (<unidirectional association>)
+	  relation 195335 --->
+	    a role_name "view" private
+	      java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<ULCComponent> ${name}${value};
+"
+	      classrelation_ref 195335 // view (<unidirectional association>)
+	    b parent class_ref 146183 // IView
+	end
+
+	operation 335239 "TreeNodePopupFactory"
+	  public explicit_return_type ""
+	  nparams 4
+	    param inout name "tree" explicit_type "ULCTree"
+	    param inout name "view" type class_ref 146183 // IView
+	    param inout name "actionHandler" explicit_type "IActionHandler"
+	    param inout name "locale" explicit_type "Locale"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1}<ULCComponent> ${p1}, ${t2} ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>TreeNodePopupFactory</code> instance.
+
+@param tree
+@param view
+@param actionHandler
+@param locale
+"
+	end
+
+	operation 335367 "createPopupForTreepath"
+	  public explicit_return_type "ULCPopupMenu"
+	  nparams 1
+	    param inout name "path" explicit_type "TreePath"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+    end
+
+    class 177671 "EvenOddTableCellRenderer"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A default table cell renderer rendering even and odd rows background slightly
+differently.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 171527 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -932556734324432049L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 171655 "column"
+	private explicit_type "int"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 334727 "EvenOddTableCellRenderer"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EvenOddTableCellRenderer</code> instance.
+
+@param column
+           the column this renderer is attached to.
+"
+      end
+
+      operation 334855 "getTableCellRendererComponent"
+	public explicit_return_type "IRendererComponent"
+	nparams 5
+	  param inout name "table" explicit_type "ULCTable"
+	  param inout name "value" explicit_type "Object"
+	  param inout name "isSelected" explicit_type "boolean"
+	  param inout name "hasFocus" explicit_type "boolean"
+	  param in name "row" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 178055 "EvenOddListCellRenderer"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A default list cell renderer rendering even and odd rows background slightly
+differently.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 172423 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  3450896483325205907L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 335495 "getListCellRendererComponent"
+	public explicit_return_type "IRendererComponent"
+	nparams 5
+	  param inout name "list" explicit_type "ULCList"
+	  param inout name "value" explicit_type "Object"
+	  param inout name "isSelected" explicit_type "boolean"
+	  param inout name "hasFocus" explicit_type "boolean"
+	  param in name "row" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 178311 "FormattedTableCellRenderer"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A table cell renderer based on a formatter.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 195591 // <generalisation>
+	relation 195591 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 195591 // <generalisation>
+	  b parent class_ref 177671 // EvenOddTableCellRenderer
+      end
+
+      attribute 172551 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  1315159518376960498L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 172679 "dataType"
+	private explicit_type "IDataType"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 335623 "FormattedTableCellRenderer"
+	public explicit_return_type ""
+	nparams 2
+	  param in name "column" explicit_type "int"
+	  param inout name "dataType" explicit_type "IDataType"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>FormattedTableCellRenderer</code> instance.
+
+@param column
+           the column this renderer is attached to.
+@param dataType
+           the dataType used to format object values.
+"
+      end
+
+      operation 335751 "getTableCellRendererComponent"
+	public explicit_return_type "IRendererComponent"
+	nparams 5
+	  param inout name "table" explicit_type "ULCTable"
+	  param inout name "value" explicit_type "Object"
+	  param inout name "isSelected" explicit_type "boolean"
+	  param inout name "hasFocus" explicit_type "boolean"
+	  param in name "row" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 178439 "TableSorter"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+TableSorter is a decorator for TableModels; adding sorting functionality to a
+supplied TableModel. TableSorter does not store or copy the data in its
+TableModel; instead it maintains a map from the row indexes of the view to
+the row indexes of the model. As requests are made of the sorter (like
+getValueAt(row, col)) they are passed to the underlying model after the row
+numbers have been translated via the internal mapping array. This way, the
+TableSorter appears to hold another copy of the table with the rows in a
+different order. <p/> TableSorter registers itself as a listener to the
+underlying model, just as the JTable itself would. Events received from the
+model are examined, sometimes manipulated (typically widened), and then
+passed on to the TableSorter's listeners (typically the JTable). If a change
+to the model has invalidated the order of TableSorter's rows, a note of this
+is made and the sorter will resort the rows the next time a value is
+requested. <p/> When the tableHeader property is set, either by using the
+setTableHeader() method or the two argument constructor, the table header may
+be used as a complete UI for TableSorter. The default renderer of the
+tableHeader is decorated with a renderer that indicates the sorting status of
+each column. In addition, a mouse listener is installed with the following
+behavior:
+<ul>
+<li> Mouse-click: Clears the sorting status of all other columns and advances
+the sorting status of that column through three values: {NOT_SORTED,
+ASCENDING, DESCENDING} (then back to NOT_SORTED again).
+<li> SHIFT-mouse-click: Clears the sorting status of all other columns and
+cycles the sorting status of the column through the same three values, in the
+opposite order: {NOT_SORTED, DESCENDING, ASCENDING}.
+<li> CONTROL-mouse-click and CONTROL-SHIFT-mouse-click: as above except that
+the changes to the column do not cancel the statuses of columns that are
+already sorting - giving a way to initiate a compound sort.
+</ul>
+<p/> This is a long overdue rewrite of a class of the same name that first
+appeared in the swing table demos in 1997.
+
+@author Philip Milne
+@author Brendon McLean
+@author Dan van Enckevort
+@author Parwinder Sekhon
+@version 2.0 02/27/04
+"
+      attribute 172807 "ASCENDING"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "=  1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>ASCENDING</code>.
+
+"
+      end
+
+      attribute 172935 "COMPARABLE_COMPARATOR"
+	class_attribute const_attribute public explicit_type "Object"
+	init_value "=  new Comparator<Object>() {
+
+                                                                    @SuppressWarnings(\"unchecked\")
+                                                                    public int compare(
+                                                                        Object o1,
+                                                                        Object o2) {
+                                                                      return ((Comparable<Object>) o1)
+                                                                          .compareTo(o2);
+                                                                    }
+                                                                  }"
+	stereotype "Comparator"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>COMPARABLE_COMPARATOR</code>.
+
+"
+      end
+
+      attribute 173063 "DESCENDING"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "=  -1"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>DESCENDING</code>.
+
+"
+      end
+
+      attribute 173191 "LEXICAL_COMPARATOR"
+	class_attribute const_attribute public explicit_type "Object"
+	init_value "=  new Comparator<Object>() {
+
+                                                                    public int compare(
+                                                                        Object o1,
+                                                                        Object o2) {
+                                                                      return o1
+                                                                          .toString()
+                                                                          .compareTo(
+                                                                              o2
+                                                                                  .toString());
+                                                                    }
+                                                                  }"
+	stereotype "Comparator"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>LEXICAL_COMPARATOR</code>.
+
+"
+      end
+
+      attribute 173319 "NOT_SORTED"
+	class_attribute const_attribute public explicit_type "int"
+	init_value "=  0"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>NOT_SORTED</code>.
+
+"
+      end
+
+      class 178695 "Directive"
+	visibility private 
+	cpp_decl ""
+	java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 174727 "column"
+	  private explicit_type "int"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 174855 "direction"
+	  private explicit_type "int"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 339847 "Directive"
+	  public explicit_return_type ""
+	  nparams 2
+	    param in name "column" explicit_type "int"
+	    param in name "direction" explicit_type "int"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>Directive</code> instance.
+
+@param column
+@param direction
+"
+	end
+      end
+
+      classrelation 195975 // NOT_SORTED_DIRECTIVE (<unidirectional association>)
+	relation 195975 --->
+	  a role_name "NOT_SORTED_DIRECTIVE" init_value "=  new Directive(
+                                                                      -1,
+                                                                      NOT_SORTED)" class_relation const_relation private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 195975 // NOT_SORTED_DIRECTIVE (<unidirectional association>)
+	  b parent class_ref 178695 // Directive
+      end
+
+      attribute 173447 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -5437879837063286581L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 173575 "columnComparators"
+	private explicit_type "Class<?>, Comparator<Object>"
+	init_value "=  new HashMap<Class<?>, Comparator<Object>>()"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 173703 "downIcon"
+	private explicit_type "ULCIcon"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 173831 "headerActionListener"
+	private explicit_type "IActionListener"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 173959 "modelToView"
+	private explicit_type "int"
+	multiplicity "[]"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 196103 // sortingColumns (<unidirectional association>)
+	relation 196103 --->
+	  stereotype "List"
+	  a role_name "sortingColumns" init_value "=  new ArrayList<Directive>()" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 196103 // sortingColumns (<unidirectional association>)
+	  b parent class_ref 178695 // Directive
+      end
+
+      attribute 174087 "tableHeader"
+	private explicit_type "ULCTableHeader"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 174215 "tableModel"
+	private explicit_type "ITableModel"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 174343 "tableModelListener"
+	private explicit_type "ITableModelListener"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 174471 "upIcon"
+	private explicit_type "ULCIcon"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      class 178823 "Row"
+	visibility private 
+	cpp_decl ""
+	java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 175111 "modelIndex"
+	  private explicit_type "int"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 340103 "Row"
+	  public explicit_return_type ""
+	  nparams 1
+	    param in name "index" explicit_type "int"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>Row</code> instance.
+
+@param index
+"
+	end
+
+	operation 340231 "compareTo"
+	  public explicit_return_type "int"
+	  nparams 1
+	    param inout name "o" explicit_type "Object"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	  
+	  
+	  comment "
+compareTo.
+
+@param o
+@return comparison.
+"
+	end
+      end
+
+      classrelation 196231 // viewToModel (<unidirectional association>)
+	relation 196231 --->
+	  a role_name "viewToModel" multiplicity "[]" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}${multiplicity} ${name}${value};
+"
+	    classrelation_ref 196231 // viewToModel (<unidirectional association>)
+	  b parent class_ref 178823 // Row
+      end
+
+      attribute 174599 "sortedColumnsBuffer"
+	private explicit_type "ULCTableColumn"
+	stereotype "Set"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 335879 "TableSorter"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>TableSorter</code> instance.
+"
+      end
+
+      operation 336007 "TableSorter"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "tableModel" explicit_type "ITableModel"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>TableSorter</code> instance.
+
+@param tableModel
+           tableModel.
+"
+      end
+
+      operation 336135 "TableSorter"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "tableModel" explicit_type "ITableModel"
+	  param inout name "tableHeader" explicit_type "ULCTableHeader"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>TableSorter</code> instance.
+
+@param tableModel
+           tableModel.
+@param tableHeader
+           tableHeader.
+"
+      end
+
+      operation 336263 "getColumnClass"
+	public explicit_return_type "Class<?>"
+	nparams 1
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 336391 "getColumnCount"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 336519 "getColumnName"
+	public explicit_return_type "String"
+	nparams 1
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 336647 "getRowCount"
+	public explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 336775 "getSortingStatus"
+	public explicit_return_type "int"
+	nparams 1
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets sorting status.
+
+@param column
+           column.
+@return sorting status.
+"
+      end
+
+      operation 336903 "getTableHeader"
+	public explicit_return_type "ULCTableHeader"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets tableHeader.
+
+@return tableHeader.
+"
+      end
+
+      operation 337031 "getTableModel"
+	public explicit_return_type "ITableModel"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets tableModel.
+
+@return tableModel.
+"
+      end
+
+      operation 337159 "getValueAt"
+	public explicit_return_type "Object"
+	nparams 2
+	  param in name "row" explicit_type "int"
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 337287 "isCellEditable"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param in name "row" explicit_type "int"
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 337415 "isSorting"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+is sorting ?
+
+@return true if sorting
+"
+      end
+
+      operation 337543 "modelIndex"
+	public explicit_return_type "int"
+	nparams 1
+	  param in name "viewIndex" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+modelIndex.
+
+@param viewIndex
+           viewIndex.
+@return modelIndex.
+"
+      end
+
+      operation 337671 "setColumnComparator"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "type" explicit_type "Class"
+	  param inout name "comparator" explicit_type "Comparator"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Sets ColumnComparator.
+
+@param type
+           type.
+@param comparator
+           comparator.
+"
+      end
+
+      operation 337799 "setDownIcon"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "downIcon" explicit_type "ULCIcon"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the downIcon.
+
+@param downIcon
+           the downIcon to set.
+"
+      end
+
+      operation 337927 "setSortingStatus"
+	public explicit_return_type "void"
+	nparams 2
+	  param in name "column" explicit_type "int"
+	  param in name "status" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Sets column sorting status.
+
+@param column
+           column.
+@param status
+           status.
+"
+      end
+
+      operation 338055 "setTableHeader"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "tableHeader" explicit_type "ULCTableHeader"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets tableHeader.
+
+@param tableHeader
+           tableHeader.
+"
+      end
+
+      operation 338183 "setTableModel"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "tableModel" explicit_type "ITableModel"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets tableModel.
+
+@param tableModel
+           tableModel.
+"
+      end
+
+      operation 338311 "setUpIcon"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "upIcon" explicit_type "ULCIcon"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the upIcon.
+
+@param upIcon
+           the upIcon to set.
+"
+      end
+
+      operation 338439 "setValueAt"
+	public explicit_return_type "void"
+	nparams 3
+	  param inout name "aValue" explicit_type "Object"
+	  param in name "row" explicit_type "int"
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 338567 "viewIndex"
+	public explicit_return_type "int"
+	nparams 1
+	  param in name "modelIndex" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " TableModel interface methods
+
+viewIndex.
+
+@param modelIndex
+           modelIndex
+@return viewIndex
+"
+      end
+
+      operation 338695 "getComparator"
+	protected explicit_return_type "Comparator<Object>"
+	nparams 1
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets Comparator.
+
+@param column
+           column.
+@return Comparator.
+"
+      end
+
+      operation 338823 "getHeaderRendererIcon"
+	protected explicit_return_type "ULCIcon"
+	nparams 2
+	  param in name "column" explicit_type "int"
+	  param in name "size" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets HeaderRendererIcon.
+
+@param column
+           column.
+@param size
+           size.
+@return HeaderRendererIcon
+"
+      end
+
+      operation 338951 "cancelSorting"
+	private explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 339079 "clearSortingState"
+	private explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 339207 "resetHeaderRenderers"
+	private explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 339335 "getDirective"
+	private return_type class_ref 178695 // Directive
+	nparams 1
+	  param in name "column" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 339463 "getModelToView"
+	private explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}[] ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 339591 "getViewToModel"
+	private return_type class_ref 178823 // Row
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}[] ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment " Helper classes"
+      end
+
+      operation 339719 "sortingStatusChanged"
+	private explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      class 178951 "HeaderActionHandler"
+	visibility private 
+	cpp_decl ""
+	java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 174983 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  2722236995259713328L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 339975 "actionPerformed"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "ActionEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+
+      class 179335 "SortableHeaderRenderer"
+	visibility private 
+	cpp_decl ""
+	java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 175239 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  8198258084747052695L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 175367 "column"
+	  private explicit_type "int"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 340359 "SortableHeaderRenderer"
+	  protected explicit_return_type ""
+	  nparams 1
+	    param in name "column" explicit_type "int"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>SortableHeaderRenderer</code> instance.
+
+@param column
+           the column this renderer is used for.
+"
+	end
+
+	operation 340487 "getTableCellRendererComponent"
+	  public explicit_return_type "IRendererComponent"
+	  nparams 5
+	    param inout name "table" explicit_type "ULCTable"
+	    param inout name "value" explicit_type "Object"
+	    param inout name "isSelected" explicit_type "boolean"
+	    param inout name "hasFocus" explicit_type "boolean"
+	    param in name "row" explicit_type "int"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+
+      class 179591 "TableModelHandler"
+	visibility private 
+	cpp_decl ""
+	java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 175495 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  447926266162838842L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 340615 "tableChanged"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "TableModelEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+    end
+
+    class 179847 "UlcActionFactory"
+      visibility public 
+      nactuals 2
+      actual class class_ref 146951 // IActionFactory
+        rank 0 explicit_value "IAction"
+      actual class class_ref 146951 // IActionFactory
+        rank 1 explicit_value "ULCComponent"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+An ulc action factory.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 196871 // <realization>
+	relation 196871 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 196871 // <realization>
+	  b parent class_ref 146951 // IActionFactory
+      end
+
+      classrelation 196999 // iconFactory (<unidirectional association>)
+	relation 196999 --->
+	  a role_name "iconFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<ULCIcon> ${name}${value};
+"
+	    classrelation_ref 196999 // iconFactory (<unidirectional association>)
+	  b parent class_ref 145799 // IIconFactory
+      end
+
+      attribute 175623 "translationProvider"
+	private explicit_type "ITranslationProvider"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 340743 "createAction"
+	public explicit_return_type "IAction"
+	nparams 4
+	  param inout name "action" type class_ref 147079 // IDisplayableAction
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "view" type class_ref 146183 // IView
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}<ULCComponent> ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 340871 "createAction"
+	public explicit_return_type "IAction"
+	nparams 6
+	  param inout name "action" type class_ref 147079 // IDisplayableAction
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "sourceComponent" explicit_type "ULCComponent"
+	  param inout name "modelDescriptor" type class_ref 134663 // IModelDescriptor
+	  param inout name "viewConnector" explicit_type "IValueConnector"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 340999 "setIconFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "iconFactory" type class_ref 145799 // IIconFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<ULCIcon> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the iconFactory.
+
+@param iconFactory
+           the iconFactory to set.
+"
+      end
+
+      operation 341127 "setTranslationProvider"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "translationProvider" explicit_type "ITranslationProvider"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the translationProvider.
+
+@param translationProvider
+           the translationProvider to set.
+"
+      end
+
+      class 179975 "ActionAdapter"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 175751 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  5819377672533326496L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 175879 "action"
+	  private explicit_type "com.d2s.framework.action.IAction"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 176007 "actionHandler"
+	  private explicit_type "IActionHandler"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	classrelation 197255 // modelDescriptor (<unidirectional association>)
+	  relation 197255 --->
+	    a role_name "modelDescriptor" private
+	      java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	      classrelation_ref 197255 // modelDescriptor (<unidirectional association>)
+	    b parent class_ref 134663 // IModelDescriptor
+	end
+
+	attribute 176135 "sourceComponent"
+	  private explicit_type "ULCComponent"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 176263 "viewConnector"
+	  private explicit_type "IValueConnector"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 341255 "ActionAdapter"
+	  public explicit_return_type ""
+	  nparams 6
+	    param inout name "action" type class_ref 147079 // IDisplayableAction
+	    param inout name "actionHandler" explicit_type "IActionHandler"
+	    param inout name "sourceComponent" explicit_type "ULCComponent"
+	    param inout name "modelDescriptor" type class_ref 134663 // IModelDescriptor
+	    param inout name "viewConnector" explicit_type "IValueConnector"
+	    param inout name "locale" explicit_type "Locale"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>ActionAdapter</code> instance.
+
+@param action
+@param actionHandler
+@param sourceComponent
+@param modelDescriptor
+@param viewConnector
+@param locale
+"
+	end
+
+	operation 341383 "actionPerformed"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "ActionEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Triggers the action execution on the action handler. The following
+initial action context is filled in :
+<li> <code>ActionContextConstants.SOURCE_COMPONENT</code>
+<li> <code>ActionContextConstants.VIEW_CONNECTOR</code>
+<li> <code>ActionContextConstants.MODEL_CONNECTOR</code>
+<li> <code>ActionContextConstants.MODEL_DESCRIPTOR</code>
+<li> <code>ActionContextConstants.SELECTED_INDICES</code>
+<li> <code>ActionContextConstants.LOCALE</code>
+<p>
+{@inheritDoc}
+"
+	end
+      end
+
+      class 180231 "GatesListener"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 176391 "action"
+	  private explicit_type "IAction"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 176519 "gates"
+	  private explicit_type "IGate"
+	  stereotype "Collection"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 341511 "GatesListener"
+	  public explicit_return_type ""
+	  nparams 2
+	    param inout name "action" explicit_type "IAction"
+	    param inout name "gates" explicit_type "Collection<IGate>"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>GatesListener</code> instance.
+
+@param action
+           the action to (de)activate based on gates state.
+@param gates
+           the gates that determine action state.
+"
+	end
+
+	operation 341639 "propertyChange"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "evt" explicit_type "PropertyChangeEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+    end
+
+    class 180359 "UlcIconFactory"
+      visibility public 
+      nactuals 1
+      actual class class_ref 145671 // AbstractIconFactory
+        rank 0 explicit_value "ULCIcon"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A factory to create (and cache) ULC icons.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 197511 // <realization>
+	relation 197511 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 197511 // <realization>
+	  b parent class_ref 145671 // AbstractIconFactory
+      end
+
+      operation 341767 "createIcon"
+	protected explicit_return_type "ULCIcon"
+	nparams 2
+	  param in name "urlSpec" explicit_type "String"
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 180487 "UlcViewCellEditorAdapter"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+An adapter around an ULC view to implement an ULC cell editor.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 176647 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -1439202520153834858L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 197767 // editorView (<unidirectional association>)
+	relation 197767 --->
+	  a role_name "editorView" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<ULCComponent> ${name}${value};
+"
+	    classrelation_ref 197767 // editorView (<unidirectional association>)
+	  b parent class_ref 146183 // IView
+      end
+
+      attribute 176775 "editorViewConnectorListener"
+	private explicit_type "IConnectorValueChangeListener"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 341895 "UlcViewCellEditorAdapter"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "editorView" type class_ref 146183 // IView
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0}<ULCComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>UlcViewCellEditorAdapter</code> instance.
+
+@param editorView
+           the ulc view responsible for editing the cell.
+"
+      end
+
+      operation 342023 "getTableCellEditorComponent"
+	public explicit_return_type "IEditorComponent"
+	nparams 3
+	  param inout name "table" explicit_type "ULCTable"
+	  param inout name "value" explicit_type "Object"
+	  param in name "row" explicit_type "int"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}, @SuppressWarnings(\"unused\") ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 342151 "getEditorViewConnectorListener"
+	private explicit_return_type "IConnectorValueChangeListener"
+	nparams 2
+	  param inout name "table" explicit_type "ULCTable"
+	  param inout name "editorPeer" explicit_type "ULCActionField"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      class 180743 "ActionFieldConnectorListener"
+	visibility private 
+	cpp_decl ""
+	java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 176903 "editorPeer"
+	  private explicit_type "ULCActionField"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 177031 "table"
+	  private explicit_type "ULCTable"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 342279 "ActionFieldConnectorListener"
+	  public explicit_return_type ""
+	  nparams 2
+	    param inout name "table" explicit_type "ULCTable"
+	    param inout name "editorPeer" explicit_type "ULCActionField"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>ActionFieldConnectorListener</code> instance.
+
+@param table
+@param editorPeer
+"
+	end
+
+	operation 342407 "connectorValueChange"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "evt" explicit_type "ConnectorValueChangeEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+    end
+  end
+
+  deploymentview 136967 "ulc"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 168967 "BooleanTableCellRenderer"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.binding.IValueConnector;
+import com.ulcjava.base.application.ClientContext;
+import com.ulcjava.base.application.IRendererComponent;
+import com.ulcjava.base.application.ULCCheckBox;
+import com.ulcjava.base.application.ULCTable;
+import com.ulcjava.base.application.border.ULCAbstractBorder;
+import com.ulcjava.base.application.border.ULCEmptyBorder;
+import com.ulcjava.base.application.table.ITableCellRenderer;
+import com.ulcjava.base.application.util.Color;
+import com.ulcjava.base.shared.IDefaults;
+${definition}"
+      associated_classes
+	class_ref 176263 // BooleanTableCellRenderer
+      end
+    end
+
+    artifact 169095 "EvenOddTableCellRenderer"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.ulc.UlcUtil;
+import com.ulcjava.base.application.IRendererComponent;
+import com.ulcjava.base.application.ULCComponent;
+import com.ulcjava.base.application.ULCTable;
+import com.ulcjava.base.application.table.DefaultTableCellRenderer;
+${definition}"
+      associated_classes
+	class_ref 177671 // EvenOddTableCellRenderer
+      end
+    end
+
+    artifact 169223 "DefaultUlcViewFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.model.BeanCollectionModule;
+import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
+import com.d2s.framework.binding.ConnectorValueChangeEvent;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.ICollectionConnectorProvider;
+import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.binding.IConfigurableCollectionConnectorListProvider;
+import com.d2s.framework.binding.IConfigurableCollectionConnectorProvider;
+import com.d2s.framework.binding.IConfigurableConnectorFactory;
+import com.d2s.framework.binding.IConnectorSelector;
+import com.d2s.framework.binding.IConnectorValueChangeListener;
+import com.d2s.framework.binding.IMvcBinder;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.basic.BasicValueConnector;
+import com.d2s.framework.binding.masterdetail.IMasterDetailBinder;
+import com.d2s.framework.binding.model.ModelRefPropertyConnector;
+import com.d2s.framework.binding.ulc.CollectionConnectorListModel;
+import com.d2s.framework.binding.ulc.CollectionConnectorTableModel;
+import com.d2s.framework.binding.ulc.ConnectorHierarchyTreeModel;
+import com.d2s.framework.binding.ulc.ConnectorTreeHelper;
+import com.d2s.framework.binding.ulc.IListSelectionModelBinder;
+import com.d2s.framework.binding.ulc.ITreeSelectionModelBinder;
+import com.d2s.framework.binding.ulc.ULCActionFieldConnector;
+import com.d2s.framework.binding.ulc.ULCColorPickerConnector;
+import com.d2s.framework.binding.ulc.ULCComboBoxConnector;
+import com.d2s.framework.binding.ulc.ULCDateFieldConnector;
+import com.d2s.framework.binding.ulc.ULCImageConnector;
+import com.d2s.framework.binding.ulc.ULCJEditTextAreaConnector;
+import com.d2s.framework.binding.ulc.ULCPasswordFieldConnector;
+import com.d2s.framework.binding.ulc.ULCPercentFieldConnector;
+import com.d2s.framework.binding.ulc.ULCReferenceFieldConnector;
+import com.d2s.framework.binding.ulc.ULCTextAreaConnector;
+import com.d2s.framework.binding.ulc.ULCTextFieldConnector;
+import com.d2s.framework.binding.ulc.ULCToggleButtonConnector;
+import com.d2s.framework.gui.ulc.components.server.ITreePathPopupFactory;
+import com.d2s.framework.gui.ulc.components.server.ULCActionField;
+import com.d2s.framework.gui.ulc.components.server.ULCColorPicker;
+import com.d2s.framework.gui.ulc.components.server.ULCDateField;
+import com.d2s.framework.gui.ulc.components.server.ULCDurationDataType;
+import com.d2s.framework.gui.ulc.components.server.ULCDurationDataTypeFactory;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedButton;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedScrollPane;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedTable;
+import com.d2s.framework.gui.ulc.components.server.ULCExtendedTree;
+import com.d2s.framework.gui.ulc.components.server.ULCJEditTextArea;
+import com.d2s.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
+import com.d2s.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
+import com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IColorPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
+import com.d2s.framework.model.descriptor.IDatePropertyDescriptor;
+import com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IDurationPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IIntegerPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.INumberPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IPasswordPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IPercentPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor;
+import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ITextPropertyDescriptor;
+import com.d2s.framework.model.descriptor.ITimePropertyDescriptor;
+import com.d2s.framework.security.ISecurable;
+import com.d2s.framework.util.format.DurationFormatter;
+import com.d2s.framework.util.format.FormatAdapter;
+import com.d2s.framework.util.format.IFormatter;
+import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.gui.ColorHelper;
+import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.util.ulc.UlcUtil;
+import com.d2s.framework.view.BasicCompositeView;
+import com.d2s.framework.view.BasicMapView;
+import com.d2s.framework.view.BasicView;
+import com.d2s.framework.view.IActionFactory;
+import com.d2s.framework.view.ICompositeView;
+import com.d2s.framework.view.IIconFactory;
+import com.d2s.framework.view.IMapView;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.ViewException;
+import com.d2s.framework.view.action.ActionList;
+import com.d2s.framework.view.action.ActionMap;
+import com.d2s.framework.view.action.IDisplayableAction;
+import com.d2s.framework.view.descriptor.IBorderViewDescriptor;
+import com.d2s.framework.view.descriptor.ICardViewDescriptor;
+import com.d2s.framework.view.descriptor.ICollectionViewDescriptor;
+import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
+import com.d2s.framework.view.descriptor.ICompositeTreeLevelDescriptor;
+import com.d2s.framework.view.descriptor.ICompositeViewDescriptor;
+import com.d2s.framework.view.descriptor.IConstrainedGridViewDescriptor;
+import com.d2s.framework.view.descriptor.IEvenGridViewDescriptor;
+import com.d2s.framework.view.descriptor.IGridViewDescriptor;
+import com.d2s.framework.view.descriptor.IImageViewDescriptor;
+import com.d2s.framework.view.descriptor.IListViewDescriptor;
+import com.d2s.framework.view.descriptor.INestingViewDescriptor;
+import com.d2s.framework.view.descriptor.IPropertyViewDescriptor;
+import com.d2s.framework.view.descriptor.ISimpleTreeLevelDescriptor;
+import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
+import com.d2s.framework.view.descriptor.ISubViewDescriptor;
+import com.d2s.framework.view.descriptor.ITabViewDescriptor;
+import com.d2s.framework.view.descriptor.ITableViewDescriptor;
+import com.d2s.framework.view.descriptor.ITreeLevelDescriptor;
+import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+import com.d2s.framework.view.descriptor.TreeDescriptorHelper;
+import com.d2s.framework.view.descriptor.ViewConstraints;
+import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
+import com.ulcjava.base.application.BorderFactory;
+import com.ulcjava.base.application.ClientContext;
+import com.ulcjava.base.application.DefaultComboBoxCellRenderer;
+import com.ulcjava.base.application.GridBagConstraints;
+import com.ulcjava.base.application.IAction;
+import com.ulcjava.base.application.IEditorComponent;
+import com.ulcjava.base.application.IRendererComponent;
+import com.ulcjava.base.application.ULCAbstractButton;
+import com.ulcjava.base.application.ULCBorderLayoutPane;
+import com.ulcjava.base.application.ULCButton;
+import com.ulcjava.base.application.ULCCardPane;
+import com.ulcjava.base.application.ULCCheckBox;
+import com.ulcjava.base.application.ULCComboBox;
+import com.ulcjava.base.application.ULCComponent;
+import com.ulcjava.base.application.ULCGridBagLayoutPane;
+import com.ulcjava.base.application.ULCGridLayoutPane;
+import com.ulcjava.base.application.ULCLabel;
+import com.ulcjava.base.application.ULCList;
+import com.ulcjava.base.application.ULCMenuItem;
+import com.ulcjava.base.application.ULCPasswordField;
+import com.ulcjava.base.application.ULCPopupMenu;
+import com.ulcjava.base.application.ULCScrollPane;
+import com.ulcjava.base.application.ULCSplitPane;
+import com.ulcjava.base.application.ULCTabbedPane;
+import com.ulcjava.base.application.ULCTableTree;
+import com.ulcjava.base.application.ULCTextArea;
+import com.ulcjava.base.application.ULCTextField;
+import com.ulcjava.base.application.ULCToolBar;
+import com.ulcjava.base.application.ULCTree;
+import com.ulcjava.base.application.datatype.ULCDateDataType;
+import com.ulcjava.base.application.datatype.ULCNumberDataType;
+import com.ulcjava.base.application.datatype.ULCPercentDataType;
+import com.ulcjava.base.application.table.DefaultTableCellRenderer;
+import com.ulcjava.base.application.table.ITableCellRenderer;
+import com.ulcjava.base.application.table.ULCTableColumn;
+import com.ulcjava.base.application.tree.DefaultTreeCellRenderer;
+import com.ulcjava.base.application.tree.TreePath;
+import com.ulcjava.base.application.tree.ULCTreeSelectionModel;
+import com.ulcjava.base.application.util.Color;
+import com.ulcjava.base.application.util.Dimension;
+import com.ulcjava.base.application.util.Font;
+import com.ulcjava.base.application.util.Insets;
+import com.ulcjava.base.application.util.KeyStroke;
+import com.ulcjava.base.application.util.ULCIcon;
+import com.ulcjava.base.shared.IDefaults;
+import com.ulcjava.base.shared.IUlcEventConstants;
+${definition}"
+      associated_classes
+	class_ref 176647 // DefaultUlcViewFactory
+      end
+    end
+
+    artifact 169351 "EvenOddListCellRenderer"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.ulc.UlcUtil;
+import com.ulcjava.base.application.DefaultListCellRenderer;
+import com.ulcjava.base.application.IRendererComponent;
+import com.ulcjava.base.application.ULCComponent;
+import com.ulcjava.base.application.ULCList;
+${definition}"
+      associated_classes
+	class_ref 178055 // EvenOddListCellRenderer
+      end
+    end
+
+    artifact 169479 "FormattedTableCellRenderer"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.ulcjava.base.application.IRendererComponent;
+import com.ulcjava.base.application.ULCTable;
+import com.ulcjava.base.application.datatype.IDataType;
+${definition}"
+      associated_classes
+	class_ref 178311 // FormattedTableCellRenderer
+      end
+    end
+
+    artifact 169607 "TableSorter"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import com.d2s.framework.util.IIndexMapper;
+import com.ulcjava.base.application.IRendererComponent;
+import com.ulcjava.base.application.ULCTable;
+import com.ulcjava.base.application.event.ActionEvent;
+import com.ulcjava.base.application.event.TableModelEvent;
+import com.ulcjava.base.application.event.serializable.IActionListener;
+import com.ulcjava.base.application.event.serializable.ITableModelListener;
+import com.ulcjava.base.application.table.AbstractTableModel;
+import com.ulcjava.base.application.table.DefaultTableHeaderCellRenderer;
+import com.ulcjava.base.application.table.ITableCellRenderer;
+import com.ulcjava.base.application.table.ITableModel;
+import com.ulcjava.base.application.table.ULCTableColumn;
+import com.ulcjava.base.application.table.ULCTableHeader;
+import com.ulcjava.base.application.util.ULCIcon;
+import com.ulcjava.base.shared.IDefaults;
+${definition}"
+      associated_classes
+	class_ref 178439 // TableSorter
+      end
+    end
+
+    artifact 169735 "UlcActionFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.ConnectorValueChangeEvent;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.ICollectionConnectorProvider;
+import com.d2s.framework.binding.IConnectorValueChangeListener;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.binding.model.IModelGate;
+import com.d2s.framework.binding.model.IModelValueConnector;
+import com.d2s.framework.model.EmbeddedModelProvider;
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import com.d2s.framework.util.gate.GateHelper;
+import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.view.IActionFactory;
+import com.d2s.framework.view.IIconFactory;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IDisplayableAction;
+import com.ulcjava.base.application.IAction;
+import com.ulcjava.base.application.ULCComponent;
+import com.ulcjava.base.application.event.ActionEvent;
+import com.ulcjava.base.application.util.KeyStroke;
+import com.ulcjava.base.application.util.ULCIcon;
+${definition}"
+      associated_classes
+	class_ref 179847 // UlcActionFactory
+      end
+    end
+
+    artifact 169863 "UlcIconFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.net.URL;
+import javax.imageio.ImageIO;
+import com.d2s.framework.util.url.UrlHelper;
+import com.d2s.framework.view.AbstractIconFactory;
+import com.ulcjava.base.application.util.ULCIcon;
+${definition}"
+      associated_classes
+	class_ref 180359 // UlcIconFactory
+      end
+    end
+
+    artifact 169991 "UlcViewCellEditorAdapter"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.binding.ConnectorValueChangeEvent;
+import com.d2s.framework.binding.IConnectorValueChangeListener;
+import com.d2s.framework.binding.ulc.ULCActionFieldConnector;
+import com.d2s.framework.gui.ulc.components.server.ULCActionField;
+import com.d2s.framework.view.IView;
+import com.ulcjava.base.application.DefaultCellEditor;
+import com.ulcjava.base.application.IEditorComponent;
+import com.ulcjava.base.application.ULCComponent;
+import com.ulcjava.base.application.ULCTable;
+${definition}"
+      associated_classes
+	class_ref 180487 // UlcViewCellEditorAdapter
+      end
+    end
+  end
+end

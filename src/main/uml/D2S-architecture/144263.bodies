@@ -1,0 +1,16 @@
+class DescriptorAwareMapPropertyAccessor
+!!!190087.java!!!	DescriptorAwareMapPropertyAccessor(in property : String)
+    super(property);
+!!!190215.java!!!	setModelDescriptor(inout modelDescriptor : IModelDescriptor) : void
+    this.modelDescriptor = modelDescriptor;
+!!!190343.java!!!	setValue(inout target : Object, inout value : Object) : void
+    Object oldValue = getValue(target);
+    if (getModelDescriptor() != null) {
+      getModelDescriptor().preprocessSetter(target, oldValue, value);
+    }
+    super.setValue(target, value);
+    if (getModelDescriptor() != null) {
+      getModelDescriptor().postprocessSetter(target, oldValue, value);
+    }
+!!!190471.java!!!	getModelDescriptor() : IPropertyDescriptor
+    return (IPropertyDescriptor) modelDescriptor;

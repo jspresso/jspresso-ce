@@ -1,0 +1,29 @@
+class MockMessageSource
+!!!409735.java!!!	getMessage(inout resolvable : MessageSourceResolvable, inout locale : Locale) : String
+
+    return getMessage(resolvable.getCodes()[0], resolvable.getArguments(),
+        resolvable.getDefaultMessage(), locale);
+!!!409863.java!!!	getMessage(in key : String, inout args : Object, inout locale : Locale) : String
+
+    return getMessage(key, args, null, locale);
+!!!409991.java!!!	getMessage(in key : String, inout args : Object, in defaultMessage : String, inout locale : Locale) : String
+
+    if (LOG.isWarnEnabled()) {
+      LOG.warn(key + "=/*TO_REPLACE*/");
+    }
+    StringBuffer message = new StringBuffer(getTranslation(key, locale));
+    if (args != null && args.length > 0) {
+      message.append(" { ");
+      for (Object arg : args) {
+        message.append(String.valueOf(arg));
+        message.append(" ");
+      }
+      message.append("}");
+    }
+    if (defaultMessage != null) {
+      message.append("[").append(defaultMessage).append("]");
+    }
+    return message.toString();
+!!!410119.java!!!	getTranslation(in key : String, inout locale : Locale) : String
+
+    return "[" + locale.getLanguage() + ":" + key + "]";

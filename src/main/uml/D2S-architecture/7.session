@@ -1,0 +1,14 @@
+window_sizes 1140 930 494 640 888 38
+diagrams
+  active  classdiagram_ref 134023 // Security
+    640 815 100 4 0 0
+end
+show_stereotypes
+selected classview_ref 129415 // unknown
+open
+  classview_ref 146823 // Startup
+  classview_ref 149767 // Security
+  
+  package_ref 129799 // unknown
+end
+end

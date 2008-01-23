@@ -1,0 +1,36 @@
+class AbstractEnumerationPropertyDescriptor
+!!!157703.java!!!	getEnumerationName() : String
+
+    if (enumerationName != null) {
+      return enumerationName;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IEnumerationPropertyDescriptor) getParentDescriptor())
+          .getEnumerationName();
+    }
+    return enumerationName;
+!!!157831.java!!!	getMaxLength() : Integer
+
+    if (maxLength != null) {
+      return maxLength;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IEnumerationPropertyDescriptor) getParentDescriptor())
+          .getMaxLength();
+    }
+    return maxLength;
+!!!157959.java!!!	getModelType() : Class<?>
+
+    return String.class;
+!!!158087.java!!!	setEnumerationName(in enumerationName : String) : void
+
+    this.enumerationName = enumerationName;
+!!!158215.java!!!	setMaxLength(inout maxLength : Integer) : void
+
+    this.maxLength = maxLength;
+!!!158343.java!!!	clone() : AbstractEnumerationPropertyDescriptor
+
+    AbstractEnumerationPropertyDescriptor clonedDescriptor = (AbstractEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

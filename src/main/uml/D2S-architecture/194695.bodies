@@ -1,0 +1,32 @@
+class ClassInvoker
+!!!381063.java!!!	handleMessage(in msg : String) : void
+
+    if (msg.startsWith(ClassInvokerUtil.MESSAGE_ROOT)) {
+      String[] messageParts = msg.split(ClassInvokerUtil.SEPARATOR);
+      try {
+        Class<?> targetClass = Class.forName(messageParts[1]);
+        String methodName = messageParts[2];
+        String[] arguments;
+        if (messageParts.length > 3) {
+          arguments = messageParts[3].split(ClassInvokerUtil.ARGS_SEPARATOR);
+        } else {
+          arguments = new String[0];
+        }
+
+        targetClass.getMethod(methodName, new Class[] {String[].class}).invoke(
+            targetClass, new Object[] {arguments});
+      } catch (ClassNotFoundException ex) {
+        throw new NestedRuntimeException(ex);
+      } catch (IllegalArgumentException ex) {
+        throw new NestedRuntimeException(ex);
+      } catch (SecurityException ex) {
+        throw new NestedRuntimeException(ex);
+      } catch (IllegalAccessException ex) {
+        throw new NestedRuntimeException(ex);
+      } catch (NoSuchMethodException ex) {
+        throw new NestedRuntimeException(ex);
+      } catch (InvocationTargetException ex) {
+        // ignored
+        ex.printStackTrace();
+      }
+    }

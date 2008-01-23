@@ -1,0 +1,26 @@
+class RemoveCollectionFromMasterAction
+!!!373383.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    ICollectionConnector collectionConnector = getModelConnector(context);
+    if (collectionConnector == null) {
+      return false;
+    }
+    int[] selectedIndices = getSelectedIndices(context);
+    if (selectedIndices != null) {
+      // Traverse the collection reversly for performance reasons.
+      for (int i = selectedIndices.length - 1; i >= 0; i--) {
+        int selectedIndex = selectedIndices[i];
+        IEntity nextDetailToRemove = (IEntity) collectionConnector
+            .getChildConnector(selectedIndex).getConnectorValue();
+        try {
+          cleanRelationshipsOnDeletion(nextDetailToRemove, context);
+        } catch (IllegalAccessException ex) {
+          throw new ActionException(ex);
+        } catch (InvocationTargetException ex) {
+          throw new ActionException(ex);
+        } catch (NoSuchMethodException ex) {
+          throw new ActionException(ex);
+        }
+      }
+    }
+    return super.execute(actionHandler, context);

@@ -1,0 +1,10 @@
+class AbstractHibernateCollectionAction
+!!!372487.java!!!	getModelConnector(inout context : Map<String, Object>) : ICollectionConnector
+
+    return (ICollectionConnector) super.getModelConnector(context);
+!!!372615.java!!!	getModelDescriptor(inout context : Map<String, Object>) : ICollectionDescriptorProvider
+
+    return (ICollectionDescriptorProvider<?>) super.getModelDescriptor(context);
+!!!372743.java!!!	getSelectedIndices(inout context : Map<String, Object>) : int
+
+    return (int[]) context.get(ActionContextConstants.SELECTED_INDICES);

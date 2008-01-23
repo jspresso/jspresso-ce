@@ -1,0 +1,5 @@
+class ResetConnectorValueAction
+!!!235271.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    getModelConnector(context).setConnectorValue(null);
+    return super.execute(actionHandler, context);

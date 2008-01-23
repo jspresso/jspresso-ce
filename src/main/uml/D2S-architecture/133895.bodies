@@ -1,0 +1,11 @@
+class ComponentTransferStructure
+!!!144519.java!!!	ComponentTransferStructure(inout componentDescriptor : IComponentDescriptor, inout content : Object, inout transferMode : TransferMode)
+    this.componentDescriptor = componentDescriptor;
+    this.content = content;
+    this.transferMode = transferMode;
+!!!144647.java!!!	getComponentDescriptor() : IComponentDescriptor
+    return componentDescriptor;
+!!!144775.java!!!	getContent() : Object
+    return content;
+!!!144903.java!!!	getTransferMode() : TransferMode
+    return transferMode;

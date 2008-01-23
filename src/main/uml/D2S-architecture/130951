@@ -1,0 +1,937 @@
+format 48
+"basic" // com::d2s::framework::model::entity::basic
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/model/entity/basic"
+  java_package "com.d2s.framework.model.entity.basic"
+  classview 130439 "basic"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 143367 "BasicEntityInvocationHandler"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is the core implementation of all entities in the application. Instances
+of this class serve as handlers for proxies representing the entities.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 865 $
+@author Vincent Vandenschrick
+"
+      classrelation 148231 // <generalisation>
+	relation 148231 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 148231 // <generalisation>
+	  b parent class_ref 132231 // AbstractComponentInvocationHandler
+      end
+
+      attribute 139399 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  6078989823404409653L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 139527 "properties"
+	private explicit_type "String, Object"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 185607 "BasicEntityInvocationHandler"
+	protected explicit_return_type ""
+	nparams 5
+	  param inout name "entityDescriptor" type class_ref 132103 // IComponentDescriptor
+	  param inout name "inlineComponentFactory" type class_ref 130567 // IComponentFactory
+	  param inout name "collectionFactory" type class_ref 131079 // IComponentCollectionFactory
+	  param inout name "accessorFactory" explicit_type "IAccessorFactory"
+	  param inout name "extensionFactory" type class_ref 131335 // IComponentExtensionFactory
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0}<IComponent> ${p0}, ${t1} ${p1}, ${t2}<IComponent> ${p2}, ${t3} ${p3}, ${t4} ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicEntityInvocationHandler</code> instance.
+
+@param entityDescriptor
+           The descriptor of the proxy entity.
+@param inlineComponentFactory
+           the factory used to create inline components.
+@param collectionFactory
+           The factory used to create empty entity collections from
+           collection getters.
+@param accessorFactory
+           The factory used to access proxy properties.
+@param extensionFactory
+           The factory used to create entity extensions based on their
+           classes.
+"
+      end
+
+      operation 185735 "invoke"
+	public explicit_return_type "Object"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "method" explicit_type "Method"
+	  param inout name "args" explicit_type "Object"
+	nexceptions 1
+	  explicit_exception "Throwable"
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+  @SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Handles methods invocations on the entity proxy. Either :
+<li>delegates to one of its extension if the accessed property is
+registered as being part of an extension
+<li>handles property access internally
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 185863 "computeEquals"
+	protected explicit_return_type "boolean"
+	nparams 2
+	  param inout name "proxy" type class_ref 130183 // IComponent
+	  param inout name "another" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 185991 "computeHashCode"
+	protected explicit_return_type "int"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 186119 "decorateReferent"
+	protected return_type class_ref 130183 // IComponent
+	nparams 2
+	  param inout name "referent" type class_ref 130183 // IComponent
+	  param inout name "referentDescriptor" type class_ref 132103 // IComponentDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1}<? extends IComponent> ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 186247 "retrievePropertyValue"
+	protected explicit_return_type "Object"
+	nparams 1
+	  param in name "propertyName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 186375 "storeProperty"
+	protected explicit_return_type "void"
+	nparams 2
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "propertyValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 186503 "createPropertyMap"
+	private explicit_return_type "Map<String, Object>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+    end
+
+    class 143495 "BasicEntityRegistry"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Basic implementation of an entity registry backed by an HashMap of weak
+reference values.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 870 $
+@author Vincent Vandenschrick
+"
+      classrelation 148359 // <realization>
+	relation 148359 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 148359 // <realization>
+	  b parent class_ref 142983 // IEntityRegistry
+      end
+
+      attribute 139655 "backingStore"
+	private explicit_type "Class<? extends IEntity>, Map<Object, IEntity>"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 186631 "BasicEntityRegistry"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicEntityRegistry</code> instance.
+"
+      end
+
+      operation 186759 "get"
+	public return_type class_ref 142087 // IEntity
+	nparams 2
+	  param inout name "entityContract" explicit_type "Class"
+	  param inout name "id" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 186887 "register"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "entity" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 143623 "BasicProxyEntityFactory"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Default implementation of <code>IEntityFactory</code>. It creates standard
+java proxies which delegate to <code>BasicEntityInvocationHandler</code>s.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 865 $
+@author Vincent Vandenschrick
+"
+      classrelation 148487 // <realization>
+	relation 148487 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 148487 // <realization>
+	  b parent class_ref 131591 // IEntityFactory
+      end
+
+      attribute 139783 "accessorFactory"
+	private explicit_type "IAccessorFactory"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 148615 // entityCollectionFactory (<unidirectional association>)
+	relation 148615 --->
+	  a role_name "entityCollectionFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<IComponent> ${name}${value};
+"
+	    classrelation_ref 148615 // entityCollectionFactory (<unidirectional association>)
+	  b parent class_ref 131079 // IComponentCollectionFactory
+      end
+
+      classrelation 148743 // entityDescriptorRegistry (<unidirectional association>)
+	relation 148743 --->
+	  a role_name "entityDescriptorRegistry" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 148743 // entityDescriptorRegistry (<unidirectional association>)
+	  b parent class_ref 131975 // IComponentDescriptorRegistry
+      end
+
+      classrelation 148871 // inlineComponentFactory (<unidirectional association>)
+	relation 148871 --->
+	  a role_name "inlineComponentFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 148871 // inlineComponentFactory (<unidirectional association>)
+	  b parent class_ref 130567 // IComponentFactory
+      end
+
+      classrelation 148999 // entityExtensionFactory (<unidirectional association>)
+	relation 148999 --->
+	  a role_name "entityExtensionFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 148999 // entityExtensionFactory (<unidirectional association>)
+	  b parent class_ref 131335 // IComponentExtensionFactory
+      end
+
+      attribute 139911 "entityGUIDGenerator"
+	private explicit_type "IGUIDGenerator"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 187015 "createEntityInstance"
+	public explicit_return_type "T"
+	nparams 1
+	  param inout name "entityContract" explicit_type "Class<T>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IEntity> ${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 187143 "createEntityInstance"
+	public explicit_return_type "T"
+	nparams 2
+	  param inout name "entityContract" explicit_type "Class<T>"
+	  param inout name "id" explicit_type "Serializable"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IEntity> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 187271 "createQueryEntityInstance"
+	public explicit_return_type "T"
+	nparams 1
+	  param inout name "entityContract" explicit_type "Class<T>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IQueryEntity> ${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 187399 "getComponentDescriptor"
+	public return_type class_ref 132103 // IComponentDescriptor
+	nparams 1
+	  param inout name "componentContract" explicit_type "Class<? extends IComponent>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<?> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 187527 "setAccessorFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "accessorFactory" explicit_type "IAccessorFactory"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the accessorFactory used by this entity factory.
+
+@param accessorFactory
+           the accessorFactory to set.
+"
+      end
+
+      operation 187655 "setEntityCollectionFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "entityCollectionFactory" type class_ref 131079 // IComponentCollectionFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the entityCollectionFactory property.
+
+@param entityCollectionFactory
+           the entityCollectionFactory to set.
+"
+      end
+
+      operation 187783 "setEntityDescriptorRegistry"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "entityDescriptorRegistry" type class_ref 131975 // IComponentDescriptorRegistry
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the entityDescriptorRegistry.
+
+@param entityDescriptorRegistry
+           the entityDescriptorRegistry to set.
+"
+      end
+
+      operation 187911 "setEntityExtensionFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "entityExtensionFactory" type class_ref 131335 // IComponentExtensionFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the entityExtensionFactory property.
+
+@param entityExtensionFactory
+           the entityCollectionFactory to set.
+"
+      end
+
+      operation 188039 "setEntityGUIDGenerator"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "entityGUIDGenerator" explicit_type "IGUIDGenerator"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the entityGUIDGenerator.
+
+@param entityGUIDGenerator
+           the entityGUIDGenerator to set.
+"
+      end
+
+      operation 188167 "createEntityInvocationHandler"
+	protected explicit_return_type "InvocationHandler"
+	nparams 1
+	  param inout name "entityDescriptor" type class_ref 132103 // IComponentDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates the entity proxy invocation handler.
+
+@param entityDescriptor
+           the entity descriptor.
+@return the entity proxy invocation handler.
+"
+      end
+
+      operation 188295 "getAccessorFactory"
+	protected explicit_return_type "IAccessorFactory"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the accessorFactory.
+
+@return the accessorFactory.
+"
+      end
+
+      operation 188423 "getEntityCollectionFactory"
+	protected return_type class_ref 131079 // IComponentCollectionFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<IComponent> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the entityCollectionFactory.
+
+@return the entityCollectionFactory.
+"
+      end
+
+      operation 188551 "getEntityExtensionFactory"
+	protected return_type class_ref 131335 // IComponentExtensionFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the entityExtensionFactory.
+
+@return the entityExtensionFactory.
+"
+      end
+
+      operation 188679 "getEntityLifecycleHandler"
+	protected return_type class_ref 131719 // IEntityLifecycleHandler
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the entity lifecycle handler.
+
+@return the entity lifecycle handler.
+"
+      end
+
+      operation 188807 "getPrincipal"
+	protected explicit_return_type "UserPrincipal"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the principal using the factory.
+
+@return the principal using the factory.
+"
+      end
+
+      operation 188935 "createEntityInstance"
+	private explicit_return_type "T"
+	nparams 3
+	  param inout name "entityContract" explicit_type "Class<T>"
+	  param inout name "id" explicit_type "Serializable"
+	  param inout name "extraInterfaces" explicit_type "Class"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IEntity> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+      end
+
+      operation 189063 "setInlineComponentFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "inlineComponentFactory" type class_ref 130567 // IComponentFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the inlineComponentFactory.
+
+@param inlineComponentFactory
+           the inlineComponentFactory to set.
+"
+      end
+
+      operation 189191 "getInlineComponentFactory"
+	protected return_type class_ref 130567 // IComponentFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the inlineComponentFactory.
+
+@return the inlineComponentFactory.
+"
+      end
+
+      operation 189319 "createComponentInstance"
+	public explicit_return_type "T"
+	nparams 2
+	  param inout name "componentContract" explicit_type "Class<T>"
+	  param inout name "delegate" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IComponent> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 189447 "createComponentInstance"
+	public explicit_return_type "T"
+	nparams 1
+	  param inout name "componentContract" explicit_type "Class<T>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IComponent> ${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 143751 "QueryEntityInvocationHandler"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is the core implementation of all query entities in the application.
+Instances of this class serve as handlers for proxies representing the query
+entities.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      attribute 140039 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  6078989823404409653L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 149383 // entityDelegate (<unidirectional association>)
+	relation 149383 --->
+	  a role_name "entityDelegate" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 149383 // entityDelegate (<unidirectional association>)
+	  b parent class_ref 142087 // IEntity
+      end
+
+      operation 189575 "QueryEntityInvocationHandler"
+	package explicit_return_type ""
+	nparams 1
+	  param inout name "entityDelegate" type class_ref 142087 // IEntity
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>QueryEntityInvocationHandler</code> instance.
+
+@param entityDelegate
+           The entity this delegate forwards the method calls to.
+"
+      end
+
+      operation 189703 "invoke"
+	public explicit_return_type "Object"
+	nparams 3
+	  param inout name "proxy" explicit_type "Object"
+	  param inout name "method" explicit_type "Method"
+	  param inout name "args" explicit_type "Object"
+	nexceptions 1
+	  explicit_exception "Throwable"
+	
+	synchronized java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Handles methods invocations on the entity proxy. Either :
+<li>delegates to the wrapped entity straightSet method in case of a
+setter.
+<li>delegates to the normal method in any other case.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+  end
+
+  deploymentview 130311 "basic"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 141703 "BasicEntityInvocationHandler"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.component.basic.AbstractComponentInvocationHandler;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+${definition}"
+      associated_classes
+	class_ref 143367 // BasicEntityInvocationHandler
+      end
+    end
+
+    artifact 141831 "BasicEntityRegistry"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.collections.map.AbstractReferenceMap;
+import org.apache.commons.collections.map.ReferenceMap;
+import com.d2s.framework.model.entity.EntityRegistryException;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityRegistry;
+${definition}"
+      associated_classes
+	class_ref 143495 // BasicEntityRegistry
+      end
+    end
+
+    artifact 141959 "BasicProxyEntityFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.component.IComponentCollectionFactory;
+import com.d2s.framework.model.component.IComponentExtensionFactory;
+import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
+import com.d2s.framework.model.entity.EntityException;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
+import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.security.UserPrincipal;
+import com.d2s.framework.util.accessor.IAccessorFactory;
+import com.d2s.framework.util.uid.IGUIDGenerator;
+${definition}"
+      associated_classes
+	class_ref 143623 // BasicProxyEntityFactory
+      end
+    end
+
+    artifact 142087 "QueryEntityInvocationHandler"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.Serializable;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.util.bean.AccessorInfo;
+${definition}"
+      associated_classes
+	class_ref 143751 // QueryEntityInvocationHandler
+      end
+    end
+  end
+end

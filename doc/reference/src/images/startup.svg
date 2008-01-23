@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="646" height="562" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="101" y1="393" x2="216" y2="283" />
+	<line stroke="black" stroke-opacity="1" x1="221" y1="279" x2="212" y2="278" />
+	<line stroke="black" stroke-opacity="1" x1="221" y1="279" x2="220" y2="287" />
+	<line stroke="black" stroke-opacity="1" x1="212" y1="278" x2="220" y2="287" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="521" y1="393" x2="394" y2="282" />
+	<line stroke="black" stroke-opacity="1" x1="390" y1="279" x2="390" y2="287" />
+	<line stroke="black" stroke-opacity="1" x1="390" y1="279" x2="398" y2="278" />
+	<line stroke="black" stroke-opacity="1" x1="390" y1="287" x2="398" y2="278" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="306" y1="425" x2="306" y2="305" />
+	<line stroke="black" stroke-opacity="1" x1="306" y1="299" x2="300" y2="305" />
+	<line stroke="black" stroke-opacity="1" x1="306" y1="299" x2="312" y2="305" />
+	<line stroke="black" stroke-opacity="1" x1="300" y1="305" x2="312" y2="305" />
+</g>
+<g>
+	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="306" y1="110" x2="306" y2="81" />
+	<line stroke="black" stroke-opacity="1" x1="306" y1="75" x2="300" y2="81" />
+	<line stroke="black" stroke-opacity="1" x1="306" y1="75" x2="312" y2="81" />
+	<line stroke="black" stroke-opacity="1" x1="300" y1="81" x2="312" y2="81" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="130" y="398" width="3" height="47" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="20" y="442" width="113" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="16" y="394" width="114" height="48" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="73" y="409">SwingStartup</text>
+	<line stroke="black" stroke-opacity="1" x1="16" y1="414" x2="130" y2="414" />
+	<line stroke="black" stroke-opacity="1" x1="16" y1="422" x2="130" y2="422" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="20" y="437">getStartupLocale()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="607" y="398" width="3" height="47" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="497" y="442" width="113" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="493" y="394" width="114" height="48" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="550" y="409">WingsStartup</text>
+	<line stroke="black" stroke-opacity="1" x1="493" y1="414" x2="607" y2="414" />
+	<line stroke="black" stroke-opacity="1" x1="493" y1="422" x2="607" y2="422" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="497" y="437">getStartupLocale()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="361" y="430" width="3" height="119" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="251" y="546" width="113" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="247" y="426" width="114" height="120" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="304" y="441">UlcStartup</text>
+	<line stroke="black" stroke-opacity="1" x1="247" y1="446" x2="361" y2="446" />
+	<line stroke="black" stroke-opacity="1" x1="247" y1="454" x2="361" y2="454" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="469">activate()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="487">handleMessage()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="505">passivate()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="523">stop()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="541">getStartupLocale()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="348" y="7" width="3" height="67" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="264" y="71" width="87" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="260" y="3" width="88" height="68" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="304" y="18">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="304" y="38">IStartup</text>
+	<line stroke="black" stroke-opacity="1" x1="260" y1="43" x2="348" y2="43" />
+	<line stroke="black" stroke-opacity="1" x1="260" y1="51" x2="348" y2="51" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="264" y="66">start()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="386" y="115" width="3" height="183" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="226" y="295" width="163" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="222" y="111" width="164" height="184" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="304" y="142">AbstractStartup</text>
+	<line stroke="black" stroke-opacity="1" x1="222" y1="147" x2="386" y2="147" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="162">applicationContext</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="180">frontendController</text>
+	<line stroke="black" stroke-opacity="1" x1="222" y1="185" x2="386" y2="185" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="200">start()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="218">getApplicationContext()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-style="italic" x="226" y="236">getApplicationContextKey()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="254">getBackendController()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="272">getFrontendController()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-style="italic" x="226" y="290">getStartupLocale()</text>
+</g>
+<g>
+	<rect fill="white" stroke-dasharray="4,4" stroke="black" stroke-width="1" stroke-opacity="1" x="334" y="99" width="83" height="23" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="376" y="117">E, F, G</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="90" y="384">&lt;&lt;bind&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="4" y="368">&lt;E-&gt;JComponent, F-&gt;Icon, G-&gt;Action&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="489" y="385">&lt;&lt;bind&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="397" y="369">&lt;E-&gt;SComponent, F-&gt;SIcon, G-&gt;Action&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="278" y="419">&lt;&lt;bind&gt;&gt;</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="169" y="403">&lt;E-&gt;ULCComponent, F-&gt;ULCIcon, G-&gt;IAction&gt;</text>
+</g>
+</svg>

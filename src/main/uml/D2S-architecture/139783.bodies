@@ -1,0 +1,23 @@
+class BasicDecimalPropertyDescriptor
+!!!169223.java!!!	getMaxFractionDigit() : Integer
+
+    if (maxFractionDigit != null) {
+      return maxFractionDigit;
+    }
+    if (getParentDescriptor() != null) {
+      return ((IDecimalPropertyDescriptor) getParentDescriptor())
+          .getMaxFractionDigit();
+    }
+    return maxFractionDigit;
+!!!169351.java!!!	getModelType() : Class<?>
+
+    return Double.class;
+!!!169479.java!!!	setMaxFractionDigit(inout maxFractionDigit : Integer) : void
+
+    this.maxFractionDigit = maxFractionDigit;
+!!!169607.java!!!	clone() : BasicDecimalPropertyDescriptor
+
+    BasicDecimalPropertyDescriptor clonedDescriptor = (BasicDecimalPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

@@ -1,0 +1,72 @@
+class ConnectorTreeCellRenderer
+!!!334215.java!!!	ConnectorTreeCellRenderer(inout viewDescriptor : ITreeViewDescriptor, inout locale : Locale)
+
+      this.viewDescriptor = viewDescriptor;
+      this.locale = locale;
+!!!334343.java!!!	getTreeCellRendererComponent(inout tree : com.ulcjava.base.application.ULCTree, inout value : Object, inout sel : boolean, inout expanded : boolean, inout leaf : boolean, inout nodeHasFocus : boolean) : IRendererComponent
+
+      IRendererComponent renderer = super.getTreeCellRendererComponent(tree,
+          value, sel, expanded, leaf, nodeHasFocus);
+      if (value instanceof IValueConnector) {
+        ULCIcon nodeIcon = null;
+        IValueConnector rootConnector = (IValueConnector) tree.getModel()
+            .getRoot();
+        nodeIcon = iconFactory.getIcon(viewDescriptor
+            .getIconImageURLForUserObject(((IValueConnector) value)
+                .getConnectorValue()), IIconFactory.SMALL_ICON_SIZE);
+        if (nodeIcon == null) {
+          if (value == rootConnector) {
+            nodeIcon = iconFactory.getIcon(viewDescriptor.getIconImageURL(),
+                IIconFactory.SMALL_ICON_SIZE);
+          } else {
+            TreePath path = ConnectorTreeHelper.getTreePathForConnector(
+                rootConnector, (IValueConnector) value);
+            if (path != null) {
+              nodeIcon = iconFactory.getIcon(TreeDescriptorHelper
+                  .getSubtreeDescriptorFromPath(
+                      viewDescriptor.getRootSubtreeDescriptor(),
+                      getDescriptorPathFromConnectorTreePath(path))
+                  .getNodeGroupDescriptor().getIconImageURL(),
+                  IIconFactory.SMALL_ICON_SIZE);
+            }
+          }
+        }
+        ((ULCLabel) renderer).setIcon(nodeIcon);
+        ((ULCLabel) renderer).setOpaque(false);
+        ((ULCLabel) renderer).setBackground(null);
+
+        // The following is useless in ULC since the renderer value is not
+        // forwarded to the client.
+
+        // String labelText = null;
+        // String toolTipText = null;
+        // if (value instanceof ICollectionConnector) {
+        // IListViewDescriptor nodeGroupDescriptor = TreeDescriptorHelper
+        // .getSubtreeDescriptorFromPath(
+        // viewDescriptor.getRootSubtreeDescriptor(),
+        // getDescriptorPathFromConnectorTreePath(ConnectorTreeHelper
+        // .getTreePathForConnector((IValueConnector) tree
+        // .getModel().getRoot(), (IValueConnector) value)))
+        // .getNodeGroupDescriptor();
+        // String labelKey = nodeGroupDescriptor.getName();
+        // if (labelKey == null) {
+        // labelKey = nodeGroupDescriptor.getModelDescriptor().getName();
+        // }
+        // labelText = translationProvider.getTranslation(labelKey, locale);
+        // if (nodeGroupDescriptor.getDescription() != null) {
+        // toolTipText = translationProvider.getTranslation(
+        // nodeGroupDescriptor.getDescription(), locale) + TOOLTIP_ELLIPSIS;
+        // }
+        // } else {
+        // setDataType(null);
+        // if (((IValueConnector) value).getConnectorValue() != null) {
+        // labelText = ((IValueConnector) value).getConnectorValue()
+        // .toString();
+        // } else {
+        // labelText = "";
+        // }
+        // }
+        // ((ULCLabel) renderer).setText(labelText);
+        // ((ULCLabel) renderer).setToolTipText(toolTipText);
+      }
+      return renderer;

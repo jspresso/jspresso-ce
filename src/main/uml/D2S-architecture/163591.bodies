@@ -1,0 +1,24 @@
+class SubModule
+!!!273031.java!!!	getParent() : Module
+
+    return parent;
+!!!273159.java!!!	getProjectedViewDescriptor() : IViewDescriptor
+
+    return projectedViewDescriptor;
+!!!273287.java!!!	setParent(inout parent : Module) : void
+
+    if (ObjectUtils.equals(this.parent, parent)) {
+      return;
+    }
+    Module oldParent = getParent();
+    if (getParent() != null) {
+      getParent().removeSubModule(this);
+    }
+    this.parent = parent;
+    if (getParent() != null && !getParent().getSubModules().contains(this)) {
+      getParent().addSubModule(this);
+    }
+    firePropertyChange("parent", oldParent, getParent());
+!!!273415.java!!!	setProjectedViewDescriptor(inout projectedViewDescriptor : IViewDescriptor) : void
+
+    this.projectedViewDescriptor = projectedViewDescriptor;

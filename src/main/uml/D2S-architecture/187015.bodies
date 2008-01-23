@@ -1,0 +1,38 @@
+class SaveFileAction
+!!!362119.java!!!	execute(inout actionHandler : IActionHandler, in context : Map<String, Object>) : boolean
+
+    if (fileSaveCallback != null) {
+      DynamicResource resource = new DynamicResource(
+          getSourceComponent(context).getParentFrame()) {
+
+        private static final long serialVersionUID = 2216910348294774650L;
+
+        public void write(Device device) throws IOException {
+          DeviceOutputStream out = new DeviceOutputStream(device);
+          fileSaveCallback.fileChosen(out, context);
+          out.flush();
+          device.close();
+        }
+      };
+      // Collection<HttpHeader> headers = new ArrayList<HttpHeader>();
+      // headers.add(new Resource.HeaderEntry("Content-Disposition",
+      // "attachment; filename=" + getDefaultFileName()));
+      // String url = SessionManager.getSession().getExternalizeManager()
+      // .externalize(resource, headers, AbstractExternalizeManager.REQUEST);
+      // String url = SessionManager.getSession().getExternalizeManager()
+      // .externalize(resource, headers, AbstractExternalizeManager.REQUEST);
+      Map<String, String> headers = new HashMap<String, String>();
+      headers.put("Content-Disposition", "attachment; filename="
+          + getDefaultFileName());
+      String url = SessionManager.getSession().getExternalizeManager()
+          .externalize(resource, headers.entrySet(),
+              AbstractExternalizeManager.REQUEST);
+      SAnchor downloadLink = new SAnchor(url, "downloadWindow");
+      downloadLink.add(new SLabel(getTranslationProvider(context)
+          .getTranslation("click.me", getLocale(context))));
+      SOptionPane.showMessageDialog(getSourceComponent(context), downloadLink);
+    }
+    return super.execute(actionHandler, context);
+!!!362247.java!!!	setFileSaveCallback(inout fileSaveCallback : IFileSaveCallback) : void
+
+    this.fileSaveCallback = fileSaveCallback;

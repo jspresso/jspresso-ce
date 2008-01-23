@@ -1,0 +1,506 @@
+format 48
+"format" // com::d2s::framework::util::format
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/util/format"
+  java_package "com.d2s.framework.util.format"
+  classview 144519 "format"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 201735 "DurationFormatter"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A formatter / parser to deal with duration properties.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 220423 // <realization>
+	relation 220423 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 220423 // <realization>
+	  b parent class_ref 201863 // IFormatter
+      end
+
+      attribute 195719 "formatter"
+	private explicit_type "PeriodFormatter"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 404615 "DurationFormatter"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>DurationFormatter</code> instance.
+
+@param locale
+           the locale the formatter must be constructed in.
+"
+      end
+
+      operation 404743 "format"
+	public explicit_return_type "String"
+	nparams 1
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 404871 "parse"
+	public explicit_return_type "Object"
+	nparams 1
+	  param in name "source" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "ParseException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 201863 "IFormatter"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Generic contract of a formatter object.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      operation 404359 "format"
+	package explicit_return_type "String"
+	nparams 1
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Formats an object to it's userfriendly string representation.
+
+@param value
+           the object to format.
+@return The formatted string representation.
+"
+      end
+
+      operation 404487 "parse"
+	package explicit_return_type "Object"
+	nparams 1
+	  param in name "source" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "ParseException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Parses a string and transform it to an Object value.
+
+@param source
+           the string representation to parse.
+@return the parsed object.
+@throws ParseException
+            thrown whenever a parsing error ocurred.
+"
+      end
+    end
+
+    class 201991 "FormatAdapter"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+An adapter for the <code>Format</code> jdk objects.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 220551 // <realization>
+	relation 220551 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 220551 // <realization>
+	  b parent class_ref 201863 // IFormatter
+      end
+
+      attribute 195847 "format"
+	private explicit_type "Format"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 404999 "FormatAdapter"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "format" explicit_type "Format"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>FormatAdapter</code> instance.
+
+@param format
+           the format to adapt.
+"
+      end
+
+      operation 405127 "format"
+	public explicit_return_type "String"
+	nparams 1
+	  param inout name "value" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 405255 "getFormat"
+	public explicit_return_type "Format"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the wrapped format instance.
+
+@return the wrapped format instance.
+"
+      end
+
+      operation 405383 "parse"
+	public explicit_return_type "Object"
+	nparams 1
+	  param in name "source" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "ParseException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 202119 "NullableSimpleDateFormat"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple date format that returns null whenever a null or empty string is
+parsed instead of throwing a ParseException.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 195975 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  8442150281431602947L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 405511 "NullableSimpleDateFormat"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>NullableSimpleDateFormat</code> instance.
+"
+      end
+
+      operation 405639 "NullableSimpleDateFormat"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "pattern" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>NullableSimpleDateFormat</code> instance.
+
+@param pattern
+           pattern.
+"
+      end
+
+      operation 405767 "NullableSimpleDateFormat"
+	public explicit_return_type ""
+	nparams 2
+	  param in name "pattern" explicit_type "String"
+	  param inout name "formatSymbols" explicit_type "DateFormatSymbols"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>NullableSimpleDateFormat</code> instance.
+
+@param pattern
+           pattern.
+@param formatSymbols
+           formatSymbols.
+"
+      end
+
+      operation 405895 "NullableSimpleDateFormat"
+	public explicit_return_type ""
+	nparams 2
+	  param in name "pattern" explicit_type "String"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>NullableSimpleDateFormat</code> instance.
+
+@param pattern
+           pattern.
+@param locale
+           locale.
+"
+      end
+
+      operation 406023 "parse"
+	public explicit_return_type "Date"
+	nparams 1
+	  param in name "source" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "ParseException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 406151 "parseObject"
+	public explicit_return_type "Object"
+	nparams 1
+	  param in name "source" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "ParseException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+  end
+
+  deploymentview 143751 "format"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 187271 "IFormatter"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.text.ParseException;
+${definition}"
+      associated_classes
+	class_ref 201863 // IFormatter
+      end
+    end
+
+    artifact 187399 "DurationFormatter"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.text.ParseException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import org.joda.time.Instant;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
+${definition}"
+      associated_classes
+	class_ref 201735 // DurationFormatter
+      end
+    end
+
+    artifact 187527 "FormatAdapter"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.text.Format;
+import java.text.ParseException;
+${definition}"
+      associated_classes
+	class_ref 201991 // FormatAdapter
+      end
+    end
+
+    artifact 187655 "NullableSimpleDateFormat"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.text.DateFormatSymbols;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+${definition}"
+      associated_classes
+	class_ref 202119 // NullableSimpleDateFormat
+      end
+    end
+  end
+end

@@ -1,0 +1,467 @@
+format 48
+"hibernate" // com::d2s::framework::application::backend::persistence::hibernate
+  revision 3
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/backend/persistence/hibernate"
+  java_package "com.d2s.framework.application.backend.persistence.hibernate"
+  classview 140935 "hibernate"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 191879 "ApplicationSessionAwareEntityProxyInterceptor"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Hibernate session interceptor aware of an application session to deal with
+uniqueness of entity instances across the JVM.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 185223 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -6834992000307471098L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 212487 // applicationSession (<unidirectional association>)
+	relation 212487 --->
+	  a role_name "applicationSession" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 212487 // applicationSession (<unidirectional association>)
+	  b parent class_ref 155143 // IApplicationSession
+      end
+
+      operation 374279 "afterTransactionBegin"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "tx" explicit_type "Transaction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Begins the application session current unit of work.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 374407 "afterTransactionCompletion"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "tx" explicit_type "Transaction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Either commits or rollbacks the application session current unit of work.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 374535 "findDirty"
+	public explicit_return_type "int"
+	nparams 6
+	  param inout name "entity" explicit_type "Object"
+	  param inout name "id" explicit_type "Serializable"
+	  param inout name "currentState" explicit_type "Object"
+	  param inout name "previousState" explicit_type "Object"
+	  param in name "propertyNames" explicit_type "String"
+	  param inout name "types" explicit_type "Type"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}[] ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}, ${t3}[] ${p3}, ${t4}[] ${p4}, ${t5}[] ${p5}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Uses the application session to retrieve the dirty properties of the
+entity.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 374663 "getEntity"
+	public explicit_return_type "Object"
+	nparams 2
+	  param in name "entityName" explicit_type "String"
+	  param inout name "id" explicit_type "Serializable"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+  @Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 374791 "onLoad"
+	public explicit_return_type "boolean"
+	nparams 5
+	  param inout name "entity" explicit_type "Object"
+	  param inout name "id" explicit_type "Serializable"
+	  param inout name "state" explicit_type "Object"
+	  param in name "propertyNames" explicit_type "String"
+	  param inout name "types" explicit_type "Type"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}[] ${p2}, ${t3}[] ${p3}, ${t4}[] ${p4}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 374919 "postFlush"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "entities" explicit_type "Iterator"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+  @Override
+"
+	
+	
+	comment "
+Notifies the application session of the entity flush.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 375047 "setApplicationSession"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "applicationSession" type class_ref 155143 // IApplicationSession
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the applicationSession.
+
+@param applicationSession
+           the applicationSession to set.
+"
+      end
+
+      operation 375175 "getEntityLifecycleHandler"
+	protected return_type class_ref 131719 // IEntityLifecycleHandler
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 375303 "getPrincipal"
+	protected explicit_return_type "UserPrincipal"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Gets the principal of the application session.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+
+    class 193287 "HibernateBackendController"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Hibernate aware backend controller.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 213895 // <generalisation>
+	relation 213895 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 213895 // <generalisation>
+	  b parent class_ref 155655 // AbstractBackendController
+      end
+
+      attribute 186887 "hibernateTemplate"
+	private explicit_type "HibernateTemplate"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 187015 "transactionTemplate"
+	private explicit_type "TransactionTemplate"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 378759 "getHibernateTemplate"
+	public explicit_return_type "HibernateTemplate"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the hibernateTemplate.
+
+@return the hibernateTemplate.
+"
+      end
+
+      operation 378887 "getTransactionTemplate"
+	public explicit_return_type "TransactionTemplate"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the transactionTemplate.
+
+@return the transactionTemplate.
+"
+      end
+
+      operation 379015 "setApplicationSession"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "applicationSession" type class_ref 155143 // IApplicationSession
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 379143 "setEntityFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 379271 "setHibernateTemplate"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "hibernateTemplate" explicit_type "HibernateTemplate"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the hibernateTemplate.
+
+@param hibernateTemplate
+           the hibernateTemplate to set.
+"
+      end
+
+      operation 379399 "setTransactionTemplate"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "transactionTemplate" explicit_type "TransactionTemplate"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the transactionTemplate.
+
+@param transactionTemplate
+           the transactionTemplate to set.
+"
+      end
+
+      operation 379527 "linkHibernateArtifacts"
+	private explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+    end
+  end
+
+  deploymentview 140423 "hibernate"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 179719 "ApplicationSessionAwareEntityProxyInterceptor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.Serializable;
+import java.util.Iterator;
+import java.util.Map;
+import org.hibernate.Transaction;
+import org.hibernate.proxy.HibernateProxy;
+import org.hibernate.proxy.LazyInitializer;
+import org.hibernate.type.Type;
+import com.d2s.framework.application.backend.session.IApplicationSession;
+import com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
+import com.d2s.framework.model.persistence.hibernate.EntityProxyInterceptor;
+import com.d2s.framework.security.UserPrincipal;
+${definition}"
+      associated_classes
+	class_ref 191879 // ApplicationSessionAwareEntityProxyInterceptor
+      end
+    end
+
+    artifact 179847 "HibernateBackendController"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.springframework.orm.hibernate3.HibernateTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
+import com.d2s.framework.application.backend.DefaultBackendController;
+import com.d2s.framework.application.backend.session.IApplicationSession;
+import com.d2s.framework.application.backend.session.hibernate.HibernateAwareApplicationSession;
+import com.d2s.framework.model.entity.IEntityFactory;
+${definition}"
+      associated_classes
+      end
+    end
+  end
+end

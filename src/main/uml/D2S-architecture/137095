@@ -1,0 +1,607 @@
+format 48
+"lov" // com::d2s::framework::application::frontend::action::ulc::lov
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action/ulc/lov"
+  java_package "com.d2s.framework.application.frontend.action.ulc.lov"
+  classview 136583 "lov"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 166919 "ChooseComponentAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A standard List of value action for reference property views. This action
+should be used in view factories.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 182791 // <generalisation>
+	relation 182791 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 182791 // <generalisation>
+	  b parent class_ref 167047 // ModalDialogAction
+      end
+
+      classrelation 182919 // cancelAction (<unidirectional association>)
+	relation 182919 --->
+	  a role_name "cancelAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 182919 // cancelAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      classrelation 183047 // okAction (<unidirectional association>)
+	relation 183047 --->
+	  a role_name "okAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 183047 // okAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      operation 283527 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 283655 "setCancelAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "cancelAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the cancelAction.
+
+@param cancelAction
+           the cancelAction to set.
+"
+      end
+
+      operation 283783 "setOkAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "okAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the okAction.
+
+@param okAction
+           the okAction to set.
+"
+      end
+    end
+
+    class 167175 "LovAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A standard List of value action for reference property views. This action
+should be used in view factories.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 183175 // <generalisation>
+	relation 183175 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 183175 // <generalisation>
+	  b parent class_ref 167047 // ModalDialogAction
+      end
+
+      attribute 161287 "autoquery"
+	private explicit_type "boolean"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 183303 // cancelAction (<unidirectional association>)
+	relation 183303 --->
+	  a role_name "cancelAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 183303 // cancelAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      classrelation 183431 // createQueryEntityAction (<unidirectional association>)
+	relation 183431 --->
+	  a role_name "createQueryEntityAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 183431 // createQueryEntityAction (<unidirectional association>)
+	  b parent class_ref 157575 // CreateQueryEntityAction
+      end
+
+      classrelation 183559 // entityRefQueryDescriptor (<unidirectional association>)
+	relation 183559 --->
+	  a role_name "entityRefQueryDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<IEntity> ${name}${value};
+"
+	    classrelation_ref 183559 // entityRefQueryDescriptor (<unidirectional association>)
+	  b parent class_ref 132871 // IReferencePropertyDescriptor
+      end
+
+      classrelation 183687 // findAction (<unidirectional association>)
+	relation 183687 --->
+	  a role_name "findAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 183687 // findAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      classrelation 183815 // lovViewDescriptorFactory (<unidirectional association>)
+	relation 183815 --->
+	  a role_name "lovViewDescriptorFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 183815 // lovViewDescriptorFactory (<unidirectional association>)
+	  b parent class_ref 149767 // ILovViewDescriptorFactory
+      end
+
+      classrelation 183943 // okAction (<unidirectional association>)
+	relation 183943 --->
+	  a role_name "okAction" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 183943 // okAction (<unidirectional association>)
+	  b parent class_ref 147079 // IDisplayableAction
+      end
+
+      operation 283911 "LovAction"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>LovAction</code> instance.
+"
+      end
+
+      operation 284039 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 284167 "setAutoquery"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "autoquery" explicit_type "boolean"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the autoquery.
+
+@param autoquery
+           the autoquery to set.
+"
+      end
+
+      operation 284295 "setCancelAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "cancelAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the cancelAction.
+
+@param cancelAction
+           the cancelAction to set.
+"
+      end
+
+      operation 284423 "setCreateQueryEntityAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "createQueryEntityAction" type class_ref 157575 // CreateQueryEntityAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the createQueryEntityAction.
+
+@param createQueryEntityAction
+           the createQueryEntityAction to set.
+"
+      end
+
+      operation 284551 "setEntityRefQueryDescriptor"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "entityRefQueryDescriptor" type class_ref 132871 // IReferencePropertyDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<IEntity> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the entityRefQueryDescriptor.
+
+@param entityRefQueryDescriptor
+           the entityRefQueryDescriptor to set.
+"
+      end
+
+      operation 284679 "setFindAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "findAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the findAction.
+
+@param findAction
+           the findAction to set.
+"
+      end
+
+      operation 284807 "setLovViewDescriptorFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "lovViewDescriptorFactory" type class_ref 149767 // ILovViewDescriptorFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the lovViewDescriptorFactory.
+
+@param lovViewDescriptorFactory
+           the lovViewDescriptorFactory to set.
+"
+      end
+
+      operation 284935 "setOkAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "okAction" type class_ref 147079 // IDisplayableAction
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the okAction.
+
+@param okAction
+           the okAction to set.
+"
+      end
+
+      operation 285063 "getEntityRefQueryDescriptor"
+	protected return_type class_ref 132871 // IReferencePropertyDescriptor
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<IEntity> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets the entityRefQueryDescriptor.
+
+@param context
+           the action context.
+@return the entityRefQueryDescriptor.
+"
+      end
+    end
+
+    class 167303 "OkChooseComponentAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Sets the selected component as the value of the source view connector (which
+will propagate to the backend).
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 184199 // <generalisation>
+	relation 184199 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 184199 // <generalisation>
+	  b parent class_ref 167431 // OkAction
+      end
+
+      operation 285447 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 167559 "OkLovAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Sets the selected entity as the value of the source view connector (which
+will propagate to the backend).
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 184327 // <generalisation>
+	relation 184327 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 184327 // <generalisation>
+	  b parent class_ref 167431 // OkAction
+      end
+
+      operation 285575 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+  end
+
+  deploymentview 136199 "lov"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 164231 "ChooseComponentAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction;
+import com.d2s.framework.binding.model.IModelValueConnector;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IDisplayableAction;
+import com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor;
+import com.ulcjava.base.application.ULCComponent;
+${definition}"
+      associated_classes
+	class_ref 166919 // ChooseComponentAction
+      end
+    end
+
+    artifact 164359 "LovAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.IController;
+import com.d2s.framework.application.backend.action.CreateQueryEntityAction;
+import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.action.IDisplayableAction;
+import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
+import com.ulcjava.base.application.ULCComponent;
+${definition}"
+      associated_classes
+	class_ref 167175 // LovAction
+      end
+    end
+
+    artifact 164615 "OkChooseComponentAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.ulc.std.OkAction;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.ICollectionConnectorProvider;
+${definition}"
+      associated_classes
+	class_ref 167303 // OkChooseComponentAction
+      end
+    end
+
+    artifact 164743 "OkLovAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.backend.session.MergeMode;
+import com.d2s.framework.application.frontend.action.ulc.std.OkAction;
+import com.d2s.framework.binding.ICollectionConnector;
+import com.d2s.framework.binding.ICollectionConnectorProvider;
+import com.d2s.framework.binding.ICompositeValueConnector;
+import com.d2s.framework.binding.model.ModelRefPropertyConnector;
+import com.d2s.framework.model.entity.IEntity;
+${definition}"
+      associated_classes
+	class_ref 167559 // OkLovAction
+      end
+    end
+  end
+end

@@ -1,0 +1,71 @@
+class AbstractIconFactory
+!!!193543.java!!!	AbstractIconFactory()
+
+    iconStore = new HashMap<String, Map<Dimension, E>>();
+!!!193671.java!!!	getBackwardIcon(inout iconSize : Dimension) : E
+
+    return getIcon(backwardIconUrl, iconSize);
+!!!193799.java!!!	getCancelIcon(inout iconSize : Dimension) : E
+
+    return getIcon(cancelIconImageURL, iconSize);
+!!!193927.java!!!	getErrorIcon(inout iconSize : Dimension) : E
+
+    return getIcon(errorIconImageURL, iconSize);
+!!!194055.java!!!	getForbiddenIcon(inout iconSize : Dimension) : E
+
+    return getIcon(forbiddenIconUrl, iconSize);
+!!!194183.java!!!	getForwardIcon(inout iconSize : Dimension) : E
+
+    return getIcon(forwardIconUrl, iconSize);
+!!!194311.java!!!	getIcon(in urlSpec : String, inout iconSize : Dimension) : E
+
+    Map<Dimension, E> multiDimStore = iconStore.get(urlSpec);
+    if (multiDimStore == null) {
+      multiDimStore = new HashMap<Dimension, E>();
+      iconStore.put(urlSpec, multiDimStore);
+    }
+    E cachedIcon = multiDimStore.get(iconSize);
+    if (cachedIcon == null) {
+      cachedIcon = createIcon(urlSpec, iconSize);
+      multiDimStore.put(iconSize, cachedIcon);
+    }
+    return cachedIcon;
+!!!194439.java!!!	getInfoIcon(inout iconSize : Dimension) : E
+
+    return getIcon(infoIconImageURL, iconSize);
+!!!194567.java!!!	getNoIcon(inout iconSize : Dimension) : E
+
+    return getIcon(noIconImageURL, iconSize);
+!!!194695.java!!!	getOkYesIcon(inout iconSize : Dimension) : E
+
+    return getIcon(okYesIconImageURL, iconSize);
+!!!194823.java!!!	getWarningIcon(inout iconSize : Dimension) : E
+
+    return getIcon(warningIconImageURL, iconSize);
+!!!194951.java!!!	setBackwardIconUrl(in backwardIconUrl : String) : void
+
+    this.backwardIconUrl = backwardIconUrl;
+!!!195079.java!!!	setCancelIconImageURL(in cancelIconImageURL : String) : void
+
+    this.cancelIconImageURL = cancelIconImageURL;
+!!!195207.java!!!	setErrorIconImageURL(in errorIconImageURL : String) : void
+
+    this.errorIconImageURL = errorIconImageURL;
+!!!195335.java!!!	setForbiddenIconUrl(in forbiddenIconUrl : String) : void
+
+    this.forbiddenIconUrl = forbiddenIconUrl;
+!!!195463.java!!!	setForwardIconUrl(in forwardIconUrl : String) : void
+
+    this.forwardIconUrl = forwardIconUrl;
+!!!195591.java!!!	setInfoIconImageURL(in infoIconImageURL : String) : void
+
+    this.infoIconImageURL = infoIconImageURL;
+!!!195719.java!!!	setNoIconImageURL(in noIconImageURL : String) : void
+
+    this.noIconImageURL = noIconImageURL;
+!!!195847.java!!!	setOkYesIconImageURL(in okYesIconImageURL : String) : void
+
+    this.okYesIconImageURL = okYesIconImageURL;
+!!!195975.java!!!	setWarningIconImageURL(in warningIconImageURL : String) : void
+
+    this.warningIconImageURL = warningIconImageURL;

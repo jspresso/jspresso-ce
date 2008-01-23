@@ -1,0 +1,246 @@
+format 48
+"startup" // com::d2s::framework::application::frontend::startup
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/startup"
+  java_package "com.d2s.framework.application.frontend.startup"
+  classview 147975 "startup"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 209159 "AbstractStartup"
+      abstract visibility public 
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Abstract class for application startup.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      classrelation 225159 // <realization>
+	relation 225159 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 225159 // <realization>
+	  b parent class_ref 194567 // IStartup
+      end
+
+      attribute 202759 "applicationContext"
+	private explicit_type "BeanFactory"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 225287 // backendController (<unidirectional association>)
+	relation 225287 --->
+	  a role_name "backendController" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 225287 // backendController (<unidirectional association>)
+	  b parent class_ref 155783 // IBackendController
+      end
+
+      attribute 202887 "frontendController"
+	private explicit_type "E, F, G"
+	stereotype "IFrontendController"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 419847 "start"
+	public explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Both front and back controllers are retrieved from the spring context,
+associated and started.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 419975 "getApplicationContext"
+	protected explicit_return_type "BeanFactory"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the applicationContext.
+
+@return the applicationContext.
+"
+      end
+
+      operation 420103 "getApplicationContextKey"
+	abstract protected explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the application context key to get the application context out of the
+singleton bean factory locator.
+
+@return the used application context key.
+"
+      end
+
+      operation 420231 "getBackendController"
+	protected return_type class_ref 155783 // IBackendController
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the application backend controller.
+
+@return the application backend controller.
+"
+      end
+
+      operation 420359 "getFrontendController"
+	protected explicit_return_type "IFrontendController<E, F, G>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+Gets the application frontend controller.
+
+@return the application frontend controller.
+"
+      end
+
+      operation 420487 "getStartupLocale"
+	abstract protected explicit_return_type "Locale"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the startup locale.
+
+@return the startup locale.
+"
+      end
+    end
+  end
+
+  deploymentview 147207 "startup"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 193543 "AbstractStartup"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Locale;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.access.BeanFactoryLocator;
+import org.springframework.beans.factory.access.BeanFactoryReference;
+import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
+import com.d2s.framework.application.backend.IBackendController;
+import com.d2s.framework.application.frontend.IFrontendController;
+import com.d2s.framework.application.startup.IStartup;
+${definition}"
+      associated_classes
+	class_ref 209159 // AbstractStartup
+      end
+    end
+  end
+
+  package_ref 149383 // swing
+
+  package_ref 149511 // ulc
+
+  package_ref 149639 // wings
+end

@@ -1,0 +1,5 @@
+class Directive
+!!!339847.java!!!	Directive(in column : int, in direction : int)
+
+      this.column = column;
+      this.direction = direction;

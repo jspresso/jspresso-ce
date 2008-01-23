@@ -1,0 +1,10 @@
+class BasicBooleanPropertyDescriptor
+!!!159367.java!!!	getModelType() : Class<?>
+
+    return Boolean.TYPE;
+!!!159495.java!!!	clone() : BasicBooleanPropertyDescriptor
+
+    BasicBooleanPropertyDescriptor clonedDescriptor = (BasicBooleanPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

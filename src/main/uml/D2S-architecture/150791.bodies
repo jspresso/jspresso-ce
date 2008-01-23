@@ -1,0 +1,26 @@
+class TreeDescriptorHelper
+!!!206983.java!!!	TreeDescriptorHelper()
+
+    // protected constructor of utility class.
+!!!207111.java!!!	getSubtreeDescriptorFromPath(inout treeLevelDescriptor : ITreeLevelDescriptor, inout treePath : List<String>) : ITreeLevelDescriptor
+
+    if (treePath != null && !treePath.isEmpty()) {
+      if (treeLevelDescriptor instanceof ICompositeTreeLevelDescriptor) {
+        ITreeLevelDescriptor nextSubtreeDescriptor = ((ICompositeTreeLevelDescriptor) treeLevelDescriptor)
+            .getChildDescriptor(treePath.get(0));
+        if (treePath.size() == 1) {
+          return nextSubtreeDescriptor;
+        }
+        return getSubtreeDescriptorFromPath(nextSubtreeDescriptor, treePath
+            .subList(1, treePath.size()));
+      } else if (treeLevelDescriptor instanceof ISimpleTreeLevelDescriptor) {
+        if (treePath.size() == 1) {
+          return treeLevelDescriptor;
+        }
+        ITreeLevelDescriptor nextSubtreeDescriptor = ((ISimpleTreeLevelDescriptor) treeLevelDescriptor)
+            .getChildDescriptor();
+        return getSubtreeDescriptorFromPath(nextSubtreeDescriptor, treePath
+            .subList(1, treePath.size()));
+      }
+    }
+    return null;

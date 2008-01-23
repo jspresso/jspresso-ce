@@ -1,0 +1,2054 @@
+format 48
+"view" // com::d2s::framework::view
+  revision 3
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/view"
+  java_package "com.d2s.framework.view"
+  classview 131847 "view"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 145671 "AbstractIconFactory"
+      abstract visibility public 
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 145799 // IIconFactory
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A factory for icons.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual icon class created.
+"
+      classrelation 151431 // <realization>
+	relation 151431 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 151431 // <realization>
+	  b parent class_ref 145799 // IIconFactory
+      end
+
+      attribute 141703 "backwardIconUrl"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 141831 "cancelIconImageURL"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 141959 "errorIconImageURL"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 142087 "forbiddenIconUrl"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 142215 "forwardIconUrl"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 142343 "iconStore"
+	private explicit_type "String, Map<Dimension, E>"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 142471 "infoIconImageURL"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 142599 "noIconImageURL"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 142727 "okYesIconImageURL"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 142855 "warningIconImageURL"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 193543 "AbstractIconFactory"
+	protected explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>AbstractIconFactory</code> instance.
+"
+      end
+
+      operation 193671 "getBackwardIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 193799 "getCancelIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 193927 "getErrorIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 194055 "getForbiddenIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 194183 "getForwardIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 194311 "getIcon"
+	public explicit_return_type "E"
+	nparams 2
+	  param in name "urlSpec" explicit_type "String"
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 194439 "getInfoIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 194567 "getNoIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 194695 "getOkYesIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 194823 "getWarningIcon"
+	public explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 194951 "setBackwardIconUrl"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "backwardIconUrl" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the backwardIconUrl.
+
+@param backwardIconUrl
+           the backwardIconUrl to set.
+"
+      end
+
+      operation 195079 "setCancelIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "cancelIconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the cancelIconImageURL.
+
+@param cancelIconImageURL
+           the cancelIconImageURL to set.
+"
+      end
+
+      operation 195207 "setErrorIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "errorIconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the errorIconImageURL.
+
+@param errorIconImageURL
+           the errorIconImageURL to set.
+"
+      end
+
+      operation 195335 "setForbiddenIconUrl"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "forbiddenIconUrl" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the forbiddenIconUrl.
+
+@param forbiddenIconUrl
+           the forbiddenIconUrl to set.
+"
+      end
+
+      operation 195463 "setForwardIconUrl"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "forwardIconUrl" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the forwardIconUrl.
+
+@param forwardIconUrl
+           the forwardIconUrl to set.
+"
+      end
+
+      operation 195591 "setInfoIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "infoIconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the infoIconImageURL.
+
+@param infoIconImageURL
+           the infoIconImageURL to set.
+"
+      end
+
+      operation 195719 "setNoIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "noIconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the noIconImageURL.
+
+@param noIconImageURL
+           the noIconImageURL to set.
+"
+      end
+
+      operation 195847 "setOkYesIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "okYesIconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the okYesIconImageURL.
+
+@param okYesIconImageURL
+           the okYesIconImageURL to set.
+"
+      end
+
+      operation 195975 "setWarningIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "warningIconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the warningIconImageURL.
+
+@param warningIconImageURL
+           the warningIconImageURL to set.
+"
+      end
+
+      operation 196103 "createIcon"
+	abstract protected explicit_return_type "E"
+	nparams 2
+	  param in name "urlSpec" explicit_type "String"
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a swing icon from an image url.
+
+@param urlSpec
+           the url of the image to be used on the icon.
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+    end
+
+    class 145799 "IIconFactory"
+      visibility public stereotype "interface"
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A factory for icons.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual icon class created.
+"
+      attribute 141191 "LARGE_ICON_SIZE"
+	package explicit_type "Dimension"
+	init_value "=  new Dimension(48, 48)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>LARGE_ICON_SIZE</code> is 48x48 dimension.
+
+"
+      end
+
+      attribute 141319 "MEDIUM_ICON_SIZE"
+	package explicit_type "Dimension"
+	init_value "=  new Dimension(32, 32)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>MEDIUM_ICON_SIZE</code> is 32x32 dimension.
+
+"
+      end
+
+      attribute 141447 "SMALL_ICON_SIZE"
+	package explicit_type "Dimension"
+	init_value "=  new Dimension(16, 16)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>SMALL_ICON_SIZE</code> is 16x16 dimension.
+
+"
+      end
+
+      attribute 141575 "TINY_ICON_SIZE"
+	package explicit_type "Dimension"
+	init_value "=  new Dimension(12, 12)"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>SMALL_ICON_SIZE</code> is 16x16 dimension.
+
+"
+      end
+
+      operation 192263 "getBackwardIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard Back icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 192391 "getCancelIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard cancel icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 192519 "getErrorIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard error icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 192647 "getForbiddenIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard forbidden icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 192775 "getForwardIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard Forward icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 192903 "getIcon"
+	package explicit_return_type "E"
+	nparams 2
+	  param in name "urlSpec" explicit_type "String"
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates an icon from an image url or get it from a local cache.
+
+@param urlSpec
+           the url of the image to be used on the icon.
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 193031 "getInfoIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard info icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 193159 "getNoIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard no icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 193287 "getOkYesIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard ok / yes icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+
+      operation 193415 "getWarningIcon"
+	package explicit_return_type "E"
+	nparams 1
+	  param inout name "iconSize" explicit_type "Dimension"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the standard warning icon.
+
+@param iconSize
+           the size of the constructed icon. The image will be resized if
+           nacessary to match the requested size.
+@return the constructed icon.
+"
+      end
+    end
+
+    class 145927 "BasicCompositeView"
+      visibility public 
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 2
+      actual class class_ref 146055 // BasicView
+        rank 0 explicit_value "E"
+      actual class class_ref 146567 // ICompositeView
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Basic composite view.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the type of component this view uses.
+"
+      classrelation 152071 // <realization>
+	relation 152071 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 152071 // <realization>
+	  b parent class_ref 146055 // BasicView
+      end
+
+      classrelation 152327 // <realization>
+	relation 152327 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 152327 // <realization>
+	  b parent class_ref 146567 // ICompositeView
+      end
+
+      classrelation 152455 // children (<unidirectional association>)
+	relation 152455 --->
+	  stereotype "List"
+	  a role_name "children" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}<E>> ${name}${value};
+"
+	    classrelation_ref 152455 // children (<unidirectional association>)
+	  b parent class_ref 146183 // IView
+      end
+
+      operation 198663 "BasicCompositeView"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "peer" explicit_type "E"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicCompositeView</code> instance.
+
+@param peer
+           the peer component.
+"
+      end
+
+      operation 198791 "getChildren"
+	public return_type class_ref 146183 // IView
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}<E>> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 198919 "setChildren"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "children" explicit_type "List<IView<E>>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the children.
+
+@param children
+           the children to set.
+"
+      end
+    end
+
+    class 146055 "BasicView"
+      visibility public 
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 146183 // IView
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+The basic implementation of the IView interface.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the type of component this view uses.
+"
+      classrelation 151687 // <realization>
+	relation 151687 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 151687 // <realization>
+	  b parent class_ref 146183 // IView
+      end
+
+      attribute 142983 "connector"
+	private explicit_type "IValueConnector"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 151815 // descriptor (<unidirectional association>)
+	relation 151815 --->
+	  a role_name "descriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 151815 // descriptor (<unidirectional association>)
+	  b parent class_ref 146439 // IViewDescriptor
+      end
+
+      classrelation 151943 // parent (<unidirectional association>)
+	relation 151943 --->
+	  a role_name "parent" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<E> ${name}${value};
+"
+	    classrelation_ref 151943 // parent (<unidirectional association>)
+	  b parent class_ref 146183 // IView
+      end
+
+      attribute 143111 "peer"
+	private explicit_type "E"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 197255 "BasicView"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "peer" explicit_type "E"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicView</code> instance.
+
+@param peer
+           the peer component.
+"
+      end
+
+      operation 197383 "getConnector"
+	public explicit_return_type "IValueConnector"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Returns the <code>IValueConnector</code> connected to the swing view.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 197511 "getDescriptor"
+	public return_type class_ref 146439 // IViewDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the descriptor.
+
+@return the descriptor.
+"
+      end
+
+      operation 197639 "getParent"
+	public return_type class_ref 146183 // IView
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the parent.
+
+@return the parent.
+"
+      end
+
+      operation 197767 "getPeer"
+	public explicit_return_type "E"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the component responsible for implementing the view.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 197895 "getView"
+	public return_type class_ref 146183 // IView
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Returns this view.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 198023 "setConnector"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "connector" explicit_type "IValueConnector"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the connector.
+
+@param connector
+           the connector to set.
+"
+      end
+
+      operation 198151 "setDescriptor"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "descriptor" type class_ref 146439 // IViewDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the descriptor.
+
+@param descriptor
+           the descriptor to set.
+"
+      end
+
+      operation 198279 "setParent"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "parent" type class_ref 146183 // IView
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<E> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the parent.
+
+@param parent
+           the parent to set.
+"
+      end
+
+      operation 198407 "setPeer"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "peer" explicit_type "E"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the peer.
+
+@param peer
+           the peer to set.
+"
+      end
+    end
+
+    class 146183 "IView"
+      visibility public stereotype "interface"
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 146311 // IViewProvider
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface establishes the general contract of a view. Its main role is
+to provide a pair of (visible peer , connector) used by the framework.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           The root class of the view peers.
+"
+      classrelation 151559 // <realization>
+	relation 151559 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 151559 // <realization>
+	  b parent class_ref 146311 // IViewProvider
+      end
+
+      operation 196359 "getConnector"
+	package explicit_return_type "IValueConnector"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the view connector of this view. This connector is built connected to
+the view peer.
+
+@return the view connector.
+"
+      end
+
+      operation 196487 "getDescriptor"
+	package return_type class_ref 146439 // IViewDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the descriptor of this view.
+
+@return the view descriptor.
+"
+      end
+
+      operation 196615 "getParent"
+	package return_type class_ref 146183 // IView
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the parent view if any or null.
+
+@return the parent view.
+"
+      end
+
+      operation 196743 "getPeer"
+	package explicit_return_type "E"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the view peer of this view.
+
+@return the view peer.
+"
+      end
+
+      operation 196871 "setConnector"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "connector" explicit_type "IValueConnector"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the view connector of this view. This connector is built connected to
+the view peer.
+
+@param connector
+           the view connector.
+"
+      end
+
+      operation 196999 "setParent"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "parent" type class_ref 146183 // IView
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<E> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the parent view if any or null.
+
+@param parent
+           the parent view.
+"
+      end
+
+      operation 197127 "setPeer"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "peer" explicit_type "E"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the view peer of this view.
+
+@param peer
+           the view peer.
+"
+      end
+    end
+
+    class 146311 "IViewProvider"
+      visibility public stereotype "interface"
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A simple interface to implement an indirection on a view.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           The root class of the view peers.
+"
+      operation 196231 "getView"
+	package return_type class_ref 146183 // IView
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Get the referenced view.
+
+@return the referenced view.
+"
+      end
+    end
+
+    class 146567 "ICompositeView"
+      visibility public stereotype "interface"
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 146183 // IView
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface establishes the general contract of a composite view which has
+child views.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+"
+      classrelation 152199 // <realization>
+	relation 152199 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 152199 // <realization>
+	  b parent class_ref 146183 // IView
+      end
+
+      operation 198535 "getChildren"
+	package return_type class_ref 146183 // IView
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}<E>> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the view child views.
+
+@return the child views.
+"
+      end
+    end
+
+    class 146695 "BasicMapView"
+      visibility public 
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 2
+      actual class class_ref 146055 // BasicView
+        rank 0 explicit_value "E"
+      actual class class_ref 146823 // IMapView
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Basic map view.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the type of component this view uses.
+"
+      classrelation 152583 // <realization>
+	relation 152583 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 152583 // <realization>
+	  b parent class_ref 146055 // BasicView
+      end
+
+      classrelation 152839 // <realization>
+	relation 152839 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 152839 // <realization>
+	  b parent class_ref 146823 // IMapView
+      end
+
+      classrelation 152967 // children (<unidirectional association>)
+	relation 152967 --->
+	  stereotype "Map"
+	  a role_name "children" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<String, ${type}<E>> ${name}${value};
+"
+	    classrelation_ref 152967 // children (<unidirectional association>)
+	  b parent class_ref 146183 // IView
+      end
+
+      operation 199175 "BasicMapView"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "peer" explicit_type "E"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicMapView</code> instance.
+
+@param peer
+           the peer component.
+"
+      end
+
+      operation 199303 "getChild"
+	public return_type class_ref 146183 // IView
+	nparams 1
+	  param in name "key" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 199431 "getChildren"
+	public return_type class_ref 146183 // IView
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}List<${type}<E>> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 199559 "setChildren"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "children" explicit_type "Map<String, IView<E>>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the children.
+
+@param children
+           the children to set.
+"
+      end
+    end
+
+    class 146823 "IMapView"
+      visibility public stereotype "interface"
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 146567 // ICompositeView
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface establishes the general contract of a composite view which has
+child views which are keyed by a string.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+"
+      classrelation 152711 // <realization>
+	relation 152711 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 152711 // <realization>
+	  b parent class_ref 146567 // ICompositeView
+      end
+
+      operation 199047 "getChild"
+	package return_type class_ref 146183 // IView
+	nparams 1
+	  param in name "key" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E> ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the child view indexed by the key or null if the key does not exist.
+
+@param key
+           the key to llok up the child view.
+@return the child view or null if none.
+"
+      end
+    end
+
+    class 146951 "IActionFactory"
+      visibility public stereotype "interface"
+      nformals 2
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+A factory for actions.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual action class created.
+@param <F>
+           the actual component class the created actions are installed in.
+"
+      attribute 143239 "TOOLTIP_ELLIPSIS"
+	package explicit_type "String"
+	init_value "=  \"...\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>TOOLTIP_ELLIPSIS</code> is \"...\".
+
+"
+      end
+
+      operation 199687 "createAction"
+	package explicit_return_type "E"
+	nparams 6
+	  param inout name "action" type class_ref 147079 // IDisplayableAction
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "sourceComponent" explicit_type "F"
+	  param inout name "modelDescriptor" type class_ref 134663 // IModelDescriptor
+	  param inout name "viewConnector" explicit_type "IValueConnector"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}, ${t3} ${p3}, ${t4} ${p4}, ${t5} ${p5}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates an action from its descriptor.
+
+@param action
+           the action descriptor.
+@param actionHandler
+           the handler responsible for executing the action.
+@param sourceComponent
+           the view component which the action is attached to.
+@param modelDescriptor
+           the model descriptor this action is triggered on.
+@param viewConnector
+           the view connector this action is created on.
+@param locale
+           the locale the action has to use.
+@return the constructed action.
+"
+      end
+
+      operation 199815 "createAction"
+	package explicit_return_type "E"
+	nparams 4
+	  param inout name "action" type class_ref 147079 // IDisplayableAction
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "view" type class_ref 146183 // IView
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2}<F> ${p2}, ${t3} ${p3}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates an action from its descriptor.
+
+@param action
+           the action descriptor.
+@param actionHandler
+           the handler responsible for executing the action.
+@param view
+           the view which the action is attached to.
+@param locale
+           the locale the action has to use.
+@return the constructed action.
+"
+      end
+    end
+
+    class 147207 "IViewFactory"
+      visibility public stereotype "interface"
+      nformals 3
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "F" type "" explicit_default_value ""
+        explicit_extends ""
+      formal name "G" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Factory for views.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the actual gui component type used.
+@param <F>
+           the actual icon type used.
+@param <G>
+           the actual action type used.
+"
+      attribute 143367 "TOOLTIP_ELLIPSIS"
+	package explicit_type "String"
+	init_value "=  \"...\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>TOOLTIP_ELLIPSIS</code> is \"...\".
+
+"
+      end
+
+      operation 199943 "createView"
+	package return_type class_ref 146183 // IView
+	nparams 3
+	  param inout name "viewDescriptor" type class_ref 146439 // IViewDescriptor
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<E> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new view from a view descriptor.
+
+@param viewDescriptor
+           the view descriptor being the root of the view hierarchy to be
+           constructed.
+@param actionHandler
+           the object responsible for executing the view actions (generally
+           the frontend controller itself).
+@param locale
+           the locale the view must use for I18N.
+@return the created view.
+"
+      end
+
+      operation 200071 "getActionFactory"
+	package return_type class_ref 146951 // IActionFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<G, E> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the action factory.
+
+@return the action factory.
+"
+      end
+
+      operation 200199 "getIconFactory"
+	package return_type class_ref 145799 // IIconFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<F> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the icon factory.
+
+@return the icon factory.
+"
+      end
+    end
+
+    class 147335 "ViewException"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This exception is thrown whenever an unexpected exception occurs on a view.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      attribute 143495 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  5403717126687643426L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 200327 "ViewException"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ViewException</code> instance.
+
+@param message
+           the exception message.
+"
+      end
+
+      operation 200455 "ViewException"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "nestedException" explicit_type "Throwable"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ViewException</code> instance.
+
+@param nestedException
+           the nested exception.
+"
+      end
+
+      operation 200583 "ViewException"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "nestedException" explicit_type "Throwable"
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ViewException</code> instance.
+
+@param nestedException
+           the nested exception.
+@param message
+           the exception message.
+"
+      end
+    end
+  end
+
+  deploymentview 131591 "view"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 143623 "IIconFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.Dimension;
+${definition}"
+      associated_classes
+	class_ref 145799 // IIconFactory
+      end
+    end
+
+    artifact 143751 "AbstractIconFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.Dimension;
+import java.util.HashMap;
+import java.util.Map;
+${definition}"
+      associated_classes
+	class_ref 145671 // AbstractIconFactory
+      end
+    end
+
+    artifact 143879 "IViewProvider"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 146311 // IViewProvider
+      end
+    end
+
+    artifact 144007 "IView"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 146183 // IView
+      end
+    end
+
+    artifact 144135 "BasicView"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 146055 // BasicView
+      end
+    end
+
+    artifact 144263 "ICompositeView"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.List;
+${definition}"
+      associated_classes
+	class_ref 146567 // ICompositeView
+      end
+    end
+
+    artifact 144391 "BasicCompositeView"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.List;
+${definition}"
+      associated_classes
+	class_ref 145927 // BasicCompositeView
+      end
+    end
+
+    artifact 144519 "IMapView"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 146823 // IMapView
+      end
+    end
+
+    artifact 144647 "BasicMapView"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+${definition}"
+      associated_classes
+	class_ref 146695 // BasicMapView
+      end
+    end
+
+    artifact 144775 "IActionFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Locale;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.descriptor.IModelDescriptor;
+import com.d2s.framework.view.action.IDisplayableAction;
+${definition}"
+      associated_classes
+	class_ref 146951 // IActionFactory
+      end
+    end
+
+    artifact 144903 "IViewFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Locale;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 147207 // IViewFactory
+      end
+    end
+
+    artifact 145031 "ViewException"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.exception.NestedRuntimeException;
+${definition}"
+      associated_classes
+	class_ref 147335 // ViewException
+      end
+    end
+  end
+
+  package_ref 132487 // descriptor
+
+  package_ref 132615 // action
+
+  package_ref 138247 // ulc
+end

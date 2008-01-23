@@ -1,0 +1,60 @@
+class BasicEntityInvocationHandler
+!!!185607.java!!!	BasicEntityInvocationHandler(inout entityDescriptor : IComponentDescriptor, inout inlineComponentFactory : IComponentFactory, inout collectionFactory : IComponentCollectionFactory, inout accessorFactory : IAccessorFactory, inout extensionFactory : IComponentExtensionFactory)
+
+    super(entityDescriptor, inlineComponentFactory, collectionFactory, accessorFactory,
+        extensionFactory);
+    this.properties = createPropertyMap();
+!!!185735.java!!!	invoke(inout proxy : Object, inout method : Method, inout args : Object) : Object
+
+    String methodName = method.getName();
+    if ("isPersistent".equals(methodName)) {
+      return new Boolean(((IEntity) proxy).getVersion() != null);
+    }
+    return super.invoke(proxy, method, args);
+!!!185863.java!!!	computeEquals(inout proxy : IComponent, inout another : Object) : boolean
+
+    if (proxy == another) {
+      return true;
+    }
+    Object id = straightGetProperty(IEntity.ID);
+    if (id == null) {
+      return false;
+    }
+    if (another instanceof IEntity) {
+      Object otherId;
+      Class<?> otherContract;
+
+      if (Proxy.isProxyClass(another.getClass())
+          && Proxy.getInvocationHandler(another) instanceof BasicEntityInvocationHandler) {
+        BasicEntityInvocationHandler otherInvocationHandler = (BasicEntityInvocationHandler) Proxy
+            .getInvocationHandler(another);
+        otherContract = otherInvocationHandler.getComponentContract();
+        otherId = otherInvocationHandler.straightGetProperty(IEntity.ID);
+      } else {
+        otherContract = ((IEntity) another).getContract();
+        otherId = ((IEntity) another).getId();
+      }
+      return new EqualsBuilder().append(getComponentContract(), otherContract)
+          .append(id, otherId).isEquals();
+    }
+    return false;
+!!!185991.java!!!	computeHashCode() : int
+
+    Object id = straightGetProperty(IEntity.ID);
+    if (id == null) {
+      throw new NullPointerException(
+          "Id must be assigned on the entity before its hashcode can be used.");
+    }
+    return new HashCodeBuilder(3, 17).append(id).toHashCode();
+!!!186119.java!!!	decorateReferent(inout referent : IComponent, inout referentDescriptor : IComponentDescriptor) : IComponent
+
+    return referent;
+!!!186247.java!!!	retrievePropertyValue(in propertyName : String) : Object
+
+    return properties.get(propertyName);
+!!!186375.java!!!	storeProperty(in propertyName : String, inout propertyValue : Object) : void
+
+    properties.put(propertyName, propertyValue);
+!!!186503.java!!!	createPropertyMap() : Map<String, Object>
+
+    return new HashMap<String, Object>();

@@ -1,0 +1,477 @@
+class BasicApplicationSession
+!!!243335.java!!!	BasicApplicationSession()
+
+    dirtRecorder = new BeanPropertyChangeRecorder();
+!!!243463.java!!!	beginUnitOfWork() : void
+
+    if (unitOfWork.isActive()) {
+      throw new ApplicationSessionException(
+          "Cannot begin a new unit of work. Another one is already active.");
+    }
+    unitOfWork.begin();
+    entitiesToMergeBack = new LinkedHashSet<IEntity>();
+!!!243591.java!!!	clearPendingOperations() : void
+
+    entitiesRegisteredForUpdate = null;
+    entitiesRegisteredForDeletion = null;
+!!!243719.java!!!	cloneInUnitOfWork(inout entity : IEntity) : IEntity
+
+    return cloneInUnitOfWork(Collections.singletonList(entity)).get(0);
+!!!243847.java!!!	cloneInUnitOfWork(inout entities : List<IEntity>) : IEntity
+
+    List<IEntity> uowEntities = new ArrayList<IEntity>();
+    Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = new HashMap<Class<?>, Map<Serializable, IEntity>>();
+    for (IEntity entity : entities) {
+      uowEntities.add(cloneInUnitOfWork(entity, alreadyCloned));
+    }
+    return uowEntities;
+!!!243975.java!!!	commitUnitOfWork() : void
+
+    if (!unitOfWork.isActive()) {
+      throw new ApplicationSessionException(
+          "Cannot commit a unit of work that has not begun.");
+    }
+    try {
+      Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
+      for (IEntity entityToMergeBack : entitiesToMergeBack) {
+        merge(entityToMergeBack, MergeMode.MERGE_CLEAN_LAZY, alreadyMerged);
+      }
+    } finally {
+      unitOfWork.commit();
+      entitiesToMergeBack = null;
+      clearPendingOperations();
+    }
+!!!244103.java!!!	deleteEntity(inout entity : IEntity) : void
+
+    if (entity.isPersistent()) {
+      if (entitiesRegisteredForDeletion == null) {
+        entitiesRegisteredForDeletion = new LinkedHashSet<IEntity>();
+      }
+      entitiesRegisteredForDeletion.add(entity);
+    }
+!!!244231.java!!!	getDirtyProperties(inout entity : IEntity) : Map<String, Object>
+
+    if (unitOfWork.isActive()) {
+      return unitOfWork.getDirtyProperties(entity);
+    }
+    return dirtRecorder.getChangedProperties(entity);
+!!!244359.java!!!	getLocale() : Locale
+
+    return locale;
+!!!244487.java!!!	getPrincipal() : UserPrincipal
+
+    if (subject != null && !subject.getPrincipals().isEmpty()) {
+      return (UserPrincipal) subject.getPrincipals().iterator().next();
+    }
+    return null;
+!!!244615.java!!!	getRegisteredEntity(inout entityContract : Class<? extends IEntity>, inout entityId : Object) : IEntity
+
+    return entityRegistry.get(entityContract, entityId);
+!!!244743.java!!!	getSubject() : Subject
+
+    return subject;
+!!!244871.java!!!	initializePropertyIfNeeded(inout entity : IEntity, inout propertyDescriptor : IPropertyDescriptor) : void
+
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
+      String propertyName = propertyDescriptor.getName();
+      Object propertyValue = entity.straightGetProperty(propertyName);
+      sortCollectionProperty(entity, propertyName);
+      for (Iterator<IEntity> ite = ((Collection<IEntity>) propertyValue)
+          .iterator(); ite.hasNext();) {
+        IEntity collectionElement = ite.next();
+        if (isEntityRegisteredForDeletion(collectionElement)) {
+          ite.remove();
+        }
+      }
+    }
+!!!244999.java!!!	isDirty(inout entity : IEntity) : boolean
+
+    if (unitOfWork.isActive()) {
+      return unitOfWork.isDirty(entity);
+    }
+    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
+    return (entityDirtyProperties != null && entityDirtyProperties.size() > 0);
+!!!245127.java!!!	isDirty(inout entity : IEntity, in propertyName : String) : boolean
+
+    if (unitOfWork.isActive()) {
+      return unitOfWork.isDirty(entity, propertyName);
+    }
+    Map<String, Object> entityDirtyProperties = getDirtyProperties(entity);
+    return (entityDirtyProperties != null && entityDirtyProperties
+        .containsKey(propertyName));
+!!!245255.java!!!	isEntityRegisteredForDeletion(inout entity : IEntity) : boolean
+
+    return entitiesRegisteredForDeletion != null
+        && entitiesRegisteredForDeletion.contains(entity);
+!!!245383.java!!!	isEntityRegisteredForUpdate(inout entity : IEntity) : boolean
+
+    return entitiesRegisteredForUpdate != null
+        && entitiesRegisteredForUpdate.contains(entity);
+!!!245511.java!!!	isInitialized(inout objectOrProxy : Object) : boolean
+
+    return true;
+!!!245639.java!!!	isUnitOfWorkActive() : boolean
+
+    return unitOfWork.isActive();
+!!!245767.java!!!	merge(inout entity : IEntity, inout mergeMode : MergeMode) : IEntity
+
+    return merge(entity, mergeMode, new HashMap<IEntity, IEntity>());
+!!!245895.java!!!	merge(inout entities : List<IEntity>, inout mergeMode : MergeMode) : IEntity
+
+    Map<IEntity, IEntity> alreadyMerged = new HashMap<IEntity, IEntity>();
+    List<IEntity> mergedList = new ArrayList<IEntity>();
+    for (IEntity entity : entities) {
+      mergedList.add(merge(entity, mergeMode, alreadyMerged));
+    }
+    return mergedList;
+!!!246023.java!!!	performPendingOperations() : void
+
+    clearPendingOperations();
+!!!246151.java!!!	recordAsSynchronized(inout flushedEntity : IEntity) : void
+
+    if (unitOfWork.isActive()) {
+      unitOfWork.clearDirtyState(flushedEntity);
+      entitiesToMergeBack.add(flushedEntity);
+    }
+!!!246279.java!!!	registerEntity(inout entity : IEntity, inout isEntityTransient : boolean) : void
+
+    if (!unitOfWork.isActive()) {
+      entityRegistry.register(entity);
+      Map<String, Object> initialDirtyProperties = null;
+      if (isEntityTransient) {
+        initialDirtyProperties = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> property : entity
+            .straightGetProperties().entrySet()) {
+          if (property.getValue() != null
+              && !(property.getValue() instanceof Collection && ((Collection<?>) property
+                  .getValue()).isEmpty())) {
+            initialDirtyProperties.put(property.getKey(), null);
+          }
+        }
+      }
+      dirtRecorder.register(entity, initialDirtyProperties);
+    }
+!!!246407.java!!!	rollbackUnitOfWork() : void
+
+    if (!unitOfWork.isActive()) {
+      throw new ApplicationSessionException(
+          "Cannot rollback a unit of work that has not begun.");
+    }
+    unitOfWork.rollback();
+    entitiesToMergeBack = null;
+!!!246535.java!!!	setAccessorFactory(inout accessorFactory : IAccessorFactory) : void
+
+    this.accessorFactory = accessorFactory;
+!!!246663.java!!!	setCarbonEntityCloneFactory(inout carbonEntityCloneFactory : IEntityCloneFactory) : void
+
+    this.carbonEntityCloneFactory = carbonEntityCloneFactory;
+!!!246791.java!!!	setCollectionFactory(inout collectionFactory : IComponentCollectionFactory) : void
+
+    this.collectionFactory = collectionFactory;
+!!!246919.java!!!	setEntityFactory(inout entityFactory : IEntityFactory) : void
+
+    this.entityFactory = entityFactory;
+!!!247047.java!!!	setEntityRegistry(inout entityRegistry : IEntityRegistry) : void
+
+    this.entityRegistry = entityRegistry;
+!!!247175.java!!!	setLocale(inout locale : Locale) : void
+
+    this.locale = locale;
+!!!247303.java!!!	setSubject(inout subject : Subject) : void
+
+    this.subject = subject;
+!!!247431.java!!!	setUnitOfWork(inout unitOfWork : IEntityUnitOfWork) : void
+
+    this.unitOfWork = unitOfWork;
+!!!247559.java!!!	updateEntity(inout entity : IEntity) : void
+
+    if (entity.isPersistent()) {
+      if (entitiesRegisteredForUpdate == null) {
+        entitiesRegisteredForUpdate = new ArrayList<IEntity>();
+      }
+      entitiesRegisteredForUpdate.add(entity);
+    }
+!!!247687.java!!!	createTransientEntityCollection(inout collection : Collection<?>) : IEntity
+
+    Collection<IEntity> uowEntityCollection = null;
+    if (collection instanceof Set) {
+      uowEntityCollection = collectionFactory.createEntityCollection(Set.class);
+    } else if (collection instanceof List) {
+      uowEntityCollection = collectionFactory
+          .createEntityCollection(List.class);
+    }
+    return uowEntityCollection;
+!!!247815.java!!!	getDirtRecorder() : BeanPropertyChangeRecorder
+
+    return dirtRecorder;
+!!!247943.java!!!	getEntitiesRegisteredForDeletion() : IEntity
+
+    return entitiesRegisteredForDeletion;
+!!!248071.java!!!	getEntitiesRegisteredForUpdate() : IEntity
+
+    return entitiesRegisteredForUpdate;
+!!!248199.java!!!	getEntitiesToMergeBack() : IEntity
+
+    return entitiesToMergeBack;
+!!!248327.java!!!	sortCollectionProperty(inout entity : IEntity, in propertyName : String) : void
+
+    Collection<Object> propertyValue = (Collection<Object>) entity
+        .straightGetProperty(propertyName);
+    ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityFactory
+        .getComponentDescriptor(entity.getContract()).getPropertyDescriptor(
+            propertyName);
+    if (propertyValue != null
+        && !propertyValue.isEmpty()
+        && !List.class.isAssignableFrom(propertyDescriptor
+            .getCollectionDescriptor().getCollectionInterface())) {
+      List<String> orderingProperties = propertyDescriptor
+          .getOrderingProperties();
+      if (orderingProperties != null && !orderingProperties.isEmpty()) {
+        BeanComparator comparator = new BeanComparator();
+        List<IAccessor> orderingAccessors = new ArrayList<IAccessor>();
+        Class collectionElementContract = propertyDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getComponentContract();
+        for (String orderingProperty : orderingProperties) {
+          orderingAccessors.add(accessorFactory.createPropertyAccessor(
+              orderingProperty, collectionElementContract));
+        }
+        comparator.setOrderingAccessors(orderingAccessors);
+        List<Object> collectionCopy = new ArrayList<Object>(propertyValue);
+        Collections.sort(collectionCopy, comparator);
+        Collection<Object> collectionProperty = propertyValue;
+        collectionProperty.clear();
+        collectionProperty.addAll(collectionCopy);
+      }
+    }
+!!!248455.java!!!	wrapDetachedEntityCollection(inout entity : IEntity, inout transientCollection : Collection<IEntity>, inout snapshotCollection : Collection<IEntity>, in role : String) : IEntity
+
+    return transientCollection;
+!!!248583.java!!!	cleanDirtyProperties(inout entity : IEntity) : void
+
+    dirtRecorder.resetChangedProperties(entity, null);
+!!!248711.java!!!	cloneInUnitOfWork(inout entity : IEntity, inout alreadyCloned : Map<Class<?>, Map<Serializable, IEntity>>) : IEntity
+
+    Map<Serializable, IEntity> contractBuffer = alreadyCloned.get(entity
+        .getContract());
+    IEntity uowEntity = null;
+    if (contractBuffer == null) {
+      contractBuffer = new HashMap<Serializable, IEntity>();
+      alreadyCloned.put(entity.getContract(), contractBuffer);
+    } else {
+      uowEntity = contractBuffer.get(entity.getId());
+      if (uowEntity != null) {
+        return uowEntity;
+      }
+    }
+    uowEntity = carbonEntityCloneFactory.cloneEntity(entity, entityFactory);
+    Map<String, Object> dirtyProperties = dirtRecorder
+        .getChangedProperties(entity);
+    if (dirtyProperties == null) {
+      dirtyProperties = new HashMap<String, Object>();
+    }
+    contractBuffer.put(entity.getId(), uowEntity);
+    Map<String, Object> entityProperties = entity.straightGetProperties();
+    for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+      if (property.getValue() instanceof IEntity) {
+        if (isInitialized(property.getValue())) {
+          uowEntity.straightSetProperty(property.getKey(), cloneInUnitOfWork(
+              (IEntity) property.getValue(), alreadyCloned));
+        } else {
+          uowEntity.straightSetProperty(property.getKey(), property.getValue());
+        }
+      } else if (property.getValue() instanceof Collection) {
+        if (isInitialized(property.getValue())) {
+          Collection<IEntity> uowEntityCollection = createTransientEntityCollection((Collection) property
+              .getValue());
+          for (IEntity entityCollectionElement : (Collection<IEntity>) property
+              .getValue()) {
+            uowEntityCollection.add(cloneInUnitOfWork(entityCollectionElement,
+                alreadyCloned));
+          }
+          Collection snapshotCollection = (Collection) dirtyProperties
+              .get(property.getKey());
+          if (snapshotCollection != null) {
+            Collection clonedSnapshotCollection = createTransientEntityCollection(snapshotCollection);
+            for (Object snapshotCollectionElement : snapshotCollection) {
+              clonedSnapshotCollection.add(cloneInUnitOfWork(
+                  (IEntity) snapshotCollectionElement, alreadyCloned));
+            }
+            snapshotCollection = clonedSnapshotCollection;
+          }
+          uowEntityCollection = wrapDetachedEntityCollection(entity,
+              uowEntityCollection, snapshotCollection, property.getKey());
+          uowEntity.straightSetProperty(property.getKey(), uowEntityCollection);
+        } else {
+          uowEntity.straightSetProperty(property.getKey(), property.getValue());
+        }
+      }
+    }
+    unitOfWork
+        .register(uowEntity, new HashMap<String, Object>(dirtyProperties));
+    return uowEntity;
+!!!248839.java!!!	merge(inout entity : IEntity, inout mergeMode : MergeMode, inout alreadyMerged : Map<IEntity, IEntity>) : IEntity
+
+    if (entity == null) {
+      return null;
+    }
+    if (alreadyMerged.containsKey(entity)) {
+      return alreadyMerged.get(entity);
+    }
+    boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
+    try {
+      dirtRecorder.setEnabled(false);
+      IEntity registeredEntity = getRegisteredEntity(entity.getContract(),
+          entity.getId());
+      boolean newlyRegistered = false;
+      if (registeredEntity == null) {
+        registeredEntity = carbonEntityCloneFactory.cloneEntity(entity,
+            entityFactory);
+        entityRegistry.register(registeredEntity);
+        dirtRecorder.register(registeredEntity, null);
+        newlyRegistered = true;
+      } else if (mergeMode == MergeMode.MERGE_KEEP) {
+        alreadyMerged.put(entity, registeredEntity);
+        return registeredEntity;
+      }
+      alreadyMerged.put(entity, registeredEntity);
+      Map sessionDirtyProperties = dirtRecorder
+          .getChangedProperties(registeredEntity);
+      boolean dirtyInSession = (sessionDirtyProperties != null && (!sessionDirtyProperties
+          .isEmpty()));
+      if (mergeMode != MergeMode.MERGE_CLEAN_LAZY
+          || (dirtyInSession || (!registeredEntity.getVersion().equals(
+              entity.getVersion()))) || newlyRegistered) {
+        if (mergeMode == MergeMode.MERGE_CLEAN_EAGER
+            || mergeMode == MergeMode.MERGE_CLEAN_LAZY) {
+          cleanDirtyProperties(registeredEntity);
+        }
+        Map<String, Object> entityProperties = entity.straightGetProperties();
+        Map<String, Object> registeredEntityProperties = registeredEntity
+            .straightGetProperties();
+        Map<String, Object> mergedProperties = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> property : entityProperties.entrySet()) {
+          if (property.getValue() instanceof IEntity) {
+            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
+                && !isInitialized(property.getValue())) {
+              if (registeredEntityProperties.get(property.getKey()) == null) {
+                mergedProperties.put(property.getKey(), property.getValue());
+              }
+            } else {
+              Object registeredProperty = registeredEntityProperties
+                  .get(property.getKey());
+              if (isInitialized(registeredProperty)) {
+                mergedProperties.put(property.getKey(), merge(
+                    (IEntity) property.getValue(), mergeMode, alreadyMerged));
+              }
+            }
+          } else if (property.getValue() instanceof Collection) {
+            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
+                && !isInitialized(property.getValue())) {
+              if (registeredEntityProperties.get(property.getKey()) == null) {
+                mergedProperties.put(property.getKey(), property.getValue());
+              }
+            } else {
+              Collection<IEntity> registeredCollection = (Collection<IEntity>) registeredEntityProperties
+                  .get(property.getKey());
+              if (isInitialized(registeredCollection)) {
+                if (property.getValue() instanceof Set) {
+                  registeredCollection = collectionFactory
+                      .createEntityCollection(Set.class);
+                } else if (property.getValue() instanceof List) {
+                  registeredCollection = collectionFactory
+                      .createEntityCollection(List.class);
+                }
+                for (IEntity entityCollectionElement : (Collection<IEntity>) property
+                    .getValue()) {
+                  registeredCollection.add(merge(entityCollectionElement,
+                      mergeMode, alreadyMerged));
+                }
+                if (registeredEntity.isPersistent()) {
+                  Collection<IEntity> snapshotCollection = null;
+                  Map<String, Object> dirtyProperties = getDirtyProperties(registeredEntity);
+                  if (dirtyProperties != null) {
+                    snapshotCollection = (Collection<IEntity>) dirtyProperties
+                        .get(property.getKey());
+                  }
+                  mergedProperties.put(property.getKey(),
+                      wrapDetachedEntityCollection(registeredEntity,
+                          registeredCollection, snapshotCollection, property
+                              .getKey()));
+                } else {
+                  mergedProperties.put(property.getKey(), registeredCollection);
+                }
+              }
+            }
+          } else if (property.getValue() instanceof IComponent) {
+            IComponent registeredComponent = (IComponent) registeredEntityProperties
+                .get(property.getKey());
+            mergedProperties.put(property.getKey(), mergeComponent(
+                (IComponent) property.getValue(), registeredComponent,
+                mergeMode, alreadyMerged));
+          } else {
+            mergedProperties.put(property.getKey(), property.getValue());
+          }
+        }
+        registeredEntity.straightSetProperties(mergedProperties);
+      }
+      return registeredEntity;
+    } finally {
+      dirtRecorder.setEnabled(dirtRecorderWasEnabled);
+    }
+!!!248967.java!!!	mergeComponent(inout componentToMerge : IComponent, inout registeredComponent : IComponent, inout mergeMode : MergeMode, inout alreadyMerged : Map<IEntity, IEntity>) : IComponent
+
+    IComponent varRegisteredComponent = registeredComponent;
+    if (componentToMerge == null) {
+      return null;
+    }
+    boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
+    boolean newlyRegistered = false;
+    try {
+      dirtRecorder.setEnabled(false);
+      if (varRegisteredComponent == null) {
+        varRegisteredComponent = carbonEntityCloneFactory.cloneComponent(
+            componentToMerge, entityFactory);
+        dirtRecorder.register(varRegisteredComponent, null);
+        newlyRegistered = true;
+      } else if (mergeMode == MergeMode.MERGE_KEEP) {
+        return varRegisteredComponent;
+      }
+      if (mergeMode != MergeMode.MERGE_CLEAN_LAZY || newlyRegistered) {
+        Map<String, Object> componentPropertiesToMerge = componentToMerge
+            .straightGetProperties();
+        Map<String, Object> registeredComponentProperties = varRegisteredComponent
+            .straightGetProperties();
+        Map<String, Object> mergedProperties = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> property : componentPropertiesToMerge
+            .entrySet()) {
+          if (property.getValue() instanceof IEntity) {
+            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
+                && !isInitialized(property.getValue())) {
+              if (registeredComponentProperties.get(property.getKey()) == null) {
+                mergedProperties.put(property.getKey(), property.getValue());
+              }
+            } else {
+              Object registeredProperty = registeredComponentProperties
+                  .get(property.getKey());
+              if (isInitialized(registeredProperty)) {
+                mergedProperties.put(property.getKey(), merge(
+                    (IEntity) property.getValue(), mergeMode, alreadyMerged));
+              }
+            }
+          } else if (property.getValue() instanceof IComponent) {
+            IComponent registeredSubComponent = (IComponent) registeredComponentProperties
+                .get(property.getKey());
+            mergedProperties.put(property.getKey(), mergeComponent(
+                (IComponent) property.getValue(), registeredSubComponent,
+                mergeMode, alreadyMerged));
+          } else {
+            mergedProperties.put(property.getKey(), property.getValue());
+          }
+        }
+        varRegisteredComponent.straightSetProperties(mergedProperties);
+      }
+      return varRegisteredComponent;
+    } finally {
+      dirtRecorder.setEnabled(dirtRecorderWasEnabled);
+    }

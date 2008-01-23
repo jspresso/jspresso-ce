@@ -1,0 +1,1154 @@
+format 48
+"flow" // com::d2s::framework::application::frontend::action::ulc::flow
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action/ulc/flow"
+  java_package "com.d2s.framework.application.frontend.action.ulc.flow"
+  classview 136455 "flow"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 164999 "InfoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action to present a message to the user.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 180615 // <generalisation>
+	relation 180615 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 180615 // <generalisation>
+	  b parent class_ref 165127 // AbstractFlowAction
+      end
+
+      operation 278279 "InfoAction"
+	protected explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>InfoAction</code> instance.
+"
+      end
+
+      operation 278407 "getNextAction"
+	protected explicit_return_type "IAction"
+	nparams 1
+	  param in name "selectedOption" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 165127 "AbstractFlowAction"
+      abstract visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Base class for ulc actions asking the user to make a decision.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 180487 // <generalisation>
+	relation 180487 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 180487 // <generalisation>
+	  b parent class_ref 165255 // AbstractMessageAction
+      end
+
+      attribute 158599 "CANCEL_OPTION"
+	class_attribute const_attribute protected explicit_type "String"
+	init_value "=  \"cancel\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>CANCEL_OPTION</code>.
+
+"
+      end
+
+      attribute 158727 "NO_OPTION"
+	class_attribute const_attribute protected explicit_type "String"
+	init_value "=  \"no\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>NO_OPTION</code>.
+
+"
+      end
+
+      attribute 158855 "OK_OPTION"
+	class_attribute const_attribute protected explicit_type "String"
+	init_value "=  \"ok\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>OK_OPTION</code>.
+
+"
+      end
+
+      attribute 158983 "YES_OPTION"
+	class_attribute const_attribute protected explicit_type "String"
+	init_value "=  \"yes\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>YES_OPTION</code>.
+
+"
+      end
+
+      attribute 159111 "firstOption"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 159239 "secondOption"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 159367 "thirdOption"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 277767 "AbstractFlowAction"
+	protected explicit_return_type ""
+	nparams 3
+	  param in name "firstOption" explicit_type "String"
+	  param in name "secondOption" explicit_type "String"
+	  param in name "thirdOption" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>AbstractFlowAction</code> instance.
+
+@param firstOption
+           the label for the 1st option.
+@param secondOption
+           the label for the 2nd option.
+@param thirdOption
+           the label for the 3rd option.
+"
+      end
+
+      operation 277895 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param in name "actionHandler" explicit_type "IActionHandler"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Creates a ULCAlert for the user to act on the execution flow.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 278023 "executeNextAction"
+	protected explicit_return_type "void"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Calls the super-implementation to execute the next action.
+
+@param actionHandler
+           the action handler responsible for the action execution.
+@param context
+           the action context.
+"
+      end
+
+      operation 278151 "getNextAction"
+	abstract protected explicit_return_type "IAction"
+	nparams 1
+	  param in name "selectedOption" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the action to execute next based on the user selected option.
+
+@param selectedOption
+           the user selected option.
+@return the action to execute next.
+"
+      end
+    end
+
+    class 165255 "AbstractMessageAction"
+      abstract visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Base class for all message ULC actions. It just keeps a reference on the
+message to be displayed.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 180359 // <generalisation>
+	relation 180359 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 180359 // <generalisation>
+	  b parent class_ref 164743 // AbstractUlcAction
+      end
+
+      operation 277639 "getMessage"
+	protected explicit_return_type "String"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the message.
+
+@param context
+           the actionContext.
+@return the message.
+"
+      end
+    end
+
+    class 166023 "OkCancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action to ask a user validation.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 181767 // <generalisation>
+	relation 181767 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 181767 // <generalisation>
+	  b parent class_ref 165127 // AbstractFlowAction
+      end
+
+      attribute 159879 "cancelAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 160007 "okAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 280455 "OkCancelAction"
+	protected explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>OkCancelAction</code> instance.
+"
+      end
+
+      operation 280583 "setCancelAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "cancelAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the cancelAction.
+
+@param cancelAction
+           the cancelAction to set.
+"
+      end
+
+      operation 280711 "setOkAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "okAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the okAction.
+
+@param okAction
+           the okAction to set.
+"
+      end
+
+      operation 280839 "getNextAction"
+	protected explicit_return_type "IAction"
+	nparams 1
+	  param in name "selectedOption" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 166151 "StaticInfoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action with a static i18nalized message.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 181895 // <generalisation>
+	relation 181895 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 181895 // <generalisation>
+	  b parent class_ref 164999 // InfoAction
+      end
+
+      attribute 160135 "messageCode"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 280967 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 281095 "setMessageCode"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "messageCode" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the messageCode.
+
+@param messageCode
+           the messageCode to set.
+"
+      end
+    end
+
+    class 166279 "StaticOkCancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action with a static i18nalized message.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 182023 // <generalisation>
+	relation 182023 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 182023 // <generalisation>
+	  b parent class_ref 166023 // OkCancelAction
+      end
+
+      attribute 160263 "messageCode"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 281223 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 281351 "setMessageCode"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "messageCode" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the messageCode.
+
+@param messageCode
+           the messageCode to set.
+"
+      end
+    end
+
+    class 166407 "StaticYesNoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action with a static i18nalized message.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 182279 // <generalisation>
+	relation 182279 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 182279 // <generalisation>
+	  b parent class_ref 166535 // YesNoAction
+      end
+
+      attribute 160647 "messageCode"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 281991 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 282119 "setMessageCode"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "messageCode" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the messageCode.
+
+@param messageCode
+           the messageCode to set.
+"
+      end
+    end
+
+    class 166535 "YesNoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action to ask a binary question to the user.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 182151 // <generalisation>
+	relation 182151 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 182151 // <generalisation>
+	  b parent class_ref 165127 // AbstractFlowAction
+      end
+
+      attribute 160391 "noAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 160519 "yesAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 281479 "YesNoAction"
+	protected explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>YesNoAction</code> instance.
+"
+      end
+
+      operation 281607 "setNoAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "noAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the noAction.
+
+@param noAction
+           the noAction to set.
+"
+      end
+
+      operation 281735 "setYesAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "yesAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the yesAction.
+
+@param yesAction
+           the yesAction to set.
+"
+      end
+
+      operation 281863 "getNextAction"
+	protected explicit_return_type "IAction"
+	nparams 1
+	  param in name "selectedOption" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+
+    class 166663 "StaticYesNoCancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action with a static i18nalized message.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 182407 // <generalisation>
+	relation 182407 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 182407 // <generalisation>
+	  b parent class_ref 166535 // YesNoAction
+      end
+
+      attribute 160775 "messageCode"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 282247 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 282375 "setMessageCode"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "messageCode" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the messageCode.
+
+@param messageCode
+           the messageCode to set.
+"
+      end
+    end
+
+    class 166791 "YesNoCancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action to ask a binary question to the user with a cancel option.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 182535 // <generalisation>
+	relation 182535 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 182535 // <generalisation>
+	  b parent class_ref 165127 // AbstractFlowAction
+      end
+
+      attribute 160903 "cancelAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 161031 "noAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 161159 "yesAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 282503 "YesNoCancelAction"
+	protected explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>YesNoAction</code> instance.
+"
+      end
+
+      operation 282631 "setCancelAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "cancelAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the cancelAction.
+
+@param cancelAction
+           the cancelAction to set.
+"
+      end
+
+      operation 282759 "setNoAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "noAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the noAction.
+
+@param noAction
+           the noAction to set.
+"
+      end
+
+      operation 282887 "setYesAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "yesAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the yesAction.
+
+@param yesAction
+           the yesAction to set.
+"
+      end
+
+      operation 283015 "getNextAction"
+	protected explicit_return_type "IAction"
+	nparams 1
+	  param in name "selectedOption" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+    end
+  end
+
+  deploymentview 135815 "flow"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 162055 "AbstractMessageAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
+import com.d2s.framework.util.html.HtmlHelper;
+${definition}"
+      associated_classes
+	class_ref 165255 // AbstractMessageAction
+      end
+    end
+
+    artifact 162183 "AbstractFlowAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.util.ulc.UlcUtil;
+import com.d2s.framework.view.IIconFactory;
+import com.ulcjava.base.application.ULCAlert;
+import com.ulcjava.base.application.event.WindowEvent;
+import com.ulcjava.base.application.event.serializable.IWindowListener;
+${definition}"
+      associated_classes
+	class_ref 165127 // AbstractFlowAction
+      end
+    end
+
+    artifact 162311 "InfoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.action.IAction;
+${definition}"
+      associated_classes
+	class_ref 164999 // InfoAction
+      end
+    end
+
+    artifact 163207 "OkCancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.action.IAction;
+${definition}"
+      associated_classes
+	class_ref 166023 // OkCancelAction
+      end
+    end
+
+    artifact 163335 "StaticInfoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 166151 // StaticInfoAction
+      end
+    end
+
+    artifact 163463 "StaticOkCancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 166279 // StaticOkCancelAction
+      end
+    end
+
+    artifact 163591 "YesNoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.action.IAction;
+${definition}"
+      associated_classes
+	class_ref 166535 // YesNoAction
+      end
+    end
+
+    artifact 163719 "StaticYesNoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 166407 // StaticYesNoAction
+      end
+    end
+
+    artifact 163847 "StaticYesNoCancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 166663 // StaticYesNoCancelAction
+      end
+    end
+
+    artifact 163975 "YesNoCancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.action.IAction;
+${definition}"
+      associated_classes
+	class_ref 166791 // YesNoCancelAction
+      end
+    end
+  end
+end

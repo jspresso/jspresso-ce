@@ -1,0 +1,36 @@
+class BinaryPropertyInfoAction
+!!!278535.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    Integer size = new Integer(0);
+    String unit = "Ko";
+    byte[] content = getBinaryContent(context);
+    if (content != null) {
+      if (content.length < 1024) {
+        size = new Integer(content.length);
+        unit = "o";
+      } else if (content.length >= 1024 && content.length < 1024 * 1024) {
+        size = new Integer(content.length / 1024);
+        unit = "Ko";
+      } else if (content.length >= 1024 * 1024
+          && content.length < 1024 * 1024 * 1024) {
+        size = new Integer(content.length / (1024 * 1024));
+        unit = "Mo";
+      } else if (content.length >= 1024 * 1024 * 1024) {
+        size = new Integer(content.length / (1024 * 1024 * 1024));
+        unit = "Go";
+      }
+    }
+    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
+        context).getTranslation("binary.info.message",
+        new Object[] {size, unit}, getLocale(context)));
+    return super.execute(actionHandler, context);
+!!!278663.java!!!	getBinaryContent(inout context : Map<String, Object>) : byte
+
+    Object connectorValue = getViewConnector(context).getConnectorValue();
+    byte[] content;
+    if (connectorValue instanceof String) {
+      content = ((String) connectorValue).getBytes();
+    } else {
+      content = (byte[]) connectorValue;
+    }
+    return content;

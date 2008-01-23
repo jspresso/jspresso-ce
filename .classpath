@@ -1,11 +1,116 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main/java"/>
-	<classpathentry kind="src" path="src/main/resources"/>
-	<classpathentry kind="src" path="src/test/java"/>
-	<classpathentry kind="src" path="src/test/resources"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/design2see-framework"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="src" output="aop/target/classes" path="aop/src/main/java"/>
+	<classpathentry kind="src" output="aop/target/classes" path="aop/src/main/resources"/>
+	<classpathentry kind="src" output="application/target/classes" path="application/src/main/java"/>
+	<classpathentry kind="src" output="application/target/classes" path="application/src/main/resources"/>
+	<classpathentry kind="src" output="binding/target/classes" path="binding/src/main/java"/>
+	<classpathentry kind="src" output="binding/target/classes" path="binding/src/main/resources"/>
+	<classpathentry kind="src" output="model/target/classes" path="model/src/main/java"/>
+	<classpathentry kind="src" output="model/target/classes" path="model/src/main/resources"/>
+	<classpathentry kind="src" output="tools/target/classes" path="tools/src/main/java"/>
+	<classpathentry kind="src" output="tools/target/classes" path="tools/src/main/resources"/>
+	<classpathentry kind="src" output="util/target/classes" path="util/src/main/java"/>
+	<classpathentry kind="src" output="util/target/classes" path="util/src/main/resources"/>
+	<classpathentry kind="src" output="view/target/classes" path="view/src/main/java"/>
+	<classpathentry kind="src" output="view/target/classes" path="view/src/main/resources"/>
+	<classpathentry kind="src" output="hibernate/target/classes" path="hibernate/src/main/java"/>
+	<classpathentry kind="src" output="hibernate/target/classes" path="hibernate/src/main/resources"/>
+	<classpathentry kind="src" output="swing/application/target/classes" path="swing/application/src/main/java"/>
+	<classpathentry kind="src" output="swing/application/target/classes" path="swing/application/src/main/resources"/>
+	<classpathentry kind="src" output="swing/components/target/classes" path="swing/components/src/main/java"/>
+	<classpathentry kind="src" output="swing/components/target/classes" path="swing/components/src/main/resources"/>
+	<classpathentry kind="src" output="ulc/application/target/classes" path="ulc/application/src/main/java"/>
+	<classpathentry kind="src" output="ulc/application/target/classes" path="ulc/application/src/main/resources"/>
+	<classpathentry kind="src" output="ulc/components/server/target/classes" path="ulc/components/server/src/main/java"/>
+	<classpathentry kind="src" output="ulc/components/server/target/classes" path="ulc/components/server/src/main/resources"/>
+	<classpathentry kind="src" output="ulc/components/shared/target/classes" path="ulc/components/shared/src/main/java"/>
+	<classpathentry kind="src" output="ulc/components/shared/target/classes" path="ulc/components/shared/src/main/resources"/>
+	<classpathentry kind="src" output="ulc/components/client/target/classes" path="ulc/components/client/src/main/java"/>
+	<classpathentry kind="src" output="ulc/components/client/target/classes" path="ulc/components/client/src/main/resources"/>
+	<classpathentry kind="src" output="wings/application/target/classes" path="wings/application/src/main/java"/>
+	<classpathentry kind="src" output="wings/application/target/classes" path="wings/application/src/main/resources"/>
+	<classpathentry kind="src" output="wings/components/target/classes" path="wings/components/src/main/java"/>
+	<classpathentry kind="src" output="wings/components/target/classes" path="wings/components/src/main/resources"/>
+	<classpathentry kind="src" output="app-template/target/classes" path="app-template/src/main/java"/>
+	<classpathentry kind="src" output="app-template/target/classes" path="app-template/src/main/resources"/>
+	<classpathentry kind="src" output="app-launch/target/classes" path="app-launch/src/main/java"/>
+	<classpathentry kind="src" output="app-launch/target/classes" path="app-launch/src/main/resources"/>
+	<classpathentry kind="src" output="action/target/classes" path="action/src/main/java"/>
+	<classpathentry kind="src" output="action/target/classes" path="action/src/main/resources"/>
+	<classpathentry kind="src" output="security/target/classes" path="security/src/main/java"/>
+	<classpathentry kind="src" output="security/target/classes" path="security/src/main/resources"/>
+	<classpathentry kind="src" output="jasper/target/classes" path="jasper/src/main/java"/>
+	<classpathentry kind="src" output="jasper/target/classes" path="jasper/src/main/resources"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jgroups/jgroups-all/2.2.7/jgroups-all-2.2.7.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/javax/security/jacc/1.0/jacc-1.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/logkit/logkit/1.0.1/logkit-1.0.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/bsf/bsf/2.3.0/bsf-2.3.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-collections/commons-collections/3.1/commons-collections-3.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-dbcp/commons-dbcp/1.2.1/commons-dbcp-1.2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/xml-apis/xml-apis/2.0.2/xml-apis-2.0.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/c3p0/c3p0/0.9.0/c3p0-0.9.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/qdox/qdox/1.4/qdox-1.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-pool/commons-pool/1.2/commons-pool-1.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/xerces/xerces/2.0.2/xerces-2.0.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/javax/transaction/jta/1.0.1B/jta-1.0.1B.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/log4j/log4j/1.2.8/log4j-1.2.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/swarmcache/swarmcache/1.0RC2/swarmcache-1.0RC2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/trove/trove/1.0.2/trove-1.0.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/avalon-framework/avalon-framework/4.1.3/avalon-framework-4.1.3.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jgoodies/uif_lite/1.3.2/uif_lite-1.3.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/proxool/proxool/0.8.3/proxool-0.8.3.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-server/6.0.5/ulc-servlet-server-6.0.5.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-cli/commons-cli/1.0/commons-cli-1.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/joda-time/joda-time/1.4/joda-time-1.4.jar" sourcepath="/ENVDEV/joda-time-1.4/joda-time-1.4-src-ide.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/envdev/joda-time-1.4/docs/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jasperreports/jasperreports/1.3.2/jasperreports-1.3.2.jar" sourcepath="/ENVDEV/jasperreports-1.3.2/src"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-lang/commons-lang/2.1/commons-lang-2.1.jar" sourcepath="/ENVDEV/commons-lang-2.1/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/lowagie/itext/1.3.1/itext-1.3.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-digester/commons-digester/1.7/commons-digester-1.7.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jcommon/1.0.0/jcommon-1.0.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jfreechart/1.0.1/jfreechart-1.0.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jedit/jedit-syntax/1.0/jedit-syntax-1.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/ldap/spring-ldap/1.2.1/spring-ldap-1.2.1.jar" sourcepath="/ENVDEV/spring-ldap-1.2.1/dist/spring-ldap-src-1.2.1.zip"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-client/6.0.5/ulc-servlet-client-6.0.5.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jrexx/jrexx/1.1.1/jrexx-1.1.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/hsqldb/hsqldb/1.8.0.1/hsqldb-1.8.0.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jython/jython/2.1/jython-2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-core/2.0/aspectwerkz-core-2.0.jar"/>
+	<classpathentry kind="var" path="M2_REPO/ulc/ulc-jnlp-client/6.0.5/ulc-jnlp-client-6.0.5.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring/2.5.1/spring-2.5.1.jar" sourcepath="/ENVDEV/spring-framework-2.5.1/dist/spring-sources.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/opensymphony/oscache/2.1/oscache-2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-jdk5/2.0/aspectwerkz-jdk5-2.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jgoodies/looks/1.3.2/looks-1.3.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils-core/1.7.0/commons-beanutils-core-1.7.0.jar" sourcepath="/ENVDEV/commons-beanutils-1.7.0/src/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz/2.0/aspectwerkz-2.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/foxtrot/foxtrot/2.0/foxtrot-2.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/freemarker/freemarker/2.3.3/freemarker-2.3.3.jar" sourcepath="/ENVDEV/freemarker-2.3.4/src"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/nachocalendar/nachocalendar/0.22/nachocalendar-0.22.jar" sourcepath="/ENVDEV/nachocalendar-0.22/src"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-base-development/6.0.5/ulc-base-development-6.0.5.jar" sourcepath="/ENVDEV/ulc-6.0.5/base/src/ulc-base-development-src.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.1/wings-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wings/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.1/wingx-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wingx/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.1/wings-experimental-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wings-experimental/src/java"/>
+	<classpathentry kind="var" path="M2_REPO/net/sf/ehcache/ehcache/1.2.4/ehcache-1.2.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate/3.2.5.ga/hibernate-3.2.5.ga.jar" sourcepath="/ENVDEV/hibernate-3.2/src">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/envdev/hibernate-3.2/doc/api/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/sun/ldapbp/1.0/ldapbp-1.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6"/>
+	<classpathentry kind="var" path="M2_REPO/org/jvnet/substance/4.1/substance-4.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.2.1.GA/jbosssx-4.2.1.GA.jar" sourcepath="/ENVDEV/jboss-4.2.2.GA/src/security/src/main"/>
+	<classpathentry kind="var" path="M2_REPO/jboss/jboss-common/4.0.4/jboss-common-4.0.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

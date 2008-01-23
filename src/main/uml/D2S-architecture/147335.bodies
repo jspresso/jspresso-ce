@@ -1,0 +1,10 @@
+class ViewException
+!!!200327.java!!!	ViewException(in message : String)
+
+    super(message);
+!!!200455.java!!!	ViewException(inout nestedException : Throwable)
+
+    super(nestedException);
+!!!200583.java!!!	ViewException(inout nestedException : Throwable, in message : String)
+
+    super(nestedException, message);

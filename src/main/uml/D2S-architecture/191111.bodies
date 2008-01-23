@@ -1,0 +1,20 @@
+class ReloadAction
+!!!372999.java!!!	execute(inout actionHandler : IActionHandler, in context : Map<String, Object>) : boolean
+
+    getApplicationSession(context).clearPendingOperations();
+    getTransactionTemplate(context).execute(new TransactionCallback() {
+
+      public Object doInTransaction(@SuppressWarnings("unused")
+      TransactionStatus status) {
+        List<IEntity> objectsToSave = getEntitiesToReload(context);
+        for (IEntity entity : objectsToSave) {
+          reloadEntity(entity, context);
+        }
+        status.setRollbackOnly();
+        return null;
+      }
+    });
+    return super.execute(actionHandler, context);
+!!!373127.java!!!	getEntitiesToReload(inout context : Map<String, Object>) : IEntity
+
+    return (List<IEntity>) context.get(ActionContextConstants.ACTION_PARAM);

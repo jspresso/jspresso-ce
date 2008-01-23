@@ -1,0 +1,763 @@
+format 48
+"swing" // com::d2s::framework::application::frontend::controller::swing
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/controller/swing"
+  java_package "com.d2s.framework.application.frontend.controller.swing"
+  classview 138631 "swing"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 184711 "DefaultSwingController"
+      visibility public 
+      nactuals 3
+      actual class class_ref 162567 // AbstractFrontendController
+        rank 0 explicit_value "JComponent"
+      actual class class_ref 162567 // AbstractFrontendController
+        rank 1 explicit_value "Icon"
+      actual class class_ref 162567 // AbstractFrontendController
+        rank 2 explicit_value "Action"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Default implementation of a swing frontend controller. This implementation is
+usable \"as-is\".
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 961 $
+@author Vincent Vandenschrick
+"
+      classrelation 203655 // <realization>
+	relation 203655 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 203655 // <realization>
+	  b parent class_ref 162567 // AbstractFrontendController
+      end
+
+      attribute 179847 "controllerFrame"
+	private explicit_type "JFrame"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 179975 "moduleInternalFrames"
+	private explicit_type "String, JInternalFrame"
+	stereotype "Map"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${stereotype}<${type}> ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 180103 "waitTimer"
+	private explicit_type "WaitCursorTimer"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 353031 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "action" explicit_type "IAction"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 353159 "handleException"
+	public explicit_return_type "void"
+	nparams 2
+	  param inout name "ex" explicit_type "Throwable"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, @SuppressWarnings(\"unused\") ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 353287 "start"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "backendController" type class_ref 155783 // IBackendController
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Creates the initial view from the root view descriptor, then a JFrame
+containing this view and presents it to the user.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 353415 "stop"
+	public explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 353543 "createLoginCallbackHandler"
+	protected explicit_return_type "CallbackHandler"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 353671 "displayModule"
+	protected explicit_return_type "void"
+	nparams 1
+	  param in name "moduleName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 353799 "executeBackend"
+	protected explicit_return_type "boolean"
+	nparams 2
+	  param in name "action" explicit_type "IAction"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	final java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+  @Override
+"
+	
+	
+	comment "
+This method has been overriden to take care of long-running operations not
+to have the swing gui blocked. It uses the foxtrot library to achieve this.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 353927 "executeFrontend"
+	protected explicit_return_type "boolean"
+	nparams 2
+	  param in name "action" explicit_type "IAction"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	final java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+  @Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 354055 "setSelectedModuleName"
+	protected explicit_return_type "void"
+	nparams 1
+	  param in name "moduleName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 354183 "createActionMenu"
+	private explicit_return_type "JMenu"
+	nparams 1
+	  param inout name "actionList" explicit_type "ActionList"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 354311 "createActionMenus"
+	private explicit_return_type "List<JMenu>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 354439 "createHelpActionMenus"
+	private explicit_return_type "List<JMenu>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 354567 "createMenus"
+	private explicit_return_type "List<JMenu>"
+	nparams 1
+	  param inout name "actionMap" type class_ref 147463 // ActionMap
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 354695 "createApplicationMenuBar"
+	private explicit_return_type "JMenuBar"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 354823 "createControllerFrame"
+	private explicit_return_type "JFrame"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 354951 "createHermeticGlassPane"
+	private explicit_return_type "JComponent"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 355079 "createJInternalFrame"
+	private explicit_return_type "JInternalFrame"
+	nparams 1
+	  param inout name "view" type class_ref 146183 // IView
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}<JComponent> ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new JInternalFrame and populates it with a view.
+
+@param view
+           the view to be set into the internal frame.
+@return the constructed internal frame.
+"
+      end
+
+      operation 355207 "createModulesMenu"
+	private explicit_return_type "JMenu"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 355335 "displayControllerFrame"
+	private explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 355463 "performLogin"
+	private explicit_return_type "boolean"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Performs login using JAAS configuration.
+
+@return true if login is successful.
+"
+      end
+
+      operation 355591 "protectedExecuteBackend"
+	private explicit_return_type "boolean"
+	nparams 2
+	  param inout name "action" explicit_type "IAction"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 355719 "protectedExecuteFrontend"
+	private explicit_return_type "boolean"
+	nparams 2
+	  param inout name "action" explicit_type "IAction"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 355847 "updateFrameTitle"
+	private explicit_return_type "void"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      class 184839 "ModuleInternalFrameListener"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 180231 "moduleName"
+	  private explicit_type "String"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 355975 "ModuleInternalFrameListener"
+	  public explicit_return_type ""
+	  nparams 1
+	    param in name "moduleName" explicit_type "String"
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>ModuleInternalFrameListener</code> instance.
+
+@param moduleName
+           the root module identifier this listener is attached to.
+"
+	end
+
+	operation 356103 "internalFrameActivated"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "InternalFrameEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+
+	operation 356231 "internalFrameDeactivated"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "InternalFrameEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+
+	operation 356359 "internalFrameDeiconified"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "InternalFrameEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+
+	operation 356487 "internalFrameIconified"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "InternalFrameEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+
+	operation 356615 "internalFrameOpened"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "InternalFrameEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  java_annotation "@Override
+"
+	  
+	  
+	  comment "
+{@inheritDoc}
+"
+	end
+      end
+
+      class 185095 "ModuleSelectionAction"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 180359 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  3469745193806038352L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	attribute 180487 "moduleName"
+	  private explicit_type "String"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 356743 "ModuleSelectionAction"
+	  public explicit_return_type ""
+	  nparams 2
+	    param in name "moduleName" explicit_type "String"
+	    param inout name "moduleViewDescriptor" type class_ref 146439 // IViewDescriptor
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>ModuleSelectionAction</code> instance.
+
+@param moduleName
+@param moduleViewDescriptor
+"
+	end
+
+	operation 356871 "actionPerformed"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "ActionEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+displays the selected module.
+<p>
+{@inheritDoc}
+"
+	end
+      end
+
+      class 185223 "QuitAction"
+	visibility private 
+	cpp_decl ""
+	final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+	php_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	
+	attribute 180615 "serialVersionUID"
+	  class_attribute const_attribute private explicit_type "long"
+	  init_value "=  -5797994634301619085L"
+	  cpp_decl ""
+	  java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	  php_decl ""
+	  idl_decl ""
+	end
+
+	operation 356999 "QuitAction"
+	  public explicit_return_type ""
+	  nparams 0
+	  
+	  java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+Constructs a new <code>ModuleSelectionAction</code> instance.
+"
+	end
+
+	operation 357127 "actionPerformed"
+	  public explicit_return_type "void"
+	  nparams 1
+	    param inout name "e" explicit_type "ActionEvent"
+	  
+	  java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	  
+	  
+	  comment "
+displays the selected module.
+<p>
+{@inheritDoc}
+"
+	end
+      end
+    end
+  end
+
+  deploymentview 137991 "swing"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 173703 "DefaultSwingController"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyVetoException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import javax.security.auth.callback.CallbackHandler;
+import javax.security.auth.login.LoginContext;
+import javax.security.auth.login.LoginException;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Box;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
+import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
+import org.springframework.dao.ConcurrencyFailureException;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.application.ControllerException;
+import com.d2s.framework.application.backend.IBackendController;
+import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
+import com.d2s.framework.application.model.Module;
+import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.gui.swing.components.JErrorDialog;
+import com.d2s.framework.security.swing.DialogCallbackHandler;
+import com.d2s.framework.util.exception.BusinessException;
+import com.d2s.framework.util.html.HtmlHelper;
+import com.d2s.framework.util.swing.SwingUtil;
+import com.d2s.framework.util.swing.WaitCursorEventQueue;
+import com.d2s.framework.util.swing.WaitCursorTimer;
+import com.d2s.framework.view.IActionFactory;
+import com.d2s.framework.view.IIconFactory;
+import com.d2s.framework.view.IView;
+import com.d2s.framework.view.IViewFactory;
+import com.d2s.framework.view.action.ActionList;
+import com.d2s.framework.view.action.ActionMap;
+import com.d2s.framework.view.action.IDisplayableAction;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+import foxtrot.Job;
+${definition}"
+      associated_classes
+	class_ref 184711 // DefaultSwingController
+      end
+    end
+  end
+end

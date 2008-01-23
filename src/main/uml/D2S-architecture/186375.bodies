@@ -1,0 +1,15 @@
+class OpenFileAction
+!!!361351.java!!!	execute(in actionHandler : IActionHandler, in context : Map<String, Object>) : boolean
+
+    SFileChooser fileChooser = new SFileChooser();
+    SOptionPane
+        .showInputDialog(getSourceComponent(context), getTranslationProvider(
+            context)
+            .getTranslation("open.file.description", getLocale(context)),
+            getTranslationProvider(context).getTranslation("open.file.name",
+                getLocale(context)), fileChooser, new OpenFileActionListener(
+                fileChooser, getController(context), context));
+    return super.execute(actionHandler, context);
+!!!361479.java!!!	setFileOpenCallback(inout fileOpenCallback : IFileOpenCallback) : void
+
+    this.fileOpenCallback = fileOpenCallback;

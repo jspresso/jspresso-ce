@@ -1,0 +1,935 @@
+format 48
+"flow" // com::d2s::framework::application::frontend::action::wings::flow
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/frontend/action/wings/flow"
+  java_package "com.d2s.framework.application.frontend.action.wings.flow"
+  classview 139143 "flow"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 185991 "InfoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action to present a message to the user.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 204807 // <generalisation>
+	relation 204807 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 204807 // <generalisation>
+	  b parent class_ref 186119 // AbstractMessageAction
+      end
+
+      operation 360455 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Displays the message using a <code>SOptionPane.INFORMATION_MESSAGE</code>.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+
+    class 186119 "AbstractMessageAction"
+      abstract visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Base class for all message wings actions. It just keeps a reference on the
+message to be displayed.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 204679 // <generalisation>
+	relation 204679 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 204679 // <generalisation>
+	  b parent class_ref 185735 // AbstractWingsAction
+      end
+
+      operation 360199 "executeNextAction"
+	protected explicit_return_type "void"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Calls the super-implementation to execute the next action.
+
+@param actionHandler
+           the action handler responsible for the action execution.
+@param context
+           the action context.
+"
+      end
+
+      operation 360327 "getMessage"
+	protected explicit_return_type "String"
+	nparams 1
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the message.
+
+@param context
+           the actionContext.
+@return the message.
+"
+      end
+    end
+
+    class 187143 "OkCancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action to ask a user validation.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 206087 // <generalisation>
+	relation 206087 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 206087 // <generalisation>
+	  b parent class_ref 186119 // AbstractMessageAction
+      end
+
+      attribute 182151 "cancelAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 182279 "okAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 362631 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param in name "actionHandler" explicit_type "IActionHandler"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Displays the message using a <code>SOptionPane.OK_CANCEL_OPTION</code>.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 362759 "setCancelAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "cancelAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the cancelAction.
+
+@param cancelAction
+           the cancelAction to set.
+"
+      end
+
+      operation 362887 "setOkAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "okAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the okAction.
+
+@param okAction
+           the okAction to set.
+"
+      end
+    end
+
+    class 187271 "StaticInfoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Info action with a static i18nalized message.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 206215 // <generalisation>
+	relation 206215 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 206215 // <generalisation>
+	  b parent class_ref 185991 // InfoAction
+      end
+
+      attribute 182407 "messageCode"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 363015 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 363143 "setMessageCode"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "messageCode" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the messageCode.
+
+@param messageCode
+           the messageCode to set.
+"
+      end
+    end
+
+    class 187399 "StaticOkCancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action with a static i18nalized message.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 206343 // <generalisation>
+	relation 206343 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 206343 // <generalisation>
+	  b parent class_ref 187143 // OkCancelAction
+      end
+
+      attribute 182535 "messageCode"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 363271 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 363399 "setMessageCode"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "messageCode" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the messageCode.
+
+@param messageCode
+           the messageCode to set.
+"
+      end
+    end
+
+    class 187527 "StaticYesNoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action with a static i18nalized message.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 206599 // <generalisation>
+	relation 206599 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 206599 // <generalisation>
+	  b parent class_ref 187655 // YesNoAction
+      end
+
+      attribute 182919 "messageCode"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 363911 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 364039 "setMessageCode"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "messageCode" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the messageCode.
+
+@param messageCode
+           the messageCode to set.
+"
+      end
+    end
+
+    class 187655 "YesNoAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action to ask a binary question to the user.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 206471 // <generalisation>
+	relation 206471 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 206471 // <generalisation>
+	  b parent class_ref 186119 // AbstractMessageAction
+      end
+
+      attribute 182663 "noAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 182791 "yesAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 363527 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param in name "actionHandler" explicit_type "IActionHandler"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Displays the message using a <code>SOptionPane.YES_NO_OPTION</code>.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 363655 "setNoAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "noAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the noAction.
+
+@param noAction
+           the noAction to set.
+"
+      end
+
+      operation 363783 "setYesAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "yesAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the yesAction.
+
+@param yesAction
+           the yesAction to set.
+"
+      end
+    end
+
+    class 187783 "StaticYesNoCancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action with a static i18nalized message.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 206727 // <generalisation>
+	relation 206727 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 206727 // <generalisation>
+	  b parent class_ref 187655 // YesNoAction
+      end
+
+      attribute 183047 "messageCode"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 364167 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 364295 "setMessageCode"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "messageCode" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the messageCode.
+
+@param messageCode
+           the messageCode to set.
+"
+      end
+    end
+
+    class 187911 "YesNoCancelAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Action to ask a binary question to the user with a cancel option.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 206855 // <generalisation>
+	relation 206855 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 206855 // <generalisation>
+	  b parent class_ref 186119 // AbstractMessageAction
+      end
+
+      attribute 183175 "cancelAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 183303 "noAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 183431 "yesAction"
+	private explicit_type "IAction"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 364423 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param in name "actionHandler" explicit_type "IActionHandler"
+	  param in name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}final ${t0} ${p0}, final ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+Displays the message using a <code>SOptionPane.YES_NO_CANCEL_OPTION</code>.
+<p>
+{@inheritDoc}
+"
+      end
+
+      operation 364551 "setCancelAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "cancelAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the cancelAction.
+
+@param cancelAction
+           the cancelAction to set.
+"
+      end
+
+      operation 364679 "setNoAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "noAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the noAction.
+
+@param noAction
+           the noAction to set.
+"
+      end
+
+      operation 364807 "setYesAction"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "yesAction" explicit_type "IAction"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the yesAction.
+
+@param yesAction
+           the yesAction to set.
+"
+      end
+    end
+  end
+
+  deploymentview 138375 "flow"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 174087 "AbstractMessageAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.frontend.action.wings.AbstractWingsAction;
+import com.d2s.framework.util.html.HtmlHelper;
+${definition}"
+      associated_classes
+	class_ref 186119 // AbstractMessageAction
+      end
+    end
+
+    artifact 174215 "InfoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import org.wings.SOptionPane;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 185991 // InfoAction
+      end
+    end
+
+    artifact 175111 "OkCancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
+import javax.swing.JOptionPane;
+import org.wings.SOptionPane;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 187143 // OkCancelAction
+      end
+    end
+
+    artifact 175239 "StaticInfoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 187271 // StaticInfoAction
+      end
+    end
+
+    artifact 175367 "StaticOkCancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 187399 // StaticOkCancelAction
+      end
+    end
+
+    artifact 175495 "YesNoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
+import org.wings.SOptionPane;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 187655 // YesNoAction
+      end
+    end
+
+    artifact 175623 "StaticYesNoAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 187527 // StaticYesNoAction
+      end
+    end
+
+    artifact 175751 "StaticYesNoCancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 187783 // StaticYesNoCancelAction
+      end
+    end
+
+    artifact 175879 "YesNoCancelAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Map;
+import org.wings.SOptionPane;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IAction;
+import com.d2s.framework.action.IActionHandler;
+${definition}"
+      associated_classes
+	class_ref 187911 // YesNoCancelAction
+      end
+    end
+  end
+end

@@ -1,0 +1,15 @@
+class ReloadProjectedAction
+!!!373255.java!!!	getEntitiesToReload(inout context : Map<String, Object>) : IEntity
+
+    List<IEntity> entitiesToReload = new ArrayList<IEntity>();
+    ICompositeValueConnector moduleConnector = getModuleConnector(context);
+    SubModule module = (SubModule) moduleConnector.getConnectorValue();
+    if (module instanceof BeanCollectionModule
+        && ((BeanCollectionModule) module).getModuleObjects() != null) {
+      for (Object entity : ((BeanCollectionModule) module).getModuleObjects()) {
+        entitiesToReload.add((IEntity) entity);
+      }
+    } else if (module instanceof BeanModule) {
+      entitiesToReload.add((IEntity) ((BeanModule) module).getModuleObject());
+    }
+    return entitiesToReload;

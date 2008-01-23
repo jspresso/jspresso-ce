@@ -1,0 +1,72 @@
+class BasicProxyComponentFactory
+!!!141703.java!!!	createComponentInstance(inout componentContract : Class<T>, inout delegate : Object) : T
+
+    T createdComponent = createComponentInstance(componentContract, delegate,
+        null);
+    createdComponent.onCreate(null, getPrincipal(), null);
+    return createdComponent;
+!!!141831.java!!!	createComponentInstance(inout componentContract : Class<T>) : T
+
+    return createComponentInstance(componentContract, null);
+!!!141959.java!!!	getComponentDescriptor(inout componentContract : Class<? extends IComponent>) : IComponentDescriptor
+
+    return componentDescriptorRegistry
+        .getComponentDescriptor(componentContract);
+!!!142087.java!!!	setAccessorFactory(inout accessorFactory : IAccessorFactory) : void
+
+    this.accessorFactory = accessorFactory;
+!!!142215.java!!!	setComponentCollectionFactory(inout componentCollectionFactory : IComponentCollectionFactory) : void
+
+    this.componentCollectionFactory = componentCollectionFactory;
+!!!142343.java!!!	setComponentDescriptorRegistry(inout componentDescriptorRegistry : IComponentDescriptorRegistry) : void
+
+    this.componentDescriptorRegistry = componentDescriptorRegistry;
+!!!142471.java!!!	setComponentExtensionFactory(inout componentExtensionFactory : IComponentExtensionFactory) : void
+
+    this.componentExtensionFactory = componentExtensionFactory;
+!!!142599.java!!!	getAccessorFactory() : IAccessorFactory
+
+    return accessorFactory;
+!!!142727.java!!!	getComponentCollectionFactory() : IComponentCollectionFactory
+
+    return componentCollectionFactory;
+!!!142855.java!!!	getComponentExtensionFactory() : IComponentExtensionFactory
+
+    return componentExtensionFactory;
+!!!142983.java!!!	getPrincipal() : UserPrincipal
+
+    return null;
+!!!143111.java!!!	createDelegatingComponentInvocationHandler(inout componentDescriptor : IComponentDescriptor, inout delegate : Object) : InvocationHandler
+
+    return new BasicDelegatingComponentInvocationHandler(delegate, this,
+        componentDescriptor, componentCollectionFactory, accessorFactory,
+        componentExtensionFactory);
+!!!143239.java!!!	createComponentInvocationHandler(inout componentDescriptor : IComponentDescriptor) : InvocationHandler
+
+    return new BasicComponentInvocationHandler(componentDescriptor, this,
+        componentCollectionFactory, accessorFactory, componentExtensionFactory);
+!!!143367.java!!!	createComponentInstance(inout componentContract : Class<T>, inout delegate : Object, inout extraInterfaces : Class) : T
+
+    IComponentDescriptor componentDescriptor = componentDescriptorRegistry
+        .getComponentDescriptor(componentContract);
+    InvocationHandler componentHandler;
+    if (delegate != null) {
+      componentHandler = createDelegatingComponentInvocationHandler(
+          componentDescriptor, delegate);
+    } else {
+      componentHandler = createComponentInvocationHandler(componentDescriptor);
+    }
+    Class[] implementedClasses;
+    if (extraInterfaces != null) {
+      implementedClasses = new Class[extraInterfaces.length + 1];
+      implementedClasses[0] = componentDescriptor.getComponentContract();
+      for (int i = 0; i < extraInterfaces.length; i++) {
+        implementedClasses[i + 1] = extraInterfaces[i];
+      }
+    } else {
+      implementedClasses = new Class[1];
+      implementedClasses[0] = componentDescriptor.getComponentContract();
+    }
+    T component = (T) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), implementedClasses, componentHandler);
+    return component;

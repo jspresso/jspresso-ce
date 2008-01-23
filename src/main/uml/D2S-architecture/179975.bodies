@@ -1,0 +1,44 @@
+class ActionAdapter
+!!!341255.java!!!	ActionAdapter(inout action : IDisplayableAction, inout actionHandler : IActionHandler, inout sourceComponent : ULCComponent, inout modelDescriptor : IModelDescriptor, inout viewConnector : IValueConnector, inout locale : Locale)
+
+      this.action = action;
+      this.actionHandler = actionHandler;
+      this.sourceComponent = sourceComponent;
+      this.modelDescriptor = modelDescriptor;
+      this.viewConnector = viewConnector;
+      putValue(IAction.NAME, action.getI18nName(translationProvider, locale));
+      String i18nDescription = action.getI18nDescription(translationProvider,
+          locale);
+      if (i18nDescription != null) {
+        putValue(IAction.SHORT_DESCRIPTION, i18nDescription + TOOLTIP_ELLIPSIS);
+      }
+      putValue(IAction.SMALL_ICON, iconFactory.getIcon(
+          action.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+      if (action.getMnemonicAsString() != null) {
+        putValue(IAction.MNEMONIC_KEY, new Integer(KeyStroke.getKeyStroke(
+            action.getMnemonicAsString()).getKeyCode()));
+      }
+!!!341383.java!!!	actionPerformed(inout e : ActionEvent) : void
+
+      if (actionHandler != null) {
+        Map<String, Object> actionContext = actionHandler.createEmptyContext();
+        actionContext.put(ActionContextConstants.SOURCE_COMPONENT,
+            sourceComponent);
+        actionContext.put(ActionContextConstants.VIEW_CONNECTOR, viewConnector);
+        if (viewConnector instanceof ICollectionConnectorProvider
+            && ((ICollectionConnectorProvider) viewConnector)
+                .getCollectionConnector() != null) {
+          actionContext.put(ActionContextConstants.SELECTED_INDICES,
+              ((ICollectionConnectorProvider) viewConnector)
+                  .getCollectionConnector().getSelectedIndices());
+        }
+        actionContext.put(ActionContextConstants.MODEL_DESCRIPTOR,
+            modelDescriptor);
+        actionContext.put(ActionContextConstants.ACTION_COMMAND, e
+            .getActionCommand());
+        actionContext.put(ActionContextConstants.ACTION_WIDGET, e.getSource());
+        if (action.getInitialContext() != null) {
+          actionContext.putAll(action.getInitialContext());
+        }
+        actionHandler.execute(action, actionContext);
+      }

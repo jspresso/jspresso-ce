@@ -1,0 +1,361 @@
+format 48
+"ldap" // com::d2s::framework::util::ldap
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/util/ldap"
+  java_package "com.d2s.framework.util.ldap"
+  classview 145671 "ldap"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 204807 "LdapConstants"
+      visibility public 
+      cpp_decl ""
+      final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Constants for Design2See LDAP attributes naming.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      attribute 197127 "DESCRIPTION_ATTRIBUTE"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"description\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>DESCRIPTION_ATTRIBUTE</code>.
+
+"
+      end
+
+      attribute 197255 "DISPLAY_NAME_ATTRIBUTE"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"displayName\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>DISPLAY_NAME_ATTRIBUTE</code>.
+
+"
+      end
+
+      attribute 197383 "MAIL_ATTRIBUTE"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"mail\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>MAIL_ATTRIBUTE</code>.
+
+"
+      end
+
+      attribute 197511 "PASSWORD_ATTIBUTE"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"userPassword\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>PASSWORD_ATTIBUTE</code>.
+
+"
+      end
+
+      attribute 197639 "SERIAL_NUMBER_ATTRIBUTE"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"serialNumber\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>SERIAL_NUMBER_ATTRIBUTE</code>.
+
+"
+      end
+
+      attribute 197767 "TOP_OBJECTCLASS"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"top\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>TOP_OBJECTCLASS</code>.
+
+"
+      end
+
+      attribute 197895 "ORGANISATIONAL_UNIT_OBJECTCLASS"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"organizationalUnit\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>ORGANISATIONAL_UNIT_OBJECTCLASS</code>.
+
+"
+      end
+
+      operation 411015 "LdapConstants"
+	private explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+    end
+
+    class 204935 "LdapUtils"
+      visibility public 
+      cpp_decl ""
+      final java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is a simple helper class to be able to cope with ldap.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      operation 411143 "LdapUtils"
+	private explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 411271 "formatBoolean"
+	class_operation public explicit_return_type "String"
+	nparams 1
+	  param inout name "value" explicit_type "boolean"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Formats an boolean attribute.
+
+@param value
+           the boolean value.
+@return the parsed boolean.
+"
+      end
+
+      operation 411399 "formatInteger"
+	class_operation public explicit_return_type "String"
+	nparams 1
+	  param inout name "value" explicit_type "Integer"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Formats an integer attribute.
+
+@param value
+           the integer value.
+@return the parsed integer or null.
+"
+      end
+
+      operation 411527 "parseBoolean"
+	class_operation public explicit_return_type "boolean"
+	nparams 1
+	  param in name "booleanAsString" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Parses an boolean attribute.
+
+@param booleanAsString
+           the string representation of the boolean.
+@return the parsed boolean or null.
+"
+      end
+
+      operation 411655 "parseGeneralizedTimeAsDate"
+	class_operation public explicit_return_type "Date"
+	nparams 1
+	  param in name "generalizedTime" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "ParseException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Parses a generalized time as a date ignoring hour minute seconds.
+
+@param generalizedTime
+           the string representation of the date/time in the format
+           YYYYMMDDHHMMSS.
+@return the parsed date or null.
+@throws ParseException
+            Whenever a parse exception occurs.
+"
+      end
+
+      operation 411783 "parseGeneralizedTimeAsDateTime"
+	class_operation public explicit_return_type "Date"
+	nparams 1
+	  param in name "generalizedTime" explicit_type "String"
+	nexceptions 1
+	  explicit_exception "ParseException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Parses a generalized time as a date and time.
+
+@param generalizedTime
+           the string representation of the date/time in the format
+           YYYYMMDDHHMMSS.
+@return the parsed date or null.
+@throws ParseException
+            Whenever a parse exception occurs.
+"
+      end
+
+      operation 411911 "parseInteger"
+	class_operation public explicit_return_type "Integer"
+	nparams 1
+	  param in name "integerAsString" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Parses an integer attribute.
+
+@param integerAsString
+           the string representation of the integer.
+@return the parsed integer or null.
+"
+      end
+    end
+  end
+
+  deploymentview 145031 "ldap"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 189959 "LdapConstants"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 204807 // LdapConstants
+      end
+    end
+
+    artifact 190087 "LdapUtils"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+${definition}"
+      associated_classes
+	class_ref 204935 // LdapUtils
+      end
+    end
+  end
+end

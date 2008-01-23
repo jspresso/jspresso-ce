@@ -1,0 +1,359 @@
+format 48
+"security" // com::d2s::framework::application::backend::action::security
+  revision 1
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/backend/action/security"
+  java_package "com.d2s.framework.application.backend.action.security"
+  classview 134535 "security"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 159495 "AbstractChangePasswordAction"
+      abstract visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Changes a user password asking for the current and new password.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 170503 // <generalisation>
+	relation 170503 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 170503 // <generalisation>
+	  b parent class_ref 156423 // AbstractBackendAction
+      end
+
+      classrelation 170631 // PASSWD_CHANGE_DESCRIPTOR (<unidirectional association>)
+	relation 170631 --->
+	  a role_name "PASSWD_CHANGE_DESCRIPTOR" init_value "=  createPasswordChangeModel()" class_relation const_relation public
+	    comment "
+<code>PASSWD_CHANGE_DESCRIPTOR</code> is a unique reference to the model
+descriptor of the change password action.
+
+"
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type}<Map<String, String>> ${name}${value};
+"
+	    classrelation_ref 170631 // PASSWD_CHANGE_DESCRIPTOR (<unidirectional association>)
+	  b parent class_ref 132103 // IComponentDescriptor
+      end
+
+      attribute 151687 "PASSWD_CURRENT"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"password_current\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>PASSWD_CURRENT</code>.
+
+"
+      end
+
+      attribute 151815 "PASSWD_RETYPED"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"password_retyped\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>PASSWD_RETYPED</code>.
+
+"
+      end
+
+      attribute 151943 "PASSWD_TYPED"
+	class_attribute const_attribute public explicit_type "String"
+	init_value "=  \"password_typed\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>PASSWD_TYPED</code>.
+
+"
+      end
+
+      operation 237575 "createPasswordChangeModel"
+	class_operation private return_type class_ref 132103 // IComponentDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type}<Map<String, String>> ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+
+      operation 237703 "execute"
+	public explicit_return_type "boolean"
+	nparams 2
+	  param inout name "actionHandler" explicit_type "IActionHandler"
+	  param inout name "context" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}@SuppressWarnings(\"unused\") ${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+  @SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 237831 "changePassword"
+	abstract protected explicit_return_type "boolean"
+	nparams 3
+	  param inout name "userPrincipal" explicit_type "UserPrincipal"
+	  param in name "currentPassword" explicit_type "char"
+	  param in name "newPassword" explicit_type "char"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}[] ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Performs the effective password change depending on the underlying storage.
+
+@param userPrincipal
+           the connected user principal.
+@param currentPassword
+           the current password.
+@param newPassword
+           the new password.
+@return true if password was changed succesfully.
+"
+      end
+    end
+
+    class 159623 "LdapChangePasswordAction"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Changes a user password in an ldap directory.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 170759 // <generalisation>
+	relation 170759 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 170759 // <generalisation>
+	  b parent class_ref 159495 // AbstractChangePasswordAction
+      end
+
+      attribute 152071 "digestAlgorithm"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      attribute 152199 "ldapUrl"
+	private explicit_type "String"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 237959 "setDigestAlgorithm"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "digestAlgorithm" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the digestAlgorithm.
+
+@param digestAlgorithm
+           the digestAlgorithm to set.
+"
+      end
+
+      operation 238087 "setLdapUrl"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "ldapUrl" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the ldapUrl.
+
+@param ldapUrl
+           the ldapUrl to set.
+"
+      end
+
+      operation 238215 "changePassword"
+	protected explicit_return_type "boolean"
+	nparams 3
+	  param inout name "userPrincipal" explicit_type "UserPrincipal"
+	  param in name "currentPassword" explicit_type "char"
+	  param in name "newPassword" explicit_type "char"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1}[] ${p1}, ${t2}[] ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@Override
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 238343 "digest"
+	private explicit_return_type "String"
+	nparams 1
+	  param in name "newPassword" explicit_type "char"
+	nexceptions 2
+	  explicit_exception "NoSuchAlgorithmException"
+	  explicit_exception "IOException"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0}[] ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+    end
+  end
+
+  deploymentview 133767 "security"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 156679 "AbstractChangePasswordAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import com.d2s.framework.action.ActionBusinessException;
+import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.IActionHandler;
+import com.d2s.framework.application.backend.action.AbstractBackendAction;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor;
+import com.d2s.framework.security.UserPrincipal;
+${definition}"
+      associated_classes
+	class_ref 159495 // AbstractChangePasswordAction
+      end
+    end
+
+    artifact 156807 "LdapChangePasswordAction"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.DirContext;
+import javax.naming.directory.ModificationItem;
+import org.jboss.security.Base64Encoder;
+import org.springframework.dao.DataAccessException;
+import org.springframework.ldap.LdapTemplate;
+import org.springframework.ldap.support.DirContextSource;
+import com.d2s.framework.action.ActionBusinessException;
+import com.d2s.framework.action.ActionException;
+import com.d2s.framework.security.UserPrincipal;
+import com.d2s.framework.util.ldap.LdapConstants;
+${definition}"
+      associated_classes
+	class_ref 159623 // LdapChangePasswordAction
+      end
+    end
+  end
+end

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book lang="en" revision="1.0">
+  <bookinfo>
+    <title>D2S : The <trademark>Design2See</trademark> Framework</title>
+
+    <subtitle><trademark>D2S</trademark> Reference Manual</subtitle>
+
+    <releaseinfo>1.0</releaseinfo>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata align="center" contentdepth="60%"
+                   fileref="../images/d2S_logo.jpg" scalefit="1" width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <abstract>
+      <para>This document is a reference manual for the
+      <trademark>Design2See</trademark> (<trademark>D2S</trademark>)
+      framework. It deals with all the building blocks of a
+      <trademark>D2S</trademark> application.</para>
+    </abstract>
+  </bookinfo>
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para>Software development requires many different skills. This is even
+    more true when you have to deal with a distributed business application
+    for which you have to get expertise on :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Database design and performance (schema design, data access
+        optimisation, data integrity, ...)</para>
+      </listitem>
+
+      <listitem>
+        <para>Gui design and binding on domain model (views, flow, actions,
+        ...)</para>
+      </listitem>
+
+      <listitem>
+        <para>N-tier architecture design for distributed applications
+        (frontend deployment, bandwidth consumption, network round trips,
+        ...)</para>
+      </listitem>
+
+      <listitem>
+        <para>System scalability and robustness (fail over, load-balancing,
+        ...)</para>
+      </listitem>
+
+      <listitem>
+        <para>Software architecture and best practices (design patterns,
+        security, manageability, logging, low coupling, separation of
+        concerns, ...)</para>
+      </listitem>
+
+      <listitem>
+        <para>Up-to-date technology building blocks (stay with standards,
+        leverage on existing components, easy switch between equivalent
+        components, ...)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Whenever one of these skills is not efficiently addressed, the
+    software may simply never become available or may not meet the promised
+    quality or exploitability required standards. It surely leads to huge
+    delays on the schedule and bad ROI.</para>
+
+    <para>Big software vendors have tried to address this situation more or
+    less succesfully by providing end to end CASE tools, but there are
+    well-known drawbacks to this approach. Some of them are :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>High license fees for development and generally for
+        runtime</para>
+      </listitem>
+
+      <listitem>
+        <para>End-to-end proprietary solutions locking the software and thus
+        the customer into the chosen technology and tools</para>
+      </listitem>
+
+      <listitem>
+        <para>The resulting software is often completely opaque and rarely
+        intergrates seamlessly in the overall information
+        infrastructure</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>With these ideas in mind, the <trademark>D2S</trademark> application
+    framework was developed. To get an idea of what a software framework is
+    and what it is not, please, refer to the following <ulink
+    url="http://en.wikipedia.org/wiki/Software_framework">link</ulink>. The
+    <trademark>D2S</trademark> framework differs from most of the other
+    frameworks since it addresses the complete software architecture (see the
+    <link linkend="D2S-modules">D2S modules diagram</link>) including all the
+    key success factors formerly described; but instead of "reinventing the
+    wheel", <trademark>D2S</trademark> strongly relies on production-proof
+    open source libraries and components. To get a complete list of the used
+    libraries, please refer to the Appendices.</para>
+
+    <para>Each of these libraries is distributed using a business-friendly
+    licence (<ulink
+    url="http://www.opensource.org/licenses/lgpl-license.php">LGPL</ulink>,
+    <ulink
+    url="http://www.opensource.org/licenses/bsd-license.php">BSD</ulink>,
+    <ulink
+    url="http://www.opensource.org/licenses/apachepl.php">Apache</ulink>, ...)
+    that enables its inclusion in closed-source software under copyright
+    notice conditions. <trademark>D2S</trademark> put them all together, in a
+    loosely coupled architecture so that the resulting software is not locked
+    in any of them. As an example, you don't have to choose whether you want
+    to distribute your application as a Java swing application through Java
+    Web Start or as an Ajax application without any plug in or both !
+    <trademark>D2S</trademark> will take care of it at runtime.<figure
+        id="D2S-modules">
+        <title>D2S Modules</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="40%"
+                       fileref="../images/D2S-modules.jpg" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+
+    <para>The whole objective of <trademark>D2S</trademark> is to shorten the
+    gap (and thus avoid the "tunnel" effect) between the business requirement
+    analysis, the detailed specifications, the design and the software
+    available and running. The development process becomes extremely agile
+    since the prototype progressively becomes the final application through
+    very short iterations.</para>
+
+    <para>To achieve this goal, the main paradigm of
+    <trademark>D2S</trademark> is "whenever describing is enough, do not
+    code". Take a simple frontend example : you want to provide the end user
+    with a table listing a set of articles. Of course, this table view has to
+    be editable, sortable and present the different columns based on their
+    types (an image, the remaining stock quantity, the date when this article
+    was made available in the system, and so on). Everyone is able to describe
+    this view precisely and everyone is able to understand what has been
+    described. There should not be a need for coding a single line of code
+    (swing, html, jsp, javascript, ...) whenever this description has been
+    captured by the framework. That is exactly what <trademark>D2S</trademark>
+    does by taking care of the implementation once you have expressed the
+    requirements. And there is no complex code generation. Everything is just
+    handled at runtime.</para>
+
+    <para>Here are some of the key features of the <trademark>D2S</trademark>
+    framework :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>TO BE COMPLETED</emphasis></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This manual is organized around developing a sample application
+    which is targeted at human resources management. We will cover the
+    complete development process while presenting as much as possible of the
+    <trademark>D2S</trademark> framework. We believe that this approach will
+    be more efficient than a raw description of the framework features since
+    it will show you not only what to use but also how to use it efficiently.
+    And of course, whenever a new feature is introduced we will suggest a link
+    to its full reference.</para>
+
+    <para>So let's begin.</para>
+  </preface>
+
+  <xi:include href="chapter1.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter2.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter3.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter4.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter5.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter6.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+
+  <xi:include href="chapter7.xml" xmlns:xi="http://www.w3.org/2001/XInclude"
+              xpointer="element(/1)" />
+</book>

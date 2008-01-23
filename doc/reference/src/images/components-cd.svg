@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="661" height="834" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<line stroke="black" stroke-opacity="1" x1="204" y1="174" x2="309" y2="76" />
+	<line stroke="black" stroke-opacity="1" x1="314" y1="72" x2="305" y2="71" />
+	<line stroke="black" stroke-opacity="1" x1="314" y1="72" x2="313" y2="80" />
+	<line stroke="black" stroke-opacity="1" x1="305" y1="71" x2="313" y2="80" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="338" y1="624" x2="393" y2="585" />
+	<line stroke="black" stroke-opacity="1" x1="398" y1="582" x2="389" y2="580" />
+	<line stroke="black" stroke-opacity="1" x1="398" y1="582" x2="396" y2="590" />
+	<line stroke="black" stroke-opacity="1" x1="389" y1="580" x2="396" y2="590" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="481" y1="117" x2="418" y2="75" />
+	<line stroke="black" stroke-opacity="1" x1="414" y1="72" x2="415" y2="80" />
+	<line stroke="black" stroke-opacity="1" x1="414" y1="72" x2="422" y2="70" />
+	<line stroke="black" stroke-opacity="1" x1="415" y1="80" x2="422" y2="70" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="455" y1="473" x2="437" y2="438" />
+	<line stroke="black" stroke-opacity="1" x1="435" y1="433" x2="432" y2="441" />
+	<line stroke="black" stroke-opacity="1" x1="435" y1="433" x2="443" y2="435" />
+	<line stroke="black" stroke-opacity="1" x1="432" y1="441" x2="443" y2="435" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="357" y1="108" x2="357" y2="78" />
+	<line stroke="black" stroke-opacity="1" x1="357" y1="72" x2="351" y2="78" />
+	<line stroke="black" stroke-opacity="1" x1="357" y1="72" x2="363" y2="78" />
+	<line stroke="black" stroke-opacity="1" x1="351" y1="78" x2="363" y2="78" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="261" y1="472" x2="275" y2="438" />
+	<line stroke="black" stroke-opacity="1" x1="278" y1="433" x2="270" y2="436" />
+	<line stroke="black" stroke-opacity="1" x1="278" y1="433" x2="281" y2="440" />
+	<line stroke="black" stroke-opacity="1" x1="270" y1="436" x2="281" y2="440" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="496" y1="625" x2="489" y2="587" />
+	<line stroke="black" stroke-opacity="1" x1="489" y1="582" x2="484" y2="588" />
+	<line stroke="black" stroke-opacity="1" x1="489" y1="582" x2="495" y2="586" />
+	<line stroke="black" stroke-opacity="1" x1="484" y1="588" x2="495" y2="586" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="431" y="113" width="3" height="319" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="283" y="429" width="151" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="279" y="109" width="152" height="320" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="355" y="124">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="355" y="144">IPropertyDescriptor</text>
+	<line stroke="black" stroke-opacity="1" x1="279" y1="149" x2="431" y2="149" />
+	<line stroke="black" stroke-opacity="1" x1="279" y1="157" x2="431" y2="157" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="172">checkValueIntegrity()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="190">getDelegateClass()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="208">getDelegateClassName()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="226">getIntegrityProcessors()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="244">getReadabilityGates()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="262">getUnicityScope()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="280">getWritabilityGates()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="298">isModifiable()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="316">isMandatory()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="334">isOverload()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="352">isQueryable()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="370">isReadOnly()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="388">postprocessSetter()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="406">preprocessSetter()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="283" y="424">clone()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="329" y="477" width="3" height="67" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="163" y="541" width="169" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="159" y="473" width="170" height="68" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="244" y="488">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="244" y="508">IScalarPropertyDescriptor</text>
+	<line stroke="black" stroke-opacity="1" x1="159" y1="513" x2="329" y2="513" />
+	<line stroke="black" stroke-opacity="1" x1="159" y1="521" x2="329" y2="521" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="163" y="536">getDefaultValue()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="596" y="478" width="3" height="103" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="368" y="578" width="231" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="364" y="474" width="232" height="104" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="480" y="489">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="480" y="509">IRelationshipEndPropertyDescriptor</text>
+	<line stroke="black" stroke-opacity="1" x1="364" y1="514" x2="596" y2="514" />
+	<line stroke="black" stroke-opacity="1" x1="364" y1="522" x2="596" y2="522" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="368" y="537">getReverseRelationEnd()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="368" y="555">isComposition()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="368" y="573">setReverseRelationEnd()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="200" y="105" width="3" height="335" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="4" y="437" width="199" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="0" y="101" width="200" height="336" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="100" y="132">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="100" y="152">IComponentDescriptor</text>
+	<line stroke="black" stroke-opacity="1" x1="0" y1="157" x2="200" y2="157" />
+	<line stroke="black" stroke-opacity="1" x1="0" y1="165" x2="200" y2="165" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="180">getComponentContract()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="198">getDeclaredPropertyDescriptors()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="216">getLifecycleInterceptors()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="234">getOrderingProperties()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="252">getPropertyDescriptor()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="270">getPropertyDescriptors()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="288">getQueryableProperties()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="306">getRenderedProperties()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="324">getServiceContracts()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="342">getServiceDelegate()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="360">getToStringProperty()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="378">getUnclonedProperties()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="396">isComputed()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="414">isEntity()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="4" y="432">isPurelyAbstract()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="359" y="629" width="3" height="101" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="169" y="727" width="193" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="165" y="625" width="194" height="102" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="262" y="656">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="262" y="676">IReferencePropertyDescriptor</text>
+	<line stroke="black" stroke-opacity="1" x1="165" y1="681" x2="359" y2="681" />
+	<line stroke="black" stroke-opacity="1" x1="165" y1="689" x2="359" y2="689" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="169" y="704">getInitializationMapping()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="169" y="722">getReferencedDescriptor()</text>
+</g>
+<g>
+	<rect fill="white" stroke-dasharray="4,4" stroke="black" stroke-width="1" stroke-opacity="1" x="136" y="89" width="101" height="23" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="187" y="107">E</text>
+</g>
+<g>
+	<rect fill="white" stroke-dasharray="4,4" stroke="black" stroke-width="1" stroke-opacity="1" x="297" y="613" width="98" height="23" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="346" y="631">E</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="412" y="4" width="3" height="67" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="302" y="68" width="113" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="298" y="0" width="114" height="68" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="355" y="15">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="355" y="35">IModelDescriptor</text>
+	<line stroke="black" stroke-opacity="1" x1="298" y1="40" x2="412" y2="40" />
+	<line stroke="black" stroke-opacity="1" x1="298" y1="48" x2="412" y2="48" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="302" y="63">getModelType()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="622" y="116" width="3" height="101" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="486" y="214" width="139" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="482" y="112" width="140" height="102" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="552" y="143">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="552" y="163">ICollectionDescriptor</text>
+	<line stroke="black" stroke-opacity="1" x1="482" y1="168" x2="622" y2="168" />
+	<line stroke="black" stroke-opacity="1" x1="482" y1="176" x2="622" y2="176" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="486" y="191">getCollectionInterface()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="486" y="209">getElementDescriptor()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="607" y="630" width="3" height="191" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="417" y="818" width="193" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="413" y="626" width="194" height="192" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="510" y="657">&lt;&lt;interface&gt;&gt;</text>
+	<text font-family="Helvetica" font-size="12" fill="black" font-weight="bold" text-anchor="middle" x="510" y="677">ICollectionPropertyDescriptor</text>
+	<line stroke="black" stroke-opacity="1" x1="413" y1="682" x2="607" y2="682" />
+	<line stroke="black" stroke-opacity="1" x1="413" y1="690" x2="607" y2="690" />
+	<text font-family="Helvetica" font-size="12" fill="black" x="417" y="705">getOrderingProperties()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="417" y="723">getReferencedDescriptor()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="417" y="741">isManyToMany()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="417" y="759">postprocessAdder()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="417" y="777">postprocessRemover()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="417" y="795">preprocessAdder()</text>
+	<text font-family="Helvetica" font-size="12" fill="black" x="417" y="813">preprocessRemover()</text>
+</g>
+<g>
+	<rect fill="white" stroke-dasharray="4,4" stroke="black" stroke-width="1" stroke-opacity="1" x="578" y="100" width="71" height="23" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="614" y="118">E</text>
+</g>
+<g>
+	<rect fill="white" stroke-dasharray="4,4" stroke="black" stroke-width="1" stroke-opacity="1" x="545" y="614" width="98" height="23" />
+	<text font-family="Helvetica" font-size="12" fill="black" text-anchor="middle" x="594" y="632">E</text>
+</g>
+</svg>

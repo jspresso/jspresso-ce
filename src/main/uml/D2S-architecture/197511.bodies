@@ -1,0 +1,21 @@
+class MapPropertyAccessor
+!!!388743.java!!!	MapPropertyAccessor(in property : String)
+
+    this.property = property;
+!!!388871.java!!!	getValue(inout target : Object) : Object
+
+    if (target != null && target instanceof Map) {
+      return ((Map<?, ?>) target).get(property);
+    }
+    return null;
+!!!388999.java!!!	isWritable() : boolean
+
+    return true;
+!!!389127.java!!!	setValue(inout target : Object, inout value : Object) : void
+
+    if (target != null && target instanceof Map) {
+      ((Map) target).put(property, value);
+    }
+!!!389255.java!!!	getProperty() : String
+
+    return property;

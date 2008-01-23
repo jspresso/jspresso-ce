@@ -1,0 +1,7 @@
+class BasicPercentPropertyDescriptor
+!!!173831.java!!!	clone() : BasicPercentPropertyDescriptor
+
+    BasicPercentPropertyDescriptor clonedDescriptor = (BasicPercentPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

@@ -1,0 +1,14 @@
+class GateHelper
+!!!407431.java!!!	GateHelper()
+
+    // Just here to prevent direct instanciation.
+!!!407559.java!!!	areGatesOpen(inout gates : Collection<IGate>) : boolean
+
+    if (gates != null) {
+      for (IGate gate : gates) {
+        if (!gate.isOpen()) {
+          return false;
+        }
+      }
+    }
+    return true;

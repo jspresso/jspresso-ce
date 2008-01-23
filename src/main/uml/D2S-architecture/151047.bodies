@@ -1,0 +1,60 @@
+class BasicViewDescriptor
+!!!210055.java!!!	getActions() : Map<String, List<IDisplayableAction>>
+
+    if (actionMap != null) {
+      return actionMap.getActionMap();
+    }
+    return null;
+!!!210183.java!!!	getBackground() : Color
+
+    return background;
+!!!210311.java!!!	getBorderType() : int
+
+    return borderType;
+!!!210439.java!!!	getFont() : Font
+
+    return font;
+!!!210567.java!!!	getForeground() : Color
+
+    return foreground;
+!!!210695.java!!!	getGrantedRoles() : Collection<String>
+
+    return grantedRoles;
+!!!210823.java!!!	getI18nDescription(inout translationProvider : ITranslationProvider, inout locale : Locale) : String
+
+    if (getDescription() == null) {
+      return getModelDescriptor().getI18nDescription(translationProvider,
+          locale);
+    }
+    return super.getI18nDescription(translationProvider, locale);
+!!!210951.java!!!	getI18nName(inout translationProvider : ITranslationProvider, inout locale : Locale) : String
+
+    if (getName() == null) {
+      return getModelDescriptor().getI18nName(translationProvider, locale);
+    }
+    return super.getI18nName(translationProvider, locale);
+!!!211079.java!!!	getIconImageURL() : String
+
+    if (super.getIconImageURL() == null
+        && getModelDescriptor() instanceof IComponentDescriptor) {
+      return ((IComponentDescriptor<?>) getModelDescriptor()).getIconImageURL();
+    }
+    return super.getIconImageURL();
+!!!211207.java!!!	setActionMap(inout actionMap : ActionMap) : void
+
+    this.actionMap = actionMap;
+!!!211335.java!!!	setBackground(inout background : Color) : void
+
+    this.background = background;
+!!!211463.java!!!	setBorderType(in borderType : int) : void
+
+    this.borderType = borderType;
+!!!211591.java!!!	setFont(inout font : Font) : void
+
+    this.font = font;
+!!!211719.java!!!	setForeground(inout foreground : Color) : void
+
+    this.foreground = foreground;
+!!!211847.java!!!	setGrantedRoles(inout grantedRoles : Collection<String>) : void
+
+    this.grantedRoles = grantedRoles;

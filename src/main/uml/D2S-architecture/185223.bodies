@@ -1,0 +1,10 @@
+class QuitAction
+!!!356999.java!!!	QuitAction()
+
+      putValue(Action.NAME, getTranslationProvider().getTranslation(
+          "quit.name", getLocale()));
+      putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
+          .getTranslation("quit.description", getLocale()));
+!!!357127.java!!!	actionPerformed(inout e : ActionEvent) : void
+
+      stop();

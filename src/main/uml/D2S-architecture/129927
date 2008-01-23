@@ -1,0 +1,1166 @@
+format 48
+"component" // com::d2s::framework::model::component
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/model/component"
+  java_package "com.d2s.framework.model.component"
+  classview 129543 "component"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 130055 "AbstractComponentExtension"
+      abstract visibility public 
+      nformals 1
+      formal name "T" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 130311 // IComponentExtension
+        rank 0 explicit_value "T"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This abstract class is a helper base class for components extensions.
+Developpers should inherit from it and use the <code>getComponent()</code>
+to access the extended component instance.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <T>
+           the parametrized component class on which these extensions work
+           on.
+"
+      classrelation 129927 // <realization>
+	relation 129927 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 129927 // <realization>
+	  b parent class_ref 130311 // IComponentExtension
+      end
+
+      classrelation 130055 // <realization>
+	relation 130055 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 130055 // <realization>
+	  b parent class_ref 130439 // IComponentFactoryAware
+      end
+
+      classrelation 130183 // componentFactory (<unidirectional association>)
+	relation 130183 --->
+	  a role_name "componentFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 130183 // componentFactory (<unidirectional association>)
+	  b parent class_ref 130567 // IComponentFactory
+      end
+
+      attribute 129671 "extendedComponent"
+	const_attribute private explicit_type "T"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 131847 "AbstractComponentExtension"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "component" explicit_type "T"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>AbstractComponentExtension</code> instance.
+
+@param component
+           The extended component instance.
+"
+      end
+
+      operation 131975 "getComponent"
+	public explicit_return_type "T"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 132103 "getType"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Computes the entity type.
+
+@return The entity type.
+"
+      end
+
+      operation 132231 "setComponentFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "componentFactory" type class_ref 130567 // IComponentFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the componentFactory.
+
+@param componentFactory
+           the componentFactory to set.
+"
+      end
+
+      operation 132359 "getComponentFactory"
+	protected return_type class_ref 130567 // IComponentFactory
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the componentFactory.
+
+@return the componentFactory.
+"
+      end
+
+      operation 132487 "registerNotificationForwarding"
+	protected explicit_return_type "void"
+	nparams 3
+	  param inout name "sourceBean" explicit_type "IPropertyChangeCapable"
+	  param in name "sourceProperty" explicit_type "String"
+	  param in name "forwardedProperty" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, final ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Registers a property change listener to forward property changes.
+
+@param sourceBean
+           the source bean.
+@param sourceProperty
+           the name of the source property.
+@param forwardedProperty
+           the name of the forwarded property.
+"
+      end
+    end
+
+    class 130183 "IComponent"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface must be implemented by all model components in the application
+domain. It establishes the minimal contract of a model component.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 130823 // <generalisation>
+	relation 130823 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 130823 // <generalisation>
+	  b parent class_ref 131463 // ILifecycleCapable
+      end
+
+      operation 134151 "firePropertyChange"
+	package explicit_return_type "void"
+	nparams 3
+	  param in name "property" explicit_type "String"
+	  param inout name "oldValue" explicit_type "Object"
+	  param inout name "newValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Notifies its <code>PropertyChangeListener</code>s on a specific property
+change.
+
+@param property
+           The property which changed.
+@param oldValue
+           The old value of the property.
+@param newValue
+           The new value of the property or <code>UNKNOWN</code>.
+"
+      end
+
+      operation 134279 "getContract"
+	package explicit_return_type "Class<? extends IComponent>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the interface or class establishing the entity contract.
+
+@return the entity contract.
+"
+      end
+
+      operation 134407 "straightGetProperties"
+	package explicit_return_type "Map<String, Object>"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This method is used to get all the persistent properties without triggering
+any other behaviour.
+
+@return the current properties values.
+"
+      end
+
+      operation 134535 "straightGetProperty"
+	package explicit_return_type "Object"
+	nparams 1
+	  param in name "propertyName" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This method is used to get a persistent property without triggering any
+other behaviour.
+
+@param propertyName
+           the name of the property to get.
+@return the current value of the property.
+"
+      end
+
+      operation 134663 "straightSetProperties"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "properties" explicit_type "Map<String, Object>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This method is used to update a persistent properties without triggering
+any other behaviour except a <code>PropertyChangeEvent</code>.
+
+@param properties
+           the properties to set.
+"
+      end
+
+      operation 134791 "straightSetProperty"
+	package explicit_return_type "void"
+	nparams 2
+	  param in name "propertyName" explicit_type "String"
+	  param inout name "backendPropertyValue" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+This method is used to update a persistent property without triggering any
+other behaviour except a <code>PropertyChangeEvent</code>.
+
+@param propertyName
+           the name of the property to set.
+@param backendPropertyValue
+           the value to set the property with.
+"
+      end
+    end
+
+    class 130311 "IComponentExtension"
+      visibility public stereotype "interface"
+      nformals 1
+      formal name "T" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is an interface used to identify classes responsible for providing
+component accessors which are not directly related to the core properties.
+Such classes provide derived (computed) properties of the component.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <T>
+           The class of the extended component.
+"
+      operation 131591 "getComponent"
+	package explicit_return_type "T"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Returns the component instance to which this extension is attached.
+
+@return The extended entity instance.
+"
+      end
+    end
+
+    class 130439 "IComponentFactoryAware"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Implemented by objects which have a insterest in componentFactory.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      operation 131719 "setComponentFactory"
+	package explicit_return_type "void"
+	nparams 1
+	  param inout name "componentFactory" type class_ref 130567 // IComponentFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the component factory.
+
+@param componentFactory
+           the component factory to set.
+"
+      end
+    end
+
+    class 130567 "IComponentFactory"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface defines the contract of a component factory.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 865 $
+@author Vincent Vandenschrick
+"
+      classrelation 131079 // <generalisation>
+	relation 131079 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 131079 // <generalisation>
+	  b parent class_ref 131975 // IComponentDescriptorRegistry
+      end
+
+      operation 135047 "createComponentInstance"
+	package explicit_return_type "T"
+	nparams 2
+	  param inout name "componentContract" explicit_type "Class<T>"
+	  param inout name "delegate" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IComponent> ${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new component instance based on the component descriptor. All
+method calls are handled by the component delegate.
+
+@param <T>
+           the concrete class of the created component.
+@param componentContract
+           the class of the component to create.
+@param delegate
+           the component delegate instance.
+@return the component instance.
+"
+      end
+
+      operation 135175 "createComponentInstance"
+	package explicit_return_type "T"
+	nparams 1
+	  param inout name "componentContract" explicit_type "Class<T>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<T extends IComponent> ${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates a new component instance based on the component descriptor.
+
+@param <T>
+           the concrete class of the created component.
+@param componentContract
+           the class of the component to create.
+@return the component instance.
+"
+      end
+    end
+
+    class 130695 "ComponentException"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This exception is thrown whenever an unexpected exception occurs on an
+entity.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      attribute 129799 "serialVersionUID"
+	class_attribute const_attribute private explicit_type "long"
+	init_value "=  -3659844614276359719L"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      operation 132615 "ComponentException"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityException</code> instance.
+
+@param message
+           the exception message.
+"
+      end
+
+      operation 132743 "ComponentException"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "nestedException" explicit_type "Throwable"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityException</code> instance.
+
+@param nestedException
+           the nested exception.
+"
+      end
+
+      operation 132871 "ComponentException"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "nestedException" explicit_type "Throwable"
+	  param in name "message" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>EntityException</code> instance.
+
+@param nestedException
+           the nested exception.
+@param message
+           the exception message.
+"
+      end
+    end
+
+    class 130951 "DefaultComponentCollectionFactory"
+      visibility public 
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 131079 // IComponentCollectionFactory
+        rank 0 explicit_value "E"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Creates new empty components collections.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the type of collection elements.
+"
+      classrelation 130439 // <realization>
+	relation 130439 -_-|>
+	  stereotype "bind"
+	  a public
+	    java "${type}"
+	    classrelation_ref 130439 // <realization>
+	  b parent class_ref 131079 // IComponentCollectionFactory
+      end
+
+      operation 133127 "createEntityCollection"
+	public explicit_return_type "Collection<E>"
+	nparams 1
+	  param inout name "collectionInterface" explicit_type "Class<?>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Creates concrete empty collections based on standard java collections.
+<p>
+{@inheritDoc}
+"
+      end
+    end
+
+    class 131079 "IComponentCollectionFactory"
+      visibility public stereotype "interface"
+      nformals 1
+      formal name "E" type "" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface is implemented by factories of component collections.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+@param <E>
+           the type of collection elements.
+"
+      operation 132999 "createEntityCollection"
+	package explicit_return_type "Collection<E>"
+	nparams 1
+	  param inout name "collectionInterface" explicit_type "Class<?>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Given a collection interface (i.e. <code>Set</code>,<code>List</code>,
+...) this method creates a concrete implementation.
+
+@param collectionInterface
+           the interface which must be implemented by the created
+           collection.
+@return an empty instance of a concrete collection.
+"
+      end
+    end
+
+    class 131207 "DefaultComponentExtensionFactory"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is the default implementation of <code>IComponentExtensionFactory</code>.
+This implementation relies on Jakarta's <code>ConstructorUtils</code> to
+build extension instances calling their constructors using reflection.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      classrelation 130567 // <realization>
+	relation 130567 -_-|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 130567 // <realization>
+	  b parent class_ref 131335 // IComponentExtensionFactory
+      end
+
+      classrelation 130695 // componentFactory (<unidirectional association>)
+	relation 130695 --->
+	  a role_name "componentFactory" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 130695 // componentFactory (<unidirectional association>)
+	  b parent class_ref 130567 // IComponentFactory
+      end
+
+      operation 133383 "createComponentExtension"
+	public return_type class_ref 130311 // IComponentExtension
+	nparams 3
+	  param inout name "extensionClass" explicit_type "Class<IComponentExtension<E>>"
+	  param inout name "componentContract" explicit_type "Class<? extends E>"
+	  param inout name "component" explicit_type "E"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<E extends IComponent> ${type}<E> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	java_annotation "@SuppressWarnings(\"unchecked\")
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 133511 "setComponentFactory"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "componentFactory" type class_ref 130567 // IComponentFactory
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the componentFactory.
+
+@param componentFactory
+         the componentFactory to set.
+"
+      end
+    end
+
+    class 131335 "IComponentExtensionFactory"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This interface establishes the contract implemented by component extension
+factories. A component extension is a delegate instance attached to an
+component instance and responsible for providing access on computed
+properties.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      operation 133255 "createComponentExtension"
+	package return_type class_ref 130311 // IComponentExtension
+	nparams 3
+	  param inout name "extensionClass" explicit_type "Class<IComponentExtension<E>>"
+	  param inout name "componentContract" explicit_type "Class<? extends E>"
+	  param inout name "component" explicit_type "E"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}<E extends IComponent> ${type}<E> ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new extension instance. Component extension classes must
+implement constructors in the form of
+<code>public ComponentExtension(ComponentContract component)</code>.
+
+@param <E>
+         the real component type.
+@param extensionClass
+         The class of the component extension.
+@param componentContract
+         The interface of the component.
+@param component
+         the component instance this extension will be attached to.
+@return The constructed component extension.
+"
+      end
+    end
+
+    class 131463 "ILifecycleCapable"
+      visibility public stereotype "interface"
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+Defines the component lifecycle hooks.
+<p>
+Copyright 2005 Design2See. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 843 $
+@author Vincent Vandenschrick
+"
+      attribute 129927 "ON_CREATE_METHOD_NAME"
+	package explicit_type "String"
+	init_value "=  \"onCreate\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>ON_CREATE_METHOD_NAME</code>.
+
+"
+      end
+
+      attribute 130055 "ON_DELETE_METHOD_NAME"
+	package explicit_type "String"
+	init_value "=  \"onDelete\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>ON_DELETE_METHOD_NAME</code>.
+
+"
+      end
+
+      attribute 130183 "ON_PERSIST_METHOD_NAME"
+	package explicit_type "String"
+	init_value "=  \"onPersist\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>ON_PERSIST_METHOD_NAME</code>.
+
+"
+      end
+
+      attribute 130311 "ON_UPDATE_METHOD_NAME"
+	package explicit_type "String"
+	init_value "=  \"onUpdate\""
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+	comment "
+<code>ON_UPDATE_METHOD_NAME</code>.
+
+"
+      end
+
+      operation 133639 "onCreate"
+	package explicit_return_type "boolean"
+	nparams 3
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called when an component is created (still transient).
+
+@param entityFactory
+           an entity factory instance which can be used to complete the
+           lifecycle step.
+@param principal
+           the principal triggering the action.
+@param entityLifecycleHandler
+           entityLifecycleHandler.
+@return true if the state of the component has been updated.
+"
+      end
+
+      operation 133767 "onDelete"
+	package explicit_return_type "boolean"
+	nparams 3
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called just before an component is deleted (delete).
+
+@param entityFactory
+           an entity factory instance which can be used to complete the
+           lifecycle step.
+@param principal
+           the principal triggering the action.
+@param entityLifecycleHandler
+           entityLifecycleHandler.
+@return true if the state of the component has been updated.
+"
+      end
+
+      operation 133895 "onPersist"
+	package explicit_return_type "boolean"
+	nparams 3
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called just before an component is persisted (insert).
+
+@param entityFactory
+           an entity factory instance which can be used to complete the
+           lifecycle step.
+@param principal
+           the principal triggering the action.
+@param entityLifecycleHandler
+           entityLifecycleHandler.
+@return true if the state of the component has been updated.
+"
+      end
+
+      operation 134023 "onUpdate"
+	package explicit_return_type "boolean"
+	nparams 3
+	  param inout name "entityFactory" type class_ref 131591 // IEntityFactory
+	  param inout name "principal" explicit_type "UserPrincipal"
+	  param inout name "entityLifecycleHandler" type class_ref 131719 // IEntityLifecycleHandler
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}, ${t2} ${p2}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Called just before an component is updated (update).
+
+@param entityFactory
+           an entity factory instance which can be used to complete the
+           lifecycle step.
+@param principal
+           the principal triggering the action.
+@param entityLifecycleHandler
+           entityLifecycleHandler.
+@return true if the state of the component has been updated.
+"
+      end
+    end
+  end
+
+  deploymentview 129287 "component"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 129799 "IComponentExtension"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 130311 // IComponentExtension
+      end
+    end
+
+    artifact 129927 "IComponentFactoryAware"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 130439 // IComponentFactoryAware
+      end
+    end
+
+    artifact 130055 "AbstractComponentExtension"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
+${definition}"
+      associated_classes
+	class_ref 130055 // AbstractComponentExtension
+      end
+    end
+
+    artifact 130183 "ComponentException"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.util.exception.NestedRuntimeException;
+${definition}"
+      associated_classes
+	class_ref 130695 // ComponentException
+      end
+    end
+
+    artifact 130311 "IComponentCollectionFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Collection;
+${definition}"
+      associated_classes
+	class_ref 131079 // IComponentCollectionFactory
+      end
+    end
+
+    artifact 130439 "DefaultComponentCollectionFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+${definition}"
+      associated_classes
+	class_ref 130951 // DefaultComponentCollectionFactory
+      end
+    end
+
+    artifact 130567 "IComponentExtensionFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+${definition}"
+      associated_classes
+	class_ref 131335 // IComponentExtensionFactory
+      end
+    end
+
+    artifact 130695 "DefaultComponentExtensionFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.lang.reflect.InvocationTargetException;
+import org.apache.commons.beanutils.ConstructorUtils;
+${definition}"
+      associated_classes
+	class_ref 131207 // DefaultComponentExtensionFactory
+      end
+    end
+
+    artifact 130823 "ILifecycleCapable"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.entity.IEntityLifecycleHandler;
+import com.d2s.framework.security.UserPrincipal;
+${definition}"
+      associated_classes
+	class_ref 131463 // ILifecycleCapable
+      end
+    end
+
+    artifact 130951 "IComponent"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Map;
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
+${definition}"
+      associated_classes
+	class_ref 130183 // IComponent
+      end
+    end
+
+    artifact 131207 "IComponentFactory"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
+${definition}"
+      associated_classes
+	class_ref 130567 // IComponentFactory
+      end
+    end
+  end
+
+  package_ref 130183 // basic
+
+  package_ref 130311 // service
+end

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Maven">
+  <bannerLeft>
+    <name>Design2See</name>
+    <src>images/d2s-small.png</src>
+    <href>http://www.design2see.com</href>
+  </bannerLeft>
+  <!--
+    <bannerRight>
+    <src>images/d2s-small.png</src>
+    </bannerRight>
+  -->
+  <body>
+    <links>
+      <item
+        name="Design2See"
+        href="http://www.design2see.com/" />
+    </links>
+
+    <menu name="Design2See Application Framework">
+      <item
+        name="Introduction"
+        href="index.html" />
+    </menu>
+    <menu name="Beans Doc">
+      <item
+        name="Standard beans"
+        href="beandocs/index.html" />
+    </menu>
+    <menu ref="parent" />
+    <menu ref="modules"/>
+    <menu ref="reports" />
+  </body>
+</project>

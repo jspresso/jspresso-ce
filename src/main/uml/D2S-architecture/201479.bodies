@@ -1,0 +1,74 @@
+class SelectionChangeSupport
+!!!402951.java!!!	SelectionChangeSupport(inout source : ISelectable)
+
+    if (source == null) {
+      throw new NullPointerException();
+    }
+    this.source = source;
+!!!403079.java!!!	addInhibitedListener(inout listener : ISelectionChangeListener) : void
+
+    if (inhibitedListeners == null && listener != null) {
+      inhibitedListeners = new HashSet<ISelectionChangeListener>();
+    }
+    inhibitedListeners.add(listener);
+!!!403207.java!!!	addSelectionChangeListener(inout listener : ISelectionChangeListener) : void
+
+    if (listener != null) {
+      if (listeners == null) {
+        listeners = new LinkedHashSet<ISelectionChangeListener>();
+      }
+      if (!listeners.contains(listener)) {
+        listeners.add(listener);
+      }
+    }
+!!!403335.java!!!	fireSelectionChange() : void
+
+    SelectionChangeEvent evt = new SelectionChangeEvent(source,
+        oldSelectedIndices, selectedIndices, leadingIndex);
+    fireSelectionChange(evt);
+!!!403463.java!!!	fireSelectionChange(inout evt : SelectionChangeEvent) : void
+
+    if (listeners != null) {
+      int[] oldSelection = evt.getOldSelection();
+      int[] newSelection = evt.getNewSelection();
+      if (oldSelection == null && newSelection == null) {
+        return;
+      }
+      if (oldSelection != null && newSelection != null
+          && Arrays.equals(oldSelection, newSelection)) {
+        return;
+      }
+      for (ISelectionChangeListener listener : listeners) {
+        if (inhibitedListeners == null
+            || !inhibitedListeners.contains(listener)) {
+          listener.selectionChange(evt);
+        }
+      }
+    }
+!!!403591.java!!!	getSelectedIndices() : int
+
+    return selectedIndices;
+!!!403719.java!!!	removeInhibitedListener(inout listener : ISelectionChangeListener) : void
+
+    if (inhibitedListeners == null || listener == null) {
+      return;
+    }
+    inhibitedListeners.remove(listener);
+!!!403847.java!!!	removeSelectionChangeListener(inout listener : ISelectionChangeListener) : void
+
+    if (listener != null && listeners != null) {
+      listeners.remove(listener);
+    }
+!!!403975.java!!!	setSelectedIndices(in selectedIndices : int) : void
+
+    int leadingInd = -1;
+    if (selectedIndices != null && selectedIndices.length > 0) {
+      leadingInd = selectedIndices[selectedIndices.length - 1];
+    }
+    setSelectedIndices(selectedIndices, leadingInd);
+!!!404103.java!!!	setSelectedIndices(in selectedInds : int, in leadingInd : int) : void
+
+    this.oldSelectedIndices = this.selectedIndices;
+    this.selectedIndices = selectedInds;
+    this.leadingIndex = leadingInd;
+    fireSelectionChange();

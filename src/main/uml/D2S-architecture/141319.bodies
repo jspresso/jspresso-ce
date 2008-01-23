@@ -1,0 +1,13 @@
+class BasicSourceCodePropertyDescriptor
+!!!175495.java!!!	getLanguage() : String
+
+    return language;
+!!!175623.java!!!	setLanguage(in language : String) : void
+
+    this.language = language;
+!!!175751.java!!!	clone() : BasicSourceCodePropertyDescriptor
+
+    BasicSourceCodePropertyDescriptor clonedDescriptor = (BasicSourceCodePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;

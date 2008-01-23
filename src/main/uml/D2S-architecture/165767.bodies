@@ -1,0 +1,10 @@
+class SaveBinaryPropertyAsFileAction
+!!!280199.java!!!	SaveBinaryPropertyAsFileAction()
+
+    setFileSaveCallback(new ConnectorValueGetterCallback());
+!!!280327.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    IFileFilterable modelDescriptor = (IFileFilterable) context
+        .get(ActionContextConstants.MODEL_DESCRIPTOR);
+    setFileFilter(modelDescriptor.getFileFilter());
+    return super.execute(actionHandler, context);

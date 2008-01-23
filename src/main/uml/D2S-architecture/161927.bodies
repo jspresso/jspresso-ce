@@ -1,0 +1,6 @@
+class ExecuteActionAction
+!!!257671.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
+
+    IAction action = (IAction) context.get(ActionContextConstants.ACTION_PARAM);
+    return actionHandler.execute(action, context)
+        && super.execute(actionHandler, context);

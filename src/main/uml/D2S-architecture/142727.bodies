@@ -1,0 +1,10 @@
+class EntityRegistryException
+!!!182279.java!!!	EntityRegistryException(in message : String)
+
+    super(message);
+!!!182407.java!!!	EntityRegistryException(inout nestedException : Throwable)
+
+    super(nestedException);
+!!!182535.java!!!	EntityRegistryException(inout nestedException : Throwable, in message : String)
+
+    super(nestedException, message);

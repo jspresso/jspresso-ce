@@ -1,0 +1,442 @@
+format 48
+"basic" // com::d2s::framework::application::view::descriptor::basic
+  revision 2
+  modified_by 7 "Vincent"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  java_dir "com/d2s/framework/application/view/descriptor/basic"
+  java_package "com.d2s.framework.application.view.descriptor.basic"
+  classview 136071 "basic"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    class 164359 "BasicModuleDescriptor"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is a default implementation of a simple module view descriptor.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 179591 // <generalisation>
+	relation 179591 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 179591 // <generalisation>
+	  b parent class_ref 153479 // BasicTreeViewDescriptor
+      end
+
+      operation 275335 "BasicModuleDescriptor"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicModuleDescriptor</code> instance.
+"
+      end
+    end
+
+    class 164487 "BasicSubModuleDescriptor"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is the default implementation of a simple module view descriptor.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 179719 // <generalisation>
+	relation 179719 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 179719 // <generalisation>
+	  b parent class_ref 152967 // BasicSimpleTreeLevelDescriptor
+      end
+
+      attribute 158471 "descriptor"
+	private explicit_type "DefaultIconDescriptor"
+	cpp_decl ""
+	java_decl "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	php_decl ""
+	idl_decl ""
+      end
+
+      classrelation 179975 // projectedViewDescriptor (<unidirectional association>)
+	relation 179975 --->
+	  a role_name "projectedViewDescriptor" private
+	    java "  ${comment}${@}${visibility}${static}${final}${transient}${volatile}${type} ${name}${value};
+"
+	    classrelation_ref 179975 // projectedViewDescriptor (<unidirectional association>)
+	  b parent class_ref 146439 // IViewDescriptor
+      end
+
+      operation 275463 "BasicSubModuleDescriptor"
+	public explicit_return_type ""
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>BasicSubModuleDescriptor</code> instance.
+"
+      end
+
+      operation 275591 "getDescription"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 275719 "getI18nDescription"
+	public explicit_return_type "String"
+	nparams 2
+	  param inout name "translationProvider" explicit_type "ITranslationProvider"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 275847 "getI18nName"
+	public explicit_return_type "String"
+	nparams 2
+	  param inout name "translationProvider" explicit_type "ITranslationProvider"
+	  param inout name "locale" explicit_type "Locale"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 275975 "getIconImageURL"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 276103 "getName"
+	public explicit_return_type "String"
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 276231 "getProjectedViewDescriptor"
+	public return_type class_ref 146439 // IViewDescriptor
+	nparams 0
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Gets the projectedViewDescriptor.
+
+@return the projectedViewDescriptor.
+"
+      end
+
+      operation 276359 "setDescription"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "description" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the description.
+
+@param description
+           the description to set.
+"
+      end
+
+      operation 276487 "setIconImageURL"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "iconImageURL" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the iconImageURL.
+
+@param iconImageURL
+           the iconImageURL to set.
+"
+      end
+
+      operation 276615 "setName"
+	public explicit_return_type "void"
+	nparams 1
+	  param in name "name" explicit_type "String"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the name.
+
+@param name
+           the name to set.
+"
+      end
+
+      operation 276743 "setProjectedViewDescriptor"
+	public explicit_return_type "void"
+	nparams 1
+	  param inout name "projectedViewDescriptor" type class_ref 146439 // IViewDescriptor
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Sets the projectedViewDescriptor.
+
+@param projectedViewDescriptor
+           the projectedViewDescriptor to set.
+"
+      end
+    end
+
+    class 164615 "ModuleCardViewDescriptor"
+      visibility public 
+      cpp_decl ""
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "
+This is a card view descriptor which stacks the projected view descriptors of
+the module module structure.
+<p>
+Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+<p>
+
+@version $LastChangedRevision: 959 $
+@author Vincent Vandenschrick
+"
+      classrelation 180103 // <generalisation>
+	relation 180103 ---|>
+	  a public
+	    java "${type}"
+	    classrelation_ref 180103 // <generalisation>
+	  b parent class_ref 150919 // AbstractCardViewDescriptor
+      end
+
+      operation 276871 "ModuleCardViewDescriptor"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "module" type class_ref 159239 // Module
+	
+	java_def "  ${comment}${@}${visibility}${synchronized}${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+Constructs a new <code>ModuleCardViewDescriptor</code> instance.
+
+@param module
+           the module.
+"
+      end
+
+      operation 276999 "getCardNameForModel"
+	public explicit_return_type "String"
+	nparams 1
+	  param inout name "model" explicit_type "Object"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+	comment "
+{@inheritDoc}
+"
+      end
+
+      operation 277127 "prepareModuleCards"
+	private explicit_return_type "void"
+	nparams 2
+	  param inout name "moduleCards" explicit_type "Map<String, IViewDescriptor>"
+	  param inout name "modules" explicit_type "List<SubModule>"
+	
+	java_def "  ${comment}${@}${visibility}${final}${static}${abstract}${synchronized}${type} ${name}${(}${t0} ${p0}, ${t1} ${p1}${)}${throws}${staticnl}{
+${body}}
+"
+	
+	
+      end
+    end
+  end
+
+  deploymentview 135559 "basic"
+    //deployment diagram settings
+    package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 161543 "BasicModuleDescriptor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 164359 // BasicModuleDescriptor
+      end
+    end
+
+    artifact 161671 "BasicSubModuleDescriptor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.Locale;
+import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
+import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
+import com.d2s.framework.util.descriptor.IIconDescriptor;
+import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
+${definition}"
+      associated_classes
+	class_ref 164487 // BasicSubModuleDescriptor
+      end
+    end
+
+    artifact 161799 "ModuleCardViewDescriptor"
+      stereotype "source"
+      java_src "${comment}
+${package}
+${imports}
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import com.d2s.framework.application.model.BeanCollectionModule;
+import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.SubModule;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
+${definition}"
+      associated_classes
+	class_ref 164615 // ModuleCardViewDescriptor
+      end
+    end
+  end
+end

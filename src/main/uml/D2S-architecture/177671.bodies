@@ -1,0 +1,16 @@
+class EvenOddTableCellRenderer
+!!!334727.java!!!	EvenOddTableCellRenderer(in column : int)
+
+    this.column = column;
+!!!334855.java!!!	getTableCellRendererComponent(inout table : ULCTable, inout value : Object, inout isSelected : boolean, inout hasFocus : boolean, in row : int) : IRendererComponent
+
+    IRendererComponent renderer = super.getTableCellRendererComponent(table,
+        value, isSelected, hasFocus, row);
+    UlcUtil.alternateEvenOddBackground((ULCComponent) renderer, table,
+        isSelected, row);
+    if (isSelected && hasFocus && table.getModel().isCellEditable(row, column)) {
+      ((ULCComponent) renderer).setBackground(((ULCComponent) renderer)
+          .getBackground().brighter());
+      ((ULCComponent) renderer).setForeground(table.getForeground());
+    }
+    return renderer;

@@ -1,0 +1,56 @@
+format 45
+
+componentcanvas 128007 component_ref 129159 // Frontend Controller
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 35 35 1995 167 57
+componentcanvas 128135 component_ref 129287 // Backend Controller
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 317 35 2000 167 57
+componentcanvas 128519 component_ref 129415 // Domain Model
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 572 217 2000 167 57
+componentcanvas 128775 component_ref 129799 // View
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 35 217 2000 167 57
+componentcanvas 129159 component_ref 129927 // Frontend Action
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 35 321 2000 167 57
+componentcanvas 130311 component_ref 130055 // Backend Action
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 317 321 2000 167 57
+componentcanvas 130695 component_ref 130183 // Frontend module
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 35 131 2000 167 57
+componentcanvas 130823 component_ref 130311 // Backend Module
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 317 131 2005 167 57
+fragment 132359 "Frontend"
+  xyzwh 2 2 1989 247 402
+end
+fragment 132487 "backend"
+  xyzwh 279 2 1989 225 403
+end
+fragment 132615 "Model"
+  xyzwh 518 2 1994 231 403
+end
+simplerelationcanvas 129543 simplerelation_ref 129415
+  from ref 128775 z 1999 to ref 129159
+simplerelationcanvas 130567 simplerelation_ref 129927
+  from ref 128007 z 1994 to ref 128135
+simplerelationcanvas 130951 simplerelation_ref 130055
+  from ref 128007 z 1994 to ref 130695
+simplerelationcanvas 131079 simplerelation_ref 130183
+  from ref 130695 z 1999 to ref 128775
+simplerelationcanvas 131207 simplerelation_ref 130311
+  from ref 129159 z 1999 to ref 130311
+simplerelationcanvas 131335 simplerelation_ref 130439
+  from ref 130695 z 1999 to ref 130823
+simplerelationcanvas 131463 simplerelation_ref 130567
+  from ref 128135 z 1999 to ref 130823
+simplerelationcanvas 131591 simplerelation_ref 130695
+  from ref 128775 z 1999 to ref 128519
+simplerelationcanvas 132103 simplerelation_ref 130823
+  geometry HV
+  from ref 130311 z 1999 to point 653 347
+  line 132231 z 1999 to ref 128519
+end

@@ -1,0 +1,7 @@
+class BasicTabViewDescriptor
+!!!219527.java!!!	getChildViewDescriptors() : IViewDescriptor
+
+    return viewDescriptors;
+!!!219655.java!!!	setViewDescriptors(inout viewDescriptors : List<IViewDescriptor>) : void
+
+    this.viewDescriptors = viewDescriptors;

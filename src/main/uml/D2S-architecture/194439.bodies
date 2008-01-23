@@ -1,0 +1,43 @@
+class SwingLauncher
+!!!380679.java!!!	SwingLauncher()
+
+    // Helper class constructor.
+!!!380807.java!!!	main(in args : String) : void
+
+    SwingUtil.installDefaults();
+    Options options = new Options();
+    options.addOption(OptionBuilder.withArgName("splash").hasArg()
+        .withDescription(
+            "use given image URL for splash (Supports classpath: pseudo URLs)")
+        .create("splash"));
+    options.addOption(OptionBuilder.withArgName("applicationClass").hasArg()
+        .withDescription("use given class name as startup class.").isRequired()
+        .create("applicationClass"));
+    CommandLineParser parser = new BasicParser();
+    boolean splashed = false;
+    try {
+      CommandLine cmd = parser.parse(options, args);
+      IStartup startup = instanciateStartup(cmd
+          .getOptionValue("applicationClass"));
+      if (cmd.hasOption("splash")) {
+        SplashWindow.splash(UrlHelper.createURL(cmd.getOptionValue("splash")));
+        splashed = true;
+      }
+      startup.start();
+    } catch (ParseException ex) {
+      System.err.println(ex.getLocalizedMessage());
+      HelpFormatter formatter = new HelpFormatter();
+      formatter.printHelp(SwingLauncher.class.getSimpleName(), options);
+    } catch (InstantiationException ex) {
+      ex.printStackTrace(System.err);
+    } catch (IllegalAccessException ex) {
+      ex.printStackTrace(System.err);
+    } catch (ClassNotFoundException ex) {
+      ex.printStackTrace(System.err);
+    }
+    if (splashed) {
+      SplashWindow.disposeSplash();
+    }
+!!!380935.java!!!	instanciateStartup(in startupClassName : String) : IStartup
+
+    return (IStartup) Class.forName(startupClassName).newInstance();
