@@ -4732,11 +4732,16 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     &lt;fileset dir="${model.src.dir}"&gt;
       &lt;include name="*.java"/&gt;
     &lt;/fileset&gt;
-    &lt;component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin" destdir="${resources.src.dir}" version="3.0" /&gt;
+    &lt;component classname="org.xdoclet.plugin.hibernate.HibernateMappingPlugin"
+               destdir="${resources.src.dir}"
+               version="3.0" /&gt;
   &lt;/xdoclet&gt;
   &lt;replaceregexp byline="true"&gt; <co id="replaceregexp" />
     &lt;regexp pattern="&amp;lt;component name=&amp;quot;(.*)&amp;quot;&amp;gt;" /&gt;
-    &lt;substitution expression="&amp;lt;component name=&amp;quot;\1&amp;quot;&amp;gt;&amp;lt;tuplizer entity-mode=&amp;quot;pojo&amp;quot; class=&amp;quot;com.d2s.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&amp;quot; /&amp;gt;" /&gt;
+    &lt;substitution expression="&amp;lt;component name=&amp;quot;\1&amp;quot;&amp;gt;
+        &amp;lt;tuplizer entity-mode=&amp;quot;pojo&amp;quot;
+        class=&amp;quot;com.d2s.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&amp;quot;
+        /&amp;gt;" /&gt;
     &lt;fileset dir="${resources.src.dir}"&gt;
       &lt;include name="**/*.hbm.xml" /&gt;
     &lt;/fileset&gt;
@@ -5177,7 +5182,47 @@ hrsample-app { <co id="hrsample-app" />
   <section>
     <title>Creating and registering application modules</title>
 
-    <para>Before getting further in this section, let's first define what an
-    <trademark>D2S</trademark> application module is. </para>
+    <para>Before getting further in this section, let's first agree on what an
+    application module is. <trademark>D2S</trademark> defines an application
+    module as a projection of the domain model offering services. It is an
+    autonomous part of the application that can be registered in the frontend
+    controller to make it available to the end-user. As of this writing, the
+    built-in frontend controllers (Swing, ULC and Wings) create a main MDI
+    frame and give access to the registered modules through a menu. Whenever a
+    module is started, a new internal frame is opened and the module structure
+    is displayed.</para>
+
+    <para>Since we talk about module structure, let's explore it. A module is
+    basically a tree structure with nested sub-modules (refer to the modules
+    class diagram to better understand it). The module is the root of this
+    tree structure and each nested sub-module (that can also nest other
+    sub-modules) is an actual application entry point.</para>
+
+    <para>There are 3 different types of sub-modules :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Basic sub-module : it offers a view (and its attached services)
+        on an arbitrary model (if any).</para>
+      </listitem>
+
+      <listitem>
+        <para>Bean sub-module : it offers a view (and its attached services)
+        on a bean (maybe an entity but it is not mandatory; it can be any java
+        bean). The contained java bean can be accessed (get / set) at any time
+        and the projected view model gets updated accordingly.</para>
+      </listitem>
+
+      <listitem>
+        <para>Bean collection sub-module : it offers a view (and its attached
+        services) on a collection of beans (maybe a collection of entities but
+        it is not mandatory; it can be any collection of java beans). The
+        contained java beans collection can be accessed (get / set) at any
+        time and the projected view model gets updated accordingly.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Since a sub-module is also a module, we will indifferently use both
+    terms later in the document.</para>
   </section>
 </chapter>

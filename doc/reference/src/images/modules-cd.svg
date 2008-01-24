@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Bouml (http://bouml.free.fr/) -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="347" height="835" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<g>
+	<line stroke="black" stroke-opacity="1" x1="157" y1="552" x2="157" y2="439" />
+	<line stroke="black" stroke-opacity="1" x1="157" y1="433" x2="151" y2="439" />
+	<line stroke="black" stroke-opacity="1" x1="157" y1="433" x2="163" y2="439" />
+	<line stroke="black" stroke-opacity="1" x1="151" y1="439" x2="163" y2="439" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="66" y1="604" x2="5" y2="604" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="5" y1="604" x2="5" y2="218" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="241" y1="218" x2="306" y2="218" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="219" y1="716" x2="189" y2="664" />
+	<line stroke="black" stroke-opacity="1" x1="187" y1="659" x2="184" y2="667" />
+	<line stroke="black" stroke-opacity="1" x1="187" y1="659" x2="195" y2="661" />
+	<line stroke="black" stroke-opacity="1" x1="184" y1="667" x2="195" y2="661" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="104" y1="716" x2="127" y2="664" />
+	<line stroke="black" stroke-opacity="1" x1="130" y1="659" x2="122" y2="661" />
+	<line stroke="black" stroke-opacity="1" x1="130" y1="659" x2="132" y2="666" />
+	<line stroke="black" stroke-opacity="1" x1="122" y1="661" x2="132" y2="666" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="247" y1="606" x2="253" y2="612" />
+	<line stroke="black" stroke-opacity="1" x1="247" y1="606" x2="253" y2="600" />
+	<line stroke="black" stroke-opacity="1" x1="306" y1="606" x2="247" y2="606" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="72" y1="218" x2="66" y2="212" />
+	<line stroke="black" stroke-opacity="1" x1="72" y1="218" x2="66" y2="224" />
+	<line stroke="black" stroke-opacity="1" x1="5" y1="218" x2="72" y2="218" />
+</g>
+<g>
+	<line stroke="black" stroke-opacity="1" x1="306" y1="218" x2="306" y2="606" />
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="237" y="7" width="3" height="425" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="77" y="429" width="163" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="73" y="3" width="164" height="426" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="155" y="18">Module</text>
+	<line stroke="black" stroke-opacity="1" x1="73" y1="31" x2="237" y2="31" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="46">setIconImageURLProvider()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="64">getStartupAction()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="82">setStartupAction()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="100">getViewDescriptor()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="118">addSubModule()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="136">addSubModules()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="154">getDescription()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="172">getGrantedRoles()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="190">getI18nDescription()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="208">getI18nName()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="226">getIconImageURL()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="244">getName()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="262">getSubModules()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="280">removeSubModule()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="298">removeSubModules()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="316">setDescription()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="334">setGrantedRoles()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="352">setI18nDescription()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="370">setI18nName()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="388">setIconImageURL()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="406">setName()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="77" y="424">setSubModules()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="144" y="721" width="3" height="65" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="34" y="783" width="113" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="30" y="717" width="114" height="66" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="87" y="732">BeanModule</text>
+	<line stroke="black" stroke-opacity="1" x1="30" y1="745" x2="144" y2="745" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="34" y="760">getModuleObject()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="34" y="778">setModuleObject()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="243" y="557" width="3" height="101" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="71" y="655" width="175" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="67" y="553" width="176" height="102" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="155" y="568">SubModule</text>
+	<line stroke="black" stroke-opacity="1" x1="67" y1="581" x2="243" y2="581" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="71" y="596">getParent()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="71" y="614">getProjectedViewDescriptor()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="71" y="632">setParent()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="71" y="650">setProjectedViewDescriptor()</text>
+</g>
+<g>
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="331" y="721" width="3" height="101" />
+	<rect fill="#808080" stroke="none" stroke-opacity="1" x="167" y="819" width="167" height="3" />
+	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="163" y="717" width="168" height="102" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="247" y="732">BeanCollectionModule</text>
+	<line stroke="black" stroke-opacity="1" x1="163" y1="745" x2="331" y2="745" />
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="167" y="760">getElementViewDescriptor()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="167" y="778">getModuleObjects()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="167" y="796">setElementViewDescriptor()</text>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="167" y="814">setModuleObjects()</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="248" y="626">subModules</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="26" y="210">parent</text>
+</g>
+<g>
+	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="389">&lt;&lt;List&gt;&gt;</text>
+</g>
+</svg>

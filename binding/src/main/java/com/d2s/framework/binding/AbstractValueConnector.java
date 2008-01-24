@@ -5,8 +5,11 @@ package com.d2s.framework.binding;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -537,6 +540,27 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *            the connectee value to set
    */
   protected abstract void setConnecteeValue(Object connecteeValue);
+
+  /**
+   * Computes the full connector path folowing the parent / child hierarchy.
+   * 
+   * @return the full connector path folowing the parent / child hierarchy.
+   */
+  public String getConnectorPath() {
+    List<String> connectorPath = new ArrayList<String>();
+    IValueConnector c = this;
+    while (c != null) {
+      connectorPath.add(c.getId());
+      c = c.getParentConnector();
+    }
+    Collections.reverse(connectorPath);
+    StringBuffer path = new StringBuffer();
+    for (String id : connectorPath) {
+      path.append("/");
+      path.append(id);
+    }
+    return path.toString();
+  }
 
   private class ModelConnectorPropertyChangeListener implements
       PropertyChangeListener {
