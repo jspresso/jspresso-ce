@@ -390,6 +390,9 @@ public abstract class AbstractValueConnector extends AbstractConnector
     IValueConnector oldModelConnector = this.modelConnector;
     this.modelConnector = modelConnector;
     if (getModelConnector() != null) {
+      if (getId() == null) {
+        setId(modelConnector.getId());
+      }
       getModelConnector().addConnectorValueChangeListener(this);
       addConnectorValueChangeListener(getModelConnector());
       if (readableListener == null) {

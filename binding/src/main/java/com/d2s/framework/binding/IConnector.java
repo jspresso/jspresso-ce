@@ -46,6 +46,15 @@ public interface IConnector extends IPropertyChangeCapable, Cloneable {
   String getId();
 
   /**
+   * Sets the identifier of the connector. In a bean property connector, this
+   * identifier will be the property name.
+   * 
+   * @param id
+   *            The connector identifier.
+   */
+  void setId(String id);
+
+  /**
    * Tells this connector to fully update its state (readability, writability,
    * actionability ...).
    */
