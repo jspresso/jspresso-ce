@@ -122,9 +122,8 @@ public class ViewTester {
     IView<JComponent> view = mockFrontController.getViewFactory().createView(
         viewDescriptor, mockFrontController, locale);
 
-    IValueConnector modelConnector = mockBackController
-        .getBeanConnectorFactory().createModelConnector(
-            viewDescriptor.getModelDescriptor());
+    IValueConnector modelConnector = mockBackController.createModelConnector(
+        "modelConnector", viewDescriptor.getModelDescriptor());
 
     IEntityFactory entityFactory = mockBackController.getEntityFactory();
 

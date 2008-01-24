@@ -58,9 +58,12 @@ public abstract class AbstractConnector extends AbstractPropertyChangeCapable
   }
 
   /**
-   * {@inheritDoc}
+   * Changes the connector id.
+   * 
+   * @param id
+   *            the connector identifier.
    */
-  public void setId(String id) {
+  protected void setId(String id) {
     this.id = id;
   }
 

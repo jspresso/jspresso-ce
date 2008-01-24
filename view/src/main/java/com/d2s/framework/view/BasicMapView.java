@@ -4,6 +4,7 @@
 package com.d2s.framework.view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +51,16 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
       return null;
     }
     return new ArrayList<IView<E>>(children.values());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Map<String, IView<E>> getChildrenMap() {
+    if (children == null) {
+      return null;
+    }
+    return new HashMap<String, IView<E>>(children);
   }
 
   /**

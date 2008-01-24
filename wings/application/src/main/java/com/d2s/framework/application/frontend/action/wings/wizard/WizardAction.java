@@ -62,8 +62,8 @@ public class WizardAction extends AbstractWingsAction {
     final SDialog dialog;
     final Set<String> alreadyDisplayedSteps = new HashSet<String>();
     final IValueConnector modelConnector = modelConnectorFactory
-        .createModelConnector(firstWizardStep.getViewDescriptor()
-            .getModelDescriptor());
+        .createModelConnector(ACTION_MODEL_CONNECTOR_ID, firstWizardStep
+            .getViewDescriptor().getModelDescriptor());
 
     Map<String, Object> wizardModelInit = (Map<String, Object>) context
         .get(ActionContextConstants.ACTION_PARAM);
@@ -80,7 +80,7 @@ public class WizardAction extends AbstractWingsAction {
         getLocale(context)));
 
     dialog.setLayout(new SBorderLayout());
-    //dialog.setClosable(false);
+    // dialog.setClosable(false);
 
     final SPanel cardPanel = new SPanel();
     cardPanel.setBorder(new SEmptyBorder(new Insets(5, 10, 5, 10)));
@@ -157,7 +157,8 @@ public class WizardAction extends AbstractWingsAction {
     });
 
     SPanel buttonPanel = new SPanel();
-    SPanel buttonBox = new SPanel(new SBoxLayout(/*buttonPanel,*/ SBoxLayout.X_AXIS));
+    SPanel buttonBox = new SPanel(new SBoxLayout(
+        /* buttonPanel, */SBoxLayout.X_AXIS));
 
     buttonPanel.setLayout(new SBorderLayout());
     buttonPanel.add(new SSeparator(), SBorderLayout.NORTH);

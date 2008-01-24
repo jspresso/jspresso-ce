@@ -98,7 +98,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
       }
     }
     ModelConnector modelConnector = (ModelConnector) getBeanConnectorFactory(
-        context).createModelConnector(
+        context).createModelConnector(ACTION_MODEL_CONNECTOR_ID,
         new BasicQueryEntityDescriptor(erqDescriptor.getReferencedDescriptor(),
             queryEntity.getClass()));
     modelConnector.setConnectorValue(queryEntity);

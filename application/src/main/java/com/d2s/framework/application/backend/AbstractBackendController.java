@@ -62,8 +62,9 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
-    return beanConnectorFactory.createModelConnector(modelDescriptor);
+  public IValueConnector createModelConnector(String id,
+      IModelDescriptor modelDescriptor) {
+    return beanConnectorFactory.createModelConnector(id, modelDescriptor);
   }
 
   /**
@@ -267,7 +268,8 @@ public abstract class AbstractBackendController extends AbstractController
     moduleConnectors = new HashMap<String, IValueConnector>();
     for (Map.Entry<String, Module> moduleEntry : modules.entrySet()) {
       IValueConnector nextModuleConnector = beanConnectorFactory
-          .createModelConnector(ModuleDescriptor.MODULE_DESCRIPTOR);
+          .createModelConnector(moduleEntry.getKey(),
+              ModuleDescriptor.MODULE_DESCRIPTOR);
       nextModuleConnector.setConnectorValue(moduleEntry.getValue());
       moduleConnectors.put(moduleEntry.getKey(), nextModuleConnector);
     }

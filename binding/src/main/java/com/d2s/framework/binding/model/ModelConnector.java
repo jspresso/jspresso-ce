@@ -26,14 +26,19 @@ public class ModelConnector extends ModelRefPropertyConnector {
   /**
    * Constructs a new instance based on the model class passed as parameter.
    * 
+   * @param id
+   *            the connector identifier.
    * @param modelDescriptor
    *            the model descriptor backing this connector.
    * @param modelConnectorFactory
    *            the factory used to create the child property connectors.
    */
-  ModelConnector(IComponentDescriptorProvider<?> modelDescriptor,
+  ModelConnector(String id, IComponentDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory);
+    if (id != null) {
+      setId(id);
+    }
     this.modelProvider = new EmbeddedModelProvider(modelDescriptor);
     modelProviderChanged(null);
   }

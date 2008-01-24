@@ -54,7 +54,8 @@ public class EditComponentAction extends ModalDialogAction {
     context.put(ActionContextConstants.DIALOG_VIEW, componentView);
 
     IValueConnector componentConnector = modelConnectorFactory
-        .createModelConnector(getViewDescriptor(context).getModelDescriptor());
+        .createModelConnector(ACTION_MODEL_CONNECTOR_ID, getViewDescriptor(
+            context).getModelDescriptor());
     componentConnector.setConnectorValue(getModel(context));
 
     getMvcBinder(context)

@@ -145,8 +145,7 @@ public class ModelCollectionPropertyConnector extends ModelPropertyConnector
     componentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
         .getCollectionDescriptor().getElementDescriptor();
     IValueConnector elementConnector = modelConnectorFactory
-        .createModelConnector(componentDescriptor);
-    elementConnector.setId(connectorId);
+        .createModelConnector(connectorId, componentDescriptor);
     return elementConnector;
   }
 

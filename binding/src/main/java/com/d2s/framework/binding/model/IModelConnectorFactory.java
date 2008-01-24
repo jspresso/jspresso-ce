@@ -22,11 +22,14 @@ public interface IModelConnectorFactory {
   /**
    * Creates a model connector based on a model descriptor.
    * 
+   * @param id
+   *            the connector identifier.
    * @param modelDescriptor
    *            the model descriptor to create the connector for.
    * @return the created model connector.
    */
-  IValueConnector createModelConnector(IModelDescriptor modelDescriptor);
+  IValueConnector createModelConnector(String id,
+      IModelDescriptor modelDescriptor);
 
   /**
    * Gets the <code>IAccessorFactory</code> used.

@@ -48,11 +48,10 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     BasicCollectionDescriptor<IReport> modelDescriptor = new BasicCollectionDescriptor<IReport>();
-    modelDescriptor
-        .setCollectionInterface(List.class);
+    modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
     IValueConnector reportsConnector = beanConnectorFactory
-        .createModelConnector(modelDescriptor);
+        .createModelConnector("ActionModel", modelDescriptor);
     reportsConnector.setConnectorValue(createReportInstances(
         getTranslationProvider(context), getLocale(context)));
     context.put(ActionContextConstants.ACTION_PARAM, reportsConnector);

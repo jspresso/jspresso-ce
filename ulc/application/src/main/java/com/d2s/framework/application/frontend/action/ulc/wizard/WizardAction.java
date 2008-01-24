@@ -61,8 +61,8 @@ public class WizardAction extends AbstractUlcAction {
     final ULCDialog dialog;
     final Set<String> alreadyDisplayedSteps = new HashSet<String>();
     final IValueConnector modelConnector = modelConnectorFactory
-        .createModelConnector(firstWizardStep.getViewDescriptor()
-            .getModelDescriptor());
+        .createModelConnector(ACTION_MODEL_CONNECTOR_ID, firstWizardStep
+            .getViewDescriptor().getModelDescriptor());
 
     Map<String, Object> wizardModelInit = (Map<String, Object>) context
         .get(ActionContextConstants.ACTION_PARAM);

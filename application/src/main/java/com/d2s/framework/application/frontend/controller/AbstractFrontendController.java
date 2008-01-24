@@ -432,10 +432,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
         });
     for (IView<E> childView : moduleView.getChildren()) {
       if (childView instanceof IMapView) {
-        for (IView<E> grandChildView : ((IMapView<E>) childView).getChildren()) {
-          mvcBinder.bind(grandChildView.getConnector(), getBackendController()
-              .createModelConnector(
-                  grandChildView.getDescriptor().getModelDescriptor()));
+        for (Map.Entry<String, IView<E>> grandChildView : ((IMapView<E>) childView)
+            .getChildrenMap().entrySet()) {
+          mvcBinder.bind(grandChildView.getValue().getConnector(),
+              getBackendController().createModelConnector(
+                  moduleName + "_" + grandChildView.getKey(),
+                  grandChildView.getValue().getDescriptor()
+                      .getModelDescriptor()));
         }
       }
     }

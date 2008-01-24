@@ -65,7 +65,7 @@ public class WizardAction extends AbstractSwingAction {
     final JDialog dialog;
     final Set<String> alreadyDisplayedSteps = new HashSet<String>();
     final IValueConnector modelConnector = modelConnectorFactory
-        .createModelConnector(firstWizardStep.getViewDescriptor()
+        .createModelConnector(ACTION_MODEL_CONNECTOR_ID, firstWizardStep.getViewDescriptor()
             .getModelDescriptor());
 
     Map<String, Object> wizardModelInit = (Map<String, Object>) context

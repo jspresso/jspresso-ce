@@ -50,11 +50,10 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     BasicCollectionDescriptor<IDescriptor> modelDescriptor = new BasicCollectionDescriptor<IDescriptor>();
-    modelDescriptor
-        .setCollectionInterface(List.class);
+    modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
     IValueConnector actionsConnector = beanConnectorFactory
-        .createModelConnector(modelDescriptor);
+        .createModelConnector(ACTION_MODEL_CONNECTOR_ID, modelDescriptor);
     actionsConnector.setConnectorValue(createActionProxies(
         getTranslationProvider(context), getLocale(context)));
     context.put(ActionContextConstants.ACTION_PARAM, actionsConnector);

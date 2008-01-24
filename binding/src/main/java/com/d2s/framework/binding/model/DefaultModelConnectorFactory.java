@@ -33,11 +33,11 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   /**
    * {@inheritDoc}
    */
-  public IValueConnector createModelConnector(IModelDescriptor modelDescriptor) {
+  public IValueConnector createModelConnector(String id, IModelDescriptor modelDescriptor) {
     if (modelDescriptor instanceof IComponentDescriptor) {
-      return new ModelConnector((IComponentDescriptor<?>) modelDescriptor, this);
+      return new ModelConnector(id, (IComponentDescriptor<?>) modelDescriptor, this);
     } else if (modelDescriptor instanceof ICollectionDescriptor) {
-      return new ModelCollectionConnector(
+      return new ModelCollectionConnector(id,
           (ICollectionDescriptor<?>) modelDescriptor, this);
     } else if (modelDescriptor instanceof IPropertyDescriptor) {
       IValueConnector propertyConnector = null;

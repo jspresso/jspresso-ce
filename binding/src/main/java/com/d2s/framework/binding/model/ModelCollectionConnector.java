@@ -24,15 +24,20 @@ public class ModelCollectionConnector extends ModelCollectionPropertyConnector {
   /**
    * Constructs a new <code>ModelCollectionConnector</code> instance.
    * 
+   * @param id
+   *            the connector identifier.
    * @param modelDescriptor
    *            the model descriptor backing this connector.
    * @param modelConnectorFactory
    *            the factory used to create the collection model connectors.
    */
-  public ModelCollectionConnector(
+  ModelCollectionConnector(String id,
       ICollectionDescriptorProvider<?> modelDescriptor,
       IModelConnectorFactory modelConnectorFactory) {
     super(modelDescriptor, modelConnectorFactory);
+    if (id != null) {
+      setId(id);
+    }
   }
 
   /**

@@ -43,11 +43,14 @@ public interface IBackendController extends IController {
    * bean connector or a bean collection connector depending on the type of
    * model descriptor.
    * 
+   * @param id
+   *            the connector id.
    * @param modelDescriptor
    *            the model descriptor to create the connector for.
    * @return the created model connector.
    */
-  IValueConnector createModelConnector(IModelDescriptor modelDescriptor);
+  IValueConnector createModelConnector(String id,
+      IModelDescriptor modelDescriptor);
 
   /**
    * Gets the beanAccessorFactory for this backend controller.
