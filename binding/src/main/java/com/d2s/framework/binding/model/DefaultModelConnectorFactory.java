@@ -33,49 +33,50 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
   /**
    * {@inheritDoc}
    */
-  public IValueConnector createModelConnector(String id, IModelDescriptor modelDescriptor) {
+  public IValueConnector createModelConnector(String id,
+      IModelDescriptor modelDescriptor) {
+    IValueConnector modelConnector = null;
     if (modelDescriptor instanceof IComponentDescriptor) {
-      return new ModelConnector(id, (IComponentDescriptor<?>) modelDescriptor, this);
+      modelConnector = new ModelConnector(id,
+          (IComponentDescriptor<?>) modelDescriptor, this);
     } else if (modelDescriptor instanceof ICollectionDescriptor) {
-      return new ModelCollectionConnector(id,
+      modelConnector = new ModelCollectionConnector(id,
           (ICollectionDescriptor<?>) modelDescriptor, this);
     } else if (modelDescriptor instanceof IPropertyDescriptor) {
-      IValueConnector propertyConnector = null;
       if (modelDescriptor instanceof IReferencePropertyDescriptor) {
-        propertyConnector = new ModelRefPropertyConnector(
+        modelConnector = new ModelRefPropertyConnector(
             (IReferencePropertyDescriptor<?>) modelDescriptor, this);
       } else if (modelDescriptor instanceof ICollectionPropertyDescriptor) {
-        propertyConnector = new ModelCollectionPropertyConnector(
+        modelConnector = new ModelCollectionPropertyConnector(
             (ICollectionPropertyDescriptor<?>) modelDescriptor, this);
       } else if (modelDescriptor instanceof IScalarPropertyDescriptor) {
         if (modelDescriptor instanceof IIntegerPropertyDescriptor) {
-          propertyConnector = new ModelIntegerPropertyConnector(
+          modelConnector = new ModelIntegerPropertyConnector(
               (IIntegerPropertyDescriptor) modelDescriptor, accessorFactory);
         } else {
-          propertyConnector = new ModelScalarPropertyConnector(
+          modelConnector = new ModelScalarPropertyConnector(
               (IScalarPropertyDescriptor) modelDescriptor, accessorFactory);
         }
       }
-      if (propertyConnector != null) {
+      if (modelConnector != null) {
         if (((IPropertyDescriptor) modelDescriptor).isReadOnly()) {
-          propertyConnector.setLocallyWritable(false);
+          modelConnector.setLocallyWritable(false);
         }
         if (((IPropertyDescriptor) modelDescriptor).getReadabilityGates() != null) {
           for (IGate gate : ((IPropertyDescriptor) modelDescriptor)
               .getReadabilityGates()) {
-            propertyConnector.addReadabilityGate(gate.clone());
+            modelConnector.addReadabilityGate(gate.clone());
           }
         }
         if (((IPropertyDescriptor) modelDescriptor).getWritabilityGates() != null) {
           for (IGate gate : ((IPropertyDescriptor) modelDescriptor)
               .getWritabilityGates()) {
-            propertyConnector.addWritabilityGate(gate.clone());
+            modelConnector.addWritabilityGate(gate.clone());
           }
         }
       }
-      return propertyConnector;
     }
-    return null;
+    return modelConnector;
   }
 
   /**

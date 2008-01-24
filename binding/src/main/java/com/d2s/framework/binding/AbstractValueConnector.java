@@ -542,9 +542,7 @@ public abstract class AbstractValueConnector extends AbstractConnector
   protected abstract void setConnecteeValue(Object connecteeValue);
 
   /**
-   * Computes the full connector path folowing the parent / child hierarchy.
-   * 
-   * @return the full connector path folowing the parent / child hierarchy.
+   * {@inheritDoc}
    */
   public String getConnectorPath() {
     List<String> connectorPath = new ArrayList<String>();

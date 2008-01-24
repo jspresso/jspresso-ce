@@ -218,4 +218,11 @@ public interface IValueConnector extends IConnector,
    *            the parent connector.
    */
   void setParentConnector(ICompositeValueConnector parent);
+
+  /**
+   * Computes the full connector path following the parent / child hierarchy.
+   * 
+   * @return the full connector path following the parent / child hierarchy.
+   */
+  String getConnectorPath();
 }
