@@ -76,6 +76,15 @@ public class DefaultModelConnectorFactory implements IModelConnectorFactory {
         }
       }
     }
+    // if (modelConnector != null) {
+    // modelConnector
+    // .addConnectorValueChangeListener(new IConnectorValueChangeListener() {
+    //
+    // public void connectorValueChange(ConnectorValueChangeEvent evt) {
+    // System.out.println(evt.getSource().getConnectorPath());
+    // }
+    // });
+    // }
     return modelConnector;
   }
 
