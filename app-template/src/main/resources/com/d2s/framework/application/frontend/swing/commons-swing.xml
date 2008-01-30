@@ -80,6 +80,11 @@
     class="com.d2s.framework.application.frontend.action.swing.flow.StaticYesNoAction" />
 
   <bean
+    id="removeAnyCollectionFromMasterFrontAction"
+    parent="abstractRemoveAnyCollectionFromMasterFrontAction"
+    class="com.d2s.framework.application.frontend.action.swing.flow.StaticYesNoAction" />
+
+  <bean
     id="infoFrontAction"
     class="com.d2s.framework.application.frontend.action.swing.flow.InfoAction">
     <property
