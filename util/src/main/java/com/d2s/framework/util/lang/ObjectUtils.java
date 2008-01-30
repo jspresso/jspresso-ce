@@ -28,6 +28,11 @@ public final class ObjectUtils {
     if (object1 == object2) {
       return true;
     }
+    if ((Boolean.FALSE.equals(object1) && object2 == null)
+        || (Boolean.FALSE.equals(object2) && object1 == null)) {
+      // Special handling for null == Boolean.FALSE on models.
+      return true;
+    }
     if ((object1 == null) || (object2 == null)) {
       return false;
     }
