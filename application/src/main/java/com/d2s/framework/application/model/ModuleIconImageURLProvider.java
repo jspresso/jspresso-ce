@@ -1,11 +1,8 @@
 /*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.framework.application.model.descriptor;
+package com.d2s.framework.application.model;
 
-import com.d2s.framework.application.model.BeanModule;
-import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.util.IIconImageURLProvider;
 
 /**

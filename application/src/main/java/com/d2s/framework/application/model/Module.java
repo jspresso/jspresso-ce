@@ -90,6 +90,9 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
       ((BasicModuleDescriptor) viewDescriptor).setDescription(getDescription());
       ((BasicModuleDescriptor) viewDescriptor)
           .setIconImageURL(getIconImageURL());
+      if (iconImageURLProvider == null) {
+        iconImageURLProvider = new ModuleIconImageURLProvider();
+      }
       ((BasicModuleDescriptor) viewDescriptor)
           .setIconImageURLProvider(iconImageURLProvider);
     }
