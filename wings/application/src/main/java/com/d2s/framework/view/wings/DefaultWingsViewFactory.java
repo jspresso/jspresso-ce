@@ -287,11 +287,9 @@ public class DefaultWingsViewFactory implements
         }
         if (viewDescriptor.getActions() != null) {
           SToolBar toolBar = createSToolBar();
-          for (Iterator<ActionList> iter = viewDescriptor
-              .getActions().getActionLists().iterator(); iter
-              .hasNext();) {
-            ActionList nextActionList = iter
-                .next();
+          for (Iterator<ActionList> iter = viewDescriptor.getActions()
+              .getActionLists().iterator(); iter.hasNext();) {
+            ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
               Action swingAction = actionFactory.createAction(action,
                   actionHandler, view, locale);
@@ -1048,26 +1046,18 @@ public class DefaultWingsViewFactory implements
                   IValueConnector childCardConnector = childCardView
                       .getConnector();
                   if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
-                    if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                      if (cardModel != null
-                          && cardModel instanceof BeanCollectionModule) {
-                        childCardConnector.getModelConnector()
-                            .setConnectorValue(
-                                ((BeanCollectionModule) cardModel)
-                                    .getModuleObjects());
-                      } else {
-                        childCardConnector.getModelConnector()
-                            .setConnectorValue(cardModel);
-                      }
+                    if (cardModel instanceof BeanCollectionModule) {
+                      ((ICollectionConnectorProvider) childCardConnector
+                          .getModelConnector()).getCollectionConnector()
+                          .setConnectorValue(
+                              ((BeanCollectionModule) cardModel)
+                                  .getModuleObjects());
+                    } else if (cardModel instanceof BeanModule) {
+                      childCardConnector.getModelConnector().setConnectorValue(
+                          ((BeanModule) cardModel).getModuleObject());
                     } else {
-                      if (cardModel != null && cardModel instanceof BeanModule) {
-                        childCardConnector.getModelConnector()
-                            .setConnectorValue(
-                                ((BeanModule) cardModel).getModuleObject());
-                      } else {
-                        childCardConnector.getModelConnector()
-                            .setConnectorValue(cardModel);
-                      }
+                      childCardConnector.getModelConnector().setConnectorValue(
+                          cardModel);
                     }
                   } else {
                     if (childCardConnector != null) {

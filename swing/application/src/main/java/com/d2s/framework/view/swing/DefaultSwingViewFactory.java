@@ -1051,26 +1051,18 @@ public class DefaultSwingViewFactory implements
                   IValueConnector childCardConnector = childCardView
                       .getConnector();
                   if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
-                    if (childCardView.getDescriptor() instanceof ICollectionViewDescriptor) {
-                      if (cardModel != null
-                          && cardModel instanceof BeanCollectionModule) {
-                        childCardConnector.getModelConnector()
-                            .setConnectorValue(
-                                ((BeanCollectionModule) cardModel)
-                                    .getModuleObjects());
-                      } else {
-                        childCardConnector.getModelConnector()
-                            .setConnectorValue(cardModel);
-                      }
+                    if (cardModel instanceof BeanCollectionModule) {
+                      ((ICollectionConnectorProvider) childCardConnector
+                          .getModelConnector()).getCollectionConnector()
+                          .setConnectorValue(
+                              ((BeanCollectionModule) cardModel)
+                                  .getModuleObjects());
+                    } else if (cardModel instanceof BeanModule) {
+                      childCardConnector.getModelConnector().setConnectorValue(
+                          ((BeanModule) cardModel).getModuleObject());
                     } else {
-                      if (cardModel != null && cardModel instanceof BeanModule) {
-                        childCardConnector.getModelConnector()
-                            .setConnectorValue(
-                                ((BeanModule) cardModel).getModuleObject());
-                      } else {
-                        childCardConnector.getModelConnector()
-                            .setConnectorValue(cardModel);
-                      }
+                      childCardConnector.getModelConnector().setConnectorValue(
+                          cardModel);
                     }
                   } else {
                     if (childCardConnector != null) {
