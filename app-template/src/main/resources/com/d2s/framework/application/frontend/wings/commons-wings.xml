@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
   default-lazy-init="true">
 
@@ -10,60 +12,101 @@
   <!--
     The implementation used as ListSelectionModelBinder.
   -->
-  <bean id="listSelectionModelBinder" class="com.d2s.framework.binding.wings.DefaultListSelectionModelBinder" />
+  <bean
+    id="listSelectionModelBinder"
+    class="com.d2s.framework.binding.wings.DefaultListSelectionModelBinder" />
 
   <!--
     The implementation used as TreeSelectionModelBinder.
   -->
-  <bean id="treeSelectionModelBinder" class="com.d2s.framework.binding.wings.DefaultTreeSelectionModelBinder" />
+  <bean
+    id="treeSelectionModelBinder"
+    class="com.d2s.framework.binding.wings.DefaultTreeSelectionModelBinder" />
 
   <!--
     Root action beans.
   -->
-  <bean id="lovFindFrontAction" parent="abstractLovFindFrontAction"
-    class="com.d2s.framework.application.frontend.action.std.FindAction" scope="prototype" />
+  <bean
+    id="lovFindFrontAction"
+    parent="abstractLovFindFrontAction"
+    class="com.d2s.framework.application.frontend.action.std.FindAction"
+    scope="prototype" />
 
-  <bean id="lovOkFrontAction" class="com.d2s.framework.application.frontend.action.wings.lov.OkLovAction"
+  <bean
+    id="lovOkFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.lov.OkLovAction"
     scope="prototype">
-    <property name="nextAction" ref="sourceViewConnectorSetAction" />
+    <property
+      name="nextAction"
+      ref="sourceViewConnectorSetAction" />
   </bean>
 
-  <bean id="printOkFrontAction"
+  <bean
+    id="printOkFrontAction"
     class="com.d2s.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
-    <property name="nextAction" ref="editReportParametersAction" />
+    <property
+      name="nextAction"
+      ref="editReportParametersAction" />
   </bean>
 
-  <bean id="doPrintAction" parent="abstractDoPrintAction"
+  <bean
+    id="doPrintAction"
+    parent="abstractDoPrintAction"
     class="com.d2s.framework.application.frontend.action.wings.std.OkAction" />
 
-  <bean id="chooseActionOkFrontAction"
+  <bean
+    id="chooseActionOkFrontAction"
     class="com.d2s.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
     <property name="nextAction">
-      <bean class="com.d2s.framework.application.frontend.action.std.ExecuteActionAction" />
+      <bean
+        class="com.d2s.framework.application.frontend.action.std.ExecuteActionAction" />
     </property>
   </bean>
 
-  <bean id="cancelDialogFrontAction" class="com.d2s.framework.application.frontend.action.wings.std.CancelAction" />
+  <bean
+    id="cancelDialogFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.std.CancelAction" />
 
-  <bean id="okDialogFrontAction" class="com.d2s.framework.application.frontend.action.wings.std.OkAction" />
+  <bean
+    id="okDialogFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.std.OkAction" />
 
   <!--
     Action beans
   -->
-  <bean id="removeEntityCollectionFromMasterFrontAction" parent="abstractRemoveCollectionFromMasterFrontAction"
+  <bean
+    id="removeEntityCollectionFromMasterFrontAction"
+    parent="abstractRemoveCollectionFromMasterFrontAction"
     class="com.d2s.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
 
-  <bean id="infoFrontAction" class="com.d2s.framework.application.frontend.action.wings.flow.InfoAction">
-    <property name="iconImageURL" value="classpath:images/info-48x48.png" />
+  <bean
+    id="removeAnyCollectionFromMasterFrontAction"
+    parent="abstractRemoveAnyCollectionFromMasterFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
+
+  <bean
+    id="infoFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.flow.InfoAction">
+    <property
+      name="iconImageURL"
+      value="classpath:images/info-48x48.png" />
   </bean>
 
-  <bean id="staticInfoFrontAction" abstract="true" parent="infoFrontAction"
+  <bean
+    id="staticInfoFrontAction"
+    abstract="true"
+    parent="infoFrontAction"
     class="com.d2s.framework.application.frontend.action.wings.flow.StaticInfoAction">
   </bean>
 
-  <bean id="yesNoFrontAction" class="com.d2s.framework.application.frontend.action.wings.flow.YesNoAction" />
+  <bean
+    id="yesNoFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.flow.YesNoAction" />
 
-  <bean id="staticYesNoFrontAction" abstract="true" parent="yesNoFrontAction"
+  <bean
+    id="staticYesNoFrontAction"
+    abstract="true"
+    parent="yesNoFrontAction"
     class="com.d2s.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
 
   <!--
@@ -73,65 +116,110 @@
   <!--
     This icon factory is defined as non-singleton since it implements a per wings session cache.
   -->
-  <bean id="iconFactory" parent="abstractIconFactory" class="com.d2s.framework.view.wings.WingsIconFactory"
+  <bean
+    id="iconFactory"
+    parent="abstractIconFactory"
+    class="com.d2s.framework.view.wings.WingsIconFactory"
     scope="prototype" />
 
-  <bean id="actionFactory" parent="abstractActionFactory" class="com.d2s.framework.view.wings.WingsActionFactory"
+  <bean
+    id="actionFactory"
+    parent="abstractActionFactory"
+    class="com.d2s.framework.view.wings.WingsActionFactory"
     scope="prototype" />
 
-  <bean id="abstractModalDialogAction" abstract="true"
+  <bean
+    id="abstractModalDialogAction"
+    abstract="true"
     class="com.d2s.framework.application.frontend.action.wings.std.ModalDialogAction" />
 
-  <bean id="lovAction" parent="abstractLovAction"
-    class="com.d2s.framework.application.frontend.action.wings.lov.LovAction" scope="prototype" />
+  <bean
+    id="lovAction"
+    parent="abstractLovAction"
+    class="com.d2s.framework.application.frontend.action.wings.lov.LovAction"
+    scope="prototype" />
 
-  <bean id="openFileAction" parent="abstractOpenFileAction"
+  <bean
+    id="openFileAction"
+    parent="abstractOpenFileAction"
     class="com.d2s.framework.application.frontend.action.wings.file.OpenFileAction" />
 
-  <bean id="openFileAsBinaryPropertyAction" parent="abstractOpenFileAction"
+  <bean
+    id="openFileAsBinaryPropertyAction"
+    parent="abstractOpenFileAction"
     class="com.d2s.framework.application.frontend.action.wings.file.OpenFileAsBinaryPropertyAction" />
 
-  <bean id="saveFileAction" parent="abstractSaveFileAction"
+  <bean
+    id="saveFileAction"
+    parent="abstractSaveFileAction"
     class="com.d2s.framework.application.frontend.action.wings.file.SaveFileAction" />
 
-  <bean id="saveBinaryPropertyAsFileAction" parent="saveFileAction"
+  <bean
+    id="saveBinaryPropertyAsFileAction"
+    parent="saveFileAction"
     class="com.d2s.framework.application.frontend.action.wings.file.SaveBinaryPropertyAsFileAction" />
 
-  <bean id="binaryPropertyInfoAction" parent="abstractBinaryPropertyInfoAction"
+  <bean
+    id="binaryPropertyInfoAction"
+    parent="abstractBinaryPropertyInfoAction"
     class="com.d2s.framework.application.frontend.action.wings.file.BinaryPropertyInfoAction" />
 
-  <bean id="chooseComponentAction" abstract="true" parent="abstractChooseComponentAction"
+  <bean
+    id="chooseComponentAction"
+    abstract="true"
+    parent="abstractChooseComponentAction"
     class="com.d2s.framework.application.frontend.action.wings.lov.ChooseComponentAction" />
 
-  <bean id="editReportParametersAction" parent="abstractEditReportParametersAction"
+  <bean
+    id="editReportParametersAction"
+    parent="abstractEditReportParametersAction"
     class="com.d2s.framework.application.printing.frontend.action.wings.EditReportParametersAction" />
 
-  <bean id="displayReportAction"
+  <bean
+    id="displayReportAction"
     class="com.d2s.framework.application.printing.frontend.action.wings.DisplayJasperReportAction" />
 
-  <bean id="editComponentAction" parent="abstractEditComponentAction"
+  <bean
+    id="editComponentAction"
+    parent="abstractEditComponentAction"
     class="com.d2s.framework.application.frontend.action.wings.std.EditComponentAction" />
 
-  <bean id="changePasswordAction" parent="abstractChangePasswordAction"
+  <bean
+    id="changePasswordAction"
+    parent="abstractChangePasswordAction"
     class="com.d2s.framework.application.frontend.action.wings.security.ChangePasswordAction" />
 
-  <bean id="displayUrlFrontAction" class="com.d2s.framework.application.frontend.action.wings.std.DisplayUrlAction" />
+  <bean
+    id="displayUrlFrontAction"
+    class="com.d2s.framework.application.frontend.action.wings.std.DisplayUrlAction" />
 
-  <bean id="staticDisplayUrlFrontAction" abstract="true" parent="displayUrlFrontAction"
+  <bean
+    id="staticDisplayUrlFrontAction"
+    abstract="true"
+    parent="displayUrlFrontAction"
     class="com.d2s.framework.application.frontend.action.wings.std.DisplayStaticUrlAction" />
 
 
-  <bean id="wizardAction" parent="abstractWizardAction"
+  <bean
+    id="wizardAction"
+    parent="abstractWizardAction"
     class="com.d2s.framework.application.frontend.action.wings.wizard.WizardAction" />
 
-  <bean id="viewFactory" parent="abstractViewFactory" class="com.d2s.framework.view.wings.DefaultWingsViewFactory"
+  <bean
+    id="viewFactory"
+    parent="abstractViewFactory"
+    class="com.d2s.framework.view.wings.DefaultWingsViewFactory"
     scope="prototype" />
 
   <!--
     The controllers.
   -->
-  <bean id="frontController" abstract="true" parent="abstractFrontController"
-    class="com.d2s.framework.application.frontend.controller.wings.DefaultWingsController" scope="prototype">
+  <bean
+    id="frontController"
+    abstract="true"
+    parent="abstractFrontController"
+    class="com.d2s.framework.application.frontend.controller.wings.DefaultWingsController"
+    scope="prototype">
   </bean>
 
 </beans>
