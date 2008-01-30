@@ -26,6 +26,8 @@ import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
  */
 public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
 
+  private static final String ELEMENT_SUFFIX = ".element";
+
   /**
    * Constructs a new <code>ModuleCardViewDescriptor</code> instance.
    * 
@@ -44,7 +46,7 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
   public String getCardNameForModel(Object model) {
     if (model instanceof BeanModule
         && (((BeanModule) model).getParent()) instanceof BeanCollectionModule) {
-      return (((BeanModule) model).getParent()).getName() + ".element";
+      return (((BeanModule) model).getParent()).getName() + ELEMENT_SUFFIX;
     } else if (model instanceof SubModule) {
       return ((SubModule) model).getName();
     }
@@ -56,10 +58,11 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     if (modules != null) {
       for (SubModule module : modules) {
         if (module.getProjectedViewDescriptor() != null) {
-          moduleCards.put(module.getName(), module.getProjectedViewDescriptor());
+          moduleCards
+              .put(module.getName(), module.getProjectedViewDescriptor());
           if (module instanceof BeanCollectionModule
               && ((BeanCollectionModule) module).getElementViewDescriptor() != null) {
-            moduleCards.put(module.getName() + ".element",
+            moduleCards.put(module.getName() + ELEMENT_SUFFIX,
                 ((BeanCollectionModule) module).getElementViewDescriptor());
           }
         }
