@@ -5,7 +5,7 @@ package com.d2s.framework.application.view.descriptor.basic;
 
 import java.util.Locale;
 
-import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
+import com.d2s.framework.application.model.descriptor.SubModuleDescriptor;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
 import com.d2s.framework.util.descriptor.IIconDescriptor;
 import com.d2s.framework.util.i18n.ITranslationProvider;
@@ -38,7 +38,7 @@ public class BasicSubModuleDescriptor extends BasicSimpleTreeLevelDescriptor
     moduleNodeGroupDescriptor.setDescription(getDescription());
     moduleNodeGroupDescriptor.setIconImageURL(getIconImageURL());
     moduleNodeGroupDescriptor
-        .setModelDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR
+        .setModelDescriptor(SubModuleDescriptor.SUB_MODULE_DESCRIPTOR
             .getPropertyDescriptor("subModules"));
     moduleNodeGroupDescriptor.setRenderedProperty("i18nName");
     setNodeGroupDescriptor(moduleNodeGroupDescriptor);

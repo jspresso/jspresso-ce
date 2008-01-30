@@ -6,14 +6,12 @@ package com.d2s.framework.application.model.descriptor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
-import com.d2s.framework.model.descriptor.basic.BasicObjectPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 
@@ -26,38 +24,37 @@ import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public final class ModuleDescriptor extends BasicComponentDescriptor<SubModule> {
+public class SubModuleDescriptor extends BasicComponentDescriptor<SubModule> {
 
   /**
-   * <code>MODULE_DESCRIPTOR</code> is a unique reference to the model
+   * <code>SUB_MODULE_DESCRIPTOR</code> is a unique reference to the model
    * descriptor of modules.
    */
-  public static final IComponentDescriptor<SubModule> MODULE_DESCRIPTOR = new ModuleDescriptor();
+  public static final IComponentDescriptor<SubModule> SUB_MODULE_DESCRIPTOR = new SubModuleDescriptor(
+                                                                                SubModule.class
+                                                                                    .getName());
 
   /**
-   * Constructs a new <code>ModuleDescriptor</code> instance.
+   * Constructs a new <code>SubModuleDescriptor</code> instance.
+   * 
+   * @param name
+   *            the name of the descriptor (the actual module class name).
    */
-  private ModuleDescriptor() {
+  protected SubModuleDescriptor(String name) {
 
-    super(Module.class.getName());
+    super(name);
 
     BasicReferencePropertyDescriptor<SubModule> parentDescriptor = new BasicReferencePropertyDescriptor<SubModule>();
     parentDescriptor.setName("parent");
     parentDescriptor.setReferencedDescriptor(this);
 
     BasicCollectionDescriptor<SubModule> moduleListDescriptor = new BasicCollectionDescriptor<SubModule>();
-    moduleListDescriptor
-        .setCollectionInterface(List.class);
+    moduleListDescriptor.setCollectionInterface(List.class);
     moduleListDescriptor.setElementDescriptor(this);
 
     BasicCollectionPropertyDescriptor<SubModule> subModulesDescriptor = new BasicCollectionPropertyDescriptor<SubModule>();
     subModulesDescriptor.setReferencedDescriptor(moduleListDescriptor);
     subModulesDescriptor.setName("subModules");
-
-    BasicObjectPropertyDescriptor projectedObjectDescriptor = new BasicObjectPropertyDescriptor();
-    projectedObjectDescriptor.setName("projectedObject");
-
-    BasicCollectionPropertyDescriptor<Object> projectedObjectsDescriptor = new BasicCollectionPropertyDescriptor<Object>();
 
     BasicStringPropertyDescriptor nameDescriptor = new BasicStringPropertyDescriptor();
     nameDescriptor.setName("name");
@@ -75,8 +72,6 @@ public final class ModuleDescriptor extends BasicComponentDescriptor<SubModule> 
     subModulesDescriptor.setReverseRelationEnd(parentDescriptor);
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
-    propertyDescriptors.add(projectedObjectDescriptor);
-    propertyDescriptors.add(projectedObjectsDescriptor);
     propertyDescriptors.add(nameDescriptor);
     propertyDescriptors.add(descriptionDescriptor);
     propertyDescriptors.add(i18nNameDescriptor);

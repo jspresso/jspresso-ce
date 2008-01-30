@@ -269,25 +269,6 @@
   </bean>
 
   <!--
-    Module utility beans.
-  -->
-  <bean id="moduleDescriptor" class="com.d2s.framework.application.model.descriptor.ModuleDescriptor" />
-  <bean id="subModulesPropertyDescriptor" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-    <property name="targetObject" ref="moduleDescriptor" />
-    <property name="targetMethod" value="getPropertyDescriptor" />
-    <property name="arguments">
-      <list>
-        <value>subModules</value>
-      </list>
-    </property>
-  </bean>
-  <bean abstract="true" id="abstractSubModulesNodeGroupDescriptor"
-    class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor">
-    <property name="renderedProperty" value="i18nName" />
-    <property name="modelDescriptor" ref="subModulesPropertyDescriptor" />
-  </bean>
-
-  <!--
     Backend action beans
   -->
   <bean id="doPrintBackendAction"

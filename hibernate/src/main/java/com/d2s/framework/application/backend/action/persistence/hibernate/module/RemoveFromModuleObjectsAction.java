@@ -77,9 +77,9 @@ public class RemoveFromModuleObjectsAction extends
       projectedCollection = new ArrayList<Object>(module.getModuleObjects());
     }
 
-    final List<IEntity> projectedObjectsToRemove = new ArrayList<IEntity>();
+    final List<IEntity> moduleObjectsToRemove = new ArrayList<IEntity>();
     for (int i = 0; i < selectedIndices.length; i++) {
-      projectedObjectsToRemove.add((IEntity) collectionConnector
+      moduleObjectsToRemove.add((IEntity) collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue());
     }
     getTransactionTemplate(context).execute(new TransactionCallback() {
@@ -90,7 +90,7 @@ public class RemoveFromModuleObjectsAction extends
 
           public Object doInHibernate(Session session) {
             List<IEntity> mergedCollection = mergeInHibernate(
-                projectedObjectsToRemove, session, context);
+                moduleObjectsToRemove, session, context);
             for (IEntity entityToRemove : mergedCollection) {
               if (entityToRemove.isPersistent()) {
                 deleteEntity(entityToRemove, session, context);
@@ -102,13 +102,13 @@ public class RemoveFromModuleObjectsAction extends
         return null;
       }
     });
-    for (IEntity entityToRemove : projectedObjectsToRemove) {
+    for (IEntity entityToRemove : moduleObjectsToRemove) {
       projectedCollection.remove(entityToRemove);
       removeFromSubModules(module, entityToRemove);
     }
     module.setModuleObjects(projectedCollection);
     collectionConnector.setConnectorValue(projectedCollection);
-    context.put(ActionContextConstants.ACTION_PARAM, projectedObjectsToRemove);
+    context.put(ActionContextConstants.ACTION_PARAM, moduleObjectsToRemove);
     return super.execute(actionHandler, context);
   }
 

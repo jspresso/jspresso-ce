@@ -16,7 +16,7 @@ import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
+import com.d2s.framework.application.model.descriptor.SubModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.component.IComponent;
@@ -269,7 +269,7 @@ public abstract class AbstractBackendController extends AbstractController
     for (Map.Entry<String, Module> moduleEntry : modules.entrySet()) {
       IValueConnector nextModuleConnector = beanConnectorFactory
           .createModelConnector(moduleEntry.getKey(),
-              ModuleDescriptor.MODULE_DESCRIPTOR);
+              SubModuleDescriptor.SUB_MODULE_DESCRIPTOR);
       nextModuleConnector.setConnectorValue(moduleEntry.getValue());
       moduleConnectors.put(moduleEntry.getKey(), nextModuleConnector);
     }

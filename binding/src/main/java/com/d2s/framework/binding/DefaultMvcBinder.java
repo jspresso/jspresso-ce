@@ -44,7 +44,7 @@ public class DefaultMvcBinder implements IMvcBinder {
             .getChildConnector(nextChildViewConnector.getId());
         if (nextChildModelConnector == null) {
           throw new MissingConnectorException("Missing model connector for id "
-              + nextConnectorId);
+              + nextChildViewConnector.getId());
         }
         bind(nextChildViewConnector, nextChildModelConnector);
       } else {

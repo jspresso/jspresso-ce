@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -21,8 +22,9 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class BeanCollectionModule extends SubModule {
 
-  private IViewDescriptor elementViewDescriptor;
-  private Collection<?>   moduleObjects;
+  private IViewDescriptor              elementViewDescriptor;
+  private IComponentDescriptor<Object> elementComponentDescriptor;
+  private Collection<?>                moduleObjects;
 
   /**
    * Equality based on projected object.
@@ -95,5 +97,26 @@ public class BeanCollectionModule extends SubModule {
     Object oldValue = getModuleObjects();
     this.moduleObjects = moduleObjects;
     firePropertyChange("moduleObjects", oldValue, getModuleObjects());
+  }
+
+  
+  /**
+   * Gets the elementComponentDescriptor.
+   * 
+   * @return the elementComponentDescriptor.
+   */
+  public IComponentDescriptor<Object> getElementComponentDescriptor() {
+    return elementComponentDescriptor;
+  }
+
+  
+  /**
+   * Sets the elementComponentDescriptor.
+   * 
+   * @param elementComponentDescriptor the elementComponentDescriptor to set.
+   */
+  public void setElementComponentDescriptor(
+      IComponentDescriptor<Object> elementComponentDescriptor) {
+    this.elementComponentDescriptor = elementComponentDescriptor;
   }
 }

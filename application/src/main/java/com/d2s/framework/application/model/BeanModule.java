@@ -10,6 +10,7 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
 /**
@@ -23,7 +24,9 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  */
 public class BeanModule extends SubModule implements PropertyChangeListener {
 
+  private IComponentDescriptor<Object> componentDescriptor;
   private Object moduleObject;
+  
 
   /**
    * Equality based on projected object.
@@ -95,5 +98,26 @@ public class BeanModule extends SubModule implements PropertyChangeListener {
           .addPropertyChangeListener(this);
     }
     firePropertyChange("moduleObject", oldValue, getModuleObject());
+  }
+
+  
+  /**
+   * Gets the componentDescriptor.
+   * 
+   * @return the componentDescriptor.
+   */
+  public IComponentDescriptor<Object> getComponentDescriptor() {
+    return componentDescriptor;
+  }
+
+  
+  /**
+   * Sets the componentDescriptor.
+   * 
+   * @param componentDescriptor the componentDescriptor to set.
+   */
+  public void setComponentDescriptor(
+      IComponentDescriptor<Object> componentDescriptor) {
+    this.componentDescriptor = componentDescriptor;
   }
 }
