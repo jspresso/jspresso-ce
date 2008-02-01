@@ -11,8 +11,13 @@ import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.model.SubModule;
+import com.d2s.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
+import com.d2s.framework.application.model.descriptor.BeanModuleDescriptor;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicNestingViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
  * This is a card view descriptor which stacks the projected view descriptors of
@@ -58,16 +63,63 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     if (modules != null) {
       for (SubModule module : modules) {
         if (module.getProjectedViewDescriptor() != null) {
-          moduleCards
-              .put(module.getName(), module.getProjectedViewDescriptor());
+          moduleCards.put(module.getName(), decorateModuleCard(module));
           if (module instanceof BeanCollectionModule
               && ((BeanCollectionModule) module).getElementViewDescriptor() != null) {
             moduleCards.put(module.getName() + ELEMENT_SUFFIX,
-                ((BeanCollectionModule) module).getElementViewDescriptor());
+                decorateElementModuleCard((BeanCollectionModule) module));
           }
         }
         prepareModuleCards(moduleCards, module.getSubModules());
       }
     }
+  }
+
+  private IViewDescriptor decorateModuleCard(SubModule module) {
+    IViewDescriptor projectedViewDescriptor = module
+        .getProjectedViewDescriptor();
+    if (module instanceof BeanCollectionModule) {
+      IComponentDescriptor<Object> componentDescriptor = ((BeanCollectionModule) module)
+          .getElementComponentDescriptor();
+      BeanCollectionModuleDescriptor moduleDescriptor = new BeanCollectionModuleDescriptor(
+          componentDescriptor);
+      ((BasicViewDescriptor) projectedViewDescriptor)
+          .setModelDescriptor(moduleDescriptor
+              .getPropertyDescriptor("moduleObjects"));
+      BasicNestingViewDescriptor moduleViewDescriptor = new BasicNestingViewDescriptor();
+      moduleViewDescriptor.setNestedViewDescriptor(projectedViewDescriptor);
+      moduleViewDescriptor.setModelDescriptor(moduleDescriptor);
+      return moduleViewDescriptor;
+    } else if (module instanceof BeanModule) {
+      IComponentDescriptor<Object> componentDescriptor = ((BeanModule) module)
+          .getComponentDescriptor();
+      BeanModuleDescriptor moduleDescriptor = new BeanModuleDescriptor(
+          componentDescriptor);
+      ((BasicViewDescriptor) projectedViewDescriptor)
+          .setModelDescriptor(moduleDescriptor
+              .getPropertyDescriptor("moduleObject"));
+      BasicNestingViewDescriptor moduleElementViewDescriptor = new BasicNestingViewDescriptor();
+      moduleElementViewDescriptor
+          .setNestedViewDescriptor(projectedViewDescriptor);
+      moduleElementViewDescriptor.setModelDescriptor(moduleDescriptor);
+      return moduleElementViewDescriptor;
+    }
+    return projectedViewDescriptor;
+  }
+
+  private IViewDescriptor decorateElementModuleCard(BeanCollectionModule module) {
+    BasicViewDescriptor projectedElementViewDescriptor = (BasicViewDescriptor) module
+        .getElementViewDescriptor();
+    IComponentDescriptor<Object> componentDescriptor = module
+        .getElementComponentDescriptor();
+    BeanModuleDescriptor moduleDescriptor = new BeanModuleDescriptor(
+        componentDescriptor);
+    projectedElementViewDescriptor.setModelDescriptor(moduleDescriptor
+        .getPropertyDescriptor("moduleObject"));
+    BasicNestingViewDescriptor moduleElementViewDescriptor = new BasicNestingViewDescriptor();
+    moduleElementViewDescriptor
+        .setNestedViewDescriptor(projectedElementViewDescriptor);
+    moduleElementViewDescriptor.setModelDescriptor(moduleDescriptor);
+    return moduleElementViewDescriptor;
   }
 }

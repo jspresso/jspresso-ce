@@ -15,7 +15,7 @@ import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.binding.ConnectorHelper;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.model.descriptor.ICollectionDescriptor;
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 
@@ -78,8 +78,8 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
   @SuppressWarnings("unchecked")
   protected Object createNewModuleObject(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
-    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptor) getModelDescriptor(context))
-        .getElementDescriptor();
+    IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor(context))
+        .getCollectionDescriptor().getElementDescriptor();
 
     return getEntityFactory(context).createEntityInstance(
         (Class<? extends IEntity>) projectedComponentDescriptor

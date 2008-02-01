@@ -436,7 +436,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
             .getChildrenMap().entrySet()) {
           mvcBinder.bind(grandChildView.getValue().getConnector(),
               getBackendController().createModelConnector(
-                  "moduleObjects",
+                  moduleName + "_" + grandChildView.getKey(),
+                  //"moduleObjects",
                   grandChildView.getValue().getDescriptor()
                       .getModelDescriptor()));
         }

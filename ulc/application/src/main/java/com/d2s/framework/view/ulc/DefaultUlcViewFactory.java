@@ -18,9 +18,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.model.BeanCollectionModule;
-import com.d2s.framework.application.model.BeanModule;
-import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICollectionConnectorProvider;
@@ -34,6 +31,7 @@ import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.basic.BasicValueConnector;
 import com.d2s.framework.binding.masterdetail.IMasterDetailBinder;
+import com.d2s.framework.binding.model.IModelValueConnector;
 import com.d2s.framework.binding.model.ModelRefPropertyConnector;
 import com.d2s.framework.binding.ulc.CollectionConnectorListModel;
 import com.d2s.framework.binding.ulc.CollectionConnectorTableModel;
@@ -289,11 +287,9 @@ public class DefaultUlcViewFactory implements
         }
         if (viewDescriptor.getActions() != null) {
           ULCToolBar toolBar = createULCToolBar();
-          for (Iterator<ActionList> iter = viewDescriptor
-              .getActions().getActionLists().iterator(); iter
-              .hasNext();) {
-            ActionList nextActionList = iter
-                .next();
+          for (Iterator<ActionList> iter = viewDescriptor.getActions()
+              .getActionLists().iterator(); iter.hasNext();) {
+            ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
               IAction ulcAction = actionFactory.createAction(action,
                   actionHandler, view, locale);
@@ -1056,25 +1052,21 @@ public class DefaultUlcViewFactory implements
                   cardPanel.setSelectedName(cardName);
                   IValueConnector childCardConnector = childCardView
                       .getConnector();
-                  if (cardView.getDescriptor() instanceof ModuleCardViewDescriptor) {
-                    if (cardModel instanceof BeanCollectionModule) {
-                      ((ICollectionConnectorProvider) childCardConnector
-                          .getModelConnector()).getCollectionConnector()
-                          .setConnectorValue(
-                              ((BeanCollectionModule) cardModel)
-                                  .getModuleObjects());
-                    } else if (cardModel instanceof BeanModule) {
-                      childCardConnector.getModelConnector().setConnectorValue(
-                          ((BeanModule) cardModel).getModuleObject());
-                    } else {
-                      childCardConnector.getModelConnector().setConnectorValue(
-                          cardModel);
+                  if (childCardConnector != null) {
+                    // To handle polymorphism, especially for modules, we refine
+                    // the model descriptor.
+                    if (((IModelValueConnector) cardView.getConnector()
+                        .getModelConnector()).getModelDescriptor().getClass()
+                        .isAssignableFrom(
+                            childCardView.getDescriptor().getModelDescriptor()
+                                .getClass())) {
+                      ((IModelValueConnector) cardView.getConnector()
+                          .getModelConnector())
+                          .setModelDescriptor(childCardView.getDescriptor()
+                              .getModelDescriptor());
                     }
-                  } else {
-                    if (childCardConnector != null) {
-                      mvcBinder.bind(childCardConnector, cardView
-                          .getConnector().getModelConnector());
-                    }
+                    mvcBinder.bind(childCardConnector, cardView.getConnector()
+                        .getModelConnector());
                   }
                 } else {
                   cardPanel.setSelectedName(ICardViewDescriptor.DEFAULT_CARD);
