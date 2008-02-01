@@ -22,12 +22,15 @@ import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.application.view.descriptor.IModuleViewDescriptorFactory;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
+import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorSelectionListener;
 import com.d2s.framework.binding.IConnectorSelector;
+import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.security.SecurityHelper;
@@ -443,6 +446,21 @@ public abstract class AbstractFrontendController<E, F, G> extends
                   grandChildView.getValue().getDescriptor()
                       .getModelDescriptor()));
         }
+        childView.getConnector().addConnectorValueChangeListener(
+            new IConnectorValueChangeListener() {
+
+              public void connectorValueChange(ConnectorValueChangeEvent evt) {
+                if (evt.getNewValue() instanceof SubModule) {
+                  SubModule selectedModule = (SubModule) evt.getNewValue();
+                  if (selectedModule.getStartupAction() != null) {
+                    // FIXME The context must be filled with the selected sub
+                    // module.
+                    execute(selectedModule.getStartupAction(),
+                        createEmptyContext());
+                  }
+                }
+              }
+            });
       }
     }
     return moduleView;
@@ -636,11 +654,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
     }
   }
 
-  
   /**
    * Sets the moduleViewDescriptorFactory.
    * 
-   * @param moduleViewDescriptorFactory the moduleViewDescriptorFactory to set.
+   * @param moduleViewDescriptorFactory
+   *            the moduleViewDescriptorFactory to set.
    */
   public void setModuleViewDescriptorFactory(
       IModuleViewDescriptorFactory moduleViewDescriptorFactory) {
