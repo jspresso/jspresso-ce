@@ -36,8 +36,11 @@ public class MockSwingController extends
   /**
    * {@inheritDoc}
    */
-  public void handleException(Throwable ex, @SuppressWarnings("unused")
-  Map<String, Object> context) {
+  @Override
+  public boolean handleException(Throwable ex, Map<String, Object> context) {
+    if (super.handleException(ex, context)) {
+      return true;
+    }
     Component sourceComponent = null;
     if (ex instanceof SecurityException) {
       JOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
@@ -60,6 +63,7 @@ public class MockSwingController extends
     } else {
       ex.printStackTrace();
     }
+    return true;
   }
 
   /**

@@ -72,8 +72,11 @@ public class DefaultWingsController extends
   /**
    * {@inheritDoc}
    */
-  public void handleException(Throwable ex, @SuppressWarnings("unused")
-  Map<String, Object> context) {
+  @Override
+  public boolean handleException(Throwable ex, Map<String, Object> context) {
+    if (super.handleException(ex, context)) {
+      return true;
+    }
     SComponent sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
       SOptionPane.showMessageDialog(sourceComponent, HtmlHelper.emphasis(ex
@@ -105,6 +108,7 @@ public class DefaultWingsController extends
       dialog.setDetails(ex);
       dialog.setVisible(true);
     }
+    return true;
   }
 
   /**

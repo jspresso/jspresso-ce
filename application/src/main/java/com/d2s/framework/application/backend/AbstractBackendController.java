@@ -163,14 +163,6 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unused")
-  public void handleException(Throwable ex, Map<String, Object> context) {
-    // NO-OP
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public IEntity merge(IEntity entity, MergeMode mergeMode) {
     return getApplicationSession().merge(entity, mergeMode);
   }

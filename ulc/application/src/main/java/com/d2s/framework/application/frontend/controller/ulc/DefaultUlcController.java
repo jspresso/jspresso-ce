@@ -91,8 +91,11 @@ public class DefaultUlcController extends
   /**
    * {@inheritDoc}
    */
-  public void handleException(Throwable ex, @SuppressWarnings("unused")
-  Map<String, Object> context) {
+  @Override
+  public boolean handleException(Throwable ex, Map<String, Object> context) {
+    if (super.handleException(ex, context)) {
+      return true;
+    }
     ULCComponent sourceComponent = controllerFrame;
     if (ex instanceof SecurityException) {
       ULCAlert alert = new ULCAlert(UlcUtil.getVisibleWindow(sourceComponent),
@@ -133,6 +136,7 @@ public class DefaultUlcController extends
       UlcUtil.centerOnScreen(dialog);
       dialog.setVisible(true);
     }
+    return true;
   }
 
   /**

@@ -25,6 +25,8 @@ public interface IExceptionHandler {
    *            the exception that occurs.
    * @param context
    *            the context where some extra information can be retrieved.
+   * @return true if the exception has been fully handled and false if it may
+   *         still be propagated.
    */
-  void handleException(Throwable ex, Map<String, Object> context);
+  boolean handleException(Throwable ex, Map<String, Object> context);
 }
