@@ -22,6 +22,7 @@ import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.view.descriptor.IModuleViewDescriptorFactory;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
 import com.d2s.framework.binding.ICompositeValueConnector;
@@ -85,6 +86,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private IAction                               startupAction;
 
   private IViewFactory<E, F, G>                 viewFactory;
+  private IModuleViewDescriptorFactory          moduleViewDescriptorFactory;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -415,7 +417,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     splitViewDescriptor.setMasterDetail(true);
 
     ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(
-        module);
+        module, moduleViewDescriptorFactory);
 
     splitViewDescriptor.setLeftTopViewDescriptor(moduleViewDescriptor);
     splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
@@ -437,7 +439,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
           mvcBinder.bind(grandChildView.getValue().getConnector(),
               getBackendController().createModelConnector(
                   moduleName + "_" + grandChildView.getKey(),
-                  //"moduleObjects",
+                  // "moduleObjects",
                   grandChildView.getValue().getDescriptor()
                       .getModelDescriptor()));
         }
@@ -632,5 +634,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
         translateModule(subModule);
       }
     }
+  }
+
+  
+  /**
+   * Sets the moduleViewDescriptorFactory.
+   * 
+   * @param moduleViewDescriptorFactory the moduleViewDescriptorFactory to set.
+   */
+  public void setModuleViewDescriptorFactory(
+      IModuleViewDescriptorFactory moduleViewDescriptorFactory) {
+    this.moduleViewDescriptorFactory = moduleViewDescriptorFactory;
   }
 }
