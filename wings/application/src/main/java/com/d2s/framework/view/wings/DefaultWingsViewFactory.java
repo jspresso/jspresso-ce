@@ -1383,9 +1383,14 @@ public class DefaultWingsViewFactory implements
           masterView = detailView;
         }
       } else {
+        String connectorId;
+        if (viewDescriptor.getModelDescriptor() instanceof IPropertyDescriptor) {
+          connectorId = viewDescriptor.getModelDescriptor().getName();
+        } else {
+          connectorId = ModelRefPropertyConnector.THIS_PROPERTY;
+        }
         ICompositeValueConnector connector = connectorFactory
-            .createCompositeValueConnector(
-                ModelRefPropertyConnector.THIS_PROPERTY, null);
+            .createCompositeValueConnector(connectorId, null);
         view.setConnector(connector);
         for (IView<SComponent> childView : view.getChildren()) {
           childView.setParent(view);

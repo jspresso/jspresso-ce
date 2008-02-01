@@ -13,7 +13,9 @@ import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
 import com.d2s.framework.application.model.descriptor.BeanModuleDescriptor;
+import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
+import com.d2s.framework.view.descriptor.ICollectionViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicNestingViewDescriptor;
@@ -75,12 +77,20 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     }
   }
 
+  @SuppressWarnings("unchecked")
   private IViewDescriptor decorateModuleCard(SubModule module) {
     IViewDescriptor projectedViewDescriptor = module
         .getProjectedViewDescriptor();
     if (module instanceof BeanCollectionModule) {
       IComponentDescriptor<Object> componentDescriptor = ((BeanCollectionModule) module)
           .getElementComponentDescriptor();
+      if (componentDescriptor == null
+          && projectedViewDescriptor instanceof ICollectionViewDescriptor
+          && projectedViewDescriptor.getModelDescriptor() != null) {
+        componentDescriptor = ((ICollectionDescriptorProvider) projectedViewDescriptor
+            .getModelDescriptor()).getCollectionDescriptor()
+            .getElementDescriptor();
+      }
       BeanCollectionModuleDescriptor moduleDescriptor = new BeanCollectionModuleDescriptor(
           componentDescriptor);
       ((BasicViewDescriptor) projectedViewDescriptor)
@@ -93,6 +103,11 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     } else if (module instanceof BeanModule) {
       IComponentDescriptor<Object> componentDescriptor = ((BeanModule) module)
           .getComponentDescriptor();
+      if (componentDescriptor == null
+          && projectedViewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
+        componentDescriptor = (IComponentDescriptor<Object>) projectedViewDescriptor
+            .getModelDescriptor();
+      }
       BeanModuleDescriptor moduleDescriptor = new BeanModuleDescriptor(
           componentDescriptor);
       ((BasicViewDescriptor) projectedViewDescriptor)
@@ -107,11 +122,17 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     return projectedViewDescriptor;
   }
 
+  @SuppressWarnings("unchecked")
   private IViewDescriptor decorateElementModuleCard(BeanCollectionModule module) {
     BasicViewDescriptor projectedElementViewDescriptor = (BasicViewDescriptor) module
         .getElementViewDescriptor();
     IComponentDescriptor<Object> componentDescriptor = module
         .getElementComponentDescriptor();
+    if (componentDescriptor == null
+        && projectedElementViewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
+      componentDescriptor = (IComponentDescriptor<Object>) projectedElementViewDescriptor
+          .getModelDescriptor();
+    }
     BeanModuleDescriptor moduleDescriptor = new BeanModuleDescriptor(
         componentDescriptor);
     projectedElementViewDescriptor.setModelDescriptor(moduleDescriptor

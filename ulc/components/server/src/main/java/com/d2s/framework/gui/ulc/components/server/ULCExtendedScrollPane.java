@@ -17,10 +17,6 @@ import com.ulcjava.base.application.ULCScrollPane;
  */
 public class ULCExtendedScrollPane extends ULCScrollPane {
 
-
-  /**
-   * TODO Comment needed for <code>serialVersionUID</code>.
-   */
   private static final long serialVersionUID = 2629813640962214434L;
 
   /**
