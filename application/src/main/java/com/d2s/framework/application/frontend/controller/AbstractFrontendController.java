@@ -26,11 +26,9 @@ import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.application.view.descriptor.IModuleViewDescriptorFactory;
 import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorSelectionListener;
 import com.d2s.framework.binding.IConnectorSelector;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.security.SecurityHelper;
@@ -431,9 +429,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
         .addConnectorSelectionListener(new IConnectorSelectionListener() {
 
           public void selectedConnectorChange(ConnectorSelectionEvent event) {
-            selectedModuleConnectors.put(moduleName,
-                (ICompositeValueConnector) event.getSelectedConnector());
+            selectedModuleChanged(moduleName, (ICompositeValueConnector) event
+                .getSelectedConnector());
           }
+
         });
     for (IView<E> childView : moduleView.getChildren()) {
       if (childView instanceof IMapView) {
@@ -446,24 +445,21 @@ public abstract class AbstractFrontendController<E, F, G> extends
                   grandChildView.getValue().getDescriptor()
                       .getModelDescriptor()));
         }
-        childView.getConnector().addConnectorValueChangeListener(
-            new IConnectorValueChangeListener() {
-
-              public void connectorValueChange(ConnectorValueChangeEvent evt) {
-                if (evt.getNewValue() instanceof SubModule) {
-                  SubModule selectedModule = (SubModule) evt.getNewValue();
-                  if (selectedModule.getStartupAction() != null) {
-                    // FIXME The context must be filled with the selected sub
-                    // module.
-                    execute(selectedModule.getStartupAction(),
-                        createEmptyContext());
-                  }
-                }
-              }
-            });
       }
     }
     return moduleView;
+  }
+
+  private void selectedModuleChanged(String moduleName,
+      ICompositeValueConnector selectedConnector) {
+    selectedModuleConnectors.put(moduleName, selectedConnector);
+    if (selectedConnector.getConnectorValue() instanceof SubModule) {
+      SubModule selectedModule = (SubModule) selectedConnector
+          .getConnectorValue();
+      if (selectedModule.getStartupAction() != null) {
+        execute(selectedModule.getStartupAction(), createEmptyContext());
+      }
+    }
   }
 
   /**
