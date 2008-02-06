@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.application.model;
 
+import org.apache.commons.lang.ObjectUtils;
+
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -35,7 +37,12 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    *            the filter to set.
    */
   public void setFilter(Object filter) {
+    if (ObjectUtils.equals(this.filter, filter)) {
+      return;
+    }
+    Object oldValue = getFilter();
     this.filter = filter;
+    firePropertyChange("filter", oldValue, getFilter());
   }
 
   /**

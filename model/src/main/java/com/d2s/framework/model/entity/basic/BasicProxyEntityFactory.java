@@ -97,13 +97,13 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public <T extends IQueryEntity> T createQueryEntityInstance(
-      Class<T> entityContract) {
+  public IQueryEntity createQueryEntityInstance(
+      Class<? extends IEntity> entityContract) {
     IEntity entityDelegate = createEntityInstance(entityContract, null,
         new Class[] {IQueryEntity.class});
     QueryEntityInvocationHandler entityHandler = new QueryEntityInvocationHandler(
         entityDelegate);
-    return (T) Proxy.newProxyInstance(Thread.currentThread()
+    return (IQueryEntity) Proxy.newProxyInstance(Thread.currentThread()
         .getContextClassLoader(), entityDelegate.getClass().getInterfaces(),
         entityHandler);
   }

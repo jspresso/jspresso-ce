@@ -15,11 +15,7 @@ import com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxy
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
-import com.d2s.framework.application.model.BeanCollectionModule;
-import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.model.descriptor.BeanCollectionModuleDescriptor;
-import com.d2s.framework.application.model.descriptor.BeanModuleDescriptor;
 import com.d2s.framework.application.model.descriptor.SubModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
@@ -264,17 +260,7 @@ public abstract class AbstractBackendController extends AbstractController
     moduleConnectors = new HashMap<String, IValueConnector>();
     for (Map.Entry<String, Module> moduleEntry : modules.entrySet()) {
       IModelDescriptor moduleDescriptor;
-      if (moduleEntry.getValue() instanceof BeanCollectionModule) {
-        moduleDescriptor = new BeanCollectionModuleDescriptor(
-            ((BeanCollectionModule) moduleEntry.getValue())
-                .getElementComponentDescriptor());
-      } else if (moduleEntry.getValue() instanceof BeanModule) {
-        moduleDescriptor = new BeanModuleDescriptor(
-            ((BeanModule) moduleEntry.getValue())
-                .getComponentDescriptor());
-      } else {
-        moduleDescriptor = SubModuleDescriptor.SUB_MODULE_DESCRIPTOR;
-      }
+      moduleDescriptor = SubModuleDescriptor.SUB_MODULE_DESCRIPTOR;
       IValueConnector nextModuleConnector = beanConnectorFactory
           .createModelConnector(moduleEntry.getKey(), moduleDescriptor);
       nextModuleConnector.setConnectorValue(moduleEntry.getValue());

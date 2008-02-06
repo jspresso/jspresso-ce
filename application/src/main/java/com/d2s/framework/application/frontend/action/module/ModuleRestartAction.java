@@ -34,7 +34,7 @@ public class ModuleRestartAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    Module module = getModule(context);
+    Module module = (Module) getModuleConnector(context).getConnectorValue();
     if (module.getStartupAction() != null) {
       return actionHandler
           .execute(module.getStartupAction(), context);

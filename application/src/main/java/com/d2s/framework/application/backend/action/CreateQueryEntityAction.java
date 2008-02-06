@@ -12,7 +12,7 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.IConnector;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.model.ModelConnector;
+import com.d2s.framework.binding.model.ModelRefPropertyConnector;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -52,8 +52,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
     }
     IQueryEntity queryEntity = getEntityFactory(context)
         .createQueryEntityInstance(
-            (Class<? extends IQueryEntity>) erqDescriptor
-                .getReferencedDescriptor().getComponentContract());
+            erqDescriptor.getReferencedDescriptor().getComponentContract());
 
     Map<String, String> initializationMapping = erqDescriptor
         .getInitializationMapping();
@@ -97,10 +96,16 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
         }
       }
     }
-    ModelConnector modelConnector = (ModelConnector) getBeanConnectorFactory(
-        context).createModelConnector(ACTION_MODEL_CONNECTOR_ID,
-        new BasicQueryEntityDescriptor(erqDescriptor.getReferencedDescriptor(),
-            queryEntity.getClass()));
+    ModelRefPropertyConnector modelConnector = (ModelRefPropertyConnector) context
+        .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
+    if (modelConnector == null) {
+      modelConnector = (ModelRefPropertyConnector) getBeanConnectorFactory(context)
+          .createModelConnector(
+              ACTION_MODEL_CONNECTOR_ID,
+              new BasicQueryEntityDescriptor(erqDescriptor
+                  .getReferencedDescriptor(), queryEntity.getClass()));
+      context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
+    }
     modelConnector.setConnectorValue(queryEntity);
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_COMMAND);
@@ -109,7 +114,6 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
           erqDescriptor.getComponentDescriptor().getToStringProperty())
           .setConnectorValue(queryPropertyValue);
     }
-    context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
     return super.execute(actionHandler, context);
   }
 }

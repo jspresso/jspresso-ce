@@ -200,9 +200,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
       initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
           selectedModuleViewConnector);
     }
-    initialActionContext.put(ActionContextConstants.MODULE,
-        getModule(getSelectedModuleName()));
-
     return initialActionContext;
   }
 
@@ -441,7 +438,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
           mvcBinder.bind(grandChildView.getValue().getConnector(),
               getBackendController().createModelConnector(
                   moduleName + "_" + grandChildView.getKey(),
-                  // "moduleObjects",
                   grandChildView.getValue().getDescriptor()
                       .getModelDescriptor()));
         }

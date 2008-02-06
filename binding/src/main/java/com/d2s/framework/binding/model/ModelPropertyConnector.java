@@ -19,6 +19,7 @@ import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
@@ -106,11 +107,11 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
     return modelDescriptor;
   }
 
-  
   /**
    * Sets the modelDescriptor.
    * 
-   * @param modelDescriptor the modelDescriptor to set.
+   * @param modelDescriptor
+   *            the modelDescriptor to set.
    */
   public void setModelDescriptor(IModelDescriptor modelDescriptor) {
     this.modelDescriptor = modelDescriptor;
@@ -224,7 +225,8 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    */
   @Override
   public void setConnectorValue(Object aValue) {
-    if (getModelDescriptor() instanceof IPropertyDescriptor) {
+    if (getModelDescriptor() instanceof IPropertyDescriptor
+        && !(getModelProvider().getModel() instanceof IQueryEntity)) {
       ((IPropertyDescriptor) getModelDescriptor()).checkValueIntegrity(
           getModelProvider().getModel(), aValue);
     }
