@@ -277,6 +277,25 @@
     class="com.d2s.framework.application.frontend.action.module.ParentModuleConnectorSelectionAction" />
 
   <bean
+    id="queryModuleFilterAction"
+    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    <property name="wrappedAction">
+      <bean
+        class="com.d2s.framework.application.backend.action.module.QueryModuleFilterAction">
+        <property
+          name="queryAction"
+          ref="queryEntitiesBackAction" />
+      </bean>
+    </property>
+    <property
+      name="name"
+      value="query.filter.name" />
+    <property
+      name="iconImageURL"
+      value="classpath:images/find-48x48.png" />
+  </bean>
+
+  <bean
     id="scriptedBackAction"
     class="com.d2s.framework.application.backend.action.StaticScriptedBackendAction">
     <property
@@ -727,7 +746,7 @@
   </bean>
 
   <bean
-    id="projectedReadonlyCollectionActionMap"
+    id="readonlyBeanCollectionModuleActionMap"
     class="com.d2s.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
@@ -758,8 +777,13 @@
   </bean>
 
   <bean
-    id="projectedEditableCollectionActionMap"
+    id="filterableReadonlyBeanCollectionModuleActionMap"
     class="com.d2s.framework.view.action.ActionMap">
+    <property name="parentActionMaps">
+      <list>
+       <ref bean="readonlyBeanCollectionModuleActionMap"/>
+      </list>
+    </property>
     <property name="actionLists">
       <list>
         <bean class="com.d2s.framework.view.action.ActionList">
@@ -768,11 +792,24 @@
             value="FILE" />
           <property name="actions">
             <list>
-              <ref local="saveProjectedFrontAction" />
-              <ref local="reloadProjectedFrontAction" />
+              <ref local="queryModuleFilterAction" />
             </list>
           </property>
         </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean
+    id="beanCollectionModuleActionMap"
+    class="com.d2s.framework.view.action.ActionMap">
+    <property name="parentActionMaps">
+      <list>
+       <ref bean="readonlyBeanCollectionModuleActionMap"/>
+      </list>
+    </property>
+    <property name="actionLists">
+      <list>
         <bean class="com.d2s.framework.view.action.ActionList">
           <property
             name="name"
@@ -784,13 +821,27 @@
             </list>
           </property>
         </bean>
+      </list>
+    </property>
+  </bean>
+
+  <bean
+    id="filterableBeanCollectionModuleActionMap"
+    class="com.d2s.framework.view.action.ActionMap">
+    <property name="parentActionMaps">
+      <list>
+       <ref bean="beanCollectionModuleActionMap"/>
+      </list>
+    </property>
+    <property name="actionLists">
+      <list>
         <bean class="com.d2s.framework.view.action.ActionList">
           <property
             name="name"
-            value="SERVICE" />
+            value="FILE" />
           <property name="actions">
             <list>
-              <ref local="addAsChildModuleFrontAction" />
+              <ref local="queryModuleFilterAction" />
             </list>
           </property>
         </bean>
@@ -799,7 +850,7 @@
   </bean>
 
   <bean
-    id="moduleActionMap"
+    id="moduleTreeActionMap"
     class="com.d2s.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
@@ -818,7 +869,7 @@
   </bean>
 
   <bean
-    id="projectedActionMap"
+    id="beanModuleActionMap"
     class="com.d2s.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>

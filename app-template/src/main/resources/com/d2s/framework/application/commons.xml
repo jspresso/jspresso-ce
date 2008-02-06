@@ -223,6 +223,7 @@
       name="nextAction"
       ref="createQueryEntityAction" />
   </bean>
+
   <!--
     The implementation used as view factory.
     View factory is not defined as singleton since it can implement some cache a the session level.
