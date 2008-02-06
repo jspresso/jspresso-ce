@@ -226,7 +226,6 @@ public class DefaultUlcController extends
     moduleInternalFrame.setMaximum(true);
     setSelectedModuleName(moduleName);
     moduleInternalFrame.moveToFront();
-    super.displayModule(moduleName);
   }
 
   /**

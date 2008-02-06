@@ -453,8 +453,10 @@ public abstract class AbstractFrontendController<E, F, G> extends
         && selectedConnector.getConnectorValue() instanceof SubModule) {
       SubModule selectedModule = (SubModule) selectedConnector
           .getConnectorValue();
-      if (selectedModule.getStartupAction() != null) {
+      if (!selectedModule.isStarted()
+          && selectedModule.getStartupAction() != null) {
         execute(selectedModule.getStartupAction(), createEmptyContext());
+        selectedModule.setStarted(true);
       }
     }
   }
@@ -465,13 +467,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @param moduleName
    *            the module identifier.
    */
-  protected void displayModule(String moduleName) {
-    Module module = getModule(moduleName);
-    if (module.getStartupAction() != null) {
-      Map<String, Object> context = createEmptyContext();
-      execute(module.getStartupAction(), context);
-    }
-  }
+  protected abstract void displayModule(String moduleName);
 
   /**
    * Executes a backend action.

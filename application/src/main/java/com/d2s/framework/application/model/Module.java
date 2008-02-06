@@ -11,7 +11,6 @@ import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.view.descriptor.basic.BasicModuleDescriptor;
 import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.util.IIconImageURLProvider;
@@ -41,7 +40,6 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   private String                i18nName;
   private String                iconImageURL;
   private String                name;
-  private IAction               startupAction;
   private IIconImageURLProvider iconImageURLProvider;
 
   private IViewDescriptor       viewDescriptor;
@@ -56,25 +54,6 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    */
   public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
     this.iconImageURLProvider = iconImageURLProvider;
-  }
-
-  /**
-   * Gets the startupAction.
-   * 
-   * @return the startupAction.
-   */
-  public IAction getStartupAction() {
-    return startupAction;
-  }
-
-  /**
-   * Sets the startupAction.
-   * 
-   * @param startupAction
-   *            the startupAction to set.
-   */
-  public void setStartupAction(IAction startupAction) {
-    this.startupAction = startupAction;
   }
 
   /**

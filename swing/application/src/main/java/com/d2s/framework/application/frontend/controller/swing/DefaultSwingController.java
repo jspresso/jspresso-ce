@@ -266,7 +266,6 @@ public class DefaultSwingController extends
     }
     setSelectedModuleName(moduleName);
     moduleInternalFrame.toFront();
-    super.displayModule(moduleName);
   }
 
   /**

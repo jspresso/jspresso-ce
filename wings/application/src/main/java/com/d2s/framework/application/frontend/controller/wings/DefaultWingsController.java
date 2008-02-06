@@ -169,7 +169,6 @@ public class DefaultWingsController extends
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
     }
     setSelectedModuleName(moduleName);
-    super.displayModule(moduleName);
   }
 
   /**

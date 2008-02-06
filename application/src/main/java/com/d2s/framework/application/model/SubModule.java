@@ -5,6 +5,7 @@ package com.d2s.framework.application.model;
 
 import org.apache.commons.lang.ObjectUtils;
 
+import com.d2s.framework.action.IAction;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -19,8 +20,19 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class SubModule extends Module {
 
+  /**
+   * Constructs a new <code>SubModule</code> instance.
+   * 
+   */
+  protected SubModule() {
+    started = false;
+  }
+
+
   private Module          parent;
   private IViewDescriptor projectedViewDescriptor;
+  private IAction         startupAction;
+  private boolean         started;
 
   /**
    * Gets the module's parent module.
@@ -69,5 +81,44 @@ public class SubModule extends Module {
    */
   public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
     this.projectedViewDescriptor = projectedViewDescriptor;
+  }
+
+  /**
+   * Gets the startupAction.
+   * 
+   * @return the startupAction.
+   */
+  public IAction getStartupAction() {
+    return startupAction;
+  }
+
+  /**
+   * Sets the startupAction.
+   * 
+   * @param startupAction
+   *            the startupAction to set.
+   */
+  public void setStartupAction(IAction startupAction) {
+    this.startupAction = startupAction;
+  }
+
+  
+  /**
+   * Gets the started.
+   * 
+   * @return the started.
+   */
+  public boolean isStarted() {
+    return started;
+  }
+
+  
+  /**
+   * Sets the started.
+   * 
+   * @param started the started to set.
+   */
+  public void setStarted(boolean started) {
+    this.started = started;
   }
 }

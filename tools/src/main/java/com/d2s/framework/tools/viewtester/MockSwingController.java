@@ -82,4 +82,13 @@ public class MockSwingController extends
   String moduleName) {
     return null;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void displayModule(@SuppressWarnings("unused")
+  String moduleName) {
+    // Empty implementation.
+  }
 }
