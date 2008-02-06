@@ -4,6 +4,7 @@
 package com.d2s.framework.view.action;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +22,18 @@ import java.util.Map;
  */
 public class ActionMap {
 
-  private Map<String, ActionList> mapOfActionLists;
-  private List<ActionMap>         parentActionMaps;
+  private List<ActionList> actionLists;
+  private List<ActionMap>  parentActionMaps;
 
   private static void completeActionMap(
-      Map<String, ActionList> bufferActionMap, ActionMap actionMap) {
-    if (actionMap != null) {
-      for (Map.Entry<String, ActionList> actionListEntry : actionMap
-          .getMapOfActionLists().entrySet()) {
+      Map<String, ActionList> bufferActionMap, List<ActionList> actionLists) {
+    if (actionLists != null) {
+      Map<String, ActionList> mapOfActionLists = new HashMap<String, ActionList>();
+      for (ActionList al : actionLists) {
+        mapOfActionLists.put(al.getName(), al);
+      }
+      for (Map.Entry<String, ActionList> actionListEntry : mapOfActionLists
+          .entrySet()) {
         ActionList bufferActionList = bufferActionMap.get(actionListEntry
             .getKey());
         if (bufferActionList == null) {
@@ -60,11 +65,11 @@ public class ActionMap {
     Map<String, ActionList> buffer = new LinkedHashMap<String, ActionList>();
     if (parentActionMaps != null) {
       for (ActionMap parentActionMap : parentActionMaps) {
-        completeActionMap(buffer, parentActionMap);
+        completeActionMap(buffer, parentActionMap.getActionLists());
       }
     }
-    if (mapOfActionLists != null) {
-      completeActionMap(buffer, this);
+    if (actionLists != null) {
+      completeActionMap(buffer, actionLists);
     }
     return new ArrayList<ActionList>(buffer.values());
   }
@@ -76,16 +81,7 @@ public class ActionMap {
    *            the action lists list to set.
    */
   public void setActionLists(List<ActionList> actionLists) {
-    mapOfActionLists = new LinkedHashMap<String, ActionList>();
-    if (actionLists != null) {
-      for (ActionList actionList : actionLists) {
-        mapOfActionLists.put(actionList.getName(), actionList);
-      }
-    }
-  }
-
-  private Map<String, ActionList> getMapOfActionLists() {
-    return mapOfActionLists;
+    this.actionLists = actionLists;
   }
 
   /**
