@@ -49,7 +49,8 @@ public final class SErrorDialog extends SDialog {
   private ITranslationProvider translationProvider;
 
   private SErrorDialog(SFrame owner) {
-    super(owner);
+    super(owner, true);
+    setDraggable(true);
   }
 
   /**

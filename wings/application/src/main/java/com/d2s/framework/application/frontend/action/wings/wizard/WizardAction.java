@@ -77,7 +77,8 @@ public class WizardAction extends AbstractWingsAction {
 
     SFrame window = getSourceComponent(context).getParentFrame();
     dialog = new SDialog(window, getI18nName(getTranslationProvider(context),
-        getLocale(context)));
+        getLocale(context)), true);
+    dialog.setDraggable(true);
 
     dialog.setLayout(new SBorderLayout());
     // dialog.setClosable(false);

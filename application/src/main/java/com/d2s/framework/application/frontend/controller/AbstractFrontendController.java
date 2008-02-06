@@ -453,7 +453,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private void selectedModuleChanged(String moduleName,
       ICompositeValueConnector selectedConnector) {
     selectedModuleConnectors.put(moduleName, selectedConnector);
-    if (selectedConnector.getConnectorValue() instanceof SubModule) {
+    if (selectedConnector != null
+        && selectedConnector.getConnectorValue() instanceof SubModule) {
       SubModule selectedModule = (SubModule) selectedConnector
           .getConnectorValue();
       if (selectedModule.getStartupAction() != null) {

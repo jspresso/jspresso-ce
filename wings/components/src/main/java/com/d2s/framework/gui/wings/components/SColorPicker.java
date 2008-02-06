@@ -173,7 +173,8 @@ public class SColorPicker extends SPanel {
 
   private void showColorPickerDialog() {
     final XColorPicker colorPicker = new XColorPicker();
-    final SDialog colorPickerDialog = new SDialog(getParentFrame());
+    final SDialog colorPickerDialog = new SDialog(getParentFrame(), true);
+    colorPickerDialog.setDraggable(true);
     SButton okButton = new SButton("OK");
     SButton cancelButton = new SButton("Cancel");
     SButton restoreButton = new SButton("Restore");

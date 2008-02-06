@@ -46,7 +46,8 @@ public class ModalDialogAction extends AbstractWingsAction {
     IView<SComponent> mainView = getMainView(context);
     SFrame window = getSourceComponent(context).getParentFrame();
     dialog = new SDialog(window, getI18nName(getTranslationProvider(context),
-        getLocale(context)));
+        getLocale(context)), true);
+    dialog.setDraggable(true);
 
     SPanel buttonBox = new SPanel(new SBoxLayout(/*dialog, */SBoxLayout.X_AXIS));
     buttonBox.setBorder(new SEmptyBorder(new java.awt.Insets(5, 10, 5, 10)));
