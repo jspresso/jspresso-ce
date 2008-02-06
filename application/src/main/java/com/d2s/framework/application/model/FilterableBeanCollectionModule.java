@@ -5,6 +5,7 @@ package com.d2s.framework.application.model;
 
 import org.apache.commons.lang.ObjectUtils;
 
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -18,8 +19,9 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class FilterableBeanCollectionModule extends BeanCollectionModule {
 
-  private Object          filter;
-  private IViewDescriptor filterViewDescriptor;
+  private Object                       filter;
+  private IViewDescriptor              filterViewDescriptor;
+  private IComponentDescriptor<Object> filterComponentDescriptor;
 
   /**
    * Gets the filter.
@@ -62,5 +64,28 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    */
   public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
     this.filterViewDescriptor = filterViewDescriptor;
+  }
+
+  /**
+   * Gets the filterComponentDescriptor.
+   * 
+   * @return the filterComponentDescriptor.
+   */
+  public IComponentDescriptor<Object> getFilterComponentDescriptor() {
+    if (filterComponentDescriptor == null) {
+      return getElementComponentDescriptor();
+    }
+    return filterComponentDescriptor;
+  }
+
+  /**
+   * Sets the filterComponentDescriptor.
+   * 
+   * @param filterComponentDescriptor
+   *            the filterComponentDescriptor to set.
+   */
+  public void setFilterComponentDescriptor(
+      IComponentDescriptor<Object> filterComponentDescriptor) {
+    this.filterComponentDescriptor = filterComponentDescriptor;
   }
 }

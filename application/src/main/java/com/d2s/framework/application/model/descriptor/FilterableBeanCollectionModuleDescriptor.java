@@ -24,32 +24,40 @@ public class FilterableBeanCollectionModuleDescriptor extends
     BeanCollectionModuleDescriptor {
 
   /**
-   * Constructs a new <code>FilterableBeanCollectionModuleDescriptor</code> instance.
+   * Constructs a new <code>FilterableBeanCollectionModuleDescriptor</code>
+   * instance.
    * 
    * @param moduleObjectReferencedDescriptor
    *            the component descriptor of the module objects.
+   * @param moduleFilterReferencedDescriptor
+   *            the component descriptor for the filter object.
    */
   public FilterableBeanCollectionModuleDescriptor(
-      IComponentDescriptor<Object> moduleObjectReferencedDescriptor) {
+      IComponentDescriptor<Object> moduleObjectReferencedDescriptor,
+      IComponentDescriptor<Object> moduleFilterReferencedDescriptor) {
     this(FilterableBeanCollectionModule.class.getName(),
-        moduleObjectReferencedDescriptor);
+        moduleObjectReferencedDescriptor, moduleFilterReferencedDescriptor);
   }
 
   /**
-   * Constructs a new <code>FilterableBeanCollectionModuleDescriptor</code> instance.
+   * Constructs a new <code>FilterableBeanCollectionModuleDescriptor</code>
+   * instance.
    * 
    * @param name
    *            the name of the descriptor (the actual module class name).
    * @param moduleObjectReferencedDescriptor
    *            the component descriptor of the module objects.
+   * @param moduleFilterReferencedDescriptor
+   *            the component descriptor for the filter object.
    */
   protected FilterableBeanCollectionModuleDescriptor(String name,
-      IComponentDescriptor<Object> moduleObjectReferencedDescriptor) {
+      IComponentDescriptor<Object> moduleObjectReferencedDescriptor,
+      IComponentDescriptor<Object> moduleFilterReferencedDescriptor) {
     super(name, moduleObjectReferencedDescriptor);
 
     BasicReferencePropertyDescriptor<Object> filterObjectDescriptor = new BasicReferencePropertyDescriptor<Object>();
     filterObjectDescriptor
-        .setReferencedDescriptor(moduleObjectReferencedDescriptor);
+        .setReferencedDescriptor(moduleFilterReferencedDescriptor);
     filterObjectDescriptor.setName("filter");
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(

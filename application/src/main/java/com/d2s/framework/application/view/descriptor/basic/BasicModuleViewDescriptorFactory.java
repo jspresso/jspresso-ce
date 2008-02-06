@@ -53,7 +53,8 @@ public class BasicModuleViewDescriptorFactory implements
         BeanCollectionModuleDescriptor moduleDescriptor;
         if (module instanceof FilterableBeanCollectionModule) {
           moduleDescriptor = new FilterableBeanCollectionModuleDescriptor(
-              componentDescriptor);
+              componentDescriptor, ((FilterableBeanCollectionModule) module)
+                  .getFilterComponentDescriptor());
         } else {
           moduleDescriptor = new BeanCollectionModuleDescriptor(
               componentDescriptor);
