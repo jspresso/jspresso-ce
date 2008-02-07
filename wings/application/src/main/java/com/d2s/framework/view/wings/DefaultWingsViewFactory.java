@@ -1543,6 +1543,9 @@ public class DefaultWingsViewFactory implements
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     SComboBox viewComponent = createSComboBox();
+    if (!propertyDescriptor.isMandatory()) {
+      viewComponent.addItem(null);
+    }
     for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
       viewComponent.addItem(enumElement);
     }

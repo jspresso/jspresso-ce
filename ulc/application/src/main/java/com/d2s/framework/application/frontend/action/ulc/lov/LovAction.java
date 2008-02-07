@@ -125,7 +125,7 @@ public class LovAction extends ModalDialogAction {
    * @param createQueryComponentAction
    *            the createQueryComponentAction to set.
    */
-  public void setCreateQueryEntityAction(
+  public void setCreateQueryComponentAction(
       CreateQueryComponentAction createQueryComponentAction) {
     this.createQueryComponentAction = createQueryComponentAction;
   }

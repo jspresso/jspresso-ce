@@ -1557,6 +1557,9 @@ public class DefaultSwingViewFactory implements
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     JComboBox viewComponent = createJComboBox();
+    if (!propertyDescriptor.isMandatory()) {
+      viewComponent.addItem(null);
+    }
     for (Object enumElement : propertyDescriptor.getEnumerationValues()) {
       viewComponent.addItem(enumElement);
     }
@@ -2934,7 +2937,7 @@ public class DefaultSwingViewFactory implements
             propertyDescriptor.getEnumerationName(), value), locale));
       } else {
         if (value == null) {
-          label.setText("");
+          label.setText(" ");
         } else {
           label.setText(String.valueOf(value));
         }

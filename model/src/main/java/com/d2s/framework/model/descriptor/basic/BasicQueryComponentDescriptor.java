@@ -4,9 +4,12 @@
 package com.d2s.framework.model.descriptor.basic;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import com.d2s.framework.model.component.IQueryComponent;
@@ -27,10 +30,12 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicQueryComponentDescriptor<E> implements IComponentDescriptor<E> {
+public class BasicQueryComponentDescriptor<E> implements
+    IComponentDescriptor<E> {
 
   private IComponentDescriptor<E>              componentDescriptor;
   private BasicCollectionPropertyDescriptor<E> queriedComponentsPropertyDescriptor;
+  private Map<String, IPropertyDescriptor>     queryPropertyDescriptors;
   private Class<? extends E>                   queryContract;
 
   /**
@@ -46,6 +51,7 @@ public class BasicQueryComponentDescriptor<E> implements IComponentDescriptor<E>
       Class<? extends E> queryContract) {
     this.componentDescriptor = componentDescriptor;
     this.queryContract = queryContract;
+    queryPropertyDescriptors = new HashMap<String, IPropertyDescriptor>();
   }
 
   /**
@@ -68,7 +74,7 @@ public class BasicQueryComponentDescriptor<E> implements IComponentDescriptor<E>
   public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
     Collection<IPropertyDescriptor> declaredPropertyDescriptors = componentDescriptor
         .getDeclaredPropertyDescriptors();
-    declaredPropertyDescriptors.add(getQueriedEntitiesPropertyDescriptor());
+    declaredPropertyDescriptors.add(getQueriedComponentsPropertyDescriptor());
     return declaredPropertyDescriptors;
   }
 
@@ -135,9 +141,10 @@ public class BasicQueryComponentDescriptor<E> implements IComponentDescriptor<E>
    */
   public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
     if (IQueryComponent.QUERIED_COMPONENTS.equals(propertyName)) {
-      return getQueriedEntitiesPropertyDescriptor();
+      return getQueriedComponentsPropertyDescriptor();
     }
-    return componentDescriptor.getPropertyDescriptor(propertyName);
+    return getQueryPropertyDescriptor(componentDescriptor
+        .getPropertyDescriptor(propertyName));
   }
 
   /**
@@ -146,8 +153,13 @@ public class BasicQueryComponentDescriptor<E> implements IComponentDescriptor<E>
   public Collection<IPropertyDescriptor> getPropertyDescriptors() {
     Collection<IPropertyDescriptor> propertyDescriptors = componentDescriptor
         .getPropertyDescriptors();
-    propertyDescriptors.add(getQueriedEntitiesPropertyDescriptor());
-    return propertyDescriptors;
+    List<IPropertyDescriptor> qPropertyDescriptors = new ArrayList<IPropertyDescriptor>(
+        propertyDescriptors.size());
+    for (IPropertyDescriptor propertyDescriptor : propertyDescriptors) {
+      qPropertyDescriptors.add(getQueryPropertyDescriptor(propertyDescriptor));
+    }
+    qPropertyDescriptors.add(getQueriedComponentsPropertyDescriptor());
+    return qPropertyDescriptors;
   }
 
   /**
@@ -218,7 +230,7 @@ public class BasicQueryComponentDescriptor<E> implements IComponentDescriptor<E>
    * 
    * @return the queriedComponentsPropertyDescriptor.
    */
-  private BasicCollectionPropertyDescriptor<E> getQueriedEntitiesPropertyDescriptor() {
+  private BasicCollectionPropertyDescriptor<E> getQueriedComponentsPropertyDescriptor() {
     if (queriedComponentsPropertyDescriptor == null) {
       BasicCollectionDescriptor<E> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<E>();
       queriedEntitiesCollectionDescriptor.setCollectionInterface(Set.class);
@@ -229,10 +241,33 @@ public class BasicQueryComponentDescriptor<E> implements IComponentDescriptor<E>
       queriedEntitiesCollectionDescriptor
           .setDescription("queriedEntities.description");
       queriedComponentsPropertyDescriptor = new BasicCollectionPropertyDescriptor<E>();
-      queriedComponentsPropertyDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
+      queriedComponentsPropertyDescriptor
+          .setName(IQueryComponent.QUERIED_COMPONENTS);
       queriedComponentsPropertyDescriptor
           .setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
     }
     return queriedComponentsPropertyDescriptor;
+  }
+
+  private IPropertyDescriptor getQueryPropertyDescriptor(
+      IPropertyDescriptor propertyDescriptor) {
+    IPropertyDescriptor queryPropertyDescriptor = null;
+    if (propertyDescriptor != null) {
+      queryPropertyDescriptor = queryPropertyDescriptors.get(propertyDescriptor
+          .getName());
+      if (queryPropertyDescriptor == null) {
+        queryPropertyDescriptor = clonePropertyDescriptorForQuery(propertyDescriptor);
+        queryPropertyDescriptors.put(propertyDescriptor.getName(),
+            queryPropertyDescriptor);
+      }
+    }
+    return queryPropertyDescriptor;
+  }
+
+  private IPropertyDescriptor clonePropertyDescriptorForQuery(
+      IPropertyDescriptor propertyDescriptor) {
+    IPropertyDescriptor queryPropertyDescriptor = propertyDescriptor.clone();
+    queryPropertyDescriptor.unleashForFilter();
+    return queryPropertyDescriptor;
   }
 }

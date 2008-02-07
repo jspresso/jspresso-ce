@@ -208,4 +208,14 @@ public class BasicStringPropertyDescriptor extends
 
     return clonedDescriptor;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void unleashForFilter() {
+    setMaxLength(null);
+    setRegexpPattern(null);
+    super.unleashForFilter();
+  }
 }

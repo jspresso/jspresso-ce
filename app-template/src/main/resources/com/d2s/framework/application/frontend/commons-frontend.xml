@@ -40,8 +40,8 @@
       name="lovViewDescriptorFactory"
       ref="lovViewDescriptorFactory" />
     <property
-      name="createQueryEntityAction"
-      ref="createQueryEntityAction" />
+      name="createQueryComponentAction"
+      ref="createQueryComponentAction" />
     <property
       name="okAction"
       ref="lovOkFrontAction" />

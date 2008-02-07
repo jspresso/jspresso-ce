@@ -384,4 +384,12 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   public BasicPropertyDescriptor clone() {
     return (BasicPropertyDescriptor) super.clone();
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public void unleashForFilter() {
+    setMandatory(false);
+    setReadOnly(false);
+  }
 }

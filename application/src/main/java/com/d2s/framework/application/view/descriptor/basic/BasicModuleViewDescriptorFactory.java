@@ -21,7 +21,7 @@ import com.d2s.framework.view.descriptor.basic.BasicNestingViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
- * TODO Comment needed.
+ * The default implementation for module view descriptor factory.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>

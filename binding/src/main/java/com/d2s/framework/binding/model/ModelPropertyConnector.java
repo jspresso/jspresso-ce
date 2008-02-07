@@ -16,7 +16,6 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.IModelChangeListener;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.ModelChangeEvent;
-import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
@@ -225,8 +224,7 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
    */
   @Override
   public void setConnectorValue(Object aValue) {
-    if (getModelDescriptor() instanceof IPropertyDescriptor
-        && !(getModelProvider().getModel() instanceof IQueryComponent)) {
+    if (getModelDescriptor() instanceof IPropertyDescriptor) {
       ((IPropertyDescriptor) getModelDescriptor()).checkValueIntegrity(
           getModelProvider().getModel(), aValue);
     }

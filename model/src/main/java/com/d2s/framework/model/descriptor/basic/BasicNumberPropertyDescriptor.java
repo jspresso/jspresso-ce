@@ -126,4 +126,14 @@ public abstract class BasicNumberPropertyDescriptor extends
 
     return clonedDescriptor;
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void unleashForFilter() {
+    setMinValue(null);
+    setMaxValue(null);
+    super.unleashForFilter();
+  }
 }

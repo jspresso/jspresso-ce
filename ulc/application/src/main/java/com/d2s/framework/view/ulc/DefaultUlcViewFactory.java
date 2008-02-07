@@ -1592,6 +1592,9 @@ public class DefaultUlcViewFactory implements
       IEnumerationPropertyDescriptor propertyDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCComboBox viewComponent = createULCComboBox();
+    if (!propertyDescriptor.isMandatory()) {
+      viewComponent.addItem(null);
+    }
     for (String enumElement : propertyDescriptor.getEnumerationValues()) {
       viewComponent.addItem(enumElement);
     }

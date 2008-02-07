@@ -213,7 +213,7 @@
   -->
 
   <bean
-    id="createQueryEntityAction"
+    id="createQueryComponentAction"
     class="com.d2s.framework.application.backend.action.CreateQueryComponentAction" />
 
   <bean
@@ -221,7 +221,7 @@
     class="com.d2s.framework.application.backend.action.module.InitModuleFilterAction">
     <property
       name="nextAction"
-      ref="createQueryEntityAction" />
+      ref="createQueryComponentAction" />
   </bean>
 
   <!--
