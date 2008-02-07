@@ -15,37 +15,37 @@ import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
-import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
- * Default implementation of entity descriptors.
+ * An implementation used for query components.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
+ * @param <E>
+ *            the concrete type of component.
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicQueryEntityDescriptor implements
-    IComponentDescriptor<IEntity> {
+public class BasicQueryComponentDescriptor<E> implements IComponentDescriptor<E> {
 
-  private IComponentDescriptor<IEntity>              entityDescriptor;
-  private BasicCollectionPropertyDescriptor<IEntity> queriedEntitiesPropertyDescriptor;
-  private Class<? extends IEntity>                   queryContract;
+  private IComponentDescriptor<E>              entityDescriptor;
+  private BasicCollectionPropertyDescriptor<E> queriedEntitiesPropertyDescriptor;
+  private Class<? extends E>                   queryContract;
 
   /**
-   * Constructs a new <code>BasicQueryEntityDescriptor</code> instance.
+   * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
    * 
    * @param entityDescriptor
    *            the delegate entity descriptor.
    * @param queryContract
-   *            the real contract this query entity has.
+   *            the real contract this query component has.
    */
-  public BasicQueryEntityDescriptor(
-      IComponentDescriptor<IEntity> entityDescriptor,
-      Class<? extends IEntity> queryContract) {
+  public BasicQueryComponentDescriptor(
+      IComponentDescriptor<E> entityDescriptor,
+      Class<? extends E> queryContract) {
     this.entityDescriptor = entityDescriptor;
     this.queryContract = queryContract;
   }
@@ -53,14 +53,14 @@ public class BasicQueryEntityDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public Class<? extends IEntity> getComponentContract() {
+  public Class<? extends E> getComponentContract() {
     return queryContract;
   }
 
   /**
    * {@inheritDoc}
    */
-  public IComponentDescriptor<IEntity> getComponentDescriptor() {
+  public IComponentDescriptor<E> getComponentDescriptor() {
     return this;
   }
 
@@ -220,9 +220,9 @@ public class BasicQueryEntityDescriptor implements
    * 
    * @return the queriedEntitiesPropertyDescriptor.
    */
-  private BasicCollectionPropertyDescriptor<IEntity> getQueriedEntitiesPropertyDescriptor() {
+  private BasicCollectionPropertyDescriptor<E> getQueriedEntitiesPropertyDescriptor() {
     if (queriedEntitiesPropertyDescriptor == null) {
-      BasicCollectionDescriptor<IEntity> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<IEntity>();
+      BasicCollectionDescriptor<E> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<E>();
       queriedEntitiesCollectionDescriptor.setCollectionInterface(Set.class);
       queriedEntitiesCollectionDescriptor
           .setElementDescriptor(entityDescriptor);
@@ -230,7 +230,7 @@ public class BasicQueryEntityDescriptor implements
           .setName(IQueryEntity.QUERIED_ENTITIES);
       queriedEntitiesCollectionDescriptor
           .setDescription("queriedEntities.description");
-      queriedEntitiesPropertyDescriptor = new BasicCollectionPropertyDescriptor<IEntity>();
+      queriedEntitiesPropertyDescriptor = new BasicCollectionPropertyDescriptor<E>();
       queriedEntitiesPropertyDescriptor.setName(IQueryEntity.QUERIED_ENTITIES);
       queriedEntitiesPropertyDescriptor
           .setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
