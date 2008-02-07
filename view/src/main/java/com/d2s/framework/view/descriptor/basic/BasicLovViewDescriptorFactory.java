@@ -6,12 +6,12 @@ package com.d2s.framework.view.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
-import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
 import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
 import com.d2s.framework.view.descriptor.ISubViewDescriptor;
@@ -87,7 +87,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     BasicCollectionPropertyDescriptor<Object> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<Object>();
     queriedEntitiesDescriptor
         .setReferencedDescriptor(queriedEntitiesListDescriptor);
-    queriedEntitiesDescriptor.setName(IQueryEntity.QUERIED_ENTITIES);
+    queriedEntitiesDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
 
     resultViewDescriptor.setName("queriedEntities.table");
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);

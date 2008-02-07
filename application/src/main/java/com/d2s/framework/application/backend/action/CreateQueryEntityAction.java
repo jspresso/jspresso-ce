@@ -14,11 +14,11 @@ import com.d2s.framework.binding.IConnector;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.ModelRefPropertyConnector;
 import com.d2s.framework.model.IModelProvider;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.basic.BasicQueryComponentDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
 /**
@@ -50,8 +50,8 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
     if (erqDescriptor == null) {
       erqDescriptor = (IReferencePropertyDescriptor) modelDescriptor;
     }
-    IQueryEntity queryEntity = getEntityFactory(context)
-        .createQueryEntityInstance(
+    IQueryComponent queryComponent = getEntityFactory(context)
+        .createQueryComponentInstance(
             erqDescriptor.getReferencedDescriptor().getComponentContract());
 
     Map<String, String> initializationMapping = erqDescriptor
@@ -80,9 +80,9 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
             .entrySet()) {
           try {
             accessorFactory.createPropertyAccessor(
-                initializedAttribute.getKey(), queryEntity.getContract())
+                initializedAttribute.getKey(), queryComponent.getContract())
                 .setValue(
-                    queryEntity,
+                    queryComponent,
                     accessorFactory.createPropertyAccessor(
                         initializedAttribute.getValue(),
                         masterEntity.getContract()).getValue(masterEntity));
@@ -103,10 +103,10 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
           .createModelConnector(
               ACTION_MODEL_CONNECTOR_ID,
               new BasicQueryComponentDescriptor(erqDescriptor
-                  .getReferencedDescriptor(), queryEntity.getClass()));
+                  .getReferencedDescriptor(), queryComponent.getClass()));
       context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
     }
-    modelConnector.setConnectorValue(queryEntity);
+    modelConnector.setConnectorValue(queryComponent);
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_COMMAND);
     if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {

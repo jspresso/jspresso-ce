@@ -45,12 +45,4 @@ public interface IEntityFactory extends IComponentFactory, IComponentDescriptorR
   <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id);
 
-  /**
-   * Creates a new query entity instance based on the entity descriptor.
-   * 
-   * @param entityContract
-   *            the class of the entity to create.
-   * @return the query entity instance.
-   */
-  IQueryEntity createQueryEntityInstance(Class<? extends IEntity> entityContract);
 }

@@ -1,19 +1,19 @@
 /*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.framework.model.entity.basic;
+package com.d2s.framework.model.component.basic;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.util.bean.AccessorInfo;
 
 /**
- * This is the core implementation of all query entities in the application.
+ * This is the core implementation of all query components in the application.
  * Instances of this class serve as handlers for proxies representing the query
- * entities.
+ * components.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -21,21 +21,21 @@ import com.d2s.framework.util.bean.AccessorInfo;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class QueryEntityInvocationHandler implements InvocationHandler,
+public class QueryComponentInvocationHandler implements InvocationHandler,
     Serializable {
 
   private static final long serialVersionUID = 6078989823404409653L;
 
-  private IEntity           entityDelegate;
+  private IComponent        componentDelegate;
 
   /**
-   * Constructs a new <code>QueryEntityInvocationHandler</code> instance.
+   * Constructs a new <code>QueryComponentInvocationHandler</code> instance.
    * 
-   * @param entityDelegate
-   *            The entity this delegate forwards the method calls to.
+   * @param componentDelegate
+   *            The component this delegate forwards the method calls to.
    */
-  QueryEntityInvocationHandler(IEntity entityDelegate) {
-    this.entityDelegate = entityDelegate;
+  QueryComponentInvocationHandler(IComponent componentDelegate) {
+    this.componentDelegate = componentDelegate;
   }
 
   /**
@@ -49,22 +49,22 @@ public class QueryEntityInvocationHandler implements InvocationHandler,
   public synchronized Object invoke(@SuppressWarnings("unused")
   Object proxy, Method method, Object[] args) throws Throwable {
     if ("getContract".equals(method.getName())) {
-      return entityDelegate.getContract();
+      return componentDelegate.getContract();
     }
     AccessorInfo accessorInfo = new AccessorInfo(method);
     int accessorType = accessorInfo.getAccessorType();
     if (accessorType == AccessorInfo.SETTER) {
       String accessedPropertyName = accessorInfo.getAccessedPropertyName();
       if (accessedPropertyName != null) {
-        entityDelegate.straightSetProperty(accessedPropertyName, args[0]);
+        componentDelegate.straightSetProperty(accessedPropertyName, args[0]);
         return null;
       }
     } else if (accessorType == AccessorInfo.GETTER) {
       String accessedPropertyName = accessorInfo.getAccessedPropertyName();
       if (accessedPropertyName != null) {
-        return entityDelegate.straightGetProperty(accessedPropertyName);
+        return componentDelegate.straightGetProperty(accessedPropertyName);
       }
     }
-    return method.invoke(entityDelegate, args);
+    return method.invoke(componentDelegate, args);
   }
 }

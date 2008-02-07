@@ -14,10 +14,10 @@ import com.d2s.framework.application.backend.action.CreateQueryEntityAction;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
@@ -85,12 +85,13 @@ public class LovAction extends ModalDialogAction {
     if (autoquery && queryPropertyValue != null
         && !queryPropertyValue.equals("%")) {
       actionHandler.execute(findAction, context);
-      IQueryEntity queryEntity = (IQueryEntity) queryEntityConnector
+      IQueryComponent queryComponent = (IQueryComponent) queryEntityConnector
           .getConnectorValue();
-      if (queryEntity.getQueriedEntities() != null
-          && queryEntity.getQueriedEntities().size() == 1) {
+      if (queryComponent.getQueriedComponents() != null
+          && queryComponent.getQueriedComponents().size() == 1) {
         IEntity selectedEntity = ((IController) actionHandler).merge(
-            queryEntity.getQueriedEntities().get(0), MergeMode.MERGE_KEEP);
+            (IEntity) queryComponent.getQueriedComponents().get(0),
+            MergeMode.MERGE_KEEP);
         getViewConnector(context).setConnectorValue(selectedEntity);
         return true;
       }

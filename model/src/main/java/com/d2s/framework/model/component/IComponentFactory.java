@@ -41,4 +41,13 @@ public interface IComponentFactory extends IComponentDescriptorRegistry {
    * @return the component instance.
    */
   <T extends IComponent> T createComponentInstance(Class<T> componentContract);
+
+  /**
+   * Creates a new query component instance based on the component descriptor.
+   * 
+   * @param componentContract
+   *            the class of the component to create.
+   * @return the query component instance.
+   */
+  IQueryComponent createQueryComponentInstance(Class<? extends IComponent> componentContract);
 }

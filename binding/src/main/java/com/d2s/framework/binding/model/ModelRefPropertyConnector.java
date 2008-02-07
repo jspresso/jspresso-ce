@@ -15,9 +15,9 @@ import com.d2s.framework.model.IModelChangeListener;
 import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.ModelChangeSupport;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IQueryEntity;
 
 /**
  * This class is a model property connector which manages a model reference
@@ -172,7 +172,7 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   public IComponentDescriptorProvider<?> getModelDescriptor() {
     IComponentDescriptorProvider<?> registeredModelDescriptor = (IComponentDescriptorProvider<?>) super
         .getModelDescriptor();
-    if (getModel() instanceof IEntity && !(getModel() instanceof IQueryEntity)) {
+    if (getModel() instanceof IEntity && !(getModel() instanceof IQueryComponent)) {
       Class<? extends IEntity> entityContract = ((IEntity) getModel())
           .getContract();
       if (!entityContract.equals(registeredModelDescriptor.getModelType())) {

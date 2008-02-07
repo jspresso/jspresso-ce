@@ -10,6 +10,7 @@ import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 import com.d2s.framework.security.UserPrincipal;
@@ -179,5 +180,20 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     T component = (T) Proxy.newProxyInstance(Thread.currentThread()
         .getContextClassLoader(), implementedClasses, componentHandler);
     return component;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public IQueryComponent createQueryComponentInstance(
+      Class<? extends IComponent> componentContract) {
+    IComponent componentDelegate = createComponentInstance(componentContract, null,
+        new Class[] {IQueryComponent.class});
+    QueryComponentInvocationHandler entityHandler = new QueryComponentInvocationHandler(
+        componentDelegate);
+    return (IQueryComponent) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), componentDelegate.getClass().getInterfaces(),
+        entityHandler);
   }
 }

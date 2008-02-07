@@ -9,8 +9,8 @@ import java.util.List;
 import com.d2s.framework.application.model.FilterableBeanCollectionModule;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
-import com.d2s.framework.model.descriptor.entity.basic.BasicQueryComponentDescriptor;
 
 /**
  * The model descriptor for filterable bean collection modules.

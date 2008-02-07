@@ -13,6 +13,7 @@ import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
@@ -22,7 +23,6 @@ import com.d2s.framework.model.entity.EntityException;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
-import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.uid.IGUIDGenerator;
@@ -91,21 +91,6 @@ public class BasicProxyEntityFactory implements IEntityFactory {
           }
         });
     return createdEntity;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  public IQueryEntity createQueryEntityInstance(
-      Class<? extends IEntity> entityContract) {
-    IEntity entityDelegate = createEntityInstance(entityContract, null,
-        new Class[] {IQueryEntity.class});
-    QueryEntityInvocationHandler entityHandler = new QueryEntityInvocationHandler(
-        entityDelegate);
-    return (IQueryEntity) Proxy.newProxyInstance(Thread.currentThread()
-        .getContextClassLoader(), entityDelegate.getClass().getInterfaces(),
-        entityHandler);
   }
 
   /**
@@ -289,5 +274,13 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract) {
     return inlineComponentFactory.createComponentInstance(componentContract);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IQueryComponent createQueryComponentInstance(
+      Class<? extends IComponent> componentContract) {
+    return inlineComponentFactory.createQueryComponentInstance(componentContract);
   }
 }

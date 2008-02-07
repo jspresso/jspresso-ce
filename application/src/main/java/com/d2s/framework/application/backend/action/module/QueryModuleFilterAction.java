@@ -11,7 +11,7 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractBackendAction;
 import com.d2s.framework.application.model.FilterableBeanCollectionModule;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.model.entity.IQueryEntity;
+import com.d2s.framework.model.component.IQueryComponent;
 
 /**
  * Retrieves the filter of a module and queries the persistent store to populate
@@ -40,10 +40,10 @@ public class QueryModuleFilterAction extends AbstractBackendAction {
           .getChildConnector("filter");
       context
           .put(ActionContextConstants.QUERY_MODEL_CONNECTOR, filterConnector);
-      IQueryEntity filter = (IQueryEntity) module.getFilter();
+      IQueryComponent filter = (IQueryComponent) module.getFilter();
       if (actionHandler.execute(queryAction, context)) {
-        module.setModuleObjects(filter.getQueriedEntities());
-        filter.setQueriedEntities(null);
+        module.setModuleObjects(filter.getQueriedComponents());
+        filter.setQueriedComponents(null);
       }
     }
     return super.execute(actionHandler, context);

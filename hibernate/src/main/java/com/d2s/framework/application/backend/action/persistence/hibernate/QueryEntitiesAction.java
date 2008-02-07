@@ -20,8 +20,8 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IQueryEntity;
 import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
@@ -42,7 +42,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
   @SuppressWarnings("unchecked")
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, final Map<String, Object> context) {
-    final IQueryEntity queryEntity = (IQueryEntity) ((IValueConnector) context
+    final IQueryComponent queryComponent = (IQueryComponent) ((IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR)).getConnectorValue();
 
     List<IEntity> queriedEntities = (List<IEntity>) getTransactionTemplate(
@@ -50,12 +50,12 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
-        DetachedCriteria criteria = DetachedCriteria.forEntityName(queryEntity
+        DetachedCriteria criteria = DetachedCriteria.forEntityName(queryComponent
             .getContract().getName());
-        Example example = Example.create(queryEntity).ignoreCase().enableLike(
+        Example example = Example.create(queryComponent).ignoreCase().enableLike(
             MatchMode.START);
         boolean abort = false;
-        for (Map.Entry<String, Object> property : queryEntity
+        for (Map.Entry<String, Object> property : queryComponent
             .straightGetProperties().entrySet()) {
           if (property.getValue() instanceof IEntity) {
             if (!((IEntity) property.getValue()).isPersistent()) {
@@ -65,7 +65,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
                   .getValue()));
             }
           } else if (Boolean.TYPE.isAssignableFrom(PropertyHelper
-              .getPropertyType(queryEntity.getContract(), property.getKey()))
+              .getPropertyType(queryComponent.getContract(), property.getKey()))
               && (property.getValue() == null || !((Boolean) property
                   .getValue()).booleanValue())) {
             example.excludeProperty(property.getKey());
@@ -88,7 +88,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         ite.remove();
       }
     }
-    queryEntity.setQueriedEntities(session.merge(queriedEntities,
+    queryComponent.setQueriedComponents(session.merge(queriedEntities,
         MergeMode.MERGE_KEEP));
     return super.execute(actionHandler, context);
   }
