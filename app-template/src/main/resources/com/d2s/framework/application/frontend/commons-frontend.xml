@@ -477,7 +477,7 @@
   </bean>
 
   <bean
-    id="addToProjectedFrontAction"
+    id="addToModuleObjectFrontAction"
     parent="addToMasterFrontAction">
     <property name="wrappedAction">
       <bean
@@ -522,7 +522,7 @@
   </bean>
 
   <bean
-    id="removeFromProjectedFrontAction"
+    id="removeFromModuleObjectFrontAction"
     parent="removeEntityCollectionFromMasterFrontAction">
     <property
       name="yesAction"
@@ -530,7 +530,7 @@
   </bean>
 
   <bean
-    id="cloneProjectedFrontAction"
+    id="cloneModuleObjectFrontAction"
     parent="cloneEntityCollectionFrontAction">
     <property name="wrappedAction">
       <bean
@@ -669,7 +669,7 @@
     Persistence action beans.
   -->
   <bean
-    id="saveProjectedFrontAction"
+    id="saveModuleObjectFrontAction"
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
@@ -682,7 +682,7 @@
       value="save.description" />
     <property
       name="wrappedAction"
-      ref="saveProjectedBackAction" />
+      ref="saveModuleObjectBackAction" />
     <property name="nextAction">
       <bean parent="staticInfoFrontAction">
         <property
@@ -693,7 +693,7 @@
   </bean>
 
   <bean
-    id="reloadProjectedFrontAction"
+    id="reloadModuleObjectFrontAction"
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
@@ -706,7 +706,7 @@
       value="reload.description" />
     <property
       name="wrappedAction"
-      ref="reloadProjectedBackAction" />
+      ref="reloadModuleObjectBackAction" />
   </bean>
 
   <!--
@@ -757,8 +757,8 @@
           <property name="actions">
             <list>
               <ref local="restartModuleFrontAction" />
-              <ref local="saveProjectedFrontAction" />
-              <ref local="reloadProjectedFrontAction" />
+              <ref local="saveModuleObjectFrontAction" />
+              <ref local="reloadModuleObjectFrontAction" />
             </list>
           </property>
         </bean>
@@ -816,8 +816,8 @@
             value="ACTION" />
           <property name="actions">
             <list>
-              <ref local="addToProjectedFrontAction" />
-              <ref local="removeFromProjectedFrontAction" />
+              <ref local="addToModuleObjectFrontAction" />
+              <ref local="removeFromModuleObjectFrontAction" />
             </list>
           </property>
         </bean>
@@ -879,8 +879,8 @@
             value="FILE" />
           <property name="actions">
             <list>
-              <ref local="saveProjectedFrontAction" />
-              <ref local="reloadProjectedFrontAction" />
+              <ref local="saveModuleObjectFrontAction" />
+              <ref local="reloadModuleObjectFrontAction" />
             </list>
           </property>
         </bean>

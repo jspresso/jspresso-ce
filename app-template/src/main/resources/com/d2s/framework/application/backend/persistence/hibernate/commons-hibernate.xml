@@ -58,14 +58,14 @@
   <bean id="saveBackAction" parent="abstractHibernateBackAction"
     class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveAction" />
 
-  <bean id="saveProjectedBackAction" parent="saveBackAction"
-    class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveProjectedAction" />
+  <bean id="saveModuleObjectBackAction" parent="saveBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.SaveModuleObjectAction" />
 
   <bean id="reloadBackAction" parent="abstractHibernateBackAction"
     class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadAction" />
 
-  <bean id="reloadProjectedBackAction" parent="reloadBackAction"
-    class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadProjectedAction" />
+  <bean id="reloadModuleObjectBackAction" parent="reloadBackAction"
+    class="com.d2s.framework.application.backend.action.persistence.hibernate.ReloadModuleObjectAction" />
 
   <bean abstract="true" id="abstractHibernateBackController" parent="abstractBackController"
     class="com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController">

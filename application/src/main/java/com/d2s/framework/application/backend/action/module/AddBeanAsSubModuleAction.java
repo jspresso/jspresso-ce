@@ -51,11 +51,11 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
     }
     int[] childSelectedIndices = new int[selectedIndices.length];
     for (int i = 0; i < selectedIndices.length; i++) {
-      IPropertyChangeCapable nextselectedProjectedObject = (IPropertyChangeCapable) collectionConnector
+      IPropertyChangeCapable nextselectedModuleObject = (IPropertyChangeCapable) collectionConnector
           .getChildConnector(selectedIndices[i]).getConnectorValue();
       BeanModule nextSubModule = new BeanModule();
-      nextSubModule.setModuleObject(nextselectedProjectedObject);
-      nextSubModule.setName(String.valueOf(nextselectedProjectedObject));
+      nextSubModule.setModuleObject(nextselectedModuleObject);
+      nextSubModule.setName(String.valueOf(nextselectedModuleObject));
       int nextSubModuleIndex = children.indexOf(nextSubModule);
       if (nextSubModuleIndex < 0) {
         childSelectedIndices[i] = children.size();

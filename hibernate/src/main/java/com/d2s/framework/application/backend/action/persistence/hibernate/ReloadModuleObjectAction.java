@@ -14,7 +14,7 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
- * Saves the projected object(s) in a transaction.
+ * Reloads the projected object(s) in a transaction.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -22,7 +22,7 @@ import com.d2s.framework.model.entity.IEntity;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SaveProjectedAction extends SaveAction {
+public class ReloadModuleObjectAction extends ReloadAction {
 
   /**
    * Saves the projected object(s) in a transaction.
@@ -30,19 +30,18 @@ public class SaveProjectedAction extends SaveAction {
    * {@inheritDoc}
    */
   @Override
-  protected List<IEntity> getEntitiesToSave(Map<String, Object> context) {
-    List<IEntity> entitiesToSave = new ArrayList<IEntity>();
+  protected List<IEntity> getEntitiesToReload(Map<String, Object> context) {
+    List<IEntity> entitiesToReload = new ArrayList<IEntity>();
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     SubModule module = (SubModule) moduleConnector.getConnectorValue();
     if (module instanceof BeanCollectionModule
         && ((BeanCollectionModule) module).getModuleObjects() != null) {
       for (Object entity : ((BeanCollectionModule) module).getModuleObjects()) {
-        entitiesToSave.add((IEntity) entity);
+        entitiesToReload.add((IEntity) entity);
       }
     } else if (module instanceof BeanModule) {
-      entitiesToSave.add((IEntity) ((BeanModule) module).getModuleObject());
+      entitiesToReload.add((IEntity) ((BeanModule) module).getModuleObject());
     }
-    return entitiesToSave;
+    return entitiesToReload;
   }
-
 }
