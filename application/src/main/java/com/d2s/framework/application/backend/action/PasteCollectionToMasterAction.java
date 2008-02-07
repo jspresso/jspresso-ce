@@ -51,7 +51,7 @@ public class PasteCollectionToMasterAction extends
   protected List<?> getAddedComponents(Map<String, Object> context) {
     ComponentTransferStructure<? extends IComponent> transferStructure = getController(
         context).retrieveComponents();
-    if (transferStructure.getContent() != null) {
+    if (transferStructure != null && transferStructure.getContent() != null) {
       List<Object> componentsToTransfer;
       if (((Class<?>) getModelDescriptor(context).getCollectionDescriptor()
           .getElementDescriptor().getComponentContract())

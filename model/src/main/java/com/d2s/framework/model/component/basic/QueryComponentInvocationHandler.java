@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 import com.d2s.framework.model.component.IComponent;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.util.bean.AccessorInfo;
 
 /**
@@ -61,8 +62,10 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
       }
     } else if (accessorType == AccessorInfo.GETTER) {
       String accessedPropertyName = accessorInfo.getAccessedPropertyName();
-      if (accessedPropertyName != null) {
-        return componentDelegate.straightGetProperty(accessedPropertyName);
+      if (IQueryComponent.QUERIED_COMPONENTS.equals(accessedPropertyName)) {
+        if (accessedPropertyName != null) {
+          return componentDelegate.straightGetProperty(accessedPropertyName);
+        }
       }
     }
     return method.invoke(componentDelegate, args);
