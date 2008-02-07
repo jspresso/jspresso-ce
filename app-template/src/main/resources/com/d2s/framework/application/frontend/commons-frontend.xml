@@ -273,10 +273,6 @@
     class="com.d2s.framework.application.frontend.action.module.ModuleConnectorSelectionAction" />
 
   <bean
-    id="parentModuleConnectorSelectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.module.ParentModuleConnectorSelectionAction" />
-
-  <bean
     id="queryModuleFilterAction"
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property name="wrappedAction">
@@ -567,23 +563,6 @@
   </bean>
 
   <bean
-    id="removeModuleFromParentFrontAction"
-    parent="removeEntityCollectionFromMasterFrontAction">
-    <property name="yesAction">
-      <bean
-        class="com.d2s.framework.application.frontend.action.ActionWrapper">
-        <property name="wrappedAction">
-          <bean
-            class="com.d2s.framework.application.backend.action.module.RemoveSubModuleFromParentAction" />
-        </property>
-        <property
-          name="nextAction"
-          ref="parentModuleConnectorSelectionFrontAction" />
-      </bean>
-    </property>
-  </bean>
-
-  <bean
     id="restartModuleFrontAction"
     class="com.d2s.framework.application.frontend.action.module.ModuleRestartAction">
     <property
@@ -842,25 +821,6 @@
           <property name="actions">
             <list>
               <ref local="queryModuleFilterAction" />
-            </list>
-          </property>
-        </bean>
-      </list>
-    </property>
-  </bean>
-
-  <bean
-    id="moduleTreeActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
-    <property name="actionLists">
-      <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
-          <property
-            name="name"
-            value="ACTION" />
-          <property name="actions">
-            <list>
-              <ref local="removeModuleFromParentFrontAction" />
             </list>
           </property>
         </bean>

@@ -201,6 +201,9 @@ public class ConnectorHierarchyTreeModel extends AbstractTreeModel implements
                 new TreePath(rootConnector));
             return;
           }
+          if (rootConnector.getConnectorValue() == null) {
+            return;
+          }
           if (connector instanceof ICollectionConnector
               && connector.getConnectorValue() != null) {
             // don't know why but this fixes a tree repaint bug
