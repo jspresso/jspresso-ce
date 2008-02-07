@@ -4,6 +4,7 @@
 package com.d2s.framework.view.ulc;
 
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.util.ulc.UlcUtil;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IRendererComponent;
 import com.ulcjava.base.application.ULCCheckBox;
@@ -29,9 +30,6 @@ public class BooleanTableCellRenderer extends ULCCheckBox implements
   private static final ULCAbstractBorder NO_FOCUS_BORDER  = new ULCEmptyBorder(
                                                               1, 1, 1, 1);
   private static final long              serialVersionUID = 5944792695339009139L;
-  private Color                          unselectedBackground;
-
-  private Color                          unselectedForeground;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -53,16 +51,8 @@ public class BooleanTableCellRenderer extends ULCCheckBox implements
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());
     } else {
-      if (unselectedForeground != null) {
-        super.setForeground(unselectedForeground);
-      } else {
-        super.setForeground(table.getForeground());
-      }
-      if (unselectedBackground != null) {
-        super.setBackground(unselectedBackground);
-      } else {
-        super.setBackground(table.getBackground());
-      }
+      super.setForeground(table.getForeground());
+      UlcUtil.alternateEvenOddBackground(this, table, isSelected, row);
     }
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
@@ -96,31 +86,5 @@ public class BooleanTableCellRenderer extends ULCCheckBox implements
       setBorder(NO_FOCUS_BORDER);
     }
     return this;
-  }
-
-  /**
-   * Overrides <code>ULCComponent.setBackground</code> to assign the
-   * unselected-background color to the specified color.
-   * 
-   * @param c
-   *            set the background color to this value
-   */
-  @Override
-  public void setBackground(Color c) {
-    super.setBackground(c);
-    unselectedBackground = c;
-  }
-
-  /**
-   * Overrides <code>ULCComponent.setForeground</code> to assign the
-   * unselected-foreground color to the specified color.
-   * 
-   * @param c
-   *            set the foreground color to this value
-   */
-  @Override
-  public void setForeground(Color c) {
-    super.setForeground(c);
-    unselectedForeground = c;
   }
 }

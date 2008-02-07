@@ -117,6 +117,9 @@ public final class UlcUtil {
    * @return the scaled color.
    */
   public static Color getScaledColor(Color color, double factor) {
+    if (color == null) {
+      return null;
+    }
     if (factor <= 1) {
       return new Color(Math.max((int) (color.getRed() * factor), 0), Math.max(
           (int) (color.getGreen() * factor), 0), Math.max((int) (color

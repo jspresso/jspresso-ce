@@ -32,9 +32,6 @@ public class BooleanTableCellRenderer extends JCheckBox implements
 
   private static final Border NO_FOCUS_BORDER  = new EmptyBorder(1, 1, 1, 1);
   private static final long   serialVersionUID = 5944792695339009139L;
-  private Color               unselectedBackground;
-
-  private Color               unselectedForeground;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -69,16 +66,8 @@ public class BooleanTableCellRenderer extends JCheckBox implements
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());
     } else {
-      if (unselectedForeground != null) {
-        super.setForeground(unselectedForeground);
-      } else {
-        super.setForeground(table.getForeground());
-      }
-      if (unselectedBackground != null) {
-        super.setBackground(unselectedBackground);
-      } else {
-        super.setBackground(table.getBackground());
-      }
+      super.setForeground(table.getForeground());
+      SwingUtil.alternateEvenOddBackground(this, table, isSelected, row);
     }
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
@@ -191,32 +180,6 @@ public class BooleanTableCellRenderer extends JCheckBox implements
   @Override
   public void revalidate() {
     // NO-OP
-  }
-
-  /**
-   * Overrides <code>JComponent.setBackground</code> to assign the
-   * unselected-background color to the specified color.
-   * 
-   * @param c
-   *            set the background color to this value
-   */
-  @Override
-  public void setBackground(Color c) {
-    super.setBackground(c);
-    unselectedBackground = c;
-  }
-
-  /**
-   * Overrides <code>JComponent.setForeground</code> to assign the
-   * unselected-foreground color to the specified color.
-   * 
-   * @param c
-   *            set the foreground color to this value
-   */
-  @Override
-  public void setForeground(Color c) {
-    super.setForeground(c);
-    unselectedForeground = c;
   }
 
   /**

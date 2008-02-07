@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.view.wings;
 
-import java.awt.Color;
-
 import org.wings.SCheckBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
@@ -12,6 +10,7 @@ import org.wings.STable;
 import org.wings.table.STableCellRenderer;
 
 import com.d2s.framework.binding.IValueConnector;
+import com.d2s.framework.util.wings.WingsUtil;
 
 /**
  * Renders a table cell using a checkbox.
@@ -26,8 +25,6 @@ public class BooleanTableCellRenderer extends SCheckBox implements
     STableCellRenderer {
 
   private static final long serialVersionUID = 5944792695339009139L;
-  private Color             unselectedBackground;
-  private Color             unselectedForeground;
 
   /**
    * Constructs a new <code>BooleanTableCellRenderer</code> instance.
@@ -48,16 +45,8 @@ public class BooleanTableCellRenderer extends SCheckBox implements
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());
     } else {
-      if (unselectedForeground != null) {
-        super.setForeground(unselectedForeground);
-      } else {
-        super.setForeground(table.getForeground());
-      }
-      if (unselectedBackground != null) {
-        super.setBackground(unselectedBackground);
-      } else {
-        super.setBackground(table.getBackground());
-      }
+      super.setForeground(table.getForeground());
+      WingsUtil.alternateEvenOddBackground(this, table, isSelected, row);
     }
     if (value instanceof IValueConnector) {
       Object connectorValue = ((IValueConnector) value).getConnectorValue();
@@ -67,32 +56,6 @@ public class BooleanTableCellRenderer extends SCheckBox implements
       setSelected((value != null && ((Boolean) value).booleanValue()));
     }
     return this;
-  }
-
-  /**
-   * Overrides <code>JComponent.setBackground</code> to assign the
-   * unselected-background color to the specified color.
-   * 
-   * @param c
-   *            set the background color to this value
-   */
-  @Override
-  public void setBackground(Color c) {
-    super.setBackground(c);
-    unselectedBackground = c;
-  }
-
-  /**
-   * Overrides <code>JComponent.setForeground</code> to assign the
-   * unselected-foreground color to the specified color.
-   * 
-   * @param c
-   *            set the foreground color to this value
-   */
-  @Override
-  public void setForeground(Color c) {
-    super.setForeground(c);
-    unselectedForeground = c;
   }
 
   /**
