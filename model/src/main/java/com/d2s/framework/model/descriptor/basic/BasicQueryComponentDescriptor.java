@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 
 import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.component.service.IComponentService;
@@ -233,7 +232,7 @@ public class BasicQueryComponentDescriptor<E> implements
   private BasicCollectionPropertyDescriptor<E> getQueriedComponentsPropertyDescriptor() {
     if (queriedComponentsPropertyDescriptor == null) {
       BasicCollectionDescriptor<E> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<E>();
-      queriedEntitiesCollectionDescriptor.setCollectionInterface(Set.class);
+      queriedEntitiesCollectionDescriptor.setCollectionInterface(List.class);
       queriedEntitiesCollectionDescriptor
           .setElementDescriptor(componentDescriptor);
       queriedEntitiesCollectionDescriptor
