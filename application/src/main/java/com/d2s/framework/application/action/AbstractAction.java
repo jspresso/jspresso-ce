@@ -8,11 +8,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.IController;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
-import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
@@ -61,20 +58,6 @@ public abstract class AbstractAction implements IAction {
    * @return the locale the action executes in.
    */
   public abstract Locale getLocale(Map<String, Object> context);
-
-  /**
-   * Gets the parent module selected indices from the context. it uses the
-   * <code>ActionContextConstants.PARENT_MODULE_SELECTED_INDICES</code> key.
-   * 
-   * @param context
-   *            the action context.
-   * @return the selected indices if any.
-   */
-  public int[] getParentModuleSelectedIndices(Map<String, Object> context) {
-    return ((ICollectionConnectorProvider) ((ICompositeValueConnector) context
-        .get(ActionContextConstants.MODULE_VIEW_CONNECTOR))
-        .getParentConnector()).getCollectionConnector().getSelectedIndices();
-  }
 
   /**
    * {@inheritDoc}
