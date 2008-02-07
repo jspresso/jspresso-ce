@@ -22,7 +22,7 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
 /**
- * Creates a query entity.
+ * Creates a query component.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -30,10 +30,10 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class CreateQueryEntityAction extends AbstractBackendAction {
+public class CreateQueryComponentAction extends AbstractBackendAction {
 
   /**
-   * Creates a query entity using the model descriptor passed in the context.
+   * Creates a query component using the model descriptor passed in the context.
    * The action result contains the model connector holding the created query
    * entity with the key <code>ActionContextConstants.MODEL_CONNECTOR</code>.
    * <p>
@@ -44,7 +44,7 @@ public class CreateQueryEntityAction extends AbstractBackendAction {
   public boolean execute(@SuppressWarnings("unused")
   IActionHandler actionHandler, Map<String, Object> context) {
     IReferencePropertyDescriptor erqDescriptor = (IReferencePropertyDescriptor) context
-        .get(ActionContextConstants.ENTITY_REF_DESCRIPTOR);
+        .get(ActionContextConstants.COMPONENT_REF_DESCRIPTOR);
     IModelDescriptor modelDescriptor = (IModelDescriptor) context
         .get(ActionContextConstants.MODEL_DESCRIPTOR);
     if (erqDescriptor == null) {

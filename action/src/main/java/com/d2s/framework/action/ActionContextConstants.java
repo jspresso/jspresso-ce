@@ -53,7 +53,7 @@ public final class ActionContextConstants {
   /**
    * A parametrized entity descriptor.
    */
-  public static final String ENTITY_REF_DESCRIPTOR   = "ENTITY_REF_DESCRIPTOR";
+  public static final String COMPONENT_REF_DESCRIPTOR   = "COMPONENT_REF_DESCRIPTOR";
 
   /**
    * the frontend controller.

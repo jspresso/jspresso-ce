@@ -214,7 +214,7 @@
 
   <bean
     id="createQueryEntityAction"
-    class="com.d2s.framework.application.backend.action.CreateQueryEntityAction" />
+    class="com.d2s.framework.application.backend.action.CreateQueryComponentAction" />
 
   <bean
     id="initModuleFilterAction"

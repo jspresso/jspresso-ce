@@ -33,7 +33,7 @@ public class InitModuleFilterAction extends AbstractBackendAction {
         context).getChildConnector("filter");
     context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR,
         filterModelConnector);
-    context.put(ActionContextConstants.ENTITY_REF_DESCRIPTOR,
+    context.put(ActionContextConstants.COMPONENT_REF_DESCRIPTOR,
         filterModelConnector.getModelDescriptor());
     return super.execute(actionHandler, context);
   }

@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.IController;
-import com.d2s.framework.application.backend.action.CreateQueryEntityAction;
+import com.d2s.framework.application.backend.action.CreateQueryComponentAction;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.swing.std.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
@@ -38,7 +38,7 @@ public class LovAction extends ModalDialogAction {
 
   private boolean                               autoquery;
   private IDisplayableAction                    cancelAction;
-  private CreateQueryEntityAction               createQueryEntityAction;
+  private CreateQueryComponentAction               createQueryComponentAction;
   private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
   private IDisplayableAction                    findAction;
   private ILovViewDescriptorFactory             lovViewDescriptorFactory;
@@ -74,8 +74,8 @@ public class LovAction extends ModalDialogAction {
         lovViewDescriptorFactory.createLovViewDescriptor(erqDescriptor),
         actionHandler, getLocale(context));
     context.put(ActionContextConstants.DIALOG_VIEW, lovView);
-    context.put(ActionContextConstants.ENTITY_REF_DESCRIPTOR, erqDescriptor);
-    actionHandler.execute(createQueryEntityAction, context);
+    context.put(ActionContextConstants.COMPONENT_REF_DESCRIPTOR, erqDescriptor);
+    actionHandler.execute(createQueryComponentAction, context);
     IValueConnector queryEntityConnector = (IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
     getMvcBinder(context).bind(lovView.getConnector(), queryEntityConnector);
@@ -121,14 +121,14 @@ public class LovAction extends ModalDialogAction {
   }
 
   /**
-   * Sets the createQueryEntityAction.
+   * Sets the createQueryComponentAction.
    * 
-   * @param createQueryEntityAction
-   *            the createQueryEntityAction to set.
+   * @param createQueryComponentAction
+   *            the createQueryComponentAction to set.
    */
   public void setCreateQueryEntityAction(
-      CreateQueryEntityAction createQueryEntityAction) {
-    this.createQueryEntityAction = createQueryEntityAction;
+      CreateQueryComponentAction createQueryComponentAction) {
+    this.createQueryComponentAction = createQueryComponentAction;
   }
 
   /**
