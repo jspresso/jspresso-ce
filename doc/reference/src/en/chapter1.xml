@@ -2994,9 +2994,9 @@ public class EmployeeIntegrityProcessors {
 
     <para>Before going further, let's create the frontend application
     descriptor. The frontend description will logically go to the
-    <code>com.d2s.framework.hrsample.frontend</code> package. In this package,
-    we will create a <filename>hrsample-frontend.xml</filename> file as
-    described below :</para>
+    <code>com.d2s.framework.hrsample.view</code> package. In this package, we
+    will create a <filename>hrsample-view.xml</filename> file as described
+    below :</para>
 
     <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
@@ -3081,7 +3081,7 @@ public class EmployeeIntegrityProcessors {
           id="commons-frontend.xml" />
         &lt;value&gt;com/d2s/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt; <co
           id="commons-swing.xml" />
-        &lt;value&gt;com/d2s/framework/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt; <co
+        &lt;value&gt;com/d2s/framework/hrsample/frontend/hrsample-view.xml&lt;/value&gt; <co
           id="hrsample-frontend.xml" />
       &lt;/list&gt;
     &lt;/constructor-arg&gt;
@@ -3139,7 +3139,7 @@ public class EmployeeIntegrityProcessors {
         <title>The first shot</title>
 
         <para>Let's describe our first component view on the company entity in
-        the <filename>hrsample-frontend.xml</filename> file:</para>
+        the <filename>hrsample-view.xml</filename> file:</para>
 
         <para><programlisting>&lt;bean
   id="Company.pane"
@@ -4597,6 +4597,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       &lt;value&gt;com/d2s/framework/hrsample/model/hrsample-model.xml&lt;/value&gt;
       &lt;value&gt;com/d2s/framework/hrsample/backend/hrsample-backend.xml&lt;/value&gt; <co
             id="hrsample-backend.xml" />
+      &lt;value&gt;com/d2s/framework/hrsample/view/hrsample-view.xml&lt;/value&gt;
       &lt;value&gt;com/d2s/framework/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt;
       &lt;value&gt;com/d2s/framework/hrsample/config.xml&lt;/value&gt; <co
             id="config.xml" />
@@ -4822,13 +4823,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       and requires no special parametrization (the default implementation
       brought to you by the <filename>commons-hibernate.xml</filename> is
       usable as-is) most of the application assembling is done in the
-      front-end controller. For the sake of simplicity, we will configure the
-      frontend controller directly in the existing
-      <filename>hrsample-frontend.xml</filename> configuration file; but you
-      are free to split all the configuration files in smaller pieces (for
-      instance one separate piece for the views) but then, don't forget to
-      update the various context entries in the
-      <filename>beanRefFactory.xml</filename> bootstrap configuration
+      front-end controller. We will configure the frontend controller in a new
+      <filename>hrsample-frontend.xml</filename> configuration file located in
+      the <code>com.d2s.framework.hrsample.frontend</code> package. Don't
+      forget that you are free to split all the configuration files in smaller
+      pieces but then, don't forget to update the various context entries in
+      the <filename>beanRefFactory.xml</filename> bootstrap configuration
       file.</para>
 
       <para>So lets add our front controller definition :</para>
