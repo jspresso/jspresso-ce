@@ -4,6 +4,7 @@
 package com.d2s.framework.gui.swing.components;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -71,6 +72,7 @@ public class JColorPicker extends JPanel {
         }
       }
     });
+    chooseButton.setPreferredSize(new Dimension(16, 16));
 
     resetButton = new JButton("X");
     resetButton.addActionListener(new ActionListener() {
@@ -80,6 +82,7 @@ public class JColorPicker extends JPanel {
         setValue(resetValue);
       }
     });
+    resetButton.setPreferredSize(new Dimension(16, 16));
 
     addPropertyChangeListener("enabled", new PropertyChangeListener() {
 

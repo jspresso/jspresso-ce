@@ -42,6 +42,7 @@
   <bean
     id="applicationBackController"
     parent="abstractBackController"
+    class="com.d2s.framework.tools.viewtester.MockBackController"
     scope="prototype">
     <property
       name="applicationSession"

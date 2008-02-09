@@ -219,8 +219,8 @@ public class DefaultUlcViewFactory implements
   private IDisplayableAction                    lovAction;
 
   private IMasterDetailBinder                   masterDetailBinder;
-  private int                                   maxCharacterLength          = 30;
-  private int                                   maxColumnCharacterLength    = 15;
+  private int                                   maxCharacterLength          = 32;
+  private int                                   maxColumnCharacterLength    = 16;
   private IMvcBinder                            mvcBinder;
   private IDisplayableAction                    openFileAsBinaryPropertyAction;
   private IDisplayableAction                    resetPropertyAction;
@@ -864,8 +864,7 @@ public class DefaultUlcViewFactory implements
         + extraWidth;
     Dimension size = new Dimension(preferredWidth, component.getFont()
         .getSize() + 6);
-    component.setMinimumSize(new Dimension(size.getWidth() / 2, size
-        .getHeight()));
+    component.setMinimumSize(size);
     component.setPreferredSize(size);
     component.setMaximumSize(size);
   }
@@ -879,7 +878,7 @@ public class DefaultUlcViewFactory implements
     if (characterLength > 0 && characterLength < maxCharacterLength) {
       charLength = characterLength + 2;
     }
-    return component.getFont().getSize() * charLength;
+    return component.getFont().getSize() * charLength / 2;
   }
 
   private Map<String, String> computeTranslationMapping(

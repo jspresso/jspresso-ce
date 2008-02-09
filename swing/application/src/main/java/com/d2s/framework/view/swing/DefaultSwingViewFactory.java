@@ -220,8 +220,8 @@ public class DefaultSwingViewFactory implements
   private IDisplayableAction                 lovAction;
   private IMasterDetailBinder                masterDetailBinder;
 
-  private int                                maxCharacterLength          = 30;
-  private int                                maxColumnCharacterLength    = 15;
+  private int                                maxCharacterLength          = 32;
+  private int                                maxColumnCharacterLength    = 16;
   private IMvcBinder                         mvcBinder;
   private IDisplayableAction                 openFileAsBinaryPropertyAction;
   private IDisplayableAction                 resetPropertyAction;
@@ -868,7 +868,7 @@ public class DefaultSwingViewFactory implements
         + extraWidth;
     Dimension size = new Dimension(preferredWidth,
         component.getPreferredSize().height);
-    component.setMinimumSize(new Dimension(size.width / 2, size.height));
+    component.setMinimumSize(size);
     component.setPreferredSize(size);
     component.setMaximumSize(size);
   }
@@ -882,7 +882,7 @@ public class DefaultSwingViewFactory implements
     if (characterLength > 0 && characterLength < maxCharacterLength) {
       charLength = characterLength + 2;
     }
-    return component.getFont().getSize() * charLength;
+    return component.getFont().getSize() * charLength / 2;
   }
 
   private BasicCompositeView<JComponent> constructCompositeView(
