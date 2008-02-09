@@ -209,7 +209,7 @@ public class DefaultWingsViewFactory implements
   private IMasterDetailBinder                masterDetailBinder;
   private int                                maxCharacterLength          = 32;
 
-  private int                                maxColumnCharacterLength    = 16;
+  private int                                maxColumnCharacterLength    = 32;
   private IMvcBinder                         mvcBinder;
   private IDisplayableAction                 openFileAsBinaryPropertyAction;
   private IDisplayableAction                 resetPropertyAction;

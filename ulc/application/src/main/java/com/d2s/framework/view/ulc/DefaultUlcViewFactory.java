@@ -220,7 +220,7 @@ public class DefaultUlcViewFactory implements
 
   private IMasterDetailBinder                   masterDetailBinder;
   private int                                   maxCharacterLength          = 32;
-  private int                                   maxColumnCharacterLength    = 16;
+  private int                                   maxColumnCharacterLength    = 32;
   private IMvcBinder                            mvcBinder;
   private IDisplayableAction                    openFileAsBinaryPropertyAction;
   private IDisplayableAction                    resetPropertyAction;
@@ -1465,7 +1465,7 @@ public class DefaultUlcViewFactory implements
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
         getDateTemplateValue(propertyDescriptor), ClientContext
-            .getScreenResolution() / 10);
+            .getScreenResolution() / 3);
     return constructView(viewComponent, null, connector);
   }
 
