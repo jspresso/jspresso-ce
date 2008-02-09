@@ -1280,6 +1280,9 @@ public class DefaultUlcViewFactory implements
         constraints.setWeightX(propertyView.getPeer().getPreferredSize()
             .getWidth());
       }
+      if (propertyView.getPeer() instanceof ULCCheckBox) {
+        constraints.setWeightX(ClientContext.getScreenResolution());
+      }
       if (propertyView.getPeer() instanceof ULCTextArea
           || propertyView.getPeer() instanceof ULCList
           || propertyView.getPeer() instanceof ULCScrollPane

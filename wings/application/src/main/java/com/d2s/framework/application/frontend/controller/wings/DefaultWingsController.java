@@ -238,6 +238,7 @@ public class DefaultWingsController extends
 
   private SFrame createControllerFrame() {
     SFrame frame = new SFrame();
+    frame.setPreferredSize(WingsUtil.FULLAREA);
     cardPanel = new SPanel(new SCardLayout());
     cardPanel.setPreferredSize(WingsUtil.FULLAREA);
     SPanel contentPane = new SPanel(new SBorderLayout());

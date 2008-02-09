@@ -198,7 +198,7 @@ public class DefaultSwingViewFactory implements
   private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                DEF_DISP_MAX_VALUE          = 1000;
   private static final double                DEF_DISP_TEMPLATE_PERCENT   = 99;
-  private static final Dimension             TREE_PREFERRED_SIZE           = new Dimension(
+  private static final Dimension             TREE_PREFERRED_SIZE         = new Dimension(
                                                                              128,
                                                                              128);
   private static final char                  TEMPLATE_CHAR               = 'O';
@@ -1280,6 +1280,9 @@ public class DefaultSwingViewFactory implements
       constraints.anchor = GridBagConstraints.WEST;
       // constraints.weightx = 1.0;
       constraints.weightx = propertyView.getPeer().getPreferredSize().width;
+      if (propertyView.getPeer() instanceof JCheckBox) {
+        constraints.weightx = Toolkit.getDefaultToolkit().getScreenResolution();
+      }
       if (propertyView.getPeer() instanceof JTextArea
           || propertyView.getPeer() instanceof JList
           || propertyView.getPeer() instanceof JScrollPane
