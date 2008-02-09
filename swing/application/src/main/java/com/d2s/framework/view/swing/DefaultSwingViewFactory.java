@@ -198,9 +198,9 @@ public class DefaultSwingViewFactory implements
   private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                DEF_DISP_MAX_VALUE          = 1000;
   private static final double                DEF_DISP_TEMPLATE_PERCENT   = 99;
-  private static final Dimension             MINIMUM_AREA_SIZE           = new Dimension(
-                                                                             100,
-                                                                             100);
+  private static final Dimension             TREE_PREFERRED_SIZE           = new Dimension(
+                                                                             128,
+                                                                             128);
   private static final char                  TEMPLATE_CHAR               = 'O';
   private static final Date                  TEMPLATE_DATE               = new Date(
                                                                              3661 * 1000);
@@ -664,7 +664,6 @@ public class DefaultSwingViewFactory implements
    */
   protected JScrollPane createJScrollPane() {
     JScrollPane scrollPane = new JScrollPane();
-    scrollPane.setMinimumSize(MINIMUM_AREA_SIZE);
     return scrollPane;
   }
 
@@ -2237,8 +2236,6 @@ public class DefaultSwingViewFactory implements
         IIconFactory.TINY_ICON_SIZE));
     iconLabel.setBorder(BorderFactory.createLoweredBevelBorder());
     scrollPane.setCorner(ScrollPaneConstants.UPPER_TRAILING_CORNER, iconLabel);
-    scrollPane
-        .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
     IView<JComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     viewComponent.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -2483,6 +2480,7 @@ public class DefaultSwingViewFactory implements
         connector);
     viewComponent.addMouseListener(new PopupListener(viewComponent, view,
         actionHandler, locale));
+    scrollPane.setMinimumSize(TREE_PREFERRED_SIZE);
     return view;
   }
 
