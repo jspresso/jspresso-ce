@@ -2121,6 +2121,7 @@ public class DefaultSwingViewFactory implements
       IView<JComponent> rightBottomView = createView(viewDescriptor
           .getRightBottomViewDescriptor(), actionHandler, locale);
       viewComponent.setRightComponent(rightBottomView.getPeer());
+      rightBottomView.getPeer().setMinimumSize(new Dimension(0, 0));
       childrenViews.add(rightBottomView);
     }
     view.setChildren(childrenViews);

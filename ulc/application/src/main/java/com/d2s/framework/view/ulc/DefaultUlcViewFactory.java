@@ -1411,7 +1411,6 @@ public class DefaultUlcViewFactory implements
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
     ULCGridBagLayoutPane viewComponent = createGridBagLayoutPane();
-    viewComponent.setMinimumSize(MINIMUM_AREA_SIZE);
     BasicCompositeView<ULCComponent> view = constructCompositeView(
         viewComponent, viewDescriptor);
     List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
@@ -2157,6 +2156,7 @@ public class DefaultUlcViewFactory implements
       IView<ULCComponent> rightBottomView = createView(viewDescriptor
           .getRightBottomViewDescriptor(), actionHandler, locale);
       viewComponent.setRightComponent(rightBottomView.getPeer());
+      rightBottomView.getPeer().setMinimumSize(new Dimension(0, 0));
       childrenViews.add(rightBottomView);
     }
     view.setChildren(childrenViews);
