@@ -817,7 +817,8 @@ public class DefaultWingsViewFactory implements
         iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
             .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
         iFrame.getContentPane().add(view.getPeer());
-        iFrame.setPreferredSize(new SDimension(SDimension.AUTO, WingsUtil.FULL_DIM_PERCENT));
+        iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
+            WingsUtil.FULL_DIM_PERCENT));
         view.setPeer(iFrame);
         break;
       default:
@@ -2292,29 +2293,29 @@ public class DefaultWingsViewFactory implements
         column.setCellRenderer(new EvenOddTableCellRenderer());
       }
       int minHeaderWidth = computePixelWidth(viewComponent, columnName.length());
+      int columnWidth;
       if (propertyDescriptor instanceof IBooleanPropertyDescriptor
           || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-        column.setWidth(Math.max(computePixelWidth(viewComponent, 2),
-            minHeaderWidth)
-            + "px");
+        columnWidth = Math.max(computePixelWidth(viewComponent, 2),
+            minHeaderWidth);
       } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-        column.setWidth(Math.max(computePixelWidth(viewComponent,
+        columnWidth = Math.max(computePixelWidth(viewComponent,
             getEnumerationTemplateValue(
                 (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                .length()), minHeaderWidth)
-            + "px");
+                .length()), minHeaderWidth);
       } else {
-        column.setWidth(Math.max(Math.min(computePixelWidth(viewComponent,
+        columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
             getFormatLength(createFormatter(propertyDescriptor, locale),
                 getTemplateValue(propertyDescriptor))), maxColumnSize),
-            minHeaderWidth)
-            + "px");
+            minHeaderWidth);
       }
+      column.setWidth(columnWidth + "px");
     }
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setPreferredSize(new SDimension(WingsUtil.FULL_DIM_PERCENT, SDimension.AUTO));
+    scrollPane.setPreferredSize(new SDimension(WingsUtil.FULL_DIM_PERCENT,
+        SDimension.AUTO));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;
