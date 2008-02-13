@@ -242,6 +242,7 @@ public class DefaultWingsController extends
     cardPanel.setPreferredSize(WingsUtil.FULLAREA);
     frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
     frame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
+    frame.getContentPane().setPreferredSize(WingsUtil.FULLAREA);
     return frame;
   }
 
@@ -265,6 +266,7 @@ public class DefaultWingsController extends
         view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     internalFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
     internalFrame.setPreferredSize(WingsUtil.FULLAREA);
+    internalFrame.getContentPane().setPreferredSize(WingsUtil.FULLAREA);
     internalFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
     internalFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return internalFrame;
