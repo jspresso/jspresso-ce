@@ -99,7 +99,6 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-base-development/6.0.5/ulc-base-development-6.0.5.jar" sourcepath="/ENVDEV/ulc-6.0.5/base/src/ulc-base-development-src.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.1/wings-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wings/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.1/wingx-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wingx/src/java"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.1/wings-experimental-3.1.jar" sourcepath="/ENVDEV/wings/wings3/wings-experimental/src/java"/>
 	<classpathentry kind="var" path="M2_REPO/net/sf/ehcache/ehcache/1.2.4/ehcache-1.2.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate/3.2.5.ga/hibernate-3.2.5.ga.jar" sourcepath="/ENVDEV/hibernate-3.2/src">
 		<attributes>
@@ -112,5 +111,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/jvnet/substance/4.1/substance-4.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-common/4.0.4/jboss-common-4.0.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.1/wings-experimental-3.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

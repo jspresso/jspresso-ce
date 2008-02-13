@@ -22,7 +22,6 @@ import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
-import org.wings.SForm;
 import org.wings.SFrame;
 import org.wings.SIcon;
 import org.wings.SInternalFrame;
@@ -229,7 +228,7 @@ public class DefaultWingsController extends
     List<SMenu> helpActionMenus = createHelpActionMenus();
     if (helpActionMenus != null) {
       for (SMenu helpActionMenu : helpActionMenus) {
-        // helpActionMenu.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
+        helpActionMenu.setHorizontalAlignment(SConstants.RIGHT_ALIGN);
         applicationMenuBar.add(helpActionMenu);
       }
     }
@@ -241,8 +240,6 @@ public class DefaultWingsController extends
     frame.setPreferredSize(WingsUtil.FULLAREA);
     cardPanel = new SPanel(new SCardLayout());
     cardPanel.setPreferredSize(WingsUtil.FULLAREA);
-    SPanel contentPane = new SPanel(new SBorderLayout());
-    frame.setContentPane(contentPane);
     frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
     frame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
     return frame;
@@ -266,10 +263,8 @@ public class DefaultWingsController extends
     internalFrame.getContentPane().setLayout(new SBorderLayout());
     internalFrame.setIcon(getIconFactory().getIcon(
         view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
-    SForm frameForm = new SForm();
-    frameForm.add(view.getPeer());
-    frameForm.setPreferredSize(WingsUtil.FULLAREA);
-    internalFrame.getContentPane().add(frameForm, SBorderLayout.CENTER);
+    internalFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
+    internalFrame.setPreferredSize(WingsUtil.FULLAREA);
     internalFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
     internalFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return internalFrame;

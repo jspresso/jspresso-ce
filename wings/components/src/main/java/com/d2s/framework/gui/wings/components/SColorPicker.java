@@ -11,6 +11,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.EventListenerList;
 
+import org.wings.SBorderFactory;
 import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
@@ -43,8 +44,8 @@ public class SColorPicker extends SPanel {
    * Constructs a new <code>SColorPicker</code> instance.
    */
   public SColorPicker() {
-    setLayout(new SBoxLayout(/*this, */SBoxLayout.X_AXIS));
-    chooseButton = new SButton(" ");
+    setLayout(new SBoxLayout(this, SBoxLayout.X_AXIS));
+    chooseButton = new SButton("O");
     chooseButton.addActionListener(new ActionListener() {
 
       public void actionPerformed(@SuppressWarnings("unused")
@@ -52,7 +53,9 @@ public class SColorPicker extends SPanel {
         showColorPickerDialog();
       }
     });
-
+    chooseButton.setShowAsFormComponent(false);
+    chooseButton.setBorder(SBorderFactory.createSEtchedBorder());
+    
     resetButton = new SButton("X");
     resetButton.addActionListener(new ActionListener() {
 
@@ -61,6 +64,8 @@ public class SColorPicker extends SPanel {
         setValue(resetValue);
       }
     });
+    resetButton.setShowAsFormComponent(false);
+    resetButton.setBorder(SBorderFactory.createSEtchedBorder());
 
     add(chooseButton);
     add(resetButton);
@@ -213,7 +218,7 @@ public class SColorPicker extends SPanel {
     });
 
     SPanel actionPanel = new SPanel();
-    actionPanel.setLayout(new SBoxLayout(/*actionPanel, */SBoxLayout.X_AXIS));
+    actionPanel.setLayout(new SBoxLayout(actionPanel, SBoxLayout.X_AXIS));
     actionPanel.add(okButton);
     actionPanel.add(cancelButton);
     actionPanel.add(restoreButton);

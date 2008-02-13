@@ -32,7 +32,6 @@ import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.util.collection.ObjectEqualityMap;
 import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.util.wings.WingsUtil;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;
@@ -51,6 +50,8 @@ public class WizardAction extends AbstractWingsAction {
   private IDisplayableAction     finishAction;
   private IWizardStepDescriptor  firstWizardStep;
   private IModelConnectorFactory modelConnectorFactory;
+  
+  private static final  SDimension WIZARD_DIMENSION = new SDimension("500px", "250px");
 
   /**
    * {@inheritDoc}
@@ -81,7 +82,6 @@ public class WizardAction extends AbstractWingsAction {
     dialog.setDraggable(true);
 
     dialog.setLayout(new SBorderLayout());
-    // dialog.setClosable(false);
 
     final SPanel cardPanel = new SPanel();
     cardPanel.setBorder(new SEmptyBorder(new Insets(5, 10, 5, 10)));
@@ -111,7 +111,7 @@ public class WizardAction extends AbstractWingsAction {
             .getPreviousStepDescriptor(context);
         show(dialog, cardPanel, alreadyDisplayedSteps, backWizardStep,
             backButton, nextButton, finishButton, modelConnector,
-            actionHandler, context, false);
+            actionHandler, context);
       }
     });
 
@@ -127,7 +127,7 @@ public class WizardAction extends AbstractWingsAction {
               .getNextStepDescriptor(context);
           show(dialog, cardPanel, alreadyDisplayedSteps, nextWizardStep,
               backButton, nextButton, finishButton, modelConnector,
-              actionHandler, context, false);
+              actionHandler, context);
           if (nextWizardStep.getOnEnterAction() != null) {
             actionHandler.execute(nextWizardStep.getOnEnterAction(), context);
           }
@@ -158,8 +158,8 @@ public class WizardAction extends AbstractWingsAction {
     });
 
     SPanel buttonPanel = new SPanel();
-    SPanel buttonBox = new SPanel(new SBoxLayout(
-        /* buttonPanel, */SBoxLayout.X_AXIS));
+    SPanel buttonBox = new SPanel(
+        new SBoxLayout(buttonPanel, SBoxLayout.X_AXIS));
 
     buttonPanel.setLayout(new SBorderLayout());
     buttonPanel.add(new SSeparator(), SBorderLayout.NORTH);
@@ -180,11 +180,13 @@ public class WizardAction extends AbstractWingsAction {
 
     dialog.setDefaultButton(nextButton);
 
-    cardPanel.setPreferredSize(new SDimension("500px", "250px"));
-    dialog.setPreferredSize(new SDimension("50%", "100%"));
+    cardPanel.setPreferredSize(WIZARD_DIMENSION);
 
     show(dialog, cardPanel, alreadyDisplayedSteps, firstWizardStep, backButton,
-        nextButton, finishButton, modelConnector, actionHandler, context, true);
+        nextButton, finishButton, modelConnector, actionHandler, context);
+
+    dialog.setVisible(true);
+
     return super.execute(actionHandler, context);
   }
 
@@ -248,13 +250,15 @@ public class WizardAction extends AbstractWingsAction {
       Set<String> alreadyDisplayedSteps, IWizardStepDescriptor wizardStep,
       SButton backButton, SButton nextButton, SButton finishButton,
       IValueConnector modelConnector, IActionHandler actionHandler,
-      Map<String, Object> context, boolean firstShow) {
+      Map<String, Object> context) {
     String cardName = wizardStep.getName();
     if (!alreadyDisplayedSteps.contains(cardName)) {
       alreadyDisplayedSteps.add(cardName);
       IView<SComponent> view = getViewFactory(context).createView(
           wizardStep.getViewDescriptor(), actionHandler, getLocale(context));
+      view.getPeer().setPreferredSize(WIZARD_DIMENSION);
       cardPanel.add(view.getPeer(), cardName);
+      cardPanel.setPreferredSize(WIZARD_DIMENSION);
       getMvcBinder(context).bind(view.getConnector(), modelConnector);
     }
     ((SCardLayout) (cardPanel.getLayout())).show(cardPanel, cardName);
@@ -296,9 +300,5 @@ public class WizardAction extends AbstractWingsAction {
     dialog.setTitle(getI18nName(translationProvider, locale) + " - "
         + wizardStep.getI18nName(translationProvider, locale));
     setCurrentWizardStep(wizardStep, context);
-    if (!firstShow) {
-      dialog.setVisible(false);
-    }
-    dialog.show(WingsUtil.getVisibleWindow(getSourceComponent(context)));
   }
 }

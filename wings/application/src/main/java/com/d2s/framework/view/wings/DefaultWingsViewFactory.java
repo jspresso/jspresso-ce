@@ -667,7 +667,7 @@ public class DefaultWingsViewFactory implements
   protected SScrollPane createSScrollPane() {
     SScrollPane scrollPane = new SScrollPane();
     scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-    scrollPane.setPreferredSize(WingsUtil.FULLAREA);
+    scrollPane.setPreferredSize(SDimension.FULLAREA);
     scrollPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     return scrollPane;
@@ -743,6 +743,7 @@ public class DefaultWingsViewFactory implements
     };
     table.setVerticalAlignment(SConstants.TOP_ALIGN);
     table.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    table.setPreferredSize(WingsUtil.FULLWIDTH);
     table.setSelectable(true);
     return table;
   }
@@ -807,11 +808,6 @@ public class DefaultWingsViewFactory implements
         view.getPeer().setBorder(new SEtchedBorder());
         break;
       case IViewDescriptor.TITLED:
-        // FIXME until titled border is re-integrated into wings.
-        // view.getPeer().setBorder(new SEtchedBorder());
-        // view.getPeer().setBorder(
-        // new STitledBorder(new SEtchedBorder(), view.getDescriptor()
-        // .getI18nName(getTranslationProvider(), locale)));
         SInternalFrame iFrame = createSInternalFrame();
         iFrame.setTitle(view.getDescriptor().getI18nName(
             getTranslationProvider(), locale));
@@ -821,6 +817,7 @@ public class DefaultWingsViewFactory implements
         iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
             .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
         iFrame.getContentPane().add(view.getPeer());
+        iFrame.setPreferredSize(new SDimension(SDimension.AUTO, WingsUtil.FULL_DIM_PERCENT));
         view.setPeer(iFrame);
         break;
       default:
@@ -2054,6 +2051,7 @@ public class DefaultWingsViewFactory implements
         viewDescriptor);
     List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
 
+    Insets insets = new Insets(0, 0, 0, 0);
     if (viewDescriptor.getLeftTopViewDescriptor() != null) {
       IView<SComponent> leftTopView = createView(viewDescriptor
           .getLeftTopViewDescriptor(), actionHandler, locale);
@@ -2061,18 +2059,14 @@ public class DefaultWingsViewFactory implements
       leftTopView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
       switch (viewDescriptor.getOrientation()) {
         case ISplitViewDescriptor.HORIZONTAL:
-          double weightx = 0.3d;
-          if (viewDescriptor.getLeftTopViewDescriptor() instanceof ITreeViewDescriptor) {
-            weightx = 0.0d;
-          }
           viewComponent.add(leftTopView.getPeer(), new GridBagConstraints(0, 0,
-              1, 1, weightx, 1.0d, GridBagConstraints.NORTHWEST,
-              GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
+              1, 1, 0.0d, 1.0d, GridBagConstraints.NORTHWEST,
+              GridBagConstraints.BOTH, insets, 0, 0));
           break;
         case ISplitViewDescriptor.VERTICAL:
           viewComponent.add(leftTopView.getPeer(), new GridBagConstraints(0, 0,
               1, 1, 1.0d, 0.0d, GridBagConstraints.NORTHWEST,
-              GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
+              GridBagConstraints.BOTH, insets, 0, 0));
           break;
         default:
           break;
@@ -2101,8 +2095,7 @@ public class DefaultWingsViewFactory implements
       viewComponent.add(rightBottomView.getPeer(), new GridBagConstraints(
           gridx, gridy, GridBagConstraints.REMAINDER,
           GridBagConstraints.REMAINDER, 1.0d, 1.0d,
-          GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, new Insets(0,
-              0, 0, 0), 0, 0));
+          GridBagConstraints.NORTHWEST, GridBagConstraints.BOTH, insets, 0, 0));
       childrenViews.add(rightBottomView);
     }
     view.setChildren(childrenViews);
@@ -2321,9 +2314,9 @@ public class DefaultWingsViewFactory implements
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
+    scrollPane.setPreferredSize(new SDimension(WingsUtil.FULL_DIM_PERCENT, SDimension.AUTO));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
-    scrollPane.setPreferredSize(new SDimension("99%", SDimension.AUTO));
     return view;
   }
 
@@ -2342,7 +2335,6 @@ public class DefaultWingsViewFactory implements
       SIcon childIcon = iconFactory.getIcon(childViewDescriptor
           .getIconImageURL(), IIconFactory.SMALL_ICON_SIZE);
       SComponent tabView = childView.getPeer();
-      tabView.setPreferredSize(new SDimension("99%", "99%"));
       if (childViewDescriptor.getDescription() != null) {
         viewComponent.addTab(childViewDescriptor.getI18nName(
             getTranslationProvider(), locale), childIcon, tabView,
@@ -2356,7 +2348,6 @@ public class DefaultWingsViewFactory implements
       childrenViews.add(childView);
     }
     view.setChildren(childrenViews);
-    viewComponent.setPreferredSize(new SDimension("99%", "800px"));
     return view;
   }
 
@@ -2467,7 +2458,7 @@ public class DefaultWingsViewFactory implements
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setPreferredSize(new SDimension("200px", "500px"));
+    scrollPane.setPreferredSize(SDimension.AUTOAREA);
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;

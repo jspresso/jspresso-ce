@@ -31,7 +31,10 @@ public final class WingsUtil {
 
   private static final boolean   DISABLE_THREADING   = false;
 
-  private static final String    FULL_DIM_PERCENT    = "100%";
+  /**
+   * <code>FULL_DIM_PERCENT</code>.
+   */
+  public static final String    FULL_DIM_PERCENT    = "100%";
 
   /**
    * <code>FULLAREA</code>.

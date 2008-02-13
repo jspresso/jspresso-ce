@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.swing.Action;
 
+import org.wings.SBorderFactory;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SGridBagLayout;
@@ -62,7 +63,7 @@ public class SActionField extends SPanel {
     }
     this.showTextField = showTextField;
     buttonPanel = new SPanel();
-    buttonPanel.setLayout(new SBoxLayout(/*buttonPanel, */SBoxLayout.X_AXIS));
+    buttonPanel.setLayout(new SBoxLayout(buttonPanel, SBoxLayout.X_AXIS));
 
     int buttonPosition;
     if (showTextField) {
@@ -164,6 +165,8 @@ public class SActionField extends SPanel {
         actionButton.setAction(action);
         actionButton.setActionCommand("%");
         actionButton.setText(null);
+        actionButton.setShowAsFormComponent(false);
+        actionButton.setBorder(SBorderFactory.createSEtchedBorder());
         if (showTextField) {
           if (defaultAction == null) {
             defaultAction = action;
