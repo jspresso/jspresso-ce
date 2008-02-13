@@ -667,7 +667,8 @@ public class DefaultWingsViewFactory implements
   protected SScrollPane createSScrollPane() {
     SScrollPane scrollPane = new SScrollPane();
     scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-    scrollPane.setPreferredSize(SDimension.FULLAREA);
+    scrollPane.setPreferredSize(new SDimension(WingsUtil.FULL_DIM_PERCENT,
+        SDimension.AUTO));
     scrollPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     return scrollPane;
@@ -1682,11 +1683,10 @@ public class DefaultWingsViewFactory implements
     viewComponent.setLayout(layout);
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-    // SScrollPane scrollPane = createSScrollPane();
-    // scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-    // scrollPane.setViewportView(imageLabel);
-    // viewComponent.add(scrollPane, SBorderLayout.CENTER);
     viewComponent.add(imageLabel, SBorderLayout.CENTER);
+    SScrollPane scrollPane = createSScrollPane();
+    scrollPane.setViewportView(viewComponent);
+    view.setPeer(scrollPane);
     return view;
   }
 
@@ -2314,8 +2314,6 @@ public class DefaultWingsViewFactory implements
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setPreferredSize(new SDimension(WingsUtil.FULL_DIM_PERCENT,
-        SDimension.AUTO));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;
@@ -2459,7 +2457,8 @@ public class DefaultWingsViewFactory implements
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setPreferredSize(SDimension.AUTOAREA);
+    scrollPane.setPreferredSize(new SDimension(SDimension.AUTO, scrollPane
+        .getPreferredSize().getHeight()));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;

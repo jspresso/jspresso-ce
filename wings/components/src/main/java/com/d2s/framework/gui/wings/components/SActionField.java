@@ -166,7 +166,7 @@ public class SActionField extends SPanel {
         actionButton.setActionCommand("%");
         actionButton.setText(null);
         actionButton.setShowAsFormComponent(false);
-        actionButton.setBorder(SBorderFactory.createSEtchedBorder());
+        actionButton.setBorder(SBorderFactory.createSLineBorder(Color.GRAY));
         if (showTextField) {
           if (defaultAction == null) {
             defaultAction = action;

@@ -16,6 +16,7 @@ import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SDialog;
+import org.wings.SDimension;
 import org.wings.SPanel;
 import org.wingx.XColorPicker;
 
@@ -30,22 +31,24 @@ import org.wingx.XColorPicker;
  */
 public class SColorPicker extends SPanel {
 
-  private static final long     serialVersionUID = -9175630518246041139L;
+  private static final long       serialVersionUID = -9175630518246041139L;
 
-  private transient ChangeEvent changeEvent      = null;
-  private SButton               chooseButton;
-  private EventListenerList     listenerList     = new EventListenerList();
-  private SButton               resetButton;
+  private transient ChangeEvent   changeEvent      = null;
+  private SButton                 chooseButton;
+  private EventListenerList       listenerList     = new EventListenerList();
+  private SButton                 resetButton;
 
-  private Color                 resetValue;
-  private Color                 value;
+  private Color                   resetValue;
+  private Color                   value;
+
+  private static final SDimension BUTTON_DIM       = new SDimension(24, 24);
 
   /**
    * Constructs a new <code>SColorPicker</code> instance.
    */
   public SColorPicker() {
     setLayout(new SBoxLayout(this, SBoxLayout.X_AXIS));
-    chooseButton = new SButton("O");
+    chooseButton = new SButton();
     chooseButton.addActionListener(new ActionListener() {
 
       public void actionPerformed(@SuppressWarnings("unused")
@@ -54,9 +57,10 @@ public class SColorPicker extends SPanel {
       }
     });
     chooseButton.setShowAsFormComponent(false);
-    chooseButton.setBorder(SBorderFactory.createSEtchedBorder());
-    
-    resetButton = new SButton("X");
+    chooseButton.setPreferredSize(BUTTON_DIM);
+    chooseButton.setBorder(SBorderFactory.createSLineBorder(Color.GRAY));
+
+    resetButton = new SButton();
     resetButton.addActionListener(new ActionListener() {
 
       public void actionPerformed(@SuppressWarnings("unused")
@@ -65,7 +69,8 @@ public class SColorPicker extends SPanel {
       }
     });
     resetButton.setShowAsFormComponent(false);
-    resetButton.setBorder(SBorderFactory.createSEtchedBorder());
+    resetButton.setPreferredSize(BUTTON_DIM);
+    resetButton.setBorder(SBorderFactory.createSLineBorder(Color.GRAY));
 
     add(chooseButton);
     add(resetButton);
@@ -227,7 +232,7 @@ public class SColorPicker extends SPanel {
     mainPanel.add(colorPicker, SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
 
-    //colorPickerDialog.setClosable(false);
+    // colorPickerDialog.setClosable(false);
     colorPickerDialog.setDefaultButton(okButton);
     colorPickerDialog.add(mainPanel);
 
