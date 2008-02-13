@@ -1684,9 +1684,9 @@ public class DefaultWingsViewFactory implements
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     viewComponent.add(imageLabel, SBorderLayout.CENTER);
-    SScrollPane scrollPane = createSScrollPane();
-    scrollPane.setViewportView(viewComponent);
-    view.setPeer(scrollPane);
+    // SScrollPane scrollPane = createSScrollPane();
+    // scrollPane.setViewportView(viewComponent);
+    // view.setPeer(scrollPane);
     return view;
   }
 
