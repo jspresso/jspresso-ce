@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.frontend.controller.wings;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.SContainer;
+import org.wings.SDimension;
 import org.wings.SFrame;
 import org.wings.SIcon;
 import org.wings.SInternalFrame;
@@ -67,6 +69,9 @@ public class DefaultWingsController extends
 
   private SFrame      controllerFrame;
   private Set<String> moduleViews;
+
+  private String      frameWidth  = "95%";
+  private String      frameHeight = "768px";
 
   /**
    * {@inheritDoc}
@@ -218,6 +223,7 @@ public class DefaultWingsController extends
 
   private SMenuBar createApplicationMenuBar() {
     SMenuBar applicationMenuBar = new SMenuBar();
+    applicationMenuBar.setBorder(new SLineBorder(Color.LIGHT_GRAY));
     applicationMenuBar.add(createModulesMenu());
     List<SMenu> actionMenus = createActionMenus();
     if (actionMenus != null) {
@@ -237,12 +243,13 @@ public class DefaultWingsController extends
 
   private SFrame createControllerFrame() {
     SFrame frame = new SFrame();
-    frame.setPreferredSize(WingsUtil.FULLAREA);
+    frame.setPreferredSize(new SDimension(frameWidth,
+        WingsUtil.FULL_DIM_PERCENT));
     cardPanel = new SPanel(new SCardLayout());
-    cardPanel.setPreferredSize(WingsUtil.FULLAREA);
+    cardPanel.setPreferredSize(SDimension.FULLAREA);
     frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
     frame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
-    frame.getContentPane().setPreferredSize(WingsUtil.FULLAREA);
+    frame.getContentPane().setPreferredSize(SDimension.FULLAREA);
     return frame;
   }
 
@@ -255,6 +262,7 @@ public class DefaultWingsController extends
    */
   private SContainer createInternalFrame(IView<SComponent> view) {
     SInternalFrame internalFrame = new SInternalFrame();
+    internalFrame.setPreferredSize(SDimension.AUTOAREA);
     internalFrame.setTitle(view.getDescriptor().getI18nName(
         getTranslationProvider(), getLocale()));
     internalFrame.setClosable(false);
@@ -264,9 +272,10 @@ public class DefaultWingsController extends
     internalFrame.getContentPane().setLayout(new SBorderLayout());
     internalFrame.setIcon(getIconFactory().getIcon(
         view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
+    view.getPeer().setPreferredSize(
+        new SDimension(WingsUtil.FULL_DIM_PERCENT, frameHeight));
     internalFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
-    internalFrame.setPreferredSize(WingsUtil.FULLAREA);
-    internalFrame.getContentPane().setPreferredSize(WingsUtil.FULLAREA);
+    internalFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
     internalFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
     internalFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return internalFrame;
@@ -373,5 +382,25 @@ public class DefaultWingsController extends
     ActionEvent e) {
       stop();
     }
+  }
+
+  /**
+   * Sets the frameWidth.
+   * 
+   * @param frameWidth
+   *            the frameWidth to set.
+   */
+  public void setFrameWidth(String frameWidth) {
+    this.frameWidth = frameWidth;
+  }
+
+  /**
+   * Sets the frameHeight.
+   * 
+   * @param frameHeight
+   *            the frameHeight to set.
+   */
+  public void setFrameHeight(String frameHeight) {
+    this.frameHeight = frameHeight;
   }
 }

@@ -43,6 +43,7 @@ import org.wings.SGridLayout;
 import org.wings.SIcon;
 import org.wings.SInternalFrame;
 import org.wings.SLabel;
+import org.wings.SLayoutManager;
 import org.wings.SList;
 import org.wings.SMenuItem;
 import org.wings.SPanel;
@@ -59,6 +60,7 @@ import org.wings.SToolBar;
 import org.wings.STree;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
+import org.wings.border.SLineBorder;
 import org.wings.io.Device;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellEditor;
@@ -134,7 +136,6 @@ import com.d2s.framework.util.format.NullableSimpleDateFormat;
 import com.d2s.framework.util.gate.IGate;
 import com.d2s.framework.util.gui.ColorHelper;
 import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.util.wings.WingsUtil;
 import com.d2s.framework.view.BasicCompositeView;
 import com.d2s.framework.view.BasicMapView;
 import com.d2s.framework.view.BasicView;
@@ -285,6 +286,7 @@ public class DefaultWingsViewFactory implements
         }
         if (viewDescriptor.getActions() != null) {
           SToolBar toolBar = createSToolBar();
+          toolBar.setBorder(new SEmptyBorder(new Insets(2, 2, 2, 2)));
           for (Iterator<ActionList> iter = viewDescriptor.getActions()
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
@@ -317,8 +319,7 @@ public class DefaultWingsViewFactory implements
               toolBar.add(new SSeparator());
             }
           }
-          SPanel viewPanel = createSPanel();
-          viewPanel.setLayout(new SBorderLayout());
+          SPanel viewPanel = createSPanel(new SBorderLayout());
           viewPanel.add(toolBar, SBorderLayout.NORTH);
           viewPanel.add(view.getPeer(), SBorderLayout.CENTER);
           view.setPeer(viewPanel);
@@ -575,8 +576,7 @@ public class DefaultWingsViewFactory implements
    * @return the created security panel.
    */
   protected SPanel createSecurityPanel() {
-    SPanel panel = createSPanel();
-    panel.setLayout(new SBorderLayout());
+    SPanel panel = createSPanel(new SBorderLayout());
     SLabel label = createSLabel();
     label.setHorizontalAlignment(SConstants.CENTER);
     label.setVerticalAlignment(SConstants.CENTER);
@@ -616,11 +616,13 @@ public class DefaultWingsViewFactory implements
   /**
    * Creates a panel.
    * 
+   * @param layout
+   *            the layout to apply to the panel.
    * @return the created panel.
    */
-  protected SPanel createSPanel() {
-    SPanel panel = new SPanel();
-    panel.setPreferredSize(WingsUtil.FULLAREA);
+  protected SPanel createSPanel(SLayoutManager layout) {
+    SPanel panel = new SPanel(layout);
+    panel.setPreferredSize(SDimension.FULLAREA);
     panel.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     panel.setVerticalAlignment(SConstants.TOP_ALIGN);
     return panel;
@@ -633,7 +635,8 @@ public class DefaultWingsViewFactory implements
    */
   protected SInternalFrame createSInternalFrame() {
     SInternalFrame iFrame = new SInternalFrame();
-    iFrame.setPreferredSize(WingsUtil.FULLAREA);
+    iFrame.setPreferredSize(SDimension.FULLAREA);
+    iFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
     iFrame.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     iFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
     return iFrame;
@@ -667,8 +670,7 @@ public class DefaultWingsViewFactory implements
   protected SScrollPane createSScrollPane() {
     SScrollPane scrollPane = new SScrollPane();
     scrollPane.setMode(SScrollPane.MODE_COMPLETE);
-    scrollPane.setPreferredSize(new SDimension(WingsUtil.FULL_DIM_PERCENT,
-        SDimension.AUTO));
+    scrollPane.setPreferredSize(SDimension.FULLAREA);
     scrollPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     return scrollPane;
@@ -693,7 +695,7 @@ public class DefaultWingsViewFactory implements
    */
   protected STabbedPane createSTabbedPane() {
     STabbedPane tabbedPane = new STabbedPane();
-    tabbedPane.setPreferredSize(WingsUtil.FULLAREA);
+    tabbedPane.setPreferredSize(SDimension.FULLAREA);
     tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     tabbedPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
     return tabbedPane;
@@ -744,7 +746,7 @@ public class DefaultWingsViewFactory implements
     };
     table.setVerticalAlignment(SConstants.TOP_ALIGN);
     table.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    table.setPreferredSize(WingsUtil.FULLWIDTH);
+    table.setPreferredSize(SDimension.FULLWIDTH);
     table.setSelectable(true);
     return table;
   }
@@ -756,7 +758,7 @@ public class DefaultWingsViewFactory implements
    */
   protected STextArea createSTextArea() {
     STextArea textArea = new STextArea();
-    textArea.setPreferredSize(WingsUtil.FULLAREA);
+    textArea.setPreferredSize(SDimension.FULLAREA);
     return textArea;
   }
 
@@ -809,18 +811,38 @@ public class DefaultWingsViewFactory implements
         view.getPeer().setBorder(new SEtchedBorder());
         break;
       case IViewDescriptor.TITLED:
-        SInternalFrame iFrame = createSInternalFrame();
-        iFrame.setTitle(view.getDescriptor().getI18nName(
-            getTranslationProvider(), locale));
-        iFrame.setMaximizable(false);
-        iFrame.setClosable(false);
-        iFrame.setIconifyable(true);
-        iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
+        // SInternalFrame iFrame = createSInternalFrame();
+        // iFrame.setTitle(view.getDescriptor().getI18nName(
+        // getTranslationProvider(), locale));
+        // iFrame.setMaximizable(false);
+        // iFrame.setClosable(false);
+        // iFrame.setIconifyable(true);
+        // iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
+        // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+        // iFrame.getContentPane().setLayout(new SBorderLayout());
+        // iFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
+        // iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
+        // WingsUtil.FULL_DIM_PERCENT));
+        // view.setPeer(iFrame);
+
+        // view.getPeer().setBorder(new
+        // STitledBorder(view.getDescriptor().getI18nName(
+        // getTranslationProvider(), locale)));
+
+        SPanel titledPanel = createSPanel(new SBorderLayout());
+        SLabel titleLabel = createSLabel();
+        titleLabel.setIcon(iconFactory.getIcon(view.getDescriptor()
             .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-        iFrame.getContentPane().add(view.getPeer());
-        iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
-            WingsUtil.FULL_DIM_PERCENT));
-        view.setPeer(iFrame);
+        titleLabel.setText(view.getDescriptor().getI18nName(
+            getTranslationProvider(), locale));
+        titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+        titleLabel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 1, new Insets(2,
+            2, 2, 2)));
+        titledPanel.add(titleLabel, SBorderLayout.NORTH);
+        titledPanel.add(view.getPeer(), SBorderLayout.CENTER);
+        view.setPeer(titledPanel);
+        titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(
+            0, 0, 2, 2)));
         break;
       default:
         break;
@@ -946,13 +968,10 @@ public class DefaultWingsViewFactory implements
   private ICompositeView<SComponent> createBorderView(
       IBorderViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    SPanel viewComponent = createSPanel();
+    SPanel viewComponent = createSPanel(new SBorderLayout());
     BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
-
-    SBorderLayout layout = new SBorderLayout();
-    viewComponent.setLayout(layout);
 
     if (viewDescriptor.getEastViewDescriptor() != null) {
       IView<SComponent> eastView = createView(viewDescriptor
@@ -991,14 +1010,14 @@ public class DefaultWingsViewFactory implements
   private IMapView<SComponent> createCardView(
       ICardViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    SPanel viewComponent = createSPanel();
     SCardLayout layout = new SCardLayout();
-    viewComponent.setLayout(layout);
+    SPanel viewComponent = createSPanel(layout);
     BasicMapView<SComponent> view = constructMapView(viewComponent,
         viewDescriptor);
     Map<String, IView<SComponent>> childrenViews = new HashMap<String, IView<SComponent>>();
 
-    viewComponent.add(createSPanel(), ICardViewDescriptor.DEFAULT_CARD);
+    viewComponent.add(createSPanel(new SBorderLayout()),
+        ICardViewDescriptor.DEFAULT_CARD);
     viewComponent.add(createSecurityPanel(), ICardViewDescriptor.SECURITY_CARD);
 
     for (Map.Entry<String, IViewDescriptor> childViewDescriptor : viewDescriptor
@@ -1008,7 +1027,7 @@ public class DefaultWingsViewFactory implements
       viewComponent.add(childView.getPeer(), childViewDescriptor.getKey());
       childrenViews.put(childViewDescriptor.getKey(), childView);
     }
-    viewComponent.setPreferredSize(WingsUtil.FULLAREA);
+    viewComponent.setPreferredSize(SDimension.FULLAREA);
     view.setChildren(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
@@ -1175,12 +1194,9 @@ public class DefaultWingsViewFactory implements
     ICompositeValueConnector connector = connectorFactory
         .createCompositeValueConnector(
             getConnectorIdForComponentView(viewDescriptor), null);
-    SPanel viewComponent = createSPanel();
+    SPanel viewComponent = createSPanel(new SGridBagLayout());
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
-
-    SGridBagLayout layout = new SGridBagLayout();
-    viewComponent.setLayout(layout);
 
     int currentX = 0;
     int currentY = 0;
@@ -1288,7 +1304,7 @@ public class DefaultWingsViewFactory implements
       currentX += propertyWidth;
     }
     if (!isSpaceFilled) {
-      SPanel filler = createSPanel();
+      SPanel filler = createSPanel(new SBorderLayout());
       GridBagConstraints constraints = new GridBagConstraints();
       constraints.gridx = 0;
       constraints.weightx = 1.0;
@@ -1403,13 +1419,10 @@ public class DefaultWingsViewFactory implements
   private ICompositeView<SComponent> createConstrainedGridView(
       IConstrainedGridViewDescriptor viewDescriptor,
       IActionHandler actionHandler, Locale locale) {
-    SPanel viewComponent = createSPanel();
+    SPanel viewComponent = createSPanel(new SGridBagLayout());
     BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
-
-    SGridBagLayout layout = new SGridBagLayout();
-    viewComponent.setLayout(layout);
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
@@ -1567,11 +1580,6 @@ public class DefaultWingsViewFactory implements
   private ICompositeView<SComponent> createEvenGridView(
       IEvenGridViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    SPanel viewComponent = createSPanel();
-    BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
-        viewDescriptor);
-    List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
-
     SGridLayout layout = new SGridLayout();
     switch (viewDescriptor.getDrivingDimension()) {
       case IEvenGridViewDescriptor.ROW:
@@ -1587,7 +1595,10 @@ public class DefaultWingsViewFactory implements
     }
     layout.setHgap(5);
     layout.setVgap(5);
-    viewComponent.setLayout(layout);
+    SPanel viewComponent = createSPanel(layout);
+    BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
+        viewDescriptor);
+    List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
 
     for (IViewDescriptor childViewDescriptor : viewDescriptor
         .getChildViewDescriptors()) {
@@ -1678,9 +1689,7 @@ public class DefaultWingsViewFactory implements
     SImageConnector connector = new SImageConnector(viewDescriptor
         .getModelDescriptor().getName(), imageLabel);
     connector.setExceptionHandler(actionHandler);
-    SPanel viewComponent = createSPanel();
-    SBorderLayout layout = new SBorderLayout();
-    viewComponent.setLayout(layout);
+    SPanel viewComponent = createSPanel(new SBorderLayout());
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     viewComponent.add(imageLabel, SBorderLayout.CENTER);
@@ -1759,9 +1768,7 @@ public class DefaultWingsViewFactory implements
         .createCompositeValueConnector(viewDescriptor.getModelDescriptor()
             .getName(), null);
 
-    SPanel viewComponent = createSPanel();
-    SBorderLayout layout = new SBorderLayout();
-    viewComponent.setLayout(layout);
+    SPanel viewComponent = createSPanel(new SBorderLayout());
 
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
@@ -2046,8 +2053,7 @@ public class DefaultWingsViewFactory implements
   private ICompositeView<SComponent> createSplitView(
       ISplitViewDescriptor viewDescriptor, IActionHandler actionHandler,
       Locale locale) {
-    SPanel viewComponent = createSPanel();
-    viewComponent.setLayout(new SGridBagLayout());
+    SPanel viewComponent = createSPanel(new SGridBagLayout());
     BasicCompositeView<SComponent> view = constructCompositeView(viewComponent,
         viewDescriptor);
     List<IView<SComponent>> childrenViews = new ArrayList<IView<SComponent>>();
@@ -2065,8 +2071,12 @@ public class DefaultWingsViewFactory implements
               GridBagConstraints.BOTH, insets, 0, 0));
           break;
         case ISplitViewDescriptor.VERTICAL:
+          double weighty = 0.0d;
+          if (leftTopView.getDescriptor() instanceof ICollectionViewDescriptor) {
+            weighty = 1.0d;
+          }
           viewComponent.add(leftTopView.getPeer(), new GridBagConstraints(0, 0,
-              1, 1, 1.0d, 0.0d, GridBagConstraints.NORTHWEST,
+              1, 1, 1.0d, weighty, GridBagConstraints.NORTHWEST,
               GridBagConstraints.BOTH, insets, 0, 0));
           break;
         default:
@@ -2221,6 +2231,7 @@ public class DefaultWingsViewFactory implements
         .createCollectionConnector(modelDescriptor.getName(), mvcBinder,
             rowConnectorPrototype);
     STable viewComponent = createSTable();
+    viewComponent.setBorder(new SLineBorder(Color.LIGHT_GRAY));
     if (viewDescriptor.isReadOnly()) {
       viewComponent.setEditable(false);
     }
@@ -2257,6 +2268,7 @@ public class DefaultWingsViewFactory implements
         .getSelectionModel(), null);
     int maxColumnSize = computePixelWidth(viewComponent,
         maxColumnCharacterLength);
+    int tableWidth = 0;
     for (int i = 0; i < viewDescriptor.getColumnViewDescriptors().size(); i++) {
       STableColumn column = viewComponent.getColumnModel().getColumn(i);
       String propertyName = viewDescriptor.getColumnViewDescriptors().get(i)
@@ -2310,10 +2322,15 @@ public class DefaultWingsViewFactory implements
             minHeaderWidth);
       }
       column.setWidth(columnWidth + "px");
+      tableWidth += columnWidth;
     }
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
+    if (viewDescriptor.getColumnViewDescriptors().size() < 4) {
+      scrollPane.setPreferredSize(new SDimension(tableWidth + "px", scrollPane
+          .getPreferredSize().getHeight()));
+    }
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;
@@ -2455,9 +2472,9 @@ public class DefaultWingsViewFactory implements
         locale));
     treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
 
-    SScrollPane scrollPane = createSScrollPane();
+    final SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    scrollPane.setPreferredSize(new SDimension(SDimension.AUTO, scrollPane
+    scrollPane.setPreferredSize(new SDimension("180px", scrollPane
         .getPreferredSize().getHeight()));
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
