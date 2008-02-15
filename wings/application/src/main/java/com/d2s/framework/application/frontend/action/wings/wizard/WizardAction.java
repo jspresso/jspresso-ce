@@ -80,7 +80,6 @@ public class WizardAction extends AbstractWingsAction {
     dialog = new SDialog(window, getI18nName(getTranslationProvider(context),
         getLocale(context)), true);
     dialog.setDraggable(true);
-
     dialog.setLayout(new SBorderLayout());
 
     final SPanel cardPanel = new SPanel();

@@ -11,7 +11,6 @@ import javax.swing.SwingUtilities;
 import org.wings.SComponent;
 import org.wings.SContainer;
 import org.wings.SDialog;
-import org.wings.SDimension;
 import org.wings.SRootContainer;
 
 import com.d2s.framework.util.exception.NestedRuntimeException;
@@ -35,23 +34,6 @@ public final class WingsUtil {
    * <code>FULL_DIM_PERCENT</code>.
    */
   public static final String    FULL_DIM_PERCENT    = "100%";
-
-  /**
-   * <code>FULLAREA</code>.
-   */
-  public static final SDimension FULLAREA            = new SDimension(
-                                                         FULL_DIM_PERCENT,
-                                                         FULL_DIM_PERCENT);
-  /**
-   * <code>FULLWIDTH</code>.
-   */
-  public static final SDimension FULLWIDTH           = new SDimension(
-                                                         FULL_DIM_PERCENT, null);
-  /**
-   * <code>FULLHEIGHT</code>.
-   */
-  public static final SDimension FULLHEIGHT          = new SDimension(null,
-                                                         FULL_DIM_PERCENT);
 
   private WingsUtil() {
     // Helper class private constructor.

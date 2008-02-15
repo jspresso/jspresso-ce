@@ -11,6 +11,7 @@ import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SDialog;
+import org.wings.SDimension;
 import org.wings.SFrame;
 import org.wings.SPanel;
 import org.wings.SSpacer;
@@ -32,6 +33,8 @@ import com.d2s.framework.view.action.IDisplayableAction;
  * @author Vincent Vandenschrick
  */
 public class ModalDialogAction extends AbstractWingsAction {
+
+  private static final  SDimension DIALOG_DIMENSION = new SDimension("500px", "250px");
 
   /**
    * Shows a modal dialog containig a main view and a button panel with the list
@@ -69,8 +72,8 @@ public class ModalDialogAction extends AbstractWingsAction {
     SPanel mainPanel = new SPanel(new SBorderLayout());
     mainPanel.add(mainView.getPeer(), SBorderLayout.CENTER);
     mainPanel.add(actionPanel, SBorderLayout.SOUTH);
+    mainPanel.setPreferredSize(DIALOG_DIMENSION);
     dialog.add(mainPanel);
-    //dialog.setClosable(false);
     if (defaultButton != null) {
       dialog.setDefaultButton(defaultButton);
     }
