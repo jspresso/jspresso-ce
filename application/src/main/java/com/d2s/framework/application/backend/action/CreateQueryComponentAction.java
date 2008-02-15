@@ -109,7 +109,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
     modelConnector.setConnectorValue(queryComponent);
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_COMMAND);
-    if (queryPropertyValue != null && !queryPropertyValue.equals("%")) {
+    if (queryPropertyValue != null && !queryPropertyValue.equals("*")) {
       modelConnector.getChildConnector(
           erqDescriptor.getComponentDescriptor().getToStringProperty())
           .setConnectorValue(queryPropertyValue);

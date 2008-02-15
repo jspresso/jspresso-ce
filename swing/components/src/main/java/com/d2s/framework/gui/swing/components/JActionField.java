@@ -188,7 +188,7 @@ public class JActionField extends JPanel {
         SwingUtil.configureButton(actionButton);
         actionButton.setBackground(textField.getBackground());
         actionButton.setAction(action);
-        actionButton.setActionCommand("%");
+        actionButton.setActionCommand("*");
         actionButton.setText("");
         int buttonSquareSize;
         if (showTextField) {

@@ -163,7 +163,7 @@ public class SActionField extends SPanel {
       for (Action action : actions) {
         SButton actionButton = new SButton();
         actionButton.setAction(action);
-        actionButton.setActionCommand("%");
+        actionButton.setActionCommand("*");
         actionButton.setText(null);
         actionButton.setShowAsFormComponent(false);
         actionButton.setBorder(SBorderFactory.createSLineBorder(Color.GRAY));

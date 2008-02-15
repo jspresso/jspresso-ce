@@ -84,7 +84,7 @@ public class LovAction extends ModalDialogAction {
     Object queryPropertyValue = context
         .get(ActionContextConstants.ACTION_COMMAND);
     if (autoquery && queryPropertyValue != null
-        && !queryPropertyValue.equals("%")) {
+        && !queryPropertyValue.equals("*")) {
       actionHandler.execute(findAction, context);
       IQueryComponent queryComponent = (IQueryComponent) queryEntityConnector
           .getConnectorValue();
