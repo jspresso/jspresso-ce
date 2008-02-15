@@ -623,7 +623,7 @@ public class DefaultWingsViewFactory implements
   protected SPanel createSPanel(SLayoutManager layout) {
     SPanel panel = new SPanel(layout);
     panel.setPreferredSize(SDimension.FULLAREA);
-    panel.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+    panel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     panel.setVerticalAlignment(SConstants.TOP_ALIGN);
     return panel;
   }
@@ -637,7 +637,7 @@ public class DefaultWingsViewFactory implements
     SInternalFrame iFrame = new SInternalFrame();
     iFrame.setPreferredSize(SDimension.FULLAREA);
     iFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
-    iFrame.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+    iFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     iFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
     return iFrame;
   }
@@ -671,7 +671,7 @@ public class DefaultWingsViewFactory implements
     SScrollPane scrollPane = new SScrollPane();
     scrollPane.setMode(SScrollPane.MODE_COMPLETE);
     scrollPane.setPreferredSize(SDimension.FULLAREA);
-    scrollPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+    scrollPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     return scrollPane;
   }
@@ -697,7 +697,7 @@ public class DefaultWingsViewFactory implements
     STabbedPane tabbedPane = new STabbedPane();
     tabbedPane.setPreferredSize(SDimension.FULLAREA);
     tabbedPane.setVerticalAlignment(SConstants.TOP_ALIGN);
-    tabbedPane.setHorizontalAlignment(SConstants.CENTER_ALIGN);
+    tabbedPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return tabbedPane;
   }
 
@@ -758,7 +758,10 @@ public class DefaultWingsViewFactory implements
    */
   protected STextArea createSTextArea() {
     STextArea textArea = new STextArea();
+    textArea.setVerticalAlignment(SConstants.TOP_ALIGN);
+    textArea.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     textArea.setPreferredSize(SDimension.FULLAREA);
+    textArea.setRows(20);
     return textArea;
   }
 
@@ -836,8 +839,7 @@ public class DefaultWingsViewFactory implements
         titleLabel.setText(view.getDescriptor().getI18nName(
             getTranslationProvider(), locale));
         titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        titleLabel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 1, new Insets(2,
-            2, 2, 2)));
+        titleLabel.setBorder(new SEmptyBorder(new Insets(2, 2, 6, 2)));
         titledPanel.add(titleLabel, SBorderLayout.NORTH);
         titledPanel.add(view.getPeer(), SBorderLayout.CENTER);
         view.setPeer(titledPanel);
@@ -1297,7 +1299,7 @@ public class DefaultWingsViewFactory implements
         constraints.fill = GridBagConstraints.BOTH;
         isSpaceFilled = true;
       } else {
-        constraints.fill = GridBagConstraints.NONE;
+        constraints.fill = GridBagConstraints.HORIZONTAL;
       }
       viewComponent.add(propertyView.getPeer(), constraints);
 
@@ -2237,6 +2239,7 @@ public class DefaultWingsViewFactory implements
     }
     Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
     List<String> columnConnectorKeys = new ArrayList<String>();
+    int tableWidth = 0;
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
@@ -2268,7 +2271,6 @@ public class DefaultWingsViewFactory implements
         .getSelectionModel(), null);
     int maxColumnSize = computePixelWidth(viewComponent,
         maxColumnCharacterLength);
-    int tableWidth = 0;
     for (int i = 0; i < viewDescriptor.getColumnViewDescriptors().size(); i++) {
       STableColumn column = viewComponent.getColumnModel().getColumn(i);
       String propertyName = viewDescriptor.getColumnViewDescriptors().get(i)
@@ -2327,10 +2329,10 @@ public class DefaultWingsViewFactory implements
 
     SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
-    if (viewDescriptor.getColumnViewDescriptors().size() < 4) {
-      scrollPane.setPreferredSize(new SDimension(tableWidth + "px", scrollPane
-          .getPreferredSize().getHeight()));
-    }
+    // if (viewDescriptor.getColumnViewDescriptors().size() < 4) {
+    // scrollPane.setPreferredSize(new SDimension((tableWidth * 3 / 2) + "px",
+    // scrollPane.getPreferredSize().getHeight()));
+    // }
     IView<SComponent> view = constructView(scrollPane, viewDescriptor,
         connector);
     return view;

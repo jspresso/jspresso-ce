@@ -178,8 +178,7 @@ public class WizardAction extends AbstractWingsAction {
     dialog.add(cardPanel, SBorderLayout.CENTER);
 
     dialog.setDefaultButton(nextButton);
-
-    cardPanel.setPreferredSize(WIZARD_DIMENSION);
+    dialog.setPreferredSize(new SDimension(WIZARD_DIMENSION.getWidth(), SDimension.AUTO));
 
     show(dialog, cardPanel, alreadyDisplayedSteps, firstWizardStep, backButton,
         nextButton, finishButton, modelConnector, actionHandler, context);
@@ -257,7 +256,6 @@ public class WizardAction extends AbstractWingsAction {
           wizardStep.getViewDescriptor(), actionHandler, getLocale(context));
       view.getPeer().setPreferredSize(WIZARD_DIMENSION);
       cardPanel.add(view.getPeer(), cardName);
-      cardPanel.setPreferredSize(WIZARD_DIMENSION);
       getMvcBinder(context).bind(view.getConnector(), modelConnector);
     }
     ((SCardLayout) (cardPanel.getLayout())).show(cardPanel, cardName);
