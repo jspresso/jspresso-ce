@@ -2078,10 +2078,11 @@ public class DefaultWingsViewFactory implements
       leftTopView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
       switch (viewDescriptor.getOrientation()) {
         case ISplitViewDescriptor.HORIZONTAL:
-          double weightx = 0.3d;
-          if (leftTopView.getDescriptor() instanceof ITreeViewDescriptor) {
-            weightx = 0.0d;
-          }
+          double weightx = 0.0d;
+          // double weightx = 0.3d;
+          // if (leftTopView.getDescriptor() instanceof ITreeViewDescriptor) {
+          // weightx = 0.0d;
+          // }
           viewComponent.add(leftTopView.getPeer(), new GridBagConstraints(0, 0,
               1, 1, weightx, 1.0d, GridBagConstraints.NORTHWEST,
               GridBagConstraints.BOTH, insets, 0, 0));
