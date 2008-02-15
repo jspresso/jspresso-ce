@@ -683,6 +683,9 @@ public class DefaultWingsViewFactory implements
    */
   protected SSplitPane createSSplitPane() {
     SSplitPane splitPane = new SSplitPane();
+    splitPane.setPreferredSize(SDimension.FULLAREA);
+    splitPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    splitPane.setVerticalAlignment(SConstants.TOP_ALIGN);
     splitPane.setContinuousLayout(true);
     // splitPane.setOneTouchExpandable(true);
     return splitPane;
@@ -2068,8 +2071,12 @@ public class DefaultWingsViewFactory implements
       leftTopView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
       switch (viewDescriptor.getOrientation()) {
         case ISplitViewDescriptor.HORIZONTAL:
+          double weightx = 1.0d;
+          if (leftTopView.getDescriptor() instanceof ITreeViewDescriptor) {
+            weightx = 0.0d;
+          }
           viewComponent.add(leftTopView.getPeer(), new GridBagConstraints(0, 0,
-              1, 1, 0.0d, 1.0d, GridBagConstraints.NORTHWEST,
+              1, 1, weightx, 1.0d, GridBagConstraints.NORTHWEST,
               GridBagConstraints.BOTH, insets, 0, 0));
           break;
         case ISplitViewDescriptor.VERTICAL:
