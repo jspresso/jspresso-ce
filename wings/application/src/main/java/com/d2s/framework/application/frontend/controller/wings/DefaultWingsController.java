@@ -22,11 +22,9 @@ import org.wings.SBorderLayout;
 import org.wings.SCardLayout;
 import org.wings.SComponent;
 import org.wings.SConstants;
-import org.wings.SContainer;
 import org.wings.SDimension;
 import org.wings.SFrame;
 import org.wings.SIcon;
-import org.wings.SInternalFrame;
 import org.wings.SMenu;
 import org.wings.SMenuBar;
 import org.wings.SMenuItem;
@@ -42,7 +40,6 @@ import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.wings.components.SErrorDialog;
 import com.d2s.framework.util.exception.BusinessException;
 import com.d2s.framework.util.html.HtmlHelper;
-import com.d2s.framework.util.wings.WingsUtil;
 import com.d2s.framework.view.IActionFactory;
 import com.d2s.framework.view.IIconFactory;
 import com.d2s.framework.view.IView;
@@ -167,9 +164,9 @@ public class DefaultWingsController extends
           .getModuleConnector(moduleName);
       IView<SComponent> moduleView = createModuleView(moduleName,
           moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
-      SContainer moduleInternalFrame = createInternalFrame(moduleView);
+      //getViewFactory().decorateWithTitle(moduleView, getLocale());
       moduleViews.add(moduleName);
-      cardPanel.add(moduleInternalFrame, moduleName);
+      cardPanel.add(moduleView.getPeer(), moduleName);
       getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
     }
     setSelectedModuleName(moduleName);
@@ -243,42 +240,14 @@ public class DefaultWingsController extends
 
   private SFrame createControllerFrame() {
     SFrame frame = new SFrame();
-    frame.setPreferredSize(new SDimension(frameWidth,
-        WingsUtil.FULL_DIM_PERCENT));
+    frame
+        .setPreferredSize(new SDimension(frameWidth, frameHeight/* WingsUtil.FULL_DIM_PERCENT */));
     cardPanel = new SPanel(new SCardLayout());
     cardPanel.setPreferredSize(SDimension.FULLAREA);
     frame.getContentPane().add(createApplicationMenuBar(), SBorderLayout.NORTH);
     frame.getContentPane().add(cardPanel, SBorderLayout.CENTER);
     frame.getContentPane().setPreferredSize(SDimension.FULLAREA);
     return frame;
-  }
-
-  /**
-   * Creates a new SInternalFrame and populates it with a view.
-   * 
-   * @param view
-   *            the view to be set into the internal frame.
-   * @return the constructed internal frame.
-   */
-  private SContainer createInternalFrame(IView<SComponent> view) {
-    SInternalFrame internalFrame = new SInternalFrame();
-    internalFrame.setPreferredSize(SDimension.AUTOAREA);
-    internalFrame.setTitle(view.getDescriptor().getI18nName(
-        getTranslationProvider(), getLocale()));
-    internalFrame.setClosable(false);
-    internalFrame.setMaximizable(false);
-    internalFrame.setIconifyable(false);
-    internalFrame.setClosable(false);
-    internalFrame.getContentPane().setLayout(new SBorderLayout());
-    internalFrame.setIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
-    view.getPeer().setPreferredSize(
-        new SDimension(WingsUtil.FULL_DIM_PERCENT, frameHeight));
-    internalFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
-    internalFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
-    internalFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
-    internalFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    return internalFrame;
   }
 
   private SMenu createModulesMenu() {

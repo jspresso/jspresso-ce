@@ -817,41 +817,48 @@ public class DefaultWingsViewFactory implements
         view.getPeer().setBorder(new SEtchedBorder());
         break;
       case IViewDescriptor.TITLED:
-        // SInternalFrame iFrame = createSInternalFrame();
-        // iFrame.setTitle(view.getDescriptor().getI18nName(
-        // getTranslationProvider(), locale));
-        // iFrame.setMaximizable(false);
-        // iFrame.setClosable(false);
-        // iFrame.setIconifyable(true);
-        // iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
-        // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-        // iFrame.getContentPane().setLayout(new SBorderLayout());
-        // iFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
-        // iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
-        // WingsUtil.FULL_DIM_PERCENT));
-        // view.setPeer(iFrame);
-
-        // view.getPeer().setBorder(new
-        // STitledBorder(view.getDescriptor().getI18nName(
-        // getTranslationProvider(), locale)));
-
-        SPanel titledPanel = createSPanel(new SBorderLayout());
-        SLabel titleLabel = createSLabel();
-        titleLabel.setIcon(iconFactory.getIcon(view.getDescriptor()
-            .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-        titleLabel.setText(view.getDescriptor().getI18nName(
-            getTranslationProvider(), locale));
-        titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-        titleLabel.setBorder(new SEmptyBorder(new Insets(2, 2, 6, 2)));
-        titledPanel.add(titleLabel, SBorderLayout.NORTH);
-        titledPanel.add(view.getPeer(), SBorderLayout.CENTER);
-        view.setPeer(titledPanel);
-        titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(
-            0, 0, 2, 2)));
+        decorateWithTitle(view, locale);
         break;
       default:
         break;
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void decorateWithTitle(IView<SComponent> view, Locale locale) {
+    // SInternalFrame iFrame = createSInternalFrame();
+    // iFrame.setTitle(view.getDescriptor().getI18nName(
+    // getTranslationProvider(), locale));
+    // iFrame.setMaximizable(false);
+    // iFrame.setClosable(false);
+    // iFrame.setIconifyable(true);
+    // iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
+    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    // iFrame.getContentPane().setLayout(new SBorderLayout());
+    // iFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
+    // iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
+    // WingsUtil.FULL_DIM_PERCENT));
+    // view.setPeer(iFrame);
+
+    // view.getPeer().setBorder(new
+    // STitledBorder(view.getDescriptor().getI18nName(
+    // getTranslationProvider(), locale)));
+
+    SPanel titledPanel = createSPanel(new SBorderLayout());
+    SLabel titleLabel = createSLabel();
+    titleLabel.setIcon(iconFactory.getIcon(view.getDescriptor()
+        .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    titleLabel.setText(view.getDescriptor().getI18nName(
+        getTranslationProvider(), locale));
+    titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    titleLabel.setBorder(new SEmptyBorder(new Insets(2, 2, 6, 2)));
+    titledPanel.add(titleLabel, SBorderLayout.NORTH);
+    titledPanel.add(view.getPeer(), SBorderLayout.CENTER);
+    titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(0, 0,
+        2, 2)));
+    view.setPeer(titledPanel);
   }
 
   /**
@@ -1698,9 +1705,9 @@ public class DefaultWingsViewFactory implements
     IView<SComponent> view = constructView(viewComponent, viewDescriptor,
         connector);
     viewComponent.add(imageLabel, SBorderLayout.CENTER);
-    // SScrollPane scrollPane = createSScrollPane();
-    // scrollPane.setViewportView(viewComponent);
-    // view.setPeer(scrollPane);
+    SScrollPane scrollPane = createSScrollPane();
+    scrollPane.setViewportView(viewComponent);
+    view.setPeer(scrollPane);
     return view;
   }
 
@@ -2071,7 +2078,7 @@ public class DefaultWingsViewFactory implements
       leftTopView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
       switch (viewDescriptor.getOrientation()) {
         case ISplitViewDescriptor.HORIZONTAL:
-          double weightx = 1.0d;
+          double weightx = 0.3d;
           if (leftTopView.getDescriptor() instanceof ITreeViewDescriptor) {
             weightx = 0.0d;
           }

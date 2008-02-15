@@ -816,22 +816,30 @@ public class DefaultSwingViewFactory implements
         view.getPeer().setBorder(BorderFactory.createEtchedBorder());
         break;
       case IViewDescriptor.TITLED:
-        view.getPeer().setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), view.getDescriptor()
-                    .getI18nName(getTranslationProvider(), locale)));
-        // JInternalFrame iFrame = new JInternalFrame(view.getDescriptor()
-        // .getI18nName(getTranslationProvider(), locale), false, false,
-        // false, false);
-        // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
-        // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-        // iFrame.getContentPane().add(view.getPeer());
-        // iFrame.pack();
-        // view.setPeer(iFrame);
+        decorateWithTitle(view, locale);
         break;
       default:
         break;
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void decorateWithTitle(IView<JComponent> view, Locale locale) {
+    view.getPeer()
+        .setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), view.getDescriptor()
+                    .getI18nName(getTranslationProvider(), locale)));
+    // JInternalFrame iFrame = new JInternalFrame(view.getDescriptor()
+    // .getI18nName(getTranslationProvider(), locale), false, false,
+    // false, false);
+    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
+    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    // iFrame.getContentPane().add(view.getPeer());
+    // iFrame.pack();
+    //view.setPeer(iFrame);
   }
 
   // ///////////// //

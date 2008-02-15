@@ -240,10 +240,6 @@ public class DefaultSwingController extends
           moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
       moduleInternalFrame = createJInternalFrame(moduleView);
       moduleInternalFrame
-          .setFrameIcon(getIconFactory().getIcon(
-              moduleViewDescriptor.getIconImageURL(),
-              IIconFactory.SMALL_ICON_SIZE));
-      moduleInternalFrame
           .addInternalFrameListener(new ModuleInternalFrameListener(moduleName));
       moduleInternalFrames.put(moduleName, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
@@ -414,6 +410,10 @@ public class DefaultSwingController extends
   private JInternalFrame createJInternalFrame(IView<JComponent> view) {
     JInternalFrame internalFrame = new JInternalFrame(view.getDescriptor()
         .getI18nName(getTranslationProvider(), getLocale()));
+    internalFrame
+    .setFrameIcon(getIconFactory().getIcon(
+        view.getDescriptor().getIconImageURL(),
+        IIconFactory.SMALL_ICON_SIZE));
     internalFrame.setResizable(true);
     internalFrame.setClosable(false);
     internalFrame.setMaximizable(true);

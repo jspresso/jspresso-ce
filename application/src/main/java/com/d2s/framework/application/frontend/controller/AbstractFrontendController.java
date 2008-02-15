@@ -412,6 +412,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
     splitViewDescriptor.setName(moduleViewDescriptor.getName());
+    //splitViewDescriptor.setDescription(moduleViewDescriptor.getDescription());
+    splitViewDescriptor.setIconImageURL(moduleViewDescriptor.getIconImageURL());
     splitViewDescriptor.setMasterDetail(true);
 
     ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(

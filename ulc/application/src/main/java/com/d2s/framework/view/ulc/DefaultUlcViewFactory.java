@@ -820,23 +820,31 @@ public class DefaultUlcViewFactory implements
         view.getPeer().setBorder(BorderFactory.createEtchedBorder());
         break;
       case IViewDescriptor.TITLED:
-        view.getPeer().setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), view.getDescriptor()
-                    .getI18nName(getTranslationProvider(), locale)));
-        // ULCInternalFrame iFrame = new ULCInternalFrame(view.getDescriptor()
-        // .getI18nName(getTranslationProvider(), locale), true, true,
-        // true, true);
-        // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
-        // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-        // iFrame.add(view.getPeer());
-        // iFrame.pack();
-        // iFrame.setPreferredSize(new Dimension(100,100));
-        // view.setPeer(iFrame);
+        decorateWithTitle(view, locale);
         break;
       default:
         break;
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public void decorateWithTitle(IView<ULCComponent> view, Locale locale) {
+    view.getPeer()
+        .setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), view.getDescriptor()
+                    .getI18nName(getTranslationProvider(), locale)));
+    // ULCInternalFrame iFrame = new ULCInternalFrame(view.getDescriptor()
+    // .getI18nName(getTranslationProvider(), locale), true, true,
+    // true, true);
+    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
+    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    // iFrame.add(view.getPeer());
+    // iFrame.pack();
+    // iFrame.setPreferredSize(new Dimension(100,100));
+    // view.setPeer(iFrame);
   }
 
   // ///////////////// //

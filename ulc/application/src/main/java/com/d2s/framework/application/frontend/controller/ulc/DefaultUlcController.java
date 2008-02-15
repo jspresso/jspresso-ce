@@ -207,10 +207,6 @@ public class DefaultUlcController extends
           moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
       moduleInternalFrame = createULCExtendedInternalFrame(moduleView);
       moduleInternalFrame
-          .setFrameIcon(getIconFactory().getIcon(
-              moduleViewDescriptor.getIconImageURL(),
-              IIconFactory.SMALL_ICON_SIZE));
-      moduleInternalFrame
           .addExtendedInternalFrameListener(new ModuleInternalFrameListener(
               moduleName));
       moduleInternalFrames.put(moduleName, moduleInternalFrame);
@@ -343,6 +339,8 @@ public class DefaultUlcController extends
       IView<ULCComponent> view) {
     ULCExtendedInternalFrame internalFrame = new ULCExtendedInternalFrame(view
         .getDescriptor().getI18nName(getTranslationProvider(), getLocale()));
+    internalFrame.setFrameIcon(getIconFactory().getIcon(
+        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     internalFrame.setResizable(true);
     internalFrame.setClosable(false);
     internalFrame.setMaximizable(true);
