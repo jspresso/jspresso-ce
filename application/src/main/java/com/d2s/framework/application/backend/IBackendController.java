@@ -95,7 +95,7 @@ public interface IBackendController extends IController {
    *            the modulen identifier.
    * @return the associated module connector.
    */
-  IValueConnector getModuleConnector(String moduleName);
+  IValueConnector getWorkspaceConnector(String moduleName);
 
   /**
    * Acts as a clipboard for retrieving previously stored component references
@@ -132,5 +132,5 @@ public interface IBackendController extends IController {
    * @param workspaces
    *            the modules to install.
    */
-  void installModules(Map<String, Workspace> workspaces);
+  void installWorkspaces(Map<String, Workspace> workspaces);
 }

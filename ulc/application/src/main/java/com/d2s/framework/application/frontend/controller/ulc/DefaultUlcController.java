@@ -192,18 +192,18 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayModule(String moduleName) {
+  protected void displayWorkspace(String moduleName) {
     if (moduleInternalFrames == null) {
       moduleInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
     }
     ULCExtendedInternalFrame moduleInternalFrame = moduleInternalFrames
         .get(moduleName);
     if (moduleInternalFrame == null) {
-      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
           .getViewDescriptor();
       IValueConnector moduleConnector = getBackendController()
-          .getModuleConnector(moduleName);
-      IView<ULCComponent> moduleView = createModuleView(moduleName,
+          .getWorkspaceConnector(moduleName);
+      IView<ULCComponent> moduleView = createWorkspaceView(moduleName,
           moduleViewDescriptor, (Workspace) moduleConnector.getConnectorValue());
       moduleInternalFrame = createULCExtendedInternalFrame(moduleView);
       moduleInternalFrame
@@ -317,7 +317,7 @@ public class DefaultUlcController extends
     modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
     for (String moduleName : getModuleNames()) {
-      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
           .getViewDescriptor();
       ULCMenuItem moduleMenuItem = new ULCMenuItem(new ModuleSelectionAction(
           moduleName, moduleViewDescriptor));
@@ -403,7 +403,7 @@ public class DefaultUlcController extends
   private void updateFrameTitle() {
     String moduleName = getSelectedModuleName();
     if (moduleName != null) {
-      controllerFrame.setTitle(getModule(getSelectedModuleName())
+      controllerFrame.setTitle(getWorkspace(getSelectedModuleName())
           .getViewDescriptor().getI18nDescription(getTranslationProvider(),
               getLocale())
           + " - " + getI18nName(getTranslationProvider(), getLocale()));
@@ -551,7 +551,7 @@ public class DefaultUlcController extends
     ActionEvent e) {
       try {
         getBackendController().checkModuleAccess(moduleName);
-        displayModule(moduleName);
+        displayWorkspace(moduleName);
       } catch (SecurityException ex) {
         handleException(ex, null);
       }

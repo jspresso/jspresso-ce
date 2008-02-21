@@ -153,16 +153,16 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayModule(String moduleName) {
+  protected void displayWorkspace(String moduleName) {
     if (moduleViews == null) {
       moduleViews = new HashSet<String>();
     }
     if (!moduleViews.contains(moduleName)) {
-      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
           .getViewDescriptor();
       IValueConnector moduleConnector = getBackendController()
-          .getModuleConnector(moduleName);
-      IView<SComponent> moduleView = createModuleView(moduleName,
+          .getWorkspaceConnector(moduleName);
+      IView<SComponent> moduleView = createWorkspaceView(moduleName,
           moduleViewDescriptor, (Workspace) moduleConnector.getConnectorValue());
       //getViewFactory().decorateWithTitle(moduleView, getLocale());
       moduleViews.add(moduleName);
@@ -256,7 +256,7 @@ public class DefaultWingsController extends
     modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
     for (String moduleName : getModuleNames()) {
-      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
           .getViewDescriptor();
       SMenuItem moduleMenuItem = new SMenuItem(new ModuleSelectionAction(
           moduleName, moduleViewDescriptor));
@@ -279,7 +279,7 @@ public class DefaultWingsController extends
   private void updateFrameTitle() {
     String moduleName = getSelectedModuleName();
     if (moduleName != null) {
-      controllerFrame.setTitle(getModule(getSelectedModuleName())
+      controllerFrame.setTitle(getWorkspace(getSelectedModuleName())
           .getViewDescriptor().getI18nDescription(getTranslationProvider(),
               getLocale())
           + " - " + getI18nName(getTranslationProvider(), getLocale()));
@@ -321,7 +321,7 @@ public class DefaultWingsController extends
     ActionEvent e) {
       try {
         getBackendController().checkModuleAccess(moduleName);
-        displayModule(moduleName);
+        displayWorkspace(moduleName);
       } catch (SecurityException ex) {
         handleException(ex, null);
       }

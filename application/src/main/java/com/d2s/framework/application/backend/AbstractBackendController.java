@@ -16,7 +16,7 @@ import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
 import com.d2s.framework.application.model.Workspace;
-import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
+import com.d2s.framework.application.model.descriptor.WorkspaceDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.component.IComponent;
@@ -48,7 +48,7 @@ public abstract class AbstractBackendController extends AbstractController
   private IEntityFactory                                   entityFactory;
   private IAccessorFactory                                 mapAccessorFactory;
   private IModelConnectorFactory                           mapConnectorFactory;
-  private Map<String, IValueConnector>                     moduleConnectors;
+  private Map<String, IValueConnector>                     workspaceConnectors;
 
   private ComponentTransferStructure<? extends IComponent> transferStructure;
 
@@ -56,7 +56,7 @@ public abstract class AbstractBackendController extends AbstractController
    * {@inheritDoc}
    */
   public void checkModuleAccess(String moduleName) {
-    checkAccess((ISecurable) getModuleConnector(moduleName).getConnectorValue());
+    checkAccess((ISecurable) getWorkspaceConnector(moduleName).getConnectorValue());
   }
 
   /**
@@ -152,8 +152,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IValueConnector getModuleConnector(String moduleName) {
-    return moduleConnectors.get(moduleName);
+  public IValueConnector getWorkspaceConnector(String moduleName) {
+    return workspaceConnectors.get(moduleName);
   }
 
   /**
@@ -256,15 +256,15 @@ public abstract class AbstractBackendController extends AbstractController
    *            A map containing the modules indexed by a well-known key used to
    *            bind them with their views.
    */
-  public void installModules(Map<String, Workspace> workspaces) {
-    moduleConnectors = new HashMap<String, IValueConnector>();
-    for (Map.Entry<String, Workspace> moduleEntry : workspaces.entrySet()) {
-      IModelDescriptor moduleDescriptor;
-      moduleDescriptor = ModuleDescriptor.MODULE_DESCRIPTOR;
-      IValueConnector nextModuleConnector = beanConnectorFactory
-          .createModelConnector(moduleEntry.getKey(), moduleDescriptor);
-      nextModuleConnector.setConnectorValue(moduleEntry.getValue());
-      moduleConnectors.put(moduleEntry.getKey(), nextModuleConnector);
+  public void installWorkspaces(Map<String, Workspace> workspaces) {
+    workspaceConnectors = new HashMap<String, IValueConnector>();
+    for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
+      IModelDescriptor workspaceDescriptor;
+      workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
+      IValueConnector nextWorkspaceConnector = beanConnectorFactory
+          .createModelConnector(workspaceEntry.getKey(), workspaceDescriptor);
+      nextWorkspaceConnector.setConnectorValue(workspaceEntry.getValue());
+      workspaceConnectors.put(workspaceEntry.getKey(), nextWorkspaceConnector);
     }
   }
 

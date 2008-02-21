@@ -401,25 +401,25 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @param moduleName
    *            the identifier of the module to create the view for.
-   * @param moduleViewDescriptor
+   * @param workspaceViewDescriptor
    *            the view descriptor of the module to render.
    * @param workspace
    *            the module to create the view for.
    * @return a view rendering the module.
    */
-  protected IView<E> createModuleView(final String moduleName,
-      IViewDescriptor moduleViewDescriptor, Workspace workspace) {
+  protected IView<E> createWorkspaceView(final String moduleName,
+      IViewDescriptor workspaceViewDescriptor, Workspace workspace) {
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
-    splitViewDescriptor.setName(moduleViewDescriptor.getName());
+    splitViewDescriptor.setName(workspaceViewDescriptor.getName());
     //splitViewDescriptor.setDescription(moduleViewDescriptor.getDescription());
-    splitViewDescriptor.setIconImageURL(moduleViewDescriptor.getIconImageURL());
+    splitViewDescriptor.setIconImageURL(workspaceViewDescriptor.getIconImageURL());
     splitViewDescriptor.setMasterDetail(true);
 
     WorkspaceCardViewDescriptor modulePaneDescriptor = new WorkspaceCardViewDescriptor(
         workspace, moduleViewDescriptorFactory);
 
-    splitViewDescriptor.setLeftTopViewDescriptor(moduleViewDescriptor);
+    splitViewDescriptor.setLeftTopViewDescriptor(workspaceViewDescriptor);
     splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
 
     ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory.createView(
@@ -469,7 +469,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * @param moduleName
    *            the module identifier.
    */
-  protected abstract void displayModule(String moduleName);
+  protected abstract void displayWorkspace(String moduleName);
 
   /**
    * Executes a backend action.
@@ -543,7 +543,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *            the name of the module.
    * @return the selected module.
    */
-  protected Workspace getModule(String moduleName) {
+  protected Workspace getWorkspace(String moduleName) {
     if (workspaces != null) {
       return workspaces.get(moduleName);
     }
@@ -609,7 +609,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
       for (Workspace workspace : workspaces.values()) {
         translateWorkspace(workspace);
       }
-      getBackendController().installModules(workspaces);
+      getBackendController().installWorkspaces(workspaces);
     }
   }
 

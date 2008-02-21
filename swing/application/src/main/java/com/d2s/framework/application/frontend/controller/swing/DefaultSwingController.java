@@ -226,24 +226,24 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayModule(String moduleName) {
+  protected void displayWorkspace(String workspaceName) {
     if (moduleInternalFrames == null) {
       moduleInternalFrames = new HashMap<String, JInternalFrame>();
     }
-    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(moduleName);
+    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(workspaceName);
     if (moduleInternalFrame == null) {
-      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
-      IValueConnector moduleConnector = getBackendController()
-          .getModuleConnector(moduleName);
-      IView<JComponent> moduleView = createModuleView(moduleName,
-          moduleViewDescriptor, (Workspace) moduleConnector.getConnectorValue());
-      moduleInternalFrame = createJInternalFrame(moduleView);
+      IValueConnector workspaceConnector = getBackendController()
+          .getWorkspaceConnector(workspaceName);
+      IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
+          workspaceViewDescriptor, (Workspace) workspaceConnector.getConnectorValue());
+      moduleInternalFrame = createJInternalFrame(workspaceView);
       moduleInternalFrame
-          .addInternalFrameListener(new ModuleInternalFrameListener(moduleName));
-      moduleInternalFrames.put(moduleName, moduleInternalFrame);
+          .addInternalFrameListener(new ModuleInternalFrameListener(workspaceName));
+      moduleInternalFrames.put(workspaceName, moduleInternalFrame);
       controllerFrame.getContentPane().add(moduleInternalFrame);
-      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
+      getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
       moduleInternalFrame.pack();
       moduleInternalFrame.setSize(controllerFrame.getSize());
     }
@@ -260,7 +260,7 @@ public class DefaultSwingController extends
     } catch (PropertyVetoException ex) {
       throw new ControllerException(ex);
     }
-    setSelectedModuleName(moduleName);
+    setSelectedModuleName(workspaceName);
     moduleInternalFrame.toFront();
   }
 
@@ -430,7 +430,7 @@ public class DefaultSwingController extends
     modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
     for (String moduleName : getModuleNames()) {
-      IViewDescriptor moduleViewDescriptor = getModule(moduleName)
+      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
           .getViewDescriptor();
       JMenuItem moduleMenuItem = new JMenuItem(new ModuleSelectionAction(
           moduleName, moduleViewDescriptor));
@@ -508,7 +508,7 @@ public class DefaultSwingController extends
   private void updateFrameTitle() {
     String moduleName = getSelectedModuleName();
     if (moduleName != null) {
-      controllerFrame.setTitle(getModule(getSelectedModuleName())
+      controllerFrame.setTitle(getWorkspace(getSelectedModuleName())
           .getViewDescriptor().getI18nDescription(getTranslationProvider(),
               getLocale())
           + " - " + getI18nName(getTranslationProvider(), getLocale()));
@@ -611,7 +611,7 @@ public class DefaultSwingController extends
     ActionEvent e) {
       try {
         getBackendController().checkModuleAccess(moduleName);
-        displayModule(moduleName);
+        displayWorkspace(moduleName);
       } catch (SecurityException ex) {
         handleException(ex, null);
       }

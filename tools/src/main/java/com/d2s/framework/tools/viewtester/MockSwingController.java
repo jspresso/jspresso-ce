@@ -78,7 +78,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected Workspace getModule(@SuppressWarnings("unused")
+  protected Workspace getWorkspace(@SuppressWarnings("unused")
   String moduleName) {
     return null;
   }
@@ -87,7 +87,7 @@ public class MockSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayModule(@SuppressWarnings("unused")
+  protected void displayWorkspace(@SuppressWarnings("unused")
   String moduleName) {
     // Empty implementation.
   }
