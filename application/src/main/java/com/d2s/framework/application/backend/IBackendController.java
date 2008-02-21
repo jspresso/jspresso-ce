@@ -30,13 +30,13 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
 public interface IBackendController extends IController {
 
   /**
-   * Checks authorization for module access. It shoud throw a SecurityException
+   * Checks authorization for workspace access. It shoud throw a SecurityException
    * whenever access should not be granted.
    * 
-   * @param moduleName
-   *            the id of the module access to check.
+   * @param workspaceName
+   *            the id of the workspace access to check.
    */
-  void checkModuleAccess(String moduleName);
+  void checkWorkspaceAccess(String workspaceName);
 
   /**
    * Creates a model connector out of a model descriptor. It should be either a
@@ -88,14 +88,14 @@ public interface IBackendController extends IController {
   IModelConnectorFactory getMapConnectorFactory();
 
   /**
-   * Given a module identifier, this method returns the composite connector used
-   * as model connector for the associated module.
+   * Given a workspace identifier, this method returns the composite connector used
+   * as model connector for the associated workspace.
    * 
-   * @param moduleName
-   *            the modulen identifier.
-   * @return the associated module connector.
+   * @param workspaceName
+   *            the workspace identifier.
+   * @return the associated workspace connector.
    */
-  IValueConnector getWorkspaceConnector(String moduleName);
+  IValueConnector getWorkspaceConnector(String workspaceName);
 
   /**
    * Acts as a clipboard for retrieving previously stored component references
@@ -127,10 +127,10 @@ public interface IBackendController extends IController {
       ComponentTransferStructure<? extends IComponent> components);
 
   /**
-   * Installs the passed in modules into the backend controller.
+   * Installs the passed in workspaces into the backend controller.
    * 
    * @param workspaces
-   *            the modules to install.
+   *            the workspaces to install.
    */
   void installWorkspaces(Map<String, Workspace> workspaces);
 }

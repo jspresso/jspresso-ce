@@ -81,7 +81,7 @@ public class DefaultSwingController extends
     AbstractFrontendController<JComponent, Icon, Action> {
 
   private JFrame                      controllerFrame;
-  private Map<String, JInternalFrame> moduleInternalFrames;
+  private Map<String, JInternalFrame> workspaceInternalFrames;
 
   private WaitCursorTimer             waitTimer;
 
@@ -227,41 +227,41 @@ public class DefaultSwingController extends
    */
   @Override
   protected void displayWorkspace(String workspaceName) {
-    if (moduleInternalFrames == null) {
-      moduleInternalFrames = new HashMap<String, JInternalFrame>();
+    if (workspaceInternalFrames == null) {
+      workspaceInternalFrames = new HashMap<String, JInternalFrame>();
     }
-    JInternalFrame moduleInternalFrame = moduleInternalFrames.get(workspaceName);
-    if (moduleInternalFrame == null) {
+    JInternalFrame workspaceInternalFrame = workspaceInternalFrames.get(workspaceName);
+    if (workspaceInternalFrame == null) {
       IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
       IValueConnector workspaceConnector = getBackendController()
           .getWorkspaceConnector(workspaceName);
       IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
           workspaceViewDescriptor, (Workspace) workspaceConnector.getConnectorValue());
-      moduleInternalFrame = createJInternalFrame(workspaceView);
-      moduleInternalFrame
-          .addInternalFrameListener(new ModuleInternalFrameListener(workspaceName));
-      moduleInternalFrames.put(workspaceName, moduleInternalFrame);
-      controllerFrame.getContentPane().add(moduleInternalFrame);
+      workspaceInternalFrame = createJInternalFrame(workspaceView);
+      workspaceInternalFrame
+          .addInternalFrameListener(new WorkspaceInternalFrameListener(workspaceName));
+      workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
+      controllerFrame.getContentPane().add(workspaceInternalFrame);
       getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
-      moduleInternalFrame.pack();
-      moduleInternalFrame.setSize(controllerFrame.getSize());
+      workspaceInternalFrame.pack();
+      workspaceInternalFrame.setSize(controllerFrame.getSize());
     }
-    moduleInternalFrame.setVisible(true);
-    if (moduleInternalFrame.isIcon()) {
+    workspaceInternalFrame.setVisible(true);
+    if (workspaceInternalFrame.isIcon()) {
       try {
-        moduleInternalFrame.setIcon(false);
+        workspaceInternalFrame.setIcon(false);
       } catch (PropertyVetoException ex) {
         throw new ControllerException(ex);
       }
     }
     try {
-      moduleInternalFrame.setMaximum(true);
+      workspaceInternalFrame.setMaximum(true);
     } catch (PropertyVetoException ex) {
       throw new ControllerException(ex);
     }
-    setSelectedModuleName(workspaceName);
-    moduleInternalFrame.toFront();
+    setSelectedWorkspaceName(workspaceName);
+    workspaceInternalFrame.toFront();
   }
 
   /**
@@ -306,8 +306,8 @@ public class DefaultSwingController extends
    * {@inheritDoc}
    */
   @Override
-  protected void setSelectedModuleName(String moduleName) {
-    super.setSelectedModuleName(moduleName);
+  protected void setSelectedWorkspaceName(String workspaceName) {
+    super.setSelectedWorkspaceName(workspaceName);
     updateFrameTitle();
   }
 
@@ -349,7 +349,7 @@ public class DefaultSwingController extends
 
   private JMenuBar createApplicationMenuBar() {
     JMenuBar applicationMenuBar = new JMenuBar();
-    applicationMenuBar.add(createModulesMenu());
+    applicationMenuBar.add(createWorkspacesMenu());
     List<JMenu> actionMenus = createActionMenus();
     if (actionMenus != null) {
       for (JMenu actionMenu : actionMenus) {
@@ -424,21 +424,21 @@ public class DefaultSwingController extends
     return internalFrame;
   }
 
-  private JMenu createModulesMenu() {
-    JMenu modulesMenu = new JMenu(getTranslationProvider().getTranslation(
-        "modules", getLocale()));
-    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+  private JMenu createWorkspacesMenu() {
+    JMenu workspacesMenu = new JMenu(getTranslationProvider().getTranslation(
+        "workspaces", getLocale()));
+    workspacesMenu.setIcon(getIconFactory().getIcon(getWorkspacesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
-    for (String moduleName : getModuleNames()) {
-      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
+    for (String workspaceName : getWorkspaceNames()) {
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
-      JMenuItem moduleMenuItem = new JMenuItem(new ModuleSelectionAction(
-          moduleName, moduleViewDescriptor));
-      modulesMenu.add(moduleMenuItem);
+      JMenuItem workspaceMenuItem = new JMenuItem(new WorkspaceSelectionAction(
+          workspaceName, workspaceViewDescriptor));
+      workspacesMenu.add(workspaceMenuItem);
     }
-    modulesMenu.addSeparator();
-    modulesMenu.add(new JMenuItem(new QuitAction()));
-    return modulesMenu;
+    workspacesMenu.addSeparator();
+    workspacesMenu.add(new JMenuItem(new QuitAction()));
+    return workspacesMenu;
   }
 
   private void displayControllerFrame() {
@@ -506,9 +506,9 @@ public class DefaultSwingController extends
   }
 
   private void updateFrameTitle() {
-    String moduleName = getSelectedModuleName();
-    if (moduleName != null) {
-      controllerFrame.setTitle(getWorkspace(getSelectedModuleName())
+    String workspaceName = getSelectedWorkspaceName();
+    if (workspaceName != null) {
+      controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
           .getViewDescriptor().getI18nDescription(getTranslationProvider(),
               getLocale())
           + " - " + getI18nName(getTranslationProvider(), getLocale()));
@@ -518,18 +518,18 @@ public class DefaultSwingController extends
     }
   }
 
-  private final class ModuleInternalFrameListener extends InternalFrameAdapter {
+  private final class WorkspaceInternalFrameListener extends InternalFrameAdapter {
 
-    private String moduleName;
+    private String workspaceName;
 
     /**
-     * Constructs a new <code>ModuleInternalFrameListener</code> instance.
+     * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.
      * 
-     * @param moduleName
-     *            the root module identifier this listener is attached to.
+     * @param workspaceName
+     *            the workspace identifier this listener is attached to.
      */
-    public ModuleInternalFrameListener(String moduleName) {
-      this.moduleName = moduleName;
+    public WorkspaceInternalFrameListener(String workspaceName) {
+      this.workspaceName = workspaceName;
     }
 
     /**
@@ -538,7 +538,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameActivated(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleName(moduleName);
+      setSelectedWorkspaceName(workspaceName);
     }
 
     /**
@@ -547,7 +547,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameDeactivated(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleName(null);
+      setSelectedWorkspaceName(null);
     }
 
     /**
@@ -556,7 +556,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameDeiconified(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleName(moduleName);
+      setSelectedWorkspaceName(workspaceName);
     }
 
     /**
@@ -565,7 +565,7 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameIconified(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleName(null);
+      setSelectedWorkspaceName(null);
     }
 
     /**
@@ -574,44 +574,44 @@ public class DefaultSwingController extends
     @Override
     public void internalFrameOpened(@SuppressWarnings("unused")
     InternalFrameEvent e) {
-      setSelectedModuleName(moduleName);
+      setSelectedWorkspaceName(workspaceName);
     }
 
   }
 
-  private final class ModuleSelectionAction extends AbstractAction {
+  private final class WorkspaceSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
-    private String            moduleName;
+    private String            workspaceName;
 
     /**
-     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     * Constructs a new <code>WorkspaceSelectionAction</code> instance.
      * 
-     * @param moduleName
-     * @param moduleViewDescriptor
+     * @param workspaceName
+     * @param workspaceViewDescriptor
      */
-    public ModuleSelectionAction(String moduleName,
-        IViewDescriptor moduleViewDescriptor) {
-      this.moduleName = moduleName;
-      putValue(Action.NAME, moduleViewDescriptor.getI18nName(
+    public WorkspaceSelectionAction(String workspaceName,
+        IViewDescriptor workspaceViewDescriptor) {
+      this.workspaceName = workspaceName;
+      putValue(Action.NAME, workspaceViewDescriptor.getI18nName(
           getTranslationProvider(), getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, moduleViewDescriptor
+      putValue(Action.SHORT_DESCRIPTION, workspaceViewDescriptor
           .getI18nDescription(getTranslationProvider(), getLocale())
           + IViewFactory.TOOLTIP_ELLIPSIS);
       putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          moduleViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+          workspaceViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     }
 
     /**
-     * displays the selected module.
+     * displays the selected workspace.
      * <p>
      * {@inheritDoc}
      */
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
-        getBackendController().checkModuleAccess(moduleName);
-        displayWorkspace(moduleName);
+        getBackendController().checkWorkspaceAccess(workspaceName);
+        displayWorkspace(workspaceName);
       } catch (SecurityException ex) {
         handleException(ex, null);
       }
@@ -623,7 +623,7 @@ public class DefaultSwingController extends
     private static final long serialVersionUID = -5797994634301619085L;
 
     /**
-     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     * Constructs a new <code>QuitAction</code> instance.
      */
     public QuitAction() {
       putValue(Action.NAME, getTranslationProvider().getTranslation(
@@ -633,7 +633,7 @@ public class DefaultSwingController extends
     }
 
     /**
-     * displays the selected module.
+     * Ends the application.
      * <p>
      * {@inheritDoc}
      */

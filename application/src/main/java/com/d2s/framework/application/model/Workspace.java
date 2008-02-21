@@ -15,8 +15,8 @@ import com.d2s.framework.util.IIconImageURLProvider;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
- * A module is a central element in the application architecture. It serves as
- * an entry point on the domain model. Modules are organized as a tree structure
+ * A workspace is a central element in the application architecture. It serves as
+ * an entry point on the domain model. Workspaces are organized as a tree structure
  * since they can (optionally) provide modules. A module can be seen as a window
  * on the business grouping processes forming a business activity (like master
  * data management, customer contract handling, ...). Each module can
@@ -54,7 +54,7 @@ public class Workspace implements ISecurable {
   }
 
   /**
-   * Gets the module view descriptor. Whenever the view descriptor has not been
+   * Gets the workspace view descriptor. Whenever the view descriptor has not been
    * set, a default one is generated.
    * 
    * @return the viewDescriptor.
@@ -94,9 +94,9 @@ public class Workspace implements ISecurable {
   }
 
   /**
-   * Gets the module's description. It may serve for the module's view.
+   * Gets the workspace description. It may serve for the workspace view.
    * 
-   * @return the module's description.
+   * @return the workspace description.
    */
   public String getDescription() {
     return description;
@@ -145,9 +145,9 @@ public class Workspace implements ISecurable {
   }
 
   /**
-   * Gets the module's name. It may serve for the module's view.
+   * Gets the workspace name. It may serve for the workspace view.
    * 
-   * @return the module's name.
+   * @return the workspace name.
    */
   public String getName() {
     return name;
@@ -156,7 +156,7 @@ public class Workspace implements ISecurable {
   /**
    * Gets the modules modules.
    * 
-   * @return the list of modules modules.
+   * @return the list of modules belonging to this workspace.
    */
   public List<Module> getModules() {
     return modules;
@@ -173,10 +173,10 @@ public class Workspace implements ISecurable {
   }
 
   /**
-   * Sets the module's description. It may serve for the module's view.
+   * Sets the workspace description. It may serve for the workspace view.
    * 
    * @param description
-   *            the module's description.
+   *            the workspace description.
    */
   public void setDescription(String description) {
     this.description = description;

@@ -65,7 +65,7 @@ public class DefaultWingsController extends
   private SPanel      cardPanel;
 
   private SFrame      controllerFrame;
-  private Set<String> moduleViews;
+  private Set<String> workspaceViews;
 
   private String      frameWidth  = "95%";
   private String      frameHeight = "768px";
@@ -153,32 +153,32 @@ public class DefaultWingsController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(String moduleName) {
-    if (moduleViews == null) {
-      moduleViews = new HashSet<String>();
+  protected void displayWorkspace(String workspaceName) {
+    if (workspaceViews == null) {
+      workspaceViews = new HashSet<String>();
     }
-    if (!moduleViews.contains(moduleName)) {
-      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
+    if (!workspaceViews.contains(workspaceName)) {
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
-      IValueConnector moduleConnector = getBackendController()
-          .getWorkspaceConnector(moduleName);
-      IView<SComponent> moduleView = createWorkspaceView(moduleName,
-          moduleViewDescriptor, (Workspace) moduleConnector.getConnectorValue());
+      IValueConnector workspaceConnector = getBackendController()
+          .getWorkspaceConnector(workspaceName);
+      IView<SComponent> workspaceView = createWorkspaceView(workspaceName,
+          workspaceViewDescriptor, (Workspace) workspaceConnector.getConnectorValue());
       //getViewFactory().decorateWithTitle(moduleView, getLocale());
-      moduleViews.add(moduleName);
-      cardPanel.add(moduleView.getPeer(), moduleName);
-      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
+      workspaceViews.add(workspaceName);
+      cardPanel.add(workspaceView.getPeer(), workspaceName);
+      getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
     }
-    setSelectedModuleName(moduleName);
+    setSelectedWorkspaceName(workspaceName);
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected void setSelectedModuleName(String moduleName) {
-    super.setSelectedModuleName(moduleName);
-    ((SCardLayout) cardPanel.getLayout()).show(moduleName);
+  protected void setSelectedWorkspaceName(String workspaceName) {
+    super.setSelectedWorkspaceName(workspaceName);
+    ((SCardLayout) cardPanel.getLayout()).show(workspaceName);
     updateFrameTitle();
   }
 
@@ -221,7 +221,7 @@ public class DefaultWingsController extends
   private SMenuBar createApplicationMenuBar() {
     SMenuBar applicationMenuBar = new SMenuBar();
     applicationMenuBar.setBorder(new SLineBorder(Color.LIGHT_GRAY));
-    applicationMenuBar.add(createModulesMenu());
+    applicationMenuBar.add(createWorkspacesMenu());
     List<SMenu> actionMenus = createActionMenus();
     if (actionMenus != null) {
       for (SMenu actionMenu : actionMenus) {
@@ -250,24 +250,24 @@ public class DefaultWingsController extends
     return frame;
   }
 
-  private SMenu createModulesMenu() {
-    SMenu modulesMenu = new SMenu(getTranslationProvider().getTranslation(
-        "modules", getLocale()));
-    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+  private SMenu createWorkspacesMenu() {
+    SMenu workspacesMenu = new SMenu(getTranslationProvider().getTranslation(
+        "workspaces", getLocale()));
+    workspacesMenu.setIcon(getIconFactory().getIcon(getWorkspacesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
-    for (String moduleName : getModuleNames()) {
-      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
+    for (String workspaceName : getWorkspaceNames()) {
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
-      SMenuItem moduleMenuItem = new SMenuItem(new ModuleSelectionAction(
-          moduleName, moduleViewDescriptor));
-      modulesMenu.add(moduleMenuItem);
+      SMenuItem workspaceMenuItem = new SMenuItem(new WorkspaceSelectionAction(
+          workspaceName, workspaceViewDescriptor));
+      workspacesMenu.add(workspaceMenuItem);
     }
     SMenuItem separator = new SMenuItem("---------");
     separator.setBorder(new SLineBorder(1));
-    modulesMenu.add(separator);
+    workspacesMenu.add(separator);
 
-    modulesMenu.add(new SMenuItem(new QuitAction()));
-    return modulesMenu;
+    workspacesMenu.add(new SMenuItem(new QuitAction()));
+    return workspacesMenu;
   }
 
   private void displayControllerFrame() {
@@ -277,9 +277,9 @@ public class DefaultWingsController extends
   }
 
   private void updateFrameTitle() {
-    String moduleName = getSelectedModuleName();
-    if (moduleName != null) {
-      controllerFrame.setTitle(getWorkspace(getSelectedModuleName())
+    String workspaceName = getSelectedWorkspaceName();
+    if (workspaceName != null) {
+      controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
           .getViewDescriptor().getI18nDescription(getTranslationProvider(),
               getLocale())
           + " - " + getI18nName(getTranslationProvider(), getLocale()));
@@ -289,39 +289,39 @@ public class DefaultWingsController extends
     }
   }
 
-  private final class ModuleSelectionAction extends AbstractAction {
+  private final class WorkspaceSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
-    private String            moduleName;
+    private String            workspaceName;
 
     /**
-     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     * Constructs a new <code>WorkspaceSelectionAction</code> instance.
      * 
-     * @param moduleName
-     * @param moduleViewDescriptor
+     * @param workspaceName
+     * @param workspaceViewDescriptor
      */
-    public ModuleSelectionAction(String moduleName,
-        IViewDescriptor moduleViewDescriptor) {
-      this.moduleName = moduleName;
-      putValue(Action.NAME, moduleViewDescriptor.getI18nName(
+    public WorkspaceSelectionAction(String workspaceName,
+        IViewDescriptor workspaceViewDescriptor) {
+      this.workspaceName = workspaceName;
+      putValue(Action.NAME, workspaceViewDescriptor.getI18nName(
           getTranslationProvider(), getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, moduleViewDescriptor
+      putValue(Action.SHORT_DESCRIPTION, workspaceViewDescriptor
           .getI18nDescription(getTranslationProvider(), getLocale())
           + IViewFactory.TOOLTIP_ELLIPSIS);
       putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          moduleViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+          workspaceViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
     }
 
     /**
-     * displays the selected module.
+     * displays the selected workspace.
      * <p>
      * {@inheritDoc}
      */
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
-        getBackendController().checkModuleAccess(moduleName);
-        displayWorkspace(moduleName);
+        getBackendController().checkWorkspaceAccess(workspaceName);
+        displayWorkspace(workspaceName);
       } catch (SecurityException ex) {
         handleException(ex, null);
       }
@@ -333,7 +333,7 @@ public class DefaultWingsController extends
     private static final long serialVersionUID = -5797994634301619085L;
 
     /**
-     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     * Constructs a new <code>QuitAction</code> instance.
      */
     public QuitAction() {
       putValue(Action.NAME, getTranslationProvider().getTranslation(
@@ -343,7 +343,7 @@ public class DefaultWingsController extends
     }
 
     /**
-     * displays the selected module.
+     * Quits the application.
      * <p>
      * {@inheritDoc}
      */

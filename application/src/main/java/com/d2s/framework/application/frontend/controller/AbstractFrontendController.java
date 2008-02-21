@@ -77,12 +77,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private String                                loginContextName;
   private Map<String, Workspace>                   workspaces;
 
-  private String                                modulesMenuIconImageUrl;
+  private String                                workspacesMenuIconImageUrl;
 
   private IMvcBinder                            mvcBinder;
 
   private Map<String, ICompositeValueConnector> selectedModuleConnectors;
-  private String                                selectedModuleName;
+  private String                                selectedWorkspaceName;
 
   private IAction                               startupAction;
 
@@ -195,7 +195,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     Map<String, Object> initialActionContext = new HashMap<String, Object>();
     initialActionContext.put(ActionContextConstants.FRONT_CONTROLLER, this);
     ICompositeValueConnector selectedModuleViewConnector = selectedModuleConnectors
-        .get(getSelectedModuleName());
+        .get(getSelectedWorkspaceName());
     if (selectedModuleViewConnector != null) {
       initialActionContext.put(ActionContextConstants.MODULE_VIEW_CONNECTOR,
           selectedModuleViewConnector);
@@ -323,13 +323,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the modulesMenuIconImageUrl.
+   * Sets the workspacesMenuIconImageUrl.
    * 
-   * @param modulesMenuIconImageUrl
-   *            the modulesMenuIconImageUrl to set.
+   * @param workspacesMenuIconImageUrl
+   *            the workspacesMenuIconImageUrl to set.
    */
-  public void setModulesMenuIconImageUrl(String modulesMenuIconImageUrl) {
-    this.modulesMenuIconImageUrl = modulesMenuIconImageUrl;
+  public void setWorkspacesMenuIconImageUrl(String workspacesMenuIconImageUrl) {
+    this.workspacesMenuIconImageUrl = workspacesMenuIconImageUrl;
   }
 
   /**
@@ -397,60 +397,60 @@ public abstract class AbstractFrontendController<E, F, G> extends
   protected abstract CallbackHandler createLoginCallbackHandler();
 
   /**
-   * Creates a root module view.
+   * Creates a root workspace view.
    * 
-   * @param moduleName
-   *            the identifier of the module to create the view for.
+   * @param workspaceName
+   *            the identifier of the workspace to create the view for.
    * @param workspaceViewDescriptor
-   *            the view descriptor of the module to render.
+   *            the view descriptor of the workspace to render.
    * @param workspace
-   *            the module to create the view for.
-   * @return a view rendering the module.
+   *            the workspace to create the view for.
+   * @return a view rendering the workspace.
    */
-  protected IView<E> createWorkspaceView(final String moduleName,
+  protected IView<E> createWorkspaceView(final String workspaceName,
       IViewDescriptor workspaceViewDescriptor, Workspace workspace) {
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
     splitViewDescriptor.setName(workspaceViewDescriptor.getName());
-    //splitViewDescriptor.setDescription(moduleViewDescriptor.getDescription());
+    //splitViewDescriptor.setDescription(workspaceViewDescriptor.getDescription());
     splitViewDescriptor.setIconImageURL(workspaceViewDescriptor.getIconImageURL());
     splitViewDescriptor.setMasterDetail(true);
 
-    WorkspaceCardViewDescriptor modulePaneDescriptor = new WorkspaceCardViewDescriptor(
+    WorkspaceCardViewDescriptor workspacePaneDescriptor = new WorkspaceCardViewDescriptor(
         workspace, moduleViewDescriptorFactory);
 
     splitViewDescriptor.setLeftTopViewDescriptor(workspaceViewDescriptor);
-    splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
+    splitViewDescriptor.setRightBottomViewDescriptor(workspacePaneDescriptor);
 
-    ICompositeView<E> moduleView = (ICompositeView<E>) viewFactory.createView(
+    ICompositeView<E> workspaceView = (ICompositeView<E>) viewFactory.createView(
         splitViewDescriptor, this, getLocale());
-    ((IConnectorSelector) moduleView.getConnector())
+    ((IConnectorSelector) workspaceView.getConnector())
         .addConnectorSelectionListener(new IConnectorSelectionListener() {
 
           public void selectedConnectorChange(ConnectorSelectionEvent event) {
-            selectedModuleChanged(moduleName, (ICompositeValueConnector) event
+            selectedModuleChanged(workspaceName, (ICompositeValueConnector) event
                 .getSelectedConnector());
           }
 
         });
-    for (IView<E> childView : moduleView.getChildren()) {
+    for (IView<E> childView : workspaceView.getChildren()) {
       if (childView instanceof IMapView) {
         for (Map.Entry<String, IView<E>> grandChildView : ((IMapView<E>) childView)
             .getChildrenMap().entrySet()) {
           mvcBinder.bind(grandChildView.getValue().getConnector(),
               getBackendController().createModelConnector(
-                  moduleName + "_" + grandChildView.getKey(),
+                  workspaceName + "_" + grandChildView.getKey(),
                   grandChildView.getValue().getDescriptor()
                       .getModelDescriptor()));
         }
       }
     }
-    return moduleView;
+    return workspaceView;
   }
 
-  private void selectedModuleChanged(String moduleName,
+  private void selectedModuleChanged(String workspaceName,
       ICompositeValueConnector selectedConnector) {
-    selectedModuleConnectors.put(moduleName, selectedConnector);
+    selectedModuleConnectors.put(workspaceName, selectedConnector);
     if (selectedConnector != null
         && selectedConnector.getConnectorValue() instanceof Module) {
       Module selectedModule = (Module) selectedConnector
@@ -464,12 +464,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Displays a module.
+   * Displays a workspace.
    * 
-   * @param moduleName
-   *            the module identifier.
+   * @param workspaceName
+   *            the workspace identifier.
    */
-  protected abstract void displayWorkspace(String moduleName);
+  protected abstract void displayWorkspace(String workspaceName);
 
   /**
    * Executes a backend action.
@@ -537,26 +537,26 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Given a module name, this method returns the associated module.
+   * Given a workspace name, this method returns the associated workspace.
    * 
-   * @param moduleName
-   *            the name of the module.
-   * @return the selected module.
+   * @param workspaceName
+   *            the name of the workspace.
+   * @return the selected workspace.
    */
-  protected Workspace getWorkspace(String moduleName) {
+  protected Workspace getWorkspace(String workspaceName) {
     if (workspaces != null) {
-      return workspaces.get(moduleName);
+      return workspaces.get(workspaceName);
     }
     return null;
   }
 
   /**
-   * Returns the list of module names. This list defines the set of workspaces the
+   * Returns the list of workspace names. This list defines the set of workspaces the
    * user have access to.
    * 
-   * @return the list of module names.
+   * @return the list of workspace names.
    */
-  protected List<String> getModuleNames() {
+  protected List<String> getWorkspaceNames() {
     if (workspaces != null) {
       return new ArrayList<String>(workspaces.keySet());
     }
@@ -564,12 +564,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the modulesMenuIconImageUrl.
+   * Gets the workspacesMenuIconImageUrl.
    * 
-   * @return the modulesMenuIconImageUrl.
+   * @return the workspacesMenuIconImageUrl.
    */
-  protected String getModulesMenuIconImageUrl() {
-    return modulesMenuIconImageUrl;
+  protected String getWorkspacesMenuIconImageUrl() {
+    return workspacesMenuIconImageUrl;
   }
 
   /**
@@ -582,12 +582,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Gets the selectedModuleName.
+   * Gets the selectedWorkspaceName.
    * 
-   * @return the selectedModuleName.
+   * @return the selectedWorkspaceName.
    */
-  protected String getSelectedModuleName() {
-    return selectedModuleName;
+  protected String getSelectedWorkspaceName() {
+    return selectedWorkspaceName;
   }
 
   /**
@@ -624,13 +624,13 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the selectedModuleName.
+   * Sets the selectedWorkspaceName.
    * 
-   * @param selectedModuleName
-   *            the selectedModuleName to set.
+   * @param selectedWorkspaceName
+   *            the selectedWorkspaceName to set.
    */
-  protected void setSelectedModuleName(String selectedModuleName) {
-    this.selectedModuleName = selectedModuleName;
+  protected void setSelectedWorkspaceName(String selectedWorkspaceName) {
+    this.selectedWorkspaceName = selectedWorkspaceName;
   }
 
   private void translateWorkspace(Workspace workspace) {

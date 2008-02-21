@@ -16,13 +16,13 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
- * A child module is a non-root module (it has a parent). A child module uses a
+ * A child module is a non-root module (it belongs to a workspace). A child module uses a
  * view to render its projected artifact.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 1013 $
  * @author Vincent Vandenschrick
  */
 public class Module extends AbstractPropertyChangeCapable implements ISecurable {
@@ -163,7 +163,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Sets the modules modules. It will fire a "modules" property change
+   * Sets the modules modules. It will fire a "subModules" property change
    * event.
    * 
    * @param children
@@ -303,7 +303,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    * Adds a child module.
    * 
    * @param child
-   *            the child module to add. It will fire a "modules" property
+   *            the child module to add. It will fire a "subModules" property
    *            change event.
    * @return <code>true</code> if the module was succesfully added.
    */
@@ -320,7 +320,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Adds a modules module collection. It will fire a "modules" property
+   * Adds a modules module collection. It will fire a "subModules" property
    * change event.
    * 
    * @param children
@@ -341,7 +341,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Removes a child module. It will fire a "modules" property change event.
+   * Removes a child module. It will fire a "subModules" property change event.
    * 
    * @param module
    *            the child module to remove.
@@ -360,7 +360,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Removes a modules module collection. It will fire a "modules"
+   * Removes a modules module collection. It will fire a "subModules"
    * property change event.
    * 
    * @param children
@@ -383,7 +383,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   /**
    * This method will set the parent module to the new modules modules and
    * remove the parent of the old removed modules modules. It will fire the
-   * "modules" property change event.
+   * "subModules" property change event.
    * 
    * @param oldChildren
    *            the old modules collection property.

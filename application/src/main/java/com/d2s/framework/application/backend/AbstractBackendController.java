@@ -55,8 +55,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public void checkModuleAccess(String moduleName) {
-    checkAccess((ISecurable) getWorkspaceConnector(moduleName).getConnectorValue());
+  public void checkWorkspaceAccess(String workspaceName) {
+    checkAccess((ISecurable) getWorkspaceConnector(workspaceName).getConnectorValue());
   }
 
   /**
@@ -152,8 +152,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IValueConnector getWorkspaceConnector(String moduleName) {
-    return workspaceConnectors.get(moduleName);
+  public IValueConnector getWorkspaceConnector(String workspaceName) {
+    return workspaceConnectors.get(workspaceName);
   }
 
   /**
@@ -249,11 +249,11 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Sets the model controller modules. These modules are not kept as-is. Their
+   * Sets the model controller workspaces. These workspaces are not kept as-is. Their
    * connectors are.
    * 
    * @param workspaces
-   *            A map containing the modules indexed by a well-known key used to
+   *            A map containing the workspaces indexed by a well-known key used to
    *            bind them with their views.
    */
   public void installWorkspaces(Map<String, Workspace> workspaces) {

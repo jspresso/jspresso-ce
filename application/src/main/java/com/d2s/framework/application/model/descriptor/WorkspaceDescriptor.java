@@ -35,10 +35,10 @@ public class WorkspaceDescriptor extends BasicComponentDescriptor<Workspace> {
                                                                                    .getName());
 
   /**
-   * Constructs a new <code>ModuleDescriptor</code> instance.
+   * Constructs a new <code>WorkspaceDescriptor</code> instance.
    * 
    * @param name
-   *            the name of the descriptor (the actual module class name).
+   *            the name of the descriptor (the actual workspace class name).
    */
   protected WorkspaceDescriptor(String name) {
 

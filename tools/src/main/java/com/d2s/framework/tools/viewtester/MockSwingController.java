@@ -79,7 +79,7 @@ public class MockSwingController extends
    */
   @Override
   protected Workspace getWorkspace(@SuppressWarnings("unused")
-  String moduleName) {
+  String workspaceName) {
     return null;
   }
 
@@ -88,7 +88,7 @@ public class MockSwingController extends
    */
   @Override
   protected void displayWorkspace(@SuppressWarnings("unused")
-  String moduleName) {
+  String workspaceName) {
     // Empty implementation.
   }
 }

@@ -17,7 +17,7 @@ import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
 
 /**
  * This is a card view descriptor which stacks the projected view descriptors of
- * the module module structure.
+ * the workspace structure.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -33,10 +33,10 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
    * Constructs a new <code>WorkspaceCardViewDescriptor</code> instance.
    * 
    * @param workspace
-   *            the module.
+   *            the workspace.
    * @param moduleDescriptorViewFactory
    *            the view descriptor factory used to create (or decorate) the
-   *            sub-modules projected views.
+   *            modules projected views.
    */
   public WorkspaceCardViewDescriptor(Workspace workspace,
       IModuleViewDescriptorFactory moduleDescriptorViewFactory) {

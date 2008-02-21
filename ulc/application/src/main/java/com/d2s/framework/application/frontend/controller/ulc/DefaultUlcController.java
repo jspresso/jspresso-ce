@@ -79,7 +79,7 @@ public class DefaultUlcController extends
   private int                                   loginRetries;
   private boolean                               loginSuccessful;
   private ULCPollingTimer                       loginTimer;
-  private Map<String, ULCExtendedInternalFrame> moduleInternalFrames;
+  private Map<String, ULCExtendedInternalFrame> workspaceInternalFrames;
 
   /**
    * {@inheritDoc}
@@ -192,44 +192,44 @@ public class DefaultUlcController extends
    * {@inheritDoc}
    */
   @Override
-  protected void displayWorkspace(String moduleName) {
-    if (moduleInternalFrames == null) {
-      moduleInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
+  protected void displayWorkspace(String workspaceName) {
+    if (workspaceInternalFrames == null) {
+      workspaceInternalFrames = new HashMap<String, ULCExtendedInternalFrame>();
     }
-    ULCExtendedInternalFrame moduleInternalFrame = moduleInternalFrames
-        .get(moduleName);
-    if (moduleInternalFrame == null) {
-      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
+    ULCExtendedInternalFrame workspaceInternalFrame = workspaceInternalFrames
+        .get(workspaceName);
+    if (workspaceInternalFrame == null) {
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
-      IValueConnector moduleConnector = getBackendController()
-          .getWorkspaceConnector(moduleName);
-      IView<ULCComponent> moduleView = createWorkspaceView(moduleName,
-          moduleViewDescriptor, (Workspace) moduleConnector.getConnectorValue());
-      moduleInternalFrame = createULCExtendedInternalFrame(moduleView);
-      moduleInternalFrame
-          .addExtendedInternalFrameListener(new ModuleInternalFrameListener(
-              moduleName));
-      moduleInternalFrames.put(moduleName, moduleInternalFrame);
-      controllerFrame.getContentPane().add(moduleInternalFrame);
-      getMvcBinder().bind(moduleView.getConnector(), moduleConnector);
-      moduleInternalFrame.pack();
-      moduleInternalFrame.setSize(controllerFrame.getSize());
+      IValueConnector workspaceConnector = getBackendController()
+          .getWorkspaceConnector(workspaceName);
+      IView<ULCComponent> workspaceView = createWorkspaceView(workspaceName,
+          workspaceViewDescriptor, (Workspace) workspaceConnector.getConnectorValue());
+      workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
+      workspaceInternalFrame
+          .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
+              workspaceName));
+      workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
+      controllerFrame.getContentPane().add(workspaceInternalFrame);
+      getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
+      workspaceInternalFrame.pack();
+      workspaceInternalFrame.setSize(controllerFrame.getSize());
     }
-    moduleInternalFrame.setVisible(true);
-    if (moduleInternalFrame.isIcon()) {
-      moduleInternalFrame.setIcon(false);
+    workspaceInternalFrame.setVisible(true);
+    if (workspaceInternalFrame.isIcon()) {
+      workspaceInternalFrame.setIcon(false);
     }
-    moduleInternalFrame.setMaximum(true);
-    setSelectedModuleName(moduleName);
-    moduleInternalFrame.moveToFront();
+    workspaceInternalFrame.setMaximum(true);
+    setSelectedWorkspaceName(workspaceName);
+    workspaceInternalFrame.moveToFront();
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  protected void setSelectedModuleName(String moduleName) {
-    super.setSelectedModuleName(moduleName);
+  protected void setSelectedWorkspaceName(String workspaceName) {
+    super.setSelectedWorkspaceName(workspaceName);
     updateFrameTitle();
   }
 
@@ -275,7 +275,7 @@ public class DefaultUlcController extends
 
   private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {
     ULCMenuBar applicationMenuBar = new ULCMenuBar();
-    applicationMenuBar.add(createModulesMenu());
+    applicationMenuBar.add(createWorkspacesMenu());
     List<ULCMenu> actionMenus = createActionMenus(sourceComponent);
     if (actionMenus != null) {
       for (ULCMenu actionMenu : actionMenus) {
@@ -311,21 +311,21 @@ public class DefaultUlcController extends
     return frame;
   }
 
-  private ULCMenu createModulesMenu() {
-    ULCMenu modulesMenu = new ULCMenu(getTranslationProvider().getTranslation(
-        "modules", getLocale()));
-    modulesMenu.setIcon(getIconFactory().getIcon(getModulesMenuIconImageUrl(),
+  private ULCMenu createWorkspacesMenu() {
+    ULCMenu workspacesMenu = new ULCMenu(getTranslationProvider().getTranslation(
+        "workspaces", getLocale()));
+    workspacesMenu.setIcon(getIconFactory().getIcon(getWorkspacesMenuIconImageUrl(),
         IIconFactory.SMALL_ICON_SIZE));
-    for (String moduleName : getModuleNames()) {
-      IViewDescriptor moduleViewDescriptor = getWorkspace(moduleName)
+    for (String workspaceName : getWorkspaceNames()) {
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
-      ULCMenuItem moduleMenuItem = new ULCMenuItem(new ModuleSelectionAction(
-          moduleName, moduleViewDescriptor));
-      modulesMenu.add(moduleMenuItem);
+      ULCMenuItem workspaceMenuItem = new ULCMenuItem(new WorkspaceSelectionAction(
+          workspaceName, workspaceViewDescriptor));
+      workspacesMenu.add(workspaceMenuItem);
     }
-    modulesMenu.addSeparator();
-    modulesMenu.add(new ULCMenuItem(new QuitAction()));
-    return modulesMenu;
+    workspacesMenu.addSeparator();
+    workspacesMenu.add(new ULCMenuItem(new QuitAction()));
+    return workspacesMenu;
   }
 
   /**
@@ -401,9 +401,9 @@ public class DefaultUlcController extends
   }
 
   private void updateFrameTitle() {
-    String moduleName = getSelectedModuleName();
-    if (moduleName != null) {
-      controllerFrame.setTitle(getWorkspace(getSelectedModuleName())
+    String workspaceName = getSelectedWorkspaceName();
+    if (workspaceName != null) {
+      controllerFrame.setTitle(getWorkspace(getSelectedWorkspaceName())
           .getViewDescriptor().getI18nDescription(getTranslationProvider(),
               getLocale())
           + " - " + getI18nName(getTranslationProvider(), getLocale()));
@@ -460,19 +460,19 @@ public class DefaultUlcController extends
     }
   }
 
-  private final class ModuleInternalFrameListener implements
+  private final class WorkspaceInternalFrameListener implements
       IExtendedInternalFrameListener {
 
-    private String moduleName;
+    private String workspaceName;
 
     /**
-     * Constructs a new <code>ModuleInternalFrameListener</code> instance.
+     * Constructs a new <code>WorkspaceInternalFrameListener</code> instance.
      * 
-     * @param moduleName
-     *            the root module identifier this listener is attached to.
+     * @param workspaceName
+     *            the root workspace identifier this listener is attached to.
      */
-    public ModuleInternalFrameListener(String moduleName) {
-      this.moduleName = moduleName;
+    public WorkspaceInternalFrameListener(String workspaceName) {
+      this.workspaceName = workspaceName;
     }
 
     /**
@@ -480,7 +480,7 @@ public class DefaultUlcController extends
      */
     public void internalFrameActivated(@SuppressWarnings("unused")
     ExtendedInternalFrameEvent e) {
-      setSelectedModuleName(moduleName);
+      setSelectedWorkspaceName(workspaceName);
     }
 
     /**
@@ -488,7 +488,7 @@ public class DefaultUlcController extends
      */
     public void internalFrameDeactivated(@SuppressWarnings("unused")
     ExtendedInternalFrameEvent e) {
-      setSelectedModuleName(null);
+      setSelectedWorkspaceName(null);
     }
 
     /**
@@ -496,7 +496,7 @@ public class DefaultUlcController extends
      */
     public void internalFrameDeiconified(@SuppressWarnings("unused")
     ExtendedInternalFrameEvent event) {
-      setSelectedModuleName(moduleName);
+      setSelectedWorkspaceName(workspaceName);
     }
 
     /**
@@ -504,7 +504,7 @@ public class DefaultUlcController extends
      */
     public void internalFrameIconified(@SuppressWarnings("unused")
     ExtendedInternalFrameEvent event) {
-      setSelectedModuleName(null);
+      setSelectedWorkspaceName(null);
     }
 
     /**
@@ -512,46 +512,46 @@ public class DefaultUlcController extends
      */
     public void internalFrameOpened(@SuppressWarnings("unused")
     ExtendedInternalFrameEvent event) {
-      setSelectedModuleName(moduleName);
+      setSelectedWorkspaceName(workspaceName);
     }
 
   }
 
-  private final class ModuleSelectionAction extends AbstractAction {
+  private final class WorkspaceSelectionAction extends AbstractAction {
 
     private static final long serialVersionUID = 3469745193806038352L;
-    private String            moduleName;
+    private String            workspaceName;
 
     /**
-     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     * Constructs a new <code>WorkspaceSelectionAction</code> instance.
      * 
-     * @param moduleName
-     * @param moduleViewDescriptor
+     * @param workspaceName
+     * @param workspaceViewDescriptor
      */
-    public ModuleSelectionAction(String moduleName,
-        IViewDescriptor moduleViewDescriptor) {
-      this.moduleName = moduleName;
-      putValue(com.ulcjava.base.application.IAction.NAME, moduleViewDescriptor
+    public WorkspaceSelectionAction(String workspaceName,
+        IViewDescriptor workspaceViewDescriptor) {
+      this.workspaceName = workspaceName;
+      putValue(com.ulcjava.base.application.IAction.NAME, workspaceViewDescriptor
           .getI18nName(getTranslationProvider(), getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
-          moduleViewDescriptor.getI18nDescription(getTranslationProvider(),
+          workspaceViewDescriptor.getI18nDescription(getTranslationProvider(),
               getLocale())
               + IViewFactory.TOOLTIP_ELLIPSIS);
       putValue(com.ulcjava.base.application.IAction.SMALL_ICON,
-          getIconFactory().getIcon(moduleViewDescriptor.getIconImageURL(),
+          getIconFactory().getIcon(workspaceViewDescriptor.getIconImageURL(),
               IIconFactory.TINY_ICON_SIZE));
     }
 
     /**
-     * displays the selected module.
+     * displays the selected workspace.
      * <p>
      * {@inheritDoc}
      */
     public void actionPerformed(@SuppressWarnings("unused")
     ActionEvent e) {
       try {
-        getBackendController().checkModuleAccess(moduleName);
-        displayWorkspace(moduleName);
+        getBackendController().checkWorkspaceAccess(workspaceName);
+        displayWorkspace(workspaceName);
       } catch (SecurityException ex) {
         handleException(ex, null);
       }
@@ -563,7 +563,7 @@ public class DefaultUlcController extends
     private static final long serialVersionUID = -1476651758085260422L;
 
     /**
-     * Constructs a new <code>ModuleSelectionAction</code> instance.
+     * Constructs a new <code>QuitAction</code> instance.
      */
     public QuitAction() {
       putValue(com.ulcjava.base.application.IAction.NAME,
@@ -574,7 +574,7 @@ public class DefaultUlcController extends
     }
 
     /**
-     * displays the selected module.
+     * Quits the application.
      * <p>
      * {@inheritDoc}
      */

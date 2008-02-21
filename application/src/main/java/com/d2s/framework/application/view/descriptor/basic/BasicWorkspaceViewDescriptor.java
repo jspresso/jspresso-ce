@@ -9,7 +9,7 @@ import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor;
 
 /**
- * This is a default implementation of a simple module view descriptor.
+ * This is a default implementation of a simple workspace view descriptor.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
