@@ -52,8 +52,9 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
     BasicCollectionDescriptor<IDescriptor> modelDescriptor = new BasicCollectionDescriptor<IDescriptor>();
     modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
+    modelDescriptor.setName(ACTION_MODEL_NAME);
     IValueConnector actionsConnector = beanConnectorFactory
-        .createModelConnector(ACTION_MODEL_CONNECTOR_ID, modelDescriptor);
+        .createModelConnector(ACTION_MODEL_NAME, modelDescriptor);
     actionsConnector.setConnectorValue(createActionProxies(
         getTranslationProvider(context), getLocale(context)));
     context.put(ActionContextConstants.ACTION_PARAM, actionsConnector);

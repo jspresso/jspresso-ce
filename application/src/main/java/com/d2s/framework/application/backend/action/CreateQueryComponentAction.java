@@ -101,7 +101,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
     if (modelConnector == null) {
       modelConnector = (ModelRefPropertyConnector) getBeanConnectorFactory(context)
           .createModelConnector(
-              ACTION_MODEL_CONNECTOR_ID,
+              ACTION_MODEL_NAME,
               new BasicQueryComponentDescriptor(erqDescriptor
                   .getReferencedDescriptor(), queryComponent.getClass()));
       context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);

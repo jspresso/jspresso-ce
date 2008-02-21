@@ -29,9 +29,9 @@ public abstract class AbstractAction implements IAction {
   private boolean             longOperation;
   
   /**
-   * <code>ACTION_MODEL_CONNECTOR_ID</code>.
+   * <code>ACTION_MODEL_NAME</code>.
    */
-  protected static final String ACTION_MODEL_CONNECTOR_ID = "ActionModel";
+  protected static final String ACTION_MODEL_NAME = "ActionModel";
 
   /**
    * {@inheritDoc}
