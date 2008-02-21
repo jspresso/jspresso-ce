@@ -31,7 +31,7 @@ public class BasicWorkspaceViewDescriptor extends BasicTreeViewDescriptor {
     moduleNodeGroupDescriptor.setRenderedProperty("i18nName");
     modulesTreeLevelDescriptor.setNodeGroupDescriptor(moduleNodeGroupDescriptor);
 
-    modulesTreeLevelDescriptor.setChildDescriptor(new BasicModuleDescriptor());
+    modulesTreeLevelDescriptor.setChildDescriptor(new BasicModuleViewDescriptor());
     setRootSubtreeDescriptor(modulesTreeLevelDescriptor);
   }
 }

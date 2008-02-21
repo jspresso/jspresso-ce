@@ -19,19 +19,19 @@ import com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor;
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
- * @version $LastChangedRevision$
+ * @version $LastChangedRevision: 998 $
  * @author Vincent Vandenschrick
  */
-public class BasicModuleDescriptor extends BasicSimpleTreeLevelDescriptor
+public class BasicModuleViewDescriptor extends BasicSimpleTreeLevelDescriptor
     implements IIconDescriptor {
 
   private DefaultIconDescriptor descriptor;
   private IViewDescriptor       projectedViewDescriptor;
 
   /**
-   * Constructs a new <code>BasicModuleDescriptor</code> instance.
+   * Constructs a new <code>BasicModuleViewDescriptor</code> instance.
    */
-  public BasicModuleDescriptor() {
+  public BasicModuleViewDescriptor() {
     descriptor = new DefaultIconDescriptor();
     BasicListViewDescriptor moduleNodeGroupDescriptor = new BasicListViewDescriptor();
     moduleNodeGroupDescriptor.setName(getName());
