@@ -35,7 +35,7 @@ import org.wings.session.SessionManager;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
-import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.wings.components.SErrorDialog;
 import com.d2s.framework.util.exception.BusinessException;
@@ -163,7 +163,7 @@ public class DefaultWingsController extends
       IValueConnector moduleConnector = getBackendController()
           .getModuleConnector(moduleName);
       IView<SComponent> moduleView = createModuleView(moduleName,
-          moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
+          moduleViewDescriptor, (Workspace) moduleConnector.getConnectorValue());
       //getViewFactory().decorateWithTitle(moduleView, getLocale());
       moduleViews.add(moduleName);
       cardPanel.add(moduleView.getPeer(), moduleName);

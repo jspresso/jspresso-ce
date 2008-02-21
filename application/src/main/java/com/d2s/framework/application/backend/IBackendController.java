@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.d2s.framework.application.IController;
-import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.component.IComponent;
@@ -129,8 +129,8 @@ public interface IBackendController extends IController {
   /**
    * Installs the passed in modules into the backend controller.
    * 
-   * @param modules
+   * @param workspaces
    *            the modules to install.
    */
-  void installModules(Map<String, Module> modules);
+  void installModules(Map<String, Workspace> workspaces);
 }

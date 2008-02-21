@@ -21,10 +21,10 @@ import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.IFrontendController;
+import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.application.view.descriptor.IModuleViewDescriptorFactory;
-import com.d2s.framework.application.view.descriptor.basic.ModuleCardViewDescriptor;
+import com.d2s.framework.application.view.descriptor.basic.WorkspaceCardViewDescriptor;
 import com.d2s.framework.binding.ConnectorSelectionEvent;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorSelectionListener;
@@ -75,7 +75,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
   private DefaultIconDescriptor                 controllerDescriptor;
   private CallbackHandler                       loginCallbackHandler;
   private String                                loginContextName;
-  private Map<String, Module>                   modules;
+  private Map<String, Workspace>                   workspaces;
 
   private String                                modulesMenuIconImageUrl;
 
@@ -309,16 +309,16 @@ public abstract class AbstractFrontendController<E, F, G> extends
   }
 
   /**
-   * Sets the modules. Modules are used by the frontend controller to give a
+   * Sets the workspaces. Modules are used by the frontend controller to give a
    * user access on the domain window.
    * 
-   * @param modules
-   *            the modules to set.
+   * @param workspaces
+   *            the workspaces to set.
    */
-  public void setModules(List<Module> modules) {
-    this.modules = new LinkedHashMap<String, Module>();
-    for (Module module : modules) {
-      this.modules.put(module.getName(), module);
+  public void setWorkspaces(List<Workspace> workspaces) {
+    this.workspaces = new LinkedHashMap<String, Workspace>();
+    for (Workspace workspace : workspaces) {
+      this.workspaces.put(workspace.getName(), workspace);
     }
   }
 
@@ -403,12 +403,12 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *            the identifier of the module to create the view for.
    * @param moduleViewDescriptor
    *            the view descriptor of the module to render.
-   * @param module
+   * @param workspace
    *            the module to create the view for.
    * @return a view rendering the module.
    */
   protected IView<E> createModuleView(final String moduleName,
-      IViewDescriptor moduleViewDescriptor, Module module) {
+      IViewDescriptor moduleViewDescriptor, Workspace workspace) {
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
     splitViewDescriptor.setName(moduleViewDescriptor.getName());
@@ -416,8 +416,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     splitViewDescriptor.setIconImageURL(moduleViewDescriptor.getIconImageURL());
     splitViewDescriptor.setMasterDetail(true);
 
-    ModuleCardViewDescriptor modulePaneDescriptor = new ModuleCardViewDescriptor(
-        module, moduleViewDescriptorFactory);
+    WorkspaceCardViewDescriptor modulePaneDescriptor = new WorkspaceCardViewDescriptor(
+        workspace, moduleViewDescriptorFactory);
 
     splitViewDescriptor.setLeftTopViewDescriptor(moduleViewDescriptor);
     splitViewDescriptor.setRightBottomViewDescriptor(modulePaneDescriptor);
@@ -452,8 +452,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
       ICompositeValueConnector selectedConnector) {
     selectedModuleConnectors.put(moduleName, selectedConnector);
     if (selectedConnector != null
-        && selectedConnector.getConnectorValue() instanceof SubModule) {
-      SubModule selectedModule = (SubModule) selectedConnector
+        && selectedConnector.getConnectorValue() instanceof Module) {
+      Module selectedModule = (Module) selectedConnector
           .getConnectorValue();
       if (!selectedModule.isStarted()
           && selectedModule.getStartupAction() != null) {
@@ -543,22 +543,22 @@ public abstract class AbstractFrontendController<E, F, G> extends
    *            the name of the module.
    * @return the selected module.
    */
-  protected Module getModule(String moduleName) {
-    if (modules != null) {
-      return modules.get(moduleName);
+  protected Workspace getModule(String moduleName) {
+    if (workspaces != null) {
+      return workspaces.get(moduleName);
     }
     return null;
   }
 
   /**
-   * Returns the list of module names. This list defines the set of modules the
+   * Returns the list of module names. This list defines the set of workspaces the
    * user have access to.
    * 
    * @return the list of module names.
    */
   protected List<String> getModuleNames() {
-    if (modules != null) {
-      return new ArrayList<String>(modules.keySet());
+    if (workspaces != null) {
+      return new ArrayList<String>(workspaces.keySet());
     }
     return Collections.<String> emptyList();
   }
@@ -605,11 +605,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
       getBackendController().getApplicationSession().setLocale(
           new Locale(userPreferredLanguageCode));
     }
-    if (modules != null) {
-      for (Module module : modules.values()) {
-        translateModule(module);
+    if (workspaces != null) {
+      for (Workspace workspace : workspaces.values()) {
+        translateWorkspace(workspace);
       }
-      getBackendController().installModules(modules);
+      getBackendController().installModules(workspaces);
     }
   }
 
@@ -631,6 +631,18 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   protected void setSelectedModuleName(String selectedModuleName) {
     this.selectedModuleName = selectedModuleName;
+  }
+
+  private void translateWorkspace(Workspace workspace) {
+    workspace.setI18nName(getTranslationProvider().getTranslation(
+        workspace.getName(), getLocale()));
+    workspace.setI18nDescription(getTranslationProvider().getTranslation(
+        workspace.getDescription(), getLocale()));
+    if (workspace.getModules() != null) {
+      for (Module module : workspace.getModules()) {
+        translateModule(module);
+      }
+    }
   }
 
   private void translateModule(Module module) {

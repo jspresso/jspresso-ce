@@ -47,7 +47,7 @@ import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.ControllerException;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
-import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.swing.components.JErrorDialog;
 import com.d2s.framework.security.swing.DialogCallbackHandler;
@@ -237,7 +237,7 @@ public class DefaultSwingController extends
       IValueConnector moduleConnector = getBackendController()
           .getModuleConnector(moduleName);
       IView<JComponent> moduleView = createModuleView(moduleName,
-          moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
+          moduleViewDescriptor, (Workspace) moduleConnector.getConnectorValue());
       moduleInternalFrame = createJInternalFrame(moduleView);
       moduleInternalFrame
           .addInternalFrameListener(new ModuleInternalFrameListener(moduleName));

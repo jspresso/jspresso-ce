@@ -15,7 +15,7 @@ import com.d2s.framework.util.IIconImageURLProvider;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ModuleIconImageURLProvider implements IIconImageURLProvider {
+public class WorkspaceIconImageURLProvider implements IIconImageURLProvider {
 
   private IIconImageURLProvider delegateProvider;
 
@@ -28,10 +28,10 @@ public class ModuleIconImageURLProvider implements IIconImageURLProvider {
         && ((BeanModule) userObject).getIconImageURL() == null) {
       return delegateProvider
           .getIconImageURLForObject(((BeanModule) userObject).getModuleObject());
-    } else if (userObject instanceof SubModule) {
-      return ((SubModule) userObject).getIconImageURL();
     } else if (userObject instanceof Module) {
       return ((Module) userObject).getIconImageURL();
+    } else if (userObject instanceof Workspace) {
+      return ((Workspace) userObject).getIconImageURL();
     }
     return null;
   }

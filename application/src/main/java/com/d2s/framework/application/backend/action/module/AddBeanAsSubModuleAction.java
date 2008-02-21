@@ -11,7 +11,7 @@ import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.application.model.BeanModule;
-import com.d2s.framework.application.model.SubModule;
+import com.d2s.framework.application.model.Module;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
@@ -42,12 +42,12 @@ public class AddBeanAsSubModuleAction extends AbstractCollectionAction {
     }
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
-    SubModule parentModule = (SubModule) moduleConnector.getConnectorValue();
-    List<SubModule> children;
+    Module parentModule = (Module) moduleConnector.getConnectorValue();
+    List<Module> children;
     if (parentModule.getSubModules() == null) {
-      children = new ArrayList<SubModule>(selectedIndices.length);
+      children = new ArrayList<Module>(selectedIndices.length);
     } else {
-      children = new ArrayList<SubModule>(parentModule.getSubModules());
+      children = new ArrayList<Module>(parentModule.getSubModules());
     }
     int[] childSelectedIndices = new int[selectedIndices.length];
     for (int i = 0; i < selectedIndices.length; i++) {

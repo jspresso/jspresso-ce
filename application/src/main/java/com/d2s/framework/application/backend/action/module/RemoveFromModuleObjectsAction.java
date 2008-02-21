@@ -12,7 +12,6 @@ import com.d2s.framework.application.backend.action.AbstractCollectionAction;
 import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.binding.ICollectionConnector;
 import com.d2s.framework.binding.ICompositeValueConnector;
 
@@ -30,11 +29,11 @@ public class RemoveFromModuleObjectsAction extends AbstractCollectionAction {
   private static void removeFromSubModules(Module parentModule,
       Object removedObject) {
     if (parentModule.getSubModules() != null) {
-      for (SubModule subModule : new ArrayList<SubModule>(parentModule
+      for (Module module : new ArrayList<Module>(parentModule
           .getSubModules())) {
-        if (subModule instanceof BeanModule
-            && removedObject.equals(((BeanModule) subModule).getModuleObject())) {
-          parentModule.removeSubModule(subModule);
+        if (module instanceof BeanModule
+            && removedObject.equals(((BeanModule) module).getModuleObject())) {
+          parentModule.removeSubModule(module);
         }
       }
     }

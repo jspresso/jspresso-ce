@@ -20,7 +20,7 @@ import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BeanModuleDescriptor extends SubModuleDescriptor {
+public class BeanModuleDescriptor extends ModuleDescriptor {
 
   /**
    * Constructs a new <code>BeanModuleDescriptor</code> instance.

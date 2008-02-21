@@ -15,8 +15,8 @@ import com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxy
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
-import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.model.descriptor.SubModuleDescriptor;
+import com.d2s.framework.application.model.Workspace;
+import com.d2s.framework.application.model.descriptor.ModuleDescriptor;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.component.IComponent;
@@ -252,15 +252,15 @@ public abstract class AbstractBackendController extends AbstractController
    * Sets the model controller modules. These modules are not kept as-is. Their
    * connectors are.
    * 
-   * @param modules
+   * @param workspaces
    *            A map containing the modules indexed by a well-known key used to
    *            bind them with their views.
    */
-  public void installModules(Map<String, Module> modules) {
+  public void installModules(Map<String, Workspace> workspaces) {
     moduleConnectors = new HashMap<String, IValueConnector>();
-    for (Map.Entry<String, Module> moduleEntry : modules.entrySet()) {
+    for (Map.Entry<String, Workspace> moduleEntry : workspaces.entrySet()) {
       IModelDescriptor moduleDescriptor;
-      moduleDescriptor = SubModuleDescriptor.SUB_MODULE_DESCRIPTOR;
+      moduleDescriptor = ModuleDescriptor.MODULE_DESCRIPTOR;
       IValueConnector nextModuleConnector = beanConnectorFactory
           .createModelConnector(moduleEntry.getKey(), moduleDescriptor);
       nextModuleConnector.setConnectorValue(moduleEntry.getValue());

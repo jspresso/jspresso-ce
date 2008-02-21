@@ -22,7 +22,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BeanModule extends SubModule implements PropertyChangeListener {
+public class BeanModule extends Module implements PropertyChangeListener {
 
   private IComponentDescriptor<Object> componentDescriptor;
   private Object moduleObject;

@@ -9,8 +9,8 @@ import java.util.Map;
 
 import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
+import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.application.model.Module;
-import com.d2s.framework.application.model.SubModule;
 import com.d2s.framework.application.view.descriptor.IModuleViewDescriptorFactory;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
@@ -25,23 +25,23 @@ import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
+public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
 
   private static final String ELEMENT_SUFFIX = ".element";
 
   /**
-   * Constructs a new <code>ModuleCardViewDescriptor</code> instance.
+   * Constructs a new <code>WorkspaceCardViewDescriptor</code> instance.
    * 
-   * @param module
+   * @param workspace
    *            the module.
    * @param moduleDescriptorViewFactory
    *            the view descriptor factory used to create (or decorate) the
    *            sub-modules projected views.
    */
-  public ModuleCardViewDescriptor(Module module,
+  public WorkspaceCardViewDescriptor(Workspace workspace,
       IModuleViewDescriptorFactory moduleDescriptorViewFactory) {
     Map<String, IViewDescriptor> moduleCards = new HashMap<String, IViewDescriptor>();
-    prepareModuleCards(moduleCards, module.getSubModules(),
+    prepareModuleCards(moduleCards, workspace.getModules(),
         moduleDescriptorViewFactory);
     setCardViewDescriptors(moduleCards);
   }
@@ -53,17 +53,17 @@ public class ModuleCardViewDescriptor extends AbstractCardViewDescriptor {
     if (model instanceof BeanModule
         && (((BeanModule) model).getParent()) instanceof BeanCollectionModule) {
       return (((BeanModule) model).getParent()).getName() + ELEMENT_SUFFIX;
-    } else if (model instanceof SubModule) {
-      return ((SubModule) model).getName();
+    } else if (model instanceof Module) {
+      return ((Module) model).getName();
     }
     return null;
   }
 
   private void prepareModuleCards(Map<String, IViewDescriptor> moduleCards,
-      List<SubModule> modules,
+      List<Module> modules,
       IModuleViewDescriptorFactory moduleDescriptorViewFactory) {
     if (modules != null) {
-      for (SubModule module : modules) {
+      for (Module module : modules) {
         if (module.getProjectedViewDescriptor() != null) {
           moduleCards.put(module.getName(), moduleDescriptorViewFactory
               .createProjectedViewDescriptor(module));

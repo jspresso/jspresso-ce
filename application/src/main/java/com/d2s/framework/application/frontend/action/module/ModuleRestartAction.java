@@ -11,7 +11,7 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
-import com.d2s.framework.application.model.SubModule;
+import com.d2s.framework.application.model.Module;
 
 /**
  * A simple action which restarts the current module executing the module
@@ -38,12 +38,12 @@ public class ModuleRestartAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    SubModule module = (SubModule) getModuleConnector(context)
+    Module module = (Module) getModuleConnector(context)
         .getConnectorValue();
     if (module instanceof BeanCollectionModule
         && module.getSubModules() != null) {
-      List<SubModule> beanModulesToRemove = new ArrayList<SubModule>();
-      for (SubModule beanModule : module.getSubModules()) {
+      List<Module> beanModulesToRemove = new ArrayList<Module>();
+      for (Module beanModule : module.getSubModules()) {
         if (beanModule instanceof BeanModule) {
           ((BeanModule) beanModule).setModuleObject(null);
           beanModulesToRemove.add(beanModule);

@@ -20,7 +20,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BeanCollectionModule extends SubModule {
+public class BeanCollectionModule extends Module {
 
   private IViewDescriptor              elementViewDescriptor;
   private IComponentDescriptor<Object> elementComponentDescriptor;

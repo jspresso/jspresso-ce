@@ -6,17 +6,17 @@ package com.d2s.framework.application.model.descriptor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.d2s.framework.application.model.SubModule;
+import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
-import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
 
 /**
- * The model descriptor of module objects.
+ * The model descriptor of workspace objects.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -24,37 +24,33 @@ import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SubModuleDescriptor extends BasicComponentDescriptor<SubModule> {
+public class WorkspaceDescriptor extends BasicComponentDescriptor<Workspace> {
 
   /**
-   * <code>SUB_MODULE_DESCRIPTOR</code> is a unique reference to the model
-   * descriptor of modules.
+   * <code>WORKSPACE_DESCRIPTOR</code> is a unique reference to the model
+   * descriptor of workspaces.
    */
-  public static final IComponentDescriptor<SubModule> SUB_MODULE_DESCRIPTOR = new SubModuleDescriptor(
-                                                                                SubModule.class
-                                                                                    .getName());
+  public static final IComponentDescriptor<Workspace> WORKSPACE_DESCRIPTOR = new WorkspaceDescriptor(
+                                                                               Workspace.class
+                                                                                   .getName());
 
   /**
-   * Constructs a new <code>SubModuleDescriptor</code> instance.
+   * Constructs a new <code>ModuleDescriptor</code> instance.
    * 
    * @param name
    *            the name of the descriptor (the actual module class name).
    */
-  protected SubModuleDescriptor(String name) {
+  protected WorkspaceDescriptor(String name) {
 
     super(name);
 
-    BasicReferencePropertyDescriptor<SubModule> parentDescriptor = new BasicReferencePropertyDescriptor<SubModule>();
-    parentDescriptor.setName("parent");
-    parentDescriptor.setReferencedDescriptor(this);
-
-    BasicCollectionDescriptor<SubModule> moduleListDescriptor = new BasicCollectionDescriptor<SubModule>();
+    BasicCollectionDescriptor<Module> moduleListDescriptor = new BasicCollectionDescriptor<Module>();
     moduleListDescriptor.setCollectionInterface(List.class);
-    moduleListDescriptor.setElementDescriptor(this);
+    moduleListDescriptor.setElementDescriptor(ModuleDescriptor.MODULE_DESCRIPTOR);
 
-    BasicCollectionPropertyDescriptor<SubModule> subModulesDescriptor = new BasicCollectionPropertyDescriptor<SubModule>();
-    subModulesDescriptor.setReferencedDescriptor(moduleListDescriptor);
-    subModulesDescriptor.setName("subModules");
+    BasicCollectionPropertyDescriptor<Module> modulesDescriptor = new BasicCollectionPropertyDescriptor<Module>();
+    modulesDescriptor.setReferencedDescriptor(moduleListDescriptor);
+    modulesDescriptor.setName("modules");
 
     BasicStringPropertyDescriptor nameDescriptor = new BasicStringPropertyDescriptor();
     nameDescriptor.setName("name");
@@ -68,16 +64,12 @@ public class SubModuleDescriptor extends BasicComponentDescriptor<SubModule> {
     BasicStringPropertyDescriptor i18nDescriptionDescriptor = new BasicStringPropertyDescriptor();
     i18nDescriptionDescriptor.setName("i18nDescription");
 
-    parentDescriptor.setReverseRelationEnd(subModulesDescriptor);
-    subModulesDescriptor.setReverseRelationEnd(parentDescriptor);
-
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
     propertyDescriptors.add(nameDescriptor);
     propertyDescriptors.add(descriptionDescriptor);
     propertyDescriptors.add(i18nNameDescriptor);
     propertyDescriptors.add(i18nDescriptionDescriptor);
-    propertyDescriptors.add(parentDescriptor);
-    propertyDescriptors.add(subModulesDescriptor);
+    propertyDescriptors.add(modulesDescriptor);
     setPropertyDescriptors(propertyDescriptors);
   }
 }

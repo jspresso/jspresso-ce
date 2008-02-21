@@ -20,7 +20,7 @@ import org.springframework.dao.ConcurrencyFailureException;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
-import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.ulc.components.server.ULCErrorDialog;
 import com.d2s.framework.gui.ulc.components.server.ULCExtendedInternalFrame;
@@ -204,7 +204,7 @@ public class DefaultUlcController extends
       IValueConnector moduleConnector = getBackendController()
           .getModuleConnector(moduleName);
       IView<ULCComponent> moduleView = createModuleView(moduleName,
-          moduleViewDescriptor, (Module) moduleConnector.getConnectorValue());
+          moduleViewDescriptor, (Workspace) moduleConnector.getConnectorValue());
       moduleInternalFrame = createULCExtendedInternalFrame(moduleView);
       moduleInternalFrame
           .addExtendedInternalFrameListener(new ModuleInternalFrameListener(

@@ -21,7 +21,7 @@ import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescripto
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BeanCollectionModuleDescriptor extends SubModuleDescriptor {
+public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
 
   /**
    * Constructs a new <code>BeanModuleDescriptor</code> instance.
