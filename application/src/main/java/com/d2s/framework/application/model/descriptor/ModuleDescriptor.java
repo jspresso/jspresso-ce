@@ -31,8 +31,8 @@ public class ModuleDescriptor extends BasicComponentDescriptor<Module> {
    * descriptor of modules.
    */
   public static final IComponentDescriptor<Module> MODULE_DESCRIPTOR = new ModuleDescriptor(
-                                                                                Module.class
-                                                                                    .getName());
+                                                                         Module.class
+                                                                             .getName());
 
   /**
    * Constructs a new <code>ModuleDescriptor</code> instance.

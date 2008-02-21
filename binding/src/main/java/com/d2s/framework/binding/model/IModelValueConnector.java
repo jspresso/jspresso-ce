@@ -26,18 +26,18 @@ public interface IModelValueConnector extends IValueConnector {
   IModelDescriptor getModelDescriptor();
 
   /**
+   * Gets the modelProvider.
+   * 
+   * @return the modelProvider.
+   */
+  IModelProvider getModelProvider();
+
+  /**
    * Sets the modelDescriptor.
    * 
    * @param modelDescriptor
    *            the modelDescriptor.
    */
   void setModelDescriptor(IModelDescriptor modelDescriptor);
-
-  /**
-   * Gets the modelProvider.
-   * 
-   * @return the modelProvider.
-   */
-  IModelProvider getModelProvider();
 
 }

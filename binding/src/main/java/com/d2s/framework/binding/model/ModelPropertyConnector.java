@@ -107,16 +107,6 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
   }
 
   /**
-   * Sets the modelDescriptor.
-   * 
-   * @param modelDescriptor
-   *            the modelDescriptor to set.
-   */
-  public void setModelDescriptor(IModelDescriptor modelDescriptor) {
-    this.modelDescriptor = modelDescriptor;
-  }
-
-  /**
    * Gets the modelProvider.
    * 
    * @return the modelProvider.
@@ -229,6 +219,16 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
           getModelProvider().getModel(), aValue);
     }
     super.setConnectorValue(aValue);
+  }
+
+  /**
+   * Sets the modelDescriptor.
+   * 
+   * @param modelDescriptor
+   *            the modelDescriptor to set.
+   */
+  public void setModelDescriptor(IModelDescriptor modelDescriptor) {
+    this.modelDescriptor = modelDescriptor;
   }
 
   /**

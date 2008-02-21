@@ -38,6 +38,14 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    * {@inheritDoc}
    */
   public <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract) {
+    return createComponentInstance(componentContract, null);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate) {
     T createdComponent = createComponentInstance(componentContract, delegate,
         null);
@@ -48,9 +56,16 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   /**
    * {@inheritDoc}
    */
-  public <T extends IComponent> T createComponentInstance(
-      Class<T> componentContract) {
-    return createComponentInstance(componentContract, null);
+  @SuppressWarnings("unchecked")
+  public IQueryComponent createQueryComponentInstance(
+      Class<? extends IComponent> componentContract) {
+    IComponent componentDelegate = createComponentInstance(componentContract,
+        null, new Class[] {IQueryComponent.class});
+    QueryComponentInvocationHandler entityHandler = new QueryComponentInvocationHandler(
+        componentDelegate);
+    return (IQueryComponent) Proxy.newProxyInstance(Thread.currentThread()
+        .getContextClassLoader(), componentDelegate.getClass().getInterfaces(),
+        entityHandler);
   }
 
   /**
@@ -141,19 +156,6 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return null;
   }
 
-  private InvocationHandler createDelegatingComponentInvocationHandler(
-      IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
-    return new BasicDelegatingComponentInvocationHandler(delegate, this,
-        componentDescriptor, componentCollectionFactory, accessorFactory,
-        componentExtensionFactory);
-  }
-
-  private InvocationHandler createComponentInvocationHandler(
-      IComponentDescriptor<IComponent> componentDescriptor) {
-    return new BasicComponentInvocationHandler(componentDescriptor, this,
-        componentCollectionFactory, accessorFactory, componentExtensionFactory);
-  }
-
   @SuppressWarnings("unchecked")
   private <T extends IComponent> T createComponentInstance(
       Class<T> componentContract, Object delegate, Class[] extraInterfaces) {
@@ -182,18 +184,16 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return component;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  public IQueryComponent createQueryComponentInstance(
-      Class<? extends IComponent> componentContract) {
-    IComponent componentDelegate = createComponentInstance(componentContract, null,
-        new Class[] {IQueryComponent.class});
-    QueryComponentInvocationHandler entityHandler = new QueryComponentInvocationHandler(
-        componentDelegate);
-    return (IQueryComponent) Proxy.newProxyInstance(Thread.currentThread()
-        .getContextClassLoader(), componentDelegate.getClass().getInterfaces(),
-        entityHandler);
+  private InvocationHandler createComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor) {
+    return new BasicComponentInvocationHandler(componentDescriptor, this,
+        componentCollectionFactory, accessorFactory, componentExtensionFactory);
+  }
+
+  private InvocationHandler createDelegatingComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor, Object delegate) {
+    return new BasicDelegatingComponentInvocationHandler(delegate, this,
+        componentDescriptor, componentCollectionFactory, accessorFactory,
+        componentExtensionFactory);
   }
 }

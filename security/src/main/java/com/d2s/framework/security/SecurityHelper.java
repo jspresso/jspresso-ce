@@ -27,14 +27,14 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public final class SecurityHelper {
 
   /**
-   * <code>ROLES_GROUP_NAME</code>.
-   */
-  public static final String ROLES_GROUP_NAME = "Roles";
-
-  /**
    * <code>ANONYMOUS_USER_NAME</code>.
    */
   public static final String ANONYMOUS_USER_NAME = "anonymous";
+
+  /**
+   * <code>ROLES_GROUP_NAME</code>.
+   */
+  public static final String ROLES_GROUP_NAME    = "Roles";
 
   private SecurityHelper() {
     // private constructor for helper class

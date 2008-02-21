@@ -29,6 +29,18 @@ public class BasicReferencePropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
+  @Override
+  public BasicReferencePropertyDescriptor<E> clone() {
+    BasicReferencePropertyDescriptor<E> clonedDescriptor = (BasicReferencePropertyDescriptor<E>) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IComponentDescriptor<E> getComponentDescriptor() {
     return getReferencedDescriptor();
   }
@@ -98,18 +110,6 @@ public class BasicReferencePropertyDescriptor<E> extends
   public void setReferencedDescriptor(
       IComponentDescriptor<E> referencedDescriptor) {
     this.referencedDescriptor = referencedDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public BasicReferencePropertyDescriptor<E> clone() {
-    BasicReferencePropertyDescriptor<E> clonedDescriptor = (BasicReferencePropertyDescriptor<E>) super
-        .clone();
-
-    return clonedDescriptor;
   }
 
   /**

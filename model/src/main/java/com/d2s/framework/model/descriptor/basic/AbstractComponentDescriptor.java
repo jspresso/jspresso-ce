@@ -40,15 +40,15 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  * @param <E>
  *            the concrete type of components.
  */
-public abstract class AbstractComponentDescriptor<E> extends DefaultIconDescriptor
-    implements IComponentDescriptor<E> {
+public abstract class AbstractComponentDescriptor<E> extends
+    DefaultIconDescriptor implements IComponentDescriptor<E> {
 
   private List<IComponentDescriptor<?>>    ancestorDescriptors;
   private Class<?>                         componentContract;
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
+  private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
   private List<String>                     orderingProperties;
   private Map<String, IPropertyDescriptor> propertyDescriptors;
-  private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
   private List<String>                     queryableProperties;
   private List<String>                     renderedProperties;
   private Set<Class<?>>                    serviceContracts;

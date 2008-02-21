@@ -28,8 +28,7 @@ public class DefaultComponentCollectionFactory<E> implements
    * <p>
    * {@inheritDoc}
    */
-  public Collection<E> createEntityCollection(
-      Class<?> collectionInterface) {
+  public Collection<E> createEntityCollection(Class<?> collectionInterface) {
     if (Set.class.isAssignableFrom(collectionInterface)) {
       return new LinkedHashSet<E>();
     } else if (List.class.isAssignableFrom(collectionInterface)) {

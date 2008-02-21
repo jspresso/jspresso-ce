@@ -20,7 +20,7 @@ import com.d2s.framework.util.resources.IResource;
  */
 public final class ResourceManager {
 
-  private static final ResourceManager INSTANCE                     = new ResourceManager();
+  private static final ResourceManager INSTANCE = new ResourceManager();
 
   private SecureRandom                 random;
   private Map<String, IResource>       resources;

@@ -19,7 +19,7 @@ import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -35,20 +35,20 @@ public class EntityTracingAspect extends AbstractTracingAspect {
 
   /**
    * The main advice used to trace modifier calls on entities.
-   *
+   * 
    * @param joinPoint
-   *          The jointpoint reached by the flow.
+   *            The jointpoint reached by the flow.
    * @return The value returned by the underlying called method.
    * @throws Throwable
-   *           Any exception thrown by the underlying method.
+   *             Any exception thrown by the underlying method.
    */
   @Around("entityModifiers")
   public Object logMethod(final JoinPoint joinPoint) throws Throwable {
     String accessType = joinPoint.getSignature().getName().substring(0,
         GET_SET_LENGTH);
     MethodRtti rtti = (MethodRtti) joinPoint.getRtti();
-    Class<? extends Object> entityClass = ((BasicEntityInvocationHandler) joinPoint.getCallee())
-        .getComponentContract();
+    Class<? extends Object> entityClass = ((BasicEntityInvocationHandler) joinPoint
+        .getCallee()).getComponentContract();
     Object[] parameterValues = rtti.getParameterValues();
     logMethodEntry(entityClass, parameterValues[0], "[" + accessType + "]"
         + ((IPropertyDescriptor) parameterValues[1]).getName());

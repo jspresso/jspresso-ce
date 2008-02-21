@@ -24,14 +24,14 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public abstract class AbstractAction implements IAction {
 
-  private Collection<String>  grantedRoles;
-  private Map<String, Object> initialContext;
-  private boolean             longOperation;
-  
   /**
    * <code>ACTION_MODEL_NAME</code>.
    */
   protected static final String ACTION_MODEL_NAME = "ActionModel";
+  private Collection<String>    grantedRoles;
+  private Map<String, Object>   initialContext;
+
+  private boolean               longOperation;
 
   /**
    * {@inheritDoc}

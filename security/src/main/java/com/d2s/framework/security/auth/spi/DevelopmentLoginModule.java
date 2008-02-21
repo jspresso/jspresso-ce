@@ -38,10 +38,10 @@ import com.d2s.framework.util.security.LoginUtils;
  */
 public class DevelopmentLoginModule implements LoginModule {
 
-  private static final String USER_OPT            = "user";
+  private static final String CUSTOM_PROPERTY_OPT = "custom.";
   private static final String PASSWORD_OPT        = "password";
   private static final String ROLES_OPT           = "roles";
-  private static final String CUSTOM_PROPERTY_OPT = "custom.";
+  private static final String USER_OPT            = "user";
 
   private ResourceBundle      bundle              = ResourceBundle
                                                       .getBundle("com.d2s.framework.util.security.LoginUtils$DlmBundle");

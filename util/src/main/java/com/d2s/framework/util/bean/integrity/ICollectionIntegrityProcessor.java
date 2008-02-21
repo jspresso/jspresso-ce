@@ -15,9 +15,9 @@ import java.util.Collection;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          The type of the target.
+ *            The type of the target.
  * @param <F>
- *          The type of the property (a subclass of collection).
+ *            The type of the property (a subclass of collection).
  */
 public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
     extends IPropertyIntegrityProcessor<E, F> {
@@ -35,8 +35,7 @@ public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
    * @param addedValue
    *            the value added in the collection.
    */
-  void postprocessAdderIntegrity(E target, F collection,
-      Object addedValue);
+  void postprocessAdderIntegrity(E target, F collection, Object addedValue);
 
   /**
    * This method gets called whenever a value has been removed from a collection
@@ -51,8 +50,7 @@ public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
    * @param removedValue
    *            the value removed from the collection.
    */
-  void postprocessRemoverIntegrity(E target, F collection,
-      Object removedValue);
+  void postprocessRemoverIntegrity(E target, F collection, Object removedValue);
 
   /**
    * This method gets called whenever a value is about to be added to a
@@ -67,8 +65,7 @@ public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
    * @param addedValue
    *            the value added in the collection.
    */
-  void preprocessAdderIntegrity(E target, F collection,
-      Object addedValue);
+  void preprocessAdderIntegrity(E target, F collection, Object addedValue);
 
   /**
    * This method gets called whenever a value is about to be removed from a
@@ -83,6 +80,5 @@ public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
    * @param removedValue
    *            the value removed from the collection.
    */
-  void preprocessRemoverIntegrity(E target, F collection,
-      Object removedValue);
+  void preprocessRemoverIntegrity(E target, F collection, Object removedValue);
 }

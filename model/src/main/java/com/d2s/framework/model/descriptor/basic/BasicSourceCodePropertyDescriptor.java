@@ -22,6 +22,17 @@ public class BasicSourceCodePropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BasicSourceCodePropertyDescriptor clone() {
+    BasicSourceCodePropertyDescriptor clonedDescriptor = (BasicSourceCodePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public String getLanguage() {
     return language;
   }
@@ -34,16 +45,5 @@ public class BasicSourceCodePropertyDescriptor extends
    */
   public void setLanguage(String language) {
     this.language = language;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicSourceCodePropertyDescriptor clone() {
-    BasicSourceCodePropertyDescriptor clonedDescriptor = (BasicSourceCodePropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

@@ -27,6 +27,17 @@ public class RangeEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public RangeEnumerationPropertyDescriptor clone() {
+    RangeEnumerationPropertyDescriptor clonedDescriptor = (RangeEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public List<String> getEnumerationValues() {
     if (enumerationValues == null) {
       int min = 0;
@@ -140,16 +151,5 @@ public class RangeEnumerationPropertyDescriptor extends
    */
   public void setRangeStep(Integer rangeStep) {
     this.rangeStep = rangeStep;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public RangeEnumerationPropertyDescriptor clone() {
-    RangeEnumerationPropertyDescriptor clonedDescriptor = (RangeEnumerationPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

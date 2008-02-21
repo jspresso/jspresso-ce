@@ -25,6 +25,17 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BasicTextPropertyDescriptor clone() {
+    BasicTextPropertyDescriptor clonedDescriptor = (BasicTextPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Map<String, List<String>> getFileFilter() {
     if (fileFilter != null) {
       return fileFilter;
@@ -43,16 +54,5 @@ public class BasicTextPropertyDescriptor extends BasicStringPropertyDescriptor
    */
   public void setFileFilter(Map<String, List<String>> fileFilter) {
     this.fileFilter = fileFilter;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicTextPropertyDescriptor clone() {
-    BasicTextPropertyDescriptor clonedDescriptor = (BasicTextPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

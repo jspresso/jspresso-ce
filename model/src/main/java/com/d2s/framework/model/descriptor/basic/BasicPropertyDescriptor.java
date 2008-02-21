@@ -67,6 +67,14 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   @Override
+  public BasicPropertyDescriptor clone() {
+    return (BasicPropertyDescriptor) super.clone();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public boolean equals(Object obj) {
     if (obj instanceof IPropertyDescriptor) {
       return getName().equals(((IPropertyDescriptor) obj).getName());
@@ -202,6 +210,19 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
+  public boolean isMandatory() {
+    if (mandatory != null) {
+      return mandatory.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return getParentDescriptor().isMandatory();
+    }
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean isModifiable() {
     if (getDelegateClassName() == null) {
       return true;
@@ -212,19 +233,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     } catch (ClassNotFoundException ex) {
       throw new NestedRuntimeException(ex);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isMandatory() {
-    if (mandatory != null) {
-      return mandatory.booleanValue();
-    }
-    if (getParentDescriptor() != null) {
-      return getParentDescriptor().isMandatory();
-    }
-    return false;
   }
 
   /**
@@ -369,27 +377,19 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void unleashForFilter() {
+    setMandatory(false);
+    setReadOnly(false);
+  }
+
+  /**
    * Gets the parentDescriptor.
    * 
    * @return the parentDescriptor.
    */
   protected IPropertyDescriptor getParentDescriptor() {
     return parentDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicPropertyDescriptor clone() {
-    return (BasicPropertyDescriptor) super.clone();
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  public void unleashForFilter() {
-    setMandatory(false);
-    setReadOnly(false);
   }
 }

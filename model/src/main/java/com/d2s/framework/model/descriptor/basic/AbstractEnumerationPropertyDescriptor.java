@@ -23,6 +23,17 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public AbstractEnumerationPropertyDescriptor clone() {
+    AbstractEnumerationPropertyDescriptor clonedDescriptor = (AbstractEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public String getEnumerationName() {
     if (enumerationName != null) {
       return enumerationName;
@@ -75,16 +86,5 @@ public abstract class AbstractEnumerationPropertyDescriptor extends
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public AbstractEnumerationPropertyDescriptor clone() {
-    AbstractEnumerationPropertyDescriptor clonedDescriptor = (AbstractEnumerationPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

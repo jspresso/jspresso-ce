@@ -22,12 +22,11 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public class BasicStringPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IStringPropertyDescriptor {
 
-  private Boolean upperCase;
   private Integer maxLength;
   private String  regexpPattern;
   private String  regexpPatternSample;
+  private Boolean upperCase;
 
-  
   /**
    * {@inheritDoc}
    */
@@ -84,24 +83,12 @@ public class BasicStringPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public boolean isUpperCase() {
-    if (upperCase != null) {
-      return upperCase.booleanValue();
-    }
-    if (getParentDescriptor() != null) {
-      return ((IStringPropertyDescriptor) getParentDescriptor()).isUpperCase();
-    }
-    return false;
-  }
+  @Override
+  public BasicStringPropertyDescriptor clone() {
+    BasicStringPropertyDescriptor clonedDescriptor = (BasicStringPropertyDescriptor) super
+        .clone();
 
-  
-  /**
-   * Sets the upperCase.
-   * 
-   * @param upperCase the upperCase to set.
-   */
-  public void setUpperCase(boolean upperCase) {
-    this.upperCase = new Boolean(upperCase);
+    return clonedDescriptor;
   }
 
   /**
@@ -157,6 +144,19 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public boolean isUpperCase() {
+    if (upperCase != null) {
+      return upperCase.booleanValue();
+    }
+    if (getParentDescriptor() != null) {
+      return ((IStringPropertyDescriptor) getParentDescriptor()).isUpperCase();
+    }
+    return false;
+  }
+
+  /**
    * Sets the maxLength property.
    * 
    * @param maxLength
@@ -187,6 +187,26 @@ public class BasicStringPropertyDescriptor extends
   }
 
   /**
+   * Sets the upperCase.
+   * 
+   * @param upperCase
+   *            the upperCase to set.
+   */
+  public void setUpperCase(boolean upperCase) {
+    this.upperCase = new Boolean(upperCase);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void unleashForFilter() {
+    setMaxLength(null);
+    setRegexpPattern(null);
+    super.unleashForFilter();
+  }
+
+  /**
    * Performs the necessary transformations to build a tring out of a property
    * value.
    * 
@@ -196,26 +216,5 @@ public class BasicStringPropertyDescriptor extends
    */
   protected String getValueAsString(Object value) {
     return (String) value;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicStringPropertyDescriptor clone() {
-    BasicStringPropertyDescriptor clonedDescriptor = (BasicStringPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public void unleashForFilter() {
-    setMaxLength(null);
-    setRegexpPattern(null);
-    super.unleashForFilter();
   }
 }

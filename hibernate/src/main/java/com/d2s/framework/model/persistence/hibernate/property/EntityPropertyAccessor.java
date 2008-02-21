@@ -47,7 +47,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({"unused", "unchecked" })
+  @SuppressWarnings({ "unused", "unchecked" })
   public Setter getSetter(Class theClass, String propertyName) {
     return new EntityPropertySetter(propertyName);
   }
@@ -92,7 +92,7 @@ public class EntityPropertyAccessor implements PropertyAccessor {
     /**
      * {@inheritDoc}
      */
-    @SuppressWarnings({"unused", "unchecked" })
+    @SuppressWarnings({ "unused", "unchecked" })
     public Object getForInsert(Object target, Map mergeMap,
         SessionImplementor session) {
       return get(target);

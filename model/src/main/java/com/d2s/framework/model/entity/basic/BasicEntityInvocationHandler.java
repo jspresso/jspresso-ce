@@ -59,8 +59,8 @@ public class BasicEntityInvocationHandler extends
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
-    super(entityDescriptor, inlineComponentFactory, collectionFactory, accessorFactory,
-        extensionFactory);
+    super(entityDescriptor, inlineComponentFactory, collectionFactory,
+        accessorFactory, extensionFactory);
     this.properties = createPropertyMap();
   }
 

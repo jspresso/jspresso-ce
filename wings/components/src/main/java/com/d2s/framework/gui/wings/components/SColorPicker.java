@@ -31,17 +31,17 @@ import org.wingx.XColorPicker;
  */
 public class SColorPicker extends SPanel {
 
-  private static final long       serialVersionUID = -9175630518246041139L;
+  private static final SDimension BUTTON_DIM       = new SDimension(24, 24);
 
+  private static final long       serialVersionUID = -9175630518246041139L;
   private transient ChangeEvent   changeEvent      = null;
   private SButton                 chooseButton;
   private EventListenerList       listenerList     = new EventListenerList();
+
   private SButton                 resetButton;
-
   private Color                   resetValue;
-  private Color                   value;
 
-  private static final SDimension BUTTON_DIM       = new SDimension(24, 24);
+  private Color                   value;
 
   /**
    * Constructs a new <code>SColorPicker</code> instance.

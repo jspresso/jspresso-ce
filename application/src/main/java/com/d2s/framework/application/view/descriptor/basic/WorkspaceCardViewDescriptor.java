@@ -9,8 +9,8 @@ import java.util.Map;
 
 import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
-import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.application.model.Module;
+import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.application.view.descriptor.IModuleViewDescriptorFactory;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.AbstractCardViewDescriptor;

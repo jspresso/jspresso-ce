@@ -20,18 +20,18 @@ public class BasicIntegerPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class<?> getModelType() {
-    return Integer.class;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public BasicIntegerPropertyDescriptor clone() {
     BasicIntegerPropertyDescriptor clonedDescriptor = (BasicIntegerPropertyDescriptor) super
         .clone();
 
     return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<?> getModelType() {
+    return Integer.class;
   }
 }

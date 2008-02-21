@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.model.descriptor;
 
-
 /**
  * This interface is implemented by descriptors of collections.
  * <p>
@@ -13,7 +12,7 @@ package com.d2s.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete component element type.
+ *            the concrete component element type.
  */
 public interface ICollectionDescriptor<E> extends IModelDescriptor,
     ICollectionDescriptorProvider<E> {

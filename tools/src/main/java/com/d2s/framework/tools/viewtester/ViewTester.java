@@ -45,12 +45,12 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public class ViewTester {
 
   private static final String APPLICATION_CONTEXT_KEY = "applicationContextKey";
-  private static final String VIEW_ID                 = "viewId";
   private static final String LANGUAGE                = "language";
+  private static final String VIEW_ID                 = "viewId";
 
   private String              applicationContextKey;
-  private String              viewId;
   private String              language;
+  private String              viewId;
 
   /**
    * Starts Code generation for an component.
@@ -158,16 +158,6 @@ public class ViewTester {
   }
 
   /**
-   * Sets the viewId.
-   * 
-   * @param viewId
-   *            the viewId to set.
-   */
-  public void setViewId(String viewId) {
-    this.viewId = viewId;
-  }
-
-  /**
    * Sets the language.
    * 
    * @param language
@@ -175,6 +165,16 @@ public class ViewTester {
    */
   public void setLanguage(String language) {
     this.language = language;
+  }
+
+  /**
+   * Sets the viewId.
+   * 
+   * @param viewId
+   *            the viewId to set.
+   */
+  public void setViewId(String viewId) {
+    this.viewId = viewId;
   }
 
   private ApplicationContext getApplicationContext() {

@@ -125,14 +125,14 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
   private IActionListener                   headerActionListener;
 
   private int[]                             modelToView;
+  private Set<ULCTableColumn>               sortedColumnsBuffer;
   private List<Directive>                   sortingColumns        = new ArrayList<Directive>();
   private ULCTableHeader                    tableHeader;
   private ITableModel                       tableModel;
   private ITableModelListener               tableModelListener;
   private ULCIcon                           upIcon;
-  private Row[]                             viewToModel;
 
-  private Set<ULCTableColumn>               sortedColumnsBuffer;
+  private Row[]                             viewToModel;
 
   /**
    * Constructs a new <code>TableSorter</code> instance.
@@ -434,14 +434,6 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
     modelToView = null;
   }
 
-  private void resetHeaderRenderers() {
-    for (ULCTableColumn col : sortedColumnsBuffer) {
-      col.setHeaderRenderer(null);
-    }
-    sortedColumnsBuffer.clear();
-    tableHeader.repaint();
-  }
-
   private Directive getDirective(int column) {
     for (int i = 0; i < sortingColumns.size(); i++) {
       Directive directive = sortingColumns.get(i);
@@ -463,8 +455,6 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
     return modelToView;
   }
 
-  // Helper classes
-
   private Row[] getViewToModel() {
     if (viewToModel == null) {
       int tableModelRowCount = tableModel.getRowCount();
@@ -478,6 +468,16 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
       }
     }
     return viewToModel;
+  }
+
+  // Helper classes
+
+  private void resetHeaderRenderers() {
+    for (ULCTableColumn col : sortedColumnsBuffer) {
+      col.setHeaderRenderer(null);
+    }
+    sortedColumnsBuffer.clear();
+    tableHeader.repaint();
   }
 
   private void sortingStatusChanged() {

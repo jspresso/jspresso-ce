@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.application.backend.action;
 
-
 /**
  * A mock backend action.
  * <p>

@@ -20,8 +20,8 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public class FilterableBeanCollectionModule extends BeanCollectionModule {
 
   private Object                       filter;
-  private IViewDescriptor              filterViewDescriptor;
   private IComponentDescriptor<Object> filterComponentDescriptor;
+  private IViewDescriptor              filterViewDescriptor;
 
   /**
    * Gets the filter.
@@ -30,6 +30,27 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    */
   public Object getFilter() {
     return filter;
+  }
+
+  /**
+   * Gets the filterComponentDescriptor.
+   * 
+   * @return the filterComponentDescriptor.
+   */
+  public IComponentDescriptor<Object> getFilterComponentDescriptor() {
+    if (filterComponentDescriptor == null) {
+      return getElementComponentDescriptor();
+    }
+    return filterComponentDescriptor;
+  }
+
+  /**
+   * Gets the filterViewDescriptor.
+   * 
+   * @return the filterViewDescriptor.
+   */
+  public IViewDescriptor getFilterViewDescriptor() {
+    return filterViewDescriptor;
   }
 
   /**
@@ -48,12 +69,14 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
   }
 
   /**
-   * Gets the filterViewDescriptor.
+   * Sets the filterComponentDescriptor.
    * 
-   * @return the filterViewDescriptor.
+   * @param filterComponentDescriptor
+   *            the filterComponentDescriptor to set.
    */
-  public IViewDescriptor getFilterViewDescriptor() {
-    return filterViewDescriptor;
+  public void setFilterComponentDescriptor(
+      IComponentDescriptor<Object> filterComponentDescriptor) {
+    this.filterComponentDescriptor = filterComponentDescriptor;
   }
 
   /**
@@ -64,28 +87,5 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    */
   public void setFilterViewDescriptor(IViewDescriptor filterViewDescriptor) {
     this.filterViewDescriptor = filterViewDescriptor;
-  }
-
-  /**
-   * Gets the filterComponentDescriptor.
-   * 
-   * @return the filterComponentDescriptor.
-   */
-  public IComponentDescriptor<Object> getFilterComponentDescriptor() {
-    if (filterComponentDescriptor == null) {
-      return getElementComponentDescriptor();
-    }
-    return filterComponentDescriptor;
-  }
-
-  /**
-   * Sets the filterComponentDescriptor.
-   * 
-   * @param filterComponentDescriptor
-   *            the filterComponentDescriptor to set.
-   */
-  public void setFilterComponentDescriptor(
-      IComponentDescriptor<Object> filterComponentDescriptor) {
-    this.filterComponentDescriptor = filterComponentDescriptor;
   }
 }

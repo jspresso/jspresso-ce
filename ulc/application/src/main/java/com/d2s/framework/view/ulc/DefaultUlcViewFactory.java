@@ -196,9 +196,6 @@ public class DefaultUlcViewFactory implements
   private static final int                      DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                   DEF_DISP_MAX_VALUE          = 1000;
   private static final double                   DEF_DISP_TEMPLATE_PERCENT   = 99;
-  private static final Dimension                TREE_PREFERRED_SIZE         = new Dimension(
-                                                                                128,
-                                                                                128);
   private static final char                     TEMPLATE_CHAR               = 'O';
   private static final Date                     TEMPLATE_DATE               = new Date(
                                                                                 3661 * 1000);
@@ -210,6 +207,9 @@ public class DefaultUlcViewFactory implements
                                                                                     + IDurationPropertyDescriptor.ONE_WEEK);
   private static final Date                     TEMPLATE_TIME               = new Date(
                                                                                 3661 * 1000);
+  private static final Dimension                TREE_PREFERRED_SIZE         = new Dimension(
+                                                                                128,
+                                                                                128);
   private IActionFactory<IAction, ULCComponent> actionFactory;
   private IDisplayableAction                    binaryPropertyInfoAction;
   private IConfigurableConnectorFactory         connectorFactory;
@@ -332,6 +332,26 @@ public class DefaultUlcViewFactory implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void decorateWithTitle(IView<ULCComponent> view, Locale locale) {
+    view.getPeer()
+        .setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), view.getDescriptor()
+                    .getI18nName(getTranslationProvider(), locale)));
+    // ULCInternalFrame iFrame = new ULCInternalFrame(view.getDescriptor()
+    // .getI18nName(getTranslationProvider(), locale), true, true,
+    // true, true);
+    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
+    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    // iFrame.add(view.getPeer());
+    // iFrame.pack();
+    // iFrame.setPreferredSize(new Dimension(100,100));
+    // view.setPeer(iFrame);
+  }
+
+  /**
    * Gets the actionFactory.
    * 
    * @return the actionFactory.
@@ -347,6 +367,10 @@ public class DefaultUlcViewFactory implements
     return iconFactory;
   }
 
+  // ///////////////// //
+  // Composite Section //
+  // ///////////////// //
+
   /**
    * Sets the actionFactory.
    * 
@@ -357,10 +381,6 @@ public class DefaultUlcViewFactory implements
       IActionFactory<IAction, ULCComponent> actionFactory) {
     this.actionFactory = actionFactory;
   }
-
-  // ///////////////// //
-  // Composite Section //
-  // ///////////////// //
 
   /**
    * Sets the binaryPropertyInfoAction.
@@ -517,6 +537,10 @@ public class DefaultUlcViewFactory implements
     return pane;
   }
 
+  // ////////////////// //
+  // Collection Section //
+  // ////////////////// //
+
   /**
    * Creates a gridbaglayout pane.
    * 
@@ -526,10 +550,6 @@ public class DefaultUlcViewFactory implements
     ULCGridBagLayoutPane pane = new ULCGridBagLayoutPane();
     return pane;
   }
-
-  // ////////////////// //
-  // Collection Section //
-  // ////////////////// //
 
   /**
    * Creates a gridlayout pane.
@@ -775,6 +795,10 @@ public class DefaultUlcViewFactory implements
     return textField;
   }
 
+  // ///////////// //
+  // Image Section //
+  // ///////////// //
+
   /**
    * Creates a tool bar.
    * 
@@ -787,9 +811,9 @@ public class DefaultUlcViewFactory implements
     return toolBar;
   }
 
-  // ///////////// //
-  // Image Section //
-  // ///////////// //
+  // /////////////// //
+  // Nesting Section //
+  // /////////////// //
 
   /**
    * Creates a tree.
@@ -801,10 +825,6 @@ public class DefaultUlcViewFactory implements
     tree.setDragEnabled(true);
     return tree;
   }
-
-  // /////////////// //
-  // Nesting Section //
-  // /////////////// //
 
   /**
    * Decorates the created view with the apropriate border.
@@ -825,26 +845,6 @@ public class DefaultUlcViewFactory implements
       default:
         break;
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void decorateWithTitle(IView<ULCComponent> view, Locale locale) {
-    view.getPeer()
-        .setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), view.getDescriptor()
-                    .getI18nName(getTranslationProvider(), locale)));
-    // ULCInternalFrame iFrame = new ULCInternalFrame(view.getDescriptor()
-    // .getI18nName(getTranslationProvider(), locale), true, true,
-    // true, true);
-    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
-    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    // iFrame.add(view.getPeer());
-    // iFrame.pack();
-    // iFrame.setPreferredSize(new Dimension(100,100));
-    // view.setPeer(iFrame);
   }
 
   // ///////////////// //

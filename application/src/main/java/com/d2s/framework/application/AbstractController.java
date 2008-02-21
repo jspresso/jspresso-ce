@@ -22,8 +22,8 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public abstract class AbstractController implements IController {
 
-  private ITranslationProvider translationProvider;
   private IExceptionHandler    customExceptionHandler;
+  private ITranslationProvider translationProvider;
 
   /**
    * {@inheritDoc}
@@ -50,13 +50,17 @@ public abstract class AbstractController implements IController {
   }
 
   /**
-   * Sets the translationProvider.
-   * 
-   * @param translationProvider
-   *            the translationProvider to set.
+   * Whenever the custom exception handler is set, delegates the exception to it
+   * and returns its result. Otherwise, the method returns false, indicating
+   * that the exception should be forwarded.
+   * <p>
+   * {@inheritDoc}
    */
-  public void setTranslationProvider(ITranslationProvider translationProvider) {
-    this.translationProvider = translationProvider;
+  public boolean handleException(Throwable ex, Map<String, Object> context) {
+    if (customExceptionHandler != null) {
+      return customExceptionHandler.handleException(ex, context);
+    }
+    return false;
   }
 
   /**
@@ -70,17 +74,13 @@ public abstract class AbstractController implements IController {
   }
 
   /**
-   * Whenever the custom exception handler is set, delegates the exception to it
-   * and returns its result. Otherwise, the method returns false, indicating
-   * that the exception should be forwarded.
-   * <p>
-   * {@inheritDoc}
+   * Sets the translationProvider.
+   * 
+   * @param translationProvider
+   *            the translationProvider to set.
    */
-  public boolean handleException(Throwable ex, Map<String, Object> context) {
-    if (customExceptionHandler != null) {
-      return customExceptionHandler.handleException(ex, context);
-    }
-    return false;
+  public void setTranslationProvider(ITranslationProvider translationProvider) {
+    this.translationProvider = translationProvider;
   }
 
 }

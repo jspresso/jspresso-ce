@@ -11,7 +11,7 @@ package com.d2s.framework.model.component;
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -21,15 +21,15 @@ public interface IComponentExtensionFactory {
    * Constructs a new extension instance. Component extension classes must
    * implement constructors in the form of
    * <code>public ComponentExtension(ComponentContract component)</code>.
-   *
+   * 
    * @param <E>
-   *          the real component type.
+   *            the real component type.
    * @param extensionClass
-   *          The class of the component extension.
+   *            The class of the component extension.
    * @param componentContract
-   *          The interface of the component.
+   *            The interface of the component.
    * @param component
-   *          the component instance this extension will be attached to.
+   *            the component instance this extension will be attached to.
    * @return The constructed component extension.
    */
   <E extends IComponent> IComponentExtension<E> createComponentExtension(

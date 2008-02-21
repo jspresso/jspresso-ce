@@ -14,7 +14,7 @@ import org.apache.commons.beanutils.ConstructorUtils;
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
- *
+ * 
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
@@ -52,9 +52,9 @@ public class DefaultComponentExtensionFactory implements
 
   /**
    * Sets the componentFactory.
-   *
+   * 
    * @param componentFactory
-   *          the componentFactory to set.
+   *            the componentFactory to set.
    */
   public void setComponentFactory(IComponentFactory componentFactory) {
     this.componentFactory = componentFactory;

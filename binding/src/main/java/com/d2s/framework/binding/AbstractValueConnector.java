@@ -223,6 +223,25 @@ public abstract class AbstractValueConnector extends AbstractConnector
   /**
    * {@inheritDoc}
    */
+  public String getConnectorPath() {
+    List<String> connectorPath = new ArrayList<String>();
+    IValueConnector c = this;
+    while (c != null) {
+      connectorPath.add(c.getId());
+      c = c.getParentConnector();
+    }
+    Collections.reverse(connectorPath);
+    StringBuffer path = new StringBuffer();
+    for (String id : connectorPath) {
+      path.append("/");
+      path.append(id);
+    }
+    return path.toString();
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Object getConnectorValue() {
     return getConnecteeValue();
   }
@@ -540,25 +559,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
    *            the connectee value to set
    */
   protected abstract void setConnecteeValue(Object connecteeValue);
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getConnectorPath() {
-    List<String> connectorPath = new ArrayList<String>();
-    IValueConnector c = this;
-    while (c != null) {
-      connectorPath.add(c.getId());
-      c = c.getParentConnector();
-    }
-    Collections.reverse(connectorPath);
-    StringBuffer path = new StringBuffer();
-    for (String id : connectorPath) {
-      path.append("/");
-      path.append(id);
-    }
-    return path.toString();
-  }
 
   private class ModelConnectorPropertyChangeListener implements
       PropertyChangeListener {

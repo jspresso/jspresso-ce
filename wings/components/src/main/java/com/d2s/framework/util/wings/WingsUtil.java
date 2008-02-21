@@ -26,14 +26,14 @@ import com.d2s.framework.util.exception.NestedRuntimeException;
  */
 public final class WingsUtil {
 
-  private static final double    DARKER_COLOR_FACTOR = 0.93;
-
-  private static final boolean   DISABLE_THREADING   = false;
-
   /**
    * <code>FULL_DIM_PERCENT</code>.
    */
-  public static final String    FULL_DIM_PERCENT    = "100%";
+  public static final String   FULL_DIM_PERCENT    = "100%";
+
+  private static final double  DARKER_COLOR_FACTOR = 0.93;
+
+  private static final boolean DISABLE_THREADING   = false;
 
   private WingsUtil() {
     // Helper class private constructor.

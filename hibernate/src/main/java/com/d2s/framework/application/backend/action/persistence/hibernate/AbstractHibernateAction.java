@@ -66,8 +66,8 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         IPropertyDescriptor propertyDescriptor = entityDescriptor
             .getPropertyDescriptor(property.getKey());
         if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-          getBeanAccessorFactory(context).createPropertyAccessor(property.getKey(),
-              entity.getContract()).setValue(entity, null);
+          getBeanAccessorFactory(context).createPropertyAccessor(
+              property.getKey(), entity.getContract()).setValue(entity, null);
         } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
           if (((ICollectionPropertyDescriptor) propertyDescriptor)
               .isComposition()) {

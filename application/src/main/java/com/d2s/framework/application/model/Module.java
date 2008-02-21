@@ -16,8 +16,8 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
- * A child module is a non-root module (it belongs to a workspace). A child module uses a
- * view to render its projected artifact.
+ * A child module is a non-root module (it belongs to a workspace). A child
+ * module uses a view to render its projected artifact.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -27,18 +27,18 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class Module extends AbstractPropertyChangeCapable implements ISecurable {
 
-  private String                description;
-  private String                i18nDescription;
-  private String                i18nName;
-  private String                iconImageURL;
-  private String                name;
+  private String             description;
+  private Collection<String> grantedRoles;
+  private String             i18nDescription;
+  private String             i18nName;
+  private String             iconImageURL;
 
-  private Module       parent;
-  private IViewDescriptor projectedViewDescriptor;
-  private IAction         startupAction;
-  private boolean         started;
-  private Collection<String>    grantedRoles;
-  private List<Module>    subModules;
+  private String             name;
+  private Module             parent;
+  private IViewDescriptor    projectedViewDescriptor;
+  private boolean            started;
+  private IAction            startupAction;
+  private List<Module>       subModules;
 
   /**
    * Constructs a new <code>Module</code> instance.
@@ -48,134 +48,44 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Gets the module's parent module.
+   * Adds a child module.
    * 
-   * @return the parent module or null if none.
+   * @param child
+   *            the child module to add. It will fire a "subModules" property
+   *            change event.
+   * @return <code>true</code> if the module was succesfully added.
    */
-  public Module getParent() {
-    return parent;
-  }
-
-  /**
-   * Gets the projectedViewDescriptor.
-   * 
-   * @return the projectedViewDescriptor.
-   */
-  public IViewDescriptor getProjectedViewDescriptor() {
-    return projectedViewDescriptor;
-  }
-
-  /**
-   * Sets the parent module. It will fire a "parent" property change event.
-   * 
-   * @param parent
-   *            the parent module to set or null if none.
-   */
-  public void setParent(Module parent) {
-    if (ObjectUtils.equals(this.parent, parent)) {
-      return;
+  public boolean addSubModule(Module child) {
+    if (subModules == null) {
+      subModules = new ArrayList<Module>();
     }
-    Module oldParent = getParent();
-    if (getParent() != null) {
-      getParent().removeSubModule(this);
+    List<Module> oldValue = new ArrayList<Module>(getSubModules());
+    if (subModules.add(child)) {
+      updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
+      return true;
     }
-    this.parent = parent;
-    if (getParent() != null && !getParent().getSubModules().contains(this)) {
-      getParent().addSubModule(this);
-    }
-    firePropertyChange("parent", oldParent, getParent());
+    return false;
   }
 
   /**
-   * Sets the projectedViewDescriptor.
-   * 
-   * @param projectedViewDescriptor
-   *            the projectedViewDescriptor to set.
-   */
-  public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
-    this.projectedViewDescriptor = projectedViewDescriptor;
-  }
-
-  /**
-   * Gets the startupAction.
-   * 
-   * @return the startupAction.
-   */
-  public IAction getStartupAction() {
-    return startupAction;
-  }
-
-  /**
-   * Sets the startupAction.
-   * 
-   * @param startupAction
-   *            the startupAction to set.
-   */
-  public void setStartupAction(IAction startupAction) {
-    this.startupAction = startupAction;
-  }
-
-  /**
-   * Gets the started.
-   * 
-   * @return the started.
-   */
-  public boolean isStarted() {
-    return started;
-  }
-
-  /**
-   * Sets the started.
-   * 
-   * @param started
-   *            the started to set.
-   */
-  public void setStarted(boolean started) {
-    this.started = started;
-  }
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
-  }
-
-  /**
-   * Sets the grantedRoles.
-   * 
-   * @param grantedRoles
-   *            the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
-  }
-  
-  /**
-   * Gets the modules modules.
-   * 
-   * @return the list of modules modules.
-   */
-  public List<Module> getSubModules() {
-    return subModules;
-  }
-
-  /**
-   * Sets the modules modules. It will fire a "subModules" property change
-   * event.
+   * Adds a modules module collection. It will fire a "subModules" property
+   * change event.
    * 
    * @param children
-   *            the modules modules to set.
+   *            the modules modules to add.
+   * @return <code>true</code> if the modules module collection was
+   *         succesfully added.
    */
-  public void setSubModules(List<Module> children) {
-    List<Module> oldValue = null;
-    if (getSubModules() != null) {
-      oldValue = new ArrayList<Module>(getSubModules());
+  public boolean addSubModules(Collection<? extends Module> children) {
+    if (subModules == null) {
+      subModules = new ArrayList<Module>();
     }
-    this.subModules = children;
-    updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
+    List<Module> oldValue = new ArrayList<Module>(getSubModules());
+    if (subModules.addAll(children)) {
+      updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -185,6 +95,15 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
    */
   public String getDescription() {
     return description;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
   }
 
   /**
@@ -230,6 +149,101 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
+   * Gets the module's parent module.
+   * 
+   * @return the parent module or null if none.
+   */
+  public Module getParent() {
+    return parent;
+  }
+
+  /**
+   * Gets the projectedViewDescriptor.
+   * 
+   * @return the projectedViewDescriptor.
+   */
+  public IViewDescriptor getProjectedViewDescriptor() {
+    return projectedViewDescriptor;
+  }
+
+  /**
+   * Gets the startupAction.
+   * 
+   * @return the startupAction.
+   */
+  public IAction getStartupAction() {
+    return startupAction;
+  }
+
+  /**
+   * Gets the modules modules.
+   * 
+   * @return the list of modules modules.
+   */
+  public List<Module> getSubModules() {
+    return subModules;
+  }
+
+  /**
+   * Hash code based on name.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return new HashCodeBuilder(23, 57).append(name).toHashCode();
+  }
+
+  /**
+   * Gets the started.
+   * 
+   * @return the started.
+   */
+  public boolean isStarted() {
+    return started;
+  }
+
+  /**
+   * Removes a child module. It will fire a "subModules" property change event.
+   * 
+   * @param module
+   *            the child module to remove.
+   * @return <code>true</code> if the module was succesfully removed.
+   */
+  public boolean removeSubModule(Module module) {
+    if (subModules != null) {
+      List<Module> oldValue = new ArrayList<Module>(getSubModules());
+      if (subModules.remove(module)) {
+        updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  /**
+   * Removes a modules module collection. It will fire a "subModules" property
+   * change event.
+   * 
+   * @param children
+   *            the modules modules to remove.
+   * @return <code>true</code> if the modules module collection was
+   *         succesfully removed.
+   */
+  public boolean removeSubModules(Collection<Module> children) {
+    if (subModules != null) {
+      List<Module> oldValue = new ArrayList<Module>(getSubModules());
+      if (subModules.removeAll(children)) {
+        updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
+
+  /**
    * Sets the module's description. It may serve for the module's view.
    * 
    * @param description
@@ -242,6 +256,16 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
     String oldValue = getDescription();
     this.description = description;
     firePropertyChange("description", oldValue, getDescription());
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *            the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 
   /**
@@ -300,84 +324,83 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   }
 
   /**
-   * Adds a child module.
+   * Sets the parent module. It will fire a "parent" property change event.
    * 
-   * @param child
-   *            the child module to add. It will fire a "subModules" property
-   *            change event.
-   * @return <code>true</code> if the module was succesfully added.
+   * @param parent
+   *            the parent module to set or null if none.
    */
-  public boolean addSubModule(Module child) {
-    if (subModules == null) {
-      subModules = new ArrayList<Module>();
+  public void setParent(Module parent) {
+    if (ObjectUtils.equals(this.parent, parent)) {
+      return;
     }
-    List<Module> oldValue = new ArrayList<Module>(getSubModules());
-    if (subModules.add(child)) {
-      updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
-      return true;
+    Module oldParent = getParent();
+    if (getParent() != null) {
+      getParent().removeSubModule(this);
     }
-    return false;
+    this.parent = parent;
+    if (getParent() != null && !getParent().getSubModules().contains(this)) {
+      getParent().addSubModule(this);
+    }
+    firePropertyChange("parent", oldParent, getParent());
   }
 
   /**
-   * Adds a modules module collection. It will fire a "subModules" property
-   * change event.
+   * Sets the projectedViewDescriptor.
+   * 
+   * @param projectedViewDescriptor
+   *            the projectedViewDescriptor to set.
+   */
+  public void setProjectedViewDescriptor(IViewDescriptor projectedViewDescriptor) {
+    this.projectedViewDescriptor = projectedViewDescriptor;
+  }
+
+  /**
+   * Sets the started.
+   * 
+   * @param started
+   *            the started to set.
+   */
+  public void setStarted(boolean started) {
+    this.started = started;
+  }
+
+  /**
+   * Sets the startupAction.
+   * 
+   * @param startupAction
+   *            the startupAction to set.
+   */
+  public void setStartupAction(IAction startupAction) {
+    this.startupAction = startupAction;
+  }
+
+  /**
+   * Sets the modules modules. It will fire a "subModules" property change
+   * event.
    * 
    * @param children
-   *            the modules modules to add.
-   * @return <code>true</code> if the modules module collection was
-   *         succesfully added.
+   *            the modules modules to set.
    */
-  public boolean addSubModules(Collection<? extends Module> children) {
-    if (subModules == null) {
-      subModules = new ArrayList<Module>();
+  public void setSubModules(List<Module> children) {
+    List<Module> oldValue = null;
+    if (getSubModules() != null) {
+      oldValue = new ArrayList<Module>(getSubModules());
     }
-    List<Module> oldValue = new ArrayList<Module>(getSubModules());
-    if (subModules.addAll(children)) {
-      updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
-      return true;
-    }
-    return false;
+    this.subModules = children;
+    updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
   }
 
   /**
-   * Removes a child module. It will fire a "subModules" property change event.
-   * 
-   * @param module
-   *            the child module to remove.
-   * @return <code>true</code> if the module was succesfully removed.
+   * based on name.
+   * <p>
+   * {@inheritDoc}
    */
-  public boolean removeSubModule(Module module) {
-    if (subModules != null) {
-      List<Module> oldValue = new ArrayList<Module>(getSubModules());
-      if (subModules.remove(module)) {
-        updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
-        return true;
-      }
-      return false;
+  @Override
+  public String toString() {
+    if (getI18nName() != null) {
+      return getI18nName();
     }
-    return false;
-  }
-
-  /**
-   * Removes a modules module collection. It will fire a "subModules"
-   * property change event.
-   * 
-   * @param children
-   *            the modules modules to remove.
-   * @return <code>true</code> if the modules module collection was
-   *         succesfully removed.
-   */
-  public boolean removeSubModules(Collection<Module> children) {
-    if (subModules != null) {
-      List<Module> oldValue = new ArrayList<Module>(getSubModules());
-      if (subModules.removeAll(children)) {
-        updateParentsAndFireSubModulesChanged(oldValue, getSubModules());
-        return true;
-      }
-      return false;
-    }
-    return false;
+    return "";
   }
 
   /**
@@ -407,28 +430,5 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
       }
     }
     firePropertyChange("subModules", oldChildren, newChildren);
-  }
-
-  /**
-   * Hash code based on name.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public int hashCode() {
-    return new HashCodeBuilder(23, 57).append(name).toHashCode();
-  }
-
-  /**
-   * based on name.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public String toString() {
-    if (getI18nName() != null) {
-      return getI18nName();
-    }
-    return "";
   }
 }

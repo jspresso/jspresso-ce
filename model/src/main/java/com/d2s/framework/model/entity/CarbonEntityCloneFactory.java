@@ -27,6 +27,18 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
+  public <E extends IComponent> E cloneComponent(IComponent componentToClone,
+      IEntityFactory entityFactory) {
+    E clonedComponent = (E) entityFactory
+        .createComponentInstance(componentToClone.getContract());
+    carbonCopyComponent(componentToClone, clonedComponent, entityFactory);
+    return clonedComponent;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
   public <E extends IEntity> E cloneEntity(E entityToClone,
       IEntityFactory entityFactory) {
     E clonedEntity = (E) entityFactory.createEntityInstance(entityToClone
@@ -60,17 +72,5 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
         }
       }
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  public <E extends IComponent> E cloneComponent(IComponent componentToClone,
-      IEntityFactory entityFactory) {
-    E clonedComponent = (E) entityFactory
-        .createComponentInstance(componentToClone.getContract());
-    carbonCopyComponent(componentToClone, clonedComponent, entityFactory);
-    return clonedComponent;
   }
 }

@@ -73,6 +73,17 @@ public abstract class BasicNumberPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BasicNumberPropertyDescriptor clone() {
+    BasicNumberPropertyDescriptor clonedDescriptor = (BasicNumberPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Double getMaxValue() {
     if (maxValue != null) {
       return maxValue;
@@ -116,17 +127,6 @@ public abstract class BasicNumberPropertyDescriptor extends
     this.minValue = minValue;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicNumberPropertyDescriptor clone() {
-    BasicNumberPropertyDescriptor clonedDescriptor = (BasicNumberPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
-  }
-  
   /**
    * {@inheritDoc}
    */

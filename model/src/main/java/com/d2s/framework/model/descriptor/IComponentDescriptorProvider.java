@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.model.descriptor;
 
-
-
 /**
  * Marks classes capable of providing a component descriptor.
  * <p>
@@ -14,7 +12,7 @@ package com.d2s.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete component type.
+ *            the concrete component type.
  */
 public interface IComponentDescriptorProvider<E> extends IModelDescriptor {
 

@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.model.descriptor;
 
-
 /**
  * Implementing classes are able to provide a collection descriptor.
  * <p>
@@ -13,7 +12,7 @@ package com.d2s.framework.model.descriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *          the concrete collection component type.
+ *            the concrete collection component type.
  */
 public interface ICollectionDescriptorProvider<E> extends IModelDescriptor {
 

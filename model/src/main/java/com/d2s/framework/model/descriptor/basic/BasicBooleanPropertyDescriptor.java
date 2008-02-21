@@ -20,18 +20,18 @@ public class BasicBooleanPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
-  public Class<?> getModelType() {
-    return Boolean.TYPE;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public BasicBooleanPropertyDescriptor clone() {
     BasicBooleanPropertyDescriptor clonedDescriptor = (BasicBooleanPropertyDescriptor) super
         .clone();
 
     return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<?> getModelType() {
+    return Boolean.TYPE;
   }
 }

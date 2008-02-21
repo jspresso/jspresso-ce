@@ -34,7 +34,8 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class ModalDialogAction extends AbstractWingsAction {
 
-  private static final  SDimension DIALOG_DIMENSION = new SDimension("500px", "250px");
+  private static final SDimension DIALOG_DIMENSION = new SDimension("500px",
+                                                       "250px");
 
   /**
    * Shows a modal dialog containig a main view and a button panel with the list

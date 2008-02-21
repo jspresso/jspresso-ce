@@ -19,6 +19,14 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
   private String iconImageURL;
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public DefaultIconDescriptor clone() {
+    return (DefaultIconDescriptor) super.clone();
+  }
+
+  /**
    * Gets the iconImageURL.
    * 
    * @return the iconImageURL.
@@ -35,13 +43,5 @@ public class DefaultIconDescriptor extends DefaultDescriptor implements
    */
   public void setIconImageURL(String iconImageURL) {
     this.iconImageURL = iconImageURL;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public DefaultIconDescriptor clone() {
-    return (DefaultIconDescriptor) super.clone();
   }
 }

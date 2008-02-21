@@ -33,6 +33,18 @@ public class BasicCollectionPropertyDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
+  @SuppressWarnings("unchecked")
+  @Override
+  public BasicCollectionPropertyDescriptor<E> clone() {
+    BasicCollectionPropertyDescriptor<E> clonedDescriptor = (BasicCollectionPropertyDescriptor<E>) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public ICollectionDescriptor<E> getCollectionDescriptor() {
     return getReferencedDescriptor();
   }
@@ -109,7 +121,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor = 
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.postprocessAdderIntegrity(component, collection, addedValue);
     }
@@ -126,7 +138,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor = 
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor
           .postprocessRemoverIntegrity(component, collection, removedValue);
@@ -144,7 +156,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor = 
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessAdderIntegrity(component, collection, addedValue);
     }
@@ -161,7 +173,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
       return;
     }
     for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor = 
+      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessRemoverIntegrity(component, collection, removedValue);
     }
@@ -196,18 +208,6 @@ public class BasicCollectionPropertyDescriptor<E> extends
   public void setReferencedDescriptor(
       ICollectionDescriptor<E> referencedDescriptor) {
     this.referencedDescriptor = referencedDescriptor;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @SuppressWarnings("unchecked")
-  @Override
-  public BasicCollectionPropertyDescriptor<E> clone() {
-    BasicCollectionPropertyDescriptor<E> clonedDescriptor = (BasicCollectionPropertyDescriptor<E>) super
-        .clone();
-
-    return clonedDescriptor;
   }
 
   /**

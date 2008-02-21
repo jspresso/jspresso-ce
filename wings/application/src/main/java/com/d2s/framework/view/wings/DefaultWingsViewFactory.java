@@ -333,6 +333,47 @@ public class DefaultWingsViewFactory implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void decorateWithTitle(IView<SComponent> view, Locale locale) {
+    // SInternalFrame iFrame = createSInternalFrame();
+    // iFrame.setTitle(view.getDescriptor().getI18nName(
+    // getTranslationProvider(), locale));
+    // iFrame.setMaximizable(false);
+    // iFrame.setClosable(false);
+    // iFrame.setIconifyable(true);
+    // iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
+    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    // iFrame.getContentPane().setLayout(new SBorderLayout());
+    // iFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
+    // iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
+    // WingsUtil.FULL_DIM_PERCENT));
+    // view.setPeer(iFrame);
+
+    // view.getPeer().setBorder(new
+    // STitledBorder(view.getDescriptor().getI18nName(
+    // getTranslationProvider(), locale)));
+
+    SPanel titledPanel = createSPanel(new SBorderLayout());
+    SLabel titleLabel = createSLabel();
+    titleLabel.setIcon(iconFactory.getIcon(view.getDescriptor()
+        .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    titleLabel.setText(view.getDescriptor().getI18nName(
+        getTranslationProvider(), locale));
+    titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    titleLabel.setBorder(new SEmptyBorder(new Insets(2, 2, 6, 2)));
+    titledPanel.add(titleLabel, SBorderLayout.NORTH);
+    titledPanel.add(view.getPeer(), SBorderLayout.CENTER);
+    titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(0, 0,
+        2, 2)));
+    view.setPeer(titledPanel);
+  }
+
+  // ///////////////// //
+  // Composite Section //
+  // ///////////////// //
+
+  /**
    * Gets the actionFactory.
    * 
    * @return the actionFactory.
@@ -340,10 +381,6 @@ public class DefaultWingsViewFactory implements
   public IActionFactory<Action, SComponent> getActionFactory() {
     return actionFactory;
   }
-
-  // ///////////////// //
-  // Composite Section //
-  // ///////////////// //
 
   /**
    * Gets the iconFactory.
@@ -499,6 +536,10 @@ public class DefaultWingsViewFactory implements
     this.treeSelectionModelBinder = treeSelectionModelBinder;
   }
 
+  // ////////////////// //
+  // Collection Section //
+  // ////////////////// //
+
   /**
    * Creates a date field.
    * 
@@ -509,10 +550,6 @@ public class DefaultWingsViewFactory implements
     dateField.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return dateField;
   }
-
-  // ////////////////// //
-  // Collection Section //
-  // ////////////////// //
 
   /**
    * Creates an action field.
@@ -586,6 +623,20 @@ public class DefaultWingsViewFactory implements
   }
 
   /**
+   * Creates an internal frame.
+   * 
+   * @return the created panel.
+   */
+  protected SInternalFrame createSInternalFrame() {
+    SInternalFrame iFrame = new SInternalFrame();
+    iFrame.setPreferredSize(SDimension.FULLAREA);
+    iFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
+    iFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
+    iFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
+    return iFrame;
+  }
+
+  /**
    * Creates a label.
    * 
    * @return the created label.
@@ -626,20 +677,6 @@ public class DefaultWingsViewFactory implements
     panel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     panel.setVerticalAlignment(SConstants.TOP_ALIGN);
     return panel;
-  }
-
-  /**
-   * Creates an internal frame.
-   * 
-   * @return the created panel.
-   */
-  protected SInternalFrame createSInternalFrame() {
-    SInternalFrame iFrame = new SInternalFrame();
-    iFrame.setPreferredSize(SDimension.FULLAREA);
-    iFrame.getContentPane().setPreferredSize(SDimension.FULLAREA);
-    iFrame.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    iFrame.setVerticalAlignment(SConstants.TOP_ALIGN);
-    return iFrame;
   }
 
   /**
@@ -822,43 +859,6 @@ public class DefaultWingsViewFactory implements
       default:
         break;
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void decorateWithTitle(IView<SComponent> view, Locale locale) {
-    // SInternalFrame iFrame = createSInternalFrame();
-    // iFrame.setTitle(view.getDescriptor().getI18nName(
-    // getTranslationProvider(), locale));
-    // iFrame.setMaximizable(false);
-    // iFrame.setClosable(false);
-    // iFrame.setIconifyable(true);
-    // iFrame.setIcon(iconFactory.getIcon(view.getDescriptor()
-    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    // iFrame.getContentPane().setLayout(new SBorderLayout());
-    // iFrame.getContentPane().add(view.getPeer(), SBorderLayout.CENTER);
-    // iFrame.setPreferredSize(new SDimension(SDimension.AUTO,
-    // WingsUtil.FULL_DIM_PERCENT));
-    // view.setPeer(iFrame);
-
-    // view.getPeer().setBorder(new
-    // STitledBorder(view.getDescriptor().getI18nName(
-    // getTranslationProvider(), locale)));
-
-    SPanel titledPanel = createSPanel(new SBorderLayout());
-    SLabel titleLabel = createSLabel();
-    titleLabel.setIcon(iconFactory.getIcon(view.getDescriptor()
-        .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    titleLabel.setText(view.getDescriptor().getI18nName(
-        getTranslationProvider(), locale));
-    titleLabel.setHorizontalAlignment(SConstants.LEFT_ALIGN);
-    titleLabel.setBorder(new SEmptyBorder(new Insets(2, 2, 6, 2)));
-    titledPanel.add(titleLabel, SBorderLayout.NORTH);
-    titledPanel.add(view.getPeer(), SBorderLayout.CENTER);
-    titledPanel.setBorder(new SLineBorder(Color.LIGHT_GRAY, 2, new Insets(0, 0,
-        2, 2)));
-    view.setPeer(titledPanel);
   }
 
   /**

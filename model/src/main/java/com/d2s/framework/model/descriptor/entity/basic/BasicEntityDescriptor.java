@@ -95,6 +95,13 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
   /**
    * {@inheritDoc}
    */
+  public boolean isComputed() {
+    return false;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public boolean isEntity() {
     return true;
   }
@@ -116,12 +123,5 @@ public class BasicEntityDescriptor extends AbstractComponentDescriptor<IEntity> 
    */
   public void setPurelyAbstract(boolean purelyAbstract) {
     this.purelyAbstract = purelyAbstract;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isComputed() {
-    return false;
   }
 }

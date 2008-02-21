@@ -26,6 +26,17 @@ public class BasicBinaryPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BasicBinaryPropertyDescriptor clone() {
+    BasicBinaryPropertyDescriptor clonedDescriptor = (BasicBinaryPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Map<String, List<String>> getFileFilter() {
     if (fileFilter != null) {
       return fileFilter;
@@ -83,16 +94,5 @@ public class BasicBinaryPropertyDescriptor extends
    */
   public void setMaxLength(Integer maxLength) {
     this.maxLength = maxLength;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicBinaryPropertyDescriptor clone() {
-    BasicBinaryPropertyDescriptor clonedDescriptor = (BasicBinaryPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

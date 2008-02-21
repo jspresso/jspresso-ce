@@ -22,8 +22,8 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class BeanCollectionModule extends Module {
 
-  private IViewDescriptor              elementViewDescriptor;
   private IComponentDescriptor<Object> elementComponentDescriptor;
+  private IViewDescriptor              elementViewDescriptor;
   private Collection<?>                moduleObjects;
 
   /**
@@ -44,6 +44,15 @@ public class BeanCollectionModule extends Module {
     // return new EqualsBuilder().append(getModuleObjects(),
     // rhs.getModuleObjects()).isEquals();
     return ObjectUtils.equals(getName(), rhs.getName());
+  }
+
+  /**
+   * Gets the elementComponentDescriptor.
+   * 
+   * @return the elementComponentDescriptor.
+   */
+  public IComponentDescriptor<Object> getElementComponentDescriptor() {
+    return elementComponentDescriptor;
   }
 
   /**
@@ -75,6 +84,17 @@ public class BeanCollectionModule extends Module {
   }
 
   /**
+   * Sets the elementComponentDescriptor.
+   * 
+   * @param elementComponentDescriptor
+   *            the elementComponentDescriptor to set.
+   */
+  public void setElementComponentDescriptor(
+      IComponentDescriptor<Object> elementComponentDescriptor) {
+    this.elementComponentDescriptor = elementComponentDescriptor;
+  }
+
+  /**
    * Sets the elementViewDescriptor.
    * 
    * @param elementViewDescriptor
@@ -97,26 +117,5 @@ public class BeanCollectionModule extends Module {
     Object oldValue = getModuleObjects();
     this.moduleObjects = moduleObjects;
     firePropertyChange("moduleObjects", oldValue, getModuleObjects());
-  }
-
-  
-  /**
-   * Gets the elementComponentDescriptor.
-   * 
-   * @return the elementComponentDescriptor.
-   */
-  public IComponentDescriptor<Object> getElementComponentDescriptor() {
-    return elementComponentDescriptor;
-  }
-
-  
-  /**
-   * Sets the elementComponentDescriptor.
-   * 
-   * @param elementComponentDescriptor the elementComponentDescriptor to set.
-   */
-  public void setElementComponentDescriptor(
-      IComponentDescriptor<Object> elementComponentDescriptor) {
-    this.elementComponentDescriptor = elementComponentDescriptor;
   }
 }

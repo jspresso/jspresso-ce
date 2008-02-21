@@ -30,8 +30,8 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
 public interface IBackendController extends IController {
 
   /**
-   * Checks authorization for workspace access. It shoud throw a SecurityException
-   * whenever access should not be granted.
+   * Checks authorization for workspace access. It shoud throw a
+   * SecurityException whenever access should not be granted.
    * 
    * @param workspaceName
    *            the id of the workspace access to check.
@@ -88,14 +88,22 @@ public interface IBackendController extends IController {
   IModelConnectorFactory getMapConnectorFactory();
 
   /**
-   * Given a workspace identifier, this method returns the composite connector used
-   * as model connector for the associated workspace.
+   * Given a workspace identifier, this method returns the composite connector
+   * used as model connector for the associated workspace.
    * 
    * @param workspaceName
    *            the workspace identifier.
    * @return the associated workspace connector.
    */
   IValueConnector getWorkspaceConnector(String workspaceName);
+
+  /**
+   * Installs the passed in workspaces into the backend controller.
+   * 
+   * @param workspaces
+   *            the workspaces to install.
+   */
+  void installWorkspaces(Map<String, Workspace> workspaces);
 
   /**
    * Acts as a clipboard for retrieving previously stored component references
@@ -125,12 +133,4 @@ public interface IBackendController extends IController {
    */
   void storeComponents(
       ComponentTransferStructure<? extends IComponent> components);
-
-  /**
-   * Installs the passed in workspaces into the backend controller.
-   * 
-   * @param workspaces
-   *            the workspaces to install.
-   */
-  void installWorkspaces(Map<String, Workspace> workspaces);
 }

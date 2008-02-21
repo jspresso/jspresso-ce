@@ -15,15 +15,6 @@ package com.d2s.framework.model.descriptor;
 public interface IStringPropertyDescriptor extends IScalarPropertyDescriptor {
 
   /**
-   * Gets whether the underlying string property should be made uppercase
-   * automatically.
-   * 
-   * @return true if the underlying string property should be made uppercase
-   *         automatically.
-   */
-  boolean isUpperCase();
-
-  /**
    * Gets the maximum length of the underlying string property.
    * 
    * @return the string property maximum length.
@@ -47,4 +38,13 @@ public interface IStringPropertyDescriptor extends IScalarPropertyDescriptor {
    *         conform to.
    */
   String getRegexpPatternSample();
+
+  /**
+   * Gets whether the underlying string property should be made uppercase
+   * automatically.
+   * 
+   * @return true if the underlying string property should be made uppercase
+   *         automatically.
+   */
+  boolean isUpperCase();
 }

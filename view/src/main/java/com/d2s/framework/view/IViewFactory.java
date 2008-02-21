@@ -47,6 +47,16 @@ public interface IViewFactory<E, F, G> {
       IActionHandler actionHandler, Locale locale);
 
   /**
+   * Decorates the view with a title.
+   * 
+   * @param view
+   *            the view to decorate.
+   * @param locale
+   *            the locale.
+   */
+  void decorateWithTitle(IView<E> view, Locale locale);
+
+  /**
    * Gets the action factory.
    * 
    * @return the action factory.
@@ -59,15 +69,5 @@ public interface IViewFactory<E, F, G> {
    * @return the icon factory.
    */
   IIconFactory<F> getIconFactory();
-
-  /**
-   * Decorates the view with a title.
-   * 
-   * @param view
-   *            the view to decorate.
-   * @param locale
-   *            the locale.
-   */
-  void decorateWithTitle(IView<E> view, Locale locale);
 
 }

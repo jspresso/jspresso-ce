@@ -22,6 +22,17 @@ public class TypeEnumerationPropertyDescriptor extends
     BasicEnumerationPropertyDescriptor {
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public TypeEnumerationPropertyDescriptor clone() {
+    TypeEnumerationPropertyDescriptor clonedDescriptor = (TypeEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
    * Sets the componentDescriptorList property.
    * 
    * @param componentDescriptorList
@@ -35,16 +46,5 @@ public class TypeEnumerationPropertyDescriptor extends
           componentDescriptor.getIconImageURL());
     }
     setValuesAndIconImageUrls(componentDescriptorImages);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public TypeEnumerationPropertyDescriptor clone() {
-    TypeEnumerationPropertyDescriptor clonedDescriptor = (TypeEnumerationPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

@@ -31,8 +31,7 @@ public class BeanCollectionModuleDescriptor extends ModuleDescriptor {
    */
   public BeanCollectionModuleDescriptor(
       IComponentDescriptor<Object> moduleObjectReferencedDescriptor) {
-    this(BeanCollectionModule.class.getName(),
-        moduleObjectReferencedDescriptor);
+    this(BeanCollectionModule.class.getName(), moduleObjectReferencedDescriptor);
   }
 
   /**

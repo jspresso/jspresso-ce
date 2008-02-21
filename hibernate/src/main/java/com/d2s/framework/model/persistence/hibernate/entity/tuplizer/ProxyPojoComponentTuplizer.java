@@ -23,9 +23,9 @@ import com.d2s.framework.model.component.IComponentFactory;
  * @author Vincent Vandenschrick
  */
 public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
-  
-  private static final long serialVersionUID = 519439258744322320L;
+
   private static IComponentFactory inlineComponentFactory;
+  private static final long        serialVersionUID = 519439258744322320L;
 
   /**
    * Constructs a new <code>ProxyPojoComponentTuplizer</code> instance.
@@ -38,6 +38,17 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
   }
 
   /**
+   * Sets the inlineComponentFactory.
+   * 
+   * @param inlineComponentFactory
+   *            the inlineComponentFactory to set.
+   */
+  public static void setInlineComponentFactory(
+      IComponentFactory inlineComponentFactory) {
+    ProxyPojoComponentTuplizer.inlineComponentFactory = inlineComponentFactory;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -47,17 +58,25 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
 
   private static class ProxyInstantiator implements Instantiator {
 
-    private static final long serialVersionUID = 8746568183869210457L;
-    private final Class<? extends IComponent>          componentContract;
+    private static final long                 serialVersionUID = 8746568183869210457L;
+    private final Class<? extends IComponent> componentContract;
 
     /**
      * Constructs a new <code>ProxyInstantiator</code> instance.
      * 
-     * @param component the hibernate component to build this instanciator for.
+     * @param component
+     *            the hibernate component to build this instanciator for.
      */
     @SuppressWarnings("unchecked")
     public ProxyInstantiator(Component component) {
       componentContract = component.getComponentClass();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object instantiate() {
+      return inlineComponentFactory.createComponentInstance(componentContract);
     }
 
     /**
@@ -72,26 +91,8 @@ public class ProxyPojoComponentTuplizer extends PojoComponentTuplizer {
     /**
      * {@inheritDoc}
      */
-    public Object instantiate() {
-      return inlineComponentFactory.createComponentInstance(componentContract);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public boolean isInstance(Object object) {
       return componentContract.isInstance(object);
     }
-  }
-
-  
-  /**
-   * Sets the inlineComponentFactory.
-   * 
-   * @param inlineComponentFactory the inlineComponentFactory to set.
-   */
-  public static void setInlineComponentFactory(
-      IComponentFactory inlineComponentFactory) {
-    ProxyPojoComponentTuplizer.inlineComponentFactory = inlineComponentFactory;
   }
 }

@@ -24,6 +24,17 @@ public class BasicEnumerationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BasicEnumerationPropertyDescriptor clone() {
+    BasicEnumerationPropertyDescriptor clonedDescriptor = (BasicEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public List<String> getEnumerationValues() {
     return new ArrayList<String>(valuesAndIconImageUrls.keySet());
   }
@@ -54,16 +65,5 @@ public class BasicEnumerationPropertyDescriptor extends
   public void setValuesAndIconImageUrls(
       Map<String, String> valuesAndIconImageUrls) {
     this.valuesAndIconImageUrls = valuesAndIconImageUrls;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicEnumerationPropertyDescriptor clone() {
-    BasicEnumerationPropertyDescriptor clonedDescriptor = (BasicEnumerationPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

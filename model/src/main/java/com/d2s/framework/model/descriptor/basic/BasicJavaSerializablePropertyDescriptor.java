@@ -24,18 +24,18 @@ public class BasicJavaSerializablePropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public Class<?> getModelType() {
-    return Serializable.class;
+  public BasicJavaSerializablePropertyDescriptor clone() {
+    BasicJavaSerializablePropertyDescriptor clonedDescriptor = (BasicJavaSerializablePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
   }
 
   /**
    * {@inheritDoc}
    */
   @Override
-  public BasicJavaSerializablePropertyDescriptor clone() {
-    BasicJavaSerializablePropertyDescriptor clonedDescriptor = (BasicJavaSerializablePropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
+  public Class<?> getModelType() {
+    return Serializable.class;
   }
 }

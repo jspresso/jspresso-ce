@@ -105,6 +105,13 @@ public interface IValueConnector extends IConnector,
   IValueConnector clone(String newConnectorId);
 
   /**
+   * Computes the full connector path following the parent / child hierarchy.
+   * 
+   * @return the full connector path following the parent / child hierarchy.
+   */
+  String getConnectorPath();
+
+  /**
    * Gets the value of the peer object.
    * 
    * @return The peer value
@@ -218,11 +225,4 @@ public interface IValueConnector extends IConnector,
    *            the parent connector.
    */
   void setParentConnector(ICompositeValueConnector parent);
-
-  /**
-   * Computes the full connector path following the parent / child hierarchy.
-   * 
-   * @return the full connector path following the parent / child hierarchy.
-   */
-  String getConnectorPath();
 }

@@ -20,18 +20,18 @@ public class BasicColorPropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
-  public Class<?> getModelType() {
-    return String.class;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public BasicColorPropertyDescriptor clone() {
     BasicColorPropertyDescriptor clonedDescriptor = (BasicColorPropertyDescriptor) super
         .clone();
 
     return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<?> getModelType() {
+    return String.class;
   }
 }

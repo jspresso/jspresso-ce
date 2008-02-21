@@ -38,7 +38,7 @@ public class LovAction extends ModalDialogAction {
 
   private boolean                               autoquery;
   private IDisplayableAction                    cancelAction;
-  private CreateQueryComponentAction               createQueryComponentAction;
+  private CreateQueryComponentAction            createQueryComponentAction;
   private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
   private IDisplayableAction                    findAction;
   private ILovViewDescriptorFactory             lovViewDescriptorFactory;

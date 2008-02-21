@@ -27,6 +27,5 @@ public interface IComponentCollectionFactory<E> {
    *            collection.
    * @return an empty instance of a concrete collection.
    */
-  Collection<E> createEntityCollection(
-      Class<?> collectionInterface);
+  Collection<E> createEntityCollection(Class<?> collectionInterface);
 }

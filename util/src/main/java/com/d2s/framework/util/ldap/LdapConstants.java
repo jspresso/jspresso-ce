@@ -30,6 +30,11 @@ public final class LdapConstants {
   public static final String MAIL_ATTRIBUTE                  = "mail";
 
   /**
+   * <code>ORGANISATIONAL_UNIT_OBJECTCLASS</code>.
+   */
+  public static final String ORGANISATIONAL_UNIT_OBJECTCLASS = "organizationalUnit";
+
+  /**
    * <code>PASSWORD_ATTIBUTE</code>.
    */
   public static final String PASSWORD_ATTIBUTE               = "userPassword";
@@ -43,11 +48,6 @@ public final class LdapConstants {
    * <code>TOP_OBJECTCLASS</code>.
    */
   public static final String TOP_OBJECTCLASS                 = "top";
-
-  /**
-   * <code>ORGANISATIONAL_UNIT_OBJECTCLASS</code>.
-   */
-  public static final String ORGANISATIONAL_UNIT_OBJECTCLASS = "organizationalUnit";
 
   private LdapConstants() {
     // Empty constructor for utility class

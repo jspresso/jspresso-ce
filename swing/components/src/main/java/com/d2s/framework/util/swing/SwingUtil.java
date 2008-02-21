@@ -299,10 +299,11 @@ public final class SwingUtil {
             public TabOverviewKind getOverviewKind(@SuppressWarnings("unused")
             JTabbedPane tabPane) {
               return TabOverviewKind.ROUND_CAROUSEL;
-              //return TabOverviewKind.MENU_CAROUSEL;
+              // return TabOverviewKind.MENU_CAROUSEL;
             }
           });
-      UIManager.put(LafWidget.COMPONENT_PREVIEW_PAINTER, new DefaultPreviewPainter());
+      UIManager.put(LafWidget.COMPONENT_PREVIEW_PAINTER,
+          new DefaultPreviewPainter());
       UIManager.put(LafWidget.TEXT_EDIT_CONTEXT_MENU, Boolean.TRUE);
       UIManager.put(LafWidget.COMBO_BOX_NO_AUTOCOMPLETION, Boolean.TRUE);
     } catch (Throwable ignored) {

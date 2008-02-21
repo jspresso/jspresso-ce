@@ -38,8 +38,7 @@ public class ModuleRestartAction<E, F, G> extends
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    Module module = (Module) getModuleConnector(context)
-        .getConnectorValue();
+    Module module = (Module) getModuleConnector(context).getConnectorValue();
     if (module instanceof BeanCollectionModule
         && module.getSubModules() != null) {
       List<Module> beanModulesToRemove = new ArrayList<Module>();

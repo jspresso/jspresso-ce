@@ -65,10 +65,10 @@ public class DefaultWingsController extends
   private SPanel      cardPanel;
 
   private SFrame      controllerFrame;
-  private Set<String> workspaceViews;
+  private String      frameHeight = "768px";
 
   private String      frameWidth  = "95%";
-  private String      frameHeight = "768px";
+  private Set<String> workspaceViews;
 
   /**
    * {@inheritDoc}
@@ -110,6 +110,26 @@ public class DefaultWingsController extends
       dialog.setVisible(true);
     }
     return true;
+  }
+
+  /**
+   * Sets the frameHeight.
+   * 
+   * @param frameHeight
+   *            the frameHeight to set.
+   */
+  public void setFrameHeight(String frameHeight) {
+    this.frameHeight = frameHeight;
+  }
+
+  /**
+   * Sets the frameWidth.
+   * 
+   * @param frameWidth
+   *            the frameWidth to set.
+   */
+  public void setFrameWidth(String frameWidth) {
+    this.frameWidth = frameWidth;
   }
 
   /**
@@ -163,8 +183,9 @@ public class DefaultWingsController extends
       IValueConnector workspaceConnector = getBackendController()
           .getWorkspaceConnector(workspaceName);
       IView<SComponent> workspaceView = createWorkspaceView(workspaceName,
-          workspaceViewDescriptor, (Workspace) workspaceConnector.getConnectorValue());
-      //getViewFactory().decorateWithTitle(moduleView, getLocale());
+          workspaceViewDescriptor, (Workspace) workspaceConnector
+              .getConnectorValue());
+      // getViewFactory().decorateWithTitle(moduleView, getLocale());
       workspaceViews.add(workspaceName);
       cardPanel.add(workspaceView.getPeer(), workspaceName);
       getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
@@ -203,21 +224,6 @@ public class DefaultWingsController extends
     return createMenus(getActions());
   }
 
-  private List<SMenu> createHelpActionMenus() {
-    return createMenus(getHelpActions());
-  }
-
-  private List<SMenu> createMenus(ActionMap actionMap) {
-    List<SMenu> menus = new ArrayList<SMenu>();
-    if (actionMap != null) {
-      for (ActionList actionList : actionMap.getActionLists()) {
-        SMenu menu = createActionMenu(actionList);
-        menus.add(menu);
-      }
-    }
-    return menus;
-  }
-
   private SMenuBar createApplicationMenuBar() {
     SMenuBar applicationMenuBar = new SMenuBar();
     applicationMenuBar.setBorder(new SLineBorder(Color.LIGHT_GRAY));
@@ -250,11 +256,26 @@ public class DefaultWingsController extends
     return frame;
   }
 
+  private List<SMenu> createHelpActionMenus() {
+    return createMenus(getHelpActions());
+  }
+
+  private List<SMenu> createMenus(ActionMap actionMap) {
+    List<SMenu> menus = new ArrayList<SMenu>();
+    if (actionMap != null) {
+      for (ActionList actionList : actionMap.getActionLists()) {
+        SMenu menu = createActionMenu(actionList);
+        menus.add(menu);
+      }
+    }
+    return menus;
+  }
+
   private SMenu createWorkspacesMenu() {
     SMenu workspacesMenu = new SMenu(getTranslationProvider().getTranslation(
         "workspaces", getLocale()));
-    workspacesMenu.setIcon(getIconFactory().getIcon(getWorkspacesMenuIconImageUrl(),
-        IIconFactory.SMALL_ICON_SIZE));
+    workspacesMenu.setIcon(getIconFactory().getIcon(
+        getWorkspacesMenuIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
     for (String workspaceName : getWorkspaceNames()) {
       IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
@@ -289,45 +310,6 @@ public class DefaultWingsController extends
     }
   }
 
-  private final class WorkspaceSelectionAction extends AbstractAction {
-
-    private static final long serialVersionUID = 3469745193806038352L;
-    private String            workspaceName;
-
-    /**
-     * Constructs a new <code>WorkspaceSelectionAction</code> instance.
-     * 
-     * @param workspaceName
-     * @param workspaceViewDescriptor
-     */
-    public WorkspaceSelectionAction(String workspaceName,
-        IViewDescriptor workspaceViewDescriptor) {
-      this.workspaceName = workspaceName;
-      putValue(Action.NAME, workspaceViewDescriptor.getI18nName(
-          getTranslationProvider(), getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, workspaceViewDescriptor
-          .getI18nDescription(getTranslationProvider(), getLocale())
-          + IViewFactory.TOOLTIP_ELLIPSIS);
-      putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          workspaceViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    }
-
-    /**
-     * displays the selected workspace.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
-      try {
-        getBackendController().checkWorkspaceAccess(workspaceName);
-        displayWorkspace(workspaceName);
-      } catch (SecurityException ex) {
-        handleException(ex, null);
-      }
-    }
-  }
-
   private final class QuitAction extends AbstractAction {
 
     private static final long serialVersionUID = -5797994634301619085L;
@@ -353,23 +335,43 @@ public class DefaultWingsController extends
     }
   }
 
-  /**
-   * Sets the frameWidth.
-   * 
-   * @param frameWidth
-   *            the frameWidth to set.
-   */
-  public void setFrameWidth(String frameWidth) {
-    this.frameWidth = frameWidth;
-  }
+  private final class WorkspaceSelectionAction extends AbstractAction {
 
-  /**
-   * Sets the frameHeight.
-   * 
-   * @param frameHeight
-   *            the frameHeight to set.
-   */
-  public void setFrameHeight(String frameHeight) {
-    this.frameHeight = frameHeight;
+    private static final long serialVersionUID = 3469745193806038352L;
+    private String            workspaceName;
+
+    /**
+     * Constructs a new <code>WorkspaceSelectionAction</code> instance.
+     * 
+     * @param workspaceName
+     * @param workspaceViewDescriptor
+     */
+    public WorkspaceSelectionAction(String workspaceName,
+        IViewDescriptor workspaceViewDescriptor) {
+      this.workspaceName = workspaceName;
+      putValue(Action.NAME, workspaceViewDescriptor.getI18nName(
+          getTranslationProvider(), getLocale()));
+      putValue(Action.SHORT_DESCRIPTION, workspaceViewDescriptor
+          .getI18nDescription(getTranslationProvider(), getLocale())
+          + IViewFactory.TOOLTIP_ELLIPSIS);
+      putValue(Action.SMALL_ICON, getIconFactory().getIcon(
+          workspaceViewDescriptor.getIconImageURL(),
+          IIconFactory.TINY_ICON_SIZE));
+    }
+
+    /**
+     * displays the selected workspace.
+     * <p>
+     * {@inheritDoc}
+     */
+    public void actionPerformed(@SuppressWarnings("unused")
+    ActionEvent e) {
+      try {
+        getBackendController().checkWorkspaceAccess(workspaceName);
+        displayWorkspace(workspaceName);
+      } catch (SecurityException ex) {
+        handleException(ex, null);
+      }
+    }
   }
 }

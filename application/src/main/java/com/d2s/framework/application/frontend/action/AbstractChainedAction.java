@@ -10,8 +10,7 @@ import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
 
 /**
- * An simple frontend action which holds a reference on a chained next
- * action.
+ * An simple frontend action which holds a reference on a chained next action.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>

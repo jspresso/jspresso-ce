@@ -53,7 +53,8 @@ public abstract class AbstractPropertyChangeCapable implements
     try {
       AbstractPropertyChangeCapable clonedBean = (AbstractPropertyChangeCapable) super
           .clone();
-      clonedBean.propertyChangeSupport = new SinglePropertyChangeSupport(clonedBean);
+      clonedBean.propertyChangeSupport = new SinglePropertyChangeSupport(
+          clonedBean);
       return clonedBean;
     } catch (CloneNotSupportedException ex) {
       throw new NestedRuntimeException(ex);

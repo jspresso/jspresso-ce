@@ -34,8 +34,8 @@ public class BasicQueryComponentDescriptor<E> implements
 
   private IComponentDescriptor<E>              componentDescriptor;
   private BasicCollectionPropertyDescriptor<E> queriedComponentsPropertyDescriptor;
-  private Map<String, IPropertyDescriptor>     queryPropertyDescriptors;
   private Class<? extends E>                   queryContract;
+  private Map<String, IPropertyDescriptor>     queryPropertyDescriptors;
 
   /**
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
@@ -224,6 +224,13 @@ public class BasicQueryComponentDescriptor<E> implements
     return componentDescriptor.isPurelyAbstract();
   }
 
+  private IPropertyDescriptor clonePropertyDescriptorForQuery(
+      IPropertyDescriptor propertyDescriptor) {
+    IPropertyDescriptor queryPropertyDescriptor = propertyDescriptor.clone();
+    queryPropertyDescriptor.unleashForFilter();
+    return queryPropertyDescriptor;
+  }
+
   /**
    * Gets the queriedComponentsPropertyDescriptor.
    * 
@@ -260,13 +267,6 @@ public class BasicQueryComponentDescriptor<E> implements
             queryPropertyDescriptor);
       }
     }
-    return queryPropertyDescriptor;
-  }
-
-  private IPropertyDescriptor clonePropertyDescriptorForQuery(
-      IPropertyDescriptor propertyDescriptor) {
-    IPropertyDescriptor queryPropertyDescriptor = propertyDescriptor.clone();
-    queryPropertyDescriptor.unleashForFilter();
     return queryPropertyDescriptor;
   }
 }

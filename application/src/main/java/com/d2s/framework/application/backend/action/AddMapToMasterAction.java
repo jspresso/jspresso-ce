@@ -25,16 +25,6 @@ import com.d2s.framework.util.collection.ObjectEqualityMap;
 public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
 
   /**
-   * Returns the map accessor factory.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected IAccessorFactory getBeanAccessorFactory(Map<String, Object> context) {
-    return getController(context).getMapAccessorFactory();
-  }
-
-  /**
    * Gets the new map component to add.
    * 
    * @param context
@@ -60,5 +50,15 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
       }
     }
     return Collections.singletonList(newMap);
+  }
+
+  /**
+   * Returns the map accessor factory.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  protected IAccessorFactory getBeanAccessorFactory(Map<String, Object> context) {
+    return getController(context).getMapAccessorFactory();
   }
 }

@@ -64,11 +64,11 @@ public abstract class AbstractComponentInvocationHandler implements
 
   private IAccessorFactory                                                             accessorFactory;
   private PropertyChangeSupport                                                        changeSupport;
-  private IComponentFactory                                                            inlineComponentFactory;
   private IComponentCollectionFactory<IComponent>                                      collectionFactory;
   private IComponentDescriptor<? extends IComponent>                                   componentDescriptor;
   private Map<Class<IComponentExtension<IComponent>>, IComponentExtension<IComponent>> componentExtensions;
   private IComponentExtensionFactory                                                   extensionFactory;
+  private IComponentFactory                                                            inlineComponentFactory;
 
   private Set<String>                                                                  modifierMonitors;
 
@@ -358,20 +358,6 @@ public abstract class AbstractComponentInvocationHandler implements
   }
 
   /**
-   * Gets wether this reference descriptor points to an inline component.
-   * 
-   * @param propertyDescriptor
-   *            the reference descriptor to test.
-   * @return true if this reference descriptor points to an inline component.
-   */
-  protected boolean isInlineComponentReference(
-      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
-    return !IEntity.class.isAssignableFrom(propertyDescriptor
-        .getReferencedDescriptor().getComponentContract())
-        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract();
-  }
-
-  /**
    * Gets a reference property value.
    * 
    * @param proxy
@@ -457,6 +443,20 @@ public abstract class AbstractComponentInvocationHandler implements
   protected boolean isInitialized(@SuppressWarnings("unused")
   Object objectOrProxy) {
     return true;
+  }
+
+  /**
+   * Gets wether this reference descriptor points to an inline component.
+   * 
+   * @param propertyDescriptor
+   *            the reference descriptor to test.
+   * @return true if this reference descriptor points to an inline component.
+   */
+  protected boolean isInlineComponentReference(
+      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+    return !IEntity.class.isAssignableFrom(propertyDescriptor
+        .getReferencedDescriptor().getComponentContract())
+        && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract();
   }
 
   /**

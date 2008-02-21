@@ -34,6 +34,13 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
   void checkValueIntegrity(Object component, Object propertyValue);
 
   /**
+   * Clones this descriptor.
+   * 
+   * @return the descriptor's clone.
+   */
+  IPropertyDescriptor clone();
+
+  /**
    * Gets the <code>Class</code> of the delegates used to compute the values
    * of the property or <code>null</code> if this property is not a derived
    * one.
@@ -85,6 +92,13 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
   Collection<IGate> getWritabilityGates();
 
   /**
+   * Wether the underlying property is mandatory.
+   * 
+   * @return true if mandatory
+   */
+  boolean isMandatory();
+
+  /**
    * Wether the underlying property has a modifier. This is only usefull
    * whenever the property is computed by delegation. In this case the delegate
    * should be analyzed to check whether it has a modifier on the property.
@@ -92,13 +106,6 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
    * @return true if the property has a modifier.
    */
   boolean isModifiable();
-
-  /**
-   * Wether the underlying property is mandatory.
-   * 
-   * @return true if mandatory
-   */
-  boolean isMandatory();
 
   /**
    * Gets wether this descriptor is an overload of a parent one.
@@ -144,13 +151,6 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
    *            the property new value.
    */
   void preprocessSetter(Object component, Object oldValue, Object newValue);
-
-  /**
-   * Clones this descriptor.
-   * 
-   * @return the descriptor's clone.
-   */
-  IPropertyDescriptor clone();
 
   /**
    * transform this property descriptor to relieve its constraints for query

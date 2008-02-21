@@ -39,6 +39,22 @@ public class ResourceProviderServlet extends HttpServlet {
   private static final long  serialVersionUID             = 5253634459280974738L;
 
   /**
+   * Computes the url where the resource is available for download. .
+   * 
+   * @param request
+   *            the incomming HTTP request.
+   * @param id
+   *            the resource id.
+   * @return the rsource url.
+   */
+  public static String computeUrl(HttpServletRequest request, String id) {
+    String baseUrl = request.getScheme() + "://" + request.getServerName()
+        + ":" + request.getServerPort() + request.getContextPath()
+        + DOWNLOAD_SERVLET_URL_PATTERN;
+    return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
+  }
+
+  /**
    * {@inheritDoc}
    */
   @Override
@@ -83,20 +99,6 @@ public class ResourceProviderServlet extends HttpServlet {
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
     doGet(request, response);
-  }
-
-  /**
-   * Computes the url where the resource is available for download. .
-   * 
-   * @param request the incomming HTTP request.
-   * @param id the resource id.
-   * @return the rsource url.
-   */
-  public static String computeUrl(HttpServletRequest request, String id) {
-    String baseUrl = request.getScheme() + "://" + request.getServerName()
-        + ":" + request.getServerPort() + request.getContextPath()
-        + DOWNLOAD_SERVLET_URL_PATTERN;
-    return baseUrl + "?" + ResourceProviderServlet.ID_PARAMETER + "=" + id;
   }
 
 }

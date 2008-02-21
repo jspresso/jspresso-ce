@@ -204,7 +204,8 @@ public class DefaultUlcController extends
       IValueConnector workspaceConnector = getBackendController()
           .getWorkspaceConnector(workspaceName);
       IView<ULCComponent> workspaceView = createWorkspaceView(workspaceName,
-          workspaceViewDescriptor, (Workspace) workspaceConnector.getConnectorValue());
+          workspaceViewDescriptor, (Workspace) workspaceConnector
+              .getConnectorValue());
       workspaceInternalFrame = createULCExtendedInternalFrame(workspaceView);
       workspaceInternalFrame
           .addExtendedInternalFrameListener(new WorkspaceInternalFrameListener(
@@ -257,22 +258,6 @@ public class DefaultUlcController extends
     return createMenus(sourceComponent, getActions());
   }
 
-  private List<ULCMenu> createHelpActionMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, getHelpActions());
-  }
-
-  private List<ULCMenu> createMenus(ULCComponent sourceComponent,
-      ActionMap actionMap) {
-    List<ULCMenu> menus = new ArrayList<ULCMenu>();
-    if (actionMap != null) {
-      for (ActionList actionList : actionMap.getActionLists()) {
-        ULCMenu menu = createActionMenu(actionList, sourceComponent);
-        menus.add(menu);
-      }
-    }
-    return menus;
-  }
-
   private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {
     ULCMenuBar applicationMenuBar = new ULCMenuBar();
     applicationMenuBar.add(createWorkspacesMenu());
@@ -311,21 +296,20 @@ public class DefaultUlcController extends
     return frame;
   }
 
-  private ULCMenu createWorkspacesMenu() {
-    ULCMenu workspacesMenu = new ULCMenu(getTranslationProvider().getTranslation(
-        "workspaces", getLocale()));
-    workspacesMenu.setIcon(getIconFactory().getIcon(getWorkspacesMenuIconImageUrl(),
-        IIconFactory.SMALL_ICON_SIZE));
-    for (String workspaceName : getWorkspaceNames()) {
-      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
-          .getViewDescriptor();
-      ULCMenuItem workspaceMenuItem = new ULCMenuItem(new WorkspaceSelectionAction(
-          workspaceName, workspaceViewDescriptor));
-      workspacesMenu.add(workspaceMenuItem);
+  private List<ULCMenu> createHelpActionMenus(ULCComponent sourceComponent) {
+    return createMenus(sourceComponent, getHelpActions());
+  }
+
+  private List<ULCMenu> createMenus(ULCComponent sourceComponent,
+      ActionMap actionMap) {
+    List<ULCMenu> menus = new ArrayList<ULCMenu>();
+    if (actionMap != null) {
+      for (ActionList actionList : actionMap.getActionLists()) {
+        ULCMenu menu = createActionMenu(actionList, sourceComponent);
+        menus.add(menu);
+      }
     }
-    workspacesMenu.addSeparator();
-    workspacesMenu.add(new ULCMenuItem(new QuitAction()));
-    return workspacesMenu;
+    return menus;
   }
 
   /**
@@ -348,6 +332,23 @@ public class DefaultUlcController extends
     internalFrame.getContentPane().add(view.getPeer());
     internalFrame.setDefaultCloseOperation(IWindowConstants.HIDE_ON_CLOSE);
     return internalFrame;
+  }
+
+  private ULCMenu createWorkspacesMenu() {
+    ULCMenu workspacesMenu = new ULCMenu(getTranslationProvider()
+        .getTranslation("workspaces", getLocale()));
+    workspacesMenu.setIcon(getIconFactory().getIcon(
+        getWorkspacesMenuIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
+    for (String workspaceName : getWorkspaceNames()) {
+      IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
+          .getViewDescriptor();
+      ULCMenuItem workspaceMenuItem = new ULCMenuItem(
+          new WorkspaceSelectionAction(workspaceName, workspaceViewDescriptor));
+      workspacesMenu.add(workspaceMenuItem);
+    }
+    workspacesMenu.addSeparator();
+    workspacesMenu.add(new ULCMenuItem(new QuitAction()));
+    return workspacesMenu;
   }
 
   private void displayControllerFrame() {
@@ -460,6 +461,43 @@ public class DefaultUlcController extends
     }
   }
 
+  private final class QuitAction extends AbstractAction {
+
+    private static final long serialVersionUID = -1476651758085260422L;
+
+    /**
+     * Constructs a new <code>QuitAction</code> instance.
+     */
+    public QuitAction() {
+      putValue(com.ulcjava.base.application.IAction.NAME,
+          getTranslationProvider().getTranslation("quit.name", getLocale()));
+      putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
+          getTranslationProvider().getTranslation("quit.description",
+              getLocale()));
+    }
+
+    /**
+     * Quits the application.
+     * <p>
+     * {@inheritDoc}
+     */
+    public void actionPerformed(@SuppressWarnings("unused")
+    ActionEvent e) {
+      stop();
+    }
+  }
+
+  private class ThreadBlockingCallbackHandler implements CallbackHandler {
+
+    /**
+     * {@inheritDoc}
+     */
+    public void handle(Callback[] callbacks) {
+      loginCallbacks = callbacks;
+      waitForNotification();
+    }
+  }
+
   private final class WorkspaceInternalFrameListener implements
       IExtendedInternalFrameListener {
 
@@ -531,8 +569,9 @@ public class DefaultUlcController extends
     public WorkspaceSelectionAction(String workspaceName,
         IViewDescriptor workspaceViewDescriptor) {
       this.workspaceName = workspaceName;
-      putValue(com.ulcjava.base.application.IAction.NAME, workspaceViewDescriptor
-          .getI18nName(getTranslationProvider(), getLocale()));
+      putValue(com.ulcjava.base.application.IAction.NAME,
+          workspaceViewDescriptor.getI18nName(getTranslationProvider(),
+              getLocale()));
       putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
           workspaceViewDescriptor.getI18nDescription(getTranslationProvider(),
               getLocale())
@@ -555,43 +594,6 @@ public class DefaultUlcController extends
       } catch (SecurityException ex) {
         handleException(ex, null);
       }
-    }
-  }
-
-  private final class QuitAction extends AbstractAction {
-
-    private static final long serialVersionUID = -1476651758085260422L;
-
-    /**
-     * Constructs a new <code>QuitAction</code> instance.
-     */
-    public QuitAction() {
-      putValue(com.ulcjava.base.application.IAction.NAME,
-          getTranslationProvider().getTranslation("quit.name", getLocale()));
-      putValue(com.ulcjava.base.application.IAction.SHORT_DESCRIPTION,
-          getTranslationProvider().getTranslation("quit.description",
-              getLocale()));
-    }
-
-    /**
-     * Quits the application.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
-      stop();
-    }
-  }
-
-  private class ThreadBlockingCallbackHandler implements CallbackHandler {
-
-    /**
-     * {@inheritDoc}
-     */
-    public void handle(Callback[] callbacks) {
-      loginCallbacks = callbacks;
-      waitForNotification();
     }
   }
 }

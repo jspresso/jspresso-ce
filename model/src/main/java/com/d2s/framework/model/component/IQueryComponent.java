@@ -5,7 +5,6 @@ package com.d2s.framework.model.component;
 
 import java.util.List;
 
-
 /**
  * A simple adapter to wrap a component used as selection criteria and a list of
  * components. It only serve as a placeholder for the result of the query.

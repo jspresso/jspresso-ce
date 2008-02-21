@@ -20,6 +20,17 @@ public abstract class BasicScalarPropertyDescriptor extends
   private Object defaultValue;
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicScalarPropertyDescriptor clone() {
+    BasicScalarPropertyDescriptor clonedDescriptor = (BasicScalarPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
    * Gets the defaultValue.
    * 
    * @return the defaultValue.
@@ -44,16 +55,5 @@ public abstract class BasicScalarPropertyDescriptor extends
    */
   public void setDefaultValue(Object defaultValue) {
     this.defaultValue = defaultValue;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicScalarPropertyDescriptor clone() {
-    BasicScalarPropertyDescriptor clonedDescriptor = (BasicScalarPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

@@ -172,7 +172,8 @@ public class ModelRefPropertyConnector extends ModelPropertyConnector implements
   public IComponentDescriptorProvider<?> getModelDescriptor() {
     IComponentDescriptorProvider<?> registeredModelDescriptor = (IComponentDescriptorProvider<?>) super
         .getModelDescriptor();
-    if (getModel() instanceof IEntity && !(getModel() instanceof IQueryComponent)) {
+    if (getModel() instanceof IEntity
+        && !(getModel() instanceof IQueryComponent)) {
       Class<? extends IEntity> entityContract = ((IEntity) getModel())
           .getContract();
       if (!entityContract.equals(registeredModelDescriptor.getModelType())) {

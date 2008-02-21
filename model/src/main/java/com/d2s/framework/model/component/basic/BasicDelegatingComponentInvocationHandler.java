@@ -58,8 +58,8 @@ public class BasicDelegatingComponentInvocationHandler extends
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory) {
-    super(componentDescriptor, componentFactory, collectionFactory, accessorFactory,
-        extensionFactory);
+    super(componentDescriptor, componentFactory, collectionFactory,
+        accessorFactory, extensionFactory);
     this.delegate = delegate;
     this.componentFactory = componentFactory;
   }

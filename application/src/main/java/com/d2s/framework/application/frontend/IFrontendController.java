@@ -33,6 +33,13 @@ public interface IFrontendController<E, F, G> extends IController,
     IIconDescriptor, IActionable {
 
   /**
+   * Retrieves a map of help action lists to be presented on this view.
+   * 
+   * @return the map of action lists handled by this view.
+   */
+  ActionMap getHelpActions();
+
+  /**
    * Gets the mvc binder used by this controller.
    * 
    * @return the mvc binder used by this controller.
@@ -52,12 +59,6 @@ public interface IFrontendController<E, F, G> extends IController,
    * @return the view factory used by this controller.
    */
   IViewFactory<E, F, G> getViewFactory();
-
-  /**
-   * Retrieves a map of help action lists to be presented on this view. 
-   * @return the map of action lists handled by this view.
-   */
-  ActionMap getHelpActions();
 
   /**
    * Starts the controller. This method performs any necessary initializations

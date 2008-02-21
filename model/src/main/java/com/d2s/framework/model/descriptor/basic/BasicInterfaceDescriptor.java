@@ -31,6 +31,13 @@ public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> 
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public boolean isComputed() {
+    return computed;
+  }
+
+  /**
    * Gets the entity.
    * 
    * @return the entity.
@@ -46,19 +53,11 @@ public class BasicInterfaceDescriptor<E> extends AbstractComponentDescriptor<E> 
     return true;
   }
 
-  
-  /**
-   * {@inheritDoc}
-   */
-  public boolean isComputed() {
-    return computed;
-  }
-
-  
   /**
    * Sets the computed.
    * 
-   * @param computed the computed to set.
+   * @param computed
+   *            the computed to set.
    */
   public void setComputed(boolean computed) {
     this.computed = computed;

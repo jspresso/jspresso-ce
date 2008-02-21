@@ -21,8 +21,8 @@ import com.d2s.framework.util.descriptor.DefaultDescriptor;
 public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
     ICollectionDescriptor<E> {
 
-  private Class<?> collectionInterface;
-  private IComponentDescriptor<E>        elementDescriptor;
+  private Class<?>                collectionInterface;
+  private IComponentDescriptor<E> elementDescriptor;
 
   /**
    * {@inheritDoc}
@@ -58,8 +58,7 @@ public class BasicCollectionDescriptor<E> extends DefaultDescriptor implements
    * @param collectionInterface
    *            the collectionInterface to set.
    */
-  public void setCollectionInterface(
-      Class<?> collectionInterface) {
+  public void setCollectionInterface(Class<?> collectionInterface) {
     this.collectionInterface = collectionInterface;
   }
 

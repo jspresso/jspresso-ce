@@ -60,14 +60,12 @@ public class ModelConnectorMap extends ConnectorMap {
    */
   @Override
   public IValueConnector getConnector(String connectorId) {
-    IValueConnector connector = super
-        .getConnector(connectorId);
+    IValueConnector connector = super.getConnector(connectorId);
     if (connector == null) {
       IComponentDescriptor<?> componentDescriptor = getParentConnector()
           .getModelDescriptor().getComponentDescriptor();
-      connector = modelConnectorFactory
-          .createModelConnector(connectorId, componentDescriptor
-              .getPropertyDescriptor(connectorId));
+      connector = modelConnectorFactory.createModelConnector(connectorId,
+          componentDescriptor.getPropertyDescriptor(connectorId));
       super.addConnector(connectorId, connector);
     }
     return connector;

@@ -18,6 +18,17 @@ public class BasicObjectPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IObjectPropertyDescriptor {
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicObjectPropertyDescriptor clone() {
+    BasicObjectPropertyDescriptor clonedDescriptor = (BasicObjectPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
    * Returns Object class.
    * <p>
    * {@inheritDoc}
@@ -32,16 +43,5 @@ public class BasicObjectPropertyDescriptor extends
   @Override
   public boolean isQueryable() {
     return false;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicObjectPropertyDescriptor clone() {
-    BasicObjectPropertyDescriptor clonedDescriptor = (BasicObjectPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

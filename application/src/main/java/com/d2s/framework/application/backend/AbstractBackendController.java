@@ -48,15 +48,16 @@ public abstract class AbstractBackendController extends AbstractController
   private IEntityFactory                                   entityFactory;
   private IAccessorFactory                                 mapAccessorFactory;
   private IModelConnectorFactory                           mapConnectorFactory;
-  private Map<String, IValueConnector>                     workspaceConnectors;
-
   private ComponentTransferStructure<? extends IComponent> transferStructure;
+
+  private Map<String, IValueConnector>                     workspaceConnectors;
 
   /**
    * {@inheritDoc}
    */
   public void checkWorkspaceAccess(String workspaceName) {
-    checkAccess((ISecurable) getWorkspaceConnector(workspaceName).getConnectorValue());
+    checkAccess((ISecurable) getWorkspaceConnector(workspaceName)
+        .getConnectorValue());
   }
 
   /**
@@ -157,6 +158,26 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
+   * Sets the model controller workspaces. These workspaces are not kept as-is.
+   * Their connectors are.
+   * 
+   * @param workspaces
+   *            A map containing the workspaces indexed by a well-known key used
+   *            to bind them with their views.
+   */
+  public void installWorkspaces(Map<String, Workspace> workspaces) {
+    workspaceConnectors = new HashMap<String, IValueConnector>();
+    for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
+      IModelDescriptor workspaceDescriptor;
+      workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
+      IValueConnector nextWorkspaceConnector = beanConnectorFactory
+          .createModelConnector(workspaceEntry.getKey(), workspaceDescriptor);
+      nextWorkspaceConnector.setConnectorValue(workspaceEntry.getValue());
+      workspaceConnectors.put(workspaceEntry.getKey(), nextWorkspaceConnector);
+    }
+  }
+
+  /**
    * {@inheritDoc}
    */
   public IEntity merge(IEntity entity, MergeMode mergeMode) {
@@ -246,26 +267,6 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public void setMapConnectorFactory(IModelConnectorFactory mapConnectorFactory) {
     this.mapConnectorFactory = mapConnectorFactory;
-  }
-
-  /**
-   * Sets the model controller workspaces. These workspaces are not kept as-is. Their
-   * connectors are.
-   * 
-   * @param workspaces
-   *            A map containing the workspaces indexed by a well-known key used to
-   *            bind them with their views.
-   */
-  public void installWorkspaces(Map<String, Workspace> workspaces) {
-    workspaceConnectors = new HashMap<String, IValueConnector>();
-    for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
-      IModelDescriptor workspaceDescriptor;
-      workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
-      IValueConnector nextWorkspaceConnector = beanConnectorFactory
-          .createModelConnector(workspaceEntry.getKey(), workspaceDescriptor);
-      nextWorkspaceConnector.setConnectorValue(workspaceEntry.getValue());
-      workspaceConnectors.put(workspaceEntry.getKey(), nextWorkspaceConnector);
-    }
   }
 
   /**

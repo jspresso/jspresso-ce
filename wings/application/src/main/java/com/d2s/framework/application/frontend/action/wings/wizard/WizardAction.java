@@ -47,11 +47,12 @@ import com.d2s.framework.view.action.IDisplayableAction;
  */
 public class WizardAction extends AbstractWingsAction {
 
-  private IDisplayableAction     finishAction;
-  private IWizardStepDescriptor  firstWizardStep;
-  private IModelConnectorFactory modelConnectorFactory;
-  
-  private static final  SDimension WIZARD_DIMENSION = new SDimension("500px", "250px");
+  private static final SDimension WIZARD_DIMENSION = new SDimension("500px",
+                                                       "250px");
+  private IDisplayableAction      finishAction;
+  private IWizardStepDescriptor   firstWizardStep;
+
+  private IModelConnectorFactory  modelConnectorFactory;
 
   /**
    * {@inheritDoc}
@@ -178,7 +179,8 @@ public class WizardAction extends AbstractWingsAction {
     dialog.add(cardPanel, SBorderLayout.CENTER);
 
     dialog.setDefaultButton(nextButton);
-    dialog.setPreferredSize(new SDimension(WIZARD_DIMENSION.getWidth(), SDimension.AUTO));
+    dialog.setPreferredSize(new SDimension(WIZARD_DIMENSION.getWidth(),
+        SDimension.AUTO));
 
     show(dialog, cardPanel, alreadyDisplayedSteps, firstWizardStep, backButton,
         nextButton, finishButton, modelConnector, actionHandler, context);

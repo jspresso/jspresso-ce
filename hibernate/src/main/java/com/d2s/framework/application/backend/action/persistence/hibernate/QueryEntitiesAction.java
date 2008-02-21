@@ -50,10 +50,10 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
 
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
-        DetachedCriteria criteria = DetachedCriteria.forEntityName(queryComponent
-            .getContract().getName());
-        Example example = Example.create(queryComponent).ignoreCase().enableLike(
-            MatchMode.START);
+        DetachedCriteria criteria = DetachedCriteria
+            .forEntityName(queryComponent.getContract().getName());
+        Example example = Example.create(queryComponent).ignoreCase()
+            .enableLike(MatchMode.START);
         boolean abort = false;
         for (Map.Entry<String, Object> property : queryComponent
             .straightGetProperties().entrySet()) {
@@ -64,8 +64,9 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
               criteria.add(Restrictions.eq(property.getKey(), property
                   .getValue()));
             }
-          } else if (Boolean.TYPE.isAssignableFrom(PropertyHelper
-              .getPropertyType(queryComponent.getContract(), property.getKey()))
+          } else if (Boolean.TYPE
+              .isAssignableFrom(PropertyHelper.getPropertyType(queryComponent
+                  .getContract(), property.getKey()))
               && (property.getValue() == null || !((Boolean) property
                   .getValue()).booleanValue())) {
             example.excludeProperty(property.getKey());

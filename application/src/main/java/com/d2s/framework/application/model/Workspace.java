@@ -15,13 +15,13 @@ import com.d2s.framework.util.IIconImageURLProvider;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
- * A workspace is a central element in the application architecture. It serves as
- * an entry point on the domain model. Workspaces are organized as a tree structure
- * since they can (optionally) provide modules. A module can be seen as a window
- * on the business grouping processes forming a business activity (like master
- * data management, customer contract handling, ...). Each module can
- * (optionally) provide a projected object serving as model root for trigerring
- * grouped processes.
+ * A workspace is a central element in the application architecture. It serves
+ * as an entry point on the domain model. Workspaces are organized as a tree
+ * structure since they can (optionally) provide modules. A module can be seen
+ * as a window on the business grouping processes forming a business activity
+ * (like master data management, customer contract handling, ...). Each module
+ * can (optionally) provide a projected object serving as model root for
+ * trigerring grouped processes.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -32,49 +32,16 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
 public class Workspace implements ISecurable {
 
   private String                description;
+  private Collection<String>    grantedRoles;
   private String                i18nDescription;
   private String                i18nName;
   private String                iconImageURL;
-  private String                name;
-  private Collection<String>    grantedRoles;
   private IIconImageURLProvider iconImageURLProvider;
-
-  private IViewDescriptor       viewDescriptor;
-
   private List<Module>          modules;
 
-  /**
-   * Sets the iconImageURLProvider.
-   * 
-   * @param iconImageURLProvider
-   *            the iconImageURLProvider to set.
-   */
-  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
-    this.iconImageURLProvider = iconImageURLProvider;
-  }
+  private String                name;
 
-  /**
-   * Gets the workspace view descriptor. Whenever the view descriptor has not been
-   * set, a default one is generated.
-   * 
-   * @return the viewDescriptor.
-   */
-  public IViewDescriptor getViewDescriptor() {
-    if (viewDescriptor == null) {
-      viewDescriptor = new BasicWorkspaceViewDescriptor();
-      ((BasicWorkspaceViewDescriptor) viewDescriptor).setName(getName());
-      ((BasicWorkspaceViewDescriptor) viewDescriptor)
-          .setDescription(getDescription());
-      ((BasicWorkspaceViewDescriptor) viewDescriptor)
-          .setIconImageURL(getIconImageURL());
-      if (iconImageURLProvider == null) {
-        iconImageURLProvider = new WorkspaceIconImageURLProvider();
-      }
-      ((BasicWorkspaceViewDescriptor) viewDescriptor)
-          .setIconImageURLProvider(iconImageURLProvider);
-    }
-    return viewDescriptor;
-  }
+  private IViewDescriptor       viewDescriptor;
 
   /**
    * Equality based on name.
@@ -145,6 +112,15 @@ public class Workspace implements ISecurable {
   }
 
   /**
+   * Gets the modules modules.
+   * 
+   * @return the list of modules belonging to this workspace.
+   */
+  public List<Module> getModules() {
+    return modules;
+  }
+
+  /**
    * Gets the workspace name. It may serve for the workspace view.
    * 
    * @return the workspace name.
@@ -154,12 +130,26 @@ public class Workspace implements ISecurable {
   }
 
   /**
-   * Gets the modules modules.
+   * Gets the workspace view descriptor. Whenever the view descriptor has not
+   * been set, a default one is generated.
    * 
-   * @return the list of modules belonging to this workspace.
+   * @return the viewDescriptor.
    */
-  public List<Module> getModules() {
-    return modules;
+  public IViewDescriptor getViewDescriptor() {
+    if (viewDescriptor == null) {
+      viewDescriptor = new BasicWorkspaceViewDescriptor();
+      ((BasicWorkspaceViewDescriptor) viewDescriptor).setName(getName());
+      ((BasicWorkspaceViewDescriptor) viewDescriptor)
+          .setDescription(getDescription());
+      ((BasicWorkspaceViewDescriptor) viewDescriptor)
+          .setIconImageURL(getIconImageURL());
+      if (iconImageURLProvider == null) {
+        iconImageURLProvider = new WorkspaceIconImageURLProvider();
+      }
+      ((BasicWorkspaceViewDescriptor) viewDescriptor)
+          .setIconImageURLProvider(iconImageURLProvider);
+    }
+    return viewDescriptor;
   }
 
   /**
@@ -223,13 +213,13 @@ public class Workspace implements ISecurable {
   }
 
   /**
-   * Sets the module's name. It may serve for the module's view.
+   * Sets the iconImageURLProvider.
    * 
-   * @param name
-   *            the module's name.
+   * @param iconImageURLProvider
+   *            the iconImageURLProvider to set.
    */
-  public void setName(String name) {
-    this.name = name;
+  public void setIconImageURLProvider(IIconImageURLProvider iconImageURLProvider) {
+    this.iconImageURLProvider = iconImageURLProvider;
   }
 
   /**
@@ -240,6 +230,16 @@ public class Workspace implements ISecurable {
    */
   public void setModules(List<Module> modules) {
     this.modules = modules;
+  }
+
+  /**
+   * Sets the module's name. It may serve for the module's view.
+   * 
+   * @param name
+   *            the module's name.
+   */
+  public void setName(String name) {
+    this.name = name;
   }
 
   /**

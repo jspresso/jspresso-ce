@@ -31,6 +31,17 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BasicDatePropertyDescriptor clone() {
+    BasicDatePropertyDescriptor clonedDescriptor = (BasicDatePropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Class<?> getModelType() {
     return Date.class;
   }
@@ -56,16 +67,5 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    */
   public void setType(String type) {
     this.type = type;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicDatePropertyDescriptor clone() {
-    BasicDatePropertyDescriptor clonedDescriptor = (BasicDatePropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

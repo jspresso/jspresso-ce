@@ -21,6 +21,17 @@ public class BasicPasswordPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
+  public BasicPasswordPropertyDescriptor clone() {
+    BasicPasswordPropertyDescriptor clonedDescriptor = (BasicPasswordPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
   public Class<?> getModelType() {
     return char[].class;
   }
@@ -34,16 +45,5 @@ public class BasicPasswordPropertyDescriptor extends
       return new String((char[]) value);
     }
     return null;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicPasswordPropertyDescriptor clone() {
-    BasicPasswordPropertyDescriptor clonedDescriptor = (BasicPasswordPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
   }
 }

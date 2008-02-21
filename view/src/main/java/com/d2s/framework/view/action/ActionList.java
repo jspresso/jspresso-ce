@@ -21,7 +21,17 @@ public class ActionList extends DefaultIconDescriptor {
 
   private List<IDisplayableAction> actions;
 
-  
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ActionList clone() {
+    ActionList clonedActionList = (ActionList) super.clone();
+    clonedActionList
+        .setActions(new ArrayList<IDisplayableAction>(getActions()));
+    return clonedActionList;
+  }
+
   /**
    * Gets the actions.
    * 
@@ -31,24 +41,14 @@ public class ActionList extends DefaultIconDescriptor {
     return actions;
   }
 
-  
   /**
    * Sets the actions.
    * 
-   * @param actions the actions to set.
+   * @param actions
+   *            the actions to set.
    */
   public void setActions(List<IDisplayableAction> actions) {
     this.actions = actions;
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public ActionList clone() {
-    ActionList clonedActionList = (ActionList) super.clone();
-    clonedActionList.setActions(new ArrayList<IDisplayableAction>(getActions()));
-    return clonedActionList;
   }
 
 }

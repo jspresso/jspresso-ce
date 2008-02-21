@@ -81,9 +81,9 @@ public class DefaultSwingController extends
     AbstractFrontendController<JComponent, Icon, Action> {
 
   private JFrame                      controllerFrame;
-  private Map<String, JInternalFrame> workspaceInternalFrames;
-
   private WaitCursorTimer             waitTimer;
+
+  private Map<String, JInternalFrame> workspaceInternalFrames;
 
   /**
    * {@inheritDoc}
@@ -230,17 +230,20 @@ public class DefaultSwingController extends
     if (workspaceInternalFrames == null) {
       workspaceInternalFrames = new HashMap<String, JInternalFrame>();
     }
-    JInternalFrame workspaceInternalFrame = workspaceInternalFrames.get(workspaceName);
+    JInternalFrame workspaceInternalFrame = workspaceInternalFrames
+        .get(workspaceName);
     if (workspaceInternalFrame == null) {
       IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
       IValueConnector workspaceConnector = getBackendController()
           .getWorkspaceConnector(workspaceName);
       IView<JComponent> workspaceView = createWorkspaceView(workspaceName,
-          workspaceViewDescriptor, (Workspace) workspaceConnector.getConnectorValue());
+          workspaceViewDescriptor, (Workspace) workspaceConnector
+              .getConnectorValue());
       workspaceInternalFrame = createJInternalFrame(workspaceView);
       workspaceInternalFrame
-          .addInternalFrameListener(new WorkspaceInternalFrameListener(workspaceName));
+          .addInternalFrameListener(new WorkspaceInternalFrameListener(
+              workspaceName));
       workspaceInternalFrames.put(workspaceName, workspaceInternalFrame);
       controllerFrame.getContentPane().add(workspaceInternalFrame);
       getMvcBinder().bind(workspaceView.getConnector(), workspaceConnector);
@@ -332,21 +335,6 @@ public class DefaultSwingController extends
     return createMenus(getActions());
   }
 
-  private List<JMenu> createHelpActionMenus() {
-    return createMenus(getHelpActions());
-  }
-
-  private List<JMenu> createMenus(ActionMap actionMap) {
-    List<JMenu> menus = new ArrayList<JMenu>();
-    if (actionMap != null) {
-      for (ActionList actionList : actionMap.getActionLists()) {
-        JMenu menu = createActionMenu(actionList);
-        menus.add(menu);
-      }
-    }
-    return menus;
-  }
-
   private JMenuBar createApplicationMenuBar() {
     JMenuBar applicationMenuBar = new JMenuBar();
     applicationMenuBar.add(createWorkspacesMenu());
@@ -388,6 +376,10 @@ public class DefaultSwingController extends
     return frame;
   }
 
+  private List<JMenu> createHelpActionMenus() {
+    return createMenus(getHelpActions());
+  }
+
   private JComponent createHermeticGlassPane() {
     JPanel glassPane = new JPanel();
     glassPane.setOpaque(false);
@@ -410,10 +402,8 @@ public class DefaultSwingController extends
   private JInternalFrame createJInternalFrame(IView<JComponent> view) {
     JInternalFrame internalFrame = new JInternalFrame(view.getDescriptor()
         .getI18nName(getTranslationProvider(), getLocale()));
-    internalFrame
-    .setFrameIcon(getIconFactory().getIcon(
-        view.getDescriptor().getIconImageURL(),
-        IIconFactory.SMALL_ICON_SIZE));
+    internalFrame.setFrameIcon(getIconFactory().getIcon(
+        view.getDescriptor().getIconImageURL(), IIconFactory.SMALL_ICON_SIZE));
     internalFrame.setResizable(true);
     internalFrame.setClosable(false);
     internalFrame.setMaximizable(true);
@@ -424,11 +414,22 @@ public class DefaultSwingController extends
     return internalFrame;
   }
 
+  private List<JMenu> createMenus(ActionMap actionMap) {
+    List<JMenu> menus = new ArrayList<JMenu>();
+    if (actionMap != null) {
+      for (ActionList actionList : actionMap.getActionLists()) {
+        JMenu menu = createActionMenu(actionList);
+        menus.add(menu);
+      }
+    }
+    return menus;
+  }
+
   private JMenu createWorkspacesMenu() {
     JMenu workspacesMenu = new JMenu(getTranslationProvider().getTranslation(
         "workspaces", getLocale()));
-    workspacesMenu.setIcon(getIconFactory().getIcon(getWorkspacesMenuIconImageUrl(),
-        IIconFactory.SMALL_ICON_SIZE));
+    workspacesMenu.setIcon(getIconFactory().getIcon(
+        getWorkspacesMenuIconImageUrl(), IIconFactory.SMALL_ICON_SIZE));
     for (String workspaceName : getWorkspaceNames()) {
       IViewDescriptor workspaceViewDescriptor = getWorkspace(workspaceName)
           .getViewDescriptor();
@@ -518,7 +519,33 @@ public class DefaultSwingController extends
     }
   }
 
-  private final class WorkspaceInternalFrameListener extends InternalFrameAdapter {
+  private final class QuitAction extends AbstractAction {
+
+    private static final long serialVersionUID = -5797994634301619085L;
+
+    /**
+     * Constructs a new <code>QuitAction</code> instance.
+     */
+    public QuitAction() {
+      putValue(Action.NAME, getTranslationProvider().getTranslation(
+          "quit.name", getLocale()));
+      putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
+          .getTranslation("quit.description", getLocale()));
+    }
+
+    /**
+     * Ends the application.
+     * <p>
+     * {@inheritDoc}
+     */
+    public void actionPerformed(@SuppressWarnings("unused")
+    ActionEvent e) {
+      stop();
+    }
+  }
+
+  private final class WorkspaceInternalFrameListener extends
+      InternalFrameAdapter {
 
     private String workspaceName;
 
@@ -599,7 +626,8 @@ public class DefaultSwingController extends
           .getI18nDescription(getTranslationProvider(), getLocale())
           + IViewFactory.TOOLTIP_ELLIPSIS);
       putValue(Action.SMALL_ICON, getIconFactory().getIcon(
-          workspaceViewDescriptor.getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+          workspaceViewDescriptor.getIconImageURL(),
+          IIconFactory.TINY_ICON_SIZE));
     }
 
     /**
@@ -615,31 +643,6 @@ public class DefaultSwingController extends
       } catch (SecurityException ex) {
         handleException(ex, null);
       }
-    }
-  }
-
-  private final class QuitAction extends AbstractAction {
-
-    private static final long serialVersionUID = -5797994634301619085L;
-
-    /**
-     * Constructs a new <code>QuitAction</code> instance.
-     */
-    public QuitAction() {
-      putValue(Action.NAME, getTranslationProvider().getTranslation(
-          "quit.name", getLocale()));
-      putValue(Action.SHORT_DESCRIPTION, getTranslationProvider()
-          .getTranslation("quit.description", getLocale()));
-    }
-
-    /**
-     * Ends the application.
-     * <p>
-     * {@inheritDoc}
-     */
-    public void actionPerformed(@SuppressWarnings("unused")
-    ActionEvent e) {
-      stop();
     }
   }
 }

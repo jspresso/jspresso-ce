@@ -80,8 +80,7 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     BasicTableViewDescriptor resultViewDescriptor = new BasicTableViewDescriptor();
 
     BasicCollectionDescriptor<Object> queriedEntitiesListDescriptor = new BasicCollectionDescriptor<Object>();
-    queriedEntitiesListDescriptor
-        .setCollectionInterface(List.class);
+    queriedEntitiesListDescriptor.setCollectionInterface(List.class);
     queriedEntitiesListDescriptor.setElementDescriptor(entityDescriptor);
 
     BasicCollectionPropertyDescriptor<Object> queriedEntitiesDescriptor = new BasicCollectionPropertyDescriptor<Object>();

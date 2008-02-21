@@ -3,7 +3,6 @@
  */
 package com.d2s.framework.view.action;
 
-
 /**
  * An actionable object.
  * <p>

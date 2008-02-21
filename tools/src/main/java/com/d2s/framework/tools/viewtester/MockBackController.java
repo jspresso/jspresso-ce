@@ -5,7 +5,6 @@ package com.d2s.framework.tools.viewtester;
 
 import com.d2s.framework.application.backend.AbstractBackendController;
 
-
 /**
  * A mock backend controller.
  * <p>
@@ -16,5 +15,5 @@ import com.d2s.framework.application.backend.AbstractBackendController;
  * @author Vincent Vandenschrick
  */
 public class MockBackController extends AbstractBackendController {
-  //a mock implementation.
+  // a mock implementation.
 }

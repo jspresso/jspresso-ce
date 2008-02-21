@@ -23,6 +23,19 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
   private String name;
 
   /**
+   * {@inheritDoc}
+   */
+  @Override
+  public DefaultDescriptor clone() {
+    try {
+      return (DefaultDescriptor) super.clone();
+    } catch (CloneNotSupportedException ex) {
+      // Cannot happen.
+      return null;
+    }
+  }
+
+  /**
    * The description getter.
    * 
    * @return the description.
@@ -74,18 +87,5 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    */
   public void setName(String name) {
     this.name = name;
-  }
-  
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public DefaultDescriptor clone() {
-    try {
-      return (DefaultDescriptor) super.clone();
-    } catch (CloneNotSupportedException ex) {
-      // Cannot happen.
-      return null;
-    }
   }
 }

@@ -23,6 +23,17 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BasicRelationshipEndPropertyDescriptor clone() {
+    BasicRelationshipEndPropertyDescriptor clonedDescriptor = (BasicRelationshipEndPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public IRelationshipEndPropertyDescriptor getReverseRelationEnd() {
     if (reverseRelationEnd != null) {
       return reverseRelationEnd;
@@ -47,13 +58,6 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
     }
     return getDefaultComposition();
   }
-  
-  /**
-   * Gets the default composition of a relationship end.
-   * 
-   * @return the default composition of a relationship end.
-   */
-  protected abstract boolean getDefaultComposition();
 
   /**
    * Sets the composition.
@@ -85,13 +89,9 @@ public abstract class BasicRelationshipEndPropertyDescriptor extends
   }
 
   /**
-   * {@inheritDoc}
+   * Gets the default composition of a relationship end.
+   * 
+   * @return the default composition of a relationship end.
    */
-  @Override
-  public BasicRelationshipEndPropertyDescriptor clone() {
-    BasicRelationshipEndPropertyDescriptor clonedDescriptor = (BasicRelationshipEndPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
-  }
+  protected abstract boolean getDefaultComposition();
 }

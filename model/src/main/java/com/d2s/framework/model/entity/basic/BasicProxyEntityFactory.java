@@ -42,9 +42,26 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   private IAccessorFactory                        accessorFactory;
   private IComponentCollectionFactory<IComponent> entityCollectionFactory;
   private IComponentDescriptorRegistry            entityDescriptorRegistry;
-  private IComponentFactory                       inlineComponentFactory;
   private IComponentExtensionFactory              entityExtensionFactory;
   private IGUIDGenerator                          entityGUIDGenerator;
+  private IComponentFactory                       inlineComponentFactory;
+
+  /**
+   * {@inheritDoc}
+   */
+  public <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract) {
+    return inlineComponentFactory.createComponentInstance(componentContract);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public <T extends IComponent> T createComponentInstance(
+      Class<T> componentContract, Object delegate) {
+    return inlineComponentFactory.createComponentInstance(componentContract,
+        delegate);
+  }
 
   /**
    * {@inheritDoc}
@@ -91,6 +108,15 @@ public class BasicProxyEntityFactory implements IEntityFactory {
           }
         });
     return createdEntity;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public IQueryComponent createQueryComponentInstance(
+      Class<? extends IComponent> componentContract) {
+    return inlineComponentFactory
+        .createQueryComponentInstance(componentContract);
   }
 
   /**
@@ -155,6 +181,16 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   }
 
   /**
+   * Sets the inlineComponentFactory.
+   * 
+   * @param inlineComponentFactory
+   *            the inlineComponentFactory to set.
+   */
+  public void setInlineComponentFactory(IComponentFactory inlineComponentFactory) {
+    this.inlineComponentFactory = inlineComponentFactory;
+  }
+
+  /**
    * Creates the entity proxy invocation handler.
    * 
    * @param entityDescriptor
@@ -205,6 +241,15 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   }
 
   /**
+   * Gets the inlineComponentFactory.
+   * 
+   * @return the inlineComponentFactory.
+   */
+  protected IComponentFactory getInlineComponentFactory() {
+    return inlineComponentFactory;
+  }
+
+  /**
    * Gets the principal using the factory.
    * 
    * @return the principal using the factory.
@@ -238,49 +283,5 @@ public class BasicProxyEntityFactory implements IEntityFactory {
         .getContextClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
-  }
-
-  /**
-   * Sets the inlineComponentFactory.
-   * 
-   * @param inlineComponentFactory
-   *            the inlineComponentFactory to set.
-   */
-  public void setInlineComponentFactory(IComponentFactory inlineComponentFactory) {
-    this.inlineComponentFactory = inlineComponentFactory;
-  }
-
-  /**
-   * Gets the inlineComponentFactory.
-   * 
-   * @return the inlineComponentFactory.
-   */
-  protected IComponentFactory getInlineComponentFactory() {
-    return inlineComponentFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public <T extends IComponent> T createComponentInstance(
-      Class<T> componentContract, Object delegate) {
-    return inlineComponentFactory.createComponentInstance(componentContract,
-        delegate);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public <T extends IComponent> T createComponentInstance(
-      Class<T> componentContract) {
-    return inlineComponentFactory.createComponentInstance(componentContract);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IQueryComponent createQueryComponentInstance(
-      Class<? extends IComponent> componentContract) {
-    return inlineComponentFactory.createQueryComponentInstance(componentContract);
   }
 }

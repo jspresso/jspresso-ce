@@ -25,8 +25,7 @@ import com.d2s.framework.util.bean.IPropertyChangeCapable;
 public class BeanModule extends Module implements PropertyChangeListener {
 
   private IComponentDescriptor<Object> componentDescriptor;
-  private Object moduleObject;
-  
+  private Object                       moduleObject;
 
   /**
    * Equality based on projected object.
@@ -44,6 +43,15 @@ public class BeanModule extends Module implements PropertyChangeListener {
     BeanModule rhs = (BeanModule) obj;
     return new EqualsBuilder().append(getModuleObject(), rhs.getModuleObject())
         .isEquals();
+  }
+
+  /**
+   * Gets the componentDescriptor.
+   * 
+   * @return the componentDescriptor.
+   */
+  public IComponentDescriptor<Object> getComponentDescriptor() {
+    return componentDescriptor;
   }
 
   /**
@@ -78,6 +86,17 @@ public class BeanModule extends Module implements PropertyChangeListener {
   }
 
   /**
+   * Sets the componentDescriptor.
+   * 
+   * @param componentDescriptor
+   *            the componentDescriptor to set.
+   */
+  public void setComponentDescriptor(
+      IComponentDescriptor<Object> componentDescriptor) {
+    this.componentDescriptor = componentDescriptor;
+  }
+
+  /**
    * Sets the module's projected object.
    * 
    * @param moduleObject
@@ -98,26 +117,5 @@ public class BeanModule extends Module implements PropertyChangeListener {
           .addPropertyChangeListener(this);
     }
     firePropertyChange("moduleObject", oldValue, getModuleObject());
-  }
-
-  
-  /**
-   * Gets the componentDescriptor.
-   * 
-   * @return the componentDescriptor.
-   */
-  public IComponentDescriptor<Object> getComponentDescriptor() {
-    return componentDescriptor;
-  }
-
-  
-  /**
-   * Sets the componentDescriptor.
-   * 
-   * @param componentDescriptor the componentDescriptor to set.
-   */
-  public void setComponentDescriptor(
-      IComponentDescriptor<Object> componentDescriptor) {
-    this.componentDescriptor = componentDescriptor;
   }
 }

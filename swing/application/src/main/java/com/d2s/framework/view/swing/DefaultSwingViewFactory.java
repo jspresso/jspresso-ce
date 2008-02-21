@@ -198,9 +198,6 @@ public class DefaultSwingViewFactory implements
   private static final int                   DEF_DISP_MAX_FRACTION_DIGIT = 2;
   private static final double                DEF_DISP_MAX_VALUE          = 1000;
   private static final double                DEF_DISP_TEMPLATE_PERCENT   = 99;
-  private static final Dimension             TREE_PREFERRED_SIZE         = new Dimension(
-                                                                             128,
-                                                                             128);
   private static final char                  TEMPLATE_CHAR               = 'O';
   private static final Date                  TEMPLATE_DATE               = new Date(
                                                                              3661 * 1000);
@@ -212,6 +209,9 @@ public class DefaultSwingViewFactory implements
                                                                                  + IDurationPropertyDescriptor.ONE_WEEK);
   private static final Date                  TEMPLATE_TIME               = new Date(
                                                                              3661 * 1000);
+  private static final Dimension             TREE_PREFERRED_SIZE         = new Dimension(
+                                                                             128,
+                                                                             128);
   private IActionFactory<Action, JComponent> actionFactory;
   private IDisplayableAction                 binaryPropertyInfoAction;
   private IConfigurableConnectorFactory      connectorFactory;
@@ -343,6 +343,29 @@ public class DefaultSwingViewFactory implements
   }
 
   /**
+   * {@inheritDoc}
+   */
+  public void decorateWithTitle(IView<JComponent> view, Locale locale) {
+    view.getPeer()
+        .setBorder(
+            BorderFactory.createTitledBorder(
+                BorderFactory.createEtchedBorder(), view.getDescriptor()
+                    .getI18nName(getTranslationProvider(), locale)));
+    // JInternalFrame iFrame = new JInternalFrame(view.getDescriptor()
+    // .getI18nName(getTranslationProvider(), locale), false, false,
+    // false, false);
+    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
+    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
+    // iFrame.getContentPane().add(view.getPeer());
+    // iFrame.pack();
+    // view.setPeer(iFrame);
+  }
+
+  // ///////////////// //
+  // Composite Section //
+  // ///////////////// //
+
+  /**
    * Gets the actionFactory.
    * 
    * @return the actionFactory.
@@ -350,10 +373,6 @@ public class DefaultSwingViewFactory implements
   public IActionFactory<Action, JComponent> getActionFactory() {
     return actionFactory;
   }
-
-  // ///////////////// //
-  // Composite Section //
-  // ///////////////// //
 
   /**
    * Gets the iconFactory.
@@ -509,6 +528,10 @@ public class DefaultSwingViewFactory implements
     this.treeSelectionModelBinder = treeSelectionModelBinder;
   }
 
+  // ////////////////// //
+  // Collection Section //
+  // ////////////////// //
+
   /**
    * Creates an action field.
    * 
@@ -519,10 +542,6 @@ public class DefaultSwingViewFactory implements
   protected JActionField createJActionField(boolean showTextField) {
     return new JActionField(showTextField);
   }
-
-  // ////////////////// //
-  // Collection Section //
-  // ////////////////// //
 
   /**
    * Creates a button.
@@ -821,25 +840,6 @@ public class DefaultSwingViewFactory implements
       default:
         break;
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void decorateWithTitle(IView<JComponent> view, Locale locale) {
-    view.getPeer()
-        .setBorder(
-            BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), view.getDescriptor()
-                    .getI18nName(getTranslationProvider(), locale)));
-    // JInternalFrame iFrame = new JInternalFrame(view.getDescriptor()
-    // .getI18nName(getTranslationProvider(), locale), false, false,
-    // false, false);
-    // iFrame.setFrameIcon(iconFactory.getIcon(view.getDescriptor()
-    // .getIconImageURL(), IIconFactory.TINY_ICON_SIZE));
-    // iFrame.getContentPane().add(view.getPeer());
-    // iFrame.pack();
-    //view.setPeer(iFrame);
   }
 
   // ///////////// //

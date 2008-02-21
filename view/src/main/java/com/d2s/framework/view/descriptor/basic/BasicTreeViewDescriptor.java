@@ -22,12 +22,12 @@ import com.d2s.framework.view.descriptor.ITreeViewDescriptor;
 public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
     ITreeViewDescriptor {
 
+  private ITreeLevelDescriptor  childDescriptor;
   private IIconImageURLProvider iconImageURLProvider;
   private int                   maxDepth = 10;
-  private ITreeLevelDescriptor  rootSubtreeDescriptor;
 
   private String                renderedProperty;
-  private ITreeLevelDescriptor  childDescriptor;
+  private ITreeLevelDescriptor  rootSubtreeDescriptor;
 
   /**
    * {@inheritDoc}
@@ -83,6 +83,16 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
+   * Sets the childDescriptor.
+   * 
+   * @param childDescriptor
+   *            the childDescriptor to set.
+   */
+  public void setChildDescriptor(ITreeLevelDescriptor childDescriptor) {
+    this.childDescriptor = childDescriptor;
+  }
+
+  /**
    * Sets the iconImageURLProvider.
    * 
    * @param iconImageURLProvider
@@ -103,6 +113,16 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   }
 
   /**
+   * Sets the renderedProperty.
+   * 
+   * @param renderedProperty
+   *            the renderedProperty to set.
+   */
+  public void setRenderedProperty(String renderedProperty) {
+    this.renderedProperty = renderedProperty;
+  }
+
+  /**
    * Sets the rootSubtreeDescriptor.
    * 
    * @param rootSubtreeDescriptor
@@ -111,25 +131,5 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
   public void setRootSubtreeDescriptor(
       ITreeLevelDescriptor rootSubtreeDescriptor) {
     this.rootSubtreeDescriptor = rootSubtreeDescriptor;
-  }
-
-  /**
-   * Sets the childDescriptor.
-   * 
-   * @param childDescriptor
-   *            the childDescriptor to set.
-   */
-  public void setChildDescriptor(ITreeLevelDescriptor childDescriptor) {
-    this.childDescriptor = childDescriptor;
-  }
-
-  /**
-   * Sets the renderedProperty.
-   * 
-   * @param renderedProperty
-   *            the renderedProperty to set.
-   */
-  public void setRenderedProperty(String renderedProperty) {
-    this.renderedProperty = renderedProperty;
   }
 }

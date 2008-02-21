@@ -153,28 +153,6 @@ public abstract class AbstractBackendAction extends AbstractAction {
   }
 
   /**
-   * Gets the beanAccessorFactory.
-   * 
-   * @param context
-   *            the action context.
-   * @return the beanAccessorFactory.
-   */
-  protected IAccessorFactory getBeanAccessorFactory(Map<String, Object> context) {
-    return getController(context).getBeanAccessorFactory();
-  }
-
-  /**
-   * Gets the mapAccessorFactory.
-   * 
-   * @param context
-   *            the action context.
-   * @return the mapAccessorFactory.
-   */
-  protected IAccessorFactory getMapAccessorFactory(Map<String, Object> context) {
-    return getController(context).getMapAccessorFactory();
-  }
-
-  /**
    * Gets the correct accessor factory to access a target object properties.
    * 
    * @param target
@@ -201,6 +179,17 @@ public abstract class AbstractBackendAction extends AbstractAction {
   protected IApplicationSession getApplicationSession(
       Map<String, Object> context) {
     return getController(context).getApplicationSession();
+  }
+
+  /**
+   * Gets the beanAccessorFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the beanAccessorFactory.
+   */
+  protected IAccessorFactory getBeanAccessorFactory(Map<String, Object> context) {
+    return getController(context).getBeanAccessorFactory();
   }
 
   /**
@@ -238,6 +227,17 @@ public abstract class AbstractBackendAction extends AbstractAction {
    */
   protected IEntityFactory getEntityFactory(Map<String, Object> context) {
     return getController(context).getEntityFactory();
+  }
+
+  /**
+   * Gets the mapAccessorFactory.
+   * 
+   * @param context
+   *            the action context.
+   * @return the mapAccessorFactory.
+   */
+  protected IAccessorFactory getMapAccessorFactory(Map<String, Object> context) {
+    return getController(context).getMapAccessorFactory();
   }
 
   /**

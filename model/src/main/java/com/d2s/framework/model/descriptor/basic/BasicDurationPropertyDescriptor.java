@@ -59,6 +59,17 @@ public class BasicDurationPropertyDescriptor extends
   /**
    * {@inheritDoc}
    */
+  @Override
+  public BasicDurationPropertyDescriptor clone() {
+    BasicDurationPropertyDescriptor clonedDescriptor = (BasicDurationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public Long getMaxMillis() {
     if (maxMillis != null) {
       return maxMillis;
@@ -87,17 +98,6 @@ public class BasicDurationPropertyDescriptor extends
     this.maxMillis = maxMillis;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public BasicDurationPropertyDescriptor clone() {
-    BasicDurationPropertyDescriptor clonedDescriptor = (BasicDurationPropertyDescriptor) super
-        .clone();
-
-    return clonedDescriptor;
-  }
-  
   /**
    * {@inheritDoc}
    */
