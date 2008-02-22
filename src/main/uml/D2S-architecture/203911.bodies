@@ -1,9 +1,0 @@
-class Messages
-!!!409095.java!!!	Messages()
-    // Helper constructor.
-!!!409223.java!!!	getString(in key : String) : String
-    try {
-      return RESOURCE_BUNDLE.getString(key);
-    } catch (MissingResourceException e) {
-      return '!' + key + '!';
-    }

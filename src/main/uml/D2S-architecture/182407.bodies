@@ -1,7 +1,0 @@
-class StaticInfoAction
-!!!345735.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
-    context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
-        context).getTranslation(messageCode, getLocale(context)));
-    return super.execute(actionHandler, context);
-!!!345863.java!!!	setMessageCode(in messageCode : String) : void
-    this.messageCode = messageCode;

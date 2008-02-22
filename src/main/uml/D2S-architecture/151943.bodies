@@ -1,7 +1,0 @@
-class BasicTreeLevelDescriptor
-!!!215303.java!!!	getNodeGroupDescriptor() : IListViewDescriptor
-
-    return nodeGroupDescriptor;
-!!!215431.java!!!	setNodeGroupDescriptor(inout nodeGroupDescriptor : IListViewDescriptor) : void
-
-    this.nodeGroupDescriptor = nodeGroupDescriptor;

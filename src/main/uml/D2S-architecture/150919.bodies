@@ -1,7 +1,0 @@
-class AbstractCardViewDescriptor
-!!!211975.java!!!	getCardViewDescriptors() : IViewDescriptor
-
-    return cardViewDescriptors;
-!!!212103.java!!!	setCardViewDescriptors(inout cardViewDescriptors : Map<String, IViewDescriptor>) : void
-
-    this.cardViewDescriptors = cardViewDescriptors;

@@ -1,4 +1,0 @@
-class DlmBundle_fr
-!!!417543.java!!!	getContents() : Object
-
-      return CONTENTS;

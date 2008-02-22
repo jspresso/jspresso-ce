@@ -1,4 +1,0 @@
-class RandomGUIDGenerator
-!!!418311.java!!!	generateGUID() : String
-
-    return new RandomGUID().toString();

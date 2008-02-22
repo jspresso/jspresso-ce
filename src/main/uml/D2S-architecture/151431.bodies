@@ -1,7 +1,0 @@
-class BasicCompositeViewDescriptor
-!!!212231.java!!!	isMasterDetail() : boolean
-
-    return masterDetail;
-!!!212359.java!!!	setMasterDetail(inout masterDetail : boolean) : void
-
-    this.masterDetail = masterDetail;

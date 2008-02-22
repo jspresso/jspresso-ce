@@ -1,7 +1,0 @@
-class MapAccessorFactory
-!!!388487.java!!!	createCollectionPropertyAccessor(in property : String, inout beanClass : Class<?>, inout elementClass : Class<?>) : ICollectionAccessor
-
-    return new MapCollectionAccessor(property);
-!!!388615.java!!!	createPropertyAccessor(in property : String, inout beanClass : Class<?>) : IAccessor
-
-    return new MapPropertyAccessor(property);

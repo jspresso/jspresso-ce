@@ -1,6 +1,0 @@
-class BasicModuleDescriptor
-!!!275335.java!!!	BasicModuleDescriptor()
-
-    BasicSubModuleDescriptor subModuleDescriptor = new BasicSubModuleDescriptor();
-    subModuleDescriptor.setChildDescriptor(subModuleDescriptor);
-    setRootSubtreeDescriptor(subModuleDescriptor);

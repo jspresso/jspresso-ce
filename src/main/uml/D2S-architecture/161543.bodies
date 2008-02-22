@@ -1,9 +1,0 @@
-class ModuleRestartAction
-!!!256647.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
-
-    Module module = getModule(context);
-    if (module.getStartupAction() != null) {
-      return actionHandler
-          .execute(module.getStartupAction(), context);
-    }
-    return true;

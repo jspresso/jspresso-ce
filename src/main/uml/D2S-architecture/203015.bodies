@@ -1,3 +1,0 @@
-class TemplateUtil
-!!!406919.java!!!	getDateNow() : Date
-    return new Date();

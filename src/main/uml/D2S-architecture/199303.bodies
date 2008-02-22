@@ -1,7 +1,0 @@
-class EmptyPropertyIntegrityProcessor
-!!!396167.java!!!	postprocessSetterIntegrity(inout target : E, inout oldPropertyValue : F, inout newPropertyValue : F) : void
-
-    // NO-OP
-!!!396295.java!!!	preprocessSetterIntegrity(inout target : E, inout oldPropertyValue : F, inout newPropertyValue : F) : void
-
-    // NO-OP

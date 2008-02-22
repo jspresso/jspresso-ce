@@ -1,0 +1,162 @@
+<class-diagram generalizations="true" realizations="true" associations="true" dependencies="false" 
+  nesting-relationships="true">  
+  <classifier-display autosize="true" package="true" attributes="false" operations="true" initial-value="true" 
+    signature="true" visibility="true"/>  
+  <association-display labels="true" multiplicity="true"/>  
+  <interface type="java" name="com.d2s.framework.application.IController" project="design2see-framework" 
+    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/IController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="372" y="58" width="-1" height="-1"/>  
+  </interface>  
+  <class type="java" name="com.d2s.framework.application.AbstractController" project="design2see-framework" 
+    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/AbstractController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="240" y="309" width="-1" height="-1"/>  
+  </class>  
+  <interface type="java" name="com.d2s.framework.application.backend.IBackendController" project="design2see-framework" 
+    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/backend/IBackendController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="599" y="280" width="-1" height="-1"/>  
+  </interface>  
+  <interface type="java" name="com.d2s.framework.application.frontend.IFrontendController" 
+    project="design2see-framework" 
+    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/IFrontendController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="100" y="171" width="-1" height="-1"/>  
+  </interface>  
+  <class type="java" name="com.d2s.framework.application.frontend.controller.AbstractFrontendController" 
+    project="design2see-framework" 
+    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/controller/AbstractFrontendController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="false" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="-6" y="420" width="367" height="496"/>  
+  </class>  
+  <class type="java" name="com.d2s.framework.application.frontend.controller.swing.DefaultSwingController" 
+    project="design2see-framework" 
+    file="/design2see-framework/swing/application/src/main/java/com/d2s/framework/application/frontend/controller/swing/DefaultSwingController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="false" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="437" y="1019" width="321" height="104"/>  
+  </class>  
+  <class type="java" name="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController" 
+    project="design2see-framework" 
+    file="/design2see-framework/ulc/application/src/main/java/com/d2s/framework/application/frontend/controller/ulc/DefaultUlcController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="false" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="-6" y="1076" width="430" height="103"/>  
+  </class>  
+  <class type="java" name="com.d2s.framework.application.frontend.controller.wings.DefaultWingsController" 
+    project="design2see-framework" 
+    file="/design2see-framework/wings/application/src/main/java/com/d2s/framework/application/frontend/controller/wings/DefaultWingsController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="false" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="-6" y="945" width="293" height="118"/>  
+  </class>  
+  <class type="java" name="com.d2s.framework.application.backend.AbstractBackendController" 
+    project="design2see-framework" 
+    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/backend/AbstractBackendController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="false" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="403" y="420" width="392" height="397"/>  
+  </class>  
+  <class type="java" name="com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController" 
+    project="design2see-framework" 
+    file="/design2see-framework/hibernate/src/main/java/com/d2s/framework/application/backend/persistence/hibernate/HibernateBackendController.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="false" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="465" y="864" width="267" height="131"/>  
+  </class>  
+  <generalization>    
+    <source project="design2see-framework" 
+      name="com.d2s.framework.application.frontend.controller.wings.DefaultWingsController" 
+      file="/design2see-framework/wings/application/src/main/java/com/d2s/framework/application/frontend/controller/wings/DefaultWingsController.java"/>    
+    <target project="design2see-framework" 
+      name="com.d2s.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/controller/AbstractFrontendController.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" 
+      name="com.d2s.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/controller/AbstractFrontendController.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.AbstractController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/AbstractController.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.application.frontend.IFrontendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/IFrontendController.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.IController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/IController.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" 
+      name="com.d2s.framework.application.backend.persistence.hibernate.HibernateBackendController" 
+      file="/design2see-framework/hibernate/src/main/java/com/d2s/framework/application/backend/persistence/hibernate/HibernateBackendController.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.backend.AbstractBackendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/backend/AbstractBackendController.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" 
+      name="com.d2s.framework.application.frontend.controller.swing.DefaultSwingController" 
+      file="/design2see-framework/swing/application/src/main/java/com/d2s/framework/application/frontend/controller/swing/DefaultSwingController.java"/>    
+    <target project="design2see-framework" 
+      name="com.d2s.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/controller/AbstractFrontendController.java"/>    
+    <bendpoint x="430" y="992"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.application.backend.AbstractBackendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/backend/AbstractBackendController.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.AbstractController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/AbstractController.java"/>  
+  </generalization>  
+  <realization>    
+    <source project="design2see-framework" name="com.d2s.framework.application.backend.AbstractBackendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/backend/AbstractBackendController.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.backend.IBackendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/backend/IBackendController.java"/>  
+  </realization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.application.backend.IBackendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/backend/IBackendController.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.IController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/IController.java"/>  
+  </generalization>  
+  <realization>    
+    <source project="design2see-framework" 
+      name="com.d2s.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/controller/AbstractFrontendController.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.frontend.IFrontendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/IFrontendController.java"/>    
+    <bendpoint x="17" y="302"/>  
+  </realization>  
+  <generalization>    
+    <source project="design2see-framework" 
+      name="com.d2s.framework.application.frontend.controller.ulc.DefaultUlcController" 
+      file="/design2see-framework/ulc/application/src/main/java/com/d2s/framework/application/frontend/controller/ulc/DefaultUlcController.java"/>    
+    <target project="design2see-framework" 
+      name="com.d2s.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/frontend/controller/AbstractFrontendController.java"/>    
+    <bendpoint x="345" y="1046"/>    
+    <bendpoint x="345" y="978"/>  
+  </generalization>  
+  <realization>    
+    <source project="design2see-framework" name="com.d2s.framework.application.AbstractController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/AbstractController.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.IController" 
+      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/IController.java"/>  
+  </realization>
+</class-diagram>

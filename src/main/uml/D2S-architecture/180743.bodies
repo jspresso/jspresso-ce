@@ -1,9 +1,0 @@
-class ActionFieldConnectorListener
-!!!342279.java!!!	ActionFieldConnectorListener(inout table : ULCTable, inout editorPeer : ULCActionField)
-
-      this.table = table;
-      this.editorPeer = editorPeer;
-!!!342407.java!!!	connectorValueChange(inout evt : ConnectorValueChangeEvent) : void
-
-      table.setValueAt(evt.getNewValue(), editorPeer.getEditingRow(),
-          editorPeer.getEditingColumn());

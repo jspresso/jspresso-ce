@@ -1,9 +1,0 @@
-class BasicCollectionViewDescriptor
-!!!213767.java!!!	getIconImageURL() : String
-
-    String iconImageURL = super.getIconImageURL();
-    if (iconImageURL == null) {
-      iconImageURL = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
-          .getCollectionDescriptor().getElementDescriptor().getIconImageURL();
-    }
-    return iconImageURL;

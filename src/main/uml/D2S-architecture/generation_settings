@@ -1,6 +1,6 @@
 
   java_default_defs 
-  cpp_h_extension "h" cpp_src_extension "cpp" java_extension "java" php_extension "php" idl_extension "idl"
+  cpp_h_extension "h" cpp_src_extension "cpp" java_extension "java" php_extension "php" python_extension "py" idl_extension "idl"
 
   type_forms 15 // uml cpp java idl cpp_in cpp_out cpp_inout cpp_return
     "void" "void" "void" "void" "${type}" "${type} &" "${type}" "${type}"
@@ -19,26 +19,26 @@
     "double" "double" "double" "double" "${type}" "${type} &" "${type} &" "${type}"
     "string" "string" "String" "string" "${type}" "${type} &" "${type} &" "${type}"
   
-  relations_stereotypes 4 // uml cpp java idl
-    "sequence" "vector" "Vector" "sequence"
-    "vector" "vector" "Vector" "sequence"
-    "list" "list" "Vector" "sequence"
-    "set" "set" "Vector" "sequence"
+  relations_stereotypes 4 // uml cpp java pythonidl
+    "sequence" "vector" "Vector" "list" "sequence"
+    "vector" "vector" "Vector" "list" "sequence"
+    "list" "list" "Vector" "list" "sequence"
+    "set" "set" "Vector" "set" "sequence"
   
-  classes_stereotypes 13 // uml cpp java php idl
-    "class" "class" "class" "class" "valuetype"
-    "interface" "class" "interface" "interface" "interface"
-    "exception" "class" "class" "class" "exception"
-    "enum" "enum" "enum" "enum" "enum"
-    "enum_pattern" "enum" "enum_pattern" "enum" "enum"
-    "struct" "struct" "class" "class" "struct"
-    "union" "union" "class" "class" "union"
-    "typedef" "typedef" "ignored" "ignored" "typedef"
-    "boundary" "class" "class" "class" "interface"
-    "control" "class" "class" "class" "valuetype"
-    "entity" "class" "class" "class" "valuetype"
-    "actor" "ignored" "ignored" "ignored" "ignored"
-    "@interface" "ignored" "@interface" "ignored" "ignored"
+  classes_stereotypes 13 // uml cpp java php python idl
+    "class" "class" "class" "class" "class" "valuetype"
+    "interface" "class" "interface" "interface" "class" "interface"
+    "exception" "class" "class" "class" "class" "exception"
+    "enum" "enum" "enum" "enum" "enum" "enum"
+    "enum_pattern" "enum" "enum_pattern" "enum" "enum" "enum"
+    "struct" "struct" "class" "class" "class" "struct"
+    "union" "union" "class" "class" "class" "union"
+    "typedef" "typedef" "ignored" "ignored" "ignored" "typedef"
+    "boundary" "class" "class" "class" "class" "interface"
+    "control" "class" "class" "class" "class" "valuetype"
+    "entity" "class" "class" "class" "class" "valuetype"
+    "actor" "ignored" "ignored" "ignored" "ignored" "ignored"
+    "@interface" "ignored" "@interface" "ignored" "ignored" "ignored"
   
   cpp_enum_default_type_forms "${type}" "${type} &" "${type} &" "${type}" // in out inout return
   other_cpp_types_default_type_forms "const ${type} &" "${type} &" "${type} &" "${type}" // in out inout return
@@ -191,6 +191,37 @@ ${members}}
 {
   ${body}}
 "
+  python_2_2
+  python_indent_step "    "
+  python_default_src_content "${comment}
+${import}
+${definition}"
+  python_default_class_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+  python_default_enum_decl "class ${name}:
+${docstring}${members}
+"
+  python_default_external_class_decl "${name}"
+  python_default_attribute_declaration "${comment}${self}${name} = ${value}
+" // multiplicity 1
+  "${comment}${self}${name} = ${stereotype}()
+" // multiplicity != 1
+  python_default_enum_item_decl "${comment}${self}${name} = ${value}
+"
+  python_default_relation_declaration"${comment}${self}${name} = ${value}
+" // multiplicity 1
+  "${comment}${self}${name} = ${stereotype}()
+" // multiplicity != 1
+  python_default_composition_declaration"${comment}${self}${name} = ${type}()
+" // multiplicity 1
+  "${comment}${self}${name} = ${stereotype}()
+" // multiplicity != 1
+  python_default_operation_definition "${@}${static}${abstract}def ${name}${(}${)}:
+${docstring}${body}
+"
+  python_get "get${Name}"
+  python_set "set${Name}"
   idl_default_src_content "#ifndef ${MODULE}_${NAME}_H
 #define ${MODULE}_${NAME}_H
 

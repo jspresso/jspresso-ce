@@ -1,5 +1,0 @@
-class ThreadBlockingCallbackHandler
-!!!292615.java!!!	handle(inout callbacks : Callback) : void
-
-      loginCallbacks = callbacks;
-      waitForNotification();

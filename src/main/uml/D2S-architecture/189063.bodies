@@ -1,9 +1,0 @@
-class CancelAction
-!!!368519.java!!!	CancelAction()
-
-    setName("cancel");
-    setIconImageURL("classpath:images/cancel-48x48.png");
-!!!368647.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
-
-    closeDialog(context);
-    return super.execute(actionHandler, context);

@@ -1,9 +1,0 @@
-class ScriptedBackendAction
-!!!235399.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
-
-    scriptHandler.execute((IScript) context
-        .get(ActionContextConstants.ACTION_PARAM), context);
-    return super.execute(actionHandler, context);
-!!!235527.java!!!	setScriptHandler(inout scriptHandler : IScriptHandler) : void
-
-    this.scriptHandler = scriptHandler;

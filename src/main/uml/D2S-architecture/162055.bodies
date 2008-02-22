@@ -1,5 +1,0 @@
-class FindAction
-!!!257799.java!!!	FindAction()
-
-    setName("find.name");
-    setIconImageURL("classpath:images/find-48x48.png");

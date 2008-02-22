@@ -1,108 +1,285 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- Created with Bouml (http://bouml.free.fr/) -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="646" height="562" version="1.1" xmlns="http://www.w3.org/2000/svg">
-<g>
-	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="101" y1="393" x2="216" y2="283" />
-	<line stroke="black" stroke-opacity="1" x1="221" y1="279" x2="212" y2="278" />
-	<line stroke="black" stroke-opacity="1" x1="221" y1="279" x2="220" y2="287" />
-	<line stroke="black" stroke-opacity="1" x1="212" y1="278" x2="220" y2="287" />
-</g>
-<g>
-	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="521" y1="393" x2="394" y2="282" />
-	<line stroke="black" stroke-opacity="1" x1="390" y1="279" x2="390" y2="287" />
-	<line stroke="black" stroke-opacity="1" x1="390" y1="279" x2="398" y2="278" />
-	<line stroke="black" stroke-opacity="1" x1="390" y1="287" x2="398" y2="278" />
-</g>
-<g>
-	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="306" y1="425" x2="306" y2="305" />
-	<line stroke="black" stroke-opacity="1" x1="306" y1="299" x2="300" y2="305" />
-	<line stroke="black" stroke-opacity="1" x1="306" y1="299" x2="312" y2="305" />
-	<line stroke="black" stroke-opacity="1" x1="300" y1="305" x2="312" y2="305" />
-</g>
-<g>
-	<line stroke-dasharray="4,4" stroke="black" stroke-opacity="1" x1="306" y1="110" x2="306" y2="81" />
-	<line stroke="black" stroke-opacity="1" x1="306" y1="75" x2="300" y2="81" />
-	<line stroke="black" stroke-opacity="1" x1="306" y1="75" x2="312" y2="81" />
-	<line stroke="black" stroke-opacity="1" x1="300" y1="81" x2="312" y2="81" />
-</g>
-<g>
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="130" y="398" width="3" height="47" />
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="20" y="442" width="113" height="3" />
-	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="16" y="394" width="114" height="48" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="73" y="409">SwingStartup</text>
-	<line stroke="black" stroke-opacity="1" x1="16" y1="414" x2="130" y2="414" />
-	<line stroke="black" stroke-opacity="1" x1="16" y1="422" x2="130" y2="422" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="20" y="437">getStartupLocale()</text>
-</g>
-<g>
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="607" y="398" width="3" height="47" />
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="497" y="442" width="113" height="3" />
-	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="493" y="394" width="114" height="48" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="550" y="409">WingsStartup</text>
-	<line stroke="black" stroke-opacity="1" x1="493" y1="414" x2="607" y2="414" />
-	<line stroke="black" stroke-opacity="1" x1="493" y1="422" x2="607" y2="422" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="497" y="437">getStartupLocale()</text>
-</g>
-<g>
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="361" y="430" width="3" height="119" />
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="251" y="546" width="113" height="3" />
-	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="247" y="426" width="114" height="120" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="304" y="441">UlcStartup</text>
-	<line stroke="black" stroke-opacity="1" x1="247" y1="446" x2="361" y2="446" />
-	<line stroke="black" stroke-opacity="1" x1="247" y1="454" x2="361" y2="454" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="469">activate()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="487">handleMessage()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="505">passivate()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="523">stop()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="251" y="541">getStartupLocale()</text>
-</g>
-<g>
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="348" y="7" width="3" height="67" />
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="264" y="71" width="87" height="3" />
-	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="260" y="3" width="88" height="68" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="304" y="18">&lt;&lt;interface&gt;&gt;</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" text-anchor="middle" x="304" y="38">IStartup</text>
-	<line stroke="black" stroke-opacity="1" x1="260" y1="43" x2="348" y2="43" />
-	<line stroke="black" stroke-opacity="1" x1="260" y1="51" x2="348" y2="51" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="264" y="66">start()</text>
-</g>
-<g>
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="386" y="115" width="3" height="183" />
-	<rect fill="#808080" stroke="none" stroke-opacity="1" x="226" y="295" width="163" height="3" />
-	<rect fill="#ffffc0" stroke="black" stroke-width="1" stroke-opacity="1" x="222" y="111" width="164" height="184" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-weight="bold" font-style="italic" text-anchor="middle" x="304" y="142">AbstractStartup</text>
-	<line stroke="black" stroke-opacity="1" x1="222" y1="147" x2="386" y2="147" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="162">applicationContext</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="180">frontendController</text>
-	<line stroke="black" stroke-opacity="1" x1="222" y1="185" x2="386" y2="185" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="200">start()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="218">getApplicationContext()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-style="italic" x="226" y="236">getApplicationContextKey()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="254">getBackendController()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="226" y="272">getFrontendController()</text>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" font-style="italic" x="226" y="290">getStartupLocale()</text>
-</g>
-<g>
-	<rect fill="white" stroke-dasharray="4,4" stroke="black" stroke-width="1" stroke-opacity="1" x="334" y="99" width="83" height="23" />
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" text-anchor="middle" x="376" y="117">E, F, G</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="90" y="384">&lt;&lt;bind&gt;&gt;</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="4" y="368">&lt;E-&gt;JComponent, F-&gt;Icon, G-&gt;Action&gt;</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="489" y="385">&lt;&lt;bind&gt;&gt;</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="397" y="369">&lt;E-&gt;SComponent, F-&gt;SIcon, G-&gt;Action&gt;</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="278" y="419">&lt;&lt;bind&gt;&gt;</text>
-</g>
-<g>
-	<text font-family="Helvetica" font-size="12" fill="#000000" xml:space="preserve" x="169" y="403">&lt;E-&gt;ULCComponent, F-&gt;ULCIcon, G-&gt;IAction&gt;</text>
-</g>
+<?xml version="1.0"?>
+
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.0//EN' 'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg stroke-dasharray="none" shape-rendering="auto" xmlns="http://www.w3.org/2000/svg" font-family="&apos;Dialog&apos;" width="720" text-rendering="auto" fill-opacity="1" contentScriptType="text/ecmascript" color-interpolation="auto" color-rendering="auto" preserveAspectRatio="xMidYMid meet" font-size="12" fill="black" xmlns:xlink="http://www.w3.org/1999/xlink" stroke="black" image-rendering="auto" stroke-miterlimit="10" zoomAndPan="magnify" version="1.0" stroke-linecap="square" stroke-linejoin="miter" contentStyleType="text/css" font-style="normal" height="483" stroke-width="1" stroke-dashoffset="0" font-weight="normal" stroke-opacity="1">
+  <!--Generated by the Batik Graphics2D SVG Generator-->
+  <defs id="genericDefs" />
+  <g>
+    <defs id="defs1">
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath1">
+        <path d="M270 4 L441 4 L441 50 L270 50 L270 4 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath2">
+        <path d="M306 5 L404 5 L404 21 L306 21 L306 5 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath3">
+        <path d="M330 19 L380 19 L380 36 L330 36 L330 19 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath4">
+        <path d="M272 34 L439 34 L439 48 L272 48 L272 34 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath5">
+        <path d="M270 48 L441 48 L441 53 L270 53 L270 48 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath6">
+        <path d="M270 51 L441 51 L441 70 L270 70 L270 51 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath7">
+        <path d="M272 52 L339 52 L339 68 L272 68 L272 52 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath8">
+        <path d="M225 135 L487 135 L487 181 L225 181 L225 135 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath9">
+        <path d="M315 136 L397 136 L397 152 L315 152 L315 136 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath10">
+        <path d="M285 150 L426 150 L426 167 L285 167 L285 150 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath11">
+        <path d="M253 165 L458 165 L458 179 L253 179 L253 165 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath12">
+        <path d="M225 179 L487 179 L487 226 L225 226 L225 179 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath13">
+        <path d="M227 180 L392 180 L392 196 L227 196 L227 180 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath14">
+        <path d="M227 194 L419 194 L419 210 L227 210 L227 194 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath15">
+        <path d="M227 208 L458 208 L458 224 L227 224 L227 208 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath16">
+        <path d="M225 224 L487 224 L487 313 L225 313 L225 224 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath17">
+        <path d="M227 225 L294 225 L294 241 L227 241 L227 225 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath18">
+        <path d="M227 239 L419 239 L419 255 L227 255 L227 239 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath19">
+        <path d="M227 253 L407 253 L407 269 L227 269 L227 253 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath20">
+        <path d="M227 267 L445 267 L445 283 L227 283 L227 267 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath21">
+        <path d="M227 281 L485 281 L485 297 L227 297 L227 281 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath22">
+        <path d="M227 295 L368 295 L368 311 L227 311 L227 295 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath23">
+        <path d="M4 357 L239 357 L239 403 L4 403 L4 357 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath24">
+        <path d="M80 358 L162 358 L162 374 L80 374 L80 358 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath25">
+        <path d="M80 372 L162 372 L162 389 L80 389 L80 372 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath26">
+        <path d="M6 387 L237 387 L237 401 L6 401 L6 387 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath27">
+        <path d="M4 401 L239 401 L239 406 L4 406 L4 401 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath28">
+        <path d="M4 404 L239 404 L239 423 L4 423 L4 404 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath29">
+        <path d="M6 405 L145 405 L145 421 L6 421 L6 405 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath30">
+        <path d="M244 357 L468 357 L468 403 L244 403 L244 357 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath31">
+        <path d="M315 358 L397 358 L397 374 L315 374 L315 358 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath32">
+        <path d="M323 372 L389 372 L389 389 L323 389 L323 372 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath33">
+        <path d="M246 387 L466 387 L466 401 L246 401 L246 387 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath34">
+        <path d="M244 401 L468 401 L468 406 L244 406 L244 401 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath35">
+        <path d="M244 404 L468 404 L468 479 L244 479 L244 404 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath36">
+        <path d="M246 405 L329 405 L329 421 L246 421 L246 405 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath37">
+        <path d="M246 419 L395 419 L395 435 L246 435 L246 419 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath38">
+        <path d="M246 433 L338 433 L338 449 L246 449 L246 433 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath39">
+        <path d="M246 447 L312 447 L312 463 L246 463 L246 447 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath40">
+        <path d="M246 461 L385 461 L385 477 L246 477 L246 461 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath41">
+        <path d="M481 357 L716 357 L716 403 L481 403 L481 357 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath42">
+        <path d="M557 358 L639 358 L639 374 L557 374 L557 358 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath43">
+        <path d="M557 372 L640 372 L640 389 L557 389 L557 372 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath44">
+        <path d="M483 387 L714 387 L714 401 L483 401 L483 387 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath45">
+        <path d="M481 401 L716 401 L716 406 L481 406 L481 401 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath46">
+        <path d="M481 404 L716 404 L716 437 L481 437 L481 404 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath47">
+        <path d="M483 405 L567 405 L567 421 L483 421 L483 405 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath48">
+        <path d="M483 419 L622 419 L622 435 L483 435 L483 419 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath49">
+        <path d="M350 68 L363 68 L363 138 L350 138 L350 68 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath50">
+        <path d="M350 68 L363 68 L363 85 L350 85 L350 68 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath51">
+        <path d="M166 311 L234 311 L234 360 L166 360 L166 311 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath52">
+        <path d="M217 311 L234 311 L234 326 L217 326 L217 311 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath53">
+        <path d="M350 311 L363 311 L363 360 L350 360 L350 311 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath54">
+        <path d="M350 311 L363 311 L363 328 L350 328 L350 311 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath55">
+        <path d="M478 311 L545 311 L545 360 L478 360 L478 311 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath56">
+        <path d="M478 311 L495 311 L495 326 L478 326 L478 311 Z" />
+      </clipPath>
+    </defs>
+    <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
+      <rect width="967" x="0" height="712" y="0" stroke="none" />
+      <rect x="271" y="5" clip-path="url(#clipPath1)" width="169" height="44" stroke="none" />
+      <rect x="271" y="5" clip-path="url(#clipPath1)" fill="none" width="169" height="44" stroke="black" />
+      <text x="309" y="17" clip-path="url(#clipPath2)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">&lt;&lt;Java Interface&gt;&gt;</text>
+    </g>
+    <g stroke-miterlimit="0" font-weight="bold" font-family="&apos;Arial&apos;" stroke-linejoin="round">
+      <text xml:space="preserve" x="333" y="32" clip-path="url(#clipPath3)" stroke="none">IStartup</text>
+      <text font-size="9" x="275" y="44" clip-path="url(#clipPath4)" stroke="none" font-weight="normal" xml:space="preserve">com.d2s.framework.application.startup</text>
+    </g>
+    <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
+      <rect x="271" y="49" clip-path="url(#clipPath5)" width="169" height="3" stroke="none" />
+      <rect x="271" y="48" clip-path="url(#clipPath5)" fill="none" width="169" height="4" stroke="black" />
+      <rect x="271" y="52" clip-path="url(#clipPath6)" width="169" height="17" stroke="none" />
+      <rect x="271" y="51" clip-path="url(#clipPath6)" fill="none" width="169" height="18" stroke="black" />
+      <text x="275" y="64" clip-path="url(#clipPath7)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+start(): void</text>
+      <rect x="226" y="136" clip-path="url(#clipPath8)" width="260" height="44" stroke="none" />
+      <rect x="226" y="136" clip-path="url(#clipPath8)" fill="none" width="260" height="44" stroke="black" />
+      <text x="318" y="148" clip-path="url(#clipPath9)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">&lt;&lt;Java Class&gt;&gt;</text>
+    </g>
+    <g font-style="italic" stroke-miterlimit="0" font-weight="bold" font-family="&apos;Arial&apos;" stroke-linejoin="round">
+      <text xml:space="preserve" x="288" y="163" clip-path="url(#clipPath10)" stroke="none">AbstractStartup&lt;E,F,G&gt;</text>
+      <text font-size="9" x="256" y="175" clip-path="url(#clipPath11)" font-style="normal" stroke="none" font-weight="normal" xml:space="preserve">com.d2s.framework.application.frontend.startup</text>
+    </g>
+    <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
+      <rect x="226" y="180" clip-path="url(#clipPath12)" width="260" height="45" stroke="none" />
+      <rect x="226" y="179" clip-path="url(#clipPath12)" fill="none" width="260" height="46" stroke="black" />
+      <text x="230" y="192" clip-path="url(#clipPath13)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">-applicationContext: BeanFactory</text>
+      <text x="230" y="206" clip-path="url(#clipPath14)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">-backendController: IBackendController</text>
+      <text x="230" y="220" clip-path="url(#clipPath15)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">-frontendController: IFrontendController&lt;E,F,G&gt;</text>
+      <rect x="226" y="225" clip-path="url(#clipPath16)" width="260" height="87" stroke="none" />
+      <rect x="226" y="224" clip-path="url(#clipPath16)" fill="none" width="260" height="88" stroke="black" />
+      <text x="230" y="237" clip-path="url(#clipPath17)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+start(): void</text>
+      <text x="230" y="251" clip-path="url(#clipPath18)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">#getApplicationContext(): BeanFactory</text>
+    </g>
+    <g font-style="italic" font-size="11" stroke-miterlimit="0" font-family="&apos;Arial&apos;" stroke-linejoin="round">
+      <text xml:space="preserve" x="230" y="265" clip-path="url(#clipPath19)" stroke="none">#getApplicationContextKey(): String</text>
+      <text x="230" y="279" clip-path="url(#clipPath20)" font-style="normal" stroke="none" xml:space="preserve">#getBackendController(): IBackendController</text>
+      <text x="230" y="293" clip-path="url(#clipPath21)" font-style="normal" stroke="none" xml:space="preserve">#getFrontendController(): IFrontendController&lt;E,F,G&gt;</text>
+      <text xml:space="preserve" x="230" y="307" clip-path="url(#clipPath22)" stroke="none">#getStartupLocale(): Locale</text>
+    </g>
+    <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
+      <rect x="5" y="358" clip-path="url(#clipPath23)" width="233" height="44" stroke="none" />
+      <rect x="5" y="358" clip-path="url(#clipPath23)" fill="none" width="233" height="44" stroke="black" />
+      <text x="83" y="370" clip-path="url(#clipPath24)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">&lt;&lt;Java Class&gt;&gt;</text>
+    </g>
+    <g font-style="italic" stroke-miterlimit="0" font-weight="bold" font-family="&apos;Arial&apos;" stroke-linejoin="round">
+      <text xml:space="preserve" x="83" y="385" clip-path="url(#clipPath25)" stroke="none">SwingStartup</text>
+      <text font-size="9" x="9" y="397" clip-path="url(#clipPath26)" font-style="normal" stroke="none" font-weight="normal" xml:space="preserve">com.d2s.framework.application.frontend.startup.swing</text>
+    </g>
+    <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
+      <rect x="5" y="402" clip-path="url(#clipPath27)" width="233" height="3" stroke="none" />
+      <rect x="5" y="401" clip-path="url(#clipPath27)" fill="none" width="233" height="4" stroke="black" />
+      <rect x="5" y="405" clip-path="url(#clipPath28)" width="233" height="17" stroke="none" />
+      <rect x="5" y="404" clip-path="url(#clipPath28)" fill="none" width="233" height="18" stroke="black" />
+      <text x="9" y="417" clip-path="url(#clipPath29)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">#getStartupLocale(): Locale</text>
+      <rect x="245" y="358" clip-path="url(#clipPath30)" width="222" height="44" stroke="none" />
+      <rect x="245" y="358" clip-path="url(#clipPath30)" fill="none" width="222" height="44" stroke="black" />
+      <text x="318" y="370" clip-path="url(#clipPath31)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">&lt;&lt;Java Class&gt;&gt;</text>
+    </g>
+    <g font-style="italic" stroke-miterlimit="0" font-weight="bold" font-family="&apos;Arial&apos;" stroke-linejoin="round">
+      <text xml:space="preserve" x="326" y="385" clip-path="url(#clipPath32)" stroke="none">UlcStartup</text>
+      <text font-size="9" x="249" y="397" clip-path="url(#clipPath33)" font-style="normal" stroke="none" font-weight="normal" xml:space="preserve">com.d2s.framework.application.frontend.startup.ulc</text>
+    </g>
+    <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
+      <rect x="245" y="402" clip-path="url(#clipPath34)" width="222" height="3" stroke="none" />
+      <rect x="245" y="401" clip-path="url(#clipPath34)" fill="none" width="222" height="4" stroke="black" />
+      <rect x="245" y="405" clip-path="url(#clipPath35)" width="222" height="73" stroke="none" />
+      <rect x="245" y="404" clip-path="url(#clipPath35)" fill="none" width="222" height="74" stroke="black" />
+      <text x="249" y="417" clip-path="url(#clipPath36)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+activate(): void</text>
+      <text x="249" y="431" clip-path="url(#clipPath37)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+handleMessage(String): void</text>
+      <text x="249" y="445" clip-path="url(#clipPath38)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+passivate(): void</text>
+      <text x="249" y="459" clip-path="url(#clipPath39)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+stop(): void</text>
+      <text x="249" y="473" clip-path="url(#clipPath40)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">#getStartupLocale(): Locale</text>
+      <rect x="482" y="358" clip-path="url(#clipPath41)" width="233" height="44" stroke="none" />
+      <rect x="482" y="358" clip-path="url(#clipPath41)" fill="none" width="233" height="44" stroke="black" />
+      <text x="560" y="370" clip-path="url(#clipPath42)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">&lt;&lt;Java Class&gt;&gt;</text>
+    </g>
+    <g font-style="italic" stroke-miterlimit="0" font-weight="bold" font-family="&apos;Arial&apos;" stroke-linejoin="round">
+      <text xml:space="preserve" x="560" y="385" clip-path="url(#clipPath43)" stroke="none">WingsStartup</text>
+      <text font-size="9" x="486" y="397" clip-path="url(#clipPath44)" font-style="normal" stroke="none" font-weight="normal" xml:space="preserve">com.d2s.framework.application.frontend.startup.wings</text>
+    </g>
+    <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
+      <rect x="482" y="402" clip-path="url(#clipPath45)" width="233" height="3" stroke="none" />
+      <rect x="482" y="401" clip-path="url(#clipPath45)" fill="none" width="233" height="4" stroke="black" />
+      <rect x="482" y="405" clip-path="url(#clipPath46)" width="233" height="31" stroke="none" />
+      <rect x="482" y="404" clip-path="url(#clipPath46)" fill="none" width="233" height="32" stroke="black" />
+      <text x="486" y="417" clip-path="url(#clipPath47)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+WingsStartup()</text>
+      <text x="486" y="431" clip-path="url(#clipPath48)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">#getStartupLocale(): Locale</text>
+      <line clip-path="url(#clipPath49)" fill="none" x1="356" x2="356" y1="136" y2="102" stroke-dasharray="3,3" stroke="black" />
+      <line clip-path="url(#clipPath49)" fill="none" x1="356" x2="356" y1="102" y2="69" stroke-dasharray="3,3" stroke="black" />
+      <polygon clip-path="url(#clipPath50)" points=" 356 69 361 83 351 83" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath50)" points=" 356 69 361 83 351 83" stroke="black" />
+      <line clip-path="url(#clipPath51)" fill="none" x1="167" x2="199" y1="358" y2="335" stroke="black" />
+      <line clip-path="url(#clipPath51)" fill="none" x1="199" x2="232" y1="335" y2="312" stroke="black" />
+      <polygon clip-path="url(#clipPath52)" points=" 232 312 223 324 218 316" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath52)" points=" 232 312 223 324 218 316" stroke="black" />
+      <line clip-path="url(#clipPath53)" fill="none" x1="356" x2="356" y1="358" y2="335" stroke="black" />
+      <line clip-path="url(#clipPath53)" fill="none" x1="356" x2="356" y1="335" y2="312" stroke="black" />
+      <polygon clip-path="url(#clipPath54)" points=" 356 312 361 326 351 326" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath54)" points=" 356 312 361 326 351 326" stroke="black" />
+      <line clip-path="url(#clipPath55)" fill="none" x1="543" x2="511" y1="358" y2="335" stroke="black" />
+      <line clip-path="url(#clipPath55)" fill="none" x1="511" x2="479" y1="335" y2="312" stroke="black" />
+      <polygon clip-path="url(#clipPath56)" points=" 479 312 493 316 488 324" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath56)" points=" 479 312 493 316 488 324" stroke="black" />
+    </g>
+  </g>
 </svg>

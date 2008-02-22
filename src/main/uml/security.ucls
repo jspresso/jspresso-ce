@@ -1,0 +1,32 @@
+<class-diagram generalizations="true" realizations="true" associations="true" dependencies="false" 
+  nesting-relationships="true">  
+  <classifier-display autosize="true" package="true" attributes="false" operations="true" initial-value="false" 
+    signature="true" visibility="true"/>  
+  <association-display labels="true" multiplicity="true"/>  
+  <class type="java" name="com.d2s.framework.security.auth.spi.LdapLoginModule" project="design2see-framework" 
+    file="/design2see-framework/security/src/main/java/com/d2s/framework/security/auth/spi/LdapLoginModule.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="146" y="269" width="-1" height="-1"/>  
+  </class>  
+  <class type="java" name="org.jboss.security.auth.spi.LdapExtLoginModule" project="design2see-framework" 
+    file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="146" y="81" width="-1" height="-1"/>  
+  </class>  
+  <class type="java" name="com.d2s.framework.security.auth.spi.DevelopmentLoginModule" project="design2see-framework" 
+    file="/design2see-framework/security/src/main/java/com/d2s/framework/security/auth/spi/DevelopmentLoginModule.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="519" y="283" width="-1" height="-1"/>  
+  </class>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.security.auth.spi.LdapLoginModule" 
+      file="/design2see-framework/security/src/main/java/com/d2s/framework/security/auth/spi/LdapLoginModule.java"/>    
+    <target project="design2see-framework" name="org.jboss.security.auth.spi.LdapExtLoginModule" 
+      file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar"/>  
+  </generalization>
+</class-diagram>

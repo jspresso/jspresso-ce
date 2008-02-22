@@ -1,8 +1,0 @@
-class CloneEntityCollectionAction
-!!!233991.java!!!	setEntityCloneFactory(inout entityCloneFactory : IEntityCloneFactory) : void
-
-    this.entityCloneFactory = entityCloneFactory;
-!!!234119.java!!!	cloneElement(inout element : Object, inout context : Map<String, Object>) : Object
-
-    return entityCloneFactory.cloneEntity((IEntity) element,
-        getEntityFactory(context));

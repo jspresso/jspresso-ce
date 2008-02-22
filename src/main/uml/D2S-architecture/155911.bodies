@@ -1,5 +1,0 @@
-class AbstractLdapDao
-!!!229895.java!!!	setLdapTemplate(inout ldapTemplate : LdapTemplate) : void
-    this.ldapTemplate = ldapTemplate;
-!!!230023.java!!!	getLdapTemplate() : LdapTemplate
-    return ldapTemplate;

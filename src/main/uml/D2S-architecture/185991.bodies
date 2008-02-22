@@ -1,7 +1,0 @@
-class InfoAction
-!!!360455.java!!!	execute(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : boolean
-
-    SOptionPane.showMessageDialog(getSourceComponent(context),
-        getMessage(context), getI18nName(getTranslationProvider(context),
-            getLocale(context)), SOptionPane.INFORMATION_MESSAGE);
-    return super.execute(actionHandler, context);

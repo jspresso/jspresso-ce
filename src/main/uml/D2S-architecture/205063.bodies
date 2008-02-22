@@ -1,7 +1,0 @@
-class AbstractResource
-!!!412423.java!!!	AbstractResource(in mimeType : String)
-
-    this.mimeType = mimeType;
-!!!412551.java!!!	getMimeType() : String
-
-    return mimeType;

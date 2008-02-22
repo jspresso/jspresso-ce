@@ -1,7 +1,0 @@
-class BasicSimpleTreeLevelDescriptor
-!!!218247.java!!!	getChildDescriptor() : ITreeLevelDescriptor
-
-    return childDescriptor;
-!!!218375.java!!!	setChildDescriptor(inout childDescriptor : ITreeLevelDescriptor) : void
-
-    this.childDescriptor = childDescriptor;

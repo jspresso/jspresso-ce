@@ -1,0 +1,110 @@
+<class-diagram generalizations="true" realizations="true" associations="true" dependencies="false" 
+  nesting-relationships="true">  
+  <classifier-display autosize="true" package="true" attributes="true" operations="true" initial-value="false" 
+    signature="true" visibility="true"/>  
+  <association-display labels="true" multiplicity="true"/>  
+  <interface type="java" name="com.d2s.framework.model.descriptor.IPropertyDescriptor" project="design2see-framework" 
+    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IPropertyDescriptor.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="498" y="251" width="-1" height="-1"/>  
+  </interface>  
+  <interface type="java" name="com.d2s.framework.model.descriptor.IModelDescriptor" project="design2see-framework" 
+    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IModelDescriptor.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="499" y="27" width="-1" height="-1"/>  
+  </interface>  
+  <interface type="java" name="com.d2s.framework.model.descriptor.ICollectionDescriptor" project="design2see-framework" 
+    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ICollectionDescriptor.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="804" y="152" width="-1" height="-1"/>  
+  </interface>  
+  <interface type="java" name="com.d2s.framework.model.descriptor.IComponentDescriptor" project="design2see-framework" 
+    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IComponentDescriptor.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="134" y="239" width="-1" height="-1"/>  
+  </interface>  
+  <interface type="java" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
+    project="design2see-framework" 
+    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="168" y="474" width="-1" height="-1"/>  
+  </interface>  
+  <interface type="java" name="com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
+    project="design2see-framework" 
+    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="499" y="488" width="-1" height="-1"/>  
+  </interface>  
+  <interface type="java" name="com.d2s.framework.model.descriptor.IReferencePropertyDescriptor" 
+    project="design2see-framework" 
+    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IReferencePropertyDescriptor.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="358" y="618" width="-1" height="-1"/>  
+  </interface>  
+  <interface type="java" name="com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor" 
+    project="design2see-framework" 
+    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ICollectionPropertyDescriptor.java" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
+      visibility="true"/>    
+    <position x="669" y="653" width="-1" height="-1"/>  
+  </interface>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.ICollectionDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ICollectionDescriptor.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IModelDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IModelDescriptor.java"/>    
+    <bendpoint x="804" y="88"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IPropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IPropertyDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ICollectionPropertyDescriptor.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IComponentDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IComponentDescriptor.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IModelDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IModelDescriptor.java"/>    
+    <bendpoint x="135" y="92"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IReferencePropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IReferencePropertyDescriptor.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IRelationshipEndPropertyDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IPropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IPropertyDescriptor.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IModelDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IModelDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IPropertyDescriptor" 
+      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IPropertyDescriptor.java"/>  
+  </generalization>
+</class-diagram>

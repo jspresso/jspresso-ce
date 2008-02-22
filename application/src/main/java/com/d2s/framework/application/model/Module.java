@@ -43,7 +43,7 @@ public class Module extends AbstractPropertyChangeCapable implements ISecurable 
   /**
    * Constructs a new <code>Module</code> instance.
    */
-  protected Module() {
+  public Module() {
     started = false;
   }
 

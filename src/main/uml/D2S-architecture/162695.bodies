@@ -1,8 +1,0 @@
-class ActionExecutorCallback
-!!!268551.java!!!	fileChosen(inout in : InputStream, in filePath : String, inout actionHandler : IActionHandler, inout context : Map<String, Object>) : void
-
-    super.fileChosen(in, filePath, actionHandler, context);
-    actionHandler.execute(action, context);
-!!!268679.java!!!	setAction(inout action : IAction) : void
-
-    this.action = action;

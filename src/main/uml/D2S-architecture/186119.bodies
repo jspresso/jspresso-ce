@@ -1,8 +1,0 @@
-class AbstractMessageAction
-!!!360199.java!!!	executeNextAction(inout actionHandler : IActionHandler, inout context : Map<String, Object>) : void
-
-    super.execute(actionHandler, context);
-!!!360327.java!!!	getMessage(inout context : Map<String, Object>) : String
-
-    return HtmlHelper.emphasis((String) context
-        .get(ActionContextConstants.ACTION_PARAM));
