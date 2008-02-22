@@ -1,14 +1,12 @@
-window_sizes 1280 1003 494 640 888 38
+window_sizes 1241 973 381 854 888 38
 diagrams
   active  classdiagram_ref 135175 // Modules
     780 888 100 4 0 0
 end
 show_stereotypes
-selected class_ref 163847 // BeanModule
+selected classview_ref 152199 // Modules
 open
-  classview_ref 130695 // Model descriptors
-  classview_ref 152199 // Modules
-  classview_ref 133639 // application
-  classview_ref 134407 // model
+  
+package_ref 129415 // framework
 end
 end
