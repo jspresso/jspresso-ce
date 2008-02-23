@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="modules" size="1231,611" id="" metadata="uml2-1.0" initialized="true" scrolledY="3" tag="1000" key="32303037303533312D313030302064657369676E327365652D6672616D65776F726B2F56696E63656E74">
+  <children xsi:type="editmodel:ClassEditModel" name="Workspace" location="50,50" size="340,365" id="com.d2s.framework.application.model/Workspace" runTimeClassModel="getModules(),getI18nName(),getIconImageURL(),setName(Ljava.lang.String;),setIconImageURL(Ljava.lang.String;),setDescription(Ljava.lang.String;),getI18nDescription(),setGrantedRoles(Ljava.util.Collection;),toString(),getName(),getDescription(),getViewDescriptor(),setIconImageURLProvider(Lcom.d2s.framework.util.IIconImageURLProvider;),setI18nName(Ljava.lang.String;),getGrantedRoles(),setI18nDescription(Ljava.lang.String;),hashCode(),equals(Ljava.lang.Object;),setModules(Ljava.util.List;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="317,304">
+      <children xsi:type="editmodel:MethodEditModel" name="equals" id="com.d2s.framework.application.model/Workspace#equals(Ljava.lang.Object;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDescription" id="com.d2s.framework.application.model/Workspace#getDescription()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getGrantedRoles" id="com.d2s.framework.application.model/Workspace#getGrantedRoles()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getI18nDescription" id="com.d2s.framework.application.model/Workspace#getI18nDescription()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getI18nName" id="com.d2s.framework.application.model/Workspace#getI18nName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIconImageURL" id="com.d2s.framework.application.model/Workspace#getIconImageURL()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setModules" id="com.d2s.framework.application.model/Workspace#setModules(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getModules" id="com.d2s.framework.application.model/Workspace#getModules()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="com.d2s.framework.application.model/Workspace#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getViewDescriptor" id="com.d2s.framework.application.model/Workspace#getViewDescriptor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="hashCode" id="com.d2s.framework.application.model/Workspace#hashCode()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDescription" id="com.d2s.framework.application.model/Workspace#setDescription(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setI18nDescription" id="com.d2s.framework.application.model/Workspace#setI18nDescription(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setI18nName" id="com.d2s.framework.application.model/Workspace#setI18nName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setIconImageURL" id="com.d2s.framework.application.model/Workspace#setIconImageURL(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setIconImageURLProvider" id="com.d2s.framework.application.model/Workspace#setIconImageURLProvider(Lcom.d2s.framework.util.IIconImageURLProvider;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setGrantedRoles" id="com.d2s.framework.application.model/Workspace#setGrantedRoles(Ljava.util.Collection;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="com.d2s.framework.application.model/Workspace#setName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="com.d2s.framework.application.model/Workspace#toString()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPublicInnerClasses="true" packageIndication="3"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="Module" location="468,50" size="743,541" id="com.d2s.framework.application.model/Module" runTimeClassModel="getIconImageURL(),addSubModules(Ljava.util.Collection;),setIconImageURL(Ljava.lang.String;),removeSubModules(Ljava.util.Collection;),setGrantedRoles(Ljava.util.Collection;),toString(),getDescription(),getName(),setParent(Lcom.d2s.framework.application.model.Module;),setI18nName(Ljava.lang.String;),setStarted(Z),getStartupAction(),removeSubModule(Lcom.d2s.framework.application.model.Module;),setSubModules(Ljava.util.List;),setProjectedViewDescriptor(Lcom.d2s.framework.view.descriptor.IViewDescriptor;),isStarted(),getI18nName(),setName(Ljava.lang.String;),setDescription(Ljava.lang.String;),getSubModules(),getI18nDescription(),updateParentsAndFireSubModulesChanged(Ljava.util.List;Ljava.util.List;),addSubModule(Lcom.d2s.framework.application.model.Module;),setStartupAction(Lcom.d2s.framework.action.IAction;),getGrantedRoles(),setI18nDescription(Ljava.lang.String;),getParent(),hashCode(),Module(),getProjectedViewDescriptor()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="720,480">
+      <children xsi:type="editmodel:MethodEditModel" name="Module" id="com.d2s.framework.application.model/Module#Module()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSubModule" id="com.d2s.framework.application.model/Module#addSubModule(Lcom.d2s.framework.application.model.Module;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setGrantedRoles" id="com.d2s.framework.application.model/Module#setGrantedRoles(Ljava.util.Collection;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getDescription" id="com.d2s.framework.application.model/Module#getDescription()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getGrantedRoles" id="com.d2s.framework.application.model/Module#getGrantedRoles()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getI18nDescription" id="com.d2s.framework.application.model/Module#getI18nDescription()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getI18nName" id="com.d2s.framework.application.model/Module#getI18nName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getIconImageURL" id="com.d2s.framework.application.model/Module#getIconImageURL()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getName" id="com.d2s.framework.application.model/Module#getName()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getParent" id="com.d2s.framework.application.model/Module#getParent()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getProjectedViewDescriptor" id="com.d2s.framework.application.model/Module#getProjectedViewDescriptor()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getStartupAction" id="com.d2s.framework.application.model/Module#getStartupAction()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="getSubModules" id="com.d2s.framework.application.model/Module#getSubModules()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="hashCode" id="com.d2s.framework.application.model/Module#hashCode()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="isStarted" id="com.d2s.framework.application.model/Module#isStarted()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeSubModule" id="com.d2s.framework.application.model/Module#removeSubModule(Lcom.d2s.framework.application.model.Module;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="updateParentsAndFireSubModulesChanged" id="com.d2s.framework.application.model/Module#updateParentsAndFireSubModulesChanged(Ljava.util.List;Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setDescription" id="com.d2s.framework.application.model/Module#setDescription(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setSubModules" id="com.d2s.framework.application.model/Module#setSubModules(Ljava.util.List;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setI18nDescription" id="com.d2s.framework.application.model/Module#setI18nDescription(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setI18nName" id="com.d2s.framework.application.model/Module#setI18nName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setIconImageURL" id="com.d2s.framework.application.model/Module#setIconImageURL(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setName" id="com.d2s.framework.application.model/Module#setName(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setParent" id="com.d2s.framework.application.model/Module#setParent(Lcom.d2s.framework.application.model.Module;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setProjectedViewDescriptor" id="com.d2s.framework.application.model/Module#setProjectedViewDescriptor(Lcom.d2s.framework.view.descriptor.IViewDescriptor;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStarted" id="com.d2s.framework.application.model/Module#setStarted(Z)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="setStartupAction" id="com.d2s.framework.application.model/Module#setStartupAction(Lcom.d2s.framework.action.IAction;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="removeSubModules" id="com.d2s.framework.application.model/Module#removeSubModules(Ljava.util.Collection;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="toString" id="com.d2s.framework.application.model/Module#toString()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="addSubModules" id="com.d2s.framework.application.model/Module#addSubModules(Ljava.util.Collection;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showStereotype="true" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPublicAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPublicInnerClasses="true" packageIndication="3"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" properties="wireOptions=3;Product=eUML2" autoName="false"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" showMethodsParameterKinds="true" attributeSorter="Natural" methodSorter="Natural" showClassStereotype="true" showPackageStereotype="true" showDependencyStereotype="true" showInterfaceStereotype="true" innerClassSorter="Natural" showPublicAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showPublicInnerClasses="true" packageIndication="3"/>
+</editmodel:ClassDiagramEditModel>
