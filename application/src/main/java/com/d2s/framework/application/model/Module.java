@@ -22,12 +22,12 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
- * @version $LastChangedRevision: 1013 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public class Module extends AbstractPropertyChangeCapable implements ISecurable {
 
-  private String             description;
+  private String            description;
   private Collection<String> grantedRoles;
   private String             i18nDescription;
   private String             i18nName;
