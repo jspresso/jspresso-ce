@@ -27,7 +27,7 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class Module extends AbstractPropertyChangeCapable implements ISecurable {
 
-  private String            description;
+  private String             description;
   private Collection<String> grantedRoles;
   private String             i18nDescription;
   private String             i18nName;
