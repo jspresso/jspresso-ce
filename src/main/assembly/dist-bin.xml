@@ -29,6 +29,13 @@
       </includes>
     </fileSet>
     <fileSet>
+      <directory>target</directory>
+      <outputDirectory>src</outputDirectory>
+      <includes>
+        <include>*sources.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
       <directory>3rd-party-licences</directory>
       <outputDirectory>3rd-party-licences</outputDirectory>
       <includes>

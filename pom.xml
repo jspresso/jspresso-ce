@@ -57,7 +57,6 @@
     </repository>
   </repositories>
   <pluginRepositories>
-    <!--
     <pluginRepository>
       <id>snapshots</id>
       <url>http://people.apache.org/repo/m2-snapshot-repository</url>
@@ -66,8 +65,7 @@
       <id>codehaus</id>
       <url>http://snapshots.repository.codehaus.org</url>
     </pluginRepository>
-    -->
-  </pluginRepositories>
+   </pluginRepositories>
   <modules>
     <module>aop</module>
     <module>application</module>
@@ -376,7 +374,7 @@
         <artifactId>jboss-common</artifactId>
         <version>4.0.4</version>
       </dependency>
-       <dependency>
+      <dependency>
         <groupId>ulc</groupId>
         <artifactId>ulc-base-client</artifactId>
         <version>6.0.5</version>
@@ -494,6 +492,22 @@
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <inherited>false</inherited>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>aggregate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <attach>false</attach>
         </configuration>
       </plugin>
       <plugin>
@@ -686,6 +700,7 @@
         <configuration>
           <descriptors>
             <descriptor>src/main/assembly/dist-bin.xml</descriptor>
+            <descriptor>src/main/assembly/dist-src.xml</descriptor>
           </descriptors>
         </configuration>
       </plugin>
