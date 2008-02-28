@@ -5156,47 +5156,48 @@ hrsample-app { <co id="hrsample-app" />
           </figure>We will see further how to take care of the profiles
         (roles) authorizations and how the framework will handle it for you
         with very little configuration. But before getting there, we need to
-        install some application modules.</para>
+        install some application workspaces and modules.</para>
       </section>
     </section>
   </section>
 
   <section>
-    <title>Creating and registering application modules</title>
+    <title>Creating and registering application workspaces and modules</title>
 
-    <para>Before getting further in this section, let's first agree on what an
-    application module is. <trademark>D2S</trademark> defines an application
-    module as a projection of the domain model offering services. It is an
-    autonomous part of the application that can be registered in the frontend
-    controller to make it available to the end-user. As of this writing, the
+    <para>Before getting further in this section, let's first agree on what
+    application workspaces and modules are. <trademark>D2S</trademark> defines
+    an application module as a projection of the domain model offering
+    services. It is an autonomous part of the application that can be
+    registered in workspaces which in turn are registered in the frontend
+    controller to make them available to the end-user. As of this writing, the
     built-in frontend controllers (Swing, ULC and Wings) create a main MDI
-    frame and give access to the registered modules through a menu. Whenever a
-    module is started, a new internal frame is opened and the module structure
-    is displayed.</para>
+    frame and give access to the registered workspaces through a menu.
+    Whenever a workspace is started, a new internal frame is opened and the
+    workspace modules structure is displayed.</para>
 
     <para>Since we talk about module structure, let's explore it. A module is
     basically a tree structure with nested sub-modules (refer to the modules
-    class diagram to better understand it). The module is the root of this
-    tree structure and each nested sub-module (that can also nest other
-    sub-modules) is an actual application entry point.</para>
+    class diagram to better understand it). The workspace is the root of this
+    tree structure and each workspace registered module is an actual
+    application entry point.</para>
 
-    <para>There are 3 different types of sub-modules :</para>
+    <para>There are 3 different categories of modules :</para>
 
     <itemizedlist>
       <listitem>
-        <para>Basic sub-module : it offers a view (and its attached services)
-        on an arbitrary model (if any).</para>
+        <para>Basic module : it offers a view (and its attached services) on
+        an arbitrary model (if any).</para>
       </listitem>
 
       <listitem>
-        <para>Bean sub-module : it offers a view (and its attached services)
-        on a bean (maybe an entity but it is not mandatory; it can be any java
+        <para>Bean module : it offers a view (and its attached services) on a
+        bean (maybe an entity but it is not mandatory; it can be any java
         bean). The contained java bean can be accessed (get / set) at any time
         and the projected view model gets updated accordingly.</para>
       </listitem>
 
       <listitem>
-        <para>Bean collection sub-module : it offers a view (and its attached
+        <para>Bean collection module : it offers a view (and its attached
         services) on a collection of beans (maybe a collection of entities but
         it is not mandatory; it can be any collection of java beans). The
         contained java beans collection can be accessed (get / set) at any
@@ -5204,7 +5205,6 @@ hrsample-app { <co id="hrsample-app" />
       </listitem>
     </itemizedlist>
 
-    <para>Since a sub-module is also a module, we will indifferently use both
-    terms later in the document.</para>
+    <para></para>
   </section>
 </chapter>

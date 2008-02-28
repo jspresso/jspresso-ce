@@ -5,9 +5,9 @@ package com.d2s.framework.application.frontend.action.wings.std;
 
 import java.util.Map;
 
-import org.wings.SAnchor;
-import org.wings.SLabel;
-import org.wings.SOptionPane;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
+import org.wings.session.SessionManager;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
@@ -34,15 +34,15 @@ public class DisplayUrlAction extends AbstractWingsAction {
   IActionHandler actionHandler, Map<String, Object> context) {
     StringBuffer urlSpec = new StringBuffer();
     if (baseUrl != null) {
-      urlSpec.append(urlSpec);
+      urlSpec.append(baseUrl);
     }
     urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
 
     if (urlSpec.length() > 0) {
-      SAnchor downloadLink = new SAnchor(urlSpec.toString(), "downloadWindow");
-      downloadLink.add(new SLabel(getTranslationProvider(context)
-          .getTranslation("click.me", getLocale(context))));
-      SOptionPane.showMessageDialog(getSourceComponent(context), downloadLink);
+      ScriptListener listener = new JavaScriptListener(null, null,
+          "location.href='" + urlSpec.toString() + "'; location.target = 'download'");
+      SessionManager.getSession().getScriptManager()
+          .addScriptListener(listener);
     }
     return true;
   }

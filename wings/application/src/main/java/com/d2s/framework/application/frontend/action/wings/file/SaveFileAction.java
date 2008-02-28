@@ -7,13 +7,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.wings.SAnchor;
-import org.wings.SLabel;
-import org.wings.SOptionPane;
 import org.wings.externalizer.AbstractExternalizeManager;
 import org.wings.io.Device;
 import org.wings.io.DeviceOutputStream;
 import org.wings.resource.DynamicResource;
+import org.wings.script.JavaScriptListener;
+import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
 
 import com.d2s.framework.action.IActionHandler;
@@ -51,21 +50,16 @@ public class SaveFileAction extends ChooseFileAction {
           device.close();
         }
       };
-      // Collection<HttpHeader> headers = new ArrayList<HttpHeader>();
-      // headers.add(new Resource.HeaderEntry("Content-Disposition",
-      // "attachment; filename=" + getDefaultFileName()));
-      // String url = SessionManager.getSession().getExternalizeManager()
-      // .externalize(resource, headers, AbstractExternalizeManager.REQUEST);
       Map<String, String> headers = new HashMap<String, String>();
       headers.put("Content-Disposition", "attachment; filename="
           + getDefaultFileName());
       String url = SessionManager.getSession().getExternalizeManager()
           .externalize(resource, headers.entrySet(),
               AbstractExternalizeManager.REQUEST);
-      SAnchor downloadLink = new SAnchor(url, "downloadWindow");
-      downloadLink.add(new SLabel(getTranslationProvider(context)
-          .getTranslation("click.me", getLocale(context))));
-      SOptionPane.showMessageDialog(getSourceComponent(context), downloadLink);
+      ScriptListener listener = new JavaScriptListener(null, null,
+          "location.href='" + url.toString() + "'");
+      SessionManager.getSession().getScriptManager()
+          .addScriptListener(listener);
     }
     return super.execute(actionHandler, context);
   }

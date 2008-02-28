@@ -33,7 +33,7 @@ public class DisplayUrlAction extends AbstractSwingAction {
   IActionHandler actionHandler, Map<String, Object> context) {
     StringBuffer urlSpec = new StringBuffer();
     if (baseUrl != null) {
-      urlSpec.append(urlSpec);
+      urlSpec.append(baseUrl);
     }
     urlSpec.append((String) context.get(ActionContextConstants.ACTION_PARAM));
 
