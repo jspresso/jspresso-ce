@@ -1,6 +1,8 @@
-#Wed Sep 05 18:31:11 CEST 2007
+#Thu Feb 28 14:05:54 CET 2008
 eclipse.preferences.version=1
+org.springframework.ide.eclipse.core.enable.project.preferences=false
 org.springframework.ide.eclipse.core.validator.enable.org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.enable.org.springframework.ide.eclipse.core.springvalidator=true
 org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanAlias-org.springframework.ide.eclipse.beans.core.beansvalidator=true
 org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanClass-org.springframework.ide.eclipse.beans.core.beansvalidator=true
 org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanConstructorArgument-org.springframework.ide.eclipse.beans.core.beansvalidator=true
@@ -10,4 +12,7 @@ org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.i
 org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanInitDestroyMethod-org.springframework.ide.eclipse.beans.core.beansvalidator=true
 org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanProperty-org.springframework.ide.eclipse.beans.core.beansvalidator=true
 org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanReference-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.methodOverride-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.parsingProblems-org.springframework.ide.eclipse.beans.core.beansvalidator=true
 org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.requiredProperty-org.springframework.ide.eclipse.beans.core.beansvalidator=false
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.core.springClasspath-org.springframework.ide.eclipse.core.springvalidator=true

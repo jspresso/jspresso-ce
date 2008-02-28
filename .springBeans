@@ -13,6 +13,7 @@
 		<config>app-template/src/main/resources/com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
 		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
 		<config>app-template/src/main/resources/com/d2s/framework/application/frontend/swing/commons-swing.xml</config>
+		<config>app-template/src/main/resources/com/d2s/framework/application/mock-config.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
@@ -24,6 +25,7 @@
 				<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
 				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
 				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/swing/commons-swing.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/mock-config.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
@@ -35,6 +37,7 @@
 				<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
 				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
 				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/ulc/commons-ulc.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/mock-config.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
@@ -46,6 +49,7 @@
 				<config>app-template/src/main/resources/com/d2s/framework/application/commons.xml</config>
 				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/commons-frontend.xml</config>
 				<config>app-template/src/main/resources/com/d2s/framework/application/frontend/wings/commons-wings.xml</config>
+				<config>app-template/src/main/resources/com/d2s/framework/application/mock-config.xml</config>
 			</configs>
 		</configSet>
 	</configSets>

@@ -7,6 +7,7 @@ import org.apache.commons.lang.ObjectUtils;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 
 /**
  * A bean collection module that offers a filter.
@@ -50,6 +51,15 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
    * @return the filterViewDescriptor.
    */
   public IViewDescriptor getFilterViewDescriptor() {
+    if (filterViewDescriptor == null) {
+      filterViewDescriptor = new BasicComponentViewDescriptor();
+      ((BasicComponentViewDescriptor) filterViewDescriptor)
+          .setModelDescriptor(getFilterComponentDescriptor());
+      ((BasicComponentViewDescriptor) filterViewDescriptor).setColumnCount(4);
+      ((BasicComponentViewDescriptor) filterViewDescriptor).setName("filter");
+      ((BasicComponentViewDescriptor) filterViewDescriptor)
+          .setBorderType(IViewDescriptor.TITLED);
+    }
     return filterViewDescriptor;
   }
 
