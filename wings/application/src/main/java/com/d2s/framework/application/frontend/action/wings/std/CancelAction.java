@@ -25,7 +25,7 @@ public class CancelAction extends AbstractWingsAction {
    */
   public CancelAction() {
     setName("cancel");
-    setIconImageURL("classpath:images/cancel-48x48.png");
+    setIconImageURL("classpath:com/d2s/framework/application/images/cancel-48x48.png");
   }
 
   /**

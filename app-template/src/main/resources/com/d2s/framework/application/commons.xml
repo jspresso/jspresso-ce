@@ -328,31 +328,31 @@
     class="com.d2s.framework.view.AbstractIconFactory">
     <property
       name="okYesIconImageURL"
-      value="classpath:images/ok-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/ok-48x48.png" />
     <property
       name="noIconImageURL"
-      value="classpath:images/no-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/no-48x48.png" />
     <property
       name="cancelIconImageURL"
-      value="classpath:images/cancel-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/cancel-48x48.png" />
     <property
       name="infoIconImageURL"
-      value="classpath:images/info-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/info-48x48.png" />
     <property
       name="warningIconImageURL"
-      value="classpath:images/warning-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/warning-48x48.png" />
     <property
       name="errorIconImageURL"
-      value="classpath:images/error-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/error-48x48.png" />
     <property
       name="forbiddenIconUrl"
-      value="classpath:images/forbidden-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/forbidden-48x48.png" />
     <property
       name="backwardIconUrl"
-      value="classpath:images/backward-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/backward-48x48.png" />
     <property
       name="forwardIconUrl"
-      value="classpath:images/forward-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/forward-48x48.png" />
   </bean>
 
   <bean

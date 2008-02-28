@@ -82,7 +82,7 @@
     abstract="true">
     <property
       name="iconImageURL"
-      value="classpath:images/open_file-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/open_file-48x48.png" />
     <property
       name="name"
       value="open.file.name" />
@@ -96,7 +96,7 @@
     abstract="true">
     <property
       name="iconImageURL"
-      value="classpath:images/save_file-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/save_file-48x48.png" />
     <property
       name="name"
       value="save.file.name" />
@@ -110,7 +110,7 @@
     abstract="true">
     <property
       name="iconImageURL"
-      value="classpath:images/info-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/info-48x48.png" />
     <property
       name="name"
       value="binary.info.name" />
@@ -125,7 +125,7 @@
     class="com.d2s.framework.application.printing.frontend.action.PrintAction">
     <property
       name="iconImageURL"
-      value="classpath:images/print-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/print-48x48.png" />
     <property
       name="name"
       value="print.name" />
@@ -168,7 +168,7 @@
     class="com.d2s.framework.application.printing.frontend.action.ReportAction">
     <property
       name="iconImageURL"
-      value="classpath:images/execute-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/execute-48x48.png" />
     <property
       name="name"
       value="report.name" />
@@ -191,7 +191,7 @@
       value="ok" />
     <property
       name="iconImageURL"
-      value="classpath:images/print-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/print-48x48.png" />
     <property
       name="wrappedAction"
       ref="doPrintBackendAction" />
@@ -234,7 +234,7 @@
       value="password.change" />
     <property
       name="iconImageURL"
-      value="classpath:images/password-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/password-48x48.png" />
     <property
       name="modelConnectorFactory"
       ref="mapConnectorFactory" />
@@ -258,7 +258,7 @@
       value="wizard.name" />
     <property
       name="iconImageURL"
-      value="classpath:images/wizard-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/wizard-48x48.png" />
     <property
       name="modelConnectorFactory"
       ref="mapConnectorFactory" />
@@ -288,7 +288,7 @@
       value="query.filter.name" />
     <property
       name="iconImageURL"
-      value="classpath:images/find-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/find-48x48.png" />
   </bean>
 
   <bean
@@ -323,7 +323,7 @@
     parent="abstractAddToMasterFrontAction">
     <property
       name="iconImageURL"
-      value="classpath:images/edit_add-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/edit_add-48x48.png" />
     <!--
       <property name="mnemonicAsString" value="alt pressed A" />
     -->
@@ -346,7 +346,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/edit_clone-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/edit_clone-48x48.png" />
     <property
       name="name"
       value="clone.name" />
@@ -374,7 +374,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/edit_clone-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/edit_clone-48x48.png" />
     <property
       name="name"
       value="clone.name" />
@@ -398,7 +398,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/edit_copy-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/edit_copy-48x48.png" />
     <property
       name="name"
       value="copy.name" />
@@ -423,7 +423,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/edit_cut-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/edit_cut-48x48.png" />
     <property
       name="name"
       value="cut.name" />
@@ -456,7 +456,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/edit_paste-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/edit_paste-48x48.png" />
     <property
       name="name"
       value="paste.name" />
@@ -489,7 +489,7 @@
     abstract="true">
     <property
       name="iconImageURL"
-      value="classpath:images/edit_remove-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/edit_remove-48x48.png" />
     <property
       name="name"
       value="remove.name" />
@@ -546,7 +546,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/view-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/view-48x48.png" />
     <property
       name="name"
       value="installInTree.name" />
@@ -567,7 +567,7 @@
     class="com.d2s.framework.application.frontend.action.module.ModuleRestartAction">
     <property
       name="iconImageURL"
-      value="classpath:images/restart-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/restart-48x48.png" />
     <property
       name="name"
       value="module.restart" />
@@ -581,7 +581,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/up-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/up-48x48.png" />
     <property
       name="name"
       value="moveUp.name" />
@@ -606,7 +606,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/down-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/down-48x48.png" />
     <property
       name="name"
       value="moveDown.name" />
@@ -631,7 +631,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/reset-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/reset-48x48.png" />
     <property
       name="name"
       value="reset.name" />
@@ -652,7 +652,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/save-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/save-48x48.png" />
     <property
       name="name"
       value="save.name" />
@@ -676,7 +676,7 @@
     class="com.d2s.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
-      value="classpath:images/reload-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/reload-48x48.png" />
     <property
       name="name"
       value="reload.name" />

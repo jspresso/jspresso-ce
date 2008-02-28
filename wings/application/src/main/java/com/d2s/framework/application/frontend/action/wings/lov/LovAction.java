@@ -50,7 +50,7 @@ public class LovAction extends ModalDialogAction {
   public LovAction() {
     setName("lov.name");
     setDescription("lov.description");
-    setIconImageURL("classpath:images/find-48x48.png");
+    setIconImageURL("classpath:com/d2s/framework/application/images/find-48x48.png");
     setAutoquery(true);
   }
 

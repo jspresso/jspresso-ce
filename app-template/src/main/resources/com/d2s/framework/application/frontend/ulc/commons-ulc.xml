@@ -89,7 +89,7 @@
     class="com.d2s.framework.application.frontend.action.ulc.flow.InfoAction">
     <property
       name="iconImageURL"
-      value="classpath:images/info-48x48.png" />
+      value="classpath:com/d2s/framework/application/images/info-48x48.png" />
   </bean>
 
   <bean

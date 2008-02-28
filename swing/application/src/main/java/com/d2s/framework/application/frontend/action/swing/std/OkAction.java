@@ -25,7 +25,7 @@ public class OkAction extends AbstractSwingAction {
    */
   public OkAction() {
     setName("ok");
-    setIconImageURL("classpath:images/ok-48x48.png");
+    setIconImageURL("classpath:com/d2s/framework/application/images/ok-48x48.png");
   }
 
   /**
