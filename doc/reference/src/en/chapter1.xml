@@ -452,12 +452,11 @@
       <para>The various description java beans that are provided by
       <trademark>D2S</trademark> are detailed in the next chapter.</para>
 
-      <para>We will use the root package
-      <code>com.d2s.framework.hrsample</code> for our application. The domain
-      model description will logically go to the
-      <code>com.d2s.framework.hrsample.model</code> package. In this package,
-      we will create a <filename>hrsample-model.xml</filename> file as
-      described below :</para>
+      <para>We will use the root package <code>com.d2s.hrsample</code> for our
+      application. The domain model description will logically go to the
+      <code>com.d2s.hrsample.model</code> package. In this package, we will
+      create a <filename>hrsample-model.xml</filename> file as described below
+      :</para>
 
       <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
@@ -484,8 +483,7 @@
   class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt; <co
           id="n-class" />
   &lt;constructor-arg
-    value="com.d2s.framework.hrsample.model.Nameable" /&gt; <co
-          id="n-classname" />
+    value="com.d2s.hrsample.model.Nameable" /&gt; <co id="n-classname" />
   &lt;property name="propertyDescriptors"&gt; <co id="n-props" />
     &lt;list&gt;
       &lt;bean
@@ -566,7 +564,7 @@
       <programlisting language="xml">&lt;bean
   id="Traceable"
   class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Traceable" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.Traceable" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
@@ -667,7 +665,7 @@
             id="brf-commons" />
         &lt;value&gt;com/d2s/framework/tools/mock.xml&lt;/value&gt; <co
             id="brf-mock" />
-        &lt;value&gt;com/d2s/framework/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
+        &lt;value&gt;com/d2s/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
             id="brf-model" />
       &lt;/list&gt;
     &lt;/constructor-arg&gt;
@@ -731,7 +729,7 @@
       &lt;arg value="-outputDir" /&gt;
       &lt;arg value="${java.src.dir}" /&gt;
       &lt;arg value="-includePackages" /&gt;
-      &lt;arg value="com.d2s.framework.hrsample.model" /&gt;
+      &lt;arg value="com.d2s.hrsample.model" /&gt;
     &lt;/java&gt;
   &lt;/target&gt;
 
@@ -740,8 +738,8 @@
 &lt;/project&gt;</programlisting>
 
       <para>You may now have a look into the
-      <code>com.d2s.framework.hrsample.model</code> package source directory.
-      You may find the 2 generated classes :</para>
+      <code>com.d2s.hrsample.model</code> package source directory. You may
+      find the 2 generated classes :</para>
 
       <itemizedlist>
         <listitem>
@@ -755,7 +753,7 @@
         </listitem>
       </itemizedlist>
 
-      <programlisting id="Nameable" language="java">package com.d2s.framework.hrsample.model;
+      <programlisting id="Nameable" language="java">package com.d2s.hrsample.model;
 
 /**
  * Nameable component.
@@ -827,14 +825,14 @@ public interface Nameable {
 
       <para>It is time to write our first lines of java to achieve that. So
       let's create the life-cycle interceptor
-      <code>com.d2s.framework.hrsample.model.service.TraceableLifecycleInterceptor</code>
+      <code>com.d2s.hrsample.model.service.TraceableLifecycleInterceptor</code>
       java class as follow :</para>
 
-      <programlisting language="java">package com.d2s.framework.hrsample.model.service;
+      <programlisting language="java">package com.d2s.hrsample.model.service;
 
 import java.util.Date;
 
-import com.d2s.framework.hrsample.model.Traceable;
+import com.d2s.hrsample.model.Traceable;
 import com.d2s.framework.model.component.service.EmptyLifecycleInterceptor;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.model.entity.IEntityLifecycleHandler;
@@ -911,7 +909,7 @@ public class TraceableLifecycleInterceptor extends
   &lt;property name="lifecycleInterceptors"&gt; <co id="lcInterceptors" />
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.hrsample.model.service.TraceableLifecycleInterceptor" /&gt;
+        class="com.d2s.hrsample.model.service.TraceableLifecycleInterceptor" /&gt;
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
@@ -935,7 +933,7 @@ public class TraceableLifecycleInterceptor extends
   id="City"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt; <co
           id="BasicEntityDescriptor" />
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.City" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.City" /&gt;
   &lt;property name="ancestorDescriptors"&gt; <co id="ancestorDescriptors" />
     &lt;list&gt;
       &lt;ref local="Nameable" /&gt;
@@ -974,7 +972,7 @@ public class TraceableLifecycleInterceptor extends
       <para>Relaunching the <trademark>D2S</trademark> generator will produce
       the following class (<filename>City.java</filename>) :</para>
 
-      <programlisting language="java">package com.d2s.framework.hrsample.model;
+      <programlisting language="java">package com.d2s.hrsample.model;
 
 /**
  * City entity.
@@ -993,7 +991,7 @@ public class TraceableLifecycleInterceptor extends
  * @version $LastChangedRevision$
  */
 public interface City extends
-  com.d2s.framework.hrsample.model.Nameable,
+  com.d2s.hrsample.model.Nameable,
   com.d2s.framework.model.entity.IEntity <co id="IEntity" /> {
 
   /**
@@ -1065,7 +1063,7 @@ public interface City extends
   id="ContactInfo"
   class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt; <co
           id="BasicComponentDescriptor" />
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.ContactInfo" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.ContactInfo" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
@@ -1128,7 +1126,7 @@ public interface City extends
       <para>Relaunching the <trademark>D2S</trademark> generator will produce
       the following class (<filename>ContactInfo.java</filename>) :</para>
 
-      <programlisting language="java">package com.d2s.framework.hrsample.model;
+      <programlisting language="java">package com.d2s.hrsample.model;
 
 /**
  * ContactInfo component.
@@ -1233,7 +1231,7 @@ public interface ContactInfo extends
         <programlisting language="xml">&lt;bean
   id="ContactInfo"
   class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.ContactInfo" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.ContactInfo" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       ...
@@ -1281,7 +1279,7 @@ public interface ContactInfo extends
    *           name = "CITY_ID"
    * @return the city.
    */
-  com.d2s.framework.hrsample.model.City getCity();
+  com.d2s.hrsample.model.City getCity();
 
   /**
    * Sets the city.
@@ -1289,9 +1287,9 @@ public interface ContactInfo extends
    * @param city
    *          the city to set.
    */
-  void setCity(com.d2s.framework.hrsample.model.City city);</programlisting>Again,
-        the needed hibernate xDoclet tags are added to reflect the
-        relationship between the component and the entity.</para>
+  void setCity(com.d2s.hrsample.model.City city);</programlisting>Again, the
+        needed hibernate xDoclet tags are added to reflect the relationship
+        between the component and the entity.</para>
 
         <para>To end with the commons model part, let's define the Event
         entity :</para>
@@ -1299,7 +1297,7 @@ public interface ContactInfo extends
         <para><programlisting language="xml">&lt;bean
   id="Event"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Event" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.Event" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="Traceable" /&gt; <co id="Traceable" />
@@ -1356,7 +1354,7 @@ public interface ContactInfo extends
         <para><programlisting language="xml">&lt;bean
   id="Employee"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Employee" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.Employee" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="Nameable" /&gt;
@@ -1430,10 +1428,10 @@ public interface ContactInfo extends
           &lt;map&gt;
             &lt;entry
               key="M"
-              value="classpath:com/d2s/framework/hrsample/images/male-48x48.png" /&gt;
+              value="classpath:com/d2s/hrsample/images/male-48x48.png" /&gt;
             &lt;entry
               key="F"
-              value="classpath:com/d2s/framework/hrsample/images/female-48x48.png" /&gt;
+              value="classpath:com/d2s/hrsample/images/female-48x48.png" /&gt;
           &lt;/map&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -1561,7 +1559,7 @@ public interface ContactInfo extends
         <para><programlisting language="xml">&lt;bean
   id="Employee"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Employee" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.Employee" /&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -1588,7 +1586,7 @@ public interface ContactInfo extends
         <para>Launching the <trademark>D2S</trademark> generator will generate
         the <filename>Employee.java</filename> source file :</para>
 
-        <para><programlisting language="java">package com.d2s.framework.hrsample.model;
+        <para><programlisting language="java">package com.d2s.hrsample.model;
 
 /**
  * Employee entity.
@@ -1605,8 +1603,8 @@ public interface ContactInfo extends
  * @author Generated by Design2see
  * @version $LastChangedRevision$
  */
-public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
-    com.d2s.framework.hrsample.model.Traceable,
+public interface Employee extends com.d2s.hrsample.model.Nameable,
+    com.d2s.hrsample.model.Traceable,
     com.d2s.framework.model.entity.IEntity {
 
   /**
@@ -1715,7 +1713,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
    * @hibernate.component prefix = "CONTACT_"
    * @return the contact.
    */
-  com.d2s.framework.hrsample.model.ContactInfo getContact();
+  com.d2s.hrsample.model.ContactInfo getContact();
 
   /**
    * Sets the contact.
@@ -1723,7 +1721,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
    * @param contact
    *            the contact to set.
    */
-  void setContact(com.d2s.framework.hrsample.model.ContactInfo contact);
+  void setContact(com.d2s.hrsample.model.ContactInfo contact);
 
   /**
    * Gets the events.
@@ -1731,11 +1729,11 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
    * @hibernate.list cascade =
    *                 "persist,merge,save-update,refresh,evict,replicate,delete"
    * @hibernate.key column = "EVENTS_PARENT_ID"
-   * @hibernate.one-to-many class = "com.d2s.framework.hrsample.model.Event"
+   * @hibernate.one-to-many class = "com.d2s.hrsample.model.Event"
    * @hibernate.list-index column = "EVENTS_SEQ"
    * @return the events.
    */
-  java.util.List&lt;com.d2s.framework.hrsample.model.Event&gt; getEvents();
+  java.util.List&lt;com.d2s.hrsample.model.Event&gt; getEvents();
 
   /**
    * Sets the events.
@@ -1743,7 +1741,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
    * @param events
    *            the events to set.
    */
-  void setEvents(java.util.List&lt;com.d2s.framework.hrsample.model.Event&gt; events);
+  void setEvents(java.util.List&lt;com.d2s.hrsample.model.Event&gt; events);
 
   /**
    * Adds an element to the events.
@@ -1751,7 +1749,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
    * @param eventsElement
    *            the events element to add.
    */
-  void addToEvents(com.d2s.framework.hrsample.model.Event eventsElement);
+  void addToEvents(com.d2s.hrsample.model.Event eventsElement);
 
   /**
    * Adds an element to the events at the specified index. If the index is out
@@ -1763,7 +1761,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
    *            the events element to add.
    */
   void addToEvents(int index,
-      com.d2s.framework.hrsample.model.Event eventsElement);
+      com.d2s.hrsample.model.Event eventsElement);
 
   /**
    * Removes an element from the events.
@@ -1771,7 +1769,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
    * @param eventsElement
    *            the events element to remove.
    */
-  void removeFromEvents(com.d2s.framework.hrsample.model.Event eventsElement);
+  void removeFromEvents(com.d2s.hrsample.model.Event eventsElement);
 
 }</programlisting>As you can see above, the generator has generated all the
         accessors for the events list property. If the events property had
@@ -1796,7 +1794,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
       <para><programlisting language="xml">&lt;bean
   id="Company"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Company" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.Company" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="Nameable" /&gt;
@@ -1821,7 +1819,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
 &lt;bean
   id="OrganizationalUnit"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.OrganizationalUnit" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.OrganizationalUnit" /&gt;
   &lt;property name="purelyAbstract" value="true" /&gt; <co
             id="purelyAbstract" />
   &lt;property name="ancestorDescriptors"&gt;
@@ -1866,7 +1864,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
 &lt;bean
   id="Department"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Department" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.Department" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="OrganizationalUnit" /&gt; <co id="OrganizationalUnit" />
@@ -1877,7 +1875,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
 &lt;bean
   id="Team"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Team" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.Team" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="OrganizationalUnit" /&gt;
@@ -2162,7 +2160,7 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
 &lt;bean
   id="Department"
   class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.framework.hrsample.model.Department" /&gt;
+  &lt;constructor-arg value="com.d2s.hrsample.model.Department" /&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -2340,10 +2338,10 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
   ...
   &lt;property name="serviceDelegates"&gt; <co id="serviceDelegates" />
     &lt;map&gt;
-      &lt;entry key="com.d2s.framework.hrsample.model.service.EmployeeService"&gt; <co
+      &lt;entry key="com.d2s.hrsample.model.service.EmployeeService"&gt; <co
             id="NameableService" />
         &lt;bean
-          class="com.d2s.framework.hrsample.model.service.EmployeeServiceDelegate" /&gt; <co
+          class="com.d2s.hrsample.model.service.EmployeeServiceDelegate" /&gt; <co
             id="NameableServiceImpl" />
       &lt;/entry&gt;
     &lt;/map&gt;
@@ -2365,14 +2363,13 @@ public interface Employee extends com.d2s.framework.hrsample.model.Nameable,
         </calloutlist>Of course, we have to code both
       <code>EmployeeService</code> (the service definition) and
       <code>EmployeeServiceDelegate</code> (the service delegate
-      implementation) in the
-      <code>com.d2s.framework.hrsample.model.service</code> package as
-      described in the previous XML fragment.</para>
+      implementation) in the <code>com.d2s.hrsample.model.service</code>
+      package as described in the previous XML fragment.</para>
 
       <para>Here is the <filename>EmployeeService.java</filename> source file
       :</para>
 
-      <para><programlisting>package com.d2s.framework.hrsample.model.service;
+      <para><programlisting>package com.d2s.hrsample.model.service;
 
 import java.util.Date;
 
@@ -2393,11 +2390,11 @@ public interface EmployeeService {
 }</programlisting>And the <filename>EmployeeServiceDelegate.java</filename>
       source file :</para>
 
-      <para><programlisting>package com.d2s.framework.hrsample.model.service;
+      <para><programlisting>package com.d2s.hrsample.model.service;
 
 import java.util.Date;
 
-import com.d2s.framework.hrsample.model.Employee;
+import com.d2s.hrsample.model.Employee;
 import com.d2s.framework.model.component.service.IComponentService;
 
 /**
@@ -2450,10 +2447,10 @@ public class EmployeeServiceDelegate implements IComponentService { <co
 
       <para><programlisting>...
 public interface Employee extends
-  com.d2s.framework.hrsample.model.Nameable,
-  com.d2s.framework.hrsample.model.Traceable,
+  com.d2s.hrsample.model.Nameable,
+  com.d2s.hrsample.model.Traceable,
   com.d2s.framework.model.entity.IEntity,
-  com.d2s.framework.hrsample.model.service.EmployeeService {
+  com.d2s.hrsample.model.service.EmployeeService {
 ...
 }</programlisting>Again, <trademark>D2S</trademark> will seamlessly take care
       of triggering the delegates' methods, passing the right parameters,
@@ -2497,7 +2494,7 @@ public interface Employee extends
           value="150" /&gt;
         &lt;property
           name="delegateClassName"
-          value="com.d2s.framework.hrsample.model.extension.EmployeeExtension" /&gt; <co
+          value="com.d2s.hrsample.model.extension.EmployeeExtension" /&gt; <co
             id="delegateClassName" />
       &lt;/bean&gt;
     &lt;/list&gt;
@@ -2510,16 +2507,16 @@ public interface Employee extends
         </calloutlist>As you can see in the above XML fragment, the age
       property is almost described like any other standard entity property.
       What differs is the reference to the
-      <code>com.d2s.framework.hrsample.model.extension.EmployeeExtension</code>
-      java class that will be used to compute it. So let's code it. As
-      declared in the descriptor, we will put it in the
-      <code>com.d2s.framework.hrsample.model.extension</code> package :</para>
+      <code>com.d2s.hrsample.model.extension.EmployeeExtension</code> java
+      class that will be used to compute it. So let's code it. As declared in
+      the descriptor, we will put it in the
+      <code>com.d2s.hrsample.model.extension</code> package :</para>
 
-      <para><programlisting language="java">package com.d2s.framework.hrsample.model.extension;
+      <para><programlisting language="java">package com.d2s.hrsample.model.extension;
 
 import java.util.Date;
 
-import com.d2s.framework.hrsample.model.Employee;
+import com.d2s.hrsample.model.Employee;
 import com.d2s.framework.model.component.AbstractComponentExtension;
 
 /**
@@ -2595,13 +2592,13 @@ public class EmployeeExtension extends
       <para>The following update of the <filename>Employee.java</filename>
       source file fixes the 2 caveats described above :</para>
 
-      <para><programlisting language="java">package com.d2s.framework.hrsample.model.extension;
+      <para><programlisting language="java">package com.d2s.hrsample.model.extension;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
 
-import com.d2s.framework.hrsample.model.Employee;
+import com.d2s.hrsample.model.Employee;
 import com.d2s.framework.model.component.AbstractComponentExtension;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 
@@ -2798,7 +2795,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
             id="integrityProcessors" />
           &lt;list&gt;
             &lt;bean <co id="FirstNameIntegrityProcessor" />
-              class="com.d2s.framework.hrsample.model.processor.EmployeeIntegrityProcessors$FirstNameIntegrityProcessor" /&gt;
+              class="com.d2s.hrsample.model.processor.EmployeeIntegrityProcessors$FirstNameIntegrityProcessor" /&gt;
           &lt;/list&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -2812,7 +2809,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
         &lt;property name="integrityProcessors"&gt;
           &lt;list&gt;
             &lt;bean <co id="BirthDateIntegrityProcessor" />
-              class="com.d2s.framework.hrsample.model.processor.EmployeeIntegrityProcessors$BirthDateIntegrityProcessor" /&gt;
+              class="com.d2s.hrsample.model.processor.EmployeeIntegrityProcessors$BirthDateIntegrityProcessor" /&gt;
           &lt;/list&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -2837,24 +2834,23 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
 
       <para>As described in the XML fragment, we are going to create an
       <code>EmployeeIntegrityProcessors</code> class in the new package
-      <code>com.d2s.framework.hrsample.model.processor</code>. As a best
-      practice, it is recommended (but not imposed) to create a containing
-      class that holds all the processors for a component; then each processor
-      will be a named static internal class of this container class and
-      referenced as such (using the $ sign) in the spring configuration file.
-      This pattern limits the number of processors source files in the project
-      while grouping all the processors related to a component
-      together.</para>
+      <code>com.d2s.hrsample.model.processor</code>. As a best practice, it is
+      recommended (but not imposed) to create a containing class that holds
+      all the processors for a component; then each processor will be a named
+      static internal class of this container class and referenced as such
+      (using the $ sign) in the spring configuration file. This pattern limits
+      the number of processors source files in the project while grouping all
+      the processors related to a component together.</para>
 
       <para>Let's see what those processors look like by looking at the
       <filename>EmployeeIntegrityProcessors.java</filename> source file
       :</para>
 
-      <para><programlisting language="java">package com.d2s.framework.hrsample.model.processor;
+      <para><programlisting language="java">package com.d2s.hrsample.model.processor;
 
 import java.util.Date;
 
-import com.d2s.framework.hrsample.model.Employee;
+import com.d2s.hrsample.model.Employee;
 import com.d2s.framework.util.bean.integrity.EmptyPropertyIntegrityProcessor;
 import com.d2s.framework.util.bean.integrity.IntegrityException;
 
@@ -2994,9 +2990,9 @@ public class EmployeeIntegrityProcessors {
 
     <para>Before going further, let's create the frontend application
     descriptor. The frontend description will logically go to the
-    <code>com.d2s.framework.hrsample.view</code> package. In this package, we
-    will create a <filename>hrsample-view.xml</filename> file as described
-    below :</para>
+    <code>com.d2s.hrsample.view</code> package. In this package, we will
+    create a <filename>hrsample-view.xml</filename> file as described below
+    :</para>
 
     <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
@@ -3017,7 +3013,7 @@ public class EmployeeIntegrityProcessors {
       ref="commonsMessageSource" /&gt; <co id="commonsMessageSource" />
     &lt;property name="basenames"&gt;
       &lt;list&gt;
-        &lt;value&gt;com.d2s.framework.hrsample.i18n.Messages&lt;/value&gt; <co
+        &lt;value&gt;com.d2s.hrsample.i18n.Messages&lt;/value&gt; <co
           id="basenames" />
       &lt;/list&gt;
     &lt;/property&gt;
@@ -3041,9 +3037,9 @@ public class EmployeeIntegrityProcessors {
     translator won't have to care about translations length.</para>
 
     <para>As declared in the XML fragment above, we will create a
-    <code>com.d2s.framework.hrsample.i18n</code> package that will contain the
-    resource bundle property files. We will translate the application in
-    English and French; so let's create the two files
+    <code>com.d2s.hrsample.i18n</code> package that will contain the resource
+    bundle property files. We will translate the application in English and
+    French; so let's create the two files
     <filename>Messages_en.properties</filename> and
     <filename>Messages_fr.properties</filename> that will respectively contain
     the English and French translations. Adding a language will be just a
@@ -3075,13 +3071,13 @@ public class EmployeeIntegrityProcessors {
       &lt;list&gt;
         &lt;value&gt;com/d2s/framework/application/commons.xml&lt;/value&gt;
         &lt;value&gt;com/d2s/framework/tools/mock.xml&lt;/value&gt;
-        &lt;value&gt;com/d2s/framework/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
+        &lt;value&gt;com/d2s/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
           id="hrsample-model.xml" />
         &lt;value&gt;com/d2s/framework/application/frontend/commons-frontend.xml&lt;/value&gt; <co
           id="commons-frontend.xml" />
         &lt;value&gt;com/d2s/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt; <co
           id="commons-swing.xml" />
-        &lt;value&gt;com/d2s/framework/hrsample/frontend/hrsample-view.xml&lt;/value&gt; <co
+        &lt;value&gt;com/d2s/hrsample/frontend/hrsample-view.xml&lt;/value&gt; <co
           id="hrsample-frontend.xml" />
       &lt;/list&gt;
     &lt;/constructor-arg&gt;
@@ -3305,7 +3301,7 @@ public class EmployeeIntegrityProcessors {
 
         <para><programlisting>age.below.18 = Employee is not 18 years old.
 
-com.d2s.framework.hrsample.model.Company = Company
+com.d2s.hrsample.model.Company = Company
 
 contact.address = Address
 contact.city    = City
@@ -3322,7 +3318,7 @@ zip = Code postal</programlisting>And Messages_fr.properties :</para>
 
         <para><programlisting>age.below.18 = L'employ\u00E9 n'a pas 18 ans.
 
-com.d2s.framework.hrsample.model.Company = Soci\u00E9t\u00E9
+com.d2s.hrsample.model.Company = Soci\u00E9t\u00E9
 
 contact.address = Adresse
 contact.city    = Ville
@@ -3598,9 +3594,8 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               including other composite views.</para>
             </callout>
           </calloutlist>After having completed the I18N property files with
-        the <code>com.d2s.framework.hrsample.model.Traceable</code> entry, we
-        can launch the view tester on the <code>Company.tab.pane</code> view
-        :</para>
+        the <code>com.d2s.hrsample.model.Traceable</code> entry, we can launch
+        the view tester on the <code>Company.tab.pane</code> view :</para>
 
         <para><figure>
             <title>The tabbed company view</title>
@@ -3649,7 +3644,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   ...
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/framework/hrsample/images/traceable-48x48.png" /&gt; <co
+    value="classpath:com/d2s/hrsample/images/traceable-48x48.png" /&gt; <co
               id="iconImageURL" />
 &lt;/bean&gt;
 ...
@@ -3659,7 +3654,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   ...
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/framework/hrsample/images/company-48x48.png" /&gt;
+    value="classpath:com/d2s/hrsample/images/company-48x48.png" /&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="iconImageURL">
               <para>We declare the URL used to reference the image to be used
@@ -3743,12 +3738,11 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             very useful, specialized URL which is the <code>classpath:</code>
             URL. Such a URL may be used to reference any resource present in
             the application classpath. As an example, we have used the
-            <code>classpath:com/d2s/framework/hrsample/images/company-48x48.png</code>
-            URL to load an image from the
-            <code>com.d2s.framework.hrsample.images</code> package. This
-            prevents the developer from hard-coding references to application
-            external resources and promotes portability across deployment
-            environments.</para>
+            <code>classpath:com/d2s/hrsample/images/company-48x48.png</code>
+            URL to load an image from the <code>com.d2s.hrsample.images</code>
+            package. This prevents the developer from hard-coding references
+            to application external resources and promotes portability across
+            deployment environments.</para>
           </listitem>
 
           <listitem>
@@ -4333,7 +4327,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     ref="Company-departments.subtree" /&gt; <co id="childDescriptor2" />
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/framework/hrsample/images/structure-48x48.png" /&gt; <co
+    value="classpath:com/d2s/hrsample/images/structure-48x48.png" /&gt; <co
               id="Company.tree.icon" />
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="BasicSimpleTreeLevelDescriptor">
@@ -4550,15 +4544,14 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <orderedlist>
         <listitem>
           <para><filename>hrsample-backend.xml</filename> that will logically
-          go into the <code>com.d2s.framework.hrsample.backend</code> package
-          and will hold all the description of the backend.</para>
+          go into the <code>com.d2s.hrsample.backend</code> package and will
+          hold all the description of the backend.</para>
         </listitem>
 
         <listitem>
           <para><filename>config.xml</filename> that we will put in the
-          <code>com.d2s.framework.hrsample</code> package and that will hold
-          all the specific configuration related to a deployment
-          environment.</para>
+          <code>com.d2s.hrsample</code> package and that will hold all the
+          specific configuration related to a deployment environment.</para>
         </listitem>
       </orderedlist>
 
@@ -4594,12 +4587,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             id="commons-hibernate.xml" />
       &lt;value&gt;com/d2s/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
       &lt;value&gt;com/d2s/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/framework/hrsample/model/hrsample-model.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/framework/hrsample/backend/hrsample-backend.xml&lt;/value&gt; <co
+      &lt;value&gt;com/d2s/hrsample/model/hrsample-model.xml&lt;/value&gt;
+      &lt;value&gt;com/d2s/hrsample/backend/hrsample-backend.xml&lt;/value&gt; <co
             id="hrsample-backend.xml" />
-      &lt;value&gt;com/d2s/framework/hrsample/view/hrsample-view.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/framework/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/framework/hrsample/config.xml&lt;/value&gt; <co
+      &lt;value&gt;com/d2s/hrsample/view/hrsample-view.xml&lt;/value&gt;
+      &lt;value&gt;com/d2s/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt;
+      &lt;value&gt;com/d2s/hrsample/config.xml&lt;/value&gt; <co
             id="config.xml" />
     &lt;/list&gt;
   &lt;/constructor-arg&gt;
@@ -4658,7 +4651,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;/property&gt;
   &lt;property name="mappingLocations"&gt;
     &lt;list&gt;
-      &lt;value&gt;classpath*:com/d2s/framework/hrsample/**/*.hbm.xml&lt;/value&gt; <co
+      &lt;value&gt;classpath*:com/d2s/hrsample/**/*.hbm.xml&lt;/value&gt; <co
             id="mappingLocations" />
     &lt;/list&gt;
   &lt;/property&gt;
@@ -4698,7 +4691,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
           <callout arearefs="mappingLocations">
             <para>We instruct hibernate to load the mapping files from
-            resources located in any <code>com.d2s.framework.hrsample</code>
+            resources located in any <code>com.d2s.hrsample</code>
             subpackage.</para>
           </callout>
         </calloutlist></para>
@@ -4711,7 +4704,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <para><programlisting language="xml">...
 &lt;property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" /&gt;
 &lt;property name="xdoclet.plugins.dir" value="${xdoclet.home}/plugins" /&gt;
-&lt;property name="model.src.dir" value="${java.src.dir}/com/d2s/framework/hrsample/model" /&gt;
+&lt;property name="model.src.dir" value="${java.src.dir}/com/d2s/hrsample/model" /&gt;
 ...
 &lt;target name="clean-hibernate"&gt;
   &lt;delete&gt;
@@ -4757,7 +4750,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             tuplizer of an entity or component, which is required.</para>
           </callout>
         </calloutlist>Running ant produces the following mapping file in the
-      <code>com.d2s.framework.hrsample.model</code> package :</para>
+      <code>com.d2s.hrsample.model</code> package :</para>
 
       <itemizedlist>
         <listitem>
@@ -4792,7 +4785,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;class dynamic-update="true"
          table="CITY"
          persister="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
-         name="com.d2s.framework.hrsample.model.City"
+         name="com.d2s.hrsample.model.City"
          dynamic-insert="true"&gt;
     &lt;id type="string" column="ID" length="36" name="id"&gt;
       &lt;generator class="assigned"/&gt;
@@ -4825,10 +4818,10 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       usable as-is) most of the application assembling is done in the
       front-end controller. We will configure the frontend controller in a new
       <filename>hrsample-frontend.xml</filename> configuration file located in
-      the <code>com.d2s.framework.hrsample.frontend</code> package. Don't
-      forget that you are free to split all the configuration files in smaller
-      pieces but then, don't forget to update the various context entries in
-      the <filename>beanRefFactory.xml</filename> bootstrap configuration
+      the <code>com.d2s.hrsample.frontend</code> package. Don't forget that
+      you are free to split all the configuration files in smaller pieces but
+      then, don't forget to update the various context entries in the
+      <filename>beanRefFactory.xml</filename> bootstrap configuration
       file.</para>
 
       <para>So lets add our front controller definition :</para>
@@ -4842,11 +4835,11 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     value="hrsample.name" /&gt; <co id="hrsample.name" />
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/framework/hrsample/images/people-48x48.png" /&gt; <co
+    value="classpath:com/d2s/hrsample/images/people-48x48.png" /&gt; <co
             id="hrsample.iconImageURL" />
   &lt;property
     name="modulesMenuIconImageUrl"
-    value="classpath:com/d2s/framework/hrsample/images/modules-48x48.png" /&gt; <co
+    value="classpath:com/d2s/hrsample/images/modules-48x48.png" /&gt; <co
             id="modulesMenuIconImageUrl" />
 &lt;/bean&gt;</programlisting><calloutlist>
           <callout arearefs="applicationFrontController">
@@ -4892,10 +4885,10 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <code>com.d2s.framework.application.launch.swing.SwingLauncher</code>;
       this is the one we are going to use now. So let's create our swing
       startup class. We will name it <code>SwingHrSampleStartup</code> and
-      create it in a new <code>com.d2s.framework.hrsample.startup</code> java
-      package :</para>
+      create it in a new <code>com.d2s.hrsample.startup</code> java package
+      :</para>
 
-      <para><programlisting language="xml">package com.d2s.framework.hrsample.startup;
+      <para><programlisting language="xml">package com.d2s.hrsample.startup;
 
 import com.d2s.framework.application.frontend.startup.swing.SwingStartup;
 
@@ -4933,9 +4926,8 @@ public class SwingHrSampleStartup extends SwingStartup { <co
 
       <para><code>java
       com.d2s.framework.application.launch.swing.SwingLauncher
-      -applicationClass
-      com.d2s.framework.hrsample.startup.SwingHrSampleStartup -splash
-      classpath:com/d2s/framework/hrsample/images/logo-small.png</code></para>
+      -applicationClass com.d2s.hrsample.startup.SwingHrSampleStartup -splash
+      classpath:com/d2s/hrsample/images/logo-small.png</code></para>
 
       <para>You should have a splash screen popping up and soon after the
       following MDI frame (here with a substance look and feel and a French
