@@ -40,7 +40,7 @@ public class DisplayUrlAction extends AbstractWingsAction {
 
     if (urlSpec.length() > 0) {
       ScriptListener listener = new JavaScriptListener(null, null,
-          "location.href='" + urlSpec.toString() + "'; location.target = 'download'");
+          "wingS.util.openLink('download','" + urlSpec.toString() + "',null);");
       SessionManager.getSession().getScriptManager()
           .addScriptListener(listener);
     }
