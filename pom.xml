@@ -514,6 +514,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
         <executions>
+<!--
           <execution>
             <id>obfuscate</id>
             <phase>verify</phase>
@@ -537,8 +538,6 @@
                       <libraryjar file="${java.home}/lib/rt.jar" />
                       <libraryjar refid="maven.runtime.classpath" />
 
-                      <!-- Keep some useful attributes. -->
-
                       <keepattribute name="InnerClasses" />
                       <keepattribute name="SourceFile" />
                       <keepattribute name="LineNumberTable" />
@@ -547,15 +546,10 @@
                       <keepattribute name="*Annotation*" />
                       <keepattribute name="EnclosingMethod" />
 
-                      <!-- Preserve all public classes, and their public and protected fields
-                        and methods. -->
-
                       <keep access="public">
                         <field access="public protected" />
                         <method access="public protected" />
                       </keep>
-
-                      <!-- Preserve all .class method names. -->
 
                       <keepclassmembernames access="public">
                         <method
@@ -568,13 +562,9 @@
                           parameters="java.lang.String,boolean" />
                       </keepclassmembernames>
 
-                      <!-- Preserve all native method names and the names of their classes. -->
-
                       <keepclasseswithmembernames>
                         <method access="native" />
                       </keepclasseswithmembernames>
-
-                      <!-- Preserve a method that is required in all enumeration classes. -->
 
                       <keepclassmembers extends="java.lang.Enum">
                         <method
@@ -583,12 +573,6 @@
                           name="values"
                           parameters="" />
                       </keepclassmembers>
-
-                      <!-- Explicitly preserve all serialization members. The Serializable
-                        interface is only a marker interface, so it wouldn't save them.
-                        You can comment this out if your library doesn't use serialization.
-                        If your code contains serializable classes that have to be backward
-                        compatible, please refer to the manual. -->
 
                       <keepclassmembers implements="java.io.Serializable">
                         <field
@@ -615,8 +599,6 @@
                           parameters="" />
                       </keepclassmembers>
 
-                      <!-- Your application may contain more items that need to be preserved;
-                        typically classes that are dynamically created using Class.forName -->
                     </proguard>
                     <move
                       file="${project.build.directory}/encrypted-${project.artifactId}-${project.version}.${project.packaging}"
@@ -629,6 +611,7 @@
               <goal>run</goal>
             </goals>
           </execution>
+-->
           <execution>
             <id>beandoc</id>
             <phase>pre-site</phase>
