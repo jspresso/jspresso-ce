@@ -4837,10 +4837,6 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     name="iconImageURL"
     value="classpath:com/d2s/hrsample/images/people-48x48.png" /&gt; <co
             id="hrsample.iconImageURL" />
-  &lt;property
-    name="modulesMenuIconImageUrl"
-    value="classpath:com/d2s/hrsample/images/modules-48x48.png" /&gt; <co
-            id="modulesMenuIconImageUrl" />
 &lt;/bean&gt;</programlisting><calloutlist>
           <callout arearefs="applicationFrontController">
             <para>We declare our application frontend controller to inherit
@@ -4864,12 +4860,6 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <para>We define the icon of the controller, or more generally of
             the application. It will be used as the frame icon in the case of
             the swing controller.</para>
-          </callout>
-
-          <callout arearefs="modulesMenuIconImageUrl">
-            <para>We define the icon of the menu used to launch the different
-            application modules (but we haven't talked about modules
-            yet...).</para>
           </callout>
         </calloutlist>That's it for the minimal frontend configuration.</para>
     </section>

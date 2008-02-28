@@ -320,6 +320,9 @@
     <property
       name="moduleViewDescriptorFactory"
       ref="moduleViewDescriptorFactory" />
+    <property
+      name="workspacesMenuIconImageUrl"
+      value="classpath:com/d2s/framework/application/images/workspaces-48x48.png" />
   </bean>
 
   <bean
