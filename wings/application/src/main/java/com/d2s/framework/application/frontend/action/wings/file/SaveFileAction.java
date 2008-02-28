@@ -56,8 +56,6 @@ public class SaveFileAction extends ChooseFileAction {
       // "attachment; filename=" + getDefaultFileName()));
       // String url = SessionManager.getSession().getExternalizeManager()
       // .externalize(resource, headers, AbstractExternalizeManager.REQUEST);
-      // String url = SessionManager.getSession().getExternalizeManager()
-      // .externalize(resource, headers, AbstractExternalizeManager.REQUEST);
       Map<String, String> headers = new HashMap<String, String>();
       headers.put("Content-Disposition", "attachment; filename="
           + getDefaultFileName());

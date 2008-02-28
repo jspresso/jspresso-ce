@@ -1,53 +1,14 @@
 <assembly>
   <id>dist-bin</id>
   <formats>
-    <format>tar.gz</format>
     <format>zip</format>
+    <format>tar.gz</format>
   </formats>
-  <fileSets>
-    <fileSet>
-      <includes>
-        <include>README*</include>
-        <include>LICENSE*</include>
-        <include>NOTICE*</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>doc/reference/target</directory>
-      <outputDirectory>doc/reference</outputDirectory>
-      <includes>
-        <include>html/**</include>
-        <include>pdf/**</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>target/site</directory>
-      <outputDirectory>doc</outputDirectory>
-      <includes>
-        <include>apidocs/**</include>
-        <include>beandocs/**</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>target</directory>
-      <outputDirectory>src</outputDirectory>
-      <includes>
-        <include>*sources.jar</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>3rd-party-licences</directory>
-      <outputDirectory>3rd-party-licences</outputDirectory>
-      <includes>
-        <include>*</include>
-      </includes>
-    </fileSet>
-  </fileSets>
+  <componentDescriptors>
+    <componentDescriptor>src/main/assembly/commons.xml</componentDescriptor>
+  </componentDescriptors>
   <moduleSets>
     <moduleSet>
-      <includes>
-        <include>com.design2see:*</include>
-      </includes>
       <binaries>
         <unpack>false</unpack>
         <dependencySets>
