@@ -41,7 +41,7 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
 
   private List<IDisplayableAction> actions;
 
-  private IModelConnectorFactory   beanConnectorFactory;
+  private IModelConnectorFactory   modelConnectorFactory;
 
   /**
    * {@inheritDoc}
@@ -53,7 +53,7 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
     modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicDescriptorDescriptor.INSTANCE);
     modelDescriptor.setName(ACTION_MODEL_NAME);
-    IValueConnector actionsConnector = beanConnectorFactory
+    IValueConnector actionsConnector = modelConnectorFactory
         .createModelConnector(ACTION_MODEL_NAME, modelDescriptor);
     actionsConnector.setConnectorValue(createActionProxies(
         getTranslationProvider(context), getLocale(context)));
@@ -72,14 +72,14 @@ public class ChooseActionAction<E, F, G> extends AbstractChainedAction<E, F, G> 
   }
 
   /**
-   * Sets the beanConnectorFactory.
+   * Sets the modelConnectorFactory.
    * 
-   * @param beanConnectorFactory
+   * @param modelConnectorFactory
    *            the beanConnectorFactory to set.
    */
-  public void setBeanConnectorFactory(
-      IModelConnectorFactory beanConnectorFactory) {
-    this.beanConnectorFactory = beanConnectorFactory;
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
   }
 
   private List<IDisplayableAction> createActionProxies(

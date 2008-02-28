@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.framework.model.component.basic;
+package com.d2s.framework.model.component.query;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
@@ -35,7 +35,7 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
    * @param componentDelegate
    *            The component this delegate forwards the method calls to.
    */
-  QueryComponentInvocationHandler(IComponent componentDelegate) {
+  public QueryComponentInvocationHandler(IComponent componentDelegate) {
     this.componentDelegate = componentDelegate;
   }
 

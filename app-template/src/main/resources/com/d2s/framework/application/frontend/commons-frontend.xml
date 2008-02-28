@@ -133,8 +133,8 @@
       name="description"
       value="print.description" />
     <property
-      name="beanConnectorFactory"
-      ref="beanConnectorFactory" />
+      name="modelConnectorFactory"
+      ref="modelConnectorFactory" />
     <property
       name="reportFactory"
       ref="reportFactory" />
@@ -152,8 +152,8 @@
     abstract="true"
     class="com.d2s.framework.application.frontend.action.flow.ChooseActionAction">
     <property
-      name="beanConnectorFactory"
-      ref="beanConnectorFactory" />
+      name="modelConnectorFactory"
+      ref="modelConnectorFactory" />
     <property name="nextAction">
       <bean parent="chooseComponentAction">
         <property
@@ -205,7 +205,7 @@
     abstract="true">
     <property
       name="modelConnectorFactory"
-      ref="mapConnectorFactory" />
+      ref="modelConnectorFactory" />
     <property
       name="okAction"
       ref="doPrintAction" />
@@ -219,7 +219,7 @@
     abstract="true">
     <property
       name="modelConnectorFactory"
-      ref="beanConnectorFactory" />
+      ref="modelConnectorFactory" />
     <property
       name="cancelAction"
       ref="cancelDialogFrontAction" />
@@ -237,7 +237,7 @@
       value="classpath:com/d2s/framework/application/images/password-48x48.png" />
     <property
       name="modelConnectorFactory"
-      ref="mapConnectorFactory" />
+      ref="modelConnectorFactory" />
     <property name="okAction">
       <bean parent="okDialogFrontAction">
         <property
@@ -261,7 +261,7 @@
       value="classpath:com/d2s/framework/application/images/wizard-48x48.png" />
     <property
       name="modelConnectorFactory"
-      ref="mapConnectorFactory" />
+      ref="modelConnectorFactory" />
   </bean>
 
   <bean

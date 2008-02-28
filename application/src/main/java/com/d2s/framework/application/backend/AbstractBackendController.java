@@ -43,11 +43,8 @@ public abstract class AbstractBackendController extends AbstractController
     implements IBackendController {
 
   private IApplicationSession                              applicationSession;
-  private IAccessorFactory                                 beanAccessorFactory;
-  private IModelConnectorFactory                           beanConnectorFactory;
+  private IModelConnectorFactory                           modelConnectorFactory;
   private IEntityFactory                                   entityFactory;
-  private IAccessorFactory                                 mapAccessorFactory;
-  private IModelConnectorFactory                           mapConnectorFactory;
   private ComponentTransferStructure<? extends IComponent> transferStructure;
 
   private Map<String, IValueConnector>                     workspaceConnectors;
@@ -65,7 +62,7 @@ public abstract class AbstractBackendController extends AbstractController
    */
   public IValueConnector createModelConnector(String id,
       IModelDescriptor modelDescriptor) {
-    return beanConnectorFactory.createModelConnector(id, modelDescriptor);
+    return modelConnectorFactory.createModelConnector(id, modelDescriptor);
   }
 
   /**
@@ -97,15 +94,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IAccessorFactory getBeanAccessorFactory() {
-    return beanAccessorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IModelConnectorFactory getBeanConnectorFactory() {
-    return beanConnectorFactory;
+  public IAccessorFactory getAccessorFactory() {
+    return modelConnectorFactory.getAccessorFactory();
   }
 
   /**
@@ -139,20 +129,6 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public IAccessorFactory getMapAccessorFactory() {
-    return mapAccessorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IModelConnectorFactory getMapConnectorFactory() {
-    return mapConnectorFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   public IValueConnector getWorkspaceConnector(String workspaceName) {
     return workspaceConnectors.get(workspaceName);
   }
@@ -170,7 +146,7 @@ public abstract class AbstractBackendController extends AbstractController
     for (Map.Entry<String, Workspace> workspaceEntry : workspaces.entrySet()) {
       IModelDescriptor workspaceDescriptor;
       workspaceDescriptor = WorkspaceDescriptor.WORKSPACE_DESCRIPTOR;
-      IValueConnector nextWorkspaceConnector = beanConnectorFactory
+      IValueConnector nextWorkspaceConnector = modelConnectorFactory
           .createModelConnector(workspaceEntry.getKey(), workspaceDescriptor);
       nextWorkspaceConnector.setConnectorValue(workspaceEntry.getValue());
       workspaceConnectors.put(workspaceEntry.getKey(), nextWorkspaceConnector);
@@ -214,24 +190,14 @@ public abstract class AbstractBackendController extends AbstractController
   }
 
   /**
-   * Sets the beanAccessorFactory.
+   * Sets the modelConnectorFactory.
    * 
-   * @param beanAccessorFactory
-   *            the beanAccessorFactory to set.
+   * @param modelConnectorFactory
+   *            the modelConnectorFactory to set.
    */
-  public void setBeanAccessorFactory(IAccessorFactory beanAccessorFactory) {
-    this.beanAccessorFactory = beanAccessorFactory;
-  }
-
-  /**
-   * Sets the beanConnectorFactory.
-   * 
-   * @param beanConnectorFactory
-   *            the beanConnectorFactory to set.
-   */
-  public void setBeanConnectorFactory(
-      IModelConnectorFactory beanConnectorFactory) {
-    this.beanConnectorFactory = beanConnectorFactory;
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
   }
 
   /**
@@ -247,26 +213,6 @@ public abstract class AbstractBackendController extends AbstractController
     }
     this.entityFactory = entityFactory;
     linkSessionArtifacts();
-  }
-
-  /**
-   * Sets the mapAccessorFactory.
-   * 
-   * @param mapAccessorFactory
-   *            the mapAccessorFactory to set.
-   */
-  public void setMapAccessorFactory(IAccessorFactory mapAccessorFactory) {
-    this.mapAccessorFactory = mapAccessorFactory;
-  }
-
-  /**
-   * Sets the mapConnectorFactory.
-   * 
-   * @param mapConnectorFactory
-   *            the mapConnectorFactory to set.
-   */
-  public void setMapConnectorFactory(IModelConnectorFactory mapConnectorFactory) {
-    this.mapConnectorFactory = mapConnectorFactory;
   }
 
   /**

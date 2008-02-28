@@ -26,7 +26,7 @@
     class="com.d2s.framework.model.entity.SmartEntityCloneFactory">
     <property
       name="accessorFactory"
-      ref="beanAccessorFactory" />
+      ref="accessorFactory" />
   </bean>
 
   <bean

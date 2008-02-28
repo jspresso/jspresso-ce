@@ -43,15 +43,16 @@
     The implementation used as factories.
   -->
   <bean
-    id="beanAccessorFactory"
-    class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory" />
-
-  <!--
-    <bean id="mapAccessorFactory" class="com.d2s.framework.util.accessor.map.MapAccessorFactory" />
-  -->
-  <bean
-    id="mapAccessorFactory"
-    class="com.d2s.framework.model.map.DescriptorAwareMapAccessorFactory" />
+    id="accessorFactory"
+    class="com.d2s.framework.util.accessor.basic.BasicAccessorFactory">
+    <property name="beanAccessorFactory">
+      <bean class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory" />
+    </property>
+    <property name="mapAccessorFactory">
+      <bean
+        class="com.d2s.framework.model.map.DescriptorAwareMapAccessorFactory" />
+    </property>
+  </bean>
 
   <bean
     id="reportFactory"
@@ -86,22 +87,14 @@
     The implementation used as ModelConnectorFactory.
   -->
   <bean
-    id="beanConnectorFactory"
+    id="modelConnectorFactory"
     class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
     <property
       name="accessorFactory"
-      ref="beanAccessorFactory" />
+      ref="accessorFactory" />
     <property
       name="descriptorRegistry"
       ref="componentDescriptorRegistry" />
-  </bean>
-
-  <bean
-    id="mapConnectorFactory"
-    class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
-    <property
-      name="accessorFactory"
-      ref="mapAccessorFactory" />
   </bean>
 
   <!--
@@ -137,7 +130,7 @@
       ref="componentCollectionFactory" />
     <property
       name="accessorFactory"
-      ref="beanAccessorFactory" />
+      ref="accessorFactory" />
     <property name="entityRegistry">
       <bean
         class="com.d2s.framework.model.entity.basic.BasicEntityRegistry"
@@ -170,7 +163,7 @@
     class="com.d2s.framework.model.component.basic.BasicProxyComponentFactory">
     <property
       name="accessorFactory"
-      ref="beanAccessorFactory" />
+      ref="accessorFactory" />
     <property
       name="componentCollectionFactory"
       ref="componentCollectionFactory" />
@@ -190,7 +183,7 @@
     class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
     <property
       name="accessorFactory"
-      ref="beanAccessorFactory" />
+      ref="accessorFactory" />
     <property
       name="inlineComponentFactory"
       ref="basicComponentFactory" />
@@ -369,17 +362,8 @@
         scope="prototype" />
     </property>
     <property
-      name="beanAccessorFactory"
-      ref="beanAccessorFactory" />
-    <property
-      name="beanConnectorFactory"
-      ref="beanConnectorFactory" />
-    <property
-      name="mapAccessorFactory"
-      ref="mapAccessorFactory" />
-    <property
-      name="mapConnectorFactory"
-      ref="mapConnectorFactory" />
+      name="modelConnectorFactory"
+      ref="modelConnectorFactory" />
     <property
       name="translationProvider"
       ref="translationProvider" />

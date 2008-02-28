@@ -36,7 +36,7 @@ public class SelectEntityPropertyAction extends AbstractBackendAction {
     IEntity model = (IEntity) getModelConnector(context).getConnectorValue();
     if (model != null) {
       try {
-        Object propertyValue = getAccessorFactory(model, context)
+        Object propertyValue = getAccessorFactory(context)
             .createPropertyAccessor(property, model.getContract()).getValue(
                 model);
         context.put(ActionContextConstants.ACTION_PARAM, propertyValue);

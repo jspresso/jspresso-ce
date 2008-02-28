@@ -37,7 +37,7 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  */
 public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
-  private IModelConnectorFactory  beanConnectorFactory;
+  private IModelConnectorFactory  modelConnectorFactory;
   private List<IReportDescriptor> reportDescriptors;
   private IReportFactory          reportFactory;
 
@@ -50,7 +50,7 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
     BasicCollectionDescriptor<IReport> modelDescriptor = new BasicCollectionDescriptor<IReport>();
     modelDescriptor.setCollectionInterface(List.class);
     modelDescriptor.setElementDescriptor(BasicReportDescriptor.INSTANCE);
-    IValueConnector reportsConnector = beanConnectorFactory
+    IValueConnector reportsConnector = modelConnectorFactory
         .createModelConnector("ActionModel", modelDescriptor);
     reportsConnector.setConnectorValue(createReportInstances(
         getTranslationProvider(context), getLocale(context)));
@@ -59,14 +59,14 @@ public class PrintAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   }
 
   /**
-   * Sets the beanConnectorFactory.
+   * Sets the modelConnectorFactory.
    * 
-   * @param beanConnectorFactory
-   *            the beanConnectorFactory to set.
+   * @param modelConnectorFactory
+   *            the modelConnectorFactory to set.
    */
-  public void setBeanConnectorFactory(
-      IModelConnectorFactory beanConnectorFactory) {
-    this.beanConnectorFactory = beanConnectorFactory;
+  public void setModelConnectorFactory(
+      IModelConnectorFactory modelConnectorFactory) {
+    this.modelConnectorFactory = modelConnectorFactory;
   }
 
   /**

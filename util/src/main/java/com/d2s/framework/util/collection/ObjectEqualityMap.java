@@ -116,7 +116,8 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
    */
   @Override
   public V put(K key, V value) {
-    Object oldValue = get(key);
+    V putVal = super.put(key, value);
+    Object oldValue = putVal;
     if (oldValue instanceof Collection) {
       oldValue = new ArrayList<Object>((Collection<?>) oldValue) {
 
@@ -139,7 +140,6 @@ public class ObjectEqualityMap<K, V> extends HashMap<K, V> implements
         }
       };
     }
-    V putVal = super.put(key, value);
     propertyChangeSupport.firePropertyChange(key.toString(), oldValue, value);
     return putVal;
   }

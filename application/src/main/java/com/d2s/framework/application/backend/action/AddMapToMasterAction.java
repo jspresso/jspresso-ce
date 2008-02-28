@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.d2s.framework.model.component.service.ILifecycleInterceptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.collection.ObjectEqualityMap;
 
 /**
@@ -52,13 +51,4 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
     return Collections.singletonList(newMap);
   }
 
-  /**
-   * Returns the map accessor factory.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  protected IAccessorFactory getBeanAccessorFactory(Map<String, Object> context) {
-    return getController(context).getMapAccessorFactory();
-  }
 }

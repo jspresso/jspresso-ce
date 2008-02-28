@@ -9,7 +9,6 @@ import java.util.Map;
 import com.d2s.framework.application.IController;
 import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.datatransfer.ComponentTransferStructure;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
@@ -53,18 +52,11 @@ public interface IBackendController extends IController {
       IModelDescriptor modelDescriptor);
 
   /**
-   * Gets the beanAccessorFactory for this backend controller.
+   * Gets the appropriate accessor factory based on the targetted object.
    * 
-   * @return the beanAccessorFactory for this backend controller.
+   * @return the approriate accessor factory.
    */
-  IAccessorFactory getBeanAccessorFactory();
-
-  /**
-   * Gets the beanConnectorFactory for this backend controller.
-   * 
-   * @return the beanConnectorFactory for this backend controller.
-   */
-  IModelConnectorFactory getBeanConnectorFactory();
+  IAccessorFactory getAccessorFactory();
 
   /**
    * Gets the entityFactory for this backend controller.
@@ -72,20 +64,6 @@ public interface IBackendController extends IController {
    * @return the entityFactory for this backend controller.
    */
   IEntityFactory getEntityFactory();
-
-  /**
-   * Gets the mapAccessorFactory for this backend controller.
-   * 
-   * @return the mapAccessorFactory for this backend controller.
-   */
-  IAccessorFactory getMapAccessorFactory();
-
-  /**
-   * Gets the mapConnectorFactory for this backend controller.
-   * 
-   * @return the mapConnectorFactory for this backend controller.
-   */
-  IModelConnectorFactory getMapConnectorFactory();
 
   /**
    * Given a workspace identifier, this method returns the composite connector

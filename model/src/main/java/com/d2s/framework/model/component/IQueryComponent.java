@@ -4,6 +4,7 @@
 package com.d2s.framework.model.component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple adapter to wrap a component used as selection criteria and a list of
@@ -16,7 +17,7 @@ import java.util.List;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IQueryComponent extends IComponent {
+public interface IQueryComponent extends Map<String, Object> {
 
   /**
    * "queriedComponents" string constant.
@@ -37,4 +38,11 @@ public interface IQueryComponent extends IComponent {
    *            the list of components result of the query.
    */
   void setQueriedComponents(List<? extends IComponent> queriedComponents);
+  
+  /**
+   * Gets the contract of the components to query.
+   * 
+   * @return the contract of the components to query.
+   */
+  Class<?> getQueryContract();
 }

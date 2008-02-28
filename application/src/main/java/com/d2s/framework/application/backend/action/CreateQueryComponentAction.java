@@ -74,17 +74,16 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
             .getChildConnector(collectionIndex).getConnectorValue();
       }
       if (masterEntity != null) {
-        IAccessorFactory accessorFactory = getAccessorFactory(masterEntity,
-            context);
+        IAccessorFactory accessorFactory = getAccessorFactory(context);
         for (Map.Entry<String, String> initializedAttribute : initializationMapping
             .entrySet()) {
           try {
             accessorFactory.createPropertyAccessor(
-                initializedAttribute.getKey(), queryComponent.getContract())
-                .setValue(
-                    queryComponent,
-                    accessorFactory.createPropertyAccessor(
-                        initializedAttribute.getValue(),
+                initializedAttribute.getKey(),
+                queryComponent.getQueryContract()).setValue(
+                queryComponent,
+                accessorFactory
+                    .createPropertyAccessor(initializedAttribute.getValue(),
                         masterEntity.getContract()).getValue(masterEntity));
           } catch (IllegalAccessException ex) {
             throw new ActionException(ex);
@@ -99,11 +98,11 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
     ModelRefPropertyConnector modelConnector = (ModelRefPropertyConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR);
     if (modelConnector == null) {
-      modelConnector = (ModelRefPropertyConnector) getBeanConnectorFactory(
-          context).createModelConnector(
-          ACTION_MODEL_NAME,
-          new BasicQueryComponentDescriptor(erqDescriptor
-              .getReferencedDescriptor(), queryComponent.getClass()));
+      modelConnector = (ModelRefPropertyConnector) getController(context)
+          .createModelConnector(
+              ACTION_MODEL_NAME,
+              new BasicQueryComponentDescriptor(erqDescriptor
+                  .getReferencedDescriptor(), queryComponent.getClass()));
       context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
     }
     modelConnector.setConnectorValue(queryComponent);

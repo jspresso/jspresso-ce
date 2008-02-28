@@ -4,12 +4,12 @@
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.transaction.TransactionStatus;
@@ -22,7 +22,6 @@ import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * An action to hibernate query entities by example.
@@ -51,28 +50,8 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
         DetachedCriteria criteria = DetachedCriteria
-            .forEntityName(queryComponent.getContract().getName());
-        Example example = Example.create(queryComponent).ignoreCase()
-            .enableLike(MatchMode.START);
-        boolean abort = false;
-        for (Map.Entry<String, Object> property : queryComponent
-            .straightGetProperties().entrySet()) {
-          if (property.getValue() instanceof IEntity) {
-            if (!((IEntity) property.getValue()).isPersistent()) {
-              abort = true;
-            } else {
-              criteria.add(Restrictions.eq(property.getKey(), property
-                  .getValue()));
-            }
-          } else if (Boolean.TYPE
-              .isAssignableFrom(PropertyHelper.getPropertyType(queryComponent
-                  .getContract(), property.getKey()))
-              && (property.getValue() == null || !((Boolean) property
-                  .getValue()).booleanValue())) {
-            example.excludeProperty(property.getKey());
-          }
-        }
-        criteria.add(example);
+            .forEntityName(queryComponent.getQueryContract().getName());
+        boolean abort = completeCriteria(criteria, null, queryComponent);
         List entities;
         if (abort) {
           entities = new ArrayList<IEntity>();
@@ -81,6 +60,43 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
         }
         status.setRollbackOnly();
         return entities;
+      }
+
+      private boolean completeCriteria(DetachedCriteria criteria, String path,
+          IQueryComponent aQueryComponent) {
+        boolean abort = false;
+        for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
+          String prefixedProperty;
+          if (path != null) {
+            prefixedProperty = path + "." + property.getKey();
+          } else {
+            prefixedProperty = property.getKey();
+          }
+          if (property.getValue() instanceof IEntity) {
+            if (!((IEntity) property.getValue()).isPersistent()) {
+              abort = true;
+            } else {
+              criteria.add(Restrictions.eq(prefixedProperty, property
+                  .getValue()));
+            }
+          } else if (property.getValue() instanceof Boolean
+              && ((Boolean) property.getValue()).booleanValue()) {
+            criteria.add(Restrictions
+                .eq(prefixedProperty, property.getValue()));
+          } else if (property.getValue() instanceof String) {
+            criteria.add(Restrictions.like(prefixedProperty,
+                (String) property.getValue(), MatchMode.START).ignoreCase());
+          } else if (property.getValue() instanceof Number
+              || property.getValue() instanceof Date) {
+            criteria.add(Restrictions
+                .eq(prefixedProperty, property.getValue()));
+          } else if (property.getValue() instanceof IQueryComponent) {
+            abort = abort
+                || completeCriteria(criteria, prefixedProperty,
+                    (IQueryComponent) property.getValue());
+          }
+        }
+        return abort;
       }
     });
     IApplicationSession session = getApplicationSession(context);

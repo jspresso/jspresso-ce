@@ -66,8 +66,8 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         IPropertyDescriptor propertyDescriptor = entityDescriptor
             .getPropertyDescriptor(property.getKey());
         if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
-          getBeanAccessorFactory(context).createPropertyAccessor(
-              property.getKey(), entity.getContract()).setValue(entity, null);
+          getAccessorFactory(context).createPropertyAccessor(property.getKey(),
+              entity.getContract()).setValue(entity, null);
         } else if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
           if (((ICollectionPropertyDescriptor) propertyDescriptor)
               .isComposition()) {
@@ -78,7 +78,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
               cleanRelationshipsOnDeletion(composedEntity, context);
             }
           } else if (propertyDescriptor.isModifiable()) {
-            getBeanAccessorFactory(context).createPropertyAccessor(
+            getAccessorFactory(context).createPropertyAccessor(
                 property.getKey(), entity.getContract()).setValue(entity, null);
           }
         }
