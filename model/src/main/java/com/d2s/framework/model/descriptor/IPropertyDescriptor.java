@@ -153,8 +153,10 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
   void preprocessSetter(Object component, Object oldValue, Object newValue);
 
   /**
-   * transform this property descriptor to relieve its constraints for query
-   * filter purpose.
+   * Creates a new property descriptor to allow for querying.
+   * 
+   * @return a new property descriptor that allows for expressing constraints on
+   *         this property.
    */
-  void unleashForFilter();
+  IPropertyDescriptor createQueryDescriptor();
 }

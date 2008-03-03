@@ -200,10 +200,12 @@ public class BasicStringPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public void unleashForFilter() {
-    setMaxLength(null);
-    setRegexpPattern(null);
-    super.unleashForFilter();
+  public BasicStringPropertyDescriptor createQueryDescriptor() {
+    BasicStringPropertyDescriptor queryDescriptor = (BasicStringPropertyDescriptor) super
+        .createQueryDescriptor();
+    queryDescriptor.setMaxLength(null);
+    queryDescriptor.setRegexpPattern(null);
+    return queryDescriptor;
   }
 
   /**

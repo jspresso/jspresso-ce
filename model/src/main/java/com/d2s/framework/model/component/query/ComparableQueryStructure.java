@@ -15,7 +15,7 @@ import com.d2s.framework.util.bean.AbstractPropertyChangeCapable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ComparablePropertyQueryStructure extends
+public class ComparableQueryStructure extends
     AbstractPropertyChangeCapable {
 
   private String comparator;

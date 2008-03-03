@@ -379,9 +379,11 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
-  public void unleashForFilter() {
-    setMandatory(false);
-    setReadOnly(false);
+  public BasicPropertyDescriptor createQueryDescriptor() {
+    BasicPropertyDescriptor queryPropertyDescriptor = clone();
+    queryPropertyDescriptor.setMandatory(false);
+    queryPropertyDescriptor.setReadOnly(false);
+    return queryPropertyDescriptor;
   }
 
   /**

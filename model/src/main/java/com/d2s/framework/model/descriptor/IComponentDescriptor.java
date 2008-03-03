@@ -148,4 +148,11 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();
+  
+  /**
+   * Gets the query contract of this component descriptor.
+   * 
+   * @return the query contract of this component descriptor.
+   */
+  Class<?> getQueryComponentContract();
 }

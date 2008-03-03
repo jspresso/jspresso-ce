@@ -14,6 +14,7 @@ import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.component.query.QueryComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
+import com.d2s.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
 import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
@@ -60,7 +61,9 @@ public class BasicProxyComponentFactory implements IComponentFactory {
   @SuppressWarnings("unchecked")
   public IQueryComponent createQueryComponentInstance(
       Class<? extends IComponent> componentContract) {
-    return new QueryComponent(getComponentDescriptor(componentContract));
+    return new QueryComponent(
+        new BasicQueryComponentDescriptor(
+            (IComponentDescriptor<Object>) getComponentDescriptor(componentContract)));
     // IComponent componentDelegate = createComponentInstance(componentContract,
     // null, new Class[] {IQueryComponent.class});
     // QueryComponentInvocationHandler entityHandler = new

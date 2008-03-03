@@ -51,7 +51,7 @@ public class QueryComponent extends ObjectEqualityMap<String, Object> implements
    * {@inheritDoc}
    */
   public Class<?> getQueryContract() {
-    return componentDescriptor.getComponentContract();
+    return componentDescriptor.getQueryComponentContract();
   }
 
   /**

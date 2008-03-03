@@ -3,7 +3,9 @@
  */
 package com.d2s.framework.util.accessor.map;
 
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.commons.beanutils.PropertyUtils;
 
 import com.d2s.framework.util.accessor.IAccessor;
 
@@ -34,9 +36,14 @@ public class MapPropertyAccessor implements IAccessor {
   /**
    * {@inheritDoc}
    */
-  public Object getValue(Object target) {
-    if (target != null && target instanceof Map) {
-      return ((Map<?, ?>) target).get(property);
+  public Object getValue(Object target) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
+    // if (target != null && target instanceof Map) {
+    // return ((Map<?, ?>) target).get(property);
+    // }
+    // PropertyUtils can also handle maps
+    if (target != null) {
+      return PropertyUtils.getProperty(target, property);
     }
     return null;
   }
@@ -54,9 +61,14 @@ public class MapPropertyAccessor implements IAccessor {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void setValue(Object target, Object value) {
-    if (target != null && target instanceof Map) {
-      ((Map) target).put(property, value);
+  public void setValue(Object target, Object value)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
+    // if (target != null && target instanceof Map) {
+    // ((Map) target).put(property, value);
+    // }
+    if (target != null) {
+      PropertyUtils.setProperty(target, property, value);
     }
   }
 

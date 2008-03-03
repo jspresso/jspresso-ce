@@ -6,6 +6,7 @@ package com.d2s.framework.model.descriptor.basic;
 import java.util.Locale;
 
 import com.d2s.framework.model.descriptor.IDurationPropertyDescriptor;
+import com.d2s.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import com.d2s.framework.util.bean.integrity.IntegrityException;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 
@@ -102,8 +103,10 @@ public class BasicDurationPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public void unleashForFilter() {
-    setMaxMillis(null);
-    super.unleashForFilter();
+  public ComparableQueryStructureDescriptor createQueryDescriptor() {
+    BasicDurationPropertyDescriptor queryDescriptor = (BasicDurationPropertyDescriptor) super
+        .createQueryDescriptor();
+    queryDescriptor.setMaxMillis(null);
+    return new ComparableQueryStructureDescriptor(queryDescriptor);
   }
 }

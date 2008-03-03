@@ -466,4 +466,11 @@ public abstract class AbstractComponentDescriptor<E> extends
       serviceDelegates.put(serviceMethod, service);
     }
   }
+  
+  /**
+   * {@inheritDoc}
+   */
+  public Class<?> getQueryComponentContract() {
+    return getComponentContract();
+  }
 }

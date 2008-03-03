@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.map;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
@@ -45,7 +47,9 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
    * {@inheritDoc}
    */
   @Override
-  public void setValue(Object target, Object value) {
+  public void setValue(Object target, Object value)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
     Object oldValue = getValue(target);
     if (getModelDescriptor() != null) {
       getModelDescriptor().preprocessSetter(target, oldValue, value);

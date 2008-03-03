@@ -21,6 +21,7 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
 
   private String description;
   private String name;
+  private String i18nNameKey;
 
   /**
    * {@inheritDoc}
@@ -57,6 +58,9 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    */
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
+    if (i18nNameKey != null) {
+      return translationProvider.getTranslation(i18nNameKey, locale);
+    }
     return translationProvider.getTranslation(getName(), locale);
   }
 
@@ -87,5 +91,15 @@ public class DefaultDescriptor implements IDescriptor, Cloneable {
    */
   public void setName(String name) {
     this.name = name;
+  }
+
+  /**
+   * Sets the i18nNameKey.
+   * 
+   * @param nameKey
+   *            the i18nNameKey to set.
+   */
+  public void setI18nNameKey(String nameKey) {
+    i18nNameKey = nameKey;
   }
 }

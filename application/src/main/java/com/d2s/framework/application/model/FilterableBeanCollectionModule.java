@@ -3,6 +3,9 @@
  */
 package com.d2s.framework.application.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.commons.lang.ObjectUtils;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
@@ -59,6 +62,16 @@ public class FilterableBeanCollectionModule extends BeanCollectionModule {
       ((BasicComponentViewDescriptor) filterViewDescriptor).setName("filter");
       ((BasicComponentViewDescriptor) filterViewDescriptor)
           .setBorderType(IViewDescriptor.TITLED);
+      Map<String, Object> propertyWidths = new HashMap<String, Object>();
+      for (String queriableProperty : getFilterComponentDescriptor()
+          .getQueryableProperties()) {
+        // To preserve col spans for query structures.
+        propertyWidths.put(queriableProperty, new Integer(3));
+      }
+      ((BasicComponentViewDescriptor) filterViewDescriptor)
+          .setPropertyWidths(propertyWidths);
+      ((BasicComponentViewDescriptor) filterViewDescriptor)
+      .setColumnCount(9);
     }
     return filterViewDescriptor;
   }

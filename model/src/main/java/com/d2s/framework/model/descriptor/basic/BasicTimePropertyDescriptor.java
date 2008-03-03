@@ -6,6 +6,7 @@ package com.d2s.framework.model.descriptor.basic;
 import java.util.Date;
 
 import com.d2s.framework.model.descriptor.ITimePropertyDescriptor;
+import com.d2s.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
 /**
  * Default implementation of a time descriptor.
@@ -35,5 +36,13 @@ public class BasicTimePropertyDescriptor extends BasicScalarPropertyDescriptor
    */
   public Class<?> getModelType() {
     return Date.class;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public ComparableQueryStructureDescriptor createQueryDescriptor() {
+    return new ComparableQueryStructureDescriptor(super.createQueryDescriptor());
   }
 }

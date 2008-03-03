@@ -52,7 +52,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
     }
     IQueryComponent queryComponent = getEntityFactory(context)
         .createQueryComponentInstance(
-            erqDescriptor.getReferencedDescriptor().getComponentContract());
+            erqDescriptor.getReferencedDescriptor().getQueryComponentContract());
 
     Map<String, String> initializationMapping = erqDescriptor
         .getInitializationMapping();
@@ -102,7 +102,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
           .createModelConnector(
               ACTION_MODEL_NAME,
               new BasicQueryComponentDescriptor(erqDescriptor
-                  .getReferencedDescriptor(), queryComponent.getClass()));
+                  .getReferencedDescriptor()/*, queryComponent.getClass()*/));
       context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
     }
     modelConnector.setConnectorValue(queryComponent);

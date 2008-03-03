@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.util.accessor.map;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -34,7 +35,9 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void addToValue(Object target, Object value) {
+  public void addToValue(Object target, Object value)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
     Collection mapValue = getValue(target);
     if (mapValue == null) {
       mapValue = new ArrayList<Object>();
@@ -48,14 +51,17 @@ public class MapCollectionAccessor extends MapPropertyAccessor implements
    * {@inheritDoc}
    */
   @Override
-  public Collection<?> getValue(Object target) {
+  public Collection<?> getValue(Object target) throws IllegalAccessException,
+      InvocationTargetException, NoSuchMethodException {
     return (Collection<?>) super.getValue(target);
   }
 
   /**
    * {@inheritDoc}
    */
-  public void removeFromValue(Object target, Object value) {
+  public void removeFromValue(Object target, Object value)
+      throws IllegalAccessException, InvocationTargetException,
+      NoSuchMethodException {
     Collection<?> mapValue = getValue(target);
     if (mapValue != null) {
       mapValue.remove(value);

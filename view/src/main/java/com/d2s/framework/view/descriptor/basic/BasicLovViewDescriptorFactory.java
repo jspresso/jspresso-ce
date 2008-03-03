@@ -4,7 +4,9 @@
 package com.d2s.framework.view.descriptor.basic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
@@ -56,13 +58,17 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
     queryComponentViewDescriptor.setColumnCount(2);
 
     List<String> queryProperties = new ArrayList<String>();
+    Map<String, Object> propertyWidths = new HashMap<String, Object>();
     for (String queryProperty : entityDescriptor.getQueryableProperties()) {
       IPropertyDescriptor propertyDescriptor = entityDescriptor
           .getPropertyDescriptor(queryProperty);
       if (propertyDescriptor.isQueryable()) {
         queryProperties.add(queryProperty);
       }
+      // to preserve query structures.
+      propertyWidths.put(queryProperty, new Integer(3));
     }
+    queryComponentViewDescriptor.setPropertyWidths(propertyWidths);
     List<ISubViewDescriptor> queryPropertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
     for (String renderedProperty : queryProperties) {
       BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();

@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.application.backend.action.persistence.hibernate;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -16,11 +17,14 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
 import com.d2s.framework.action.ActionContextConstants;
+import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.component.IQueryComponent;
+import com.d2s.framework.model.component.query.ComparableQueryStructure;
+import com.d2s.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -65,35 +69,87 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       private boolean completeCriteria(DetachedCriteria criteria, String path,
           IQueryComponent aQueryComponent) {
         boolean abort = false;
-        for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
-          String prefixedProperty;
-          if (path != null) {
-            prefixedProperty = path + "." + property.getKey();
-          } else {
-            prefixedProperty = property.getKey();
+        if (ComparableQueryStructure.class.isAssignableFrom(aQueryComponent
+            .getQueryContract())) {
+          try {
+            String comparator = (String) getAccessorFactory(context)
+                .createPropertyAccessor(
+                    ComparableQueryStructureDescriptor.COMPARATOR,
+                    ComparableQueryStructure.class).getValue(aQueryComponent);
+            Object infValue = getAccessorFactory(context)
+                .createPropertyAccessor(
+                    ComparableQueryStructureDescriptor.INF_VALUE,
+                    ComparableQueryStructure.class).getValue(aQueryComponent);
+            Object supValue = getAccessorFactory(context)
+                .createPropertyAccessor(
+                    ComparableQueryStructureDescriptor.SUP_VALUE,
+                    ComparableQueryStructure.class).getValue(aQueryComponent);
+            if (infValue != null) {
+              if (ComparableQueryStructureDescriptor.EQ.equals(comparator)) {
+                criteria.add(Restrictions.eq(path, infValue));
+              } else if (ComparableQueryStructureDescriptor.GT
+                  .equals(comparator)) {
+                criteria.add(Restrictions.gt(path, infValue));
+              } else if (ComparableQueryStructureDescriptor.GE
+                  .equals(comparator)) {
+                criteria.add(Restrictions.ge(path, infValue));
+              } else if (ComparableQueryStructureDescriptor.LT
+                  .equals(comparator)) {
+                criteria.add(Restrictions.lt(path, infValue));
+              } else if (ComparableQueryStructureDescriptor.LE
+                  .equals(comparator)) {
+                criteria.add(Restrictions.le(path, infValue));
+              } else if (ComparableQueryStructureDescriptor.BE
+                  .equals(comparator)) {
+                if (supValue != null) {
+                  criteria.add(Restrictions.between(path, infValue, supValue));
+                } else {
+                  criteria.add(Restrictions.ge(path, infValue));
+                }
+              }
+            } else if (supValue != null) {
+              if (ComparableQueryStructureDescriptor.BE.equals(comparator)) {
+                criteria.add(Restrictions.le(path, supValue));
+              }
+            }
+          } catch (IllegalAccessException ex) {
+            throw new ActionException(ex);
+          } catch (InvocationTargetException ex) {
+            throw new ActionException(ex);
+          } catch (NoSuchMethodException ex) {
+            throw new ActionException(ex);
           }
-          if (property.getValue() instanceof IEntity) {
-            if (!((IEntity) property.getValue()).isPersistent()) {
-              abort = true;
+        } else {
+          for (Map.Entry<String, Object> property : aQueryComponent.entrySet()) {
+            String prefixedProperty;
+            if (path != null) {
+              prefixedProperty = path + "." + property.getKey();
             } else {
+              prefixedProperty = property.getKey();
+            }
+            if (property.getValue() instanceof IEntity) {
+              if (!((IEntity) property.getValue()).isPersistent()) {
+                abort = true;
+              } else {
+                criteria.add(Restrictions.eq(prefixedProperty, property
+                    .getValue()));
+              }
+            } else if (property.getValue() instanceof Boolean
+                && ((Boolean) property.getValue()).booleanValue()) {
               criteria.add(Restrictions.eq(prefixedProperty, property
                   .getValue()));
+            } else if (property.getValue() instanceof String) {
+              criteria.add(Restrictions.like(prefixedProperty,
+                  (String) property.getValue(), MatchMode.START).ignoreCase());
+            } else if (property.getValue() instanceof Number
+                || property.getValue() instanceof Date) {
+              criteria.add(Restrictions.eq(prefixedProperty, property
+                  .getValue()));
+            } else if (property.getValue() instanceof IQueryComponent) {
+              abort = abort
+                  || completeCriteria(criteria, prefixedProperty,
+                      (IQueryComponent) property.getValue());
             }
-          } else if (property.getValue() instanceof Boolean
-              && ((Boolean) property.getValue()).booleanValue()) {
-            criteria.add(Restrictions
-                .eq(prefixedProperty, property.getValue()));
-          } else if (property.getValue() instanceof String) {
-            criteria.add(Restrictions.like(prefixedProperty,
-                (String) property.getValue(), MatchMode.START).ignoreCase());
-          } else if (property.getValue() instanceof Number
-              || property.getValue() instanceof Date) {
-            criteria.add(Restrictions
-                .eq(prefixedProperty, property.getValue()));
-          } else if (property.getValue() instanceof IQueryComponent) {
-            abort = abort
-                || completeCriteria(criteria, prefixedProperty,
-                    (IQueryComponent) property.getValue());
           }
         }
         return abort;

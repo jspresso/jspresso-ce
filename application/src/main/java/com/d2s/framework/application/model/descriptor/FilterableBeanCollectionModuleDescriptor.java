@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.d2s.framework.application.model.FilterableBeanCollectionModule;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
@@ -56,16 +57,14 @@ public class FilterableBeanCollectionModuleDescriptor extends
       IComponentDescriptor<Object> moduleFilterReferencedDescriptor) {
     super(name, moduleObjectReferencedDescriptor);
 
-    BasicReferencePropertyDescriptor<Object> filterObjectDescriptor = new BasicReferencePropertyDescriptor<Object>();
-    filterObjectDescriptor
-        .setReferencedDescriptor(new BasicQueryComponentDescriptor<Object>(
-            moduleFilterReferencedDescriptor, moduleFilterReferencedDescriptor
-                .getComponentContract()));
-    filterObjectDescriptor.setName("filter");
+    BasicReferencePropertyDescriptor<IQueryComponent> filterDescriptor = new BasicReferencePropertyDescriptor<IQueryComponent>();
+    filterDescriptor.setReferencedDescriptor(new BasicQueryComponentDescriptor(
+        moduleFilterReferencedDescriptor));
+    filterDescriptor.setName("filter");
 
     List<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>(
         getPropertyDescriptors());
-    propertyDescriptors.add(filterObjectDescriptor);
+    propertyDescriptors.add(filterDescriptor);
     setPropertyDescriptors(propertyDescriptors);
   }
 

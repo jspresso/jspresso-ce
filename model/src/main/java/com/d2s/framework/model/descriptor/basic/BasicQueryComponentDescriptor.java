@@ -3,20 +3,15 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import com.d2s.framework.model.component.IQueryComponent;
-import com.d2s.framework.model.component.service.IComponentService;
-import com.d2s.framework.model.component.service.ILifecycleInterceptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
-import com.d2s.framework.util.i18n.ITranslationProvider;
+import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
 /**
  * An implementation used for query components.
@@ -24,249 +19,102 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
  * 
- * @param <E>
- *            the concrete type of component.
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class BasicQueryComponentDescriptor<E> implements
-    IComponentDescriptor<E> {
+public class BasicQueryComponentDescriptor extends
+    AbstractComponentDescriptor<IQueryComponent> {
 
-  private IComponentDescriptor<E>              componentDescriptor;
-  private BasicCollectionPropertyDescriptor<E> queriedComponentsPropertyDescriptor;
-  private Class<? extends E>                   queryContract;
-  private Map<String, IPropertyDescriptor>     queryPropertyDescriptors;
+  private IComponentDescriptor<Object> componentDescriptor;
 
   /**
    * Constructs a new <code>BasicQueryComponentDescriptor</code> instance.
    * 
    * @param componentDescriptor
    *            the delegate entity descriptor.
-   * @param queryContract
-   *            the real contract this query component has.
    */
   public BasicQueryComponentDescriptor(
-      IComponentDescriptor<E> componentDescriptor,
-      Class<? extends E> queryContract) {
+      IComponentDescriptor<Object> componentDescriptor) {
+    super(componentDescriptor.getComponentContract().getName());
     this.componentDescriptor = componentDescriptor;
-    this.queryContract = queryContract;
-    queryPropertyDescriptors = new HashMap<String, IPropertyDescriptor>();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class<? extends E> getComponentContract() {
-    return queryContract;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IComponentDescriptor<E> getComponentDescriptor() {
-    return this;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
-    Collection<IPropertyDescriptor> declaredPropertyDescriptors = componentDescriptor
-        .getDeclaredPropertyDescriptors();
-    declaredPropertyDescriptors.add(getQueriedComponentsPropertyDescriptor());
-    return declaredPropertyDescriptors;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getDescription() {
-    return componentDescriptor.getDescription();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getI18nDescription(ITranslationProvider translationProvider,
-      Locale locale) {
-    return componentDescriptor.getI18nDescription(translationProvider, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getI18nName(ITranslationProvider translationProvider,
-      Locale locale) {
-    return componentDescriptor.getI18nName(translationProvider, locale);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getIconImageURL() {
-    return componentDescriptor.getIconImageURL();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<ILifecycleInterceptor<?>> getLifecycleInterceptors() {
-    return componentDescriptor.getLifecycleInterceptors();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Class<?> getModelType() {
-    return queryContract;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getName() {
-    return componentDescriptor.getName();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<String> getOrderingProperties() {
-    return componentDescriptor.getOrderingProperties();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IPropertyDescriptor getPropertyDescriptor(String propertyName) {
-    if (IQueryComponent.QUERIED_COMPONENTS.equals(propertyName)) {
-      return getQueriedComponentsPropertyDescriptor();
+    Collection<IPropertyDescriptor> propertyDescriptors = new ArrayList<IPropertyDescriptor>();
+    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
+        .getPropertyDescriptors()) {
+      propertyDescriptors.add(propertyDescriptor.createQueryDescriptor());
     }
-    return getQueryPropertyDescriptor(componentDescriptor
-        .getPropertyDescriptor(propertyName));
-  }
+    BasicCollectionDescriptor<Object> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<Object>();
+    queriedEntitiesCollectionDescriptor.setCollectionInterface(List.class);
+    queriedEntitiesCollectionDescriptor
+        .setElementDescriptor(componentDescriptor);
+    queriedEntitiesCollectionDescriptor
+        .setName(IQueryComponent.QUERIED_COMPONENTS);
+    queriedEntitiesCollectionDescriptor
+        .setDescription("queriedEntities.description");
+    BasicCollectionPropertyDescriptor<Object> qCPDescriptor = new BasicCollectionPropertyDescriptor<Object>();
+    qCPDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
+    qCPDescriptor.setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
 
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<IPropertyDescriptor> getPropertyDescriptors() {
-    Collection<IPropertyDescriptor> propertyDescriptors = componentDescriptor
-        .getPropertyDescriptors();
-    List<IPropertyDescriptor> qPropertyDescriptors = new ArrayList<IPropertyDescriptor>(
-        propertyDescriptors.size());
-    for (IPropertyDescriptor propertyDescriptor : propertyDescriptors) {
-      qPropertyDescriptors.add(getQueryPropertyDescriptor(propertyDescriptor));
+    propertyDescriptors.add(qCPDescriptor);
+    setPropertyDescriptors(propertyDescriptors);
+    setDescription(componentDescriptor.getDescription());
+    setIconImageURL(componentDescriptor.getIconImageURL());
+    List<String> qProperties = new ArrayList<String>();
+    for (String queryableProperty : componentDescriptor
+        .getQueryableProperties()) {
+      IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(queryableProperty);
+      if (propertyDescriptor instanceof ComparableQueryStructureDescriptor) {
+        for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor().getRenderedProperties()) {
+          qProperties.add(propertyDescriptor.getName() + "."
+              + nestedRenderedProperty);
+        }
+        ((BasicPropertyDescriptor) ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor().getPropertyDescriptor(
+                ComparableQueryStructureDescriptor.COMPARATOR))
+            .setI18nNameKey(propertyDescriptor.getName());
+      } else {
+        qProperties.add(propertyDescriptor.getName());
+      }
     }
-    qPropertyDescriptors.add(getQueriedComponentsPropertyDescriptor());
-    return qPropertyDescriptors;
+    setRenderedProperties(qProperties);
+    setToStringProperty(componentDescriptor.getToStringProperty());
+    setUnclonedProperties(componentDescriptor.getUnclonedProperties());
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<String> getQueryableProperties() {
-    return componentDescriptor.getQueryableProperties();
+  @Override
+  public Class<IQueryComponent> getComponentContract() {
+    return IQueryComponent.class;
   }
 
   /**
    * {@inheritDoc}
    */
-  public List<String> getRenderedProperties() {
-    return componentDescriptor.getRenderedProperties();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<Class<?>> getServiceContracts() {
-    return componentDescriptor.getServiceContracts();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IComponentService getServiceDelegate(Method targetMethod) {
-    return componentDescriptor.getServiceDelegate(targetMethod);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public String getToStringProperty() {
-    return componentDescriptor.getToStringProperty();
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public Collection<String> getUnclonedProperties() {
-    return componentDescriptor.getUnclonedProperties();
+  @Override
+  public Class<?> getQueryComponentContract() {
+    return componentDescriptor.getComponentContract();
   }
 
   /**
    * {@inheritDoc}
    */
   public boolean isComputed() {
-    return componentDescriptor.isComputed();
+    return false;
   }
 
   /**
    * {@inheritDoc}
    */
   public boolean isEntity() {
-    return componentDescriptor.isEntity();
+    return false;
   }
 
   /**
    * {@inheritDoc}
    */
   public boolean isPurelyAbstract() {
-    return componentDescriptor.isPurelyAbstract();
-  }
-
-  private IPropertyDescriptor clonePropertyDescriptorForQuery(
-      IPropertyDescriptor propertyDescriptor) {
-    IPropertyDescriptor queryPropertyDescriptor = propertyDescriptor.clone();
-    queryPropertyDescriptor.unleashForFilter();
-    return queryPropertyDescriptor;
-  }
-
-  /**
-   * Gets the queriedComponentsPropertyDescriptor.
-   * 
-   * @return the queriedComponentsPropertyDescriptor.
-   */
-  private BasicCollectionPropertyDescriptor<E> getQueriedComponentsPropertyDescriptor() {
-    if (queriedComponentsPropertyDescriptor == null) {
-      BasicCollectionDescriptor<E> queriedEntitiesCollectionDescriptor = new BasicCollectionDescriptor<E>();
-      queriedEntitiesCollectionDescriptor.setCollectionInterface(List.class);
-      queriedEntitiesCollectionDescriptor
-          .setElementDescriptor(componentDescriptor);
-      queriedEntitiesCollectionDescriptor
-          .setName(IQueryComponent.QUERIED_COMPONENTS);
-      queriedEntitiesCollectionDescriptor
-          .setDescription("queriedEntities.description");
-      queriedComponentsPropertyDescriptor = new BasicCollectionPropertyDescriptor<E>();
-      queriedComponentsPropertyDescriptor
-          .setName(IQueryComponent.QUERIED_COMPONENTS);
-      queriedComponentsPropertyDescriptor
-          .setReferencedDescriptor(queriedEntitiesCollectionDescriptor);
-    }
-    return queriedComponentsPropertyDescriptor;
-  }
-
-  private IPropertyDescriptor getQueryPropertyDescriptor(
-      IPropertyDescriptor propertyDescriptor) {
-    IPropertyDescriptor queryPropertyDescriptor = null;
-    if (propertyDescriptor != null) {
-      queryPropertyDescriptor = queryPropertyDescriptors.get(propertyDescriptor
-          .getName());
-      if (queryPropertyDescriptor == null) {
-        queryPropertyDescriptor = clonePropertyDescriptorForQuery(propertyDescriptor);
-        queryPropertyDescriptors.put(propertyDescriptor.getName(),
-            queryPropertyDescriptor);
-      }
-    }
-    return queryPropertyDescriptor;
+    return false;
   }
 }
