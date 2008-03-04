@@ -14,7 +14,11 @@
   -->
   <bean
     id="lovViewDescriptorFactory"
-    class="com.d2s.framework.view.descriptor.basic.BasicLovViewDescriptorFactory" />
+    class="com.d2s.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
+    <property
+      name="queryViewDescriptorFactory"
+      ref="queryViewDescriptorFactory" />
+  </bean>
 
   <!--
     Report descriptors
@@ -760,7 +764,7 @@
     class="com.d2s.framework.view.action.ActionMap">
     <property name="parentActionMaps">
       <list>
-       <ref bean="readonlyBeanCollectionModuleActionMap"/>
+        <ref bean="readonlyBeanCollectionModuleActionMap" />
       </list>
     </property>
     <property name="actionLists">
@@ -784,7 +788,7 @@
     class="com.d2s.framework.view.action.ActionMap">
     <property name="parentActionMaps">
       <list>
-       <ref bean="readonlyBeanCollectionModuleActionMap"/>
+        <ref bean="readonlyBeanCollectionModuleActionMap" />
       </list>
     </property>
     <property name="actionLists">
@@ -809,7 +813,7 @@
     class="com.d2s.framework.view.action.ActionMap">
     <property name="parentActionMaps">
       <list>
-       <ref bean="beanCollectionModuleActionMap"/>
+        <ref bean="beanCollectionModuleActionMap" />
       </list>
     </property>
     <property name="actionLists">

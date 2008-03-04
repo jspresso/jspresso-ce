@@ -23,6 +23,6 @@ public interface IActionable {
    * 
    * @return the map of action lists handled by this view.
    */
-  ActionMap getActions();
+  ActionMap getActionMap();
 
 }

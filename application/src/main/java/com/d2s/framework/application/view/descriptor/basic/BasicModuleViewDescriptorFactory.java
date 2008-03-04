@@ -3,9 +3,6 @@
  */
 package com.d2s.framework.application.view.descriptor.basic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.application.model.BeanModule;
 import com.d2s.framework.application.model.FilterableBeanCollectionModule;
@@ -17,13 +14,10 @@ import com.d2s.framework.application.view.descriptor.IModuleViewDescriptorFactor
 import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.view.descriptor.ICollectionViewDescriptor;
-import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
-import com.d2s.framework.view.descriptor.ISubViewDescriptor;
+import com.d2s.framework.view.descriptor.IQueryViewDescriptorFactory;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicBorderViewDescriptor;
-import com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicNestingViewDescriptor;
-import com.d2s.framework.view.descriptor.basic.BasicPropertyViewDescriptor;
 import com.d2s.framework.view.descriptor.basic.BasicViewDescriptor;
 
 /**
@@ -37,6 +31,8 @@ import com.d2s.framework.view.descriptor.basic.BasicViewDescriptor;
  */
 public class BasicModuleViewDescriptorFactory implements
     IModuleViewDescriptorFactory {
+
+  private IQueryViewDescriptorFactory queryViewDescriptorFactory;
 
   /**
    * {@inheritDoc}
@@ -68,23 +64,13 @@ public class BasicModuleViewDescriptorFactory implements
           .setModelDescriptor(moduleDescriptor
               .getPropertyDescriptor("moduleObjects"));
       if (module instanceof FilterableBeanCollectionModule) {
+        IComponentDescriptor<Object> filterComponentDescriptor = ((FilterableBeanCollectionModule) module)
+            .getFilterComponentDescriptor();
         IViewDescriptor filterViewDescriptor = ((FilterableBeanCollectionModule) module)
             .getFilterViewDescriptor();
         if (filterViewDescriptor == null) {
-          filterViewDescriptor = new BasicComponentViewDescriptor();
-          ((BasicComponentViewDescriptor) filterViewDescriptor)
-              .setLabelsPosition(IComponentViewDescriptor.ABOVE);
-          List<ISubViewDescriptor> propertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
-          for (String qPropertyName : ((FilterableBeanCollectionModule) module)
-              .getFilterComponentDescriptor().getQueryableProperties()) {
-            BasicPropertyViewDescriptor qPropertyViewDescriptor = new BasicPropertyViewDescriptor();
-            qPropertyViewDescriptor.setName(qPropertyName);
-            propertyViewDescriptors.add(qPropertyViewDescriptor);
-          }
-          ((BasicComponentViewDescriptor) filterViewDescriptor)
-              .setPropertyViewDescriptors(propertyViewDescriptors);
-          ((BasicComponentViewDescriptor) filterViewDescriptor)
-              .setColumnCount(propertyViewDescriptors.size());
+          filterViewDescriptor = queryViewDescriptorFactory
+              .createQueryViewDescriptor(filterComponentDescriptor);
         }
         ((BasicViewDescriptor) filterViewDescriptor)
             .setModelDescriptor(moduleDescriptor
@@ -92,6 +78,8 @@ public class BasicModuleViewDescriptorFactory implements
         BasicBorderViewDescriptor decorator = new BasicBorderViewDescriptor();
         decorator.setNorthViewDescriptor(filterViewDescriptor);
         decorator.setCenterViewDescriptor(projectedViewDescriptor);
+        // decorator.setActionMap(projectedViewDescriptor.getActionMap());
+        // ((BasicViewDescriptor) projectedViewDescriptor).setActionMap(null);
         projectedViewDescriptor = decorator;
       }
       BasicNestingViewDescriptor moduleViewDescriptor = new BasicNestingViewDescriptor();
@@ -118,6 +106,17 @@ public class BasicModuleViewDescriptorFactory implements
       return moduleElementViewDescriptor;
     }
     return projectedViewDescriptor;
+  }
+
+  /**
+   * Sets the queryViewDescriptorFactory.
+   * 
+   * @param queryViewDescriptorFactory
+   *            the queryViewDescriptorFactory to set.
+   */
+  public void setQueryViewDescriptorFactory(
+      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
+    this.queryViewDescriptorFactory = queryViewDescriptorFactory;
   }
 
 }

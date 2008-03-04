@@ -293,11 +293,11 @@ public class DefaultSwingViewFactory implements
                   locale)
                   + TOOLTIP_ELLIPSIS);
         }
-        if (viewDescriptor.getActions() != null) {
+        if (viewDescriptor.getActionMap() != null) {
           JToolBar toolBar = createJToolBar();
           toolBar.setRollover(true);
           toolBar.setFloatable(true);
-          for (Iterator<ActionList> iter = viewDescriptor.getActions()
+          for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
@@ -1267,7 +1267,10 @@ public class DefaultSwingViewFactory implements
         default:
           break;
       }
-      viewComponent.add(propertyLabel, constraints);
+      if (propertyLabel.getText() != null
+          && propertyLabel.getText().length() > 0) {
+        viewComponent.add(propertyLabel, constraints);
+      }
 
       // component positionning
       switch (viewDescriptor.getLabelsPosition()) {
@@ -2284,9 +2287,11 @@ public class DefaultSwingViewFactory implements
     Dimension iconSize = new Dimension(viewComponent.getTableHeader().getFont()
         .getSize(), viewComponent.getTableHeader().getFont().getSize());
     sorterDecorator.setUpIcon(iconFactory.getIcon(
-        "classpath:com/d2s/framework/application/images/1uparrow-48x48.png", iconSize));
+        "classpath:com/d2s/framework/application/images/1uparrow-48x48.png",
+        iconSize));
     sorterDecorator.setDownIcon(iconFactory.getIcon(
-        "classpath:com/d2s/framework/application/images/1downarrow-48x48.png", iconSize));
+        "classpath:com/d2s/framework/application/images/1downarrow-48x48.png",
+        iconSize));
     sorterDecorator.setColumnComparator(String.class,
         String.CASE_INSENSITIVE_ORDER);
     viewComponent.setModel(sorterDecorator);
@@ -2672,7 +2677,7 @@ public class DefaultSwingViewFactory implements
     IModelDescriptor modelDescriptor = tableView.getDescriptor()
         .getModelDescriptor();
     ActionMap actionMap = ((ICollectionViewDescriptor) tableView
-        .getDescriptor()).getActions();
+        .getDescriptor()).getActionMap();
 
     if (actionMap == null) {
       return;
@@ -2710,7 +2715,7 @@ public class DefaultSwingViewFactory implements
     IViewDescriptor viewDescriptor;
     if (viewConnector == tree.getModel().getRoot()) {
       modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-      actionMap = treeView.getDescriptor().getActions();
+      actionMap = treeView.getDescriptor().getActionMap();
       viewDescriptor = treeView.getDescriptor();
     } else {
       viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
@@ -2719,7 +2724,7 @@ public class DefaultSwingViewFactory implements
           getDescriptorPathFromConnectorTreePath(path))
           .getNodeGroupDescriptor();
       modelDescriptor = viewDescriptor.getModelDescriptor();
-      actionMap = viewDescriptor.getActions();
+      actionMap = viewDescriptor.getActionMap();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }

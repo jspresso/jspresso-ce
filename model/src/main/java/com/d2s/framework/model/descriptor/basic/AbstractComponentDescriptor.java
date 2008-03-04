@@ -84,7 +84,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({ "cast", "unchecked" })
+  @SuppressWarnings({"cast", "unchecked" })
   public Class<? extends E> getComponentContract() {
     if (componentContract == null && getName() != null) {
       try {
@@ -224,7 +224,13 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public List<String> getQueryableProperties() {
     if (queryableProperties == null) {
-      return getRenderedProperties();
+      queryableProperties = new ArrayList<String>();
+      for (String renderedProperty : getRenderedProperties()) {
+        IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(renderedProperty);
+        if (propertyDescriptor.isQueryable()) {
+          queryableProperties.add(renderedProperty);
+        }
+      }
     }
     return queryableProperties;
   }
@@ -466,7 +472,7 @@ public abstract class AbstractComponentDescriptor<E> extends
       serviceDelegates.put(serviceMethod, service);
     }
   }
-  
+
   /**
    * {@inheritDoc}
    */

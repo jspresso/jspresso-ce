@@ -332,7 +332,7 @@ public class DefaultSwingController extends
   }
 
   private List<JMenu> createActionMenus() {
-    return createMenus(getActions());
+    return createMenus(getActionMap());
   }
 
   private JMenuBar createApplicationMenuBar() {

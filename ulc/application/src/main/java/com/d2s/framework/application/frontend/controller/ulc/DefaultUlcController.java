@@ -255,7 +255,7 @@ public class DefaultUlcController extends
   }
 
   private List<ULCMenu> createActionMenus(ULCComponent sourceComponent) {
-    return createMenus(sourceComponent, getActions());
+    return createMenus(sourceComponent, getActionMap());
   }
 
   private ULCMenuBar createApplicationMenuBar(ULCComponent sourceComponent) {

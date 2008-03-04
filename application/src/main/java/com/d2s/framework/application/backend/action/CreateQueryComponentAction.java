@@ -102,7 +102,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
           .createModelConnector(
               ACTION_MODEL_NAME,
               new BasicQueryComponentDescriptor(erqDescriptor
-                  .getReferencedDescriptor()/*, queryComponent.getClass()*/));
+                  .getReferencedDescriptor()));
       context.put(ActionContextConstants.QUERY_MODEL_CONNECTOR, modelConnector);
     }
     modelConnector.setConnectorValue(queryComponent);

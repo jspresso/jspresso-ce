@@ -38,7 +38,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * 
    * @return the actionMap.
    */
-  public ActionMap getActions() {
+  public ActionMap getActionMap() {
     return actionMap;
   }
 

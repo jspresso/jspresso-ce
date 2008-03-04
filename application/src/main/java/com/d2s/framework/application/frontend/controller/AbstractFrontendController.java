@@ -127,7 +127,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * 
    * @return the actions.
    */
-  public ActionMap getActions() {
+  public ActionMap getActionMap() {
     return actionMap;
   }
 

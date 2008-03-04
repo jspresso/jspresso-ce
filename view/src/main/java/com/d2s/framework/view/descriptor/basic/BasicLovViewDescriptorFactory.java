@@ -3,20 +3,15 @@
  */
 package com.d2s.framework.view.descriptor.basic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
 import com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor;
-import com.d2s.framework.view.descriptor.IComponentViewDescriptor;
 import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
-import com.d2s.framework.view.descriptor.ISubViewDescriptor;
+import com.d2s.framework.view.descriptor.IQueryViewDescriptorFactory;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
@@ -30,6 +25,8 @@ import com.d2s.framework.view.descriptor.IViewDescriptor;
  */
 public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory {
 
+  private IQueryViewDescriptorFactory queryViewDescriptorFactory;
+
   /**
    * {@inheritDoc}
    */
@@ -37,48 +34,14 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
   public IViewDescriptor createLovViewDescriptor(
       IReferencePropertyDescriptor entityRefDescriptor) {
     BasicSplitViewDescriptor lovViewDescriptor = new BasicSplitViewDescriptor();
-    lovViewDescriptor.setMasterDetail(true);
-    lovViewDescriptor
-        .setLeftTopViewDescriptor(createQueryComponentViewDescriptor(entityRefDescriptor
-            .getComponentDescriptor()));
+    lovViewDescriptor.setLeftTopViewDescriptor(queryViewDescriptorFactory
+        .createQueryViewDescriptor(
+            entityRefDescriptor.getComponentDescriptor()));
     lovViewDescriptor
         .setRightBottomViewDescriptor(createResultViewDescriptor(entityRefDescriptor
             .getComponentDescriptor()));
     return lovViewDescriptor;
 
-  }
-
-  private IViewDescriptor createQueryComponentViewDescriptor(
-      IComponentDescriptor<?> entityDescriptor) {
-    BasicComponentViewDescriptor queryComponentViewDescriptor = new BasicComponentViewDescriptor();
-    queryComponentViewDescriptor.setModelDescriptor(entityDescriptor);
-    queryComponentViewDescriptor.setName("queryEntity");
-    queryComponentViewDescriptor
-        .setLabelsPosition(IComponentViewDescriptor.ASIDE);
-    queryComponentViewDescriptor.setColumnCount(2);
-
-    List<String> queryProperties = new ArrayList<String>();
-    Map<String, Object> propertyWidths = new HashMap<String, Object>();
-    for (String queryProperty : entityDescriptor.getQueryableProperties()) {
-      IPropertyDescriptor propertyDescriptor = entityDescriptor
-          .getPropertyDescriptor(queryProperty);
-      if (propertyDescriptor.isQueryable()) {
-        queryProperties.add(queryProperty);
-      }
-      // to preserve query structures.
-      propertyWidths.put(queryProperty, new Integer(3));
-    }
-    queryComponentViewDescriptor.setPropertyWidths(propertyWidths);
-    List<ISubViewDescriptor> queryPropertyViewDescriptors = new ArrayList<ISubViewDescriptor>();
-    for (String renderedProperty : queryProperties) {
-      BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
-      propertyDescriptor.setName(renderedProperty);
-      queryPropertyViewDescriptors.add(propertyDescriptor);
-    }
-    queryComponentViewDescriptor
-        .setPropertyViewDescriptors(queryPropertyViewDescriptors);
-
-    return queryComponentViewDescriptor;
   }
 
   private IViewDescriptor createResultViewDescriptor(
@@ -94,9 +57,19 @@ public class BasicLovViewDescriptorFactory implements ILovViewDescriptorFactory 
         .setReferencedDescriptor(queriedEntitiesListDescriptor);
     queriedEntitiesDescriptor.setName(IQueryComponent.QUERIED_COMPONENTS);
 
-    resultViewDescriptor.setName("queriedEntities.table");
     resultViewDescriptor.setModelDescriptor(queriedEntitiesDescriptor);
     resultViewDescriptor.setReadOnly(true);
     return resultViewDescriptor;
+  }
+
+  /**
+   * Sets the queryViewDescriptorFactory.
+   * 
+   * @param queryViewDescriptorFactory
+   *            the queryViewDescriptorFactory to set.
+   */
+  public void setQueryViewDescriptorFactory(
+      IQueryViewDescriptorFactory queryViewDescriptorFactory) {
+    this.queryViewDescriptorFactory = queryViewDescriptorFactory;
   }
 }

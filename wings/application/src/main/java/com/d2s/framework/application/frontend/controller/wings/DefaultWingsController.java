@@ -221,7 +221,7 @@ public class DefaultWingsController extends
   }
 
   private List<SMenu> createActionMenus() {
-    return createMenus(getActions());
+    return createMenus(getActionMap());
   }
 
   private SMenuBar createApplicationMenuBar() {

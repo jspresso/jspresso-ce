@@ -285,9 +285,9 @@ public class DefaultUlcViewFactory implements
         if (viewDescriptor.isReadOnly()) {
           view.getConnector().setLocallyWritable(false);
         }
-        if (viewDescriptor.getActions() != null) {
+        if (viewDescriptor.getActionMap() != null) {
           ULCToolBar toolBar = createULCToolBar();
-          for (Iterator<ActionList> iter = viewDescriptor.getActions()
+          for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
@@ -1265,7 +1265,10 @@ public class DefaultUlcViewFactory implements
         default:
           break;
       }
-      viewComponent.add(propertyLabel, constraints);
+      if (propertyLabel.getText() != null
+          && propertyLabel.getText().length() > 0) {
+        viewComponent.add(propertyLabel, constraints);
+      }
 
       // component positionning
       switch (viewDescriptor.getLabelsPosition()) {
@@ -2606,7 +2609,7 @@ public class DefaultUlcViewFactory implements
     IModelDescriptor modelDescriptor = tableView.getDescriptor()
         .getModelDescriptor();
     ActionMap actionMap = ((ICollectionViewDescriptor) tableView
-        .getDescriptor()).getActions();
+        .getDescriptor()).getActionMap();
 
     if (actionMap == null) {
       return null;
@@ -2644,7 +2647,7 @@ public class DefaultUlcViewFactory implements
     IViewDescriptor viewDescriptor;
     if (viewConnector == tree.getModel().getRoot()) {
       modelDescriptor = treeView.getDescriptor().getModelDescriptor();
-      actionMap = treeView.getDescriptor().getActions();
+      actionMap = treeView.getDescriptor().getActionMap();
       viewDescriptor = treeView.getDescriptor();
     } else {
       viewDescriptor = TreeDescriptorHelper.getSubtreeDescriptorFromPath(
@@ -2653,7 +2656,7 @@ public class DefaultUlcViewFactory implements
           getDescriptorPathFromConnectorTreePath(path))
           .getNodeGroupDescriptor();
       modelDescriptor = viewDescriptor.getModelDescriptor();
-      actionMap = viewDescriptor.getActions();
+      actionMap = viewDescriptor.getActionMap();
       if (!(viewConnector instanceof ICollectionConnector)) {
         viewConnector = viewConnector.getParentConnector();
       }

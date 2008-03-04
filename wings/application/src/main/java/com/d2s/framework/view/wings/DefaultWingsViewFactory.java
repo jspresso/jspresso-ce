@@ -284,10 +284,10 @@ public class DefaultWingsViewFactory implements
                   locale)
                   + TOOLTIP_ELLIPSIS);
         }
-        if (viewDescriptor.getActions() != null) {
+        if (viewDescriptor.getActionMap() != null) {
           SToolBar toolBar = createSToolBar();
           toolBar.setBorder(new SEmptyBorder(new Insets(2, 2, 2, 2)));
-          for (Iterator<ActionList> iter = viewDescriptor.getActions()
+          for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
@@ -1281,7 +1281,10 @@ public class DefaultWingsViewFactory implements
         default:
           break;
       }
-      viewComponent.add(propertyLabel, constraints);
+      if (propertyLabel.getText() != null
+          && propertyLabel.getText().length() > 0) {
+        viewComponent.add(propertyLabel, constraints);
+      }
 
       // SComponent positionning
       switch (viewDescriptor.getLabelsPosition()) {

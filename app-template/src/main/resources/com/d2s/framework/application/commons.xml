@@ -284,11 +284,22 @@
     class="com.d2s.framework.util.scripting.DefaultScriptHandler" />
 
   <!--
+    The query view descriptor factory.
+  -->
+  <bean
+    id="queryViewDescriptorFactory"
+    class="com.d2s.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory" />
+
+  <!--
     The module view descriptor factory.
   -->
   <bean
     id="moduleViewDescriptorFactory"
-    class="com.d2s.framework.application.view.descriptor.basic.BasicModuleViewDescriptorFactory" />
+    class="com.d2s.framework.application.view.descriptor.basic.BasicModuleViewDescriptorFactory">
+    <property
+      name="queryViewDescriptorFactory"
+      ref="queryViewDescriptorFactory" />
+  </bean>
 
   <!--
     The controllers.
