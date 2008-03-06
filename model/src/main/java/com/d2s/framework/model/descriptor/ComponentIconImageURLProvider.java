@@ -3,12 +3,10 @@
  */
 package com.d2s.framework.model.descriptor;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.d2s.framework.model.descriptor.util.ComponentInheritanceComparator;
 import com.d2s.framework.util.IIconImageURLProvider;
 
 /**
@@ -27,6 +25,14 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
 
   private Collection<IComponentDescriptor<?>> componentDescriptors;
   private IComponentDescriptorRegistry        componentDescriptorRegistry;
+  private Map<Class<?>, String>               cache;
+
+  /**
+   * Constructs a new <code>ComponentIconImageURLProvider</code> instance.
+   */
+  protected ComponentIconImageURLProvider() {
+    cache = new HashMap<Class<?>, String>();
+  }
 
   /**
    * {@inheritDoc}
@@ -35,20 +41,37 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
     if (userObject == null) {
       return null;
     }
-    if (componentDescriptors == null) {
-      componentDescriptors = new ArrayList<IComponentDescriptor<?>>(
-          componentDescriptorRegistry.getComponentDescriptors());
-      Collections.sort((List<IComponentDescriptor<?>>) componentDescriptors,
-          new ComponentInheritanceComparator());
-    }
     Class<?> modelClass = userObject.getClass();
+    if (cache.containsKey(modelClass)) {
+      return cache.get(modelClass);
+    }
+    if (componentDescriptors == null) {
+      componentDescriptors = componentDescriptorRegistry
+          .getComponentDescriptors();
+    }
+    String iconImageURL = computeIconImageURL(modelClass);
+    cache.put(modelClass, iconImageURL);
+    return iconImageURL;
+  }
+
+  private String computeIconImageURL(Class<?> modelClass) {
+    String iconImageURL = null;
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
-      if (((Class<?>) componentDescriptor.getComponentContract())
-          .isAssignableFrom(modelClass)) {
-        return componentDescriptor.getIconImageURL();
+      if (modelClass.equals(componentDescriptor.getComponentContract())
+          && componentDescriptor.getIconImageURL() != null) {
+        iconImageURL = componentDescriptor.getIconImageURL();
       }
     }
-    return null;
+    if (iconImageURL == null) {
+      Class<?>[] superInterfaces = modelClass.getInterfaces();
+      for (int i = superInterfaces.length - 1; i >= 0 && iconImageURL == null; i--) {
+        iconImageURL = computeIconImageURL(superInterfaces[i]);
+      }
+      if (iconImageURL == null && modelClass.getSuperclass() != null) {
+        iconImageURL = computeIconImageURL(modelClass.getSuperclass());
+      }
+    }
+    return iconImageURL;
   }
 
   /**
