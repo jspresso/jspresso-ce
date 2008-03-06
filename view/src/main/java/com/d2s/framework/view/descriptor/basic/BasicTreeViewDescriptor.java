@@ -38,6 +38,7 @@ public class BasicTreeViewDescriptor extends BasicViewDescriptor implements
     if (iconImageURL == null) {
       iconImageURL = rootSubtreeDescriptor.getNodeGroupDescriptor()
           .getIconImageURL();
+      setIconImageURL(iconImageURL);
     }
     return iconImageURL;
   }

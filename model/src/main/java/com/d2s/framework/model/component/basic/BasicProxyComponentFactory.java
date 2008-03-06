@@ -5,6 +5,7 @@ package com.d2s.framework.model.component.basic;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.util.Collection;
 
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
@@ -201,5 +202,12 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return new BasicDelegatingComponentInvocationHandler(delegate, this,
         componentDescriptor, componentCollectionFactory, accessorFactory,
         componentExtensionFactory);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
+    return componentDescriptorRegistry.getComponentDescriptors();
   }
 }

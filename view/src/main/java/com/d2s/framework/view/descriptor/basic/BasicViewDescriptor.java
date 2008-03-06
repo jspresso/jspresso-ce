@@ -109,11 +109,13 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    */
   @Override
   public String getIconImageURL() {
-    if (super.getIconImageURL() == null
+    String iconImageURL = super.getIconImageURL();
+    if (iconImageURL == null
         && getModelDescriptor() instanceof IComponentDescriptor) {
-      return ((IComponentDescriptor<?>) getModelDescriptor()).getIconImageURL();
+      iconImageURL = ((IComponentDescriptor<?>) getModelDescriptor()).getIconImageURL();
+      setIconImageURL(iconImageURL);
     }
-    return super.getIconImageURL();
+    return iconImageURL;
   }
 
   /**

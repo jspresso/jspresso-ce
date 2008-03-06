@@ -51,6 +51,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     if (iconImageURL == null) {
       iconImageURL = ((IComponentDescriptorProvider<?>) getModelDescriptor())
           .getComponentDescriptor().getIconImageURL();
+      setIconImageURL(iconImageURL);
     }
     return iconImageURL;
   }

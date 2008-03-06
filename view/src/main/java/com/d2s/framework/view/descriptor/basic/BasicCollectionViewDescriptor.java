@@ -27,6 +27,7 @@ public abstract class BasicCollectionViewDescriptor extends BasicViewDescriptor
     if (iconImageURL == null) {
       iconImageURL = ((ICollectionDescriptorProvider<?>) getModelDescriptor())
           .getCollectionDescriptor().getElementDescriptor().getIconImageURL();
+      setIconImageURL(iconImageURL);
     }
     return iconImageURL;
   }

@@ -3,6 +3,7 @@
  */
 package com.d2s.framework.model.descriptor.basic;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,19 +27,17 @@ public class BasicComponentDescriptorRegistry implements
     IComponentDescriptorRegistry, ApplicationContextAware {
 
   private ApplicationContext  componentApplicationContext;
-  private Map<String, String> contractNameIdMap;
+  private Map<String, IComponentDescriptor<?>> contractNameToComponentDescriptorMap;
 
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   public IComponentDescriptor<?> getComponentDescriptor(
       Class<? extends IComponent> componentContract) {
-    if (contractNameIdMap == null) {
+    if (contractNameToComponentDescriptorMap == null) {
       buildContractNameIdMap();
     }
-    return (IComponentDescriptor<IComponent>) componentApplicationContext
-        .getBean(contractNameIdMap.get(componentContract.getName()));
+    return contractNameToComponentDescriptorMap.get(componentContract.getName());
   }
 
   /**
@@ -55,15 +54,25 @@ public class BasicComponentDescriptorRegistry implements
 
   @SuppressWarnings("unchecked")
   private void buildContractNameIdMap() {
-    contractNameIdMap = new HashMap<String, String>();
+    contractNameToComponentDescriptorMap = new HashMap<String, IComponentDescriptor<?>>();
     Map<String, IComponentDescriptor<?>> idToComponentDescriptors = componentApplicationContext
         .getBeansOfType(IComponentDescriptor.class);
     for (Map.Entry<String, IComponentDescriptor<?>> descriptorEntry : idToComponentDescriptors
         .entrySet()) {
       if (descriptorEntry.getValue().getComponentContract() != null) {
-        contractNameIdMap.put(descriptorEntry.getValue().getComponentContract()
-            .getName(), descriptorEntry.getKey());
+        contractNameToComponentDescriptorMap.put(descriptorEntry.getValue().getComponentContract()
+            .getName(), descriptorEntry.getValue());
       }
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
+    if (contractNameToComponentDescriptorMap == null) {
+      buildContractNameIdMap();
+    }
+    return contractNameToComponentDescriptorMap.values();
   }
 }

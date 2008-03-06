@@ -8,6 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.util.Collection;
 
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
@@ -16,7 +17,6 @@ import com.d2s.framework.model.component.IComponentFactory;
 import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptorRegistry;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IScalarPropertyDescriptor;
 import com.d2s.framework.model.entity.EntityException;
@@ -41,7 +41,6 @@ public class BasicProxyEntityFactory implements IEntityFactory {
 
   private IAccessorFactory                        accessorFactory;
   private IComponentCollectionFactory<IComponent> entityCollectionFactory;
-  private IComponentDescriptorRegistry            entityDescriptorRegistry;
   private IComponentExtensionFactory              entityExtensionFactory;
   private IGUIDGenerator                          entityGUIDGenerator;
   private IComponentFactory                       inlineComponentFactory;
@@ -69,7 +68,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   public <T extends IEntity> T createEntityInstance(Class<T> entityContract) {
     T createdEntity = createEntityInstance(entityContract, entityGUIDGenerator
         .generateGUID());
-    for (IPropertyDescriptor propertyDescriptor : entityDescriptorRegistry
+    for (IPropertyDescriptor propertyDescriptor : inlineComponentFactory
         .getComponentDescriptor(entityContract).getPropertyDescriptors()) {
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
         createdEntity
@@ -124,7 +123,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    */
   public IComponentDescriptor<?> getComponentDescriptor(
       Class<? extends IComponent> componentContract) {
-    return entityDescriptorRegistry.getComponentDescriptor(componentContract);
+    return inlineComponentFactory.getComponentDescriptor(componentContract);
   }
 
   /**
@@ -146,17 +145,6 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   public void setEntityCollectionFactory(
       IComponentCollectionFactory<IComponent> entityCollectionFactory) {
     this.entityCollectionFactory = entityCollectionFactory;
-  }
-
-  /**
-   * Sets the entityDescriptorRegistry.
-   * 
-   * @param entityDescriptorRegistry
-   *            the entityDescriptorRegistry to set.
-   */
-  public void setEntityDescriptorRegistry(
-      IComponentDescriptorRegistry entityDescriptorRegistry) {
-    this.entityDescriptorRegistry = entityDescriptorRegistry;
   }
 
   /**
@@ -261,7 +249,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   @SuppressWarnings("unchecked")
   private <T extends IEntity> T createEntityInstance(Class<T> entityContract,
       Serializable id, Class[] extraInterfaces) {
-    IComponentDescriptor entityDescriptor = entityDescriptorRegistry
+    IComponentDescriptor entityDescriptor = inlineComponentFactory
         .getComponentDescriptor(entityContract);
     if (entityDescriptor.isPurelyAbstract()) {
       throw new EntityException(entityDescriptor.getName()
@@ -283,5 +271,12 @@ public class BasicProxyEntityFactory implements IEntityFactory {
         .getContextClassLoader(), implementedClasses, entityHandler);
     entity.straightSetProperty(IEntity.ID, id);
     return entity;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Collection<IComponentDescriptor<?>> getComponentDescriptors() {
+    return inlineComponentFactory.getComponentDescriptors();
   }
 }

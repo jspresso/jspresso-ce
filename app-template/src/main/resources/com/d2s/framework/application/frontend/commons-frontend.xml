@@ -6,10 +6,6 @@
   default-lazy-init="true">
 
   <!--
-    Test view description context.
-  -->
-
-  <!--
     View factories
   -->
   <bean
@@ -893,5 +889,50 @@
         </bean>
       </list>
     </property>
+  </bean>
+
+  <!--
+    Standard ready to use modules
+  -->
+
+  <bean
+    id="filterableBeanCollectionModuleView"
+    parent="decoratedView"
+    class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor">
+    <property
+      name="actionMap"
+      ref="filterableBeanCollectionModuleActionMap" />
+  </bean>
+
+  <bean
+    abstract="true"
+    id="abstractFilterableBeanCollectionModule"
+    class="com.d2s.framework.application.model.FilterableBeanCollectionModule">
+    <property
+      name="projectedViewDescriptor"
+      ref="filterableBeanCollectionModuleView" />
+    <property
+      name="startupAction"
+      ref="initModuleFilterAction" />
+  </bean>
+
+  <!--
+    Workspaces
+  -->
+  <bean
+    id="defaultModuleIconImageURLProvider"
+    class="com.d2s.framework.application.model.WorkspaceIconImageURLProvider">
+    <property
+      name="delegateProvider"
+      ref="defaultDomainImageUrlProvider" />
+  </bean>
+
+  <bean
+    abstract="true"
+    id="abstractWorkspace"
+    class="com.d2s.framework.application.model.Workspace">
+    <property
+      name="iconImageURLProvider"
+      ref="defaultModuleIconImageURLProvider" />
   </bean>
 </beans>

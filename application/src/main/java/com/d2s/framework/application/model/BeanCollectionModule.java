@@ -118,4 +118,17 @@ public class BeanCollectionModule extends Module {
     this.moduleObjects = moduleObjects;
     firePropertyChange("moduleObjects", oldValue, getModuleObjects());
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getIconImageURL() {
+    String iconImageUrl = super.getIconImageURL();
+    if (iconImageUrl == null) {
+      iconImageUrl = getElementComponentDescriptor().getIconImageURL();
+      setIconImageURL(iconImageUrl);
+    }
+    return iconImageUrl;
+  }
 }

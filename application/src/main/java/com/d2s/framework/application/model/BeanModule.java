@@ -12,6 +12,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
+import com.d2s.framework.view.descriptor.IViewDescriptor;
+import com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 
 /**
  * A bean module is the base class of bean related modules.
@@ -117,5 +119,27 @@ public class BeanModule extends Module implements PropertyChangeListener {
           .addPropertyChangeListener(this);
     }
     firePropertyChange("moduleObject", oldValue, getModuleObject());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public IViewDescriptor getProjectedViewDescriptor() {
+    IViewDescriptor projectedViewDescriptor = super
+        .getProjectedViewDescriptor();
+    if (projectedViewDescriptor == null) {
+      projectedViewDescriptor = new BasicComponentViewDescriptor();
+      ((BasicComponentViewDescriptor) projectedViewDescriptor)
+          .setModelDescriptor(getComponentDescriptor());
+      ((BasicComponentViewDescriptor) projectedViewDescriptor)
+          .setBorderType(IViewDescriptor.TITLED);
+      ((BasicComponentViewDescriptor) projectedViewDescriptor)
+          .setName(getComponentDescriptor().getName());
+      ((BasicComponentViewDescriptor) projectedViewDescriptor)
+          .setColumnCount(3);
+      setProjectedViewDescriptor(projectedViewDescriptor);
+    }
+    return projectedViewDescriptor;
   }
 }

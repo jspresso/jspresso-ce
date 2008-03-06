@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.model.descriptor;
 
+import java.util.Collection;
+
 import com.d2s.framework.model.component.IComponent;
 
 /**
@@ -25,4 +27,11 @@ public interface IComponentDescriptorRegistry {
    */
   IComponentDescriptor<?> getComponentDescriptor(
       Class<? extends IComponent> componentContract);
+
+  /**
+   * Gets all the registered component descriptors.
+   * 
+   * @return all the registered component descriptors.
+   */
+  Collection<IComponentDescriptor<?>> getComponentDescriptors();
 }

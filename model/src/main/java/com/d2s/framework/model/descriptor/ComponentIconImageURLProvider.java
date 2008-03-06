@@ -3,8 +3,12 @@
  */
 package com.d2s.framework.model.descriptor;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
+import com.d2s.framework.model.descriptor.util.ComponentInheritanceComparator;
 import com.d2s.framework.util.IIconImageURLProvider;
 
 /**
@@ -22,6 +26,7 @@ import com.d2s.framework.util.IIconImageURLProvider;
 public class ComponentIconImageURLProvider implements IIconImageURLProvider {
 
   private Collection<IComponentDescriptor<?>> componentDescriptors;
+  private IComponentDescriptorRegistry        componentDescriptorRegistry;
 
   /**
    * {@inheritDoc}
@@ -29,6 +34,12 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
   public String getIconImageURLForObject(Object userObject) {
     if (userObject == null) {
       return null;
+    }
+    if (componentDescriptors == null) {
+      componentDescriptors = new ArrayList<IComponentDescriptor<?>>(
+          componentDescriptorRegistry.getComponentDescriptors());
+      Collections.sort((List<IComponentDescriptor<?>>) componentDescriptors,
+          new ComponentInheritanceComparator());
     }
     Class<?> modelClass = userObject.getClass();
     for (IComponentDescriptor<?> componentDescriptor : componentDescriptors) {
@@ -49,5 +60,16 @@ public class ComponentIconImageURLProvider implements IIconImageURLProvider {
   public void setComponentDescriptors(
       Collection<IComponentDescriptor<?>> componentDescriptors) {
     this.componentDescriptors = componentDescriptors;
+  }
+
+  /**
+   * Sets the componentDescriptorRegistry.
+   * 
+   * @param componentDescriptorRegistry
+   *            the componentDescriptorRegistry to set.
+   */
+  public void setComponentDescriptorRegistry(
+      IComponentDescriptorRegistry componentDescriptorRegistry) {
+    this.componentDescriptorRegistry = componentDescriptorRegistry;
   }
 }

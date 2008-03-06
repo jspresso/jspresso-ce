@@ -67,8 +67,7 @@ public class WorkspaceCardViewDescriptor extends AbstractCardViewDescriptor {
         if (module.getProjectedViewDescriptor() != null) {
           moduleCards.put(module.getName(), moduleDescriptorViewFactory
               .createProjectedViewDescriptor(module));
-          if (module instanceof BeanCollectionModule
-              && ((BeanCollectionModule) module).getElementViewDescriptor() != null) {
+          if (module instanceof BeanCollectionModule) {
             BeanModule fakeBeanModule = new BeanModule();
             fakeBeanModule
                 .setProjectedViewDescriptor(((BeanCollectionModule) module)

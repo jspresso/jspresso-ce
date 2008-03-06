@@ -156,6 +156,17 @@
     class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
   <!--
+    The implementation used as ComponentIconImageURLProvider.
+  -->
+  <bean
+    id="defaultDomainImageUrlProvider"
+    class="com.d2s.framework.model.descriptor.ComponentIconImageURLProvider">
+    <property
+      name="componentDescriptorRegistry"
+      ref="componentDescriptorRegistry" />
+  </bean>
+
+  <!--
     The implementation used as ComponentFactory.
   -->
   <bean
@@ -196,9 +207,6 @@
     <property
       name="entityGUIDGenerator"
       ref="entityGUIDGenerator" />
-    <property
-      name="entityDescriptorRegistry"
-      ref="componentDescriptorRegistry" />
   </bean>
 
   <!--
