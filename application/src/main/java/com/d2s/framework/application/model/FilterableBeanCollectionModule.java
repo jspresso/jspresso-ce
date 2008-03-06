@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.application.model;
 
-import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.util.lang.ObjectUtils;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;

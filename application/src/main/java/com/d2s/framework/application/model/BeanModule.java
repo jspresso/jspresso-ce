@@ -6,7 +6,7 @@ package com.d2s.framework.application.model;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.util.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 

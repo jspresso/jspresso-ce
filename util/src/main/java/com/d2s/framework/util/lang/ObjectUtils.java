@@ -1,5 +1,7 @@
 package com.d2s.framework.util.lang;
 
+import java.sql.Timestamp;
+
 /**
  * Helper class for objects operations.
  * <p>
@@ -39,6 +41,10 @@ public final class ObjectUtils {
     if (object1 instanceof Number && object2 instanceof Number) {
       return ((Number) object1).doubleValue() == ((Number) object2)
           .doubleValue();
+    }
+    if (object1 instanceof Timestamp) {
+      // there is a bug where a date equals a timestamp but not reflexively !
+      return object2.equals(object1);
     }
     return object1.equals(object2);
   }

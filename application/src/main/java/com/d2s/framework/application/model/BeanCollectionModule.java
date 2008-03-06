@@ -5,7 +5,7 @@ package com.d2s.framework.application.model;
 
 import java.util.Collection;
 
-import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.util.lang.ObjectUtils;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
 import com.d2s.framework.model.descriptor.IComponentDescriptor;

@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.gui.ulc.components.server;
 
-import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.util.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 

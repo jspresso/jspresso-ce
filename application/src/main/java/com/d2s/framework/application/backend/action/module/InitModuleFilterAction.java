@@ -8,6 +8,7 @@ import java.util.Map;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.action.AbstractBackendAction;
+import com.d2s.framework.application.model.BeanCollectionModule;
 import com.d2s.framework.binding.model.IModelValueConnector;
 
 /**
@@ -35,6 +36,9 @@ public class InitModuleFilterAction extends AbstractBackendAction {
         filterModelConnector);
     context.put(ActionContextConstants.COMPONENT_REF_DESCRIPTOR,
         filterModelConnector.getModelDescriptor());
+    BeanCollectionModule beanCollectionModule = (BeanCollectionModule) getModuleConnector(
+        context).getConnectorValue();
+    beanCollectionModule.setModuleObjects(null);
     return super.execute(actionHandler, context);
   }
 

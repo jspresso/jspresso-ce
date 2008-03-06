@@ -6,7 +6,7 @@ package com.d2s.framework.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.util.lang.ObjectUtils;
 
 /**
  * Helper class to ease the IModelChangeListener management.

@@ -7,7 +7,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.util.lang.ObjectUtils;
 
 import com.d2s.framework.binding.AbstractValueConnector;
 import com.d2s.framework.binding.ConnectorBindingException;

@@ -5264,25 +5264,118 @@ hrsample-app { <co id="hrsample-app" />
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
           <callout arearefs="Workspace">
-            <para></para>
+            <para>We declare our new workspace inheriting from the
+            <trademark>D2S</trademark> standard built-in workspace component
+            that may fit most of standard usages.</para>
           </callout>
 
           <callout arearefs="modules">
-            <para></para>
+            <para>We assign the list of modules belonging to this new
+            workspace. The list contains one module which is the cities bean
+            collection module.</para>
           </callout>
 
           <callout arearefs="abstractFilterableBeanCollectionModule">
-            <para></para>
+            <para>We declare the cities module inheriting the
+            <trademark>D2S</trademark> standard built-in filterable bean
+            collection module component that may fit most of standard
+            usages.</para>
           </callout>
 
           <callout arearefs="elementComponentDescriptor">
-            <para></para>
+            <para>We customize the module by referencing the city entity as
+            being the content element of this module.</para>
           </callout>
 
           <callout arearefs="workspaces">
-            <para></para>
+            <para>We register the master data management module in the
+            existing frontend controller.</para>
           </callout>
-        </calloutlist></para>
+        </calloutlist>You might notice in the XML fragment above that there
+      are actually very few directives needed to get a fully functionning
+      C.R.U.D. module on an entity. Most of the code deals with names,
+      descriptions and icons to obtain a nice looking GUI. Of course, there
+      are plenty of customizations you can achieve to meet the actual end-user
+      requirements (customize the view on the bean collection, the filter, the
+      offered services, ...), but none of them is required until you actually
+      want to change the default sensible values.</para>
+
+      <para>We are now ready to see the first workspace in action by launching
+      the application. The master data workspace will be made available in the
+      application frame workspaces menu. Don't hesitate to play with it,
+      create some cities, save them, query them applying a filter, zoom on a
+      selected one to edit it in a more convenient form, reset the list, ...
+      And if you turn on logging for the SQL issued by hibernate, you will see
+      all your orders transmitted to the backend database. The screenshots
+      below captures some of the actions we have just talked about.</para>
+
+      <para><table>
+          <title>Some screenshots from the master data management
+          module</title>
+
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry>1- We have just lauched the module.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata.module.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+
+                <entry>2- We are saving 3 cities we've just
+                created.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata.module.3cities.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
+
+              <row>
+                <entry>3- We are queriing the database applying a
+                filter.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata.module.filter.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+
+                <entry>4- We are going to edit one of the cities individually
+                in a form.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata.module.open.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
+
+              <row>
+                <entry>5- We have installed one of the city in the module tree
+                and we edit it.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata.module.single.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+
+                <entry>6- We reset the module content (the database, of
+                course, still contains the data).<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="60%"
+                                 fileref="../images/Masterdata.module.reloaded.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table></para>
     </section>
   </section>
 </chapter>

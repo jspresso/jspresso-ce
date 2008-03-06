@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.MethodUtils;
-import org.apache.commons.lang.ObjectUtils;
+import com.d2s.framework.util.lang.ObjectUtils;
 
 import com.d2s.framework.model.component.ComponentException;
 import com.d2s.framework.model.component.IComponent;
