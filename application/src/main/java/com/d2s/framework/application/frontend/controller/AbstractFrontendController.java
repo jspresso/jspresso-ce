@@ -426,7 +426,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
     // splitViewDescriptor.setDescription(workspaceViewDescriptor.getDescription());
     splitViewDescriptor.setIconImageURL(workspaceViewDescriptor
         .getIconImageURL());
-    splitViewDescriptor.setMasterDetail(true);
+    splitViewDescriptor.setCascadingModels(true);
 
     WorkspaceCardViewDescriptor workspacePaneDescriptor = new WorkspaceCardViewDescriptor(
         workspace, moduleViewDescriptorFactory);

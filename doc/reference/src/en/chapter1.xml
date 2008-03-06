@@ -4149,8 +4149,8 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     name="rightBottomViewDescriptor"
     ref="Department-teams.table" /&gt; <co id="Department-teams.table" />
   &lt;property
-    name="masterDetail"
-    value="true" /&gt; <co id="masterDetail" />
+    name="cascadingModels"
+    value="true" /&gt; <co id="cascadingModels" />
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="Departments.and.teams.view">
               <para>We declare a new split view.</para>
@@ -4166,7 +4166,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               view.</para>
             </callout>
 
-            <callout arearefs="masterDetail">
+            <callout arearefs="cascadingModels">
               <para>We declare this composite view a master-detail view for
               <trademark>D2S</trademark> to track the departments
               selection.</para>

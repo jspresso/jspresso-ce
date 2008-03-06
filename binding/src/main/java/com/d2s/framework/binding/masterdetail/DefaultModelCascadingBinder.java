@@ -11,7 +11,7 @@ import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
 
 /**
- * Default implementation of <code>IMasterDetailBinder</code>.
+ * Default implementation of <code>IModelCascadingBinder</code>.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
@@ -19,7 +19,7 @@ import com.d2s.framework.binding.IValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class DefaultMasterDetailBinder implements IMasterDetailBinder {
+public class DefaultModelCascadingBinder implements IModelCascadingBinder {
 
   private IMvcBinder mvcBinder;
 

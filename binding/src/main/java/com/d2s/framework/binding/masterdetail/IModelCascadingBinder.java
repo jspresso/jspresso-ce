@@ -16,7 +16,7 @@ import com.d2s.framework.binding.IValueConnector;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IMasterDetailBinder {
+public interface IModelCascadingBinder {
 
   /**
    * Binds two connectors altogether.

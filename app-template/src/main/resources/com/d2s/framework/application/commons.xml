@@ -101,8 +101,8 @@
     The implementation used as MvcBinder.
   -->
   <bean
-    id="masterDetailBinder"
-    class="com.d2s.framework.binding.masterdetail.DefaultMasterDetailBinder">
+    id="modelCascadingBinder"
+    class="com.d2s.framework.binding.masterdetail.DefaultModelCascadingBinder">
     <property
       name="mvcBinder"
       ref="mvcBinder" />
@@ -234,8 +234,8 @@
       name="translationProvider"
       ref="translationProvider" />
     <property
-      name="masterDetailBinder"
-      ref="masterDetailBinder" />
+      name="modelCascadingBinder"
+      ref="modelCascadingBinder" />
     <property
       name="listSelectionModelBinder"
       ref="listSelectionModelBinder" />

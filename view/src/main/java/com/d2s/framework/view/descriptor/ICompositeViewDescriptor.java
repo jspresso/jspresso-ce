@@ -22,5 +22,5 @@ public interface ICompositeViewDescriptor extends IViewDescriptor {
    * 
    * @return true if the child views are in a master / detail relationship.
    */
-  boolean isMasterDetail();
+  boolean isCascadingModels();
 }

@@ -30,7 +30,7 @@ import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.binding.IMvcBinder;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.binding.basic.BasicValueConnector;
-import com.d2s.framework.binding.masterdetail.IMasterDetailBinder;
+import com.d2s.framework.binding.masterdetail.IModelCascadingBinder;
 import com.d2s.framework.binding.model.IModelValueConnector;
 import com.d2s.framework.binding.model.ModelRefPropertyConnector;
 import com.d2s.framework.binding.ulc.CollectionConnectorListModel;
@@ -218,7 +218,7 @@ public class DefaultUlcViewFactory implements
   private IListSelectionModelBinder             listSelectionModelBinder;
   private IDisplayableAction                    lovAction;
 
-  private IMasterDetailBinder                   masterDetailBinder;
+  private IModelCascadingBinder                   modelCascadingBinder;
   private int                                   maxCharacterLength          = 32;
   private int                                   maxColumnCharacterLength    = 32;
   private IMvcBinder                            mvcBinder;
@@ -435,13 +435,13 @@ public class DefaultUlcViewFactory implements
   }
 
   /**
-   * Sets the masterDetailBinder.
+   * Sets the modelCascadingBinder.
    * 
-   * @param masterDetailBinder
-   *            the masterDetailBinder to set.
+   * @param modelCascadingBinder
+   *            the modelCascadingBinder to set.
    */
-  public void setMasterDetailBinder(IMasterDetailBinder masterDetailBinder) {
-    this.masterDetailBinder = masterDetailBinder;
+  public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
+    this.modelCascadingBinder = modelCascadingBinder;
   }
 
   /**
@@ -1380,7 +1380,7 @@ public class DefaultUlcViewFactory implements
           locale);
     }
     if (view != null) {
-      if (viewDescriptor.isMasterDetail()) {
+      if (viewDescriptor.isCascadingModels()) {
         IView<ULCComponent> masterView = view.getChildren().get(0);
         view.setConnector(masterView.getConnector());
         for (int i = 1; i < view.getChildren().size(); i++) {
@@ -1399,7 +1399,7 @@ public class DefaultUlcViewFactory implements
           } else {
             detailConnector = detailView.getConnector();
           }
-          masterDetailBinder.bind(masterView.getConnector(), detailConnector);
+          modelCascadingBinder.bind(masterView.getConnector(), detailConnector);
           masterView = detailView;
         }
       } else {

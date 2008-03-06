@@ -17,22 +17,23 @@ import com.d2s.framework.view.descriptor.ICompositeViewDescriptor;
 public abstract class BasicCompositeViewDescriptor extends BasicViewDescriptor
     implements ICompositeViewDescriptor {
 
-  private boolean masterDetail;
+  private boolean cascadingModels;
 
   /**
    * {@inheritDoc}
    */
-  public boolean isMasterDetail() {
-    return masterDetail;
+  public boolean isCascadingModels() {
+    return cascadingModels;
   }
 
   /**
-   * Sets the masterDetail.
+   * Sets the cascadingModels.
    * 
-   * @param masterDetail
-   *            true if this descriptor is a master / detail one.
+   * @param cascadingModels
+   *            true if this descriptor is cascading its models based on a
+   *            master / detail relationship.
    */
-  public void setMasterDetail(boolean masterDetail) {
-    this.masterDetail = masterDetail;
+  public void setCascadingModels(boolean cascadingModels) {
+    this.cascadingModels = cascadingModels;
   }
 }
