@@ -5205,6 +5205,84 @@ hrsample-app { <co id="hrsample-app" />
       </listitem>
     </itemizedlist>
 
-    <para></para>
+    <section>
+      <title>The master data management workspace</title>
+
+      <para>The first workspace we will create and register is the master data
+      management workspace. It will offer simple C.R.U.D. (<emphasis
+      role="bold">C</emphasis>reate <emphasis role="bold">R</emphasis>etrieve
+      <emphasis role="bold">U</emphasis>pdate <emphasis
+      role="bold">D</emphasis>elete) services on the application master data
+      (actually the cities). As always, <trademark>D2S</trademark> is offering
+      a range of built-in, ready to assemble components to achieve this. Let's
+      have a look to the workspace and module definition and
+      registration.</para>
+
+      <para>Open the <filename>hrsample-frontend.xml</filename> spring context
+      file :</para>
+
+      <para><programlisting>&lt;bean
+  id="Masterdata.workspace"
+  parent="abstractWorkspace" <co id="Workspace" />
+  scope="prototype"&gt;
+  &lt;property
+    name="name"
+    value="masterdata.workspace" /&gt;
+  &lt;property
+    name="description"
+    value="masterdata.workspace.description" /&gt;
+  &lt;property
+    name="iconImageURL"
+    value="classpath:com/d2s/hrsample/images/masterdata-48x48.png" /&gt;
+  &lt;property name="modules"&gt; <co id="modules" />
+    &lt;list&gt;
+      &lt;bean parent="abstractFilterableBeanCollectionModule"&gt; <co
+            id="abstractFilterableBeanCollectionModule" />
+        &lt;property
+          name="name"
+          value="masterdata.cities.module" /&gt;
+        &lt;property
+          name="description"
+          value="masterdata.cities.module.description" /&gt;
+        &lt;property
+          name="elementComponentDescriptor"
+          ref="City" /&gt; <co id="elementComponentDescriptor" />
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean
+  id="applicationFrontController"
+  parent="frontController"
+  scope="prototype"&gt;
+  ...
+  &lt;property name="workspaces"&gt; <co id="workspaces" />
+    &lt;list&gt;
+      &lt;ref bean="Masterdata.workspace" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+          <callout arearefs="Workspace">
+            <para></para>
+          </callout>
+
+          <callout arearefs="modules">
+            <para></para>
+          </callout>
+
+          <callout arearefs="abstractFilterableBeanCollectionModule">
+            <para></para>
+          </callout>
+
+          <callout arearefs="elementComponentDescriptor">
+            <para></para>
+          </callout>
+
+          <callout arearefs="workspaces">
+            <para></para>
+          </callout>
+        </calloutlist></para>
+    </section>
   </section>
 </chapter>
