@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.framework.application.frontend.startup.wings;
+package com.d2s.framework.application.startup.wings;
 
 import java.util.Locale;
 
