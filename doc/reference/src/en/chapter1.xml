@@ -552,7 +552,7 @@
       </calloutlist>
 
       <para>As you can see above, we create an interface descriptor
-      (<code>com.d2s.framework.sample.backend.domain.Nameable</code>) with one
+      (<code>com.d2s.hrsample.backend.domain.Nameable</code>) with one
       property (<code>name</code>) along with its constraints
       (<code>maxLength</code> and <code>mandatory</code>). This is a fairly
       simple interface since it has no intrinsic behaviour nor relationships
@@ -2259,7 +2259,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
       <section>
         <title>Bi-directional 1-1 relationships</title>
 
-        <para>The last type of relationship we will handle in the HR
+        <para>The next type of relationship we will handle in the HR
         application is the 1-1 <code>OrganizationalUnit</code> &lt;-&gt;
         <code>Employee</code> manager association. And you have certainly
         already guessed that it is the exact same way to describe
@@ -2313,6 +2313,106 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
         <para>Of course, setting one end of the 1-1 relationship will also
         update the other end accordingly without having to take care of
         it.</para>
+      </section>
+
+      <section>
+        <title>Bi-directional N-N relationships</title>
+
+        <para>Certainly one of the most difficult relationship to handle in
+        business software development is the N-N relationship navigable at
+        both ends. Here again, <trademark>D2S</trademark> handles all the
+        complex plumbing for you. All you need to do is to declare both ends
+        of the relationship as being a collection property descriptor. The
+        following XML fragment illustrates this for the <code>Team</code>
+        &lt;-&gt; <code>Employee</code> relationship :</para>
+
+        <para><programlisting>&lt;bean
+  id="Employee-teams"
+  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
+              id="Employee-teams" />
+  &lt;property
+    name="name"
+    value="teams" /&gt;
+  &lt;property name="referencedDescriptor"&gt;
+    &lt;bean
+      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      &lt;property
+        name="collectionInterface"
+        value="java.util.Set" /&gt;
+      &lt;property
+        name="elementDescriptor"
+        ref="Team" /&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean
+  id="Team-employees"
+  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
+  &lt;property
+    name="name"
+    value="teamMembers" /&gt;
+  &lt;property name="referencedDescriptor"&gt;
+    &lt;bean
+      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      &lt;property
+        name="collectionInterface"
+        value="java.util.Set" /&gt;
+      &lt;property
+        name="elementDescriptor"
+        ref="Employee" /&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+  &lt;property
+    name="reverseRelationEnd"
+    ref="Employee-teams" /&gt; <co id="reverseRelationEnd-Employee-teams" />
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Employee"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref local="Employee-teams" /&gt; <co id="Employee-teams-ref" />
+      ...
+    &lt;/list&gt;
+  &lt;/property&gt;
+  ...
+&lt;/bean&gt;
+...
+&lt;bean
+  id="Team"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;ref local="Team-employees" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+  ...
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="Employee-teams">
+              <para>We declare both ends as collection property
+              descriptors.</para>
+            </callout>
+
+            <callout arearefs="reverseRelationEnd-Employee-teams">
+              <para>We reference one of the end as the reverse relation end of
+              the other.</para>
+            </callout>
+
+            <callout arearefs="Employee-teams-ref">
+              <para>We reference both relation ends in their respective entity
+              descriptor.</para>
+            </callout>
+          </calloutlist>Of course, when re-generating the entities code,
+        <code>Employee</code> and <code>Team</code> will have the
+        corresponding collection accessors generated and whenever one side of
+        the relationship is updated, the other one will also reflect the
+        change.</para>
       </section>
     </section>
 
@@ -4880,7 +4980,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
       <para><programlisting language="xml">package com.d2s.hrsample.startup;
 
-import com.d2s.framework.application.frontend.startup.swing.SwingStartup;
+import com.d2s.framework.application.startup.swing.SwingStartup;
 
 /**
  * Swing HR sample startup class.
@@ -5214,7 +5314,7 @@ hrsample-app { <co id="hrsample-app" />
       <emphasis role="bold">U</emphasis>pdate <emphasis
       role="bold">D</emphasis>elete) services on the application master data
       (actually the cities). As always, <trademark>D2S</trademark> is offering
-      a range of built-in, ready to assemble components to achieve
+      a large range of built-in, ready to assemble components to achieve
       this.</para>
 
       <section>
@@ -5228,7 +5328,7 @@ hrsample-app { <co id="hrsample-app" />
         <para>Open the <filename>hrsample-frontend.xml</filename> spring
         context file :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Masterdata.workspace"
   parent="abstractWorkspace" <co id="Workspace" />
   scope="prototype"&gt;
@@ -5405,7 +5505,7 @@ hrsample-app { <co id="hrsample-app" />
         how we slightly modify the workspace description in the following XML
         fragment :</para>
 
-        <para><programlisting>&lt;bean
+        <para><programlisting language="xml">&lt;bean
   id="Masterdata.workspace"
   parent="abstractWorkspace"
   scope="prototype"&gt;
@@ -5486,8 +5586,176 @@ hrsample-app { <co id="hrsample-app" />
         useful), let's customize the view of this bean module to offer a save
         and reload service on the single displayed city.</para>
 
-        <para></para>
+        <para>Beforehand, we are going to declare the new city component view
+        in the <filename>hrsample-view.xml</filename> :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="City.module.view"
+  parent="decoratedView"
+  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  &lt;property
+    name="columnCount"
+    value="1" /&gt; <co id="cityColumnCount" />
+  &lt;property name="actionMap"&gt;
+    &lt;bean class="com.d2s.framework.view.action.ActionMap"&gt; <co
+              id="cityActionMap" />
+      &lt;property name="actionLists"&gt;
+        &lt;list&gt;
+          &lt;bean class="com.d2s.framework.view.action.ActionList"&gt; <co
+              id="ActionList" />
+            &lt;property
+              name="name"
+              value="FILE" /&gt;
+            &lt;property name="actions"&gt;
+              &lt;list&gt;
+                &lt;ref bean="saveModuleObjectFrontAction" /&gt; <co
+              id="saveModuleObjectFrontAction" />
+                &lt;ref bean="reloadModuleObjectFrontAction" /&gt; <co
+              id="reloadModuleObjectFrontAction" />
+              &lt;/list&gt;
+            &lt;/property&gt;
+          &lt;/bean&gt;
+        &lt;/list&gt;
+      &lt;/property&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="cityColumnCount">
+              <para>For the sake of modifying the view layout, we organize the
+              fields in 1 column.</para>
+            </callout>
+
+            <callout arearefs="cityActionMap">
+              <para>We assign a new action map to this view. Instead of we we
+              did previously when referencing a built-in action map, we will
+              create a brand new one.</para>
+            </callout>
+
+            <callout arearefs="ActionList">
+              <para>An action map is a list of action lists; so let's create
+              one.</para>
+            </callout>
+
+            <callout arearefs="saveModuleObjectFrontAction">
+              <para>We register the standard built-in save action.</para>
+            </callout>
+
+            <callout arearefs="reloadModuleObjectFrontAction">
+              <para>We register the standard built-in reload action.</para>
+            </callout>
+          </calloutlist>Once the customized view is declared, we need to
+        register it in the bean collection module as follows :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Masterdata.workspace"
+  parent="abstractWorkspace"
+  scope="prototype"&gt;
+  ...
+  &lt;property name="modules"&gt;
+    &lt;list&gt;
+      &lt;bean parent="abstractSimpleModule"&gt;
+        ...
+        &lt;property name="subModules"&gt;
+          &lt;list&gt;
+            &lt;bean parent="abstractFilterableBeanCollectionModule"&gt;
+              ...
+              &lt;property
+                name="elementViewDescriptor"
+                ref="City.module.view" /&gt; <co id="elementViewDescriptor" />
+            &lt;/bean&gt;
+          &lt;/list&gt;
+        &lt;/property&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="elementViewDescriptor">
+              <para>We register the new city view as being the preferred view
+              when displaying a single city.</para>
+            </callout>
+          </calloutlist>We are now ready to re-open the workspace, create a
+        new city and display it individually :</para>
+
+        <para><figure>
+            <title>The customized city bean module view</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Masterdata.module.single.customized.jpg"
+                           scalefit="1" width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure>We have seen here one usage of a bean module that is
+        implicitly created and installed using an action registered on a bean
+        collection module. Although this is actually one of the major usage of
+        this type of module, another usage consists in giving access to a
+        session singleton-like component.</para>
+
+        <para>For instance, you could explicitly install a bean module to
+        allow the logged-in user to edit his personal informations. In that
+        particular case, the logged-in user account would be used as the
+        module object of the account editing module. The question left is how
+        to initialize the user account as the bean module object? Every
+        <trademark>D2S</trademark> application module provides a startup hook
+        that gets triggered when the module is first selected by the end-user.
+        So in this case, you would code a custom startup action to retrieve
+        the logged-in user informations from whatever backing store (LDAP for
+        instance), wrap them in a java bean and set the result as the bean
+        module object. This startup action is then registered in the module
+        description as its <code>startupAction</code>. This somewhat advanced
+        topic is beyond the scope of this section, but read further to learn
+        how to write custom actions and remember that you can register them as
+        being startup-triggered at different places in a
+        <trademark>D2S</trademark> application i.e. controller (when the
+        application starts) and modules (when the module is first
+        selected).</para>
       </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Improving the development lifecycle</title>
+
+    <para>We now have a fully working application but there are a few hints
+    that can be easily applied to speed up the development cycles.</para>
+
+    <section>
+      <title>Setting-up startup test data at startup</title>
+
+      <para>One thing that you might have noticed is that the usage of an
+      in-memory development database leads to a waste of time creating sample
+      data to test the different modules and services. A good practice is to
+      ease the developer job by setting-up test data each time the application
+      starts. There are actually different ways to achieve that ranging from
+      launching a SQL script when starting the application to registering a
+      startup triggered action in the controller; but one of the preferred,
+      more robust and less intrusive way to do it is to write a dedicated
+      startup class that inherits from the default one and that persists a
+      complete test domain before actually starting the frontend controller.
+      This way, you directly manipulate your domain objects, your business
+      rules are enforced and your domain structure is checked at compile time;
+      you then basically stay away from seeing your test data becoming
+      obsolete after a major refactoring and you keep this setup agnostic of
+      the implementation details (nature of the targeted database for
+      instance).</para>
+
+      <para>It is also a good idea to centralize the test data production in a
+      separate class that can be used by the various development startup class
+      (actually one per presentation technology) and thus avoiding un-needed
+      duplication of code. <trademark>D2S</trademark> offers an abstract base
+      class for this task :
+      <code>com.d2s.framework.application.startup.development.AbstractTestDataPersister</code>.</para>
+
+      <para>Afterwards, a simple change in the startup command line will
+      launch either the production or the development version of the
+      application. </para>
+
+      <para>So let's write this simple test data production class for the HR
+      application. Place it in the
+      <code>com.d2s.hrsample.startup.development</code> package :</para>
+
+      <para><programlisting></programlisting></para>
     </section>
   </section>
 </chapter>

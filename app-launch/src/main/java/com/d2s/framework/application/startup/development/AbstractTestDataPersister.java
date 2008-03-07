@@ -8,6 +8,7 @@ import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
+import com.d2s.framework.model.persistence.hibernate.EntityProxyInterceptor;
 
 /**
  * A utility class used to persist some test data.
@@ -30,9 +31,15 @@ public abstract class AbstractTestDataPersister {
    *            the spring bean factory to use.
    */
   public AbstractTestDataPersister(BeanFactory beanFactory) {
-    entityFactory = (IEntityFactory) beanFactory.getBean("entityFactory");
+    // use basicEntityFactory instead of entityFactory so that the created
+    // beans do not get registered in the session.
+    entityFactory = (IEntityFactory) beanFactory.getBean("basicEntityFactory");
+
     hibernateTemplate = (HibernateTemplate) beanFactory
         .getBean("hibernateTemplate");
+    EntityProxyInterceptor entityInterceptor = new EntityProxyInterceptor();
+    entityInterceptor.setEntityFactory(entityFactory);
+    hibernateTemplate.setEntityInterceptor(entityInterceptor);
   }
 
   /**
