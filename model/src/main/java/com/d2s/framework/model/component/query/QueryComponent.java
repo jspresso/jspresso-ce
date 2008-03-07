@@ -14,7 +14,7 @@ import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.collection.ObjectEqualityMap;
 
 /**
- * TODO Comment needed.
+ * The default implementation of a query component.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>
