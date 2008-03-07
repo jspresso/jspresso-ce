@@ -807,7 +807,7 @@ public class DefaultUlcViewFactory implements
   protected ULCToolBar createULCToolBar() {
     ULCToolBar toolBar = new ULCToolBar();
     toolBar.setFloatable(true);
-    toolBar.setBorderPainted(false);
+    toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
     return toolBar;
   }
 

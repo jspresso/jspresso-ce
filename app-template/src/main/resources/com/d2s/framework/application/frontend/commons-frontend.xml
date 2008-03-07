@@ -2,7 +2,7 @@
 <beans
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true">
 
   <!--
@@ -894,6 +894,36 @@
   <!--
     Standard ready to use modules
   -->
+
+  <bean
+    abstract="true"
+    id="abstractSimpleModule"
+    class="com.d2s.framework.application.model.Module">
+  </bean>
+
+  <bean
+    abstract="true"
+    id="abstractBeanModule"
+    class="com.d2s.framework.application.model.BeanModule">
+  </bean>
+
+  <bean
+    id="beanCollectionModuleView"
+    parent="decoratedView"
+    class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor">
+    <property
+      name="actionMap"
+      ref="beanCollectionModuleActionMap" />
+  </bean>
+
+  <bean
+    abstract="true"
+    id="abstractBeanCollectionModule"
+    class="com.d2s.framework.application.model.BeanCollectionModule">
+    <property
+      name="projectedViewDescriptor"
+      ref="beanCollectionModuleView" />
+  </bean>
 
   <bean
     id="filterableBeanCollectionModuleView"

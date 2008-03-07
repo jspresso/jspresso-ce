@@ -438,7 +438,7 @@
       url="http://www.springframework.org/">Spring framework Dependency
       Injection Container</ulink>. To achieve this, you will have to write an
       XML file that conforms to the <ulink
-      url="http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">spring
+      url="http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">spring
       beans schema</ulink>. Of course, you can use any text editor but we will
       encourage you to use at least a schema-aware XML editor like <ulink
       url="http://www.jedit.org/">jEdit</ulink> or even better, use <ulink
@@ -463,7 +463,7 @@
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true"&gt;
 
 &lt;/beans&gt;</programlisting>
@@ -652,7 +652,7 @@
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true"&gt;
 
   &lt;bean
@@ -2999,7 +2999,7 @@ public class EmployeeIntegrityProcessors {
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true"&gt;
 
   &lt;!--
@@ -3060,7 +3060,7 @@ public class EmployeeIntegrityProcessors {
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
-                      http://www.springframework.org/schema/beans/spring-beans-2.0.xsd"
+                      http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
   default-lazy-init="true"&gt;
   ...
   &lt;bean
@@ -5185,7 +5185,7 @@ hrsample-app { <co id="hrsample-app" />
 
     <itemizedlist>
       <listitem>
-        <para>Basic module : it offers a view (and its attached services) on
+        <para>Simple module : it offers a view (and its attached services) on
         an arbitrary model (if any).</para>
       </listitem>
 
@@ -5214,14 +5214,21 @@ hrsample-app { <co id="hrsample-app" />
       <emphasis role="bold">U</emphasis>pdate <emphasis
       role="bold">D</emphasis>elete) services on the application master data
       (actually the cities). As always, <trademark>D2S</trademark> is offering
-      a range of built-in, ready to assemble components to achieve this. Let's
-      have a look to the workspace and module definition and
-      registration.</para>
+      a range of built-in, ready to assemble components to achieve
+      this.</para>
 
-      <para>Open the <filename>hrsample-frontend.xml</filename> spring context
-      file :</para>
+      <section>
+        <title>The cities filterable bean collection module</title>
 
-      <para><programlisting>&lt;bean
+        <para>The first module we will build is a bean collection module
+        (actually a filterable one) that offers the end user all the standard
+        operations on the cities entities. Let's have a look to the workspace
+        and module definition and registration.</para>
+
+        <para>Open the <filename>hrsample-frontend.xml</filename> spring
+        context file :</para>
+
+        <para><programlisting>&lt;bean
   id="Masterdata.workspace"
   parent="abstractWorkspace" <co id="Workspace" />
   scope="prototype"&gt;
@@ -5237,7 +5244,7 @@ hrsample-app { <co id="hrsample-app" />
   &lt;property name="modules"&gt; <co id="modules" />
     &lt;list&gt;
       &lt;bean parent="abstractFilterableBeanCollectionModule"&gt; <co
-            id="abstractFilterableBeanCollectionModule" />
+              id="abstractFilterableBeanCollectionModule" />
         &lt;property
           name="name"
           value="masterdata.cities.module" /&gt;
@@ -5263,119 +5270,224 @@ hrsample-app { <co id="hrsample-app" />
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
-          <callout arearefs="Workspace">
-            <para>We declare our new workspace inheriting from the
-            <trademark>D2S</trademark> standard built-in workspace component
-            that may fit most of standard usages.</para>
-          </callout>
+            <callout arearefs="Workspace">
+              <para>We declare our new workspace inheriting from the
+              <trademark>D2S</trademark> standard built-in workspace component
+              that may fit most of standard usages.</para>
+            </callout>
 
-          <callout arearefs="modules">
-            <para>We assign the list of modules belonging to this new
-            workspace. The list contains one module which is the cities bean
-            collection module.</para>
-          </callout>
+            <callout arearefs="modules">
+              <para>We assign the list of modules belonging to this new
+              workspace. The list contains one module which is the cities bean
+              collection module.</para>
+            </callout>
 
-          <callout arearefs="abstractFilterableBeanCollectionModule">
-            <para>We declare the cities module inheriting the
-            <trademark>D2S</trademark> standard built-in filterable bean
-            collection module component that may fit most of standard
-            usages.</para>
-          </callout>
+            <callout arearefs="abstractFilterableBeanCollectionModule">
+              <para>We declare the cities module inheriting the
+              <trademark>D2S</trademark> standard built-in filterable bean
+              collection module component that may fit most of standard
+              usages.</para>
+            </callout>
 
-          <callout arearefs="elementComponentDescriptor">
-            <para>We customize the module by referencing the city entity as
-            being the content element of this module.</para>
-          </callout>
+            <callout arearefs="elementComponentDescriptor">
+              <para>We customize the module by referencing the city entity as
+              being the content element of this module.</para>
+            </callout>
 
-          <callout arearefs="workspaces">
-            <para>We register the master data management module in the
-            existing frontend controller.</para>
-          </callout>
-        </calloutlist>You might notice in the XML fragment above that there
-      are actually very few directives needed to get a fully functionning
-      C.R.U.D. module on an entity. Most of the code deals with names,
-      descriptions and icons to obtain a nice looking GUI. Of course, there
-      are plenty of customizations you can achieve to meet the actual end-user
-      requirements (customize the view on the bean collection, the filter, the
-      offered services, ...), but none of them is required until you actually
-      want to change the default sensible values.</para>
+            <callout arearefs="workspaces">
+              <para>We register the master data management module in the
+              existing frontend controller.</para>
+            </callout>
+          </calloutlist>You might notice in the XML fragment above that there
+        are actually very few directives needed to get a fully functionning
+        C.R.U.D. module on an entity. Most of the code deals with names,
+        descriptions and icons to obtain a nice looking GUI. Of course, there
+        are plenty of customizations you can achieve to meet the actual
+        end-user requirements (customize the view on the bean collection, the
+        filter, the offered services, ...), but none of them is required until
+        you actually want to change the default sensible values.</para>
 
-      <para>We are now ready to see the first workspace in action by launching
-      the application. The master data workspace will be made available in the
-      application frame workspaces menu. Don't hesitate to play with it,
-      create some cities, save them, query them applying a filter, zoom on a
-      selected one to edit it in a more convenient form, reset the list, ...
-      And if you turn on logging for the SQL issued by hibernate, you will see
-      all your orders transmitted to the backend database. The screenshots
-      below captures some of the actions we have just talked about.</para>
+        <para>We are now ready to see the first workspace in action by
+        launching the application. The master data workspace will be made
+        available in the application frame workspaces menu. Don't hesitate to
+        play with it, create some cities, save them, query them applying a
+        filter, zoom on a selected one to edit it in a more convenient form,
+        reset the list, ... And if you turn on logging for the SQL issued, you
+        will see all your orders transmitted to the backend database. The
+        screenshots below captures some of the actions we have just talked
+        about.</para>
 
-      <para><table>
-          <title>Some screenshots from the master data management
-          module</title>
+        <para><table>
+            <title>Some screenshots of the master data management
+            workspace</title>
 
-          <tgroup cols="2">
-            <tbody>
-              <row>
-                <entry>1- We have just lauched the module.<mediaobject>
-                    <imageobject>
-                      <imagedata align="center" contentdepth="60%"
-                                 fileref="../images/Masterdata.module.jpg"
-                                 scalefit="1" width="100%" />
-                    </imageobject>
-                  </mediaobject></entry>
+            <tgroup cols="2">
+              <tbody>
+                <row>
+                  <entry>1- We have just lauched the module.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="60%"
+                                   fileref="../images/Masterdata.module.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
 
-                <entry>2- We are saving 3 cities we've just
-                created.<mediaobject>
-                    <imageobject>
-                      <imagedata align="center" contentdepth="60%"
-                                 fileref="../images/Masterdata.module.3cities.jpg"
-                                 scalefit="1" width="100%" />
-                    </imageobject>
-                  </mediaobject></entry>
-              </row>
+                  <entry>2- We are saving 3 cities we've just
+                  created.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="60%"
+                                   fileref="../images/Masterdata.module.3cities.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
 
-              <row>
-                <entry>3- We are queriing the database applying a
-                filter.<mediaobject>
-                    <imageobject>
-                      <imagedata align="center" contentdepth="60%"
-                                 fileref="../images/Masterdata.module.filter.jpg"
-                                 scalefit="1" width="100%" />
-                    </imageobject>
-                  </mediaobject></entry>
+                <row>
+                  <entry>3- We are queriing the database applying a
+                  filter.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="60%"
+                                   fileref="../images/Masterdata.module.filter.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
 
-                <entry>4- We are going to edit one of the cities individually
-                in a form.<mediaobject>
-                    <imageobject>
-                      <imagedata align="center" contentdepth="60%"
-                                 fileref="../images/Masterdata.module.open.jpg"
-                                 scalefit="1" width="100%" />
-                    </imageobject>
-                  </mediaobject></entry>
-              </row>
+                  <entry>4- We are going to edit one of the cities
+                  individually in a form.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="60%"
+                                   fileref="../images/Masterdata.module.open.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
 
-              <row>
-                <entry>5- We have installed one of the city in the module tree
-                and we edit it.<mediaobject>
-                    <imageobject>
-                      <imagedata align="center" contentdepth="60%"
-                                 fileref="../images/Masterdata.module.single.jpg"
-                                 scalefit="1" width="100%" />
-                    </imageobject>
-                  </mediaobject></entry>
+                <row>
+                  <entry>5- We have installed one of the city in the module
+                  tree and we edit it.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="60%"
+                                   fileref="../images/Masterdata.module.single.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
 
-                <entry>6- We reset the module content (the database, of
-                course, still contains the data).<mediaobject>
-                    <imageobject>
-                      <imagedata align="center" contentdepth="60%"
-                                 fileref="../images/Masterdata.module.reloaded.jpg"
-                                 scalefit="1" width="100%" />
-                    </imageobject>
-                  </mediaobject></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </table></para>
+                  <entry>6- We reset the module content (the database, of
+                  course, still contains the data).<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="60%"
+                                   fileref="../images/Masterdata.module.reloaded.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table></para>
+
+        <para>Next step will consist in structuring a little bit more the
+        module tree.</para>
+      </section>
+
+      <section>
+        <title>Structuring modules hierarchy</title>
+
+        <para>There might be situations when you would like to structure a
+        little bit more how your application modules are organized. This
+        implies, for instance, grouping modules into categories and
+        sub-categories. Modules grouping can be achieved by using basic
+        modules that structure the workspace module hierarchy.</para>
+
+        <para>Consider the following situation where you want to group your
+        master data management in sub-categories like "geography", "finance",
+        and so on... Of course, our cities management module should go in the
+        geography category. This is quite straightforward to declare; look at
+        how we slightly modify the workspace description in the following XML
+        fragment :</para>
+
+        <para><programlisting>&lt;bean
+  id="Masterdata.workspace"
+  parent="abstractWorkspace"
+  scope="prototype"&gt;
+  ...
+  &lt;property name="modules"&gt;
+    &lt;list&gt;
+      &lt;bean parent="abstractSimpleModule"&gt; <co id="abstractSimpleModule" />
+        &lt;property
+          name="name"
+          value="masterdata.geography.module" /&gt;
+        &lt;property
+          name="description"
+          value="masterdata.geography.module.description" /&gt;
+        &lt;property
+          name="iconImageURL"
+          value="classpath:com/d2s/hrsample/images/geography-48x48.png" /&gt;
+        &lt;property name="subModules"&gt; <co id="subModules" />
+          &lt;list&gt;
+            &lt;bean parent="abstractFilterableBeanCollectionModule"&gt;
+              ...
+            &lt;/bean&gt;
+          &lt;/list&gt;
+        &lt;/property&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="abstractSimpleModule">
+              <para>We are inserting the category simple module. It is a
+              viewless module, so the only thing we have to configure is its
+              name, description and icon.</para>
+            </callout>
+
+            <callout arearefs="subModules">
+              <para>We transfer the existing cities management module as a
+              child (sub-module) of the above geography module.</para>
+            </callout>
+          </calloutlist>This type of taxonomy can be arbitrarily deep since
+        you can in turn put categories modules as sub-modules of
+        others.</para>
+
+        <para>Re-launching the master data management workspace, we wil see
+        our new intermediate geography simple module :</para>
+
+        <para><figure>
+            <title>The module hiearchy gets structured</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Masterdata.module.structured.jpg"
+                           scalefit="1" width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure></para>
+      </section>
+
+      <section>
+        <title>Introduction to bean modules</title>
+
+        <para>As of now, we have used a simple module and a bean collection
+        module. As introduced at the beginning of the section, the third type
+        of module is the bean module. This type of module, as explained
+        before, gives a view (and services) on a single business
+        object.</para>
+
+        <para>If you look back to the screenshots of the master data
+        management workspace, you may notice that we haved used such a module
+        (screenshot 5) even without knowing it ! This is because one of the
+        standard bean collection module actions creates a bean module behind
+        the scene and dynamically install it in the module hierarchy as a
+        sub-module. Of course, in this case, it is pretty useless since it
+        doesn't offer any extra functionality beyond the ones offered by its
+        parent. But don't forget that you may change a lot of things to meet
+        any special requirement.</para>
+
+        <para>As a demonstration of this (but actually not really more
+        useful), let's customize the view of this bean module to offer a save
+        and reload service on the single displayed city.</para>
+
+        <para></para>
+      </section>
     </section>
   </section>
 </chapter>

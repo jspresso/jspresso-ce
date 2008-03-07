@@ -295,8 +295,6 @@ public class DefaultSwingViewFactory implements
         }
         if (viewDescriptor.getActionMap() != null) {
           JToolBar toolBar = createJToolBar();
-          toolBar.setRollover(true);
-          toolBar.setFloatable(true);
           for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
@@ -791,7 +789,11 @@ public class DefaultSwingViewFactory implements
    * @return the created tool bar.
    */
   protected JToolBar createJToolBar() {
-    return new JToolBar();
+    JToolBar toolBar = new JToolBar();
+    toolBar.setRollover(true);
+    toolBar.setFloatable(true);
+    toolBar.setBorder(BorderFactory.createRaisedBevelBorder());
+    return toolBar;
   }
 
   /**

@@ -28,6 +28,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import org.wings.SBorderLayout;
+import org.wings.SBoxLayout;
 import org.wings.SButton;
 import org.wings.SCardLayout;
 import org.wings.SCellRendererPane;
@@ -50,7 +51,7 @@ import org.wings.SPanel;
 import org.wings.SPasswordField;
 import org.wings.SPopupMenu;
 import org.wings.SScrollPane;
-import org.wings.SSeparator;
+import org.wings.SSpacer;
 import org.wings.SSplitPane;
 import org.wings.STabbedPane;
 import org.wings.STable;
@@ -58,6 +59,7 @@ import org.wings.STextArea;
 import org.wings.STextField;
 import org.wings.SToolBar;
 import org.wings.STree;
+import org.wings.border.SBevelBorder;
 import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
 import org.wings.border.SLineBorder;
@@ -207,7 +209,7 @@ public class DefaultWingsViewFactory implements
   private IIconFactory<SIcon>                iconFactory;
   private IListSelectionModelBinder          listSelectionModelBinder;
   private IDisplayableAction                 lovAction;
-  private IModelCascadingBinder                modelCascadingBinder;
+  private IModelCascadingBinder              modelCascadingBinder;
   private int                                maxCharacterLength          = 32;
 
   private int                                maxColumnCharacterLength    = 32;
@@ -286,7 +288,6 @@ public class DefaultWingsViewFactory implements
         }
         if (viewDescriptor.getActionMap() != null) {
           SToolBar toolBar = createSToolBar();
-          toolBar.setBorder(new SEmptyBorder(new Insets(2, 2, 2, 2)));
           for (Iterator<ActionList> iter = viewDescriptor.getActionMap()
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
@@ -316,7 +317,7 @@ public class DefaultWingsViewFactory implements
               toolBar.add(actionButton);
             }
             if (iter.hasNext()) {
-              toolBar.add(new SSeparator());
+              toolBar.add(new SSpacer(10, 0));
             }
           }
           SPanel viewPanel = createSPanel(new SBorderLayout());
@@ -823,7 +824,13 @@ public class DefaultWingsViewFactory implements
    */
   protected SToolBar createSToolBar() {
     SToolBar toolBar = new SToolBar();
-    toolBar.setBorder(new SEmptyBorder(2, 2, 2, 2));
+    SBoxLayout toolBarLayout = new SBoxLayout(toolBar, SConstants.LEFT_ALIGN);
+    toolBar.setLayout(toolBarLayout);
+    SBevelBorder toolBarBorder = new SBevelBorder(SBevelBorder.RAISED,
+        new Insets(2, 2, 2, 2), 2);
+    toolBarBorder.setColor(Color.LIGHT_GRAY);
+    toolBar.setBorder(toolBarBorder);
+    // toolBar.setPreferredSize(SDimension.FULLWIDTH);
     toolBar.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     return toolBar;
   }
