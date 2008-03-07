@@ -10,8 +10,7 @@
       visibility="true"/>    
     <position x="324" y="-42" width="-1" height="-1"/>  
   </interface>  
-  <class type="java" name="com.d2s.framework.application.frontend.startup.AbstractStartup" 
-    project="design2see-framework" 
+  <class type="java" name="com.d2s.framework.application.startup.AbstractStartup" project="design2see-framework" 
     file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
@@ -43,27 +42,27 @@
     <position x="567" y="318" width="-1" height="-1"/>  
   </class>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.frontend.startup.wings.WingsStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/wings/WingsStartup.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.frontend.startup.AbstractStartup" 
+    <source project="design2see-framework" name="com.d2s.framework.application.frontend.startup.swing.SwingStartup" 
+      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/swing/SwingStartup.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.startup.AbstractStartup" 
+      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="design2see-framework" name="com.d2s.framework.application.frontend.startup.ulc.UlcStartup" 
+      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/ulc/UlcStartup.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.startup.AbstractStartup" 
       file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>  
   </generalization>  
   <realization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.frontend.startup.AbstractStartup" 
+    <source project="design2see-framework" name="com.d2s.framework.application.startup.AbstractStartup" 
       file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>    
     <target project="design2see-framework" name="com.d2s.framework.application.startup.IStartup" 
       file="/design2see-framework/app-launch/src/main/java/com/d2s/framework/application/startup/IStartup.java"/>  
   </realization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.frontend.startup.ulc.UlcStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/ulc/UlcStartup.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.frontend.startup.AbstractStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.frontend.startup.swing.SwingStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/swing/SwingStartup.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.frontend.startup.AbstractStartup" 
+    <source project="design2see-framework" name="com.d2s.framework.application.frontend.startup.wings.WingsStartup" 
+      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/wings/WingsStartup.java"/>    
+    <target project="design2see-framework" name="com.d2s.framework.application.startup.AbstractStartup" 
       file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>  
   </generalization>
 </class-diagram>

@@ -5,7 +5,7 @@ package com.d2s.framework.application.frontend.startup.ulc;
 
 import java.util.Locale;
 
-import com.d2s.framework.application.frontend.startup.AbstractStartup;
+import com.d2s.framework.application.startup.AbstractStartup;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.IApplication;

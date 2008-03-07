@@ -11,7 +11,7 @@ import org.wings.SComponent;
 import org.wings.SIcon;
 import org.wings.session.SessionManager;
 
-import com.d2s.framework.application.frontend.startup.AbstractStartup;
+import com.d2s.framework.application.startup.AbstractStartup;
 
 /**
  * Default wings startup class.

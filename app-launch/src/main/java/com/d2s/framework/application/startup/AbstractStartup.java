@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.framework.application.frontend.startup;
+package com.d2s.framework.application.startup;
 
 import java.util.Locale;
 
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.frontend.IFrontendController;
-import com.d2s.framework.application.startup.IStartup;
 
 /**
  * Abstract class for application startup.
