@@ -796,6 +796,7 @@
           <property name="actions">
             <list>
               <ref local="addToModuleObjectFrontAction" />
+              <ref local="cloneModuleObjectFrontAction" />
               <ref local="removeFromModuleObjectFrontAction" />
             </list>
           </property>
