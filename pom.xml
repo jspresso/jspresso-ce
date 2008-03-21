@@ -61,7 +61,7 @@
       <id>snapshots</id>
       <url>http://people.apache.org/repo/m2-snapshot-repository</url>
     </pluginRepository>
-    <pluginRepository>
+     <pluginRepository>
       <id>codehaus</id>
       <url>http://snapshots.repository.codehaus.org</url>
     </pluginRepository>

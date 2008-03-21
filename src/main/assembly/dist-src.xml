@@ -30,15 +30,15 @@
             <outputDirectory>lib</outputDirectory>
             <!--<outputFileNameMapping>${groupId}/${artifactId}-${version}.${extension}</outputFileNameMapping>-->
             <excludes>
-              <exclude>com.design2see:*</exclude>
+                <exclude>com.design2see:*</exclude>
               <exclude>ulc:*</exclude>
               <exclude>javax.servlet:*</exclude>
-              <exclude>javax.transaction:*</exclude>
-              <exclude>dom4j:dom4j:*:1.4</exclude>
-              <exclude>jaxen:jaxen:*:1.0-FCS</exclude>
-              <exclude>relaxngDatatype:relaxngDatatype:*:20020414</exclude>
-              <exclude>xml-apis:xml-apis:*:1.0.b2</exclude>
-            </excludes>
+              <!--<exclude>javax.transaction:*</exclude>-->
+              <exclude>dom4j:dom4j:jar:1.4</exclude>
+              <exclude>jaxen:jaxen:jar:1.0-FCS</exclude>
+              <exclude>relaxngDatatype:relaxngDatatype:jar:20020414</exclude>
+              <exclude>xml-apis:xml-apis:jar:1.0.b2</exclude>
+          </excludes>
           </dependencySet>
         </dependencySets>
       </binaries>
