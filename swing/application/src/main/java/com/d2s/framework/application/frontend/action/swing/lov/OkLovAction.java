@@ -10,9 +10,8 @@ import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.swing.std.OkAction;
 import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
 import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.binding.model.ModelRefPropertyConnector;
+import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.entity.IEntity;
 
 /**
@@ -33,9 +32,8 @@ public class OkLovAction extends OkAction {
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
-    ICollectionConnector resultConnector = ((ICollectionConnectorProvider) ((ICompositeValueConnector) getViewConnector(context))
-        .getChildConnector(ModelRefPropertyConnector.THIS_PROPERTY))
-        .getCollectionConnector();
+    ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) getViewConnector(context))
+        .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
     int[] resultSelectedIndices = resultConnector.getSelectedIndices();
     if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
       IEntity selectedEntity = (IEntity) resultConnector.getChildConnector(
