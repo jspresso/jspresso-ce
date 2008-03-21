@@ -13,8 +13,25 @@
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>
+      <artifactId>d2s-application</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-util</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
       <artifactId>d2s-swing-components</artifactId>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.design2see</groupId>
+      <artifactId>d2s-hibernate</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-cli</groupId>
@@ -34,6 +51,11 @@
     <dependency>
       <groupId>ulc</groupId>
       <artifactId>ulc-servlet-client</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.wings</groupId>
+      <artifactId>wings</artifactId>
       <optional>true</optional>
     </dependency>
   </dependencies>

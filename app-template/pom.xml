@@ -15,19 +15,7 @@
   <dependencies>
     <dependency>
       <groupId>com.design2see</groupId>
-      <artifactId>d2s-application</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.design2see</groupId>
-      <artifactId>d2s-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.design2see</groupId>
       <artifactId>d2s-app-launch</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring</artifactId>
     </dependency>
     <dependency>
       <groupId>bsf</groupId>
@@ -42,11 +30,6 @@
     <dependency>
       <groupId>ulc</groupId>
       <artifactId>ulc-base-server</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.wings</groupId>
-      <artifactId>wings</artifactId>
       <optional>true</optional>
     </dependency>
   </dependencies>
