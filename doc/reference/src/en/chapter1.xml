@@ -4803,7 +4803,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
       <para><programlisting language="xml">...
 &lt;property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" /&gt;
-&lt;property name="xdoclet.plugins.dir" value="${xdoclet.home}/plugins" /&gt;
+&lt;property name="xdoclet.plugins.dir" value="${xdoclet.home}/lib" /&gt;
 &lt;property name="model.src.dir" value="${java.src.dir}/com/d2s/hrsample/model" /&gt;
 ...
 &lt;target name="clean-hibernate"&gt;
@@ -4815,7 +4815,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 &lt;target name="xdoclet-hibernate" depends="clean-hibernate"&gt;
   &lt;mkdir dir="${resources.src.dir}" /&gt;
   &lt;path id="xdoclet.task.classpath"&gt;
-    &lt;pathelement location="${xdoclet.plugins.dir}/xdoclet-plugin-hibernate-1.0.2.jar" /&gt;
+    &lt;pathelement location="${xdoclet.plugins.dir}/xdoclet-plugin-hibernate-1.0.4.jar" /&gt;
     &lt;fileset dir="${xdoclet.lib.dir}"&gt;
       &lt;include name="**/*.jar" /&gt;
     &lt;/fileset&gt;
