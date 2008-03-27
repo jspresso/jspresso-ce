@@ -39,8 +39,8 @@ public class OkLovAction extends OkAction {
       IEntity selectedEntity = (IEntity) resultConnector.getChildConnector(
           resultSelectedIndices[0]).getConnectorValue();
       if (selectedEntity != null) {
-        selectedEntity = getController(context).merge(selectedEntity,
-            MergeMode.MERGE_KEEP);
+        selectedEntity = getController(context).getApplicationSession().merge(
+            selectedEntity, MergeMode.MERGE_KEEP);
       }
       context.put(ActionContextConstants.ACTION_PARAM, selectedEntity);
     }

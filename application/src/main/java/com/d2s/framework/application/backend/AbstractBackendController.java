@@ -4,7 +4,6 @@
 package com.d2s.framework.application.backend;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory;
 import com.d2s.framework.application.backend.session.IApplicationSession;
-import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
 import com.d2s.framework.application.model.Workspace;
 import com.d2s.framework.application.model.descriptor.WorkspaceDescriptor;
@@ -22,7 +20,6 @@ import com.d2s.framework.binding.model.IModelConnectorFactory;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.datatransfer.ComponentTransferStructure;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
-import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityFactory;
 import com.d2s.framework.security.ISecurable;
 import com.d2s.framework.security.SecurityHelper;
@@ -151,20 +148,6 @@ public abstract class AbstractBackendController extends AbstractController
       nextWorkspaceConnector.setConnectorValue(workspaceEntry.getValue());
       workspaceConnectors.put(workspaceEntry.getKey(), nextWorkspaceConnector);
     }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IEntity merge(IEntity entity, MergeMode mergeMode) {
-    return getApplicationSession().merge(entity, mergeMode);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
-    return getApplicationSession().merge(entities, mergeMode);
   }
 
   /**

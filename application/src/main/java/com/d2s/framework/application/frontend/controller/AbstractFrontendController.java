@@ -19,7 +19,6 @@ import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.AbstractController;
 import com.d2s.framework.application.backend.IBackendController;
 import com.d2s.framework.application.backend.session.IApplicationSession;
-import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.IFrontendController;
 import com.d2s.framework.application.model.Module;
 import com.d2s.framework.application.model.Workspace;
@@ -30,7 +29,6 @@ import com.d2s.framework.binding.ICompositeValueConnector;
 import com.d2s.framework.binding.IConnectorSelectionListener;
 import com.d2s.framework.binding.IConnectorSelector;
 import com.d2s.framework.binding.IMvcBinder;
-import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.UserPrincipal;
 import com.d2s.framework.util.descriptor.DefaultIconDescriptor;
@@ -242,20 +240,6 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public IViewFactory<E, F, G> getViewFactory() {
     return viewFactory;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public IEntity merge(IEntity entity, MergeMode mergeMode) {
-    return getBackendController().merge(entity, mergeMode);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode) {
-    return getBackendController().merge(entities, mergeMode);
   }
 
   /**

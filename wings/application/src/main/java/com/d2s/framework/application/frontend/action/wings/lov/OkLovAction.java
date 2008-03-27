@@ -33,14 +33,14 @@ public class OkLovAction extends OkAction {
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     ICollectionConnector resultConnector = (ICollectionConnector) ((ICompositeValueConnector) getViewConnector(context))
-    .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
+        .getChildConnector(IQueryComponent.QUERIED_COMPONENTS);
     int[] resultSelectedIndices = resultConnector.getSelectedIndices();
     if (resultSelectedIndices != null && resultSelectedIndices.length > 0) {
       IEntity selectedEntity = (IEntity) resultConnector.getChildConnector(
           resultSelectedIndices[0]).getConnectorValue();
       if (selectedEntity != null) {
-        selectedEntity = getController(context).merge(selectedEntity,
-            MergeMode.MERGE_KEEP);
+        selectedEntity = getController(context).getApplicationSession().merge(
+            selectedEntity, MergeMode.MERGE_KEEP);
       }
       context.put(ActionContextConstants.ACTION_PARAM, selectedEntity);
     }

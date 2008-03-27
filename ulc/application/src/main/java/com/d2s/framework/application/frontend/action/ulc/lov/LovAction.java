@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.IController;
 import com.d2s.framework.application.backend.action.CreateQueryComponentAction;
 import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction;
@@ -89,9 +88,9 @@ public class LovAction extends ModalDialogAction {
           .getConnectorValue();
       if (queryComponent.getQueriedComponents() != null
           && queryComponent.getQueriedComponents().size() == 1) {
-        IEntity selectedEntity = ((IController) actionHandler).merge(
-            (IEntity) queryComponent.getQueriedComponents().get(0),
-            MergeMode.MERGE_KEEP);
+        IEntity selectedEntity = getController(context).getApplicationSession()
+            .merge((IEntity) queryComponent.getQueriedComponents().get(0),
+                MergeMode.MERGE_KEEP);
         getViewConnector(context).setConnectorValue(selectedEntity);
         return true;
       }
