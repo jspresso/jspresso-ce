@@ -44,7 +44,7 @@ public abstract class BasicScalarPropertyDescriptor extends
    */
   @Override
   public boolean isQueryable() {
-    return true;
+    return getDelegateClassName() == null;
   }
 
   /**

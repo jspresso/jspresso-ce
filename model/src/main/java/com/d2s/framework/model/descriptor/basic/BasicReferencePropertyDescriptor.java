@@ -88,7 +88,7 @@ public class BasicReferencePropertyDescriptor<E> extends
    */
   @Override
   public boolean isQueryable() {
-    return true;
+    return getDelegateClassName() == null;
   }
 
   /**
