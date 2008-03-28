@@ -43,6 +43,7 @@ import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.accessor.ICollectionAccessor;
 import com.d2s.framework.util.bean.AccessorInfo;
+import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.util.bean.SinglePropertyChangeSupport;
 import com.d2s.framework.util.collection.CollectionHelper;
 
@@ -375,17 +376,7 @@ public abstract class AbstractComponentInvocationHandler implements
       property = inlineComponentFactory
           .createComponentInstance(propertyDescriptor.getReferencedDescriptor()
               .getComponentContract());
-
-      property.addPropertyChangeListener(new PropertyChangeListener() {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-          firePropertyChange(propertyDescriptor.getName(), null, evt
-              .getSource());
-          firePropertyChange(propertyDescriptor.getName() + "."
-              + evt.getPropertyName(), evt.getOldValue(), evt.getNewValue());
-        }
-      });
-      storeProperty(propertyDescriptor.getName(), property);
+      storeReferenceProperty(propertyDescriptor, property);
     }
     return decorateReferent(property, propertyDescriptor
         .getReferencedDescriptor());
@@ -453,7 +444,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return true if this reference descriptor points to an inline component.
    */
   protected boolean isInlineComponentReference(
-      IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
+      IReferencePropertyDescriptor<?> propertyDescriptor) {
     return !IEntity.class.isAssignableFrom(propertyDescriptor
         .getReferencedDescriptor().getComponentContract())
         && !propertyDescriptor.getReferencedDescriptor().isPurelyAbstract();
@@ -468,6 +459,25 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return the property value.
    */
   protected abstract Object retrievePropertyValue(String propertyName);
+
+  /**
+   * Performs necessary registration on inline components before actually
+   * storing them.
+   * 
+   * @param propertyDescriptor
+   *            the reference property descriptor.
+   * @param propertyValue
+   *            the reference property value.
+   */
+  protected void storeReferenceProperty(
+      IReferencePropertyDescriptor<?> propertyDescriptor, Object propertyValue) {
+    if (propertyValue != null && isInlineComponentReference(propertyDescriptor)) {
+      ((IPropertyChangeCapable) propertyValue)
+          .addPropertyChangeListener(new InlinedComponentTracker(
+              propertyDescriptor.getName()));
+    }
+    storeProperty(propertyDescriptor.getName(), propertyValue);
+  }
 
   /**
    * Direct write access to the properties map without any other operation. Use
@@ -807,7 +817,9 @@ public abstract class AbstractComponentInvocationHandler implements
       try {
         if (propertyDescriptor instanceof IReferencePropertyDescriptor) {
           // It's a 'one' relation end
-          storeProperty(propertyName, actualNewProperty);
+          storeReferenceProperty(
+              (IReferencePropertyDescriptor) propertyDescriptor,
+              actualNewProperty);
           if (reversePropertyDescriptor != null) {
             // It is bidirectionnal, so we are going to update the other end.
             if (reversePropertyDescriptor instanceof IReferencePropertyDescriptor) {
@@ -919,14 +931,22 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   private void straightSetProperty(String propertyName, Object newPropertyValue) {
     Object currentPropertyValue = straightGetProperty(propertyName);
-    storeProperty(propertyName, newPropertyValue);
-    if (componentDescriptor.getPropertyDescriptor(propertyName) instanceof ICollectionPropertyDescriptor) {
-      ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) componentDescriptor
-          .getPropertyDescriptor(propertyName);
+    IPropertyDescriptor propertyDescriptor = componentDescriptor
+        .getPropertyDescriptor(propertyName);
+    if (propertyDescriptor instanceof IReferencePropertyDescriptor
+        && !ObjectUtils.equals(currentPropertyValue, newPropertyValue)) {
+      storeReferenceProperty(
+          (IReferencePropertyDescriptor<?>) propertyDescriptor,
+          newPropertyValue);
+    } else {
+      storeProperty(propertyName, newPropertyValue);
+    }
+    if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       if (currentPropertyValue != null) {
         currentPropertyValue = Proxy.newProxyInstance(Thread.currentThread()
-            .getContextClassLoader(), new Class[] {propertyDescriptor
-            .getReferencedDescriptor().getCollectionInterface()},
+            .getContextClassLoader(),
+            new Class[] {((ICollectionPropertyDescriptor) propertyDescriptor)
+                .getReferencedDescriptor().getCollectionInterface()},
             new NeverEqualsInvocationHandler(currentPropertyValue));
       }
     }
@@ -972,6 +992,30 @@ public abstract class AbstractComponentInvocationHandler implements
         return new Boolean(false);
       }
       return method.invoke(delegate, args);
+    }
+  }
+
+  private class InlinedComponentTracker implements PropertyChangeListener {
+
+    private String componentName;
+
+    /**
+     * Constructs a new <code>InnerComponentTracker</code> instance.
+     * 
+     * @param componentName
+     *            the name of the component to track the properties.
+     */
+    public InlinedComponentTracker(String componentName) {
+      this.componentName = componentName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void propertyChange(PropertyChangeEvent evt) {
+      firePropertyChange(componentName, null, evt.getSource());
+      firePropertyChange(componentName + "." + evt.getPropertyName(), evt
+          .getOldValue(), evt.getNewValue());
     }
   }
 }
