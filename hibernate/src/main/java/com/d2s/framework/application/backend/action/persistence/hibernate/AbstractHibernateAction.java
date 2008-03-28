@@ -189,6 +189,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
     getHibernateTemplate(context).execute(new HibernateCallback() {
 
       public Object doInHibernate(Session session) {
+        session.clear(); // important to avoid duplicates in session when looping on saves.
         IEntity mergedEntity = mergeInHibernate(entity, session, context);
         session.saveOrUpdate(mergedEntity);
         session.flush();
