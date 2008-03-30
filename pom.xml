@@ -432,17 +432,17 @@
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wings</artifactId>
-        <version>3.1</version>
+        <version>3.2</version>
       </dependency>
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wingx</artifactId>
-        <version>3.1</version>
+        <version>3.2</version>
       </dependency>
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wings-experimental</artifactId>
-        <version>3.1</version>
+        <version>3.2</version>
       </dependency>
       <dependency>
         <groupId>org.jvnet</groupId>

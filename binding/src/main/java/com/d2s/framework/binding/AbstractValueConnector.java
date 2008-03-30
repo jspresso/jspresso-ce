@@ -508,11 +508,15 @@ public abstract class AbstractValueConnector extends AbstractConnector
       valueChangeSupport.fireConnectorValueChange(createChangeEvent(
           oldConnectorValue, getConnecteeValue()));
     } catch (RuntimeException ex) {
-      setConnecteeValue(oldConnectorValue);
       if (exceptionHandler != null) {
         exceptionHandler.handleException(ex, null);
       } else {
         throw ex;
+      }
+      try {
+        setConnecteeValue(oldConnectorValue);
+      } catch (Exception ex2) {
+        // ignore. Nothing can be done about it.
       }
     }
     // the change propagated correctly. Save the value propagated as the old
