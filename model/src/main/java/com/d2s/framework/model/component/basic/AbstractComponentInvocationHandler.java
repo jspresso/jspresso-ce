@@ -1018,4 +1018,14 @@ public abstract class AbstractComponentInvocationHandler implements
           .getOldValue(), evt.getNewValue());
     }
   }
+
+  
+  /**
+   * Gets the inlineComponentFactory.
+   * 
+   * @return the inlineComponentFactory.
+   */
+  protected IComponentFactory getInlineComponentFactory() {
+    return inlineComponentFactory;
+  }
 }

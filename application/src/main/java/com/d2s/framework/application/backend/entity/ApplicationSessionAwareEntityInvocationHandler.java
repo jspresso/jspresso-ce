@@ -3,11 +3,15 @@
  */
 package com.d2s.framework.application.backend.entity;
 
+import java.lang.reflect.Proxy;
+
+import com.d2s.framework.application.backend.component.ApplicationSessionAwareComponentInvocationHandler;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.component.basic.BasicComponentInvocationHandler;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
@@ -94,5 +98,29 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected boolean isInitialized(Object objectOrProxy) {
     return applicationSession.isInitialized(objectOrProxy);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected void storeReferenceProperty(
+      IReferencePropertyDescriptor<?> propertyDescriptor, Object propertyValue) {
+    if (propertyValue != null && isInlineComponentReference(propertyDescriptor)) {
+      if (Proxy.isProxyClass(propertyValue.getClass())
+          && Proxy.getInvocationHandler(propertyValue) instanceof BasicComponentInvocationHandler
+          && !(Proxy.getInvocationHandler(propertyValue) instanceof ApplicationSessionAwareComponentInvocationHandler)) {
+        IComponent sessionAwareComponent = getInlineComponentFactory()
+            .createComponentInstance(((IComponent) propertyValue).getContract());
+        sessionAwareComponent
+            .straightSetProperties(((IComponent) propertyValue)
+                .straightGetProperties());
+        super.storeReferenceProperty(propertyDescriptor, sessionAwareComponent);
+      } else {
+        super.storeReferenceProperty(propertyDescriptor, propertyValue);
+      }
+    } else {
+      super.storeReferenceProperty(propertyDescriptor, propertyValue);
+    }
   }
 }
