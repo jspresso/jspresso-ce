@@ -5,6 +5,7 @@ package com.d2s.framework.application.backend.entity;
 
 import java.lang.reflect.InvocationHandler;
 
+import com.d2s.framework.application.backend.component.ApplicationSessionAwareProxyComponentFactory;
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
@@ -49,6 +50,10 @@ public class ApplicationSessionAwareProxyEntityFactory extends
    */
   public void setApplicationSession(IApplicationSession applicationSession) {
     this.applicationSession = applicationSession;
+    if (getInlineComponentFactory() instanceof ApplicationSessionAwareProxyComponentFactory) {
+      ((ApplicationSessionAwareProxyComponentFactory) getInlineComponentFactory())
+          .setApplicationSession(applicationSession);
+    }
   }
 
   /**

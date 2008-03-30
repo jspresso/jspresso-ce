@@ -65,14 +65,6 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return new QueryComponent(
         new BasicQueryComponentDescriptor(
             (IComponentDescriptor<Object>) getComponentDescriptor(componentContract)));
-    // IComponent componentDelegate = createComponentInstance(componentContract,
-    // null, new Class[] {IQueryComponent.class});
-    // QueryComponentInvocationHandler entityHandler = new
-    // QueryComponentInvocationHandler(
-    // componentDelegate);
-    // return (IQueryComponent) Proxy.newProxyInstance(Thread.currentThread()
-    // .getContextClassLoader(), componentDelegate.getClass().getInterfaces(),
-    // entityHandler);
   }
 
   /**
@@ -191,7 +183,14 @@ public class BasicProxyComponentFactory implements IComponentFactory {
     return component;
   }
 
-  private InvocationHandler createComponentInvocationHandler(
+  /**
+   * Creates the component proxy invocation handler.
+   * 
+   * @param componentDescriptor
+   *            the component descriptor.
+   * @return the component proxy invocation handler.
+   */
+  protected InvocationHandler createComponentInvocationHandler(
       IComponentDescriptor<IComponent> componentDescriptor) {
     return new BasicComponentInvocationHandler(componentDescriptor, this,
         componentCollectionFactory, accessorFactory, componentExtensionFactory);

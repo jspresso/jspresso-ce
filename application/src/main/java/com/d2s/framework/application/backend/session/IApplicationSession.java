@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import javax.security.auth.Subject;
 
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.model.entity.IEntityDirtAware;
@@ -105,12 +106,12 @@ public interface IApplicationSession extends IEntityDirtAware,
    * Whenever a property might not be fully initialized, this method performs
    * all necessary complementary initializations..
    * 
-   * @param entity
-   *            the entity holding the property.
+   * @param componentOrEntity
+   *            the component or entity holding the property.
    * @param propertyDescriptor
    *            the property descriptor.
    */
-  void initializePropertyIfNeeded(IEntity entity,
+  void initializePropertyIfNeeded(IComponent componentOrEntity,
       IPropertyDescriptor propertyDescriptor);
 
   /**

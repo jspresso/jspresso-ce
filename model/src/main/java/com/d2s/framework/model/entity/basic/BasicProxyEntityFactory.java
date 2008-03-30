@@ -177,7 +177,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
   public void setInlineComponentFactory(IComponentFactory inlineComponentFactory) {
     this.inlineComponentFactory = inlineComponentFactory;
   }
-
+  
   /**
    * Creates the entity proxy invocation handler.
    * 

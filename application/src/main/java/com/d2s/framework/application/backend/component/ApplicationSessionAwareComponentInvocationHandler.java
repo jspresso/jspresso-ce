@@ -1,22 +1,21 @@
 /*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.framework.application.backend.entity;
+package com.d2s.framework.application.backend.component;
 
 import com.d2s.framework.application.backend.session.IApplicationSession;
 import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.component.IComponentCollectionFactory;
 import com.d2s.framework.model.component.IComponentExtensionFactory;
 import com.d2s.framework.model.component.IComponentFactory;
+import com.d2s.framework.model.component.basic.BasicComponentInvocationHandler;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.basic.BasicEntityInvocationHandler;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 
 /**
- * This entity invocation handler handles initialization of lazy loaded
+ * This component invocation handler handles initialization of lazy loaded
  * properties like collections an entity references, delegating the
  * initialization job to the application session.
  * <p>
@@ -26,10 +25,10 @@ import com.d2s.framework.util.accessor.IAccessorFactory;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class ApplicationSessionAwareEntityInvocationHandler extends
-    BasicEntityInvocationHandler {
+public class ApplicationSessionAwareComponentInvocationHandler extends
+    BasicComponentInvocationHandler {
 
-  private static final long   serialVersionUID = 3663517052427878204L;
+  private static final long   serialVersionUID = -3613223267370638150L;
 
   private IApplicationSession applicationSession;
 
@@ -37,7 +36,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    * Constructs a new
    * <code>ApplicationSessionAwareEntityInvocationHandler</code> instance.
    * 
-   * @param entityDescriptor
+   * @param componentDescriptor
    *            The descriptor of the proxy entity.
    * @param inlineComponentFactory
    *            the factory used to create inline components.
@@ -52,14 +51,14 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
    * @param applicationSession
    *            the current application session.
    */
-  protected ApplicationSessionAwareEntityInvocationHandler(
-      IComponentDescriptor<IComponent> entityDescriptor,
+  protected ApplicationSessionAwareComponentInvocationHandler(
+      IComponentDescriptor<IComponent> componentDescriptor,
       IComponentFactory inlineComponentFactory,
       IComponentCollectionFactory<IComponent> collectionFactory,
       IAccessorFactory accessorFactory,
       IComponentExtensionFactory extensionFactory,
       IApplicationSession applicationSession) {
-    super(entityDescriptor, inlineComponentFactory, collectionFactory,
+    super(componentDescriptor, inlineComponentFactory, collectionFactory,
         accessorFactory, extensionFactory);
     this.applicationSession = applicationSession;
   }
@@ -71,7 +70,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor propertyDescriptor) {
-    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+    applicationSession.initializePropertyIfNeeded((IComponent) proxy,
         propertyDescriptor);
     return super.getCollectionProperty(proxy, propertyDescriptor);
   }
@@ -82,8 +81,7 @@ public class ApplicationSessionAwareEntityInvocationHandler extends
   @Override
   protected Object getReferenceProperty(Object proxy,
       IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
-
-    applicationSession.initializePropertyIfNeeded((IEntity) proxy,
+    applicationSession.initializePropertyIfNeeded((IComponent) proxy,
         propertyDescriptor);
     return super.getReferenceProperty(proxy, propertyDescriptor);
   }

@@ -187,12 +187,12 @@ public class BasicApplicationSession implements IApplicationSession {
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void initializePropertyIfNeeded(IEntity entity,
+  public void initializePropertyIfNeeded(IComponent componentOrEntity,
       IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       String propertyName = propertyDescriptor.getName();
-      Object propertyValue = entity.straightGetProperty(propertyName);
-      sortCollectionProperty(entity, propertyName);
+      Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
+      sortCollectionProperty(componentOrEntity, propertyName);
       for (Iterator<IEntity> ite = ((Collection<IEntity>) propertyValue)
           .iterator(); ite.hasNext();) {
         IEntity collectionElement = ite.next();
@@ -482,17 +482,17 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * Sorts an entity collection property.
    * 
-   * @param entity
-   *            the entity to sort the collection property of.
+   * @param component
+   *            the component to sort the collection property of.
    * @param propertyName
    *            the name of the collection property to sort.
    */
   @SuppressWarnings("unchecked")
-  protected void sortCollectionProperty(IEntity entity, String propertyName) {
-    Collection<Object> propertyValue = (Collection<Object>) entity
+  protected void sortCollectionProperty(IComponent component, String propertyName) {
+    Collection<Object> propertyValue = (Collection<Object>) component
         .straightGetProperty(propertyName);
     ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityFactory
-        .getComponentDescriptor(entity.getContract()).getPropertyDescriptor(
+        .getComponentDescriptor(component.getContract()).getPropertyDescriptor(
             propertyName);
     if (propertyValue != null
         && !propertyValue.isEmpty()
@@ -547,6 +547,7 @@ public class BasicApplicationSession implements IApplicationSession {
     dirtRecorder.resetChangedProperties(entity, null);
   }
 
+  // FIXME review cloning of entities handling component references
   @SuppressWarnings("unchecked")
   private IEntity cloneInUnitOfWork(IEntity entity,
       Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned) {
@@ -610,6 +611,7 @@ public class BasicApplicationSession implements IApplicationSession {
     return uowEntity;
   }
 
+  // FIXME review cloning of entities handling component references
   @SuppressWarnings("unchecked")
   private IEntity merge(IEntity entity, MergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
@@ -722,6 +724,7 @@ public class BasicApplicationSession implements IApplicationSession {
     }
   }
 
+  //FIXME check implementation especially with dirt recorder (Enabled on components ?)
   private IComponent mergeComponent(IComponent componentToMerge,
       IComponent registeredComponent, MergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {

@@ -59,14 +59,7 @@ public class CarbonEntityCloneFactory implements IEntityCloneFactory {
       if (propertyEntry.getValue() != null) {
         IPropertyDescriptor propertyDescriptor = componentDescriptor
             .getPropertyDescriptor(propertyEntry.getKey());
-        if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
-          if (propertyEntry.getValue() instanceof IComponent
-              && !(propertyEntry.getValue() instanceof IEntity)) {
-            clonedComponent.straightSetProperty(propertyEntry.getKey(),
-                cloneComponent((IComponent) propertyEntry.getValue(),
-                    entityFactory));
-          }
-        } else {
+        if (!(propertyDescriptor instanceof IRelationshipEndPropertyDescriptor)) {
           clonedComponent.straightSetProperty(propertyEntry.getKey(),
               propertyEntry.getValue());
         }

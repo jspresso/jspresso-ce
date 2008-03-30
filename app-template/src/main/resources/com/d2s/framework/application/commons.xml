@@ -378,7 +378,15 @@
       <bean
         parent="basicEntityFactory"
         class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory"
-        scope="prototype" />
+        scope="prototype">
+        <property name="inlineComponentFactory">
+          <bean
+            parent="basicComponentFactory"
+            class="com.d2s.framework.application.backend.component.ApplicationSessionAwareProxyComponentFactory"
+            scope="prototype">
+          </bean>
+        </property>
+      </bean>
     </property>
     <property
       name="modelConnectorFactory"

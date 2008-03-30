@@ -22,6 +22,7 @@ import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
 import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
+import com.d2s.framework.model.component.IComponent;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
@@ -47,15 +48,16 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    * workaround a "bug" with hibernate since hibernate cannot re-attach a
    * "dirty" detached collection.
    * 
-   * @param entity
+   * @param componentOrEntity
    *            the entity to clean the collections dirty state of.
    */
-  public static void cleanPersistentCollectionDirtyState(IEntity entity) {
-    if (entity != null) {
+  public static void cleanPersistentCollectionDirtyState(
+      IComponent componentOrEntity) {
+    if (componentOrEntity != null) {
       // Whenever the entity has dirty persistent collection, make them
       // clean to workaround a "bug" with hibernate since hibernate cannot
       // re-attach a "dirty" detached collection.
-      for (Map.Entry<String, Object> registeredPropertyEntry : entity
+      for (Map.Entry<String, Object> registeredPropertyEntry : componentOrEntity
           .straightGetProperties().entrySet()) {
         if (registeredPropertyEntry.getValue() instanceof PersistentCollection
             && Hibernate.isInitialized(registeredPropertyEntry.getValue())) {
@@ -134,10 +136,11 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public void initializePropertyIfNeeded(final IEntity entity,
+  public void initializePropertyIfNeeded(final IComponent componentOrEntity,
       IPropertyDescriptor propertyDescriptor) {
     final String propertyName = propertyDescriptor.getName();
-    if (Hibernate.isInitialized(entity.straightGetProperty(propertyName))) {
+    if (Hibernate.isInitialized(componentOrEntity
+        .straightGetProperty(propertyName))) {
       return;
     }
     boolean dirtRecorderWasEnabled = getDirtRecorder().isEnabled();
@@ -152,16 +155,29 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
          */
         public Object doInHibernate(Session session) {
           HibernateAwareApplicationSession
-              .cleanPersistentCollectionDirtyState(entity);
-          Object initializedProperty = entity.straightGetProperty(propertyName);
-          if (entity.isPersistent()) {
-            try {
-              session.lock(entity, LockMode.NONE);
-            } catch (Exception ex) {
-              session.evict(session.get(entity.getContract(), entity.getId()));
-              session.lock(entity, LockMode.NONE);
+              .cleanPersistentCollectionDirtyState(componentOrEntity);
+          Object initializedProperty = componentOrEntity
+              .straightGetProperty(propertyName);
+          if (componentOrEntity instanceof IEntity) {
+            if (((IEntity) componentOrEntity).isPersistent()) {
+              try {
+                session.lock(componentOrEntity, LockMode.NONE);
+              } catch (Exception ex) {
+                session.evict(session.get(componentOrEntity.getContract(),
+                    ((IEntity) componentOrEntity).getId()));
+                session.lock(componentOrEntity, LockMode.NONE);
+              }
+            } else if (initializedProperty instanceof IEntity) {
+              try {
+                session.lock(initializedProperty, LockMode.NONE);
+              } catch (Exception ex) {
+                session.evict(session.get(((IEntity) initializedProperty)
+                    .getContract(), ((IEntity) initializedProperty).getId()));
+                session.lock(initializedProperty, LockMode.NONE);
+              }
             }
           } else if (initializedProperty instanceof IEntity) {
+            // to handle initialization of component properties.
             try {
               session.lock(initializedProperty, LockMode.NONE);
             } catch (Exception ex) {
@@ -175,7 +191,7 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
           return initializedProperty;
         }
       });
-      super.initializePropertyIfNeeded(entity, propertyDescriptor);
+      super.initializePropertyIfNeeded(componentOrEntity, propertyDescriptor);
       if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
         if (propertyValue instanceof PersistentCollection) {
           ((PersistentCollection) propertyValue).clearDirty();
