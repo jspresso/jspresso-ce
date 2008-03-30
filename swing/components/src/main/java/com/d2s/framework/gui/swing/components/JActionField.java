@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 
 import com.d2s.framework.util.lang.ObjectUtils;
 import com.d2s.framework.util.swing.SwingUtil;
@@ -63,9 +62,6 @@ public class JActionField extends JPanel {
       add(textField, new GridBagConstraints(0, 0, 1, 1, 1, 0,
           GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL, new Insets(
               0, 0, 0, 0), 0, 0));
-      Border border = textField.getBorder();
-      textField.setBorder(BorderFactory.createEmptyBorder(1, 5, 1, 5));
-      setBorder(border);
       super.addFocusListener(new FocusAdapter() {
 
         @Override
