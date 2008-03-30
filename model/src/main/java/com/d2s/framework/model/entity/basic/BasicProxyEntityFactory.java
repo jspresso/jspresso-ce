@@ -155,6 +155,7 @@ public class BasicProxyEntityFactory implements IEntityFactory {
    */
   public void setEntityExtensionFactory(
       IComponentExtensionFactory entityExtensionFactory) {
+    entityExtensionFactory.setComponentFactory(this);
     this.entityExtensionFactory = entityExtensionFactory;
   }
 

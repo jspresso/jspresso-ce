@@ -116,6 +116,7 @@ public class BasicProxyComponentFactory implements IComponentFactory {
    */
   public void setComponentExtensionFactory(
       IComponentExtensionFactory componentExtensionFactory) {
+    componentExtensionFactory.setComponentFactory(this);
     this.componentExtensionFactory = componentExtensionFactory;
   }
 

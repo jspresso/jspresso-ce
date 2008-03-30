@@ -35,4 +35,13 @@ public interface IComponentExtensionFactory {
   <E extends IComponent> IComponentExtension<E> createComponentExtension(
       Class<IComponentExtension<E>> extensionClass,
       Class<? extends E> componentContract, E component);
+  
+  /**
+   * Sets the componentFactory.
+   * 
+   * @param componentFactory
+   *            the componentFactory to set.
+   */
+  void setComponentFactory(IComponentFactory componentFactory);
+
 }

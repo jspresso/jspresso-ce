@@ -73,17 +73,6 @@
     class="com.d2s.framework.model.component.DefaultComponentCollectionFactory" />
 
   <!--
-    The implementation used as ComponentExtensionFactory.
-  -->
-  <bean
-    id="componentExtensionFactory"
-    class="com.d2s.framework.model.component.DefaultComponentExtensionFactory">
-    <property
-      name="componentFactory"
-      ref="basicComponentFactory" />
-  </bean>
-
-  <!--
     The implementation used as ModelConnectorFactory.
   -->
   <bean
@@ -178,9 +167,11 @@
     <property
       name="componentCollectionFactory"
       ref="componentCollectionFactory" />
-    <property
-      name="componentExtensionFactory"
-      ref="componentExtensionFactory" />
+    <property name="componentExtensionFactory">
+      <bean
+        class="com.d2s.framework.model.component.DefaultComponentExtensionFactory">
+      </bean>
+    </property>
     <property
       name="componentDescriptorRegistry"
       ref="componentDescriptorRegistry" />
@@ -202,8 +193,11 @@
       name="entityCollectionFactory"
       ref="componentCollectionFactory" />
     <property
-      name="entityExtensionFactory"
-      ref="componentExtensionFactory" />
+      name="entityExtensionFactory">
+      <bean
+        class="com.d2s.framework.model.component.DefaultComponentExtensionFactory">
+      </bean>
+    </property>
     <property
       name="entityGUIDGenerator"
       ref="entityGUIDGenerator" />
