@@ -191,7 +191,8 @@ public class BasicApplicationSession implements IApplicationSession {
       IPropertyDescriptor propertyDescriptor) {
     if (propertyDescriptor instanceof ICollectionPropertyDescriptor) {
       String propertyName = propertyDescriptor.getName();
-      Object propertyValue = componentOrEntity.straightGetProperty(propertyName);
+      Object propertyValue = componentOrEntity
+          .straightGetProperty(propertyName);
       sortCollectionProperty(componentOrEntity, propertyName);
       for (Iterator<IEntity> ite = ((Collection<IEntity>) propertyValue)
           .iterator(); ite.hasNext();) {
@@ -488,7 +489,8 @@ public class BasicApplicationSession implements IApplicationSession {
    *            the name of the collection property to sort.
    */
   @SuppressWarnings("unchecked")
-  protected void sortCollectionProperty(IComponent component, String propertyName) {
+  protected void sortCollectionProperty(IComponent component,
+      String propertyName) {
     Collection<Object> propertyValue = (Collection<Object>) component
         .straightGetProperty(propertyName);
     ICollectionPropertyDescriptor propertyDescriptor = (ICollectionPropertyDescriptor) entityFactory
@@ -547,7 +549,6 @@ public class BasicApplicationSession implements IApplicationSession {
     dirtRecorder.resetChangedProperties(entity, null);
   }
 
-  // FIXME review cloning of entities handling component references
   @SuppressWarnings("unchecked")
   private IEntity cloneInUnitOfWork(IEntity entity,
       Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned) {
@@ -604,6 +605,10 @@ public class BasicApplicationSession implements IApplicationSession {
         } else {
           uowEntity.straightSetProperty(property.getKey(), property.getValue());
         }
+      } else if (property.getValue() instanceof IComponent) {
+        uowEntity.straightSetProperty(property.getKey(),
+            cloneComponentInUnitOfWork((IComponent) property.getValue(),
+                alreadyCloned));
       }
     }
     unitOfWork
@@ -611,7 +616,29 @@ public class BasicApplicationSession implements IApplicationSession {
     return uowEntity;
   }
 
-  // FIXME review cloning of entities handling component references
+  private IComponent cloneComponentInUnitOfWork(IComponent component,
+      Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned) {
+    IComponent uowComponent = carbonEntityCloneFactory.cloneComponent(
+        component, entityFactory);
+    Map<String, Object> componentProperties = component.straightGetProperties();
+    for (Map.Entry<String, Object> property : componentProperties.entrySet()) {
+      if (property.getValue() instanceof IEntity) {
+        if (isInitialized(property.getValue())) {
+          uowComponent.straightSetProperty(property.getKey(),
+              cloneInUnitOfWork((IEntity) property.getValue(), alreadyCloned));
+        } else {
+          uowComponent.straightSetProperty(property.getKey(), property
+              .getValue());
+        }
+      } else if (property.getValue() instanceof IComponent) {
+        uowComponent.straightSetProperty(property.getKey(),
+            cloneComponentInUnitOfWork((IComponent) property.getValue(),
+                alreadyCloned));
+      }
+    }
+    return uowComponent;
+  }
+
   @SuppressWarnings("unchecked")
   private IEntity merge(IEntity entity, MergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
@@ -724,7 +751,6 @@ public class BasicApplicationSession implements IApplicationSession {
     }
   }
 
-  //FIXME check implementation especially with dirt recorder (Enabled on components ?)
   private IComponent mergeComponent(IComponent componentToMerge,
       IComponent registeredComponent, MergeMode mergeMode,
       Map<IEntity, IEntity> alreadyMerged) {
@@ -732,55 +758,46 @@ public class BasicApplicationSession implements IApplicationSession {
     if (componentToMerge == null) {
       return null;
     }
-    boolean dirtRecorderWasEnabled = dirtRecorder.isEnabled();
-    boolean newlyRegistered = false;
-    try {
-      dirtRecorder.setEnabled(false);
-      if (varRegisteredComponent == null) {
-        varRegisteredComponent = carbonEntityCloneFactory.cloneComponent(
-            componentToMerge, entityFactory);
-        dirtRecorder.register(varRegisteredComponent, null);
-        newlyRegistered = true;
-      } else if (mergeMode == MergeMode.MERGE_KEEP) {
-        return varRegisteredComponent;
-      }
-      if (mergeMode != MergeMode.MERGE_CLEAN_LAZY || newlyRegistered) {
-        Map<String, Object> componentPropertiesToMerge = componentToMerge
-            .straightGetProperties();
-        Map<String, Object> registeredComponentProperties = varRegisteredComponent
-            .straightGetProperties();
-        Map<String, Object> mergedProperties = new HashMap<String, Object>();
-        for (Map.Entry<String, Object> property : componentPropertiesToMerge
-            .entrySet()) {
-          if (property.getValue() instanceof IEntity) {
-            if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
-                && !isInitialized(property.getValue())) {
-              if (registeredComponentProperties.get(property.getKey()) == null) {
-                mergedProperties.put(property.getKey(), property.getValue());
-              }
-            } else {
-              Object registeredProperty = registeredComponentProperties
-                  .get(property.getKey());
-              if (isInitialized(registeredProperty)) {
-                mergedProperties.put(property.getKey(), merge(
-                    (IEntity) property.getValue(), mergeMode, alreadyMerged));
-              }
-            }
-          } else if (property.getValue() instanceof IComponent) {
-            IComponent registeredSubComponent = (IComponent) registeredComponentProperties
-                .get(property.getKey());
-            mergedProperties.put(property.getKey(), mergeComponent(
-                (IComponent) property.getValue(), registeredSubComponent,
-                mergeMode, alreadyMerged));
-          } else {
-            mergedProperties.put(property.getKey(), property.getValue());
-          }
-        }
-        varRegisteredComponent.straightSetProperties(mergedProperties);
-      }
+    if (varRegisteredComponent == null) {
+      varRegisteredComponent = carbonEntityCloneFactory.cloneComponent(
+          componentToMerge, entityFactory);
+    } else if (mergeMode == MergeMode.MERGE_KEEP) {
       return varRegisteredComponent;
-    } finally {
-      dirtRecorder.setEnabled(dirtRecorderWasEnabled);
     }
+    if (mergeMode != MergeMode.MERGE_CLEAN_LAZY) {
+      Map<String, Object> componentPropertiesToMerge = componentToMerge
+          .straightGetProperties();
+      Map<String, Object> registeredComponentProperties = varRegisteredComponent
+          .straightGetProperties();
+      Map<String, Object> mergedProperties = new HashMap<String, Object>();
+      for (Map.Entry<String, Object> property : componentPropertiesToMerge
+          .entrySet()) {
+        if (property.getValue() instanceof IEntity) {
+          if (mergeMode != MergeMode.MERGE_CLEAN_EAGER
+              && !isInitialized(property.getValue())) {
+            if (registeredComponentProperties.get(property.getKey()) == null) {
+              mergedProperties.put(property.getKey(), property.getValue());
+            }
+          } else {
+            Object registeredProperty = registeredComponentProperties
+                .get(property.getKey());
+            if (isInitialized(registeredProperty)) {
+              mergedProperties.put(property.getKey(), merge((IEntity) property
+                  .getValue(), mergeMode, alreadyMerged));
+            }
+          }
+        } else if (property.getValue() instanceof IComponent) {
+          IComponent registeredSubComponent = (IComponent) registeredComponentProperties
+              .get(property.getKey());
+          mergedProperties.put(property.getKey(), mergeComponent(
+              (IComponent) property.getValue(), registeredSubComponent,
+              mergeMode, alreadyMerged));
+        } else {
+          mergedProperties.put(property.getKey(), property.getValue());
+        }
+      }
+      varRegisteredComponent.straightSetProperties(mergedProperties);
+    }
+    return varRegisteredComponent;
   }
 }
