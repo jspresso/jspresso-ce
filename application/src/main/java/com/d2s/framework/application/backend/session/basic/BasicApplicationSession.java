@@ -96,6 +96,13 @@ public class BasicApplicationSession implements IApplicationSession {
   /**
    * {@inheritDoc}
    */
+  public boolean isUpdatedInUnitOfWork(IEntity entity) {
+    return entitiesToMergeBack != null && entitiesToMergeBack.contains(entity);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   public List<IEntity> cloneInUnitOfWork(List<IEntity> entities) {
     List<IEntity> uowEntities = new ArrayList<IEntity>();
     Map<Class<?>, Map<Serializable, IEntity>> alreadyCloned = new HashMap<Class<?>, Map<Serializable, IEntity>>();

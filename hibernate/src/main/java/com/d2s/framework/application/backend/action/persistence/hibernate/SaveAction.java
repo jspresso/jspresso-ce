@@ -37,8 +37,8 @@ public class SaveAction extends AbstractHibernateAction {
       @SuppressWarnings("unchecked")
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
-        List<IEntity> objectsToSave = getEntitiesToSave(context);
-        for (IEntity entity : objectsToSave) {
+        List<IEntity> entitiesToSave = getEntitiesToSave(context);
+        for (IEntity entity : entitiesToSave) {
           saveEntity(entity, context);
         }
         return null;

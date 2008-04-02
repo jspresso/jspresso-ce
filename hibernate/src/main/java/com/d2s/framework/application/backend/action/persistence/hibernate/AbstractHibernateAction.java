@@ -154,7 +154,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
         .cloneInUnitOfWork(entities);
     Set<IEntity> alreadyLocked = new HashSet<IEntity>();
     for (IEntity mergedEntity : mergedEntities) {
-      lockInHibernate(mergedEntity, hibernateSession, alreadyLocked);
+      lockInHibernate(mergedEntity, hibernateSession, alreadyLocked, context);
     }
     return mergedEntities;
   }
@@ -189,10 +189,14 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
     getHibernateTemplate(context).execute(new HibernateCallback() {
 
       public Object doInHibernate(Session session) {
-        session.clear(); // important to avoid duplicates in session when looping on saves.
-        IEntity mergedEntity = mergeInHibernate(entity, session, context);
-        session.saveOrUpdate(mergedEntity);
-        session.flush();
+        session.clear(); // important to avoid duplicates in session when
+                          // looping on saves.
+
+        if (!getApplicationSession(context).isUpdatedInUnitOfWork(entity)) {
+          IEntity mergedEntity = mergeInHibernate(entity, session, context);
+          session.saveOrUpdate(mergedEntity);
+          session.flush();
+        }
         return null;
       }
     });
@@ -200,7 +204,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
 
   @SuppressWarnings("unchecked")
   private void lockInHibernate(IEntity entity, Session hibernateSession,
-      Set<IEntity> alreadyLocked) {
+      Set<IEntity> alreadyLocked, Map<String, Object> context) {
     if (alreadyLocked.add(entity)) {
       if (entity.isPersistent()) {
         try {
@@ -216,11 +220,12 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
           if (Hibernate.isInitialized(property.getValue())) {
             if (property.getValue() instanceof IEntity) {
               lockInHibernate((IEntity) property.getValue(), hibernateSession,
-                  alreadyLocked);
+                  alreadyLocked, context);
             } else if (property.getValue() instanceof Collection) {
               for (Iterator<IEntity> ite = ((Collection<IEntity>) property
                   .getValue()).iterator(); ite.hasNext();) {
-                lockInHibernate(ite.next(), hibernateSession, alreadyLocked);
+                lockInHibernate(ite.next(), hibernateSession, alreadyLocked,
+                    context);
               }
             }
           }
