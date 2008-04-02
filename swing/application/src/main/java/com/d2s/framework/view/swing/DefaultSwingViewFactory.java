@@ -1390,14 +1390,16 @@ public class DefaultSwingViewFactory implements
           detailView.setParent(view);
 
           IValueConnector detailConnector = null;
-          if (detailView.getConnector() instanceof ICollectionConnector) {
+          if (detailView.getDescriptor().getModelDescriptor() instanceof IPropertyDescriptor) {
             IConfigurableCollectionConnectorProvider wrapper = connectorFactory
                 .createConfigurableCollectionConnectorProvider(
                     ModelRefPropertyConnector.THIS_PROPERTY, null);
             wrapper.addChildConnector(detailView.getConnector());
-            wrapper
-                .setCollectionConnectorProvider((ICollectionConnector) detailView
-                    .getConnector());
+            if (detailView.getConnector() instanceof ICollectionConnector) {
+              wrapper
+                  .setCollectionConnectorProvider((ICollectionConnector) detailView
+                      .getConnector());
+            }
             detailConnector = wrapper;
           } else {
             detailConnector = detailView.getConnector();
