@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.beanutils.MethodUtils;
-import com.d2s.framework.util.lang.ObjectUtils;
 
 import com.d2s.framework.model.component.ComponentException;
 import com.d2s.framework.model.component.IComponent;
@@ -37,7 +36,6 @@ import com.d2s.framework.model.descriptor.IModelDescriptorAware;
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IStringPropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
@@ -46,6 +44,7 @@ import com.d2s.framework.util.bean.AccessorInfo;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.util.bean.SinglePropertyChangeSupport;
 import com.d2s.framework.util.collection.CollectionHelper;
+import com.d2s.framework.util.lang.ObjectUtils;
 
 /**
  * This is the core implementation of all components in the application.
@@ -788,13 +787,6 @@ public abstract class AbstractComponentInvocationHandler implements
       IPropertyDescriptor propertyDescriptor, Object newProperty) {
     String propertyName = propertyDescriptor.getName();
 
-    Object actualNewProperty = newProperty;
-    if (newProperty != null
-        && propertyDescriptor instanceof IStringPropertyDescriptor
-        && ((IStringPropertyDescriptor) propertyDescriptor).isUpperCase()) {
-      actualNewProperty = ((String) newProperty).toUpperCase();
-    }
-
     Object oldProperty = null;
     try {
       oldProperty = accessorFactory.createPropertyAccessor(propertyName,
@@ -806,6 +798,9 @@ public abstract class AbstractComponentInvocationHandler implements
     } catch (NoSuchMethodException ex) {
       throw new ComponentException(ex);
     }
+    Object actualNewProperty = propertyDescriptor.interceptSetter(proxy,
+        oldProperty, newProperty);
+
     if (ObjectUtils.equals(oldProperty, actualNewProperty)) {
       return;
     }
@@ -1019,7 +1014,6 @@ public abstract class AbstractComponentInvocationHandler implements
     }
   }
 
-  
   /**
    * Gets the inlineComponentFactory.
    * 

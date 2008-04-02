@@ -123,7 +123,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
     for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
       ICollectionIntegrityProcessor<Object, Collection<?>> processor =
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
-      processor.postprocessAdderIntegrity(component, collection, addedValue);
+      processor.postprocessAdder(component, collection, addedValue);
     }
   }
 
@@ -141,7 +141,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
       ICollectionIntegrityProcessor<Object, Collection<?>> processor =
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor
-          .postprocessRemoverIntegrity(component, collection, removedValue);
+          .postprocessRemover(component, collection, removedValue);
     }
   }
 
@@ -158,7 +158,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
     for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
       ICollectionIntegrityProcessor<Object, Collection<?>> processor =
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
-      processor.preprocessAdderIntegrity(component, collection, addedValue);
+      processor.preprocessAdder(component, collection, addedValue);
     }
   }
 
@@ -175,7 +175,7 @@ public class BasicCollectionPropertyDescriptor<E> extends
     for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
       ICollectionIntegrityProcessor<Object, Collection<?>> processor =
         (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
-      processor.preprocessRemoverIntegrity(component, collection, removedValue);
+      processor.preprocessRemover(component, collection, removedValue);
     }
   }
 

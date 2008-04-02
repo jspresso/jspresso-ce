@@ -219,4 +219,17 @@ public class BasicStringPropertyDescriptor extends
   protected String getValueAsString(Object value) {
     return (String) value;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Object interceptSetter(Object component, Object oldValue,
+      Object newValue) {
+    String actualNewValue = (String) newValue;
+    if (isUpperCase()) {
+      actualNewValue = actualNewValue.toUpperCase();
+    }
+    return super.interceptSetter(component, oldValue, actualNewValue);
+  }
 }

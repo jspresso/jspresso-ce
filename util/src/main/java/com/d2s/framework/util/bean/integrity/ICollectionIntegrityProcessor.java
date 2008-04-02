@@ -35,7 +35,7 @@ public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
    * @param addedValue
    *            the value added in the collection.
    */
-  void postprocessAdderIntegrity(E target, F collection, Object addedValue);
+  void postprocessAdder(E target, F collection, Object addedValue);
 
   /**
    * This method gets called whenever a value has been removed from a collection
@@ -50,7 +50,7 @@ public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
    * @param removedValue
    *            the value removed from the collection.
    */
-  void postprocessRemoverIntegrity(E target, F collection, Object removedValue);
+  void postprocessRemover(E target, F collection, Object removedValue);
 
   /**
    * This method gets called whenever a value is about to be added to a
@@ -65,7 +65,7 @@ public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
    * @param addedValue
    *            the value added in the collection.
    */
-  void preprocessAdderIntegrity(E target, F collection, Object addedValue);
+  void preprocessAdder(E target, F collection, Object addedValue);
 
   /**
    * This method gets called whenever a value is about to be removed from a
@@ -80,5 +80,5 @@ public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
    * @param removedValue
    *            the value removed from the collection.
    */
-  void preprocessRemoverIntegrity(E target, F collection, Object removedValue);
+  void preprocessRemover(E target, F collection, Object removedValue);
 }

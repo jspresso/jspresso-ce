@@ -274,8 +274,26 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     }
     for (IPropertyIntegrityProcessor<?, ?> processor : processors) {
       ((IPropertyIntegrityProcessor<Object, Object>) processor)
-          .postprocessSetterIntegrity(component, oldValue, newValue);
+          .postprocessSetter(component, oldValue, newValue);
     }
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unchecked")
+  public Object interceptSetter(Object component, Object oldValue,
+      Object newValue) {
+    Object interceptedValue = newValue;
+    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    if (processors == null) {
+      return interceptedValue;
+    }
+    for (IPropertyIntegrityProcessor<?, ?> processor : processors) {
+      interceptedValue = ((IPropertyIntegrityProcessor<Object, Object>) processor)
+          .interceptSetter(component, oldValue, interceptedValue);
+    }
+    return interceptedValue;
   }
 
   /**
@@ -290,7 +308,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     }
     for (IPropertyIntegrityProcessor<?, ?> processor : processors) {
       ((IPropertyIntegrityProcessor<Object, Object>) processor)
-          .preprocessSetterIntegrity(component, oldValue, newValue);
+          .preprocessSetter(component, oldValue, newValue);
     }
   }
 

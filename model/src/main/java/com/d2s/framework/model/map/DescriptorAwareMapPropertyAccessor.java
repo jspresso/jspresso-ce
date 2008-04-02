@@ -54,7 +54,8 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
     if (getModelDescriptor() != null) {
       getModelDescriptor().preprocessSetter(target, oldValue, value);
     }
-    super.setValue(target, value);
+    super.setValue(target, getModelDescriptor().interceptSetter(target,
+        oldValue, value));
     if (getModelDescriptor() != null) {
       getModelDescriptor().postprocessSetter(target, oldValue, value);
     }

@@ -31,8 +31,23 @@ public interface IPropertyIntegrityProcessor<E, F> {
    * @param newPropertyValue
    *            the new value of the property accessed.
    */
-  void postprocessSetterIntegrity(E target, F oldPropertyValue,
+  void postprocessSetter(E target, F oldPropertyValue,
       F newPropertyValue);
+
+  /**
+   * This method gets called whenever a property has been set on an component to
+   * which this processor is registered. This method may change the actual value
+   * set to the bean.
+   * 
+   * @param target
+   *            the component the processor is ran on.
+   * @param oldPropertyValue
+   *            the old value of the property accessed.
+   * @param newPropertyValue
+   *            the new value of the property accessed.
+   * @return the actual value to set on the bean (it may be unchanged of course).
+   */
+  F interceptSetter(E target, F oldPropertyValue, F newPropertyValue);
 
   /**
    * This method gets called whenever a property is about to be set on an
@@ -46,6 +61,6 @@ public interface IPropertyIntegrityProcessor<E, F> {
    * @param newPropertyValue
    *            the new value of the property accessed.
    */
-  void preprocessSetterIntegrity(E target, F oldPropertyValue,
+  void preprocessSetter(E target, F oldPropertyValue,
       F newPropertyValue);
 }

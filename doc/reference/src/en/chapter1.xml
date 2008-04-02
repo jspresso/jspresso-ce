@@ -4092,10 +4092,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       &lt;value&gt;ouId&lt;/value&gt;
       &lt;value&gt;name&lt;/value&gt;
       &lt;value&gt;manager&lt;/value&gt;
-      &lt;value&gt;contact.address&lt;/value&gt;
-      &lt;value&gt;contact.city&lt;/value&gt;
-      &lt;value&gt;contact.phone&lt;/value&gt;
-      &lt;value&gt;contact.email&lt;/value&gt;
+      &lt;value&gt;contact&lt;/value&gt;
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting></para>

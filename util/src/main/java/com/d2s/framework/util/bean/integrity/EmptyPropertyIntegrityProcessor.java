@@ -25,7 +25,7 @@ public abstract class EmptyPropertyIntegrityProcessor<E, F> implements
    * {@inheritDoc}
    */
   @SuppressWarnings("unused")
-  public void postprocessSetterIntegrity(E target, F oldPropertyValue,
+  public void postprocessSetter(E target, F oldPropertyValue,
       F newPropertyValue) {
     // NO-OP
   }
@@ -36,7 +36,18 @@ public abstract class EmptyPropertyIntegrityProcessor<E, F> implements
    * {@inheritDoc}
    */
   @SuppressWarnings("unused")
-  public void preprocessSetterIntegrity(E target, F oldPropertyValue,
+  public F interceptSetter(E target, F oldPropertyValue,
+      F newPropertyValue) {
+    return newPropertyValue;
+  }
+
+  /**
+   * No-op.
+   * <p>
+   * {@inheritDoc}
+   */
+  @SuppressWarnings("unused")
+  public void preprocessSetter(E target, F oldPropertyValue,
       F newPropertyValue) {
     // NO-OP
   }
