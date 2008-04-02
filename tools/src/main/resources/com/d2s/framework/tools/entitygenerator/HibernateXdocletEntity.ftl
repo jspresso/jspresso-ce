@@ -246,7 +246,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#local bidirectional=false/>
     <#local inverse=false/>
     <#if !manyToMany>
-      <#local reversePropertyName=propertyDescriptor.name+"Parent"/>
+      <#local reversePropertyName=propertyName+componentName/>
     </#if>
   </#if>
   /**

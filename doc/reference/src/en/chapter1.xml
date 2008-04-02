@@ -1728,7 +1728,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
    * 
    * @hibernate.list cascade =
    *                 "persist,merge,save-update,refresh,evict,replicate,delete"
-   * @hibernate.key column = "EVENTS_PARENT_ID"
+   * @hibernate.key column = "EVENTS_EMPLOYEE_ID"
    * @hibernate.one-to-many class = "com.d2s.hrsample.model.Event"
    * @hibernate.list-index column = "EVENTS_SEQ"
    * @return the events.

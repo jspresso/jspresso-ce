@@ -84,7 +84,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({"cast", "unchecked" })
+  @SuppressWarnings({ "cast", "unchecked" })
   public Class<? extends E> getComponentContract() {
     if (componentContract == null && getName() != null) {
       try {
@@ -232,7 +232,26 @@ public abstract class AbstractComponentDescriptor<E> extends
         }
       }
     }
-    return queryableProperties;
+    return explodeComponentReferences(queryableProperties);
+  }
+
+  private List<String> explodeComponentReferences(List<String> propertyNames) {
+    List<String> explodedProperties = new ArrayList<String>();
+    for (String propertyName : propertyNames) {
+      IPropertyDescriptor propertyDescriptor = getPropertyDescriptor(propertyName);
+      if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
+          .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
+              .getReferencedDescriptor().getComponentContract()))) {
+        for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
+            .getReferencedDescriptor().getRenderedProperties()) {
+          explodedProperties.add(propertyName + "."
+              + nestedRenderedProperty);
+        }
+      } else {
+        explodedProperties.add(propertyName);
+      }
+    }
+    return explodedProperties;
   }
 
   /**
@@ -240,24 +259,15 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public List<String> getRenderedProperties() {
     if (renderedProperties == null) {
-      List<String> allProperties = new ArrayList<String>();
+      renderedProperties = new ArrayList<String>();
       for (IPropertyDescriptor propertyDescriptor : getPropertyDescriptors()) {
-        if ((propertyDescriptor instanceof IReferencePropertyDescriptor<?> && !IEntity.class
-            .isAssignableFrom(((IReferencePropertyDescriptor<?>) propertyDescriptor)
-                .getReferencedDescriptor().getComponentContract()))) {
-          for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
-              .getReferencedDescriptor().getRenderedProperties()) {
-            allProperties.add(propertyDescriptor.getName() + "."
-                + nestedRenderedProperty);
-          }
-        } else if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor)
+        if (!(propertyDescriptor instanceof ICollectionPropertyDescriptor)
             && !(propertyDescriptor instanceof ITextPropertyDescriptor)) {
-          allProperties.add(propertyDescriptor.getName());
+          renderedProperties.add(propertyDescriptor.getName());
         }
       }
-      return allProperties;
     }
-    return new ArrayList<String>(renderedProperties);
+    return explodeComponentReferences(renderedProperties);
   }
 
   /**
