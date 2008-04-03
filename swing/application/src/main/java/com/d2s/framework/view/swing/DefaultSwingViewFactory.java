@@ -2356,6 +2356,15 @@ public class DefaultSwingViewFactory implements
     }
     viewComponent.addMouseListener(new PopupListener(viewComponent, view,
         actionHandler, locale));
+    int minimumWidth = 0;
+    for (int i = 0; i < 1
+        && i < viewComponent.getColumnModel().getColumnCount(); i++) {
+      minimumWidth += viewComponent.getColumnModel().getColumn(i)
+          .getPreferredWidth();
+    }
+    scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
+        .getRowHeight()
+        * 6 + viewComponent.getTableHeader().getPreferredSize().height));
     return view;
   }
 

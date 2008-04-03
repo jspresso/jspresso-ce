@@ -218,7 +218,7 @@ public class DefaultUlcViewFactory implements
   private IListSelectionModelBinder             listSelectionModelBinder;
   private IDisplayableAction                    lovAction;
 
-  private IModelCascadingBinder                   modelCascadingBinder;
+  private IModelCascadingBinder                 modelCascadingBinder;
   private int                                   maxCharacterLength          = 32;
   private int                                   maxColumnCharacterLength    = 32;
   private IMvcBinder                            mvcBinder;
@@ -2313,9 +2313,11 @@ public class DefaultUlcViewFactory implements
         .getTableHeader().getFont().getSize(), viewComponent.getTableHeader()
         .getFont().getSize());
     sorterDecorator.setUpIcon(iconFactory.getIcon(
-        "classpath:com/d2s/framework/application/images/1uparrow-48x48.png", iconSize));
+        "classpath:com/d2s/framework/application/images/1uparrow-48x48.png",
+        iconSize));
     sorterDecorator.setDownIcon(iconFactory.getIcon(
-        "classpath:com/d2s/framework/application/images/1downarrow-48x48.png", iconSize));
+        "classpath:com/d2s/framework/application/images/1downarrow-48x48.png",
+        iconSize));
     sorterDecorator.setColumnComparator(String.class,
         String.CASE_INSENSITIVE_ORDER);
     ClientContext.setModelUpdateMode(sorterDecorator,
@@ -2392,6 +2394,14 @@ public class DefaultUlcViewFactory implements
     }
     viewComponent.setComponentPopupMenu(createPopupMenu(viewComponent, view,
         actionHandler, locale));
+    int minimumWidth = 0;
+    for (int i = 0; i < 1
+        && i < viewComponent.getColumnModel().getColumnCount(); i++) {
+      minimumWidth += viewComponent.getColumnModel().getColumn(i)
+          .getPreferredWidth();
+    }
+    scrollPane.setMinimumSize(new Dimension(minimumWidth, viewComponent
+        .getRowHeight() * 7));
     return view;
   }
 

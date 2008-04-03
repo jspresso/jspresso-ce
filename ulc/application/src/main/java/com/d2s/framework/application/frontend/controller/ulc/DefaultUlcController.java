@@ -366,39 +366,46 @@ public class DefaultUlcController extends
   }
 
   private void performLogin() {
-    new LoginThread().start();
-    loginTimer = new ULCPollingTimer(2000, new IActionListener() {
+    if (getLoginContextName() != null) {
+      new LoginThread().start();
+      loginTimer = new ULCPollingTimer(2000, new IActionListener() {
 
-      private static final long serialVersionUID = 5630061795918376362L;
+        private static final long serialVersionUID = 5630061795918376362L;
 
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent event) {
-        if (loginCallbacks != null) {
-          Callback[] loginCallbacksCopy = loginCallbacks;
-          loginCallbacks = null;
-          try {
-            getLoginCallbackHandler().handle(loginCallbacksCopy);
-          } catch (IOException ex) {
-            // NO-OP
-          } catch (UnsupportedCallbackException ex) {
-            // NO-OP
+        public void actionPerformed(@SuppressWarnings("unused")
+        ActionEvent event) {
+          if (loginCallbacks != null) {
+            Callback[] loginCallbacksCopy = loginCallbacks;
+            loginCallbacks = null;
+            try {
+              getLoginCallbackHandler().handle(loginCallbacksCopy);
+            } catch (IOException ex) {
+              // NO-OP
+            } catch (UnsupportedCallbackException ex) {
+              // NO-OP
+            }
+          }
+          if (loginComplete) {
+            loginTimer.stop();
+            loginTimer = null;
+            ClientContext.sendMessage("appStarted");
+            if (loginSuccessful) {
+              displayControllerFrame();
+              execute(getStartupAction(), getInitialActionContext());
+            } else {
+              stop();
+            }
           }
         }
-        if (loginComplete) {
-          loginTimer.stop();
-          loginTimer = null;
-          ClientContext.sendMessage("appStarted");
-          if (loginSuccessful) {
-            displayControllerFrame();
-            execute(getStartupAction(), getInitialActionContext());
-          } else {
-            stop();
-          }
-        }
-      }
-    });
-    loginTimer.setInitialDelay(100);
-    loginTimer.start();
+      });
+      loginTimer.setInitialDelay(100);
+      loginTimer.start();
+    } else {
+      loginSuccess(getAnonymousSubject());
+      ClientContext.sendMessage("appStarted");
+      displayControllerFrame();
+      execute(getStartupAction(), getInitialActionContext());
+    }
   }
 
   private void updateFrameTitle() {
