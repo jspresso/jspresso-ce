@@ -8,8 +8,8 @@ import java.util.List;
 
 import com.d2s.framework.model.descriptor.ICollectionDescriptor;
 import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
-import com.d2s.framework.util.bean.integrity.ICollectionIntegrityProcessor;
-import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
+import com.d2s.framework.util.bean.integrity.ICollectionPropertyProcessor;
+import com.d2s.framework.util.bean.integrity.IPropertyProcessor;
 
 /**
  * Default implementation of a collection descriptor.
@@ -116,13 +116,13 @@ public class BasicCollectionPropertyDescriptor<E> extends
   @SuppressWarnings("unchecked")
   public void postprocessAdder(Object component, Collection<?> collection,
       Object addedValue) {
-    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
-        (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+    for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
+      ICollectionPropertyProcessor<Object, Collection<?>> processor =
+        (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.postprocessAdder(component, collection, addedValue);
     }
   }
@@ -133,13 +133,13 @@ public class BasicCollectionPropertyDescriptor<E> extends
   @SuppressWarnings("unchecked")
   public void postprocessRemover(Object component, Collection<?> collection,
       Object removedValue) {
-    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
-        (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+    for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
+      ICollectionPropertyProcessor<Object, Collection<?>> processor =
+        (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor
           .postprocessRemover(component, collection, removedValue);
     }
@@ -151,13 +151,13 @@ public class BasicCollectionPropertyDescriptor<E> extends
   @SuppressWarnings("unchecked")
   public void preprocessAdder(Object component, Collection<?> collection,
       Object addedValue) {
-    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
-        (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+    for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
+      ICollectionPropertyProcessor<Object, Collection<?>> processor =
+        (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessAdder(component, collection, addedValue);
     }
   }
@@ -168,13 +168,13 @@ public class BasicCollectionPropertyDescriptor<E> extends
   @SuppressWarnings("unchecked")
   public void preprocessRemover(Object component, Collection<?> collection,
       Object removedValue) {
-    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor<?, ?> propertyIntegrityProcessor : processors) {
-      ICollectionIntegrityProcessor<Object, Collection<?>> processor =
-        (ICollectionIntegrityProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
+    for (IPropertyProcessor<?, ?> propertyIntegrityProcessor : processors) {
+      ICollectionPropertyProcessor<Object, Collection<?>> processor =
+        (ICollectionPropertyProcessor<Object, Collection<?>>) propertyIntegrityProcessor;
       processor.preprocessRemover(component, collection, removedValue);
     }
   }

@@ -9,7 +9,7 @@ import java.util.Locale;
 
 import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.util.bean.PropertyHelper;
-import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
+import com.d2s.framework.util.bean.integrity.IPropertyProcessor;
 import com.d2s.framework.util.bean.integrity.IntegrityException;
 import com.d2s.framework.util.descriptor.DefaultDescriptor;
 import com.d2s.framework.util.exception.NestedRuntimeException;
@@ -31,7 +31,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private Class<?>                                delegateClass;
 
   private String                                  delegateClassName;
-  private List<IPropertyIntegrityProcessor<?, ?>> integrityProcessors;
+  private List<IPropertyProcessor<?, ?>> integrityProcessors;
   private Boolean                                 mandatory;
   private IPropertyDescriptor                     parentDescriptor;
   private Collection<IGate>                       readabilityGates;
@@ -132,7 +132,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
-  public List<IPropertyIntegrityProcessor<?, ?>> getIntegrityProcessors() {
+  public List<IPropertyProcessor<?, ?>> getIntegrityProcessors() {
     if (integrityProcessors != null) {
       return integrityProcessors;
     }
@@ -268,12 +268,12 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   @SuppressWarnings("unchecked")
   public void postprocessSetter(Object component, Object oldValue,
       Object newValue) {
-    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor<?, ?> processor : processors) {
-      ((IPropertyIntegrityProcessor<Object, Object>) processor)
+    for (IPropertyProcessor<?, ?> processor : processors) {
+      ((IPropertyProcessor<Object, Object>) processor)
           .postprocessSetter(component, oldValue, newValue);
     }
   }
@@ -285,12 +285,12 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   public Object interceptSetter(Object component, Object oldValue,
       Object newValue) {
     Object interceptedValue = newValue;
-    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return interceptedValue;
     }
-    for (IPropertyIntegrityProcessor<?, ?> processor : processors) {
-      interceptedValue = ((IPropertyIntegrityProcessor<Object, Object>) processor)
+    for (IPropertyProcessor<?, ?> processor : processors) {
+      interceptedValue = ((IPropertyProcessor<Object, Object>) processor)
           .interceptSetter(component, oldValue, interceptedValue);
     }
     return interceptedValue;
@@ -302,12 +302,12 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   @SuppressWarnings("unchecked")
   public void preprocessSetter(Object component, Object oldValue,
       Object newValue) {
-    List<IPropertyIntegrityProcessor<?, ?>> processors = getIntegrityProcessors();
+    List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;
     }
-    for (IPropertyIntegrityProcessor<?, ?> processor : processors) {
-      ((IPropertyIntegrityProcessor<Object, Object>) processor)
+    for (IPropertyProcessor<?, ?> processor : processors) {
+      ((IPropertyProcessor<Object, Object>) processor)
           .preprocessSetter(component, oldValue, newValue);
     }
   }
@@ -330,7 +330,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    *            the integrityProcessors to set.
    */
   public void setIntegrityProcessors(
-      List<IPropertyIntegrityProcessor<?, ?>> integrityProcessors) {
+      List<IPropertyProcessor<?, ?>> integrityProcessors) {
     this.integrityProcessors = integrityProcessors;
   }
 

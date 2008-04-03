@@ -6,7 +6,7 @@ package com.d2s.framework.model.descriptor;
 import java.util.Collection;
 import java.util.List;
 
-import com.d2s.framework.util.bean.integrity.IPropertyIntegrityProcessor;
+import com.d2s.framework.util.bean.integrity.IPropertyProcessor;
 import com.d2s.framework.util.gate.IGate;
 
 /**
@@ -64,7 +64,7 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
    * 
    * @return the registered <code>IIntegrityProcessor</code> s
    */
-  List<IPropertyIntegrityProcessor<?, ?>> getIntegrityProcessors();
+  List<IPropertyProcessor<?, ?>> getIntegrityProcessors();
 
   /**
    * Gets the collection of gates determining the readability state of this

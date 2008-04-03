@@ -17,7 +17,7 @@ package com.d2s.framework.util.bean.integrity;
  * @param <F>
  *            The type of the property.
  */
-public interface IPropertyIntegrityProcessor<E, F> {
+public interface IPropertyProcessor<E, F> {
 
   /**
    * This method gets called whenever a property has been set on an component to

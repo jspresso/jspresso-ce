@@ -16,8 +16,8 @@ package com.d2s.framework.util.bean.integrity;
  * @param <F>
  *            The type of the property.
  */
-public abstract class EmptyPropertyIntegrityProcessor<E, F> implements
-    IPropertyIntegrityProcessor<E, F> {
+public abstract class EmptyPropertyProcessor<E, F> implements
+    IPropertyProcessor<E, F> {
 
   /**
    * No-op.

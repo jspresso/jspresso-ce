@@ -19,8 +19,8 @@ import java.util.Collection;
  * @param <F>
  *            The type of the property (a subclass of collection).
  */
-public interface ICollectionIntegrityProcessor<E, F extends Collection<?>>
-    extends IPropertyIntegrityProcessor<E, F> {
+public interface ICollectionPropertyProcessor<E, F extends Collection<?>>
+    extends IPropertyProcessor<E, F> {
 
   /**
    * This method gets called whenever a value has been added to a collection

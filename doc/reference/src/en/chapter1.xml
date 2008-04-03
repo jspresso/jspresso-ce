@@ -2804,7 +2804,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
     </section>
 
     <section>
-      <title>Integrity processors</title>
+      <title>Property processors</title>
 
       <para>A clean and efficient domain model design assigns to the business
       objects the responsibility of maintaining their integrity.</para>
@@ -2816,6 +2816,11 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
           <para>Checking a property before it gets actually modified. Trying
           to set a value that would compromise the business object integrity
           must be prevented and should raise a clear notification.</para>
+        </listitem>
+
+        <listitem>
+          <para>Being able to intercept a setter to change the value actually
+          set (e.g. ensuring a string is uppercase).</para>
         </listitem>
 
         <listitem>
@@ -2834,23 +2839,28 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
       of the business object or even of other business objects of the
       model).</para>
 
-      <para>As far as the second point is concerned, we have seen nothing yet
-      that would help to cover it.</para>
+      <para>As far as the second and third points are concerned, we have seen
+      nothing yet that would help to cover it.</para>
 
       <para>Fortunately, the <trademark>D2S</trademark> framework allows you
-      to implement integrity processors that can be registered with any
+      to implement property processors that can be registered with any
       property you define on a <trademark>D2S</trademark> managed component.
       This includes :</para>
 
       <orderedlist>
         <listitem>
-          <para>Pre-update integrity processors to cover pre-update controls
-          on setters for scalar, reference and collection properties and
-          adders and removers for collection properties.</para>
+          <para>Pre-update property processors to cover pre-update controls on
+          setters for scalar, reference and collection properties and adders
+          and removers for collection properties.</para>
         </listitem>
 
         <listitem>
-          <para>Post-update integrity processors to trigger post-update
+          <para>Interceptors to transform the value before it's actually set
+          on the business object.</para>
+        </listitem>
+
+        <listitem>
+          <para>Post-update property processors to trigger post-update
           computations for scalar, reference and collection properties and
           adders and removers for collection properties.</para>
         </listitem>
@@ -2863,11 +2873,11 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
         <listitem>
           <para>An employee first name should be automatically formatted like
           this : first letter capitalized and the remaining letters in lower
-          case; this is a post-update integrity processor on the employee
-          first name property. We could have implemented this constraint using
-          a regular expression check, but this would have forced the end user
-          to type-in a compliant first name instead of automatically making it
-          compliant through computation.</para>
+          case; this is a setter interceptor on the employee first name
+          property. We could have implemented this constraint using a regular
+          expression check, but this would have forced the end user to type-in
+          a compliant first name instead of automatically making it compliant
+          through computation.</para>
         </listitem>
 
         <listitem>
@@ -2895,7 +2905,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
             id="integrityProcessors" />
           &lt;list&gt;
             &lt;bean <co id="FirstNameIntegrityProcessor" />
-              class="com.d2s.hrsample.model.processor.EmployeeIntegrityProcessors$FirstNameIntegrityProcessor" /&gt;
+              class="com.d2s.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor" /&gt;
           &lt;/list&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -2909,7 +2919,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
         &lt;property name="integrityProcessors"&gt;
           &lt;list&gt;
             &lt;bean <co id="BirthDateIntegrityProcessor" />
-              class="com.d2s.hrsample.model.processor.EmployeeIntegrityProcessors$BirthDateIntegrityProcessor" /&gt;
+              class="com.d2s.hrsample.model.processor.EmployeePropertyProcessors$BirthDateProcessor" /&gt;
           &lt;/list&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -2918,13 +2928,14 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
           <callout arearefs="integrityProcessors">
-            <para>The property is completed by a list of integrity processors.
+            <para>The property is completed by a list of property processors.
             Each processor of this chain will be triggered
             sequentially.</para>
           </callout>
 
           <callout arearefs="FirstNameIntegrityProcessor">
-            <para>We register the processor on the first name property.</para>
+            <para>We register the interceptor on the first name
+            property.</para>
           </callout>
 
           <callout arearefs="BirthDateIntegrityProcessor">
@@ -2933,7 +2944,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
         </calloutlist></para>
 
       <para>As described in the XML fragment, we are going to create an
-      <code>EmployeeIntegrityProcessors</code> class in the new package
+      <code>EmployeePropertyProcessors</code> class in the new package
       <code>com.d2s.hrsample.model.processor</code>. As a best practice, it is
       recommended (but not imposed) to create a containing class that holds
       all the processors for a component; then each processor will be a named
@@ -2943,7 +2954,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
       the processors related to a component together.</para>
 
       <para>Let's see what those processors look like by looking at the
-      <filename>EmployeeIntegrityProcessors.java</filename> source file
+      <filename>EmployeePropertyProcessors.java</filename> source file
       :</para>
 
       <para><programlisting language="java">package com.d2s.hrsample.model.processor;
@@ -2955,16 +2966,16 @@ import com.d2s.framework.util.bean.integrity.EmptyPropertyIntegrityProcessor;
 import com.d2s.framework.util.bean.integrity.IntegrityException;
 
 /**
- * Employee integrity processors.
+ * Employee property processors.
  */
-public class EmployeeIntegrityProcessors {
+public class EmployeePropertyProcessors {
 
   /**
-   * Birth date integrity processor.
+   * Birth date property processor.
    */
-  public static class BirthDateIntegrityProcessor extends <co
+  public static class BirthDateProcessor extends <co
             id="BirthDateIntegrityProcessorImpl" />
-      EmptyPropertyIntegrityProcessor&lt;Employee, Date&gt; {
+      EmptyPropertyProcessor&lt;Employee, Date&gt; {
 
     /**
      * Checks that the employee age is at least 18.
@@ -2972,7 +2983,7 @@ public class EmployeeIntegrityProcessors {
      * {@inheritDoc}
      */
     @Override
-    public void preprocessSetterIntegrity(Employee employee, <co
+    public void preprocessSetter(Employee employee, <co
             id="preprocessSetterIntegrity" />
         @SuppressWarnings("unused")
         Date oldBirthDate, Date newBirthDate) {
@@ -2985,11 +2996,11 @@ public class EmployeeIntegrityProcessors {
   }
 
   /**
-   * First name integrity processor.
+   * First name property processor.
    */
-  public static class FirstNameIntegrityProcessor extends <co
+  public static class FirstNameProcessor extends <co
             id="FirstNameIntegrityProcessorImpl" />
-      EmptyPropertyIntegrityProcessor&lt;Employee, String&gt; {
+      EmptyPropertyProcessor&lt;Employee, String&gt; {
 
     /**
      * Formats the new first name. The formatting is :
@@ -2999,7 +3010,7 @@ public class EmployeeIntegrityProcessors {
      * {@inheritDoc}
      */
     @Override
-    public void postprocessSetterIntegrity(Employee employee, <co
+    public String interceptSetter(Employee employee, <co
             id="postprocessSetterIntegrity" />
         @SuppressWarnings("unused")
         String oldFirstName, String newFirstName) {
@@ -3007,22 +3018,21 @@ public class EmployeeIntegrityProcessors {
         StringBuffer formattedName = new StringBuffer();
         formattedName.append(newFirstName.substring(0, 1).toUpperCase());
         formattedName.append(newFirstName.substring(1).toLowerCase());
-        employee.setFirstName(formattedName.toString()); <co
-            id="formattedName" />
+        return formattedName.toString(); <co id="formattedName" />
       }
+      return super.interceptSetter(employee, oldFirstName, newFirstName);
     }
   }
 }</programlisting><calloutlist>
           <callout arearefs="BirthDateIntegrityProcessorImpl">
             <para>We declare an internal class as being a processor for the
             birth date property and inherit from the
-            <code>EmptyPropertyIntegrityProcessor</code> empty adaptor
-            class.</para>
+            <code>EmptyPropertyProcessor</code> empty adaptor class.</para>
           </callout>
 
           <callout arearefs="preprocessSetterIntegrity">
-            <para>We override the <code>preprocessSetterIntegrity</code> to
-            implement the age over 18 constraint.</para>
+            <para>We override the <code>preprocessSetter</code> to implement
+            the age over 18 constraint.</para>
           </callout>
 
           <callout arearefs="IntegrityException">
@@ -3036,30 +3046,28 @@ public class EmployeeIntegrityProcessors {
           <callout arearefs="FirstNameIntegrityProcessorImpl">
             <para>We declare an internal class as being a processor for the
             first name property and inherit from the
-            <code>EmptyPropertyIntegrityProcessor</code> empty adaptor
-            class.</para>
+            <code>EmptyPropertyProcessor</code> empty adaptor class.</para>
           </callout>
 
           <callout arearefs="postprocessSetterIntegrity">
-            <para>We override the <code>postprocessSetterIntegrity</code> to
-            implement the first name formatting.</para>
+            <para>We override the <code>interceptSetter</code> to implement
+            the first name formatting.</para>
           </callout>
 
           <callout arearefs="formattedName">
-            <para>We replace the first name in the employee by the new
-            computed value.</para>
+            <para>We change the first name actually set in the employee to the
+            new computed value.</para>
           </callout>
         </calloutlist>Each processor declared on a property is potentially a
-      pre and post processor. To make a property processor a pre-only
-      processor, just leave the <code>postprocessSetterIntegrity</code> method
-      implementation empty. Same applies to make property processor a
-      post-only processor by leaving the
-      <code>preprocessSetterIntegrity</code> method implementation empty. We
-      encourage you, as shown in the example above, to make all your
-      processors inherit from the <code>EmptyPropertyIntegrityProcessor</code>
-      adapter class which provide empty implementations for both methods and
-      then to override the method you want to provide an implementation
-      for.</para>
+      pre, post processor and interceptor. To make a property processor a
+      pre-only processor, just leave the <code>postprocessSetter</code> and
+      interceptSetter methods implementation empty. Same applies to make
+      property processor a post-only or intercept-only processor by leaving
+      the other methods implementation empty. We encourage you, as shown in
+      the example above, to make all your processors inherit from the
+      <code>EmptyPropertyProcessor</code> adapter class which provide empty
+      implementations for all required methods and then to override the method
+      you want to provide an implementation for.</para>
     </section>
   </section>
 
