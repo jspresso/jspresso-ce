@@ -79,7 +79,9 @@ public class BasicReportDescriptor extends BasicComponentDescriptor<IReport>
    */
   @Override
   public Class<? extends IReport> getComponentContract() {
-    return IReport.class;
+    // return null to have map accessors instead of bean accessors.
+    //return IReport.class;
+    return null;
   }
 
   /**
