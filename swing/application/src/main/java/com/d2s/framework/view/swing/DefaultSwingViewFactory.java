@@ -2345,7 +2345,7 @@ public class DefaultSwingViewFactory implements
         column.setPreferredWidth(Math.max(computePixelWidth(viewComponent,
             getEnumerationTemplateValue(
                 (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                .length()), minHeaderWidth));
+                .length() + 4), minHeaderWidth));
       } else {
         column.setPreferredWidth(Math.max(
             Math.min(computePixelWidth(viewComponent, getFormatLength(

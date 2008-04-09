@@ -41,7 +41,9 @@ Design2See checks
             <property name="max" value="130"/>
             <property name="tabWidth" value="2"/>
         </module>
-        <module name="MethodLength"/>
+        <module name="MethodLength">
+            <property name="max" value="175"/>
+        </module>
         <module name="ParameterNumber">
             <property name="severity" value="ignore"/>
         </module>

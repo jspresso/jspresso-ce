@@ -2343,7 +2343,7 @@ public class DefaultWingsViewFactory implements
         columnWidth = Math.max(computePixelWidth(viewComponent,
             getEnumerationTemplateValue(
                 (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                .length()), minHeaderWidth);
+                .length() + 4), minHeaderWidth);
       } else {
         columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
             getFormatLength(createFormatter(propertyDescriptor, locale),
