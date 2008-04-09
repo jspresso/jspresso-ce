@@ -26,6 +26,8 @@ import javax.swing.JWindow;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import org.jvnet.lafwidget.LafWidget;
 import org.jvnet.lafwidget.preview.DefaultPreviewPainter;
@@ -158,6 +160,9 @@ public final class SwingUtil {
         }
       }
     });
+
+    textField.getDocument().addDocumentListener(
+        new TfDocumentListener(textField));
   }
 
   /**
@@ -389,7 +394,11 @@ public final class SwingUtil {
      */
     public void run() {
       if (!isUsedAsEditor(textField)) {
-        textField.selectAll();
+        // textField.selectAll();
+        if (textField.getDocument() != null) {
+          textField.setCaretPosition(textField.getDocument().getLength());
+          textField.moveCaretPosition(0);
+        }
       }
     }
   }
@@ -414,8 +423,54 @@ public final class SwingUtil {
     public void run() {
       if (!isUsedAsEditor(textField)) {
         if (textField.getText().length() > 0) {
-          textField.getCaret().setDot(textField.getText().length());
+          // textField.setCaretPosition(textField.getText().length());
+          textField.setCaretPosition(0);
         }
+      }
+    }
+  }
+
+  private static class TfDocumentListener implements DocumentListener {
+
+    private JTextField textField;
+
+    /**
+     * Constructs a new <code>TfDocumentListener</code> instance.
+     * 
+     * @param textField
+     *            the text field to run on.
+     */
+    protected TfDocumentListener(JTextField textField) {
+      this.textField = textField;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void changedUpdate(@SuppressWarnings("unused")
+    DocumentEvent e) {
+      if (!textField.hasFocus()) {
+        SwingUtilities.invokeLater(new FocusLostTask(textField));
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void insertUpdate(@SuppressWarnings("unused")
+    DocumentEvent e) {
+      if (!textField.hasFocus()) {
+        SwingUtilities.invokeLater(new FocusLostTask(textField));
+      }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void removeUpdate(@SuppressWarnings("unused")
+    DocumentEvent e) {
+      if (!textField.hasFocus()) {
+        SwingUtilities.invokeLater(new FocusLostTask(textField));
       }
     }
   }
