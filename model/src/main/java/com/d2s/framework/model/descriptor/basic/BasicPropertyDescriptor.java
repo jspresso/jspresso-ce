@@ -28,16 +28,16 @@ import com.d2s.framework.util.i18n.ITranslationProvider;
 public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     implements IPropertyDescriptor {
 
-  private Class<?>                                delegateClass;
+  private Class<?>                       delegateClass;
 
-  private String                                  delegateClassName;
+  private String                         delegateClassName;
   private List<IPropertyProcessor<?, ?>> integrityProcessors;
-  private Boolean                                 mandatory;
-  private IPropertyDescriptor                     parentDescriptor;
-  private Collection<IGate>                       readabilityGates;
-  private Boolean                                 readOnly;
-  private String                                  unicityScope;
-  private Collection<IGate>                       writabilityGates;
+  private Boolean                        mandatory;
+  private IPropertyDescriptor            parentDescriptor;
+  private Collection<IGate>              readabilityGates;
+  private Boolean                        readOnly;
+  private String                         unicityScope;
+  private Collection<IGate>              writabilityGates;
 
   /**
    * {@inheritDoc}
@@ -273,8 +273,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
       return;
     }
     for (IPropertyProcessor<?, ?> processor : processors) {
-      ((IPropertyProcessor<Object, Object>) processor)
-          .postprocessSetter(component, oldValue, newValue);
+      ((IPropertyProcessor<Object, Object>) processor).postprocessSetter(
+          component, oldValue, newValue);
     }
   }
 
@@ -307,8 +307,8 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
       return;
     }
     for (IPropertyProcessor<?, ?> processor : processors) {
-      ((IPropertyProcessor<Object, Object>) processor)
-          .preprocessSetter(component, oldValue, newValue);
+      ((IPropertyProcessor<Object, Object>) processor).preprocessSetter(
+          component, oldValue, newValue);
     }
   }
 
@@ -401,6 +401,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
     BasicPropertyDescriptor queryPropertyDescriptor = clone();
     queryPropertyDescriptor.setMandatory(false);
     queryPropertyDescriptor.setReadOnly(false);
+    queryPropertyDescriptor.setIntegrityProcessors(null);
     return queryPropertyDescriptor;
   }
 

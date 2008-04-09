@@ -44,7 +44,7 @@ public class BasicQueryViewDescriptorFactory implements IQueryViewDescriptorFact
     queryViewDescriptor
         .setPropertyWidths(propertyWidths);
     queryViewDescriptor
-        .setColumnCount(9);
+        .setColumnCount(6);
     return queryViewDescriptor;
   }
 }
