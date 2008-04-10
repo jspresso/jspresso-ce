@@ -23,16 +23,15 @@ public class BasicDurationPropertyDescriptor extends
     BasicScalarPropertyDescriptor implements IDurationPropertyDescriptor {
 
   private Long maxMillis;
-
+  
   /**
    * {@inheritDoc}
    */
   @Override
-  public void checkValueIntegrity(final Object component,
-      final Object propertyValue) {
-    super.checkValueIntegrity(component, propertyValue);
-    if (propertyValue != null && getMaxMillis() != null
-        && ((Long) propertyValue).longValue() > getMaxMillis().longValue()) {
+  public void preprocessSetter(final Object component, Object newValue) {
+    super.preprocessSetter(component, newValue);
+    if (newValue != null && getMaxMillis() != null
+        && ((Long) newValue).longValue() > getMaxMillis().longValue()) {
       IntegrityException ie = new IntegrityException("[" + getName()
           + "] value is too high on [" + component + "].") {
 

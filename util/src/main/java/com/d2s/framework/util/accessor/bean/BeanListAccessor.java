@@ -51,7 +51,14 @@ public class BeanListAccessor extends BeanCollectionAccessor implements
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
           new Class[] {Integer.TYPE, getElementClass()});
     }
-    adderAtMethod.invoke(target, new Object[] {new Integer(index), value});
+    try {
+      adderAtMethod.invoke(target, new Object[] {new Integer(index), value});
+    } catch (InvocationTargetException ex) {
+      if (ex.getTargetException() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getTargetException();
+      }
+      throw ex;
+    }
   }
 
   /**

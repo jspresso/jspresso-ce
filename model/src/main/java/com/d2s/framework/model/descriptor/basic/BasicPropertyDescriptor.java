@@ -42,30 +42,6 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   /**
    * {@inheritDoc}
    */
-  public void checkValueIntegrity(final Object component,
-      final Object propertyValue) {
-    if (isMandatory() && propertyValue == null) {
-      IntegrityException ie = new IntegrityException("Mandatory property ["
-          + getName() + "] on component [" + component + "].") {
-
-        private static final long serialVersionUID = 5518554460713051123L;
-
-        @Override
-        public String getI18nMessage(ITranslationProvider translationProvider,
-            Locale locale) {
-          return translationProvider.getTranslation(
-              "integrity.property.mandatory", new Object[] {
-                  getI18nName(translationProvider, locale), component}, locale);
-        }
-
-      };
-      throw ie;
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   */
   @Override
   public BasicPropertyDescriptor clone() {
     return (BasicPropertyDescriptor) super.clone();
@@ -299,8 +275,25 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void preprocessSetter(Object component, 
+  public void preprocessSetter(final Object component, 
       Object newValue) {
+    if (isMandatory() && newValue == null) {
+      IntegrityException ie = new IntegrityException("Mandatory property ["
+          + getName() + "] on component [" + component + "].") {
+
+        private static final long serialVersionUID = 5518554460713051123L;
+
+        @Override
+        public String getI18nMessage(ITranslationProvider translationProvider,
+            Locale locale) {
+          return translationProvider.getTranslation(
+              "integrity.property.mandatory", new Object[] {
+                  getI18nName(translationProvider, locale), component}, locale);
+        }
+
+      };
+      throw ie;
+    }
     List<IPropertyProcessor<?, ?>> processors = getIntegrityProcessors();
     if (processors == null) {
       return;

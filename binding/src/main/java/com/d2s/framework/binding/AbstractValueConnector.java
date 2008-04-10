@@ -207,7 +207,8 @@ public abstract class AbstractValueConnector extends AbstractConnector
     valueChangeSupport.addInhibitedListener(evt.getSource());
     try {
       setConnectorValue(evt.getNewValue());
-      // a model connector should not be updated by the view connector when being assigned as model.
+      // a model connector should not be updated by the view connector when
+      // being assigned as model.
       if (evt.getSource() != getModelConnector()) {
         Object potentiallyChangedValue = getConnectorValue();
         if (!ObjectUtils.equals(potentiallyChangedValue, evt.getNewValue())) {
@@ -507,24 +508,28 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * Notifies its listeners about a change in the connector's value.
    */
   protected void fireConnectorValueChange() {
+    boolean propagatedCorrectly = true;
     try {
       valueChangeSupport.fireConnectorValueChange(createChangeEvent(
           oldConnectorValue, getConnecteeValue()));
     } catch (RuntimeException ex) {
-      if (exceptionHandler != null) {
-        exceptionHandler.handleException(ex, null);
-      } else {
-        throw ex;
-      }
+      propagatedCorrectly = false;
       try {
         setConnecteeValue(oldConnectorValue);
       } catch (Exception ex2) {
         // ignore. Nothing can be done about it.
       }
+      if (exceptionHandler != null) {
+        exceptionHandler.handleException(ex, null);
+      } else {
+        throw ex;
+      }
     }
-    // the change propagated correctly. Save the value propagated as the old
-    // value of the connector.
-    oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
+    if (propagatedCorrectly) {
+      // the change propagated correctly. Save the value propagated as the old
+      // value of the connector.
+      oldConnectorValue = computeOldConnectorValue(getConnecteeValue());
+    }
   }
 
   /**

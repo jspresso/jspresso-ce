@@ -54,7 +54,14 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
           AccessorInfo.ADDER_PREFIX + capitalizeFirst(getProperty()),
           new Class[] {getElementClass()});
     }
-    adderMethod.invoke(target, new Object[] {value});
+    try {
+      adderMethod.invoke(target, new Object[] {value});
+    } catch (InvocationTargetException ex) {
+      if (ex.getTargetException() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getTargetException();
+      }
+      throw ex;
+    }
   }
 
   /**
@@ -76,7 +83,14 @@ public class BeanCollectionAccessor extends BeanPropertyAccessor implements
           AccessorInfo.REMOVER_PREFIX + capitalizeFirst(getProperty()),
           new Class[] {getElementClass()});
     }
-    removerMethod.invoke(target, new Object[] {value});
+    try {
+      removerMethod.invoke(target, new Object[] {value});
+    } catch (InvocationTargetException ex) {
+      if (ex.getTargetException() instanceof RuntimeException) {
+        throw (RuntimeException) ex.getTargetException();
+      }
+      throw ex;
+    }
   }
 
   /**

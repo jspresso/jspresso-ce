@@ -595,14 +595,6 @@ public abstract class AbstractComponentInvocationHandler implements
     addToProperty(proxy, propertyDescriptor, -1, value);
   }
 
-  private void checkIntegrity(Object proxy) {
-    for (IPropertyDescriptor propertyDescriptor : componentDescriptor
-        .getPropertyDescriptors()) {
-      propertyDescriptor.checkValueIntegrity(proxy,
-          straightGetProperty(propertyDescriptor.getName()));
-    }
-  }
-
   private void firePropertyChange(String propertyName, Object oldValue,
       Object newValue) {
     if (changeSupport == null || (oldValue == null && newValue == null)) {
@@ -650,12 +642,6 @@ public abstract class AbstractComponentInvocationHandler implements
   @SuppressWarnings("unchecked")
   private boolean invokeLifecycleInterceptors(Object proxy,
       Method lifecycleMethod, Object[] args) {
-    if (ILifecycleCapable.ON_PERSIST_METHOD_NAME.equals(lifecycleMethod
-        .getName())
-        || ILifecycleCapable.ON_UPDATE_METHOD_NAME.equals(lifecycleMethod
-            .getName())) {
-      checkIntegrity(proxy);
-    }
     boolean interceptorResults = false;
     for (ILifecycleInterceptor<?> lifecycleInterceptor : componentDescriptor
         .getLifecycleInterceptors()) {

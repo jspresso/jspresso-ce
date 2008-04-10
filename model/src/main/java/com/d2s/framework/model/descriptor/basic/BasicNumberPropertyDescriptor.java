@@ -24,18 +24,17 @@ public abstract class BasicNumberPropertyDescriptor extends
 
   private Double maxValue;
   private Double minValue;
-
+  
   /**
    * {@inheritDoc}
    */
   @Override
-  public void checkValueIntegrity(final Object component,
-      final Object propertyValue) {
-    super.checkValueIntegrity(component, propertyValue);
-    if (propertyValue != null) {
-      if ((getMinValue() != null && ((Number) propertyValue).doubleValue() < getMinValue()
+  public void preprocessSetter(final Object component, final Object newValue) {
+    super.preprocessSetter(component, newValue);
+    if (newValue != null) {
+      if ((getMinValue() != null && ((Number) newValue).doubleValue() < getMinValue()
           .doubleValue())
-          || (getMaxValue() != null && ((Number) propertyValue).doubleValue() > getMaxValue()
+          || (getMaxValue() != null && ((Number) newValue).doubleValue() > getMaxValue()
               .doubleValue())) {
         IntegrityException ie = new IntegrityException("[" + getName()
             + "] value is out of bounds on [" + component + "].") {
@@ -54,7 +53,7 @@ public abstract class BasicNumberPropertyDescriptor extends
               boundsSpec.append(" &lt= ").append(getMaxValue());
             }
             String messageKey = null;
-            if ((getMinValue() != null && ((Number) propertyValue)
+            if ((getMinValue() != null && ((Number) newValue)
                 .doubleValue() < getMinValue().doubleValue())) {
               messageKey = "integrity.property.toosmall";
             } else {

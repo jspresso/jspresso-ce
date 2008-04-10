@@ -7,8 +7,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.reflect.InvocationTargetException;
 
-import com.d2s.framework.util.lang.ObjectUtils;
-
 import com.d2s.framework.binding.AbstractValueConnector;
 import com.d2s.framework.binding.ConnectorBindingException;
 import com.d2s.framework.binding.ICollectionConnector;
@@ -18,11 +16,11 @@ import com.d2s.framework.model.IModelProvider;
 import com.d2s.framework.model.ModelChangeEvent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptorAware;
-import com.d2s.framework.model.descriptor.IPropertyDescriptor;
 import com.d2s.framework.util.accessor.IAccessor;
 import com.d2s.framework.util.accessor.IAccessorFactory;
 import com.d2s.framework.util.bean.IPropertyChangeCapable;
 import com.d2s.framework.util.gate.IGate;
+import com.d2s.framework.util.lang.ObjectUtils;
 
 /**
  * This connector is a model property connector.
@@ -205,20 +203,6 @@ public abstract class ModelPropertyConnector extends AbstractValueConnector
       ((IModelGate) gate).setModelProvider(null);
     }
     super.removeWritabilityGate(gate);
-  }
-
-  /**
-   * Performs check.
-   * <p>
-   * {@inheritDoc}
-   */
-  @Override
-  public void setConnectorValue(Object aValue) {
-    if (getModelDescriptor() instanceof IPropertyDescriptor) {
-      ((IPropertyDescriptor) getModelDescriptor()).checkValueIntegrity(
-          getModelProvider().getModel(), aValue);
-    }
-    super.setConnectorValue(aValue);
   }
 
   /**

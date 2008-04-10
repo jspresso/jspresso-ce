@@ -39,14 +39,10 @@ public class BeanPropertyAccessor implements IAccessor {
     this.property = property;
     this.beanClass = beanClass;
 
-    try {
-      PropertyDescriptor propertyDescriptor = PropertyHelper
-          .getPropertyDescriptor(beanClass, property);
-      if (propertyDescriptor != null) {
-        this.writable = propertyDescriptor.getWriteMethod() != null;
-      }
-    } catch (RuntimeException e) {
-      throw e;
+    PropertyDescriptor propertyDescriptor = PropertyHelper
+        .getPropertyDescriptor(beanClass, property);
+    if (propertyDescriptor != null) {
+      this.writable = propertyDescriptor.getWriteMethod() != null;
     }
   }
 
@@ -77,7 +73,14 @@ public class BeanPropertyAccessor implements IAccessor {
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
     if (target != null) {
-      PropertyUtils.setProperty(target, property, value);
+      try {
+        PropertyUtils.setProperty(target, property, value);
+      } catch (InvocationTargetException ex) {
+        if (ex.getTargetException() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getTargetException();
+        }
+        throw ex;
+      }
     }
   }
 

@@ -22,18 +22,6 @@ import com.d2s.framework.util.gate.IGate;
 public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
 
   /**
-   * Checks the basic compliance of a property value against the property
-   * descriptor. Whenever the value might not be compliant, an
-   * <code>IntegrityException</code> should be thrown.
-   * 
-   * @param component
-   *            the component on which the proerty value is checked.
-   * @param propertyValue
-   *            the property value to check the compliance of.
-   */
-  void checkValueIntegrity(Object component, Object propertyValue);
-
-  /**
    * Clones this descriptor.
    * 
    * @return the descriptor's clone.

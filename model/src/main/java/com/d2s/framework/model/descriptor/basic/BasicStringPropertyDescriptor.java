@@ -31,9 +31,9 @@ public class BasicStringPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public void checkValueIntegrity(final Object component, Object propertyValue) {
-    super.checkValueIntegrity(component, propertyValue);
-    final String propertyValueAsString = getValueAsString(propertyValue);
+  public void preprocessSetter(final Object component, Object newValue) {
+    super.preprocessSetter(component, newValue);
+    final String propertyValueAsString = getValueAsString(newValue);
     if (propertyValueAsString != null && getMaxLength() != null
         && propertyValueAsString.length() > getMaxLength().intValue()) {
       IntegrityException ie = new IntegrityException("[" + getName()

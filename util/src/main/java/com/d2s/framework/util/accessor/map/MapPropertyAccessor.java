@@ -64,11 +64,15 @@ public class MapPropertyAccessor implements IAccessor {
   public void setValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
-    // if (target != null && target instanceof Map) {
-    // ((Map) target).put(property, value);
-    // }
     if (target != null) {
-      PropertyUtils.setProperty(target, property, value);
+      try {
+        PropertyUtils.setProperty(target, property, value);
+      } catch (InvocationTargetException ex) {
+        if (ex.getTargetException() instanceof RuntimeException) {
+          throw (RuntimeException) ex.getTargetException();
+        }
+        throw ex;
+      }
     }
   }
 
