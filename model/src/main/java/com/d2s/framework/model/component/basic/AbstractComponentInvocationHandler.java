@@ -799,12 +799,12 @@ public abstract class AbstractComponentInvocationHandler implements
       throw new ComponentException(ex);
     }
     Object actualNewProperty = propertyDescriptor.interceptSetter(proxy,
-        oldProperty, newProperty);
+        newProperty);
 
     if (ObjectUtils.equals(oldProperty, actualNewProperty)) {
       return;
     }
-    propertyDescriptor.preprocessSetter(proxy, oldProperty, actualNewProperty);
+    propertyDescriptor.preprocessSetter(proxy, actualNewProperty);
     if (propertyDescriptor instanceof IRelationshipEndPropertyDescriptor) {
       // It's a relation end
       IRelationshipEndPropertyDescriptor reversePropertyDescriptor = ((IRelationshipEndPropertyDescriptor) propertyDescriptor)

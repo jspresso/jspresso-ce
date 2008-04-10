@@ -145,25 +145,21 @@ public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
    * 
    * @param component
    *            the component targetted by the setter.
-   * @param oldValue
-   *            the property old value.
    * @param newValue
    *            the property new value.
    */
-  void preprocessSetter(Object component, Object oldValue, Object newValue);
+  void preprocessSetter(Object component, Object newValue);
 
   /**
    * Triggers all setter interceptors.
    * 
    * @param component
    *            the component targetted by the setter.
-   * @param oldValue
-   *            the property old value.
    * @param newValue
    *            the property new value.
    * @return the result of the interception.
    */
-  Object interceptSetter(Object component, Object oldValue, Object newValue);
+  Object interceptSetter(Object component, Object newValue);
 
   /**
    * Creates a new property descriptor to allow for querying.

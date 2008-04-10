@@ -51,13 +51,14 @@ public class DescriptorAwareMapPropertyAccessor extends MapPropertyAccessor
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {
     Object oldValue = getValue(target);
+    Object actualNewValue = value;
     if (getModelDescriptor() != null) {
-      getModelDescriptor().preprocessSetter(target, oldValue, value);
+      actualNewValue = getModelDescriptor().interceptSetter(target, value);
+      getModelDescriptor().preprocessSetter(target, actualNewValue);
     }
-    super.setValue(target, getModelDescriptor().interceptSetter(target,
-        oldValue, value));
+    super.setValue(target, actualNewValue);
     if (getModelDescriptor() != null) {
-      getModelDescriptor().postprocessSetter(target, oldValue, value);
+      getModelDescriptor().postprocessSetter(target, oldValue, actualNewValue);
     }
   }
 

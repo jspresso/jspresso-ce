@@ -224,12 +224,11 @@ public class BasicStringPropertyDescriptor extends
    * {@inheritDoc}
    */
   @Override
-  public Object interceptSetter(Object component, Object oldValue,
-      Object newValue) {
+  public Object interceptSetter(Object component, Object newValue) {
     String actualNewValue = (String) newValue;
     if (isUpperCase()) {
       actualNewValue = actualNewValue.toUpperCase();
     }
-    return super.interceptSetter(component, oldValue, actualNewValue);
+    return super.interceptSetter(component, actualNewValue);
   }
 }
