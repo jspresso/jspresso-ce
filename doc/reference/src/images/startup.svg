@@ -176,7 +176,7 @@
       </clipPath>
     </defs>
     <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
-      <rect width="766" x="0" height="569" y="0" stroke="none" />
+      <rect width="764" x="0" height="490" y="0" stroke="none" />
       <rect x="252" y="5" clip-path="url(#clipPath1)" width="169" height="44" stroke="none" />
       <rect x="252" y="5" clip-path="url(#clipPath1)" fill="none" width="169" height="44" stroke="black" />
       <text x="290" y="17" clip-path="url(#clipPath2)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">&lt;&lt;Java Interface&gt;&gt;</text>

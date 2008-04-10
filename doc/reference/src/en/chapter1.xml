@@ -2985,8 +2985,7 @@ public class EmployeePropertyProcessors {
     @Override
     public void preprocessSetter(Employee employee, <co
             id="preprocessSetterIntegrity" />
-        @SuppressWarnings("unused")
-        Date oldBirthDate, Date newBirthDate) {
+        Date newBirthDate) {
       if (newBirthDate == null
           || employee.computeAge(newBirthDate).intValue() &lt; 18) {
         throw new IntegrityException("Age is below 18", "age.below.18"); <co
@@ -3012,8 +3011,7 @@ public class EmployeePropertyProcessors {
     @Override
     public String interceptSetter(Employee employee, <co
             id="postprocessSetterIntegrity" />
-        @SuppressWarnings("unused")
-        String oldFirstName, String newFirstName) {
+        String newFirstName) {
       if (newFirstName != null &amp;&amp; newFirstName.length() &gt; 0) {
         StringBuffer formattedName = new StringBuffer();
         formattedName.append(newFirstName.substring(0, 1).toUpperCase());
@@ -6422,8 +6420,7 @@ public class OrganizationalUnitPropertyProcessors {
     @Override
     public void preprocessSetter(OrganizationalUnit organizationalUnit, <co
                 id="manager.preprocessSetter" />
-        @SuppressWarnings("unused")
-        Employee oldManager, Employee newManager) {
+        Employee newManager) {
       if (newManager == null || newManager.getCompany() == null
           || !newManager.getCompany().equals(organizationalUnit.getCompany())) {
         throw new IntegrityException(
@@ -6483,17 +6480,17 @@ public class OrganizationalUnitPropertyProcessors {
                     <entry>3- Let's reset the filter, and search for the
                     employee of the other company.<mediaobject>
                         <imageobject>
-                          <imagedata align="center" contentdepth="45%"
+                          <imagedata align="center" contentdepth="30%"
                                      fileref="../images/Companies.module.single.manager.lov.search.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
 
                     <entry>4- Select it as the new manager; the business rule
-                    is violated.<mediaobject>
+                    is violated and the end-user is notified.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies.module.single_tree.jpg"
+                                     fileref="../images/Companies.module.single.manager.lov.error.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>

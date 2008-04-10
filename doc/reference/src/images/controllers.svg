@@ -445,28 +445,28 @@
         <path d="M435 107 L451 107 L451 123 L435 123 L435 107 Z" />
       </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath147">
-        <path d="M216 102 L270 102 L270 127 L216 127 L216 102 Z" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath148">
-        <path d="M252 102 L270 102 L270 115 L252 115 L252 102 Z" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath149">
         <path d="M285 107 L358 107 L358 244 L285 244 L285 107 Z" />
       </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath150">
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath148">
         <path d="M344 107 L358 107 L358 125 L344 125 L344 107 Z" />
       </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath149">
+        <path d="M216 103 L270 103 L270 127 L216 127 L216 103 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath150">
+        <path d="M252 103 L270 103 L270 116 L252 116 L252 103 Z" />
+      </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath151">
-        <path d="M230 372 L243 372 L243 420 L230 420 L230 372 Z" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath152">
-        <path d="M231 372 L243 372 L243 390 L231 390 L231 372 Z" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath153">
         <path d="M343 372 L416 372 L416 425 L343 425 L343 372 Z" />
       </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath154">
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath152">
         <path d="M343 372 L360 372 L360 387 L343 387 L343 372 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath153">
+        <path d="M230 372 L243 372 L243 420 L230 420 L230 372 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath154">
+        <path d="M231 372 L243 372 L243 390 L231 390 L231 372 Z" />
       </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath155">
         <path d="M604 364 L617 364 L617 420 L604 420 L604 364 Z" />
@@ -487,16 +487,16 @@
         <path d="M362 885 L377 885 L377 902 L362 902 L362 885 Z" />
       </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath161">
-        <path d="M156 885 L168 885 L168 943 L156 943 L156 885 Z" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath162">
-        <path d="M156 885 L168 885 L168 902 L156 902 L156 885 Z" />
-      </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath163">
         <path d="M305 885 L358 885 L358 1076 L305 1076 L305 885 Z" />
       </clipPath>
-      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath164">
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath162">
         <path d="M308 885 L322 885 L322 903 L308 903 L308 885 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath163">
+        <path d="M156 885 L169 885 L169 943 L156 943 L156 885 Z" />
+      </clipPath>
+      <clipPath clipPathUnits="userSpaceOnUse" id="clipPath164">
+        <path d="M156 885 L169 885 L169 902 L156 902 L156 885 Z" />
       </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath165">
         <path d="M603 704 L616 704 L616 749 L603 749 L603 704 Z" />
@@ -506,7 +506,7 @@
       </clipPath>
     </defs>
     <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
-      <rect width="919" x="0" height="1184" y="-2" stroke="none" />
+      <rect width="811" x="0" height="1184" y="-2" stroke="none" />
       <rect x="268" y="5" clip-path="url(#clipPath1)" width="230" height="44" stroke="none" />
       <rect x="268" y="5" clip-path="url(#clipPath1)" fill="none" width="230" height="44" stroke="black" />
       <text x="337" y="17" clip-path="url(#clipPath2)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">&lt;&lt;Java Interface&gt;&gt;</text>
@@ -715,28 +715,22 @@
       <text x="480" y="845" clip-path="url(#clipPath142)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+setEntityFactory(IEntityFactory): void</text>
       <text x="480" y="859" clip-path="url(#clipPath143)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+setHibernateTemplate(HibernateTemplate): void</text>
       <text x="480" y="873" clip-path="url(#clipPath144)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">+setTransactionTemplate(TransactionTemplate): void</text>
-      <line clip-path="url(#clipPath145)" fill="none" x1="522" x2="479" y1="192" y2="150" stroke="black" />
-      <line clip-path="url(#clipPath145)" fill="none" x1="479" x2="436" y1="150" y2="108" stroke="black" />
+      <line clip-path="url(#clipPath145)" fill="none" x1="522" x2="436" y1="192" y2="108" stroke="black" />
       <polygon clip-path="url(#clipPath146)" points=" 436 108 449 114 443 121" stroke="none" />
       <polygon fill="none" clip-path="url(#clipPath146)" points=" 436 108 449 114 443 121" stroke="black" />
-      <line clip-path="url(#clipPath147)" fill="none" x1="217" x2="242" y1="125" y2="114" stroke="black" />
-      <line clip-path="url(#clipPath147)" fill="none" x1="242" x2="268" y1="114" y2="103" stroke="black" />
-      <polygon clip-path="url(#clipPath148)" points=" 268 103 257 113 253 104" stroke="none" />
-      <polygon fill="none" clip-path="url(#clipPath148)" points=" 268 103 257 113 253 104" stroke="black" />
-      <line clip-path="url(#clipPath149)" fill="none" x1="286" x2="321" y1="242" y2="175" stroke-dasharray="3,3" stroke="black" />
-      <line clip-path="url(#clipPath149)" fill="none" x1="321" x2="356" y1="175" y2="108" stroke-dasharray="3,3" stroke="black" />
-      <polygon clip-path="url(#clipPath150)" points=" 356 108 354 123 345 118" stroke="none" />
-      <polygon fill="none" clip-path="url(#clipPath150)" points=" 356 108 354 123 345 118" stroke="black" />
-      <line clip-path="url(#clipPath151)" fill="none" x1="231" x2="235" y1="418" y2="395" stroke="black" />
-      <line clip-path="url(#clipPath151)" fill="none" x1="235" x2="239" y1="395" y2="373" stroke="black" />
-      <polygon clip-path="url(#clipPath152)" points=" 239 373 241 388 232 386" stroke="none" />
-      <polygon fill="none" clip-path="url(#clipPath152)" points=" 239 373 241 388 232 386" stroke="black" />
-      <line clip-path="url(#clipPath153)" fill="none" x1="414" x2="379" y1="423" y2="398" stroke="black" />
-      <line clip-path="url(#clipPath153)" fill="none" x1="379" x2="344" y1="398" y2="373" stroke="black" />
-      <polygon clip-path="url(#clipPath154)" points=" 344 373 358 377 353 385" stroke="none" />
-      <polygon fill="none" clip-path="url(#clipPath154)" points=" 344 373 358 377 353 385" stroke="black" />
-      <line clip-path="url(#clipPath155)" fill="none" x1="610" x2="610" y1="418" y2="391" stroke-dasharray="2,2" stroke="black" />
-      <line clip-path="url(#clipPath155)" fill="none" x1="610" x2="610" y1="391" y2="365" stroke-dasharray="2,2" stroke="black" />
+      <line clip-path="url(#clipPath147)" fill="none" x1="286" x2="356" y1="242" y2="108" stroke-dasharray="3,3" stroke="black" />
+      <polygon clip-path="url(#clipPath148)" points=" 356 108 354 123 345 118" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath148)" points=" 356 108 354 123 345 118" stroke="black" />
+      <line clip-path="url(#clipPath149)" fill="none" x1="217" x2="268" y1="125" y2="104" stroke="black" />
+      <polygon clip-path="url(#clipPath150)" points=" 268 104 257 114 253 105" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath150)" points=" 268 104 257 114 253 105" stroke="black" />
+      <line clip-path="url(#clipPath151)" fill="none" x1="414" x2="344" y1="423" y2="373" stroke="black" />
+      <polygon clip-path="url(#clipPath152)" points=" 344 373 358 377 353 385" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath152)" points=" 344 373 358 377 353 385" stroke="black" />
+      <line clip-path="url(#clipPath153)" fill="none" x1="231" x2="239" y1="418" y2="373" stroke="black" />
+      <polygon clip-path="url(#clipPath154)" points=" 239 373 241 388 232 386" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath154)" points=" 239 373 241 388 232 386" stroke="black" />
+      <line clip-path="url(#clipPath155)" fill="none" x1="610" x2="610" y1="418" y2="365" stroke-dasharray="2,2" stroke="black" />
       <polygon clip-path="url(#clipPath156)" points=" 610 365 615 379 605 379" stroke="none" />
       <polygon fill="none" clip-path="url(#clipPath156)" points=" 610 365 615 379 605 379" stroke="black" />
       <line clip-path="url(#clipPath157)" fill="none" x1="82" x2="28" y1="418" y2="300" stroke-dasharray="2,2" stroke="black" />
@@ -747,17 +741,15 @@
       <line clip-path="url(#clipPath159)" fill="none" x1="441" x2="363" y1="990" y2="886" stroke="black" />
       <polygon clip-path="url(#clipPath160)" points=" 363 886 375 894 367 900" stroke="none" />
       <polygon fill="none" clip-path="url(#clipPath160)" points=" 363 886 375 894 367 900" stroke="black" />
-      <line clip-path="url(#clipPath161)" fill="none" x1="157" x2="160" y1="941" y2="913" stroke="black" />
-      <line clip-path="url(#clipPath161)" fill="none" x1="160" x2="163" y1="913" y2="886" stroke="black" />
-      <polygon clip-path="url(#clipPath162)" points=" 163 886 166 900 157 899" stroke="none" />
-      <polygon fill="none" clip-path="url(#clipPath162)" points=" 163 886 166 900 157 899" stroke="black" />
-      <line clip-path="url(#clipPath163)" fill="none" x1="306" x2="356" y1="1074" y2="1044" stroke="black" />
-      <line clip-path="url(#clipPath163)" fill="none" x1="356" x2="356" y1="1044" y2="976" stroke="black" />
-      <line clip-path="url(#clipPath163)" fill="none" x1="356" x2="309" y1="976" y2="886" stroke="black" />
-      <polygon clip-path="url(#clipPath164)" points=" 309 886 320 896 311 901" stroke="none" />
-      <polygon fill="none" clip-path="url(#clipPath164)" points=" 309 886 320 896 311 901" stroke="black" />
-      <line clip-path="url(#clipPath165)" fill="none" x1="609" x2="609" y1="747" y2="726" stroke="black" />
-      <line clip-path="url(#clipPath165)" fill="none" x1="609" x2="609" y1="726" y2="705" stroke="black" />
+      <line clip-path="url(#clipPath161)" fill="none" x1="306" x2="356" y1="1074" y2="1044" stroke="black" />
+      <line clip-path="url(#clipPath161)" fill="none" x1="356" x2="356" y1="1044" y2="976" stroke="black" />
+      <line clip-path="url(#clipPath161)" fill="none" x1="356" x2="309" y1="976" y2="886" stroke="black" />
+      <polygon clip-path="url(#clipPath162)" points=" 309 886 320 896 311 901" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath162)" points=" 309 886 320 896 311 901" stroke="black" />
+      <line clip-path="url(#clipPath163)" fill="none" x1="158" x2="163" y1="941" y2="886" stroke="black" />
+      <polygon clip-path="url(#clipPath164)" points=" 163 886 167 900 157 899" stroke="none" />
+      <polygon fill="none" clip-path="url(#clipPath164)" points=" 163 886 167 900 157 899" stroke="black" />
+      <line clip-path="url(#clipPath165)" fill="none" x1="610" x2="609" y1="747" y2="705" stroke="black" />
       <polygon clip-path="url(#clipPath166)" points=" 609 705 614 719 604 719" stroke="none" />
       <polygon fill="none" clip-path="url(#clipPath166)" points=" 609 705 614 719 604 719" stroke="black" />
     </g>

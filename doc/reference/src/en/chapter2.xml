@@ -15,8 +15,8 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="60%"
-                     fileref="../images/components-cd.png" scalefit="1"
-                     width="100%" />
+                     fileref="../images/component-descriptors.png"
+                     scalefit="1" width="100%" />
         </imageobject>
       </mediaobject>
     </figure>
@@ -33,8 +33,8 @@
       <mediaobject>
         <imageobject>
           <imagedata align="center" contentdepth="60%"
-                     fileref="../images/scalar-cd.png" scalefit="1"
-                     width="100%" />
+                     fileref="../images/scalar-property-descriptors.png"
+                     scalefit="1" width="100%" />
         </imageobject>
       </mediaobject>
     </figure>
