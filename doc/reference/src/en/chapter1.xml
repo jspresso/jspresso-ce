@@ -3305,7 +3305,7 @@ public class EmployeePropertyProcessors {
                            width="100%" />
               </imageobject>
             </mediaobject>
-          </figure>You will notice several things on the screen shot above
+          </figure>You will notice several things on the screenshot above
         :</para>
 
         <itemizedlist>
@@ -3491,7 +3491,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         the 2 columns. Then we keep the order name, address, city, phone and
         email.</para>
 
-        <para>The following modification to the view descriptor achieves that
+        <para>The following change to the view descriptor achieves that
         :</para>
 
         <para><programlisting>&lt;bean
@@ -3585,9 +3585,9 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <code>Company</code> entity descriptor the
         <code>renderedProperties</code> attribute that allows to set an
         ordered list of properties to be displayed by default when an company
-        instance is displayed in any view. This modification would have
-        impacted all the application company views (including tables for
-        instance) except the ones declare their own property list.</para>
+        instance is displayed in any view. This change would have impacted all
+        the application company views (including tables for instance) except
+        the ones declare their own property list.</para>
 
         <para>To summarize, a component view will display (higher in the list
         has higher priority) :</para>
@@ -4123,7 +4123,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
-          </figure>There are several things to notice on the screen shot above
+          </figure>There are several things to notice on the screenshot above
         and that you can experiment in the view tester :</para>
 
         <itemizedlist>
@@ -5448,7 +5448,7 @@ hrsample-app { <co id="hrsample-app" />
                 </row>
 
                 <row>
-                  <entry>3- We are queriing the database applying a
+                  <entry>3- We are querying the database applying a
                   filter.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="60%"
@@ -5631,9 +5631,9 @@ hrsample-app { <co id="hrsample-app" />
             </callout>
 
             <callout arearefs="cityActionMap">
-              <para>We assign a new action map to this view. Instead of we we
-              did previously when referencing a built-in action map, we will
-              create a brand new one.</para>
+              <para>We assign a new action map to this view. Instead of what
+              we did previously when referencing a built-in action map, we
+              will create a brand new one.</para>
             </callout>
 
             <callout arearefs="ActionList">
@@ -5717,16 +5717,10 @@ hrsample-app { <co id="hrsample-app" />
         selected).</para>
       </section>
     </section>
-  </section>
-
-  <section>
-    <title>Improving the development lifecycle</title>
-
-    <para>We now have a fully working application but there are a few hints
-    that can be easily applied to speed up the development cycles.</para>
 
     <section>
-      <title>Setting-up startup test data at startup</title>
+      <title>Improving the development lifecycle : setting-up startup test
+      data on startup</title>
 
       <para>One thing that you might have noticed is that the usage of an
       in-memory development database leads to a waste of time creating sample
@@ -5751,7 +5745,7 @@ hrsample-app { <co id="hrsample-app" />
       duplication of code. <trademark>D2S</trademark> offers an abstract base
       class for this task :
       <code>com.d2s.framework.application.startup.development.AbstractTestDataPersister</code>
-      on which you simply have to averride the <code>persistTestData()</code>
+      on which you simply have to override the <code>persistTestData()</code>
       method.</para>
 
       <para>Afterwards, a simple change in the startup command line will
@@ -5811,80 +5805,74 @@ public class HrTestDataPersister extends AbstractTestDataPersister {
     City suresnes = createCity("Suresnes", "92150");
     City evry = createCity("Evry", "91000");
 
+    // Company
+    Company design2see = createCompany("Design2See",
+        "123 avenue de la Liberté", paris, "contact@design2see.com",
+        "+33 123 456 000");
+
     // Employees
     Employee johnDoe = createEmployee("M", "Doe", "John",
         "12 allée du Chien qui Fume", evry, "john.doe@design2see.com",
-        "+33 1 152 368 984", "02/05/1972", "03/08/2005", "1523698754");
+        "+33 1 152 368 984", "02/05/1972", "03/08/2005", "1523698754",
+        design2see);
 
     Employee mikeDen = createEmployee("M", "Den", "Mike",
         "26 rue de la Pie qui Chante", suresnes, "mike.den@design2see.com",
-        "+33 1 968 846 398", "05/07/1970", "01/03/2004", "1859637461");
+        "+33 1 968 846 398", "05/07/1970", "01/03/2004", "1859637461",
+        design2see);
 
     Employee evaGreen = createEmployee("F", "Green", "Eva",
         "68 rue de l'Eléphant Vert", suresnes, "eva.green@design2see.com",
-        "+33 1 958 536 972", "10/08/1977", "06/04/2002", "2856752387");
+        "+33 1 958 536 972", "10/08/1977", "06/04/2002", "2856752387",
+        design2see);
 
     Employee gloriaSan = createEmployee("F", "San", "Gloria",
         "13 avenue du Poisson Enragé", evry, "gloria.san@design2see.com",
-        "+33 1 956 367 412", "09/01/1969", "03/01/2006", "2597853274");
+        "+33 1 956 367 412", "09/01/1969", "03/01/2006", "2597853274",
+        design2see);
 
     Employee mariaTrulli = createEmployee("F", "Trulli", "Maria",
         "20 avenue du Crocodile Marteau", evry, "maria.trulli@design2see.com",
-        "+33 1 868 745 369", "01/02/1976", "03/10/2006", "2325985423");
+        "+33 1 868 745 369", "01/02/1976", "03/10/2006", "2325985423",
+        design2see);
 
     Employee isabelleMartin = createEmployee("F", "Martin", "Isabelle",
         "20 allée de la Gazelle Sauteuse", evry,
         "isabelle.martin@design2see.com", "+33 1 698 256 365", "04/07/1970",
-        "12/06/2001", "2652398751");
+        "12/06/2001", "2652398751", design2see);
 
-    // Company departments teams and employees
-    Company design2see = createCompany("Design2See",
-        "123 avenue de la Liberté", paris, "contact@design2see.com",
-        "+33 123 456 000");
-    design2see.addToEmployees(johnDoe);
-    design2see.addToEmployees(mikeDen);
-    design2see.addToEmployees(evaGreen);
-    design2see.addToEmployees(gloriaSan);
-    design2see.addToEmployees(mariaTrulli);
-    design2see.addToEmployees(isabelleMartin);
-
+    // Departments and teams.
     Department hrDepartment = createDepartment("Human Resources", "HR-000",
         "124 avenue de la Liberté", paris, "hr@design2see.com",
-        "+33 123 456 100", johnDoe);
-    design2see.addToDepartments(hrDepartment);
+        "+33 123 456 100", design2see, johnDoe);
 
     Team hr001Team = createTeam("HR 001 Team", "HR-001",
         "124 avenue de la Liberté", paris, "hr001@design2see.com",
-        "+33 123 456 101", mikeDen);
+        "+33 123 456 101", hrDepartment, mikeDen);
     hr001Team.addToTeamMembers(johnDoe);
     hr001Team.addToTeamMembers(mikeDen);
-    hrDepartment.addToTeams(hr001Team);
 
     Team hr002Team = createTeam("HR 002 Team", "HR-002",
         "124 avenue de la Liberté", paris, "hr002@design2see.com",
-        "+33 123 456 102", evaGreen);
+        "+33 123 456 102", hrDepartment, evaGreen);
     hr002Team.addToTeamMembers(johnDoe);
     hr002Team.addToTeamMembers(evaGreen);
-    hrDepartment.addToTeams(hr002Team);
 
     Department itDepartment = createDepartment("Information Technology",
         "IT-000", "125 avenue de la Liberté", paris, "it@design2see.com",
-        "+33 123 456 200", gloriaSan);
-    design2see.addToDepartments(itDepartment);
+        "+33 123 456 200", design2see, gloriaSan);
 
     Team it001Team = createTeam("IT 001 Team", "IT-001",
         "125 avenue de la Liberté", paris, "it001@design2see.com",
-        "+33 123 456 201", mariaTrulli);
+        "+33 123 456 201", itDepartment, mariaTrulli);
     it001Team.addToTeamMembers(gloriaSan);
     it001Team.addToTeamMembers(mariaTrulli);
-    itDepartment.addToTeams(it001Team);
 
     Team it002Team = createTeam("IT 002 Team", "IT-002",
         "125 avenue de la Liberté", paris, "it002@design2see.com",
-        "+33 123 456 202", isabelleMartin);
+        "+33 123 456 202", itDepartment, isabelleMartin);
     it002Team.addToTeamMembers(gloriaSan);
     it002Team.addToTeamMembers(isabelleMartin);
-    itDepartment.addToTeams(it002Team);
 
     saveOrUpdate(design2see);
   }
@@ -5909,7 +5897,7 @@ public class HrTestDataPersister extends AbstractTestDataPersister {
   }
 
   private Department createDepartment(String name, String ouId, String address,
-      City city, String email, String phone, Employee manager) {
+      City city, String email, String phone, Company company, Employee manager) {
     Department department = createEntityInstance(Department.class);
     department.setName(name);
     department.setOuId(ouId);
@@ -5917,12 +5905,13 @@ public class HrTestDataPersister extends AbstractTestDataPersister {
     department.getContact().setCity(city);
     department.getContact().setEmail(email);
     department.getContact().setPhone(phone);
+    department.setCompany(company);
     department.setManager(manager);
     return department;
   }
 
   private Team createTeam(String name, String ouId, String address, City city,
-      String email, String phone, Employee manager) {
+      String email, String phone, Department department, Employee manager) {
     Team team = createEntityInstance(Team.class);
     team.setName(name);
     team.setOuId(ouId);
@@ -5930,13 +5919,14 @@ public class HrTestDataPersister extends AbstractTestDataPersister {
     team.getContact().setCity(city);
     team.getContact().setEmail(email);
     team.getContact().setPhone(phone);
+    team.setDepartment(department);
     team.setManager(manager);
     return team;
   }
 
   private Employee createEmployee(String gender, String name, String firstName,
       String address, City city, String email, String phone, String birthDate,
-      String hireDate, String ssn) {
+      String hireDate, String ssn, Company company) {
     SimpleDateFormat df = new SimpleDateFormat("DD/MM/yyyy");
 
     Employee employee = createEntityInstance(Employee.class);
@@ -5958,6 +5948,7 @@ public class HrTestDataPersister extends AbstractTestDataPersister {
       ex.printStackTrace(System.err);
     }
     employee.setSsn(ssn);
+    employee.setCompany(company);
     return employee;
   }
 }</programlisting></para>
@@ -6015,23 +6006,509 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
       com.d2s.hrsample.startup.development.SwingDevHrSampleStartup -splash
       classpath:com/d2s/hrsample/images/logo-small.png</code></para>
     </section>
-  </section>
-
-  <section>
-    <title>Developing the remaining modules</title>
-
-    <para>In this section, we will create and register the remaining modules
-    to work on the employees and the organization design. We will reuse the
-    concepts that we've discussed when dealing with the master data management
-    module and adapt them to the corresponding domain windows.</para>
 
     <section>
-      <title>The employees management workspace</title>
+      <title>Developing the remaining workspaces</title>
 
-      <para>As for the cities module, the employees management module will
-      offer CRUD operations. For the sake of simplicity, this module will not
-      be linked to a particular company and thus allows employees to be
-      managed for any existing company in the database.</para>
+      <para>In this section, we will create and register the remaining
+      workspaces and modules to work on the employees and the organization
+      design. We will reuse the concepts that we've discussed when dealing
+      with the master data management module and adapt them to the
+      corresponding domain windows.</para>
+
+      <section>
+        <title>The employees management workspace</title>
+
+        <para>As for the cities module, the employees management module will
+        offer CRUD operations. For the sake of simplicity, this module will
+        not be linked to a particular company and thus allows employees to be
+        managed for any existing company in the database. Since it would be
+        too cumbersome to include all the XML declarations in this tutorial
+        and since there is hardly anything new, we will only take some
+        screenshots of the resulting GUI; but feel free to have a look to the
+        spring definition files and to modify them to get a deeper
+        understanding of how the workspace is built (don't be afraid, it's
+        only a matter of ~50 XML lines).</para>
+
+        <para>So let's navigate through the employees workspace :</para>
+
+        <table>
+          <title>Some screenshots of the employees management
+          workspace</title>
+
+          <tgroup cols="2">
+            <tbody>
+              <row>
+                <entry>1- We have just launched the module.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="40%"
+                                 fileref="../images/Employees.module.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+
+                <entry>2- We are querying employees filtering their address
+                city and birth date.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="40%"
+                                 fileref="../images/Employees.module.filter.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
+
+              <row>
+                <entry>3- We are editing a single employee in a
+                form.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="40%"
+                                 fileref="../images/Employees.module.single.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+
+                <entry>4- This form gives access to the events of the edited
+                employee.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="40%"
+                                 fileref="../images/Employees.module.single.events.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
+
+              <row>
+                <entry>5- We can copy an event entity.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="40%"
+                                 fileref="../images/Employees.module.single.event.copy.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+
+                <entry>6- And paste it to another employee.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="40%"
+                                 fileref="../images/Employees.module.single.event.paste.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
+
+              <row>
+                <entry>7- Or maybe read an event text from a file.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="40%"
+                                 fileref="../images/Employees.module.single.event.read.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+
+                <entry>8- And even save the event text to a file.<mediaobject>
+                    <imageobject>
+                      <imagedata align="center" contentdepth="40%"
+                                 fileref="../images/Employees.module.single.event.save.jpg"
+                                 scalefit="1" width="100%" />
+                    </imageobject>
+                  </mediaobject></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </section>
+
+      <section>
+        <title>The organization management workspace</title>
+
+        <para>As for the employee workspace, getting a fully functional
+        workspace to be able to edit a company organization is only a matter
+        of assembling things that we've already gone through. We will reuse
+        the company view we've created in the previous sections as the company
+        bean module view. This workspace will be made of several modules. One
+        module will allow to edit the company structure in terms of
+        organizational units (departments and teams), and a second module will
+        allow for managing the teams members.</para>
+
+        <para>So let's navigate through the organization workspace.</para>
+
+        <section>
+          <title>Managing companies, departments and teams</title>
+
+          <para>You will find below the screenshots of companies management
+          module; they are somehow familiar now.</para>
+
+          <table>
+            <title>Some screenshots of the organization management
+            workspace</title>
+
+            <tgroup cols="2">
+              <tbody>
+                <row>
+                  <entry>1- We have just launched the module.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="40%"
+                                   fileref="../images/Companies.module.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+
+                  <entry>2- We are querying companies without any
+                  filter.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="40%"
+                                   fileref="../images/Companies.module.filter.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
+
+                <row>
+                  <entry>3- We are editing a single company in a
+                  form.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="40%"
+                                   fileref="../images/Companies.module.single.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+
+                  <entry>4- The second tab in the company view gives a tree
+                  overview of the current company structure.<mediaobject>
+                      <imageobject>
+                        <imagedata align="center" contentdepth="40%"
+                                   fileref="../images/Companies.module.single_tree.jpg"
+                                   scalefit="1" width="100%" />
+                      </imageobject>
+                    </mediaobject></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>Within this module, there is a business rule that needs some
+          investigation. Remember the <code>OrganizationalUnit</code> abstract
+          entity (<code>Department</code> and <code>Team</code> entities
+          inherit from it). We have defined a <code>manager</code>
+          relationship to the <code>Employee</code> entity that can be
+          visualized in the screenshots above (look at the manager table
+          columns). By default, nothing prevents the end user from selecting a
+          manager that belongs to another company than the one the
+          organizational unit belongs to. So we need to enforce the fact that
+          a manager must belong to the same company than the team or
+          department (s)he manages.</para>
+
+          <para>There are several steps to enforce this business rule and ease
+          the end-user job :</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>A department is directly linked to a company but a team is
+              not; a team belongs to a company through the department it's
+              part of. This is quite a good design regarding the model
+              normalization but we might want to enrich the API of the
+              <code>OrganisationalUnit</code> entity to be able to get its
+              company wether it's a <code>Team</code> or a
+              <code>Department</code>. It is the perfect situation where we
+              need to implement a computed <code>company</code> property held
+              by the <code>OrganisationalUnit</code> entity.</para>
+            </listitem>
+
+            <listitem>
+              <para>We need to enforce the company check business rule when
+              setting the manager property on an
+              <code>OrganisationalUnit</code> entity. This will ensure that
+              any update of the manager property (from the GUI or from any
+              other headless interface) will not corrupt the integrity of the
+              <code>OrganisationalUnit</code> entity. This is easily
+              implemented using a property pre-processor.</para>
+            </listitem>
+
+            <listitem>
+              <para>We must ease the end-user job in the GUI by
+              pre-initializing the employee filter with the organizational
+              unit company in the manager LOV and auto-completion
+              feature.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Let's have a look to the changes made to the
+          application.</para>
+
+          <para>In the <filename>hrsample-model.xml</filename> spring
+          definition file :<programlisting language="xml">...
+&lt;bean
+  id="OrganizationalUnit-manager"
+  class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+  ...
+  &lt;property name="integrityProcessors"&gt; <co id="manager.processor" />
+    &lt;list&gt;
+      &lt;bean
+        class="com.d2s.hrsample.model.processor.OrganizationalUnitPropertyProcessors$ManagerProcessor" /&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+  &lt;property name="initializationMapping"&gt; <co id="initializationMapping" />
+    &lt;map&gt;
+      &lt;entry
+        key="company"
+        value="company" /&gt;
+    &lt;/map&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...
+&lt;bean
+  id="OrganizationalUnit"
+  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  ...
+  &lt;property name="propertyDescriptors"&gt;
+    &lt;list&gt;
+      ...
+      &lt;bean
+        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
+                id="company.computed" />
+        &lt;property
+          name="name"
+          value="company" /&gt;
+        &lt;property
+          name="referencedDescriptor"
+          ref="Company" /&gt;
+        &lt;property
+          name="delegateClassName"
+          value="com.d2s.hrsample.model.extension.OrganizationalUnitExtension" /&gt;
+      &lt;/bean&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+...</programlisting><calloutlist>
+              <callout arearefs="manager.processor">
+                <para>We register an integrity processor that will be
+                triggered when a change occurs on the organizational unit
+                manager.</para>
+              </callout>
+
+              <callout arearefs="initializationMapping">
+                <para>We tell the framework that filter based on the manager
+                reference property should pre-initialize its value with the
+                following mapping <code>OrganistionalUnit.company</code> -&gt;
+                <code>Employee.company</code>. This is a feature that we have
+                not seen yet and that is very useful to pre-enforce business
+                rules on the GUI side. LOV and auto-completion will both
+                benefit from this customization.</para>
+              </callout>
+
+              <callout arearefs="company.computed">
+                <para>We declare a new <code>company</code> computed property
+                on the organizational unit entity. The delegate will handle
+                the company computing in case of a department or a
+                team.</para>
+              </callout>
+            </calloutlist></para>
+
+          <para>Since we added a property to the
+          <code>OrganizationalUnit</code> entity, we need to re-generate it so
+          that the accessors are available in the entity interface.</para>
+
+          <para>As before when dealing with property processors and computed
+          properties, we need to implement the java delegates.</para>
+
+          <para>We create the
+          <code>com.d2s.hrsample.model.extension.OrganizationalUnitExtension</code>
+          class to implement the computed properties on the
+          <code>OrganistionalUnit</code> entity; this is the exact same design
+          as when we dealt with computing the age of the <code>Employee</code>
+          entity :</para>
+
+          <para><programlisting language="java">/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package com.d2s.hrsample.model.extension;
+
+import com.d2s.framework.model.component.AbstractComponentExtension;
+import com.d2s.hrsample.model.Company;
+import com.d2s.hrsample.model.Department;
+import com.d2s.hrsample.model.OrganizationalUnit;
+import com.d2s.hrsample.model.Team;
+
+/**
+ * Helper class computing extended properties for OrganizationalUnit entity.
+ * &lt;p&gt;
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class OrganizationalUnitExtension extends
+    AbstractComponentExtension&lt;OrganizationalUnit&gt; {
+
+  /**
+   * Constructs a new &lt;code&gt;OrganizationalUnitExtension&lt;/code&gt; instance.
+   * 
+   * @param organizationalUnit
+   *            The extended OrganizationalUnit instance.
+   */
+  public OrganizationalUnitExtension(OrganizationalUnit organizationalUnit) {
+    super(organizationalUnit);
+  }
+
+  /**
+   * Computes the company this organizational unit is attached to.
+   * 
+   * @return the company this organizational unit is attached to. If the
+   *         organizational unit is a department, returns the departments
+   *         company; if this organizational unit is a team, then we must
+   *         navigate to the enclosing department to get its team.
+   */
+  public Company getCompany() { <co id="getCompany.computed" />
+    if (getComponent() instanceof Team
+        &amp;&amp; ((Team) getComponent()).getDepartment() != null) {
+      return ((Team) getComponent()).getDepartment().getCompany();
+    } else if (getComponent() instanceof Department) {
+      return ((Department) getComponent()).getCompany();
+    }
+    return null;
+  }
+}</programlisting><calloutlist>
+              <callout arearefs="getCompany.computed">
+                <para>A pretty simple implementation that deals with concrete
+                sublasses of OrganizationalUnit.</para>
+              </callout>
+            </calloutlist>Finally, we create the
+          <code>com.d2s.hrsample.model.processor.OrganizationalUnitPropertyProcessors</code>
+          that holds all property processors of the
+          <code>OrganistionalUnit</code> entity; this is the exact same design
+          as when we dealt with checking the birth date of the
+          <code>Employee</code> entity :</para>
+
+          <para><programlisting>/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package com.d2s.hrsample.model.processor;
+
+import com.d2s.framework.util.bean.integrity.EmptyPropertyProcessor;
+import com.d2s.framework.util.bean.integrity.IntegrityException;
+import com.d2s.hrsample.model.Employee;
+import com.d2s.hrsample.model.OrganizationalUnit;
+
+/**
+ * OrganizationalUnit property processors.
+ * &lt;p&gt;
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class OrganizationalUnitPropertyProcessors {
+
+  /**
+   * Manager property processor.
+   * &lt;p&gt;
+   * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+   * &lt;p&gt;
+   * 
+   * @version $LastChangedRevision$
+   * @author Vincent Vandenschrick
+   */
+  public static class ManagerProcessor extends
+      EmptyPropertyProcessor&lt;OrganizationalUnit, Employee&gt; { <co
+                id="ManagerProcessor" />
+
+    /**
+     * Checks that the manager belongs to the same company as the managed
+     * OrganizationalUnit.
+     * &lt;p&gt;
+     * {@inheritDoc}
+     */
+    @Override
+    public void preprocessSetter(OrganizationalUnit organizationalUnit, <co
+                id="manager.preprocessSetter" />
+        @SuppressWarnings("unused")
+        Employee oldManager, Employee newManager) {
+      if (newManager == null || newManager.getCompany() == null
+          || !newManager.getCompany().equals(organizationalUnit.getCompany())) {
+        throw new IntegrityException(
+            "A manager must belong to the same company as its managed organizational unit.",
+            "manager.company.invalid");
+      }
+    }
+  }
+}</programlisting><calloutlist>
+              <callout arearefs="ManagerProcessor">
+                <para>Following the recommended design for property
+                processors, the manager property processor is implemented as
+                an inner class of the enclosing
+                <code>OrganizationalUnitPropertyProcessors</code>
+                class.</para>
+              </callout>
+
+              <callout arearefs="manager.preprocessSetter">
+                <para>We need to pre-process the manager setter to check for
+                the manager company to be the same as the company of the
+                managed organizational unit. Whenever the rule is violated, an
+                integrity exception is thrown.</para>
+              </callout>
+            </calloutlist>Let's see a few screenshots to demonstrate the
+          result of the various changes we did. For the sake of the
+          demonstration, we have created a second company along with an
+          employee and we will try to use this new employee as the manager in
+          one of the sample departments.</para>
+
+          <para><table>
+              <title>Some screenshots to show the manager business rule
+              enforcement</title>
+
+              <tgroup cols="2">
+                <tbody>
+                  <row>
+                    <entry>1- We will trigger the list of value to change the
+                    department manager.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="40%"
+                                     fileref="../images/Companies.module.single.manager.lov.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+
+                    <entry>2- The LOV dialog opens with a pre-initialized
+                    filter containing the department company.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="30%"
+                                     fileref="../images/Companies.module.single.manager.lov.open.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+                  </row>
+
+                  <row>
+                    <entry>3- Let's reset the filter, and search for the
+                    employee of the other company.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="45%"
+                                     fileref="../images/Companies.module.single.manager.lov.search.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+
+                    <entry>4- Select it as the new manager; the business rule
+                    is violated.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="45%"
+                                     fileref="../images/Companies.module.single_tree.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+                  </row>
+                </tbody>
+              </tgroup>
+            </table></para>
+        </section>
+
+        <section>
+          <title>Managing team members</title>
+
+          <para></para>
+        </section>
+      </section>
     </section>
   </section>
 </chapter>

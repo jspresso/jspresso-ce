@@ -101,7 +101,7 @@ public class ComparableQueryStructureDescriptor extends
     values.put(LE, null);
     values.put(BE, null);
     comparatorPropertyDescriptor.setValuesAndIconImageUrls(values);
-    comparatorPropertyDescriptor.setMandatory(true);
+    //comparatorPropertyDescriptor.setMandatory(true);
 
     BasicPropertyDescriptor infValuePropertyDescriptor = propertyDescriptor
         .clone();
