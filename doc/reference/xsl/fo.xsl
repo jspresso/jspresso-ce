@@ -24,7 +24,7 @@
   <xsl:param name="chapter.autolabel">I</xsl:param>
   <xsl:param name="section.autolabel">1</xsl:param>
   <xsl:param name="section.label.includes.component.label">1</xsl:param>
-  
+
   <xsl:attribute-set name="monospace.properties">
     <xsl:attribute name="font-family">
       <xsl:value-of select="$monospace.font.family"></xsl:value-of>
@@ -37,7 +37,7 @@
     use-attribute-sets="verbatim.properties monospace.properties">
     <xsl:attribute name="font-size">6</xsl:attribute>
   </xsl:attribute-set>
-  
+
   <xsl:attribute-set
     name="formal.title.properties"
     use-attribute-sets="normal.para.spacing">
@@ -47,6 +47,10 @@
     <xsl:attribute name="space-after.optimum">0.6em</xsl:attribute>
     <xsl:attribute name="space-after.maximum">0.8em</xsl:attribute>
     <xsl:attribute name="text-align">center</xsl:attribute>
+  </xsl:attribute-set>
+
+  <xsl:attribute-set name="section.level1.properties">
+    <xsl:attribute name="break-after">page</xsl:attribute>
   </xsl:attribute-set>
 
 </xsl:stylesheet>
