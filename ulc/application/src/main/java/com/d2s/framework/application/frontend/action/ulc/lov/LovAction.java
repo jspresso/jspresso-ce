@@ -15,8 +15,10 @@ import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.ulc.std.ModalDialogAction;
 import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.model.component.IQueryComponent;
+import com.d2s.framework.model.descriptor.IComponentDescriptor;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
+import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
 import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.IView;
@@ -40,6 +42,8 @@ public class LovAction extends ModalDialogAction {
   private IDisplayableAction                    cancelAction;
   private CreateQueryComponentAction            createQueryComponentAction;
   private IReferencePropertyDescriptor<IEntity> entityRefQueryDescriptor;
+  private IComponentDescriptor<IEntity>         entityDescriptor;
+  private Map<String, String>                   initializationMapping;
   private IDisplayableAction                    findAction;
   private ILovViewDescriptorFactory             lovViewDescriptorFactory;
   private IDisplayableAction                    okAction;
@@ -58,10 +62,10 @@ public class LovAction extends ModalDialogAction {
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     if (getName() == null) {
-      if (entityRefQueryDescriptor != null) {
+      if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.name",
-            new Object[] {entityRefQueryDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale);
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
       }
       return translationProvider.getTranslation("lov.name", locale);
     }
@@ -75,10 +79,10 @@ public class LovAction extends ModalDialogAction {
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     if (getDescription() == null) {
-      if (entityRefQueryDescriptor != null) {
+      if (entityDescriptor != null) {
         return translationProvider.getTranslation("lov.element.description",
-            new Object[] {entityRefQueryDescriptor.getReferencedDescriptor()
-                .getI18nName(translationProvider, locale)}, locale);
+            new Object[] {entityDescriptor.getI18nName(translationProvider,
+                locale)}, locale);
       }
       return translationProvider.getTranslation("lov.description", locale);
     }
@@ -92,9 +96,8 @@ public class LovAction extends ModalDialogAction {
   public String getIconImageURL() {
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null) {
-      if (entityRefQueryDescriptor != null) {
-        iconImageURL = entityRefQueryDescriptor.getReferencedDescriptor()
-            .getIconImageURL();
+      if (entityDescriptor != null) {
+        iconImageURL = entityDescriptor.getIconImageURL();
       }
       if (iconImageURL == null) {
         iconImageURL = "classpath:com/d2s/framework/application/images/find-48x48.png";
@@ -232,7 +235,14 @@ public class LovAction extends ModalDialogAction {
   @SuppressWarnings("unchecked")
   protected IReferencePropertyDescriptor<IEntity> getEntityRefQueryDescriptor(
       Map<String, Object> context) {
-    if (entityRefQueryDescriptor != null) {
+    if (entityDescriptor != null) {
+      if (entityRefQueryDescriptor == null) {
+        entityRefQueryDescriptor = new BasicReferencePropertyDescriptor<IEntity>();
+        ((BasicReferencePropertyDescriptor<IEntity>) entityRefQueryDescriptor)
+            .setReferencedDescriptor(entityDescriptor);
+        ((BasicReferencePropertyDescriptor<IEntity>) entityRefQueryDescriptor)
+            .setInitializationMapping(initializationMapping);
+      }
       return entityRefQueryDescriptor;
     }
     IModelDescriptor modelDescriptor = (IModelDescriptor) context
@@ -241,6 +251,26 @@ public class LovAction extends ModalDialogAction {
       return (IReferencePropertyDescriptor<IEntity>) modelDescriptor;
     }
     return null;
+  }
+
+  
+  /**
+   * Sets the entityDescriptor.
+   * 
+   * @param entityDescriptor the entityDescriptor to set.
+   */
+  public void setEntityDescriptor(IComponentDescriptor<IEntity> entityDescriptor) {
+    this.entityDescriptor = entityDescriptor;
+  }
+
+  
+  /**
+   * Sets the initializationMapping.
+   * 
+   * @param initializationMapping the initializationMapping to set.
+   */
+  public void setInitializationMapping(Map<String, String> initializationMapping) {
+    this.initializationMapping = initializationMapping;
   }
 
 }
