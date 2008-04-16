@@ -60,7 +60,10 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    */
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
-    return descriptor.getI18nDescription(translationProvider, locale);
+    if (getDescription() != null) {
+      return translationProvider.getTranslation(getDescription(), locale);
+    }
+    return getI18nName(translationProvider, locale);
   }
 
   /**
@@ -68,7 +71,7 @@ public class StaticWizardStepDescriptor implements IWizardStepDescriptor {
    */
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
-    return descriptor.getI18nName(translationProvider, locale);
+    return translationProvider.getTranslation(getName(), locale);
   }
 
   /**

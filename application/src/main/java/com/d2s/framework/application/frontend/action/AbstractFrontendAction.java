@@ -103,7 +103,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     if (getDescription() != null) {
-      return actionDescriptor.getI18nDescription(translationProvider, locale);
+      return translationProvider.getTranslation(getDescription(), locale);
     }
     return getI18nName(translationProvider, locale);
   }
@@ -113,7 +113,7 @@ public abstract class AbstractFrontendAction<E, F, G> extends AbstractAction
    */
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
-    return actionDescriptor.getI18nName(translationProvider, locale);
+    return translationProvider.getTranslation(getName(), locale);
   }
 
   /**

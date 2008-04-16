@@ -5,6 +5,7 @@ package com.d2s.framework.application.frontend.action.wings.lov;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.wings.SComponent;
@@ -19,6 +20,7 @@ import com.d2s.framework.model.component.IQueryComponent;
 import com.d2s.framework.model.descriptor.IModelDescriptor;
 import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
 import com.d2s.framework.model.entity.IEntity;
+import com.d2s.framework.util.i18n.ITranslationProvider;
 import com.d2s.framework.view.IView;
 import com.d2s.framework.view.action.IDisplayableAction;
 import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
@@ -47,10 +49,59 @@ public class LovAction extends ModalDialogAction {
    * Constructs a new <code>LovAction</code> instance.
    */
   public LovAction() {
-    setName("lov.name");
-    setDescription("lov.description");
-    setIconImageURL("classpath:com/d2s/framework/application/images/find-48x48.png");
     setAutoquery(true);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nName(ITranslationProvider translationProvider,
+      Locale locale) {
+    if (getName() == null) {
+      if (entityRefQueryDescriptor != null) {
+        return translationProvider.getTranslation("lov.element.name",
+            new Object[] {entityRefQueryDescriptor.getReferencedDescriptor()
+                .getI18nName(translationProvider, locale)}, locale);
+      }
+      return translationProvider.getTranslation("lov.name", locale);
+    }
+    return super.getI18nName(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getI18nDescription(ITranslationProvider translationProvider,
+      Locale locale) {
+    if (getDescription() == null) {
+      if (entityRefQueryDescriptor != null) {
+        return translationProvider.getTranslation("lov.element.description",
+            new Object[] {entityRefQueryDescriptor.getReferencedDescriptor()
+                .getI18nName(translationProvider, locale)}, locale);
+      }
+      return translationProvider.getTranslation("lov.description", locale);
+    }
+    return super.getI18nDescription(translationProvider, locale);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public String getIconImageURL() {
+    String iconImageURL = super.getIconImageURL();
+    if (iconImageURL == null) {
+      if (entityRefQueryDescriptor != null) {
+        iconImageURL = entityRefQueryDescriptor.getReferencedDescriptor()
+            .getIconImageURL();
+      }
+      if (iconImageURL == null) {
+        iconImageURL = "classpath:com/d2s/framework/application/images/find-48x48.png";
+      }
+    }
+    return iconImageURL;
   }
 
   /**
