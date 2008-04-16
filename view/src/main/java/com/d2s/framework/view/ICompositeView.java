@@ -19,7 +19,7 @@ import java.util.List;
 public interface ICompositeView<E> extends IView<E> {
 
   /**
-   * Gets the view child views.
+   * Gets the child views.
    * 
    * @return the child views.
    */

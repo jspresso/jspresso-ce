@@ -3,6 +3,9 @@
  */
 package com.d2s.framework.view.descriptor.basic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.d2s.framework.view.descriptor.ISplitViewDescriptor;
 import com.d2s.framework.view.descriptor.IViewDescriptor;
 
@@ -72,5 +75,19 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   public void setRightBottomViewDescriptor(
       IViewDescriptor rightBottomViewDescriptor) {
     this.rightBottomViewDescriptor = rightBottomViewDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<IViewDescriptor> getChildViewDescriptors() {
+    List<IViewDescriptor> children = new ArrayList<IViewDescriptor>();
+    if (getLeftTopViewDescriptor() != null) {
+      children.add(getLeftTopViewDescriptor());
+    }
+    if (getRightBottomViewDescriptor() != null) {
+      children.add(getRightBottomViewDescriptor());
+    }
+    return children;
   }
 }

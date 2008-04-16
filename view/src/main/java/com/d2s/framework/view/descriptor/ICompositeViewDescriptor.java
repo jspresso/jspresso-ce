@@ -3,6 +3,8 @@
  */
 package com.d2s.framework.view.descriptor;
 
+import java.util.List;
+
 /**
  * This public interface is the super-interface of all view descriptors used as
  * containers for others.
@@ -23,4 +25,12 @@ public interface ICompositeViewDescriptor extends IViewDescriptor {
    * @return true if the child views are in a master / detail relationship.
    */
   boolean isCascadingModels();
+  
+  /**
+   * Gets the child view descriptors.
+   * 
+   * @return the list of contained view descriptors.
+   */
+  List<IViewDescriptor> getChildViewDescriptors();
+
 }

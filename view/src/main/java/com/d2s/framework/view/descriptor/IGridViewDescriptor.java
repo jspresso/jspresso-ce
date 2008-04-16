@@ -3,8 +3,6 @@
  */
 package com.d2s.framework.view.descriptor;
 
-import java.util.List;
-
 /**
  * This public interface is implemented by any composite view descriptor
  * organizing their contained descriptors in a grid way.
@@ -16,12 +14,5 @@ import java.util.List;
  * @author Vincent Vandenschrick
  */
 public interface IGridViewDescriptor extends ICompositeViewDescriptor {
-
-  /**
-   * Gets the list of view descriptors contained in this grid composite view.
-   * 
-   * @return the list of contained view descriptors.
-   */
-  List<IViewDescriptor> getChildViewDescriptors();
-
+  // Empty as of now.
 }
