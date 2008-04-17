@@ -12,7 +12,7 @@
   <url>file:///Dev/Jspresso/jspresso-framework/target/fullsite</url>
   <organization>
     <name>Jspresso</name>
-    <url>http://www.jspresso.com</url>
+    <url>http://www.jspresso.org</url>
   </organization>
   <inceptionYear>2005</inceptionYear>
   <scm>
@@ -23,21 +23,21 @@
   <mailingLists>
     <mailingList>
       <name>${pom.name} Dev List</name>
-      <subscribe>dev-subscribe@jspresso.com</subscribe>
-      <unsubscribe>dev-unsubscribe@jspresso.com</unsubscribe>
+      <subscribe>dev-subscribe@jspresso.org</subscribe>
+      <unsubscribe>dev-unsubscribe@jspresso.org</unsubscribe>
     </mailingList>
     <mailingList>
       <name>${pom.name} User List</name>
-      <subscribe>users-subscribe@jspresso.com</subscribe>
-      <unsubscribe>users-unsubscribe@jspresso.com</unsubscribe>
+      <subscribe>users-subscribe@jspresso.org</subscribe>
+      <unsubscribe>users-unsubscribe@jspresso.org</unsubscribe>
     </mailingList>
   </mailingLists>
   <developers>
     <developer>
       <name>Vincent Vandenschrick</name>
       <id>vvandens</id>
-      <email>vandenschrick.v@free.fr</email>
-      <organization>Design 2 See</organization>
+      <email>vvandens@jspresso.org</email>
+      <organization>Jspresso</organization>
     </developer>
   </developers>
   <distributionManagement>

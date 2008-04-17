@@ -3,7 +3,7 @@
   <bannerLeft>
     <name>Jspresso</name>
     <src>images/jspresso-small.png</src>
-    <href>http://www.jspresso.com</href>
+    <href>http://www.jspresso.org</href>
   </bannerLeft>
   <!--
     <bannerRight>
@@ -14,7 +14,7 @@
     <links>
       <item
         name="Jspresso"
-        href="http://www.jspresso.com/" />
+        href="http://www.jspresso.org/" />
     </links>
 
     <menu name="Jspresso Application Framework">
