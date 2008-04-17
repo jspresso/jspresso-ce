@@ -8,12 +8,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.bean.AbstractPropertyChangeCapable;
 import org.jspresso.framework.util.lang.ObjectUtils;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.security.ISecurable;
 
 /**
  * A child module is a non-root module (it belongs to a workspace). A child

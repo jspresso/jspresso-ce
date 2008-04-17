@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.entity.IEntity;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * An action used in list components to move a detail up and down.

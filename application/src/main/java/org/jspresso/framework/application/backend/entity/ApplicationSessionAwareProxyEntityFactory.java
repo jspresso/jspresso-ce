@@ -12,8 +12,8 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
 import org.jspresso.framework.model.entity.basic.BasicProxyEntityFactory;
+import org.jspresso.framework.security.UserPrincipal;
 
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Proxy entity factory aware of an application session to deal with uniqueness

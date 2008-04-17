@@ -5,9 +5,10 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+
 
 /**
  * Base class for backend actions acting on collections.

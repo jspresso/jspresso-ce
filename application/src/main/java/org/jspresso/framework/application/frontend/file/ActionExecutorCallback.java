@@ -6,8 +6,9 @@ package org.jspresso.framework.application.frontend.file;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.action.IActionHandler;
+import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
+
 
 /**
  * A callback handler which triggers an arbitrary action.

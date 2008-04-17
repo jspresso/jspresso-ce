@@ -6,11 +6,11 @@ package org.jspresso.framework.application.frontend.action.wizard;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.util.descriptor.DefaultDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-import com.d2s.framework.action.IAction;
 
 /**
  * A static wizard step.

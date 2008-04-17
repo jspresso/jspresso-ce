@@ -5,10 +5,10 @@ package org.jspresso.framework.view.action;
 
 import java.util.Collection;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
 import org.jspresso.framework.util.gate.IGate;
 
-import com.d2s.framework.action.IAction;
 
 /**
  * This interface must be implemented by any displayable action of the

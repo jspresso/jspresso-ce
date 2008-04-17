@@ -1,0 +1,72 @@
+/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.framework.application.frontend.action.ulc.flow;
+
+import org.jspresso.framework.action.IAction;
+
+/**
+ * Action to ask a binary question to the user with a cancel option.
+ * <p>
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class YesNoCancelAction extends AbstractFlowAction {
+
+  private IAction cancelAction;
+  private IAction noAction;
+  private IAction yesAction;
+
+  /**
+   * Constructs a new <code>YesNoAction</code> instance.
+   */
+  protected YesNoCancelAction() {
+    super(YES_OPTION, NO_OPTION, CANCEL_OPTION);
+  }
+
+  /**
+   * Sets the cancelAction.
+   * 
+   * @param cancelAction
+   *            the cancelAction to set.
+   */
+  public void setCancelAction(IAction cancelAction) {
+    this.cancelAction = cancelAction;
+  }
+
+  /**
+   * Sets the noAction.
+   * 
+   * @param noAction
+   *            the noAction to set.
+   */
+  public void setNoAction(IAction noAction) {
+    this.noAction = noAction;
+  }
+
+  /**
+   * Sets the yesAction.
+   * 
+   * @param yesAction
+   *            the yesAction to set.
+   */
+  public void setYesAction(IAction yesAction) {
+    this.yesAction = yesAction;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected IAction getNextAction(String selectedOption) {
+    if (YES_OPTION.equals(selectedOption)) {
+      return yesAction;
+    } else if (NO_OPTION.equals(selectedOption)) {
+      return noAction;
+    }
+    return cancelAction;
+  }
+}

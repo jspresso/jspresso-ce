@@ -3,14 +3,14 @@
  */
 package org.jspresso.framework.application.backend.persistence.hibernate;
 
+import org.jspresso.framework.application.backend.AbstractBackendController;
+import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.hibernate.HibernateAwareApplicationSession;
+import org.jspresso.framework.model.entity.IEntityFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.orm.hibernate3.HibernateTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.d2s.framework.application.backend.AbstractBackendController;
-import com.d2s.framework.application.backend.session.IApplicationSession;
-import com.d2s.framework.model.entity.IEntityFactory;
 
 /**
  * Hibernate aware backend controller.

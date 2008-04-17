@@ -5,9 +5,10 @@ package org.jspresso.framework.application.frontend.action;
 
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.action.IActionHandler;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
+
 
 /**
  * An simple frontend action which holds a reference on a chained next action.

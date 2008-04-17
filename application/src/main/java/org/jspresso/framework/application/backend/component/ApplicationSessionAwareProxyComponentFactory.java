@@ -9,8 +9,8 @@ import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.basic.BasicProxyComponentFactory;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.security.UserPrincipal;
 
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Proxy entity factory aware of an application session to deal with uniqueness

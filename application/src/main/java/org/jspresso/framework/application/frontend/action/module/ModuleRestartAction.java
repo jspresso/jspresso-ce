@@ -7,12 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.application.model.BeanModule;
 import org.jspresso.framework.application.model.Module;
 
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * A simple action which restarts the current module executing the module

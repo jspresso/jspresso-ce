@@ -9,9 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.ActionException;
-import com.d2s.framework.action.IActionHandler;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IActionHandler;
+
 
 /**
  * Default handler implementation to fully read the file inputstream into a byte

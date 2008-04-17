@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.framework.view.wings;
+
+import org.jspresso.framework.util.wings.WingsUtil;
+import org.wings.SComponent;
+import org.wings.SDefaultListCellRenderer;
+
+
+/**
+ * A default list cell renderer rendering even and odd rows background slightly
+ * differently.
+ * <p>
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class EvenOddListCellRenderer extends SDefaultListCellRenderer {
+
+  private static final long serialVersionUID = 2051850807889065438L;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public SComponent getListCellRendererComponent(SComponent list, Object value,
+      boolean isSelected, int index) {
+    SComponent renderer = super.getListCellRendererComponent(list, value,
+        isSelected, index);
+    WingsUtil.alternateEvenOddBackground(renderer, list, isSelected, index);
+    return renderer;
+  }
+}

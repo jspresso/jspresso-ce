@@ -5,10 +5,10 @@ package org.jspresso.framework.application.frontend.action;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * A simple action which selects indices on ath view connector.

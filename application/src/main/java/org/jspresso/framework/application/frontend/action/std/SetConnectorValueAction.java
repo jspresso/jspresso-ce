@@ -5,11 +5,11 @@ package org.jspresso.framework.application.frontend.action.std;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.AbstractFrontendAction;
 import org.jspresso.framework.binding.IValueConnector;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * Sets the object registered as ACTION_RESULT in the action context as the

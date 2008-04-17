@@ -6,10 +6,11 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
-import com.d2s.framework.action.ActionException;
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.model.entity.IEntity;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.model.entity.IEntity;
+
 
 /**
  * An action used in master/detail views to remove selected details from a

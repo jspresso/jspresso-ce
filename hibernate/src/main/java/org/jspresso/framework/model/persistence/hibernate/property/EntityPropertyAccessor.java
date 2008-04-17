@@ -11,9 +11,9 @@ import org.hibernate.engine.SessionImplementor;
 import org.hibernate.property.Getter;
 import org.hibernate.property.PropertyAccessor;
 import org.hibernate.property.Setter;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.util.bean.PropertyHelper;
 
-import com.d2s.framework.model.component.IComponent;
-import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * This class the contract defined by hibernate to enable entity properties to

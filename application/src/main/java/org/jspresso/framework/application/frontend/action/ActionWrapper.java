@@ -5,8 +5,9 @@ package org.jspresso.framework.application.frontend.action;
 
 import java.util.Map;
 
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.action.IActionHandler;
+import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
+
 
 /**
  * A simple frontend action to wrap a backend action.

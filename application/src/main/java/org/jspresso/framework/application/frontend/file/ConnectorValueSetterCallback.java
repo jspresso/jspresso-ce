@@ -6,12 +6,12 @@ package org.jspresso.framework.application.frontend.file;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.descriptor.IStringPropertyDescriptor;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * Default handler implementation to deal with setting binary properties using

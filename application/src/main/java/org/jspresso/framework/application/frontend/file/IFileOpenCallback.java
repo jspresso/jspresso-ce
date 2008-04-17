@@ -6,7 +6,8 @@ package org.jspresso.framework.application.frontend.file;
 import java.io.InputStream;
 import java.util.Map;
 
-import com.d2s.framework.action.IActionHandler;
+import org.jspresso.framework.action.IActionHandler;
+
 
 /**
  * This interface is used react to file open.

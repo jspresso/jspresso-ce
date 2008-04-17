@@ -7,13 +7,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.frontend.action.ActionWrapper;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * Creates and adds an entity to the selected master detail collection.

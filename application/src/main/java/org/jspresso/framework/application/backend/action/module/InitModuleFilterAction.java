@@ -5,12 +5,12 @@ package org.jspresso.framework.application.backend.action.module;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractBackendAction;
 import org.jspresso.framework.application.model.BeanCollectionModule;
 import org.jspresso.framework.binding.model.IModelValueConnector;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * Initialize a module filter with a query entity.

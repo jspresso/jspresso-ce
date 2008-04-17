@@ -9,9 +9,9 @@ import org.hibernate.AssertionFailure;
 import org.hibernate.mapping.Component;
 import org.hibernate.tuple.Instantiator;
 import org.hibernate.tuple.component.PojoComponentTuplizer;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.component.IComponentFactory;
 
-import com.d2s.framework.model.component.IComponent;
-import com.d2s.framework.model.component.IComponentFactory;
 
 /**
  * A specialized hibernate tuplizer to handle proxy components.

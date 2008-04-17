@@ -24,6 +24,7 @@ import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntityFactory;
+import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IView;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
@@ -31,7 +32,6 @@ import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 import org.springframework.context.ApplicationContext;
 
-import com.d2s.framework.util.swing.SwingUtil;
 
 /**
  * Generates D2S powered component java code based on its descriptor.

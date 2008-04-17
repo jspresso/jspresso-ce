@@ -15,14 +15,14 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 
 import org.jboss.security.Base64Encoder;
+import org.jspresso.framework.action.ActionBusinessException;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.ldap.LdapConstants;
 import org.springframework.dao.DataAccessException;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.DirContextSource;
 
-import com.d2s.framework.action.ActionBusinessException;
-import com.d2s.framework.action.ActionException;
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Changes a user password in an ldap directory.

@@ -7,11 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.d2s.framework.application.model.BeanCollectionModule;
-import com.d2s.framework.application.model.BeanModule;
-import com.d2s.framework.application.model.Module;
-import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.model.entity.IEntity;
+import org.jspresso.framework.application.model.BeanCollectionModule;
+import org.jspresso.framework.application.model.BeanModule;
+import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.model.entity.IEntity;
+
 
 /**
  * Saves the projected object(s) in a transaction.

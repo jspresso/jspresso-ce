@@ -10,8 +10,8 @@ import org.hibernate.engine.SessionFactoryImplementor;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.persister.entity.JoinedSubclassEntityPersister;
+import org.jspresso.framework.model.entity.IEntity;
 
-import com.d2s.framework.model.entity.IEntity;
 
 /**
  * Subclassed the hibernate default persister for joined subclasses to

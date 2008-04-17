@@ -5,10 +5,10 @@ package org.jspresso.framework.application.backend.action;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
 
-import com.d2s.framework.action.ActionContextConstants;
 
 /**
  * Base class for backend actions acting on collections.

@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-import com.d2s.framework.action.IAction;
 
 /**
  * Base class for all application actions. Takes care of the context reference

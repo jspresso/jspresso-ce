@@ -23,10 +23,10 @@ import org.jspresso.framework.model.entity.EntityException;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
+import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.uid.IGUIDGenerator;
 
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Default implementation of <code>IEntityFactory</code>. It creates standard

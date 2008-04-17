@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.AbstractController;
 import org.jspresso.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
@@ -19,12 +21,10 @@ import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.entity.IEntityFactory;
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.security.ISecurable;
-import com.d2s.framework.security.SecurityHelper;
 
 /**
  * Base class for backend application controllers. It provides the implementor

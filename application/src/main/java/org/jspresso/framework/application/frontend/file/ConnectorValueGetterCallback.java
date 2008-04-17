@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.binding.IValueConnector;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.ActionException;
 
 /**
  * Default handler implementation to deal with getting binary properties storing

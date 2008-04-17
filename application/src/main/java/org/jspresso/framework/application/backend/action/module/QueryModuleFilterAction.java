@@ -5,14 +5,14 @@ package org.jspresso.framework.application.backend.action.module;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IAction;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractBackendAction;
 import org.jspresso.framework.application.model.FilterableBeanCollectionModule;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IAction;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * Retrieves the filter of a module and queries the persistent store to populate

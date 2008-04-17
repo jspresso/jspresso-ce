@@ -5,8 +5,8 @@ package org.jspresso.framework.model.component.service;
 
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
+import org.jspresso.framework.security.UserPrincipal;
 
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Empty interceptor for component lifecycle. It is designed to be subclassed

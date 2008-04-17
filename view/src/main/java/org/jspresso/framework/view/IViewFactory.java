@@ -5,9 +5,9 @@ package org.jspresso.framework.view;
 
 import java.util.Locale;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * Factory for views.

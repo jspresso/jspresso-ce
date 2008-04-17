@@ -5,10 +5,10 @@ package org.jspresso.framework.application.frontend.action.wizard;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.util.descriptor.IDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-import com.d2s.framework.action.IAction;
 
 /**
  * The descriptor contract for a wizard view step.

@@ -1,0 +1,31 @@
+/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.framework.binding.wings;
+
+import org.jspresso.framework.binding.IValueConnector;
+import org.wings.STree;
+
+
+/**
+ * Helper class used to bind collection view connectors to tree selection models
+ * (used in <code>STree</code>).
+ * <p>
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public interface ITreeSelectionModelBinder {
+
+  /**
+   * Binds a collection connector to keep track of a selection model selections.
+   * 
+   * @param rootConnector
+   *            the root connector of the connector hierarchy.
+   * @param tree
+   *            the the tree to bind the selection model of.
+   */
+  void bindSelectionModel(IValueConnector rootConnector, STree tree);
+}

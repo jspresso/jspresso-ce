@@ -6,11 +6,11 @@ package org.jspresso.framework.application;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspresso.framework.security.ISecurable;
+import org.jspresso.framework.security.SecurityHelper;
 import org.jspresso.framework.util.exception.IExceptionHandler;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-import com.d2s.framework.security.ISecurable;
-import com.d2s.framework.security.SecurityHelper;
 
 /**
  * Base class for controllers. It holds a reference to the root connector.

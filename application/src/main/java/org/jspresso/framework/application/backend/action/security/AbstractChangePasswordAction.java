@@ -8,16 +8,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionBusinessException;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.AbstractBackendAction;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicPasswordPropertyDescriptor;
+import org.jspresso.framework.security.UserPrincipal;
 
-import com.d2s.framework.action.ActionBusinessException;
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Changes a user password asking for the current and new password.

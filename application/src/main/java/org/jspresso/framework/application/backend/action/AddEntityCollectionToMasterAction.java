@@ -7,11 +7,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 
-import com.d2s.framework.action.ActionContextConstants;
 
 /**
  * An action used in master/detail views to create and add a new detail to a

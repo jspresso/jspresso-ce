@@ -6,11 +6,11 @@ package org.jspresso.framework.application.backend.action;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.ActionException;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * A generic action to fill-in the context ACTION_PARAM with the value of an

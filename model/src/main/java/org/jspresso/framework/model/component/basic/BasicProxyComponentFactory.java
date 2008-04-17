@@ -16,9 +16,9 @@ import org.jspresso.framework.model.component.query.QueryComponent;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptorRegistry;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
+import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Default implementation of <code>IComponentFactory</code>. It creates

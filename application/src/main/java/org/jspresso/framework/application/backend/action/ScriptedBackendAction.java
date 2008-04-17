@@ -5,11 +5,11 @@ package org.jspresso.framework.application.backend.action;
 
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.util.scripting.IScript;
 import org.jspresso.framework.util.scripting.IScriptHandler;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * A scripted backend action.

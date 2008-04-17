@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.frontend.IFrontendController;
 import org.jspresso.framework.binding.ICompositeValueConnector;
@@ -20,7 +21,6 @@ import org.jspresso.framework.view.IIconFactory;
 import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
-import com.d2s.framework.action.ActionContextConstants;
 
 /**
  * Base class for frontend actions.

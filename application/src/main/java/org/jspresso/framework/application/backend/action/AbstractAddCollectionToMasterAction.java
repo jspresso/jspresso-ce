@@ -7,6 +7,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ConnectorHelper;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.binding.model.IModelValueConnector;
@@ -16,9 +19,6 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.accessor.IListAccessor;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.ActionException;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * An action used in master/detail views to create and add a new detail to a

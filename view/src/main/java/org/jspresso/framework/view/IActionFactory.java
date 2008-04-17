@@ -5,11 +5,11 @@ package org.jspresso.framework.view;
 
 import java.util.Locale;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.view.action.IDisplayableAction;
 
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * A factory for actions.

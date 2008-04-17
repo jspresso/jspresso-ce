@@ -13,8 +13,8 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityDirtAware;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
+import org.jspresso.framework.security.UserPrincipal;
 
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * This interface establishes the contract of an application session. This

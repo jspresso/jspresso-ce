@@ -5,6 +5,7 @@ package org.jspresso.framework.application.frontend;
 
 import java.util.Locale;
 
+import org.jspresso.framework.action.IAction;
 import org.jspresso.framework.application.IController;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.binding.IMvcBinder;
@@ -13,7 +14,6 @@ import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IActionable;
 
-import com.d2s.framework.action.IAction;
 
 /**
  * General contract of frontend (view) application controllers.

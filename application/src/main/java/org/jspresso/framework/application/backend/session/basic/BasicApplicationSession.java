@@ -29,12 +29,12 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityRegistry;
+import org.jspresso.framework.security.UserPrincipal;
 import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.bean.BeanComparator;
 import org.jspresso.framework.util.bean.BeanPropertyChangeRecorder;
 
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Basic implementation of an application session.

@@ -17,16 +17,16 @@ import org.hibernate.Session;
 import org.hibernate.collection.PersistentCollection;
 import org.hibernate.collection.PersistentList;
 import org.hibernate.collection.PersistentSet;
+import org.jspresso.framework.application.backend.session.basic.BasicApplicationSession;
+import org.jspresso.framework.model.component.IComponent;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.bean.PropertyHelper;
 import org.springframework.orm.hibernate3.HibernateAccessor;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
-import com.d2s.framework.application.backend.session.basic.BasicApplicationSession;
-import com.d2s.framework.model.component.IComponent;
-import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IPropertyDescriptor;
-import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.util.bean.PropertyHelper;
 
 /**
  * Basic implementation of an application session aware of hibernate when

@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
 import org.jspresso.framework.model.datatransfer.TransferMode;
 
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * An action used register a collection of domain objects into the controller's

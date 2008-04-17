@@ -6,6 +6,8 @@ package org.jspresso.framework.application.backend.action;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.action.AbstractAction;
 import org.jspresso.framework.application.backend.IBackendController;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
@@ -15,8 +17,6 @@ import org.jspresso.framework.model.descriptor.IModelDescriptor;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * This class should serve as base class for implementing a action which

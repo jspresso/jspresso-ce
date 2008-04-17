@@ -16,18 +16,18 @@ import java.util.Set;
 import org.hibernate.Hibernate;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
+import org.jspresso.framework.application.backend.action.AbstractBackendAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
+import org.jspresso.framework.application.backend.session.MergeMode;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import com.d2s.framework.application.backend.action.AbstractBackendAction;
-import com.d2s.framework.application.backend.session.MergeMode;
-import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.IPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.entity.IEntity;
 
 /**
  * This the root abstract class of all hibernate related persistence actions.

@@ -6,9 +6,9 @@ package org.jspresso.framework.view.descriptor;
 import java.awt.Color;
 import java.awt.Font;
 
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.view.action.IActionable;
 
-import com.d2s.framework.security.ISecurable;
 
 /**
  * This public interface is the super-interface of all view descriptors.

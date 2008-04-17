@@ -9,19 +9,19 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.persistence.hibernate.AbstractHibernateCollectionAction;
+import org.jspresso.framework.application.model.BeanCollectionModule;
+import org.jspresso.framework.application.model.BeanModule;
+import org.jspresso.framework.application.model.Module;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.model.BeanCollectionModule;
-import com.d2s.framework.application.model.BeanModule;
-import com.d2s.framework.application.model.Module;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.model.entity.IEntity;
 
 /**
  * This action removes the selected objects from the projected collection.

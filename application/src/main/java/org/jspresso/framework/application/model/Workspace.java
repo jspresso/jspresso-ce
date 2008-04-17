@@ -9,10 +9,10 @@ import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jspresso.framework.application.view.descriptor.basic.BasicWorkspaceViewDescriptor;
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.IIconImageURLProvider;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-import com.d2s.framework.security.ISecurable;
 
 /**
  * A workspace is a central element in the application architecture. It serves

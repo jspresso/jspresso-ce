@@ -6,12 +6,12 @@ package org.jspresso.framework.application.backend.action.persistence.hibernate;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.model.entity.IEntity;
 
 /**
  * Reloads the object(s) provided by the action context.

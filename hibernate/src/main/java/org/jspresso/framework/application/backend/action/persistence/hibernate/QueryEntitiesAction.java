@@ -13,19 +13,19 @@ import java.util.Map;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
+import org.jspresso.framework.action.ActionContextConstants;
+import org.jspresso.framework.action.ActionException;
+import org.jspresso.framework.action.IActionHandler;
+import org.jspresso.framework.application.backend.session.IApplicationSession;
+import org.jspresso.framework.application.backend.session.MergeMode;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.component.query.ComparableQueryStructure;
+import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
-import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.action.ActionException;
-import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.backend.session.IApplicationSession;
-import com.d2s.framework.application.backend.session.MergeMode;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.model.component.IQueryComponent;
-import com.d2s.framework.model.component.query.ComparableQueryStructure;
-import com.d2s.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
-import com.d2s.framework.model.entity.IEntity;
 
 /**
  * An action to hibernate query entities by example.

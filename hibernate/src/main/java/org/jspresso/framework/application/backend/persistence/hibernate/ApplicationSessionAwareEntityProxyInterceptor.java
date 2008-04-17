@@ -11,13 +11,13 @@ import org.hibernate.Transaction;
 import org.hibernate.proxy.HibernateProxy;
 import org.hibernate.proxy.LazyInitializer;
 import org.hibernate.type.Type;
+import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.application.backend.session.hibernate.HibernateAwareApplicationSession;
+import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
+import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
+import org.jspresso.framework.security.UserPrincipal;
 
-import com.d2s.framework.application.backend.session.IApplicationSession;
-import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityLifecycleHandler;
-import com.d2s.framework.model.persistence.hibernate.EntityProxyInterceptor;
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * Hibernate session interceptor aware of an application session to deal with

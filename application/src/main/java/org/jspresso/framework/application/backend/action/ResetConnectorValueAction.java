@@ -5,7 +5,8 @@ package org.jspresso.framework.application.backend.action;
 
 import java.util.Map;
 
-import com.d2s.framework.action.IActionHandler;
+import org.jspresso.framework.action.IActionHandler;
+
 
 /**
  * Resets the model connector value to null.

@@ -5,10 +5,10 @@ package org.jspresso.framework.application;
 
 import java.util.Locale;
 
+import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-import com.d2s.framework.action.IActionHandler;
 
 /**
  * This interface is implemented by the controllers of the application.

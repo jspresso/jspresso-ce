@@ -9,12 +9,12 @@ import java.util.Collection;
 import org.hibernate.EmptyInterceptor;
 import org.hibernate.EntityMode;
 import org.hibernate.type.Type;
+import org.jspresso.framework.model.entity.EntityException;
+import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityFactory;
+import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
+import org.jspresso.framework.security.UserPrincipal;
 
-import com.d2s.framework.model.entity.EntityException;
-import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityFactory;
-import com.d2s.framework.model.entity.IEntityLifecycleHandler;
-import com.d2s.framework.security.UserPrincipal;
 
 /**
  * This hibernate interceptor enables hibernate to handle entities which are
