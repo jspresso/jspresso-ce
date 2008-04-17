@@ -2347,7 +2347,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 &lt;/bean&gt;
 
 &lt;bean
-  id="Team-employees"
+  id="Team-teamMembers"
   class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
   &lt;property
     name="name"
@@ -2389,7 +2389,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       ...
-      &lt;ref local="Team-employees" /&gt;
+      &lt;ref local="Team-teamMembers" /&gt;
     &lt;/list&gt;
   &lt;/property&gt;
   ...
@@ -6460,7 +6460,7 @@ public class OrganizationalUnitPropertyProcessors {
                     <entry>1- We will trigger the list of value to change the
                     department manager.<mediaobject>
                         <imageobject>
-                          <imagedata align="center" contentdepth="40%"
+                          <imagedata align="center" contentdepth="45%"
                                      fileref="../images/Companies.module.single.manager.lov.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
@@ -6469,7 +6469,7 @@ public class OrganizationalUnitPropertyProcessors {
                     <entry>2- The LOV dialog opens with a pre-initialized
                     filter containing the department company.<mediaobject>
                         <imageobject>
-                          <imagedata align="center" contentdepth="30%"
+                          <imagedata align="center" contentdepth="35%"
                                      fileref="../images/Companies.module.single.manager.lov.open.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
@@ -6480,7 +6480,7 @@ public class OrganizationalUnitPropertyProcessors {
                     <entry>3- Let's reset the filter, and search for the
                     employee of the other company.<mediaobject>
                         <imageobject>
-                          <imagedata align="center" contentdepth="30%"
+                          <imagedata align="center" contentdepth="35%"
                                      fileref="../images/Companies.module.single.manager.lov.search.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
@@ -6489,7 +6489,7 @@ public class OrganizationalUnitPropertyProcessors {
                     <entry>4- Select it as the new manager; the business rule
                     is violated and the end-user is notified.<mediaobject>
                         <imageobject>
-                          <imagedata align="center" contentdepth="45%"
+                          <imagedata align="center" contentdepth="50%"
                                      fileref="../images/Companies.module.single.manager.lov.error.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>

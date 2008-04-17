@@ -55,6 +55,11 @@ public class BooleanTableCellRenderer extends SCheckBox implements
     } else {
       setSelected((value != null && ((Boolean) value).booleanValue()));
     }
+    if (table.isCellEditable(row, column)) {
+      setEnabled(true);
+    } else {
+      setEnabled(false);
+    }
     return this;
   }
 

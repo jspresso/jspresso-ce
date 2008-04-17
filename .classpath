@@ -109,8 +109,8 @@
 	<classpathentry kind="var" path="M2_REPO/org/jvnet/substance/4.1/substance-4.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-common/4.0.4/jboss-common-4.0.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.2/wings-3.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.2/wings-3.2.jar" sourcepath="/ENVDEV/wings/wings3/wings/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.2/wings-experimental-3.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.2/wingx-3.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.2/wingx-3.2.jar" sourcepath="/ENVDEV/wings/wings3/wingx/src/java"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
