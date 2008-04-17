@@ -11,6 +11,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
 
 import org.wings.SAbstractButton;
+import org.wings.SCheckBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.STable;
@@ -109,6 +110,10 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
       modelConnector.setConnectorValue(value);
     }
     modelConnector.addConnectorValueChangeListener(this);
+    if (editorView.getPeer() instanceof SCheckBox) {
+      ((SCheckBox) editorView.getPeer()).setSelected(!((SCheckBox) editorView
+          .getPeer()).isSelected());
+    }
     return editorView.getPeer();
   }
 
