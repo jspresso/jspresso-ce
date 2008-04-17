@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-modules id="moduleCoreId" project-version="1.5.0">
-<wb-module deploy-name="design2see-framework">
+<wb-module deploy-name="jspresso-framework">
 <wb-resource deploy-path="/" source-path="/view/src/test/java"/>
         <wb-resource deploy-path="/" source-path="/view/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/app-launch/src/test/java"/>
