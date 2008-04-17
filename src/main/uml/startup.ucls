@@ -3,63 +3,63 @@
   <classifier-display autosize="true" package="true" attributes="true" operations="true" initial-value="false" 
     signature="true" visibility="true"/>  
   <association-display labels="true" multiplicity="true"/>  
-  <interface type="java" name="com.d2s.framework.application.startup.IStartup" project="design2see-framework" 
-    file="/design2see-framework/app-launch/src/main/java/com/d2s/framework/application/startup/IStartup.java" 
+  <interface type="java" name="org.jspresso.framework.application.startup.IStartup" project="jspresso-framework" 
+    file="/jspresso-framework/app-launch/src/main/java/org/jspresso/framework/application/startup/IStartup.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="324" y="-42" width="-1" height="-1"/>  
   </interface>  
-  <class type="java" name="com.d2s.framework.application.startup.AbstractStartup" project="design2see-framework" 
-    file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java" 
+  <class type="java" name="org.jspresso.framework.application.startup.AbstractStartup" project="jspresso-framework" 
+    file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/AbstractStartup.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="325" y="145" width="-1" height="-1"/>  
   </class>  
-  <class type="java" name="com.d2s.framework.application.startup.swing.SwingStartup" project="design2see-framework" 
-    file="/design2see-framework/app-launch/src/main/java/com/d2s/framework/application/frontend/startup/swing/SwingStartup.java" 
+  <class type="java" name="org.jspresso.framework.application.startup.swing.SwingStartup" project="jspresso-framework" 
+    file="/jspresso-framework/app-launch/src/main/java/org/jspresso/framework/application/frontend/startup/swing/SwingStartup.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="90" y="311" width="-1" height="-1"/>  
   </class>  
-  <class type="java" name="com.d2s.framework.application.startup.ulc.UlcStartup" project="design2see-framework" 
-    file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/ulc/UlcStartup.java" 
+  <class type="java" name="org.jspresso.framework.application.startup.ulc.UlcStartup" project="jspresso-framework" 
+    file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/ulc/UlcStartup.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="325" y="339" width="-1" height="-1"/>  
   </class>  
-  <class type="java" name="com.d2s.framework.application.startup.wings.WingsStartup" project="design2see-framework" 
-    file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/wings/WingsStartup.java" 
+  <class type="java" name="org.jspresso.framework.application.startup.wings.WingsStartup" project="jspresso-framework" 
+    file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/wings/WingsStartup.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="567" y="318" width="-1" height="-1"/>  
   </class>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.startup.swing.SwingStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/swing/SwingStartup.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.startup.AbstractStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.swing.SwingStartup" 
+      file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/swing/SwingStartup.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
+      file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/AbstractStartup.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.startup.ulc.UlcStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/ulc/UlcStartup.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.startup.AbstractStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.ulc.UlcStartup" 
+      file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/ulc/UlcStartup.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
+      file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/AbstractStartup.java"/>  
   </generalization>  
   <realization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.startup.AbstractStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.startup.IStartup" 
-      file="/design2see-framework/app-launch/src/main/java/com/d2s/framework/application/startup/IStartup.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
+      file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/AbstractStartup.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.IStartup" 
+      file="/jspresso-framework/app-launch/src/main/java/org/jspresso/framework/application/startup/IStartup.java"/>  
   </realization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.startup.wings.WingsStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/wings/WingsStartup.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.startup.AbstractStartup" 
-      file="/design2see-framework/app-template/src/main/java/com/d2s/framework/application/frontend/startup/AbstractStartup.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.application.startup.wings.WingsStartup" 
+      file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/wings/WingsStartup.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.startup.AbstractStartup" 
+      file="/jspresso-framework/app-template/src/main/java/org/jspresso/framework/application/frontend/startup/AbstractStartup.java"/>  
   </generalization>
 </class-diagram>

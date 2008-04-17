@@ -3,252 +3,252 @@
   <classifier-display autosize="true" package="true" attributes="true" operations="true" initial-value="false" 
     signature="true" visibility="true"/>  
   <association-display labels="true" multiplicity="true"/>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="344" y="-39" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IBinaryPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IBinaryPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="634" y="-39" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IBooleanPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IBooleanPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="-27" y="89" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IColorPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IColorPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IColorPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IColorPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="572" y="102" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IDatePropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IDatePropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IDatePropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDatePropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="603" y="220" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IDurationPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IDurationPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDurationPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="571" y="367" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IEnumerationPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IEnumerationPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="-13" y="-11" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.INumberPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/INumberPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="398" y="254" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IDecimalPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDecimalPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="279" y="374" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IIntegerPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IIntegerPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IIntegerPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="398" y="464" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IPercentPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IPercentPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPercentPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="228" y="464" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IObjectPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IObjectPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IObjectPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="209" y="130" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IStringPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IStringPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="-21" y="193" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IPasswordPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IPasswordPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPasswordPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="155" y="300" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.ITextPropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ITextPropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="-20" y="300" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.ITimePropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ITimePropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.ITimePropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITimePropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="287" y="186" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.IJavaSerializablePropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IJavaSerializablePropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.IJavaSerializablePropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IJavaSerializablePropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="634" y="43" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor" 
-    project="design2see-framework" 
-    file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ISourceCodePropertyDescriptor.java" 
+  <interface type="java" name="org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ISourceCodePropertyDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="-21" y="419" width="-1" height="-1"/>  
   </interface>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IPasswordPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IPasswordPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IStringPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IStringPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IPasswordPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPasswordPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.ITimePropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ITimePropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ITimePropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITimePropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IDecimalPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.INumberPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/INumberPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDecimalPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IEnumerationPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IEnumerationPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IDatePropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IDatePropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IDatePropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDatePropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>    
     <bendpoint x="453" y="110"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IDurationPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IDurationPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IDurationPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDurationPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.INumberPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/INumberPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.ITextPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ITextPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IStringPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IStringPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IBinaryPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IBinaryPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IJavaSerializablePropertyDescriptor" 
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IJavaSerializablePropertyDescriptor" 
       
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IJavaSerializablePropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IBinaryPropertyDescriptor.java"/>  
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IJavaSerializablePropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IBinaryPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IBooleanPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IBooleanPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IColorPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IColorPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IColorPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IColorPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IPercentPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IPercentPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IDecimalPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IPercentPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPercentPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IDecimalPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IIntegerPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IIntegerPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.INumberPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/INumberPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IIntegerPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.INumberPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/INumberPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IObjectPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IObjectPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IObjectPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IObjectPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.IStringPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IStringPropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.IScalarPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IStringPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IStringPropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IScalarPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IScalarPropertyDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.model.descriptor.ISourceCodePropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ISourceCodePropertyDescriptor.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.model.descriptor.ITextPropertyDescriptor" 
-      file="/design2see-framework/model/src/main/java/com/d2s/framework/model/descriptor/ITextPropertyDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ISourceCodePropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ISourceCodePropertyDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.model.descriptor.ITextPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/ITextPropertyDescriptor.java"/>  
   </generalization>
 </class-diagram>

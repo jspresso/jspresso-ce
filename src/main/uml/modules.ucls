@@ -3,88 +3,88 @@
   <classifier-display autosize="true" package="true" attributes="false" operations="true" initial-value="false" 
     signature="true" visibility="true"/>  
   <association-display labels="true" multiplicity="true"/>  
-  <class type="java" name="com.d2s.framework.application.model.Workspace" project="design2see-framework" 
-    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Workspace.java" 
+  <class type="java" name="org.jspresso.framework.application.model.Workspace" project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="146" y="229" width="-1" height="-1"/>  
   </class>  
-  <class type="java" name="com.d2s.framework.application.model.Module" project="design2see-framework" 
-    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Module.java" 
+  <class type="java" name="org.jspresso.framework.application.model.Module" project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="561" y="229" width="-1" height="-1"/>  
   </class>  
-  <class type="java" name="com.d2s.framework.application.model.BeanModule" project="design2see-framework" 
-    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/BeanModule.java" 
+  <class type="java" name="org.jspresso.framework.application.model.BeanModule" project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanModule.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="163" y="572" width="-1" height="-1"/>  
   </class>  
-  <class type="java" name="com.d2s.framework.application.model.BeanCollectionModule" project="design2see-framework" 
-    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/BeanCollectionModule.java" 
+  <class type="java" name="org.jspresso.framework.application.model.BeanCollectionModule" project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="561" y="579" width="-1" height="-1"/>  
   </class>  
-  <class type="java" name="com.d2s.framework.application.model.FilterableBeanCollectionModule" 
-    project="design2see-framework" 
-    file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/FilterableBeanCollectionModule.java" 
+  <class type="java" name="org.jspresso.framework.application.model.FilterableBeanCollectionModule" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/FilterableBeanCollectionModule.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="561" y="757" width="-1" height="-1"/>  
   </class>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.model.BeanModule" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/BeanModule.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.model.Module" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Module.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.BeanModule" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanModule.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java"/>  
   </generalization>  
   <association>    
     <display labels="true" multiplicity="true"/>    
-    <source navigable="false" project="design2see-framework" name="com.d2s.framework.application.model.Workspace" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Workspace.java">      
+    <source navigable="false" project="jspresso-framework" name="org.jspresso.framework.application.model.Workspace" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java">      
       <attribute name="modules"/>      
       <multiplicity minimum="0" maximum="2147483647"/>    
     </source>    
-    <target navigable="true" project="design2see-framework" name="com.d2s.framework.application.model.Module" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Module.java"/>  
+    <target navigable="true" project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java"/>  
   </association>  
   <association>    
     <display labels="true" multiplicity="true"/>    
-    <source navigable="false" project="design2see-framework" name="com.d2s.framework.application.model.Module" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Module.java">      
+    <source navigable="false" project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java">      
       <attribute name="subModules"/>      
       <multiplicity minimum="0" maximum="2147483647"/>    
     </source>    
-    <target navigable="true" project="design2see-framework" name="com.d2s.framework.application.model.Module" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Module.java"/>  
+    <target navigable="true" project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java"/>  
   </association>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.model.BeanCollectionModule" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/BeanCollectionModule.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.model.Module" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Module.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.BeanCollectionModule" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java"/>  
   </generalization>  
   <association>    
     <display labels="true" multiplicity="true"/>    
-    <source navigable="false" project="design2see-framework" name="com.d2s.framework.application.model.Module" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Module.java">      
+    <source navigable="false" project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java">      
       <attribute name="parent"/>      
       <multiplicity minimum="0" maximum="1"/>    
     </source>    
-    <target navigable="true" project="design2see-framework" name="com.d2s.framework.application.model.Module" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/Module.java"/>  
+    <target navigable="true" project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java"/>  
   </association>  
   <generalization>    
-    <source project="design2see-framework" name="com.d2s.framework.application.model.FilterableBeanCollectionModule" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/FilterableBeanCollectionModule.java"/>    
-    <target project="design2see-framework" name="com.d2s.framework.application.model.BeanCollectionModule" 
-      file="/design2see-framework/application/src/main/java/com/d2s/framework/application/model/BeanCollectionModule.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.FilterableBeanCollectionModule" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/FilterableBeanCollectionModule.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.model.BeanCollectionModule" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/BeanCollectionModule.java"/>  
   </generalization>
 </class-diagram>
