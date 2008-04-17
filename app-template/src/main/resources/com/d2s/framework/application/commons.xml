@@ -11,11 +11,11 @@
 
   <bean
     id="mockMessageSource"
-    class="org.jspresso.framework.util.i18n.mock.MockMessageSource" />
+    class="com.d2s.framework.util.i18n.mock.MockMessageSource" />
 
   <bean
     id="translationProvider"
-    class="org.jspresso.framework.util.i18n.basic.MessageSourceTranslationProvider">
+    class="com.d2s.framework.util.i18n.basic.MessageSourceTranslationProvider">
     <property
       name="messageSource"
       ref="applicationMessageSource" />
@@ -44,13 +44,13 @@
   -->
   <bean
     id="accessorFactory"
-    class="org.jspresso.framework.util.accessor.basic.BasicAccessorFactory">
+    class="com.d2s.framework.util.accessor.basic.BasicAccessorFactory">
     <property name="beanAccessorFactory">
-      <bean clorg.jspresso.framework.util.accessor.bean.bean.BeanAccessorFactory" />
+      <bean class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory" />
     </property>
     <property name="mapAccessorFactory">
       <bean
-        class="org.jspresso.framework.model.map.DescriptorAwareMapAccessorFactory" />
+        class="com.d2s.framework.model.map.DescriptorAwareMapAccessorFactory" />
     </property>
   </bean>
 
@@ -70,7 +70,7 @@
   -->
   <bean
     id="componentCollectionFactory"
-    class="org.jspresso.framework.model.component.DefaultComponentCollectionFactory" />
+    class="com.d2s.framework.model.component.DefaultComponentCollectionFactory" />
 
   <!--
     The implementation used as ModelConnectorFactory.
@@ -104,7 +104,8 @@
     it on http://www.javaexchange.com/aboutRandomGUID.html
   -->
   <bean
-    id="entityGUIDGenorg.jspresso.framework.util.uids.framework.util.uid.RandomGUIDGenerator" />
+    id="entityGUIDGenerator"
+    class="com.d2s.framework.util.uid.RandomGUIDGenerator" />
 
   <!--
     The root abstract implementation used as Application Session.
@@ -121,7 +122,7 @@
       ref="accessorFactory" />
     <property name="entityRegistry">
       <bean
-        clorg.jspresso.framework.model.entity.basicbasic.BasicEntityRegistry"
+        class="com.d2s.framework.model.entity.basic.BasicEntityRegistry"
         scope="prototype" />
     </property>
     <property name="unitOfWork">
@@ -131,7 +132,7 @@
     </property>
     <property name="carbonEntityCloneFactory">
       <bean
-        clorg.jspresso.framework.model.entityntity.CarbonEntityCloneFactory"
+        class="com.d2s.framework.model.entity.CarbonEntityCloneFactory"
         scope="prototype" />
     </property>
   </bean>
@@ -141,14 +142,14 @@
   -->
   <bean
     id="componentDescriptorRegistry"
-    clorg.jspresso.framework.model.descriptor.basicbasic.BasicComponentDescriptorRegistry" />
+    class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
   <!--
     The implementation used as ComponentIconImageURLProvider.
   -->
   <bean
     id="defaultDomainImageUrlProvider"
-    clorg.jspresso.framework.model.descriptoriptor.ComponentIconImageURLProvider">
+    class="com.d2s.framework.model.descriptor.ComponentIconImageURLProvider">
     <property
       name="componentDescriptorRegistry"
       ref="componentDescriptorRegistry" />
@@ -159,7 +160,7 @@
   -->
   <bean
     id="basicComponentFactory"
-    clorg.jspresso.framework.model.component.basicbasic.BasicProxyComponentFactory">
+    class="com.d2s.framework.model.component.basic.BasicProxyComponentFactory">
     <property
       name="accessorFactory"
       ref="accessorFactory" />
@@ -168,7 +169,7 @@
       ref="componentCollectionFactory" />
     <property name="componentExtensionFactory">
       <bean
-        class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory">
+        class="com.d2s.framework.model.component.DefaultComponentExtensionFactory">
       </bean>
     </property>
     <property
@@ -180,7 +181,8 @@
     The implementation used as EntityFactory.
   -->
   <bean
-    id="baorg.jspresso.framework.model.entity.basics.framework.model.entity.basic.BasicProxyEntityFactory">
+    id="basicEntityFactory"
+    class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
     <property
       name="accessorFactory"
       ref="accessorFactory" />
@@ -193,7 +195,7 @@
     <property
       name="entityExtensionFactory">
       <bean
-        class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory">
+        class="com.d2s.framework.model.component.DefaultComponentExtensionFactory">
       </bean>
     </property>
     <property
@@ -280,14 +282,15 @@
     The scriptHandler.
   -->
   <bean
-    id="scriptHorg.jspresso.framework.util.scriptingework.util.scripting.DefaultScriptHandler" />
+    id="scriptHandler"
+    class="com.d2s.framework.util.scripting.DefaultScriptHandler" />
 
   <!--
     The query view descriptor factory.
   -->
   <bean
     id="queryViewDescriptorFactory"
-    class="org.jspresso.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory" />
+    class="com.d2s.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory" />
 
   <!--
     The module view descriptor factory.
@@ -331,7 +334,7 @@
   <bean
     abstract="true"
     id="abstractIconFactory"
-    class="org.jspresso.framework.view.AbstractIconFactory">
+    class="com.d2s.framework.view.AbstractIconFactory">
     <property
       name="okYesIconImageURL"
       value="classpath:com/d2s/framework/application/images/ok-48x48.png" />
