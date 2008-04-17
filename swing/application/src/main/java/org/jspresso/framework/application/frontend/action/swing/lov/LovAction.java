@@ -102,7 +102,7 @@ public class LovAction extends ModalDialogAction {
         iconImageURL = entityDescriptor.getIconImageURL();
       }
       if (iconImageURL == null) {
-        iconImageURL = "classpath:com/d2s/framework/application/images/find-48x48.png";
+        iconImageURL = "classpath:org/jspresso/framework/application/images/find-48x48.png";
       }
     }
     return iconImageURL;

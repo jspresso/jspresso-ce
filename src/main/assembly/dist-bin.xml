@@ -17,7 +17,7 @@
             <outputDirectory>lib</outputDirectory>
             <!--<outputFileNameMapping>${groupId}/${artifactId}-${version}.${extension}</outputFileNameMapping>-->
             <excludes>
-              <exclude>com.design2see:*</exclude>
+              <exclude>org.jspresso:*</exclude>
               <exclude>ulc:*</exclude>
               <exclude>javax.servlet:*</exclude>
               <!--<exclude>javax.transaction:*</exclude>-->

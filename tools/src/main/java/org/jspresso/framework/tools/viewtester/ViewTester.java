@@ -34,7 +34,7 @@ import org.springframework.context.ApplicationContext;
 
 
 /**
- * Generates D2S powered component java code based on its descriptor.
+ * Generates Jspresso powered component java code based on its descriptor.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>

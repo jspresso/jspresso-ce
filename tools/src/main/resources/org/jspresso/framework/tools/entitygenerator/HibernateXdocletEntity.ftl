@@ -30,7 +30,7 @@ package ${package};
  *
   <#if isEntity>
  * @hibernate.mapping
- *           default-access = "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
+ *           default-access = "org.jspresso.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
 <#-- *           package = "${package}"-->
     <#if superEntity?exists>
  * @hibernate.joined-subclass
@@ -40,7 +40,7 @@ package ${package};
  *           table = "${generateSQLName(componentName)}"
  *           dynamic-insert = "true"
  *           dynamic-update = "true"
- *           persister = "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
+ *           persister = "org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
     <#if componentDescriptor.purelyAbstract>
  *           abstract = "true"
     </#if>
@@ -104,28 +104,28 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    *
   <#if !componentDescriptor.computed && !propertyDescriptor.delegateClassName?exists>
    * @hibernate.property
-    <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDatePropertyDescriptor")>
+    <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDatePropertyDescriptor")>
       <#if propertyDescriptor.type = "DATE">
    *           type = "date"
       <#else>
    *           type = "timestamp"
       </#if>
-    <#elseif instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.ITimePropertyDescriptor")>
+    <#elseif instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.ITimePropertyDescriptor")>
    *           type = "time"
-<#-- <#elseif    instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
+<#-- <#elseif    instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")
               && !(propertyDescriptor.maxLength?exists)>
    *           type = "blob"
 -->
     </#if>
    * @hibernate.column
    *           name = "${generateSQLName(propertyName)}"
-    <#if (   instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IStringPropertyDescriptor")
-          || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IEnumerationPropertyDescriptor")
-          || instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBinaryPropertyDescriptor")
+    <#if (   instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IStringPropertyDescriptor")
+          || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IEnumerationPropertyDescriptor")
+          || instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor")
          )
       && (propertyDescriptor.maxLength?exists)>
    *           length = "${propertyDescriptor.maxLength?c}"
-    <#elseif instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IColorPropertyDescriptor")>
+    <#elseif instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IColorPropertyDescriptor")>
    *           length = "10"
     </#if>
     <#if propertyDescriptor.mandatory>
@@ -134,7 +134,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
     <#if propertyDescriptor.unicityScope?exists>
    *           unique-key = "${generateSQLName(propertyDescriptor.unicityScope)}_UNQ"
     </#if>
-    <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.INumberPropertyDescriptor")>
+    <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.INumberPropertyDescriptor")>
       <#if (propertyDescriptor.minValue?exists)
          &&(propertyDescriptor.maxValue?exists)>
         <#local infLength=propertyDescriptor.minValue?int?c?length/>
@@ -148,7 +148,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
       <#else>
    *           scale = "10"
       </#if>
-      <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IDecimalPropertyDescriptor")>
+      <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IDecimalPropertyDescriptor")>
         <#if propertyDescriptor.maxFractionDigit?exists>
    *           precision = "${propertyDescriptor.maxFractionDigit?c}"
         <#else>
@@ -159,7 +159,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   </#if>
    * @return the ${propertyName}.
    */
-  <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IBooleanPropertyDescriptor")>
+  <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor")>
   ${propertyType} is${propertyName?cap_first}();
   <#else>
   ${propertyType} get${propertyName?cap_first}();
@@ -324,7 +324,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
    * @return the ${propertyName}.
    */
   <#if generateAnnotations>
-  @com.d2s.framework.util.bean.ElementClass(${elementType}.class)
+  @org.jspresso.framework.util.bean.ElementClass(${elementType}.class)
   </#if>
   ${collectionType}<${elementType}> get${propertyName?cap_first}();
 </#macro>
@@ -348,7 +348,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
   <#local isPurelyAbstract=propertyDescriptor.referencedDescriptor.purelyAbstract/>
   <#if propertyDescriptor.reverseRelationEnd?exists>
     <#local bidirectional=true/>
-    <#if instanceof(propertyDescriptor.reverseRelationEnd, "com.d2s.framework.model.descriptor.IReferencePropertyDescriptor")>
+    <#if instanceof(propertyDescriptor.reverseRelationEnd, "org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor")>
       <#local oneToOne=true/>
       <#local componentName=componentDescriptor.name[componentDescriptor.name?last_index_of(".")+1..]/>
       <#local elementName=propertyType[propertyType?last_index_of(".")+1..]/>
@@ -464,9 +464,9 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 </#macro>
 
 <#macro generatePropertyAccessors componentDescriptor propertyDescriptor>
-  <#if instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor")>
+  <#if instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor")>
     <@generateCollectionPropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
-  <#elseif instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IReferencePropertyDescriptor")>
+  <#elseif instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor")>
     <@generateReferencePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
   <#else>
     <@generateScalarPropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
@@ -476,7 +476,7 @@ public interface ${componentName}<#if (superInterfaceList?size > 0)> extends
 <#if componentDescriptor.declaredPropertyDescriptors?exists>
   <#assign empty=true/>
   <#list componentDescriptor.declaredPropertyDescriptors as propertyDescriptor>
-    <#if !(instanceof(propertyDescriptor, "com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor")
+    <#if !(instanceof(propertyDescriptor, "org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor")
            && propertyDescriptor.overload)>
       <@generatePropertyAccessors componentDescriptor=componentDescriptor propertyDescriptor=propertyDescriptor/>
       <#assign empty=false/>

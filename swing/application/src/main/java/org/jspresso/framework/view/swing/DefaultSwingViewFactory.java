@@ -2291,10 +2291,10 @@ public class DefaultSwingViewFactory implements
     Dimension iconSize = new Dimension(viewComponent.getTableHeader().getFont()
         .getSize(), viewComponent.getTableHeader().getFont().getSize());
     sorterDecorator.setUpIcon(iconFactory.getIcon(
-        "classpath:com/d2s/framework/application/images/1uparrow-48x48.png",
+        "classpath:org/jspresso/framework/application/images/1uparrow-48x48.png",
         iconSize));
     sorterDecorator.setDownIcon(iconFactory.getIcon(
-        "classpath:com/d2s/framework/application/images/1downarrow-48x48.png",
+        "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
         iconSize));
     sorterDecorator.setColumnComparator(String.class,
         String.CASE_INSENSITIVE_ORDER);

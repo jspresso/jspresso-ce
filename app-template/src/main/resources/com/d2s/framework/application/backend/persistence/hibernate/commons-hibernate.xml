@@ -4,7 +4,7 @@
   default-lazy-init="true">
 
   <!--
-    Hibernate root application context for the D2S framework.
+    Hibernate root application context for the Jspresso framework.
   -->
 
   <bean id="componentTuplizerInit" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

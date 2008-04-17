@@ -215,7 +215,7 @@
       </fileset>
     </copy>
     <beandoc outputDir="${beandoc.output.dir}"
-             beandocProps="${basedir}/d2s-beandoc.properties">
+             beandocProps="${basedir}/jspresso-beandoc.properties">
       <fileset dir="${beandoc.output.dir}/tmp">
         <include name="**/*.xml" />
       </fileset>

@@ -3,9 +3,9 @@
     This configuration file was written by the eclipse-cs plugin configuration editor
 -->
 <!--
-    Checkstyle-Configuration: D2S Checks
+    Checkstyle-Configuration: Jspresso Checks
     Description: 
-Design2See checks
+Jspresso checks
 -->
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 <module name="Checker">

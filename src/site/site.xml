@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="Maven">
   <bannerLeft>
-    <name>Design2See</name>
-    <src>images/d2s-small.png</src>
-    <href>http://www.design2see.com</href>
+    <name>Jspresso</name>
+    <src>images/jspresso-small.png</src>
+    <href>http://www.jspresso.com</href>
   </bannerLeft>
   <!--
     <bannerRight>
-    <src>images/d2s-small.png</src>
+    <src>images/jspresso-small.png</src>
     </bannerRight>
   -->
   <body>
     <links>
       <item
-        name="Design2See"
-        href="http://www.design2see.com/" />
+        name="Jspresso"
+        href="http://www.jspresso.com/" />
     </links>
 
-    <menu name="Design2See Application Framework">
+    <menu name="Jspresso Application Framework">
       <item
         name="Introduction"
         href="index.html" />

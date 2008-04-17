@@ -4,32 +4,32 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.design2see</groupId>
-  <artifactId>d2s-framework</artifactId>
+  <groupId>org.jspresso</groupId>
+  <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
   <version>2.0</version>
-  <name>Design2See Application Framework</name>
-  <url>file:///Dev/D2S/design2see-framework/target/fullsite</url>
+  <name>Jspresso Application Framework</name>
+  <url>file:///Dev/Jspresso/jspresso-framework/target/fullsite</url>
   <organization>
-    <name>Design2See</name>
-    <url>http://www.design2see.com</url>
+    <name>Jspresso</name>
+    <url>http://www.jspresso.com</url>
   </organization>
   <inceptionYear>2005</inceptionYear>
   <scm>
     <connection>
-      scm:svn:http://saturne/svnrep:design2see/framework/trunk
+      scm:svn:http://saturne/svnrep:jspresso/framework/trunk
     </connection>
   </scm>
   <mailingLists>
     <mailingList>
       <name>${pom.name} Dev List</name>
-      <subscribe>dev-subscribe@design2see.com</subscribe>
-      <unsubscribe>dev-unsubscribe@design2see.com</unsubscribe>
+      <subscribe>dev-subscribe@jspresso.com</subscribe>
+      <unsubscribe>dev-unsubscribe@jspresso.com</unsubscribe>
     </mailingList>
     <mailingList>
       <name>${pom.name} User List</name>
-      <subscribe>users-subscribe@design2see.com</subscribe>
-      <unsubscribe>users-unsubscribe@design2see.com</unsubscribe>
+      <subscribe>users-subscribe@jspresso.com</subscribe>
+      <unsubscribe>users-unsubscribe@jspresso.com</unsubscribe>
     </mailingList>
   </mailingLists>
   <developers>
@@ -43,7 +43,7 @@
   <distributionManagement>
     <site>
       <id>local</id>
-      <url>file:///Dev/D2S/design2see-framework/target/fullsite</url>
+      <url>file:///Dev/Jspresso/jspresso-framework/target/fullsite</url>
     </site>
   </distributionManagement>
   <repositories>
@@ -87,128 +87,128 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-aop</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-aop</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-application</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-application</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-binding</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-binding</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-action</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-action</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-model</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-model</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-tools</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-tools</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-util</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-util</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-security</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-security</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-view</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-view</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-hibernate</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-hibernate</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-swing</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-swing</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-swing-application</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-swing-application</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-swing-components</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-swing-components</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-ulc</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-ulc</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-ulc-application</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-ulc-application</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-ulc-components</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-ulc-components</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-ulc-components-server</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-ulc-components-server</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-ulc-components-shared</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-ulc-components-shared</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-ulc-components-client</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-ulc-components-client</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-wings</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-wings</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-wings-application</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-wings-application</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-wings-components</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-wings-components</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-app-template</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-app-template</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-jasper</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-jasper</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
-        <groupId>com.design2see</groupId>
-        <artifactId>d2s-app-launch</artifactId>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-app-launch</artifactId>
         <version>${pom.version}</version>
       </dependency>
       <dependency>
@@ -624,7 +624,7 @@
                 <if>
                   <equals
                     arg1="${project.artifactId}"
-                    arg2="d2s-framework" />
+                    arg2="jspresso-framework" />
                   <then>
                     <mkdir dir="${project.reporting.outputDirectory}/beandocs" />
                     <mkdir
@@ -642,7 +642,7 @@
                     </copy>
                     <beandoc
                       outputDir="${project.reporting.outputDirectory}/beandocs"
-                      beandocProps="${basedir}/d2s-beandoc.properties">
+                      beandocProps="${basedir}/jspresso-beandoc.properties">
                       <fileset
                         dir="${project.reporting.outputDirectory}/beandocs/tmp">
                         <include name="**/*.xml" />

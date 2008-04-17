@@ -6,7 +6,7 @@
   default-lazy-init="true">
 
   <!--
-    Root application context for the D2S framework.
+    Root application context for the Jspresso framework.
   -->
 
   <bean
@@ -328,7 +328,7 @@
       ref="moduleViewDescriptorFactory" />
     <property
       name="workspacesMenuIconImageUrl"
-      value="classpath:com/d2s/framework/application/images/workspaces-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/workspaces-48x48.png" />
   </bean>
 
   <bean
@@ -337,31 +337,31 @@
     class="org.jspresso.framework.view.AbstractIconFactory">
     <property
       name="okYesIconImageURL"
-      value="classpath:com/d2s/framework/application/images/ok-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/ok-48x48.png" />
     <property
       name="noIconImageURL"
-      value="classpath:com/d2s/framework/application/images/no-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/no-48x48.png" />
     <property
       name="cancelIconImageURL"
-      value="classpath:com/d2s/framework/application/images/cancel-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/cancel-48x48.png" />
     <property
       name="infoIconImageURL"
-      value="classpath:com/d2s/framework/application/images/info-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
     <property
       name="warningIconImageURL"
-      value="classpath:com/d2s/framework/application/images/warning-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/warning-48x48.png" />
     <property
       name="errorIconImageURL"
-      value="classpath:com/d2s/framework/application/images/error-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/error-48x48.png" />
     <property
       name="forbiddenIconUrl"
-      value="classpath:com/d2s/framework/application/images/forbidden-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/forbidden-48x48.png" />
     <property
       name="backwardIconUrl"
-      value="classpath:com/d2s/framework/application/images/backward-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/backward-48x48.png" />
     <property
       name="forwardIconUrl"
-      value="classpath:com/d2s/framework/application/images/forward-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/forward-48x48.png" />
   </bean>
 
   <bean

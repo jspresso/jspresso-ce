@@ -6,7 +6,7 @@
   default-lazy-init="true">
 
   <!--
-    WingS root application context for the D2S framework.
+    WingS root application context for the Jspresso framework.
   -->
 
   <!--
@@ -89,7 +89,7 @@
     class="org.jspresso.framework.application.frontend.action.wings.flow.InfoAction">
     <property
       name="iconImageURL"
-      value="classpath:com/d2s/framework/application/images/info-48x48.png" />
+      value="classpath:org/jspresso/framework/application/images/info-48x48.png" />
   </bean>
 
   <bean

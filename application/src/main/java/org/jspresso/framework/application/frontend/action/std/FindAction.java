@@ -28,6 +28,6 @@ public class FindAction<E, F, G> extends ActionWrapper<E, F, G> {
    */
   public FindAction() {
     setName("find.name");
-    setIconImageURL("classpath:com/d2s/framework/application/images/find-48x48.png");
+    setIconImageURL("classpath:org/jspresso/framework/application/images/find-48x48.png");
   }
 }

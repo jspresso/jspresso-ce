@@ -4,7 +4,7 @@
 package org.jspresso.framework.util.ldap;
 
 /**
- * Constants for Design2See LDAP attributes naming.
+ * Constants for Jspresso LDAP attributes naming.
  * <p>
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  * <p>

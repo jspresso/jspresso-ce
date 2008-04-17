@@ -26,7 +26,7 @@ public class CancelAction extends AbstractUlcAction {
    */
   public CancelAction() {
     setName("cancel");
-    setIconImageURL("classpath:com/d2s/framework/application/images/cancel-48x48.png");
+    setIconImageURL("classpath:org/jspresso/framework/application/images/cancel-48x48.png");
   }
 
   /**

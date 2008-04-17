@@ -5,7 +5,7 @@
   <title>Getting started</title>
 
   <para>This chapter will help you to understand the basics of the
-  <trademark>D2S</trademark> application framework and how to work with
+  <trademark>Jspresso</trademark> application framework and how to work with
   it.</para>
 
   <section>
@@ -14,7 +14,7 @@
     <para>The human resources application is a simple yet comprehensive
     business application targeted at managing a company organization and the
     employees who work in it. It will demonstrate how
-    <trademark>D2S</trademark> can handle a domain model with its
+    <trademark>Jspresso</trademark> can handle a domain model with its
     relationships and its constraints, present it to the end-user for
     manipulation through various built-in views and actions, handle security
     through profile management, distribute the frontend across the network,
@@ -259,7 +259,7 @@
     feed the framework with them. As we saw before, most of the job will
     consist in describing the different layers in a structured way. But before
     going further, let's define the best practices regarding the logical
-    layering of a typical <trademark>D2S</trademark> application (although
+    layering of a typical <trademark>Jspresso</trademark> application (although
     these practices may generally apply to any well designed application). We
     will define 3 logical layers from the bottom to the top :</para>
 
@@ -355,7 +355,7 @@
       </itemizedlist>
 
       <para>We will see later that there virtually any domain model can be
-      extensively described using <trademark>D2S</trademark>. This includes
+      extensively described using <trademark>Jspresso</trademark>. This includes
       for instance polymorphic entities or associations, multiple inheritance,
       and so on.</para>
     </section>
@@ -426,7 +426,7 @@
     <title>Describing the domain model</title>
 
     <para>In this chapter, you will learn how to feed the
-    <trademark>D2S</trademark> framework with the sample domain model
+    <trademark>Jspresso</trademark> framework with the sample domain model
     description.</para>
 
     <section>
@@ -434,7 +434,7 @@
 
       <para>Let's go back to the HR sample application. As for every layer
       introduced above, describing the domain model will consist in assembling
-      <trademark>D2S</trademark> description java beans using the <ulink
+      <trademark>Jspresso</trademark> description java beans using the <ulink
       url="http://www.springframework.org/">Spring framework Dependency
       Injection Container</ulink>. To achieve this, you will have to write an
       XML file that conforms to the <ulink
@@ -447,14 +447,14 @@
       IDE</ulink>. The latest will offer a lot of productivity enhancement
       with code completion for the XML elements and attributes as well as for
       the description bean class names and properties of
-      <trademark>D2S</trademark>.</para>
+      <trademark>Jspresso</trademark>.</para>
 
       <para>The various description java beans that are provided by
-      <trademark>D2S</trademark> are detailed in the next chapter.</para>
+      <trademark>Jspresso</trademark> are detailed in the next chapter.</para>
 
-      <para>We will use the root package <code>com.d2s.hrsample</code> for our
+      <para>We will use the root package <code>org.jspresso.hrsample</code> for our
       application. The domain model description will logically go to the
-      <code>com.d2s.hrsample.model</code> package. In this package, we will
+      <code>org.jspresso.hrsample.model</code> package. In this package, we will
       create a <filename>hrsample-model.xml</filename> file as described below
       :</para>
 
@@ -483,7 +483,7 @@
   class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt; <co
           id="n-class" />
   &lt;constructor-arg
-    value="com.d2s.hrsample.model.Nameable" /&gt; <co id="n-classname" />
+    value="org.jspresso.hrsample.model.Nameable" /&gt; <co id="n-classname" />
   &lt;property name="propertyDescriptors"&gt; <co id="n-props" />
     &lt;list&gt;
       &lt;bean
@@ -552,7 +552,7 @@
       </calloutlist>
 
       <para>As you can see above, we create an interface descriptor
-      (<code>com.d2s.hrsample.backend.domain.Nameable</code>) with one
+      (<code>org.jspresso.hrsample.backend.domain.Nameable</code>) with one
       property (<code>name</code>) along with its constraints
       (<code>maxLength</code> and <code>mandatory</code>). This is a fairly
       simple interface since it has no intrinsic behaviour nor relationships
@@ -564,7 +564,7 @@
       <programlisting language="xml">&lt;bean
   id="Traceable"
   class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.Traceable" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.Traceable" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
@@ -637,8 +637,8 @@
       <title>Generating the code</title>
 
       <para>It is time now to get our interfaces generated before going
-      further. Let's use the <trademark>D2S</trademark> generation tool to
-      make it happen. <trademark>D2S</trademark> provides a <ulink
+      further. Let's use the <trademark>Jspresso</trademark> generation tool to
+      make it happen. <trademark>Jspresso</trademark> provides a <ulink
       url="http://freemarker.org/">freemarker</ulink> template to generate the
       components that may be easily triggered using a simple ant task. Since
       this generator explores the spring beans definitions, we first need to
@@ -661,11 +661,11 @@
     lazy-init="true"&gt;
     &lt;constructor-arg&gt;
       &lt;list&gt;
-        &lt;value&gt;com/d2s/framework/application/commons.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt; <co
             id="brf-commons" />
-        &lt;value&gt;com/d2s/framework/tools/mock.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/framework/tools/mock.xml&lt;/value&gt; <co
             id="brf-mock" />
-        &lt;value&gt;com/d2s/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
             id="brf-model" />
       &lt;/list&gt;
     &lt;/constructor-arg&gt;
@@ -673,7 +673,7 @@
 &lt;/beans&gt;</programlisting><calloutlist>
           <callout arearefs="brf-commons">
             <para>The commons bean definitions of the
-            <trademark>D2S</trademark> framework.</para>
+            <trademark>Jspresso</trademark> framework.</para>
           </callout>
 
           <callout arearefs="brf-mock">
@@ -705,7 +705,7 @@
       &lt;include name="**/target/classes" /&gt;
     &lt;/dirset&gt;
     &lt;fileset dir="${m2.repo}"&gt;
-      &lt;include name="**/design2see/**/2.0/*.jar" /&gt;
+      &lt;include name="**/jspresso/**/2.0/*.jar" /&gt;
       &lt;include name="**/commons-cli-1.0.jar" /&gt;
       &lt;include name="**/freemarker-2.3.3.jar" /&gt;
       &lt;include name="**/spring-2.5.1.jar" /&gt;
@@ -723,13 +723,13 @@
       &lt;arg value="-applicationContextKey" /&gt;
       &lt;arg value="hrsample-model-context" /&gt;
       &lt;arg value="-templateResourcePath" /&gt;
-      &lt;arg value="/com/d2s/framework/tools/entitygenerator" /&gt;
+      &lt;arg value="/org/jspresso/framework/tools/entitygenerator" /&gt;
       &lt;arg value="-templateName" /&gt;
       &lt;arg value="HibernateXdocletEntity.ftl" /&gt;
       &lt;arg value="-outputDir" /&gt;
       &lt;arg value="${java.src.dir}" /&gt;
       &lt;arg value="-includePackages" /&gt;
-      &lt;arg value="com.d2s.hrsample.model" /&gt;
+      &lt;arg value="org.jspresso.hrsample.model" /&gt;
     &lt;/java&gt;
   &lt;/target&gt;
 
@@ -738,7 +738,7 @@
 &lt;/project&gt;</programlisting>
 
       <para>You may now have a look into the
-      <code>com.d2s.hrsample.model</code> package source directory. You may
+      <code>org.jspresso.hrsample.model</code> package source directory. You may
       find the 2 generated classes :</para>
 
       <itemizedlist>
@@ -753,7 +753,7 @@
         </listitem>
       </itemizedlist>
 
-      <programlisting id="Nameable" language="java">package com.d2s.hrsample.model;
+      <programlisting id="Nameable" language="java">package org.jspresso.hrsample.model;
 
 /**
  * Nameable component.
@@ -790,7 +790,7 @@ public interface Nameable {
 
       <para>These 2 java classes are in fact interfaces with getters and
       setters for the declared properties. In fact, you will never need any
-      implementation for them since <trademark>D2S</trademark> will
+      implementation for them since <trademark>Jspresso</trademark> will
       automatically handle their implementation for you at runtime using J2SE
       proxies. This approach relieves the developer from writing the
       implementation classes and thus, improves quality, robustness and
@@ -825,14 +825,14 @@ public interface Nameable {
 
       <para>It is time to write our first lines of java to achieve that. So
       let's create the life-cycle interceptor
-      <code>com.d2s.hrsample.model.service.TraceableLifecycleInterceptor</code>
+      <code>org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor</code>
       java class as follow :</para>
 
-      <programlisting language="java">package com.d2s.hrsample.model.service;
+      <programlisting language="java">package org.jspresso.hrsample.model.service;
 
 import java.util.Date;
 
-import com.d2s.hrsample.model.Traceable;
+import org.jspresso.hrsample.model.Traceable;
 import org.jspresso.framework.model.component.service.EmptyLifecycleInterceptor;
 import org.jspresso.framework.model.entity.IEntityFactory;
 import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
@@ -909,7 +909,7 @@ public class TraceableLifecycleInterceptor extends
   &lt;property name="lifecycleInterceptors"&gt; <co id="lcInterceptors" />
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.hrsample.model.service.TraceableLifecycleInterceptor" /&gt;
+        class="org.jspresso.hrsample.model.service.TraceableLifecycleInterceptor" /&gt;
     &lt;/list&gt;
   &lt;/property&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
@@ -933,7 +933,7 @@ public class TraceableLifecycleInterceptor extends
   id="City"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt; <co
           id="BasicEntityDescriptor" />
-  &lt;constructor-arg value="com.d2s.hrsample.model.City" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.City" /&gt;
   &lt;property name="ancestorDescriptors"&gt; <co id="ancestorDescriptors" />
     &lt;list&gt;
       &lt;ref local="Nameable" /&gt;
@@ -969,10 +969,10 @@ public class TraceableLifecycleInterceptor extends
         </callout>
       </calloutlist>
 
-      <para>Relaunching the <trademark>D2S</trademark> generator will produce
+      <para>Relaunching the <trademark>Jspresso</trademark> generator will produce
       the following class (<filename>City.java</filename>) :</para>
 
-      <programlisting language="java">package com.d2s.hrsample.model;
+      <programlisting language="java">package org.jspresso.hrsample.model;
 
 /**
  * City entity.
@@ -991,7 +991,7 @@ public class TraceableLifecycleInterceptor extends
  * @version $LastChangedRevision$
  */
 public interface City extends
-  com.d2s.hrsample.model.Nameable,
+  org.jspresso.hrsample.model.Nameable,
   org.jspresso.framework.model.entity.IEntity <co id="IEntity" /> {
 
   /**
@@ -1034,7 +1034,7 @@ public interface City extends
         <callout arearefs="IEntity">
           <para><code>City</code> is an entity so the generator made it
           inherit from <code>org.jspresso.framework.model.entity.IEntity</code>
-          which is a <trademark>D2S</trademark> framework base class.</para>
+          which is a <trademark>Jspresso</trademark> framework base class.</para>
         </callout>
       </calloutlist>
 
@@ -1063,7 +1063,7 @@ public interface City extends
   id="ContactInfo"
   class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor"&gt; <co
           id="BasicComponentDescriptor" />
-  &lt;constructor-arg value="com.d2s.hrsample.model.ContactInfo" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.ContactInfo" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
@@ -1123,10 +1123,10 @@ public interface City extends
         </callout>
       </calloutlist>
 
-      <para>Relaunching the <trademark>D2S</trademark> generator will produce
+      <para>Relaunching the <trademark>Jspresso</trademark> generator will produce
       the following class (<filename>ContactInfo.java</filename>) :</para>
 
-      <programlisting language="java">package com.d2s.hrsample.model;
+      <programlisting language="java">package org.jspresso.hrsample.model;
 
 /**
  * ContactInfo component.
@@ -1204,7 +1204,7 @@ public interface ContactInfo extends
           <para><code>ContactInfo</code> is an entity so the generator made it
           inherit from
           <code>org.jspresso.framework.model.component.IComponent</code> which is a
-          <trademark>D2S</trademark> framework base class.</para>
+          <trademark>Jspresso</trademark> framework base class.</para>
         </callout>
       </calloutlist>
 
@@ -1231,7 +1231,7 @@ public interface ContactInfo extends
         <programlisting language="xml">&lt;bean
   id="ContactInfo"
   class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.ContactInfo" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.ContactInfo" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       ...
@@ -1263,7 +1263,7 @@ public interface ContactInfo extends
               usage of the <emphasis role="bold">ref</emphasis> spring
               attribute).</para>
             </callout>
-          </calloutlist>Relaunching the <trademark>D2S</trademark> generator
+          </calloutlist>Relaunching the <trademark>Jspresso</trademark> generator
         will update the <filename>ContactInfo.java</filename> source file we
         generated above, but since this is a unidirectional relationship, the
         <filename>City.java</filename> file will remain untouched. The
@@ -1279,7 +1279,7 @@ public interface ContactInfo extends
    *           name = "CITY_ID"
    * @return the city.
    */
-  com.d2s.hrsample.model.City getCity();
+  org.jspresso.hrsample.model.City getCity();
 
   /**
    * Sets the city.
@@ -1287,7 +1287,7 @@ public interface ContactInfo extends
    * @param city
    *          the city to set.
    */
-  void setCity(com.d2s.hrsample.model.City city);</programlisting>Again, the
+  void setCity(org.jspresso.hrsample.model.City city);</programlisting>Again, the
         needed hibernate xDoclet tags are added to reflect the relationship
         between the component and the entity.</para>
 
@@ -1297,7 +1297,7 @@ public interface ContactInfo extends
         <para><programlisting language="xml">&lt;bean
   id="Event"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.Event" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.Event" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="Traceable" /&gt; <co id="Traceable" />
@@ -1335,7 +1335,7 @@ public interface ContactInfo extends
             </callout>
           </calloutlist>This first relationship is fairly simple since it is a
         n-1 unidirectional association. Of course, the
-        <trademark>D2S</trademark> can seamlessly handle 1-n, 1-1 and n-n
+        <trademark>Jspresso</trademark> can seamlessly handle 1-n, 1-1 and n-n
         unidirectional and bi-directional associations and compositions
         (strong aggregations).</para>
 
@@ -1354,7 +1354,7 @@ public interface ContactInfo extends
         <para><programlisting language="xml">&lt;bean
   id="Employee"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.Employee" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.Employee" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="Nameable" /&gt;
@@ -1428,10 +1428,10 @@ public interface ContactInfo extends
           &lt;map&gt;
             &lt;entry
               key="M"
-              value="classpath:com/d2s/hrsample/images/male-48x48.png" /&gt;
+              value="classpath:org/jspresso/hrsample/images/male-48x48.png" /&gt;
             &lt;entry
               key="F"
-              value="classpath:com/d2s/hrsample/images/female-48x48.png" /&gt;
+              value="classpath:org/jspresso/hrsample/images/female-48x48.png" /&gt;
           &lt;/map&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -1559,7 +1559,7 @@ public interface ContactInfo extends
         <para><programlisting language="xml">&lt;bean
   id="Employee"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.Employee" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.Employee" /&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -1583,10 +1583,10 @@ public interface ContactInfo extends
         applications. Your descriptor sources will be more concise and more
         readable and maintainable.</para>
 
-        <para>Launching the <trademark>D2S</trademark> generator will generate
+        <para>Launching the <trademark>Jspresso</trademark> generator will generate
         the <filename>Employee.java</filename> source file :</para>
 
-        <para><programlisting language="java">package com.d2s.hrsample.model;
+        <para><programlisting language="java">package org.jspresso.hrsample.model;
 
 /**
  * Employee entity.
@@ -1603,8 +1603,8 @@ public interface ContactInfo extends
  * @author Generated by Design2see
  * @version $LastChangedRevision$
  */
-public interface Employee extends com.d2s.hrsample.model.Nameable,
-    com.d2s.hrsample.model.Traceable,
+public interface Employee extends org.jspresso.hrsample.model.Nameable,
+    org.jspresso.hrsample.model.Traceable,
     org.jspresso.framework.model.entity.IEntity {
 
   /**
@@ -1713,7 +1713,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
    * @hibernate.component prefix = "CONTACT_"
    * @return the contact.
    */
-  com.d2s.hrsample.model.ContactInfo getContact();
+  org.jspresso.hrsample.model.ContactInfo getContact();
 
   /**
    * Sets the contact.
@@ -1721,7 +1721,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
    * @param contact
    *            the contact to set.
    */
-  void setContact(com.d2s.hrsample.model.ContactInfo contact);
+  void setContact(org.jspresso.hrsample.model.ContactInfo contact);
 
   /**
    * Gets the events.
@@ -1729,11 +1729,11 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
    * @hibernate.list cascade =
    *                 "persist,merge,save-update,refresh,evict,replicate,delete"
    * @hibernate.key column = "EVENTS_EMPLOYEE_ID"
-   * @hibernate.one-to-many class = "com.d2s.hrsample.model.Event"
+   * @hibernate.one-to-many class = "org.jspresso.hrsample.model.Event"
    * @hibernate.list-index column = "EVENTS_SEQ"
    * @return the events.
    */
-  java.util.List&lt;com.d2s.hrsample.model.Event&gt; getEvents();
+  java.util.List&lt;org.jspresso.hrsample.model.Event&gt; getEvents();
 
   /**
    * Sets the events.
@@ -1741,7 +1741,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
    * @param events
    *            the events to set.
    */
-  void setEvents(java.util.List&lt;com.d2s.hrsample.model.Event&gt; events);
+  void setEvents(java.util.List&lt;org.jspresso.hrsample.model.Event&gt; events);
 
   /**
    * Adds an element to the events.
@@ -1749,7 +1749,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
    * @param eventsElement
    *            the events element to add.
    */
-  void addToEvents(com.d2s.hrsample.model.Event eventsElement);
+  void addToEvents(org.jspresso.hrsample.model.Event eventsElement);
 
   /**
    * Adds an element to the events at the specified index. If the index is out
@@ -1761,7 +1761,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
    *            the events element to add.
    */
   void addToEvents(int index,
-      com.d2s.hrsample.model.Event eventsElement);
+      org.jspresso.hrsample.model.Event eventsElement);
 
   /**
    * Removes an element from the events.
@@ -1769,7 +1769,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
    * @param eventsElement
    *            the events element to remove.
    */
-  void removeFromEvents(com.d2s.hrsample.model.Event eventsElement);
+  void removeFromEvents(org.jspresso.hrsample.model.Event eventsElement);
 
 }</programlisting>As you can see above, the generator has generated all the
         accessors for the events list property. If the events property had
@@ -1794,7 +1794,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
       <para><programlisting language="xml">&lt;bean
   id="Company"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.Company" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.Company" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="Nameable" /&gt;
@@ -1819,7 +1819,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 &lt;bean
   id="OrganizationalUnit"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.OrganizationalUnit" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.OrganizationalUnit" /&gt;
   &lt;property name="purelyAbstract" value="true" /&gt; <co
             id="purelyAbstract" />
   &lt;property name="ancestorDescriptors"&gt;
@@ -1864,7 +1864,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 &lt;bean
   id="Department"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.Department" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.Department" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="OrganizationalUnit" /&gt; <co id="OrganizationalUnit" />
@@ -1875,7 +1875,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 &lt;bean
   id="Team"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.Team" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.Team" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
       &lt;ref local="OrganizationalUnit" /&gt;
@@ -1976,7 +1976,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
     <section>
       <title>Bi-directional relationships</title>
 
-      <para>It is time see how the <trademark>D2S</trademark> framework
+      <para>It is time see how the <trademark>Jspresso</trademark> framework
       handles relationships which are navigable at both ends.</para>
 
       <section>
@@ -2127,7 +2127,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
         </orderedlist>
 
         <para>As you can see above, you can expect the
-        <trademark>D2S</trademark> framework to extensively and transparently
+        <trademark>Jspresso</trademark> framework to extensively and transparently
         manage any bi-directional relationship for you. Just call whatever
         accessor you want and the domain model will be updated
         consistently.</para>
@@ -2160,7 +2160,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 &lt;bean
   id="Department"
   class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
-  &lt;constructor-arg value="com.d2s.hrsample.model.Department" /&gt;
+  &lt;constructor-arg value="org.jspresso.hrsample.model.Department" /&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -2320,7 +2320,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
         <para>Certainly one of the most difficult relationship to handle in
         business software development is the N-N relationship navigable at
-        both ends. Here again, <trademark>D2S</trademark> handles all the
+        both ends. Here again, <trademark>Jspresso</trademark> handles all the
         complex plumbing for you. All you need to do is to declare both ends
         of the relationship as being a collection property descriptor. The
         following XML fragment illustrates this for the <code>Team</code>
@@ -2419,11 +2419,11 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
     <section>
       <title>Component services</title>
 
-      <para>As of now, we have only dealt with <trademark>D2S</trademark>
+      <para>As of now, we have only dealt with <trademark>Jspresso</trademark>
       component properties. There might be situations where you want (or you
       need) your domain model components to implement arbitrary interfaces
       (maybe legacy interfaces) and provide an arbitrary implementation for
-      them. The <trademark>D2S</trademark> framework supports it at any level
+      them. The <trademark>Jspresso</trademark> framework supports it at any level
       of the domain model. As an example, let's consider the
       <code>EmployeeService</code> interface that we want all of our employee
       components to implement. This service provides one method to compute age
@@ -2438,10 +2438,10 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
   ...
   &lt;property name="serviceDelegates"&gt; <co id="serviceDelegates" />
     &lt;map&gt;
-      &lt;entry key="com.d2s.hrsample.model.service.EmployeeService"&gt; <co
+      &lt;entry key="org.jspresso.hrsample.model.service.EmployeeService"&gt; <co
             id="NameableService" />
         &lt;bean
-          class="com.d2s.hrsample.model.service.EmployeeServiceDelegate" /&gt; <co
+          class="org.jspresso.hrsample.model.service.EmployeeServiceDelegate" /&gt; <co
             id="NameableServiceImpl" />
       &lt;/entry&gt;
     &lt;/map&gt;
@@ -2463,13 +2463,13 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
         </calloutlist>Of course, we have to code both
       <code>EmployeeService</code> (the service definition) and
       <code>EmployeeServiceDelegate</code> (the service delegate
-      implementation) in the <code>com.d2s.hrsample.model.service</code>
+      implementation) in the <code>org.jspresso.hrsample.model.service</code>
       package as described in the previous XML fragment.</para>
 
       <para>Here is the <filename>EmployeeService.java</filename> source file
       :</para>
 
-      <para><programlisting>package com.d2s.hrsample.model.service;
+      <para><programlisting>package org.jspresso.hrsample.model.service;
 
 import java.util.Date;
 
@@ -2490,11 +2490,11 @@ public interface EmployeeService {
 }</programlisting>And the <filename>EmployeeServiceDelegate.java</filename>
       source file :</para>
 
-      <para><programlisting>package com.d2s.hrsample.model.service;
+      <para><programlisting>package org.jspresso.hrsample.model.service;
 
 import java.util.Date;
 
-import com.d2s.hrsample.model.Employee;
+import org.jspresso.hrsample.model.Employee;
 import org.jspresso.framework.model.component.service.IComponentService;
 
 /**
@@ -2538,7 +2538,7 @@ public class EmployeeServiceDelegate implements IComponentService { <co
       <code>EmployeeService</code>. This is simply because although the names
       of the implemented methods must match, their signature is augmented by
       the component instance to work on. This allows the
-      <trademark>D2S</trademark> framework to share services delegates across
+      <trademark>Jspresso</trademark> framework to share services delegates across
       multiple component instances.</para>
 
       <para>A re-generation of the <filename>Employee.java</filename> source
@@ -2547,12 +2547,12 @@ public class EmployeeServiceDelegate implements IComponentService { <co
 
       <para><programlisting>...
 public interface Employee extends
-  com.d2s.hrsample.model.Nameable,
-  com.d2s.hrsample.model.Traceable,
+  org.jspresso.hrsample.model.Nameable,
+  org.jspresso.hrsample.model.Traceable,
   org.jspresso.framework.model.entity.IEntity,
-  com.d2s.hrsample.model.service.EmployeeService {
+  org.jspresso.hrsample.model.service.EmployeeService {
 ...
-}</programlisting>Again, <trademark>D2S</trademark> will seamlessly take care
+}</programlisting>Again, <trademark>Jspresso</trademark> will seamlessly take care
       of triggering the delegates' methods, passing the right parameters,
       whenever the service is requested on the target component.</para>
     </section>
@@ -2566,12 +2566,12 @@ public interface Employee extends
       of them. It is fairly easy to compute the age of an employee from his
       birth date and this is the service we have just implemented above. Of
       course computed properties are not limited to entities. They can be
-      declared on any <trademark>D2S</trademark> managed component (inlined
+      declared on any <trademark>Jspresso</trademark> managed component (inlined
       components, interfaces and entities). And they are not limited to scalar
       properties. Even a collection property or a reference property may be
       computed this way.</para>
 
-      <para>Let's see how we can link it using <trademark>D2S</trademark>
+      <para>Let's see how we can link it using <trademark>Jspresso</trademark>
       :</para>
 
       <para><programlisting language="xml">&lt;bean
@@ -2594,7 +2594,7 @@ public interface Employee extends
           value="150" /&gt;
         &lt;property
           name="delegateClassName"
-          value="com.d2s.hrsample.model.extension.EmployeeExtension" /&gt; <co
+          value="org.jspresso.hrsample.model.extension.EmployeeExtension" /&gt; <co
             id="delegateClassName" />
       &lt;/bean&gt;
     &lt;/list&gt;
@@ -2607,16 +2607,16 @@ public interface Employee extends
         </calloutlist>As you can see in the above XML fragment, the age
       property is almost described like any other standard entity property.
       What differs is the reference to the
-      <code>com.d2s.hrsample.model.extension.EmployeeExtension</code> java
+      <code>org.jspresso.hrsample.model.extension.EmployeeExtension</code> java
       class that will be used to compute it. So let's code it. As declared in
       the descriptor, we will put it in the
-      <code>com.d2s.hrsample.model.extension</code> package :</para>
+      <code>org.jspresso.hrsample.model.extension</code> package :</para>
 
-      <para><programlisting language="java">package com.d2s.hrsample.model.extension;
+      <para><programlisting language="java">package org.jspresso.hrsample.model.extension;
 
 import java.util.Date;
 
-import com.d2s.hrsample.model.Employee;
+import org.jspresso.hrsample.model.Employee;
 import org.jspresso.framework.model.component.AbstractComponentExtension;
 
 /**
@@ -2686,19 +2686,19 @@ public class EmployeeExtension extends
       consist in keeping the computed age value for later use and listening to
       changes of the birth date property to invalidate the age cached value.
       Hopefully, the implementation is almost straightforward since every
-      <trademark>D2S</trademark> managed component can be listened to for
+      <trademark>Jspresso</trademark> managed component can be listened to for
       property changes.</para>
 
       <para>The following update of the <filename>Employee.java</filename>
       source file fixes the 2 caveats described above :</para>
 
-      <para><programlisting language="java">package com.d2s.hrsample.model.extension;
+      <para><programlisting language="java">package org.jspresso.hrsample.model.extension;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
 
-import com.d2s.hrsample.model.Employee;
+import org.jspresso.hrsample.model.Employee;
 import org.jspresso.framework.model.component.AbstractComponentExtension;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
@@ -2842,9 +2842,9 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
       <para>As far as the second and third points are concerned, we have seen
       nothing yet that would help to cover it.</para>
 
-      <para>Fortunately, the <trademark>D2S</trademark> framework allows you
+      <para>Fortunately, the <trademark>Jspresso</trademark> framework allows you
       to implement property processors that can be registered with any
-      property you define on a <trademark>D2S</trademark> managed component.
+      property you define on a <trademark>Jspresso</trademark> managed component.
       This includes :</para>
 
       <orderedlist>
@@ -2905,7 +2905,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
             id="integrityProcessors" />
           &lt;list&gt;
             &lt;bean <co id="FirstNameIntegrityProcessor" />
-              class="com.d2s.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor" /&gt;
+              class="org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$FirstNameProcessor" /&gt;
           &lt;/list&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -2919,7 +2919,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
         &lt;property name="integrityProcessors"&gt;
           &lt;list&gt;
             &lt;bean <co id="BirthDateIntegrityProcessor" />
-              class="com.d2s.hrsample.model.processor.EmployeePropertyProcessors$BirthDateProcessor" /&gt;
+              class="org.jspresso.hrsample.model.processor.EmployeePropertyProcessors$BirthDateProcessor" /&gt;
           &lt;/list&gt;
         &lt;/property&gt;
       &lt;/bean&gt;
@@ -2945,7 +2945,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
 
       <para>As described in the XML fragment, we are going to create an
       <code>EmployeePropertyProcessors</code> class in the new package
-      <code>com.d2s.hrsample.model.processor</code>. As a best practice, it is
+      <code>org.jspresso.hrsample.model.processor</code>. As a best practice, it is
       recommended (but not imposed) to create a containing class that holds
       all the processors for a component; then each processor will be a named
       static internal class of this container class and referenced as such
@@ -2957,11 +2957,11 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
       <filename>EmployeePropertyProcessors.java</filename> source file
       :</para>
 
-      <para><programlisting language="java">package com.d2s.hrsample.model.processor;
+      <para><programlisting language="java">package org.jspresso.hrsample.model.processor;
 
 import java.util.Date;
 
-import com.d2s.hrsample.model.Employee;
+import org.jspresso.hrsample.model.Employee;
 import org.jspresso.framework.util.bean.integrity.EmptyPropertyIntegrityProcessor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
 
@@ -3085,18 +3085,18 @@ public class EmployeePropertyProcessors {
 
       <listitem>
         <para>To assemble descriptor beans in order to translate what has been
-        specified into <trademark>D2S</trademark> view descriptors.</para>
+        specified into <trademark>Jspresso</trademark> view descriptors.</para>
       </listitem>
     </orderedlist>
 
     <para>As far as we begin to deal with GUI, internationalization (I18N)
-    comes into the game. <trademark>D2S</trademark> is definitely targeted at
+    comes into the game. <trademark>Jspresso</trademark> is definitely targeted at
     multi-lingual applications and as such, fully supports internationalized
     GUIs.</para>
 
     <para>Before going further, let's create the frontend application
     descriptor. The frontend description will logically go to the
-    <code>com.d2s.hrsample.view</code> package. In this package, we will
+    <code>org.jspresso.hrsample.view</code> package. In this package, we will
     create a <filename>hrsample-view.xml</filename> file as described below
     :</para>
 
@@ -3119,14 +3119,14 @@ public class EmployeePropertyProcessors {
       ref="commonsMessageSource" /&gt; <co id="commonsMessageSource" />
     &lt;property name="basenames"&gt;
       &lt;list&gt;
-        &lt;value&gt;com.d2s.hrsample.i18n.Messages&lt;/value&gt; <co
+        &lt;value&gt;org.jspresso.hrsample.i18n.Messages&lt;/value&gt; <co
           id="basenames" />
       &lt;/list&gt;
     &lt;/property&gt;
   &lt;/bean&gt;
 &lt;/beans&gt;</programlisting><calloutlist>
         <callout arearefs="commonsMessageSource">
-          <para>We inherit the default <trademark>D2S</trademark> I18N
+          <para>We inherit the default <trademark>Jspresso</trademark> I18N
           resource bundles that contain translated entries for generic
           terms.</para>
         </callout>
@@ -3135,15 +3135,15 @@ public class EmployeePropertyProcessors {
           <para>We declare the list of I18N resource bundles we are going to
           use to store the translations.</para>
         </callout>
-      </calloutlist><trademark>D2S</trademark> relies on the well-known java
+      </calloutlist><trademark>Jspresso</trademark> relies on the well-known java
     I18N mechanism through the use of resource bundle property files.
     Translating the application is then a matter of translating the entries
-    contained in these property files. Since <trademark>D2S</trademark> never
+    contained in these property files. Since <trademark>Jspresso</trademark> never
     use absolute positioning but instead heavily relies on layouts, the
     translator won't have to care about translations length.</para>
 
     <para>As declared in the XML fragment above, we will create a
-    <code>com.d2s.hrsample.i18n</code> package that will contain the resource
+    <code>org.jspresso.hrsample.i18n</code> package that will contain the resource
     bundle property files. We will translate the application in English and
     French; so let's create the two files
     <filename>Messages_en.properties</filename> and
@@ -3151,11 +3151,11 @@ public class EmployeePropertyProcessors {
     the English and French translations. Adding a language will be just a
     mater of creating, in the same package, a new property file with the 2
     letter ISO code of the language. Those 2 files are empty as of now but
-    don't care about that; <trademark>D2S</trademark> will graphically notify
+    don't care about that; <trademark>Jspresso</trademark> will graphically notify
     you that a translation is missing for a given language.</para>
 
     <para>In order to ease the work of the GUI designer,
-    <trademark>D2S</trademark> provides a view tester tool that enables an
+    <trademark>Jspresso</trademark> provides a view tester tool that enables an
     immediate java swing preview of each described view fragment. In order to
     have this tool up and running, we need to create a new entry in the
     <filename>beanRefFactory.xml</filename> file we created when designing the
@@ -3175,15 +3175,15 @@ public class EmployeePropertyProcessors {
     lazy-init="true"&gt;
     &lt;constructor-arg&gt;
       &lt;list&gt;
-        &lt;value&gt;com/d2s/framework/application/commons.xml&lt;/value&gt;
-        &lt;value&gt;com/d2s/framework/tools/mock.xml&lt;/value&gt;
-        &lt;value&gt;com/d2s/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt;
+        &lt;value&gt;org/jspresso/framework/tools/mock.xml&lt;/value&gt;
+        &lt;value&gt;org/jspresso/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
           id="hrsample-model.xml" />
-        &lt;value&gt;com/d2s/framework/application/frontend/commons-frontend.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt; <co
           id="commons-frontend.xml" />
-        &lt;value&gt;com/d2s/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt; <co
           id="commons-swing.xml" />
-        &lt;value&gt;com/d2s/hrsample/frontend/hrsample-view.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/hrsample/frontend/hrsample-view.xml&lt;/value&gt; <co
           id="hrsample-frontend.xml" />
       &lt;/list&gt;
     &lt;/constructor-arg&gt;
@@ -3195,18 +3195,18 @@ public class EmployeePropertyProcessors {
 
         <callout arearefs="commons-frontend.xml">
           <para>The commons frontend bean definitions of the
-          <trademark>D2S</trademark> framework.</para>
+          <trademark>Jspresso</trademark> framework.</para>
         </callout>
 
         <callout arearefs="commons-swing.xml">
           <para>The commons swing bean definitions of the
-          <trademark>D2S</trademark> framework.</para>
+          <trademark>Jspresso</trademark> framework.</para>
         </callout>
 
         <callout arearefs="hrsample-frontend.xml">
           <para>Our sample application frontend description.</para>
         </callout>
-      </calloutlist>In order to start the <trademark>D2S</trademark> view
+      </calloutlist>In order to start the <trademark>Jspresso</trademark> view
     tester tool, we will launch the
     <code>org.jspresso.framework.tools.viewtester.ViewTester</code> java class with
     the following arguments : <code>-applicationContextKey
@@ -3224,7 +3224,7 @@ public class EmployeePropertyProcessors {
     <para>Finally, note that the view tester tool will not display fully
     functional views. For instance, list of values won't be available (the
     button will be displayed but won't trigger anything) since the view is not
-    instantiated in the scope of a complete <trademark>D2S</trademark>
+    instantiated in the scope of a complete <trademark>Jspresso</trademark>
     application - no database, ... Its goal is only targeted at quickly
     previewing the GUI layout to promote agile development.</para>
 
@@ -3259,7 +3259,7 @@ public class EmployeePropertyProcessors {
     ref="Company" /&gt; <co id="modelDescriptor" />
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="decoratedView">
-              <para>We inherit from a D2S standard bean which surrounds the
+              <para>We inherit from a Jspresso standard bean which surrounds the
               view with a title.</para>
             </callout>
 
@@ -3289,7 +3289,7 @@ public class EmployeePropertyProcessors {
         running using the view tester. Note that unlike for the model
         components, there is no java generation nor compilation step involved;
         the view descriptors are just handled at runtime by
-        <trademark>D2S</trademark>. Launching the tester with the
+        <trademark>Jspresso</trademark>. Launching the tester with the
         <code>Company.pane</code> view descriptor id will produce the
         following result :</para>
 
@@ -3379,7 +3379,7 @@ public class EmployeePropertyProcessors {
 
           <listitem>
             <para>Finally, there are terms that are missing translations in
-            English. Whenever <trademark>D2S</trademark> detects such a
+            English. Whenever <trademark>Jspresso</trademark> detects such a
             situation, it will "translate" the term using the following
             pattern <emphasis>[language:translation key]</emphasis>. This
             strategy allows for easy and fast identification of missing
@@ -3407,7 +3407,7 @@ public class EmployeePropertyProcessors {
 
         <para><programlisting>age.below.18 = Employee is not 18 years old.
 
-com.d2s.hrsample.model.Company = Company
+org.jspresso.hrsample.model.Company = Company
 
 contact.address = Address
 contact.city    = City
@@ -3424,7 +3424,7 @@ zip = Code postal</programlisting>And Messages_fr.properties :</para>
 
         <para><programlisting>age.below.18 = L'employ\u00E9 n'a pas 18 ans.
 
-com.d2s.hrsample.model.Company = Soci\u00E9t\u00E9
+org.jspresso.hrsample.model.Company = Soci\u00E9t\u00E9
 
 contact.address = Adresse
 contact.city    = Ville
@@ -3700,7 +3700,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               including other composite views.</para>
             </callout>
           </calloutlist>After having completed the I18N property files with
-        the <code>com.d2s.hrsample.model.Traceable</code> entry, we can launch
+        the <code>org.jspresso.hrsample.model.Traceable</code> entry, we can launch
         the view tester on the <code>Company.tab.pane</code> view :</para>
 
         <para><figure>
@@ -3720,7 +3720,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <title>Improving the view aspect</title>
 
         <para>We can make the view a little more attractive by adding icons
-        and tool tips. Using <trademark>D2S</trademark>, it is quite
+        and tool tips. Using <trademark>Jspresso</trademark>, it is quite
         straightforward by completing the descriptors :</para>
 
         <itemizedlist>
@@ -3750,7 +3750,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   ...
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/hrsample/images/traceable-48x48.png" /&gt; <co
+    value="classpath:org/jspresso/hrsample/images/traceable-48x48.png" /&gt; <co
               id="iconImageURL" />
 &lt;/bean&gt;
 ...
@@ -3760,7 +3760,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   ...
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/hrsample/images/company-48x48.png" /&gt;
+    value="classpath:org/jspresso/hrsample/images/company-48x48.png" /&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="iconImageURL">
               <para>We declare the URL used to reference the image to be used
@@ -3819,7 +3819,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <itemizedlist>
           <listitem>
             <para>Name, description and icons can be used in different layers
-            of the application. <trademark>D2S</trademark> will then take
+            of the application. <trademark>Jspresso</trademark> will then take
             advantage of these attributes to generate tool tips, to place
             icons, to fill-in labels in the following order (higher in the
             list has higher priority) :</para>
@@ -3840,12 +3840,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
           <listitem>
             <para>To reference an image to be used as icon, you may use any
-            kind of URL (HTTP, file) but <trademark>D2S</trademark> provides a
+            kind of URL (HTTP, file) but <trademark>Jspresso</trademark> provides a
             very useful, specialized URL which is the <code>classpath:</code>
             URL. Such a URL may be used to reference any resource present in
             the application classpath. As an example, we have used the
-            <code>classpath:com/d2s/hrsample/images/company-48x48.png</code>
-            URL to load an image from the <code>com.d2s.hrsample.images</code>
+            <code>classpath:org/jspresso/hrsample/images/company-48x48.png</code>
+            URL to load an image from the <code>org.jspresso.hrsample.images</code>
             package. This prevents the developer from hard-coding references
             to application external resources and promotes portability across
             deployment environments.</para>
@@ -3866,7 +3866,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <section>
         <title>Other composite views</title>
 
-        <para><trademark>D2S</trademark> offers a rich set of composite view
+        <para><trademark>Jspresso</trademark> offers a rich set of composite view
         descriptors. Although we won't detail them in this section, the
         following enumeration lists them :</para>
 
@@ -4027,12 +4027,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         this menu bar, you will find menus -action categories- like "File",
         "Edit", "Help" and in each menu, a list of individual actions. This is
         the exact same principle of an action map, but instead of being a
-        rendered as a menu bar, the <trademark>D2S</trademark> framework will
+        rendered as a menu bar, the <trademark>Jspresso</trademark> framework will
         make a tool bar out of it, and in certain situations a context menu,
         that will make the actions available to the end user.</para>
 
         <para>In this section, we won't go describe in detail how to develop
-        and declare an action. Actually, <trademark>D2S</trademark> comes with
+        and declare an action. Actually, <trademark>Jspresso</trademark> comes with
         a large set of pre-defined, ready-to-use general purpose actions (and
         even action maps) that are sufficient for most classic operations.
         Look at the following XML fragment :</para>
@@ -4186,7 +4186,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         are not directly related to the company but to the
         <emphasis>selected</emphasis> department in the intermediate
         department table view. So we need to instruct
-        <trademark>D2S</trademark> that we want this nested master-detail
+        <trademark>Jspresso</trademark> that we want this nested master-detail
         behaviour.</para>
 
         <para>Let's first describe the teams collection view; for the sake of
@@ -4235,7 +4235,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         the previous department view. We now need to assemble the
         <code>Company-departments.table</code> and the new
         <code>Department-teams.table</code> into a split view and tell
-        <trademark>D2S</trademark> to drive the teams table content with the
+        <trademark>Jspresso</trademark> to drive the teams table content with the
         departments table selection :</para>
 
         <para><programlisting language="xml">&lt;bean
@@ -4271,7 +4271,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
             <callout arearefs="cascadingModels">
               <para>We declare this composite view a master-detail view for
-              <trademark>D2S</trademark> to track the departments
+              <trademark>Jspresso</trademark> to track the departments
               selection.</para>
             </callout>
           </calloutlist>The crucial part of the previous definition is the use
@@ -4337,7 +4337,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <para>Tree views are certainly the most complicated but also the most
       intuitive type of view to display and manage a structured model. Anyone
       who ever tried to build a truly MVC aware GUI using trees knows that
-      there are many caveats to avoid. <trademark>D2S</trademark> drastically
+      there are many caveats to avoid. <trademark>Jspresso</trademark> drastically
       simplifies getting a tree view up and running while keeping its original
       description centric philosophy.</para>
 
@@ -4430,7 +4430,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     ref="Company-departments.subtree" /&gt; <co id="childDescriptor2" />
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/hrsample/images/structure-48x48.png" /&gt; <co
+    value="classpath:org/jspresso/hrsample/images/structure-48x48.png" /&gt; <co
               id="Company.tree.icon" />
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="BasicSimpleTreeLevelDescriptor">
@@ -4535,7 +4535,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         display, under each team, a subtree for the projects managed by a team
         and a subtree for the team members.</para>
 
-        <para><trademark>D2S</trademark> allows you aggregate the 2 simple
+        <para><trademark>Jspresso</trademark> allows you aggregate the 2 simple
         tree levels (projects and team members) into a composite tree level
         and make this composite tree level the child level of the team tree
         level.</para>
@@ -4545,7 +4545,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     <section>
       <title>Other types of views</title>
 
-      <para><trademark>D2S</trademark> offers many other types of views to
+      <para><trademark>Jspresso</trademark> offers many other types of views to
       build arbitrarily complex views to enhance the user experience. We won't
       describe theme in detail in this tutorial but you can refer to the view
       descriptor reference section for a complete description. Fell free also
@@ -4563,7 +4563,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     <title>Wiring the application</title>
 
     <para>As we saw it at the beginning of this tutorial, a
-    <trademark>D2S</trademark> based application is cleanly organized into 3
+    <trademark>Jspresso</trademark> based application is cleanly organized into 3
     separate layers :</para>
 
     <orderedlist>
@@ -4633,7 +4633,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
       <para>The backend layer is organized around the backend controller. The
       backend controller is the conductor of all backend operations. As of
-      now, <trademark>D2S</trademark> provides one concrete implementation of
+      now, <trademark>Jspresso</trademark> provides one concrete implementation of
       a backend controller : the Hibernate backend controller. This
       implementation provides all the backend management described above using
       hibernate and the hibernate spring stack (using hibernate and
@@ -4647,13 +4647,13 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <orderedlist>
         <listitem>
           <para><filename>hrsample-backend.xml</filename> that will logically
-          go into the <code>com.d2s.hrsample.backend</code> package and will
+          go into the <code>org.jspresso.hrsample.backend</code> package and will
           hold all the description of the backend.</para>
         </listitem>
 
         <listitem>
           <para><filename>config.xml</filename> that we will put in the
-          <code>com.d2s.hrsample</code> package and that will hold all the
+          <code>org.jspresso.hrsample</code> package and that will hold all the
           specific configuration related to a deployment environment.</para>
         </listitem>
       </orderedlist>
@@ -4685,23 +4685,23 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   lazy-init="true"&gt;
   &lt;constructor-arg&gt;
     &lt;list&gt;
-      &lt;value&gt;com/d2s/framework/application/commons.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/framework/application/backend/persistence/hibernate/commons-hibernate.xml&lt;/value&gt; <co
+      &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml&lt;/value&gt; <co
             id="commons-hibernate.xml" />
-      &lt;value&gt;com/d2s/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/hrsample/model/hrsample-model.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/hrsample/backend/hrsample-backend.xml&lt;/value&gt; <co
+      &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/model/hrsample-model.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/backend/hrsample-backend.xml&lt;/value&gt; <co
             id="hrsample-backend.xml" />
-      &lt;value&gt;com/d2s/hrsample/view/hrsample-view.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt;
-      &lt;value&gt;com/d2s/hrsample/config.xml&lt;/value&gt; <co
+      &lt;value&gt;org/jspresso/hrsample/view/hrsample-view.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/config.xml&lt;/value&gt; <co
             id="config.xml" />
     &lt;/list&gt;
   &lt;/constructor-arg&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
           <callout arearefs="commons-hibernate.xml">
-            <para>This is the standard <trademark>D2S</trademark> spring
+            <para>This is the standard <trademark>Jspresso</trademark> spring
             configuration file to bring an hibernate powered backend to our
             application.</para>
           </callout>
@@ -4754,7 +4754,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;/property&gt;
   &lt;property name="mappingLocations"&gt;
     &lt;list&gt;
-      &lt;value&gt;classpath*:com/d2s/hrsample/**/*.hbm.xml&lt;/value&gt; <co
+      &lt;value&gt;classpath*:org/jspresso/hrsample/**/*.hbm.xml&lt;/value&gt; <co
             id="mappingLocations" />
     &lt;/list&gt;
   &lt;/property&gt;
@@ -4794,7 +4794,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
           <callout arearefs="mappingLocations">
             <para>We instruct hibernate to load the mapping files from
-            resources located in any <code>com.d2s.hrsample</code>
+            resources located in any <code>org.jspresso.hrsample</code>
             subpackage.</para>
           </callout>
         </calloutlist></para>
@@ -4807,7 +4807,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <para><programlisting language="xml">...
 &lt;property name="xdoclet.lib.dir" value="${xdoclet.home}/lib" /&gt;
 &lt;property name="xdoclet.plugins.dir" value="${xdoclet.home}/lib" /&gt;
-&lt;property name="model.src.dir" value="${java.src.dir}/com/d2s/hrsample/model" /&gt;
+&lt;property name="model.src.dir" value="${java.src.dir}/org/jspresso/hrsample/model" /&gt;
 ...
 &lt;target name="clean-hibernate"&gt;
   &lt;delete&gt;
@@ -4848,12 +4848,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 &lt;target name="all" depends="generate-entities, xdoclet-hibernate" /&gt;</programlisting><calloutlist>
           <callout arearefs="replaceregexp">
             <para>The "replaceregexp" section is important for the inlined
-            components mapping to support <trademark>D2S</trademark> ones; as
+            components mapping to support <trademark>Jspresso</trademark> ones; as
             of this writing, xDoclet does not support for changing the
             tuplizer of an entity or component, which is required.</para>
           </callout>
         </calloutlist>Running ant produces the following mapping file in the
-      <code>com.d2s.hrsample.model</code> package :</para>
+      <code>org.jspresso.hrsample.model</code> package :</para>
 
       <itemizedlist>
         <listitem>
@@ -4888,7 +4888,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;class dynamic-update="true"
          table="CITY"
          persister="org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
-         name="com.d2s.hrsample.model.City"
+         name="org.jspresso.hrsample.model.City"
          dynamic-insert="true"&gt;
     &lt;id type="string" column="ID" length="36" name="id"&gt;
       &lt;generator class="assigned"/&gt;
@@ -4921,7 +4921,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       usable as-is) most of the application assembling is done in the
       front-end controller. We will configure the frontend controller in a new
       <filename>hrsample-frontend.xml</filename> configuration file located in
-      the <code>com.d2s.hrsample.frontend</code> package. Don't forget that
+      the <code>org.jspresso.hrsample.frontend</code> package. Don't forget that
       you are free to split all the configuration files in smaller pieces but
       then, don't forget to update the various context entries in the
       <filename>beanRefFactory.xml</filename> bootstrap configuration
@@ -4938,7 +4938,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     value="hrsample.name" /&gt; <co id="hrsample.name" />
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/hrsample/images/people-48x48.png" /&gt; <co
+    value="classpath:org/jspresso/hrsample/images/people-48x48.png" /&gt; <co
             id="hrsample.iconImageURL" />
 &lt;/bean&gt;</programlisting><calloutlist>
           <callout arearefs="applicationFrontController">
@@ -4971,17 +4971,17 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <title>Starting up the application</title>
 
       <para>To be able to launch the application, we need a startup class. In
-      <trademark>D2S</trademark>, the startup class configures the spring
+      <trademark>Jspresso</trademark>, the startup class configures the spring
       context to be used when starting the application. The actual startup is
       performed by a generic launcher depending on the presentation technology
       used. For instance, the swing generic launcher is
       <code>org.jspresso.framework.application.launch.swing.SwingLauncher</code>;
       this is the one we are going to use now. So let's create our swing
       startup class. We will name it <code>SwingHrSampleStartup</code> and
-      create it in a new <code>com.d2s.hrsample.startup</code> java package
+      create it in a new <code>org.jspresso.hrsample.startup</code> java package
       :</para>
 
-      <para><programlisting language="xml">package com.d2s.hrsample.startup;
+      <para><programlisting language="xml">package org.jspresso.hrsample.startup;
 
 import org.jspresso.framework.application.startup.swing.SwingStartup;
 
@@ -5019,8 +5019,8 @@ public class SwingHrSampleStartup extends SwingStartup { <co
 
       <para><code>java
       org.jspresso.framework.application.launch.swing.SwingLauncher
-      -applicationClass com.d2s.hrsample.startup.SwingHrSampleStartup -splash
-      classpath:com/d2s/hrsample/images/logo-small.png</code></para>
+      -applicationClass org.jspresso.hrsample.startup.SwingHrSampleStartup -splash
+      classpath:org/jspresso/hrsample/images/logo-small.png</code></para>
 
       <para>You should have a splash screen popping up and soon after the
       following MDI frame (here with a substance look and feel and a French
@@ -5104,15 +5104,15 @@ INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : 
       </itemizedlist>
 
       <para>Both of these topics are extensively covered by the
-      <trademark>D2S</trademark> framework. This chapter covers the
+      <trademark>Jspresso</trademark> framework. This chapter covers the
       authentication part.</para>
 
-      <para>Authentication in a <trademark>D2S</trademark> application relies
+      <para>Authentication in a <trademark>Jspresso</trademark> application relies
       on JAAS (Java Authentication and Authorization Service). We will not go
       into details about JAAS since there are excellent tutorials on the web
       (<ulink
       url="http://java.sun.com/j2se/1.5.0/docs/guide/security/jaas/tutorials/index.html">this
-      one</ulink> for instance). <trademark>D2S</trademark> provides all the
+      one</ulink> for instance). <trademark>Jspresso</trademark> provides all the
       necessary plumbing to seamlessly integrate any JAAS login module and as
       of this writing, there are 2 login modules that come with the framework
       :</para>
@@ -5268,7 +5268,7 @@ hrsample-app { <co id="hrsample-app" />
     <title>Creating and registering application workspaces and modules</title>
 
     <para>Before getting further in this section, let's first agree on what
-    application workspaces and modules are. <trademark>D2S</trademark> defines
+    application workspaces and modules are. <trademark>Jspresso</trademark> defines
     an application module as a projection of the domain model offering
     services. It is an autonomous part of the application that can be
     registered in workspaces which in turn are registered in the frontend
@@ -5316,7 +5316,7 @@ hrsample-app { <co id="hrsample-app" />
       role="bold">C</emphasis>reate <emphasis role="bold">R</emphasis>etrieve
       <emphasis role="bold">U</emphasis>pdate <emphasis
       role="bold">D</emphasis>elete) services on the application master data
-      (actually the cities). As always, <trademark>D2S</trademark> is offering
+      (actually the cities). As always, <trademark>Jspresso</trademark> is offering
       a large range of built-in, ready to assemble components to achieve
       this.</para>
 
@@ -5343,7 +5343,7 @@ hrsample-app { <co id="hrsample-app" />
     value="masterdata.workspace.description" /&gt;
   &lt;property
     name="iconImageURL"
-    value="classpath:com/d2s/hrsample/images/masterdata-48x48.png" /&gt;
+    value="classpath:org/jspresso/hrsample/images/masterdata-48x48.png" /&gt;
   &lt;property name="modules"&gt; <co id="modules" />
     &lt;list&gt;
       &lt;bean parent="abstractFilterableBeanCollectionModule"&gt; <co
@@ -5375,7 +5375,7 @@ hrsample-app { <co id="hrsample-app" />
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="Workspace">
               <para>We declare our new workspace inheriting from the
-              <trademark>D2S</trademark> standard built-in workspace component
+              <trademark>Jspresso</trademark> standard built-in workspace component
               that may fit most of standard usages.</para>
             </callout>
 
@@ -5387,7 +5387,7 @@ hrsample-app { <co id="hrsample-app" />
 
             <callout arearefs="abstractFilterableBeanCollectionModule">
               <para>We declare the cities module inheriting the
-              <trademark>D2S</trademark> standard built-in filterable bean
+              <trademark>Jspresso</trademark> standard built-in filterable bean
               collection module component that may fit most of standard
               usages.</para>
             </callout>
@@ -5524,7 +5524,7 @@ hrsample-app { <co id="hrsample-app" />
           value="masterdata.geography.module.description" /&gt;
         &lt;property
           name="iconImageURL"
-          value="classpath:com/d2s/hrsample/images/geography-48x48.png" /&gt;
+          value="classpath:org/jspresso/hrsample/images/geography-48x48.png" /&gt;
         &lt;property name="subModules"&gt; <co id="subModules" />
           &lt;list&gt;
             &lt;bean parent="abstractFilterableBeanCollectionModule"&gt;
@@ -5700,7 +5700,7 @@ hrsample-app { <co id="hrsample-app" />
         particular case, the logged-in user account would be used as the
         module object of the account editing module. The question left is how
         to initialize the user account as the bean module object? Every
-        <trademark>D2S</trademark> application module provides a startup hook
+        <trademark>Jspresso</trademark> application module provides a startup hook
         that gets triggered when the module is first selected by the end-user.
         So in this case, you would code a custom startup action to retrieve
         the logged-in user informations from whatever backing store (LDAP for
@@ -5710,7 +5710,7 @@ hrsample-app { <co id="hrsample-app" />
         topic is beyond the scope of this section, but read further to learn
         how to write custom actions and remember that you can register them as
         being startup-triggered at different places in a
-        <trademark>D2S</trademark> application i.e. controller (when the
+        <trademark>Jspresso</trademark> application i.e. controller (when the
         application starts) and modules (when the module is first
         selected).</para>
       </section>
@@ -5740,7 +5740,7 @@ hrsample-app { <co id="hrsample-app" />
       <para>It is also a good idea to centralize the test data production in a
       separate class that can be used by the various development startup class
       (actually one per presentation technology) and thus avoiding un-needed
-      duplication of code. <trademark>D2S</trademark> offers an abstract base
+      duplication of code. <trademark>Jspresso</trademark> offers an abstract base
       class for this task :
       <code>org.jspresso.framework.application.startup.development.AbstractTestDataPersister</code>
       on which you simply have to override the <code>persistTestData()</code>
@@ -5752,12 +5752,12 @@ hrsample-app { <co id="hrsample-app" />
 
       <para>So let's write this simple test data production class for the HR
       application. Place it in the
-      <code>com.d2s.hrsample.startup.development</code> package :</para>
+      <code>org.jspresso.hrsample.startup.development</code> package :</para>
 
       <para><programlisting language="java">/*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.hrsample.startup.development;
+package org.jspresso.hrsample.startup.development;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -5765,11 +5765,11 @@ import java.text.SimpleDateFormat;
 import org.springframework.beans.factory.BeanFactory;
 
 import org.jspresso.framework.application.startup.development.AbstractTestDataPersister;
-import com.d2s.hrsample.model.City;
-import com.d2s.hrsample.model.Company;
-import com.d2s.hrsample.model.Department;
-import com.d2s.hrsample.model.Employee;
-import com.d2s.hrsample.model.Team;
+import org.jspresso.hrsample.model.City;
+import org.jspresso.hrsample.model.Company;
+import org.jspresso.hrsample.model.Department;
+import org.jspresso.hrsample.model.Employee;
+import org.jspresso.hrsample.model.Team;
 
 /**
  * Persists some test data for the HR sample application.
@@ -5804,75 +5804,75 @@ public class HrTestDataPersister extends AbstractTestDataPersister {
     City evry = createCity("Evry", "91000");
 
     // Company
-    Company design2see = createCompany("Design2See",
-        "123 avenue de la Liberté", paris, "contact@design2see.com",
+    Company jspresso = createCompany("Jspresso",
+        "123 avenue de la Liberté", paris, "contact@jspresso.com",
         "+33 123 456 000");
 
     // Employees
     Employee johnDoe = createEmployee("M", "Doe", "John",
-        "12 allée du Chien qui Fume", evry, "john.doe@design2see.com",
+        "12 allée du Chien qui Fume", evry, "john.doe@jspresso.com",
         "+33 1 152 368 984", "02/05/1972", "03/08/2005", "1523698754",
-        design2see);
+        jspresso);
 
     Employee mikeDen = createEmployee("M", "Den", "Mike",
-        "26 rue de la Pie qui Chante", suresnes, "mike.den@design2see.com",
+        "26 rue de la Pie qui Chante", suresnes, "mike.den@jspresso.com",
         "+33 1 968 846 398", "05/07/1970", "01/03/2004", "1859637461",
-        design2see);
+        jspresso);
 
     Employee evaGreen = createEmployee("F", "Green", "Eva",
-        "68 rue de l'Eléphant Vert", suresnes, "eva.green@design2see.com",
+        "68 rue de l'Eléphant Vert", suresnes, "eva.green@jspresso.com",
         "+33 1 958 536 972", "10/08/1977", "06/04/2002", "2856752387",
-        design2see);
+        jspresso);
 
     Employee gloriaSan = createEmployee("F", "San", "Gloria",
-        "13 avenue du Poisson Enragé", evry, "gloria.san@design2see.com",
+        "13 avenue du Poisson Enragé", evry, "gloria.san@jspresso.com",
         "+33 1 956 367 412", "09/01/1969", "03/01/2006", "2597853274",
-        design2see);
+        jspresso);
 
     Employee mariaTrulli = createEmployee("F", "Trulli", "Maria",
-        "20 avenue du Crocodile Marteau", evry, "maria.trulli@design2see.com",
+        "20 avenue du Crocodile Marteau", evry, "maria.trulli@jspresso.com",
         "+33 1 868 745 369", "01/02/1976", "03/10/2006", "2325985423",
-        design2see);
+        jspresso);
 
     Employee isabelleMartin = createEmployee("F", "Martin", "Isabelle",
         "20 allée de la Gazelle Sauteuse", evry,
-        "isabelle.martin@design2see.com", "+33 1 698 256 365", "04/07/1970",
-        "12/06/2001", "2652398751", design2see);
+        "isabelle.martin@jspresso.com", "+33 1 698 256 365", "04/07/1970",
+        "12/06/2001", "2652398751", jspresso);
 
     // Departments and teams.
     Department hrDepartment = createDepartment("Human Resources", "HR-000",
-        "124 avenue de la Liberté", paris, "hr@design2see.com",
-        "+33 123 456 100", design2see, johnDoe);
+        "124 avenue de la Liberté", paris, "hr@jspresso.com",
+        "+33 123 456 100", jspresso, johnDoe);
 
     Team hr001Team = createTeam("HR 001 Team", "HR-001",
-        "124 avenue de la Liberté", paris, "hr001@design2see.com",
+        "124 avenue de la Liberté", paris, "hr001@jspresso.com",
         "+33 123 456 101", hrDepartment, mikeDen);
     hr001Team.addToTeamMembers(johnDoe);
     hr001Team.addToTeamMembers(mikeDen);
 
     Team hr002Team = createTeam("HR 002 Team", "HR-002",
-        "124 avenue de la Liberté", paris, "hr002@design2see.com",
+        "124 avenue de la Liberté", paris, "hr002@jspresso.com",
         "+33 123 456 102", hrDepartment, evaGreen);
     hr002Team.addToTeamMembers(johnDoe);
     hr002Team.addToTeamMembers(evaGreen);
 
     Department itDepartment = createDepartment("Information Technology",
-        "IT-000", "125 avenue de la Liberté", paris, "it@design2see.com",
-        "+33 123 456 200", design2see, gloriaSan);
+        "IT-000", "125 avenue de la Liberté", paris, "it@jspresso.com",
+        "+33 123 456 200", jspresso, gloriaSan);
 
     Team it001Team = createTeam("IT 001 Team", "IT-001",
-        "125 avenue de la Liberté", paris, "it001@design2see.com",
+        "125 avenue de la Liberté", paris, "it001@jspresso.com",
         "+33 123 456 201", itDepartment, mariaTrulli);
     it001Team.addToTeamMembers(gloriaSan);
     it001Team.addToTeamMembers(mariaTrulli);
 
     Team it002Team = createTeam("IT 002 Team", "IT-002",
-        "125 avenue de la Liberté", paris, "it002@design2see.com",
+        "125 avenue de la Liberté", paris, "it002@jspresso.com",
         "+33 123 456 202", itDepartment, isabelleMartin);
     it002Team.addToTeamMembers(gloriaSan);
     it002Team.addToTeamMembers(isabelleMartin);
 
-    saveOrUpdate(design2see);
+    saveOrUpdate(jspresso);
   }
 
   private City createCity(String name, String zip) {
@@ -5955,15 +5955,15 @@ public class HrTestDataPersister extends AbstractTestDataPersister {
       simply creating and composing some domain entities in plain java.</para>
 
       <para>You can now create the development application startup class
-      (<code>com.d2s.hrsample.startup.development.SwingDevHrSampleStartup</code>)
+      (<code>org.jspresso.hrsample.startup.development.SwingDevHrSampleStartup</code>)
       that inherits from the existing production one :</para>
 
       <para><programlisting language="java">/*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.hrsample.startup.development;
+package org.jspresso.hrsample.startup.development;
 
-import com.d2s.hrsample.startup.SwingHrSampleStartup;
+import org.jspresso.hrsample.startup.SwingHrSampleStartup;
 
 /**
  * Swing development HR sample startup class.
@@ -6001,8 +6001,8 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
       <para><code>java
       org.jspresso.framework.application.launch.swing.SwingLauncher
       -applicationClass
-      com.d2s.hrsample.startup.development.SwingDevHrSampleStartup -splash
-      classpath:com/d2s/hrsample/images/logo-small.png</code></para>
+      org.jspresso.hrsample.startup.development.SwingDevHrSampleStartup -splash
+      classpath:org/jspresso/hrsample/images/logo-small.png</code></para>
     </section>
 
     <section>
@@ -6241,7 +6241,7 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
   &lt;property name="integrityProcessors"&gt; <co id="manager.processor" />
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.hrsample.model.processor.OrganizationalUnitPropertyProcessors$ManagerProcessor" /&gt;
+        class="org.jspresso.hrsample.model.processor.OrganizationalUnitPropertyProcessors$ManagerProcessor" /&gt;
     &lt;/list&gt;
   &lt;/property&gt;
   &lt;property name="initializationMapping"&gt; <co id="initializationMapping" />
@@ -6271,7 +6271,7 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
           ref="Company" /&gt;
         &lt;property
           name="delegateClassName"
-          value="com.d2s.hrsample.model.extension.OrganizationalUnitExtension" /&gt;
+          value="org.jspresso.hrsample.model.extension.OrganizationalUnitExtension" /&gt;
       &lt;/bean&gt;
     &lt;/list&gt;
   &lt;/property&gt;
@@ -6309,7 +6309,7 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
           properties, we need to implement the java delegates.</para>
 
           <para>We create the
-          <code>com.d2s.hrsample.model.extension.OrganizationalUnitExtension</code>
+          <code>org.jspresso.hrsample.model.extension.OrganizationalUnitExtension</code>
           class to implement the computed properties on the
           <code>OrganistionalUnit</code> entity; this is the exact same design
           as when we dealt with computing the age of the <code>Employee</code>
@@ -6318,13 +6318,13 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
           <para><programlisting language="java">/*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.hrsample.model.extension;
+package org.jspresso.hrsample.model.extension;
 
 import org.jspresso.framework.model.component.AbstractComponentExtension;
-import com.d2s.hrsample.model.Company;
-import com.d2s.hrsample.model.Department;
-import com.d2s.hrsample.model.OrganizationalUnit;
-import com.d2s.hrsample.model.Team;
+import org.jspresso.hrsample.model.Company;
+import org.jspresso.hrsample.model.Department;
+import org.jspresso.hrsample.model.OrganizationalUnit;
+import org.jspresso.hrsample.model.Team;
 
 /**
  * Helper class computing extended properties for OrganizationalUnit entity.
@@ -6371,7 +6371,7 @@ public class OrganizationalUnitExtension extends
                 sublasses of OrganizationalUnit.</para>
               </callout>
             </calloutlist>Finally, we create the
-          <code>com.d2s.hrsample.model.processor.OrganizationalUnitPropertyProcessors</code>
+          <code>org.jspresso.hrsample.model.processor.OrganizationalUnitPropertyProcessors</code>
           that holds all property processors of the
           <code>OrganistionalUnit</code> entity; this is the exact same design
           as when we dealt with checking the birth date of the
@@ -6380,12 +6380,12 @@ public class OrganizationalUnitExtension extends
           <para><programlisting>/*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
-package com.d2s.hrsample.model.processor;
+package org.jspresso.hrsample.model.processor;
 
 import org.jspresso.framework.util.bean.integrity.EmptyPropertyProcessor;
 import org.jspresso.framework.util.bean.integrity.IntegrityException;
-import com.d2s.hrsample.model.Employee;
-import com.d2s.hrsample.model.OrganizationalUnit;
+import org.jspresso.hrsample.model.Employee;
+import org.jspresso.hrsample.model.OrganizationalUnit;
 
 /**
  * OrganizationalUnit property processors.

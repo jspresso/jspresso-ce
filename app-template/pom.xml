@@ -5,25 +5,25 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.design2see</groupId>
-    <artifactId>d2s-framework</artifactId>
+    <groupId>org.jspresso</groupId>
+    <artifactId>jspresso-framework</artifactId>
     <version>2.0</version>
   </parent>
-  <artifactId>d2s-app-template</artifactId>
+  <artifactId>jspresso-app-template</artifactId>
   <packaging>jar</packaging>
   <name>App-template</name>
   <dependencies>
     <dependency>
-      <groupId>com.design2see</groupId>
-      <artifactId>d2s-app-launch</artifactId>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-app-launch</artifactId>
     </dependency>
     <dependency>
       <groupId>bsf</groupId>
       <artifactId>bsf</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.design2see</groupId>
-      <artifactId>d2s-swing-components</artifactId>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-swing-components</artifactId>
       <scope>runtime</scope>
       <optional>true</optional>
     </dependency>
