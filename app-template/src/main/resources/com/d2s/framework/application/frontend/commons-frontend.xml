@@ -22,10 +22,10 @@
   <bean
     id="abstractReportDescriptor"
     abstract="true"
-    class="com.d2s.framework.application.printing.model.descriptor.basic.BasicReportDescriptor">
+    class="org.jspresso.framework.application.printing.model.descriptor.basic.BasicReportDescriptor">
     <constructor-arg
       index="0"
-      value="com.d2s.framework.application.printing.model.descriptor.basic.IReportDescriptor" />
+      value="org.jspresso.framework.application.printing.model.descriptor.basic.IReportDescriptor" />
   </bean>
   <!--
     Root action beans.
@@ -71,7 +71,7 @@
 
   <bean
     id="sourceViewConnectorSetAction"
-    class="com.d2s.framework.application.frontend.action.std.SetConnectorValueAction">
+    class="org.jspresso.framework.application.frontend.action.std.SetConnectorValueAction">
     <property
       name="connectorActionContextKey"
       value="SOURCE_VIEW_CONNECTOR" />
@@ -122,7 +122,7 @@
   <bean
     id="abstractPrintAction"
     abstract="true"
-    class="com.d2s.framework.application.printing.frontend.action.PrintAction">
+    class="org.jspresso.framework.application.printing.frontend.action.PrintAction">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/print-48x48.png" />
@@ -150,7 +150,7 @@
   <bean
     id="abstractChooseActionAction"
     abstract="true"
-    class="com.d2s.framework.application.frontend.action.flow.ChooseActionAction">
+    class="org.jspresso.framework.application.frontend.action.flow.ChooseActionAction">
     <property
       name="modelConnectorFactory"
       ref="modelConnectorFactory" />
@@ -165,7 +165,7 @@
 
   <bean
     id="reportAction"
-    class="com.d2s.framework.application.printing.frontend.action.ReportAction">
+    class="org.jspresso.framework.application.printing.frontend.action.ReportAction">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/execute-48x48.png" />
@@ -266,18 +266,18 @@
 
   <bean
     id="connectorSelectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.ConnectorSelectionAction" />
+    class="org.jspresso.framework.application.frontend.action.ConnectorSelectionAction" />
 
   <bean
     id="moduleConnectorSelectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.module.ModuleConnectorSelectionAction" />
+    class="org.jspresso.framework.application.frontend.action.module.ModuleConnectorSelectionAction" />
 
   <bean
     id="queryModuleFilterAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.module.QueryModuleFilterAction">
+        class="org.jspresso.framework.application.backend.action.module.QueryModuleFilterAction">
         <property
           name="queryAction"
           ref="queryEntitiesBackAction" />
@@ -293,7 +293,7 @@
 
   <bean
     id="scriptedBackAction"
-    class="com.d2s.framework.application.backend.action.StaticScriptedBackendAction">
+    class="org.jspresso.framework.application.backend.action.StaticScriptedBackendAction">
     <property
       name="scriptHandler"
       ref="scriptHandler" />
@@ -302,7 +302,7 @@
   <bean
     id="abstractAddToMasterFrontAction"
     abstract="true"
-    class="com.d2s.framework.application.frontend.action.std.AddCollectionToMasterAction">
+    class="org.jspresso.framework.application.frontend.action.std.AddCollectionToMasterAction">
     <property
       name="name"
       value="add.name" />
@@ -311,7 +311,7 @@
       value="add.description" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.AddEntityCollectionToMasterAction" />
+        class="org.jspresso.framework.application.backend.action.AddEntityCollectionToMasterAction" />
     </property>
     <property
       name="nextAction"
@@ -337,13 +337,13 @@
     parent="addToMasterFrontAction">
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.AddMapToMasterAction" />
+        class="org.jspresso.framework.application.backend.action.AddMapToMasterAction" />
     </property>
   </bean>
 
   <bean
     id="cloneEntityCollectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/edit_clone-48x48.png" />
@@ -358,7 +358,7 @@
       value="alt C" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.CloneEntityCollectionAction">
+        class="org.jspresso.framework.application.backend.action.CloneEntityCollectionAction">
         <property
           name="entityCloneFactory"
           ref="smartEntityCloneFactory" />
@@ -371,7 +371,7 @@
 
   <bean
     id="cloneMapCollectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/edit_clone-48x48.png" />
@@ -386,7 +386,7 @@
       value="alt C" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.CloneMapCollectionAction" />
+        class="org.jspresso.framework.application.backend.action.CloneMapCollectionAction" />
     </property>
     <property
       name="nextAction"
@@ -395,7 +395,7 @@
 
   <bean
     id="copyCollectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/edit_copy-48x48.png" />
@@ -410,7 +410,7 @@
       value="ctrl C" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.TransferCollectionAction">
+        class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property
           name="transferMode"
           value="COPY" />
@@ -420,7 +420,7 @@
 
   <bean
     id="cutCollectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/edit_cut-48x48.png" />
@@ -435,7 +435,7 @@
       value="ctrl X" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.TransferCollectionAction">
+        class="org.jspresso.framework.application.backend.action.TransferCollectionAction">
         <property
           name="transferMode"
           value="MOVE" />
@@ -445,7 +445,7 @@
 
   <bean
     id="pasteCollectionBackAction"
-    class="com.d2s.framework.application.backend.action.PasteCollectionToMasterAction">
+    class="org.jspresso.framework.application.backend.action.PasteCollectionToMasterAction">
     <property
       name="entityCloneFactory"
       ref="smartEntityCloneFactory" />
@@ -453,7 +453,7 @@
 
   <bean
     id="pasteCollectionFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/edit_paste-48x48.png" />
@@ -477,7 +477,7 @@
     parent="addToMasterFrontAction">
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.module.AddToModuleObjectsAction" />
+        class="org.jspresso.framework.application.backend.action.module.AddToModuleObjectsAction" />
     </property>
     <property
       name="nextAction"
@@ -513,7 +513,7 @@
     parent="abstractRemoveCollectionFromMasterFrontAction">
     <property name="yesAction">
       <bean
-        class="com.d2s.framework.application.backend.action.RemoveCollectionFromMasterAction" />
+        class="org.jspresso.framework.application.backend.action.RemoveCollectionFromMasterAction" />
     </property>
   </bean>
 
@@ -530,7 +530,7 @@
     parent="cloneEntityCollectionFrontAction">
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.module.CloneModuleObjectsAction">
+        class="org.jspresso.framework.application.backend.action.module.CloneModuleObjectsAction">
         <property
           name="entityCloneFactory"
           ref="smartEntityCloneFactory" />
@@ -543,7 +543,7 @@
 
   <bean
     id="addAsChildModuleFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/view-48x48.png" />
@@ -555,7 +555,7 @@
       value="installInTree.description" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.module.AddBeanAsSubModuleAction" />
+        class="org.jspresso.framework.application.backend.action.module.AddBeanAsSubModuleAction" />
     </property>
     <property
       name="nextAction"
@@ -564,7 +564,7 @@
 
   <bean
     id="restartModuleFrontAction"
-    class="com.d2s.framework.application.frontend.action.module.ModuleRestartAction">
+    class="org.jspresso.framework.application.frontend.action.module.ModuleRestartAction">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/restart-48x48.png" />
@@ -578,7 +578,7 @@
 
   <bean
     id="moveUpFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/up-48x48.png" />
@@ -590,7 +590,7 @@
       value="moveUp.description" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.CollectionElementMoveAction">
+        class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property
           name="offset"
           value="-1" />
@@ -603,7 +603,7 @@
 
   <bean
     id="moveDownFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/down-48x48.png" />
@@ -615,7 +615,7 @@
       value="moveDown.description" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.CollectionElementMoveAction">
+        class="org.jspresso.framework.application.backend.action.CollectionElementMoveAction">
         <property
           name="offset"
           value="1" />
@@ -628,7 +628,7 @@
 
   <bean
     id="resetPropertyFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/reset-48x48.png" />
@@ -640,7 +640,7 @@
       value="reset.description" />
     <property name="wrappedAction">
       <bean
-        class="com.d2s.framework.application.backend.action.ResetConnectorValueAction" />
+        class="org.jspresso.framework.application.backend.action.ResetConnectorValueAction" />
     </property>
   </bean>
 
@@ -649,7 +649,7 @@
   -->
   <bean
     id="saveModuleObjectFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/save-48x48.png" />
@@ -673,7 +673,7 @@
 
   <bean
     id="reloadModuleObjectFrontAction"
-    class="com.d2s.framework.application.frontend.action.ActionWrapper">
+    class="org.jspresso.framework.application.frontend.action.ActionWrapper">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/reload-48x48.png" />
@@ -899,16 +899,19 @@
   <bean
     abstract="true"
     id="abstractSimpleModule"
-    class="com.d2s.framework.application.model.Module">
+    class="org.jspresso.framework.application.model.Module">
   </bean>
 
   <bean
     abstract="true"
     id="abstractBeanModule"
-    class="com.d2s.framework.application.model.BeanModule">
-  </beorg.jspresso.framework.view.descriptor.basicoduleView"
+    class="org.jspresso.framework.application.model.BeanModule">
+  </bean>
+
+  <bean
+    id="beanCollectionModuleView"
     parent="decoratedView"
-    class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor">
+    class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor">
     <property
       name="actionMap"
       ref="beanCollectionModuleActionMap" />
@@ -917,15 +920,16 @@
   <bean
     abstract="true"
     id="abstractBeanCollectionModule"
-    class="com.d2s.framework.application.model.BeanCollectionModule">
+    class="org.jspresso.framework.application.model.BeanCollectionModule">
     <property
       name="projectedViewDescriptor"
       ref="beanCollectionModuleView" />
   </bean>
 
-  <org.jspresso.framework.view.descriptor.basicoduleView"
+  <bean
+    id="filterableBeanCollectionModuleView"
     parent="decoratedView"
-    class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor">
+    class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor">
     <property
       name="actionMap"
       ref="filterableBeanCollectionModuleActionMap" />
@@ -934,7 +938,7 @@
   <bean
     abstract="true"
     id="abstractFilterableBeanCollectionModule"
-    class="com.d2s.framework.application.model.FilterableBeanCollectionModule">
+    class="org.jspresso.framework.application.model.FilterableBeanCollectionModule">
     <property
       name="projectedViewDescriptor"
       ref="filterableBeanCollectionModuleView" />
@@ -948,7 +952,7 @@
   -->
   <bean
     id="defaultModuleIconImageURLProvider"
-    class="com.d2s.framework.application.model.WorkspaceIconImageURLProvider">
+    class="org.jspresso.framework.application.model.WorkspaceIconImageURLProvider">
     <property
       name="delegateProvider"
       ref="defaultDomainImageUrlProvider" />
@@ -957,7 +961,7 @@
   <bean
     abstract="true"
     id="abstractWorkspace"
-    class="com.d2s.framework.application.model.Workspace">
+    class="org.jspresso.framework.application.model.Workspace">
     <property
       name="iconImageURLProvider"
       ref="defaultModuleIconImageURLProvider" />

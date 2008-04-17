@@ -11,11 +11,11 @@
 
   <bean
     id="mockMessageSource"
-    class="com.d2s.framework.util.i18n.mock.MockMessageSource" />
+    class="org.jspresso.framework.util.i18n.mock.MockMessageSource" />
 
   <bean
     id="translationProvider"
-    class="com.d2s.framework.util.i18n.basic.MessageSourceTranslationProvider">
+    class="org.jspresso.framework.util.i18n.basic.MessageSourceTranslationProvider">
     <property
       name="messageSource"
       ref="applicationMessageSource" />
@@ -29,7 +29,7 @@
       ref="mockMessageSource" />
     <property
       name="basename"
-      value="com.d2s.framework.application.i18n.Commons" />
+      value="org.jspresso.framework.application.i18n.Commons" />
   </bean>
 
   <!--
@@ -37,47 +37,47 @@
   -->
   <bean
     id="mvcBinder"
-    class="com.d2s.framework.binding.DefaultMvcBinder" />
+    class="org.jspresso.framework.binding.DefaultMvcBinder" />
 
   <!--
     The implementation used as factories.
   -->
   <bean
     id="accessorFactory"
-    class="com.d2s.framework.util.accessor.basic.BasicAccessorFactory">
+    class="org.jspresso.framework.util.accessor.basic.BasicAccessorFactory">
     <property name="beanAccessorFactory">
-      <bean class="com.d2s.framework.util.accessor.bean.BeanAccessorFactory" />
+      <bean class="org.jspresso.framework.util.accessor.bean.BeanAccessorFactory" />
     </property>
     <property name="mapAccessorFactory">
       <bean
-        class="com.d2s.framework.model.map.DescriptorAwareMapAccessorFactory" />
+        class="org.jspresso.framework.model.map.DescriptorAwareMapAccessorFactory" />
     </property>
   </bean>
 
   <bean
     id="reportFactory"
-    class="com.d2s.framework.application.printing.model.basic.BasicReportFactory" />
+    class="org.jspresso.framework.application.printing.model.basic.BasicReportFactory" />
 
   <!--
     The implementation used as ConnectorFactory.
   -->
   <bean
     id="connectorFactory"
-    class="com.d2s.framework.binding.basic.BasicConnectorFactory" />
+    class="org.jspresso.framework.binding.basic.BasicConnectorFactory" />
 
   <!--
     The implementation used as ComponentCollectionFactory.
   -->
   <bean
     id="componentCollectionFactory"
-    class="com.d2s.framework.model.component.DefaultComponentCollectionFactory" />
+    class="org.jspresso.framework.model.component.DefaultComponentCollectionFactory" />
 
   <!--
     The implementation used as ModelConnectorFactory.
   -->
   <bean
     id="modelConnectorFactory"
-    class="com.d2s.framework.binding.model.DefaultModelConnectorFactory">
+    class="org.jspresso.framework.binding.model.DefaultModelConnectorFactory">
     <property
       name="accessorFactory"
       ref="accessorFactory" />
@@ -91,7 +91,7 @@
   -->
   <bean
     id="modelCascadingBinder"
-    class="com.d2s.framework.binding.masterdetail.DefaultModelCascadingBinder">
+    class="org.jspresso.framework.binding.masterdetail.DefaultModelCascadingBinder">
     <property
       name="mvcBinder"
       ref="mvcBinder" />
@@ -105,7 +105,7 @@
   -->
   <bean
     id="entityGUIDGenerator"
-    class="com.d2s.framework.util.uid.RandomGUIDGenerator" />
+    class="org.jspresso.framework.util.uid.RandomGUIDGenerator" />
 
   <!--
     The root abstract implementation used as Application Session.
@@ -113,7 +113,7 @@
   <bean
     id="abstractApplicationSession"
     abstract="true"
-    class="com.d2s.framework.application.backend.session.basic.BasicApplicationSession">
+    class="org.jspresso.framework.application.backend.session.basic.BasicApplicationSession">
     <property
       name="collectionFactory"
       ref="componentCollectionFactory" />
@@ -122,17 +122,17 @@
       ref="accessorFactory" />
     <property name="entityRegistry">
       <bean
-        class="com.d2s.framework.model.entity.basic.BasicEntityRegistry"
+        class="org.jspresso.framework.model.entity.basic.BasicEntityRegistry"
         scope="prototype" />
     </property>
     <property name="unitOfWork">
       <bean
-        class="com.d2s.framework.application.backend.session.basic.BasicEntityUnitOfWork"
+        class="org.jspresso.framework.application.backend.session.basic.BasicEntityUnitOfWork"
         scope="prototype" />
     </property>
     <property name="carbonEntityCloneFactory">
       <bean
-        class="com.d2s.framework.model.entity.CarbonEntityCloneFactory"
+        class="org.jspresso.framework.model.entity.CarbonEntityCloneFactory"
         scope="prototype" />
     </property>
   </bean>
@@ -142,14 +142,14 @@
   -->
   <bean
     id="componentDescriptorRegistry"
-    class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
+    class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptorRegistry" />
 
   <!--
     The implementation used as ComponentIconImageURLProvider.
   -->
   <bean
     id="defaultDomainImageUrlProvider"
-    class="com.d2s.framework.model.descriptor.ComponentIconImageURLProvider">
+    class="org.jspresso.framework.model.descriptor.ComponentIconImageURLProvider">
     <property
       name="componentDescriptorRegistry"
       ref="componentDescriptorRegistry" />
@@ -160,7 +160,7 @@
   -->
   <bean
     id="basicComponentFactory"
-    class="com.d2s.framework.model.component.basic.BasicProxyComponentFactory">
+    class="org.jspresso.framework.model.component.basic.BasicProxyComponentFactory">
     <property
       name="accessorFactory"
       ref="accessorFactory" />
@@ -169,7 +169,7 @@
       ref="componentCollectionFactory" />
     <property name="componentExtensionFactory">
       <bean
-        class="com.d2s.framework.model.component.DefaultComponentExtensionFactory">
+        class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory">
       </bean>
     </property>
     <property
@@ -182,7 +182,7 @@
   -->
   <bean
     id="basicEntityFactory"
-    class="com.d2s.framework.model.entity.basic.BasicProxyEntityFactory">
+    class="org.jspresso.framework.model.entity.basic.BasicProxyEntityFactory">
     <property
       name="accessorFactory"
       ref="accessorFactory" />
@@ -195,7 +195,7 @@
     <property
       name="entityExtensionFactory">
       <bean
-        class="com.d2s.framework.model.component.DefaultComponentExtensionFactory">
+        class="org.jspresso.framework.model.component.DefaultComponentExtensionFactory">
       </bean>
     </property>
     <property
@@ -209,11 +209,11 @@
 
   <bean
     id="createQueryComponentAction"
-    class="com.d2s.framework.application.backend.action.CreateQueryComponentAction" />
+    class="org.jspresso.framework.application.backend.action.CreateQueryComponentAction" />
 
   <bean
     id="initModuleFilterAction"
-    class="com.d2s.framework.application.backend.action.module.InitModuleFilterAction">
+    class="org.jspresso.framework.application.backend.action.module.InitModuleFilterAction">
     <property
       name="nextAction"
       ref="createQueryComponentAction" />
@@ -283,21 +283,21 @@
   -->
   <bean
     id="scriptHandler"
-    class="com.d2s.framework.util.scripting.DefaultScriptHandler" />
+    class="org.jspresso.framework.util.scripting.DefaultScriptHandler" />
 
   <!--
     The query view descriptor factory.
   -->
   <bean
     id="queryViewDescriptorFactory"
-    class="com.d2s.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory" />
+    class="org.jspresso.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory" />
 
   <!--
     The module view descriptor factory.
   -->
   <bean
     id="moduleViewDescriptorFactory"
-    class="com.d2s.framework.application.view.descriptor.basic.BasicModuleViewDescriptorFactory">
+    class="org.jspresso.framework.application.view.descriptor.basic.BasicModuleViewDescriptorFactory">
     <property
       name="queryViewDescriptorFactory"
       ref="queryViewDescriptorFactory" />
@@ -313,7 +313,7 @@
   <bean
     abstract="true"
     id="abstractFrontController"
-    class="com.d2s.framework.application.frontend.controller.AbstractFrontendController">
+    class="org.jspresso.framework.application.frontend.controller.AbstractFrontendController">
     <property
       name="mvcBinder"
       ref="mvcBinder" />
@@ -334,7 +334,7 @@
   <bean
     abstract="true"
     id="abstractIconFactory"
-    class="com.d2s.framework.view.AbstractIconFactory">
+    class="org.jspresso.framework.view.AbstractIconFactory">
     <property
       name="okYesIconImageURL"
       value="classpath:com/d2s/framework/application/images/ok-48x48.png" />
@@ -367,16 +367,16 @@
   <bean
     abstract="true"
     id="abstractBackController"
-    class="com.d2s.framework.application.backend.AbstractBackendController">
+    class="org.jspresso.framework.application.backend.AbstractBackendController">
     <property name="entityFactory">
       <bean
         parent="basicEntityFactory"
-        class="com.d2s.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory"
+        class="org.jspresso.framework.application.backend.entity.ApplicationSessionAwareProxyEntityFactory"
         scope="prototype">
         <property name="inlineComponentFactory">
           <bean
             parent="basicComponentFactory"
-            class="com.d2s.framework.application.backend.component.ApplicationSessionAwareProxyComponentFactory"
+            class="org.jspresso.framework.application.backend.component.ApplicationSessionAwareProxyComponentFactory"
             scope="prototype">
           </bean>
         </property>
@@ -398,7 +398,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TYPE
+        org.jspresso.framework.model.descriptor.IDatePropertyDescriptor.DATE_TYPE
       </value>
     </property>
   </bean>
@@ -407,7 +407,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.model.descriptor.IDatePropertyDescriptor.DATE_TIME_TYPE
+        org.jspresso.framework.model.descriptor.IDatePropertyDescriptor.DATE_TIME_TYPE
       </value>
     </property>
   </bean>
@@ -416,7 +416,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.application.printing.model.descriptor.basic.BasicReportDescriptor.INSTANCE
+        org.jspresso.framework.application.printing.model.descriptor.basic.BasicReportDescriptor.INSTANCE
       </value>
     </property>
   </bean>
@@ -429,7 +429,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.view.descriptor.IComponentViewDescriptor.ASIDE
+        org.jspresso.framework.view.descriptor.IComponentViewDescriptor.ASIDE
       </value>
     </property>
   </bean>
@@ -438,7 +438,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.view.descriptor.IComponentViewDescriptor.ABOVE
+        org.jspresso.framework.view.descriptor.IComponentViewDescriptor.ABOVE
       </value>
     </property>
   </bean>
@@ -447,7 +447,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.view.descriptor.IEvenGridViewDescriptor.ROW
+        org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor.ROW
       </value>
     </property>
   </bean>
@@ -456,7 +456,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.view.descriptor.IEvenGridViewDescriptor.COLUMN
+        org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor.COLUMN
       </value>
     </property>
   </bean>
@@ -465,7 +465,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.view.descriptor.ISplitViewDescriptor.HORIZONTAL
+        org.jspresso.framework.view.descriptor.ISplitViewDescriptor.HORIZONTAL
       </value>
     </property>
   </bean>
@@ -474,7 +474,7 @@
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
       <value>
-        com.d2s.framework.view.descriptor.ISplitViewDescriptor.VERTICAL
+        org.jspresso.framework.view.descriptor.ISplitViewDescriptor.VERTICAL
       </value>
     </property>
   </bean>
@@ -482,14 +482,14 @@
     id="SIMPLE_BORDER"
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.IViewDescriptor.SIMPLE</value>
+      <value>org.jspresso.framework.view.descriptor.IViewDescriptor.SIMPLE</value>
     </property>
   </bean>
   <bean
     id="TITLED_BORDER"
     class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">
     <property name="staticField">
-      <value>com.d2s.framework.view.descriptor.IViewDescriptor.TITLED</value>
+      <value>org.jspresso.framework.view.descriptor.IViewDescriptor.TITLED</value>
     </property>
   </bean>
   <bean
@@ -505,7 +505,7 @@
   -->
   <bean
     id="doPrintBackendAction"
-    class="com.d2s.framework.application.printing.backend.action.GenerateJasperReportAction">
+    class="org.jspresso.framework.application.printing.backend.action.GenerateJasperReportAction">
     <property
       name="jdbcTemplate"
       ref="reportingJdbcTemplate" />

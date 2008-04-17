@@ -14,14 +14,14 @@
   -->
   <bean
     id="listSelectionModelBinder"
-    class="com.d2s.framework.binding.wings.DefaultListSelectionModelBinder" />
+    class="org.jspresso.framework.binding.wings.DefaultListSelectionModelBinder" />
 
   <!--
     The implementation used as TreeSelectionModelBinder.
   -->
   <bean
     id="treeSelectionModelBinder"
-    class="com.d2s.framework.binding.wings.DefaultTreeSelectionModelBinder" />
+    class="org.jspresso.framework.binding.wings.DefaultTreeSelectionModelBinder" />
 
   <!--
     Root action beans.
@@ -29,12 +29,12 @@
   <bean
     id="lovFindFrontAction"
     parent="abstractLovFindFrontAction"
-    class="com.d2s.framework.application.frontend.action.std.FindAction"
+    class="org.jspresso.framework.application.frontend.action.std.FindAction"
     scope="prototype" />
 
   <bean
     id="lovOkFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.lov.OkLovAction"
+    class="org.jspresso.framework.application.frontend.action.wings.lov.OkLovAction"
     scope="prototype">
     <property
       name="nextAction"
@@ -43,7 +43,7 @@
 
   <bean
     id="printOkFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
+    class="org.jspresso.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
     <property
       name="nextAction"
       ref="editReportParametersAction" />
@@ -52,24 +52,24 @@
   <bean
     id="doPrintAction"
     parent="abstractDoPrintAction"
-    class="com.d2s.framework.application.frontend.action.wings.std.OkAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.std.OkAction" />
 
   <bean
     id="chooseActionOkFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
+    class="org.jspresso.framework.application.frontend.action.wings.lov.OkChooseComponentAction">
     <property name="nextAction">
       <bean
-        class="com.d2s.framework.application.frontend.action.std.ExecuteActionAction" />
+        class="org.jspresso.framework.application.frontend.action.std.ExecuteActionAction" />
     </property>
   </bean>
 
   <bean
     id="cancelDialogFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.std.CancelAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.std.CancelAction" />
 
   <bean
     id="okDialogFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.std.OkAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.std.OkAction" />
 
   <!--
     Action beans
@@ -77,16 +77,16 @@
   <bean
     id="removeEntityCollectionFromMasterFrontAction"
     parent="abstractRemoveCollectionFromMasterFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
 
   <bean
     id="removeAnyCollectionFromMasterFrontAction"
     parent="abstractRemoveAnyCollectionFromMasterFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
 
   <bean
     id="infoFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.flow.InfoAction">
+    class="org.jspresso.framework.application.frontend.action.wings.flow.InfoAction">
     <property
       name="iconImageURL"
       value="classpath:com/d2s/framework/application/images/info-48x48.png" />
@@ -96,18 +96,18 @@
     id="staticInfoFrontAction"
     abstract="true"
     parent="infoFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.flow.StaticInfoAction">
+    class="org.jspresso.framework.application.frontend.action.wings.flow.StaticInfoAction">
   </bean>
 
   <bean
     id="yesNoFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.flow.YesNoAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.flow.YesNoAction" />
 
   <bean
     id="staticYesNoFrontAction"
     abstract="true"
     parent="yesNoFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.flow.StaticYesNoAction" />
 
   <!--
     The implementation used as view factory.
@@ -119,96 +119,96 @@
   <bean
     id="iconFactory"
     parent="abstractIconFactory"
-    class="com.d2s.framework.view.wings.WingsIconFactory"
+    class="org.jspresso.framework.view.wings.WingsIconFactory"
     scope="prototype" />
 
   <bean
     id="actionFactory"
     parent="abstractActionFactory"
-    class="com.d2s.framework.view.wings.WingsActionFactory"
+    class="org.jspresso.framework.view.wings.WingsActionFactory"
     scope="prototype" />
 
   <bean
     id="abstractModalDialogAction"
     abstract="true"
-    class="com.d2s.framework.application.frontend.action.wings.std.ModalDialogAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.std.ModalDialogAction" />
 
   <bean
     id="lovAction"
     parent="abstractLovAction"
-    class="com.d2s.framework.application.frontend.action.wings.lov.LovAction"
+    class="org.jspresso.framework.application.frontend.action.wings.lov.LovAction"
     scope="prototype" />
 
   <bean
     id="openFileAction"
     parent="abstractOpenFileAction"
-    class="com.d2s.framework.application.frontend.action.wings.file.OpenFileAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.file.OpenFileAction" />
 
   <bean
     id="openFileAsBinaryPropertyAction"
     parent="abstractOpenFileAction"
-    class="com.d2s.framework.application.frontend.action.wings.file.OpenFileAsBinaryPropertyAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.file.OpenFileAsBinaryPropertyAction" />
 
   <bean
     id="saveFileAction"
     parent="abstractSaveFileAction"
-    class="com.d2s.framework.application.frontend.action.wings.file.SaveFileAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.file.SaveFileAction" />
 
   <bean
     id="saveBinaryPropertyAsFileAction"
     parent="saveFileAction"
-    class="com.d2s.framework.application.frontend.action.wings.file.SaveBinaryPropertyAsFileAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.file.SaveBinaryPropertyAsFileAction" />
 
   <bean
     id="binaryPropertyInfoAction"
     parent="abstractBinaryPropertyInfoAction"
-    class="com.d2s.framework.application.frontend.action.wings.file.BinaryPropertyInfoAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.file.BinaryPropertyInfoAction" />
 
   <bean
     id="chooseComponentAction"
     abstract="true"
     parent="abstractChooseComponentAction"
-    class="com.d2s.framework.application.frontend.action.wings.lov.ChooseComponentAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.lov.ChooseComponentAction" />
 
   <bean
     id="editReportParametersAction"
     parent="abstractEditReportParametersAction"
-    class="com.d2s.framework.application.printing.frontend.action.wings.EditReportParametersAction" />
+    class="org.jspresso.framework.application.printing.frontend.action.wings.EditReportParametersAction" />
 
   <bean
     id="displayReportAction"
-    class="com.d2s.framework.application.printing.frontend.action.wings.DisplayJasperReportAction" />
+    class="org.jspresso.framework.application.printing.frontend.action.wings.DisplayJasperReportAction" />
 
   <bean
     id="editComponentAction"
     parent="abstractEditComponentAction"
-    class="com.d2s.framework.application.frontend.action.wings.std.EditComponentAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.std.EditComponentAction" />
 
   <bean
     id="changePasswordAction"
     parent="abstractChangePasswordAction"
-    class="com.d2s.framework.application.frontend.action.wings.security.ChangePasswordAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.security.ChangePasswordAction" />
 
   <bean
     id="displayUrlFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.std.DisplayUrlAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.std.DisplayUrlAction" />
 
   <bean
     id="staticDisplayUrlFrontAction"
     abstract="true"
     parent="displayUrlFrontAction"
-    class="com.d2s.framework.application.frontend.action.wings.std.DisplayStaticUrlAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.std.DisplayStaticUrlAction" />
 
 
   <bean
     id="wizardAction"
     parent="abstractWizardAction"
-    class="com.d2s.framework.application.frontend.action.wings.wizard.WizardAction" />
+    class="org.jspresso.framework.application.frontend.action.wings.wizard.WizardAction" />
 
   <bean
     id="viewFactory"
     parent="abstractViewFactory"
-    class="com.d2s.framework.view.wings.DefaultWingsViewFactory"
+    class="org.jspresso.framework.view.wings.DefaultWingsViewFactory"
     scope="prototype" />
 
   <!--
@@ -218,7 +218,7 @@
     id="frontController"
     abstract="true"
     parent="abstractFrontController"
-    class="com.d2s.framework.application.frontend.controller.wings.DefaultWingsController"
+    class="org.jspresso.framework.application.frontend.controller.wings.DefaultWingsController"
     scope="prototype">
   </bean>
 

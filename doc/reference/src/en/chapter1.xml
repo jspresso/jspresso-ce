@@ -480,14 +480,14 @@
 
       <programlisting language="xml">&lt;bean <co id="n-bean" />
   id="Nameable" <co id="n-id" />
-  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt; <co
+  class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt; <co
           id="n-class" />
   &lt;constructor-arg
     value="com.d2s.hrsample.model.Nameable" /&gt; <co id="n-classname" />
   &lt;property name="propertyDescriptors"&gt; <co id="n-props" />
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;<co
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;<co
           id="n-stringprop" />
         &lt;property
           name="name" <co id="n-name" />
@@ -563,12 +563,12 @@
 
       <programlisting language="xml">&lt;bean
   id="Traceable"
-  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.Traceable" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt; <co
+        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt; <co
           id="t-createTimestamp" />
         &lt;property
           name="name"
@@ -581,7 +581,7 @@
           value="true" /&gt; <co id="readOnly" />
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="lastUpdateTimestamp" /&gt;
@@ -718,7 +718,7 @@
   &lt;/path&gt;
 
   &lt;target name="generate-entities"&gt;
-    &lt;java classname="com.d2s.framework.tools.entitygenerator.EntityGenerator"
+    &lt;java classname="org.jspresso.framework.tools.entitygenerator.EntityGenerator"
           classpathref="entity.generator.classpath"&gt;
       &lt;arg value="-applicationContextKey" /&gt;
       &lt;arg value="hrsample-model-context" /&gt;
@@ -833,10 +833,10 @@ public interface Nameable {
 import java.util.Date;
 
 import com.d2s.hrsample.model.Traceable;
-import com.d2s.framework.model.component.service.EmptyLifecycleInterceptor;
-import com.d2s.framework.model.entity.IEntityFactory;
-import com.d2s.framework.model.entity.IEntityLifecycleHandler;
-import com.d2s.framework.security.UserPrincipal;
+import org.jspresso.framework.model.component.service.EmptyLifecycleInterceptor;
+import org.jspresso.framework.model.entity.IEntityFactory;
+import org.jspresso.framework.model.entity.IEntityLifecycleHandler;
+import org.jspresso.framework.security.UserPrincipal;
 
 /**
  * Default lifecycle service for tracing.
@@ -874,11 +874,11 @@ public class TraceableLifecycleInterceptor extends
       <calloutlist>
         <callout arearefs="lcInterceptor">
           <para>The class inherits from the support class
-          <code>com.d2s.framework.model.component.service.EmptyLifecycleInterceptor</code>
+          <code>org.jspresso.framework.model.component.service.EmptyLifecycleInterceptor</code>
           which empty implements the required life-cycle interceptor interface
-          <code>com.d2s.framework.model.component.service.EmptyLifecycleInterceptor</code>
+          <code>org.jspresso.framework.model.component.service.EmptyLifecycleInterceptor</code>
           as well as the marker interface
-          <code>com.d2s.framework.model.component.service.IComponentService</code>.</para>
+          <code>org.jspresso.framework.model.component.service.IComponentService</code>.</para>
         </callout>
 
         <callout arearefs="onPersist">
@@ -904,7 +904,7 @@ public class TraceableLifecycleInterceptor extends
 
       <para><programlisting language="xml">&lt;bean
   id="Traceable"
-  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
   ...
   &lt;property name="lifecycleInterceptors"&gt; <co id="lcInterceptors" />
     &lt;list&gt;
@@ -931,7 +931,7 @@ public class TraceableLifecycleInterceptor extends
 
       <programlisting language="xml">&lt;bean
   id="City"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt; <co
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt; <co
           id="BasicEntityDescriptor" />
   &lt;constructor-arg value="com.d2s.hrsample.model.City" /&gt;
   &lt;property name="ancestorDescriptors"&gt; <co id="ancestorDescriptors" />
@@ -942,7 +942,7 @@ public class TraceableLifecycleInterceptor extends
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="zip" /&gt;
@@ -964,7 +964,7 @@ public class TraceableLifecycleInterceptor extends
         <callout arearefs="ancestorDescriptors">
           <para>This descriptor inherits from our <code>Nameable</code>
           interface as well as the standard
-          <code>com.d2s.framework.model.entity.IEntity</code> descriptor
+          <code>org.jspresso.framework.model.entity.IEntity</code> descriptor
           bean.</para>
         </callout>
       </calloutlist>
@@ -981,18 +981,18 @@ public class TraceableLifecycleInterceptor extends
  * &lt;p&gt;
  *
  * @hibernate.mapping
- *           default-access = "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
+ *           default-access = "org.jspresso.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
  * @hibernate.class
  *   table = "CITY"
  *   dynamic-insert = "true"
  *   dynamic-update = "true"
- *   persister = "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
+ *   persister = "org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
  * @author Generated by Design2see
  * @version $LastChangedRevision$
  */
 public interface City extends
   com.d2s.hrsample.model.Nameable,
-  com.d2s.framework.model.entity.IEntity <co id="IEntity" /> {
+  org.jspresso.framework.model.entity.IEntity <co id="IEntity" /> {
 
   /**
    * @hibernate.id generator-class = "assigned" column = "ID" type = "string"
@@ -1033,7 +1033,7 @@ public interface City extends
       <calloutlist>
         <callout arearefs="IEntity">
           <para><code>City</code> is an entity so the generator made it
-          inherit from <code>com.d2s.framework.model.entity.IEntity</code>
+          inherit from <code>org.jspresso.framework.model.entity.IEntity</code>
           which is a <trademark>D2S</trademark> framework base class.</para>
         </callout>
       </calloutlist>
@@ -1061,13 +1061,13 @@ public interface City extends
 
       <programlisting language="xml">&lt;bean
   id="ContactInfo"
-  class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt; <co
+  class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor"&gt; <co
           id="BasicComponentDescriptor" />
   &lt;constructor-arg value="com.d2s.hrsample.model.ContactInfo" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="address" /&gt;
@@ -1076,7 +1076,7 @@ public interface City extends
           value="256" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="phone" /&gt;
@@ -1085,7 +1085,7 @@ public interface City extends
           value="32" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="email" /&gt;
@@ -1138,7 +1138,7 @@ public interface City extends
  * @version $LastChangedRevision$
  */
 public interface ContactInfo extends
-  com.d2s.framework.model.component.IComponent <co id="IComponent" /> {
+  org.jspresso.framework.model.component.IComponent <co id="IComponent" /> {
 
   /**
    * Gets the address.
@@ -1203,7 +1203,7 @@ public interface ContactInfo extends
         <callout arearefs="IComponent">
           <para><code>ContactInfo</code> is an entity so the generator made it
           inherit from
-          <code>com.d2s.framework.model.component.IComponent</code> which is a
+          <code>org.jspresso.framework.model.component.IComponent</code> which is a
           <trademark>D2S</trademark> framework base class.</para>
         </callout>
       </calloutlist>
@@ -1230,13 +1230,13 @@ public interface ContactInfo extends
 
         <programlisting language="xml">&lt;bean
   id="ContactInfo"
-  class="com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.ContactInfo" /&gt;
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       ...
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
             id="BasicReferencePropertyDescriptor" />
         &lt;property
           name="name"
@@ -1254,7 +1254,7 @@ public interface ContactInfo extends
             <callout arearefs="BasicReferencePropertyDescriptor">
               <para><code>ContactInfo</code> has a reference to the
               <code>City</code> entity so we describe this using a
-              <code>com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor</code>.</para>
+              <code>org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor</code>.</para>
             </callout>
 
             <callout arearefs="referencedDescriptor">
@@ -1296,7 +1296,7 @@ public interface ContactInfo extends
 
         <para><programlisting language="xml">&lt;bean
   id="Event"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.Event" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
@@ -1306,7 +1306,7 @@ public interface ContactInfo extends
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicTextPropertyDescriptor"&gt; <co
+        class="org.jspresso.framework.model.descriptor.basic.BasicTextPropertyDescriptor"&gt; <co
               id="BasicTextPropertyDescriptor" />
         &lt;property
           name="name"
@@ -1324,9 +1324,9 @@ public interface ContactInfo extends
 
             <callout arearefs="BasicTextPropertyDescriptor">
               <para>We use a
-              <code>com.d2s.framework.model.descriptor.basic.BasicTextPropertyDescriptor</code>
+              <code>org.jspresso.framework.model.descriptor.basic.BasicTextPropertyDescriptor</code>
               instead of a
-              <code>com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor</code>.
+              <code>org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor</code>.
               This is to inform the framework the this property is likely to
               receive multi-line text; although there is no direct impact on
               the model layer, it might be useful in the view layer (e.g. :
@@ -1353,7 +1353,7 @@ public interface ContactInfo extends
 
         <para><programlisting language="xml">&lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.Employee" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
@@ -1364,7 +1364,7 @@ public interface ContactInfo extends
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="firstName" /&gt;
@@ -1373,7 +1373,7 @@ public interface ContactInfo extends
           value="32" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="ssn" /&gt;
@@ -1391,7 +1391,7 @@ public interface ContactInfo extends
           value="empSsn" /&gt; <co id="unicityScope" />
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="birthDate" /&gt;
@@ -1400,7 +1400,7 @@ public interface ContactInfo extends
           ref="DATE" /&gt; <co id="birthDate" />
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="hireDate" /&gt;
@@ -1409,7 +1409,7 @@ public interface ContactInfo extends
           ref="DATE" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor"&gt; <co
+        class="org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor"&gt; <co
               id="BasicEnumerationPropertyDescriptor" />
         &lt;property
           name="name"
@@ -1436,7 +1436,7 @@ public interface ContactInfo extends
         &lt;/property&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
               id="inlinedComp" />
         &lt;property
           name="name"
@@ -1495,7 +1495,7 @@ public interface ContactInfo extends
 
         <para><programlisting language="xml">&lt;bean
   id="Employee-events"
-  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
+  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
               id="BasicCollectionPropertyDescriptor" />
   &lt;property
     name="name"
@@ -1505,7 +1505,7 @@ public interface ContactInfo extends
     value="true" /&gt; <co id="composition" />
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt; <co
+      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt; <co
               id="BasicCollectionDescriptor" />
       &lt;property
         name="collectionInterface"
@@ -1519,7 +1519,7 @@ public interface ContactInfo extends
             <callout arearefs="BasicCollectionPropertyDescriptor">
               <para>We are describing a collection relationship property. This
               is done using a
-              <code>com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor</code>.</para>
+              <code>org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor</code>.</para>
             </callout>
 
             <callout arearefs="unicityScope">
@@ -1558,7 +1558,7 @@ public interface ContactInfo extends
 
         <para><programlisting language="xml">&lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.Employee" /&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
@@ -1595,17 +1595,17 @@ public interface ContactInfo extends
  * &lt;p&gt;
  * 
  * @hibernate.mapping default-access =
- *                    "com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
+ *                    "org.jspresso.framework.model.persistence.hibernate.property.EntityPropertyAccessor"
  * @hibernate.class table = "EMPLOYEE"
  *   dynamic-insert = "true"
  *   dynamic-update = "true" persister =
- *   "com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
+ *   "org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
  * @author Generated by Design2see
  * @version $LastChangedRevision$
  */
 public interface Employee extends com.d2s.hrsample.model.Nameable,
     com.d2s.hrsample.model.Traceable,
-    com.d2s.framework.model.entity.IEntity {
+    org.jspresso.framework.model.entity.IEntity {
 
   /**
    * @hibernate.id generator-class = "assigned" column = "ID" type = "string"
@@ -1793,7 +1793,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
       <para><programlisting language="xml">&lt;bean
   id="Company"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.Company" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
@@ -1804,7 +1804,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="contact" /&gt;
@@ -1818,7 +1818,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
 &lt;bean
   id="OrganizationalUnit"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.OrganizationalUnit" /&gt;
   &lt;property name="purelyAbstract" value="true" /&gt; <co
             id="purelyAbstract" />
@@ -1831,7 +1831,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="ouId" /&gt;
@@ -1849,7 +1849,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
           value="true" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="contact" /&gt;
@@ -1863,7 +1863,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
 &lt;bean
   id="Department"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.Department" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
@@ -1874,7 +1874,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
 &lt;bean
   id="Team"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.Team" /&gt;
   &lt;property name="ancestorDescriptors"&gt;
     &lt;list&gt;
@@ -1905,7 +1905,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
       The result will be :</para>
 
       <para><programlisting language="xml">&lt;bean id="contact"
-  class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
+  class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
             id="contact" />
   &lt;property
     name="name"
@@ -1917,7 +1917,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -1930,7 +1930,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Company"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -1941,7 +1941,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="OrganizationalUnit"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -1991,7 +1991,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
         <para><programlisting language="xml">&lt;bean
   id="Company-departments"
-  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
+  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
               id="Company-departments" />
   &lt;property
     name="name"
@@ -2001,7 +2001,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
     value="true" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
       &lt;property
         name="collectionInterface"
         value="java.util.Set" /&gt;
@@ -2014,7 +2014,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Company"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -2026,12 +2026,12 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Department"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
               id="company-ref" />
         &lt;property
           name="name"
@@ -2137,7 +2137,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
         <para><programlisting language="xml">&lt;bean
   id="Department-teams"
-  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
   &lt;property
     name="name"
     value="teams" /&gt;
@@ -2146,7 +2146,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
     value="true" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
       &lt;property
         name="collectionInterface"
         value="java.util.Set" /&gt;
@@ -2159,7 +2159,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
 &lt;bean
   id="Department"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   &lt;constructor-arg value="com.d2s.hrsample.model.Department" /&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
@@ -2172,12 +2172,12 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
 &lt;bean
   id="Team"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="department" /&gt;
@@ -2197,7 +2197,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
         &lt;-&gt; <code>Employees</code> relationship :<programlisting
         language="xml">&lt;bean
   id="Company-employees"
-  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
   &lt;property
     name="name"
     value="employees" /&gt;
@@ -2206,7 +2206,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
     value="true" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
       &lt;property
         name="collectionInterface"
         value="java.util.Set" /&gt;
@@ -2219,13 +2219,13 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       ...
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="company" /&gt;
@@ -2245,7 +2245,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Company"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -2267,7 +2267,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
         both ends are reference property descriptors :<programlisting
         language="xml">&lt;bean
   id="OrganizationalUnit-manager"
-  class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
   &lt;property
     name="name"
     value="manager" /&gt;
@@ -2277,13 +2277,13 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       ...
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="managedOu" /&gt;
@@ -2300,7 +2300,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="OrganizationalUnit"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -2328,14 +2328,14 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
         <para><programlisting>&lt;bean
   id="Employee-teams"
-  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
+  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt; <co
               id="Employee-teams" />
   &lt;property
     name="name"
     value="teams" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
       &lt;property
         name="collectionInterface"
         value="java.util.Set" /&gt;
@@ -2348,13 +2348,13 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
 &lt;bean
   id="Team-teamMembers"
-  class="com.d2s.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicCollectionPropertyDescriptor"&gt;
   &lt;property
     name="name"
     value="teamMembers" /&gt;
   &lt;property name="referencedDescriptor"&gt;
     &lt;bean
-      class="com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
+      class="org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor"&gt;
       &lt;property
         name="collectionInterface"
         value="java.util.Set" /&gt;
@@ -2370,7 +2370,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -2384,7 +2384,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 ...
 &lt;bean
   id="Team"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
@@ -2434,7 +2434,7 @@ public interface Employee extends com.d2s.hrsample.model.Nameable,
 
       <para><programlisting language="xml">&lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="serviceDelegates"&gt; <co id="serviceDelegates" />
     &lt;map&gt;
@@ -2495,7 +2495,7 @@ public interface EmployeeService {
 import java.util.Date;
 
 import com.d2s.hrsample.model.Employee;
-import com.d2s.framework.model.component.service.IComponentService;
+import org.jspresso.framework.model.component.service.IComponentService;
 
 /**
  * The services delegate of the Employee entity
@@ -2549,7 +2549,7 @@ public class EmployeeServiceDelegate implements IComponentService { <co
 public interface Employee extends
   com.d2s.hrsample.model.Nameable,
   com.d2s.hrsample.model.Traceable,
-  com.d2s.framework.model.entity.IEntity,
+  org.jspresso.framework.model.entity.IEntity,
   com.d2s.hrsample.model.service.EmployeeService {
 ...
 }</programlisting>Again, <trademark>D2S</trademark> will seamlessly take care
@@ -2576,13 +2576,13 @@ public interface Employee extends
 
       <para><programlisting language="xml">&lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       ...
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicIntegerPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="age" /&gt;
@@ -2617,7 +2617,7 @@ public interface Employee extends
 import java.util.Date;
 
 import com.d2s.hrsample.model.Employee;
-import com.d2s.framework.model.component.AbstractComponentExtension;
+import org.jspresso.framework.model.component.AbstractComponentExtension;
 
 /**
  * Helper class computing extended properties for Employee entity.
@@ -2699,8 +2699,8 @@ import java.beans.PropertyChangeListener;
 import java.util.Date;
 
 import com.d2s.hrsample.model.Employee;
-import com.d2s.framework.model.component.AbstractComponentExtension;
-import com.d2s.framework.util.bean.IPropertyChangeCapable;
+import org.jspresso.framework.model.component.AbstractComponentExtension;
+import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 
 /**
  * Helper class computing extended properties for Employee entity.
@@ -2891,12 +2891,12 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
 
       <para><programlisting language="xml">&lt;bean
   id="Employee"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="firstName" /&gt;
@@ -2911,7 +2911,7 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
       &lt;/bean&gt;
       ...
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
+        class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
         &lt;property
           name="name"
           value="birthDate" /&gt;
@@ -2962,8 +2962,8 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
 import java.util.Date;
 
 import com.d2s.hrsample.model.Employee;
-import com.d2s.framework.util.bean.integrity.EmptyPropertyIntegrityProcessor;
-import com.d2s.framework.util.bean.integrity.IntegrityException;
+import org.jspresso.framework.util.bean.integrity.EmptyPropertyIntegrityProcessor;
+import org.jspresso.framework.util.bean.integrity.IntegrityException;
 
 /**
  * Employee property processors.
@@ -3208,7 +3208,7 @@ public class EmployeePropertyProcessors {
         </callout>
       </calloutlist>In order to start the <trademark>D2S</trademark> view
     tester tool, we will launch the
-    <code>com.d2s.framework.tools.viewtester.ViewTester</code> java class with
+    <code>org.jspresso.framework.tools.viewtester.ViewTester</code> java class with
     the following arguments : <code>-applicationContextKey
     hrsample-viewtester-context -viewId &lt;view descriptor id&gt; -language
     en</code>.</para>
@@ -3246,7 +3246,7 @@ public class EmployeePropertyProcessors {
         <para><programlisting>&lt;bean
   id="Company.pane"
   parent="decoratedView" <co id="decoratedView" />
-  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
+  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
               id="BasicComponentViewDescriptor" />
   &lt;property
     name="labelsPosition"
@@ -3495,7 +3495,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <para><programlisting>&lt;bean
   id="Company.pane"
   parent="decoratedView"
-  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
   ...
   &lt;property
     name="columnCount"
@@ -3505,31 +3505,31 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               id="propertyViewDescriptors" />
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="name" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="contact.address" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="contact.city" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="contact.phone" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="contact.email" /&gt;
@@ -3633,7 +3633,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <para><programlisting language="xml">&lt;bean
   id="Traceable.pane"
   parent="decoratedView"
-  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
+  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt; <co
               id="Traceable.pane" />
   &lt;property
     name="labelsPosition"
@@ -3647,13 +3647,13 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;property name="propertyViewDescriptors"&gt;
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="createTimestamp" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="lastUpdateTimestamp" /&gt;
@@ -3664,7 +3664,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 ...
 &lt;bean
   id="Company.tab.pane"
-  class="com.d2s.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt; <co
+  class="org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt; <co
               id="BasicTabViewDescriptor" />
   &lt;property
     name="modelDescriptor"
@@ -3746,7 +3746,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <para><programlisting language="xml">&lt;bean
   id="Traceable"
-  class="com.d2s.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicInterfaceDescriptor"&gt;
   ...
   &lt;property
     name="iconImageURL"
@@ -3756,7 +3756,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 ...
 &lt;bean
   id="Company"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property
     name="iconImageURL"
@@ -3775,7 +3775,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <para><programlisting language="xml">&lt;bean
   id="Traceable.pane"
   parent="decoratedView"
-  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
   ...
   &lt;property
     name="description"
@@ -3786,7 +3786,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 &lt;bean
   id="Company.pane"
   parent="decoratedView"
-  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
   ...
   &lt;property
     name="description"
@@ -3947,7 +3947,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <para><programlisting language="xml">&lt;bean
   id="Company-departments.table"
   parent="decoratedView"
-  class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt; <co
+  class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt; <co
               id="BasicTableViewDescriptor" />
   &lt;property
     name="modelDescriptor"
@@ -3956,7 +3956,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
 &lt;bean
   id="Company.organization.view"
-  class="com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
+  class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
               id="BasicSplitViewDescriptor" />
   &lt;property
     name="modelDescriptor"
@@ -4040,7 +4040,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <para><programlisting language="xml">  &lt;bean
     id="Company-departments.table"
     parent="decoratedView"
-    class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
+    class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
     ...
     &lt;property
       name="actionMap"
@@ -4091,7 +4091,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <para><programlisting language="xml">&lt;bean
   id="Department"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="renderedProperties"&gt; <co id="renderedProperties" />
     &lt;list&gt;
@@ -4195,7 +4195,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         team entity :<programlisting language="xml">&lt;bean
   id="Department-teams.table"
   parent="decoratedView"
-  class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
   &lt;property
     name="modelDescriptor"
     ref="Department-teams" /&gt;
@@ -4205,19 +4205,19 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;property name="columnViewDescriptors"&gt; <co id="columnViewDescriptors" />
     &lt;list&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="ouId" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="name" /&gt;
       &lt;/bean&gt;
       &lt;bean
-        class="com.d2s.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
+        class="org.jspresso.framework.view.descriptor.basic.BasicSubviewDescriptor"&gt;
         &lt;property
           name="name"
           value="manager" /&gt;
@@ -4240,7 +4240,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <para><programlisting language="xml">&lt;bean
   id="Departments.and.teams.view"
-  class="com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
+  class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
               id="Departments.and.teams.view" />
   &lt;property
     name="modelDescriptor"
@@ -4293,7 +4293,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <para><programlisting language="xml">&lt;bean
   id="Company.organization.view"
-  class="com.d2s.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt;
   &lt;property
     name="modelDescriptor"
     ref="Company" /&gt;
@@ -4374,11 +4374,11 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <para><programlisting language="xml">&lt;bean
   id="Department-teams.subtree"
-  class="com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt; <co
+  class="org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt; <co
               id="BasicSimpleTreeLevelDescriptor" />
   &lt;property name="nodeGroupDescriptor"&gt;
     &lt;bean
-      class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor"&gt; <co
+      class="org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor"&gt; <co
               id="nodeGroupDescriptor" />
       &lt;property
         name="modelDescriptor"
@@ -4395,10 +4395,10 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
 &lt;bean
   id="Company-departments.subtree"
-  class="com.d2s.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"&gt;
   &lt;property name="nodeGroupDescriptor"&gt;
     &lt;bean
-      class="com.d2s.framework.view.descriptor.basic.BasicListViewDescriptor"&gt;
+      class="org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor"&gt;
       &lt;property
         name="modelDescriptor"
         ref="Company-departments" /&gt;
@@ -4417,7 +4417,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
 &lt;bean
   id="Company.tree"
-  class="com.d2s.framework.view.descriptor.basic.BasicTreeViewDescriptor"&gt; <co
+  class="org.jspresso.framework.view.descriptor.basic.BasicTreeViewDescriptor"&gt; <co
               id="BasicTreeViewDescriptor" />
   &lt;property
     name="modelDescriptor"
@@ -4497,7 +4497,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
         <para><programlisting language="xml">&lt;bean
   id="Company.tab.pane"
-  class="com.d2s.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicTabViewDescriptor"&gt;
   ...
   &lt;property name="viewDescriptors"&gt;
     &lt;list&gt;
@@ -4837,7 +4837,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     &lt;regexp pattern="&amp;lt;component name=&amp;quot;(.*)&amp;quot;&amp;gt;" /&gt;
     &lt;substitution expression="&amp;lt;component name=&amp;quot;\1&amp;quot;&amp;gt;
         &amp;lt;tuplizer entity-mode=&amp;quot;pojo&amp;quot;
-        class=&amp;quot;com.d2s.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&amp;quot;
+        class=&amp;quot;org.jspresso.framework.model.persistence.hibernate.entity.tuplizer.ProxyPojoComponentTuplizer&amp;quot;
         /&amp;gt;" /&gt;
     &lt;fileset dir="${resources.src.dir}"&gt;
       &lt;include name="**/*.hbm.xml" /&gt;
@@ -4884,10 +4884,10 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 &lt;!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
                                    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd"&gt;
 
-&lt;hibernate-mapping default-access="com.d2s.framework.model.persistence.hibernate.property.EntityPropertyAccessor"&gt;
+&lt;hibernate-mapping default-access="org.jspresso.framework.model.persistence.hibernate.property.EntityPropertyAccessor"&gt;
   &lt;class dynamic-update="true"
          table="CITY"
-         persister="com.d2s.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
+         persister="org.jspresso.framework.model.persistence.hibernate.entity.persister.EntityProxyJoinedSubclassEntityPersister"
          name="com.d2s.hrsample.model.City"
          dynamic-insert="true"&gt;
     &lt;id type="string" column="ID" length="36" name="id"&gt;
@@ -5150,7 +5150,7 @@ INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : 
         <para><programlisting>/** Login Configuration for the HR sample application **/
 
 hrsample-app { <co id="hrsample-app" />
-   com.d2s.framework.security.auth.spi.DevelopmentLoginModule required <co
+   org.jspresso.framework.security.auth.spi.DevelopmentLoginModule required <co
               id="DevelopmentLoginModule" />
        user=demo <co id="user" />
        password=demo <co id="password" />
@@ -5595,16 +5595,16 @@ hrsample-app { <co id="hrsample-app" />
         <para><programlisting language="xml">&lt;bean
   id="City.module.view"
   parent="decoratedView"
-  class="com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
+  class="org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor"&gt;
   &lt;property
     name="columnCount"
     value="1" /&gt; <co id="cityColumnCount" />
   &lt;property name="actionMap"&gt;
-    &lt;bean class="com.d2s.framework.view.action.ActionMap"&gt; <co
+    &lt;bean class="org.jspresso.framework.view.action.ActionMap"&gt; <co
               id="cityActionMap" />
       &lt;property name="actionLists"&gt;
         &lt;list&gt;
-          &lt;bean class="com.d2s.framework.view.action.ActionList"&gt; <co
+          &lt;bean class="org.jspresso.framework.view.action.ActionList"&gt; <co
               id="ActionList" />
             &lt;property
               name="name"
@@ -6236,7 +6236,7 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
           definition file :<programlisting language="xml">...
 &lt;bean
   id="OrganizationalUnit-manager"
-  class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
   ...
   &lt;property name="integrityProcessors"&gt; <co id="manager.processor" />
     &lt;list&gt;
@@ -6255,13 +6255,13 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
 ...
 &lt;bean
   id="OrganizationalUnit"
-  class="com.d2s.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
+  class="org.jspresso.framework.model.descriptor.entity.basic.BasicEntityDescriptor"&gt;
   ...
   &lt;property name="propertyDescriptors"&gt;
     &lt;list&gt;
       ...
       &lt;bean
-        class="com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
+        class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt; <co
                 id="company.computed" />
         &lt;property
           name="name"
@@ -6320,7 +6320,7 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
  */
 package com.d2s.hrsample.model.extension;
 
-import com.d2s.framework.model.component.AbstractComponentExtension;
+import org.jspresso.framework.model.component.AbstractComponentExtension;
 import com.d2s.hrsample.model.Company;
 import com.d2s.hrsample.model.Department;
 import com.d2s.hrsample.model.OrganizationalUnit;
@@ -6382,8 +6382,8 @@ public class OrganizationalUnitExtension extends
  */
 package com.d2s.hrsample.model.processor;
 
-import com.d2s.framework.util.bean.integrity.EmptyPropertyProcessor;
-import com.d2s.framework.util.bean.integrity.IntegrityException;
+import org.jspresso.framework.util.bean.integrity.EmptyPropertyProcessor;
+import org.jspresso.framework.util.bean.integrity.IntegrityException;
 import com.d2s.hrsample.model.Employee;
 import com.d2s.hrsample.model.OrganizationalUnit;
 

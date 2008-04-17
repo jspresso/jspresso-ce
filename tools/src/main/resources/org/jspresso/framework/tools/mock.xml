@@ -23,7 +23,7 @@
 
   <bean
     id="smartEntityCloneFactory"
-    class="com.d2s.framework.model.entity.SmartEntityCloneFactory">
+    class="org.jspresso.framework.model.entity.SmartEntityCloneFactory">
     <property
       name="accessorFactory"
       ref="accessorFactory" />
@@ -32,7 +32,7 @@
   <bean
     id="applicationFrontController"
     parent="abstractFrontController"
-    class="com.d2s.framework.tools.viewtester.MockSwingController"
+    class="org.jspresso.framework.tools.viewtester.MockSwingController"
     scope="prototype">
     <property
       name="viewFactory"
@@ -42,7 +42,7 @@
   <bean
     id="applicationBackController"
     parent="abstractBackController"
-    class="com.d2s.framework.tools.viewtester.MockBackController"
+    class="org.jspresso.framework.tools.viewtester.MockBackController"
     scope="prototype">
     <property
       name="applicationSession"
