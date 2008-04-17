@@ -16,7 +16,7 @@
         <path d="M137 256 L242 256 L242 273 L137 273 L137 256 Z" />
       </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath4">
-        <path d="M109 271 L270 271 L270 285 L109 285 L109 271 Z" />
+        <path d="M101 271 L277 271 L277 285 L101 285 L101 271 Z" />
       </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath5">
         <path d="M4 285 L375 285 L375 332 L4 332 L4 285 Z" />
@@ -85,7 +85,7 @@
         <path d="M486 256 L637 256 L637 273 L486 273 L486 256 Z" />
       </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath27">
-        <path d="M481 271 L642 271 L642 285 L481 285 L481 271 Z" />
+        <path d="M474 271 L650 271 L650 285 L474 285 L474 271 Z" />
       </clipPath>
       <clipPath clipPathUnits="userSpaceOnUse" id="clipPath28">
         <path d="M389 285 L735 285 L735 360 L389 360 L389 285 Z" />
@@ -113,14 +113,14 @@
       </clipPath>
     </defs>
     <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
-      <rect width="795" x="0" height="428" y="0" stroke="none" />
+      <rect width="912" x="0" height="477" y="0" stroke="none" />
       <rect x="5" y="242" clip-path="url(#clipPath1)" width="369" height="44" stroke="none" />
       <rect x="5" y="242" clip-path="url(#clipPath1)" fill="none" width="369" height="44" stroke="black" />
       <text x="151" y="254" clip-path="url(#clipPath2)" fill="black" font-family="&apos;Arial&apos;" stroke="none" xml:space="preserve">&lt;&lt;Java Class&gt;&gt;</text>
     </g>
     <g stroke-miterlimit="0" font-weight="bold" font-family="&apos;Arial&apos;" stroke-linejoin="round">
       <text xml:space="preserve" x="140" y="269" clip-path="url(#clipPath3)" stroke="none">LdapLoginModule</text>
-      <text font-size="9" x="112" y="281" clip-path="url(#clipPath4)" stroke="none" font-weight="normal" xml:space="preserve">com.d2s.framework.security.auth.spi</text>
+      <text font-size="9" x="104" y="281" clip-path="url(#clipPath4)" stroke="none" font-weight="normal" xml:space="preserve">org.jspresso.framework.security.auth.spi</text>
     </g>
     <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
       <rect x="5" y="286" clip-path="url(#clipPath5)" width="369" height="45" stroke="none" />
@@ -155,7 +155,7 @@
     </g>
     <g stroke-miterlimit="0" font-weight="bold" font-family="&apos;Arial&apos;" stroke-linejoin="round">
       <text xml:space="preserve" x="489" y="269" clip-path="url(#clipPath26)" stroke="none">DevelopmentLoginModule</text>
-      <text font-size="9" x="484" y="281" clip-path="url(#clipPath27)" stroke="none" font-weight="normal" xml:space="preserve">com.d2s.framework.security.auth.spi</text>
+      <text font-size="9" x="477" y="281" clip-path="url(#clipPath27)" stroke="none" font-weight="normal" xml:space="preserve">org.jspresso.framework.security.auth.spi</text>
     </g>
     <g font-size="11" fill="white" font-family="&apos;Tahoma&apos;" stroke-linejoin="round" stroke="white" stroke-miterlimit="0">
       <rect x="390" y="286" clip-path="url(#clipPath28)" width="344" height="73" stroke="none" />

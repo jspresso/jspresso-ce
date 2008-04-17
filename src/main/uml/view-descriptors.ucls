@@ -22,7 +22,7 @@
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
-    <position x="556" y="-58" width="-1" height="-1"/>  
+    <position x="594" y="-58" width="-1" height="-1"/>  
   </interface>  
   <interface type="java" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
     project="jspresso-framework" 
@@ -44,7 +44,7 @@
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
-    <position x="553" y="-156" width="-1" height="-1"/>  
+    <position x="563" y="-156" width="-1" height="-1"/>  
   </interface>  
   <interface type="java" name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" 
     project="jspresso-framework" 
@@ -62,7 +62,8 @@
       visibility="true"/>    
     <position x="302" y="-21" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" project="jspresso-framework" 
+  <interface type="java" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" 
+    project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IBorderViewDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
@@ -84,7 +85,8 @@
       visibility="true"/>    
     <position x="27" y="263" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" project="jspresso-framework" 
+  <interface type="java" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
+    project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IEvenGridViewDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
@@ -96,7 +98,7 @@
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
-    <position x="544" y="61" width="-1" height="-1"/>  
+    <position x="576" y="82" width="-1" height="-1"/>  
   </interface>  
   <interface type="java" name="org.jspresso.framework.view.descriptor.ITabViewDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITabViewDescriptor.java" 
@@ -112,14 +114,16 @@
       visibility="true"/>    
     <position x="519" y="-379" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="org.jspresso.framework.view.descriptor.INestingViewDescriptor" project="jspresso-framework" 
+  <interface type="java" name="org.jspresso.framework.view.descriptor.INestingViewDescriptor" 
+    project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/INestingViewDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
     <position x="9" y="-139" width="-1" height="-1"/>  
   </interface>  
-  <interface type="java" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" project="jspresso-framework" 
+  <interface type="java" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
+    project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="true" operations="true" initial-value="false" signature="true" 
@@ -134,16 +138,16 @@
     <position x="20" y="-223" width="-1" height="-1"/>  
   </interface>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.INestingViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/INestingViewDescriptor.java"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IConstrainedGridViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java"/>  
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
   </generalization>  
   <generalization>    
     <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IComponentViewDescriptor" 
@@ -152,14 +156,20 @@
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITabViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITabViewDescriptor.java"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISplitViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISplitViewDescriptor.java"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.INestingViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/INestingViewDescriptor.java"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
   </generalization>  
@@ -169,55 +179,6 @@
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java"/>    
     <bendpoint x="508" y="-232"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISubViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISubViewDescriptor.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IBorderViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java"/>    
-    <bendpoint x="425" y="134"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IImageViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IImageViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICardViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICardViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITreeViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITreeViewDescriptor.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
   </generalization>  
   <generalization>    
     <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor" 
@@ -232,9 +193,52 @@
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISplitViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISplitViewDescriptor.java"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ITabViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ITabViewDescriptor.java"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IImageViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IImageViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IBorderViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IBorderViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java"/>    
+    <bendpoint x="425" y="134"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IConstrainedGridViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IConstrainedGridViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IGridViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IGridViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICompositeViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICompositeViewDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IListViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IListViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ICollectionViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ICollectionViewDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IPropertyViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISubViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISubViewDescriptor.java"/>  
   </generalization>
 </class-diagram>

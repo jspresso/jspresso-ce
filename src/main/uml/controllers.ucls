@@ -17,7 +17,8 @@
       visibility="true"/>    
     <position x="240" y="309" width="-1" height="-1"/>  
   </class>  
-  <interface type="java" name="org.jspresso.framework.application.backend.IBackendController" project="jspresso-framework" 
+  <interface type="java" name="org.jspresso.framework.application.backend.IBackendController" 
+    project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java" 
     corner="BOTTOM_RIGHT">    
     <display autosize="true" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
@@ -78,41 +79,22 @@
     corner="BOTTOM_RIGHT">    
     <display autosize="false" package="true" attributes="false" operations="true" initial-value="false" signature="true" 
       visibility="true"/>    
-    <position x="465" y="749" width="267" height="131"/>  
+    <position x="465" y="749" width="322" height="131"/>  
   </class>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java"/>  
-  </generalization>  
-  <realization>    
     <source project="jspresso-framework" 
+      name="org.jspresso.framework.application.frontend.controller.wings.DefaultWingsController" 
+      file="/jspresso-framework/wings/application/src/main/java/org/jspresso/framework/application/frontend/controller/wings/DefaultWingsController.java"/>    
+    <target project="jspresso-framework" 
       name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java"/>    
-    <bendpoint x="17" y="302"/>  
-  </realization>  
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java"/>  
+  </generalization>  
   <realization>    
     <source project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.application.backend.IBackendController" 
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java"/>  
   </realization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.IBackendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" 
-      name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java"/>  
-  </generalization>  
   <generalization>    
     <source project="jspresso-framework" 
       name="org.jspresso.framework.application.frontend.controller.ulc.DefaultUlcController" 
@@ -131,25 +113,11 @@
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java"/>  
   </generalization>  
   <generalization>    
-    <source project="jspresso-framework" 
-      name="org.jspresso.framework.application.frontend.controller.wings.DefaultWingsController" 
-      file="/jspresso-framework/wings/application/src/main/java/org/jspresso/framework/application/frontend/controller/wings/DefaultWingsController.java"/>    
-    <target project="jspresso-framework" 
-      name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java"/>  
-  </generalization>  
-  <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java"/>  
-  </generalization>  
-  <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java"/>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java"/>  
-  </realization>  
+  </generalization>  
   <generalization>    
     <source project="jspresso-framework" 
       name="org.jspresso.framework.application.frontend.controller.swing.DefaultSwingController" 
@@ -158,5 +126,38 @@
       name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
       file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java"/>    
     <bendpoint x="430" y="992"/>  
+  </generalization>  
+  <realization>    
+    <source project="jspresso-framework" 
+      name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.frontend.IFrontendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/IFrontendController.java"/>    
+    <bendpoint x="17" y="302"/>  
+  </realization>  
+  <realization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java"/>  
+  </realization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.IBackendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/IBackendController.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.IController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/IController.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" 
+      name="org.jspresso.framework.application.frontend.controller.AbstractFrontendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/frontend/controller/AbstractFrontendController.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.backend.AbstractBackendController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/backend/AbstractBackendController.java"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.application.AbstractController" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/AbstractController.java"/>  
   </generalization>
 </class-diagram>
