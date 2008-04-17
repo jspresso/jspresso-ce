@@ -8,12 +8,12 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.SwingUtilities;
 
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.wings.SComponent;
 import org.wings.SContainer;
 import org.wings.SDialog;
 import org.wings.SRootContainer;
 
-import com.d2s.framework.util.exception.NestedRuntimeException;
 
 /**
  * A helper class for Swing.

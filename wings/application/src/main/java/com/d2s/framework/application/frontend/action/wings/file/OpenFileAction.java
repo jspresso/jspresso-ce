@@ -9,12 +9,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
 import org.wings.SFileChooser;
 import org.wings.SOptionPane;
 
 import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.file.IFileOpenCallback;
 
 /**
  * Initiates a file open action.

@@ -9,13 +9,14 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.model.IModelConnectorFactory;
-import com.d2s.framework.view.IView;
-import com.d2s.framework.view.action.IDisplayableAction;
-import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
  * A simple action to edit a component in a form view.

@@ -3,7 +3,8 @@
  */
 package com.d2s.framework.binding.ulc;
 
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
+
 import com.ulcjava.base.application.ULCTableTree;
 import com.ulcjava.base.application.ULCTree;
 

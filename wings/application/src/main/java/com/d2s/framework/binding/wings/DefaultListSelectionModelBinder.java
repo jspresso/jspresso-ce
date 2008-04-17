@@ -8,12 +8,12 @@ import java.util.Arrays;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.jspresso.framework.util.IIndexMapper;
+import org.jspresso.framework.util.event.ISelectable;
+import org.jspresso.framework.util.event.ISelectionChangeListener;
+import org.jspresso.framework.util.event.SelectionChangeEvent;
 import org.wings.SListSelectionModel;
 
-import com.d2s.framework.util.IIndexMapper;
-import com.d2s.framework.util.event.ISelectable;
-import com.d2s.framework.util.event.ISelectionChangeListener;
-import com.d2s.framework.util.event.SelectionChangeEvent;
 
 /**
  * Default implementation of <code>IListSelectionModelBinder</code>.

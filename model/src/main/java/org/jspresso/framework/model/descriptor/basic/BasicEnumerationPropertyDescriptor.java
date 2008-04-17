@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.framework.model.descriptor.basic;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Default implementation of an enumerationValues descriptor.
+ * <p>
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class BasicEnumerationPropertyDescriptor extends
+    AbstractEnumerationPropertyDescriptor {
+
+  private Map<String, String> valuesAndIconImageUrls;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicEnumerationPropertyDescriptor clone() {
+    BasicEnumerationPropertyDescriptor clonedDescriptor = (BasicEnumerationPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public List<String> getEnumerationValues() {
+    return new ArrayList<String>(valuesAndIconImageUrls.keySet());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public String getIconImageURL(String value) {
+    if (valuesAndIconImageUrls != null) {
+      return valuesAndIconImageUrls.get(value);
+    }
+    return null;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public boolean isTranslated() {
+    return true;
+  }
+
+  /**
+   * Sets the valuesAndIconImageUrls property.
+   * 
+   * @param valuesAndIconImageUrls
+   *            the valuesAndIconImageUrls to set.
+   */
+  public void setValuesAndIconImageUrls(
+      Map<String, String> valuesAndIconImageUrls) {
+    this.valuesAndIconImageUrls = valuesAndIconImageUrls;
+  }
+}

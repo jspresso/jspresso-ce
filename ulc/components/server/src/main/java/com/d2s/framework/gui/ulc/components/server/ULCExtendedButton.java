@@ -44,7 +44,7 @@ public class ULCExtendedButton extends ULCButton {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedButton";
+    return "org.jspresso.framework.gui.ulc.components.client.UIExtendedButton";
   }
 
 }

@@ -7,7 +7,8 @@ import java.awt.Color;
 
 import javax.swing.JComponent;
 
-import com.d2s.framework.binding.AbstractValueConnector;
+import org.jspresso.framework.binding.AbstractValueConnector;
+
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**

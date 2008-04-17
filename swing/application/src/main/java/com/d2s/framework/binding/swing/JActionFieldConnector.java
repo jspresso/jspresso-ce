@@ -7,9 +7,9 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 import org.apache.commons.lang.StringUtils;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
 
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.gui.swing.components.JActionField;
 
 /**

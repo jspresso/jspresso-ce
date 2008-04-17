@@ -6,10 +6,11 @@ package com.d2s.framework.binding.swing;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IValueConnector;
+
 import com.d2s.framework.gui.swing.components.JActionField;
 
 /**

@@ -15,7 +15,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
 
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
+
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**

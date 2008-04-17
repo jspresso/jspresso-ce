@@ -6,8 +6,9 @@ package com.d2s.framework.application.frontend.action.ulc.file;
 import java.io.InputStream;
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
+
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.file.IFileOpenCallback;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.util.serializable.IFileLoadHandler;
 import com.ulcjava.base.shared.FileChooserConfig;

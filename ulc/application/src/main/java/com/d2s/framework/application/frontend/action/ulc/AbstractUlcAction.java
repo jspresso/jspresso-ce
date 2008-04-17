@@ -5,8 +5,9 @@ package com.d2s.framework.application.frontend.action.ulc;
 
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.action.ActionWrapper;
+
 import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.application.frontend.action.ActionWrapper;
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.ULCComponent;

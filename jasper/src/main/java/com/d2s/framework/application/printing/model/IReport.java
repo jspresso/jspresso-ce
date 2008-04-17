@@ -3,9 +3,10 @@
  */
 package com.d2s.framework.application.printing.model;
 
+import org.jspresso.framework.util.context.IContextAware;
+import org.jspresso.framework.util.descriptor.IDescriptor;
+
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
-import com.d2s.framework.util.context.IContextAware;
-import com.d2s.framework.util.descriptor.IDescriptor;
 
 /**
  * Defines the contract of a report instance.

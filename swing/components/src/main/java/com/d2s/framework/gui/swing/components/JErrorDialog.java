@@ -28,7 +28,8 @@ import javax.swing.JScrollPane;
 import javax.swing.TransferHandler;
 import javax.swing.plaf.basic.BasicHTML;
 
-import com.d2s.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
+
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**

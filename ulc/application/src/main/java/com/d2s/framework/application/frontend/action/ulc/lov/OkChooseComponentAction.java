@@ -5,11 +5,12 @@ package com.d2s.framework.application.frontend.action.ulc.lov;
 
 import java.util.Map;
 
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.std.OkAction;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
 
 /**
  * Sets the selected component as the value of the source view connector (which

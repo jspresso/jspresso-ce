@@ -5,10 +5,10 @@ package com.d2s.framework.binding.wings;
 
 import java.text.Format;
 
+import org.jspresso.framework.util.format.FormatAdapter;
+import org.jspresso.framework.util.format.IFormatter;
 import org.wings.STextField;
 
-import com.d2s.framework.util.format.FormatAdapter;
-import com.d2s.framework.util.format.IFormatter;
 
 /**
  * Automatically adds a '%' character at the end of the pased string if needed.

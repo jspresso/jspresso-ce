@@ -8,8 +8,9 @@ import java.awt.Color;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.jspresso.framework.util.gui.ColorHelper;
+
 import com.d2s.framework.gui.swing.components.JColorPicker;
-import com.d2s.framework.util.gui.ColorHelper;
 
 /**
  * JColorPickerConnector connector.

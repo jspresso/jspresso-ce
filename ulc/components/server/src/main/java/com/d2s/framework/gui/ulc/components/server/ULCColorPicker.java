@@ -3,12 +3,12 @@
  */
 package com.d2s.framework.gui.ulc.components.server;
 
-import com.d2s.framework.util.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jspresso.framework.util.gui.ColorHelper;
+import org.jspresso.framework.util.lang.ObjectUtils;
 
 import com.d2s.framework.gui.ulc.components.shared.ColorPickerConstants;
-import com.d2s.framework.util.gui.ColorHelper;
 import com.ulcjava.base.application.IEditorComponent;
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.event.ValueChangedEvent;
@@ -151,7 +151,7 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
    */
   @Override
   public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIColorPicker";
+    return "org.jspresso.framework.gui.ulc.components.client.UIColorPicker";
   }
 
   /**

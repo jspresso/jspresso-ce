@@ -1,0 +1,37 @@
+/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.framework.model.descriptor.basic;
+
+import org.jspresso.framework.model.descriptor.IIntegerPropertyDescriptor;
+
+/**
+ * Default implementation of an integer descriptor.
+ * <p>
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class BasicIntegerPropertyDescriptor extends
+    BasicNumberPropertyDescriptor implements IIntegerPropertyDescriptor {
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public BasicIntegerPropertyDescriptor clone() {
+    BasicIntegerPropertyDescriptor clonedDescriptor = (BasicIntegerPropertyDescriptor) super
+        .clone();
+
+    return clonedDescriptor;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public Class<?> getModelType() {
+    return Integer.class;
+  }
+}

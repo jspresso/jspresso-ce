@@ -10,14 +10,15 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
 
-import com.d2s.framework.binding.CollectionConnectorValueChangeEvent;
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICollectionConnectorListProvider;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
-import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.CollectionConnectorValueChangeEvent;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorListProvider;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
+import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IValueConnector;
+
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**

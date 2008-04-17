@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.framework.application.frontend.action.module;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.application.model.BeanCollectionModule;
+import org.jspresso.framework.application.model.BeanModule;
+import org.jspresso.framework.application.model.Module;
+
+import com.d2s.framework.action.IActionHandler;
+
+/**
+ * A simple action which restarts the current module executing the module
+ * startup action.
+ * <p>
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ * @param <E>
+ *            the actual gui component type used.
+ * @param <F>
+ *            the actual icon type used.
+ * @param <G>
+ *            the actual action type used.
+ */
+public class ModuleRestartAction<E, F, G> extends
+    AbstractChainedAction<E, F, G> {
+
+  /**
+   * Gets the current module and restarts it. {@inheritDoc}
+   */
+  @Override
+  public boolean execute(IActionHandler actionHandler,
+      Map<String, Object> context) {
+    Module module = (Module) getModuleConnector(context).getConnectorValue();
+    if (module instanceof BeanCollectionModule
+        && module.getSubModules() != null) {
+      List<Module> beanModulesToRemove = new ArrayList<Module>();
+      for (Module beanModule : module.getSubModules()) {
+        if (beanModule instanceof BeanModule) {
+          ((BeanModule) beanModule).setModuleObject(null);
+          beanModulesToRemove.add(beanModule);
+        }
+      }
+      module.removeSubModules(beanModulesToRemove);
+    }
+    if (module.getStartupAction() != null) {
+      return actionHandler.execute(module.getStartupAction(), context);
+    }
+    return true;
+  }
+}

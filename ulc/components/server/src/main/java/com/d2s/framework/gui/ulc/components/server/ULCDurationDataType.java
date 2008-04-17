@@ -84,7 +84,7 @@ public class ULCDurationDataType extends ULCProxy implements IDataType {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIDurationDataType";
+    return "org.jspresso.framework.gui.ulc.components.client.UIDurationDataType";
   }
 
 }

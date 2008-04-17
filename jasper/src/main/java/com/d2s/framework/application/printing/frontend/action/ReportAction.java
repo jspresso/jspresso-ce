@@ -5,13 +5,14 @@ package com.d2s.framework.application.printing.frontend.action;
 
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.binding.ICollectionConnector;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.application.printing.model.IReport;
 import com.d2s.framework.application.printing.model.IReportFactory;
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
-import com.d2s.framework.binding.ICollectionConnector;
 
 /**
  * Frontend action to generate a report selected among the model collection

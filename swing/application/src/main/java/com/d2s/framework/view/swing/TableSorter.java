@@ -26,7 +26,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
-import com.d2s.framework.util.IIndexMapper;
+import org.jspresso.framework.util.IIndexMapper;
+
 
 /**
  * TableSorter is a decorator for TableModels; adding sorting functionality to a

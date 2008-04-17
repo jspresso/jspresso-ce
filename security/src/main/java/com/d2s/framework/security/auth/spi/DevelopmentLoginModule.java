@@ -21,10 +21,10 @@ import javax.security.auth.spi.LoginModule;
 
 import org.jboss.security.SimpleGroup;
 import org.jboss.security.SimplePrincipal;
+import org.jspresso.framework.util.security.LoginUtils;
 
 import com.d2s.framework.security.SecurityHelper;
 import com.d2s.framework.security.UserPrincipal;
-import com.d2s.framework.util.security.LoginUtils;
 
 /**
  * A development login module with configuration parametrized user, password,
@@ -44,7 +44,7 @@ public class DevelopmentLoginModule implements LoginModule {
   private static final String USER_OPT            = "user";
 
   private ResourceBundle      bundle              = ResourceBundle
-                                                      .getBundle("com.d2s.framework.util.security.LoginUtils$DlmBundle");
+                                                      .getBundle("org.jspresso.framework.util.security.LoginUtils$DlmBundle");
   private CallbackHandler     callbackHandler;
   private boolean             commitSucceeded     = false;
   private Map<String, ?>      options;

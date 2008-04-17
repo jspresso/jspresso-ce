@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.action;
 
-import com.d2s.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 
 /**
  * This exception is thrown whenever an unexpected exception occurs on an

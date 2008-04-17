@@ -29,12 +29,12 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jvnet.lafwidget.LafWidget;
 import org.jvnet.lafwidget.preview.DefaultPreviewPainter;
 import org.jvnet.lafwidget.tabbed.DefaultTabPreviewPainter;
 import org.jvnet.lafwidget.utils.LafConstants.TabOverviewKind;
 
-import com.d2s.framework.util.exception.NestedRuntimeException;
 
 import foxtrot.Job;
 import foxtrot.Worker;

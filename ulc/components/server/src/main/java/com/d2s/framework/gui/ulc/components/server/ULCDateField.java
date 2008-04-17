@@ -8,9 +8,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import com.d2s.framework.util.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jspresso.framework.util.lang.ObjectUtils;
 
 import com.d2s.framework.gui.ulc.components.shared.DateFieldConstants;
 import com.ulcjava.base.application.IEditorComponent;
@@ -188,7 +188,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
    */
   @Override
   public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIDateField";
+    return "org.jspresso.framework.gui.ulc.components.client.UIDateField";
   }
 
   /**

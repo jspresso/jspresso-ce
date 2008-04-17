@@ -5,10 +5,11 @@ package com.d2s.framework.binding.ulc;
 
 import java.util.Arrays;
 
-import com.d2s.framework.util.IIndexMapper;
-import com.d2s.framework.util.event.ISelectable;
-import com.d2s.framework.util.event.ISelectionChangeListener;
-import com.d2s.framework.util.event.SelectionChangeEvent;
+import org.jspresso.framework.util.IIndexMapper;
+import org.jspresso.framework.util.event.ISelectable;
+import org.jspresso.framework.util.event.ISelectionChangeListener;
+import org.jspresso.framework.util.event.SelectionChangeEvent;
+
 import com.ulcjava.base.application.ULCListSelectionModel;
 import com.ulcjava.base.application.event.ListSelectionEvent;
 import com.ulcjava.base.application.event.serializable.IListSelectionListener;

@@ -9,9 +9,9 @@ import java.text.ParseException;
 import javax.swing.JTextField;
 
 import org.apache.commons.lang.StringUtils;
+import org.jspresso.framework.util.format.FormatAdapter;
+import org.jspresso.framework.util.format.IFormatter;
 
-import com.d2s.framework.util.format.FormatAdapter;
-import com.d2s.framework.util.format.IFormatter;
 
 /**
  * JFormattedFieldConnector connector. Instances of this class must be provided

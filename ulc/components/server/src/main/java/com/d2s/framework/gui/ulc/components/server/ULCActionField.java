@@ -7,12 +7,12 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
-import com.d2s.framework.util.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
+import org.jspresso.framework.util.lang.ObjectUtils;
 
 import com.d2s.framework.gui.ulc.components.shared.ActionFieldConstants;
-import com.d2s.framework.util.bean.SinglePropertyChangeSupport;
 import com.ulcjava.base.application.IAction;
 import com.ulcjava.base.application.IEditorComponent;
 import com.ulcjava.base.application.ULCComponent;
@@ -345,7 +345,7 @@ public class ULCActionField extends ULCComponent implements IEditorComponent {
    */
   @Override
   public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIActionField";
+    return "org.jspresso.framework.gui.ulc.components.client.UIActionField";
   }
 
   /**

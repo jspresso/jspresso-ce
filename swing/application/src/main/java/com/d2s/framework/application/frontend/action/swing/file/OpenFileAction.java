@@ -10,8 +10,9 @@ import java.util.Map;
 
 import javax.swing.JFileChooser;
 
+import org.jspresso.framework.application.frontend.file.IFileOpenCallback;
+
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.file.IFileOpenCallback;
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**

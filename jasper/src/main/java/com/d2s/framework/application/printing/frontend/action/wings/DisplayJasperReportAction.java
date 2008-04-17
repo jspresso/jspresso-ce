@@ -10,16 +10,16 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 
+import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.MemoryResource;
+import org.jspresso.framework.util.resources.server.ResourceManager;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
 import org.wings.session.SessionManager;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.wings.std.DisplayUrlAction;
-import com.d2s.framework.util.resources.IResource;
-import com.d2s.framework.util.resources.MemoryResource;
-import com.d2s.framework.util.resources.server.ResourceManager;
-import com.d2s.framework.util.resources.server.ResourceProviderServlet;
 
 /**
  * A simple action to display a Jasper report.

@@ -4,11 +4,11 @@
 package com.d2s.framework.binding.wings;
 
 import org.apache.commons.lang.StringUtils;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
 import org.wings.event.SDocumentEvent;
 import org.wings.event.SDocumentListener;
 
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.gui.wings.components.SActionField;
 
 /**

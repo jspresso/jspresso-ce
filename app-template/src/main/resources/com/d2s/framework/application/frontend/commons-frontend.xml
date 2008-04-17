@@ -10,7 +10,7 @@
   -->
   <bean
     id="lovViewDescriptorFactory"
-    class="com.d2s.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
+    class="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactory">
     <property
       name="queryViewDescriptorFactory"
       ref="queryViewDescriptorFactory" />
@@ -693,10 +693,10 @@
   -->
   <bean
     id="masterDetailActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
+    class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="ACTION" />
@@ -708,7 +708,7 @@
             </list>
           </property>
         </bean>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="EDIT" />
@@ -726,10 +726,10 @@
 
   <bean
     id="readonlyBeanCollectionModuleActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
+    class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
@@ -741,7 +741,7 @@
             </list>
           </property>
         </bean>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="SERVICE" />
@@ -757,7 +757,7 @@
 
   <bean
     id="filterableReadonlyBeanCollectionModuleActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
+    class="org.jspresso.framework.view.action.ActionMap">
     <property name="parentActionMaps">
       <list>
         <ref bean="readonlyBeanCollectionModuleActionMap" />
@@ -765,7 +765,7 @@
     </property>
     <property name="actionLists">
       <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
@@ -781,7 +781,7 @@
 
   <bean
     id="beanCollectionModuleActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
+    class="org.jspresso.framework.view.action.ActionMap">
     <property name="parentActionMaps">
       <list>
         <ref bean="readonlyBeanCollectionModuleActionMap" />
@@ -789,7 +789,7 @@
     </property>
     <property name="actionLists">
       <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="ACTION" />
@@ -807,7 +807,7 @@
 
   <bean
     id="filterableBeanCollectionModuleActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
+    class="org.jspresso.framework.view.action.ActionMap">
     <property name="parentActionMaps">
       <list>
         <ref bean="beanCollectionModuleActionMap" />
@@ -815,7 +815,7 @@
     </property>
     <property name="actionLists">
       <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
@@ -831,10 +831,10 @@
 
   <bean
     id="beanModuleActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
+    class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
@@ -851,10 +851,10 @@
 
   <bean
     id="binaryPropertyActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
+    class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="FILE" />
@@ -873,10 +873,10 @@
 
   <bean
     id="mapMasterDetailActionMap"
-    class="com.d2s.framework.view.action.ActionMap">
+    class="org.jspresso.framework.view.action.ActionMap">
     <property name="actionLists">
       <list>
-        <bean class="com.d2s.framework.view.action.ActionList">
+        <bean class="org.jspresso.framework.view.action.ActionList">
           <property
             name="name"
             value="ACTION" />
@@ -906,10 +906,7 @@
     abstract="true"
     id="abstractBeanModule"
     class="com.d2s.framework.application.model.BeanModule">
-  </bean>
-
-  <bean
-    id="beanCollectionModuleView"
+  </beorg.jspresso.framework.view.descriptor.basicoduleView"
     parent="decoratedView"
     class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor">
     <property
@@ -926,8 +923,7 @@
       ref="beanCollectionModuleView" />
   </bean>
 
-  <bean
-    id="filterableBeanCollectionModuleView"
+  <org.jspresso.framework.view.descriptor.basicoduleView"
     parent="decoratedView"
     class="com.d2s.framework.view.descriptor.basic.BasicTableViewDescriptor">
     <property

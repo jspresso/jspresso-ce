@@ -16,9 +16,10 @@ import javax.swing.event.ChangeListener;
 import javax.swing.table.TableCellEditor;
 import javax.swing.tree.TreeCellEditor;
 
+import org.jspresso.framework.util.gui.ColorHelper;
+
 import com.d2s.framework.gui.swing.components.JColorPicker;
 import com.d2s.framework.gui.ulc.components.shared.ColorPickerConstants;
-import com.d2s.framework.util.gui.ColorHelper;
 import com.ulcjava.base.client.IEditorComponent;
 import com.ulcjava.base.client.UIComponent;
 import com.ulcjava.base.client.tabletree.TableTreeCellEditor;

@@ -5,9 +5,10 @@ package com.d2s.framework.application.printing.model.basic;
 
 import java.util.Map;
 
+import org.jspresso.framework.util.descriptor.DefaultDescriptor;
+
 import com.d2s.framework.application.printing.model.IReport;
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
-import com.d2s.framework.util.descriptor.DefaultDescriptor;
 
 /**
  * A basic report execution instance.

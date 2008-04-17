@@ -5,9 +5,10 @@ package com.d2s.framework.application.frontend.action.ulc.flow;
 
 import java.util.Map;
 
+import org.jspresso.framework.util.html.HtmlHelper;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
-import com.d2s.framework.util.html.HtmlHelper;
 
 /**
  * Base class for all message ULC actions. It just keeps a reference on the

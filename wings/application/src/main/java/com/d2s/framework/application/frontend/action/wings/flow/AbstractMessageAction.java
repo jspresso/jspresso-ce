@@ -5,10 +5,11 @@ package com.d2s.framework.application.frontend.action.wings.flow;
 
 import java.util.Map;
 
+import org.jspresso.framework.util.html.HtmlHelper;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.wings.AbstractWingsAction;
-import com.d2s.framework.util.html.HtmlHelper;
 
 /**
  * Base class for all message wings actions. It just keeps a reference on the

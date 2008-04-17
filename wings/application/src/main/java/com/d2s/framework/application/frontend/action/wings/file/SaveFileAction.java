@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
 import org.wings.externalizer.AbstractExternalizeManager;
 import org.wings.io.Device;
 import org.wings.io.DeviceOutputStream;
@@ -16,7 +17,6 @@ import org.wings.script.ScriptListener;
 import org.wings.session.SessionManager;
 
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.file.IFileSaveCallback;
 
 /**
  * Initiates a file save action.

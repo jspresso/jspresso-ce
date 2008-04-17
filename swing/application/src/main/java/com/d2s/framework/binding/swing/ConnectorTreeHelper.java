@@ -9,9 +9,10 @@ import java.util.List;
 
 import javax.swing.tree.TreePath;
 
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
+import org.jspresso.framework.binding.IValueConnector;
+
 
 /**
  * This is a utility class to help connector tree management.

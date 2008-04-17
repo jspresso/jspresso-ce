@@ -5,10 +5,11 @@ package com.d2s.framework.application.frontend.action.swing.security;
 
 import java.util.HashMap;
 
+import org.jspresso.framework.application.backend.action.security.AbstractChangePasswordAction;
+import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
+
 import com.d2s.framework.action.ActionContextConstants;
-import com.d2s.framework.application.backend.action.security.AbstractChangePasswordAction;
 import com.d2s.framework.application.frontend.action.swing.std.EditComponentAction;
-import com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 
 /**
  * The frontend action to initiate the password change.

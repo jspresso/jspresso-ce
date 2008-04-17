@@ -6,6 +6,8 @@ package com.d2s.framework.application.frontend.action.wings.std;
 import java.util.List;
 import java.util.Map;
 
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
@@ -20,8 +22,6 @@ import org.wings.border.SEmptyBorder;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.wings.AbstractWingsAction;
-import com.d2s.framework.view.IView;
-import com.d2s.framework.view.action.IDisplayableAction;
 
 /**
  * Base class dialog wings actions.

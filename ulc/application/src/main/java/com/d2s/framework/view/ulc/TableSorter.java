@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.d2s.framework.util.IIndexMapper;
+import org.jspresso.framework.util.IIndexMapper;
+
 import com.ulcjava.base.application.IRendererComponent;
 import com.ulcjava.base.application.ULCTable;
 import com.ulcjava.base.application.event.ActionEvent;

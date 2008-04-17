@@ -5,9 +5,9 @@ package com.d2s.framework.binding.wings;
 
 import java.awt.Color;
 
+import org.jspresso.framework.binding.AbstractValueConnector;
 import org.wings.SComponent;
 
-import com.d2s.framework.binding.AbstractValueConnector;
 
 /**
  * This abstract class serves as the base class for all SComponent connectors.

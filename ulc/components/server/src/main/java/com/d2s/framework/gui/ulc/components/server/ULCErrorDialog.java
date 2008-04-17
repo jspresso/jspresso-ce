@@ -5,7 +5,8 @@ package com.d2s.framework.gui.ulc.components.server;
 
 import java.util.Locale;
 
-import com.d2s.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
+
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.ulcjava.base.application.GridBagConstraints;
 import com.ulcjava.base.application.ULCButton;

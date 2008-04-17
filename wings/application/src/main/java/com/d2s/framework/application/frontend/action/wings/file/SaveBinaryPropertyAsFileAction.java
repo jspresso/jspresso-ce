@@ -5,10 +5,11 @@ package com.d2s.framework.application.frontend.action.wings.file;
 
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.file.ConnectorValueGetterCallback;
+import org.jspresso.framework.model.descriptor.IFileFilterable;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.file.ConnectorValueGetterCallback;
-import com.d2s.framework.model.descriptor.IFileFilterable;
 
 /**
  * Lets the user browse the local file system and choose a file to store the

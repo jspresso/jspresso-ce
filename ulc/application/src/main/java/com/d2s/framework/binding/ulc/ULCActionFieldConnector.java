@@ -7,9 +7,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import org.apache.commons.lang.StringUtils;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
 
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
 import com.d2s.framework.gui.ulc.components.server.ULCActionField;
 
 /**

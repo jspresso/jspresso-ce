@@ -20,12 +20,13 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.swing.AbstractSwingAction;
 import com.d2s.framework.util.swing.SwingUtil;
-import com.d2s.framework.view.IView;
-import com.d2s.framework.view.action.IDisplayableAction;
 
 /**
  * Base class dialog swing actions.

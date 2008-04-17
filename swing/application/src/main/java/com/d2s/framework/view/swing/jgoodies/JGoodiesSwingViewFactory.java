@@ -8,9 +8,10 @@ import java.util.Locale;
 import javax.swing.JComponent;
 import javax.swing.JSplitPane;
 
-import com.d2s.framework.view.IIconFactory;
-import com.d2s.framework.view.IView;
-import com.d2s.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
+
 import com.d2s.framework.view.swing.DefaultSwingViewFactory;
 import com.jgoodies.uif_lite.component.UIFSplitPane;
 import com.jgoodies.uif_lite.panel.SimpleInternalFrame;

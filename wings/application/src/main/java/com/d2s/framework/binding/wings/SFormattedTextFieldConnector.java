@@ -7,9 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 
+import org.jspresso.framework.binding.ConnectorBindingException;
 import org.wings.SFormattedTextField;
 
-import com.d2s.framework.binding.ConnectorBindingException;
 
 /**
  * SFormattedTextFieldConnector connector.

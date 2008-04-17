@@ -3,8 +3,9 @@
  */
 package com.d2s.framework.binding.ulc;
 
-import com.d2s.framework.util.IIndexMapper;
-import com.d2s.framework.util.event.ISelectable;
+import org.jspresso.framework.util.IIndexMapper;
+import org.jspresso.framework.util.event.ISelectable;
+
 import com.ulcjava.base.application.ULCListSelectionModel;
 
 /**

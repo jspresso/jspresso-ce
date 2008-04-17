@@ -15,10 +15,11 @@ import java.io.InputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.d2s.framework.util.io.IoHelper;
-import com.d2s.framework.util.resources.IResource;
-import com.d2s.framework.util.resources.server.ResourceManager;
-import com.d2s.framework.util.resources.server.ResourceProviderServlet;
+import org.jspresso.framework.util.io.IoHelper;
+import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.server.ResourceManager;
+import org.jspresso.framework.util.resources.server.ResourceProviderServlet;
+
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.container.servlet.application.ServletContainerContext;
 

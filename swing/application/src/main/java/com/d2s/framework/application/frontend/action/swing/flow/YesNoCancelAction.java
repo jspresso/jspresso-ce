@@ -7,11 +7,12 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import org.jspresso.framework.view.IIconFactory;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.util.swing.SwingUtil;
-import com.d2s.framework.view.IIconFactory;
 
 /**
  * Action to ask a binary question to the user with a cancel option.

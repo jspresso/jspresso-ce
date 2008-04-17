@@ -5,8 +5,9 @@ package com.d2s.framework.binding.swing;
 
 import javax.swing.ListSelectionModel;
 
-import com.d2s.framework.util.IIndexMapper;
-import com.d2s.framework.util.event.ISelectable;
+import org.jspresso.framework.util.IIndexMapper;
+import org.jspresso.framework.util.event.ISelectable;
+
 
 /**
  * Helper class used to bind collection view connectors to list selection models

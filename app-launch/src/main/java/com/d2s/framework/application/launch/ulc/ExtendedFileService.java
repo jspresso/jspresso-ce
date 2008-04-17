@@ -7,7 +7,8 @@ import java.io.File;
 
 import javax.swing.JOptionPane;
 
-import com.d2s.framework.util.i18n.Messages;
+import org.jspresso.framework.util.i18n.Messages;
+
 import com.ulcjava.base.shared.FileChooserConfig;
 import com.ulcjava.base.shared.FileChooserConfig.FileFilterConfig;
 import com.ulcjava.base.trusted.AllPermissionsFileService;

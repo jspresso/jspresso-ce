@@ -10,6 +10,11 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.EventListenerList;
 
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.basic.BasicValueConnector;
+import org.jspresso.framework.view.IView;
 import org.wings.SAbstractButton;
 import org.wings.SCheckBox;
 import org.wings.SComponent;
@@ -17,12 +22,7 @@ import org.wings.SConstants;
 import org.wings.STable;
 import org.wings.table.STableCellEditor;
 
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.basic.BasicValueConnector;
 import com.d2s.framework.gui.wings.components.SActionField;
-import com.d2s.framework.view.IView;
 
 /**
  * This class is an adapter around a WingsView to be able to use it as a cell

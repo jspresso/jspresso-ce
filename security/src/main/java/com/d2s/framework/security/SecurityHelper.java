@@ -11,9 +11,9 @@ import java.util.Locale;
 import javax.security.auth.Subject;
 
 import org.jboss.security.SimplePrincipal;
+import org.jspresso.framework.util.descriptor.IDescriptor;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-import com.d2s.framework.util.descriptor.IDescriptor;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Helper class for security management.

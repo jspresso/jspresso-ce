@@ -3,9 +3,9 @@
  */
 package com.d2s.framework.binding.wings;
 
+import org.jspresso.framework.binding.IValueConnector;
 import org.wings.STree;
 
-import com.d2s.framework.binding.IValueConnector;
 
 /**
  * Helper class used to bind collection view connectors to tree selection models

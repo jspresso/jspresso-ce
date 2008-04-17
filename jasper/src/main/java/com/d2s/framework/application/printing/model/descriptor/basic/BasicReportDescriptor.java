@@ -6,15 +6,16 @@ package com.d2s.framework.application.printing.model.descriptor.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicComponentDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
+import org.jspresso.framework.util.descriptor.IDescriptor;
+
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.printing.model.IReport;
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.IPropertyDescriptor;
-import com.d2s.framework.model.descriptor.basic.BasicComponentDescriptor;
-import com.d2s.framework.model.descriptor.basic.BasicPropertyDescriptor;
-import com.d2s.framework.model.descriptor.basic.BasicStringPropertyDescriptor;
-import com.d2s.framework.util.descriptor.IDescriptor;
 
 /**
  * Basic implementation of a report descriptor.

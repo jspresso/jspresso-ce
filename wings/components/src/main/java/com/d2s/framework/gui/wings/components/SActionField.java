@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.swing.Action;
 
+import org.jspresso.framework.util.lang.ObjectUtils;
 import org.wings.SBorderFactory;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
@@ -21,7 +22,6 @@ import org.wings.STextField;
 import org.wings.border.SBevelBorder;
 import org.wings.event.SDocumentListener;
 
-import com.d2s.framework.util.lang.ObjectUtils;
 
 /**
  * A wings component to represent an actionable field. It should behave like a

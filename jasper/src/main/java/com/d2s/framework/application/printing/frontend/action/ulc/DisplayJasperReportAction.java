@@ -7,6 +7,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Map;
 
+import org.jspresso.framework.util.resources.IResource;
+import org.jspresso.framework.util.resources.MemoryResource;
+import org.jspresso.framework.util.resources.server.ResourceManager;
+
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -15,9 +19,6 @@ import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.ActionException;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.ulc.AbstractUlcAction;
-import com.d2s.framework.util.resources.IResource;
-import com.d2s.framework.util.resources.MemoryResource;
-import com.d2s.framework.util.resources.server.ResourceManager;
 import com.d2s.framework.util.ulc.resource.DocumentHelper;
 
 /**

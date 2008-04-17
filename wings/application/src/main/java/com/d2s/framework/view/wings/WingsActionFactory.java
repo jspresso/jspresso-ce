@@ -15,33 +15,33 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.IModelGate;
+import org.jspresso.framework.binding.model.IModelValueConnector;
+import org.jspresso.framework.model.EmbeddedModelProvider;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptor;
+import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
+import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
+import org.jspresso.framework.model.descriptor.IComponentDescriptorProvider;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
+import org.jspresso.framework.util.gate.GateHelper;
+import org.jspresso.framework.util.gate.IGate;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.IActionFactory;
+import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.wings.SComponent;
 import org.wings.SIcon;
 
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.model.IModelGate;
-import com.d2s.framework.binding.model.IModelValueConnector;
-import com.d2s.framework.model.EmbeddedModelProvider;
-import com.d2s.framework.model.descriptor.ICollectionDescriptor;
-import com.d2s.framework.model.descriptor.ICollectionDescriptorProvider;
-import com.d2s.framework.model.descriptor.ICollectionPropertyDescriptor;
-import com.d2s.framework.model.descriptor.IComponentDescriptorProvider;
-import com.d2s.framework.model.descriptor.IModelDescriptor;
-import com.d2s.framework.model.descriptor.IRelationshipEndPropertyDescriptor;
-import com.d2s.framework.util.gate.GateHelper;
-import com.d2s.framework.util.gate.IGate;
-import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.view.IActionFactory;
-import com.d2s.framework.view.IIconFactory;
-import com.d2s.framework.view.IView;
-import com.d2s.framework.view.action.IDisplayableAction;
 
 /**
  * A swing action factory.

@@ -3,7 +3,7 @@
  */
 package com.d2s.framework.action;
 
-import com.d2s.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.exception.BusinessException;
 
 /**
  * This exception is thrown whenever a business exception occurs on an action.

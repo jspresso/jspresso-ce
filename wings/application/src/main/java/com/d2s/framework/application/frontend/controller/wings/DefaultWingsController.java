@@ -17,6 +17,20 @@ import javax.security.auth.callback.CallbackHandler;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.frontend.controller.AbstractFrontendController;
+import org.jspresso.framework.application.model.Workspace;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.exception.BusinessException;
+import org.jspresso.framework.util.html.HtmlHelper;
+import org.jspresso.framework.view.IActionFactory;
+import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.IViewFactory;
+import org.jspresso.framework.view.action.ActionList;
+import org.jspresso.framework.view.action.ActionMap;
+import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.wings.SBorderLayout;
 import org.wings.SCardLayout;
@@ -33,21 +47,7 @@ import org.wings.SPanel;
 import org.wings.border.SLineBorder;
 import org.wings.session.SessionManager;
 
-import com.d2s.framework.application.backend.IBackendController;
-import com.d2s.framework.application.frontend.controller.AbstractFrontendController;
-import com.d2s.framework.application.model.Workspace;
-import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.gui.wings.components.SErrorDialog;
-import com.d2s.framework.util.exception.BusinessException;
-import com.d2s.framework.util.html.HtmlHelper;
-import com.d2s.framework.view.IActionFactory;
-import com.d2s.framework.view.IIconFactory;
-import com.d2s.framework.view.IView;
-import com.d2s.framework.view.IViewFactory;
-import com.d2s.framework.view.action.ActionList;
-import com.d2s.framework.view.action.ActionMap;
-import com.d2s.framework.view.action.IDisplayableAction;
-import com.d2s.framework.view.descriptor.IViewDescriptor;
 
 /**
  * Default implementation of a wings frontend controller. This implementation is

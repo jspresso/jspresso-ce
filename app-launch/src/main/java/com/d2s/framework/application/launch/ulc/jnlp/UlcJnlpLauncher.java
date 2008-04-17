@@ -15,12 +15,13 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
+import org.jspresso.framework.util.url.UrlHelper;
+
 import com.d2s.framework.application.launch.ulc.ClassInvoker;
 import com.d2s.framework.application.launch.ulc.ExtendedFileService;
 import com.d2s.framework.application.launch.ulc.FileExists;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.splash.SplashWindow;
-import com.d2s.framework.util.url.UrlHelper;
 import com.ulcjava.base.client.ClientEnvironmentAdapter;
 import com.ulcjava.base.client.ConnectorException;
 import com.ulcjava.base.client.IMessageService;

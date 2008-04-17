@@ -9,11 +9,12 @@ import java.util.Map;
 
 import javax.swing.AbstractListModel;
 
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
-import com.d2s.framework.binding.IRenderableCompositeValueConnector;
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IRenderableCompositeValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
+
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**

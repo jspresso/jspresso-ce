@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.framework.binding.model;
+
+import org.jspresso.framework.binding.ConnectorMap;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+
+
+/**
+ * Serves as an auto-generating ConnectorMap for maps. It may be used to hold a
+ * map model in a MVC pattern.
+ * <p>
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * <p>
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class ModelConnectorMap extends ConnectorMap {
+
+  private IModelConnectorFactory modelConnectorFactory;
+
+  /**
+   * Constructs a new instance based on the model class passed as parameter.
+   * 
+   * @param parentConnector
+   *            the model connector holding the connector map.
+   * @param modelConnectorFactory
+   *            the factory used to create the model connectors.
+   */
+  ModelConnectorMap(ModelRefPropertyConnector parentConnector,
+      IModelConnectorFactory modelConnectorFactory) {
+    super(parentConnector);
+    this.modelConnectorFactory = modelConnectorFactory;
+  }
+
+  /**
+   * Will throw an <code>UnsupportedOperationException</code>. This is a
+   * self-generating connector map.
+   * <p>
+   * {@inheritDoc}
+   * 
+   * @see org.jspresso.framework.binding.IConnectorMap#getConnector(String)
+   */
+  @Override
+  public void addConnector(@SuppressWarnings("unused")
+  String storageKey, @SuppressWarnings("unused")
+  IValueConnector connector) {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * This method implements connector auto creation. If a connector with the
+   * <code>connectorId</code> doesn't already exist, a new one is created
+   * using the <code>IModelConnectorFactory</code> and register it as
+   * <code>IModelChangeListener</code>.
+   * <p>
+   * {@inheritDoc}
+   */
+  @Override
+  public IValueConnector getConnector(String connectorId) {
+    IValueConnector connector = super.getConnector(connectorId);
+    if (connector == null) {
+      IComponentDescriptor<?> componentDescriptor = getParentConnector()
+          .getModelDescriptor().getComponentDescriptor();
+      connector = modelConnectorFactory.createModelConnector(connectorId,
+          componentDescriptor.getPropertyDescriptor(connectorId));
+      super.addConnector(connectorId, connector);
+    }
+    return connector;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected ModelRefPropertyConnector getParentConnector() {
+    return (ModelRefPropertyConnector) super.getParentConnector();
+  }
+}

@@ -8,17 +8,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.jspresso.framework.application.frontend.action.AbstractChainedAction;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
+import org.jspresso.framework.model.descriptor.basic.BasicCollectionDescriptor;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.action.AbstractChainedAction;
 import com.d2s.framework.application.printing.model.IReport;
 import com.d2s.framework.application.printing.model.IReportFactory;
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
 import com.d2s.framework.application.printing.model.descriptor.basic.BasicReportDescriptor;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.model.IModelConnectorFactory;
-import com.d2s.framework.model.descriptor.basic.BasicCollectionDescriptor;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Frontend action to select a report.

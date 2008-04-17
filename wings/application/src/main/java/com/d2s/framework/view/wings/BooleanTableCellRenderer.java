@@ -3,13 +3,13 @@
  */
 package com.d2s.framework.view.wings;
 
+import org.jspresso.framework.binding.IValueConnector;
 import org.wings.SCheckBox;
 import org.wings.SComponent;
 import org.wings.SConstants;
 import org.wings.STable;
 import org.wings.table.STableCellRenderer;
 
-import com.d2s.framework.binding.IValueConnector;
 import com.d2s.framework.util.wings.WingsUtil;
 
 /**

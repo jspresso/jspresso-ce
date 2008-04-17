@@ -12,8 +12,9 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
-import com.d2s.framework.util.url.UrlHelper;
-import com.d2s.framework.view.AbstractIconFactory;
+import org.jspresso.framework.util.url.UrlHelper;
+import org.jspresso.framework.view.AbstractIconFactory;
+
 import com.ulcjava.base.application.util.ULCIcon;
 
 /**

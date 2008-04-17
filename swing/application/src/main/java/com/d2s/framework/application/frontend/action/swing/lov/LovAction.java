@@ -10,22 +10,23 @@ import java.util.Map;
 
 import javax.swing.JComponent;
 
+import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
+import org.jspresso.framework.application.backend.session.MergeMode;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+import org.jspresso.framework.model.descriptor.IModelDescriptor;
+import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
+import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
+import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
+import org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.backend.action.CreateQueryComponentAction;
-import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.swing.std.ModalDialogAction;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.model.component.IQueryComponent;
-import com.d2s.framework.model.descriptor.IComponentDescriptor;
-import com.d2s.framework.model.descriptor.IModelDescriptor;
-import com.d2s.framework.model.descriptor.IReferencePropertyDescriptor;
-import com.d2s.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
-import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.view.IView;
-import com.d2s.framework.view.action.IDisplayableAction;
-import com.d2s.framework.view.descriptor.ILovViewDescriptorFactory;
 
 /**
  * A standard List of value action for reference property views. This action

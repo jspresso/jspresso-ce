@@ -24,7 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 
-import com.d2s.framework.util.lang.ObjectUtils;
+import org.jspresso.framework.util.lang.ObjectUtils;
+
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**

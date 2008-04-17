@@ -5,11 +5,12 @@ package com.d2s.framework.application.printing.frontend.action.wings;
 
 import java.util.Map;
 
+import org.jspresso.framework.view.descriptor.IViewDescriptor;
+import org.jspresso.framework.view.descriptor.basic.BasicComponentViewDescriptor;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.application.frontend.action.wings.std.EditComponentAction;
 import com.d2s.framework.application.printing.model.IReport;
-import com.d2s.framework.view.descriptor.IViewDescriptor;
-import com.d2s.framework.view.descriptor.basic.BasicComponentViewDescriptor;
 
 /**
  * A simple action to edit input parameters in a form view.

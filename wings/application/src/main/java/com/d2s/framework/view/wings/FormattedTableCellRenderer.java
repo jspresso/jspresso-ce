@@ -3,12 +3,12 @@
  */
 package com.d2s.framework.view.wings;
 
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.format.IFormatter;
 import org.wings.SComponent;
 import org.wings.SLabel;
 import org.wings.STable;
 
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.util.format.IFormatter;
 
 /**
  * A table cell renderer based on a formatter.

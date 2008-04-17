@@ -4975,7 +4975,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       context to be used when starting the application. The actual startup is
       performed by a generic launcher depending on the presentation technology
       used. For instance, the swing generic launcher is
-      <code>com.d2s.framework.application.launch.swing.SwingLauncher</code>;
+      <code>org.jspresso.framework.application.launch.swing.SwingLauncher</code>;
       this is the one we are going to use now. So let's create our swing
       startup class. We will name it <code>SwingHrSampleStartup</code> and
       create it in a new <code>com.d2s.hrsample.startup</code> java package
@@ -4983,7 +4983,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
       <para><programlisting language="xml">package com.d2s.hrsample.startup;
 
-import com.d2s.framework.application.startup.swing.SwingStartup;
+import org.jspresso.framework.application.startup.swing.SwingStartup;
 
 /**
  * Swing HR sample startup class.
@@ -5018,7 +5018,7 @@ public class SwingHrSampleStartup extends SwingStartup { <co
       :</para>
 
       <para><code>java
-      com.d2s.framework.application.launch.swing.SwingLauncher
+      org.jspresso.framework.application.launch.swing.SwingLauncher
       -applicationClass com.d2s.hrsample.startup.SwingHrSampleStartup -splash
       classpath:com/d2s/hrsample/images/logo-small.png</code></para>
 
@@ -5742,7 +5742,7 @@ hrsample-app { <co id="hrsample-app" />
       (actually one per presentation technology) and thus avoiding un-needed
       duplication of code. <trademark>D2S</trademark> offers an abstract base
       class for this task :
-      <code>com.d2s.framework.application.startup.development.AbstractTestDataPersister</code>
+      <code>org.jspresso.framework.application.startup.development.AbstractTestDataPersister</code>
       on which you simply have to override the <code>persistTestData()</code>
       method.</para>
 
@@ -5764,7 +5764,7 @@ import java.text.SimpleDateFormat;
 
 import org.springframework.beans.factory.BeanFactory;
 
-import com.d2s.framework.application.startup.development.AbstractTestDataPersister;
+import org.jspresso.framework.application.startup.development.AbstractTestDataPersister;
 import com.d2s.hrsample.model.City;
 import com.d2s.hrsample.model.Company;
 import com.d2s.hrsample.model.Department;
@@ -5999,7 +5999,7 @@ public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
       application startup :</para>
 
       <para><code>java
-      com.d2s.framework.application.launch.swing.SwingLauncher
+      org.jspresso.framework.application.launch.swing.SwingLauncher
       -applicationClass
       com.d2s.hrsample.startup.development.SwingDevHrSampleStartup -splash
       classpath:com/d2s/hrsample/images/logo-small.png</code></para>

@@ -3,9 +3,9 @@
  */
 package com.d2s.framework.gui.ulc.components.server;
 
-import com.d2s.framework.util.lang.ObjectUtils;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.jspresso.framework.util.lang.ObjectUtils;
 
 import com.d2s.framework.gui.ulc.components.shared.JEditTextAreaConstants;
 import com.ulcjava.base.application.IEditorComponent;
@@ -166,7 +166,7 @@ public class ULCJEditTextArea extends ULCComponent implements IEditorComponent {
    */
   @Override
   public String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIJEditTextArea";
+    return "org.jspresso.framework.gui.ulc.components.client.UIJEditTextArea";
   }
 
   /**

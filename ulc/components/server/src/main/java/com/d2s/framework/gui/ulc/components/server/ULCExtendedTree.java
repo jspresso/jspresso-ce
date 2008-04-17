@@ -153,7 +153,7 @@ public class ULCExtendedTree extends com.ulcjava.base.application.ULCTree {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedTree";
+    return "org.jspresso.framework.gui.ulc.components.client.UIExtendedTree";
   }
 
   private void handlePreparePopup(int row) {

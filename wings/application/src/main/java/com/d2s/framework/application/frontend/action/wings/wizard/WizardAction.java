@@ -11,6 +11,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.jspresso.framework.application.frontend.action.wizard.IWizardStepDescriptor;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.model.IModelConnectorFactory;
+import org.jspresso.framework.util.collection.ObjectEqualityMap;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.IIconFactory;
+import org.jspresso.framework.view.IView;
+import org.jspresso.framework.view.action.IDisplayableAction;
 import org.wings.SBorderLayout;
 import org.wings.SBoxLayout;
 import org.wings.SButton;
@@ -27,14 +35,6 @@ import org.wings.border.SEmptyBorder;
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.application.frontend.action.wings.AbstractWingsAction;
-import com.d2s.framework.application.frontend.action.wizard.IWizardStepDescriptor;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.model.IModelConnectorFactory;
-import com.d2s.framework.util.collection.ObjectEqualityMap;
-import com.d2s.framework.util.i18n.ITranslationProvider;
-import com.d2s.framework.view.IIconFactory;
-import com.d2s.framework.view.IView;
-import com.d2s.framework.view.action.IDisplayableAction;
 
 /**
  * A Wizard wings action.

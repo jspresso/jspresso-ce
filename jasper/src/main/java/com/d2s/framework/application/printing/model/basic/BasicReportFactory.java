@@ -6,10 +6,11 @@ package com.d2s.framework.application.printing.model.basic;
 import java.util.HashMap;
 import java.util.Locale;
 
+import org.jspresso.framework.util.i18n.ITranslationProvider;
+
 import com.d2s.framework.application.printing.model.IReport;
 import com.d2s.framework.application.printing.model.IReportFactory;
 import com.d2s.framework.application.printing.model.descriptor.IReportDescriptor;
-import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Basic implementation of report factory returning instances of

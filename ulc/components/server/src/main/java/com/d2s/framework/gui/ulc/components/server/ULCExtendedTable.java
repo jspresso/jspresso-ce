@@ -24,7 +24,7 @@ public class ULCExtendedTable extends ULCTable {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedTable";
+    return "org.jspresso.framework.gui.ulc.components.client.UIExtendedTable";
   }
 
 }

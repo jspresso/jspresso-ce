@@ -5,13 +5,13 @@ package com.d2s.framework.application.startup;
 
 import java.util.Locale;
 
+import org.jspresso.framework.application.backend.IBackendController;
+import org.jspresso.framework.application.frontend.IFrontendController;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.access.BeanFactoryLocator;
 import org.springframework.beans.factory.access.BeanFactoryReference;
 import org.springframework.beans.factory.access.SingletonBeanFactoryLocator;
 
-import com.d2s.framework.application.backend.IBackendController;
-import com.d2s.framework.application.frontend.IFrontendController;
 
 /**
  * Abstract class for application startup.

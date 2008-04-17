@@ -7,9 +7,10 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import org.jspresso.framework.view.IIconFactory;
+
 import com.d2s.framework.action.IActionHandler;
 import com.d2s.framework.util.swing.SwingUtil;
-import com.d2s.framework.view.IIconFactory;
 
 /**
  * Action to present a message to the user.

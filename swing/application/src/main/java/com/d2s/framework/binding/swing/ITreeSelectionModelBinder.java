@@ -5,7 +5,8 @@ package com.d2s.framework.binding.swing;
 
 import javax.swing.JTree;
 
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
+
 
 /**
  * Helper class used to bind collection view connectors to tree selection models

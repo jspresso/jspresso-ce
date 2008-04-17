@@ -3,12 +3,12 @@
  */
 package com.d2s.framework.application.startup.development;
 
+import org.jspresso.framework.model.entity.IEntity;
+import org.jspresso.framework.model.entity.IEntityFactory;
+import org.jspresso.framework.model.persistence.hibernate.EntityProxyInterceptor;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.orm.hibernate3.HibernateTemplate;
 
-import com.d2s.framework.model.entity.IEntity;
-import com.d2s.framework.model.entity.IEntityFactory;
-import com.d2s.framework.model.persistence.hibernate.EntityProxyInterceptor;
 
 /**
  * A utility class used to persist some test data.

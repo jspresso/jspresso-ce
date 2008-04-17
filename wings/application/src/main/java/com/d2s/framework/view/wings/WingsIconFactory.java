@@ -9,11 +9,11 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 
+import org.jspresso.framework.util.url.UrlHelper;
+import org.jspresso.framework.view.AbstractIconFactory;
 import org.wings.SIcon;
 import org.wings.SImageIcon;
 
-import com.d2s.framework.util.url.UrlHelper;
-import com.d2s.framework.view.AbstractIconFactory;
 
 /**
  * A factory to create (and cache) swing icons.

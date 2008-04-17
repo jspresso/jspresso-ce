@@ -3,9 +3,10 @@
  */
 package com.d2s.framework.application.printing.model.descriptor;
 
+import org.jspresso.framework.model.descriptor.IComponentDescriptor;
+
 import com.d2s.framework.action.IAction;
 import com.d2s.framework.application.printing.model.IReport;
-import com.d2s.framework.model.descriptor.IComponentDescriptor;
 
 /**
  * The descriptor of a report. It points to the report design resource as well a

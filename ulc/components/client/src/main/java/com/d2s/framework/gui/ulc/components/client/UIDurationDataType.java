@@ -6,9 +6,10 @@ package com.d2s.framework.gui.ulc.components.client;
 import java.text.ParseException;
 import java.util.Locale;
 
+import org.jspresso.framework.util.format.DurationFormatter;
+import org.jspresso.framework.util.lang.ObjectUtils;
+
 import com.d2s.framework.gui.ulc.components.shared.DurationDataTypeConstants;
-import com.d2s.framework.util.format.DurationFormatter;
-import com.d2s.framework.util.lang.ObjectUtils;
 import com.ulcjava.base.client.datatype.DataTypeConversionException;
 import com.ulcjava.base.client.datatype.UIDataType;
 import com.ulcjava.base.shared.internal.Anything;

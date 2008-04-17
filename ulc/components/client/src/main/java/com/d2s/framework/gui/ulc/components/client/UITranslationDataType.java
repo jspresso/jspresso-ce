@@ -7,8 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import org.jspresso.framework.util.lang.ObjectUtils;
+
 import com.d2s.framework.gui.ulc.components.shared.TranslationDataTypeConstants;
-import com.d2s.framework.util.lang.ObjectUtils;
 import com.ulcjava.base.client.datatype.UIDataType;
 import com.ulcjava.base.shared.internal.Anything;
 

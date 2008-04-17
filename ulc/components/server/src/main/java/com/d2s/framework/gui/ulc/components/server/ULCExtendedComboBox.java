@@ -42,7 +42,7 @@ public class ULCExtendedComboBox extends ULCComboBox {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedComboBox";
+    return "org.jspresso.framework.gui.ulc.components.client.UIExtendedComboBox";
   }
 
 }

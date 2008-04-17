@@ -6,9 +6,10 @@ package com.d2s.framework.binding.ulc;
 import java.util.List;
 import java.util.Map;
 
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
+
 import com.ulcjava.base.application.ULCTableTree;
 import com.ulcjava.base.application.event.TreeModelEvent;
 import com.ulcjava.base.application.event.serializable.ITreeModelListener;

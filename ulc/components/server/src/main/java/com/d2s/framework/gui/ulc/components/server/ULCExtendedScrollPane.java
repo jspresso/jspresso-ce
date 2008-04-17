@@ -24,7 +24,7 @@ public class ULCExtendedScrollPane extends ULCScrollPane {
    */
   @Override
   protected String typeString() {
-    return "com.d2s.framework.gui.ulc.components.client.UIExtendedScrollPane";
+    return "org.jspresso.framework.gui.ulc.components.client.UIExtendedScrollPane";
   }
 
 }

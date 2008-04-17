@@ -3,7 +3,8 @@
  */
 package com.d2s.framework.binding.ulc;
 
-import com.d2s.framework.binding.AbstractValueConnector;
+import org.jspresso.framework.binding.AbstractValueConnector;
+
 import com.ulcjava.base.application.ULCComponent;
 import com.ulcjava.base.application.util.Color;
 

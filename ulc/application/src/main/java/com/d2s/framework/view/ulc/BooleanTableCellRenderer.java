@@ -3,7 +3,8 @@
  */
 package com.d2s.framework.view.ulc;
 
-import com.d2s.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.IValueConnector;
+
 import com.d2s.framework.util.ulc.UlcUtil;
 import com.ulcjava.base.application.ClientContext;
 import com.ulcjava.base.application.IRendererComponent;

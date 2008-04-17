@@ -7,10 +7,10 @@ import java.text.Format;
 import java.text.ParseException;
 
 import org.apache.commons.lang.StringUtils;
+import org.jspresso.framework.util.format.FormatAdapter;
+import org.jspresso.framework.util.format.IFormatter;
 import org.wings.STextField;
 
-import com.d2s.framework.util.format.FormatAdapter;
-import com.d2s.framework.util.format.IFormatter;
 
 /**
  * SFormattedFieldConnector connector. Instances of this class must be provided

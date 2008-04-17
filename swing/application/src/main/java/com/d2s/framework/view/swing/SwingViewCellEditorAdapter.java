@@ -18,13 +18,14 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.text.JTextComponent;
 import javax.swing.tree.TreeCellEditor;
 
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.binding.basic.BasicValueConnector;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.binding.basic.BasicValueConnector;
+import org.jspresso.framework.view.IView;
+
 import com.d2s.framework.gui.swing.components.JActionField;
 import com.d2s.framework.gui.swing.components.JDateField;
-import com.d2s.framework.view.IView;
 
 /**
  * This class is an adapter around a SwingView to be able to use it as a cell

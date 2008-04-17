@@ -12,9 +12,10 @@ import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
+import org.jspresso.framework.application.frontend.file.IFileSaveCallback;
+import org.jspresso.framework.util.i18n.Messages;
+
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.frontend.file.IFileSaveCallback;
-import com.d2s.framework.util.i18n.Messages;
 import com.d2s.framework.util.swing.SwingUtil;
 
 /**

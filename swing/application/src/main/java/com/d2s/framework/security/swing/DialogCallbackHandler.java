@@ -33,9 +33,10 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
-import com.d2s.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.util.i18n.ITranslationProvider;
+import org.jspresso.framework.view.IIconFactory;
+
 import com.d2s.framework.util.swing.SwingUtil;
-import com.d2s.framework.view.IIconFactory;
 
 /**
  * <p>

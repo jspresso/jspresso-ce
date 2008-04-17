@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Locale;
 
+import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.wings.SButton;
 import org.wings.SComponent;
 import org.wings.SDialog;
@@ -20,7 +21,6 @@ import org.wings.SLabel;
 import org.wings.SPanel;
 import org.wings.SScrollPane;
 
-import com.d2s.framework.util.i18n.ITranslationProvider;
 
 /**
  * Dialog used for reporting detailed messages (and errors).

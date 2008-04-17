@@ -7,14 +7,15 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.d2s.framework.binding.ConnectorSelectionEvent;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICollectionConnectorListProvider;
-import com.d2s.framework.binding.ICollectionConnectorProvider;
-import com.d2s.framework.binding.IConnectorSelector;
-import com.d2s.framework.binding.IValueConnector;
-import com.d2s.framework.util.event.ISelectionChangeListener;
-import com.d2s.framework.util.event.SelectionChangeEvent;
+import org.jspresso.framework.binding.ConnectorSelectionEvent;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICollectionConnectorListProvider;
+import org.jspresso.framework.binding.ICollectionConnectorProvider;
+import org.jspresso.framework.binding.IConnectorSelector;
+import org.jspresso.framework.binding.IValueConnector;
+import org.jspresso.framework.util.event.ISelectionChangeListener;
+import org.jspresso.framework.util.event.SelectionChangeEvent;
+
 import com.ulcjava.base.application.ULCTableTree;
 import com.ulcjava.base.application.ULCTree;
 import com.ulcjava.base.application.event.TableTreeModelEvent;

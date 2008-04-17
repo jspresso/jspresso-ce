@@ -3,11 +3,12 @@
  */
 package com.d2s.framework.view.ulc;
 
-import com.d2s.framework.binding.ConnectorValueChangeEvent;
-import com.d2s.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.binding.ConnectorValueChangeEvent;
+import org.jspresso.framework.binding.IConnectorValueChangeListener;
+import org.jspresso.framework.view.IView;
+
 import com.d2s.framework.binding.ulc.ULCActionFieldConnector;
 import com.d2s.framework.gui.ulc.components.server.ULCActionField;
-import com.d2s.framework.view.IView;
 import com.ulcjava.base.application.DefaultCellEditor;
 import com.ulcjava.base.application.IEditorComponent;
 import com.ulcjava.base.application.ULCComponent;

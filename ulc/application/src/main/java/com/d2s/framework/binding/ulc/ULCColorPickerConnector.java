@@ -3,8 +3,9 @@
  */
 package com.d2s.framework.binding.ulc;
 
+import org.jspresso.framework.util.gui.ColorHelper;
+
 import com.d2s.framework.gui.ulc.components.server.ULCColorPicker;
-import com.d2s.framework.util.gui.ColorHelper;
 import com.ulcjava.base.application.event.ValueChangedEvent;
 import com.ulcjava.base.application.event.serializable.IValueChangedListener;
 import com.ulcjava.base.application.util.Color;

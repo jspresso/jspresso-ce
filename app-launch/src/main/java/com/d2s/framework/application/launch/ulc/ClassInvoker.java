@@ -5,7 +5,8 @@ package com.d2s.framework.application.launch.ulc;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.d2s.framework.util.exception.NestedRuntimeException;
+import org.jspresso.framework.util.exception.NestedRuntimeException;
+
 import com.ulcjava.base.client.IMessageService;
 
 /**

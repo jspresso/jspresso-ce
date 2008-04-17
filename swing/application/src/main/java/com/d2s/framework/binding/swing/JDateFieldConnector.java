@@ -9,7 +9,8 @@ import java.text.ParseException;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import com.d2s.framework.binding.ConnectorBindingException;
+import org.jspresso.framework.binding.ConnectorBindingException;
+
 import com.d2s.framework.gui.swing.components.JDateField;
 
 /**

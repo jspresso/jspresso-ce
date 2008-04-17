@@ -5,14 +5,15 @@ package com.d2s.framework.application.frontend.action.swing.lov;
 
 import java.util.Map;
 
+import org.jspresso.framework.application.backend.session.MergeMode;
+import org.jspresso.framework.binding.ICollectionConnector;
+import org.jspresso.framework.binding.ICompositeValueConnector;
+import org.jspresso.framework.model.component.IQueryComponent;
+import org.jspresso.framework.model.entity.IEntity;
+
 import com.d2s.framework.action.ActionContextConstants;
 import com.d2s.framework.action.IActionHandler;
-import com.d2s.framework.application.backend.session.MergeMode;
 import com.d2s.framework.application.frontend.action.swing.std.OkAction;
-import com.d2s.framework.binding.ICollectionConnector;
-import com.d2s.framework.binding.ICompositeValueConnector;
-import com.d2s.framework.model.component.IQueryComponent;
-import com.d2s.framework.model.entity.IEntity;
 
 /**
  * Sets the selected entity as the value of the source view connector (which

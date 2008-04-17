@@ -10,11 +10,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.jspresso.framework.util.url.UrlHelper;
 
 import com.d2s.framework.application.startup.IStartup;
 import com.d2s.framework.util.swing.SwingUtil;
 import com.d2s.framework.util.swing.splash.SplashWindow;
-import com.d2s.framework.util.url.UrlHelper;
 
 /**
  * Swing launcher.
