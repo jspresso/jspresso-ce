@@ -12,15 +12,15 @@
     <mediaobject>
       <imageobject>
         <imagedata align="center" contentdepth="60%"
-                   fileref="../images/d2S_logo.jpg" scalefit="1" width="100%" />
+                   fileref="../images/jspresso_logo.jpg" scalefit="1"
+                   width="100%" />
       </imageobject>
     </mediaobject>
 
     <abstract>
       <para>This document is a reference manual for the
-      <trademark>Jspresso</trademark> (<trademark>Jspresso</trademark>)
-      framework. It deals with all the building blocks of a
-      <trademark>Jspresso</trademark> application.</para>
+      <trademark>Jspresso</trademark> framework. It deals with all the
+      building blocks of a <trademark>Jspresso</trademark> application.</para>
     </abstract>
   </bookinfo>
 
@@ -95,17 +95,18 @@
       </listitem>
     </itemizedlist>
 
-    <para>With these ideas in mind, the <trademark>Jspresso</trademark> application
-    framework was developed. To get an idea of what a software framework is
-    and what it is not, please, refer to the following <ulink
+    <para>With these ideas in mind, the <trademark>Jspresso</trademark>
+    application framework was developed. To get an idea of what a software
+    framework is and what it is not, please, refer to the following <ulink
     url="http://en.wikipedia.org/wiki/Software_framework">link</ulink>. The
     <trademark>Jspresso</trademark> framework differs from most of the other
     frameworks since it addresses the complete software architecture (see the
-    <link linkend="Jspresso-modules">Jspresso modules diagram</link>) including all the
-    key success factors formerly described; but instead of "reinventing the
-    wheel", <trademark>Jspresso</trademark> strongly relies on production-proof
-    open source libraries and components. To get a complete list of the used
-    libraries, please refer to the Appendices.</para>
+    <link linkend="Jspresso-modules">Jspresso modules diagram</link>)
+    including all the key success factors formerly described; but instead of
+    "reinventing the wheel", <trademark>Jspresso</trademark> strongly relies
+    on production-proof open source libraries and components. To get a
+    complete list of the used libraries, please refer to the
+    Appendices.</para>
 
     <para>Each of these libraries is distributed using a business-friendly
     licence (<ulink
@@ -115,11 +116,11 @@
     <ulink
     url="http://www.opensource.org/licenses/apachepl.php">Apache</ulink>, ...)
     that enables its inclusion in closed-source software under copyright
-    notice conditions. <trademark>Jspresso</trademark> put them all together, in a
-    loosely coupled architecture so that the resulting software is not locked
-    in any of them. As an example, you don't have to choose whether you want
-    to distribute your application as a Java swing application through Java
-    Web Start or as an Ajax application without any plug in or both !
+    notice conditions. <trademark>Jspresso</trademark> put them all together,
+    in a loosely coupled architecture so that the resulting software is not
+    locked in any of them. As an example, you don't have to choose whether you
+    want to distribute your application as a Java swing application through
+    Java Web Start or as an Ajax application without any plug in or both !
     <trademark>Jspresso</trademark> will take care of it at runtime.<figure
         id="Jspresso-modules">
         <title>Jspresso Modules</title>
@@ -133,12 +134,12 @@
         </mediaobject>
       </figure></para>
 
-    <para>The whole objective of <trademark>Jspresso</trademark> is to shorten the
-    gap (and thus avoid the "tunnel" effect) between the business requirement
-    analysis, the detailed specifications, the design and the software
-    available and running. The development process becomes extremely agile
-    since the prototype progressively becomes the final application through
-    very short iterations.</para>
+    <para>The whole objective of <trademark>Jspresso</trademark> is to shorten
+    the gap (and thus avoid the "tunnel" effect) between the business
+    requirement analysis, the detailed specifications, the design and the
+    software available and running. The development process becomes extremely
+    agile since the prototype progressively becomes the final application
+    through very short iterations.</para>
 
     <para>To achieve this goal, the main paradigm of
     <trademark>Jspresso</trademark> is "whenever describing is enough, do not
@@ -150,13 +151,13 @@
     this view precisely and everyone is able to understand what has been
     described. There should not be a need for coding a single line of code
     (swing, html, jsp, javascript, ...) whenever this description has been
-    captured by the framework. That is exactly what <trademark>Jspresso</trademark>
-    does by taking care of the implementation once you have expressed the
-    requirements. And there is no complex code generation. Everything is just
-    handled at runtime.</para>
+    captured by the framework. That is exactly what
+    <trademark>Jspresso</trademark> does by taking care of the implementation
+    once you have expressed the requirements. And there is no complex code
+    generation. Everything is just handled at runtime.</para>
 
-    <para>Here are some of the key features of the <trademark>Jspresso</trademark>
-    framework :</para>
+    <para>Here are some of the key features of the
+    <trademark>Jspresso</trademark> framework :</para>
 
     <itemizedlist>
       <listitem>
@@ -167,11 +168,11 @@
     <para>This manual is organized around developing a sample application
     which is targeted at human resources management. We will cover the
     complete development process while presenting as much as possible of the
-    <trademark>Jspresso</trademark> framework. We believe that this approach will
-    be more efficient than a raw description of the framework features since
-    it will show you not only what to use but also how to use it efficiently.
-    And of course, whenever a new feature is introduced we will suggest a link
-    to its full reference.</para>
+    <trademark>Jspresso</trademark> framework. We believe that this approach
+    will be more efficient than a raw description of the framework features
+    since it will show you not only what to use but also how to use it
+    efficiently. And of course, whenever a new feature is introduced we will
+    suggest a link to its full reference.</para>
 
     <para>So let's begin.</para>
   </preface>
