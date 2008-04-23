@@ -3,7 +3,7 @@
  */
 package org.jspresso.framework.application.frontend.action.std;
 
-import org.jspresso.framework.application.frontend.action.ActionWrapper;
+import org.jspresso.framework.application.frontend.action.WrappingAction;
 
 /**
  * A standard find action. Since it is a chained action, it can be chained with
@@ -21,7 +21,7 @@ import org.jspresso.framework.application.frontend.action.ActionWrapper;
  * @param <G>
  *            the actual action type used.
  */
-public class FindAction<E, F, G> extends ActionWrapper<E, F, G> {
+public class FindAction<E, F, G> extends WrappingAction<E, F, G> {
 
   /**
    * Constructs a new <code>FindAction</code> instance.

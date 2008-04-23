@@ -12,7 +12,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.application.frontend.action.ActionWrapper;
+import org.jspresso.framework.application.frontend.action.WrappingAction;
 import org.jspresso.framework.util.swing.SwingUtil;
 
 
@@ -27,7 +27,7 @@ import org.jspresso.framework.util.swing.SwingUtil;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractSwingAction extends
-    ActionWrapper<JComponent, Icon, Action> {
+    WrappingAction<JComponent, Icon, Action> {
 
   /**
    * Retrieves the widget which triggered the action from the action context.

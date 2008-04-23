@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.swing.Action;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.application.frontend.action.ActionWrapper;
+import org.jspresso.framework.application.frontend.action.WrappingAction;
 import org.jspresso.framework.util.wings.WingsUtil;
 import org.wings.SComponent;
 import org.wings.SContainer;
@@ -27,7 +27,7 @@ import org.wings.SIcon;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractWingsAction extends
-    ActionWrapper<SComponent, SIcon, Action> {
+    WrappingAction<SComponent, SIcon, Action> {
 
   /**
    * Retrieves the widget which triggered the action from the action context.

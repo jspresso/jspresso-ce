@@ -6,7 +6,7 @@ package org.jspresso.framework.application.frontend.action.ulc;
 import java.util.Map;
 
 import org.jspresso.framework.action.ActionContextConstants;
-import org.jspresso.framework.application.frontend.action.ActionWrapper;
+import org.jspresso.framework.application.frontend.action.WrappingAction;
 import org.jspresso.framework.util.ulc.UlcUtil;
 
 import com.ulcjava.base.application.IAction;
@@ -26,7 +26,7 @@ import com.ulcjava.base.application.util.ULCIcon;
  * @author Vincent Vandenschrick
  */
 public abstract class AbstractUlcAction extends
-    ActionWrapper<ULCComponent, ULCIcon, IAction> {
+    WrappingAction<ULCComponent, ULCIcon, IAction> {
 
   /**
    * Retrieves the widget which triggered the action from the action context.

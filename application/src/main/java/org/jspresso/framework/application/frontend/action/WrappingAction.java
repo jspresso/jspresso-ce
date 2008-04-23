@@ -24,7 +24,7 @@ import org.jspresso.framework.action.IActionHandler;
  * @param <G>
  *            the actual action type used.
  */
-public class ActionWrapper<E, F, G> extends AbstractChainedAction<E, F, G> {
+public class WrappingAction<E, F, G> extends AbstractChainedAction<E, F, G> {
 
   private IAction wrappedAction;
 

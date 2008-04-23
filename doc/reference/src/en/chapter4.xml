@@ -51,4 +51,20 @@
         </mediaobject>
       </figure></para>
   </section>
+
+  <section>
+    <title>The actions</title>
+
+    <para><figure>
+        <title>Actions class diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="60%"
+                       fileref="../images/actions.png" scalefit="1"
+                       width="100%" />
+          </imageobject>
+        </mediaobject>
+      </figure></para>
+  </section>
 </chapter>
