@@ -1,0 +1,44 @@
+<class-diagram icons="false" always-add-relationships="false" generalizations="true" realizations="true" 
+  associations="true" dependencies="false" nesting-relationships="true" version="0.9.65">  
+  <classifier-display autosize="true" package="true" attributes="false" operations="true" initial-value="false" 
+    signature="true" visibility="true">    
+    <attributes public="false" package="false" protected="false" private="false"/>    
+    <operations public="true" package="false" protected="true" private="false"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>  
+  <class language="java" name="org.jboss.security.auth.spi.LdapExtLoginModule" project="jspresso-framework" 
+    file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" binary="true" 
+    corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>    
+    <position x="88" y="63" width="-1" height="-1"/>  
+  </class>  
+  <class language="java" name="org.jspresso.framework.security.auth.spi.LdapLoginModule" project="jspresso-framework" 
+    file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>    
+    <position x="88" y="235" width="-1" height="-1"/>  
+  </class>  
+  <class language="java" name="org.jspresso.framework.security.auth.spi.DevelopmentLoginModule" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/DevelopmentLoginModule.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="true" package="false" protected="true" private="false"/>    
+    </display>    
+    <position x="472" y="256" width="-1" height="-1"/>  
+  </class>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.security.auth.spi.LdapLoginModule" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/auth/spi/LdapLoginModule.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jboss.security.auth.spi.LdapExtLoginModule" 
+      file="C:/Documents and Settings/Vincent/.m2/repository/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" binary="true"/>  
+  </generalization>
+</class-diagram>
