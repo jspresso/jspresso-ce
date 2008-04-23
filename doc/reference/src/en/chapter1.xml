@@ -5771,9 +5771,9 @@ package org.jspresso.hrsample.startup.development;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import org.jspresso.framework.application.startup.development.AbstractTestDataPersister;
 import org.springframework.beans.factory.BeanFactory;
 
-import org.jspresso.framework.application.startup.development.AbstractTestDataPersister;
 import org.jspresso.hrsample.model.City;
 import org.jspresso.hrsample.model.Company;
 import org.jspresso.hrsample.model.Department;
@@ -5813,75 +5813,368 @@ public class HrTestDataPersister extends AbstractTestDataPersister {
     City evry = createCity("Evry", "91000");
 
     // Company
-    Company jspresso = createCompany("Jspresso",
-        "123 avenue de la Liberté", paris, "contact@jspresso.org",
+    Company design2see = createCompany("Design2See",
+        "123 avenue de la Liberté", paris, "contact@design2see.org",
         "+33 123 456 000");
 
     // Employees
     Employee johnDoe = createEmployee("M", "Doe", "John",
-        "12 allée du Chien qui Fume", evry, "john.doe@jspresso.org",
+        "12 allée du Chien qui Fume", evry, "john.doe@design2see.org",
         "+33 1 152 368 984", "02/05/1972", "03/08/2005", "1523698754",
-        jspresso);
+        design2see);
 
     Employee mikeDen = createEmployee("M", "Den", "Mike",
-        "26 rue de la Pie qui Chante", suresnes, "mike.den@jspresso.org",
+        "26 rue de la Pie qui Chante", suresnes, "mike.den@design2see.org",
         "+33 1 968 846 398", "05/07/1970", "01/03/2004", "1859637461",
-        jspresso);
+        design2see);
 
     Employee evaGreen = createEmployee("F", "Green", "Eva",
-        "68 rue de l'Eléphant Vert", suresnes, "eva.green@jspresso.org",
+        "68 rue de l'Eléphant Vert", suresnes, "eva.green@design2see.org",
         "+33 1 958 536 972", "10/08/1977", "06/04/2002", "2856752387",
-        jspresso);
+        design2see);
 
     Employee gloriaSan = createEmployee("F", "San", "Gloria",
-        "13 avenue du Poisson Enragé", evry, "gloria.san@jspresso.org",
+        "13 avenue du Poisson Enragé", evry, "gloria.san@design2see.org",
         "+33 1 956 367 412", "09/01/1969", "03/01/2006", "2597853274",
-        jspresso);
+        design2see);
 
     Employee mariaTrulli = createEmployee("F", "Trulli", "Maria",
-        "20 avenue du Crocodile Marteau", evry, "maria.trulli@jspresso.org",
+        "20 avenue du Crocodile Marteau", evry, "maria.trulli@design2see.org",
         "+33 1 868 745 369", "01/02/1976", "03/10/2006", "2325985423",
-        jspresso);
+        design2see);
 
     Employee isabelleMartin = createEmployee("F", "Martin", "Isabelle",
         "20 allée de la Gazelle Sauteuse", evry,
-        "isabelle.martin@jspresso.org", "+33 1 698 256 365", "04/07/1970",
-        "12/06/2001", "2652398751", jspresso);
+        "isabelle.martin@design2see.org", "+33 1 698 256 365", "04/07/1970",
+        "12/06/2001", "2652398751", design2see);
 
     // Departments and teams.
     Department hrDepartment = createDepartment("Human Resources", "HR-000",
-        "124 avenue de la Liberté", paris, "hr@jspresso.org",
-        "+33 123 456 100", jspresso, johnDoe);
+        "124 avenue de la Liberté", paris, "hr@design2see.org",
+        "+33 123 456 100", design2see, johnDoe);
 
     Team hr001Team = createTeam("HR 001 Team", "HR-001",
-        "124 avenue de la Liberté", paris, "hr001@jspresso.org",
+        "124 avenue de la Liberté", paris, "hr001@design2see.org",
         "+33 123 456 101", hrDepartment, mikeDen);
     hr001Team.addToTeamMembers(johnDoe);
     hr001Team.addToTeamMembers(mikeDen);
 
     Team hr002Team = createTeam("HR 002 Team", "HR-002",
-        "124 avenue de la Liberté", paris, "hr002@jspresso.org",
+        "124 avenue de la Liberté", paris, "hr002@design2see.org",
         "+33 123 456 102", hrDepartment, evaGreen);
     hr002Team.addToTeamMembers(johnDoe);
     hr002Team.addToTeamMembers(evaGreen);
 
     Department itDepartment = createDepartment("Information Technology",
-        "IT-000", "125 avenue de la Liberté", paris, "it@jspresso.org",
-        "+33 123 456 200", jspresso, gloriaSan);
+        "IT-000", "125 avenue de la Liberté", paris, "it@design2see.org",
+        "+33 123 456 200", design2see, gloriaSan);
 
     Team it001Team = createTeam("IT 001 Team", "IT-001",
-        "125 avenue de la Liberté", paris, "it001@jspresso.org",
+        "125 avenue de la Liberté", paris, "it001@design2see.org",
         "+33 123 456 201", itDepartment, mariaTrulli);
     it001Team.addToTeamMembers(gloriaSan);
     it001Team.addToTeamMembers(mariaTrulli);
 
     Team it002Team = createTeam("IT 002 Team", "IT-002",
-        "125 avenue de la Liberté", paris, "it002@jspresso.org",
+        "125 avenue de la Liberté", paris, "it002@design2see.org",
         "+33 123 456 202", itDepartment, isabelleMartin);
     it002Team.addToTeamMembers(gloriaSan);
     it002Team.addToTeamMembers(isabelleMartin);
 
-    saveOrUpdate(jspresso);
+    saveOrUpdate(design2see);
+  }
+
+  private City createCity(String name, String zip) {
+    City city = createEntityInstance(City.class);
+    city.setName(name);
+    city.setZip(zip);
+    saveOrUpdate(city);
+    return city;
+  }
+
+  private Company createCompany(String name, String address, City city,
+      String email, String phone) {
+    Company company = createEntityInstance(Company.class);
+    company.setName(name);
+    company.getContact().setAddress(address);
+    company.getContact().setCity(city);
+    company.getContact().setEmail(email);
+    company.getContact().setPhone(phone);
+    return company;
+  }
+
+  private Department createDepartment(String name, String ouId, String address,
+      City city, String email, String phone, Company company, Employee manager) {
+    Department department = createEntityInstance(Department.class);
+    department.setName(name);
+    department.setOuId(ouId);
+    department.getContact().setAddress(address);
+    department.getContact().setCity(city);
+    department.getContact().setEmail(email);/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.hrsample.startup.development;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import org.jspresso.framework.application.startup.development.AbstractTestDataPersister;
+import org.springframework.beans.factory.BeanFactory;
+
+import org.jspresso.hrsample.model.City;
+import org.jspresso.hrsample.model.Company;
+import org.jspresso.hrsample.model.Department;
+import org.jspresso.hrsample.model.Employee;
+import org.jspresso.hrsample.model.Team;
+
+/**
+ * Persists some test data for the HR sample application.
+ * &lt;p&gt;
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class HrTestDataPersister extends AbstractTestDataPersister {
+
+  /**
+   * Constructs a new &lt;code&gt;HrTestDataPersister&lt;/code&gt; instance.
+   * 
+   * @param beanFactory
+   *            the spring bean factory to use.
+   */
+  public HrTestDataPersister(BeanFactory beanFactory) {
+    super(beanFactory);
+  }
+
+  /**
+   * Creates some test data using the passed in Spring application context.
+   */
+  @Override
+  public void persistTestData() {
+
+    // Cities
+    City paris = createCity("Paris I", "75001");
+    City suresnes = createCity("Suresnes", "92150");
+    City evry = createCity("Evry", "91000");
+
+    // Company
+    Company design2see = createCompany("Design2See",
+        "123 avenue de la Liberté", paris, "contact@design2see.com",
+        "+33 123 456 000");
+
+    // Employees
+    Employee johnDoe = createEmployee("M", "Doe", "John",
+        "12 allée du Chien qui Fume", evry, "john.doe@design2see.com",
+        "+33 1 152 368 984", "02/05/1972", "03/08/2005", "1523698754",
+        design2see);
+
+    Employee mikeDen = createEmployee("M", "Den", "Mike",
+        "26 rue de la Pie qui Chante", suresnes, "mike.den@design2see.com",
+        "+33 1 968 846 398", "05/07/1970", "01/03/2004", "1859637461",
+        design2see);
+
+    Employee evaGreen = createEmployee("F", "Green", "Eva",
+        "68 rue de l'Eléphant Vert", suresnes, "eva.green@design2see.com",
+        "+33 1 958 536 972", "10/08/1977", "06/04/2002", "2856752387",
+        design2see);
+
+    Employee gloriaSan = createEmployee("F", "San", "Gloria",
+        "13 avenue du Poisson Enragé", evry, "gloria.san@design2see.com",
+        "+33 1 956 367 412", "09/01/1969", "03/01/2006", "2597853274",
+        design2see);
+
+    Employee mariaTrulli = createEmployee("F", "Trulli", "Maria",
+        "20 avenue du Crocodile Marteau", evry, "maria.trulli@design2see.com",
+        "+33 1 868 745 369", "01/02/1976", "03/10/2006", "2325985423",
+        design2see);
+
+    Employee isabelleMartin = createEmployee("F", "Martin", "Isabelle",
+        "20 allée de la Gazelle Sauteuse", evry,
+        "isabelle.martin@design2see.com", "+33 1 698 256 365", "04/07/1970",
+        "12/06/2001", "2652398751", design2see);
+
+    // Departments and teams.
+    Department hrDepartment = createDepartment("Human Resources", "HR-000",
+        "124 avenue de la Liberté", paris, "hr@design2see.com",
+        "+33 123 456 100", design2see, johnDoe);
+
+    Team hr001Team = createTeam("HR 001 Team", "HR-001",
+        "124 avenue de la Liberté", paris, "hr001@design2see.com",
+        "+33 123 456 101", hrDepartment, mikeDen);
+    hr001Team.addToTeamMembers(johnDoe);
+    hr001Team.addToTeamMembers(mikeDen);
+
+    Team hr002Team = createTeam("HR 002 Team", "HR-002",
+        "124 avenue de la Liberté", paris, "hr002@design2see.com",
+        "+33 123 456 102", hrDepartment, evaGreen);
+    hr002Team.addToTeamMembers(johnDoe);
+    hr002Team.addToTeamMembers(evaGreen);
+
+    Department itDepartment = createDepartment("Information Technology",
+        "IT-000", "125 avenue de la Liberté", paris, "it@design2see.com",
+        "+33 123 456 200", design2see, gloriaSan);
+
+    Team it001Team = createTeam("IT 001 Team", "IT-001",
+        "125 avenue de la Liberté", paris, "it001@design2see.com",
+        "+33 123 456 201", itDepartment, mariaTrulli);
+    it001Team.addToTeamMembers(gloriaSan);
+    it001Team.addToTeamMembers(mariaTrulli);
+
+    Team it002Team = createTeam("IT 002 Team", "IT-002",
+        "125 avenue de la Liberté", paris, "it002@design2see.com",
+        "+33 123 456 202", itDepartment, isabelleMartin);
+    it002Team.addToTeamMembers(gloriaSan);
+    it002Team.addToTeamMembers(isabelleMartin);
+
+    saveOrUpdate(design2see);
+  }
+
+  private City createCity(String name, String zip) {
+    City city = createEntityInstance(City.class);
+    city.setName(name);
+    city.setZip(zip);
+    saveOrUpdate(city);
+    return city;
+  }
+
+  private Company createCompany(String name, String address, City city,
+      String email, String phone) {
+    Company company = createEntityInstance(Company.class);
+    company.setName(name);
+    company.getContact().setAddress(address);
+    company.getContact().setCity(city);
+    company.getContact().setEmail(email);
+    company.getContact().setPhone(phone);
+    return company;
+  }
+
+  private Department createDepartment(String name, String ouId, String address,
+      City city, String email, String phone, Company company, Employee manager) {
+    Department department = createEntityInstance(Department.class);
+    department.setName(name);
+    department.setOuId(ouId);
+    department.getContact().setAddress(address);
+    department.getContact().setCity(city);/*
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ */
+package org.jspresso.hrsample.startup.development;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
+import org.jspresso.framework.application.startup.development.AbstractTestDataPersister;
+import org.springframework.beans.factory.BeanFactory;
+
+import org.jspresso.hrsample.model.City;
+import org.jspresso.hrsample.model.Company;
+import org.jspresso.hrsample.model.Department;
+import org.jspresso.hrsample.model.Employee;
+import org.jspresso.hrsample.model.Team;
+
+/**
+ * Persists some test data for the HR sample application.
+ * &lt;p&gt;
+ * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
+ * &lt;p&gt;
+ * 
+ * @version $LastChangedRevision$
+ * @author Vincent Vandenschrick
+ */
+public class HrTestDataPersister extends AbstractTestDataPersister {
+
+  /**
+   * Constructs a new &lt;code&gt;HrTestDataPersister&lt;/code&gt; instance.
+   * 
+   * @param beanFactory
+   *            the spring bean factory to use.
+   */
+  public HrTestDataPersister(BeanFactory beanFactory) {
+    super(beanFactory);
+  }
+
+  /**
+   * Creates some test data using the passed in Spring application context.
+   */
+  @Override
+  public void persistTestData() {
+
+    // Cities
+    City paris = createCity("Paris I", "75001");
+    City suresnes = createCity("Suresnes", "92150");
+    City evry = createCity("Evry", "91000");
+
+    // Company
+    Company design2see = createCompany("Design2See",
+        "123 avenue de la Liberté", paris, "contact@design2see.com",
+        "+33 123 456 000");
+
+    // Employees
+    Employee johnDoe = createEmployee("M", "Doe", "John",
+        "12 allée du Chien qui Fume", evry, "john.doe@design2see.com",
+        "+33 1 152 368 984", "02/05/1972", "03/08/2005", "1523698754",
+        design2see);
+
+    Employee mikeDen = createEmployee("M", "Den", "Mike",
+        "26 rue de la Pie qui Chante", suresnes, "mike.den@design2see.com",
+        "+33 1 968 846 398", "05/07/1970", "01/03/2004", "1859637461",
+        design2see);
+
+    Employee evaGreen = createEmployee("F", "Green", "Eva",
+        "68 rue de l'Eléphant Vert", suresnes, "eva.green@design2see.com",
+        "+33 1 958 536 972", "10/08/1977", "06/04/2002", "2856752387",
+        design2see);
+
+    Employee gloriaSan = createEmployee("F", "San", "Gloria",
+        "13 avenue du Poisson Enragé", evry, "gloria.san@design2see.com",
+        "+33 1 956 367 412", "09/01/1969", "03/01/2006", "2597853274",
+        design2see);
+
+    Employee mariaTrulli = createEmployee("F", "Trulli", "Maria",
+        "20 avenue du Crocodile Marteau", evry, "maria.trulli@design2see.com",
+        "+33 1 868 745 369", "01/02/1976", "03/10/2006", "2325985423",
+        design2see);
+
+    Employee isabelleMartin = createEmployee("F", "Martin", "Isabelle",
+        "20 allée de la Gazelle Sauteuse", evry,
+        "isabelle.martin@design2see.com", "+33 1 698 256 365", "04/07/1970",
+        "12/06/2001", "2652398751", design2see);
+
+    // Departments and teams.
+    Department hrDepartment = createDepartment("Human Resources", "HR-000",
+        "124 avenue de la Liberté", paris, "hr@design2see.com",
+        "+33 123 456 100", design2see, johnDoe);
+
+    Team hr001Team = createTeam("HR 001 Team", "HR-001",
+        "124 avenue de la Liberté", paris, "hr001@design2see.com",
+        "+33 123 456 101", hrDepartment, mikeDen);
+    hr001Team.addToTeamMembers(johnDoe);
+    hr001Team.addToTeamMembers(mikeDen);
+
+    Team hr002Team = createTeam("HR 002 Team", "HR-002",
+        "124 avenue de la Liberté", paris, "hr002@design2see.com",
+        "+33 123 456 102", hrDepartment, evaGreen);
+    hr002Team.addToTeamMembers(johnDoe);
+    hr002Team.addToTeamMembers(evaGreen);
+
+    Department itDepartment = createDepartment("Information Technology",
+        "IT-000", "125 avenue de la Liberté", paris, "it@design2see.com",
+        "+33 123 456 200", design2see, gloriaSan);
+
+    Team it001Team = createTeam("IT 001 Team", "IT-001",
+        "125 avenue de la Liberté", paris, "it001@design2see.com",
+        "+33 123 456 201", itDepartment, mariaTrulli);
+    it001Team.addToTeamMembers(gloriaSan);
+    it001Team.addToTeamMembers(mariaTrulli);
+
+    Team it002Team = createTeam("IT 002 Team", "IT-002",
+        "125 avenue de la Liberté", paris, "it002@design2see.com",
+        "+33 123 456 202", itDepartment, isabelleMartin);
+    it002Team.addToTeamMembers(gloriaSan);
+    it002Team.addToTeamMembers(isabelleMartin);
+
+    saveOrUpdate(design2see);
   }
 
   private City createCity(String name, String zip) {
@@ -6387,7 +6680,7 @@ public class OrganizationalUnitExtension extends
           as when we dealt with checking the birth date of the
           <code>Employee</code> entity :</para>
 
-          <para><programlisting>/*
+          <para><programlisting language="java">/*
  * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
  */
 package org.jspresso.hrsample.model.processor;
@@ -6513,7 +6806,290 @@ public class OrganizationalUnitPropertyProcessors {
         <section>
           <title>Managing team members</title>
 
-          <para></para>
+          <para>Managing team members will give us the oportunity to introduce
+          the <trademark>Jspresso</trademark> action framework. Actually, we
+          have already used action maps and action lists to assemble simple
+          standard CRUD operations in views (refer to the master-detail action
+          map). This time, we need to go a little bit further since there is
+          no out-of-the-box action to cover our needs. But don't be afraid, we
+          will still compose <trademark>Jspresso</trademark> standard actions
+          without writing a single line of java code !</para>
+
+          <para>We will compose 2 actions to manage team members :</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The end-user can select an employee and add it to the
+              selected team. Of course, the application must filter the
+              employees of the company the team belongs to.</para>
+            </listitem>
+
+            <listitem>
+              <para>The end-user can select an existing team member and remove
+              it from the team.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>These 2 actions will be presented by a view that lists the
+          team members of the selected team in the company management module
+          (a somehow classic master-detail view between teams and team
+          members). One thing that you may not pay attention to, and this is
+          quite normal since <trademark>Jspresso</trademark> handles it
+          transparently, is the fact that the relationship between teams and
+          employees is a bi-directional N-N association. We will handle here
+          one of the association side exactly as if it was a 1-N relationship.
+          All the inherent complexity of this kind of association will be
+          managed behind the scene without any extra effort.</para>
+
+          <para>So let's replace the teams view by a master detail view
+          presenting the team members in the
+          <filename>hrsample-view.xml</filename> :</para>
+
+          <para><programlisting language="xml">&lt;bean
+  id="Team-teamMembers.table" <co id="Team-teamMembers.table" />
+  parent="decoratedView"
+  class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"&gt;
+  &lt;property
+    name="modelDescriptor"
+    ref="Team-teamMembers" /&gt; <co id="Team-teamMembers" />
+  &lt;property name="actionMap"&gt;
+    &lt;bean class="org.jspresso.framework.view.action.ActionMap"&gt; <co
+                id="teamMembers-actionMap" />
+      &lt;property name="actionLists"&gt;
+        &lt;list&gt;
+          &lt;bean class="org.jspresso.framework.view.action.ActionList"&gt; <co
+                id="teamMembers-actionList" />
+            &lt;property
+              name="name"
+              value="EDIT" /&gt;
+            &lt;property name="actions"&gt; <co id="teamMembers-actions" />
+              &lt;list&gt;
+                &lt;bean parent="lovAction"&gt; <co id="lovAction" />
+                  &lt;property
+                    name="autoquery"
+                    value="false" /&gt; <co id="autoquery" />
+                  &lt;property
+                    name="entityDescriptor"
+                    ref="Employee" /&gt; <co id="lovAction-entityDescriptor" />
+                  &lt;property name="initializationMapping"&gt;
+                    &lt;map&gt;
+                      &lt;entry
+                        key="company"
+                        value="company" /&gt; <co
+                id="lovAction-initializationMapping" />
+                    &lt;/map&gt;
+                  &lt;/property&gt;
+                  &lt;property name="okAction"&gt;
+                    &lt;bean parent="lovOkFrontAction"&gt; <co
+                id="lovOkFrontAction" />
+                      &lt;property name="nextAction"&gt;
+                        &lt;bean
+                          class="org.jspresso.framework.application.backend.action.AddAnyCollectionToMasterAction" /&gt; <co
+                id="AddAnyCollectionToMasterAction" />
+                      &lt;/property&gt;
+                    &lt;/bean&gt;
+                  &lt;/property&gt;
+                &lt;/bean&gt;
+                &lt;ref bean="removeAnyCollectionFromMasterFrontAction" /&gt; <co
+                id="removeAnyCollectionFromMasterFrontAction" />
+              &lt;/list&gt;
+            &lt;/property&gt;
+          &lt;/bean&gt;
+        &lt;/list&gt;
+      &lt;/property&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean
+  id="Departments.and.teams.view"
+  class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt;
+  &lt;property
+    name="leftTopViewDescriptor"
+    ref="Company-departments.table" /&gt;
+  &lt;property name="rightBottomViewDescriptor"&gt;
+    &lt;bean
+      class="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"&gt; <co
+                id="department-rightBottomViewDescriptor" />
+      &lt;property
+        name="orientation"
+        ref="HORIZONTAL" /&gt;
+      &lt;property
+        name="leftTopViewDescriptor"
+        ref="Department-teams.table" /&gt;
+      &lt;property
+        name="rightBottomViewDescriptor"
+        ref="Team-teamMembers.table" /&gt; <co
+                id="team-rightBottomViewDescriptor" />
+      &lt;property
+        name="cascadingModels"
+        value="true" /&gt; <co id="teams-cascadingModels" />
+    &lt;/bean&gt;
+  &lt;/property&gt;
+  &lt;property
+    name="cascadingModels"
+    value="true" /&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+              <callout arearefs="Team-teamMembers.table">
+                <para>We declare a new table view to present the team members
+                of a team.</para>
+              </callout>
+
+              <callout arearefs="Team-teamMembers">
+                <para>This view is backed by the team -&gt; team members
+                relationship. </para>
+              </callout>
+
+              <callout arearefs="teamMembers-actionMap">
+                <para>We assemble a brand new action map (map of action lists)
+                for this view. This action map will contain a single action
+                list that holds our 2 actions.</para>
+              </callout>
+
+              <callout arearefs="teamMembers-actionList">
+                <para>We declare the single action list...</para>
+              </callout>
+
+              <callout arearefs="teamMembers-actions">
+                <para>... and the actions it holds.</para>
+              </callout>
+
+              <callout arearefs="lovAction">
+                <para>The selection action is a kind of list of values (LOV)
+                action (listing existing employees). We reuse the built-in
+                <trademark>Jspresso</trademark> LOV action (actually
+                inheriting its spring definition) and customize it to meet our
+                needs.</para>
+              </callout>
+
+              <callout arearefs="autoquery">
+                <para>We don't want to query the backend for all available
+                employees as soon as the end-user triggers the action; it is
+                an arbitrary decision that is lead by the fact that a company
+                may actually employ thousands of people ! So let the end-user
+                fill-in some criteria before actually triggering the
+                search.</para>
+              </callout>
+
+              <callout arearefs="lovAction-entityDescriptor">
+                <para>The LOV action retrieves employees so we configure it
+                accordingly.</para>
+              </callout>
+
+              <callout arearefs="lovAction-initializationMapping">
+                <para>As for relationships, we initialize the LOV filter with
+                the company of the selected team.</para>
+              </callout>
+
+              <callout arearefs="lovOkFrontAction">
+                <para>Then we need to tell the action what to do when the
+                end-user has selected the employee to add... </para>
+              </callout>
+
+              <callout arearefs="AddAnyCollectionToMasterAction">
+                <para>... by registering another
+                <trademark>Jspresso</trademark> built-in action that adds an
+                arbitrary collection of objects (in our case the LOV selected
+                employee) to the master model on which it was triggered (the
+                selected team).</para>
+              </callout>
+
+              <callout arearefs="removeAnyCollectionFromMasterFrontAction">
+                <para>Removing a team member is somehow easier. We just reuse
+                another <trademark>Jspresso</trademark> built-in action that
+                removes an arbitrary collection of objects (in our case the
+                selected employees) from the master model on which it was
+                triggered (the selected team).</para>
+              </callout>
+
+              <callout arearefs="department-rightBottomViewDescriptor">
+                <para>Then we need to slightly update the department and teams
+                view to include the team members view.</para>
+              </callout>
+
+              <callout arearefs="team-rightBottomViewDescriptor">
+                <para>So we register the view created above...</para>
+              </callout>
+
+              <callout arearefs="teams-cascadingModels">
+                <para>... and configure it to cascade models so that the team
+                backing the team members view is retrieved from the selection
+                in the department teams view.</para>
+              </callout>
+            </calloutlist>With approximately 50 new lines of spring
+          configuration in a single file, you achieve things that would
+          normally require hundreds !</para>
+
+          <para>The following screenshots shows the result :</para>
+
+          <para><table>
+              <title>Some screenshots to show the team members
+              management</title>
+
+              <tgroup cols="2">
+                <tbody>
+                  <row>
+                    <entry>1- We display a company organization. notice our
+                    new team members view.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="45%"
+                                     fileref="../images/Companies.module.single.team-members.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+
+                    <entry>2- Notice how the 2 actions have been installed and
+                    configured (e.g. icons and tooltips).<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="45%"
+                                     fileref="../images/Companies.module.single.team-members-2.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+                  </row>
+
+                  <row>
+                    <entry>3- Let's trigger the employee selection. The filter
+                    is pre-initialized.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="35%"
+                                     fileref="../images/Companies.module.single.team-members-lov.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+
+                    <entry>4- Search for employees filtering on
+                    name.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="35%"
+                                     fileref="../images/Companies.module.single.team-members-lov.search.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+                  </row>
+
+                  <row>
+                    <entry>5- Select one of the employee. The team members is
+                    updated.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="45%"
+                                     fileref="../images/Companies.module.single.team-members-3.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+
+                    <entry>4- Since it is a N-N relationship, the added
+                    employee still belongs to its former teams.<mediaobject>
+                        <imageobject>
+                          <imagedata align="center" contentdepth="45%"
+                                     fileref="../images/Companies.module.single.team-members-4.jpg"
+                                     scalefit="1" width="100%" />
+                        </imageobject>
+                      </mediaobject></entry>
+                  </row>
+                </tbody>
+              </tgroup>
+            </table></para>
         </section>
       </section>
     </section>
