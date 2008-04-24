@@ -17,10 +17,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.KeyStroke;
@@ -2265,28 +2267,35 @@ public class DefaultWingsViewFactory implements
     }
     Map<String, Class<?>> columnClassesByIds = new HashMap<String, Class<?>>();
     List<String> columnConnectorKeys = new ArrayList<String>();
+    Set<String> forbiddenColumns = new HashSet<String>();
     int tableWidth = 0;
     for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
         .getColumnViewDescriptors()) {
       String columnId = columnViewDescriptor.getName();
-      IValueConnector columnConnector = createColumnConnector(columnId,
-          modelDescriptor.getCollectionDescriptor().getElementDescriptor());
-      rowConnectorPrototype.addChildConnector(columnConnector);
-      columnClassesByIds.put(columnId, modelDescriptor
-          .getCollectionDescriptor().getElementDescriptor()
-          .getPropertyDescriptor(columnId).getModelType());
-      columnConnectorKeys.add(columnId);
-      if (columnViewDescriptor.getReadabilityGates() != null) {
-        for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
-          columnConnector.addReadabilityGate(gate.clone());
+      try {
+        actionHandler.checkAccess(columnViewDescriptor);
+        IValueConnector columnConnector = createColumnConnector(columnId,
+            modelDescriptor.getCollectionDescriptor().getElementDescriptor());
+        rowConnectorPrototype.addChildConnector(columnConnector);
+        columnClassesByIds.put(columnId, modelDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getPropertyDescriptor(columnId).getModelType());
+        columnConnectorKeys.add(columnId);
+        if (columnViewDescriptor.getReadabilityGates() != null) {
+          for (IGate gate : columnViewDescriptor.getReadabilityGates()) {
+            columnConnector.addReadabilityGate(gate.clone());
+          }
         }
-      }
-      if (columnViewDescriptor.getWritabilityGates() != null) {
-        for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
-          columnConnector.addWritabilityGate(gate.clone());
+        if (columnViewDescriptor.getWritabilityGates() != null) {
+          for (IGate gate : columnViewDescriptor.getWritabilityGates()) {
+            columnConnector.addWritabilityGate(gate.clone());
+          }
         }
+        columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
+      } catch (SecurityException ex) {
+        // The column simply won't be added.
+        forbiddenColumns.add(columnId);
       }
-      columnConnector.setLocallyWritable(!columnViewDescriptor.isReadOnly());
     }
     CollectionConnectorTableModel tableModel = new CollectionConnectorTableModel(
         connector, columnConnectorKeys);
@@ -2297,60 +2306,65 @@ public class DefaultWingsViewFactory implements
         .getSelectionModel(), null);
     int maxColumnSize = computePixelWidth(viewComponent,
         maxColumnCharacterLength);
-    for (int i = 0; i < viewDescriptor.getColumnViewDescriptors().size(); i++) {
-      STableColumn column = viewComponent.getColumnModel().getColumn(i);
-      String propertyName = viewDescriptor.getColumnViewDescriptors().get(i)
-          .getName();
-      column.setIdentifier(propertyName);
-      IPropertyDescriptor propertyDescriptor = modelDescriptor
-          .getCollectionDescriptor().getElementDescriptor()
-          .getPropertyDescriptor(propertyName);
-      StringBuffer columnName = new StringBuffer(propertyDescriptor
-          .getI18nName(getTranslationProvider(), locale));
-      if (propertyDescriptor.isMandatory()) {
-        columnName.append("*");
-      }
-      column.setHeaderValue(columnName.toString());
+    int columnIndex = 0;
+    for (ISubViewDescriptor columnViewDescriptor : viewDescriptor
+        .getColumnViewDescriptors()) {
+      String propertyName = columnViewDescriptor.getName();
+      if (!forbiddenColumns.contains(propertyName)) {
+        STableColumn column = viewComponent.getColumnModel().getColumn(
+            columnIndex++);
+        column.setIdentifier(propertyName);
+        IPropertyDescriptor propertyDescriptor = modelDescriptor
+            .getCollectionDescriptor().getElementDescriptor()
+            .getPropertyDescriptor(propertyName);
+        StringBuffer columnName = new StringBuffer(propertyDescriptor
+            .getI18nName(getTranslationProvider(), locale));
+        if (propertyDescriptor.isMandatory()) {
+          columnName.append("*");
+        }
+        column.setHeaderValue(columnName.toString());
 
-      if (!viewDescriptor.isReadOnly()) {
-        IView<SComponent> editorView = createPropertyView(propertyDescriptor,
-            null, actionHandler, locale);
-        if (editorView.getPeer() instanceof SActionField) {
-          SActionField actionField = (SActionField) editorView.getPeer();
-          actionField.setActions(Collections.singletonList(actionField
-              .getActions().get(0)));
+        if (!viewDescriptor.isReadOnly()) {
+          IView<SComponent> editorView = createPropertyView(propertyDescriptor,
+              null, actionHandler, locale);
+          if (editorView.getPeer() instanceof SActionField) {
+            SActionField actionField = (SActionField) editorView.getPeer();
+            actionField.setActions(Collections.singletonList(actionField
+                .getActions().get(0)));
+          }
+          if (editorView.getConnector().getParentConnector() == null) {
+            editorView.getConnector().setParentConnector(connector);
+          }
+          column.setCellEditor(createTableCellEditor(editorView));
         }
-        if (editorView.getConnector().getParentConnector() == null) {
-          editorView.getConnector().setParentConnector(connector);
+        STableCellRenderer cellRenderer = createTableCellRenderer(
+            propertyDescriptor, locale);
+        if (cellRenderer != null) {
+          column.setCellRenderer(cellRenderer);
+        } else {
+          column.setCellRenderer(new EvenOddTableCellRenderer());
         }
-        column.setCellEditor(createTableCellEditor(editorView));
+        int minHeaderWidth = computePixelWidth(viewComponent, columnName
+            .length());
+        int columnWidth;
+        if (propertyDescriptor instanceof IBooleanPropertyDescriptor
+            || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
+          columnWidth = Math.max(computePixelWidth(viewComponent, 2),
+              minHeaderWidth);
+        } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
+          columnWidth = Math.max(computePixelWidth(viewComponent,
+              getEnumerationTemplateValue(
+                  (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
+                  .length() + 4), minHeaderWidth);
+        } else {
+          columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
+              getFormatLength(createFormatter(propertyDescriptor, locale),
+                  getTemplateValue(propertyDescriptor))), maxColumnSize),
+              minHeaderWidth);
+        }
+        column.setWidth(columnWidth + "px");
+        tableWidth += columnWidth;
       }
-      STableCellRenderer cellRenderer = createTableCellRenderer(
-          propertyDescriptor, locale);
-      if (cellRenderer != null) {
-        column.setCellRenderer(cellRenderer);
-      } else {
-        column.setCellRenderer(new EvenOddTableCellRenderer());
-      }
-      int minHeaderWidth = computePixelWidth(viewComponent, columnName.length());
-      int columnWidth;
-      if (propertyDescriptor instanceof IBooleanPropertyDescriptor
-          || propertyDescriptor instanceof IBinaryPropertyDescriptor) {
-        columnWidth = Math.max(computePixelWidth(viewComponent, 2),
-            minHeaderWidth);
-      } else if (propertyDescriptor instanceof IEnumerationPropertyDescriptor) {
-        columnWidth = Math.max(computePixelWidth(viewComponent,
-            getEnumerationTemplateValue(
-                (IEnumerationPropertyDescriptor) propertyDescriptor, locale)
-                .length() + 4), minHeaderWidth);
-      } else {
-        columnWidth = Math.max(Math.min(computePixelWidth(viewComponent,
-            getFormatLength(createFormatter(propertyDescriptor, locale),
-                getTemplateValue(propertyDescriptor))), maxColumnSize),
-            minHeaderWidth);
-      }
-      column.setWidth(columnWidth + "px");
-      tableWidth += columnWidth;
     }
 
     SScrollPane scrollPane = createSScrollPane();
