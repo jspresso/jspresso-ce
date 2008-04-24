@@ -7152,6 +7152,24 @@ public class OrganizationalUnitPropertyProcessors {
         </listitem>
       </itemizedlist>
 
+      <para>For workspaces, modules and actions, the end-user will be notified
+      that he is not granted access to this part of the application.</para>
+
+      <para>For views and view parts, the framework will simply hide at
+      runtime the corresponding graphical component (a table column for
+      instance).</para>
+
+      <para>For components and component properties, an access not granted
+      will hide all the views (or view parts) backed by the corresponding
+      model. Note that the authorization is not enforced on the model itself
+      because our experience shows that such a behaviour can lead to really
+      problematic side effects. For instance, a user can be granted access to
+      an action that behind the scene updates a property (through a component
+      service for instance) that he is not granted access to. An unexpected
+      security exception then occurs that is hardly understandable... So the
+      overall philosophy is to secure the caller and not the callee (the view,
+      the web service, ... and not the model).</para>
+
       <para>The <trademark>Jspresso</trademark> login modules assign roles
       (that may be hierarchically declared) to the successfully logged-in
       user. Then, whenever on of the components listed above is solicited by
@@ -7252,7 +7270,19 @@ hrsample-app {
             </imageobject>
           </mediaobject>
         </figure>
+
+        <para>An other example of authorization enforcement might be that you
+        want to hide all the tracing properties unless the logged-in user is
+        "administrator"; simply add the corresponding granted roles on the
+        tracing property descriptors and all your GUI will be instantly
+        impacted.</para>
       </section>
     </section>
+  </section>
+
+  <section>
+    <title>Packaging and deploying</title>
+
+    <para></para>
   </section>
 </chapter>
