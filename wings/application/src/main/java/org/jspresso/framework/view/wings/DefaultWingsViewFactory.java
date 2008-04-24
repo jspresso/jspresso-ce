@@ -1237,6 +1237,11 @@ public class DefaultWingsViewFactory implements
       IView<SComponent> propertyView = createPropertyView(propertyDescriptor,
           viewDescriptor.getRenderedChildProperties(propertyName),
           actionHandler, locale);
+      try {
+        actionHandler.checkAccess(propertyViewDescriptor);
+      } catch (SecurityException ex) {
+        propertyView.setPeer(createSecurityPanel());
+      }
       propertyView.setParent(view);
       connector.addChildConnector(propertyView.getConnector());
       if (propertyViewDescriptor.getReadabilityGates() != null) {
