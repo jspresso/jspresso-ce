@@ -1237,9 +1237,11 @@ public class DefaultWingsViewFactory implements
       IView<SComponent> propertyView = createPropertyView(propertyDescriptor,
           viewDescriptor.getRenderedChildProperties(propertyName),
           actionHandler, locale);
+      boolean forbidden = false;
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
+        forbidden = true;
         propertyView.setPeer(createSecurityPanel());
       }
       propertyView.setParent(view);
@@ -1258,6 +1260,9 @@ public class DefaultWingsViewFactory implements
           !propertyViewDescriptor.isReadOnly());
       SLabel propertyLabel = createPropertyLabel(propertyDescriptor,
           propertyView.getPeer(), locale);
+      if (forbidden) {
+        propertyLabel.setText(" ");
+      }
 
       int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
       if (propertyWidth > viewDescriptor.getColumnCount()) {

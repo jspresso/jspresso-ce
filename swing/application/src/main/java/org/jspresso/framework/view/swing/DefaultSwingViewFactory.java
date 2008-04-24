@@ -1217,9 +1217,11 @@ public class DefaultSwingViewFactory implements
       IView<JComponent> propertyView = createPropertyView(propertyDescriptor,
           viewDescriptor.getRenderedChildProperties(propertyName),
           actionHandler, locale);
+      boolean forbidden = false;
       try {
         actionHandler.checkAccess(propertyViewDescriptor);
       } catch (SecurityException ex) {
+        forbidden = true;
         propertyView.setPeer(createSecurityPanel());
       }
       propertyView.setParent(view);
@@ -1238,6 +1240,9 @@ public class DefaultSwingViewFactory implements
           !propertyViewDescriptor.isReadOnly());
       JLabel propertyLabel = createPropertyLabel(propertyDescriptor,
           propertyView.getPeer(), locale);
+      if (forbidden) {
+        propertyLabel.setText(" ");
+      }
 
       int propertyWidth = viewDescriptor.getPropertyWidth(propertyName);
       if (propertyWidth > viewDescriptor.getColumnCount()) {

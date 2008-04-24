@@ -15,7 +15,6 @@ import org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDes
 import org.jspresso.framework.model.descriptor.basic.BasicPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor;
 
-
 /**
  * The component descriptor of comparable property query structures.
  * <p>
@@ -31,33 +30,33 @@ public class ComparableQueryStructureDescriptor extends
   /**
    * <code>EQ</code> equals.
    */
-  public static final String EQ = "EQ";
+  public static final String EQ         = "EQ";
 
   /**
    * <code>GT</code> greater than.
    */
-  public static final String GT = "GT";
+  public static final String GT         = "GT";
 
   /**
    * <code>GT</code> greater than or equals.
    */
-  public static final String GE = "GE";
+  public static final String GE         = "GE";
 
   /**
    * <code>LT</code> lower than.
    */
-  public static final String LT = "LT";
+  public static final String LT         = "LT";
 
   /**
    * <code>LT</code> lower than or equals.
    */
-  public static final String LE = "LE";
+  public static final String LE         = "LE";
 
   /**
    * <code>LG</code> between.
    */
-  public static final String BE = "BE";
-  
+  public static final String BE         = "BE";
+
   /**
    * <code>COMPARATOR</code> comparator.
    */
@@ -66,12 +65,12 @@ public class ComparableQueryStructureDescriptor extends
   /**
    * <code>INF_VALUE</code> infValue.
    */
-  public static final String INF_VALUE = "infValue";
+  public static final String INF_VALUE  = "infValue";
 
   /**
    * <code>SUP_VALUE</code> supValue.
    */
-  public static final String SUP_VALUE = "supValue";
+  public static final String SUP_VALUE  = "supValue";
 
   /**
    * Constructs a new <code>ComparablePropertyQueryStructureDescriptor</code>
@@ -102,7 +101,9 @@ public class ComparableQueryStructureDescriptor extends
     values.put(LE, null);
     values.put(BE, null);
     comparatorPropertyDescriptor.setValuesAndIconImageUrls(values);
-    //comparatorPropertyDescriptor.setMandatory(true);
+    comparatorPropertyDescriptor.setGrantedRoles(propertyDescriptor
+        .getGrantedRoles());
+    // comparatorPropertyDescriptor.setMandatory(true);
 
     BasicPropertyDescriptor infValuePropertyDescriptor = propertyDescriptor
         .clone();
@@ -120,7 +121,7 @@ public class ComparableQueryStructureDescriptor extends
     propertyDescriptors.add(supValuePropertyDescriptor);
 
     refDescriptor.setPropertyDescriptors(propertyDescriptors);
-    
+
     setReferencedDescriptor(refDescriptor);
   }
 }
