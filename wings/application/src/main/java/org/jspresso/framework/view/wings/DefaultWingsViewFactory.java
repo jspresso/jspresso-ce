@@ -211,7 +211,7 @@ public class DefaultWingsViewFactory implements
   private IListSelectionModelBinder          listSelectionModelBinder;
   private IDisplayableAction                 lovAction;
   private IModelCascadingBinder              modelCascadingBinder;
-  private int                                maxCharacterLength          = 32;
+  private int                                maxCharacterLength          = 64;
 
   private int                                maxColumnCharacterLength    = 32;
   private IMvcBinder                         mvcBinder;
@@ -293,19 +293,19 @@ public class DefaultWingsViewFactory implements
               .getActionLists().iterator(); iter.hasNext();) {
             ActionList nextActionList = iter.next();
             for (IDisplayableAction action : nextActionList.getActions()) {
-              Action swingAction = actionFactory.createAction(action,
+              Action wingsAction = actionFactory.createAction(action,
                   actionHandler, view, locale);
               SButton actionButton = createSButton();
               actionButton.setShowAsFormComponent(false);
-              actionButton.setAction(swingAction);
+              actionButton.setAction(wingsAction);
               if (action.getAcceleratorAsString() != null) {
                 KeyStroke ks = KeyStroke.getKeyStroke(action
                     .getAcceleratorAsString());
                 view.getPeer().getActionMap().put(
-                    swingAction.getValue(Action.NAME), swingAction);
+                    wingsAction.getValue(Action.NAME), wingsAction);
                 view.getPeer().getInputMap(
                     SComponent.WHEN_FOCUSED_OR_ANCESTOR_OF_FOCUSED_COMPONENT)
-                    .put(ks, swingAction.getValue(Action.NAME));
+                    .put(ks, wingsAction.getValue(Action.NAME));
                 String acceleratorString = KeyEvent.getKeyModifiersText(ks
                     .getModifiers())
                     + "-" + KeyEvent.getKeyText(ks.getKeyCode());
@@ -573,6 +573,7 @@ public class DefaultWingsViewFactory implements
    */
   protected SButton createSButton() {
     SButton button = new SButton();
+    button.setActionCommand("*"); // For LOV actions to avoid "1".
     return button;
   }
 

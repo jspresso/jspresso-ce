@@ -34,8 +34,8 @@ import org.wings.border.SEmptyBorder;
  */
 public class ModalDialogAction extends AbstractWingsAction {
 
-  private static final SDimension DIALOG_DIMENSION = new SDimension("500px",
-                                                       "250px");
+  private static final SDimension DIALOG_DIMENSION = new SDimension("800px",
+                                                       "600px");
 
   /**
    * Shows a modal dialog containig a main view and a button panel with the list
