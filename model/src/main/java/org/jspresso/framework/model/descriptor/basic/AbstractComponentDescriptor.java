@@ -29,7 +29,6 @@ import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.util.descriptor.DefaultIconDescriptor;
 import org.jspresso.framework.util.exception.NestedRuntimeException;
 
-
 /**
  * Abstract implementation of a component descriptor.
  * <p>
@@ -57,6 +56,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<IPropertyDescriptor>        tempPropertyBuffer;
   private String                           toStringProperty;
   private Collection<String>               unclonedProperties;
+  private Collection<String>               grantedRoles;
 
   /**
    * Constructs a new <code>AbstractComponentDescriptor</code> instance.
@@ -85,7 +85,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings({ "cast", "unchecked" })
+  @SuppressWarnings("unchecked")
   public Class<? extends E> getComponentContract() {
     if (componentContract == null && getName() != null) {
       try {
@@ -245,8 +245,7 @@ public abstract class AbstractComponentDescriptor<E> extends
               .getReferencedDescriptor().getComponentContract()))) {
         for (String nestedRenderedProperty : ((IReferencePropertyDescriptor<?>) propertyDescriptor)
             .getReferencedDescriptor().getRenderedProperties()) {
-          explodedProperties.add(propertyName + "."
-              + nestedRenderedProperty);
+          explodedProperties.add(propertyName + "." + nestedRenderedProperty);
         }
       } else {
         explodedProperties.add(propertyName);
@@ -489,5 +488,24 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public Class<?> getQueryComponentContract() {
     return getComponentContract();
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *            the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 }

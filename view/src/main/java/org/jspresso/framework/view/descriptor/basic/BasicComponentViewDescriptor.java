@@ -4,6 +4,7 @@
 package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
-
 
 /**
  * Default implementation of a component view descriptor.
@@ -77,6 +77,8 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
       for (String renderedProperty : modelRenderedProperties) {
         BasicSubviewDescriptor propertyDescriptor = new BasicSubviewDescriptor();
         propertyDescriptor.setName(renderedProperty);
+        propertyDescriptor.setGrantedRoles(componentDescriptor
+            .getPropertyDescriptor(renderedProperty).getGrantedRoles());
         defaultPropertyViewDescriptors.add(propertyDescriptor);
       }
       return defaultPropertyViewDescriptors;
@@ -149,6 +151,15 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public void setPropertyViewDescriptors(
       List<ISubViewDescriptor> propertyViewDescriptors) {
     this.propertyViewDescriptors = propertyViewDescriptors;
+    if (propertyViewDescriptors != null) {
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor();
+      for (ISubViewDescriptor propertyViewDescriptor : getPropertyViewDescriptors()) {
+        propertyViewDescriptor.setGrantedRoles(componentDescriptor
+            .getPropertyDescriptor(propertyViewDescriptor.getName())
+            .getGrantedRoles());
+      }
+    }
   }
 
   /**
@@ -179,5 +190,19 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public void setRenderedChildProperties(
       Map<String, List<String>> renderedChildProperties) {
     this.renderedChildProperties = renderedChildProperties;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public Collection<String> getGrantedRoles() {
+    Collection<String> grantedRoles = super.getGrantedRoles();
+    if (grantedRoles == null && getModelDescriptor() != null) {
+      IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
+          .getComponentDescriptor();
+      grantedRoles = componentDescriptor.getGrantedRoles();
+    }
+    return grantedRoles;
   }
 }

@@ -53,4 +53,13 @@ public interface ISubViewDescriptor extends IIconDescriptor, ISecurable {
    * @return true if the view is read-only.
    */
   boolean isReadOnly();
+  
+  
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *            the grantedRoles to set.
+   */
+  void setGrantedRoles(Collection<String> grantedRoles);
 }

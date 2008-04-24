@@ -7135,7 +7135,20 @@ public class OrganizationalUnitPropertyProcessors {
         </listitem>
 
         <listitem>
-          <para>Views (and view parts)</para>
+          <para>Views</para>
+        </listitem>
+
+        <listitem>
+          <para>View parts like columns in table views or properties in
+          component views</para>
+        </listitem>
+
+        <listitem>
+          <para>Components (and of course entities)</para>
+        </listitem>
+
+        <listitem>
+          <para>Component properties</para>
         </listitem>
       </itemizedlist>
 

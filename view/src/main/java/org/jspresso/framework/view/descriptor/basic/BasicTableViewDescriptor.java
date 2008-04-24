@@ -12,7 +12,6 @@ import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
 import org.jspresso.framework.view.descriptor.ITableViewDescriptor;
 
-
 /**
  * Default implementation of a table view descriptor.
  * <p>
@@ -48,6 +47,8 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
       for (String renderedProperty : modelRenderedProperties) {
         BasicSubviewDescriptor columnDescriptor = new BasicSubviewDescriptor();
         columnDescriptor.setName(renderedProperty);
+        columnDescriptor.setGrantedRoles(rowModelDescriptor
+            .getPropertyDescriptor(renderedProperty).getGrantedRoles());
         defaultColumnViewDescriptors.add(columnDescriptor);
       }
       return defaultColumnViewDescriptors;
@@ -64,6 +65,16 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
   public void setColumnViewDescriptors(
       List<ISubViewDescriptor> columnViewDescriptors) {
     this.columnViewDescriptors = columnViewDescriptors;
+    if (columnViewDescriptors != null) {
+      ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor());
+      IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
+          .getCollectionDescriptor().getElementDescriptor();
+      for (ISubViewDescriptor columnViewDescriptor : getColumnViewDescriptors()) {
+        columnViewDescriptor.setGrantedRoles(rowModelDescriptor
+            .getPropertyDescriptor(columnViewDescriptor.getName())
+            .getGrantedRoles());
+      }
+    }
   }
 
 }

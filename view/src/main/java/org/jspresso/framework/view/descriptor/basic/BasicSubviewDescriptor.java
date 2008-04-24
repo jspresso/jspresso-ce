@@ -114,10 +114,7 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
   }
 
   /**
-   * Sets the grantedRoles.
-   * 
-   * @param grantedRoles
-   *            the grantedRoles to set.
+   * {@inheritDoc}
    */
   public void setGrantedRoles(Collection<String> grantedRoles) {
     this.grantedRoles = grantedRoles;

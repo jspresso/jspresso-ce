@@ -16,7 +16,6 @@ import org.jspresso.framework.util.exception.NestedRuntimeException;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 
-
 /**
  * Default implementation of a property descriptor.
  * <p>
@@ -39,6 +38,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
   private Boolean                        readOnly;
   private String                         unicityScope;
   private Collection<IGate>              writabilityGates;
+  private Collection<String>             grantedRoles;
 
   /**
    * {@inheritDoc}
@@ -276,8 +276,7 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    * {@inheritDoc}
    */
   @SuppressWarnings("unchecked")
-  public void preprocessSetter(final Object component, 
-      Object newValue) {
+  public void preprocessSetter(final Object component, Object newValue) {
     if (isMandatory() && newValue == null) {
       IntegrityException ie = new IntegrityException("Mandatory property ["
           + getName() + "] on component [" + component + "].") {
@@ -405,5 +404,24 @@ public abstract class BasicPropertyDescriptor extends DefaultDescriptor
    */
   protected IPropertyDescriptor getParentDescriptor() {
     return parentDescriptor;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *            the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 }

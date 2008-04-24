@@ -21,7 +21,7 @@
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>    
-    <position x="-55" y="148" width="-1" height="-1"/>  
+    <position x="-21" y="163" width="-1" height="-1"/>  
   </class>  
   <class language="java" name="org.jspresso.framework.application.model.Workspace" project="jspresso-framework" 
     file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
@@ -30,7 +30,7 @@
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>    
-    <position x="137" y="148" width="-1" height="-1"/>  
+    <position x="-55" y="96" width="-1" height="-1"/>  
   </class>  
   <interface language="java" name="org.jspresso.framework.action.IAction" project="jspresso-framework" 
     file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false" 
@@ -39,7 +39,7 @@
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>    
-    <position x="307" y="148" width="-1" height="-1"/>  
+    <position x="492" y="75" width="-1" height="-1"/>  
   </interface>  
   <interface language="java" name="org.jspresso.framework.view.descriptor.IViewDescriptor" project="jspresso-framework" 
     file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
@@ -48,7 +48,7 @@
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>    
-    <position x="473" y="215" width="-1" height="-1"/>  
+    <position x="473" y="221" width="-1" height="-1"/>  
   </interface>  
   <interface language="java" name="org.jspresso.framework.view.descriptor.ISubViewDescriptor" 
     project="jspresso-framework" 
@@ -60,6 +60,40 @@
     </display>    
     <position x="473" y="148" width="-1" height="-1"/>  
   </interface>  
+  <interface language="java" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>    
+    <position x="88" y="221" width="-1" height="-1"/>  
+  </interface>  
+  <interface language="java" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>    
+    <position x="276" y="221" width="-1" height="-1"/>  
+  </interface>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IPropertyDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IPropertyDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
+  </generalization>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISubViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISubViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
+  </generalization>  
   <generalization>    
     <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
       file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
@@ -69,8 +103,8 @@
       binary="false"/>  
   </generalization>  
   <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Workspace" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
@@ -81,18 +115,18 @@
     <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
   </generalization>  
-  <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Workspace" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Workspace.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
-      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </realization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISubViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISubViewDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.model.descriptor.IComponentDescriptor" 
+      file="/jspresso-framework/model/src/main/java/org/jspresso/framework/model/descriptor/IComponentDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </generalization>
+  </generalization>  
+  <realization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
+  </realization>
 </class-diagram>

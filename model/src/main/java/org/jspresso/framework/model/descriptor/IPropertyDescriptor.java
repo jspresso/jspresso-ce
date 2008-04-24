@@ -6,9 +6,9 @@ package org.jspresso.framework.model.descriptor;
 import java.util.Collection;
 import java.util.List;
 
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.bean.integrity.IPropertyProcessor;
 import org.jspresso.framework.util.gate.IGate;
-
 
 /**
  * This interface is the super-interface of all properties descriptors.
@@ -20,7 +20,8 @@ import org.jspresso.framework.util.gate.IGate;
  * @author Vincent Vandenschrick
  * @see org.jspresso.framework.model.descriptor.IComponentDescriptor
  */
-public interface IPropertyDescriptor extends IModelDescriptor, Cloneable {
+public interface IPropertyDescriptor extends IModelDescriptor, Cloneable,
+    ISecurable {
 
   /**
    * Clones this descriptor.

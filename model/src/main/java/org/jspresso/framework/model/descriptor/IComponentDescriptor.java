@@ -9,8 +9,8 @@ import java.util.List;
 
 import org.jspresso.framework.model.component.service.IComponentService;
 import org.jspresso.framework.model.component.service.ILifecycleInterceptor;
+import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.util.descriptor.IIconDescriptor;
-
 
 /**
  * This interface is implemented by descriptors of components (java bean style).
@@ -26,7 +26,7 @@ import org.jspresso.framework.util.descriptor.IIconDescriptor;
  *            the concrete type of component.
  */
 public interface IComponentDescriptor<E> extends IModelDescriptor,
-    IIconDescriptor, IComponentDescriptorProvider<E> {
+    IIconDescriptor, IComponentDescriptorProvider<E>, ISecurable {
 
   /**
    * Gets the interface class defining the component contract.
@@ -149,7 +149,7 @@ public interface IComponentDescriptor<E> extends IModelDescriptor,
    * @return true if this is a pure abstract entity descriptor.
    */
   boolean isPurelyAbstract();
-  
+
   /**
    * Gets the query contract of this component descriptor.
    * 
