@@ -7283,6 +7283,96 @@ hrsample-app {
   <section>
     <title>Packaging and deploying</title>
 
-    <para></para>
+    <para>Last but not least, we need to package and deploy the final
+    application. Choosing the target environment highly depends on the
+    requirements. <trademark>Jspresso</trademark> supports as of now 3
+    different deployment scenarios : Swing, AJAX (<ulink
+    url="???">Wings</ulink>) and <ulink
+    url="http://www.canoo.com/ulc/">ULC</ulink>.</para>
+
+    <section>
+      <title>A quick overview of options</title>
+
+      <para>For swing you should simply package your application classes and
+      resources in a jar (or multiple jars) and distribute it on the clients
+      either manually or through a more advanced deployement mechanism like
+      <ulink url="http://java.sun.com/products/javawebstart">Java Web
+      Start</ulink>. Be aware in that case that the client JVM will handle
+      everything except the database and that the network will support the
+      JDBC calls from the application backend. This 2-tier architecture is
+      certainly not the preferred scenario when you have limited bandwith
+      between the clients and the server or limited resources on the client
+      machines but it might perfectly fit for a limited number of clients
+      residing on the same LAN than the database server. Although, this option
+      is not commonly considered as a good option, we believe that it should
+      not be underestimated especially when dealing with small-scale
+      deployments.</para>
+
+      <para>Ajax and ULC deployment require a servlet 2.4 compatible
+      application server (<ulink url="http://tomcat.apache.org/">Apache
+      tomcat</ulink> is one of them, free and production-ready). This means
+      that you can just package your application as a WAR archive and drop it
+      in the application server to have it deployed.
+      <trademark>Jspresso</trademark>, although very powerful and flexible
+      doesn't require an overkilling, latest specifications compliant,
+      application server. Once this is said, there are times when your
+      application specific needs might require one of them. For instance, if
+      you need some heterogeneous transaction capability and must use a full
+      fledged JTA compliant transaction service, you have little other choice
+      than going to one of the market big application servers. You can still
+      stay in the free and opensource world.</para>
+
+      <para>We won't discuss here the database side since
+      <trademark>Jspresso</trademark> database support is directly linked to
+      the Hibernate database support. Please refer to the Hibernate
+      documentation to get a complete understanding of the support and
+      limitations of the database engine you plan to deploy. By the way, you
+      will rarely find any limitation on this side regarding the huge and
+      excellent support Hibernate has on almost each and every common database
+      vendors.</para>
+
+      <para>Although the Wings library is a LGPL opensource library, ULC is
+      not. As of this writing, ULC requires at least a developer licence that
+      comes with an unlimited deployment licence.
+      <trademark>Jspresso</trademark> is strongly attached to the opensource
+      and free software philosophy, but we believe that licensing ULC is
+      really worth the money you will spend due to the really high quality,
+      performance and support of the library. ULC is developed and supported
+      by <ulink url="http://www.canoo.com/">Canoo</ulink>. One thing to note
+      is that the preferred way to deploy the ULC client is still to use Java
+      Web Start.</para>
+
+      <para>On the Wings side, the architecture is basically the same as ULC,
+      but the frontend is an Ajax enabled web application. This makes the
+      deployment of the client really smooth (no plugin), but the look and
+      feel has many differences compared to the Swing and ULC front-end.
+      Although <trademark>Jspresso</trademark> tends to limit those
+      differences to their minimum, some of them (like table cells mouseless
+      navigation) cannot be bypassed due to the underlying limitations.
+      Improving the look of a Wings application might also require some web
+      design and CSS skills that are beyond the scope of this document. Having
+      said that, Wings is certainly one of the best available library to
+      seamlessly bridge the AJAX world and the java world.</para>
+    </section>
+
+    <section>
+      <title>Packaging the application WAR archive</title>
+
+      <para>Depending on your development habits, you might choose any project
+      building tool to package the application WAR; Apache <ulink
+      url="http://ant.apache.org/">ant</ulink> and <ulink
+      url="http://maven.apache.org/">maven</ulink> are such tools you can
+      safely rely on for the whole project lifecycle including the packaging.
+      So rather than dealing with a specific project environment integration,
+      we will precisely define what artifact should be packaged in the WAR and
+      where they should be packaged.</para>
+
+      <para>So let's go back to our sample application. The WAR layout should
+      be the following (versions of the libraries may have changed from the
+      time of this writing but safely replace them by the ones distributed
+      with <trademark>Jspresso</trademark>) :</para>
+
+      <para></para>
+    </section>
   </section>
 </chapter>
