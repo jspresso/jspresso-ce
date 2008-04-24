@@ -176,7 +176,6 @@ import org.wings.text.SDateFormatter;
 import org.wings.tree.SDefaultTreeCellRenderer;
 import org.wingx.XCalendar;
 
-
 /**
  * Factory for swing views.
  * <p>
@@ -615,11 +614,11 @@ public class DefaultWingsViewFactory implements
    */
   protected SPanel createSecurityPanel() {
     SPanel panel = createSPanel(new SBorderLayout());
-    SLabel label = createSLabel();
-    label.setHorizontalAlignment(SConstants.CENTER);
-    label.setVerticalAlignment(SConstants.CENTER);
-    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
-    panel.add(label, SBorderLayout.CENTER);
+    // SLabel label = createSLabel();
+    // label.setHorizontalAlignment(SConstants.CENTER);
+    // label.setVerticalAlignment(SConstants.CENTER);
+    // label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
+    // panel.add(label, SBorderLayout.CENTER);
     return panel;
   }
 

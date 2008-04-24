@@ -6,9 +6,7 @@ package org.jspresso.framework.view.descriptor;
 import java.awt.Color;
 import java.awt.Font;
 
-import org.jspresso.framework.security.ISecurable;
 import org.jspresso.framework.view.action.IActionable;
-
 
 /**
  * This public interface is the super-interface of all view descriptors.
@@ -19,8 +17,7 @@ import org.jspresso.framework.view.action.IActionable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public interface IViewDescriptor extends ISubViewDescriptor, IActionable,
-    ISecurable {
+public interface IViewDescriptor extends ISubViewDescriptor, IActionable {
 
   /**
    * <code>NONE</code> border constant.

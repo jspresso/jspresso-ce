@@ -815,11 +815,11 @@ public class DefaultSwingViewFactory implements
   protected JPanel createSecurityPanel() {
     JPanel panel = createJPanel();
     panel.setLayout(new BorderLayout());
-    JLabel label = createJLabel();
-    label.setHorizontalAlignment(SwingConstants.CENTER);
-    label.setVerticalAlignment(SwingConstants.CENTER);
-    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
-    panel.add(label, BorderLayout.CENTER);
+//    JLabel label = createJLabel();
+//    label.setHorizontalAlignment(SwingConstants.CENTER);
+//    label.setVerticalAlignment(SwingConstants.CENTER);
+//    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
+//    panel.add(label, BorderLayout.CENTER);
     return panel;
   }
 

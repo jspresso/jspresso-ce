@@ -5,7 +5,6 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.util.Collection;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
@@ -31,8 +30,6 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   private int                borderType = NONE;
   private Font               font;
   private Color              foreground;
-
-  private Collection<String> grantedRoles;
 
   /**
    * Gets the actionMap.
@@ -69,15 +66,6 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    */
   public Color getForeground() {
     return foreground;
-  }
-
-  /**
-   * Gets the grantedRoles.
-   * 
-   * @return the grantedRoles.
-   */
-  public Collection<String> getGrantedRoles() {
-    return grantedRoles;
   }
 
   /**
@@ -167,16 +155,6 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    */
   public void setForeground(Color foreground) {
     this.foreground = foreground;
-  }
-
-  /**
-   * Sets the grantedRoles.
-   * 
-   * @param grantedRoles
-   *            the grantedRoles to set.
-   */
-  public void setGrantedRoles(Collection<String> grantedRoles) {
-    this.grantedRoles = grantedRoles;
   }
 
 }

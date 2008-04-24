@@ -186,14 +186,14 @@
     </section>
 
     <section>
-      <title>The application modules</title>
+      <title>The application workspaces</title>
 
-      <para>The HR application is divided in 3 modules.</para>
+      <para>The HR application is divided in 3 workspaces.</para>
 
       <section>
-        <title>The organization management module</title>
+        <title>The organization management workspace</title>
 
-        <para>This module manages a company structure in terms of
+        <para>This workspace manages a company structure in terms of
         organizational units. The end-user may create/delete/update a company,
         create/delete/update its organizational units and structure them in
         the organization. The end-user may compose the employee teams, assign
@@ -205,10 +205,9 @@
       <section>
         <title>The employees management module</title>
 
-        <para>This module manages a company staff. The end-user can retrieve
-        the company employees and create/update/delete an employee. The
-        end-user will be able to create/update/delete events for an employee
-        and may re-order them in an unspecified manner as needed.</para>
+        <para>This workspace manages a company staff. The end-user can
+        retrieve the company employees and create/update/delete an
+        employee.</para>
       </section>
 
       <section>
@@ -229,18 +228,18 @@
         <title>The organization manager profile</title>
 
         <para>A logged-in user having the organization manager profile will be
-        granted access to the organization management module as well as the
-        master data management module but he won't be able to create a new
-        company.</para>
+        granted access to the organization management workspace as well as the
+        master data management workspace but he won't be able to access the
+        employee management workspace.</para>
       </section>
 
       <section>
         <title>The staff manager profile</title>
 
         <para>A logged-in user having the staff manager profile will be
-        granted access to the employee management module as well as the master
-        data management module but he won't be able to re-order the events
-        assigned to an employee.</para>
+        granted access to the employee management workspace as well as the
+        master data management workspace but he won't be able to access the
+        organization management workspace.</para>
       </section>
 
       <section>
@@ -5096,7 +5095,7 @@ INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : 
     </section>
 
     <section>
-      <title>Securing the application access</title>
+      <title>Securing the application access : Authentication</title>
 
       <para>Securing an application is a matter of handling :</para>
 
@@ -5163,7 +5162,7 @@ hrsample-app { <co id="hrsample-app" />
               id="DevelopmentLoginModule" />
        user=demo <co id="user" />
        password=demo <co id="password" />
-       roles=admin <co id="roles" />
+       roles=administrator <co id="roles" />
        custom.language=en; <co id="language" />
 };</programlisting><calloutlist>
             <callout arearefs="hrsample-app">
@@ -5187,8 +5186,8 @@ hrsample-app { <co id="hrsample-app" />
 
             <callout arearefs="roles">
               <para>The comma-separated list of roles (profiles) the logged-in
-              user will be assigned (here "admin"). These roles will be
-              checked against when dealing with authorizations.</para>
+              user will be assigned (here "administrator"). These roles will
+              be checked against when dealing with authorizations.</para>
             </callout>
 
             <callout arearefs="language">
@@ -6937,7 +6936,7 @@ public class OrganizationalUnitPropertyProcessors {
 
               <callout arearefs="Team-teamMembers">
                 <para>This view is backed by the team -&gt; team members
-                relationship. </para>
+                relationship.</para>
               </callout>
 
               <callout arearefs="teamMembers-actionMap">
@@ -6983,7 +6982,7 @@ public class OrganizationalUnitPropertyProcessors {
 
               <callout arearefs="lovOkFrontAction">
                 <para>Then we need to tell the action what to do when the
-                end-user has selected the employee to add... </para>
+                end-user has selected the employee to add...</para>
               </callout>
 
               <callout arearefs="AddAnyCollectionToMasterAction">
@@ -7090,7 +7089,156 @@ public class OrganizationalUnitPropertyProcessors {
                 </tbody>
               </tgroup>
             </table></para>
+
+          <para><trademark>Jspresso</trademark> comes with tens of
+          configurable built-in actions like the ones we've just used
+          (wizards, user decisions through pop-ups to control the application
+          flow, reporting, file download, ...). This is beyond the scope of
+          this section to list them all but remember that those built-in
+          actions should cover 100% of your standard needs. And whenever you
+          may encounter specific requirements during the business analysis,
+          you still have the option to write your own actions leveraging the
+          full power of the framework with a whole set of abstract action
+          classes to inherit from.</para>
         </section>
+      </section>
+    </section>
+
+    <section>
+      <title>Securing the application access : Authorization</title>
+
+      <para>As we covered it before, securing an application requires 2
+      features : authentication and authorization. We've already discussed
+      about authentication and JAAS login modules. JAAS also deals with
+      authorization but in a way that is strongly related to the java code.
+      Basically, it allows for securing java methods and requires
+      modifications in the source code.</para>
+
+      <para>The <trademark>Jspresso</trademark> framework covers the
+      authorization part in a much more declarative and loosely coupled way.
+      All you need to do is to declare the granted roles (you may name them
+      profiles or groups) on the application component you want to secure the
+      access to. Among the securable application components, you will find
+      :</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Workspaces</para>
+        </listitem>
+
+        <listitem>
+          <para>Modules</para>
+        </listitem>
+
+        <listitem>
+          <para>Actions</para>
+        </listitem>
+
+        <listitem>
+          <para>Views (and view parts)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <trademark>Jspresso</trademark> login modules assign roles
+      (that may be hierarchically declared) to the successfully logged-in
+      user. Then, whenever on of the components listed above is solicited by
+      the end user, the framework checks the access according to the declared
+      granted roles. Please note that an application component with no granted
+      roles assigned is considered to be accessible by anyone; this is what we
+      have done until now.</para>
+
+      <section>
+        <title>Restricting access to the application components</title>
+
+        <para>So let's use the 3 profiles we have collected during the
+        business requirement : "organization-manager", "staff-manager" and
+        "administrator". We will secure the application workspaces accordingly
+        :</para>
+
+        <para><programlisting language="xml">&lt;bean
+  id="Employees.workspace"
+  parent="abstractWorkspace"
+  scope="prototype"&gt;
+  ...
+  &lt;property name="grantedRoles"&gt; <co id="grantedRoles" />
+    &lt;list&gt;
+      &lt;value&gt;administrator&lt;/value&gt;
+      &lt;value&gt;staff-manager&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+
+&lt;bean
+  id="Organization.workspace"
+  parent="abstractWorkspace"
+  scope="prototype"&gt;
+  ...
+  &lt;property name="grantedRoles"&gt;
+    &lt;list&gt;
+      &lt;value&gt;administrator&lt;/value&gt;
+      &lt;value&gt;organization-manager&lt;/value&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;</programlisting><calloutlist>
+            <callout arearefs="grantedRoles">
+              <para>We grant employees workspace access to the "administrator"
+              and "staff-manager" roles. Same applies for the organization
+              workspace below.</para>
+            </callout>
+          </calloutlist>Believe it or not, you don't have to write anything
+        else ! The exact same kind of declarations apply to all the securable
+        components. It would have been even shorter if we had used a smarter
+        login module that had handled groups (or roles) nesting. In that case,
+        we would have nest all profiles in the administrator one, making the
+        administrator inherit all the authorizations of its nested groups.
+        Then we could simply have omitted the administrator declaration in the
+        workspaces granted roles.</para>
+      </section>
+
+      <section>
+        <title>Testing the authorizations enforcement</title>
+
+        <para>The <trademark>Jspresso</trademark> development login module
+        allows for arbitrarily changing the user role so that authorization
+        can be quickly and efficiently tested. We will use this feature to
+        test the workspace restrictions that we have declared above.</para>
+
+        <para>So let's assign the "staff-manager" role to our demo user by
+        modifying the configuration of the development login module in the
+        <filename>jaas.config</filename> file :</para>
+
+        <para><programlisting>/** Login Configuration for the HR sample application **/
+
+hrsample-app {
+   org.jspresso.framework.security.auth.spi.DevelopmentLoginModule required
+       user=demo
+       password=demo
+       roles=staff-manager <co id="staff-manager" />
+       custom.language=en;
+};</programlisting><calloutlist>
+            <callout arearefs="staff-manager">
+              <para>When logged-in, the demo user will be assigned the
+              "staff-manager" role. You can even assign multiple roles to the
+              development user by listing them separated by comas; in that
+              case, the JAAS configuration syntax makes the use of double
+              quotes mandatory to surround the list.</para>
+            </callout>
+          </calloutlist></para>
+
+        <para>When you then try to launch the organization workspace, the
+        following notification pops-up :</para>
+
+        <figure>
+          <title>Access denied on workspace</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center" contentdepth="60%"
+                         fileref="../images/Access.denied.jpg" scalefit="1"
+                         width="100%" />
+            </imageobject>
+          </mediaobject>
+        </figure>
       </section>
     </section>
   </section>

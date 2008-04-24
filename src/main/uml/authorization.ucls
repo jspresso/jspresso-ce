@@ -1,4 +1,4 @@
-<class-diagram icons="false" always-add-relationships="true" generalizations="true" realizations="true" 
+<class-diagram icons="false" always-add-relationships="false" generalizations="true" realizations="true" 
   associations="true" dependencies="false" nesting-relationships="true" version="0.9.65">  
   <classifier-display autosize="true" package="true" initial-value="false" signature="true" visibility="true">    
     <attributes public="false" package="false" protected="false" private="false"/>    
@@ -48,8 +48,33 @@
       <attributes public="false" package="false" protected="false" private="false"/>      
       <operations public="false" package="false" protected="false" private="false"/>    
     </display>    
-    <position x="468" y="148" width="-1" height="-1"/>  
+    <position x="473" y="215" width="-1" height="-1"/>  
   </interface>  
+  <interface language="java" name="org.jspresso.framework.view.descriptor.ISubViewDescriptor" 
+    project="jspresso-framework" 
+    file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISubViewDescriptor.java" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <display autosize="true" package="true" initial-value="false" signature="true" visibility="true">      
+      <attributes public="false" package="false" protected="false" private="false"/>      
+      <operations public="false" package="false" protected="false" private="false"/>    
+    </display>    
+    <position x="473" y="148" width="-1" height="-1"/>  
+  </interface>  
+  <generalization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISubViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISubViewDescriptor.java" 
+      binary="false"/>  
+  </generalization>  
+  <realization>    
+    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
+      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
+      binary="false"/>    
+    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
+      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
+  </realization>  
   <generalization>    
     <source project="jspresso-framework" name="org.jspresso.framework.action.IAction" 
       file="/jspresso-framework/action/src/main/java/org/jspresso/framework/action/IAction.java" binary="false"/>    
@@ -64,17 +89,10 @@
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
   </realization>  
   <generalization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.IViewDescriptor" 
-      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/IViewDescriptor.java" 
+    <source project="jspresso-framework" name="org.jspresso.framework.view.descriptor.ISubViewDescriptor" 
+      file="/jspresso-framework/view/src/main/java/org/jspresso/framework/view/descriptor/ISubViewDescriptor.java" 
       binary="false"/>    
     <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
       file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </generalization>  
-  <realization>    
-    <source project="jspresso-framework" name="org.jspresso.framework.application.model.Module" 
-      file="/jspresso-framework/application/src/main/java/org/jspresso/framework/application/model/Module.java" 
-      binary="false"/>    
-    <target project="jspresso-framework" name="org.jspresso.framework.security.ISecurable" 
-      file="/jspresso-framework/security/src/main/java/org/jspresso/framework/security/ISecurable.java" binary="false"/>  
-  </realization>
+  </generalization>
 </class-diagram>

@@ -28,6 +28,8 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
   private boolean           readOnly;
   private Collection<IGate> writabilityGates;
 
+  private Collection<String> grantedRoles;
+
   /**
    * Gets the modelDescriptor.
    * 
@@ -100,5 +102,24 @@ public class BasicSubviewDescriptor extends DefaultIconDescriptor implements
    */
   public void setWritabilityGates(Collection<IGate> writabilityGates) {
     this.writabilityGates = writabilityGates;
+  }
+
+  /**
+   * Gets the grantedRoles.
+   * 
+   * @return the grantedRoles.
+   */
+  public Collection<String> getGrantedRoles() {
+    return grantedRoles;
+  }
+
+  /**
+   * Sets the grantedRoles.
+   * 
+   * @param grantedRoles
+   *            the grantedRoles to set.
+   */
+  public void setGrantedRoles(Collection<String> grantedRoles) {
+    this.grantedRoles = grantedRoles;
   }
 }

@@ -569,11 +569,11 @@ public class DefaultUlcViewFactory implements
    */
   protected ULCBorderLayoutPane createSecurityPanel() {
     ULCBorderLayoutPane panel = new ULCBorderLayoutPane();
-    ULCLabel label = createULCLabel();
-    label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
-    label.setHorizontalAlignment(IDefaults.CENTER);
-    label.setVerticalAlignment(IDefaults.CENTER);
-    panel.add(label, ULCBorderLayoutPane.CENTER);
+    // ULCLabel label = createULCLabel();
+    // label.setIcon(iconFactory.getForbiddenIcon(IIconFactory.LARGE_ICON_SIZE));
+    // label.setHorizontalAlignment(IDefaults.CENTER);
+    // label.setVerticalAlignment(IDefaults.CENTER);
+    // panel.add(label, ULCBorderLayoutPane.CENTER);
     return panel;
   }
 
@@ -2313,12 +2313,16 @@ public class DefaultUlcViewFactory implements
     java.awt.Dimension iconSize = new java.awt.Dimension(viewComponent
         .getTableHeader().getFont().getSize(), viewComponent.getTableHeader()
         .getFont().getSize());
-    sorterDecorator.setUpIcon(iconFactory.getIcon(
-        "classpath:org/jspresso/framework/application/images/1uparrow-48x48.png",
-        iconSize));
-    sorterDecorator.setDownIcon(iconFactory.getIcon(
-        "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
-        iconSize));
+    sorterDecorator
+        .setUpIcon(iconFactory
+            .getIcon(
+                "classpath:org/jspresso/framework/application/images/1uparrow-48x48.png",
+                iconSize));
+    sorterDecorator
+        .setDownIcon(iconFactory
+            .getIcon(
+                "classpath:org/jspresso/framework/application/images/1downarrow-48x48.png",
+                iconSize));
     sorterDecorator.setColumnComparator(String.class,
         String.CASE_INSENSITIVE_ORDER);
     ClientContext.setModelUpdateMode(sorterDecorator,
