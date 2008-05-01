@@ -29,5 +29,9 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring</artifactId>
 		</dependency>
+    <dependency>
+      <groupId>freemarker</groupId>
+      <artifactId>freemarker</artifactId>
+    </dependency>
 	</dependencies>
 </project>

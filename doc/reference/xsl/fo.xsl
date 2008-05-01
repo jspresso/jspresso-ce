@@ -29,7 +29,7 @@
     <xsl:attribute name="font-family">
       <xsl:value-of select="$monospace.font.family"></xsl:value-of>
     </xsl:attribute>
-    <xsl:attribute name="font-size">10</xsl:attribute>
+    <xsl:attribute name="font-size">8</xsl:attribute>
   </xsl:attribute-set>
 
   <xsl:attribute-set
