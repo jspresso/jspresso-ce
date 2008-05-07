@@ -201,7 +201,7 @@ public class DefaultUlcViewFactory implements
   private static final double                   DEF_DISP_TEMPLATE_PERCENT   = 99;
   private static final char                     TEMPLATE_CHAR               = 'O';
   private static final Date                     TEMPLATE_DATE               = new Date(
-                                                                                3661 * 1000);
+                                                                                27166271000L);
   private static final Long                     TEMPLATE_DURATION           = new Long(
                                                                                 IDurationPropertyDescriptor.ONE_SECOND
                                                                                     + IDurationPropertyDescriptor.ONE_MINUTE
@@ -209,7 +209,7 @@ public class DefaultUlcViewFactory implements
                                                                                     + IDurationPropertyDescriptor.ONE_DAY
                                                                                     + IDurationPropertyDescriptor.ONE_WEEK);
   private static final Date                     TEMPLATE_TIME               = new Date(
-                                                                                3661 * 1000);
+                                                                                366000);
   private static final Dimension                TREE_PREFERRED_SIZE         = new Dimension(
                                                                                 128,
                                                                                 128);

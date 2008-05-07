@@ -7358,8 +7358,8 @@ hrsample-app {
       by <ulink url="http://www.canoo.com/">Canoo</ulink>.</para>
 
       <note>
-        <para>The preferred way to deploy the ULC client is still to use Java
-        Web Start.</para>
+        <para>The preferred way to deploy the ULC client is to use Java Web
+        Start.</para>
       </note>
 
       <para>On the Wings side, the architecture is basically the same as ULC,
@@ -7370,9 +7370,13 @@ hrsample-app {
       differences to their minimum, some of them (like table cells mouseless
       navigation) cannot be bypassed due to the underlying limitations.
       Improving the look of a Wings application might also require some web
-      design and CSS skills that are beyond the scope of this document. Having
-      said that, Wings is certainly one of the best available library to
-      seamlessly bridge the AJAX world and the java world.</para>
+      design and CSS skills that are beyond the scope of this document but
+      they are extensively covered by the Wings reference documentation. Just
+      have a look to the real-life applications that the Wings web site points
+      to, and you will get a good idea of what can be achieved with some
+      styling capabilities. Having said that, Wings is certainly one of the
+      best available library to seamlessly bridge the AJAX world and the java
+      world.</para>
     </section>
 
     <section>
@@ -7541,28 +7545,31 @@ public class WingsHrSampleStartup extends WingsStartup {
       we will precisely define what artifact should be packaged in the WAR and
       where they should be packaged.</para>
 
-      <para>So let's go back to our sample application. The WAR layout should
-      be the following (versions of the libraries are omitted but safely
-      replace them by the ones distributed with
-      <trademark>Jspresso</trademark>).</para>
+      <section>
+        <title>The WAR structure</title>
 
-      <note>
-        <para>You might complement the content based on the extra libraries
-        you might need in the application.</para>
-      </note>
+        <para>So let's go back to our sample application. The WAR layout
+        should be the following (versions of the libraries are omitted but
+        safely replace them by the ones distributed with
+        <trademark>Jspresso</trademark>).</para>
 
-      <note>
-        <para>This WAR layout gathers both ULC and Wings deployment channels
-        together. Whenever you choose not to deploy your application through
-        one of these technologies, you can safely get rid of some parts (e.g.
-        webstart is not needed for Wings deployment).</para>
-      </note>
+        <note>
+          <para>You might complement the content based on the extra libraries
+          you might need in the application.</para>
+        </note>
 
-      <para>Although typical of a WAR layout, this is a quite long list ! But
-      don't be afraid, we will go into structural details so that you will get
-      a logical understanding of it.</para>
+        <note>
+          <para>This WAR layout gathers both ULC and Wings deployment channels
+          together. Whenever you choose not to deploy your application through
+          one of these technologies, you can safely get rid of some parts
+          (e.g. webstart is not needed for Wings deployment).</para>
+        </note>
 
-      <para><programlisting>WEB-INF/
+        <para>Although typical of a WAR layout, this is a quite long list !
+        But don't be afraid, we will go into structural details so that you
+        will get a logical understanding of it.</para>
+
+        <para><programlisting>WEB-INF/
 		web.xml <co id="web.xml" />
 
 		lib/ <co id="webinf-lib" />
@@ -7677,149 +7684,794 @@ lib/ <co id="client-libs" />
 login.html <co id="html-pages" />
 login-error.html</programlisting></para>
 
-      <para><calloutlist>
-          <callout arearefs="web.xml">
-            <para>The standard <filename>web.xml</filename> web application
-            descriptor. We will have a closer look to it.</para>
-          </callout>
+        <para><calloutlist>
+            <callout arearefs="web.xml">
+              <para>The standard <filename>web.xml</filename> web application
+              descriptor. We will have a closer look to it.</para>
+            </callout>
 
-          <callout arearefs="webinf-lib">
-            <para>The directory containing the dependencies of the web
-            application.</para>
-          </callout>
+            <callout arearefs="webinf-lib">
+              <para>The directory containing the dependencies of the web
+              application.</para>
+            </callout>
 
-          <callout arearefs="hrsample">
-            <para>Our application archive containing all the code we've
-            developed so far.</para>
-          </callout>
+            <callout arearefs="hrsample">
+              <para>Our application archive containing all the code we've
+              developed so far.</para>
+            </callout>
 
-          <callout arearefs="jspresso-server">
-            <para>The <trademark>Jspresso</trademark> server libraries.</para>
-          </callout>
+            <callout arearefs="jspresso-server">
+              <para>The <trademark>Jspresso</trademark> server
+              libraries.</para>
+            </callout>
 
-          <callout arearefs="spring">
-            <para>The spring libraries and dependencies.</para>
-          </callout>
+            <callout arearefs="spring">
+              <para>The spring libraries and dependencies.</para>
+            </callout>
 
-          <callout arearefs="bsf">
-            <para>The <ulink url="http://jakarta.apache.org/bsf/">BSF</ulink>
-            (Bean Scripting Framework) library. This is used by a built-in
-            <trademark>Jspresso</trademark> action we haven't seen yet. It
-            allows for the action code to be entirely scripted using a BSF
-            supported scripting language (Jython, Groovy, BeanShell,
-            ...)</para>
-          </callout>
+            <callout arearefs="bsf">
+              <para>The <ulink
+              url="http://jakarta.apache.org/bsf/">BSF</ulink> (Bean Scripting
+              Framework) library. This is used by a built-in
+              <trademark>Jspresso</trademark> action we haven't seen yet. It
+              allows for the action code to be entirely scripted using a BSF
+              supported scripting language (Jython, Groovy, BeanShell,
+              ...)</para>
+            </callout>
 
-          <callout arearefs="joda-time-server">
-            <para>A library to manipulate duration information. Only useful on
-            server-side for Wings deployment.</para>
-          </callout>
+            <callout arearefs="joda-time-server">
+              <para>A library to manipulate duration information. Only useful
+              on server-side for Wings deployment.</para>
+            </callout>
 
-          <callout arearefs="various">
-            <para>Various commons libraries heavilly used by the Jspresso
-            framework itself. Most of them come from the <ulink
-            url="http://jakarta.apache.org/">Apache Jakarta</ulink>
-            project.</para>
-          </callout>
+            <callout arearefs="various">
+              <para>Various commons libraries heavilly used by the Jspresso
+              framework itself. Most of them come from the <ulink
+              url="http://jakarta.apache.org/">Apache Jakarta</ulink>
+              project.</para>
+            </callout>
 
-          <callout arearefs="jasperreports">
+            <callout arearefs="jasperreports">
+              <para>The <ulink
+              url="http://jasperreports.sourceforge.net/">Jasper
+              Reports</ulink> library and its dependencies. This is used by a
+              built-in <trademark>Jspresso</trademark> action we haven't seen
+              yet that brings first class reporting capabilities to your
+              applications.</para>
+            </callout>
+
+            <callout arearefs="jboss">
+              <para>The <ulink url="http://www.jboss.org/">JBoss</ulink>
+              implementation of JAAS/LDAP provider.</para>
+            </callout>
+
+            <callout arearefs="ulc-server">
+              <para>The ULC server libraries and the JNLP enablling servlet.
+              Only useful for ULC deployment.</para>
+            </callout>
+
+            <callout arearefs="wings">
+              <para>The Wings libraries and dependencies. Only useful for
+              Wings deployment.</para>
+            </callout>
+
+            <callout arearefs="hibernate">
+              <para>The Hibernate libraries and dependencies.</para>
+            </callout>
+
+            <callout arearefs="db-config">
+              <para>The necessary libraries for database access (JDBC driver)
+              and connexion pooling. Of course, you might use the JDBC driver
+              that matches your targeted database. Here, we still use
+              HSQLDB.</para>
+            </callout>
+
+            <callout arearefs="webapp-config.xml">
+              <para>The spring configuration file that supercedes the one we
+              used during the development phase
+              (<filename>config.xml</filename> in the application jar).
+              Targeting the application to different environments (e.g.
+              development, integration, preproduction, production) is then
+              just a matter of changing the content of this file.</para>
+            </callout>
+
+            <callout arearefs="log4j.properties">
+              <para>The logging configuration file that supercedes the one we
+              used during the development phase
+              (<filename>log4j.properties</filename> in the application
+              jar).</para>
+            </callout>
+
+            <callout arearefs="webstart">
+              <para>The Java Web Start descriptors and resources. We will have
+              a closer look to it. Only useful for ULC deployment.</para>
+            </callout>
+
+            <callout arearefs="client-libs">
+              <para>The directory containing the client libraries for ULC
+              deployment.</para>
+            </callout>
+
+            <callout arearefs="jedit-syntax">
+              <para>A text component capable of coloring code syntax for
+              various languages. It is used to build views on source code
+              property descriptors (a text property containg source
+              code).</para>
+            </callout>
+
+            <callout arearefs="joda-time-client">
+              <para>A library to manipulate duration information. Only useful
+              on server-side for ULC deployment.</para>
+            </callout>
+
+            <callout arearefs="nachocalendar">
+              <para>A calendar component.</para>
+            </callout>
+
+            <callout arearefs="jspresso-client">
+              <para>The <trademark>Jspresso</trademark> client
+              libraries.</para>
+            </callout>
+
+            <callout arearefs="ulc-client">
+              <para>The ULC client libraries.</para>
+            </callout>
+
+            <callout arearefs="substance">
+              <para>The <ulink
+              url="https://substance.dev.java.net/">substance</ulink> swing
+              L&amp;F. Only useful if you want to change the default look and
+              feel of the GUI.</para>
+            </callout>
+
+            <callout arearefs="html-pages">
+              <para>The HTML pages used to log in the user in case of a Wings
+              deployment.</para>
+            </callout>
+          </calloutlist></para>
+
+        <para>Next, we are going to detail the <filename>web.xml</filename>
+        web application descriptor as well as a very basic HTML login page for
+        the Wings deployment and a simple JNLP configuration for ULC
+        deployment.</para>
+      </section>
+
+      <section>
+        <title>The web.xml descriptor</title>
+
+        <para>You will find below a minimal <filename>web.xml</filename>
+        descriptor gathering both Wings and ULC through JNLP
+        deployment.</para>
+
+        <para><programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app
+  id="WebApp_ID"
+  version="2.4"
+  xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt;
+
+  <emphasis role="bold">&lt;!-- Common web application configuration section --&gt;</emphasis> <co
+              id="std-webapp-config" />
+  &lt;display-name&gt;Jspresso HR sample&lt;/display-name&gt;
+  &lt;description&gt;Jspresso HR sample Application&lt;/description&gt;
+
+  &lt;session-config&gt;
+    &lt;session-timeout&gt;5&lt;/session-timeout&gt;
+  &lt;/session-config&gt;
+  <emphasis role="bold">&lt;!-- End common web application configuration section --&gt;</emphasis>
+
+  <emphasis role="bold">&lt;!-- Jspresso all deployments section --&gt;</emphasis> <co
+              id="jspresso-commons" />
+  &lt;servlet&gt; <co id="ResourceProviderServlet" />
+    &lt;servlet-name&gt;ResourceProviderServlet&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.jspresso.framework.util.resources.server.ResourceProviderServlet&lt;/servlet-class&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;ResourceProviderServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/download&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  <emphasis role="bold">&lt;!-- End Jspresso all deployments section --&gt;</emphasis>
+
+  <emphasis role="bold">&lt;!-- ULC deployment section --&gt;</emphasis> <co
+              id="ulc-specifics" />
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;HrSampleUlcServlet&lt;/servlet-name&gt; <co
+              id="HrSampleUlcServlet" />
+    &lt;servlet-class&gt;com.ulcjava.container.servlet.server.ServletContainerAdapter&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;application-class&lt;/param-name&gt;
+      &lt;param-value&gt;org.jspresso.hrsample.startup.UlcHrSampleStartup&lt;/param-value&gt; <co
+              id="UlcHrSampleStartup" />
+    &lt;/init-param&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;HrSampleUlcServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/jspresso-hrsample-ulc&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;JnlpDownloadServlet&lt;/servlet-name&gt; <co
+              id="JnlpDownloadServlet" />
+    &lt;servlet-class&gt;com.sun.javaws.servlet.JnlpDownloadServlet&lt;/servlet-class&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;JnlpDownloadServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;*.jnlp&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+  &lt;mime-mapping&gt;
+    &lt;extension&gt;jnlp&lt;/extension&gt;
+    &lt;mime-type&gt;application/x-java-jnlp-file&lt;/mime-type&gt;
+  &lt;/mime-mapping&gt;
+  <emphasis role="bold">&lt;!-- End ULC deployment section --&gt;</emphasis>
+
+  <emphasis role="bold">&lt;!-- WingS deployment section --&gt;</emphasis> <co
+              id="wings-specifics" />
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;HrSampleWingsServlet&lt;/servlet-name&gt; <co
+              id="HrSampleWingsServlet" />
+    &lt;servlet-class&gt;org.wings.session.WingServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;wings.mainclass&lt;/param-name&gt;
+      &lt;param-value&gt;org.jspresso.hrsample.startup.WingsHrSampleStartup&lt;/param-value&gt; <co
+              id="WingsHrSampleStartup" />
+    &lt;/init-param&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;HrSampleWingsServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/jspresso-hrsample-ajax/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+
+  &lt;servlet&gt; <co id="wings-config" />
+    &lt;description&gt;Direct Web Remoter Servlet&lt;/description&gt;
+    &lt;display-name&gt;DWR Servlet&lt;/display-name&gt;
+    &lt;servlet-name&gt;dwr-invoker&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.directwebremoting.servlet.DwrServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;description&gt;Install a session local CreatorManager&lt;/description&gt;
+      &lt;param-name&gt;org.directwebremoting.extend.CreatorManager&lt;/param-name&gt;
+      &lt;param-value&gt;org.wings.plaf.css.dwr.SessionCreatorManager&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;description&gt;Install a session local AccessControl&lt;/description&gt;
+      &lt;param-name&gt;org.directwebremoting.extend.AccessControl&lt;/param-name&gt;
+      &lt;param-value&gt;org.wings.plaf.css.dwr.SessionAccessControl&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;description&gt;Install a session local Remoter&lt;/description&gt;
+      &lt;param-name&gt;org.directwebremoting.extend.Remoter&lt;/param-name&gt;
+      &lt;param-value&gt;org.wings.plaf.css.dwr.SessionRemoter&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;-1&lt;/load-on-startup&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;dwr-invoker&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/dwr/*&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+
+  &lt;servlet&gt;
+    &lt;servlet-name&gt;LoginServlet&lt;/servlet-name&gt; <co
+              id="LoginServlet" />
+    &lt;servlet-class&gt;org.jspresso.framework.security.LoginServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;jaas-application&lt;/param-name&gt; <co
+              id="jaas-application" />
+      &lt;param-value&gt;hrsample-app&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;success.redirect&lt;/param-name&gt;
+      &lt;param-value&gt;/jspresso-hrsample-ajax&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/servlet&gt;
+  &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;LoginServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/login.do&lt;/url-pattern&gt;
+  &lt;/servlet-mapping&gt;
+
+  &lt;filter&gt;
+    &lt;filter-name&gt;AutenticationFilter&lt;/filter-name&gt; <co
+              id="AutenticationFilter" />
+    &lt;filter-class&gt;org.jspresso.framework.security.SecurityContextFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;login.redirect&lt;/param-name&gt;
+      &lt;param-value&gt;/login.html&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/filter&gt;
+  &lt;filter-mapping&gt;
+    &lt;filter-name&gt;AutenticationFilter&lt;/filter-name&gt;
+    &lt;url-pattern&gt;/jspresso-hrsample-ajax/*&lt;/url-pattern&gt;
+  &lt;/filter-mapping&gt;
+  <emphasis role="bold">&lt;!-- End WingS deployment section --&gt;</emphasis>
+
+&lt;/web-app&gt;</programlisting><calloutlist>
+            <callout arearefs="std-webapp-config">
+              <para>Standard web application configuration with name,
+              description, session timeout and so on.</para>
+            </callout>
+
+            <callout arearefs="jspresso-commons">
+              <para>Some standard <trademark>Jspresso</trademark> components
+              that are not tied to a specific deployment channel.</para>
+            </callout>
+
+            <callout arearefs="ResourceProviderServlet">
+              <para>The resource provider servlet is used internally by the
+              framework to allow the client for downloading a server in-memory
+              generated resource. One example of its usage is when the user
+              requests a report, a PDF is generated in memory by the server
+              and sent back to the client browser without transiting by the
+              file system. Of course, this is one example among others.</para>
+            </callout>
+
+            <callout arearefs="ulc-specifics">
+              <para>This section is only necessary for the ULC deployment
+              channel.</para>
+            </callout>
+
+            <callout arearefs="HrSampleUlcServlet">
+              <para>The standard ULC servlet, along with its mapping...</para>
+            </callout>
+
+            <callout arearefs="UlcHrSampleStartup">
+              <para>... and configured to start the HR sample application ULC
+              startup class, actually the one we have just written.</para>
+            </callout>
+
+            <callout arearefs="JnlpDownloadServlet">
+              <para>The standard JNLP download servlet, provided by Sun
+              Microsystems, that allows for the distribution of the Java Web
+              Start application (i.e. in our case, the ULC client).</para>
+            </callout>
+
+            <callout arearefs="wings-specifics">
+              <para>This section is only necessary for the Wings deployment
+              channel.</para>
+            </callout>
+
+            <callout arearefs="HrSampleWingsServlet">
+              <para>The standard ULC servlet, along with its mapping...</para>
+            </callout>
+
+            <callout arearefs="WingsHrSampleStartup">
+              <para>... and configured to start the HR sample application
+              Wings startup class, actually the one we have just
+              written.</para>
+            </callout>
+
+            <callout arearefs="wings-config">
+              <para>Some extra components that are necessary for the Wings
+              deployment. They are provided by Wings and you it's very
+              unlikely that you will need to change their
+              configuration.</para>
+            </callout>
+
+            <callout arearefs="LoginServlet">
+              <para>A <trademark>Jspresso</trademark> built-in login servlet
+              that is JAAS aware and provides the login capability to the
+              Wings deployment channel, along with its mapping.</para>
+            </callout>
+
+            <callout arearefs="jaas-application">
+              <para>The JAAS configuration section to use to log the user in
+              (declared in the JAAS configuration file).</para>
+            </callout>
+
+            <callout arearefs="AutenticationFilter">
+              <para>A <trademark>Jspresso</trademark> built-in web application
+              filter to prevent an anonymous user to access the
+              application.</para>
+            </callout>
+          </calloutlist><note>
+            <para>ULC and Wings are highly configurable presentation
+            technologies. The <filename>web.xml</filename> descriptor
+            presented above is a minimal (but working) one and their are
+            plenty of options you can tweak to achieve some specific needs.
+            Don't hesitate to open the respective deployment guides to get a
+            complete understanding of what can be achieved in terms of
+            parametrization.</para>
+          </note>We are almost there... All that remain is :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Writing the JNLP descriptors in case of an ULC
+            deployment.</para>
+          </listitem>
+
+          <listitem>
+            <para>Writing the HTML static login page in case of a Wings
+            deployment</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>The JNLP descriptors for an ULC deployment</title>
+
+        <para>As we already discussed it, the preferred way of distributing an
+        ULC based application is through JNLP; the 2 other modes, applet and
+        standalone won't be detailed but feel free to refer to the ULC
+        documentation if you wish to use one of them.</para>
+
+        <para>As described in the WAR structure, the JNLP descriptors are
+        located by convention in the <filename>webstart</filename>
+        subdirectory. Since the ULC client application runs in the Java Web
+        Start security manager, there are some special steps to perform so
+        that the application is given broader access to the client machine
+        resources. For instance, there are <trademark>Jspresso</trademark>
+        built-in actions that allow for choosing a file on the client host
+        file system, saving a file to the client file system, opening a
+        connexion to another server than the one the application runs on, and
+        so on. By default, the Java Web Start sandbox doesn't allow for such
+        actions due to security reasons. Hopefully, you can make some (or all)
+        of your application jars trusted so that once the end user has
+        accepted to release those limitations, the code contained in the
+        trusted jars can be given broader access. This special step is called
+        jar <emphasis>signing</emphasis>. It requires to post-process the jars
+        with a certificate (either delivered and certified by a certificate
+        authority or self generated for development purpose).</para>
+
+        <para>There are plenty of documents over the internet that deal with
+        this standard process and is beyond the scope of this manual to detail
+        this general purpose topic. However, here are some pointers to useful
+        resources that will help you to make a jar trusted :</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><ulink
+            url="http://java.sun.com/docs/books/tutorial/deployment/jar/signindex.html">Signing
+            and Verifying JAR Files</ulink> in the Sun's Java Tutorial will
+            teach you all the basics.</para>
+          </listitem>
+
+          <listitem>
+            <para>The excellent <ulink
+            url="http://yellowcat1.free.fr/keytool_iui.html">KeyTool
+            IUI</ulink> freeware will dramatically ease your keystore and
+            certificates management.</para>
+          </listitem>
+
+          <listitem>
             <para>The <ulink
-            url="http://jasperreports.sourceforge.net/">Jasper Reports</ulink>
-            library and its dependencies. This is used by a built-in
-            <trademark>Jspresso</trademark> action we haven't seen yet that
-            brings first class reporting capabilities to your
-            applications.</para>
-          </callout>
+            url="http://ant.apache.org/manual/CoreTasks/signjar.html">ant
+            signjar task</ulink> will allow you to include jar signing into
+            your build process without effort.</para>
+          </listitem>
+        </itemizedlist>
 
-          <callout arearefs="jboss">
-            <para>The <ulink url="http://www.jboss.org/">JBoss</ulink>
-            implementation of JAAS/LDAP provider.</para>
-          </callout>
+        <para>Following this signing process, the client jars can be divided
+        in 2 different categories : the jars that need to be trusted to
+        overcome the sandbox limitations and the jars that don't need any
+        extra authorization. This is why we need 2 separate JNLP descriptors
+        as shown below.</para>
 
-          <callout arearefs="ulc-server">
-            <para>The ULC server libraries and the JNLP enablling servlet.
-            Only useful for ULC deployment.</para>
-          </callout>
+        <para><note>
+            <para><ulink
+            url="http://java.sun.com/products/javawebstart/1.2/docs/developersguide.html">Java[tm]
+            Web Start Developer's Guide</ulink> is an excellent tutorial to
+            understand and deploy Java Web Start; refer to the section <ulink
+            url="http://java.sun.com/products/javawebstart/1.2/docs/developersguide.html#jnlp">JNLP
+            file syntax</ulink> to get a deeper understanding of what's
+            described below.</para>
+          </note>The <filename>jspresso-hrsample.jnlp</filename> file is the
+        main descriptor and references the signed jars as resources.</para>
 
-          <callout arearefs="wings">
-            <para>The Wings libraries and dependencies. Only useful for Wings
-            deployment.</para>
-          </callout>
+        <para><programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;jnlp spec="1.0+" codebase="$$context/webstart" href="jspresso-hrsample.jnlp"&gt;
 
-          <callout arearefs="hibernate">
-            <para>The Hibernate libraries and dependencies.</para>
-          </callout>
+  &lt;information&gt; <co id="information" />
+    &lt;title&gt;Jspresso HR Sample&lt;/title&gt;
+    &lt;vendor&gt;Jspresso&lt;/vendor&gt;
+    &lt;description&gt;Jspresso HR Sample Application&lt;/description&gt;
+    &lt;homepage href="http://www.jspresso.org"/&gt;
+    &lt;icon href="$$context/webstart/jspresso.jpg" width="192" height="96"/&gt;
+    &lt;icon kind="splash" href="$$context/webstart/jspresso.jpg" width="192" height="96"/&gt;
+  &lt;/information&gt;
 
-          <callout arearefs="db-config">
-            <para>The necessary libraries for database access (JDBC driver)
-            and connexion pooling. Of course, you might use the JDBC driver
-            that matches your targeted database. Here, we still use
-            HSQLDB.</para>
-          </callout>
+  &lt;resources&gt; <co id="resources-trusted" />
+    &lt;j2se version="1.5+" href="http://java.sun.com/products/autodl/j2se"/&gt; <co
+              id="j2se" />
+    &lt;jar href="../lib/jspresso-app-launch.jar" main="true"/&gt; <co
+              id="libraries" />
+    &lt;jar href="../lib/jspresso-swing-components.jar"/&gt;
+    &lt;jar href="../lib/ulc-base-client.jar"/&gt;
+    &lt;jar href="../lib/ulc-base-trusted.jar"/&gt;
+    &lt;jar href="../lib/ulc-jnlp-client.jar"/&gt;
+    &lt;jar href="../lib/nachocalendar.jar"/&gt;
+    &lt;jar href="../lib/substance.jar"/&gt;
+    &lt;property name="swing.defaultlaf" value="org.jvnet.substance.SubstanceLookAndFeel"/&gt; <co
+              id="property-laf" />
+    &lt;property name="sun.awt.noerasebackground" value="true"/&gt; 
+    &lt;extension name="untrusted jars" href="$$context/webstart/jspresso-hrsample-untrusted.jnlp"/&gt; <co
+              id="untrusted-ref" />
+  &lt;/resources&gt;
 
-          <callout arearefs="webapp-config.xml">
-            <para>The spring configuration file that supercedes the one we
-            used during the development phase (<filename>config.xml</filename>
-            in the application jar). Targeting the application to different
-            environments (e.g. development, integration, preproduction,
-            production) is then just a matter of changing the content of this
-            file.</para>
-          </callout>
+  &lt;security&gt; <co id="security" />
+    &lt;all-permissions/&gt;
+  &lt;/security&gt;
 
-          <callout arearefs="log4j.properties">
-            <para>The logging configuration file that supercedes the one we
-            used during the development phase
-            (<filename>log4j.properties</filename> in the application
-            jar).</para>
-          </callout>
+  &lt;application-desc main-class="org.jspresso.framework.application.launch.ulc.jnlp.UlcJnlpLauncher"&gt; <co
+              id="UlcJnlpLauncher" />
+    &lt;argument&gt;-splash&lt;/argument&gt;
+    &lt;argument&gt;$$context/webstart/jspresso.jpg&lt;/argument&gt; <co
+              id="splash" />
+    &lt;argument&gt;$$context/jspresso-hrsample-ulc&lt;/argument&gt; <co
+              id="jspresso-hrsample-url" />
+    &lt;argument&gt;60&lt;/argument&gt; <co id="timeout" />
+    &lt;argument&gt;WARNING&lt;/argument&gt; <co id="log-level" />
+  &lt;/application-desc&gt;
 
-          <callout arearefs="webstart">
-            <para>The Java Web Start descriptors and resources. We will have a
-            closer look to it. Only useful for ULC deployment.</para>
-          </callout>
+&lt;/jnlp&gt;</programlisting><calloutlist>
+            <callout arearefs="information">
+              <para>JNLP standard informations like name, description, splash
+              screen, icon, ...</para>
+            </callout>
 
-          <callout arearefs="client-libs">
-            <para>The directory containing the client libraries for ULC
-            deployment.</para>
-          </callout>
+            <callout arearefs="resources-trusted">
+              <para>The resources list the application relies on.</para>
+            </callout>
 
-          <callout arearefs="jedit-syntax">
-            <para>A text component capable of coloring code syntax for various
-            languages. It is used to build views on source code property
-            descriptors (a text property containg source code).</para>
-          </callout>
+            <callout arearefs="j2se">
+              <para>The Java virtual machine requirement. Here, we need at
+              least a 1.5 VM.</para>
+            </callout>
 
-          <callout arearefs="joda-time-client">
-            <para>A library to manipulate duration information. Only useful on
-            server-side for ULC deployment.</para>
-          </callout>
+            <callout arearefs="libraries">
+              <para>The list of jar libraries that are trusted and required by
+              the client application.</para>
+            </callout>
 
-          <callout arearefs="nachocalendar">
-            <para>A calendar component.</para>
-          </callout>
+            <callout arearefs="property-laf">
+              <para>Java system properties to install the client look and feel
+              (although not necessary, it improves the user
+              experience).</para>
+            </callout>
 
-          <callout arearefs="jspresso-client">
-            <para>The <trademark>Jspresso</trademark> client libraries.</para>
-          </callout>
+            <callout arearefs="untrusted-ref">
+              <para>We reference the other, unsigned, library jars.</para>
+            </callout>
 
-          <callout arearefs="ulc-client">
-            <para>The ULC client libraries.</para>
-          </callout>
+            <callout arearefs="security">
+              <para>This is where we ask to release security for the resources
+              contained in this descriptor; the
+              <emphasis>all-premissions</emphasis> is not strictly requiered
+              by the application but tailoring it further would have
+              unnecessarily complicated things.</para>
+            </callout>
 
-          <callout arearefs="substance">
-            <para>The <ulink
-            url="https://substance.dev.java.net/">substance</ulink> swing
-            L&amp;F. Only useful if you want to change the default look and
-            feel of the GUI.</para>
-          </callout>
+            <callout arearefs="UlcJnlpLauncher">
+              <para>We tell Java Web Start to start the
+              <trademark>Jspresso</trademark> built-in ULC client launcher. It
+              is a fully generic class that is configured by program
+              arguments...</para>
+            </callout>
 
-          <callout arearefs="html-pages">
-            <para>The HTML pages used to log in the user in case of a Wings
-            deployment.</para>
-          </callout>
-        </calloutlist></para>
+            <callout arearefs="splash">
+              <para>... like a splash screen, ...</para>
+            </callout>
 
-      <para></para>
+            <callout arearefs="jspresso-hrsample-url">
+              <para>... the URL to connect to to run tha application; it is
+              actually the URL of the <emphasis>HrSampleUlcServlet</emphasis>
+              as defined in the web.xml descriptor...</para>
+            </callout>
+
+            <callout arearefs="timeout">
+              <para>... the connexion timeout after wich the server is
+              considered as unreachable...</para>
+            </callout>
+
+            <callout arearefs="log-level">
+              <para>... and the logging treshold of the ULC stack.</para>
+            </callout>
+          </calloutlist>The
+        <filename>jspresso-hrsample-untrusted.jnlp</filename> is included by
+        the former one and references the unsigned jars as resources.</para>
+
+        <para><programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;jnlp spec="1.0+" codebase="$$context/webstart" href="bluevox-cms-untrusted.jnlp"&gt;
+
+  &lt;information&gt;
+    &lt;title&gt;Jspresso HR Sample - Untrusted code&lt;/title&gt;
+    &lt;vendor&gt;Jspresso&lt;/vendor&gt;
+  &lt;/information&gt;
+
+  &lt;resources&gt; <co id="resources-untrusted" />
+    &lt;jar href="../lib/jspresso-ulc-components-client.jar"/&gt;
+    &lt;jar href="../lib/jspresso-ulc-components-shared.jar"/&gt;
+    &lt;jar href="../lib/jspresso-util.jar"/&gt;
+    &lt;jar href="../lib/ulc-servlet-client.jar"/&gt;
+    &lt;jar href="../lib/jedit-syntax.jar"/&gt;
+    &lt;jar href="../lib/joda-time.jar"/&gt;
+  &lt;/resources&gt;
+
+  &lt;component-desc/&gt;
+
+&lt;/jnlp&gt;</programlisting><calloutlist>
+            <callout arearefs="resources-untrusted">
+              <para>We list the remaining dependencies of the ULC client
+              application.</para>
+            </callout>
+          </calloutlist><note>
+            <para>As you can see, there is nothing that references the jar
+            specific to our application; the client is then completely generic
+            (only ULC and <trademark>Jspresso</trademark> framework). This
+            really speeds-up the maintenance of a
+            <trademark>Jspresso</trademark> based application since any change
+            on the application side does not require the deployed clients to
+            update anything.</para>
+          </note>That's over for an ULC deployment. For Wings, it is somehow
+        easier since it does not require any further packaging... but some
+        HTML code for the login page.</para>
+      </section>
+
+      <section>
+        <title> The HTML login pages for a Wings deployment</title>
+
+        <para>The following HTML pages show how to implement the
+        <trademark>Jspresso</trademark> login for a Wings deployment. Although
+        they are fully functioning, you will certainly not use them "as is"
+        but rather include the HTML code into some corporate web site
+        following your styling conventions as well as section language.</para>
+
+        <para>The <filename>login.html</filename> file, as referenced in the
+        <filename>web.xml</filename> descriptor :</para>
+
+        <para><programlisting>&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Login&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;form method="post" action="login.do"&gt; <co id="login.do" />
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Name:&lt;/td&gt;
+    &lt;td&gt;&lt;input type="text" name="username"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Password:&lt;/td&gt;
+    &lt;td&gt;&lt;input type="password" name="password"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;&amp;nbsp;&lt;/td&gt;
+    &lt;td&gt;&lt;input type="submit" value="login"&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</programlisting><calloutlist>
+            <callout arearefs="login.do">
+              <para>The login post action as referenced by the login servlet
+              in the <filename>web.xml</filename> descriptor.</para>
+            </callout>
+          </calloutlist>And whenever the login is not successful, the
+        <filename>login-error.html</filename> file, as referenced in the
+        <filename>web.xml</filename> descriptor :</para>
+
+        <para><programlisting>&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Login Error&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Login Error&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</programlisting>That's it for Wings. The last step is to
+        actually deploy the application into the application server.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Deploying to the application server</title>
+
+      <para>Now that you have a complete WAR archive, it is time to deploy it
+      in the application server. This step highly depends on the application
+      server you will choose and ranges from a simple copy into a deployment
+      directory to the use of a specific deployment tool; so refer to the
+      documentation of your J2EE server to know how to perform this task. As
+      an example, in the Apache Tomcat AS, deploying a WAR is a matter of
+      copying it to the <code>webapps/</code> directory.</para>
+
+      <para>There is still one thing to achieve before being able to go live.
+      The JAAS configuration (held in the <filename>jaas.config</filename>
+      file) is a per-JVM configuration. This means that you cannot package
+      your <filename>jaas.config</filename> file into the WAR itself, but you
+      need to make it accessible somewhere in the environment so that you can
+      refer to it in the <code>java.security.auth.login.config</code> java
+      system property on the application server JVM level (as we did it at
+      development time for the standalone swing application). The
+      <filename>jaas.config</filename> file will then gather the JAAS
+      configurations of <emphasis>all</emphasis> the applications deployed in
+      your server. Again, refer to the documentation of your J2EE server to
+      know how to set a java system property in your application server
+      instance. As an example, in the Apache Tomcat AS, setting a system
+      property is achieved by setting the <code>CATALINA_OPTS</code>
+      environment variable, e.g. :</para>
+
+      <para><code>CATALINA_OPTS=-Djava.security.auth.login.config=/path/to/my/jaas.config</code></para>
+
+      <para>We can now see the result of the deployment.</para>
+
+      <section>
+        <title>The first ULC launch</title>
+
+        <para>Point your browser to the
+        <filename>jspresso-hrsample.jnlp</filename> file deployed; this should
+        be in the form
+        <code>http://[machine]:[port]/[webapp-context]/webstart/jspresso-hrsample.jnlp</code>.
+        You shoul see the following happening (this is on a french
+        workstation) :</para>
+
+        <para><figure>
+            <title>Java Web Start downloads the application ULC client</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/JWS_download.jpg" scalefit="1"
+                           width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure><figure>
+            <title>Java Web Start asks the user to approve the certificate you
+            used for signing</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/JWS_certificate.jpg"
+                           scalefit="1" width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure>Once you choose to execute the application, the splash
+        screen appears and the ULC application starts. No screenshot is needed
+        for the running application since they are strictly identical to the
+        ones we saw during swing development time.</para>
+      </section>
+
+      <section>
+        <title>The first Wings launch</title>
+
+        <para>Point your browser to the login.html file deployed; this should
+        be in the form
+        <code>http://[machine]:[port]/[webapp-context]/login.html</code>.</para>
+
+        <para>The browser shows you the "rudimentary" login page.</para>
+
+        <para><figure>
+            <title>The browser displays the login page</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Wings_login.jpg" scalefit="1"
+                           width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure>And you can play with the same application but in AJAX
+        !</para>
+
+        <para><figure>
+            <title>You query the companies in AJAX !</title>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata align="center" contentdepth="60%"
+                           fileref="../images/Wings_application.jpg"
+                           scalefit="1" width="100%" />
+              </imageobject>
+            </mediaobject>
+          </figure>Congratulations! we have now closed the circle and in tenth
+        of the effort usually required to achieve the equivalent, we
+        developped and deployed a multi-channel, distributed desktop-like
+        business application.</para>
+      </section>
+
+      <section>
+        <title>Further reading</title>
+
+        <para></para>
+      </section>
     </section>
   </section>
 </chapter>

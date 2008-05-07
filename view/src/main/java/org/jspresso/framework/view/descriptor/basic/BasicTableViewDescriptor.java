@@ -67,12 +67,14 @@ public class BasicTableViewDescriptor extends BasicCollectionViewDescriptor
     this.columnViewDescriptors = columnViewDescriptors;
     if (columnViewDescriptors != null) {
       ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor());
-      IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
-          .getCollectionDescriptor().getElementDescriptor();
-      for (ISubViewDescriptor columnViewDescriptor : getColumnViewDescriptors()) {
-        columnViewDescriptor.setGrantedRoles(rowModelDescriptor
-            .getPropertyDescriptor(columnViewDescriptor.getName())
-            .getGrantedRoles());
+      if (modelDescriptor != null) {
+        IComponentDescriptor<?> rowModelDescriptor = modelDescriptor
+            .getCollectionDescriptor().getElementDescriptor();
+        for (ISubViewDescriptor columnViewDescriptor : columnViewDescriptors) {
+          columnViewDescriptor.setGrantedRoles(rowModelDescriptor
+              .getPropertyDescriptor(columnViewDescriptor.getName())
+              .getGrantedRoles());
+        }
       }
     }
   }

@@ -195,7 +195,7 @@ public class DefaultWingsViewFactory implements
   private static final double                DEF_DISP_TEMPLATE_PERCENT   = 99;
   private static final char                  TEMPLATE_CHAR               = 'O';
   private static final Date                  TEMPLATE_DATE               = new Date(
-                                                                             3661 * 1000);
+                                                                             27166271000L);
   private static final Long                  TEMPLATE_DURATION           = new Long(
                                                                              IDurationPropertyDescriptor.ONE_SECOND
                                                                                  + IDurationPropertyDescriptor.ONE_MINUTE
@@ -203,7 +203,7 @@ public class DefaultWingsViewFactory implements
                                                                                  + IDurationPropertyDescriptor.ONE_DAY
                                                                                  + IDurationPropertyDescriptor.ONE_WEEK);
   private static final Date                  TEMPLATE_TIME               = new Date(
-                                                                             3661 * 1000);
+                                                                             3661000);
   private IActionFactory<Action, SComponent> actionFactory;
   private IDisplayableAction                 binaryPropertyInfoAction;
   private IConfigurableConnectorFactory      connectorFactory;
@@ -211,7 +211,7 @@ public class DefaultWingsViewFactory implements
   private IListSelectionModelBinder          listSelectionModelBinder;
   private IDisplayableAction                 lovAction;
   private IModelCascadingBinder              modelCascadingBinder;
-  private int                                maxCharacterLength          = 64;
+  private int                                maxCharacterLength          = 48;
 
   private int                                maxColumnCharacterLength    = 32;
   private IMvcBinder                         mvcBinder;
@@ -1503,7 +1503,7 @@ public class DefaultWingsViewFactory implements
         .getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
     adjustSizes(viewComponent, createFormatter(format),
-        getDateTemplateValue(propertyDescriptor), 24);
+        getDateTemplateValue(propertyDescriptor), 64);
     return constructView(viewComponent, null, connector);
   }
 

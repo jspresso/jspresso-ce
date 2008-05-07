@@ -151,10 +151,10 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   public void setPropertyViewDescriptors(
       List<ISubViewDescriptor> propertyViewDescriptors) {
     this.propertyViewDescriptors = propertyViewDescriptors;
-    if (propertyViewDescriptors != null) {
+    if (propertyViewDescriptors != null && getModelDescriptor() != null) {
       IComponentDescriptor<?> componentDescriptor = ((IComponentDescriptorProvider<?>) getModelDescriptor())
           .getComponentDescriptor();
-      for (ISubViewDescriptor propertyViewDescriptor : getPropertyViewDescriptors()) {
+      for (ISubViewDescriptor propertyViewDescriptor : propertyViewDescriptors) {
         propertyViewDescriptor.setGrantedRoles(componentDescriptor
             .getPropertyDescriptor(propertyViewDescriptor.getName())
             .getGrantedRoles());
