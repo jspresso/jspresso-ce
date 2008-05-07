@@ -1263,8 +1263,7 @@ public interface ContactInfo extends
             <callout arearefs="referencedDescriptor">
               <para>We link the reference property descriptor to the
               <code>City</code> entity descriptor we described above (note the
-              usage of the <emphasis role="bold">ref</emphasis> spring
-              attribute).</para>
+              usage of the <code>ref</code> spring attribute).</para>
             </callout>
           </calloutlist>Relaunching the <trademark>Jspresso</trademark>
         generator will update the <filename>ContactInfo.java</filename> source
@@ -3219,19 +3218,24 @@ public class EmployeePropertyProcessors {
     en</code>.</para>
 
     <para>The application context key used above is the one we have just added
-    in the <filename>beanRefFactory.xml</filename> configuration file. Note
-    that you are able to choose the language to use for displaying the tested
-    view through the use of the <code>-language</code> option. Whenever this
-    option is omitted, the view tester will fall back to the platform default
-    locale. Changing the language when testing a view will allow for early
-    missing translations identification.</para>
+    in the <filename>beanRefFactory.xml</filename> configuration file.</para>
 
-    <para>Finally, note that the view tester tool will not display fully
-    functional views. For instance, list of values won't be available (the
-    button will be displayed but won't trigger anything) since the view is not
-    instantiated in the scope of a complete <trademark>Jspresso</trademark>
-    application - no database, ... Its goal is only targeted at quickly
-    previewing the GUI layout to promote agile development.</para>
+    <note>
+      <para>You are able to choose the language to use for displaying the
+      tested view through the use of the <code>-language</code> option.
+      Whenever this option is omitted, the view tester will fall back to the
+      platform default locale. Changing the language when testing a view will
+      allow for early missing translations identification.</para>
+    </note>
+
+    <note>
+      <para>The view tester tool will not display fully functional views. For
+      instance, list of values won't be available (the button will be
+      displayed but won't trigger anything) since the view is not instantiated
+      in the scope of a complete <trademark>Jspresso</trademark> application -
+      no database, ... Its goal is only targeted at quickly previewing the GUI
+      layout to promote agile development.</para>
+    </note>
 
     <para>We can now begin to describe our first views.</para>
 
@@ -3291,12 +3295,16 @@ public class EmployeePropertyProcessors {
           </calloutlist>Although there are plenty of configurations that can
         be applied to view descriptions (font, color, properties subset, ...),
         the previous XML fragment is fully enough to get our first view up and
-        running using the view tester. Note that unlike for the model
-        components, there is no java generation nor compilation step involved;
-        the view descriptors are just handled at runtime by
-        <trademark>Jspresso</trademark>. Launching the tester with the
-        <code>Company.pane</code> view descriptor id will produce the
-        following result :</para>
+        running using the view tester.</para>
+
+        <note>
+          <para>Unlike for the model components, there is no java generation
+          nor compilation step involved; the view descriptors are just handled
+          at runtime by <trademark>Jspresso</trademark>.</para>
+        </note>
+
+        <para>Launching the tester with the <code>Company.pane</code> view
+        descriptor id will produce the following result :</para>
 
         <para><figure>
             <title>The first component view</title>
@@ -4283,7 +4291,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               selection.</para>
             </callout>
           </calloutlist>The crucial part of the previous definition is the use
-        of the <code>masterDetail</code> attribute. It tells the framework
+        of the <code>cascadingModels</code> attribute. It tells the framework
         that the sub-views we are composing are not straightly backed by
         properties of the master model, but each one will be driven by some
         kind of selection in the previous one. Note that this attribute is
@@ -7176,9 +7184,13 @@ public class OrganizationalUnitPropertyProcessors {
       (that may be hierarchically declared) to the successfully logged-in
       user. Then, whenever on of the components listed above is solicited by
       the end user, the framework checks the access according to the declared
-      granted roles. Please note that an application component with no granted
-      roles assigned is considered to be accessible by anyone; this is what we
-      have done until now.</para>
+      granted roles.</para>
+
+      <note>
+        <para>An application component with no granted roles assigned is
+        considered to be accessible by anyone; this is what we have done until
+        now.</para>
+      </note>
 
       <section>
         <title>Restricting access to the application components</title>
@@ -7326,12 +7338,15 @@ hrsample-app {
 
       <para>We won't discuss here the database side since
       <trademark>Jspresso</trademark> database support is directly linked to
-      the Hibernate database support. Please refer to the Hibernate
-      documentation to get a complete understanding of the support and
-      limitations of the database engine you plan to deploy. By the way, you
-      will rarely find any limitation on this side regarding the huge and
-      excellent support Hibernate has on almost each and every common database
-      vendors.</para>
+      the Hibernate database support.</para>
+
+      <note>
+        <para>Refer to the Hibernate documentation to get a complete
+        understanding of the support and limitations of the database engine
+        you plan to deploy. By the way, you will rarely find any limitation on
+        this side regarding the huge and excellent support Hibernate has on
+        almost each and every common database vendors.</para>
+      </note>
 
       <para>Although the Wings library is a LGPL opensource library, ULC is
       not. As of this writing, ULC requires at least a developer licence that
@@ -7340,9 +7355,12 @@ hrsample-app {
       and free software philosophy, but we believe that licensing ULC is
       really worth the money you will spend due to the really high quality,
       performance and support of the library. ULC is developed and supported
-      by <ulink url="http://www.canoo.com/">Canoo</ulink>. One thing to note
-      is that the preferred way to deploy the ULC client is still to use Java
-      Web Start.</para>
+      by <ulink url="http://www.canoo.com/">Canoo</ulink>.</para>
+
+      <note>
+        <para>The preferred way to deploy the ULC client is still to use Java
+        Web Start.</para>
+      </note>
 
       <para>On the Wings side, the architecture is basically the same as ULC,
       but the frontend is an Ajax enabled web application. This makes the
@@ -7526,15 +7544,23 @@ public class WingsHrSampleStartup extends WingsStartup {
       <para>So let's go back to our sample application. The WAR layout should
       be the following (versions of the libraries are omitted but safely
       replace them by the ones distributed with
-      <trademark>Jspresso</trademark>); note that you might complement the
-      content based on the extra libraries you might need in the application.
-      Although typical of a WAR layout, this is a quite long list ! But don't
-      be afraid, we will go into structural details so that you will get a
-      logical understanding of it. Also note that this WAR layout gathers both
-      ULC and Wings deployment channels together. Whenever you choose not to
-      deploy your application through one of these technologies, you can
-      safely get rid of some parts (e.g. webstart is not needed for Wings
-      deployment).</para>
+      <trademark>Jspresso</trademark>).</para>
+
+      <note>
+        <para>You might complement the content based on the extra libraries
+        you might need in the application.</para>
+      </note>
+
+      <note>
+        <para>This WAR layout gathers both ULC and Wings deployment channels
+        together. Whenever you choose not to deploy your application through
+        one of these technologies, you can safely get rid of some parts (e.g.
+        webstart is not needed for Wings deployment).</para>
+      </note>
+
+      <para>Although typical of a WAR layout, this is a quite long list ! But
+      don't be afraid, we will go into structural details so that you will get
+      a logical understanding of it.</para>
 
       <para><programlisting>WEB-INF/
 		web.xml <co id="web.xml" />
@@ -7760,7 +7786,7 @@ login-error.html</programlisting></para>
           <callout arearefs="jedit-syntax">
             <para>A text component capable of coloring code syntax for various
             languages. It is used to build views on source code property
-            descriptors (a text property containg source code). </para>
+            descriptors (a text property containg source code).</para>
           </callout>
 
           <callout arearefs="joda-time-client">
@@ -7792,6 +7818,8 @@ login-error.html</programlisting></para>
             deployment.</para>
           </callout>
         </calloutlist></para>
+
+      <para></para>
     </section>
   </section>
 </chapter>
