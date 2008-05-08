@@ -223,6 +223,12 @@
     <delete dir="${beandoc.output.dir}/tmp" />
   </target>
 
+  <target name="apidoc">
+    <ant antfile="doc/api/src/Jspresso-api.xml"
+         inheritall="false"
+         target="dbdoclet.pdf"/>
+  </target>
+
   <target name="test">
     <delete>
       <fileset dir="${preprocessed.reference.target.dir}/xsl"

@@ -2,7 +2,7 @@
 <project default='dbdoclet.pdf' name='Jspresso-api'>
   <!-- ========================================================== -->
   <!-- Generated from dbdoclet.TiDbit                             -->
-  <!-- Generated at 8 mai 2008 11:13:07                           -->
+  <!-- Generated at 8 mai 2008 12:03:42                           -->
   <!-- http://www.dbdoclet.org                                    -->
   <!-- ========================================================== -->
   <property file='${basedir}/dbdoclet.properties'/>
@@ -108,11 +108,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
@@ -143,11 +143,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
@@ -181,11 +181,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
@@ -211,11 +211,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
@@ -249,11 +249,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
@@ -291,11 +291,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
@@ -337,11 +337,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
@@ -375,11 +375,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
@@ -413,11 +413,11 @@
       <packageset dir='../../../ulc/application/src/main/java'/>
       <packageset dir='../../../swing/application/src/main/java'/>
       <packageset dir='../../../ulc/components/client/src/main/java'/>
-      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../action/src/main/java'/>
+      <packageset dir='../../../ulc/components/shared/src/main/java'/>
       <packageset dir='../../../util/src/main/java'/>
-      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../ulc/components/server/src/main/java'/>
+      <packageset dir='../../../tools/src/main/java'/>
       <packageset dir='../../../jasper/src/main/java'/>
       <packageset dir='../../../wings/components/src/main/java'/>
       <packageset dir='../../../view/src/main/java'/>
