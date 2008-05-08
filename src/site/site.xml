@@ -2,14 +2,9 @@
 <project name="Maven">
   <bannerLeft>
     <name>Jspresso</name>
-    <src>images/jspresso-small.png</src>
+    <src>images/jspresso.jpg</src>
     <href>http://www.jspresso.org</href>
   </bannerLeft>
-  <!--
-    <bannerRight>
-    <src>images/jspresso-small.png</src>
-    </bannerRight>
-  -->
   <body>
     <links>
       <item
