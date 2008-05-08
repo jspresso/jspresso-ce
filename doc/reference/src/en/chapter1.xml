@@ -5,7 +5,7 @@
   <title>Getting started</title>
 
   <para>This chapter will help you to understand the basics of the
-  <trademark>Jspresso</trademark> application framework and how to work with
+  Jspresso application framework and how to work with
   it.</para>
 
   <section>
@@ -14,7 +14,7 @@
     <para>The human resources application is a simple yet comprehensive
     business application targeted at managing a company organization and the
     employees who work in it. It will demonstrate how
-    <trademark>Jspresso</trademark> can handle a domain model with its
+    Jspresso can handle a domain model with its
     relationships and its constraints, present it to the end-user for
     manipulation through various built-in views and actions, handle security
     through profile management, distribute the frontend across the network,
@@ -258,7 +258,7 @@
     feed the framework with them. As we saw before, most of the job will
     consist in describing the different layers in a structured way. But before
     going further, let's define the best practices regarding the logical
-    layering of a typical <trademark>Jspresso</trademark> application
+    layering of a typical Jspresso application
     (although these practices may generally apply to any well designed
     application). We will define 3 logical layers from the bottom to the top
     :</para>
@@ -355,7 +355,7 @@
       </itemizedlist>
 
       <para>We will see later that there virtually any domain model can be
-      extensively described using <trademark>Jspresso</trademark>. This
+      extensively described using Jspresso. This
       includes for instance polymorphic entities or associations, multiple
       inheritance, and so on.</para>
     </section>
@@ -426,7 +426,7 @@
     <title>Describing the domain model</title>
 
     <para>In this chapter, you will learn how to feed the
-    <trademark>Jspresso</trademark> framework with the sample domain model
+    Jspresso framework with the sample domain model
     description.</para>
 
     <section>
@@ -434,7 +434,7 @@
 
       <para>Let's go back to the HR sample application. As for every layer
       introduced above, describing the domain model will consist in assembling
-      <trademark>Jspresso</trademark> description java beans using the <ulink
+      Jspresso description java beans using the <ulink
       url="http://www.springframework.org/">Spring framework Dependency
       Injection Container</ulink>. To achieve this, you will have to write an
       XML file that conforms to the <ulink
@@ -447,10 +447,10 @@
       IDE</ulink>. The latest will offer a lot of productivity enhancement
       with code completion for the XML elements and attributes as well as for
       the description bean class names and properties of
-      <trademark>Jspresso</trademark>.</para>
+      Jspresso.</para>
 
       <para>The various description java beans that are provided by
-      <trademark>Jspresso</trademark> are detailed in the next chapter.</para>
+      Jspresso are detailed in the next chapter.</para>
 
       <para>We will use the root package <code>org.jspresso.hrsample</code>
       for our application. The domain model description will logically go to
@@ -637,8 +637,8 @@
       <title>Generating the code</title>
 
       <para>It is time now to get our interfaces generated before going
-      further. Let's use the <trademark>Jspresso</trademark> generation tool
-      to make it happen. <trademark>Jspresso</trademark> provides a <ulink
+      further. Let's use the Jspresso generation tool
+      to make it happen. Jspresso provides a <ulink
       url="http://freemarker.org/">freemarker</ulink> template to generate the
       components that may be easily triggered using a simple ant task. Since
       this generator explores the spring beans definitions, we first need to
@@ -673,7 +673,7 @@
 &lt;/beans&gt;</programlisting><calloutlist>
           <callout arearefs="brf-commons">
             <para>The commons bean definitions of the
-            <trademark>Jspresso</trademark> framework.</para>
+            Jspresso framework.</para>
           </callout>
 
           <callout arearefs="brf-mock">
@@ -790,7 +790,7 @@ public interface Nameable {
 
       <para>These 2 java classes are in fact interfaces with getters and
       setters for the declared properties. In fact, you will never need any
-      implementation for them since <trademark>Jspresso</trademark> will
+      implementation for them since Jspresso will
       automatically handle their implementation for you at runtime using J2SE
       proxies. This approach relieves the developer from writing the
       implementation classes and thus, improves quality, robustness and
@@ -969,7 +969,7 @@ public class TraceableLifecycleInterceptor extends
         </callout>
       </calloutlist>
 
-      <para>Relaunching the <trademark>Jspresso</trademark> generator will
+      <para>Relaunching the Jspresso generator will
       produce the following class (<filename>City.java</filename>) :</para>
 
       <programlisting language="java">package org.jspresso.hrsample.model;
@@ -1036,7 +1036,7 @@ public interface City extends
           <para><code>City</code> is an entity so the generator made it
           inherit from
           <code>org.jspresso.framework.model.entity.IEntity</code> which is a
-          <trademark>Jspresso</trademark> framework base class.</para>
+          Jspresso framework base class.</para>
         </callout>
       </calloutlist>
 
@@ -1125,7 +1125,7 @@ public interface City extends
         </callout>
       </calloutlist>
 
-      <para>Relaunching the <trademark>Jspresso</trademark> generator will
+      <para>Relaunching the Jspresso generator will
       produce the following class (<filename>ContactInfo.java</filename>)
       :</para>
 
@@ -1207,7 +1207,7 @@ public interface ContactInfo extends
           <para><code>ContactInfo</code> is an entity so the generator made it
           inherit from
           <code>org.jspresso.framework.model.component.IComponent</code> which
-          is a <trademark>Jspresso</trademark> framework base class.</para>
+          is a Jspresso framework base class.</para>
         </callout>
       </calloutlist>
 
@@ -1265,7 +1265,7 @@ public interface ContactInfo extends
               <code>City</code> entity descriptor we described above (note the
               usage of the <code>ref</code> spring attribute).</para>
             </callout>
-          </calloutlist>Relaunching the <trademark>Jspresso</trademark>
+          </calloutlist>Relaunching the Jspresso
         generator will update the <filename>ContactInfo.java</filename> source
         file we generated above, but since this is a unidirectional
         relationship, the <filename>City.java</filename> file will remain
@@ -1337,7 +1337,7 @@ public interface ContactInfo extends
             </callout>
           </calloutlist>This first relationship is fairly simple since it is a
         n-1 unidirectional association. Of course, the
-        <trademark>Jspresso</trademark> can seamlessly handle 1-n, 1-1 and n-n
+        Jspresso can seamlessly handle 1-n, 1-1 and n-n
         unidirectional and bi-directional associations and compositions
         (strong aggregations).</para>
 
@@ -1585,7 +1585,7 @@ public interface ContactInfo extends
         applications. Your descriptor sources will be more concise and more
         readable and maintainable.</para>
 
-        <para>Launching the <trademark>Jspresso</trademark> generator will
+        <para>Launching the Jspresso generator will
         generate the <filename>Employee.java</filename> source file :</para>
 
         <para><programlisting language="java">package org.jspresso.hrsample.model;
@@ -1979,7 +1979,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
     <section>
       <title>Bi-directional relationships</title>
 
-      <para>It is time see how the <trademark>Jspresso</trademark> framework
+      <para>It is time see how the Jspresso framework
       handles relationships which are navigable at both ends.</para>
 
       <section>
@@ -2130,7 +2130,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
         </orderedlist>
 
         <para>As you can see above, you can expect the
-        <trademark>Jspresso</trademark> framework to extensively and
+        Jspresso framework to extensively and
         transparently manage any bi-directional relationship for you. Just
         call whatever accessor you want and the domain model will be updated
         consistently.</para>
@@ -2323,7 +2323,7 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
 
         <para>Certainly one of the most difficult relationship to handle in
         business software development is the N-N relationship navigable at
-        both ends. Here again, <trademark>Jspresso</trademark> handles all the
+        both ends. Here again, Jspresso handles all the
         complex plumbing for you. All you need to do is to declare both ends
         of the relationship as being a collection property descriptor. The
         following XML fragment illustrates this for the <code>Team</code>
@@ -2422,11 +2422,11 @@ public interface Employee extends org.jspresso.hrsample.model.Nameable,
     <section>
       <title>Component services</title>
 
-      <para>As of now, we have only dealt with <trademark>Jspresso</trademark>
+      <para>As of now, we have only dealt with Jspresso
       component properties. There might be situations where you want (or you
       need) your domain model components to implement arbitrary interfaces
       (maybe legacy interfaces) and provide an arbitrary implementation for
-      them. The <trademark>Jspresso</trademark> framework supports it at any
+      them. The Jspresso framework supports it at any
       level of the domain model. As an example, let's consider the
       <code>EmployeeService</code> interface that we want all of our employee
       components to implement. This service provides one method to compute age
@@ -2541,7 +2541,7 @@ public class EmployeeServiceDelegate implements IComponentService { <co
       <code>EmployeeService</code>. This is simply because although the names
       of the implemented methods must match, their signature is augmented by
       the component instance to work on. This allows the
-      <trademark>Jspresso</trademark> framework to share services delegates
+      Jspresso framework to share services delegates
       across multiple component instances.</para>
 
       <para>A re-generation of the <filename>Employee.java</filename> source
@@ -2555,7 +2555,7 @@ public interface Employee extends
   org.jspresso.framework.model.entity.IEntity,
   org.jspresso.hrsample.model.service.EmployeeService {
 ...
-}</programlisting>Again, <trademark>Jspresso</trademark> will seamlessly take
+}</programlisting>Again, Jspresso will seamlessly take
       care of triggering the delegates' methods, passing the right parameters,
       whenever the service is requested on the target component.</para>
     </section>
@@ -2569,12 +2569,12 @@ public interface Employee extends
       of them. It is fairly easy to compute the age of an employee from his
       birth date and this is the service we have just implemented above. Of
       course computed properties are not limited to entities. They can be
-      declared on any <trademark>Jspresso</trademark> managed component
+      declared on any Jspresso managed component
       (inlined components, interfaces and entities). And they are not limited
       to scalar properties. Even a collection property or a reference property
       may be computed this way.</para>
 
-      <para>Let's see how we can link it using <trademark>Jspresso</trademark>
+      <para>Let's see how we can link it using Jspresso
       :</para>
 
       <para><programlisting language="xml">&lt;bean
@@ -2689,7 +2689,7 @@ public class EmployeeExtension extends
       consist in keeping the computed age value for later use and listening to
       changes of the birth date property to invalidate the age cached value.
       Hopefully, the implementation is almost straightforward since every
-      <trademark>Jspresso</trademark> managed component can be listened to for
+      Jspresso managed component can be listened to for
       property changes.</para>
 
       <para>The following update of the <filename>Employee.java</filename>
@@ -2845,9 +2845,9 @@ public class EmployeeExtension extends AbstractComponentExtension&lt;Employee&gt
       <para>As far as the second and third points are concerned, we have seen
       nothing yet that would help to cover it.</para>
 
-      <para>Fortunately, the <trademark>Jspresso</trademark> framework allows
+      <para>Fortunately, the Jspresso framework allows
       you to implement property processors that can be registered with any
-      property you define on a <trademark>Jspresso</trademark> managed
+      property you define on a Jspresso managed
       component. This includes :</para>
 
       <orderedlist>
@@ -3088,13 +3088,13 @@ public class EmployeePropertyProcessors {
 
       <listitem>
         <para>To assemble descriptor beans in order to translate what has been
-        specified into <trademark>Jspresso</trademark> view
+        specified into Jspresso view
         descriptors.</para>
       </listitem>
     </orderedlist>
 
     <para>As far as we begin to deal with GUI, internationalization (I18N)
-    comes into the game. <trademark>Jspresso</trademark> is definitely
+    comes into the game. Jspresso is definitely
     targeted at multi-lingual applications and as such, fully supports
     internationalized GUIs.</para>
 
@@ -3130,7 +3130,7 @@ public class EmployeePropertyProcessors {
   &lt;/bean&gt;
 &lt;/beans&gt;</programlisting><calloutlist>
         <callout arearefs="commonsMessageSource">
-          <para>We inherit the default <trademark>Jspresso</trademark> I18N
+          <para>We inherit the default Jspresso I18N
           resource bundles that contain translated entries for generic
           terms.</para>
         </callout>
@@ -3139,10 +3139,10 @@ public class EmployeePropertyProcessors {
           <para>We declare the list of I18N resource bundles we are going to
           use to store the translations.</para>
         </callout>
-      </calloutlist><trademark>Jspresso</trademark> relies on the well-known
+      </calloutlist>Jspresso relies on the well-known
     java I18N mechanism through the use of resource bundle property files.
     Translating the application is then a matter of translating the entries
-    contained in these property files. Since <trademark>Jspresso</trademark>
+    contained in these property files. Since Jspresso
     never use absolute positioning but instead heavily relies on layouts, the
     translator won't have to care about translations length.</para>
 
@@ -3155,11 +3155,11 @@ public class EmployeePropertyProcessors {
     the English and French translations. Adding a language will be just a
     mater of creating, in the same package, a new property file with the 2
     letter ISO code of the language. Those 2 files are empty as of now but
-    don't care about that; <trademark>Jspresso</trademark> will graphically
+    don't care about that; Jspresso will graphically
     notify you that a translation is missing for a given language.</para>
 
     <para>In order to ease the work of the GUI designer,
-    <trademark>Jspresso</trademark> provides a view tester tool that enables
+    Jspresso provides a view tester tool that enables
     an immediate java swing preview of each described view fragment. In order
     to have this tool up and running, we need to create a new entry in the
     <filename>beanRefFactory.xml</filename> file we created when designing the
@@ -3199,18 +3199,18 @@ public class EmployeePropertyProcessors {
 
         <callout arearefs="commons-frontend.xml">
           <para>The commons frontend bean definitions of the
-          <trademark>Jspresso</trademark> framework.</para>
+          Jspresso framework.</para>
         </callout>
 
         <callout arearefs="commons-swing.xml">
           <para>The commons swing bean definitions of the
-          <trademark>Jspresso</trademark> framework.</para>
+          Jspresso framework.</para>
         </callout>
 
         <callout arearefs="hrsample-frontend.xml">
           <para>Our sample application frontend description.</para>
         </callout>
-      </calloutlist>In order to start the <trademark>Jspresso</trademark> view
+      </calloutlist>In order to start the Jspresso view
     tester tool, we will launch the
     <code>org.jspresso.framework.tools.viewtester.ViewTester</code> java class
     with the following arguments : <code>-applicationContextKey
@@ -3232,7 +3232,7 @@ public class EmployeePropertyProcessors {
       <para>The view tester tool will not display fully functional views. For
       instance, list of values won't be available (the button will be
       displayed but won't trigger anything) since the view is not instantiated
-      in the scope of a complete <trademark>Jspresso</trademark> application -
+      in the scope of a complete Jspresso application -
       no database, ... Its goal is only targeted at quickly previewing the GUI
       layout to promote agile development.</para>
     </note>
@@ -3300,7 +3300,7 @@ public class EmployeePropertyProcessors {
         <note>
           <para>Unlike for the model components, there is no java generation
           nor compilation step involved; the view descriptors are just handled
-          at runtime by <trademark>Jspresso</trademark>.</para>
+          at runtime by Jspresso.</para>
         </note>
 
         <para>Launching the tester with the <code>Company.pane</code> view
@@ -3392,7 +3392,7 @@ public class EmployeePropertyProcessors {
 
           <listitem>
             <para>Finally, there are terms that are missing translations in
-            English. Whenever <trademark>Jspresso</trademark> detects such a
+            English. Whenever Jspresso detects such a
             situation, it will "translate" the term using the following
             pattern <emphasis>[language:translation key]</emphasis>. This
             strategy allows for easy and fast identification of missing
@@ -3734,7 +3734,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <title>Improving the view aspect</title>
 
         <para>We can make the view a little more attractive by adding icons
-        and tool tips. Using <trademark>Jspresso</trademark>, it is quite
+        and tool tips. Using Jspresso, it is quite
         straightforward by completing the descriptors :</para>
 
         <itemizedlist>
@@ -3833,7 +3833,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         <itemizedlist>
           <listitem>
             <para>Name, description and icons can be used in different layers
-            of the application. <trademark>Jspresso</trademark> will then take
+            of the application. Jspresso will then take
             advantage of these attributes to generate tool tips, to place
             icons, to fill-in labels in the following order (higher in the
             list has higher priority) :</para>
@@ -3854,7 +3854,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
           <listitem>
             <para>To reference an image to be used as icon, you may use any
-            kind of URL (HTTP, file) but <trademark>Jspresso</trademark>
+            kind of URL (HTTP, file) but Jspresso
             provides a very useful, specialized URL which is the
             <code>classpath:</code> URL. Such a URL may be used to reference
             any resource present in the application classpath. As an example,
@@ -3882,7 +3882,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <section>
         <title>Other composite views</title>
 
-        <para><trademark>Jspresso</trademark> offers a rich set of composite
+        <para>Jspresso offers a rich set of composite
         view descriptors. Although we won't detail them in this section, the
         following enumeration lists them :</para>
 
@@ -4043,12 +4043,12 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         this menu bar, you will find menus -action categories- like "File",
         "Edit", "Help" and in each menu, a list of individual actions. This is
         the exact same principle of an action map, but instead of being a
-        rendered as a menu bar, the <trademark>Jspresso</trademark> framework
+        rendered as a menu bar, the Jspresso framework
         will make a tool bar out of it, and in certain situations a context
         menu, that will make the actions available to the end user.</para>
 
         <para>In this section, we won't go describe in detail how to develop
-        and declare an action. Actually, <trademark>Jspresso</trademark> comes
+        and declare an action. Actually, Jspresso comes
         with a large set of pre-defined, ready-to-use general purpose actions
         (and even action maps) that are sufficient for most classic
         operations. Look at the following XML fragment :</para>
@@ -4202,7 +4202,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         are not directly related to the company but to the
         <emphasis>selected</emphasis> department in the intermediate
         department table view. So we need to instruct
-        <trademark>Jspresso</trademark> that we want this nested master-detail
+        Jspresso that we want this nested master-detail
         behaviour.</para>
 
         <para>Let's first describe the teams collection view; for the sake of
@@ -4251,7 +4251,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         the previous department view. We now need to assemble the
         <code>Company-departments.table</code> and the new
         <code>Department-teams.table</code> into a split view and tell
-        <trademark>Jspresso</trademark> to drive the teams table content with
+        Jspresso to drive the teams table content with
         the departments table selection :</para>
 
         <para><programlisting language="xml">&lt;bean
@@ -4287,7 +4287,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
             <callout arearefs="cascadingModels">
               <para>We declare this composite view a master-detail view for
-              <trademark>Jspresso</trademark> to track the departments
+              Jspresso to track the departments
               selection.</para>
             </callout>
           </calloutlist>The crucial part of the previous definition is the use
@@ -4353,7 +4353,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <para>Tree views are certainly the most complicated but also the most
       intuitive type of view to display and manage a structured model. Anyone
       who ever tried to build a truly MVC aware GUI using trees knows that
-      there are many caveats to avoid. <trademark>Jspresso</trademark>
+      there are many caveats to avoid. Jspresso
       drastically simplifies getting a tree view up and running while keeping
       its original description centric philosophy.</para>
 
@@ -4551,7 +4551,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
         display, under each team, a subtree for the projects managed by a team
         and a subtree for the team members.</para>
 
-        <para><trademark>Jspresso</trademark> allows you aggregate the 2
+        <para>Jspresso allows you aggregate the 2
         simple tree levels (projects and team members) into a composite tree
         level and make this composite tree level the child level of the team
         tree level.</para>
@@ -4561,7 +4561,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     <section>
       <title>Other types of views</title>
 
-      <para><trademark>Jspresso</trademark> offers many other types of views
+      <para>Jspresso offers many other types of views
       to build arbitrarily complex views to enhance the user experience. We
       won't describe theme in detail in this tutorial but you can refer to the
       view descriptor reference section for a complete description. Fell free
@@ -4579,7 +4579,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
     <title>Wiring the application</title>
 
     <para>As we saw it at the beginning of this tutorial, a
-    <trademark>Jspresso</trademark> based application is cleanly organized
+    Jspresso based application is cleanly organized
     into 3 separate layers :</para>
 
     <orderedlist>
@@ -4649,7 +4649,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
       <para>The backend layer is organized around the backend controller. The
       backend controller is the conductor of all backend operations. As of
-      now, <trademark>Jspresso</trademark> provides one concrete
+      now, Jspresso provides one concrete
       implementation of a backend controller : the Hibernate backend
       controller. This implementation provides all the backend management
       described above using hibernate and the hibernate spring stack (using
@@ -4718,7 +4718,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
   &lt;/constructor-arg&gt;
 &lt;/bean&gt;</programlisting><calloutlist>
           <callout arearefs="commons-hibernate.xml">
-            <para>This is the standard <trademark>Jspresso</trademark> spring
+            <para>This is the standard Jspresso spring
             configuration file to bring an hibernate powered backend to our
             application.</para>
           </callout>
@@ -4865,7 +4865,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 &lt;target name="all" depends="generate-entities, xdoclet-hibernate" /&gt;</programlisting><calloutlist>
           <callout arearefs="replaceregexp">
             <para>The "replaceregexp" section is important for the inlined
-            components mapping to support <trademark>Jspresso</trademark>
+            components mapping to support Jspresso
             ones; as of this writing, xDoclet does not support for changing
             the tuplizer of an entity or component, which is required.</para>
           </callout>
@@ -4988,7 +4988,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       <title>Starting up the application</title>
 
       <para>To be able to launch the application, we need a startup class. In
-      <trademark>Jspresso</trademark>, the startup class configures the spring
+      Jspresso, the startup class configures the spring
       context to be used when starting the application. The actual startup is
       performed by a generic launcher depending on the presentation technology
       used. For instance, the swing generic launcher is
@@ -5122,15 +5122,15 @@ INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : 
       </itemizedlist>
 
       <para>Both of these topics are extensively covered by the
-      <trademark>Jspresso</trademark> framework. This chapter covers the
+      Jspresso framework. This chapter covers the
       authentication part.</para>
 
-      <para>Authentication in a <trademark>Jspresso</trademark> application
+      <para>Authentication in a Jspresso application
       relies on JAAS (Java Authentication and Authorization Service). We will
       not go into details about JAAS since there are excellent tutorials on
       the web (<ulink
       url="http://java.sun.com/j2se/1.5.0/docs/guide/security/jaas/tutorials/index.html">this
-      one</ulink> for instance). <trademark>Jspresso</trademark> provides all
+      one</ulink> for instance). Jspresso provides all
       the necessary plumbing to seamlessly integrate any JAAS login module and
       as of this writing, there are 2 login modules that come with the
       framework :</para>
@@ -5286,7 +5286,7 @@ hrsample-app { <co id="hrsample-app" />
     <title>Creating and registering application workspaces and modules</title>
 
     <para>Before getting further in this section, let's first agree on what
-    application workspaces and modules are. <trademark>Jspresso</trademark>
+    application workspaces and modules are. Jspresso
     defines an application module as a projection of the domain model offering
     services. It is an autonomous part of the application that can be
     registered in workspaces which in turn are registered in the frontend
@@ -5334,7 +5334,7 @@ hrsample-app { <co id="hrsample-app" />
       role="bold">C</emphasis>reate <emphasis role="bold">R</emphasis>etrieve
       <emphasis role="bold">U</emphasis>pdate <emphasis
       role="bold">D</emphasis>elete) services on the application master data
-      (actually the cities). As always, <trademark>Jspresso</trademark> is
+      (actually the cities). As always, Jspresso is
       offering a large range of built-in, ready to assemble components to
       achieve this.</para>
 
@@ -5393,7 +5393,7 @@ hrsample-app { <co id="hrsample-app" />
 &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="Workspace">
               <para>We declare our new workspace inheriting from the
-              <trademark>Jspresso</trademark> standard built-in workspace
+              Jspresso standard built-in workspace
               component that may fit most of standard usages.</para>
             </callout>
 
@@ -5405,7 +5405,7 @@ hrsample-app { <co id="hrsample-app" />
 
             <callout arearefs="abstractFilterableBeanCollectionModule">
               <para>We declare the cities module inheriting the
-              <trademark>Jspresso</trademark> standard built-in filterable
+              Jspresso standard built-in filterable
               bean collection module component that may fit most of standard
               usages.</para>
             </callout>
@@ -5718,7 +5718,7 @@ hrsample-app { <co id="hrsample-app" />
         particular case, the logged-in user account would be used as the
         module object of the account editing module. The question left is how
         to initialize the user account as the bean module object? Every
-        <trademark>Jspresso</trademark> application module provides a startup
+        Jspresso application module provides a startup
         hook that gets triggered when the module is first selected by the
         end-user. So in this case, you would code a custom startup action to
         retrieve the logged-in user informations from whatever backing store
@@ -5728,7 +5728,7 @@ hrsample-app { <co id="hrsample-app" />
         advanced topic is beyond the scope of this section, but read further
         to learn how to write custom actions and remember that you can
         register them as being startup-triggered at different places in a
-        <trademark>Jspresso</trademark> application i.e. controller (when the
+        Jspresso application i.e. controller (when the
         application starts) and modules (when the module is first
         selected).</para>
       </section>
@@ -5758,7 +5758,7 @@ hrsample-app { <co id="hrsample-app" />
       <para>It is also a good idea to centralize the test data production in a
       separate class that can be used by the various development startup class
       (actually one per presentation technology) and thus avoiding un-needed
-      duplication of code. <trademark>Jspresso</trademark> offers an abstract
+      duplication of code. Jspresso offers an abstract
       base class for this task :
       <code>org.jspresso.framework.application.startup.development.AbstractTestDataPersister</code>
       on which you simply have to override the <code>persistTestData()</code>
@@ -6816,12 +6816,12 @@ public class OrganizationalUnitPropertyProcessors {
           <title>Managing team members</title>
 
           <para>Managing team members will give us the oportunity to introduce
-          the <trademark>Jspresso</trademark> action framework. Actually, we
+          the Jspresso action framework. Actually, we
           have already used action maps and action lists to assemble simple
           standard CRUD operations in views (refer to the master-detail action
           map). This time, we need to go a little bit further since there is
           no out-of-the-box action to cover our needs. But don't be afraid, we
-          will still compose <trademark>Jspresso</trademark> standard actions
+          will still compose Jspresso standard actions
           without writing a single line of java code !</para>
 
           <para>We will compose 2 actions to manage team members :</para>
@@ -6843,7 +6843,7 @@ public class OrganizationalUnitPropertyProcessors {
           team members of the selected team in the company management module
           (a somehow classic master-detail view between teams and team
           members). One thing that you may not pay attention to, and this is
-          quite normal since <trademark>Jspresso</trademark> handles it
+          quite normal since Jspresso handles it
           transparently, is the fact that the relationship between teams and
           employees is a bi-directional N-N association. We will handle here
           one of the association side exactly as if it was a 1-N relationship.
@@ -6966,7 +6966,7 @@ public class OrganizationalUnitPropertyProcessors {
               <callout arearefs="lovAction">
                 <para>The selection action is a kind of list of values (LOV)
                 action (listing existing employees). We reuse the built-in
-                <trademark>Jspresso</trademark> LOV action (actually
+                Jspresso LOV action (actually
                 inheriting its spring definition) and customize it to meet our
                 needs.</para>
               </callout>
@@ -6997,7 +6997,7 @@ public class OrganizationalUnitPropertyProcessors {
 
               <callout arearefs="AddAnyCollectionToMasterAction">
                 <para>... by registering another
-                <trademark>Jspresso</trademark> built-in action that adds an
+                Jspresso built-in action that adds an
                 arbitrary collection of objects (in our case the LOV selected
                 employee) to the master model on which it was triggered (the
                 selected team).</para>
@@ -7005,7 +7005,7 @@ public class OrganizationalUnitPropertyProcessors {
 
               <callout arearefs="removeAnyCollectionFromMasterFrontAction">
                 <para>Removing a team member is somehow easier. We just reuse
-                another <trademark>Jspresso</trademark> built-in action that
+                another Jspresso built-in action that
                 removes an arbitrary collection of objects (in our case the
                 selected employees) from the master model on which it was
                 triggered (the selected team).</para>
@@ -7100,7 +7100,7 @@ public class OrganizationalUnitPropertyProcessors {
               </tgroup>
             </table></para>
 
-          <para><trademark>Jspresso</trademark> comes with tens of
+          <para>Jspresso comes with tens of
           configurable built-in actions like the ones we've just used
           (wizards, user decisions through pop-ups to control the application
           flow, reporting, file download, ...). This is beyond the scope of
@@ -7124,7 +7124,7 @@ public class OrganizationalUnitPropertyProcessors {
       Basically, it allows for securing java methods and requires
       modifications in the source code.</para>
 
-      <para>The <trademark>Jspresso</trademark> framework covers the
+      <para>The Jspresso framework covers the
       authorization part in a much more declarative and loosely coupled way.
       All you need to do is to declare the granted roles (you may name them
       profiles or groups) on the application component you want to secure the
@@ -7180,7 +7180,7 @@ public class OrganizationalUnitPropertyProcessors {
       overall philosophy is to secure the caller and not the callee (the view,
       the web service, ... and not the model).</para>
 
-      <para>The <trademark>Jspresso</trademark> login modules assign roles
+      <para>The Jspresso login modules assign roles
       (that may be hierarchically declared) to the successfully logged-in
       user. Then, whenever on of the components listed above is solicited by
       the end user, the framework checks the access according to the declared
@@ -7243,7 +7243,7 @@ public class OrganizationalUnitPropertyProcessors {
       <section>
         <title>Testing the authorizations enforcement</title>
 
-        <para>The <trademark>Jspresso</trademark> development login module
+        <para>The Jspresso development login module
         allows for arbitrarily changing the user role so that authorization
         can be quickly and efficiently tested. We will use this feature to
         test the workspace restrictions that we have declared above.</para>
@@ -7299,7 +7299,7 @@ hrsample-app {
 
     <para>Last but not least, we need to package and deploy the final
     application. Choosing the target environment highly depends on the
-    requirements. <trademark>Jspresso</trademark> supports as of now 3
+    requirements. Jspresso supports as of now 3
     different deployment scenarios : Swing, AJAX (<ulink
     url="???">Wings</ulink>) and <ulink
     url="http://www.canoo.com/ulc/">ULC</ulink>.</para>
@@ -7327,7 +7327,7 @@ hrsample-app {
       tomcat</ulink> is one of them, free and production-ready). This means
       that you can just package your application as a WAR archive and drop it
       in the application server to have it deployed.
-      <trademark>Jspresso</trademark>, although very powerful and flexible
+      Jspresso, although very powerful and flexible
       doesn't require an overkilling, latest specifications compliant,
       application server. Once this is said, there are times when your
       application specific needs might require one of them. For instance, if
@@ -7337,7 +7337,7 @@ hrsample-app {
       stay in the free and opensource world.</para>
 
       <para>We won't discuss here the database side since
-      <trademark>Jspresso</trademark> database support is directly linked to
+      Jspresso database support is directly linked to
       the Hibernate database support.</para>
 
       <note>
@@ -7351,7 +7351,7 @@ hrsample-app {
       <para>Although the Wings library is a LGPL opensource library, ULC is
       not. As of this writing, ULC requires at least a developer licence that
       comes with an unlimited deployment licence.
-      <trademark>Jspresso</trademark> is strongly attached to the opensource
+      Jspresso is strongly attached to the opensource
       and free software philosophy, but we believe that licensing ULC is
       really worth the money you will spend due to the really high quality,
       performance and support of the library. ULC is developed and supported
@@ -7366,7 +7366,7 @@ hrsample-app {
       but the frontend is an Ajax enabled web application. This makes the
       deployment of the client really smooth (no plugin), but the look and
       feel has many differences compared to the Swing and ULC front-end.
-      Although <trademark>Jspresso</trademark> tends to limit those
+      Although Jspresso tends to limit those
       differences to their minimum, some of them (like table cells mouseless
       navigation) cannot be bypassed due to the underlying limitations.
       Improving the look of a Wings application might also require some web
@@ -7465,7 +7465,7 @@ public class WingsHrSampleStartup extends WingsStartup {
         </calloutlist>Of course, we need to complement the spring bootstrap
       config file with these new contexts. Simply edit the
       <filename>beanRefFactory.xml</filename> and create the new entries
-      simply assembling the corresponding <trademark>Jspresso</trademark>
+      simply assembling the corresponding Jspresso
       built-in spring definitions; it is actually simply a matter of replacing
       the swing specific ones by the ULC or Wings specific ones :</para>
 
@@ -7551,7 +7551,7 @@ public class WingsHrSampleStartup extends WingsStartup {
         <para>So let's go back to our sample application. The WAR layout
         should be the following (versions of the libraries are omitted but
         safely replace them by the ones distributed with
-        <trademark>Jspresso</trademark>).</para>
+        Jspresso).</para>
 
         <note>
           <para>You might complement the content based on the extra libraries
@@ -7701,7 +7701,7 @@ login-error.html</programlisting></para>
             </callout>
 
             <callout arearefs="jspresso-server">
-              <para>The <trademark>Jspresso</trademark> server
+              <para>The Jspresso server
               libraries.</para>
             </callout>
 
@@ -7713,7 +7713,7 @@ login-error.html</programlisting></para>
               <para>The <ulink
               url="http://jakarta.apache.org/bsf/">BSF</ulink> (Bean Scripting
               Framework) library. This is used by a built-in
-              <trademark>Jspresso</trademark> action we haven't seen yet. It
+              Jspresso action we haven't seen yet. It
               allows for the action code to be entirely scripted using a BSF
               supported scripting language (Jython, Groovy, BeanShell,
               ...)</para>
@@ -7735,7 +7735,7 @@ login-error.html</programlisting></para>
               <para>The <ulink
               url="http://jasperreports.sourceforge.net/">Jasper
               Reports</ulink> library and its dependencies. This is used by a
-              built-in <trademark>Jspresso</trademark> action we haven't seen
+              built-in Jspresso action we haven't seen
               yet that brings first class reporting capabilities to your
               applications.</para>
             </callout>
@@ -7809,7 +7809,7 @@ login-error.html</programlisting></para>
             </callout>
 
             <callout arearefs="jspresso-client">
-              <para>The <trademark>Jspresso</trademark> client
+              <para>The Jspresso client
               libraries.</para>
             </callout>
 
@@ -7990,7 +7990,7 @@ login-error.html</programlisting></para>
             </callout>
 
             <callout arearefs="jspresso-commons">
-              <para>Some standard <trademark>Jspresso</trademark> components
+              <para>Some standard Jspresso components
               that are not tied to a specific deployment channel.</para>
             </callout>
 
@@ -8046,7 +8046,7 @@ login-error.html</programlisting></para>
             </callout>
 
             <callout arearefs="LoginServlet">
-              <para>A <trademark>Jspresso</trademark> built-in login servlet
+              <para>A Jspresso built-in login servlet
               that is JAAS aware and provides the login capability to the
               Wings deployment channel, along with its mapping.</para>
             </callout>
@@ -8057,7 +8057,7 @@ login-error.html</programlisting></para>
             </callout>
 
             <callout arearefs="AutenticationFilter">
-              <para>A <trademark>Jspresso</trademark> built-in web application
+              <para>A Jspresso built-in web application
               filter to prevent an anonymous user to access the
               application.</para>
             </callout>
@@ -8097,7 +8097,7 @@ login-error.html</programlisting></para>
         subdirectory. Since the ULC client application runs in the Java Web
         Start security manager, there are some special steps to perform so
         that the application is given broader access to the client machine
-        resources. For instance, there are <trademark>Jspresso</trademark>
+        resources. For instance, there are Jspresso
         built-in actions that allow for choosing a file on the client host
         file system, saving a file to the client file system, opening a
         connexion to another server than the one the application runs on, and
@@ -8240,7 +8240,7 @@ login-error.html</programlisting></para>
 
             <callout arearefs="UlcJnlpLauncher">
               <para>We tell Java Web Start to start the
-              <trademark>Jspresso</trademark> built-in ULC client launcher. It
+              Jspresso built-in ULC client launcher. It
               is a fully generic class that is configured by program
               arguments...</para>
             </callout>
@@ -8294,9 +8294,9 @@ login-error.html</programlisting></para>
           </calloutlist><note>
             <para>As you can see, there is nothing that references the jar
             specific to our application; the client is then completely generic
-            (only ULC and <trademark>Jspresso</trademark> framework). This
+            (only ULC and Jspresso framework). This
             really speeds-up the maintenance of a
-            <trademark>Jspresso</trademark> based application since any change
+            Jspresso based application since any change
             on the application side does not require the deployed clients to
             update anything.</para>
           </note>That's over for an ULC deployment. For Wings, it is somehow
@@ -8308,7 +8308,7 @@ login-error.html</programlisting></para>
         <title> The HTML login pages for a Wings deployment</title>
 
         <para>The following HTML pages show how to implement the
-        <trademark>Jspresso</trademark> login for a Wings deployment. Although
+        Jspresso login for a Wings deployment. Although
         they are fully functioning, you will certainly not use them "as is"
         but rather include the HTML code into some corporate web site
         following your styling conventions as well as section language.</para>
