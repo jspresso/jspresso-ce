@@ -75,6 +75,19 @@
            classname="org.springframework.beandoc.client.AntTask"
            classpathref="beandoc-classpath" />
 
+  <path id="ant-contrib-classpath">
+    <fileset dir="${ant-contrib.home}">
+      <include name="*.jar" />
+    </fileset>
+  </path>
+
+  <taskdef resource="net/sf/antcontrib/antcontrib.properties"
+           classpathref="ant-contrib-classpath" />
+
+  <taskdef name="for"
+           classname="net.sf.antcontrib.logic.ForTask"
+           classpathref="ant-contrib-classpath" />
+
   <target name="clean" description="Cleans up generated files.">
     <delete dir="${doc.reference.target.dir}" />
   </target>
@@ -226,7 +239,37 @@
   <target name="apidoc">
     <ant antfile="doc/api/src/Jspresso-api.xml"
          inheritall="false"
-         target="dbdoclet.pdf"/>
+         target="dbdoclet.pdf" />
+  </target>
+
+  <target name="clean-dist">
+    <delete dir="${basedir}/target/tmp"/>
+    <mkdir dir="${basedir}/target/tmp" />
+    <for param="file">
+      <path>
+        <fileset dir="${basedir}/target" includes="*.zip" />
+      </path>
+      <sequential>
+        <propertyregex override="yes"
+                       property="filename"
+                       input="@{file}"
+                       regexp="([^\\]*)\.zip"
+                       select="\1" />
+        <unzip src="@{file}" dest="${basedir}/target/tmp/${filename}" />
+        <zip destfile="${basedir}/target/tmp/${filename}.zip"
+             basedir="${basedir}/target/tmp/${filename}" />
+        <tar destfile="${basedir}/target/tmp/${filename}.tar.gz"
+             basedir="${basedir}/target/tmp/${filename}"
+             compression="gzip" />
+      </sequential>
+    </for>
+    <move todir="${basedir}/target">
+      <fileset dir="${basedir}/target/tmp">
+        <include name="*.zip"/>
+        <include name="*.tar.gz"/>
+      </fileset>
+    </move>
+    <delete dir="${basedir}/target/tmp"/>
   </target>
 
   <target name="test">
