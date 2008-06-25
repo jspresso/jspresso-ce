@@ -45,7 +45,7 @@
   <distributionManagement>
     <site>
       <id>local</id>
-      <url>file:///${basedir}/fullsite</url>
+      <url>file:///${project.build.directory}/fullsite</url>
     </site>
   </distributionManagement>
   <repositories>
@@ -473,8 +473,8 @@
   <build>
     <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
     <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
-    <outputDirectory>${basedir}/target/classes</outputDirectory>
-    <testOutputDirectory>${basedir}/target/test-classes</testOutputDirectory>
+    <outputDirectory>${project.build.directory}/classes</outputDirectory>
+    <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
     <resources>
       <resource>
         <directory>${basedir}/src/main/resources</directory>
@@ -529,6 +529,7 @@
           <execution>
             <id>beandoc</id>
             <phase>pre-site</phase>
+            <inherited>false</inherited>
             <configuration>
               <tasks>
                 <taskdef
@@ -585,6 +586,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>dist</id>
+            <inherited>false</inherited>
+          </execution>
+        </executions>
         <configuration>
           <descriptors>
             <descriptor>src/main/assembly/dist-bin.xml</descriptor>
