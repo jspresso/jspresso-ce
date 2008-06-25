@@ -9,6 +9,7 @@
   <packaging>pom</packaging>
   <version>2.1-SNAPSHOT</version>
   <name>Jspresso Application Framework</name>
+  <description>Jspresso is a new generation framework to easily build professional quality java distributed desktop applications. Jspresso dramatically reduces the development cycles needed to get your business application up and running while not sacrificing quality, robustness and performance. Jspresso is not another webapp framework. Jspresso based applications offer the exact same ergonomics as desktop applications while keeping an N-tier centralized architecture. And last but not least, Jspresso is free.</description>
   <url>http://www.jspresso.org</url>
   <organization>
     <name>Jspresso</name>
@@ -56,7 +57,7 @@
       <url>file:///tmp/jspresso/repo</url>
     </repository>
     <snapshotRepository>
-      <id>local-repo</id>
+      <id>local-repo-snapshot</id>
       <url>file:///tmp/jspresso/snapshot-repo</url>
     </snapshotRepository>
     <site>
@@ -629,7 +630,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <linksource>false</linksource>
+          <linksource>true</linksource>
           <aggregate>true</aggregate>
         </configuration>
       </plugin>
