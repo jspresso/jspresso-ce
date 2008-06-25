@@ -15,6 +15,14 @@
     <url>http://www.jspresso.org</url>
   </organization>
   <inceptionYear>2005</inceptionYear>
+  <licenses>
+    <license>
+      <name>LGPL V3</name>
+      <url>LICENSE.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
   <scm>
     <connection>
       scm:svn:https://svn.jspresso.org:447/jspresso/framework/trunk
@@ -43,9 +51,17 @@
     </developer>
   </developers>
   <distributionManagement>
+    <repository>
+      <id>local-repo</id>
+      <url>file:///tmp/jspresso/repo</url>
+    </repository>
+    <snapshotRepository>
+      <id>local-repo</id>
+      <url>file:///tmp/jspresso/snapshot-repo</url>
+    </snapshotRepository>
     <site>
-      <id>local</id>
-      <url>file:///${project.build.directory}/fullsite</url>
+      <id>local-site</id>
+      <url>file:///tmp/jspresso/framework/site</url>
     </site>
   </distributionManagement>
   <repositories>
@@ -586,12 +602,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>dist</id>
-            <inherited>false</inherited>
-          </execution>
-        </executions>
+        <inherited>false</inherited>
         <configuration>
           <descriptors>
             <descriptor>src/main/assembly/dist-bin.xml</descriptor>
