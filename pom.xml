@@ -7,9 +7,9 @@
   <groupId>org.jspresso</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>2.0</version>
+  <version>2.1-SNAPSHOT</version>
   <name>Jspresso Application Framework</name>
-  <url>file:///Dev/Jspresso/jspresso-framework/target/fullsite</url>
+  <url>http://www.jspresso.org</url>
   <organization>
     <name>Jspresso</name>
     <url>http://www.jspresso.org</url>
@@ -17,21 +17,23 @@
   <inceptionYear>2005</inceptionYear>
   <scm>
     <connection>
-      scm:svn:http://saturne/svnrep:jspresso/framework/trunk
+      scm:svn:https://svn.jspresso.org:447/jspresso/framework/trunk
     </connection>
   </scm>
-  <mailingLists>
+  <!--
+    <mailingLists>
     <mailingList>
-      <name>${pom.name} Dev List</name>
-      <subscribe>dev-subscribe@jspresso.org</subscribe>
-      <unsubscribe>dev-unsubscribe@jspresso.org</unsubscribe>
+    <name>${pom.name} Dev List</name>
+    <subscribe>dev-subscribe@jspresso.org</subscribe>
+    <unsubscribe>dev-unsubscribe@jspresso.org</unsubscribe>
     </mailingList>
     <mailingList>
-      <name>${pom.name} User List</name>
-      <subscribe>users-subscribe@jspresso.org</subscribe>
-      <unsubscribe>users-unsubscribe@jspresso.org</unsubscribe>
+    <name>${pom.name} User List</name>
+    <subscribe>users-subscribe@jspresso.org</subscribe>
+    <unsubscribe>users-unsubscribe@jspresso.org</unsubscribe>
     </mailingList>
-  </mailingLists>
+    </mailingLists>
+  -->
   <developers>
     <developer>
       <name>Vincent Vandenschrick</name>
@@ -43,7 +45,7 @@
   <distributionManagement>
     <site>
       <id>local</id>
-      <url>file:///Dev/Jspresso/jspresso-framework/target/fullsite</url>
+      <url>file:///${basedir}/fullsite</url>
     </site>
   </distributionManagement>
   <repositories>
@@ -61,11 +63,11 @@
       <id>snapshots</id>
       <url>http://people.apache.org/repo/m2-snapshot-repository</url>
     </pluginRepository>
-     <pluginRepository>
+    <pluginRepository>
       <id>codehaus</id>
       <url>http://snapshots.repository.codehaus.org</url>
     </pluginRepository>
-   </pluginRepositories>
+  </pluginRepositories>
   <modules>
     <module>aop</module>
     <module>application</module>
@@ -539,13 +541,11 @@
                     arg2="jspresso-framework" />
                   <then>
                     <mkdir dir="${project.reporting.outputDirectory}/beandocs" />
-                    <mkdir
-                      dir="${project.reporting.outputDirectory}/beandocs/tmp" />
+                    <mkdir dir="${project.reporting.outputDirectory}/beandocs/tmp" />
                     <copy
                       todir="${project.reporting.outputDirectory}/beandocs/tmp"
                       flatten="true">
-                      <fileset
-                        dir="${basedir}/app-template/src/main/resources">
+                      <fileset dir="${basedir}/app-template/src/main/resources">
                         <include name="**/commons.xml" />
                         <include name="**/commons-hibernate.xml" />
                         <include name="**/commons-frontend.xml" />
@@ -555,13 +555,11 @@
                     <beandoc
                       outputDir="${project.reporting.outputDirectory}/beandocs"
                       beandocProps="${basedir}/jspresso-beandoc.properties">
-                      <fileset
-                        dir="${project.reporting.outputDirectory}/beandocs/tmp">
+                      <fileset dir="${project.reporting.outputDirectory}/beandocs/tmp">
                         <include name="**/*.xml" />
                       </fileset>
                     </beandoc>
-                    <delete
-                      dir="${project.reporting.outputDirectory}/beandocs/tmp" />
+                    <delete dir="${project.reporting.outputDirectory}/beandocs/tmp" />
                   </then>
                 </if>
               </tasks>
@@ -592,6 +590,13 @@
             <descriptor>src/main/assembly/dist-bin.xml</descriptor>
             <descriptor>src/main/assembly/dist-src.xml</descriptor>
           </descriptors>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
         </configuration>
       </plugin>
     </plugins>
