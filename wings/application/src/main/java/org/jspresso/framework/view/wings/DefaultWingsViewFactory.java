@@ -1248,9 +1248,13 @@ public class DefaultWingsViewFactory implements
     int currentY = 0;
 
     boolean isSpaceFilled = false;
+    boolean lastRowNeedsFilling = true;
 
-    for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
-        .getPropertyViewDescriptors()) {
+    // for (ISubViewDescriptor propertyViewDescriptor : viewDescriptor
+    // .getPropertyViewDescriptors()) {
+    for (Iterator<ISubViewDescriptor> ite = viewDescriptor
+        .getPropertyViewDescriptors().iterator(); ite.hasNext();) {
+      ISubViewDescriptor propertyViewDescriptor = ite.next();
       String propertyName = propertyViewDescriptor.getName();
       IPropertyDescriptor propertyDescriptor = ((IComponentDescriptorProvider<?>) viewDescriptor
           .getModelDescriptor()).getComponentDescriptor()
@@ -1295,6 +1299,7 @@ public class DefaultWingsViewFactory implements
         propertyWidth = viewDescriptor.getColumnCount();
       }
       if (currentX + propertyWidth > viewDescriptor.getColumnCount()) {
+        fillLastRow(viewComponent);
         currentX = 0;
         currentY++;
       }
@@ -1347,27 +1352,36 @@ public class DefaultWingsViewFactory implements
       }
 
       constraints.anchor = GridBagConstraints.WEST;
-      constraints.weightx = 1.0;
       if (propertyView.getPeer() instanceof STextArea
           || propertyView.getPeer() instanceof SList
           || propertyView.getPeer() instanceof SScrollPane
           || propertyView.getPeer() instanceof STable) {
-        constraints.weighty = 1.0;
+        constraints.weightx = 1.0D;
+        constraints.weighty = 1.0D;
         constraints.fill = GridBagConstraints.BOTH;
+        if (!ite.hasNext()) {
+          constraints.gridwidth = GridBagConstraints.REMAINDER;
+          lastRowNeedsFilling = false;
+        }
         isSpaceFilled = true;
       } else {
+        constraints.weightx = 0.0D;
+        constraints.weighty = 0.0D;
         constraints.fill = GridBagConstraints.HORIZONTAL;
       }
       viewComponent.add(propertyView.getPeer(), constraints);
 
       currentX += propertyWidth;
     }
+    if (lastRowNeedsFilling) {
+      fillLastRow(viewComponent);
+    }
     if (!isSpaceFilled) {
       SPanel filler = createSPanel(new SBorderLayout());
       GridBagConstraints constraints = new GridBagConstraints();
       constraints.gridx = 0;
-      constraints.weightx = 1.0;
-      constraints.weighty = 1.0;
+      constraints.weightx = 1.0D;
+      constraints.weighty = 1.0D;
       constraints.fill = GridBagConstraints.BOTH;
       switch (viewDescriptor.getLabelsPosition()) {
         case IComponentViewDescriptor.ASIDE:
@@ -1384,6 +1398,17 @@ public class DefaultWingsViewFactory implements
       viewComponent.add(filler, constraints);
     }
     return view;
+  }
+
+  private void fillLastRow(SPanel viewComponent) {
+    GridBagConstraints constraints = new GridBagConstraints();
+    constraints.gridx = GridBagConstraints.RELATIVE;
+    constraints.weightx = 1.0;
+    constraints.fill = GridBagConstraints.HORIZONTAL;
+    constraints.gridwidth = GridBagConstraints.REMAINDER;
+    SPanel filler = createSPanel(new SBorderLayout());
+    //filler.setBorder(new SLineBorder(Color.BLUE));
+    viewComponent.add(filler, constraints);
   }
 
   private ICollectionConnectorProvider createCompositeNodeGroupConnector(
