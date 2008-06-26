@@ -69,6 +69,7 @@
       <url>http://spring-beandoc.sourceforge.net/repo</url>
     </repository>
   </repositories>
+<!-- 
   <pluginRepositories>
     <pluginRepository>
       <id>snapshots</id>
@@ -79,6 +80,7 @@
       <url>http://snapshots.repository.codehaus.org</url>
     </pluginRepository>
   </pluginRepositories>
+-->
   <modules>
     <module>aop</module>
     <module>application</module>
