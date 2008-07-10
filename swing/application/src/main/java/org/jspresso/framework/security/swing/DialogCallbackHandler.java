@@ -37,7 +37,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.IIconFactory;
 
-
 /**
  * <p>
  * Uses a Swing dialog to query the user for answers to authentication
@@ -60,10 +59,10 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Handles the specified set of callbacks.
    * 
    * @param callbacks
-   *            the callbacks to handle
+   *          the callbacks to handle
    * @throws UnsupportedCallbackException
-   *             if the callback is not an instance of NameCallback or
-   *             PasswordCallback
+   *           if the callback is not an instance of NameCallback or
+   *           PasswordCallback
    */
 
   public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
@@ -119,7 +118,8 @@ public class DialogCallbackHandler implements CallbackHandler {
         }
         processTextOutputCallback(messagePanel, (TextOutputCallback) callback);
         if (dialogTitle == null) {
-          dialogTitle = ((TextOutputCallback) callback).getMessage();
+          dialogTitle = translationProvider.getTranslation(
+              ((TextOutputCallback) callback).getMessage(), locale);
         }
       } else if (callback instanceof NameCallback) {
         if (inputPanel == null) {
@@ -195,7 +195,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the iconFactory.
    * 
    * @param iconFactory
-   *            the iconFactory to set.
+   *          the iconFactory to set.
    */
   public void setIconFactory(IIconFactory<Icon> iconFactory) {
     this.iconFactory = iconFactory;
@@ -205,7 +205,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the locale.
    * 
    * @param locale
-   *            the locale to set.
+   *          the locale to set.
    */
   public void setLocale(Locale locale) {
     this.locale = locale;
@@ -215,7 +215,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the parentComponent.
    * 
    * @param parentComponent
-   *            the parentComponent to set.
+   *          the parentComponent to set.
    */
   public void setParentComponent(Component parentComponent) {
     this.parentComponent = parentComponent;
@@ -225,7 +225,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *            the translationProvider to set.
+   *          the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
@@ -258,8 +258,7 @@ public class DialogCallbackHandler implements CallbackHandler {
       }
       optionButton.addActionListener(new ActionListener() {
 
-        public void actionPerformed(@SuppressWarnings("unused")
-        ActionEvent e) {
+        public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
           cc.setSelectedIndex(option);
           callbackDialog.dispose();
         }
@@ -306,8 +305,7 @@ public class DialogCallbackHandler implements CallbackHandler {
         JButton optionButton = new JButton(cc.getOptions()[i]);
         optionButton.addActionListener(new ActionListener() {
 
-          public void actionPerformed(@SuppressWarnings("unused")
-          ActionEvent e) {
+          public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
             cc.setSelectedIndex(optionIndex);
             callbackDialog.dispose();
           }
@@ -383,8 +381,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
     proceedActions.add(new ActionListener() {
 
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         nc.setName(nameTextField.getText());
       }
     });
@@ -418,8 +415,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
     proceedActions.add(new ActionListener() {
 
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         pc.setPassword(passwordField.getPassword());
       }
     });
@@ -427,8 +423,8 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   private void processTextOutputCallback(JPanel messagePanel,
       TextOutputCallback toc) throws UnsupportedCallbackException {
-    JLabel messageLabel = new JLabel(toc.getMessage(), getIcon(toc),
-        SwingConstants.LEADING);
+    JLabel messageLabel = new JLabel(translationProvider.getTranslation(toc
+        .getMessage(), locale), getIcon(toc), SwingConstants.LEADING);
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.insets = DEFAULT_INSETS;
     constraints.gridx = GridBagConstraints.RELATIVE;

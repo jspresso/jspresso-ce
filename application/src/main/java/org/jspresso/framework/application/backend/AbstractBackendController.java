@@ -227,8 +227,8 @@ public abstract class AbstractBackendController extends AbstractController
   /**
    * {@inheritDoc}
    */
-  public boolean start(Locale locale) {
-    applicationSession.setLocale(locale);
+  public boolean start(Locale startingLocale) {
+    applicationSession.setLocale(startingLocale);
     return true;
   }
 

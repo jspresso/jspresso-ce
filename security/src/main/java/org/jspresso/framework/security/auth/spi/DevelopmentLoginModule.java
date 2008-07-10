@@ -21,7 +21,6 @@ package org.jspresso.framework.security.auth.spi;
 import java.io.IOException;
 import java.security.acl.Group;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
@@ -68,8 +67,6 @@ public class DevelopmentLoginModule implements LoginModule {
   private static final String ROLES_OPT           = "roles";
   private static final String USER_OPT            = "user";
 
-  private ResourceBundle      bundle              = ResourceBundle
-                                                      .getBundle("org.jspresso.framework.util.security.LoginUtils$DlmBundle");
   private CallbackHandler     callbackHandler;
   private boolean             commitSucceeded     = false;
   private Map<String, ?>      options;
@@ -97,8 +94,7 @@ public class DevelopmentLoginModule implements LoginModule {
   public boolean abort() {
     if (!succeeded) {
       Callback[] callbacks = new Callback[1];
-      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, bundle
-          .getString(LoginUtils.LOGIN_FAILED));
+      callbacks[0] = new TextOutputCallback(TextOutputCallback.ERROR, LoginUtils.LOGIN_FAILED);
       try {
         callbackHandler.handle(callbacks);
       } catch (IOException ex) {
@@ -228,11 +224,11 @@ public class DevelopmentLoginModule implements LoginModule {
     }
 
     Callback[] callbacks = new Callback[3];
-    callbacks[0] = new NameCallback(bundle.getString(LoginUtils.USER));
-    callbacks[1] = new PasswordCallback(bundle.getString(LoginUtils.PASSWORD),
+    callbacks[0] = new NameCallback(LoginUtils.USER);
+    callbacks[1] = new PasswordCallback(LoginUtils.PASSWORD,
         false);
     callbacks[2] = new TextOutputCallback(TextOutputCallback.INFORMATION,
-        bundle.getString(LoginUtils.CRED_MESSAGE));
+        LoginUtils.CRED_MESSAGE);
 
     try {
       callbackHandler.handle(callbacks);
@@ -283,9 +279,9 @@ public class DevelopmentLoginModule implements LoginModule {
     }
     password = null;
     if (!usernameCorrect) {
-      throw new FailedLoginException(bundle.getString(LoginUtils.USER_FAILED));
+      throw new FailedLoginException(LoginUtils.USER_FAILED);
     }
-    throw new FailedLoginException(bundle.getString(LoginUtils.PASSWORD_FAILED));
+    throw new FailedLoginException(LoginUtils.PASSWORD_FAILED);
   }
 
   /**

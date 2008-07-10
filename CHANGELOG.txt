@@ -1,0 +1,10 @@
+2.2
+===
+
+Bugs fixed
+----------
+[ 2014954 ] Application fails to start
+
+New features
+------------
+[ 2014966 ] Force startup locale

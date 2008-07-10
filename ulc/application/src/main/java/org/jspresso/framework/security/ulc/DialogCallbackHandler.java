@@ -58,10 +58,10 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Handles the specified set of callbacks.
    * 
    * @param callbacks
-   *            the callbacks to handle
+   *          the callbacks to handle
    * @throws UnsupportedCallbackException
-   *             if the callback is not an instance of NameCallback or
-   *             PasswordCallback
+   *           if the callback is not an instance of NameCallback or
+   *           PasswordCallback
    */
 
   public void handle(Callback[] callbacks) throws UnsupportedCallbackException {
@@ -117,7 +117,8 @@ public class DialogCallbackHandler implements CallbackHandler {
         }
         processTextOutputCallback(messagePanel, (TextOutputCallback) callback);
         if (dialogTitle == null) {
-          dialogTitle = ((TextOutputCallback) callback).getMessage();
+          dialogTitle = translationProvider.getTranslation(
+              ((TextOutputCallback) callback).getMessage(), locale);
         }
       } else if (callback instanceof NameCallback) {
         if (inputPanel == null) {
@@ -188,7 +189,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the callbackHandlerListener.
    * 
    * @param callbackHandlerListener
-   *            the callbackHandlerListener to set.
+   *          the callbackHandlerListener to set.
    */
   public void setCallbackHandlerListener(
       ICallbackHandlerListener callbackHandlerListener) {
@@ -199,7 +200,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the iconFactory.
    * 
    * @param iconFactory
-   *            the iconFactory to set.
+   *          the iconFactory to set.
    */
   public void setIconFactory(IIconFactory<ULCIcon> iconFactory) {
     this.iconFactory = iconFactory;
@@ -209,7 +210,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the locale.
    * 
    * @param locale
-   *            the locale to set.
+   *          the locale to set.
    */
   public void setLocale(Locale locale) {
     this.locale = locale;
@@ -219,7 +220,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the parentComponent.
    * 
    * @param parentComponent
-   *            the parentComponent to set.
+   *          the parentComponent to set.
    */
   public void setParentComponent(ULCComponent parentComponent) {
     this.parentComponent = parentComponent;
@@ -229,7 +230,7 @@ public class DialogCallbackHandler implements CallbackHandler {
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *            the translationProvider to set.
+   *          the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
@@ -267,8 +268,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
         private static final long serialVersionUID = -1787817960559101628L;
 
-        public void actionPerformed(@SuppressWarnings("unused")
-        ActionEvent e) {
+        public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
           cc.setSelectedIndex(option);
           endClientSideLoginProcess(callbackDialog);
         }
@@ -325,8 +325,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
           private static final long serialVersionUID = -5727287836828197725L;
 
-          public void actionPerformed(@SuppressWarnings("unused")
-          ActionEvent e) {
+          public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
             cc.setSelectedIndex(optionIndex);
             endClientSideLoginProcess(callbackDialog);
           }
@@ -404,8 +403,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
       private static final long serialVersionUID = 974089545700172602L;
 
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         nc.setName(nameTextField.getText());
       }
     });
@@ -441,8 +439,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
       private static final long serialVersionUID = -8212061905248284632L;
 
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent e) {
+      public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
         if (passwordField.getText() != null) {
           pc.setPassword(passwordField.getText().toCharArray());
         }
@@ -452,8 +449,8 @@ public class DialogCallbackHandler implements CallbackHandler {
 
   private void processTextOutputCallback(ULCGridBagLayoutPane messagePanel,
       TextOutputCallback toc) throws UnsupportedCallbackException {
-    ULCLabel messageLabel = new ULCLabel(toc.getMessage(), getIcon(toc),
-        IDefaults.LEADING);
+    ULCLabel messageLabel = new ULCLabel(translationProvider.getTranslation(toc
+        .getMessage(), locale), getIcon(toc), IDefaults.LEADING);
     GridBagConstraints constraints = new GridBagConstraints();
     constraints.setInsets(DEFAULT_INSETS);
     constraints.setGridX(GridBagConstraints.RELATIVE);
