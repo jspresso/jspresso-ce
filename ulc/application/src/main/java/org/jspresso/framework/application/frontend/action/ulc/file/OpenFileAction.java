@@ -68,7 +68,6 @@ public class OpenFileAction extends ChooseFileAction {
         }
       }
 
-      @SuppressWarnings("unused")
       public void onSuccess(InputStream in, String filePath) {
         if (fileOpenCallback != null) {
           getFileChooser(context).setCurrentDirectory(filePath);

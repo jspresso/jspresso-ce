@@ -85,9 +85,7 @@ public class BooleanTableCellRenderer extends JCheckBox implements
    * {@inheritDoc}
    */
   public Component getTableCellRendererComponent(JTable table, Object value,
-      boolean isSelected, boolean hasFocus, @SuppressWarnings("unused")
-      int row, @SuppressWarnings("unused")
-      int column) {
+      boolean isSelected, boolean hasFocus, int row, int column) {
     if (isSelected) {
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());

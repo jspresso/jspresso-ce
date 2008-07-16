@@ -85,7 +85,6 @@ public class MapPropertyAccessor implements IAccessor {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   public void setValue(Object target, Object value)
       throws IllegalAccessException, InvocationTargetException,
       NoSuchMethodException {

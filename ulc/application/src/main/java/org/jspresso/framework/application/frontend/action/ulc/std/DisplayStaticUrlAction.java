@@ -51,8 +51,7 @@ public class DisplayStaticUrlAction extends DisplayUrlAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     context.put(ActionContextConstants.ACTION_PARAM, getTranslationProvider(
         context).getTranslation(urlKey, getLocale(context)));
     return super.execute(actionHandler, context);

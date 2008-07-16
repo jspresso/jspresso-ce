@@ -55,11 +55,9 @@ public class SaveAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
-      @SuppressWarnings("unchecked")
       public Object doInTransaction(@SuppressWarnings("unused")
       TransactionStatus status) {
         List<IEntity> entitiesToSave = getEntitiesToSave(context);

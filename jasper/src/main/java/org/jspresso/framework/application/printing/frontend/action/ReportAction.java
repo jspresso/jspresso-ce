@@ -62,7 +62,6 @@ public class ReportAction<E, F, G> extends AbstractChainedAction<E, F, G> {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {

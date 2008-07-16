@@ -95,8 +95,8 @@ public class ULCColorPicker extends ULCComponent implements IEditorComponent {
   /**
    * {@inheritDoc}
    */
-  public void copyAttributes(@SuppressWarnings("unused")
-  ICellComponent source) {
+  public void copyAttributes(
+      ICellComponent source) {
     ULCColorPicker sourceColorPicker = (ULCColorPicker) source;
     resetValue = sourceColorPicker.resetValue;
   }

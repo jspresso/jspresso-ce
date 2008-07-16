@@ -67,8 +67,7 @@ public class CreateQueryComponentAction extends AbstractBackendAction {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     IReferencePropertyDescriptor erqDescriptor = (IReferencePropertyDescriptor) context
         .get(ActionContextConstants.COMPONENT_REF_DESCRIPTOR);
     IModelDescriptor modelDescriptor = (IModelDescriptor) context

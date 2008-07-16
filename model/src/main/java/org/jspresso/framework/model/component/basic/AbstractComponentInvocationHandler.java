@@ -324,8 +324,7 @@ public abstract class AbstractComponentInvocationHandler implements
    * @return the property value.
    */
   @SuppressWarnings("unchecked")
-  protected Object getCollectionProperty(@SuppressWarnings("unused")
-  Object proxy,
+  protected Object getCollectionProperty(Object proxy,
       ICollectionPropertyDescriptor<? extends IComponent> propertyDescriptor) {
     Object property = straightGetProperty(propertyDescriptor.getName());
     if (property == null) {
@@ -391,8 +390,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *            the property descriptor to get the value for.
    * @return the property value.
    */
-  protected Object getReferenceProperty(@SuppressWarnings("unused")
-  Object proxy,
+  protected Object getReferenceProperty(Object proxy,
       final IReferencePropertyDescriptor<IComponent> propertyDescriptor) {
     IComponent property = (IComponent) straightGetProperty(propertyDescriptor
         .getName());
@@ -455,8 +453,7 @@ public abstract class AbstractComponentInvocationHandler implements
    *            the object to test.
    * @return true if the object is fully initialized.
    */
-  protected boolean isInitialized(@SuppressWarnings("unused")
-  Object objectOrProxy) {
+  protected boolean isInitialized(Object objectOrProxy) {
     return true;
   }
 

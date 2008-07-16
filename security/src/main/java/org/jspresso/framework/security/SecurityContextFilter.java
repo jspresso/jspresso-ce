@@ -59,8 +59,7 @@ public class SecurityContextFilter implements Filter {
   /**
    * {@inheritDoc}
    */
-  public void init(@SuppressWarnings("unused")
-  FilterConfig config) {
+  public void init(FilterConfig config) {
     loginRedirectUrl = config.getInitParameter(LOGIN_PARAM_NAME);
     if (loginRedirectUrl == null) {
       loginRedirectUrl = LOGIN_DEFAULT;

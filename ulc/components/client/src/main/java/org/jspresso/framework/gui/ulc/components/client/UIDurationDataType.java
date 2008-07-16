@@ -113,7 +113,6 @@ public class UIDurationDataType extends UIDataType {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void restoreState(Anything args) {
     super.restoreState(args);

@@ -68,16 +68,14 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
     final IQueryComponent queryComponent = (IQueryComponent) ((IValueConnector) context
         .get(ActionContextConstants.QUERY_MODEL_CONNECTOR)).getConnectorValue();
 
     List<IEntity> queriedEntities = (List<IEntity>) getTransactionTemplate(
         context).execute(new TransactionCallback() {
 
-      public Object doInTransaction(@SuppressWarnings("unused")
-      TransactionStatus status) {
+      public Object doInTransaction(TransactionStatus status) {
         DetachedCriteria criteria = DetachedCriteria
             .forEntityName(queryComponent.getQueryContract().getName());
         boolean abort = completeCriteria(criteria, null, queryComponent);

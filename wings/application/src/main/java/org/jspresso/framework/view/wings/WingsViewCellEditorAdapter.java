@@ -173,8 +173,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    *            an event object
    * @return true
    */
-  public boolean shouldSelectCell(@SuppressWarnings("unused")
-  EventObject anEvent) {
+  public boolean shouldSelectCell(EventObject anEvent) {
     return true;
   }
 

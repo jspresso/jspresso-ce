@@ -58,8 +58,7 @@ public class AddMapToMasterAction extends AbstractAddCollectionToMasterAction {
    */
   @Override
   @SuppressWarnings("unchecked")
-  protected List<?> getAddedComponents(@SuppressWarnings("unused")
-  Map<String, Object> context) {
+  protected List<?> getAddedComponents(Map<String, Object> context) {
     IComponentDescriptor componentDescriptor = getModelDescriptor(context)
         .getCollectionDescriptor().getElementDescriptor();
     Map<String, Object> newMap = new ObjectEqualityMap<String, Object>();

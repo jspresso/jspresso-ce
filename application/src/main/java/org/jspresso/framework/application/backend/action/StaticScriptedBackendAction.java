@@ -55,7 +55,6 @@ public class StaticScriptedBackendAction extends ScriptedBackendAction {
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public boolean execute(IActionHandler actionHandler,
       Map<String, Object> context) {
     ScriptMixin scriptMixin = new ScriptMixin(this);

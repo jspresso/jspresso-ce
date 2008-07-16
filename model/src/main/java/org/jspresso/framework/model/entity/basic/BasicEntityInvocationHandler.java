@@ -98,7 +98,6 @@ public class BasicEntityInvocationHandler extends
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
   public synchronized Object invoke(Object proxy, Method method, Object[] args)
       throws Throwable {
     String methodName = method.getName();

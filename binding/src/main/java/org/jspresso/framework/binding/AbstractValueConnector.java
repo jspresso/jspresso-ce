@@ -508,7 +508,6 @@ public abstract class AbstractValueConnector extends AbstractConnector
    * @param newModelConnector
    *            the new model connector.
    */
-  @SuppressWarnings("unused")
   protected void connectorModelChange(IValueConnector oldModelConnector,
       IValueConnector newModelConnector) {
     updateState();

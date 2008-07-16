@@ -60,8 +60,7 @@ public class TransferCollectionAction extends AbstractCollectionAction {
    */
   @SuppressWarnings("unchecked")
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (selectedIndices == null || selectedIndices.length == 0

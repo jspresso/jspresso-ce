@@ -169,8 +169,7 @@ public class SmartEntityCloneFactory extends CarbonEntityCloneFactory {
    *            the object to test.
    * @return true if the object is fully initialized.
    */
-  protected boolean isInitialized(@SuppressWarnings("unused")
-  Object objectOrProxy) {
+  protected boolean isInitialized(Object objectOrProxy) {
     return true;
   }
 

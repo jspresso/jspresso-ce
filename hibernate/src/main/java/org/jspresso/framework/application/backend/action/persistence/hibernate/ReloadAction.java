@@ -55,13 +55,11 @@ public class ReloadAction extends AbstractHibernateAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
     getApplicationSession(context).clearPendingOperations();
     getTransactionTemplate(context).execute(new TransactionCallback() {
 
-      public Object doInTransaction(@SuppressWarnings("unused")
-      TransactionStatus status) {
+      public Object doInTransaction(TransactionStatus status) {
         List<IEntity> objectsToSave = getEntitiesToReload(context);
         for (IEntity entity : objectsToSave) {
           reloadEntity(entity, context);

@@ -150,8 +150,7 @@ public class EditComponentAction extends ModalDialogAction {
    *            the action context.
    * @return the viewDescriptor.
    */
-  protected IViewDescriptor getViewDescriptor(@SuppressWarnings("unused")
-  Map<String, Object> context) {
+  protected IViewDescriptor getViewDescriptor(Map<String, Object> context) {
     return viewDescriptor;
   }
 }

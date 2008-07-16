@@ -50,8 +50,7 @@ public class ResetConnectorValueAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     getModelConnector(context).setConnectorValue(null);
     return super.execute(actionHandler, context);
   }

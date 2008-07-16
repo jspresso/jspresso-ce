@@ -66,8 +66,7 @@ public abstract class AbstractAddCollectionToMasterAction extends
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (collectionConnector == null) {
       return false;
@@ -132,6 +131,5 @@ public abstract class AbstractAddCollectionToMasterAction extends
    *            the action context.
    * @return the entity to add to the collection.
    */
-  @SuppressWarnings("unchecked")
   protected abstract List<?> getAddedComponents(Map<String, Object> context);
 }
