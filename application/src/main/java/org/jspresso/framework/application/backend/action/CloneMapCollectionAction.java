@@ -57,8 +57,7 @@ public class CloneMapCollectionAction extends AddMapToMasterAction {
    *            the action context.
    * @return the cloned map.
    */
-  protected Object cloneElement(Object element, @SuppressWarnings("unused")
-  Map<String, Object> context) {
+  protected Object cloneElement(Object element, Map<String, Object> context) {
     return new ObjectEqualityMap<Object, Object>((Map<?, ?>) element);
   }
 

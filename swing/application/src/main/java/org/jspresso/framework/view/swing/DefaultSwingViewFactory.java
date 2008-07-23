@@ -1119,7 +1119,6 @@ public class DefaultSwingViewFactory implements
   private IView<JComponent> createCollectionPropertyView(
       ICollectionPropertyDescriptor<?> propertyDescriptor,
       List<String> renderedChildProperties, IActionHandler actionHandler,
-      @SuppressWarnings("unused")
       Locale locale) {
 
     IView<JComponent> view;
@@ -2500,9 +2499,7 @@ public class DefaultSwingViewFactory implements
   // Tree Section //
   // //////////// //
   private IView<JComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused")
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      IActionHandler actionHandler, Locale locale) {
 
     ITreeLevelDescriptor rootDescriptor = viewDescriptor
         .getRootSubtreeDescriptor();

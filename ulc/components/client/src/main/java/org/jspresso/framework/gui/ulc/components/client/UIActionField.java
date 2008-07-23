@@ -198,8 +198,7 @@ public class UIActionField extends UIComponent implements IEditorComponent {
 
       private static final long serialVersionUID = -1208228660452838215L;
 
-      public void actionPerformed(@SuppressWarnings("unused")
-      ActionEvent evt) {
+      public void actionPerformed(ActionEvent evt) {
         if (evt.getSource() instanceof JButton) {
           triggerAction(index, ((JButton) evt.getSource()).getActionCommand());
           // sendActionText(((JButton) evt.getSource()).getActionCommand());

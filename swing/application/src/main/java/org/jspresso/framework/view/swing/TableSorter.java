@@ -303,7 +303,6 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
    * @param status
    *            status.
    */
-  @SuppressWarnings("unchecked")
   public void setSortingStatus(int column, int status) {
     Directive directive = getDirective(column);
     if (directive != NOT_SORTED_DIRECTIVE) {
@@ -580,7 +579,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
     }
   }
 
-  private static class Directive {
+  private static final class Directive {
 
     private int column;
     private int direction;
@@ -591,7 +590,7 @@ public class TableSorter extends AbstractTableModel implements IIndexMapper {
      * @param column
      * @param direction
      */
-    public Directive(int column, int direction) {
+    private Directive(int column, int direction) {
       this.column = column;
       this.direction = direction;
     }

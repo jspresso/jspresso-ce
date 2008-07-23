@@ -69,8 +69,7 @@ public class GenerateJasperReportAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     try {
       IReport reportDesign = (IReport) context
           .get(ActionContextConstants.ACTION_PARAM);

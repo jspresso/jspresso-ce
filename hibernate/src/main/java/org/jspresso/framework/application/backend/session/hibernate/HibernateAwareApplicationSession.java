@@ -159,7 +159,6 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   public void initializePropertyIfNeeded(final IComponent componentOrEntity,
       IPropertyDescriptor propertyDescriptor) {

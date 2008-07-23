@@ -55,8 +55,7 @@ public class FileToByteArrayCallback implements IFileOpenCallback {
    * {@inheritDoc}
    */
   public void cancel(@SuppressWarnings("unused")
-  IActionHandler actionHandler, @SuppressWarnings("unused")
-  Map<String, Object> context) {
+  IActionHandler actionHandler, Map<String, Object> context) {
     context.remove(ActionContextConstants.ACTION_PARAM);
   }
 

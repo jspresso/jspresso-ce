@@ -3,7 +3,7 @@
   <groupId>org.jspresso</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.2</version>
   <name>Jspresso Application Framework</name>
   <description>Jspresso is a new generation framework to easily build professional quality java distributed desktop applications. Jspresso dramatically reduces the development cycles needed to get your business application up and running while not sacrificing quality, robustness and performance. Jspresso is not another webapp framework. Jspresso based applications offer the exact same ergonomics as desktop applications while keeping an N-tier centralized architecture. And last but not least, Jspresso is free.</description>
   <url>http://www.jspresso.org</url>
@@ -21,21 +21,13 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.jspresso.org:447/jspresso/framework/trunk</connection>
+    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/tags/jspresso-framework-2.2</connection>
   </scm>
   <!--
-    <mailingLists>
-    <mailingList>
-    <name>${pom.name} Dev List</name>
-    <subscribe>dev-subscribe@jspresso.org</subscribe>
-    <unsubscribe>dev-unsubscribe@jspresso.org</unsubscribe>
-    </mailingList>
-    <mailingList>
-    <name>${pom.name} User List</name>
-    <subscribe>users-subscribe@jspresso.org</subscribe>
-    <unsubscribe>users-unsubscribe@jspresso.org</unsubscribe>
-    </mailingList>
-    </mailingLists>
+    <mailingLists> <mailingList> <name>${pom.name} Dev List</name> <subscribe>dev-subscribe@jspresso.org</subscribe>
+    <unsubscribe>dev-unsubscribe@jspresso.org</unsubscribe> </mailingList> <mailingList> <name>${pom.name} User
+    List</name> <subscribe>users-subscribe@jspresso.org</subscribe>
+    <unsubscribe>users-unsubscribe@jspresso.org</unsubscribe> </mailingList> </mailingLists>
   -->
   <developers>
     <developer>
@@ -45,43 +37,58 @@
       <organization>Jspresso</organization>
     </developer>
   </developers>
+  <!--
+    <pluginRepositories> <pluginRepository> <id>snapshots</id>
+    <url>http://people.apache.org/repo/m2-snapshot-repository</url> </pluginRepository> <pluginRepository>
+    <id>codehaus</id> <url>http://snapshots.repository.codehaus.org</url> </pluginRepository> </pluginRepositories>
+  -->
   <distributionManagement>
     <repository>
-      <id>local-repo</id>
-      <url>file:///tmp/jspresso/repo</url>
+      <id>jspresso-repository</id>
+      <url>scp://repository.jspresso.org/var/maven/repositories/maven2</url>
     </repository>
     <snapshotRepository>
-      <id>local-repo-snapshot</id>
-      <url>file:///tmp/jspresso/snapshot-repo</url>
+      <id>jspresso-snapshots-repository</id>
+      <url>scp://repository.jspresso.org/var/maven/repositories/maven2-snapshots</url>
+      <uniqueVersion>false</uniqueVersion>
     </snapshotRepository>
     <site>
-      <id>local-site</id>
-      <url>file:///tmp/jspresso/framework/site</url>
+      <id>jspresso-maven-site</id>
+      <url>scp://www.jspresso.org/var/www/jspresso/external/maven-site</url>
     </site>
   </distributionManagement>
   <repositories>
     <repository>
       <id>jboss</id>
       <url>http://repository.jboss.com/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
     </repository>
     <repository>
       <id>beandoc</id>
       <url>http://spring-beandoc.sourceforge.net/repo</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jspresso-repository</id>
+      <url>http://repository.jspresso.org/maven2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>jspresso-repository</id>
+      <url>http://repository.jspresso.org/maven2-snapshots</url>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
     </repository>
   </repositories>
-<!-- 
-  <pluginRepositories>
-    <pluginRepository>
-      <id>snapshots</id>
-      <url>http://people.apache.org/repo/m2-snapshot-repository</url>
-    </pluginRepository>
-    <pluginRepository>
-      <id>codehaus</id>
-      <url>http://snapshots.repository.codehaus.org</url>
-    </pluginRepository>
-  </pluginRepositories>
--->
   <modules>
+    <module>root</module>
     <module>aop</module>
     <module>application</module>
     <module>binding</module>
@@ -99,442 +106,8 @@
     <module>app-launch</module>
     <module>app-template</module>
   </modules>
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-aop</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-application</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-binding</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-action</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-model</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-tools</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-util</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-security</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-view</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-hibernate</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-swing</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-swing-application</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-swing-components</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-ulc</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-ulc-application</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-ulc-components</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-ulc-components-server</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-ulc-components-shared</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-ulc-components-client</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-wings</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-wings-application</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-wings-components</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-app-template</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-jasper</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-app-launch</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-logging</groupId>
-        <artifactId>commons-logging</artifactId>
-        <version>1.1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>logkit</groupId>
-            <artifactId>logkit</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>avalon-framework</groupId>
-            <artifactId>avalon-framework</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>1.2.8</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
-        <version>2.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate</artifactId>
-        <version>3.2.5.ga</version>
-        <exclusions>
-          <exclusion>
-            <groupId>pull-parser</groupId>
-            <artifactId>pull-parser</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>asm</groupId>
-            <artifactId>asm</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>asm</groupId>
-            <artifactId>asm-attrs</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>cglib</groupId>
-        <artifactId>cglib-nodep</artifactId>
-        <version>2.1_3</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-beanutils</groupId>
-        <artifactId>commons-beanutils</artifactId>
-        <version>1.7.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring</artifactId>
-        <version>2.5.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.ldap</groupId>
-        <artifactId>spring-ldap</artifactId>
-        <version>1.2.1</version>
-        <exclusions>
-          <exclusion>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-          </exclusion>
-          <exclusion>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>com.sun</groupId>
-        <artifactId>ldapbp</artifactId>
-        <version>1.0</version>
-      </dependency>
-      <dependency>
-        <groupId>aspectwerkz</groupId>
-        <artifactId>aspectwerkz-core</artifactId>
-        <version>2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>aspectwerkz</groupId>
-        <artifactId>aspectwerkz</artifactId>
-        <version>2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>aspectwerkz</groupId>
-        <artifactId>aspectwerkz-jdk5</artifactId>
-        <version>2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>joda-time</groupId>
-        <artifactId>joda-time</artifactId>
-        <version>1.4</version>
-      </dependency>
-      <dependency>
-        <groupId>bsf</groupId>
-        <artifactId>bsf</artifactId>
-        <version>2.3.0</version>
-      </dependency>
-      <dependency>
-        <groupId>jython</groupId>
-        <artifactId>jython</artifactId>
-        <version>2.1</version>
-      </dependency>
-      <dependency>
-        <groupId>org.beanshell</groupId>
-        <artifactId>bsh</artifactId>
-        <version>2.0b4</version>
-      </dependency>
-      <dependency>
-        <groupId>foxtrot</groupId>
-        <artifactId>foxtrot</artifactId>
-        <version>2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>jgoodies</groupId>
-        <artifactId>looks</artifactId>
-        <version>1.3.2</version>
-      </dependency>
-      <dependency>
-        <groupId>nachocalendar</groupId>
-        <artifactId>nachocalendar</artifactId>
-        <version>0.22</version>
-      </dependency>
-      <dependency>
-        <groupId>jedit</groupId>
-        <artifactId>jedit-syntax</artifactId>
-        <version>1.0</version>
-      </dependency>
-      <dependency>
-        <groupId>jgoodies</groupId>
-        <artifactId>uif_lite</artifactId>
-        <version>1.3.2</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-cli</groupId>
-        <artifactId>commons-cli</artifactId>
-        <version>1.0</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-collections</groupId>
-        <artifactId>commons-collections</artifactId>
-        <version>3.1</version>
-      </dependency>
-      <dependency>
-        <groupId>freemarker</groupId>
-        <artifactId>freemarker</artifactId>
-        <version>2.3.3</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-development</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
-        <groupId>jboss</groupId>
-        <artifactId>jbosssx</artifactId>
-        <version>4.0.4</version>
-      </dependency>
-      <dependency>
-        <groupId>jboss</groupId>
-        <artifactId>jboss-common</artifactId>
-        <version>4.0.4</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-client</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-server</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-jnlp-client</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-servlet-server</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-servlet-client</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-trusted</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-deployment-key</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>3.8.1</version>
-      </dependency>
-      <dependency>
-        <groupId>jasperreports</groupId>
-        <artifactId>jasperreports</artifactId>
-        <version>1.3.2</version>
-      </dependency>
-      <dependency>
-        <groupId>jfree</groupId>
-        <artifactId>jfreechart</artifactId>
-        <version>1.0.1</version>
-      </dependency>
-      <dependency>
-        <groupId>javax.servlet</groupId>
-        <artifactId>servlet-api</artifactId>
-        <version>2.4</version>
-      </dependency>
-      <dependency>
-        <groupId>org.wings</groupId>
-        <artifactId>wings</artifactId>
-        <version>3.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.wings</groupId>
-        <artifactId>wingx</artifactId>
-        <version>3.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.wings</groupId>
-        <artifactId>wings-experimental</artifactId>
-        <version>3.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jvnet</groupId>
-        <artifactId>substance</artifactId>
-        <version>4.1</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
   <build>
-    <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
-    <outputDirectory>${project.build.directory}/classes</outputDirectory>
-    <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
-    <resources>
-      <resource>
-        <directory>${basedir}/src/main/resources</directory>
-        <filtering>false</filtering>
-      </resource>
-    </resources>
-    <testResources>
-      <testResource>
-        <directory>${basedir}/src/test/resources</directory>
-        <filtering>false</filtering>
-      </testResource>
-    </testResources>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <includes>
-            <include>**/*Test.java</include>
-            <include>**/*Tests.java</include>
-          </includes>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.5</source>
-          <target>1.5</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <inherited>false</inherited>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>aggregate</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <attach>false</attach>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
@@ -542,7 +115,6 @@
           <execution>
             <id>beandoc</id>
             <phase>pre-site</phase>
-            <inherited>false</inherited>
             <configuration>
               <tasks>
                 <taskdef name="beandoc" classname="org.springframework.beandoc.client.AntTask" />
@@ -605,6 +177,21 @@
           <autoVersionSubmodules>true</autoVersionSubmodules>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>aggregate</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <attach>false</attach>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <reporting>
@@ -623,4 +210,4 @@
       </plugin>
     </plugins>
   </reporting>
-</project>
+ </project>

@@ -235,9 +235,7 @@ public class WizardAction extends AbstractUlcAction {
    * @param context
    *            the action context.
    */
-  protected void completeInitialWizardModel(@SuppressWarnings("unused")
-  Map<String, Object> initialWizardModel, @SuppressWarnings("unused")
-  Map<String, Object> context) {
+  protected void completeInitialWizardModel(Map<String, Object> initialWizardModel, Map<String, Object> context) {
     // No-op by default.
   }
 

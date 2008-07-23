@@ -70,9 +70,7 @@ public class BooleanTableCellRenderer extends ULCCheckBox implements
    * {@inheritDoc}
    */
   public IRendererComponent getTableCellRendererComponent(ULCTable table,
-      Object value, boolean isSelected, @SuppressWarnings("unused")
-      boolean hasFocus, @SuppressWarnings("unused")
-      int row) {
+      Object value, boolean isSelected, boolean hasFocus, int row) {
     if (isSelected) {
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());

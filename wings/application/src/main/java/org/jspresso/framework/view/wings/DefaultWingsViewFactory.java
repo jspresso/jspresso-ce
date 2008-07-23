@@ -1143,7 +1143,6 @@ public class DefaultWingsViewFactory implements
   private IView<SComponent> createCollectionPropertyView(
       ICollectionPropertyDescriptor<?> propertyDescriptor,
       List<String> renderedChildProperties, IActionHandler actionHandler,
-      @SuppressWarnings("unused")
       Locale locale) {
 
     IView<SComponent> view;
@@ -2130,8 +2129,7 @@ public class DefaultWingsViewFactory implements
   private IView<SComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
 
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      IActionHandler actionHandler, Locale locale) {
 
     return createTextPropertyView(propertyDescriptor, actionHandler, locale);
   }
@@ -2520,8 +2518,7 @@ public class DefaultWingsViewFactory implements
   // //////////// //
   private IView<SComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
       @SuppressWarnings("unused")
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      IActionHandler actionHandler, Locale locale) {
 
     ITreeLevelDescriptor rootDescriptor = viewDescriptor
         .getRootSubtreeDescriptor();

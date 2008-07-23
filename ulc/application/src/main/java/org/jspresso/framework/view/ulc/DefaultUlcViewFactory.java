@@ -1120,7 +1120,6 @@ public class DefaultUlcViewFactory implements
   private IView<ULCComponent> createCollectionPropertyView(
       ICollectionPropertyDescriptor<?> propertyDescriptor,
       List<String> renderedChildProperties, IActionHandler actionHandler,
-      @SuppressWarnings("unused")
       Locale locale) {
 
     IView<ULCComponent> view;
@@ -1900,8 +1899,7 @@ public class DefaultUlcViewFactory implements
   }
 
   private IView<ULCComponent> createNumberPropertyView(
-      INumberPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
-      IActionHandler actionHandler, Locale locale) {
+      INumberPropertyDescriptor propertyDescriptor, IActionHandler actionHandler, Locale locale) {
     IView<ULCComponent> view = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       view = createIntegerPropertyView(
@@ -1952,8 +1950,7 @@ public class DefaultUlcViewFactory implements
     return percentDataType;
   }
 
-  private NumberFormat createPercentFormat(@SuppressWarnings("unused")
-  IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+  private NumberFormat createPercentFormat(IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getPercentInstance(locale);
     if (propertyDescriptor.getMaxFractionDigit() != null) {
       format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
@@ -2550,9 +2547,7 @@ public class DefaultUlcViewFactory implements
   // Tree Section //
   // //////////// //
   private IView<ULCComponent> createTreeView(
-      ITreeViewDescriptor viewDescriptor, @SuppressWarnings("unused")
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale) {
 
     ITreeLevelDescriptor rootDescriptor = viewDescriptor
         .getRootSubtreeDescriptor();

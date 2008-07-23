@@ -60,8 +60,7 @@ public class CollectionElementMoveAction extends AbstractCollectionAction {
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     int[] indicesToMove = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
     if (indicesToMove == null || indicesToMove.length == 0

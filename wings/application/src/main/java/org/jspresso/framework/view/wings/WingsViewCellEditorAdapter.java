@@ -38,7 +38,6 @@ import org.wings.SConstants;
 import org.wings.STable;
 import org.wings.table.STableCellEditor;
 
-
 /**
  * This class is an adapter around a WingsView to be able to use it as a cell
  * editor.
@@ -73,7 +72,7 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    * Constructs a new <code>WingsViewCellEditorAdapter</code> instance.
    * 
    * @param editorView
-   *            the swing view used as editor.
+   *          the swing view used as editor.
    */
   public WingsViewCellEditorAdapter(IView<SComponent> editorView) {
     this.listenerList = new EventListenerList();
@@ -105,8 +104,8 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
   /**
    * {@inheritDoc}
    */
-  public void connectorValueChange(@SuppressWarnings("unused")
-  ConnectorValueChangeEvent evt) {
+  public void connectorValueChange(
+      @SuppressWarnings("unused") ConnectorValueChangeEvent evt) {
     stopCellEditing();
   }
 
@@ -139,6 +138,9 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
       ((SCheckBox) editorView.getPeer()).setSelected(!((SCheckBox) editorView
           .getPeer()).isSelected());
     }
+    if (!isSelected) {
+      table.setSelectedRow(row);
+    }
     return editorView.getPeer();
   }
 
@@ -170,11 +172,10 @@ public class WingsViewCellEditorAdapter implements STableCellEditor,
    * Returns true.
    * 
    * @param anEvent
-   *            an event object
+   *          an event object
    * @return true
    */
-  public boolean shouldSelectCell(@SuppressWarnings("unused")
-  EventObject anEvent) {
+  public boolean shouldSelectCell(EventObject anEvent) {
     return true;
   }
 

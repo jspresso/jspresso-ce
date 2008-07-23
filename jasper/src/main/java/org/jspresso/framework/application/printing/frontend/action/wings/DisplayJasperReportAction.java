@@ -61,8 +61,7 @@ public class DisplayJasperReportAction extends DisplayUrlAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     JasperPrint report = (JasperPrint) context
         .get(ActionContextConstants.ACTION_PARAM);
 

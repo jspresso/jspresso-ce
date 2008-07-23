@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.util.security;
 
-import java.util.ListResourceBundle;
 
 /**
  * Some i18n utils for login.
@@ -68,67 +67,5 @@ public final class LoginUtils {
 
   private LoginUtils() {
     // Helper class constructor.
-  }
-
-  /**
-   * English RB.
-   * <p>
-   * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
-   * <p>
-   * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
-   */
-  public static class DlmBundle_en extends ListResourceBundle {
-
-    static final Object[][] CONTENTS = {
-                                         {USER, "User"},
-                                         {PASSWORD, "Password"},
-                                         {CRED_MESSAGE,
-                                             "Enter login information :"},
-                                         {USER_FAILED, "User incorrect"},
-                                         {PASSWORD_FAILED, "Password incorrect"},
-                                         {LOGIN_FAILED, "Login failed"}};
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Object[][] getContents() {
-      return CONTENTS;
-    }
-
-  }
-
-  /**
-   * French RB.
-   * <p>
-   * Copyright (c) 2005-2008 Vincent Vandenschrick. All rights reserved.
-   * <p>
-   * 
-   * @version $LastChangedRevision$
-   * @author Vincent Vandenschrick
-   */
-  public static class DlmBundle_fr extends ListResourceBundle {
-
-    static final Object[][] CONTENTS = {
-                                         {USER, "Utilisateur"},
-                                         {PASSWORD, "Mot de passe"},
-                                         {CRED_MESSAGE,
-                                             "Veuillez saisir vos informations d'identification :"},
-                                         {USER_FAILED, "Utilisateur incorrect"},
-                                         {PASSWORD_FAILED,
-                                             "Mot de passe incorrect"},
-                                         {LOGIN_FAILED,
-                                             "Identification incorrecte"}};
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    protected Object[][] getContents() {
-      return CONTENTS;
-    }
-
   }
 }

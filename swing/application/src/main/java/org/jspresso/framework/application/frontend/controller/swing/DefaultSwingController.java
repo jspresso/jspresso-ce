@@ -298,7 +298,6 @@ public class DefaultSwingController extends
    * <p>
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected final boolean executeBackend(final IAction action,
       final Map<String, Object> context) {
@@ -323,7 +322,6 @@ public class DefaultSwingController extends
   /**
    * {@inheritDoc}
    */
-  @SuppressWarnings("unchecked")
   @Override
   protected final boolean executeFrontend(final IAction action,
       final Map<String, Object> context) {

@@ -122,11 +122,11 @@ public interface IBackendController extends IController {
    * One of this action should be to construct the root connector based on the
    * root model descriptor.
    * 
-   * @param locale
+   * @param startingLocale
    *            the locale this backend controller should start with.
    * @return true if the controller successfully started.
    */
-  boolean start(Locale locale);
+  boolean start(Locale startingLocale);
 
   /**
    * Acts as a clipboard for storing component references along with their

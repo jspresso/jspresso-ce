@@ -75,8 +75,7 @@ public abstract class AbstractChangePasswordAction extends
    */
   @Override
   @SuppressWarnings("unchecked")
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     Map<String, Object> actionParam = (Map<String, Object>) context
         .get(ActionContextConstants.ACTION_PARAM);
     char[] typedPasswd = (char[]) actionParam.get(PASSWD_TYPED);

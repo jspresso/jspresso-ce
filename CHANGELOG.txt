@@ -1,0 +1,11 @@
+2.2
+===
+
+Bugs fixed
+----------
+[ 2014954 ] Application fails to start
+[ 2020304 ] Clicking an editable table cell in Wings does not select row
+
+New features
+------------
+[ 2014966 ] Force startup locale

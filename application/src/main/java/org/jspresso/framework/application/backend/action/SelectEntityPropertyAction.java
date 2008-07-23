@@ -11,7 +11,6 @@ import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.model.entity.IEntity;
 
-
 /**
  * A generic action to fill-in the context ACTION_PARAM with the value of an
  * entity property.
@@ -32,8 +31,9 @@ public class SelectEntityPropertyAction extends AbstractBackendAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(
+      @SuppressWarnings("unused") IActionHandler actionHandler,
+      Map<String, Object> context) {
     IEntity model = (IEntity) getModelConnector(context).getConnectorValue();
     if (model != null) {
       try {
@@ -56,7 +56,7 @@ public class SelectEntityPropertyAction extends AbstractBackendAction {
    * Sets the property.
    * 
    * @param property
-   *            the property to set.
+   *          the property to set.
    */
   public void setProperty(String property) {
     this.property = property;

@@ -62,8 +62,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * {@inheritDoc}
    */
   @Override
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, Map<String, Object> context) {
     ICompositeValueConnector moduleConnector = getModuleConnector(context);
     BeanCollectionModule module = (BeanCollectionModule) moduleConnector
         .getConnectorValue();
@@ -102,8 +101,7 @@ public class AddToModuleObjectsAction extends AbstractCollectionAction {
    * @return the created entity.
    */
   @SuppressWarnings("unchecked")
-  protected Object createNewModuleObject(@SuppressWarnings("unused")
-  IActionHandler actionHandler, Map<String, Object> context) {
+  protected Object createNewModuleObject(IActionHandler actionHandler, Map<String, Object> context) {
     IComponentDescriptor projectedComponentDescriptor = ((ICollectionDescriptorProvider<?>) getModelDescriptor(context))
         .getCollectionDescriptor().getElementDescriptor();
 

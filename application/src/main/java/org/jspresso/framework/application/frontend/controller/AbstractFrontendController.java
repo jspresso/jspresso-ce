@@ -58,7 +58,6 @@ import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 import org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor;
 
-
 /**
  * This class serves as base class for frontend (view) controllers.
  * <p>
@@ -78,11 +77,11 @@ import org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public abstract class AbstractFrontendController<E, F, G> extends
     AbstractController implements IFrontendController<E, F, G> {
@@ -112,6 +111,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
 
   private Map<String, Workspace>                workspaces;
   private String                                workspacesMenuIconImageUrl;
+
+  private String                                forcedStartingLocale;
 
   /**
    * Constructs a new <code>AbstractFrontendController</code> instance.
@@ -272,7 +273,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the actionMap.
    * 
    * @param actionMap
-   *            the actionMap to set.
+   *          the actionMap to set.
    */
   public void setActionMap(ActionMap actionMap) {
     this.actionMap = actionMap;
@@ -282,7 +283,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the description.
    * 
    * @param description
-   *            the description to set.
+   *          the description to set.
    */
   public void setDescription(String description) {
     controllerDescriptor.setDescription(description);
@@ -292,7 +293,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the helpActionMap.
    * 
    * @param helpActionMap
-   *            the helpActionMap to set.
+   *          the helpActionMap to set.
    */
   public void setHelpActionMap(ActionMap helpActionMap) {
     this.helpActionMap = helpActionMap;
@@ -302,7 +303,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the iconImageURL.
    * 
    * @param iconImageURL
-   *            the iconImageURL to set.
+   *          the iconImageURL to set.
    */
   public void setIconImageURL(String iconImageURL) {
     controllerDescriptor.setIconImageURL(iconImageURL);
@@ -312,7 +313,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the loginContextName.
    * 
    * @param loginContextName
-   *            the loginContextName to set.
+   *          the loginContextName to set.
    */
   public void setLoginContextName(String loginContextName) {
     this.loginContextName = loginContextName;
@@ -322,7 +323,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the moduleViewDescriptorFactory.
    * 
    * @param moduleViewDescriptorFactory
-   *            the moduleViewDescriptorFactory to set.
+   *          the moduleViewDescriptorFactory to set.
    */
   public void setModuleViewDescriptorFactory(
       IModuleViewDescriptorFactory moduleViewDescriptorFactory) {
@@ -333,7 +334,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the mvcBinder.
    * 
    * @param mvcBinder
-   *            the mvcBinder to set.
+   *          the mvcBinder to set.
    */
   public void setMvcBinder(IMvcBinder mvcBinder) {
     this.mvcBinder = mvcBinder;
@@ -343,7 +344,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the name.
    * 
    * @param name
-   *            the name to set.
+   *          the name to set.
    */
   public void setName(String name) {
     controllerDescriptor.setName(name);
@@ -353,7 +354,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the startupAction.
    * 
    * @param startupAction
-   *            the startupAction to set.
+   *          the startupAction to set.
    */
   public void setStartupAction(IAction startupAction) {
     this.startupAction = startupAction;
@@ -363,7 +364,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the viewFactory.
    * 
    * @param viewFactory
-   *            the viewFactory to set.
+   *          the viewFactory to set.
    */
   public void setViewFactory(IViewFactory<E, F, G> viewFactory) {
     this.viewFactory = viewFactory;
@@ -374,7 +375,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * user access on the domain window.
    * 
    * @param workspaces
-   *            the workspaces to set.
+   *          the workspaces to set.
    */
   public void setWorkspaces(List<Workspace> workspaces) {
     this.workspaces = new LinkedHashMap<String, Workspace>();
@@ -387,7 +388,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the workspacesMenuIconImageUrl.
    * 
    * @param workspacesMenuIconImageUrl
-   *            the workspacesMenuIconImageUrl to set.
+   *          the workspacesMenuIconImageUrl to set.
    */
   public void setWorkspacesMenuIconImageUrl(String workspacesMenuIconImageUrl) {
     this.workspacesMenuIconImageUrl = workspacesMenuIconImageUrl;
@@ -400,7 +401,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    */
   public boolean start(IBackendController peerController, Locale startingLocale) {
     setBackendController(peerController);
-    return peerController.start(startingLocale);
+    Locale initialLocale = startingLocale;
+    if (forcedStartingLocale != null) {
+      initialLocale = new Locale(forcedStartingLocale);
+    }
+    return peerController.start(initialLocale);
   }
 
   /**
@@ -421,11 +426,11 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Creates a root workspace view.
    * 
    * @param workspaceName
-   *            the identifier of the workspace to create the view for.
+   *          the identifier of the workspace to create the view for.
    * @param workspaceViewDescriptor
-   *            the view descriptor of the workspace to render.
+   *          the view descriptor of the workspace to render.
    * @param workspace
-   *            the workspace to create the view for.
+   *          the workspace to create the view for.
    * @return a view rendering the workspace.
    */
   protected IView<E> createWorkspaceView(final String workspaceName,
@@ -433,7 +438,8 @@ public abstract class AbstractFrontendController<E, F, G> extends
     BasicSplitViewDescriptor splitViewDescriptor = new BasicSplitViewDescriptor();
     splitViewDescriptor.setOrientation(ISplitViewDescriptor.HORIZONTAL);
     splitViewDescriptor.setName(workspaceViewDescriptor.getName());
-    // splitViewDescriptor.setDescription(workspaceViewDescriptor.getDescription());
+    //splitViewDescriptor.setDescription(workspaceViewDescriptor.getDescription(
+    // ));
     splitViewDescriptor.setIconImageURL(workspaceViewDescriptor
         .getIconImageURL());
     splitViewDescriptor.setCascadingModels(true);
@@ -474,7 +480,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Displays a workspace.
    * 
    * @param workspaceName
-   *            the workspace identifier.
+   *          the workspace identifier.
    */
   protected abstract void displayWorkspace(String workspaceName);
 
@@ -482,9 +488,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Executes a backend action.
    * 
    * @param action
-   *            the backend action to execute.
+   *          the backend action to execute.
    * @param context
-   *            the action execution context.
+   *          the action execution context.
    * @return true if the action was succesfully executed.
    */
   protected boolean executeBackend(IAction action, Map<String, Object> context) {
@@ -495,9 +501,9 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Executes a frontend action.
    * 
    * @param action
-   *            the frontend action to execute.
+   *          the frontend action to execute.
    * @param context
-   *            the action execution context.
+   *          the action execution context.
    * @return true if the action was succesfully executed.
    */
   protected boolean executeFrontend(IAction action, Map<String, Object> context) {
@@ -565,7 +571,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Given a workspace name, this method returns the associated workspace.
    * 
    * @param workspaceName
-   *            the name of the workspace.
+   *          the name of the workspace.
    * @return the selected workspace.
    */
   protected Workspace getWorkspace(String workspaceName) {
@@ -601,7 +607,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * This method installs the security subject into the application session.
    * 
    * @param subject
-   *            the authenticated user subject.
+   *          the authenticated user subject.
    */
   protected void loginSuccess(Subject subject) {
     getBackendController().getApplicationSession().setSubject(subject);
@@ -624,7 +630,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the backend controller this controller is attached to.
    * 
    * @param backendController
-   *            the backend controller to set.
+   *          the backend controller to set.
    */
   protected void setBackendController(IBackendController backendController) {
     this.backendController = backendController;
@@ -634,7 +640,7 @@ public abstract class AbstractFrontendController<E, F, G> extends
    * Sets the selectedWorkspaceName.
    * 
    * @param selectedWorkspaceName
-   *            the selectedWorkspaceName to set.
+   *          the selectedWorkspaceName to set.
    */
   protected void setSelectedWorkspaceName(String selectedWorkspaceName) {
     this.selectedWorkspaceName = selectedWorkspaceName;
@@ -676,5 +682,24 @@ public abstract class AbstractFrontendController<E, F, G> extends
         translateModule(module);
       }
     }
+  }
+
+  /**
+   * Gets the forcedStartingLocale.
+   * 
+   * @return the forcedStartingLocale.
+   */
+  protected String getForcedStartingLocale() {
+    return forcedStartingLocale;
+  }
+
+  /**
+   * Sets the forcedStartingLocale.
+   * 
+   * @param forcedStartingLocale
+   *          the forcedStartingLocale to set.
+   */
+  public void setForcedStartingLocale(String forcedStartingLocale) {
+    this.forcedStartingLocale = forcedStartingLocale;
   }
 }

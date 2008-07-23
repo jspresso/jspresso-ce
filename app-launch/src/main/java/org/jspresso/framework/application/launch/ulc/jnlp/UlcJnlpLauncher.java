@@ -72,11 +72,11 @@ import com.ulcjava.environment.jnlp.client.AbstractJnlpLauncher;
  */
 public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
 
-  private static final String   USAGE_TEXT = "JNLP file paramters: \n"
-                                               + "\t<urlString> the ULC application URL string\n"
-                                               + "\t<keepAliveInterval> the keep alive interval\n"
-                                               + "\t[ <logLevel> ] the log level (optional)\n"
-                                               + "\t{ -<key> <value> } the user parameters (optional, multiple allowed)\n";
+  private static final String   USAGE_TEXT      = "JNLP file paramters: \n"
+                                                    + "\t<urlString> the ULC application URL string\n"
+                                                    + "\t<keepAliveInterval> the keep alive interval\n"
+                                                    + "\t[ <logLevel> ] the log level (optional)\n"
+                                                    + "\t{ -<key> <value> } the user parameters (optional, multiple allowed)\n";
   private ResourceBundle        bundle;
   private int                   keepAliveInterval;
   private List<IMessageService> messageHandlers;
@@ -90,7 +90,9 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
     this.keepAliveInterval = keepAliveInterval;
     this.userParameters = userParameters;
     this.splashUrl = splashUrl;
+
     bundle = ResourceBundle.getBundle(getClass().getName(), locale);
+
     registerMessageHandler(new ClassInvoker());
     registerMessageHandler(new FileExists());
     if (splashUrl != null) {
@@ -121,9 +123,9 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
    * Overriden to cope with formatted textfield font bug.
    * 
    * @param args
-   *            arguments.
+   *          arguments.
    * @throws MalformedURLException
-   *             whenever the startup url is malformed.
+   *           whenever the startup url is malformed.
    */
   public static void main(String[] args) throws MalformedURLException {
     SwingUtil.installDefaults();
@@ -240,7 +242,7 @@ public final class UlcJnlpLauncher extends AbstractJnlpLauncher {
    * Registers a new message handler to which client messages will be delivered.
    * 
    * @param messageHandler
-   *            the new message handler to be delivered.
+   *          the new message handler to be delivered.
    */
   private void registerMessageHandler(IMessageService messageHandler) {
     if (messageHandlers == null) {

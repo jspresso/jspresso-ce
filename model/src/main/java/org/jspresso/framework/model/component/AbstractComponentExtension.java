@@ -115,8 +115,7 @@ public abstract class AbstractComponentExtension<T extends IComponent>
     sourceBean.addPropertyChangeListener(sourceProperty,
         new PropertyChangeListener() {
 
-          public void propertyChange(@SuppressWarnings("unused")
-          PropertyChangeEvent evt) {
+          public void propertyChange(PropertyChangeEvent evt) {
             getComponent().firePropertyChange(forwardedProperty,
                 evt.getOldValue(), evt.getNewValue());
           }

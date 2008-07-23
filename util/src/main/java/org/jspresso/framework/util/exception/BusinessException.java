@@ -20,6 +20,8 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
  */
 public abstract class BusinessException extends RuntimeException {
 
+  private static final long serialVersionUID = -5422600831610337684L;
+
   private String staticI18nKey;
 
   /**

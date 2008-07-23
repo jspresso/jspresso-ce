@@ -29,7 +29,6 @@ import org.jspresso.framework.view.IViewFactory;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.action.IActionable;
 
-
 /**
  * General contract of frontend (view) application controllers.
  * <p>
@@ -49,11 +48,11 @@ import org.jspresso.framework.view.action.IActionable;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  * @param <E>
- *            the actual gui component type used.
+ *          the actual gui component type used.
  * @param <F>
- *            the actual icon type used.
+ *          the actual icon type used.
  * @param <G>
- *            the actual action type used.
+ *          the actual action type used.
  */
 public interface IFrontendController<E, F, G> extends IController,
     IIconDescriptor, IActionable {
@@ -93,11 +92,11 @@ public interface IFrontendController<E, F, G> extends IController,
    * descriptor.
    * 
    * @param backendController
-   *            the backend controller to bind to.
-   * @param locale
-   *            the locale this controller should use to create the views and
-   *            execute actions.
+   *          the backend controller to bind to.
+   * @param startingLocale
+   *          the locale this controller should use to initiate the login
+   *          session while not knowing yet the user locale.
    * @return true if the controller succesfully started.
    */
-  boolean start(IBackendController backendController, Locale locale);
+  boolean start(IBackendController backendController, Locale startingLocale);
 }

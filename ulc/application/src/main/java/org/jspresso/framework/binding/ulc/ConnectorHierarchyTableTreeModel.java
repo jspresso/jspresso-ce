@@ -68,8 +68,7 @@ public class ConnectorHierarchyTableTreeModel extends AbstractTableTreeModel {
    *            lazy-load the tree hierarchy.
    */
   public ConnectorHierarchyTableTreeModel(
-      ICompositeValueConnector rootConnector, @SuppressWarnings("unused")
-      ULCTableTree tree) {
+      ICompositeValueConnector rootConnector, ULCTableTree tree) {
     treeModelDelegate = new ConnectorHierarchyTreeModel(rootConnector);
     treeModelDelegate.addTreeModelListener(new TreeModelListenerAdapter());
   }

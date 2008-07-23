@@ -63,9 +63,7 @@ public class BooleanTableCellRenderer extends SCheckBox implements
    * {@inheritDoc}
    */
   public SComponent getTableCellRendererComponent(STable table, Object value,
-      boolean isSelected, @SuppressWarnings("unused")
-      int row, @SuppressWarnings("unused")
-      int column) {
+      boolean isSelected, int row, int column) {
     if (isSelected) {
       super.setForeground(table.getSelectionForeground());
       super.setBackground(table.getSelectionBackground());

@@ -464,7 +464,6 @@ public class BasicApplicationSession implements IApplicationSession {
    * @return a transient collection instance with the same interface type as the
    *         parameter.
    */
-  @SuppressWarnings("unchecked")
   protected Collection<IEntity> createTransientEntityCollection(
       Collection<?> collection) {
     Collection<IEntity> uowEntityCollection = null;
@@ -571,7 +570,6 @@ public class BasicApplicationSession implements IApplicationSession {
    * @return the wrapped collection if any (it may be the collection itself as
    *         in this implementation).
    */
-  @SuppressWarnings("unused")
   protected Collection<IEntity> wrapDetachedEntityCollection(IEntity entity,
       Collection<IEntity> transientCollection,
       Collection<IEntity> snapshotCollection, String role) {

@@ -82,8 +82,7 @@ public class ModelCollectionConnector extends ModelCollectionPropertyConnector {
    * {@inheritDoc}
    */
   @Override
-  protected void setConnecteeValue(@SuppressWarnings("unused")
-  Object aValue) {
+  protected void setConnecteeValue(Object aValue) {
     Collection<?> oldValue = connecteeValue;
     connecteeValue = (Collection<?>) aValue;
     propertyChange(new PropertyChangeEvent(this, "connecteeValue",

@@ -50,8 +50,7 @@ public class UIExtendedButton extends UIButton {
    * {@inheritDoc}
    */
   @Override
-  protected Object createBasicObject(@SuppressWarnings("unused")
-  Anything args) {
+  protected Object createBasicObject(Anything args) {
     UiJButton button = (UiJButton) super.createBasicObject(args);
     SwingUtil.configureButton(button);
     return button;

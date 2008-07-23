@@ -40,8 +40,7 @@ public class UIExtendedTree extends UITree {
       /**
        * {@inheritDoc}
        */
-      public void treeWillCollapse(@SuppressWarnings("unused")
-      TreeExpansionEvent event) {
+      public void treeWillCollapse(TreeExpansionEvent event) {
         sendOptionalEventULC(
             ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT,
             ExtendedTreeConstants.EXTENDED_TREE_WILL_COLLAPSE,
@@ -51,8 +50,7 @@ public class UIExtendedTree extends UITree {
       /**
        * {@inheritDoc}
        */
-      public void treeWillExpand(@SuppressWarnings("unused")
-      TreeExpansionEvent event) {
+      public void treeWillExpand(TreeExpansionEvent event) {
         sendOptionalEventULC(
             ExtendedTreeConstants.EXTENDED_TREE_EXPANSION_EVENT,
             ExtendedTreeConstants.EXTENDED_TREE_WILL_EXPAND,

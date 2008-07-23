@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
-import org.jspresso.framework.model.descriptor.IModelDescriptorAware;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 
 
@@ -23,8 +22,7 @@ import org.jspresso.framework.util.accessor.ICollectionAccessor;
  * @author Vincent Vandenschrick
  */
 public class DescriptorAwareMapCollectionAccessor extends
-    DescriptorAwareMapPropertyAccessor implements ICollectionAccessor,
-    IModelDescriptorAware {
+    DescriptorAwareMapPropertyAccessor implements ICollectionAccessor {
 
   /**
    * Constructs a new <code>DescriptorAwareMapCollectionAccessor</code>

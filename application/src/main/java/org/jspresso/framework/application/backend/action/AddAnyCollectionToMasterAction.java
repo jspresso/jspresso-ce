@@ -81,7 +81,6 @@ public class AddAnyCollectionToMasterAction extends
    * @return the collection of details to add to the collection.
    */
   @Override
-  @SuppressWarnings("unchecked")
   protected List<?> getAddedComponents(Map<String, Object> context) {
     Object detailOrList = context.get(ActionContextConstants.ACTION_PARAM);
     if (detailOrList instanceof List) {

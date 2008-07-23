@@ -79,9 +79,7 @@ public class RemoveFromModuleObjectsAction extends
    * {@inheritDoc}
    */
   @Override
-  @SuppressWarnings("unchecked")
-  public boolean execute(@SuppressWarnings("unused")
-  IActionHandler actionHandler, final Map<String, Object> context) {
+  public boolean execute(IActionHandler actionHandler, final Map<String, Object> context) {
     int[] selectedIndices = getSelectedIndices(context);
     ICollectionConnector collectionConnector = getModelConnector(context);
 
@@ -147,7 +145,6 @@ public class RemoveFromModuleObjectsAction extends
    *            the action context.
    */
   protected void deleteEntity(IEntity entity, Session session,
-      @SuppressWarnings("unused")
       Map<String, Object> context) {
     session.delete(entity);
   }
