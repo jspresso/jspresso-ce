@@ -1,12 +1,9 @@
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jspresso</groupId>
   <artifactId>jspresso-framework</artifactId>
   <packaging>pom</packaging>
-  <version>2.2-SNAPSHOT</version>
+  <version>2.2</version>
   <name>Jspresso Application Framework</name>
   <description>Jspresso is a new generation framework to easily build professional quality java distributed desktop applications. Jspresso dramatically reduces the development cycles needed to get your business application up and running while not sacrificing quality, robustness and performance. Jspresso is not another webapp framework. Jspresso based applications offer the exact same ergonomics as desktop applications while keeping an N-tier centralized architecture. And last but not least, Jspresso is free.</description>
   <url>http://www.jspresso.org</url>
@@ -24,7 +21,7 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/trunk</connection>
+    <connection>scm:svn:https://svn.jspresso.org/jspresso/framework/tags/jspresso-framework-2.2</connection>
   </scm>
   <!--
     <mailingLists> <mailingList> <name>${pom.name} Dev List</name> <subscribe>dev-subscribe@jspresso.org</subscribe>
@@ -120,46 +117,27 @@
             <phase>pre-site</phase>
             <configuration>
               <tasks>
-                <taskdef
-                  name="beandoc"
-                  classname="org.springframework.beandoc.client.AntTask" />
-                <taskdef
-                  resource="net/sf/antcontrib/antlib.xml" />
+                <taskdef name="beandoc" classname="org.springframework.beandoc.client.AntTask" />
+                <taskdef resource="net/sf/antcontrib/antlib.xml" />
                 <if>
-                  <equals
-                    arg1="${project.artifactId}"
-                    arg2="jspresso-framework" />
+                  <equals arg1="${project.artifactId}" arg2="jspresso-framework" />
                   <then>
-                    <mkdir
-                      dir="${project.reporting.outputDirectory}/beandocs" />
-                    <mkdir
-                      dir="${project.reporting.outputDirectory}/beandocs/tmp" />
-                    <copy
-                      todir="${project.reporting.outputDirectory}/beandocs/tmp"
-                      flatten="true">
-                      <fileset
-                        dir="${basedir}/app-template/src/main/resources">
-                        <include
-                          name="**/commons.xml" />
-                        <include
-                          name="**/commons-hibernate.xml" />
-                        <include
-                          name="**/commons-frontend.xml" />
-                        <include
-                          name="**/commons-swing.xml" />
+                    <mkdir dir="${project.reporting.outputDirectory}/beandocs" />
+                    <mkdir dir="${project.reporting.outputDirectory}/beandocs/tmp" />
+                    <copy todir="${project.reporting.outputDirectory}/beandocs/tmp" flatten="true">
+                      <fileset dir="${basedir}/app-template/src/main/resources">
+                        <include name="**/commons.xml" />
+                        <include name="**/commons-hibernate.xml" />
+                        <include name="**/commons-frontend.xml" />
+                        <include name="**/commons-swing.xml" />
                       </fileset>
                     </copy>
-                    <beandoc
-                      outputDir="${project.reporting.outputDirectory}/beandocs"
-                      beandocProps="${basedir}/jspresso-beandoc.properties">
-                      <fileset
-                        dir="${project.reporting.outputDirectory}/beandocs/tmp">
-                        <include
-                          name="**/*.xml" />
+                    <beandoc outputDir="${project.reporting.outputDirectory}/beandocs" beandocProps="${basedir}/jspresso-beandoc.properties">
+                      <fileset dir="${project.reporting.outputDirectory}/beandocs/tmp">
+                        <include name="**/*.xml" />
                       </fileset>
                     </beandoc>
-                    <delete
-                      dir="${project.reporting.outputDirectory}/beandocs/tmp" />
+                    <delete dir="${project.reporting.outputDirectory}/beandocs/tmp" />
                   </then>
                 </if>
               </tasks>
