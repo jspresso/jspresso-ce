@@ -9,3 +9,6 @@ Bugs fixed
 New features
 ------------
 [ 2014966 ] Force startup locale
+Migrate to jboss libraries 4.2.2.GA
+Migrate to log4j 1.2.14
+Fixed a version error for WingS libraries. 3.2 is in fact 3.2.1

@@ -26,7 +26,7 @@
   <repositories>
     <repository>
       <id>jboss</id>
-      <url>http://repository.jboss.com/maven2</url>
+      <url>http://repository.jboss.org/maven2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -34,6 +34,13 @@
     <repository>
       <id>beandoc</id>
       <url>http://spring-beandoc.sourceforge.net/repo</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>sun</id>
+      <url>http://download.java.net/maven/2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -198,7 +205,7 @@
       <dependency>
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
-        <version>1.2.8</version>
+        <version>1.2.14</version>
       </dependency>
       <dependency>
         <groupId>commons-lang</groupId>
@@ -346,12 +353,12 @@
       <dependency>
         <groupId>jboss</groupId>
         <artifactId>jbosssx</artifactId>
-        <version>4.0.4</version>
+        <version>4.2.2.GA</version>
       </dependency>
       <dependency>
         <groupId>jboss</groupId>
         <artifactId>jboss-common</artifactId>
-        <version>4.0.4</version>
+        <version>4.2.2.GA</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
@@ -411,17 +418,17 @@
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wings</artifactId>
-        <version>3.2</version>
+        <version>3.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wingx</artifactId>
-        <version>3.2</version>
+        <version>3.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.wings</groupId>
         <artifactId>wings-experimental</artifactId>
-        <version>3.2</version>
+        <version>3.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.jvnet</groupId>

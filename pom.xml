@@ -63,7 +63,7 @@
   <repositories>
     <repository>
       <id>jboss</id>
-      <url>http://repository.jboss.com/maven2</url>
+      <url>http://repository.jboss.org/maven2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -71,6 +71,13 @@
     <repository>
       <id>beandoc</id>
       <url>http://spring-beandoc.sourceforge.net/repo</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>sun</id>
+      <url>http://download.java.net/maven/2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>

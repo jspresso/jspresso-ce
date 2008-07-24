@@ -78,8 +78,7 @@ public class DialogCallbackHandler implements CallbackHandler {
 
     if (pcFound && !tocFound) {
       TextOutputCallback defaultToc = new TextOutputCallback(
-          TextOutputCallback.INFORMATION, translationProvider.getTranslation(
-              "credentialMessage", locale));
+          TextOutputCallback.INFORMATION, "credentialMessage");
       List<Callback> completedCallBacks = new ArrayList<Callback>(Arrays
           .asList(varCallbacks));
       completedCallBacks.add(defaultToc);

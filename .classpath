@@ -57,7 +57,6 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/javax/transaction/jta/1.0.1B/jta-1.0.1B.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/log4j/log4j/1.2.8/log4j-1.2.8.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/swarmcache/swarmcache/1.0RC2/swarmcache-1.0RC2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/trove/trove/1.0.2/trove-1.0.2.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/avalon-framework/avalon-framework/4.1.3/avalon-framework-4.1.3.jar"/>
@@ -107,10 +106,11 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/cglib/cglib-nodep/2.1_3/cglib-nodep-2.1_3.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6"/>
 	<classpathentry kind="var" path="M2_REPO/org/jvnet/substance/4.1/substance-4.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-common/4.0.4/jboss-common-4.0.4.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.0.4/jbosssx-4.0.4.jar" sourcepath="/ENVDEV/jboss-4.0.4.GA/src/security/src/main"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.2/wings-3.2.jar" sourcepath="/ENVDEV/wings/wings3-stable/wings/src/java"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.2/wings-experimental-3.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.2/wingx-3.2.jar" sourcepath="/ENVDEV/wings/wings3/wingx/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-common/4.2.2.GA/jboss-common-4.2.2.GA.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" sourcepath="/ENVDEV/jboss-4.2.2.GA/src/security/src/main"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.2.1/wings-3.2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.2.1/wings-experimental-3.2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.2.1/wingx-3.2.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
