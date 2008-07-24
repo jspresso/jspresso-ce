@@ -46,7 +46,7 @@
       </snapshots>
     </repository>
     <repository>
-      <id>jspresso-repository</id>
+      <id>jspresso-snapshots-repository</id>
       <url>http://repository.jspresso.org/maven2-snapshots</url>
       <snapshots>
         <enabled>true</enabled>
