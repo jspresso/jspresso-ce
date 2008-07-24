@@ -346,11 +346,6 @@
         <version>2.3.3</version>
       </dependency>
       <dependency>
-        <groupId>ulc</groupId>
-        <artifactId>ulc-base-development</artifactId>
-        <version>6.0.5</version>
-      </dependency>
-      <dependency>
         <groupId>jboss</groupId>
         <artifactId>jbosssx</artifactId>
         <version>4.2.2.GA</version>
@@ -359,6 +354,11 @@
         <groupId>jboss</groupId>
         <artifactId>jboss-common</artifactId>
         <version>4.2.2.GA</version>
+      </dependency>
+      <dependency>
+        <groupId>ulc</groupId>
+        <artifactId>ulc-base-development</artifactId>
+        <version>6.0.5</version>
       </dependency>
       <dependency>
         <groupId>ulc</groupId>
