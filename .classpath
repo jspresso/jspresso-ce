@@ -109,8 +109,8 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jboss-common/4.2.2.GA/jboss-common-4.2.2.GA.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jboss/jbosssx/4.2.2.GA/jbosssx-4.2.2.GA.jar" sourcepath="/ENVDEV/jboss-4.2.2.GA/src/security/src/main"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/log4j/log4j/1.2.14/log4j-1.2.14.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.2.1/wings-3.2.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.2.1/wings-experimental-3.2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.2.1/wings-3.2.1.jar" sourcepath="/ENVDEV/wings/wings3/wings/src/java"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.2.1/wings-experimental-3.2.1.jar" sourcepath="/ENVDEV/wings/wings3/wings-experimental/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.2.1/wingx-3.2.1.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
