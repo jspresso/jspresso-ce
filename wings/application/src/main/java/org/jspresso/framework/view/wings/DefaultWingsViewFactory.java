@@ -185,6 +185,7 @@ import org.wings.border.SEmptyBorder;
 import org.wings.border.SEtchedBorder;
 import org.wings.border.SLineBorder;
 import org.wings.io.Device;
+import org.wings.style.CSSProperty;
 import org.wings.table.SDefaultTableCellRenderer;
 import org.wings.table.STableCellEditor;
 import org.wings.table.STableCellRenderer;
@@ -738,6 +739,8 @@ public class DefaultWingsViewFactory implements
     scrollPane.setPreferredSize(SDimension.FULLAREA);
     scrollPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
+    //TODO remove workaround asa WingS is fixed.
+    scrollPane.setAttribute(CSSProperty.TABLE_LAYOUT, "fixed");
     return scrollPane;
   }
 
@@ -2572,7 +2575,7 @@ public class DefaultWingsViewFactory implements
         locale));
     treeSelectionModelBinder.bindSelectionModel(connector, viewComponent);
 
-    final SScrollPane scrollPane = createSScrollPane();
+    SScrollPane scrollPane = createSScrollPane();
     scrollPane.setViewportView(viewComponent);
     scrollPane.setPreferredSize(new SDimension("180px", scrollPane
         .getPreferredSize().getHeight()));
