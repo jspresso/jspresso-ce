@@ -1530,12 +1530,12 @@ public class DefaultWingsViewFactory implements
     DateFormat format;
     if (IDatePropertyDescriptor.DATE_TYPE.equals(propertyDescriptor.getType())) {
       format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
-          .getDateInstance(DateFormat.SHORT, locale)).toLocalizedPattern(),
+          .getDateInstance(DateFormat.SHORT, locale)).toPattern(),
           locale);
     } else {
       format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
           .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale))
-          .toLocalizedPattern(), locale);
+          .toPattern(), locale);
     }
     return format;
   }
