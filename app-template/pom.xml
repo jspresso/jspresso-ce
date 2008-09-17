@@ -10,10 +10,6 @@
   <name>App-template</name>
   <dependencies>
     <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-app-launch</artifactId>
-    </dependency>
-    <dependency>
       <groupId>bsf</groupId>
       <artifactId>bsf</artifactId>
     </dependency>
