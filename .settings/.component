@@ -67,8 +67,6 @@
         <wb-resource deploy-path="/" source-path="/wings/application/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/wings/components/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/wings/components/src/main/resources"/>
-        <wb-resource deploy-path="/" source-path="/app-template/src/main/java"/>
-        <wb-resource deploy-path="/" source-path="/app-template/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/action/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/action/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/security/src/main/java"/>
@@ -89,5 +87,13 @@
         <wb-resource deploy-path="/" source-path="/jasper/ulc/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/jasper/wings/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/jasper/wings/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/app-template/core/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/app-template/core/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/app-template/swing/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/app-template/swing/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/app-template/ulc/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/app-template/ulc/src/main/resources"/>
+        <wb-resource deploy-path="/" source-path="/app-template/wings/src/main/java"/>
+        <wb-resource deploy-path="/" source-path="/app-template/wings/src/main/resources"/>
 </wb-module>
 </project-modules>

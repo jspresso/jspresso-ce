@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.0.3.v200802061800]]></pluginVersion>
+	<pluginVersion><![CDATA[2.1.0.v200808011800]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
 	<enableImports><![CDATA[false]]></enableImports>
 	<configs>
-		<config>app-template/src/main/resources/org/jspresso/framework/application/commons.xml</config>
-		<config>app-template/src/main/resources/org/jspresso/framework/application/mock-config.xml</config>
-		<config>app-template/src/main/resources/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
-		<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
-		<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
-		<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/ulc/commons-ulc.xml</config>
-		<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
+		<config>app-template/core/src/main/resources/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
+		<config>app-template/core/src/main/resources/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+		<config>app-template/swing/src/main/resources/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
+		<config>app-template/ulc/src/main/resources/org/jspresso/framework/application/frontend/ulc/commons-ulc.xml</config>
+		<config>app-template/wings/src/main/resources/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
+		<config>app-template/core/src/main/resources/org/jspresso/framework/application/commons.xml</config>
+		<config>app-template/core/src/main/resources/org/jspresso/framework/application/mock-config.xml</config>
 	</configs>
 	<configSets>
 		<configSet>
-			<name><![CDATA[D2sTemplateSwing]]></name>
+			<name><![CDATA[JspressoSwing]]></name>
 			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/commons.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/mock-config.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/commons.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/mock-config.xml</config>
+				<config>app-template/swing/src/main/resources/org/jspresso/framework/application/frontend/swing/commons-swing.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
-			<name><![CDATA[D2sTemplateUlc]]></name>
+			<name><![CDATA[JspressoWings]]></name>
 			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/commons.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/ulc/commons-ulc.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/mock-config.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/commons.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/mock-config.xml</config>
+				<config>app-template/wings/src/main/resources/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
 			</configs>
 		</configSet>
 		<configSet>
-			<name><![CDATA[D2sTemplateWings]]></name>
+			<name><![CDATA[JspressoUlc]]></name>
 			<allowBeanDefinitionOverriding>false</allowBeanDefinitionOverriding>
 			<incomplete>false</incomplete>
 			<configs>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/commons.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/frontend/wings/commons-wings.xml</config>
-				<config>app-template/src/main/resources/org/jspresso/framework/application/mock-config.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/backend/persistence/hibernate/commons-hibernate.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/commons.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/frontend/commons-frontend.xml</config>
+				<config>app-template/core/src/main/resources/org/jspresso/framework/application/mock-config.xml</config>
+				<config>app-template/ulc/src/main/resources/org/jspresso/framework/application/frontend/ulc/commons-ulc.xml</config>
 			</configs>
 		</configSet>
 	</configSets>

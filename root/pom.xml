@@ -174,7 +174,22 @@
       </dependency>
       <dependency>
         <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-app-template</artifactId>
+        <artifactId>jspresso-app-template-core</artifactId>
+        <version>2.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-app-template-swing</artifactId>
+        <version>2.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-app-template-ulc</artifactId>
+        <version>2.2-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jspresso</groupId>
+        <artifactId>jspresso-app-template-wings</artifactId>
         <version>2.2-SNAPSHOT</version>
       </dependency>
       <dependency>
