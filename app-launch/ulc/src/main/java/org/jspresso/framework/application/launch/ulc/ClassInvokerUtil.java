@@ -34,7 +34,7 @@ package org.jspresso.framework.application.launch.ulc;
  * License along with Jspresso. If not, see <http://www.gnu.org/licenses/>.
  * <p>
  * 
- * @version $LastChangedRevision: 959 $
+ * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
 public final class ClassInvokerUtil {

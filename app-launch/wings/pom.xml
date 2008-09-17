@@ -6,12 +6,13 @@
     <version>2.2-SNAPSHOT</version>
   </parent>
   <artifactId>jspresso-app-launch</artifactId>
-  <packaging>pom</packaging>
-  <name>App - launch</name>
-  <modules>
-    <module>core</module>
-    <module>swing</module>
-    <module>ulc</module>
-    <module>wings</module>
-  </modules>
+  <packaging>jar</packaging>
+  <name>App - launch - Wings</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.wings</groupId>
+      <artifactId>wings</artifactId>
+      <optional>true</optional>
+    </dependency>
+  </dependencies>
 </project>

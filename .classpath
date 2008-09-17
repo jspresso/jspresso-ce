@@ -34,8 +34,14 @@
 	<classpathentry kind="src" output="wings/components/target/classes" path="wings/components/src/main/resources"/>
 	<classpathentry kind="src" output="app-template/target/classes" path="app-template/src/main/java"/>
 	<classpathentry kind="src" output="app-template/target/classes" path="app-template/src/main/resources"/>
-	<classpathentry kind="src" output="app-launch/target/classes" path="app-launch/src/main/java"/>
-	<classpathentry kind="src" output="app-launch/target/classes" path="app-launch/src/main/resources"/>
+	<classpathentry kind="src" output="app-launch/core/target/classes" path="app-launch/core/src/main/java"/>
+	<classpathentry kind="src" output="app-launch/core/target/classes" path="app-launch/core/src/main/resources"/>
+	<classpathentry kind="src" output="app-launch/swing/target/classes" path="app-launch/swing/src/main/java"/>
+	<classpathentry kind="src" output="app-launch/swing/target/classes" path="app-launch/swing/src/main/resources"/>
+	<classpathentry kind="src" output="app-launch/ulc/target/classes" path="app-launch/ulc/src/main/java"/>
+	<classpathentry kind="src" output="app-launch/ulc/target/classes" path="app-launch/ulc/src/main/resources"/>
+	<classpathentry kind="src" output="app-launch/wings/target/classes" path="app-launch/wings/src/main/java"/>
+	<classpathentry kind="src" output="app-launch/wings/target/classes" path="app-launch/wings/src/main/resources"/>
 	<classpathentry kind="src" output="action/target/classes" path="action/src/main/java"/>
 	<classpathentry kind="src" output="action/target/classes" path="action/src/main/resources"/>
 	<classpathentry kind="src" output="security/target/classes" path="security/src/main/java"/>
