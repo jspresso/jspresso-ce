@@ -6,29 +6,12 @@
     <version>2.2-SNAPSHOT</version>
   </parent>
   <artifactId>jspresso-jasper</artifactId>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <name>JasperReports</name>
-  <dependencies>
-    <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-action</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-swing-application</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-ulc-application</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-wings-application</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>jasperreports</groupId>
-      <artifactId>jasperreports</artifactId>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>core</module>
+    <module>swing</module>
+    <module>ulc</module>
+    <module>wings</module>
+  </modules>
 </project>

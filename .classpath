@@ -46,8 +46,14 @@
 	<classpathentry kind="src" output="action/target/classes" path="action/src/main/resources"/>
 	<classpathentry kind="src" output="security/target/classes" path="security/src/main/java"/>
 	<classpathentry kind="src" output="security/target/classes" path="security/src/main/resources"/>
-	<classpathentry kind="src" output="jasper/target/classes" path="jasper/src/main/java"/>
-	<classpathentry kind="src" output="jasper/target/classes" path="jasper/src/main/resources"/>
+	<classpathentry kind="src" output="jasper/core/target/classes" path="jasper/core/src/main/java"/>
+	<classpathentry kind="src" output="jasper/core/target/classes" path="jasper/core/src/main/resources"/>
+	<classpathentry kind="src" output="jasper/swing/target/classes" path="jasper/swing/src/main/java"/>
+	<classpathentry kind="src" output="jasper/swing/target/classes" path="jasper/swing/src/main/resources"/>
+	<classpathentry kind="src" output="jasper/ulc/target/classes" path="jasper/ulc/src/main/java"/>
+	<classpathentry kind="src" output="jasper/ulc/target/classes" path="jasper/ulc/src/main/resources"/>
+	<classpathentry kind="src" output="jasper/wings/target/classes" path="jasper/wings/src/main/java"/>
+	<classpathentry kind="src" output="jasper/wings/target/classes" path="jasper/wings/src/main/resources"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jgroups/jgroups-all/2.2.7/jgroups-all-2.2.7.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/javax/security/jacc/1.0/jacc-1.0.jar"/>

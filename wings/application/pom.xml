@@ -26,6 +26,10 @@
       <artifactId>jspresso-application</artifactId>
     </dependency>
     <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.wings</groupId>
       <artifactId>wings</artifactId>
     </dependency>

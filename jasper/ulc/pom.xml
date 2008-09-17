@@ -5,25 +5,17 @@
     <artifactId>jspresso-root</artifactId>
     <version>2.2-SNAPSHOT</version>
   </parent>
-  <artifactId>jspresso-ulc-components-client</artifactId>
+  <artifactId>jspresso-jasper-ulc</artifactId>
   <packaging>jar</packaging>
-  <name>ULC - Components - Client</name>
+  <name>JasperReports - ULC</name>
   <dependencies>
     <dependency>
       <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-ulc-components-shared</artifactId>
+      <artifactId>jspresso-jasper-core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-swing-components</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>ulc</groupId>
-      <artifactId>ulc-base-client</artifactId>
+      <artifactId>jspresso-ulc-application</artifactId>
     </dependency>
   </dependencies>
 </project>

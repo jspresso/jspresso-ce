@@ -8,21 +8,4 @@
   <artifactId>jspresso-app-template</artifactId>
   <packaging>jar</packaging>
   <name>App-template</name>
-  <dependencies>
-    <dependency>
-      <groupId>bsf</groupId>
-      <artifactId>bsf</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-swing-components</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>ulc</groupId>
-      <artifactId>ulc-base-server</artifactId>
-      <optional>true</optional>
-    </dependency>
-  </dependencies>
 </project>
