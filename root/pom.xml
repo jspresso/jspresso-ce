@@ -480,6 +480,11 @@
         <artifactId>substance</artifactId>
         <version>4.1</version>
       </dependency>
+      <dependency>
+        <groupId>jnlp-servlet</groupId>
+        <artifactId>jnlp-servlet</artifactId>
+        <version>1.0</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>

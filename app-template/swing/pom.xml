@@ -14,5 +14,17 @@
       <groupId>org.jspresso</groupId>
       <artifactId>jspresso-app-template-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-jasper-swing</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-swing-application</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-app-launch-swing</artifactId>
+    </dependency>
   </dependencies>
 </project>

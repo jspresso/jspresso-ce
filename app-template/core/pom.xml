@@ -8,4 +8,10 @@
   <artifactId>jspresso-app-template-core</artifactId>
   <packaging>jar</packaging>
   <name>App - template - core</name>
+  <dependencies>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-hibernate</artifactId>
+    </dependency>
+  </dependencies>
 </project>

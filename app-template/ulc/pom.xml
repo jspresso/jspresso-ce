@@ -13,5 +13,17 @@
       <groupId>org.jspresso</groupId>
       <artifactId>jspresso-app-template-core</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-jasper-ulc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-ulc-application</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jspresso</groupId>
+      <artifactId>jspresso-app-launch-ulc</artifactId>
+    </dependency>
   </dependencies>
 </project>
