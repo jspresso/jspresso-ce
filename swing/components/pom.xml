@@ -18,7 +18,7 @@
       <artifactId>nachocalendar</artifactId>
     </dependency>
     <dependency>
-      <groupId>jedit</groupId>
+      <groupId>net.sf.jedit-syntax</groupId>
       <artifactId>jedit-syntax</artifactId>
     </dependency>
     <dependency>
