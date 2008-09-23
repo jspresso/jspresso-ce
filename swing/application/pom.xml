@@ -29,11 +29,6 @@
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
     </dependency>
-		<dependency>
-			<groupId>jgoodies</groupId>
-			<artifactId>uif_lite</artifactId>
-			<optional>true</optional>
-		</dependency>
   	<dependency>
 			<groupId>foxtrot</groupId>
 			<artifactId>foxtrot</artifactId>

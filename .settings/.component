@@ -35,8 +35,6 @@
         <wb-resource deploy-path="/" source-path="/binding/src/test/resources"/>
         <wb-resource deploy-path="/" source-path="/application/src/test/java"/>
         <wb-resource deploy-path="/" source-path="/application/src/test/resources"/>
-        <wb-resource deploy-path="/" source-path="/aop/src/main/java"/>
-        <wb-resource deploy-path="/" source-path="/aop/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/application/src/main/java"/>
         <wb-resource deploy-path="/" source-path="/application/src/main/resources"/>
         <wb-resource deploy-path="/" source-path="/binding/src/main/java"/>

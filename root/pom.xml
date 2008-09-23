@@ -64,11 +64,6 @@
     <dependencies>
       <dependency>
         <groupId>org.jspresso</groupId>
-        <artifactId>jspresso-aop</artifactId>
-        <version>2.2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-        <groupId>org.jspresso</groupId>
         <artifactId>jspresso-application</artifactId>
         <version>2.2-SNAPSHOT</version>
       </dependency>
@@ -316,21 +311,6 @@
         <version>1.0</version>
       </dependency>
       <dependency>
-        <groupId>aspectwerkz</groupId>
-        <artifactId>aspectwerkz-core</artifactId>
-        <version>2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>aspectwerkz</groupId>
-        <artifactId>aspectwerkz</artifactId>
-        <version>2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>aspectwerkz</groupId>
-        <artifactId>aspectwerkz-jdk5</artifactId>
-        <version>2.0</version>
-      </dependency>
-      <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
         <version>1.4</version>
@@ -356,24 +336,14 @@
         <version>2.0</version>
       </dependency>
       <dependency>
-        <groupId>jgoodies</groupId>
-        <artifactId>looks</artifactId>
-        <version>1.3.2</version>
-      </dependency>
-      <dependency>
-        <groupId>nachocalendar</groupId>
+        <groupId>net.sf.nachocalendar</groupId>
         <artifactId>nachocalendar</artifactId>
-        <version>0.22</version>
+        <version>0.23</version>
       </dependency>
       <dependency>
         <groupId>net.sf.jedit-syntax</groupId>
         <artifactId>jedit-syntax</artifactId>
         <version>2.2.2</version>
-      </dependency>
-      <dependency>
-        <groupId>jgoodies</groupId>
-        <artifactId>uif_lite</artifactId>
-        <version>1.3.2</version>
       </dependency>
       <dependency>
         <groupId>commons-cli</groupId>
@@ -477,14 +447,14 @@
         <version>3.2.1</version>
       </dependency>
       <dependency>
-        <groupId>org.jvnet</groupId>
+        <groupId>org.jvnet.substance</groupId>
         <artifactId>substance</artifactId>
-        <version>4.1</version>
+        <version>4.3</version>
       </dependency>
       <dependency>
-        <groupId>jnlp-servlet</groupId>
+        <groupId>com.sun.jnlp</groupId>
         <artifactId>jnlp-servlet</artifactId>
-        <version>1.0</version>
+        <version>1.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

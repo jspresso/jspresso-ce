@@ -204,23 +204,7 @@
     class="org.jspresso.framework.view.swing.DefaultSwingViewFactory"
     parent="abstractViewFactory"
     scope="prototype">
-    <!--
-      <constructor-arg index="0" value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
-      <constructor-arg index="0"
-      value="com.jgoodies.looks.windows.WindowsLookAndFeel" />
-      <constructor-arg index="0"
-      value="com.jgoodies.looks.plastic.PlasticLookAndFeel" />
-      <constructor-arg index="0"
-      value="com.jgoodies.looks.plastic.Plastic3DLookAndFeel" />
-      <constructor-arg index="0"
-      value="com.jgoodies.looks.plastic.PlasticXPLookAndFeel" />
-    -->
   </bean>
-
-  <!--
-    <bean id="jgoodiesViewFactory" class="org.jspresso.framework.view.swing.jgoodies.JGoodiesSwingViewFactory"
-    parent="viewFactory" scope="prototype" />
-  -->
 
   <!--
     The controllers.

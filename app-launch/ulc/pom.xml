@@ -19,7 +19,7 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>jnlp-servlet</groupId>
+      <groupId>com.sun.jnlp</groupId>
       <artifactId>jnlp-servlet</artifactId>
       <scope>runtime</scope>
     </dependency>
