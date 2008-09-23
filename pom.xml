@@ -152,13 +152,16 @@
                       todir="${project.reporting.outputDirectory}/beandocs/tmp"
                       flatten="true">
                       <fileset
-                        dir="${basedir}/app-template/src/main/resources">
+                        dir="${basedir}/app-template/core/src/main/resources">
                         <include
                           name="**/commons.xml" />
                         <include
                           name="**/commons-hibernate.xml" />
                         <include
                           name="**/commons-frontend.xml" />
+                      </fileset>
+                      <fileset
+                        dir="${basedir}/app-template/swing/src/main/resources">
                         <include
                           name="**/commons-swing.xml" />
                       </fileset>

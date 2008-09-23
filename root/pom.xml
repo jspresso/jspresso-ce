@@ -465,6 +465,9 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <properties>
+    <project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
+  </properties>
   <build>
     <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
     <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
