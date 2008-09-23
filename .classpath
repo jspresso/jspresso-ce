@@ -59,25 +59,13 @@
 	<classpathentry kind="src" output="app-template/ulc/target/classes" path="app-template/ulc/src/main/resources"/>
 	<classpathentry kind="src" output="app-template/wings/target/classes" path="app-template/wings/src/main/java"/>
 	<classpathentry kind="src" output="app-template/wings/target/classes" path="app-template/wings/src/main/resources"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jgroups/jgroups-all/2.2.7/jgroups-all-2.2.7.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-logging/commons-logging/1.1/commons-logging-1.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/javax/security/jacc/1.0/jacc-1.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/logkit/logkit/1.0.1/logkit-1.0.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/bsf/bsf/2.3.0/bsf-2.3.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-collections/commons-collections/3.1/commons-collections-3.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-dbcp/commons-dbcp/1.2.1/commons-dbcp-1.2.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/xml-apis/xml-apis/2.0.2/xml-apis-2.0.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/c3p0/c3p0/0.9.0/c3p0-0.9.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/qdox/qdox/1.4/qdox-1.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-pool/commons-pool/1.2/commons-pool-1.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/xerces/xerces/2.0.2/xerces-2.0.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/concurrent/concurrent/1.3.4/concurrent-1.3.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/javax/transaction/jta/1.0.1B/jta-1.0.1B.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/junit/junit/3.8.1/junit-3.8.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/swarmcache/swarmcache/1.0RC2/swarmcache-1.0RC2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/trove/trove/1.0.2/trove-1.0.2.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/avalon-framework/avalon-framework/4.1.3/avalon-framework-4.1.3.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/proxool/proxool/0.8.3/proxool-0.8.3.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/javax/servlet/servlet-api/2.4/servlet-api-2.4.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-server/6.0.5/ulc-servlet-server-6.0.5.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-cli/commons-cli/1.0/commons-cli-1.0.jar"/>
@@ -92,21 +80,13 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/commons-digester/commons-digester/1.7/commons-digester-1.7.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jcommon/1.0.0/jcommon-1.0.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jfreechart/1.0.1/jfreechart-1.0.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jedit/jedit-syntax/1.0/jedit-syntax-1.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/ldap/spring-ldap/1.2.1/spring-ldap-1.2.1.jar" sourcepath="/ENVDEV/spring-ldap-1.2.1/dist/spring-ldap-src-1.2.1.zip"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-servlet-client/6.0.5/ulc-servlet-client-6.0.5.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jrexx/jrexx/1.1.1/jrexx-1.1.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/hsqldb/hsqldb/1.8.0.1/hsqldb-1.8.0.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/jython/jython/2.1/jython-2.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-core/2.0/aspectwerkz-core-2.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/ulc/ulc-jnlp-client/6.0.5/ulc-jnlp-client-6.0.5.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/springframework/spring/2.5.1/spring-2.5.1.jar" sourcepath="/ENVDEV/spring-framework-2.5.1/dist/spring-sources.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/opensymphony/oscache/2.1/oscache-2.1.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz-jdk5/2.0/aspectwerkz-jdk5-2.0.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils-core/1.7.0/commons-beanutils-core-1.7.0.jar" sourcepath="/ENVDEV/commons-beanutils-1.7.0/src/src/java"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/aspectwerkz/aspectwerkz/2.0/aspectwerkz-2.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/foxtrot/foxtrot/2.0/foxtrot-2.0.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/freemarker/freemarker/2.3.3/freemarker-2.3.3.jar" sourcepath="/ENVDEV/freemarker-2.3.4/src"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/net/sf/nachocalendar/nachocalendar/0.23/nachocalendar-0.23.jar" sourcepath="/ENVDEV/nachocalendar-0.23/src/java"/>
@@ -126,5 +106,7 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings/3.2.1/wings-3.2.1.jar" sourcepath="/ENVDEV/wings/wings3/wings/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wings-experimental/3.2.1/wings-experimental-3.2.1.jar" sourcepath="/ENVDEV/wings/wings3/wings-experimental/src/java"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/wings/wingx/3.2.1/wingx-3.2.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/net/sf/jedit-syntax/jedit-syntax/2.2.2/jedit-syntax-2.2.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

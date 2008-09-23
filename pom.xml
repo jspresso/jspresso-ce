@@ -240,8 +240,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
+          <goal>javadoc:aggregate</goal>
           <linksource>true</linksource>
-          <aggregate>true</aggregate>
         </configuration>
       </plugin>
     </plugins>

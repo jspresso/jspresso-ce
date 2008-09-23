@@ -7893,7 +7893,7 @@ login-error.html</programlisting></para>
   &lt;servlet&gt;
     &lt;servlet-name&gt;JnlpDownloadServlet&lt;/servlet-name&gt; <co
               id="JnlpDownloadServlet" />
-    &lt;servlet-class&gt;com.sun.javaws.servlet.JnlpDownloadServlet&lt;/servlet-class&gt;
+    &lt;servlet-class&gt;jnlp.sample.servlet.JnlpDownloadServlet&lt;/servlet-class&gt;
   &lt;/servlet&gt;
   &lt;servlet-mapping&gt;
     &lt;servlet-name&gt;JnlpDownloadServlet&lt;/servlet-name&gt;
