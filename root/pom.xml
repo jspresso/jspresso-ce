@@ -8,6 +8,7 @@
   <packaging>pom</packaging>
   <version>2.2-SNAPSHOT</version>
   <name>Jspresso Root POM</name>
+  <url>http://www.jspresso.org</url>
   <distributionManagement>
     <repository>
       <id>jspresso-repository</id>
