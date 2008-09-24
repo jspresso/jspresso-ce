@@ -6,27 +6,19 @@
     <version>2.2</version>
   </parent>
   <artifactId>jspresso-app-template</artifactId>
-  <packaging>jar</packaging>
-  <name>App-template</name>
-  <dependencies>
-    <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-app-launch</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>bsf</groupId>
-      <artifactId>bsf</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jspresso</groupId>
-      <artifactId>jspresso-swing-components</artifactId>
-      <scope>runtime</scope>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>ulc</groupId>
-      <artifactId>ulc-base-server</artifactId>
-      <optional>true</optional>
-    </dependency>
-  </dependencies>
+  <packaging>pom</packaging>
+  <name>App - template</name>
+  <modules>
+    <module>core</module>
+    <module>swing</module>
+    <module>wings</module>
+  </modules>
+  <profiles>
+    <profile>
+      <id>ulc</id>
+      <modules>
+        <module>ulc</module>
+      </modules>
+    </profile>
+  </profiles>
 </project>

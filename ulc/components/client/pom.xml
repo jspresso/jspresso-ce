@@ -18,8 +18,24 @@
       <artifactId>jspresso-swing-components</artifactId>
     </dependency>
     <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time</artifactId>
+    </dependency>
+    <dependency>
       <groupId>ulc</groupId>
       <artifactId>ulc-base-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ulc</groupId>
+      <artifactId>ulc-jnlp-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ulc</groupId>
+      <artifactId>ulc-servlet-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ulc</groupId>
+      <artifactId>ulc-base-trusted</artifactId>
     </dependency>
   </dependencies>
 </project>

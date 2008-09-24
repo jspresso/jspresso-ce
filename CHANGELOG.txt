@@ -5,7 +5,26 @@ Bugs fixed
 ----------
 [ 2014954 ] Application fails to start
 [ 2020304 ] Clicking an editable table cell in Wings does not select row
+[ 2033594 ] Scroll panes do not appear correctly in Firefox3
+[ 2033834 ] Date patterns are wrongly computed based on user locale
 
 New features
 ------------
 [ 2014966 ] Force startup locale
+[ 2115852 ] Split artifacts dependent on all GUI technologies
+[ 2025633 ] Set-up a maven2 repository
+[ 2019540 ] Create maven2 archetypes to speed-up project setup
+[ 2115852 ] Split artifacts dependent on all GUI technologies
+[ 2015009 ] Make the build portable
+
+Migrate to jboss libraries 4.2.2.GA
+Migrate to log4j 1.2.14
+Migrate to substance 4.3
+Migrate to nachocalendar 0.23
+Fixed a version error for WingS libraries. 3.2 is in fact 3.2.1
+Removed jspresso-aop module and dependencies on aspectwerkz
+Removed jgoodies dependencies
+
+Known problems
+--------------
+Firefox 3 introduced a major performance problem in nested html tables. This impacts directly wings applications performance.

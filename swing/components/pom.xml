@@ -14,26 +14,21 @@
       <artifactId>jspresso-util</artifactId>
     </dependency>
     <dependency>
-      <groupId>nachocalendar</groupId>
+      <groupId>net.sf.nachocalendar</groupId>
       <artifactId>nachocalendar</artifactId>
     </dependency>
     <dependency>
-      <groupId>jedit</groupId>
+      <groupId>net.sf.jedit-syntax</groupId>
       <artifactId>jedit-syntax</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.jvnet</groupId>
+      <groupId>org.jvnet.substance</groupId>
       <artifactId>substance</artifactId>
       <optional>true</optional>
     </dependency>
     <dependency>
       <groupId>foxtrot</groupId>
       <artifactId>foxtrot</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>jgoodies</groupId>
-      <artifactId>uif_lite</artifactId>
       <optional>true</optional>
     </dependency>
   </dependencies>

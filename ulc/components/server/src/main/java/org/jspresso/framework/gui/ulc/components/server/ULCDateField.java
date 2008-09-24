@@ -69,7 +69,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
    */
   public ULCDateField() {
     this(((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT))
-        .toLocalizedPattern(), Locale.getDefault());
+        .toPattern(), Locale.getDefault());
   }
 
   /**
@@ -80,7 +80,7 @@ public class ULCDateField extends ULCComponent implements IEditorComponent {
    */
   public ULCDateField(Locale locale) {
     this(((SimpleDateFormat) DateFormat.getDateInstance(DateFormat.SHORT))
-        .toLocalizedPattern(), locale);
+        .toPattern(), locale);
   }
 
   /**

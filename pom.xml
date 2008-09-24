@@ -60,7 +60,7 @@
   <repositories>
     <repository>
       <id>jboss</id>
-      <url>http://repository.jboss.com/maven2</url>
+      <url>http://repository.jboss.org/maven2</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -73,6 +73,13 @@
       </snapshots>
     </repository>
     <repository>
+      <id>sun</id>
+      <url>http://download.java.net/maven/2</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
       <id>jspresso-repository</id>
       <url>http://repository.jspresso.org/maven2</url>
       <snapshots>
@@ -80,7 +87,7 @@
       </snapshots>
     </repository>
     <repository>
-      <id>jspresso-repository</id>
+      <id>jspresso-snapshots-repository</id>
       <url>http://repository.jspresso.org/maven2-snapshots</url>
       <snapshots>
         <enabled>true</enabled>
@@ -89,7 +96,7 @@
   </repositories>
   <modules>
     <module>root</module>
-    <module>aop</module>
+    <module>dependencies</module>
     <module>application</module>
     <module>binding</module>
     <module>action</module>
@@ -100,12 +107,19 @@
     <module>view</module>
     <module>hibernate</module>
     <module>swing</module>
-    <module>ulc</module>
     <module>wings</module>
     <module>jasper</module>
     <module>app-launch</module>
     <module>app-template</module>
   </modules>
+  <profiles>
+    <profile>
+      <id>ulc</id>
+      <modules>
+        <module>ulc</module>
+      </modules>
+    </profile>
+  </profiles>
   <build>
     <plugins>
       <plugin>
@@ -125,10 +139,12 @@
                     <mkdir dir="${project.reporting.outputDirectory}/beandocs" />
                     <mkdir dir="${project.reporting.outputDirectory}/beandocs/tmp" />
                     <copy todir="${project.reporting.outputDirectory}/beandocs/tmp" flatten="true">
-                      <fileset dir="${basedir}/app-template/src/main/resources">
+                      <fileset dir="${basedir}/app-template/core/src/main/resources">
                         <include name="**/commons.xml" />
                         <include name="**/commons-hibernate.xml" />
                         <include name="**/commons-frontend.xml" />
+                      </fileset>
+                      <fileset dir="${basedir}/app-template/swing/src/main/resources">
                         <include name="**/commons-swing.xml" />
                       </fileset>
                     </copy>
@@ -204,8 +220,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
+          <goal>javadoc:aggregate</goal>
           <linksource>true</linksource>
-          <aggregate>true</aggregate>
         </configuration>
       </plugin>
     </plugins>

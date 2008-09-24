@@ -1511,7 +1511,7 @@ public class DefaultUlcViewFactory implements
     SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
 
     ULCDateField viewComponent = createULCDateField(
-        format.toLocalizedPattern(), locale);
+        format.toPattern(), locale);
     ULCDateFieldConnector connector = new ULCDateFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
