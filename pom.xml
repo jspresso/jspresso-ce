@@ -220,7 +220,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <goal>javadoc:aggregate</goal>
+          <aggregate>true</aggregate>
           <linksource>true</linksource>
         </configuration>
       </plugin>
