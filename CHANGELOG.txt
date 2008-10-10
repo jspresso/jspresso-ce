@@ -6,7 +6,7 @@ Bugs fixed
 
 New features
 ------------
-Reference documentation has been updated to reflect the HR sample application new naming conventsions.
+Reference documentation has been updated to reflect the HR sample application new naming conventions.
 
 2.2
 ===
