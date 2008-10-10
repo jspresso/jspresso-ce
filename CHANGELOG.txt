@@ -1,3 +1,13 @@
+2.2.1
+=====
+Bugs fixed
+----------
+[ 2157885 ] Entities registered for update are not correctly processsed
+
+New features
+------------
+Reference documentation has been updated to reflect the HR sample application new naming conventsions.
+
 2.2
 ===
 
