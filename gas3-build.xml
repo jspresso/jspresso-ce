@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<project name="jspresso-framework-as3">
+
+  <path id="project.classpath">
+    <dirset dir="${basedir}">
+      <include name="**/target/classes" />
+    </dirset>
+  </path>
+
+  <target name="clean">
+    <delete includeemptydirs="true">
+      <fileset dir="view" includes="**/src/main/as3/**/*Base.as" />
+    </delete>
+  </target>
+
+  <target name="generate.as3" depends="clean">
+    <gas3 outputdir="view/src/main/as3">
+      <classpath refid="project.classpath" />
+      <fileset dir="view/target/classes">
+        <include name="org/jspresso/framework/view/descriptor/**/*.class" />
+      </fileset>
+    </gas3>
+  </target>
+</project>
