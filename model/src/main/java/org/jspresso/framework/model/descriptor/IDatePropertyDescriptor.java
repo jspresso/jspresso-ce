@@ -40,22 +40,12 @@ package org.jspresso.framework.model.descriptor;
 public interface IDatePropertyDescriptor extends IScalarPropertyDescriptor {
 
   /**
-   * Date-time date.
-   */
-  String DATE_TIME_TYPE = "DATE_TIME";
-
-  /**
-   * Day only date.
-   */
-  String DATE_TYPE      = "DATE";
-
-  /**
    * Gets the date type. Values are among :
-   * <li> <code>DATE_TYPE</code>
-   * <li> <code>DATE_TIME_TYPE</code>
+   * <li> <code>DATE</code>
+   * <li> <code>DATE_TIME</code>
    * 
    * @return the type of this date descriptor.
    */
-  String getType();
+  EDateType getType();
 
 }

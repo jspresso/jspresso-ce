@@ -33,7 +33,7 @@ import org.hibernate.LockMode;
 import org.hibernate.Session;
 import org.jspresso.framework.application.backend.action.AbstractBackendAction;
 import org.jspresso.framework.application.backend.persistence.hibernate.HibernateBackendController;
-import org.jspresso.framework.application.backend.session.MergeMode;
+import org.jspresso.framework.application.backend.session.EMergeMode;
 import org.jspresso.framework.model.descriptor.ICollectionPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
@@ -197,7 +197,7 @@ public abstract class AbstractHibernateAction extends AbstractBackendAction {
       HibernateTemplate hibernateTemplate = getHibernateTemplate(context);
       getApplicationSession(context).merge(
           (IEntity) hibernateTemplate.load(entity.getContract().getName(),
-              entity.getId()), MergeMode.MERGE_CLEAN_EAGER);
+              entity.getId()), EMergeMode.MERGE_CLEAN_EAGER);
     }
   }
 

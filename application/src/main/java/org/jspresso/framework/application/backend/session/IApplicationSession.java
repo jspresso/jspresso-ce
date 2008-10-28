@@ -183,7 +183,7 @@ public interface IApplicationSession extends IEntityDirtAware,
    *            the merge mmode to be used.
    * @return the entity registered in the application session.
    */
-  IEntity merge(IEntity entity, MergeMode mergeMode);
+  IEntity merge(IEntity entity, EMergeMode mergeMode);
 
   /**
    * Merges a list of entities in this application session. If the application
@@ -199,7 +199,7 @@ public interface IApplicationSession extends IEntityDirtAware,
    *            the merge mmode to be used.
    * @return the merged entity list.
    */
-  List<IEntity> merge(List<IEntity> entities, MergeMode mergeMode);
+  List<IEntity> merge(List<IEntity> entities, EMergeMode mergeMode);
 
   /**
    * Gives a chance to the session to perform any pending operation.

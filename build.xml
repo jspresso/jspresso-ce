@@ -81,13 +81,15 @@
     </fileset>
   </path>
 
+<!--
   <taskdef resource="net/sf/antcontrib/antcontrib.properties"
            classpathref="ant-contrib-classpath" />
 
   <taskdef name="for"
            classname="net.sf.antcontrib.logic.ForTask"
            classpathref="ant-contrib-classpath" />
-
+-->
+  
   <target name="clean" description="Cleans up generated files.">
     <delete dir="${doc.reference.target.dir}" />
   </target>

@@ -21,7 +21,7 @@ public class ComponentTransferStructure<E> {
 
   private IComponentDescriptor<E> componentDescriptor;
   private Object                  content;
-  private TransferMode            transferMode;
+  private ETransferMode            transferMode;
 
   /**
    * Constructs a new <code>ComponentTransferStructure</code> instance.
@@ -35,7 +35,7 @@ public class ComponentTransferStructure<E> {
    */
   public ComponentTransferStructure(
       IComponentDescriptor<E> componentDescriptor, Object content,
-      TransferMode transferMode) {
+      ETransferMode transferMode) {
     this.componentDescriptor = componentDescriptor;
     this.content = content;
     this.transferMode = transferMode;
@@ -64,7 +64,7 @@ public class ComponentTransferStructure<E> {
    * 
    * @return the transferMode.
    */
-  public TransferMode getTransferMode() {
+  public ETransferMode getTransferMode() {
     return transferMode;
   }
 

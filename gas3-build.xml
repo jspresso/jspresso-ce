@@ -9,16 +9,29 @@
   </path>
 
   <target name="clean">
-    <delete includeemptydirs="true">
-      <fileset dir="view" includes="**/src/main/as3/**/*Base.as" />
+    <delete>
+      <fileset dir="src/main/as3" includes="**/*.as" />
     </delete>
   </target>
 
   <target name="generate.as3" depends="clean">
-    <gas3 outputdir="view/src/main/as3">
+    <gas3 outputdir="src/main/as3">
       <classpath refid="project.classpath" />
+      <fileset dir="util/target/classes">
+        <include name="org/jspresso/framework/util/IIconImageURLProvider.class" />
+        <include name="org/jspresso/framework/util/descriptor/*.class" />
+      </fileset>
+      <fileset dir="model/target/classes">
+        <include name="org/jspresso/framework/model/descriptor/**/*Descriptor.class" />
+        <include name="org/jspresso/framework/model/descriptor/EDateType.class" />
+      </fileset>
       <fileset dir="view/target/classes">
-        <include name="org/jspresso/framework/view/descriptor/**/*.class" />
+        <include name="org/jspresso/framework/view/action/*.class" />
+        <include name="org/jspresso/framework/view/descriptor/**/*Descriptor.class" />
+        <include name="org/jspresso/framework/view/descriptor/EAxis.class" />
+        <include name="org/jspresso/framework/view/descriptor/EBorderType.class" />
+        <include name="org/jspresso/framework/view/descriptor/ELabelPosition.class" />
+        <include name="org/jspresso/framework/view/descriptor/EOrientation.class" />
       </fileset>
     </gas3>
   </target>
