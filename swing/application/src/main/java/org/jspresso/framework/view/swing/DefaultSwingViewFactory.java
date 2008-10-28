@@ -23,6 +23,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -125,6 +126,8 @@ import org.jspresso.framework.binding.swing.JToggleButtonConnector;
 import org.jspresso.framework.gui.swing.components.JActionField;
 import org.jspresso.framework.gui.swing.components.JColorPicker;
 import org.jspresso.framework.gui.swing.components.JDateField;
+import org.jspresso.framework.model.descriptor.EDateType;
+import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -155,6 +158,7 @@ import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.ColorHelper;
+import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.swing.SwingUtil;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -228,11 +232,16 @@ public class DefaultSwingViewFactory implements
   private static final Date                  TEMPLATE_DATE               = new Date(
                                                                              27166271000L);
   private static final Long                  TEMPLATE_DURATION           = new Long(
-                                                                             IDurationPropertyDescriptor.ONE_SECOND
-                                                                                 + IDurationPropertyDescriptor.ONE_MINUTE
-                                                                                 + IDurationPropertyDescriptor.ONE_HOUR
-                                                                                 + IDurationPropertyDescriptor.ONE_DAY
-                                                                                 + IDurationPropertyDescriptor.ONE_WEEK);
+                                                                             EDuration.ONE_SECOND
+                                                                                 .getMillis()
+                                                                                 + EDuration.ONE_MINUTE
+                                                                                     .getMillis()
+                                                                                 + EDuration.ONE_HOUR
+                                                                                     .getMillis()
+                                                                                 + EDuration.ONE_DAY
+                                                                                     .getMillis()
+                                                                                 + EDuration.ONE_WEEK
+                                                                                     .getMillis());
   private static final Date                  TEMPLATE_TIME               = new Date(
                                                                              366000);
   private static final Dimension             TREE_PREFERRED_SIZE         = new Dimension(
@@ -292,13 +301,13 @@ public class DefaultSwingViewFactory implements
           actionHandler.checkAccess(viewDescriptor);
         }
         if (viewDescriptor.getForeground() != null) {
-          view.getPeer().setForeground(viewDescriptor.getForeground());
+          view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
         }
         if (viewDescriptor.getBackground() != null) {
-          view.getPeer().setBackground(viewDescriptor.getBackground());
+          view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
         }
         if (viewDescriptor.getFont() != null) {
-          view.getPeer().setFont(viewDescriptor.getFont());
+          view.getPeer().setFont(createFont(viewDescriptor.getFont()));
         }
         if (viewDescriptor.isReadOnly()) {
           view.getConnector().setLocallyWritable(false);
@@ -411,7 +420,7 @@ public class DefaultSwingViewFactory implements
    * Sets the actionFactory.
    * 
    * @param actionFactory
-   *            the actionFactory to set.
+   *          the actionFactory to set.
    */
   public void setActionFactory(IActionFactory<Action, JComponent> actionFactory) {
     this.actionFactory = actionFactory;
@@ -421,7 +430,7 @@ public class DefaultSwingViewFactory implements
    * Sets the binaryPropertyInfoAction.
    * 
    * @param binaryPropertyInfoAction
-   *            the binaryPropertyInfoAction to set.
+   *          the binaryPropertyInfoAction to set.
    */
   public void setBinaryPropertyInfoAction(
       IDisplayableAction binaryPropertyInfoAction) {
@@ -432,7 +441,7 @@ public class DefaultSwingViewFactory implements
    * Sets the connectorFactory.
    * 
    * @param connectorFactory
-   *            the connectorFactory to set.
+   *          the connectorFactory to set.
    */
   public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
     this.connectorFactory = connectorFactory;
@@ -442,7 +451,7 @@ public class DefaultSwingViewFactory implements
    * Sets the iconFactory.
    * 
    * @param iconFactory
-   *            the iconFactory to set.
+   *          the iconFactory to set.
    */
   public void setIconFactory(IIconFactory<Icon> iconFactory) {
     this.iconFactory = iconFactory;
@@ -452,7 +461,7 @@ public class DefaultSwingViewFactory implements
    * Sets the listSelectionModelBinder.
    * 
    * @param listSelectionModelBinder
-   *            the listSelectionModelBinder to set.
+   *          the listSelectionModelBinder to set.
    */
   public void setListSelectionModelBinder(
       IListSelectionModelBinder listSelectionModelBinder) {
@@ -463,7 +472,7 @@ public class DefaultSwingViewFactory implements
    * Sets the lovAction.
    * 
    * @param lovAction
-   *            the lovAction to set.
+   *          the lovAction to set.
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
@@ -473,7 +482,7 @@ public class DefaultSwingViewFactory implements
    * Sets the modelCascadingBinder.
    * 
    * @param modelCascadingBinder
-   *            the modelCascadingBinder to set.
+   *          the modelCascadingBinder to set.
    */
   public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
     this.modelCascadingBinder = modelCascadingBinder;
@@ -483,7 +492,7 @@ public class DefaultSwingViewFactory implements
    * Sets the maxCharacterLength.
    * 
    * @param maxCharacterLength
-   *            the maxCharacterLength to set.
+   *          the maxCharacterLength to set.
    */
   public void setMaxCharacterLength(int maxCharacterLength) {
     this.maxCharacterLength = maxCharacterLength;
@@ -493,7 +502,7 @@ public class DefaultSwingViewFactory implements
    * Sets the mvcBinder.
    * 
    * @param mvcBinder
-   *            the mvcBinder to set.
+   *          the mvcBinder to set.
    */
   public void setMvcBinder(IMvcBinder mvcBinder) {
     this.mvcBinder = mvcBinder;
@@ -503,7 +512,7 @@ public class DefaultSwingViewFactory implements
    * Sets the openFileAsBinaryPropertyAction.
    * 
    * @param openFileAsBinaryPropertyAction
-   *            the openFileAsBinaryPropertyAction to set.
+   *          the openFileAsBinaryPropertyAction to set.
    */
   public void setOpenFileAsBinaryPropertyAction(
       IDisplayableAction openFileAsBinaryPropertyAction) {
@@ -514,7 +523,7 @@ public class DefaultSwingViewFactory implements
    * Sets the resetPropertyAction.
    * 
    * @param resetPropertyAction
-   *            the resetPropertyAction to set.
+   *          the resetPropertyAction to set.
    */
   public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
     this.resetPropertyAction = resetPropertyAction;
@@ -524,7 +533,7 @@ public class DefaultSwingViewFactory implements
    * Sets the saveBinaryPropertyAsFileAction.
    * 
    * @param saveBinaryPropertyAsFileAction
-   *            the saveBinaryPropertyAsFileAction to set.
+   *          the saveBinaryPropertyAsFileAction to set.
    */
   public void setSaveBinaryPropertyAsFileAction(
       IDisplayableAction saveBinaryPropertyAsFileAction) {
@@ -535,7 +544,7 @@ public class DefaultSwingViewFactory implements
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *            the translationProvider to set.
+   *          the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
@@ -545,7 +554,7 @@ public class DefaultSwingViewFactory implements
    * Sets the treeSelectionModelBinder.
    * 
    * @param treeSelectionModelBinder
-   *            the treeSelectionModelBinder to set.
+   *          the treeSelectionModelBinder to set.
    */
   public void setTreeSelectionModelBinder(
       ITreeSelectionModelBinder treeSelectionModelBinder) {
@@ -560,7 +569,7 @@ public class DefaultSwingViewFactory implements
    * Creates an action field.
    * 
    * @param showTextField
-   *            is the text field visible to the user.
+   *          is the text field visible to the user.
    * @return the created action field.
    */
   protected JActionField createJActionField(boolean showTextField) {
@@ -609,7 +618,7 @@ public class DefaultSwingViewFactory implements
    * Creates a date field.
    * 
    * @param locale
-   *            the user locale.
+   *          the user locale.
    * @return the created date field.
    */
   protected JDateField createJDateField(Locale locale) {
@@ -623,7 +632,7 @@ public class DefaultSwingViewFactory implements
    * Creates a JEdit text area.
    * 
    * @param language
-   *            the language to add syntax highlighting for.
+   *          the language to add syntax highlighting for.
    * @return the created text area.
    */
   protected JEditTextArea createJEditTextArea(String language) {
@@ -853,16 +862,16 @@ public class DefaultSwingViewFactory implements
    * Decorates the created view with the apropriate border.
    * 
    * @param view
-   *            the view to descorate.
+   *          the view to descorate.
    * @param locale
-   *            the locale to use.
+   *          the locale to use.
    */
   protected void decorateWithBorder(IView<JComponent> view, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
-      case IViewDescriptor.SIMPLE:
+      case SIMPLE:
         view.getPeer().setBorder(BorderFactory.createEtchedBorder());
         break;
-      case IViewDescriptor.TITLED:
+      case TITLED:
         decorateWithTitle(view, locale);
         break;
       default:
@@ -968,8 +977,7 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JCheckBox viewComponent = createJCheckBox();
     JToggleButtonConnector connector = new JToggleButtonConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -978,10 +986,8 @@ public class DefaultSwingViewFactory implements
   }
 
   private TableCellRenderer createBooleanTableCellRenderer(
-      @SuppressWarnings("unused")
-      IBooleanPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused")
-      Locale locale) {
+      @SuppressWarnings("unused") IBooleanPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
     return new BooleanTableCellRenderer();
   }
 
@@ -1148,10 +1154,8 @@ public class DefaultSwingViewFactory implements
   }
 
   private TableCellRenderer createCollectionTableCellRenderer(
-      @SuppressWarnings("unused")
-      ICollectionPropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused")
-      Locale locale) {
+      @SuppressWarnings("unused") ICollectionPropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
     return null;
   }
 
@@ -1171,8 +1175,7 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createColorPropertyView(
       IColorPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JColorPicker viewComponent = createJColorPicker();
     if (propertyDescriptor.getDefaultValue() != null) {
       int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
@@ -1187,9 +1190,8 @@ public class DefaultSwingViewFactory implements
   }
 
   private TableCellRenderer createColorTableCellRenderer(
-      @SuppressWarnings("unused")
-      IColorPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
-      Locale locale) {
+      @SuppressWarnings("unused") IColorPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
     return new ColorTableCellRenderer();
   }
 
@@ -1280,7 +1282,7 @@ public class DefaultSwingViewFactory implements
       // label positionning
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
-        case IComponentViewDescriptor.ASIDE:
+        case ASIDE:
           constraints.insets = new Insets(5, 5, 5, 5);
           if (propertyView.getPeer() instanceof JTextArea
               || propertyView.getPeer() instanceof JList
@@ -1294,7 +1296,7 @@ public class DefaultSwingViewFactory implements
           constraints.gridx = currentX * 2;
           constraints.gridy = currentY;
           break;
-        case IComponentViewDescriptor.ABOVE:
+        case ABOVE:
           constraints.insets = new Insets(5, 5, 0, 5);
           constraints.anchor = GridBagConstraints.WEST;
           constraints.gridx = currentX;
@@ -1311,12 +1313,12 @@ public class DefaultSwingViewFactory implements
 
       // component positionning
       switch (viewDescriptor.getLabelsPosition()) {
-        case IComponentViewDescriptor.ASIDE:
+        case ASIDE:
           constraints.gridx++;
           constraints.insets = new Insets(5, 0, 5, 5);
           constraints.gridwidth = propertyWidth * 2 - 1;
           break;
-        case IComponentViewDescriptor.ABOVE:
+        case ABOVE:
           constraints.gridy++;
           constraints.insets = new Insets(0, 5, 0, 5);
           constraints.gridwidth = propertyWidth;
@@ -1354,11 +1356,11 @@ public class DefaultSwingViewFactory implements
       constraints.weighty = 1.0;
       constraints.fill = GridBagConstraints.BOTH;
       switch (viewDescriptor.getLabelsPosition()) {
-        case IComponentViewDescriptor.ASIDE:
+        case ASIDE:
           constraints.gridy = currentY + 1;
           constraints.gridwidth = viewDescriptor.getColumnCount() * 2;
           break;
-        case IComponentViewDescriptor.ABOVE:
+        case ABOVE:
           constraints.gridy = (currentY + 1) * 2;
           constraints.gridwidth = viewDescriptor.getColumnCount();
           break;
@@ -1488,10 +1490,9 @@ public class DefaultSwingViewFactory implements
   private DateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
-    if (IDatePropertyDescriptor.DATE_TYPE.equals(propertyDescriptor.getType())) {
+    if (propertyDescriptor.getType() == EDateType.DATE) {
       format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
-          .getDateInstance(DateFormat.SHORT, locale)).toPattern(),
-          locale);
+          .getDateInstance(DateFormat.SHORT, locale)).toPattern(), locale);
     } else {
       format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
           .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale))
@@ -1577,8 +1578,9 @@ public class DefaultSwingViewFactory implements
         propertyDescriptor, locale));
   }
 
-  private IFormatter createDurationFormatter(@SuppressWarnings("unused")
-  IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
+  private IFormatter createDurationFormatter(
+      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
+      Locale locale) {
     return new DurationFormatter(locale);
   }
 
@@ -1642,11 +1644,11 @@ public class DefaultSwingViewFactory implements
 
     GridLayout layout = new GridLayout();
     switch (viewDescriptor.getDrivingDimension()) {
-      case IEvenGridViewDescriptor.ROW:
+      case ROW:
         layout.setColumns(viewDescriptor.getDrivingDimensionCellCount());
         layout.setRows(0);
         break;
-      case IEvenGridViewDescriptor.COLUMN:
+      case COLUMN:
         layout.setRows(viewDescriptor.getDrivingDimensionCellCount());
         layout.setColumns(0);
         break;
@@ -1739,8 +1741,7 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused")
-      Locale locale) {
+      @SuppressWarnings("unused") Locale locale) {
     JLabel imageLabel = createJLabel();
     imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
     JImageConnector connector = new JImageConnector(viewDescriptor
@@ -1757,8 +1758,9 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  private NumberFormat createIntegerFormat(@SuppressWarnings("unused")
-  IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
+  private NumberFormat createIntegerFormat(
+      @SuppressWarnings("unused") IIntegerPropertyDescriptor propertyDescriptor,
+      Locale locale) {
     return NumberFormat.getIntegerInstance(locale);
   }
 
@@ -1818,9 +1820,8 @@ public class DefaultSwingViewFactory implements
   }
 
   private IView<JComponent> createListView(IListViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused")
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      @SuppressWarnings("unused") IActionHandler actionHandler,
+      @SuppressWarnings("unused") Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = connectorFactory
@@ -1917,8 +1918,7 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createPasswordPropertyView(
       IPasswordPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JPasswordField viewComponent = createJPasswordField();
     JPasswordFieldConnector connector = new JPasswordFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -2068,10 +2068,8 @@ public class DefaultSwingViewFactory implements
   }
 
   private TableCellRenderer createReferenceTableCellRenderer(
-      @SuppressWarnings("unused")
-      IReferencePropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused")
-      Locale locale) {
+      @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
     return null;
   }
 
@@ -2134,8 +2132,7 @@ public class DefaultSwingViewFactory implements
   private IView<JComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
 
-      IActionHandler actionHandler, @SuppressWarnings("unused")
-      Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JEditTextArea viewComponent = createJEditTextArea(propertyDescriptor
         .getLanguage());
     JEditTextAreaConnector connector = new JEditTextAreaConnector(
@@ -2153,10 +2150,10 @@ public class DefaultSwingViewFactory implements
     List<IView<JComponent>> childrenViews = new ArrayList<IView<JComponent>>();
 
     switch (viewDescriptor.getOrientation()) {
-      case ISplitViewDescriptor.HORIZONTAL:
+      case HORIZONTAL:
         viewComponent.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         break;
-      case ISplitViewDescriptor.VERTICAL:
+      case VERTICAL:
         viewComponent.setOrientation(JSplitPane.VERTICAL_SPLIT);
         break;
       default:
@@ -2204,9 +2201,8 @@ public class DefaultSwingViewFactory implements
   }
 
   private TableCellRenderer createStringTableCellRenderer(
-      @SuppressWarnings("unused")
-      IStringPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
-      Locale locale) {
+      @SuppressWarnings("unused") IStringPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused") Locale locale) {
     return new FormattedTableCellRenderer(null);
   }
 
@@ -2451,8 +2447,7 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused")
-      Locale locale) {
+      @SuppressWarnings("unused") Locale locale) {
     JTextArea viewComponent = createJTextArea();
     viewComponent.setLineWrap(true);
     JScrollPane scrollPane = createJScrollPane();
@@ -2465,8 +2460,9 @@ public class DefaultSwingViewFactory implements
     return constructView(scrollPane, null, connector);
   }
 
-  private DateFormat createTimeFormat(@SuppressWarnings("unused")
-  ITimePropertyDescriptor propertyDescriptor, Locale locale) {
+  private DateFormat createTimeFormat(
+      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor,
+      Locale locale) {
     DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
     return format;
   }
@@ -2562,6 +2558,26 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
+  private Color createColor(String colorAsHexString) {
+    int[] rgba = ColorHelper.fromHexString(colorAsHexString);
+    return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
+  }
+
+  private Font createFont(String fontString) {
+    org.jspresso.framework.util.gui.Font font = FontHelper.fromString(fontString);
+    int fontStyle;
+    if (font.isBold() && font.isItalic()) {
+      fontStyle = Font.BOLD | Font.ITALIC;
+    } else if (font.isBold()) {
+      fontStyle = Font.BOLD;
+    } else if (font.isItalic()) {
+      fontStyle = Font.ITALIC;
+    } else {
+      fontStyle = Font.PLAIN;
+    }
+    return new Font(font.getName(), fontStyle, font.getSize());
+  }
+
   private String getConnectorIdForComponentView(
       IComponentViewDescriptor viewDescriptor) {
     if (viewDescriptor.getModelDescriptor() instanceof IComponentDescriptor) {
@@ -2570,8 +2586,8 @@ public class DefaultSwingViewFactory implements
     return viewDescriptor.getModelDescriptor().getName();
   }
 
-  private Object getDateTemplateValue(@SuppressWarnings("unused")
-  IDatePropertyDescriptor propertyDescriptor) {
+  private Object getDateTemplateValue(
+      @SuppressWarnings("unused") IDatePropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DATE;
   }
 
@@ -2611,8 +2627,8 @@ public class DefaultSwingViewFactory implements
   // Configuration Section //
   // ///////////////////// //
 
-  private Object getDurationTemplateValue(@SuppressWarnings("unused")
-  IDurationPropertyDescriptor propertyDescriptor) {
+  private Object getDurationTemplateValue(
+      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DURATION;
   }
 
@@ -2719,8 +2735,8 @@ public class DefaultSwingViewFactory implements
     return null;
   }
 
-  private Object getTimeTemplateValue(@SuppressWarnings("unused")
-  ITimePropertyDescriptor propertyDescriptor) {
+  private Object getTimeTemplateValue(
+      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor) {
     return TEMPLATE_TIME;
   }
 
@@ -2844,7 +2860,7 @@ public class DefaultSwingViewFactory implements
      * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
      * 
      * @param viewDescriptor
-     *            the tree view descriptor used by the tree view.
+     *          the tree view descriptor used by the tree view.
      * @param locale
      */
     public ConnectorTreeCellRenderer(ITreeViewDescriptor viewDescriptor,
@@ -2981,15 +2997,14 @@ public class DefaultSwingViewFactory implements
     private IEnumerationPropertyDescriptor propertyDescriptor;
 
     /**
-     * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
-     * instance.
+     * Constructs a new <code>TranslatedEnumerationCellRenderer</code> instance.
      * 
      * @param propertyDescriptor
-     *            the property descriptor from which the enumeration name is
-     *            taken. The prefix used to lookup translation keys in the form
-     *            keyPrefix.value is the propertyDescriptor enumeration name.
+     *          the property descriptor from which the enumeration name is
+     *          taken. The prefix used to lookup translation keys in the form
+     *          keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
-     *            the locale to lookup the translation.
+     *          the locale to lookup the translation.
      */
     public TranslatedEnumerationListCellRenderer(
         IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
@@ -3035,11 +3050,11 @@ public class DefaultSwingViewFactory implements
      * instance.
      * 
      * @param propertyDescriptor
-     *            the property descriptor from which the enumeration name is
-     *            taken. The prefix used to lookup translation keys in the form
-     *            keyPrefix.value is the propertyDescriptor enumeration name.
+     *          the property descriptor from which the enumeration name is
+     *          taken. The prefix used to lookup translation keys in the form
+     *          keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
-     *            the locale to lookup the translation.
+     *          the locale to lookup the translation.
      */
     public TranslatedEnumerationTableCellRenderer(
         IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {

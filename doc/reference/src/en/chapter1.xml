@@ -570,7 +570,7 @@
           value="createTimestamp" /&gt;
         &lt;property
           name="type"
-          ref="DATE_TIME" /&gt; <co id="t-DATE_TIME" />
+          value="DATE_TIME" /&gt; <co id="t-DATE_TIME" />
         &lt;property
           name="readOnly"
           value="true" /&gt; <co id="readOnly" />
@@ -582,7 +582,7 @@
           value="lastUpdateTimestamp" /&gt;
         &lt;property
           name="type"
-          ref="DATE_TIME" /&gt;
+          value="DATE_TIME" /&gt;
         &lt;property
           name="readOnly"
           value="true" /&gt;
@@ -1391,7 +1391,7 @@ public interface ContactInfo extends
           value="birthDate" /&gt;
         &lt;property
           name="type"
-          ref="DATE" /&gt; <co id="birthDate" />
+          value="DATE" /&gt; <co id="birthDate" />
       &lt;/bean&gt;
       &lt;bean
         class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
@@ -1400,7 +1400,7 @@ public interface ContactInfo extends
           value="hireDate" /&gt;
         &lt;property
           name="type"
-          ref="DATE" /&gt;
+          value="DATE" /&gt;
       &lt;/bean&gt;
       &lt;bean
         class="org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor"&gt; <co
@@ -3240,7 +3240,7 @@ public class EmployeePropertyProcessors {
               id="BasicComponentViewDescriptor" />
   &lt;property
     name="labelsPosition"
-    ref="ABOVE" /&gt; <co id="labelsPosition" />
+    value="ABOVE" /&gt; <co id="labelsPosition" />
   &lt;property
     name="columnCount"
     value="3" /&gt; <co id="columnCount" />
@@ -3631,7 +3631,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               id="Traceable.pane" />
   &lt;property
     name="labelsPosition"
-    ref="ABOVE" /&gt;
+    value="ABOVE" /&gt;
   &lt;property
     name="columnCount"
     value="2" /&gt;
@@ -6597,7 +6597,7 @@ public class OrganizationalUnitPropertyProcessors {
                 id="department-rightBottomViewDescriptor" />
       &lt;property
         name="orientation"
-        ref="HORIZONTAL" /&gt;
+        value="HORIZONTAL" /&gt;
       &lt;property
         name="leftTopViewDescriptor"
         ref="Department-teams.table" /&gt;

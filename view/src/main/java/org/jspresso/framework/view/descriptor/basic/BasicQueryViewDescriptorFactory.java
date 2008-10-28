@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.model.descriptor.basic.BasicQueryComponentDescriptor;
+import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
@@ -60,7 +61,7 @@ public class BasicQueryViewDescriptorFactory implements IQueryViewDescriptorFact
     queryViewDescriptor
         .setName("filter");
     queryViewDescriptor
-        .setBorderType(IViewDescriptor.TITLED);
+        .setBorderType(EBorderType.TITLED);
     Map<String, Object> propertyWidths = new HashMap<String, Object>();
     for (String queriableProperty : queryComponentDescriptor
         .getQueryableProperties()) {

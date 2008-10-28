@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.jspresso.framework.view.descriptor.ISplitViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
+import org.jspresso.framework.view.descriptor.EOrientation;
 
 /**
  * Default implementation of a split view descriptor.
@@ -48,7 +48,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
     implements ISplitViewDescriptor {
 
   private IViewDescriptor leftTopViewDescriptor;
-  private int             orientation = VERTICAL;
+  private EOrientation     orientation = EOrientation.VERTICAL;
   private IViewDescriptor rightBottomViewDescriptor;
 
   /**
@@ -61,7 +61,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
-  public int getOrientation() {
+  public EOrientation getOrientation() {
     return orientation;
   }
 
@@ -76,7 +76,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the leftTopViewDescriptor.
    * 
    * @param leftTopViewDescriptor
-   *            the leftTopViewDescriptor to set.
+   *          the leftTopViewDescriptor to set.
    */
   public void setLeftTopViewDescriptor(IViewDescriptor leftTopViewDescriptor) {
     this.leftTopViewDescriptor = leftTopViewDescriptor;
@@ -86,9 +86,9 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the orientation.
    * 
    * @param orientation
-   *            the orientation to set.
+   *          the orientation to set.
    */
-  public void setOrientation(int orientation) {
+  public void setOrientation(EOrientation orientation) {
     this.orientation = orientation;
   }
 
@@ -96,7 +96,7 @@ public class BasicSplitViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the rightBottomViewDescriptor.
    * 
    * @param rightBottomViewDescriptor
-   *            the rightBottomViewDescriptor to set.
+   *          the rightBottomViewDescriptor to set.
    */
   public void setRightBottomViewDescriptor(
       IViewDescriptor rightBottomViewDescriptor) {

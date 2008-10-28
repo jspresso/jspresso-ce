@@ -25,7 +25,7 @@ import java.util.Map;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.binding.ICollectionConnector;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
-import org.jspresso.framework.model.datatransfer.TransferMode;
+import org.jspresso.framework.model.datatransfer.ETransferMode;
 
 
 /**
@@ -50,7 +50,7 @@ import org.jspresso.framework.model.datatransfer.TransferMode;
  */
 public class TransferCollectionAction extends AbstractCollectionAction {
 
-  private TransferMode transferMode;
+  private ETransferMode transferMode;
 
   /**
    * Retrieves the managed collection from the model connector then registers
@@ -85,7 +85,7 @@ public class TransferCollectionAction extends AbstractCollectionAction {
    * @param transferMode
    *            the transferMode to set.
    */
-  public void setTransferMode(TransferMode transferMode) {
+  public void setTransferMode(ETransferMode transferMode) {
     this.transferMode = transferMode;
   }
 }

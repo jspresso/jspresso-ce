@@ -20,9 +20,9 @@ package org.jspresso.framework.view.descriptor.basic;
 
 import java.util.List;
 
+import org.jspresso.framework.view.descriptor.EAxis;
 import org.jspresso.framework.view.descriptor.IEvenGridViewDescriptor;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
-
 
 /**
  * Default implementation of an even grid view descriptor.
@@ -47,7 +47,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
     implements IEvenGridViewDescriptor {
 
   private List<IViewDescriptor> childViewDescriptors;
-  private int                   drivingDimension = ROW;
+  private EAxis                  drivingDimension = EAxis.ROW;
   private int                   drivingDimensionCellCount;
 
   /**
@@ -60,7 +60,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
   /**
    * {@inheritDoc}
    */
-  public int getDrivingDimension() {
+  public EAxis getDrivingDimension() {
     return drivingDimension;
   }
 
@@ -75,7 +75,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the viewDescriptors.
    * 
    * @param viewDescriptors
-   *            the viewDescriptors to set.
+   *          the viewDescriptors to set.
    */
   public void setChildViewDescriptors(List<IViewDescriptor> viewDescriptors) {
     this.childViewDescriptors = viewDescriptors;
@@ -85,9 +85,9 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the drivingDimension.
    * 
    * @param drivingDimension
-   *            the drivingDimension to set.
+   *          the drivingDimension to set.
    */
-  public void setDrivingDimension(int drivingDimension) {
+  public void setDrivingDimension(EAxis drivingDimension) {
     this.drivingDimension = drivingDimension;
   }
 
@@ -95,7 +95,7 @@ public class BasicEvenGridViewDescriptor extends BasicCompositeViewDescriptor
    * Sets the drivingDimensionCellCount.
    * 
    * @param drivingDimensionCellCount
-   *            the drivingDimensionCellCount to set.
+   *          the drivingDimensionCellCount to set.
    */
   public void setDrivingDimensionCellCount(int drivingDimensionCellCount) {
     this.drivingDimensionCellCount = drivingDimensionCellCount;

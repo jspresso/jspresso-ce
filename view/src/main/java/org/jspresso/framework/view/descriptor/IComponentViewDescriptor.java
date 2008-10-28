@@ -45,16 +45,6 @@ import java.util.List;
 public interface IComponentViewDescriptor extends IViewDescriptor {
 
   /**
-   * <code>ABOVE</code> location constant.
-   */
-  int ABOVE = 1;
-
-  /**
-   * <code>ASIDE</code> location constant.
-   */
-  int ASIDE = 2;
-
-  /**
    * Gets the number of properties displayed in a row. This is actually a
    * maximum value since a property might span multiple columns.
    * 
@@ -68,7 +58,7 @@ public interface IComponentViewDescriptor extends IViewDescriptor {
    * @return the relative position of the labels (<code>ABOVE</code> or
    *         <code>ASIDE</code>).
    */
-  int getLabelsPosition();
+  ELabelPosition getLabelsPosition();
 
   /**
    * Gets the property view descriptors.
