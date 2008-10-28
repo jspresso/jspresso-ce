@@ -18,13 +18,15 @@
  */
 package org.jspresso.framework.view.descriptor.basic;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.util.Locale;
 
 import org.jspresso.framework.model.descriptor.IComponentDescriptor;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.ActionMap;
-import org.jspresso.framework.view.descriptor.EBorderType;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
+
 
 /**
  * Default implementation of a view descriptor.
@@ -48,11 +50,11 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
     implements IViewDescriptor {
 
-  private ActionMap  actionMap;
-  private String     background;
-  private EBorderType borderType = EBorderType.NONE;
-  private String     font;
-  private String     foreground;
+  private ActionMap          actionMap;
+  private Color              background;
+  private int                borderType = NONE;
+  private Font               font;
+  private Color              foreground;
 
   /**
    * Gets the actionMap.
@@ -66,28 +68,28 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   /**
    * {@inheritDoc}
    */
-  public String getBackground() {
+  public Color getBackground() {
     return background;
   }
 
   /**
    * {@inheritDoc}
    */
-  public EBorderType getBorderType() {
+  public int getBorderType() {
     return borderType;
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getFont() {
+  public Font getFont() {
     return font;
   }
 
   /**
    * {@inheritDoc}
    */
-  public String getForeground() {
+  public Color getForeground() {
     return foreground;
   }
 
@@ -98,10 +100,8 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     if (getDescription() == null) {
-      if (getModelDescriptor() != null) {
-        return getModelDescriptor().getI18nDescription(translationProvider,
-            locale);
-      }
+      return getModelDescriptor().getI18nDescription(translationProvider,
+          locale);
     }
     return super.getI18nDescription(translationProvider, locale);
   }
@@ -113,9 +113,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     if (getName() == null) {
-      if (getModelDescriptor() != null) {
-        return getModelDescriptor().getI18nName(translationProvider, locale);
-      }
+      return getModelDescriptor().getI18nName(translationProvider, locale);
     }
     return super.getI18nName(translationProvider, locale);
   }
@@ -128,8 +126,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null
         && getModelDescriptor() instanceof IComponentDescriptor) {
-      iconImageURL = ((IComponentDescriptor<?>) getModelDescriptor())
-          .getIconImageURL();
+      iconImageURL = ((IComponentDescriptor<?>) getModelDescriptor()).getIconImageURL();
       setIconImageURL(iconImageURL);
     }
     return iconImageURL;
@@ -139,7 +136,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the actionMap.
    * 
    * @param actionMap
-   *          the actionMap to set.
+   *            the actionMap to set.
    */
   public void setActionMap(ActionMap actionMap) {
     this.actionMap = actionMap;
@@ -149,9 +146,9 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the background.
    * 
    * @param background
-   *          the background to set.
+   *            the background to set.
    */
-  public void setBackground(String background) {
+  public void setBackground(Color background) {
     this.background = background;
   }
 
@@ -159,9 +156,9 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the borderType.
    * 
    * @param borderType
-   *          the borderType to set.
+   *            the borderType to set.
    */
-  public void setBorderType(EBorderType borderType) {
+  public void setBorderType(int borderType) {
     this.borderType = borderType;
   }
 
@@ -169,9 +166,9 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the font.
    * 
    * @param font
-   *          the font to set.
+   *            the font to set.
    */
-  public void setFont(String font) {
+  public void setFont(Font font) {
     this.font = font;
   }
 
@@ -179,9 +176,9 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the foreground.
    * 
    * @param foreground
-   *          the foreground to set.
+   *            the foreground to set.
    */
-  public void setForeground(String foreground) {
+  public void setForeground(Color foreground) {
     this.foreground = foreground;
   }
 

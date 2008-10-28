@@ -32,7 +32,7 @@ import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.ActionException;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.session.IApplicationSession;
-import org.jspresso.framework.application.backend.session.EMergeMode;
+import org.jspresso.framework.application.backend.session.MergeMode;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.model.component.query.ComparableQueryStructure;
@@ -185,7 +185,7 @@ public class QueryEntitiesAction extends AbstractHibernateAction {
       }
     }
     queryComponent.setQueriedComponents(session.merge(queriedEntities,
-        EMergeMode.MERGE_KEEP));
+        MergeMode.MERGE_KEEP));
     return super.execute(actionHandler, context);
   }
 }

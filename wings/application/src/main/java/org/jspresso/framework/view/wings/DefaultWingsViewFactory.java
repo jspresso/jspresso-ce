@@ -80,8 +80,6 @@ import org.jspresso.framework.binding.wings.STextFieldConnector;
 import org.jspresso.framework.binding.wings.XCalendarConnector;
 import org.jspresso.framework.gui.wings.components.SActionField;
 import org.jspresso.framework.gui.wings.components.SColorPicker;
-import org.jspresso.framework.model.descriptor.EDateType;
-import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -111,7 +109,6 @@ import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.format.NullableSimpleDateFormat;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.ColorHelper;
-import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.BasicCompositeView;
 import org.jspresso.framework.view.BasicMapView;
@@ -226,16 +223,11 @@ public class DefaultWingsViewFactory implements
   private static final Date                  TEMPLATE_DATE               = new Date(
                                                                              27166271000L);
   private static final Long                  TEMPLATE_DURATION           = new Long(
-                                                                             EDuration.ONE_SECOND
-                                                                                 .getMillis()
-                                                                                 + EDuration.ONE_MINUTE
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_HOUR
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_DAY
-                                                                                     .getMillis()
-                                                                                 + EDuration.ONE_WEEK
-                                                                                     .getMillis());
+                                                                             IDurationPropertyDescriptor.ONE_SECOND
+                                                                                 + IDurationPropertyDescriptor.ONE_MINUTE
+                                                                                 + IDurationPropertyDescriptor.ONE_HOUR
+                                                                                 + IDurationPropertyDescriptor.ONE_DAY
+                                                                                 + IDurationPropertyDescriptor.ONE_WEEK);
   private static final Date                  TEMPLATE_TIME               = new Date(
                                                                              3661000);
   private IActionFactory<Action, SComponent> actionFactory;
@@ -292,13 +284,15 @@ public class DefaultWingsViewFactory implements
           actionHandler.checkAccess(viewDescriptor);
         }
         if (viewDescriptor.getForeground() != null) {
-          view.getPeer().setForeground(createColor(viewDescriptor.getForeground()));
+          view.getPeer().setForeground(viewDescriptor.getForeground());
         }
         if (viewDescriptor.getBackground() != null) {
-          view.getPeer().setBackground(createColor(viewDescriptor.getBackground()));
+          view.getPeer().setBackground(viewDescriptor.getBackground());
         }
         if (viewDescriptor.getFont() != null) {
-          view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+          view.getPeer().setFont(
+              new SFont(viewDescriptor.getFont().getFontName(), viewDescriptor
+                  .getFont().getStyle(), viewDescriptor.getFont().getSize()));
         }
         if (viewDescriptor.isReadOnly()) {
           view.getConnector().setLocallyWritable(false);
@@ -429,7 +423,7 @@ public class DefaultWingsViewFactory implements
    * Sets the actionFactory.
    * 
    * @param actionFactory
-   *          the actionFactory to set.
+   *            the actionFactory to set.
    */
   public void setActionFactory(IActionFactory<Action, SComponent> actionFactory) {
     this.actionFactory = actionFactory;
@@ -439,7 +433,7 @@ public class DefaultWingsViewFactory implements
    * Sets the binaryPropertyInfoAction.
    * 
    * @param binaryPropertyInfoAction
-   *          the binaryPropertyInfoAction to set.
+   *            the binaryPropertyInfoAction to set.
    */
   public void setBinaryPropertyInfoAction(
       IDisplayableAction binaryPropertyInfoAction) {
@@ -450,7 +444,7 @@ public class DefaultWingsViewFactory implements
    * Sets the connectorFactory.
    * 
    * @param connectorFactory
-   *          the connectorFactory to set.
+   *            the connectorFactory to set.
    */
   public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
     this.connectorFactory = connectorFactory;
@@ -460,7 +454,7 @@ public class DefaultWingsViewFactory implements
    * Sets the iconFactory.
    * 
    * @param iconFactory
-   *          the iconFactory to set.
+   *            the iconFactory to set.
    */
   public void setIconFactory(IIconFactory<SIcon> iconFactory) {
     this.iconFactory = iconFactory;
@@ -470,7 +464,7 @@ public class DefaultWingsViewFactory implements
    * Sets the listSelectionModelBinder.
    * 
    * @param listSelectionModelBinder
-   *          the listSelectionModelBinder to set.
+   *            the listSelectionModelBinder to set.
    */
   public void setListSelectionModelBinder(
       IListSelectionModelBinder listSelectionModelBinder) {
@@ -481,7 +475,7 @@ public class DefaultWingsViewFactory implements
    * Sets the lovAction.
    * 
    * @param lovAction
-   *          the lovAction to set.
+   *            the lovAction to set.
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
@@ -491,7 +485,7 @@ public class DefaultWingsViewFactory implements
    * Sets the modelCascadingBinder.
    * 
    * @param modelCascadingBinder
-   *          the modelCascadingBinder to set.
+   *            the modelCascadingBinder to set.
    */
   public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
     this.modelCascadingBinder = modelCascadingBinder;
@@ -501,7 +495,7 @@ public class DefaultWingsViewFactory implements
    * Sets the maxCharacterLength.
    * 
    * @param maxCharacterLength
-   *          the maxCharacterLength to set.
+   *            the maxCharacterLength to set.
    */
   public void setMaxCharacterLength(int maxCharacterLength) {
     this.maxCharacterLength = maxCharacterLength;
@@ -511,7 +505,7 @@ public class DefaultWingsViewFactory implements
    * Sets the mvcBinder.
    * 
    * @param mvcBinder
-   *          the mvcBinder to set.
+   *            the mvcBinder to set.
    */
   public void setMvcBinder(IMvcBinder mvcBinder) {
     this.mvcBinder = mvcBinder;
@@ -521,7 +515,7 @@ public class DefaultWingsViewFactory implements
    * Sets the openFileAsBinaryPropertyAction.
    * 
    * @param openFileAsBinaryPropertyAction
-   *          the openFileAsBinaryPropertyAction to set.
+   *            the openFileAsBinaryPropertyAction to set.
    */
   public void setOpenFileAsBinaryPropertyAction(
       IDisplayableAction openFileAsBinaryPropertyAction) {
@@ -532,7 +526,7 @@ public class DefaultWingsViewFactory implements
    * Sets the resetPropertyAction.
    * 
    * @param resetPropertyAction
-   *          the resetPropertyAction to set.
+   *            the resetPropertyAction to set.
    */
   public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
     this.resetPropertyAction = resetPropertyAction;
@@ -542,7 +536,7 @@ public class DefaultWingsViewFactory implements
    * Sets the saveBinaryPropertyAsFileAction.
    * 
    * @param saveBinaryPropertyAsFileAction
-   *          the saveBinaryPropertyAsFileAction to set.
+   *            the saveBinaryPropertyAsFileAction to set.
    */
   public void setSaveBinaryPropertyAsFileAction(
       IDisplayableAction saveBinaryPropertyAsFileAction) {
@@ -553,7 +547,7 @@ public class DefaultWingsViewFactory implements
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *          the translationProvider to set.
+   *            the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
@@ -563,7 +557,7 @@ public class DefaultWingsViewFactory implements
    * Sets the treeSelectionModelBinder.
    * 
    * @param treeSelectionModelBinder
-   *          the treeSelectionModelBinder to set.
+   *            the treeSelectionModelBinder to set.
    */
   public void setTreeSelectionModelBinder(
       ITreeSelectionModelBinder treeSelectionModelBinder) {
@@ -589,7 +583,7 @@ public class DefaultWingsViewFactory implements
    * Creates an action field.
    * 
    * @param showTextField
-   *          is the text field visible to the user.
+   *            is the text field visible to the user.
    * @return the created action field.
    */
   protected SActionField createSActionField(boolean showTextField) {
@@ -703,7 +697,7 @@ public class DefaultWingsViewFactory implements
    * Creates a panel.
    * 
    * @param layout
-   *          the layout to apply to the panel.
+   *            the layout to apply to the panel.
    * @return the created panel.
    */
   protected SPanel createSPanel(SLayoutManager layout) {
@@ -745,7 +739,7 @@ public class DefaultWingsViewFactory implements
     scrollPane.setPreferredSize(SDimension.FULLAREA);
     scrollPane.setHorizontalAlignment(SConstants.LEFT_ALIGN);
     scrollPane.setVerticalAlignment(SConstants.TOP_ALIGN);
-    // TODO remove workaround asa WingS is fixed.
+    //TODO remove workaround asa WingS is fixed.
     scrollPane.setAttribute(CSSProperty.TABLE_LAYOUT, "fixed");
     return scrollPane;
   }
@@ -887,16 +881,16 @@ public class DefaultWingsViewFactory implements
    * Decorates the created view with the apropriate border.
    * 
    * @param view
-   *          the view to descorate.
+   *            the view to descorate.
    * @param locale
-   *          the locale to use.
+   *            the locale to use.
    */
   protected void decorateWithBorder(IView<SComponent> view, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
-      case SIMPLE:
+      case IViewDescriptor.SIMPLE:
         view.getPeer().setBorder(new SEtchedBorder());
         break;
-      case TITLED:
+      case IViewDescriptor.TITLED:
         decorateWithTitle(view, locale);
         break;
       default:
@@ -1003,7 +997,8 @@ public class DefaultWingsViewFactory implements
 
   private IView<SComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     SCheckBox viewComponent = createSCheckBox();
     SCheckBoxConnector connector = new SCheckBoxConnector(propertyDescriptor
         .getName(), viewComponent);
@@ -1012,8 +1007,10 @@ public class DefaultWingsViewFactory implements
   }
 
   private STableCellRenderer createBooleanTableCellRenderer(
-      @SuppressWarnings("unused") IBooleanPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IBooleanPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return new BooleanTableCellRenderer();
   }
 
@@ -1178,8 +1175,10 @@ public class DefaultWingsViewFactory implements
   }
 
   private STableCellRenderer createCollectionTableCellRenderer(
-      @SuppressWarnings("unused") ICollectionPropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      ICollectionPropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return null;
   }
 
@@ -1199,7 +1198,8 @@ public class DefaultWingsViewFactory implements
 
   private IView<SComponent> createColorPropertyView(
       IColorPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     SColorPicker viewComponent = createSColorPicker();
     if (propertyDescriptor.getDefaultValue() != null) {
       int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
@@ -1214,8 +1214,9 @@ public class DefaultWingsViewFactory implements
   }
 
   private STableCellRenderer createColorTableCellRenderer(
-      @SuppressWarnings("unused") IColorPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IColorPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
     return new ColorTableCellRenderer();
   }
 
@@ -1308,7 +1309,7 @@ public class DefaultWingsViewFactory implements
       // label positionning
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
+        case IComponentViewDescriptor.ASIDE:
           constraints.insets = new Insets(5, 5, 5, 5);
           if (propertyView.getPeer() instanceof STextArea
               || propertyView.getPeer() instanceof SList
@@ -1321,7 +1322,7 @@ public class DefaultWingsViewFactory implements
           constraints.gridx = currentX * 2;
           constraints.gridy = currentY;
           break;
-        case ABOVE:
+        case IComponentViewDescriptor.ABOVE:
           constraints.insets = new Insets(5, 5, 0, 5);
           constraints.anchor = GridBagConstraints.WEST;
           constraints.gridx = currentX;
@@ -1338,12 +1339,12 @@ public class DefaultWingsViewFactory implements
 
       // SComponent positionning
       switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
+        case IComponentViewDescriptor.ASIDE:
           constraints.gridx++;
           constraints.insets = new Insets(5, 0, 5, 5);
           constraints.gridwidth = propertyWidth * 2 - 1;
           break;
-        case ABOVE:
+        case IComponentViewDescriptor.ABOVE:
           constraints.gridy++;
           constraints.insets = new Insets(0, 5, 0, 5);
           constraints.gridwidth = propertyWidth;
@@ -1385,11 +1386,11 @@ public class DefaultWingsViewFactory implements
       constraints.weighty = 1.0D;
       constraints.fill = GridBagConstraints.BOTH;
       switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
+        case IComponentViewDescriptor.ASIDE:
           constraints.gridy = currentY + 1;
           constraints.gridwidth = viewDescriptor.getColumnCount() * 2;
           break;
-        case ABOVE:
+        case IComponentViewDescriptor.ABOVE:
           constraints.gridy = (currentY + 1) * 2;
           constraints.gridwidth = viewDescriptor.getColumnCount();
           break;
@@ -1408,7 +1409,7 @@ public class DefaultWingsViewFactory implements
     constraints.fill = GridBagConstraints.HORIZONTAL;
     constraints.gridwidth = GridBagConstraints.REMAINDER;
     SPanel filler = createSPanel(new SBorderLayout());
-    // filler.setBorder(new SLineBorder(Color.BLUE));
+    //filler.setBorder(new SLineBorder(Color.BLUE));
     viewComponent.add(filler, constraints);
   }
 
@@ -1527,9 +1528,10 @@ public class DefaultWingsViewFactory implements
   private DateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
-    if (propertyDescriptor.getType() == EDateType.DATE) {
+    if (IDatePropertyDescriptor.DATE_TYPE.equals(propertyDescriptor.getType())) {
       format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
-          .getDateInstance(DateFormat.SHORT, locale)).toPattern(), locale);
+          .getDateInstance(DateFormat.SHORT, locale)).toPattern(),
+          locale);
     } else {
       format = new NullableSimpleDateFormat(((SimpleDateFormat) DateFormat
           .getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, locale))
@@ -1613,9 +1615,8 @@ public class DefaultWingsViewFactory implements
   // Helpers Section //
   // /////////////// //
 
-  private IFormatter createDurationFormatter(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
-      Locale locale) {
+  private IFormatter createDurationFormatter(@SuppressWarnings("unused")
+  IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
     return new DurationFormatter(locale);
   }
 
@@ -1669,11 +1670,11 @@ public class DefaultWingsViewFactory implements
       Locale locale) {
     SGridLayout layout = new SGridLayout();
     switch (viewDescriptor.getDrivingDimension()) {
-      case ROW:
+      case IEvenGridViewDescriptor.ROW:
         layout.setColumns(viewDescriptor.getDrivingDimensionCellCount());
         layout.setRows(0);
         break;
-      case COLUMN:
+      case IEvenGridViewDescriptor.COLUMN:
         layout.setRows(viewDescriptor.getDrivingDimensionCellCount());
         layout.setColumns(0);
         break;
@@ -1769,7 +1770,8 @@ public class DefaultWingsViewFactory implements
 
   private IView<SComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      Locale locale) {
     SLabel imageLabel = createSLabel();
     imageLabel.setHorizontalAlignment(SConstants.CENTER);
     SImageConnector connector = new SImageConnector(viewDescriptor
@@ -1785,9 +1787,8 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
-  private NumberFormat createIntegerFormat(
-      @SuppressWarnings("unused") IIntegerPropertyDescriptor propertyDescriptor,
-      Locale locale) {
+  private NumberFormat createIntegerFormat(@SuppressWarnings("unused")
+  IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
     return NumberFormat.getIntegerInstance(locale);
   }
 
@@ -1816,8 +1817,9 @@ public class DefaultWingsViewFactory implements
   }
 
   private IView<SComponent> createListView(IListViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = ((ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor());
     ICompositeValueConnector rowConnectorPrototype = connectorFactory
@@ -1913,7 +1915,8 @@ public class DefaultWingsViewFactory implements
 
   private IView<SComponent> createPasswordPropertyView(
       IPasswordPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     SPasswordField viewComponent = createSPasswordField();
     SPasswordFieldConnector connector = new SPasswordFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -1960,7 +1963,8 @@ public class DefaultWingsViewFactory implements
   }
 
   private SLabel createPropertyLabel(IPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") SComponent propertyComponent, Locale locale) {
+      @SuppressWarnings("unused")
+      SComponent propertyComponent, Locale locale) {
     SLabel propertyLabel = createSLabel();
     StringBuffer labelText = new StringBuffer(propertyDescriptor.getI18nName(
         getTranslationProvider(), locale));
@@ -2062,8 +2066,10 @@ public class DefaultWingsViewFactory implements
   }
 
   private STableCellRenderer createReferenceTableCellRenderer(
-      @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IReferencePropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return null;
   }
 
@@ -2146,7 +2152,7 @@ public class DefaultWingsViewFactory implements
       leftTopView.getPeer().setHorizontalAlignment(SConstants.LEFT_ALIGN);
       leftTopView.getPeer().setVerticalAlignment(SConstants.TOP_ALIGN);
       switch (viewDescriptor.getOrientation()) {
-        case HORIZONTAL:
+        case ISplitViewDescriptor.HORIZONTAL:
           double weightx = 0.0d;
           // double weightx = 0.3d;
           // if (leftTopView.getDescriptor() instanceof ITreeViewDescriptor) {
@@ -2156,7 +2162,7 @@ public class DefaultWingsViewFactory implements
               1, 1, weightx, 1.0d, GridBagConstraints.NORTHWEST,
               GridBagConstraints.BOTH, insets, 0, 0));
           break;
-        case VERTICAL:
+        case ISplitViewDescriptor.VERTICAL:
           double weighty = 0.0d;
           if (leftTopView.getDescriptor() instanceof ICollectionViewDescriptor) {
             weighty = 1.0d;
@@ -2178,11 +2184,11 @@ public class DefaultWingsViewFactory implements
       int gridx = 0;
       int gridy = 0;
       switch (viewDescriptor.getOrientation()) {
-        case HORIZONTAL:
+        case ISplitViewDescriptor.HORIZONTAL:
           gridx = 1;
           gridy = 0;
           break;
-        case VERTICAL:
+        case ISplitViewDescriptor.VERTICAL:
           gridx = 0;
           gridy = 1;
           break;
@@ -2258,8 +2264,9 @@ public class DefaultWingsViewFactory implements
   }
 
   private STableCellRenderer createStringTableCellRenderer(
-      @SuppressWarnings("unused") IStringPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IStringPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
     return new FormattedTableCellRenderer(null);
   }
 
@@ -2466,7 +2473,8 @@ public class DefaultWingsViewFactory implements
 
   private IView<SComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      Locale locale) {
     STextArea viewComponent = createSTextArea();
     viewComponent.setLineWrap(STextArea.VIRTUAL_WRAP);
 
@@ -2478,9 +2486,8 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
-  private DateFormat createTimeFormat(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor,
-      Locale locale) {
+  private DateFormat createTimeFormat(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
     return format;
   }
@@ -2513,7 +2520,8 @@ public class DefaultWingsViewFactory implements
   // Tree Section //
   // //////////// //
   private IView<SComponent> createTreeView(ITreeViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler, Locale locale) {
+      @SuppressWarnings("unused")
+      IActionHandler actionHandler, Locale locale) {
 
     ITreeLevelDescriptor rootDescriptor = viewDescriptor
         .getRootSubtreeDescriptor();
@@ -2576,26 +2584,6 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
-  private Color createColor(String colorAsHexString) {
-    int[] rgba = ColorHelper.fromHexString(colorAsHexString);
-    return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
-  }
-
-  private SFont createFont(String fontString) {
-    org.jspresso.framework.util.gui.Font font = FontHelper.fromString(fontString);
-    int fontStyle;
-    if (font.isBold() && font.isItalic()) {
-      fontStyle = SFont.BOLD | SFont.ITALIC;
-    } else if (font.isBold()) {
-      fontStyle = SFont.BOLD;
-    } else if (font.isItalic()) {
-      fontStyle = SFont.ITALIC;
-    } else {
-      fontStyle = SFont.PLAIN;
-    }
-    return new SFont(font.getName(), fontStyle, font.getSize());
-  }
-
   // ///////////////////// //
   // Configuration Section //
   // ///////////////////// //
@@ -2608,8 +2596,8 @@ public class DefaultWingsViewFactory implements
     return viewDescriptor.getModelDescriptor().getName();
   }
 
-  private Object getDateTemplateValue(
-      @SuppressWarnings("unused") IDatePropertyDescriptor propertyDescriptor) {
+  private Object getDateTemplateValue(@SuppressWarnings("unused")
+  IDatePropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DATE;
   }
 
@@ -2645,8 +2633,8 @@ public class DefaultWingsViewFactory implements
     return descriptorPath;
   }
 
-  private Object getDurationTemplateValue(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor) {
+  private Object getDurationTemplateValue(@SuppressWarnings("unused")
+  IDurationPropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DURATION;
   }
 
@@ -2753,8 +2741,8 @@ public class DefaultWingsViewFactory implements
     return null;
   }
 
-  private Object getTimeTemplateValue(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor) {
+  private Object getTimeTemplateValue(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor) {
     return TEMPLATE_TIME;
   }
 
@@ -2790,7 +2778,7 @@ public class DefaultWingsViewFactory implements
      * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
      * 
      * @param viewDescriptor
-     *          the tree view descriptor used by the tree view.
+     *            the tree view descriptor used by the tree view.
      * @param locale
      */
     public ConnectorTreeCellRenderer(ITreeViewDescriptor viewDescriptor,
@@ -2881,14 +2869,15 @@ public class DefaultWingsViewFactory implements
     private IEnumerationPropertyDescriptor propertyDescriptor;
 
     /**
-     * Constructs a new <code>TranslatedEnumerationCellRenderer</code> instance.
+     * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
+     * instance.
      * 
      * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
-     *          taken. The prefix used to lookup translation keys in the form
-     *          keyPrefix.value is the propertyDescriptor enumeration name.
+     *            the property descriptor from which the enumeration name is
+     *            taken. The prefix used to lookup translation keys in the form
+     *            keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
-     *          the locale to lookup the translation.
+     *            the locale to lookup the translation.
      */
     public TranslatedEnumerationListCellRenderer(
         IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
@@ -2930,11 +2919,11 @@ public class DefaultWingsViewFactory implements
      * instance.
      * 
      * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
-     *          taken. The prefix used to lookup translation keys in the form
-     *          keyPrefix.value is the propertyDescriptor enumeration name.
+     *            the property descriptor from which the enumeration name is
+     *            taken. The prefix used to lookup translation keys in the form
+     *            keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
-     *          the locale to lookup the translation.
+     *            the locale to lookup the translation.
      */
     public TranslatedEnumerationTableCellRenderer(
         IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {

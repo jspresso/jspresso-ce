@@ -81,8 +81,6 @@ import org.jspresso.framework.gui.ulc.components.server.ULCExtendedTree;
 import org.jspresso.framework.gui.ulc.components.server.ULCJEditTextArea;
 import org.jspresso.framework.gui.ulc.components.server.ULCOnFocusSelectTextField;
 import org.jspresso.framework.gui.ulc.components.server.ULCTranslationDataTypeFactory;
-import org.jspresso.framework.model.descriptor.EDateType;
-import org.jspresso.framework.model.descriptor.EDuration;
 import org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IBooleanPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.ICollectionDescriptorProvider;
@@ -112,7 +110,6 @@ import org.jspresso.framework.util.format.FormatAdapter;
 import org.jspresso.framework.util.format.IFormatter;
 import org.jspresso.framework.util.gate.IGate;
 import org.jspresso.framework.util.gui.ColorHelper;
-import org.jspresso.framework.util.gui.FontHelper;
 import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.util.ulc.UlcUtil;
 import org.jspresso.framework.view.BasicCompositeView;
@@ -231,16 +228,11 @@ public class DefaultUlcViewFactory implements
   private static final Date                     TEMPLATE_DATE               = new Date(
                                                                                 27166271000L);
   private static final Long                     TEMPLATE_DURATION           = new Long(
-                                                                                EDuration.ONE_SECOND
-                                                                                    .getMillis()
-                                                                                    + EDuration.ONE_MINUTE
-                                                                                        .getMillis()
-                                                                                    + EDuration.ONE_HOUR
-                                                                                        .getMillis()
-                                                                                    + EDuration.ONE_DAY
-                                                                                        .getMillis()
-                                                                                    + EDuration.ONE_WEEK
-                                                                                        .getMillis());
+                                                                                IDurationPropertyDescriptor.ONE_SECOND
+                                                                                    + IDurationPropertyDescriptor.ONE_MINUTE
+                                                                                    + IDurationPropertyDescriptor.ONE_HOUR
+                                                                                    + IDurationPropertyDescriptor.ONE_DAY
+                                                                                    + IDurationPropertyDescriptor.ONE_WEEK);
   private static final Date                     TEMPLATE_TIME               = new Date(
                                                                                 366000);
   private static final Dimension                TREE_PREFERRED_SIZE         = new Dimension(
@@ -309,14 +301,14 @@ public class DefaultUlcViewFactory implements
         }
         if (viewDescriptor.getForeground() != null) {
           view.getPeer().setForeground(
-              createColor(viewDescriptor.getForeground()));
+              createUlcColor(viewDescriptor.getForeground()));
         }
         if (viewDescriptor.getBackground() != null) {
           view.getPeer().setBackground(
-              createColor(viewDescriptor.getBackground()));
+              createUlcColor(viewDescriptor.getBackground()));
         }
         if (viewDescriptor.getFont() != null) {
-          view.getPeer().setFont(createFont(viewDescriptor.getFont()));
+          view.getPeer().setFont(createUlcFont(viewDescriptor.getFont()));
         }
         if (viewDescriptor.isReadOnly()) {
           view.getConnector().setLocallyWritable(false);
@@ -411,7 +403,7 @@ public class DefaultUlcViewFactory implements
    * Sets the actionFactory.
    * 
    * @param actionFactory
-   *          the actionFactory to set.
+   *            the actionFactory to set.
    */
   public void setActionFactory(
       IActionFactory<IAction, ULCComponent> actionFactory) {
@@ -422,7 +414,7 @@ public class DefaultUlcViewFactory implements
    * Sets the binaryPropertyInfoAction.
    * 
    * @param binaryPropertyInfoAction
-   *          the binaryPropertyInfoAction to set.
+   *            the binaryPropertyInfoAction to set.
    */
   public void setBinaryPropertyInfoAction(
       IDisplayableAction binaryPropertyInfoAction) {
@@ -433,7 +425,7 @@ public class DefaultUlcViewFactory implements
    * Sets the connectorFactory.
    * 
    * @param connectorFactory
-   *          the connectorFactory to set.
+   *            the connectorFactory to set.
    */
   public void setConnectorFactory(IConfigurableConnectorFactory connectorFactory) {
     this.connectorFactory = connectorFactory;
@@ -443,7 +435,7 @@ public class DefaultUlcViewFactory implements
    * Sets the iconFactory.
    * 
    * @param iconFactory
-   *          the iconFactory to set.
+   *            the iconFactory to set.
    */
   public void setIconFactory(IIconFactory<ULCIcon> iconFactory) {
     this.iconFactory = iconFactory;
@@ -453,7 +445,7 @@ public class DefaultUlcViewFactory implements
    * Sets the listSelectionModelBinder.
    * 
    * @param listSelectionModelBinder
-   *          the listSelectionModelBinder to set.
+   *            the listSelectionModelBinder to set.
    */
   public void setListSelectionModelBinder(
       IListSelectionModelBinder listSelectionModelBinder) {
@@ -464,7 +456,7 @@ public class DefaultUlcViewFactory implements
    * Sets the lovAction.
    * 
    * @param lovAction
-   *          the lovAction to set.
+   *            the lovAction to set.
    */
   public void setLovAction(IDisplayableAction lovAction) {
     this.lovAction = lovAction;
@@ -474,7 +466,7 @@ public class DefaultUlcViewFactory implements
    * Sets the modelCascadingBinder.
    * 
    * @param modelCascadingBinder
-   *          the modelCascadingBinder to set.
+   *            the modelCascadingBinder to set.
    */
   public void setModelCascadingBinder(IModelCascadingBinder modelCascadingBinder) {
     this.modelCascadingBinder = modelCascadingBinder;
@@ -484,7 +476,7 @@ public class DefaultUlcViewFactory implements
    * Sets the maxCharacterLength.
    * 
    * @param maxCharacterLength
-   *          the maxCharacterLength to set.
+   *            the maxCharacterLength to set.
    */
   public void setMaxCharacterLength(int maxCharacterLength) {
     this.maxCharacterLength = maxCharacterLength;
@@ -494,7 +486,7 @@ public class DefaultUlcViewFactory implements
    * Sets the mvcBinder.
    * 
    * @param mvcBinder
-   *          the mvcBinder to set.
+   *            the mvcBinder to set.
    */
   public void setMvcBinder(IMvcBinder mvcBinder) {
     this.mvcBinder = mvcBinder;
@@ -504,7 +496,7 @@ public class DefaultUlcViewFactory implements
    * Sets the openFileAsBinaryPropertyAction.
    * 
    * @param openFileAsBinaryPropertyAction
-   *          the openFileAsBinaryPropertyAction to set.
+   *            the openFileAsBinaryPropertyAction to set.
    */
   public void setOpenFileAsBinaryPropertyAction(
       IDisplayableAction openFileAsBinaryPropertyAction) {
@@ -515,7 +507,7 @@ public class DefaultUlcViewFactory implements
    * Sets the resetPropertyAction.
    * 
    * @param resetPropertyAction
-   *          the resetPropertyAction to set.
+   *            the resetPropertyAction to set.
    */
   public void setResetPropertyAction(IDisplayableAction resetPropertyAction) {
     this.resetPropertyAction = resetPropertyAction;
@@ -525,7 +517,7 @@ public class DefaultUlcViewFactory implements
    * Sets the saveBinaryPropertyAsFileAction.
    * 
    * @param saveBinaryPropertyAsFileAction
-   *          the saveBinaryPropertyAsFileAction to set.
+   *            the saveBinaryPropertyAsFileAction to set.
    */
   public void setSaveBinaryPropertyAsFileAction(
       IDisplayableAction saveBinaryPropertyAsFileAction) {
@@ -536,7 +528,7 @@ public class DefaultUlcViewFactory implements
    * Sets the translationProvider.
    * 
    * @param translationProvider
-   *          the translationProvider to set.
+   *            the translationProvider to set.
    */
   public void setTranslationProvider(ITranslationProvider translationProvider) {
     this.translationProvider = translationProvider;
@@ -546,7 +538,7 @@ public class DefaultUlcViewFactory implements
    * Sets the treeSelectionModelBinder.
    * 
    * @param treeSelectionModelBinder
-   *          the treeSelectionModelBinder to set.
+   *            the treeSelectionModelBinder to set.
    */
   public void setTreeSelectionModelBinder(
       ITreeSelectionModelBinder treeSelectionModelBinder) {
@@ -616,7 +608,7 @@ public class DefaultUlcViewFactory implements
    * Creates an action field.
    * 
    * @param showTextField
-   *          is the text field visible to the user.
+   *            is the text field visible to the user.
    * @return the created action field.
    */
   protected ULCActionField createULCActionField(boolean showTextField) {
@@ -664,9 +656,9 @@ public class DefaultUlcViewFactory implements
    * Creates a date field.
    * 
    * @param formatPattern
-   *          the (simple date format) pattern this date field uses.
+   *            the (simple date format) pattern this date field uses.
    * @param locale
-   *          the user locale.
+   *            the user locale.
    * @return the created date field.
    */
   protected ULCDateField createULCDateField(String formatPattern, Locale locale) {
@@ -681,7 +673,7 @@ public class DefaultUlcViewFactory implements
    * Creates a ULC JEdit text area.
    * 
    * @param language
-   *          the language to add syntax highlighting for.
+   *            the language to add syntax highlighting for.
    * @return the created text area.
    */
   protected ULCJEditTextArea createULCJEditTextArea(String language) {
@@ -866,16 +858,16 @@ public class DefaultUlcViewFactory implements
    * Decorates the created view with the apropriate border.
    * 
    * @param view
-   *          the view to descorate.
+   *            the view to descorate.
    * @param locale
-   *          the locale to use.
+   *            the locale to use.
    */
   protected void decorateWithBorder(IView<ULCComponent> view, Locale locale) {
     switch (view.getDescriptor().getBorderType()) {
-      case SIMPLE:
+      case IViewDescriptor.SIMPLE:
         view.getPeer().setBorder(BorderFactory.createEtchedBorder());
         break;
-      case TITLED:
+      case IViewDescriptor.TITLED:
         decorateWithTitle(view, locale);
         break;
       default:
@@ -985,7 +977,8 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createBooleanPropertyView(
       IBooleanPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ULCCheckBox viewComponent = createULCCheckBox();
     ULCToggleButtonConnector connector = new ULCToggleButtonConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -994,8 +987,10 @@ public class DefaultUlcViewFactory implements
   }
 
   private ITableCellRenderer createBooleanTableCellRenderer(
-      @SuppressWarnings("unused") IBooleanPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IBooleanPropertyDescriptor propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return new BooleanTableCellRenderer();
   }
 
@@ -1154,8 +1149,10 @@ public class DefaultUlcViewFactory implements
   }
 
   private ITableCellRenderer createCollectionTableCellRenderer(
-      @SuppressWarnings("unused") ICollectionPropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      ICollectionPropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return null;
   }
 
@@ -1175,7 +1172,8 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createColorPropertyView(
       IColorPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ULCColorPicker viewComponent = createULCColorPicker();
     if (propertyDescriptor.getDefaultValue() != null) {
       int[] rgba = ColorHelper.fromHexString((String) propertyDescriptor
@@ -1190,8 +1188,9 @@ public class DefaultUlcViewFactory implements
   }
 
   private ITableCellRenderer createColorTableCellRenderer(
-      @SuppressWarnings("unused") IColorPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IColorPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
     return new ColorTableCellRenderer();
   }
 
@@ -1279,7 +1278,7 @@ public class DefaultUlcViewFactory implements
       // label positionning
       GridBagConstraints constraints = new GridBagConstraints();
       switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
+        case IComponentViewDescriptor.ASIDE:
           constraints.setInsets(new Insets(5, 5, 5, 5));
           if (propertyView.getPeer() instanceof ULCTextArea
               || propertyView.getPeer() instanceof ULCList
@@ -1293,7 +1292,7 @@ public class DefaultUlcViewFactory implements
           constraints.setGridX(currentX * 2);
           constraints.setGridY(currentY);
           break;
-        case ABOVE:
+        case IComponentViewDescriptor.ABOVE:
           constraints.setInsets(new Insets(5, 5, 0, 5));
           constraints.setAnchor(GridBagConstraints.SOUTHWEST);
           constraints.setGridX(currentX);
@@ -1310,12 +1309,12 @@ public class DefaultUlcViewFactory implements
 
       // component positionning
       switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
+        case IComponentViewDescriptor.ASIDE:
           constraints.setGridX(constraints.getGridX() + 1);
           constraints.setInsets(new Insets(5, 0, 5, 5));
           constraints.setGridWidth(propertyWidth * 2 - 1);
           break;
-        case ABOVE:
+        case IComponentViewDescriptor.ABOVE:
           constraints.setGridY(constraints.getGridY() + 1);
           constraints.setInsets(new Insets(0, 5, 0, 5));
           constraints.setGridWidth(propertyWidth);
@@ -1355,11 +1354,11 @@ public class DefaultUlcViewFactory implements
       constraints.setWeightY(1.0);
       constraints.setFill(GridBagConstraints.BOTH);
       switch (viewDescriptor.getLabelsPosition()) {
-        case ASIDE:
+        case IComponentViewDescriptor.ASIDE:
           constraints.setGridY(currentY + 1);
           constraints.setGridWidth(viewDescriptor.getColumnCount() * 2);
           break;
-        case ABOVE:
+        case IComponentViewDescriptor.ABOVE:
           constraints.setGridY((currentY + 1) * 2);
           constraints.setGridWidth(viewDescriptor.getColumnCount());
           break;
@@ -1482,16 +1481,16 @@ public class DefaultUlcViewFactory implements
     return view;
   }
 
-  private ULCDateDataType createDateDataType(
-      @SuppressWarnings("unused") IDatePropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale, SimpleDateFormat format) {
+  private ULCDateDataType createDateDataType(@SuppressWarnings("unused")
+  IDatePropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+  Locale locale, SimpleDateFormat format) {
     return new ULCDateDataType(format.toPattern());
   }
 
   private SimpleDateFormat createDateFormat(
       IDatePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format;
-    if (propertyDescriptor.getType() == EDateType.DATE) {
+    if (IDatePropertyDescriptor.DATE_TYPE.equals(propertyDescriptor.getType())) {
       format = DateFormat.getDateInstance(DateFormat.SHORT, locale);
     } else {
       format = DateFormat.getDateTimeInstance(DateFormat.SHORT,
@@ -1511,7 +1510,8 @@ public class DefaultUlcViewFactory implements
 
     SimpleDateFormat format = createDateFormat(propertyDescriptor, locale);
 
-    ULCDateField viewComponent = createULCDateField(format.toPattern(), locale);
+    ULCDateField viewComponent = createULCDateField(
+        format.toPattern(), locale);
     ULCDateFieldConnector connector = new ULCDateFieldConnector(
         propertyDescriptor.getName(), viewComponent);
     connector.setExceptionHandler(actionHandler);
@@ -1598,16 +1598,17 @@ public class DefaultUlcViewFactory implements
   }
 
   private ULCDurationDataType createDurationDataType(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
-      Locale locale, @SuppressWarnings("unused") DurationFormatter formatter) {
+      @SuppressWarnings("unused")
+      IDurationPropertyDescriptor propertyDescriptor, Locale locale,
+      @SuppressWarnings("unused")
+      DurationFormatter formatter) {
     ULCDurationDataType durationDataType = durationDataTypeFactory
         .getTranslationDataType(locale);
     return durationDataType;
   }
 
-  private DurationFormatter createDurationFormatter(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor,
-      Locale locale) {
+  private DurationFormatter createDurationFormatter(@SuppressWarnings("unused")
+  IDurationPropertyDescriptor propertyDescriptor, Locale locale) {
     return new DurationFormatter(locale);
   }
 
@@ -1674,11 +1675,11 @@ public class DefaultUlcViewFactory implements
     List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
 
     switch (viewDescriptor.getDrivingDimension()) {
-      case ROW:
+      case IEvenGridViewDescriptor.ROW:
         viewComponent.setColumns(viewDescriptor.getDrivingDimensionCellCount());
         viewComponent.setRows(0);
         break;
-      case COLUMN:
+      case IEvenGridViewDescriptor.COLUMN:
         viewComponent.setRows(viewDescriptor.getDrivingDimensionCellCount());
         viewComponent.setColumns(0);
         break;
@@ -1770,7 +1771,8 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createImageView(
       IImageViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      Locale locale) {
     ULCLabel imageLabel = createULCLabel();
     imageLabel.setHorizontalAlignment(IDefaults.CENTER);
     ULCImageConnector connector = new ULCImageConnector(viewDescriptor
@@ -1798,9 +1800,8 @@ public class DefaultUlcViewFactory implements
     return numberDataType;
   }
 
-  private NumberFormat createIntegerFormat(
-      @SuppressWarnings("unused") IIntegerPropertyDescriptor propertyDescriptor,
-      Locale locale) {
+  private NumberFormat createIntegerFormat(@SuppressWarnings("unused")
+  IIntegerPropertyDescriptor propertyDescriptor, Locale locale) {
     return NumberFormat.getIntegerInstance(locale);
   }
 
@@ -1834,9 +1835,9 @@ public class DefaultUlcViewFactory implements
   }
 
   private IView<ULCComponent> createListView(
-      IListViewDescriptor viewDescriptor,
-      @SuppressWarnings("unused") IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      IListViewDescriptor viewDescriptor, @SuppressWarnings("unused")
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ICollectionDescriptorProvider<?> modelDescriptor = (ICollectionDescriptorProvider<?>) viewDescriptor
         .getModelDescriptor();
     ICompositeValueConnector rowConnectorPrototype = connectorFactory
@@ -1898,8 +1899,7 @@ public class DefaultUlcViewFactory implements
   }
 
   private IView<ULCComponent> createNumberPropertyView(
-      INumberPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, Locale locale) {
+      INumberPropertyDescriptor propertyDescriptor, IActionHandler actionHandler, Locale locale) {
     IView<ULCComponent> view = null;
     if (propertyDescriptor instanceof IIntegerPropertyDescriptor) {
       view = createIntegerPropertyView(
@@ -1928,7 +1928,8 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createPasswordPropertyView(
       IPasswordPropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ULCPasswordField viewComponent = createULCPasswordField();
     ULCPasswordFieldConnector connector = new ULCPasswordFieldConnector(
         propertyDescriptor.getName(), viewComponent);
@@ -1939,7 +1940,8 @@ public class DefaultUlcViewFactory implements
 
   private ULCPercentDataType createPercentDataType(
       IPercentPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      Locale locale) {
     ULCPercentDataType percentDataType = new ULCPercentDataType();
     if (propertyDescriptor.getMaxFractionDigit() != null) {
       percentDataType.setFractionalDigits(propertyDescriptor
@@ -1948,8 +1950,7 @@ public class DefaultUlcViewFactory implements
     return percentDataType;
   }
 
-  private NumberFormat createPercentFormat(
-      IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
+  private NumberFormat createPercentFormat(IPercentPropertyDescriptor propertyDescriptor, Locale locale) {
     NumberFormat format = NumberFormat.getPercentInstance(locale);
     if (propertyDescriptor.getMaxFractionDigit() != null) {
       format.setMaximumFractionDigits(propertyDescriptor.getMaxFractionDigit()
@@ -2102,8 +2103,10 @@ public class DefaultUlcViewFactory implements
   }
 
   private ITableCellRenderer createReferenceTableCellRenderer(
-      @SuppressWarnings("unused") IReferencePropertyDescriptor<?> propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IReferencePropertyDescriptor<?> propertyDescriptor,
+      @SuppressWarnings("unused")
+      Locale locale) {
     return null;
   }
 
@@ -2165,7 +2168,8 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
-      IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
+      IActionHandler actionHandler, @SuppressWarnings("unused")
+      Locale locale) {
     ULCJEditTextArea viewComponent = createULCJEditTextArea(propertyDescriptor
         .getLanguage());
     ULCJEditTextAreaConnector connector = new ULCJEditTextAreaConnector(
@@ -2183,10 +2187,10 @@ public class DefaultUlcViewFactory implements
     List<IView<ULCComponent>> childrenViews = new ArrayList<IView<ULCComponent>>();
 
     switch (viewDescriptor.getOrientation()) {
-      case HORIZONTAL:
+      case ISplitViewDescriptor.HORIZONTAL:
         viewComponent.setOrientation(ULCSplitPane.HORIZONTAL_SPLIT);
         break;
-      case VERTICAL:
+      case ISplitViewDescriptor.VERTICAL:
         viewComponent.setOrientation(ULCSplitPane.VERTICAL_SPLIT);
         break;
       default:
@@ -2235,8 +2239,9 @@ public class DefaultUlcViewFactory implements
   }
 
   private ITableCellRenderer createStringTableCellRenderer(int column,
-      @SuppressWarnings("unused") IStringPropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      IStringPropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+      Locale locale) {
     return new FormattedTableCellRenderer(column, null);
   }
 
@@ -2483,7 +2488,8 @@ public class DefaultUlcViewFactory implements
 
   private IView<ULCComponent> createTextPropertyView(
       ITextPropertyDescriptor propertyDescriptor, IActionHandler actionHandler,
-      @SuppressWarnings("unused") Locale locale) {
+      @SuppressWarnings("unused")
+      Locale locale) {
     ULCTextArea viewComponent = createULCTextArea();
     viewComponent.setLineWrap(true);
     ULCScrollPane scrollPane = createULCScrollPane();
@@ -2496,15 +2502,14 @@ public class DefaultUlcViewFactory implements
     return constructView(scrollPane, null, connector);
   }
 
-  private ULCDateDataType createTimeDataType(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor,
-      @SuppressWarnings("unused") Locale locale, SimpleDateFormat format) {
+  private ULCDateDataType createTimeDataType(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor, @SuppressWarnings("unused")
+  Locale locale, SimpleDateFormat format) {
     return new ULCDateDataType(format.toPattern());
   }
 
-  private SimpleDateFormat createTimeFormat(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor,
-      Locale locale) {
+  private SimpleDateFormat createTimeFormat(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor, Locale locale) {
     DateFormat format = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
     return (SimpleDateFormat) format;
   }
@@ -2542,8 +2547,7 @@ public class DefaultUlcViewFactory implements
   // Tree Section //
   // //////////// //
   private IView<ULCComponent> createTreeView(
-      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler,
-      Locale locale) {
+      ITreeViewDescriptor viewDescriptor, IActionHandler actionHandler, Locale locale) {
 
     ITreeLevelDescriptor rootDescriptor = viewDescriptor
         .getRootSubtreeDescriptor();
@@ -2620,24 +2624,13 @@ public class DefaultUlcViewFactory implements
     return view;
   }
 
-  private Color createColor(String colorAsHexString) {
-    int[] rgba = ColorHelper.fromHexString(colorAsHexString);
-    return new Color(rgba[0], rgba[1], rgba[2], rgba[3]);
+  private Color createUlcColor(java.awt.Color color) {
+    return new Color(color.getRed(), color.getGreen(), color.getBlue(), color
+        .getAlpha());
   }
 
-  private Font createFont(String fontString) {
-    org.jspresso.framework.util.gui.Font font = FontHelper.fromString(fontString);
-    int fontStyle;
-    if (font.isBold() && font.isItalic()) {
-      fontStyle = Font.BOLD | Font.ITALIC;
-    } else if (font.isBold()) {
-      fontStyle = Font.BOLD;
-    } else if (font.isItalic()) {
-      fontStyle = Font.ITALIC;
-    } else {
-      fontStyle = Font.PLAIN;
-    }
-    return new Font(font.getName(), fontStyle, font.getSize());
+  private Font createUlcFont(java.awt.Font font) {
+    return new Font(font.getName(), font.getStyle(), font.getSize());
   }
 
   private ULCPopupMenu createULCPopupMenu(ULCComponent sourceComponent,
@@ -2750,8 +2743,8 @@ public class DefaultUlcViewFactory implements
   // Configuration Section //
   // ///////////////////// //
 
-  private Object getDateTemplateValue(
-      @SuppressWarnings("unused") IDatePropertyDescriptor propertyDescriptor) {
+  private Object getDateTemplateValue(@SuppressWarnings("unused")
+  IDatePropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DATE;
   }
 
@@ -2787,8 +2780,8 @@ public class DefaultUlcViewFactory implements
     return descriptorPath;
   }
 
-  private Object getDurationTemplateValue(
-      @SuppressWarnings("unused") IDurationPropertyDescriptor propertyDescriptor) {
+  private Object getDurationTemplateValue(@SuppressWarnings("unused")
+  IDurationPropertyDescriptor propertyDescriptor) {
     return TEMPLATE_DURATION;
   }
 
@@ -2895,8 +2888,8 @@ public class DefaultUlcViewFactory implements
     return null;
   }
 
-  private Object getTimeTemplateValue(
-      @SuppressWarnings("unused") ITimePropertyDescriptor propertyDescriptor) {
+  private Object getTimeTemplateValue(@SuppressWarnings("unused")
+  ITimePropertyDescriptor propertyDescriptor) {
     return TEMPLATE_TIME;
   }
 
@@ -2934,7 +2927,7 @@ public class DefaultUlcViewFactory implements
      * Constructs a new <code>ConnectorTreeCellRenderer</code> instance.
      * 
      * @param viewDescriptor
-     *          the tree view descriptor used by the tree view.
+     *            the tree view descriptor used by the tree view.
      * @param locale
      */
     public ConnectorTreeCellRenderer(ITreeViewDescriptor viewDescriptor,
@@ -3026,14 +3019,15 @@ public class DefaultUlcViewFactory implements
     private IEnumerationPropertyDescriptor propertyDescriptor;
 
     /**
-     * Constructs a new <code>TranslatedEnumerationCellRenderer</code> instance.
+     * Constructs a new <code>TranslatedEnumerationCellRenderer</code>
+     * instance.
      * 
      * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
-     *          taken. The prefix used to lookup translation keys in the form
-     *          keyPrefix.value is the propertyDescriptor enumeration name.
+     *            the property descriptor from which the enumeration name is
+     *            taken. The prefix used to lookup translation keys in the form
+     *            keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
-     *          the locale to lookup the translation.
+     *            the locale to lookup the translation.
      */
     public TranslatedEnumerationListCellRenderer(
         IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {
@@ -3071,13 +3065,13 @@ public class DefaultUlcViewFactory implements
      * instance.
      * 
      * @param column
-     *          the column this renderer is attached to.
+     *            the column this renderer is attached to.
      * @param propertyDescriptor
-     *          the property descriptor from which the enumeration name is
-     *          taken. The prefix used to lookup translation keys in the form
-     *          keyPrefix.value is the propertyDescriptor enumeration name.
+     *            the property descriptor from which the enumeration name is
+     *            taken. The prefix used to lookup translation keys in the form
+     *            keyPrefix.value is the propertyDescriptor enumeration name.
      * @param locale
-     *          the locale to lookup the translation.
+     *            the locale to lookup the translation.
      */
     public TranslatedEnumerationTableCellRenderer(int column,
         IEnumerationPropertyDescriptor propertyDescriptor, Locale locale) {

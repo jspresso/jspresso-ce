@@ -28,7 +28,7 @@ import javax.swing.JComponent;
 import org.jspresso.framework.action.ActionContextConstants;
 import org.jspresso.framework.action.IActionHandler;
 import org.jspresso.framework.application.backend.action.CreateQueryComponentAction;
-import org.jspresso.framework.application.backend.session.EMergeMode;
+import org.jspresso.framework.application.backend.session.MergeMode;
 import org.jspresso.framework.application.frontend.action.swing.std.ModalDialogAction;
 import org.jspresso.framework.binding.IValueConnector;
 import org.jspresso.framework.model.component.IQueryComponent;
@@ -171,7 +171,7 @@ public class LovAction extends ModalDialogAction {
           && queryComponent.getQueriedComponents().size() == 1) {
         IEntity selectedEntity = getController(context).getApplicationSession()
             .merge((IEntity) queryComponent.getQueriedComponents().get(0),
-                EMergeMode.MERGE_KEEP);
+                MergeMode.MERGE_KEEP);
         getViewConnector(context).setConnectorValue(selectedEntity);
         return true;
       }

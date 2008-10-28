@@ -253,8 +253,9 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
             for (IEntity entityToUpdate : entitiesToUpdate) {
               IEntity sessionEntity;
               try {
-                sessionEntity = cloneInUnitOfWork(entityToUpdate);
-                session.lock(sessionEntity, LockMode.NONE);
+                session.lock(entityToUpdate, LockMode.NONE);
+                cloneInUnitOfWork(entityToUpdate);
+                sessionEntity = entityToUpdate;
               } catch (Exception ex) {
                 sessionEntity = (IEntity) session.get(entityToUpdate
                     .getContract(), entityToUpdate.getId());
@@ -271,8 +272,8 @@ public class HibernateAwareApplicationSession extends BasicApplicationSession {
             for (IEntity entityToDelete : entitiesToDelete) {
               IEntity sessionEntity;
               try {
-                sessionEntity = cloneInUnitOfWork(entityToDelete);
-                session.lock(sessionEntity, LockMode.NONE);
+                session.lock(entityToDelete, LockMode.NONE);
+                sessionEntity = entityToDelete;
               } catch (Exception ex) {
                 sessionEntity = (IEntity) session.get(entityToDelete
                     .getContract(), entityToDelete.getId());

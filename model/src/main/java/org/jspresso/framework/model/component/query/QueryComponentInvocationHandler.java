@@ -25,7 +25,6 @@ import java.lang.reflect.Method;
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.component.IQueryComponent;
 import org.jspresso.framework.util.bean.AccessorInfo;
-import org.jspresso.framework.util.bean.EAccessorType;
 
 
 /**
@@ -80,14 +79,14 @@ public class QueryComponentInvocationHandler implements InvocationHandler,
       return componentDelegate.getContract();
     }
     AccessorInfo accessorInfo = new AccessorInfo(method);
-    EAccessorType accessorType = accessorInfo.getAccessorType();
-    if (accessorType == EAccessorType.SETTER) {
+    int accessorType = accessorInfo.getAccessorType();
+    if (accessorType == AccessorInfo.SETTER) {
       String accessedPropertyName = accessorInfo.getAccessedPropertyName();
       if (accessedPropertyName != null) {
         componentDelegate.straightSetProperty(accessedPropertyName, args[0]);
         return null;
       }
-    } else if (accessorType == EAccessorType.GETTER) {
+    } else if (accessorType == AccessorInfo.GETTER) {
       String accessedPropertyName = accessorInfo.getAccessedPropertyName();
       if (IQueryComponent.QUERIED_COMPONENTS.equals(accessedPropertyName)) {
         if (accessedPropertyName != null) {

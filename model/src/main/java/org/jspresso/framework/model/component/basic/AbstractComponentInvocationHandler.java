@@ -55,7 +55,6 @@ import org.jspresso.framework.util.accessor.IAccessor;
 import org.jspresso.framework.util.accessor.IAccessorFactory;
 import org.jspresso.framework.util.accessor.ICollectionAccessor;
 import org.jspresso.framework.util.bean.AccessorInfo;
-import org.jspresso.framework.util.bean.EAccessorType;
 import org.jspresso.framework.util.bean.IPropertyChangeCapable;
 import org.jspresso.framework.util.bean.SinglePropertyChangeSupport;
 import org.jspresso.framework.util.collection.CollectionHelper;
@@ -197,9 +196,9 @@ public abstract class AbstractComponentInvocationHandler implements
         return new Boolean(invokeLifecycleInterceptors(proxy, method, args));
       }
       AccessorInfo accessorInfo = new AccessorInfo(method);
-      EAccessorType accessorType = accessorInfo.getAccessorType();
+      int accessorType = accessorInfo.getAccessorType();
       IPropertyDescriptor propertyDescriptor = null;
-      if (accessorType != EAccessorType.NONE) {
+      if (accessorType != AccessorInfo.NONE) {
         String accessedPropertyName = accessorInfo.getAccessedPropertyName();
         if (accessedPropertyName != null) {
           propertyDescriptor = componentDescriptor
@@ -224,12 +223,12 @@ public abstract class AbstractComponentInvocationHandler implements
         }
         try {
           switch (accessorType) {
-            case GETTER:
+            case AccessorInfo.GETTER:
               return getProperty(proxy, propertyDescriptor);
-            case SETTER:
+            case AccessorInfo.SETTER:
               setProperty(proxy, propertyDescriptor, args[0]);
               return null;
-            case ADDER:
+            case AccessorInfo.ADDER:
               if (args.length == 2) {
                 addToProperty(proxy,
                     (ICollectionPropertyDescriptor) propertyDescriptor,
@@ -239,7 +238,7 @@ public abstract class AbstractComponentInvocationHandler implements
                     (ICollectionPropertyDescriptor) propertyDescriptor, args[0]);
               }
               return null;
-            case REMOVER:
+            case AccessorInfo.REMOVER:
               removeFromProperty(proxy,
                   (ICollectionPropertyDescriptor) propertyDescriptor, args[0]);
               return null;

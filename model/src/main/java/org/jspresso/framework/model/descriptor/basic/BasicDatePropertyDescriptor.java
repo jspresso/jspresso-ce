@@ -20,7 +20,6 @@ package org.jspresso.framework.model.descriptor.basic;
 
 import java.util.Date;
 
-import org.jspresso.framework.model.descriptor.EDateType;
 import org.jspresso.framework.model.descriptor.IDatePropertyDescriptor;
 import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDescriptor;
 
@@ -47,13 +46,13 @@ import org.jspresso.framework.model.descriptor.query.ComparableQueryStructureDes
 public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
     implements IDatePropertyDescriptor {
 
-  private EDateType type;
+  private String type;
 
   /**
    * Constructs a new <code>BasicDatePropertyDescriptor</code> instance.
    */
   public BasicDatePropertyDescriptor() {
-    type = EDateType.DATE;
+    type = DATE_TYPE;
   }
 
   /**
@@ -77,7 +76,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
   /**
    * {@inheritDoc}
    */
-  public EDateType getType() {
+  public String getType() {
     if (type != null) {
       return type;
     }
@@ -93,7 +92,7 @@ public class BasicDatePropertyDescriptor extends BasicScalarPropertyDescriptor
    * @param type
    *            the type to set.
    */
-  public void setType(EDateType type) {
+  public void setType(String type) {
     this.type = type;
   }
   

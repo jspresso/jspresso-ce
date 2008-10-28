@@ -18,6 +18,9 @@
  */
 package org.jspresso.framework.view.descriptor;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import org.jspresso.framework.view.action.IActionable;
 
 /**
@@ -42,11 +45,26 @@ import org.jspresso.framework.view.action.IActionable;
 public interface IViewDescriptor extends ISubViewDescriptor, IActionable {
 
   /**
-   * Gets the background color of this view as hex string representation argb coded.
+   * <code>NONE</code> border constant.
+   */
+  int NONE   = -1;
+
+  /**
+   * <code>SIMPLE</code> border constant.
+   */
+  int SIMPLE = 1;
+
+  /**
+   * <code>TITLED</code> border constant.
+   */
+  int TITLED = 2;
+
+  /**
+   * Gets the background color of this view.
    * 
    * @return this view's foreground color.
    */
-  String getBackground();
+  Color getBackground();
 
   /**
    * Gets the border type used to surround view.
@@ -57,22 +75,19 @@ public interface IViewDescriptor extends ISubViewDescriptor, IActionable {
    *         <li> <code>TITLED</code> means a titled border. The title will be
    *         the name of the view.
    */
-  EBorderType getBorderType();
+  int getBorderType();
 
   /**
-   * Gets the font of this view as string representation. The font is coded <code>[name];[style];[size]</code>.
-   * <li> [name] is the name of the font.
-   * <li> [style] is PLAIN, BOLD, ITALIC or a union of BOLD and ITALIC combined with the '|' character, i.e. BOLD|ITALIC.
-   * <li> [size] is the size of the font.
+   * Gets the font of this view.
    * 
    * @return this view's font.
    */
-  String getFont();
+  Font getFont();
 
   /**
-   * Gets the foreground color of this view as hex string representation argb coded.
+   * Gets the foreground color of this view.
    * 
    * @return this view's foreground color.
    */
-  String getForeground();
+  Color getForeground();
 }

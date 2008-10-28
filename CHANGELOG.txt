@@ -1,16 +1,3 @@
-2.3
-=====
-Bugs fixed
-----------
-[ 2157885 ] Entities registered for update are not correctly processsed
-[ 2181095 ] Build fails on linux for generated projects
-
-New features
-------------
-Reference documentation has been updated to reflect the HR sample application new naming conventions.
-[ 2172464 ] Remove all references to java.awt in view descriptors
-[ 2172455 ] Refactor all interface constants in typesafe enums
-
 2.2
 ===
 

@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.jspresso.framework.model.component.IComponent;
 import org.jspresso.framework.model.datatransfer.ComponentTransferStructure;
-import org.jspresso.framework.model.datatransfer.ETransferMode;
+import org.jspresso.framework.model.datatransfer.TransferMode;
 import org.jspresso.framework.model.entity.IEntity;
 import org.jspresso.framework.model.entity.IEntityCloneFactory;
 
@@ -90,7 +90,7 @@ public class PasteCollectionToMasterAction extends
           componentsToTransfer = Collections.singletonList(transferStructure
               .getContent());
         }
-        if (transferStructure.getTransferMode() == ETransferMode.COPY) {
+        if (transferStructure.getTransferMode() == TransferMode.COPY) {
           for (int i = 0; i < componentsToTransfer.size(); i++) {
             Object component = componentsToTransfer.get(i);
             if (component instanceof IEntity) {

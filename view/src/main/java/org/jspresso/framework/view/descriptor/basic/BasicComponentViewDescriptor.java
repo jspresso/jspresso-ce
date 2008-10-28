@@ -32,7 +32,6 @@ import org.jspresso.framework.model.descriptor.IPropertyDescriptor;
 import org.jspresso.framework.model.descriptor.IReferencePropertyDescriptor;
 import org.jspresso.framework.view.descriptor.IComponentViewDescriptor;
 import org.jspresso.framework.view.descriptor.ISubViewDescriptor;
-import org.jspresso.framework.view.descriptor.ELabelPosition;
 
 /**
  * Default implementation of a component view descriptor.
@@ -57,7 +56,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
     IComponentViewDescriptor {
 
   private int                       columnCount    = 1;
-  private ELabelPosition             labelsPosition = ELabelPosition.ASIDE;
+  private int                       labelsPosition = ASIDE;
   private List<ISubViewDescriptor>  propertyViewDescriptors;
   private Map<String, Integer>      propertyWidths;
   private Map<String, List<String>> renderedChildProperties;
@@ -86,7 +85,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
   /**
    * {@inheritDoc}
    */
-  public ELabelPosition getLabelsPosition() {
+  public int getLabelsPosition() {
     return labelsPosition;
   }
 
@@ -152,7 +151,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the columnCount.
    * 
    * @param columnCount
-   *          the columnCount to set.
+   *            the columnCount to set.
    */
   public void setColumnCount(int columnCount) {
     this.columnCount = columnCount;
@@ -162,9 +161,9 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the labelsPosition.
    * 
    * @param labelsPosition
-   *          the labelsPosition to set.
+   *            the labelsPosition to set.
    */
-  public void setLabelsPosition(ELabelPosition labelsPosition) {
+  public void setLabelsPosition(int labelsPosition) {
     this.labelsPosition = labelsPosition;
   }
 
@@ -172,7 +171,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the propertyViewDescriptors.
    * 
    * @param propertyViewDescriptors
-   *          the propertyViewDescriptors to set.
+   *            the propertyViewDescriptors to set.
    */
   public void setPropertyViewDescriptors(
       List<ISubViewDescriptor> propertyViewDescriptors) {
@@ -192,7 +191,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the propertyWidths.
    * 
    * @param propertyWidths
-   *          the propertyWidths to set.
+   *            the propertyWidths to set.
    */
   public void setPropertyWidths(Map<String, Object> propertyWidths) {
     this.propertyWidths = new HashMap<String, Integer>();
@@ -211,7 +210,7 @@ public class BasicComponentViewDescriptor extends BasicViewDescriptor implements
    * Sets the renderedChildProperties.
    * 
    * @param renderedChildProperties
-   *          the renderedChildProperties to set.
+   *            the renderedChildProperties to set.
    */
   public void setRenderedChildProperties(
       Map<String, List<String>> renderedChildProperties) {

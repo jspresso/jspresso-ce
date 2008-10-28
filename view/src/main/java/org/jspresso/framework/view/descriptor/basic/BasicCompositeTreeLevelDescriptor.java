@@ -49,14 +49,14 @@ import org.jspresso.framework.view.descriptor.ITreeLevelDescriptor;
 public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
     implements ICompositeTreeLevelDescriptor {
 
-  private Map<String, ITreeLevelDescriptor> childrenDescriptorsMap;
+  private Map<String, ITreeLevelDescriptor> childrenDescriptors;
 
   /**
    * {@inheritDoc}
    */
   public ITreeLevelDescriptor getChildDescriptor(String name) {
-    if (childrenDescriptorsMap != null) {
-      return childrenDescriptorsMap.get(name);
+    if (childrenDescriptors != null) {
+      return childrenDescriptors.get(name);
     }
     return null;
   }
@@ -65,8 +65,8 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
    * {@inheritDoc}
    */
   public List<ITreeLevelDescriptor> getChildrenDescriptors() {
-    if (childrenDescriptorsMap != null) {
-      return new ArrayList<ITreeLevelDescriptor>(childrenDescriptorsMap.values());
+    if (childrenDescriptors != null) {
+      return new ArrayList<ITreeLevelDescriptor>(childrenDescriptors.values());
     }
     return null;
   }
@@ -79,7 +79,7 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
    */
   public void setChildrenDescriptors(
       List<ITreeLevelDescriptor> childrenDescriptors) {
-    this.childrenDescriptorsMap = new LinkedHashMap<String, ITreeLevelDescriptor>();
+    this.childrenDescriptors = new LinkedHashMap<String, ITreeLevelDescriptor>();
     for (ITreeLevelDescriptor descriptor : childrenDescriptors) {
       // String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
       // .getName();
@@ -87,7 +87,7 @@ public class BasicCompositeTreeLevelDescriptor extends BasicTreeLevelDescriptor
       String nodeGroupDescriptorName = descriptor.getNodeGroupDescriptor()
           .getModelDescriptor().getName();
       // }
-      this.childrenDescriptorsMap.put(nodeGroupDescriptorName, descriptor);
+      this.childrenDescriptors.put(nodeGroupDescriptorName, descriptor);
     }
   }
 }

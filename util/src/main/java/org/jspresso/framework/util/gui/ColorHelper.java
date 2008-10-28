@@ -44,10 +44,10 @@ public final class ColorHelper {
   }
 
   /**
-   * Transforms a color rgba hex string representation to its rgba components.
+   * Transforms a color rgba components to their hex string representation.
    * 
    * @param hexString
-   *            the Hex string representation argb coded.
+   *            the Hex string representation.
    * @return the rgba components of the color once parsed in an array.
    */
   public static int[] fromHexString(String hexString) {
@@ -60,7 +60,7 @@ public final class ColorHelper {
   }
 
   /**
-   * Transforms a color rgba components to their hex string representation argb coded.
+   * Transforms a color rgba components to their hex string representation.
    * 
    * @param r
    *            the red component.

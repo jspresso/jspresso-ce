@@ -450,8 +450,8 @@
       <para>We will use the root package <code>org.jspresso.hrsample</code>
       for our application. The domain model description will logically go to
       the <code>org.jspresso.hrsample.model</code> package. In this package,
-      we will create a <filename>model.xml</filename> file as described below
-      :</para>
+      we will create a <filename>hrsample-model.xml</filename> file as
+      described below :</para>
 
       <programlisting language="xml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
@@ -570,7 +570,7 @@
           value="createTimestamp" /&gt;
         &lt;property
           name="type"
-          value="DATE_TIME" /&gt; <co id="t-DATE_TIME" />
+          ref="DATE_TIME" /&gt; <co id="t-DATE_TIME" />
         &lt;property
           name="readOnly"
           value="true" /&gt; <co id="readOnly" />
@@ -582,7 +582,7 @@
           value="lastUpdateTimestamp" /&gt;
         &lt;property
           name="type"
-          value="DATE_TIME" /&gt;
+          ref="DATE_TIME" /&gt;
         &lt;property
           name="readOnly"
           value="true" /&gt;
@@ -637,7 +637,7 @@
       url="http://freemarker.org/">freemarker</ulink> template to generate the
       components that may be easily triggered using a simple ant task. Since
       this generator explores the spring beans definitions, we first need to
-      declare our <filename>model.xml</filename> as being part of our
+      declare our <filename>hrsample-model.xml</filename> as being part of our
       application. To achieve that, let's create a configuration file named
       <filename><code>beanRefFactory.xml</code></filename> in the root source
       folder (without any package) as follow :</para>
@@ -660,7 +660,7 @@
             id="brf-commons" />
         &lt;value&gt;org/jspresso/framework/tools/mock.xml&lt;/value&gt; <co
             id="brf-mock" />
-        &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
             id="brf-model" />
       &lt;/list&gt;
     &lt;/constructor-arg&gt;
@@ -1391,7 +1391,7 @@ public interface ContactInfo extends
           value="birthDate" /&gt;
         &lt;property
           name="type"
-          value="DATE" /&gt; <co id="birthDate" />
+          ref="DATE" /&gt; <co id="birthDate" />
       &lt;/bean&gt;
       &lt;bean
         class="org.jspresso.framework.model.descriptor.basic.BasicDatePropertyDescriptor"&gt;
@@ -1400,7 +1400,7 @@ public interface ContactInfo extends
           value="hireDate" /&gt;
         &lt;property
           name="type"
-          value="DATE" /&gt;
+          ref="DATE" /&gt;
       &lt;/bean&gt;
       &lt;bean
         class="org.jspresso.framework.model.descriptor.basic.BasicEnumerationPropertyDescriptor"&gt; <co
@@ -3086,7 +3086,8 @@ public class EmployeePropertyProcessors {
     <para>Before going further, let's create the frontend application
     descriptor. The frontend description will logically go to the
     <code>org.jspresso.hrsample.view</code> package. In this package, we will
-    create a <filename>view.xml</filename> file as described below :</para>
+    create a <filename>hrsample-view.xml</filename> file as described below
+    :</para>
 
     <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;beans
@@ -3163,13 +3164,13 @@ public class EmployeePropertyProcessors {
       &lt;list&gt;
         &lt;value&gt;org/jspresso/framework/application/commons.xml&lt;/value&gt;
         &lt;value&gt;org/jspresso/framework/tools/mock.xml&lt;/value&gt;
-        &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/hrsample/model/hrsample-model.xml&lt;/value&gt; <co
           id="hrsample-model.xml" />
         &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt; <co
           id="commons-frontend.xml" />
         &lt;value&gt;org/jspresso/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt; <co
           id="commons-swing.xml" />
-        &lt;value&gt;org/jspresso/hrsample/frontend/view.xml&lt;/value&gt; <co
+        &lt;value&gt;org/jspresso/hrsample/frontend/hrsample-view.xml&lt;/value&gt; <co
           id="hrsample-frontend.xml" />
       &lt;/list&gt;
     &lt;/constructor-arg&gt;
@@ -3231,7 +3232,7 @@ public class EmployeePropertyProcessors {
         <title>The first shot</title>
 
         <para>Let's describe our first component view on the company entity in
-        the <filename>view.xml</filename> file:</para>
+        the <filename>hrsample-view.xml</filename> file:</para>
 
         <para><programlisting>&lt;bean
   id="Company.pane"
@@ -3240,7 +3241,7 @@ public class EmployeePropertyProcessors {
               id="BasicComponentViewDescriptor" />
   &lt;property
     name="labelsPosition"
-    value="ABOVE" /&gt; <co id="labelsPosition" />
+    ref="ABOVE" /&gt; <co id="labelsPosition" />
   &lt;property
     name="columnCount"
     value="3" /&gt; <co id="columnCount" />
@@ -3293,7 +3294,7 @@ public class EmployeePropertyProcessors {
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-pane.jpg" scalefit="1"
+                           fileref="../images/Company.pane.jpg" scalefit="1"
                            width="100%" />
               </imageobject>
             </mediaobject>
@@ -3438,7 +3439,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-pane_en.jpg"
+                           fileref="../images/Company.pane_en.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -3450,7 +3451,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-pane_fr.jpg"
+                           fileref="../images/Company.pane_fr.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -3562,7 +3563,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-pane_reworked.jpg"
+                           fileref="../images/Company.pane_reworked.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -3631,7 +3632,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
               id="Traceable.pane" />
   &lt;property
     name="labelsPosition"
-    value="ABOVE" /&gt;
+    ref="ABOVE" /&gt;
   &lt;property
     name="columnCount"
     value="2" /&gt;
@@ -3704,7 +3705,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-tab-pane.jpg"
+                           fileref="../images/Company.tab.pane.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -3802,7 +3803,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-tab-pane_reworked.jpg"
+                           fileref="../images/Company.tab.pane_reworked.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4006,7 +4007,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-organization-view.jpg"
+                           fileref="../images/Company.organization.view.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4056,7 +4057,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-organization-view_reworked.jpg"
+                           fileref="../images/Company.organization.view_reworked.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4113,7 +4114,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-organization-view_reworked_2.jpg"
+                           fileref="../images/Company.organization.view_reworked_2.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4314,7 +4315,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-organization-view_reworked_3.jpg"
+                           fileref="../images/Company.organization.view_reworked_3.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4512,7 +4513,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Company-organization-view_tree.jpg"
+                           fileref="../images/Company.organization.view_tree.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -4638,9 +4639,9 @@ zip = Zip code</programlisting>Relaunching the view test with the English
 
       <orderedlist>
         <listitem>
-          <para><filename>backend.xml</filename> that will logically go into
-          the <code>org.jspresso.hrsample.backend</code> package and will hold
-          all the description of the backend.</para>
+          <para><filename>hrsample-backend.xml</filename> that will logically
+          go into the <code>org.jspresso.hrsample.backend</code> package and
+          will hold all the description of the backend.</para>
         </listitem>
 
         <listitem>
@@ -4683,11 +4684,11 @@ zip = Zip code</programlisting>Relaunching the view test with the English
             id="commons-hibernate.xml" />
       &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
       &lt;value&gt;org/jspresso/framework/application/frontend/swing/commons-swing.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/backend/backend.xml&lt;/value&gt; <co
+      &lt;value&gt;org/jspresso/hrsample/model/hrsample-model.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/backend/hrsample-backend.xml&lt;/value&gt; <co
             id="hrsample-backend.xml" />
-      &lt;value&gt;org/jspresso/hrsample/view/view.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/frontend/frontend.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/view/hrsample-view.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt;
       &lt;value&gt;org/jspresso/hrsample/config.xml&lt;/value&gt; <co
             id="config.xml" />
     &lt;/list&gt;
@@ -4709,8 +4710,9 @@ zip = Zip code</programlisting>Relaunching the view test with the English
           </callout>
         </calloutlist></para>
 
-      <para>As of now, we will keep the <filename>backend.xml</filename>
-      configuration file empty.</para>
+      <para>As of now, we will keep the
+      <filename>hrsample-backend.xml</filename> configuration file
+      empty.</para>
 
       <para>On the other hand, let's complete the
       <filename>config.xml</filename> file for our development environment
@@ -4911,10 +4913,10 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       brought to you by the <filename>commons-hibernate.xml</filename> is
       usable as-is) most of the application assembling is done in the
       front-end controller. We will configure the frontend controller in a new
-      <filename>frontend.xml</filename> configuration file located in the
-      <code>org.jspresso.hrsample.frontend</code> package. Don't forget that
-      you are free to split all the configuration files in smaller pieces but
-      then, don't forget to update the various context entries in the
+      <filename>hrsample-frontend.xml</filename> configuration file located in
+      the <code>org.jspresso.hrsample.frontend</code> package. Don't forget
+      that you are free to split all the configuration files in smaller pieces
+      but then, don't forget to update the various context entries in the
       <filename>beanRefFactory.xml</filename> bootstrap configuration
       file.</para>
 
@@ -4968,7 +4970,7 @@ zip = Zip code</programlisting>Relaunching the view test with the English
       instance, the swing generic launcher is
       <code>org.jspresso.framework.application.launch.swing.SwingLauncher</code>;
       this is the one we are going to use now. So let's create our swing
-      startup class. We will name it <code>SwingApplicationStartup</code> and
+      startup class. We will name it <code>SwingHrSampleStartup</code> and
       create it in a new <code>org.jspresso.hrsample.startup.swing</code> java
       package :</para>
 
@@ -4979,7 +4981,7 @@ import org.jspresso.framework.application.startup.swing.SwingStartup;
 /**
  * Swing HR sample startup class.
  */
-public class SwingApplicationStartup extends SwingStartup { <co
+public class SwingHrSampleStartup extends SwingStartup { <co
             id="SwingHrSampleStartup" />
 
   /**
@@ -5011,7 +5013,7 @@ public class SwingApplicationStartup extends SwingStartup { <co
       <para><code>java
       org.jspresso.framework.application.launch.swing.SwingLauncher
       -applicationClass
-      org.jspresso.hrsample.startup.swing.SwingApplicationStartup -splash
+      org.jspresso.hrsample.startup.swing.SwingHrSampleStartup -splash
       classpath:org/jspresso/hrsample/images/logo-small.png</code></para>
 
       <para>You should have a splash screen popping up and soon after the
@@ -5138,7 +5140,7 @@ INFO  &lt;2008-01-23 13:36:29,140&gt; org.hibernate.tool.hbm2ddl.SchemaUpdate : 
 
         <para><programlisting>/** Login Configuration for the HR sample application **/
 
-hrsample { <co id="hrsample-app" />
+hrsample-app { <co id="hrsample-app" />
    org.jspresso.framework.security.auth.spi.DevelopmentLoginModule required <co
               id="DevelopmentLoginModule" />
        user=demo <co id="user" />
@@ -5210,11 +5212,11 @@ hrsample { <co id="hrsample-app" />
     ...
     &lt;property
       name="loginContextName"
-      value="hrsample" /&gt; <co id="loginContextName" />
+      value="hrsample-app" /&gt; <co id="loginContextName" />
    &lt;/bean&gt;</programlisting><calloutlist>
             <callout arearefs="loginContextName">
               <para>We configure the controller to use the
-              <code>hrsample</code> login context.</para>
+              <code>hrsample-app</code> login context.</para>
             </callout>
           </calloutlist>When relaunching the application with the java system
         property
@@ -5316,8 +5318,8 @@ hrsample { <co id="hrsample-app" />
         operations on the cities entities. Let's have a look to the workspace
         and module definition and registration.</para>
 
-        <para>Open the <filename>frontend.xml</filename> spring context file
-        :</para>
+        <para>Open the <filename>hrsample-frontend.xml</filename> spring
+        context file :</para>
 
         <para><programlisting language="xml">&lt;bean
   id="Masterdata.workspace"
@@ -5417,7 +5419,7 @@ hrsample { <co id="hrsample-app" />
                   <entry>1- We have just lauched the module.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module.jpg"
+                                   fileref="../images/Masterdata.module.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -5426,7 +5428,7 @@ hrsample { <co id="hrsample-app" />
                   created.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-3cities.jpg"
+                                   fileref="../images/Masterdata.module.3cities.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -5437,7 +5439,7 @@ hrsample { <co id="hrsample-app" />
                   filter.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-filter.jpg"
+                                   fileref="../images/Masterdata.module.filter.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -5446,7 +5448,7 @@ hrsample { <co id="hrsample-app" />
                   individually in a form.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-open.jpg"
+                                   fileref="../images/Masterdata.module.open.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -5457,7 +5459,7 @@ hrsample { <co id="hrsample-app" />
                   tree and we edit it.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-single.jpg"
+                                   fileref="../images/Masterdata.module.single.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -5466,7 +5468,7 @@ hrsample { <co id="hrsample-app" />
                   course, still contains the data).<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="60%"
-                                   fileref="../images/Masterdata-module-reloaded.jpg"
+                                   fileref="../images/Masterdata.module.reloaded.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -5546,7 +5548,7 @@ hrsample { <co id="hrsample-app" />
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Masterdata-module-structured.jpg"
+                           fileref="../images/Masterdata.module.structured.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -5577,7 +5579,7 @@ hrsample { <co id="hrsample-app" />
         and reload service on the single displayed city.</para>
 
         <para>Beforehand, we are going to declare the new city component view
-        in the <filename>view.xml</filename> :</para>
+        in the <filename>hrsample-view.xml</filename> :</para>
 
         <para><programlisting language="xml">&lt;bean
   id="City.module.view"
@@ -5672,7 +5674,7 @@ hrsample { <co id="hrsample-app" />
             <mediaobject>
               <imageobject>
                 <imagedata align="center" contentdepth="60%"
-                           fileref="../images/Masterdata-module-single-customized.jpg"
+                           fileref="../images/Masterdata.module.single.customized.jpg"
                            scalefit="1" width="100%" />
               </imageobject>
             </mediaobject>
@@ -5766,15 +5768,15 @@ import org.jspresso.hrsample.model.Team;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class TestDataPersister extends AbstractTestDataPersister {
+public class HrTestDataPersister extends AbstractTestDataPersister {
 
   /**
-   * Constructs a new &lt;code&gt;TestDataPersister&lt;/code&gt; instance.
+   * Constructs a new &lt;code&gt;HrTestDataPersister&lt;/code&gt; instance.
    * 
    * @param beanFactory
    *            the spring bean factory to use.
    */
-  public TestDataPersister(BeanFactory beanFactory) {
+  public HrTestDataPersister(BeanFactory beanFactory) {
     super(beanFactory);
   }
 
@@ -5941,7 +5943,7 @@ public class TestDataPersister extends AbstractTestDataPersister {
       simply creating and composing some domain entities in plain java.</para>
 
       <para>You can now create the development application startup class
-      (<code>org.jspresso.hrsample.startup.swing.development.SwingDevApplicationStartup</code>)
+      (<code>org.jspresso.hrsample.startup.swing.development.SwingDevHrSampleStartup</code>)
       that inherits from the existing production one :</para>
 
       <para><programlisting language="java">/*
@@ -5949,8 +5951,8 @@ public class TestDataPersister extends AbstractTestDataPersister {
  */
 package org.jspresso.hrsample.startup.swing.development;
 
-import org.jspresso.hrsample.development.TestDataPersister;
-import org.jspresso.hrsample.startup.swing.SwingApplicationStartup;
+import org.jspresso.hrsample.development.HrTestDataPersister;
+import org.jspresso.hrsample.startup.swing.SwingHrSampleStartup;
 
 /**
  * Swing development HR sample startup class.
@@ -5961,7 +5963,7 @@ import org.jspresso.hrsample.startup.swing.SwingApplicationStartup;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class SwingDevApplicationStartup extends SwingApplicationStartup {
+public class SwingDevHrSampleStartup extends SwingHrSampleStartup {
 
   /**
    * Sets up some test data before actually starting.
@@ -5970,7 +5972,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
    */
   @Override
   public void start() {
-    new TestDataPersister(getApplicationContext()).persistTestData(); <co
+    new HrTestDataPersister(getApplicationContext()).persistTestData(); <co
             id="dev-start" />
     super.start();
   }
@@ -5988,7 +5990,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
       <para><code>java
       org.jspresso.framework.application.launch.swing.SwingLauncher
       -applicationClass
-      org.jspresso.hrsample.startup.swing.development.SwingDevApplicationStartup
+      org.jspresso.hrsample.startup.swing.development.SwingDevHrSampleStartup
       -splash
       classpath:org/jspresso/hrsample/images/logo-small.png</code></para>
     </section>
@@ -6028,7 +6030,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>1- We have just launched the module.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../images/Employees-module.jpg"
+                                 fileref="../images/Employees.module.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6037,7 +6039,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 city and birth date.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../images/Employees-module-filter.jpg"
+                                 fileref="../images/Employees.module.filter.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6048,7 +6050,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 form.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../images/Employees-module-single.jpg"
+                                 fileref="../images/Employees.module.single.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6057,7 +6059,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 employee.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../images/Employees-module-single-events.jpg"
+                                 fileref="../images/Employees.module.single.events.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6067,7 +6069,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>5- We can copy an event entity.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../images/Employees-module-single-event-copy.jpg"
+                                 fileref="../images/Employees.module.single.event.copy.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6075,7 +6077,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>6- And paste it to another employee.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../images/Employees-module-single-event-paste.jpg"
+                                 fileref="../images/Employees.module.single.event.paste.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6085,7 +6087,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>7- Or maybe read an event text from a file.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../images/Employees-module-single-event-read.jpg"
+                                 fileref="../images/Employees.module.single.event.read.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6093,7 +6095,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                 <entry>8- And even save the event text to a file.<mediaobject>
                     <imageobject>
                       <imagedata align="center" contentdepth="40%"
-                                 fileref="../images/Employees-module-single-event-save.jpg"
+                                 fileref="../images/Employees.module.single.event.save.jpg"
                                  scalefit="1" width="100%" />
                     </imageobject>
                   </mediaobject></entry>
@@ -6133,7 +6135,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                   <entry>1- We have just launched the module.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="40%"
-                                   fileref="../images/Companies-module.jpg"
+                                   fileref="../images/Companies.module.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6142,7 +6144,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                   filter.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="40%"
-                                   fileref="../images/Companies-module-filter.jpg"
+                                   fileref="../images/Companies.module.filter.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6153,7 +6155,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                   form.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="40%"
-                                   fileref="../images/Companies-module-single.jpg"
+                                   fileref="../images/Companies.module.single.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6162,7 +6164,7 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
                   overview of the current company structure.<mediaobject>
                       <imageobject>
                         <imagedata align="center" contentdepth="40%"
-                                   fileref="../images/Companies-module-single_tree.jpg"
+                                   fileref="../images/Companies.module.single_tree.jpg"
                                    scalefit="1" width="100%" />
                       </imageobject>
                     </mediaobject></entry>
@@ -6220,8 +6222,8 @@ public class SwingDevApplicationStartup extends SwingApplicationStartup {
           <para>Let's have a look to the changes made to the
           application.</para>
 
-          <para>In the <filename>model.xml</filename> spring definition file
-          :<programlisting language="xml">...
+          <para>In the <filename>hrsample-model.xml</filename> spring
+          definition file :<programlisting language="xml">...
 &lt;bean
   id="OrganizationalUnit-manager"
   class="org.jspresso.framework.model.descriptor.basic.BasicReferencePropertyDescriptor"&gt;
@@ -6449,7 +6451,7 @@ public class OrganizationalUnitPropertyProcessors {
                     department manager.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-manager-lov.jpg"
+                                     fileref="../images/Companies.module.single.manager.lov.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6458,7 +6460,7 @@ public class OrganizationalUnitPropertyProcessors {
                     filter containing the department company.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="35%"
-                                     fileref="../images/Companies-module-single-manager-lov-open.jpg"
+                                     fileref="../images/Companies.module.single.manager.lov.open.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6469,7 +6471,7 @@ public class OrganizationalUnitPropertyProcessors {
                     employee of the other company.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="35%"
-                                     fileref="../images/Companies-module-single-manager-lov-search.jpg"
+                                     fileref="../images/Companies.module.single.manager.lov.search.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6478,7 +6480,7 @@ public class OrganizationalUnitPropertyProcessors {
                     is violated and the end-user is notified.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="50%"
-                                     fileref="../images/Companies-module-single-manager-lov-error.jpg"
+                                     fileref="../images/Companies.module.single.manager.lov.error.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6526,8 +6528,8 @@ public class OrganizationalUnitPropertyProcessors {
           behind the scene without any extra effort.</para>
 
           <para>So let's replace the teams view by a master detail view
-          presenting the team members in the <filename>view.xml</filename>
-          :</para>
+          presenting the team members in the
+          <filename>hrsample-view.xml</filename> :</para>
 
           <para><programlisting language="xml">&lt;bean
   id="Team-teamMembers.table" <co id="Team-teamMembers.table" />
@@ -6597,7 +6599,7 @@ public class OrganizationalUnitPropertyProcessors {
                 id="department-rightBottomViewDescriptor" />
       &lt;property
         name="orientation"
-        value="HORIZONTAL" /&gt;
+        ref="HORIZONTAL" /&gt;
       &lt;property
         name="leftTopViewDescriptor"
         ref="Department-teams.table" /&gt;
@@ -6715,7 +6717,7 @@ public class OrganizationalUnitPropertyProcessors {
                     new team members view.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-team-members.jpg"
+                                     fileref="../images/Companies.module.single.team-members.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6724,7 +6726,7 @@ public class OrganizationalUnitPropertyProcessors {
                     configured (e.g. icons and tooltips).<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-team-members-2.jpg"
+                                     fileref="../images/Companies.module.single.team-members-2.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6735,7 +6737,7 @@ public class OrganizationalUnitPropertyProcessors {
                     is pre-initialized.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="35%"
-                                     fileref="../images/Companies-module-single-team-members-lov.jpg"
+                                     fileref="../images/Companies.module.single.team-members-lov.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6744,7 +6746,7 @@ public class OrganizationalUnitPropertyProcessors {
                     name.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="35%"
-                                     fileref="../images/Companies-module-single-team-members-lov-search.jpg"
+                                     fileref="../images/Companies.module.single.team-members-lov.search.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6755,7 +6757,7 @@ public class OrganizationalUnitPropertyProcessors {
                     updated.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-team-members-3.jpg"
+                                     fileref="../images/Companies.module.single.team-members-3.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6764,7 +6766,7 @@ public class OrganizationalUnitPropertyProcessors {
                     employee still belongs to its former teams.<mediaobject>
                         <imageobject>
                           <imagedata align="center" contentdepth="45%"
-                                     fileref="../images/Companies-module-single-team-members-4.jpg"
+                                     fileref="../images/Companies.module.single.team-members-4.jpg"
                                      scalefit="1" width="100%" />
                         </imageobject>
                       </mediaobject></entry>
@@ -6925,7 +6927,7 @@ public class OrganizationalUnitPropertyProcessors {
 
         <para><programlisting>/** Login Configuration for the HR sample application **/
 
-hrsample {
+hrsample-app {
    org.jspresso.framework.security.auth.spi.DevelopmentLoginModule required
        user=demo
        password=demo
@@ -6950,7 +6952,7 @@ hrsample {
           <mediaobject>
             <imageobject>
               <imagedata align="center" contentdepth="60%"
-                         fileref="../images/Access-denied.jpg" scalefit="1"
+                         fileref="../images/Access.denied.jpg" scalefit="1"
                          width="100%" />
             </imageobject>
           </mediaobject>
@@ -7058,7 +7060,7 @@ hrsample {
       the swing one.</para>
 
       <para>For ULC
-      (<code>org.jspresso.hrsample.startup.ulc.UlcApplicationStartup</code>)
+      (<code>org.jspresso.hrsample.startup.ulc.UlcHrSampleStartup</code>)
       :</para>
 
       <para><programlisting>/*
@@ -7077,7 +7079,7 @@ import org.jspresso.framework.application.startup.ulc.UlcStartup;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class UlcApplicationStartup extends UlcStartup {
+public class UlcHrSampleStartup extends UlcStartup {
 
   /**
    * Returns the "hrsample-ulc-context" value.
@@ -7096,7 +7098,7 @@ public class UlcApplicationStartup extends UlcStartup {
             for ULC.</para>
           </callout>
         </calloutlist>And for Wings
-      (<code>org.jspresso.hrsample.startup.wings.WingsApplicationStartup</code>)
+      (<code>org.jspresso.hrsample.startup.wings.WingsHrSampleStartup</code>)
       :</para>
 
       <para><programlisting>/*
@@ -7115,7 +7117,7 @@ import org.jspresso.framework.application.startup.wings.WingsStartup;
  * @version $LastChangedRevision$
  * @author Vincent Vandenschrick
  */
-public class WingsApplicationStartup extends WingsStartup {
+public class WingsHrSampleStartup extends WingsStartup {
 
   /**
    * Returns the "hrsample-wings-context" value.
@@ -7150,10 +7152,10 @@ public class WingsApplicationStartup extends WingsStartup {
       &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
       &lt;value&gt;org/jspresso/framework/application/frontend/ulc/commons-ulc.xml&lt;/value&gt; <co
             id="commons-ulc" />
-      &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/backend/backend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/view/view.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/frontend/frontend.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/model/hrsample-model.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/backend/hrsample-backend.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/view/hrsample-view.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt;
       &lt;value&gt;org/jspresso/hrsample/config.xml&lt;/value&gt;
     &lt;/list&gt;
   &lt;/constructor-arg&gt;
@@ -7170,10 +7172,10 @@ public class WingsApplicationStartup extends WingsStartup {
       &lt;value&gt;org/jspresso/framework/application/frontend/commons-frontend.xml&lt;/value&gt;
       &lt;value&gt;org/jspresso/framework/application/frontend/wings/commons-wings.xml&lt;/value&gt; <co
             id="commons-wings" />
-      &lt;value&gt;org/jspresso/hrsample/model/model.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/backend/backend.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/view/view.xml&lt;/value&gt;
-      &lt;value&gt;org/jspresso/hrsample/frontend/frontend.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/model/hrsample-model.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/backend/hrsample-backend.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/view/hrsample-view.xml&lt;/value&gt;
+      &lt;value&gt;org/jspresso/hrsample/frontend/hrsample-frontend.xml&lt;/value&gt;
       &lt;value&gt;org/jspresso/hrsample/config.xml&lt;/value&gt;
     &lt;/list&gt;
   &lt;/constructor-arg&gt;
@@ -7326,8 +7328,8 @@ public class WingsApplicationStartup extends WingsStartup {
 
 webstart/ <co id="webstart" />
 		jspresso.jpg
-		application.jnlp
-		application-untrusted.jnlp
+		jspresso-hrsample.jnlp
+		jspresso-hrsample-untrusted.jnlp
 
 lib/ <co id="client-libs" />
 		jedit-syntax.jar <co id="jedit-syntax" />
@@ -7541,18 +7543,18 @@ login-error.html</programlisting></para>
   <emphasis role="bold">&lt;!-- ULC deployment section --&gt;</emphasis> <co
               id="ulc-specifics" />
   &lt;servlet&gt;
-    &lt;servlet-name&gt;ApplicationUlcServlet&lt;/servlet-name&gt; <co
+    &lt;servlet-name&gt;HrSampleUlcServlet&lt;/servlet-name&gt; <co
               id="HrSampleUlcServlet" />
     &lt;servlet-class&gt;com.ulcjava.container.servlet.server.ServletContainerAdapter&lt;/servlet-class&gt;
     &lt;init-param&gt;
       &lt;param-name&gt;application-class&lt;/param-name&gt;
-      &lt;param-value&gt;org.jspresso.hrsample.startup.ulc.UlcApplicationStartup&lt;/param-value&gt; <co
+      &lt;param-value&gt;org.jspresso.hrsample.startup.ulc.UlcHrSampleStartup&lt;/param-value&gt; <co
               id="UlcHrSampleStartup" />
     &lt;/init-param&gt;
   &lt;/servlet&gt;
   &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ApplicationUlcServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/hrsample-ulc&lt;/url-pattern&gt;
+    &lt;servlet-name&gt;HrSampleUlcServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/jspresso-hrsample-ulc&lt;/url-pattern&gt;
   &lt;/servlet-mapping&gt;
 
   &lt;servlet&gt;
@@ -7573,18 +7575,18 @@ login-error.html</programlisting></para>
   <emphasis role="bold">&lt;!-- WingS deployment section --&gt;</emphasis> <co
               id="wings-specifics" />
   &lt;servlet&gt;
-    &lt;servlet-name&gt;ApplicationWingsServlet&lt;/servlet-name&gt; <co
+    &lt;servlet-name&gt;HrSampleWingsServlet&lt;/servlet-name&gt; <co
               id="HrSampleWingsServlet" />
     &lt;servlet-class&gt;org.wings.session.WingServlet&lt;/servlet-class&gt;
     &lt;init-param&gt;
       &lt;param-name&gt;wings.mainclass&lt;/param-name&gt;
-      &lt;param-value&gt;org.jspresso.hrsample.startup.wings.WingsApplicationStartup&lt;/param-value&gt; <co
+      &lt;param-value&gt;org.jspresso.hrsample.startup.wings.WingsHrSampleStartup&lt;/param-value&gt; <co
               id="WingsHrSampleStartup" />
     &lt;/init-param&gt;
   &lt;/servlet&gt;
   &lt;servlet-mapping&gt;
-    &lt;servlet-name&gt;ApplicationWingsServlet&lt;/servlet-name&gt;
-    &lt;url-pattern&gt;/hrsample-ajax/*&lt;/url-pattern&gt;
+    &lt;servlet-name&gt;HrSampleWingsServlet&lt;/servlet-name&gt;
+    &lt;url-pattern&gt;/jspresso-hrsample-ajax/*&lt;/url-pattern&gt;
   &lt;/servlet-mapping&gt;
 
   &lt;servlet&gt; <co id="wings-config" />
@@ -7621,11 +7623,11 @@ login-error.html</programlisting></para>
     &lt;init-param&gt;
       &lt;param-name&gt;jaas-application&lt;/param-name&gt; <co
               id="jaas-application" />
-      &lt;param-value&gt;hrsample&lt;/param-value&gt;
+      &lt;param-value&gt;hrsample-app&lt;/param-value&gt;
     &lt;/init-param&gt;
     &lt;init-param&gt;
       &lt;param-name&gt;success.redirect&lt;/param-name&gt;
-      &lt;param-value&gt;/hrsample-ajax&lt;/param-value&gt;
+      &lt;param-value&gt;/jspresso-hrsample-ajax&lt;/param-value&gt;
     &lt;/init-param&gt;
   &lt;/servlet&gt;
   &lt;servlet-mapping&gt;
@@ -7644,7 +7646,7 @@ login-error.html</programlisting></para>
   &lt;/filter&gt;
   &lt;filter-mapping&gt;
     &lt;filter-name&gt;AutenticationFilter&lt;/filter-name&gt;
-    &lt;url-pattern&gt;/hrsample-ajax/*&lt;/url-pattern&gt;
+    &lt;url-pattern&gt;/jspresso-hrsample-ajax/*&lt;/url-pattern&gt;
   &lt;/filter-mapping&gt;
   <emphasis role="bold">&lt;!-- End WingS deployment section --&gt;</emphasis>
 
@@ -7816,11 +7818,11 @@ login-error.html</programlisting></para>
             url="http://java.sun.com/products/javawebstart/1.2/docs/developersguide.html#jnlp">JNLP
             file syntax</ulink> to get a deeper understanding of what's
             described below.</para>
-          </note>The <filename>application.jnlp</filename> file is the main
-        descriptor and references the signed jars as resources.</para>
+          </note>The <filename>jspresso-hrsample.jnlp</filename> file is the
+        main descriptor and references the signed jars as resources.</para>
 
         <para><programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;jnlp spec="1.0+" codebase="$$context/webstart" href="application.jnlp"&gt;
+&lt;jnlp spec="1.0+" codebase="$$context/webstart" href="jspresso-hrsample.jnlp"&gt;
 
   &lt;information&gt; <co id="information" />
     &lt;title&gt;Jspresso HR Sample&lt;/title&gt;
@@ -7848,7 +7850,7 @@ login-error.html</programlisting></para>
     &lt;property name="swing.defaultlaf" value="org.jvnet.substance.SubstanceLookAndFeel"/&gt; <co
               id="property-laf" />
     &lt;property name="sun.awt.noerasebackground" value="true"/&gt; 
-    &lt;extension name="untrusted jars" href="$$context/webstart/application-untrusted.jnlp"/&gt; <co
+    &lt;extension name="untrusted jars" href="$$context/webstart/jspresso-hrsample-untrusted.jnlp"/&gt; <co
               id="untrusted-ref" />
   &lt;/resources&gt;
 
@@ -7861,7 +7863,7 @@ login-error.html</programlisting></para>
     &lt;argument&gt;-splash&lt;/argument&gt;
     &lt;argument&gt;$$context/webstart/jspresso.jpg&lt;/argument&gt; <co
               id="splash" />
-    &lt;argument&gt;$$context/hrsample-ulc&lt;/argument&gt; <co
+    &lt;argument&gt;$$context/jspresso-hrsample-ulc&lt;/argument&gt; <co
               id="jspresso-hrsample-url" />
     &lt;argument&gt;60&lt;/argument&gt; <co id="timeout" />
     &lt;argument&gt;WARNING&lt;/argument&gt; <co id="log-level" />
@@ -7917,9 +7919,8 @@ login-error.html</programlisting></para>
 
             <callout arearefs="jspresso-hrsample-url">
               <para>... the URL to connect to to run tha application; it is
-              actually the URL of the
-              <emphasis>ApplicationUlcServlet</emphasis> as defined in the
-              web.xml descriptor...</para>
+              actually the URL of the <emphasis>HrSampleUlcServlet</emphasis>
+              as defined in the web.xml descriptor...</para>
             </callout>
 
             <callout arearefs="timeout">
@@ -7930,12 +7931,12 @@ login-error.html</programlisting></para>
             <callout arearefs="log-level">
               <para>... and the logging treshold of the ULC stack.</para>
             </callout>
-          </calloutlist>The <filename>application-untrusted.jnlp</filename> is
-        included by the former one and references the unsigned jars as
-        resources.</para>
+          </calloutlist>The
+        <filename>jspresso-hrsample-untrusted.jnlp</filename> is included by
+        the former one and references the unsigned jars as resources.</para>
 
         <para><programlisting language="xml">&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;jnlp spec="1.0+" codebase="$$context/webstart" href="application-untrusted.jnlp"&gt;
+&lt;jnlp spec="1.0+" codebase="$$context/webstart" href="jspresso-hrsample-untrusted.jnlp"&gt;
 
   &lt;information&gt;
     &lt;title&gt;Jspresso HR Sample - Untrusted code&lt;/title&gt;
@@ -8063,9 +8064,10 @@ login-error.html</programlisting></para>
       <section>
         <title>The first ULC launch</title>
 
-        <para>Point your browser to the <filename>application.jnlp</filename>
-        file deployed; this should be in the form
-        <code>http://[machine]:[port]/[webapp-context]/webstart/application.jnlp</code>.
+        <para>Point your browser to the
+        <filename>jspresso-hrsample.jnlp</filename> file deployed; this should
+        be in the form
+        <code>http://[machine]:[port]/[webapp-context]/webstart/jspresso-hrsample.jnlp</code>.
         You shoul see the following happening (this is on a french
         workstation) :</para>
 

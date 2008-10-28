@@ -73,7 +73,7 @@ public abstract class AbstractComponentDescriptor<E> extends
   private List<ILifecycleInterceptor<?>>   lifecycleInterceptors;
   private Map<String, IPropertyDescriptor> nestedPropertyDescriptors;
   private List<String>                     orderingProperties;
-  private Map<String, IPropertyDescriptor> propertyDescriptorsMap;
+  private Map<String, IPropertyDescriptor> propertyDescriptors;
   private List<String>                     queryableProperties;
   private List<String>                     renderedProperties;
   private Set<Class<?>>                    serviceContracts;
@@ -134,8 +134,8 @@ public abstract class AbstractComponentDescriptor<E> extends
    */
   public Collection<IPropertyDescriptor> getDeclaredPropertyDescriptors() {
     processPropertiesBufferIfNecessary();
-    if (propertyDescriptorsMap != null) {
-      return propertyDescriptorsMap.values();
+    if (propertyDescriptors != null) {
+      return propertyDescriptors.values();
     }
     return null;
   }
@@ -409,10 +409,10 @@ public abstract class AbstractComponentDescriptor<E> extends
     // may not have their names fully initialized.
     if (descriptors != null) {
       tempPropertyBuffer = new ArrayList<IPropertyDescriptor>(descriptors);
-      propertyDescriptorsMap = null;
+      propertyDescriptors = null;
     } else {
       tempPropertyBuffer = null;
-      propertyDescriptorsMap = null;
+      propertyDescriptors = null;
     }
   }
 
@@ -479,17 +479,17 @@ public abstract class AbstractComponentDescriptor<E> extends
 
   private IPropertyDescriptor getDeclaredPropertyDescriptor(String propertyName) {
     processPropertiesBufferIfNecessary();
-    if (propertyDescriptorsMap != null) {
-      return propertyDescriptorsMap.get(propertyName);
+    if (propertyDescriptors != null) {
+      return propertyDescriptors.get(propertyName);
     }
     return null;
   }
 
   private synchronized void processPropertiesBufferIfNecessary() {
     if (tempPropertyBuffer != null) {
-      propertyDescriptorsMap = new LinkedHashMap<String, IPropertyDescriptor>();
+      propertyDescriptors = new LinkedHashMap<String, IPropertyDescriptor>();
       for (IPropertyDescriptor descriptor : tempPropertyBuffer) {
-        propertyDescriptorsMap.put(descriptor.getName(), descriptor);
+        propertyDescriptors.put(descriptor.getName(), descriptor);
       }
       tempPropertyBuffer = null;
     }

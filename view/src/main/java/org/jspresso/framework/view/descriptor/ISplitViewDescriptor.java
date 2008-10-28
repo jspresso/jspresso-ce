@@ -42,6 +42,16 @@ package org.jspresso.framework.view.descriptor;
 public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
 
   /**
+   * <code>HORIZONTAL</code> location constant.
+   */
+  int HORIZONTAL = 1;
+
+  /**
+   * <code>VERTICAL</code> location constant.
+   */
+  int VERTICAL   = 2;
+
+  /**
    * Gets the left / top sub view descriptor of this split composite view
    * descriptor.
    * 
@@ -53,10 +63,10 @@ public interface ISplitViewDescriptor extends ICompositeViewDescriptor {
    * Gets the orientation of the split described view.
    * 
    * @return the split orientation. The admissible values are :
-   *         <li>Orientation.VERTICAL
-   *         <li>Orientation.HORIZONTAL
+   *         <li>VERTICAL
+   *         <li>HORIZONTAL
    */
-  EOrientation getOrientation();
+  int getOrientation();
 
   /**
    * Gets the right / bottom sub view descriptor of this split composite view

@@ -911,8 +911,7 @@
   <bean
     id="beanCollectionModuleView"
     parent="decoratedView"
-    class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"
-    scope="prototype">
+    class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor">
     <property
       name="actionMap"
       ref="beanCollectionModuleActionMap" />
@@ -930,8 +929,7 @@
   <bean
     id="filterableBeanCollectionModuleView"
     parent="decoratedView"
-    class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor"
-    scope="prototype">
+    class="org.jspresso.framework.view.descriptor.basic.BasicTableViewDescriptor">
     <property
       name="actionMap"
       ref="filterableBeanCollectionModuleActionMap" />
