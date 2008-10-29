@@ -27,7 +27,6 @@ import org.jspresso.framework.util.i18n.ITranslationProvider;
 import org.jspresso.framework.view.action.ActionMap;
 import org.jspresso.framework.view.descriptor.IViewDescriptor;
 
-
 /**
  * Default implementation of a view descriptor.
  * <p>
@@ -50,11 +49,11 @@ import org.jspresso.framework.view.descriptor.IViewDescriptor;
 public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
     implements IViewDescriptor {
 
-  private ActionMap          actionMap;
-  private Color              background;
-  private int                borderType = NONE;
-  private Font               font;
-  private Color              foreground;
+  private ActionMap actionMap;
+  private Color     background;
+  private int       borderType = NONE;
+  private Font      font;
+  private Color     foreground;
 
   /**
    * Gets the actionMap.
@@ -100,8 +99,10 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   public String getI18nDescription(ITranslationProvider translationProvider,
       Locale locale) {
     if (getDescription() == null) {
-      return getModelDescriptor().getI18nDescription(translationProvider,
-          locale);
+      if (getModelDescriptor() != null) {
+        return getModelDescriptor().getI18nDescription(translationProvider,
+            locale);
+      }
     }
     return super.getI18nDescription(translationProvider, locale);
   }
@@ -113,7 +114,9 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
   public String getI18nName(ITranslationProvider translationProvider,
       Locale locale) {
     if (getName() == null) {
-      return getModelDescriptor().getI18nName(translationProvider, locale);
+      if (getModelDescriptor() != null) {
+        return getModelDescriptor().getI18nName(translationProvider, locale);
+      }
     }
     return super.getI18nName(translationProvider, locale);
   }
@@ -126,7 +129,8 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
     String iconImageURL = super.getIconImageURL();
     if (iconImageURL == null
         && getModelDescriptor() instanceof IComponentDescriptor) {
-      iconImageURL = ((IComponentDescriptor<?>) getModelDescriptor()).getIconImageURL();
+      iconImageURL = ((IComponentDescriptor<?>) getModelDescriptor())
+          .getIconImageURL();
       setIconImageURL(iconImageURL);
     }
     return iconImageURL;
@@ -136,7 +140,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the actionMap.
    * 
    * @param actionMap
-   *            the actionMap to set.
+   *          the actionMap to set.
    */
   public void setActionMap(ActionMap actionMap) {
     this.actionMap = actionMap;
@@ -146,7 +150,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the background.
    * 
    * @param background
-   *            the background to set.
+   *          the background to set.
    */
   public void setBackground(Color background) {
     this.background = background;
@@ -156,7 +160,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the borderType.
    * 
    * @param borderType
-   *            the borderType to set.
+   *          the borderType to set.
    */
   public void setBorderType(int borderType) {
     this.borderType = borderType;
@@ -166,7 +170,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the font.
    * 
    * @param font
-   *            the font to set.
+   *          the font to set.
    */
   public void setFont(Font font) {
     this.font = font;
@@ -176,7 +180,7 @@ public abstract class BasicViewDescriptor extends BasicSubviewDescriptor
    * Sets the foreground.
    * 
    * @param foreground
-   *            the foreground to set.
+   *          the foreground to set.
    */
   public void setForeground(Color foreground) {
     this.foreground = foreground;

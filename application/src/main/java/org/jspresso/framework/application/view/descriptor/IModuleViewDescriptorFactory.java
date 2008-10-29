@@ -48,9 +48,9 @@ public interface IModuleViewDescriptorFactory {
    * It gives a chance to the framework to handle custom user-writtent modules
    * (for instance a filterable bean collection module).
    * 
-   * @param workspace
+   * @param module
    *            the module to create the view descriptor for.
    * @return the created view descriptor.
    */
-  IViewDescriptor createProjectedViewDescriptor(Module workspace);
+  IViewDescriptor createProjectedViewDescriptor(Module module);
 }
