@@ -10,7 +10,10 @@
 
   <target name="clean">
     <delete>
-      <fileset dir="src/main/as3" includes="**/*.as" />
+      <fileset dir="src/main/as3">
+        <include name="**/*.as"/> 
+        <exclude name="**/DefaultFlexViewFactory.as"/> 
+      </fileset>
     </delete>
   </target>
 
