@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>jspresso-framework</name>
-	<comment>@key 32303037303533312D313030302064657369676E327365652D6672616D65776F726B2F56696E63656E74 </comment>
 	<projects>
 	</projects>
 	<buildSpec>
-		<buildCommand>
-			<name>com.adobe.flexbuilder.project.flexbuilder</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 		<buildCommand>
 			<name>org.eclipse.jdt.core.javabuilder</name>
 			<arguments>
@@ -39,14 +33,9 @@
 	<natures>
 		<nature>org.springframework.ide.eclipse.core.springnature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
-		<nature>org.mevenide.ui.mavennature</nature>
-		<nature>org.hibernate.eclipse.console.hibernateNature</nature>
 		<nature>com.atlassw.tools.eclipse.checkstyle.CheckstyleNature</nature>
 		<nature>org.eclipse.wst.common.project.facet.core.nature</nature>
 		<nature>org.eclipse.wst.common.modulecore.ModuleCoreNature</nature>
 		<nature>org.eclipse.jem.workbench.JavaEMFNature</nature>
-		<nature>com.soyatec.additional.Nature</nature>
-		<nature>com.adobe.flexbuilder.project.flexlibnature</nature>
-		<nature>com.adobe.flexbuilder.project.actionscriptnature</nature>
 	</natures>
 </projectDescription>
