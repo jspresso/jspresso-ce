@@ -13,7 +13,6 @@
       <fileset dir="src/main/as3">
         <include name="**/*.as"/> 
         <exclude name="**/DefaultFlexViewFactory.as"/>
-        <exclude name="**/IValueConnector.as"/>
       </fileset>
     </delete>
   </target>
@@ -33,6 +32,11 @@
         <include name="**/*.class" />
         <exclude name="**/*Helper.class" />
         <exclude name="**/*Exception.class" />
+      </fileset>
+      <fileset dir="binding/target/classes">
+        <include name="**/I*Connector.class" />
+        <include name="**/basic/Basic*Connector.class" />
+        <exclude name="**/model/**/*.class" />
       </fileset>
     </gas3>
   </target>

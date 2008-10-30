@@ -7,6 +7,6 @@
 
 package org.jspresso.framework.binding {
 
-    public interface IValueConnector extends IValueConnectorBase {
+    public interface IConnector extends IConnectorBase {
     }
 }

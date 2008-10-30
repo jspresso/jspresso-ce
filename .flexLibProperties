@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
   <includeClasses>
+    <classEntry path="org.jspresso.framework.binding.ICollectionConnector"/>
+    <classEntry path="org.jspresso.framework.binding.ICollectionConnectorBase"/>
+    <classEntry path="org.jspresso.framework.binding.ICompositeValueConnector"/>
+    <classEntry path="org.jspresso.framework.binding.ICompositeValueConnectorBase"/>
+    <classEntry path="org.jspresso.framework.binding.IConnector"/>
+    <classEntry path="org.jspresso.framework.binding.IConnectorBase"/>
+    <classEntry path="org.jspresso.framework.binding.IRenderableCompositeValueConnector"/>
+    <classEntry path="org.jspresso.framework.binding.IRenderableCompositeValueConnectorBase"/>
     <classEntry path="org.jspresso.framework.binding.IValueConnector"/>
+    <classEntry path="org.jspresso.framework.binding.IValueConnectorBase"/>
+    <classEntry path="org.jspresso.framework.binding.basic.BasicCollectionConnector"/>
+    <classEntry path="org.jspresso.framework.binding.basic.BasicCollectionConnectorBase"/>
+    <classEntry path="org.jspresso.framework.binding.basic.BasicCompositeConnector"/>
+    <classEntry path="org.jspresso.framework.binding.basic.BasicCompositeConnectorBase"/>
+    <classEntry path="org.jspresso.framework.binding.basic.BasicValueConnector"/>
+    <classEntry path="org.jspresso.framework.binding.basic.BasicValueConnectorBase"/>
     <classEntry path="org.jspresso.framework.model.descriptor.EDateType"/>
     <classEntry path="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor"/>
     <classEntry path="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptorBase"/>
