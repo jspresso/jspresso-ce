@@ -1,3 +1,15 @@
+2.2.1
+=====
+Bugs fixed
+----------
+[ 2157885 ] Entities registered for update are not correctly processsed
+[ 2181095 ] Build fails on linux for generated projects
+[ 2201522 ] abstractFilterableBeanCollectionModule is broken
+
+New features
+------------
+Reference documentation has been updated to reflect the HR sample application new naming conventions.
+
 2.2
 ===
 
