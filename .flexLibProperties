@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
   <includeClasses>
+    <classEntry path="org.jspresso.framework.binding.IValueConnector"/>
     <classEntry path="org.jspresso.framework.model.descriptor.EDateType"/>
     <classEntry path="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptor"/>
     <classEntry path="org.jspresso.framework.model.descriptor.IBinaryPropertyDescriptorBase"/>
@@ -128,6 +129,28 @@
     <classEntry path="org.jspresso.framework.util.descriptor.IDescriptorBase"/>
     <classEntry path="org.jspresso.framework.util.descriptor.IIconDescriptor"/>
     <classEntry path="org.jspresso.framework.util.descriptor.IIconDescriptorBase"/>
+    <classEntry path="org.jspresso.framework.view.AbstractIconFactory"/>
+    <classEntry path="org.jspresso.framework.view.AbstractIconFactoryBase"/>
+    <classEntry path="org.jspresso.framework.view.BasicCompositeView"/>
+    <classEntry path="org.jspresso.framework.view.BasicCompositeViewBase"/>
+    <classEntry path="org.jspresso.framework.view.BasicMapView"/>
+    <classEntry path="org.jspresso.framework.view.BasicMapViewBase"/>
+    <classEntry path="org.jspresso.framework.view.BasicView"/>
+    <classEntry path="org.jspresso.framework.view.BasicViewBase"/>
+    <classEntry path="org.jspresso.framework.view.IActionFactory"/>
+    <classEntry path="org.jspresso.framework.view.IActionFactoryBase"/>
+    <classEntry path="org.jspresso.framework.view.ICompositeView"/>
+    <classEntry path="org.jspresso.framework.view.ICompositeViewBase"/>
+    <classEntry path="org.jspresso.framework.view.IIconFactory"/>
+    <classEntry path="org.jspresso.framework.view.IIconFactoryBase"/>
+    <classEntry path="org.jspresso.framework.view.IMapView"/>
+    <classEntry path="org.jspresso.framework.view.IMapViewBase"/>
+    <classEntry path="org.jspresso.framework.view.IView"/>
+    <classEntry path="org.jspresso.framework.view.IViewBase"/>
+    <classEntry path="org.jspresso.framework.view.IViewFactory"/>
+    <classEntry path="org.jspresso.framework.view.IViewFactoryBase"/>
+    <classEntry path="org.jspresso.framework.view.IViewProvider"/>
+    <classEntry path="org.jspresso.framework.view.IViewProviderBase"/>
     <classEntry path="org.jspresso.framework.view.action.ActionList"/>
     <classEntry path="org.jspresso.framework.view.action.ActionListBase"/>
     <classEntry path="org.jspresso.framework.view.action.ActionMap"/>
@@ -162,10 +185,14 @@
     <classEntry path="org.jspresso.framework.view.descriptor.IImageViewDescriptorBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.IListViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.IListViewDescriptorBase"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.ILovViewDescriptorFactory"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.ILovViewDescriptorFactoryBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.INestingViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.INestingViewDescriptorBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.IPropertyViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.IPropertyViewDescriptorBase"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactory"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.IQueryViewDescriptorFactoryBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.ISimpleTreeLevelDescriptorBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.ISplitViewDescriptor"/>
@@ -182,6 +209,8 @@
     <classEntry path="org.jspresso.framework.view.descriptor.ITreeViewDescriptorBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.IViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.IViewDescriptorBase"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.ViewConstraints"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.ViewConstraintsBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.AbstractCardViewDescriptorBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicBorderViewDescriptor"/>
@@ -202,10 +231,14 @@
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicImageViewDescriptorBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicListViewDescriptorBase"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactory"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicLovViewDescriptorFactoryBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicNestingViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicNestingViewDescriptorBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicPropertyViewDescriptorBase"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicQueryViewDescriptorFactory"/>
+    <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicQueryViewDescriptorFactoryBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptor"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicSimpleTreeLevelDescriptorBase"/>
     <classEntry path="org.jspresso.framework.view.descriptor.basic.BasicSplitViewDescriptor"/>

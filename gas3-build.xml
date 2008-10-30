@@ -12,7 +12,8 @@
     <delete>
       <fileset dir="src/main/as3">
         <include name="**/*.as"/> 
-        <exclude name="**/DefaultFlexViewFactory.as"/> 
+        <exclude name="**/DefaultFlexViewFactory.as"/>
+        <exclude name="**/IValueConnector.as"/>
       </fileset>
     </delete>
   </target>
@@ -29,12 +30,9 @@
         <include name="org/jspresso/framework/model/descriptor/EDateType.class" />
       </fileset>
       <fileset dir="view/target/classes">
-        <include name="org/jspresso/framework/view/action/*.class" />
-        <include name="org/jspresso/framework/view/descriptor/**/*Descriptor.class" />
-        <include name="org/jspresso/framework/view/descriptor/EAxis.class" />
-        <include name="org/jspresso/framework/view/descriptor/EBorderType.class" />
-        <include name="org/jspresso/framework/view/descriptor/ELabelPosition.class" />
-        <include name="org/jspresso/framework/view/descriptor/EOrientation.class" />
+        <include name="**/*.class" />
+        <exclude name="**/*Helper.class" />
+        <exclude name="**/*Exception.class" />
       </fileset>
     </gas3>
   </target>

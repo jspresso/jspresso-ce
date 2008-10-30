@@ -46,7 +46,7 @@ import java.util.Map;
  */
 public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
 
-  private Map<String, IView<E>> children;
+  private Map<String, IView<E>> childrenMap;
 
   /**
    * Constructs a new <code>BasicMapView</code> instance.
@@ -62,39 +62,39 @@ public class BasicMapView<E> extends BasicView<E> implements IMapView<E> {
    * {@inheritDoc}
    */
   public IView<E> getChild(String key) {
-    if (children == null) {
+    if (childrenMap == null) {
       return null;
     }
-    return children.get(key);
+    return childrenMap.get(key);
   }
 
   /**
    * {@inheritDoc}
    */
   public List<IView<E>> getChildren() {
-    if (children == null) {
+    if (childrenMap == null) {
       return null;
     }
-    return new ArrayList<IView<E>>(children.values());
+    return new ArrayList<IView<E>>(childrenMap.values());
   }
 
   /**
    * {@inheritDoc}
    */
   public Map<String, IView<E>> getChildrenMap() {
-    if (children == null) {
+    if (childrenMap == null) {
       return null;
     }
-    return new HashMap<String, IView<E>>(children);
+    return new HashMap<String, IView<E>>(childrenMap);
   }
 
   /**
-   * Sets the children.
+   * Sets the childrenMap.
    * 
-   * @param children
-   *            the children to set.
+   * @param childrenMap
+   *            the childrenMap to set.
    */
-  public void setChildren(Map<String, IView<E>> children) {
-    this.children = children;
+  public void setChildrenMap(Map<String, IView<E>> childrenMap) {
+    this.childrenMap = childrenMap;
   }
 }

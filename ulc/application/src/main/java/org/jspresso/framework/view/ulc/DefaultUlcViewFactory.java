@@ -1060,7 +1060,7 @@ public class DefaultUlcViewFactory implements
       viewComponent.addCard(childViewDescriptor.getKey(), childView.getPeer());
       childrenViews.put(childViewDescriptor.getKey(), childView);
     }
-    view.setChildren(childrenViews);
+    view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
   }

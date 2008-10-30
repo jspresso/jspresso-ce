@@ -1056,7 +1056,7 @@ public class DefaultSwingViewFactory implements
       viewComponent.add(childView.getPeer(), childViewDescriptor.getKey());
       childrenViews.put(childViewDescriptor.getKey(), childView);
     }
-    view.setChildren(childrenViews);
+    view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
   }

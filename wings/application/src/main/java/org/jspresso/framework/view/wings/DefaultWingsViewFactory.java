@@ -1080,7 +1080,7 @@ public class DefaultWingsViewFactory implements
       childrenViews.put(childViewDescriptor.getKey(), childView);
     }
     viewComponent.setPreferredSize(SDimension.FULLAREA);
-    view.setChildren(childrenViews);
+    view.setChildrenMap(childrenViews);
     view.setConnector(createCardViewConnector(view, actionHandler));
     return view;
   }
