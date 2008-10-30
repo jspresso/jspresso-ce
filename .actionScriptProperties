@@ -5,11 +5,9 @@
     <libraryPath defaultLinkType="1">
       <libraryPathEntry kind="4" path=""/>
       <libraryPathEntry kind="3" linkType="1" path="C:/envdev/graniteds/build/granite.swc" sourcepath="C:/envdev/graniteds/as3/core" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="C:/envdev/aswing-1.4/AsWing/bin/AsWing.swc" sourcepath="C:/envdev/aswing-1.4/AsWing/src" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath>
       <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/envdev/graniteds/build/granite.swc" sourcepath="C:/envdev/graniteds/as3/core" useDefaultLinkType="false"/>
-      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/envdev/aswing-1.4/AsWing/bin/AsWing.swc" sourcepath="C:/envdev/aswing-1.4/AsWing/src" useDefaultLinkType="false"/>
     </sourceAttachmentPath>
   </compiler>
   <applications>
