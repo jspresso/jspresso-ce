@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<actionScriptProperties mainApplicationPath="JspressoAsTest.as" version="3">
+  <compiler additionalCompilerArguments="" copyDependentFiles="true" enableModuleDebug="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="9.0.124" htmlPlayerVersionCheck="true" outputFolderPath="target/as3" sourceFolderPath="src/main/as3" strict="true" useApolloConfig="false" verifyDigests="true" warn="true">
+    <compilerSourcePath/>
+    <libraryPath defaultLinkType="1">
+      <libraryPathEntry kind="4" path=""/>
+      <libraryPathEntry kind="3" linkType="1" path="C:/envdev/graniteds/build/granite.swc" sourcepath="C:/envdev/graniteds/as3/core" useDefaultLinkType="false"/>
+      <libraryPathEntry kind="3" linkType="1" path="C:/envdev/aswing-1.4/AsWing/bin/AsWing.swc" sourcepath="C:/envdev/aswing-1.4/AsWing/src" useDefaultLinkType="false"/>
+    </libraryPath>
+    <sourceAttachmentPath>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/envdev/graniteds/build/granite.swc" sourcepath="C:/envdev/graniteds/as3/core" useDefaultLinkType="false"/>
+      <sourceAttachmentPathEntry kind="3" linkType="1" path="C:/envdev/aswing-1.4/AsWing/bin/AsWing.swc" sourcepath="C:/envdev/aswing-1.4/AsWing/src" useDefaultLinkType="false"/>
+    </sourceAttachmentPath>
+  </compiler>
+  <applications>
+    <application path="JspressoAsTest.as"/>
+  </applications>
+  <modules/>
+  <buildCSSFiles/>
+</actionScriptProperties>
