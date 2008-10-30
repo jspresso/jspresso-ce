@@ -1,4 +1,16 @@
 2.3
+===
+Bugs fixed
+----------
+[ 2201522 ] abstractFilterableBeanCollectionModule is broken 
+
+New features
+------------
+[ 2172464 ] Remove all references to java.awt in view descriptors
+[ 2172455 ] Refactor all interface constants in typesafe enums
+
+
+2.2.1
 =====
 Bugs fixed
 ----------
@@ -8,8 +20,6 @@ Bugs fixed
 New features
 ------------
 Reference documentation has been updated to reflect the HR sample application new naming conventions.
-[ 2172464 ] Remove all references to java.awt in view descriptors
-[ 2172455 ] Refactor all interface constants in typesafe enums
 
 2.2
 ===
