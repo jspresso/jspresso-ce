@@ -31,6 +31,10 @@
 	<classpathentry kind="src" output="wings/application/target/classes" path="wings/application/src/main/resources"/>
 	<classpathentry kind="src" output="wings/components/target/classes" path="wings/components/src/main/java"/>
 	<classpathentry kind="src" output="wings/components/target/classes" path="wings/components/src/main/resources"/>
+	<classpathentry kind="src" output="remote/application/target/classes" path="remote/application/src/main/java"/>
+	<classpathentry kind="src" output="remote/application/target/classes" path="remote/application/src/main/resources"/>
+	<classpathentry kind="src" output="remote/components/target/classes" path="remote/components/src/main/java"/>
+	<classpathentry kind="src" output="remote/components/target/classes" path="remote/components/src/main/resources"/>
 	<classpathentry kind="src" output="app-launch/core/target/classes" path="app-launch/core/src/main/java"/>
 	<classpathentry kind="src" output="app-launch/core/target/classes" path="app-launch/core/src/main/resources"/>
 	<classpathentry kind="src" output="app-launch/swing/target/classes" path="app-launch/swing/src/main/java"/>

@@ -375,10 +375,7 @@ public class DefaultSwingViewFactory implements
     return view;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void decorateWithTitle(IView<JComponent> view, Locale locale) {
+  private void decorateWithTitle(IView<JComponent> view, Locale locale) {
     view.getPeer()
         .setBorder(
             BorderFactory.createTitledBorder(
@@ -2131,7 +2128,6 @@ public class DefaultSwingViewFactory implements
 
   private IView<JComponent> createSourceCodePropertyView(
       ISourceCodePropertyDescriptor propertyDescriptor,
-
       IActionHandler actionHandler, @SuppressWarnings("unused") Locale locale) {
     JEditTextArea viewComponent = createJEditTextArea(propertyDescriptor
         .getLanguage());

@@ -367,10 +367,7 @@ public class DefaultUlcViewFactory implements
     return view;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void decorateWithTitle(IView<ULCComponent> view, Locale locale) {
+  private void decorateWithTitle(IView<ULCComponent> view, Locale locale) {
     view.getPeer()
         .setBorder(
             BorderFactory.createTitledBorder(

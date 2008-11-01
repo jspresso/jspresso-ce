@@ -366,10 +366,7 @@ public class DefaultWingsViewFactory implements
     return view;
   }
 
-  /**
-   * {@inheritDoc}
-   */
-  public void decorateWithTitle(IView<SComponent> view, Locale locale) {
+  private void decorateWithTitle(IView<SComponent> view, Locale locale) {
     // SInternalFrame iFrame = createSInternalFrame();
     // iFrame.setTitle(view.getDescriptor().getI18nName(
     // getTranslationProvider(), locale));
