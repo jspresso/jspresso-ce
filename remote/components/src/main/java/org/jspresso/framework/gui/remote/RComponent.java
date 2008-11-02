@@ -42,10 +42,12 @@ import java.util.Map;
  */
 public class RComponent {
 
-  private String              name;
-  private String              description;
-  private List<RAction>       actions;
-  private Map<String, String> translations;
+  private String                  name;
+  private String                  description;
+  private RIcon                   icon;
+  private List<RAction>           actions;
+  private Map<String, String>     renderingTranslations;
+  private Map<String, RIcon>      renderingIcons;
 
   /**
    * Sets the name.
@@ -105,21 +107,59 @@ public class RComponent {
   }
 
   /**
-   * Sets the translations.
+   * Sets the icon.
    * 
-   * @param translations the translations to set.
+   * @param icon
+   *          the icon to set.
    */
-  public void setTranslations(Map<String, String> translations) {
-    this.translations = translations;
+  public void setIcon(RIcon icon) {
+    this.icon = icon;
   }
 
   /**
-   * Gets the translations.
+   * Gets the icon.
    * 
-   * @return the translations.
+   * @return the icon.
    */
-  public Map<String, String> getTranslations() {
-    return translations;
+  public RIcon getIcon() {
+    return icon;
   }
 
+  /**
+   * Sets the renderingTranslations.
+   * 
+   * @param renderingTranslations
+   *          the renderingTranslations to set.
+   */
+  public void setRenderingTranslations(Map<String, String> renderingTranslations) {
+    this.renderingTranslations = renderingTranslations;
+  }
+
+  /**
+   * Gets the renderingTranslations.
+   * 
+   * @return the renderingTranslations.
+   */
+  public Map<String, String> getRenderingTranslations() {
+    return renderingTranslations;
+  }
+
+  /**
+   * Sets the renderingIcons.
+   * 
+   * @param renderingIcons
+   *          the renderingIcons to set.
+   */
+  public void setRenderingIcons(Map<String, RIcon> renderingIcons) {
+    this.renderingIcons = renderingIcons;
+  }
+
+  /**
+   * Gets the renderingIcons.
+   * 
+   * @return the renderingIcons.
+   */
+  public Map<String, RIcon> getRenderingIcons() {
+    return renderingIcons;
+  }
 }

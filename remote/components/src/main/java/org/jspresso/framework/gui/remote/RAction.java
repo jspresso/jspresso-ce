@@ -18,7 +18,6 @@
  */
 package org.jspresso.framework.gui.remote;
 
-
 /**
  * This class is the generic server peer of a client GUI action.
  * <p>
@@ -40,5 +39,65 @@ package org.jspresso.framework.gui.remote;
  */
 public class RAction {
 
-  // Empty as of now.
+  private String name;
+  private String description;
+  private RIcon  icon;
+
+  /**
+   * Gets the name.
+   * 
+   * @return the name.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Sets the name.
+   * 
+   * @param name
+   *          the name to set.
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * Gets the description.
+   * 
+   * @return the description.
+   */
+  public String getDescription() {
+    return description;
+  }
+
+  /**
+   * Sets the description.
+   * 
+   * @param description
+   *          the description to set.
+   */
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  /**
+   * Gets the icon.
+   * 
+   * @return the icon.
+   */
+  public RIcon getIcon() {
+    return icon;
+  }
+
+  /**
+   * Sets the icon.
+   * 
+   * @param icon
+   *          the icon to set.
+   */
+  public void setIcon(RIcon icon) {
+    this.icon = icon;
+  }
+
 }
